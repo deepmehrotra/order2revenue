@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
 
+import com.o2r.model.Role;
 import com.o2r.model.TaxCategory;
 
 public class SellerBean {
@@ -21,12 +22,14 @@ public class SellerBean {
 	private String tanNumber;
 	private String brandName;
 	private String logoUrl;
+	private Role role;
 	private List<OrderBean> orders = new ArrayList<OrderBean>();
 	private List<CategoryBean> categories = new ArrayList<CategoryBean>();
 	private List<ProductBean> products = new ArrayList<ProductBean>();
 	private List<ExpenseCategoryBean> expensecategories = new ArrayList<ExpenseCategoryBean>();
 	private List<TaxCategory> taxCategories = new ArrayList<>();
-	
+	private List<StateDeliveryTimeBean> stateDeliveryTime = new ArrayList<StateDeliveryTimeBean>();
+
 	public List<OrderBean> getOrders() {
 		return orders;
 	}
@@ -35,9 +38,9 @@ public class SellerBean {
 		this.orders = orders;
 	}
 
-	@OneToMany(cascade=CascadeType.ALL)	
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<PartnerBean> partners = new ArrayList<PartnerBean>();
-	
+
 	public String getName() {
 		return name;
 	}
@@ -62,8 +65,6 @@ public class SellerBean {
 		this.email = email;
 	}
 
-	
-
 	public String getContactNo() {
 		return contactNo;
 	}
@@ -72,9 +73,6 @@ public class SellerBean {
 		this.contactNo = contactNo;
 	}
 
-	
-
-	
 	public List<PartnerBean> getPartners() {
 		return partners;
 	}
@@ -171,5 +169,20 @@ public class SellerBean {
 		this.taxCategories = taxCategories;
 	}
 
-	
+	public List<StateDeliveryTimeBean> getStateDeliveryTime() {
+		return stateDeliveryTime;
+	}
+
+	public void setStateDeliveryTime(List<StateDeliveryTimeBean> stateDeliveryTime) {
+		this.stateDeliveryTime = stateDeliveryTime;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
 }

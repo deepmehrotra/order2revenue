@@ -70,6 +70,8 @@ http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 				<value>com.o2r.model.Plan</value>
 				<value>com.o2r.model.NRnReturnCharges</value>
 				<value>com.o2r.model.NRnReturnConfig</value>
+				<value>com.o2r.model.State</value>
+				<value>com.o2r.model.StateDeliveryTime</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
