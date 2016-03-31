@@ -18,7 +18,7 @@ public class NRnReturnConfig {
 	@Column
 	private int configId;
 	@Column
-	private boolean isNRCalculator;
+	private boolean nrCalculator;
 	@Column
 	private String commissionType;   // - fixed or categoryWise
 	@Column
@@ -27,6 +27,8 @@ public class NRnReturnConfig {
 	private boolean whicheverGreaterPCC;
 	@Column
 	private String shippingFeeType ; // - variable  or fixed
+	@Column
+	private String revshippingFeeType ;
 
 	@Column
 	private 	String retCharType;
@@ -164,12 +166,7 @@ public class NRnReturnConfig {
 	public void setConfigId(int configId) {
 		this.configId = configId;
 	}
-	public boolean isNRCalculator() {
-		return isNRCalculator;
-	}
-	public void setNRCalculator(boolean isNRCalculator) {
-		this.isNRCalculator = isNRCalculator;
-	}
+
 	public String getCommissionType() {
 		return commissionType;
 	}
@@ -530,6 +527,18 @@ public class NRnReturnConfig {
 	}
 	public void setCanCharSFBRTDPCC(boolean canCharSFBRTDPCC) {
 		this.canCharSFBRTDPCC = canCharSFBRTDPCC;
+	}
+	public String getRevshippingFeeType() {
+		return revshippingFeeType;
+	}
+	public void setRevshippingFeeType(String revshippingFeeType) {
+		this.revshippingFeeType = revshippingFeeType;
+	}
+	public boolean isNrCalculator() {
+		return nrCalculator;
+	}
+	public void setNrCalculator(boolean nrCalculator) {
+		this.nrCalculator = nrCalculator;
 	}
 
 
