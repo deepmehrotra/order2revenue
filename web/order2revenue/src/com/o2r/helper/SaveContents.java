@@ -75,6 +75,7 @@ public class SaveContents {
        StringBuffer errorMessage=null;
        CustomerBean customerBean=null;
        OrderTaxBean otb=null;
+       Partner partner=null;
        try{
               System.out.println("Inside save content -->");
               HSSFWorkbook offices= new HSSFWorkbook(file.getInputStream());
@@ -151,7 +152,7 @@ public class SaveContents {
                      }
                      if(entry.getCell(3)!=null&&entry.getCell(3).getCellType()!=HSSFCell.CELL_TYPE_BLANK)
                      {
-                           Partner partner=partnerService.getPartner(entry.getCell(3).toString(), sellerId);
+                           partner=partnerService.getPartner(entry.getCell(3).toString(), sellerId);
                            if(partner!=null)
                            order.setPcName(entry.getCell(3).toString());
                            else
@@ -316,8 +317,11 @@ public class SaveContents {
                            errorMessage.append(" Quantity can not be null ");
                                   validaterow=false;
                      }
+                     if(partner!=null&&partner.getNrnReturnConfig()!=null&&!partner.getNrnReturnConfig().isNrCalculator())
+                     {
                      if(entry.getCell(17)!=null&&entry.getCell(17).getCellType()!=HSSFCell.CELL_TYPE_BLANK)
                      {
+
                            try
                            {
                                   order.setGrossNetRate(Double.parseDouble(entry.getCell(17).toString()));
@@ -332,6 +336,8 @@ public class SaveContents {
                            errorMessage.append(" Net Rate is null ");
                                   validaterow=false;
                      }
+                      }
+
                      if(entry.getCell(18)!=null&&entry.getCell(18).getCellType()!=HSSFCell.CELL_TYPE_BLANK)
                      {
                            customerBean.setCustomerEmail(entry.getCell(18).toString());
