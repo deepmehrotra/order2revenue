@@ -1,7 +1,10 @@
 package com.o2r.dao;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,6 +12,9 @@ import org.hibernate.criterion.CriteriaSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.controller.SellerController;
+import com.o2r.helper.CustomException;
+import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Employee;
 import com.o2r.model.GenericQuery;
 
@@ -19,84 +25,126 @@ import com.o2r.model.GenericQuery;
 @Repository("adminDao")
 public class AdminDaoImpl implements AdminDao {
 
- @Autowired
- private SessionFactory sessionFactory;
- private static final int LIMITITEMSPERPAGE = 10;
+	@Autowired
+	private SessionFactory sessionFactory;
+	private static final int LIMITITEMSPERPAGE = 10;
 
- @Override
-public void addEmployee(Employee employee) {
-	 System.out.println(" Employee age "+employee.getEmpAge());
-	 System.out.println("Employee name :"+employee.getEmpName());
-	 try
-	 {
-   sessionFactory.getCurrentSession().saveOrUpdate(employee);
-	 }
-	 catch(Exception e)
-	 {
-		 System.out.println(" Employee exception :"+e.getLocalizedMessage());
-	 }
- }
+	static Logger log = Logger.getLogger(AdminDaoImpl.class.getName());
 
- @Override
-@SuppressWarnings("unchecked")
- public List<Employee> listEmployeess(int pageno) {
-	 List<Employee> returnlist=sessionFactory.getCurrentSession().createCriteria(Employee.class).setMaxResults(LIMITITEMSPERPAGE).setFirstResult(LIMITITEMSPERPAGE*(pageno-1)).list();
-	 System.out.println(" Getting employee records"+returnlist.size());
+	@Override
+	public void addEmployee(Employee employee)throws CustomException {
 
-  return returnlist; }
+		log.info("*** addEmployee start***");
+		System.out.println(" Employee age " + employee.getEmpAge());
+		System.out.println("Employee name :" + employee.getEmpName());
+		try {
+			sessionFactory.getCurrentSession().saveOrUpdate(employee);
+		} catch (Exception e) {
+			log.error(e);
+			throw new CustomException(GlobalConstant.addEmployeeError, new Date(), 1, GlobalConstant.addEmployeeErrorCode, e);
+		}
+		log.info("*** addEmployee exit***");
+	}
 
- @Override
-@SuppressWarnings("unchecked")
- public List<Employee> listEmployeess() {
-  return sessionFactory.getCurrentSession().createCriteria(Employee.class).list();
- }
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Employee> listEmployeess(int pageno)throws CustomException {
+		log.info("*** listEmployee Start ***");
+		List<Employee> returnlist=new ArrayList<Employee>();
+		try{
+		returnlist = sessionFactory.getCurrentSession().createCriteria(Employee.class).setMaxResults(LIMITITEMSPERPAGE).setFirstResult(LIMITITEMSPERPAGE * (pageno - 1)).list();
+		//System.out.println(" Getting employee records" + returnlist.size());
+		}catch(Exception e){
+			log.error(e);
+			throw new CustomException(GlobalConstant.listEmployeeError, new Date(), 3, GlobalConstant.listEmployeeErrorCode, e);
+		}
+		log.info("*** listEmployee exit ***");
+		return returnlist;
+	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Employee> listEmployeess()throws CustomException {
+		
+		log.info("*** listEmployeess Start ***");
+		List<Employee> employeess=new ArrayList<Employee>();
+		try{
+		employeess=sessionFactory.getCurrentSession().createCriteria(Employee.class).list();
+		}catch(Exception e){
+			log.error(e);
+			throw new CustomException(GlobalConstant.listEmployeeError, new Date(), 3, GlobalConstant.listEmployeeErrorCode, e);
+		}
+		log.info("*** listEmployeess exit ***");
+		return employeess;
+	}
 
- @Override
-public Employee getEmployee(int empid) {
-  return (Employee) sessionFactory.getCurrentSession().get(Employee.class, empid);
- }
+	@Override
+	public Employee getEmployee(int empid)throws CustomException {
+		
+		log.info("*** getEmployee start ***");
+		Employee employee=new Employee();
+		try{
+		employee=(Employee) sessionFactory.getCurrentSession().get(Employee.class, empid);
+		}catch(Exception e){
+			log.error(e);
+			throw new CustomException(GlobalConstant.getEmployeeError, new Date(), 3, GlobalConstant.getEmployeeErrorCode, e);
+		}
+		log.info("*** getEmployee exit ***");
+		return employee;
+	}
 
- @Override
-public void deleteEmployee(Employee employee) {
-  sessionFactory.getCurrentSession().createQuery("DELETE FROM Employee WHERE empid = "+employee.getEmpId()).executeUpdate();
- }
+	@Override
+	public void deleteEmployee(Employee employee)throws CustomException {
+		log.info("*** deleteEmployee start ***");
+		try{
+		sessionFactory.getCurrentSession().createQuery("DELETE FROM Employee WHERE empid = "+ employee.getEmpId()).executeUpdate();
+		}catch(Exception e){
+			log.error(e);
+			throw new CustomException(GlobalConstant.deleteEmployeeError, new Date(), 3, GlobalConstant.deleteEmployeeErrorCode, e);
+		}
+		log.info("*** deleteEmployee exit ***");
+	}
 
- @Override
- public void addQuery(GenericQuery query) {
- 	 System.out.println("Query  "+query.getEmail());
- 	 try
- 	 {
-    sessionFactory.getCurrentSession().saveOrUpdate(query);
- 	 }
- 	 catch(Exception e)
- 	 {
- 		 System.out.println(" addQuery :"+e.getLocalizedMessage());
- 	 }
-  }
+	@Override
+	public void addQuery(GenericQuery query)throws CustomException {
+		
+		log.info("*** addQuery start ***");
+		//System.out.println("Query  " + query.getEmail());
+		try {
+			sessionFactory.getCurrentSession().saveOrUpdate(query);
+		} catch (Exception e) {
+			log.error(e);
+			throw new CustomException(GlobalConstant.addQueryError, new Date(), 3, GlobalConstant.addQueryErrorCode, e);
+		}
+		
+		log.info("*** addQuery exit ***");
+	}
 
- @Override
- public List<GenericQuery> listQueries() {
- 	//sellerId=4;
-	 System.out.println(" Inside query geting list");
- 	List<GenericQuery> returnlist=null;
- 	try
- 	{
- 	Session session=sessionFactory.openSession();
- 	   session.beginTransaction();
- 	   Criteria criteria=session.createCriteria(GenericQuery.class);
-  	  criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-  	 criteria.addOrder(org.hibernate.criterion.Order.desc("queryTime"));
-  	  returnlist=criteria.list();
-  	  System.out.println(" Queries : "+returnlist);
- 	   session.getTransaction().commit();
- 	   session.close();
- 	}
- 	catch(Exception e)
- 	{
- 		System.out.println(" Exception in getting order list :"+e.getLocalizedMessage());
- 	}
- 	return returnlist;
- }
+	@Override
+	public List<GenericQuery> listQueries()throws CustomException {
+		// sellerId=4;
+		
+		log.info("*** listQueries start ***");
+		List<GenericQuery> returnlist = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(GenericQuery.class);
+			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			criteria.addOrder(org.hibernate.criterion.Order.desc("queryTime"));
+			returnlist = criteria.list();
+			System.out.println(" Queries : " + returnlist);
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			
+			log.error(e);
+			throw new CustomException(GlobalConstant.listQueriesError, new Date(), 3, GlobalConstant.listQueriesErrorCode, e);
+			/*System.out.println(" Exception in getting order list :"
+					+ e.getLocalizedMessage());*/
+		}
+		log.info("*** listQueries exit ***");
+		return returnlist;
+	}
 
 }

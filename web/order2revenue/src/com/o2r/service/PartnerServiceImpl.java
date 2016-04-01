@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.dao.PartnerDao;
+import com.o2r.helper.CustomException;
 import com.o2r.model.Partner;
 
 /**
@@ -22,22 +23,22 @@ public class PartnerServiceImpl implements PartnerService {
  private PartnerDao partnerDao;
  
  @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
- public void addPartner(Partner partner,int sellerId) {
+ public void addPartner(Partner partner,int sellerId)throws CustomException {
 	 partnerDao.addPartner(partner,sellerId);
  }
  
- public List<Partner> listPartners(int sellerId) {
+ public List<Partner> listPartners(int sellerId)throws CustomException {
   return partnerDao.listPartner(sellerId);
  }
 
- public Partner getPartner(int partnerid) {
+ public Partner getPartner(int partnerid)throws CustomException {
   return partnerDao.getPartner(partnerid);
  }
  
- public void deletePartner(Partner partner,int sellerId) {
+ public void deletePartner(Partner partner,int sellerId)throws CustomException {
 	 partnerDao.deletePartner(partner,sellerId);
  }
- public Partner getPartner(String name ,int sellerId)
+ public Partner getPartner(String name ,int sellerId)throws CustomException
  {
 	 return partnerDao.getPartner(name,sellerId);
  }

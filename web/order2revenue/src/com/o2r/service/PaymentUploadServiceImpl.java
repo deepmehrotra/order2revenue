@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.dao.PaymentUploadDao;
+import com.o2r.helper.CustomException;
 import com.o2r.model.PaymentUpload;
 
 
@@ -24,34 +25,34 @@ private PaymentUploadDao paymentUploadDao;
  
 
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
- public void addPaymentUpload(PaymentUpload upload , int sellerId)
+ public void addPaymentUpload(PaymentUpload upload , int sellerId)throws CustomException
  {
 	 paymentUploadDao.addPaymentUpload(upload, sellerId);
  }
  
  
  @Override
-public List<PaymentUpload> listPaymentUploads(int sellerId)
+public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomException
  {
 	 
 		return  paymentUploadDao.listPaymentUploads(sellerId);
  }
  
  @Override
- public PaymentUpload getPaymentUpload(int paymentUploadId)
+ public PaymentUpload getPaymentUpload(int paymentUploadId)throws CustomException
  {
 	 return paymentUploadDao.getPaymentUpload(paymentUploadId);
  }
  
  @Override
- public void deletePaymentUpload(PaymentUpload payupload,int sellerId)
+ public void deletePaymentUpload(PaymentUpload payupload,int sellerId)throws CustomException
  {
 	 paymentUploadDao.deletePaymentUpload(payupload, sellerId);
  }
  
  
  @Override
- public PaymentUpload getManualPayment(int sellerId)
+ public PaymentUpload getManualPayment(int sellerId)throws CustomException
  {
 	 return  paymentUploadDao.getManualPayment(sellerId);
  }

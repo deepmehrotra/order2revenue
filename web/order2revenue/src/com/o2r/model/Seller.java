@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,12 +17,16 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 
+
+
+
+
 @Entity
-@Table(name = "Seller")
+@Table(name="Seller")
 public class Seller {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	@Column
 	private String name;
@@ -45,55 +48,60 @@ public class Seller {
 	private String brandName;
 	@Column
 	private String logoUrl;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinTable(name = "seller_roles", joinColumns = { @JoinColumn(name = "seller_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "role_id", referencedColumnName = "id") })
+	
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinTable(name="seller_roles",
+		joinColumns = {@JoinColumn(name="seller_id", referencedColumnName="id")},
+		inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id")}
+	)
 	private Role role;
-	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "seller",cascade=CascadeType.ALL)	
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<Order> orders = new ArrayList<Order>();
-
-	@OneToMany(cascade = CascadeType.ALL)
+	
+	@OneToMany(cascade=CascadeType.ALL)	
 	private List<Category> categories = new ArrayList<Category>();
-
-	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+	
+	@OneToMany(mappedBy = "seller",cascade=CascadeType.ALL)	
 	private List<Product> products = new ArrayList<Product>();
-
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "Seller_ExpCat", joinColumns = @JoinColumn(name = "ID"), inverseJoinColumns = @JoinColumn(name = "EXPCATID"))
+	
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinTable(
+	            name = "Seller_ExpCat",
+	            joinColumns = @JoinColumn(name = "ID"),
+	            inverseJoinColumns = @JoinColumn(name = "EXPCATID")
+	    )
 	private List<ExpenseCategory> expensecategories = new ArrayList<ExpenseCategory>();
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL)	
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<Partner> partners = new ArrayList<Partner>();
-
-	@OneToMany(cascade = CascadeType.ALL)
+	
+	@OneToMany(cascade=CascadeType.ALL)	
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<PaymentUpload> paymentUploads = new ArrayList<PaymentUpload>();
-
-	@OneToMany(cascade = CascadeType.ALL)
+	
+	@OneToMany(cascade=CascadeType.ALL)	
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<ManualCharges> manualCharges = new ArrayList<>();
-
-	@OneToMany(cascade = CascadeType.ALL)
+	
+	@OneToMany(cascade=CascadeType.ALL)	
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<TaxDetail> taxDetails = new ArrayList<>();
-
-	@OneToMany(cascade = CascadeType.ALL)
+	
+	@OneToMany(cascade=CascadeType.ALL)	
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<TaxCategory> taxCategories = new ArrayList<>();
-
-	// Seller to state wise delivery time OneToMany
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<StateDeliveryTime> stateDeliveryTime = new ArrayList<StateDeliveryTime>();
-
+	
+	
 	// Seller to SellerAccount OneToOne
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.ALL) 
 	private SellerAccount sellerAccount = new SellerAccount();
 
 	// Plan To Seller OneTwoOne
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.ALL)
 	private Plan plan;
-
+	
+	
 	public SellerAccount getSellerAccount() {
 		return sellerAccount;
 	}
@@ -150,6 +158,9 @@ public class Seller {
 		this.contactNo = contactNo;
 	}
 
+	
+
+	
 	public List<Partner> getPartners() {
 		return partners;
 	}
@@ -276,13 +287,5 @@ public class Seller {
 
 	public void setTaxCategories(List<TaxCategory> taxCategories) {
 		this.taxCategories = taxCategories;
-	}
-
-	public List<StateDeliveryTime> getStateDeliveryTime() {
-		return stateDeliveryTime;
-	}
-
-	public void setStateDeliveryTime(List<StateDeliveryTime> stateDeliveryTime) {
-		this.stateDeliveryTime = stateDeliveryTime;
 	}
 }

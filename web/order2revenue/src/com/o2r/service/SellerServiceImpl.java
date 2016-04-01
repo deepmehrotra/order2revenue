@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.dao.SellerDao;
+import com.o2r.helper.CustomException;
 import com.o2r.model.Seller;
-import com.o2r.model.State;
 
 /**
  * @author Deep Mehrotra
@@ -23,31 +23,27 @@ public class SellerServiceImpl implements SellerService {
 	private SellerDao sellerDao;
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public void addSeller(Seller seller) {
+	public void addSeller(Seller seller) throws CustomException {
 		sellerDao.addSeller(seller);
 	}
 
-	public List<Seller> listSellers() {
+	public List<Seller> listSellers() throws CustomException {
 		return sellerDao.listSeller();
 	}
 
-	public Seller getSeller(int sellerid) {
+	public Seller getSeller(int sellerid) throws CustomException {
 		return sellerDao.getSeller(sellerid);
 	}
 
-	public void deleteSeller(Seller seller) {
+	public void deleteSeller(Seller seller) throws CustomException {
 		sellerDao.deleteSeller(seller);
 	}
 
-	public Seller getSeller(String email) {
+	public Seller getSeller(String email) throws CustomException {
 		return sellerDao.getSeller(email);
 	}
 
-	public void planUpgrade(int pid, int sellerid) {
+	public void planUpgrade(int pid, int sellerid) throws CustomException {
 		sellerDao.planUpgrade(pid, sellerid);
-	}
-
-	public List<State> listStates() {
-		return sellerDao.listStates();
 	}
 }

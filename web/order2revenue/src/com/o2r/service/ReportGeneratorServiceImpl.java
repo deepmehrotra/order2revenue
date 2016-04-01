@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.dao.ReportsGeneratorDao;
+import com.o2r.helper.CustomException;
 
 /**
  * @author Deep Mehortra
@@ -25,7 +26,7 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 
 @Override
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public TotalShippedOrder getPartnerTSOdetails(String pcName,Date startDate ,Date endDate, int sellerId)
+public TotalShippedOrder getPartnerTSOdetails(String pcName,Date startDate ,Date endDate, int sellerId)throws CustomException
 {
 	return reportGeneratorDao.getPartnerTSOdetails(pcName, startDate, endDate, sellerId);
 }
@@ -33,7 +34,7 @@ public TotalShippedOrder getPartnerTSOdetails(String pcName,Date startDate ,Date
 
 @Override
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public List<TotalShippedOrder> getAllPartnerTSOdetails(Date startDate ,Date endDate, int sellerId)
+public List<TotalShippedOrder> getAllPartnerTSOdetails(Date startDate ,Date endDate, int sellerId)throws CustomException
 {
 	return reportGeneratorDao.getAllPartnerTSOdetails(startDate, endDate, sellerId);
 }

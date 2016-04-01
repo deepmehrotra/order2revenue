@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.dao.PlanDao;
+import com.o2r.helper.CustomException;
 import com.o2r.model.Plan;
 
 @Service("planService")
@@ -19,24 +20,25 @@ import com.o2r.model.Plan;
 public class PlanServiceImpl implements PlanService {
 	@Autowired
 	private PlanDao planDao;
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public void addPlan(Plan plan) {
+	public void addPlan(Plan plan) throws CustomException {
 		planDao.addPlan(plan);
 	}
 
 	@Override
-	public List<Plan> listPlans() {
+	public List<Plan> listPlans() throws CustomException {
 		return planDao.listPlans();
 	}
 
 	@Override
-	public Plan getPlan(int pid) {
+	public Plan getPlan(int pid) throws CustomException {
 		return planDao.getPlan(pid);
 	}
 
 	@Override
-	public void deletePlan(Plan plan) {
+	public void deletePlan(Plan plan) throws CustomException {
 		planDao.deletePlan(plan);
 	}
 

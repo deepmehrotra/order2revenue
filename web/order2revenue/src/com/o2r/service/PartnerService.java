@@ -2,6 +2,7 @@ package com.o2r.service;
 
 import java.util.List;
 
+import com.o2r.helper.CustomException;
 import com.o2r.model.Partner;
 
 /**
@@ -10,13 +11,13 @@ import com.o2r.model.Partner;
  */
 public interface PartnerService {
  
- public void addPartner(Partner partner,int sellerId);
+ public void addPartner(Partner partner,int sellerId)throws CustomException;
 
- public List<Partner> listPartners(int sellerId);
+ public List<Partner> listPartners(int sellerId)throws CustomException;
  
- public Partner getPartner(int partnerid);
+ public Partner getPartner(int partnerid)throws CustomException;
  
- public Partner getPartner(String name ,int sellerId);
+ public Partner getPartner(String name ,int sellerId)throws CustomException;
  
- public void deletePartner(Partner partner,int sellerId);
+ public void deletePartner(Partner partner,int sellerId)throws CustomException;
 }

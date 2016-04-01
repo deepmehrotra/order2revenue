@@ -10,7 +10,7 @@ import com.o2r.model.Seller;
 public class HelperClass {
 	
 	
-	public static int getSellerIdfromSession(HttpServletRequest request) throws NullPointerException
+	public static int getSellerIdfromSession(HttpServletRequest request) throws Exception
 	{
 		int sellerId=0;
 		System.out.println(" Inside seller id from session :"+request.getUserPrincipal().getName());

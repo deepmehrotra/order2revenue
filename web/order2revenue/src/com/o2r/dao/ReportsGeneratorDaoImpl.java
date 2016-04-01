@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -18,6 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.o2r.bean.TotalShippedOrder;
+import com.o2r.controller.AdminController;
+import com.o2r.helper.CustomException;
+import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Order;
 
 
@@ -35,10 +39,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao{
  @Autowired
  private SessionFactory sessionFactory;
  
+ static Logger log = Logger.getLogger(ReportsGeneratorDaoImpl.class.getName());
+ 
  @SuppressWarnings("unchecked")
 @Override
- public TotalShippedOrder getPartnerTSOdetails(String pcName,Date startDate ,Date endDate, int sellerId)
+ public TotalShippedOrder getPartnerTSOdetails(String pcName,Date startDate ,Date endDate, int sellerId)throws CustomException
  {
+	 log.info("*** getPartnerTSOdetails start ***");
 	 //http://howtodoinjava.com/2014/10/28/hibernate-criteria-queries-tutorial-and-examples/#unique_result
 	 System.out.println(" getPartnerTSOdetails   : pcName :"+pcName+" >>startDate"+startDate+">>endDate :"+endDate);
 	// List<Order> orderlist=null;
@@ -75,17 +82,23 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao{
 	   session.close();
 	   }
 	   catch (Exception e) {
-		   System.out.println("Inside exception  "+e.getLocalizedMessage());
+		   log.error(e);
+		   log.info("Error :",e);
+		   throw new CustomException(GlobalConstant.getPartnerTSOdetailsError, new Date(), 3, GlobalConstant.getPartnerTSOdetailsErrorCode, e);
+		   /*System.out.println("Inside exception  "+e.getLocalizedMessage());*/
 	}
+	  log.info("*** getPartnerTSOdetails exit ***");
 	  return ttso;
  }
  
  
  @Override
- public List<TotalShippedOrder> getAllPartnerTSOdetails(Date startDate ,Date endDate, int sellerId)
+ public List<TotalShippedOrder> getAllPartnerTSOdetails(Date startDate ,Date endDate, int sellerId)throws CustomException
  {
+	 
+	 log.info("*** getAllPartnerTSOdetails start ***");
 	 //http://howtodoinjava.com/2014/10/28/hibernate-criteria-queries-tutorial-and-examples/#unique_result
-	 System.out.println(" getAllPartnerTSOdetails   :  >>startDate"+startDate+">>endDate :"+endDate);
+	 /*System.out.println(" getAllPartnerTSOdetails   :  >>startDate"+startDate+">>endDate :"+endDate);*/
 	 TotalShippedOrder[] ttso=null;
 	 
 	 int  totalQuantity=0;
@@ -435,9 +448,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao{
 	   session.close();
 	   }
 	   catch (Exception e) {
-		   System.out.println("Inside exception  "+e.getLocalizedMessage());
-		   e.printStackTrace();
+		   
+		   log.error(e);
+		   log.info("Error :",e);
+		   throw new CustomException(GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3, GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
+		  /* System.out.println("Inside exception  "+e.getLocalizedMessage());
+		   e.printStackTrace();*/
 	}
+	 log.info("*** getAllPartnerTSOdetails exit ***");
 	 return Arrays.asList(ttso);
  }
  

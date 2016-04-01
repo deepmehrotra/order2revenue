@@ -3,6 +3,7 @@ package com.o2r.dao;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -12,6 +13,8 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.helper.CustomException;
+import com.o2r.helper.GlobalConstant;
 import com.o2r.model.PaymentUpload;
 import com.o2r.model.Seller;
 
@@ -26,9 +29,9 @@ public class PaymentUploadDaoImpl implements PaymentUploadDao{
  @Autowired
  private SessionFactory sessionFactory;
  
-
+ static Logger log = Logger.getLogger(PaymentUploadDaoImpl.class.getName());
  @Override
- public void addPaymentUpload(PaymentUpload upload , int sellerId)
+ public void addPaymentUpload(PaymentUpload upload , int sellerId) throws CustomException
  {
 	
 	// sellerId=4;
@@ -56,7 +59,9 @@ public class PaymentUploadDaoImpl implements PaymentUploadDao{
 		   session.close();
 		   }
 		   catch (Exception e) {
-			   System.out.println("Inside exception  "+e.getLocalizedMessage());
+			   log.error(e);
+			   throw new CustomException(GlobalConstant.addPaymentUploadError, new Date(), 1, GlobalConstant.addPaymentUploadErrorCode, e);
+			   //System.out.println("Inside exception  "+e.getLocalizedMessage());
 		}
 		
 	 
@@ -64,7 +69,7 @@ public class PaymentUploadDaoImpl implements PaymentUploadDao{
  
  
 
-public List<PaymentUpload> listPaymentUploads(int sellerId)
+public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomException
  {
 	// sellerId=4;
 		List<PaymentUpload> returnlist=null;
@@ -82,12 +87,14 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)
 		}
 		catch(Exception e)
 		{
-			System.out.println(" Exception in getting Payment list :"+e.getLocalizedMessage());
+			log.error(e);
+			throw new CustomException(GlobalConstant.listPaymentUploadError, new Date(), 1, GlobalConstant.listPaymentUploadErrorCode, e);
+			//System.out.println(" Exception in getting Payment list :"+e.getLocalizedMessage());
 		}
 		return returnlist;
  }
  
- public PaymentUpload getPaymentUpload(int paymentUploadId)
+ public PaymentUpload getPaymentUpload(int paymentUploadId)throws CustomException
  {
 	 PaymentUpload  returnObject=null;
 		try
@@ -102,13 +109,16 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)
 		}
 		catch(Exception e)
 		{
-			System.out.println(" Exception in getting Expenses list :"+e.getLocalizedMessage());
+			log.error(e);
+			throw new CustomException(GlobalConstant.getPaymentUploadError, new Date(), 3, GlobalConstant.getPaymentUploadErrorCode, e);
+			
+			//System.out.println(" Exception in getting Expenses list :"+e.getLocalizedMessage());
 		}
 		return returnObject;
 	
  }
  
- public PaymentUpload getManualPayment(int sellerId)
+ public PaymentUpload getManualPayment(int sellerId)throws CustomException
  {
 	 PaymentUpload  returnObject=null;
 	 Seller seller=null;
@@ -137,7 +147,10 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)
 		}
 		catch(Exception e)
 		{
-			System.out.println(" Exception in getting Payment Upload list :"+e.getLocalizedMessage());
+			log.error(e);
+			throw new CustomException(GlobalConstant.getManualPaymentError, new Date(), 3, GlobalConstant.getManualPaymentErrorCode, e);
+			
+			//System.out.println(" Exception in getting Payment Upload list :"+e.getLocalizedMessage());
 		}
 		return returnObject;
 	
@@ -166,6 +179,7 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)
 	 }
 	 catch(Exception e)
 	 {
+		 
 		 System.out.println(" Inside delleting order"+e.getLocalizedMessage());
 		 e.printStackTrace();
 	 }
