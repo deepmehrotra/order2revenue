@@ -84,22 +84,12 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 	// sellerId=4;
 		Seller seller=null;
 		TaxDetail existingObj=null;
-		/*Date todaysDate=new Date();*/
-		boolean sessionState=false;
+		Date todaysDate=new Date();
 		double amount=taxDetail.getBalanceRemaining();
 		  try
 		   {
 			  // Session session=sessionFactory.openSession();
-			  if(session!=null)
-			  {
 			   session.beginTransaction();
-			   sessionState=true;
-			  }
-			  else
-			  {
-				  session=sessionFactory.openSession();
-				  session.beginTransaction();
-			  }
 
 
 				   DetachedCriteria maxQuery = DetachedCriteria.forClass( Seller.class );
@@ -152,7 +142,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 				   session.saveOrUpdate(seller);
 			   }
 
-			   if(!sessionState)
+
 		    session.getTransaction().commit();
 		  // session.close();
 		   }

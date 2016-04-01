@@ -348,20 +348,20 @@ public class Layouter {
 		cell7.setCellStyle(headerCellStyle);
 
 		HSSFCell cell8 = rowHeader.createCell(startColIndex+7);
-		cell8.setCellValue("Length");
-		cell8.setCellStyle(headerCellStyle);
+		cell4.setCellValue("Length");
+		cell4.setCellStyle(headerCellStyle);
 
 		HSSFCell cell9 = rowHeader.createCell(startColIndex+8);
-		cell9.setCellValue("Breadth");
-		cell9.setCellStyle(headerCellStyle);
+		cell5.setCellValue("Breadth");
+		cell5.setCellStyle(headerCellStyle);
 
 		HSSFCell cell10 = rowHeader.createCell(startColIndex+9);
-		cell10.setCellValue("Height");
-		cell10.setCellStyle(headerCellStyle);
+		cell6.setCellValue("Height");
+		cell6.setCellStyle(headerCellStyle);
 
 		HSSFCell cell11 = rowHeader.createCell(startColIndex+10);
-		cell11.setCellValue("Dead Weight");
-		cell11.setCellStyle(headerCellStyle);
+		cell7.setCellValue("Dead Weight");
+		cell7.setCellStyle(headerCellStyle);
 
 
 	}

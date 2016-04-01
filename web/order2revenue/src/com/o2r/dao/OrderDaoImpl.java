@@ -73,13 +73,12 @@ public class OrderDaoImpl implements OrderDao {
  	Session session=null;
  	TaxDetail taxDetails=null;
  	Map<String,Float> nrMap=null;
- 	 Partner partner=null;
+
  	Product product = productService.getProduct(order.getProductSkuCode(), sellerId);
  	if(product!=null)
  	{
  	   try
  	   {
- 		   System.out.println(" Before starting the session in orderdaolimpl");
  	   session=sessionFactory.openSession();
  	   session.beginTransaction();
  	   Criteria criteria=session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
@@ -87,11 +86,10 @@ public class OrderDaoImpl implements OrderDao {
  	   .add(Restrictions.eq("partner.pcName", order.getPcName()).ignoreCase())
  	   .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
  	   seller=(Seller)criteria.list().get(0);
-
+ 	   seller.getPartners().get(0);
  	   float taxpercent=taxDetailService.getTaxCategory(order.getOrderTax().getTaxCategtory(), sellerId).getTaxPercent();
  	   if(seller.getPartners()!=null&&seller.getPartners().size()!=0)
  	   {
- 		  partner=seller.getPartners().get(0);
  	   reconciledate=getreconciledate(order ,seller.getPartners().get(0), order.getOrderDate());
  	   if(reconciledate!=null)
  	   order.setPaymentDueDate(reconciledate);
@@ -99,16 +97,11 @@ public class OrderDaoImpl implements OrderDao {
  	   }
  		 /* populating derived values of order*/
  	   order.setStatus("Shipped");
-	if(partner!=null&&partner.getNrnReturnConfig()!=null&&partner.getNrnReturnConfig().isNrCalculator())
-	{
-	 	  nrMap=calculateNR( seller.getPartners().get(0), order ,order.getOrderSP(), product.getCategoryName(), product.getDeadWeight(), product.getVolWeight(), order.getCustomer().getCustomerAddress());
-	 	  System.out.println(" NR MAP "+nrMap);
-	 	   System.out.println(" Shipping charges :"+order.getShippingCharges()+" >> Gross net rate "+order.getGrossNetRate()+" delivery date :"+order.getDeliveryDate());
-	}
-	else
-	{
-	 	   order.setNetRate(order.getGrossNetRate()+order.getShippingCharges());
-	}
+
+ 	  nrMap=calculateNR( seller.getPartners().get(0), order ,order.getOrderSP(), product.getCategoryName(), product.getDeadWeight(), product.getVolWeight(), order.getCustomer().getCustomerAddress());
+ 	  System.out.println(" NR MAP "+nrMap);
+ 	   System.out.println(" Shipping charges :"+order.getShippingCharges()+" >> Gross net rate "+order.getGrossNetRate()+" delivery date :"+order.getDeliveryDate());
+ 	 //  order.setNetRate(order.getGrossNetRate()+order.getShippingCharges());
 
 
  	   if((int)order.getPoPrice()!=0&&order.getPcName().equals("Myntra"))
@@ -173,7 +166,7 @@ public class OrderDaoImpl implements OrderDao {
  	   }
 
  	   //Adding order to the Partner
-
+ 	   Partner partner=seller.getPartners().get(0);
  	   if(partner.getOrders()!=null&&order.getOrderId()==0)
  	   {partner.getOrders().add(order);
  	   }

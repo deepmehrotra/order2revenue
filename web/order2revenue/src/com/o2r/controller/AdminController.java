@@ -24,10 +24,7 @@ import com.o2r.service.AdminService;
 /**
  * @author Deep Mehrotra
  *
- *
- *
  */
-//Comment for comiting git changes in testing for first time-31st march -2016
 @Controller
 public class AdminController {
 

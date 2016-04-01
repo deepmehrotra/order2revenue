@@ -148,7 +148,7 @@ span.#error{
                                  <!--    <button class="btn btn-primary pull-right" type="button"  onclick="submitform()">Save</button> -->
                                        <input type="button" class="btn btn-primary pull-right" value="Save" onclick="submitForm()"/>
                                 </div>
-                         <%--    </form:form> --%>
+                            </form:form>
                         </div>
                     </div>
                 </div>
@@ -205,7 +205,7 @@ span.#error{
     <div class="ibox-content add-company">
       <div class="col-lg-12">
       <!--   <input type="checkbox" class="js-switch_2" id="nr-switch" /> -->
-        <form:checkbox path="nrnReturnConfig.nrCalculator"   class="js-switch_2" id="nr-switch" />
+        <form:checkbox path="nrnReturnConfig.isNRCalculator"   class="js-switch_2" id="nr-switch" />
         <label>NR Switch</label>
         <div class="col-sm-12 radio5" id="nr-switch-sec"> 
           <!--<div class="col-sm-12 radio1" id="blk-200">-->
@@ -246,16 +246,14 @@ span.#error{
                       </div>
                     </div>
                     <div class="col-sm-12 radio1" id="blk-5">
-                     <c:if test="${!empty categoryList}">
-           <c:forEach items="${categoryList}" var="category" varStatus="loop">
+                    
                       <div class="form-group col-md-12">
-                        <label class="col-md-4 control-label">${category}</label>
+                        <label class="col-md-4 control-label">label</label>
                         <div class="input-group m-b col-md-4">
-                          <input type="text" class="form-control" name="${category}">
-                        <!--   <span class="input-group-addon">%</span> --></div>
+                          <input type="text" class="form-control">
+                          <span class="input-group-addon">%</span></div>
                       </div>
-                    </c:forEach>
-                    </c:if>
+                    
                     </div>
                   </div>
                 </div>
@@ -270,19 +268,19 @@ span.#error{
                       <div class="form-group col-md-12">
                         <label class="col-md-4 control-label content-rgt">&lt; 250</label>
                         <div class="col-md-4 content-rgt">
-                          <input type="text" placeholder="Enter value" class="form-control" name="fixedfeelt250">
+                          <input type="text" placeholder="" class="form-control">
                         </div>
                       </div>
                       <div class="form-group col-md-12">
-                        <label class="col-md-4 control-label">&gt; 250 && &lt; 500</label>
+                        <label class="col-md-4 control-label">250 &gt; 500</label>
                         <div class="col-md-4 content-rgt">
-                          <input type="text" name="fixedfeegt250lt500" placeholder="Enter Value" class="form-control">
+                          <input type="text" placeholder="" class="form-control">
                         </div>
                       </div>
                       <div class="form-group col-md-12">
                         <label class="col-md-4 control-label">&lt; 500</label>
                         <div class="col-md-4 content-rgt">
-                          <input type="text" placeholder="" class="form-control"  name="fixedfeelt500">
+                          <input type="text" placeholder="" class="form-control">
                         </div>
                       </div>
                       <div class="form-group col-md-12">
@@ -306,8 +304,8 @@ span.#error{
                         <div class="col-sm-6">
                           <div class="checkbox i-checks">
                             <label>
-                            <form:checkbox path="nrnReturnConfig.whicheverGreaterPCC" id="whicheverGreaterPCC"/>
-                              <i></i> Which Ever Is Greater </label>
+                              <input type="checkbox" value="">
+                              <i></i> Which Ever Is Grater </label>
                           </div>
                         </div>
                       </div>
@@ -315,13 +313,13 @@ span.#error{
                         <div class="col-sm-6">
                           <div class="checkbox i-checks">
                             <label>
-                              <input type="checkbox" value="" name="ispercentSPPCC">
+                              <input type="checkbox" value="">
                               <i></i> Percentage of SP </label>
                           </div>
                         </div>
                         <div class="col-sm-6">
                           <div class="input-group m-b">
-                            <input type="text" class="form-control" name="percentSPPCC">
+                            <input type="text" class="form-control">
                             <span class="input-group-addon">%</span></div>
                         </div>
                       </div>
@@ -329,13 +327,13 @@ span.#error{
                         <div class="col-sm-6">
                           <div class="checkbox i-checks">
                             <label>
-                              <input type="checkbox" value="" name="isfixedAmountPCC">
+                              <input type="checkbox" value="">
                               <i></i> Fixed Amount </label>
                           </div>
                         </div>
                         <div class="col-sm-6">
                           <div class="input-group m-b">
-                            <input type="text" class="form-control" name="fixedAmtPCC">
+                            <input type="text" class="form-control">
                             <span class="input-group-addon">%</span></div>
                         </div>
                       </div>
@@ -353,22 +351,19 @@ span.#error{
                       <div class="col-sm-6">
                         <div class="radio">
                           <label>
-                            <!-- <input type="radio" value="6" id="optionsRadios1" name="toggler"> -->
-                            <form:radiobutton path="nrnReturnConfig.shippingFeeType" value="variable" id="variable" name="toggler"/>
-                            Variable Shipping Charges  </label>
+                            <input type="radio" value="6" id="optionsRadios1" name="toggler">
+                            Variable Shipping Charges</label>
                         </div>
                       </div>
                       <div class="col-sm-6">
                         <div class="radio">
                           <label>
-                         <!--    <input type="radio" value="7" id="optionsRadios1" name="toggler"> -->
-                              <form:radiobutton path="nrnReturnConfig.shippingFeeType" value="fixed" id="fixed" name="toggler"/>
-                         
+                            <input type="radio" value="7" id="optionsRadios1" name="toggler">
                             Fixed Shipping Charges </label>
                         </div>
                       </div>
                     </div>
-                    <div class="col-sm-12 radio1" id="blk-variable">
+                    <div class="col-sm-12 radio1" id="blk-6">
                       <div class="col-sm-12 center-align text-center font-bold">
                         <h4 class="text-info">Which Ever is Higher</h4>
                       </div>
@@ -389,77 +384,77 @@ span.#error{
                               <td><label>&lt; 500</label></td>
                               <td><div class="form-group ">
                                   <div class=" content-rgt">
-                                    <input type="text" placeholder="" class="form-control" name="localvwlt500">
+                                    <input type="text" placeholder="" class="form-control">
                                   </div>
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="zonalvwlt500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="nationalvwlt500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="metrovwlt500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                             </tr>
                             <tr>
                               <td><label>500 &gt; 1000</label></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="localvwgt500lt1000">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control"  name="zonalvwgt500lt1000"> 
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="nationalvwgt500lt1000">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="metrovwgt500lt1000">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                             </tr>
                             <tr>
                               <td><label>1000 &gt; 1500</label></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="localvwgt1000lt1500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="zonalvwgt1000lt1500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="nationalvwgt1000lt1500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="metrovwgt1000lt1500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                             </tr>
                             <tr>
                               <td><label>1500 &gt; 5000</label></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control"  name="localvwgt1500lt5000">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="zonalvwgt1500lt5000">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="nationalvwgt1500lt5000">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="metrovwgt1500lt5000">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                             </tr>
                             <tr>
                               <td><label>add 1 kg</label></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="localvwgt5000">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control"  name="zonalvwgt5000">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="nationalvwgt5000">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="metrovwgt5000">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                             </tr>
                           </tbody>
@@ -470,7 +465,7 @@ span.#error{
                         <table class="table table-bordered">
                           <thead>
                             <tr>
-                              <th>Dead Weight Slab(gms) </th>
+                              <th>Volume Weight Slab(gms) </th>
                               <th>Local </th>
                               <th>Zonal </th>
                               <th>National </th>
@@ -482,39 +477,39 @@ span.#error{
                               <td><label>&lt; 500</label></td>
                               <td><div class="form-group ">
                                   <div class=" content-rgt">
-                                    <input type="text" placeholder="" class="form-control"  name="localdwlt500">
+                                    <input type="text" placeholder="" class="form-control">
                                   </div>
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="zonaldwlt500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control"  name="nationaldwlt500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control"  name="metrodwlt500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                             </tr>
                             <tr>
                               <td><label>additional &gt; 500</label></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="localdwgt500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control"  name="zonaldwgt500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control"  name="nationaldwgt500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="metrodwgt500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
                     </div>
-                    <div class="col-sm-12 radio1" id="blk-fixed">
+                    <div class="col-sm-12 radio1" id="blk-7">
                       <div class="col-sm-12 center-align text-center font-bold">
                         <h4 class="text-info">Which Ever is Higher</h4>
                       </div>
@@ -523,7 +518,7 @@ span.#error{
                         <table class="table table-bordered">
                           <thead>
                             <tr>
-                              <th>Dead Weight Slab(gms) </th>
+                              <th>Weight Weight Slab(gms) </th>
                               <th>Price </th>
                             </tr>
                           </thead>
@@ -532,14 +527,14 @@ span.#error{
                               <td><label>&lt; 500</label></td>
                               <td><div class="form-group ">
                                   <div class=" content-rgt">
-                                    <input type="text" placeholder="" class="form-control" name="fixeddwlt500">
+                                    <input type="text" placeholder="" class="form-control">
                                   </div>
                                 </div></td>
                             </tr>
                             <tr>
                               <td><label>additional &gt; 500</label></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control"  name="fixeddwgt500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                             </tr>
                           </tbody>
@@ -559,32 +554,32 @@ span.#error{
                               <td><label>&lt; 500</label></td>
                               <td><div class="form-group ">
                                   <div class=" content-rgt">
-                                    <input type="text" placeholder="" class="form-control"  name="fixedvwlt500">
+                                    <input type="text" placeholder="" class="form-control">
                                   </div>
                                 </div></td>
                             </tr>
                             <tr>
                               <td><label>500 &gt; 1000</label></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control"  name="fixedvwgt500lt1000">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                             </tr>
                             <tr>
                               <td><label>1000 &gt; 1500</label></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control"  name="fixedvwgt1000lt1500">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                             </tr>
                             <tr>
                               <td><label>1500 &gt; 5000</label></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="fixedvwgt1500lt5000">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                             </tr>
                             <tr>
                               <td><label>add 1 kg</label></td>
                               <td><div class=" content-rgt">
-                                  <input type="text" placeholder="" class="form-control" name="fixedvwgt5000">
+                                  <input type="text" placeholder="" class="form-control">
                                 </div></td>
                             </tr>
                           </tbody>
@@ -596,13 +591,13 @@ span.#error{
               </div>
               <div class="panel panel-default">
                 <div class="panel-heading">
-                  <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapsefive1">Service Tax</a> </h4>
+                  <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapsefive1">Service Tax @ 14.5%</a> </h4>
                 </div>
                 <div id="collapsefive1" class="panel-collapse collapse">
                   <div class="panel-body">
                     <div class="form-group col-md-12">
                       <div class="col-md-4 content-rgt">
-                        <input type="text" placeholder="Enter Service Tax %" class="form-control"  name="serviceTax">
+                        <input type="text" placeholder="" class="form-control">
                       </div>
                     </div>
                   </div>
@@ -635,66 +630,68 @@ span.#error{
                   <div class="col-sm-6">
                     <div class="radio">
                       <label>
-                        <form:radiobutton path="nrnReturnConfig.retCharType" value="fixed" id="retrun-sf-fix" name="toggler"/>
-                     <!--    <input type="radio" value="8" id="optionsRadios1" name="toggler"> -->
+                        <input type="radio" value="8" id="optionsRadios1" name="toggler">
                         Fixed Amount</label>
                     </div>
                   </div>
                   <div class="col-sm-6">
                     <div class="radio">
                       <label>
-                           <form:radiobutton path="nrnReturnConfig.retCharType" value="variable" id="retrun-sf-variable" name="toggler"/>
-                     <!--    <input type="radio" value="9" id="optionsRadios1" name="toggler"> -->
+                        <input type="radio" value="9" id="optionsRadios1" name="toggler">
                         Variable </label>
                     </div>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-sm-12 radio1 m-b" id="blk-retrun-sf-fix">
+                  <div class="col-sm-12 radio1 m-b" id="blk-8">
                     <div class="col-sm-12">
                       <div class="form-group">
                         <div class="col-md-2 content-rgt">
-                          <label>Enter Fix Charges</label>
+                          <label>Lable</label>
                         </div>
                         <div class="col-md-3 content-rgt">
-                          <input type="text" placeholder="" class="form-control" name="retCharSFFixedAmt">
+                          <input type="text" placeholder="" class="form-control">
                         </div>
                       </div>
 				
                     </div>
                   </div>
-                  <div class="col-sm-12 radio1" id="blk-retrun-sf-variable">
+                  <div class="col-sm-12 radio1" id="blk-9">
                     <div class="form-group col-md-12">
-                      <label class="col-sm-2 control-label">% of SP</label>
+                      <label class="col-sm-2 control-label">lable</label>
                       <div class="col-sm-3">
-                        <input type="text" placeholder="Enter %" class="form-control" name="retCharSFPercentSP">
+                        <input type="text" placeholder="" class="form-control">
                       </div>
-						<label class="col-sm-2 control-label">Fix Amount</label>
+						<label class="col-sm-2 control-label">lable 2</label>
                       <div class="col-sm-3">
-                        <input type="text" placeholder="Enter Amount" class="form-control" name="retCharSFVarFixedAmt">
+                        <input type="text" placeholder="" class="form-control">
                       </div>
                     </div>
                     <div class="col-md-12">
                       <div class="checkbox i-checks">
                         <label>
-                        <!--   <input type="checkbox" value=""> -->
-                            <form:checkbox path="nrnReturnConfig.retCharSFFF" id="retCharSFFF"/>
+                          <input type="checkbox" value="">
+                          <i></i> % of SP or commission </label>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="checkbox i-checks">
+                        <label>
+                          <input type="checkbox" value="">
                           <i></i> Fixed Fee </label>
                       </div>
                     </div>
                     <div class="col-md-12">
                       <div class="checkbox i-checks">
                         <label>
-                       <!--    <input type="checkbox" value=""> -->
-                               <form:checkbox path="nrnReturnConfig.retCharSFFF" id="retCharSFFF"/>
+                          <input type="checkbox" value="">
                           <i></i> Shipping Fee </label>
                       </div>
                     </div>
                     <div class="col-md-12">
                       <div class="checkbox i-checks">
                         <label>
-                       <!--    <input type="checkbox" value=""> -->
-                          <form:checkbox path="nrnReturnConfig.retCharSFShipFee" id="retCharSFShipFee"/>
+                          <input type="checkbox" value="">
                           <i></i> Service Tax </label>
                       </div>
                     </div>
@@ -715,21 +712,19 @@ span.#error{
                                     <div class="col-sm-6">
                                       <div class="radio">
                                         <label>
-                                           <form:radiobutton path="nrnReturnConfig.revshippingFeeType"  value="variable" id="revsf-variable" name="toggler"/>
-                                         <!--  <input type="radio" value="201" id="optionsRadios1" name="toggler"> -->
+                                          <input type="radio" value="201" id="optionsRadios1" name="toggler">
                                           Variable</label>
                                       </div>
                                     </div>
                                     <div class="col-sm-6">
                                       <div class="radio">
                                         <label>
-                                            <form:radiobutton path="nrnReturnConfig.revshippingFeeType"  value="fixed" id="revsf-fixed" name="toggler"/>
-                                         <!--  <input type="radio" value="202" id="optionsRadios1" name="toggler"> -->
+                                          <input type="radio" value="202" id="optionsRadios1" name="toggler">
                                           Fixed </label>
                                       </div>
                                     </div>
                                   </div>
-                                  <div class="col-sm-12 radio1" id="blk-revsf-variable">
+                                  <div class="col-sm-12 radio1" id="blk-201">
                                     <div class="row">
                                       <div class="col-sm-2">
                                         <div class="form-group">
@@ -755,7 +750,7 @@ span.#error{
                                       </div>
                                     </div>
                                   </div>
-                                  <div class="col-sm-12 radio1" id="blk-revsf-fixed">
+                                  <div class="col-sm-12 radio1" id="blk-202">
                                     <div class="col-sm-12 center-align text-center font-bold">
                                       <h4 class="text-info">Which Ever is Higher</h4>
                                     </div>
@@ -3167,7 +3162,6 @@ span.#error{
                               </div>
                             </div>
                           </div>
-                             </form:form>
                           <div class="footer">
                             <div class="pull-right"> <img alt="image"  src="img/go-easy-logo.jpg" /> </div>
                             <div> <a href="">Support</a> | <a href="">Contact Us</a> </div>
