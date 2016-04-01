@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +26,7 @@ import com.google.gson.GsonBuilder;
 import com.o2r.bean.OrderBean;
 import com.o2r.bean.PaymentUploadBean;
 import com.o2r.helper.ConverterClass;
+import com.o2r.helper.CustomException;
 import com.o2r.helper.FileUploadForm;
 import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
@@ -39,7 +41,6 @@ import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.PaymentUploadService;
 
-
 /**
  * @author Deep Mehrotra
  *
@@ -47,219 +48,301 @@ import com.o2r.service.PaymentUploadService;
 @Controller
 public class UploadController {
 
- @Autowired
- private PaymentUploadService paymentUploadService;
- @Autowired
- private OrderService orderService;
- @Resource(name="downloadService")
+	@Autowired
+	private PaymentUploadService paymentUploadService;
+	@Autowired
+	private OrderService orderService;
+	@Resource(name = "downloadService")
 	private DownloadService downloadService;
-@Resource(name="saveContents")
-private SaveContents saveContents;
-@Autowired
-private PartnerService partnerService;
-@Autowired
-private ManualChargesService manualChargesService;
+	@Resource(name = "saveContents")
+	private SaveContents saveContents;
+	@Autowired
+	private PartnerService partnerService;
+	@Autowired
+	private ManualChargesService manualChargesService;
 
- @RequestMapping(value = "/seller/paymentUploadList", method = RequestMethod.GET)
- public ModelAndView paymentUploadList(HttpServletRequest request) {
-		  Map<String, Object> model = new HashMap<String, Object>();
-		  System.out.println(" Inside Upload payment list");
-		  List<PaymentUploadBean> payuploadbeanlist=ConverterClass.prepareListofPaymentUploadBean(paymentUploadService.listPaymentUploads(HelperClass.getSellerIdfromSession(request)));
-		  if(payuploadbeanlist!=null)
-		  {
-		  for(PaymentUploadBean bean:payuploadbeanlist)
-		  {
-			  bean.setManualCharges(manualChargesService.getMCforPaymentID(bean.getUploadDesc(), HelperClass.getSellerIdfromSession(request)));
-		  }
-		  model.put("payments",payuploadbeanlist);
-		  }
+	static Logger log = Logger.getLogger(UploadController.class.getName());
 
-		  return new ModelAndView("dailyactivities/paymentUploadList", model);
-		 }
+	@RequestMapping(value = "/seller/paymentUploadList", method = RequestMethod.GET)
+	public ModelAndView paymentUploadList(HttpServletRequest request)
+			throws CustomException {
 
+		log.info("***paymentUploadList Start****");
 
- @RequestMapping(value = "/seller/viewPayments", method = RequestMethod.GET)
- public ModelAndView viewPayments(HttpServletRequest request) {
-	 String uploadId=request.getParameter("uploadId");
-	 String manualPay=request.getParameter("manualPay");
- 	System.out.println("Inside Payment orders  viewpayments uploadId"+uploadId);
- 	System.out.println("Inside Payment orders  viewpayments manualPay"+manualPay);
- 	Map<String, Object> model = new HashMap<String, Object>();
- 	String manualpayid=null;
- 	int sellerId=HelperClass.getSellerIdfromSession(request);
- 	if(manualPay!=null&&manualPay.equals("true"))
- 	{
- 		if(paymentUploadService.getManualPayment(sellerId)!=null)
- 			manualpayid=String.valueOf(paymentUploadService.getManualPayment(sellerId).getUploadId());
- 		model.put("uploadId",manualpayid);
- 	}
- 	else
- 	{
- 	model.put("uploadId",uploadId);
- 	}
-   return new ModelAndView("dailyactivities/orderPaymentDetails",model);
-  }
+		Map<String, Object> model = new HashMap<String, Object>();
+		System.out.println(" Inside Upload payment list");
+		List<PaymentUploadBean> payuploadbeanlist = null;
+		try {
+			payuploadbeanlist = ConverterClass
+					.prepareListofPaymentUploadBean(paymentUploadService
+							.listPaymentUploads(HelperClass
+									.getSellerIdfromSession(request)));
 
- @RequestMapping(value = "/seller/paymentDetails", method = RequestMethod.POST)
- public @ResponseBody String viewPaymentDetails(HttpServletRequest request) {
- 	System.out.println("****Inside payment details Ssave");
- 	 Map<String, Object> model = new HashMap<String, Object>();
- 	  Gson gson = new GsonBuilder().setPrettyPrinting().create();
- 	  PaymentUpload payment=null;
- 	 List<OrderBean> orderlist=null;
- 	 String action=request.getParameter("action");
- 	String uploadId=request.getParameter("uploadId");
+			if (payuploadbeanlist != null) {
 
- 	if(action!=null&&action.equals("list")&&uploadId!=null&&uploadId.length()!=0)
- 	  {
- 		payment=paymentUploadService.getPaymentUpload(Integer.parseInt(uploadId));
- 		orderlist=ConverterClass.prepareListofBean(payment.getOrders());
+				for (PaymentUploadBean bean : payuploadbeanlist) {
+					bean.setManualCharges(manualChargesService.getMCforPaymentID(
+							bean.getUploadDesc(),
+							HelperClass.getSellerIdfromSession(request)));
+				}
+			}
+		} catch (CustomException ce) {
+			log.error("changeInventorygroup exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			log.error(e);
+			model.put("errorMessage", e.getCause());
+			return new ModelAndView("globalErorPage", model);
+		}
 
- 	  }
- 	  System.out.println(" Inside find order method controller");
+		model.put("payments", payuploadbeanlist);
 
- 	 model.put("Result", "OK");
- 	  model.put("Records",orderlist);
+		log.info("***paymentUploadList Exit****");
+		return new ModelAndView("dailyactivities/paymentUploadList", model);
+	}
 
- 	 	// Convert Java Object to Json
- 	 String jsonArray = gson.toJson(model);
- 	  //model.put("employees", jsonArray);
- 	   return jsonArray;
-  }
+	@RequestMapping(value = "/seller/viewPayments", method = RequestMethod.GET)
+	public ModelAndView viewPayments(HttpServletRequest request) {
 
+		log.info("***viewPayments Start****");
 
-/**
- * Downloads the report as an Excel format.
- * <p>
- * Make sure this method doesn't return any model. Otherwise, you'll get
- * an "IllegalStateException: getOutputStream() has already been called for this response"
- */
-@RequestMapping(value = "/seller/download/paymentXls", method = RequestMethod.GET)
-public void getXLS(HttpServletResponse response) throws ClassNotFoundException {
+		String uploadId = request.getParameter("uploadId");
+		String manualPay = request.getParameter("manualPay");
+		// System.out.println("Inside Payment orders  viewpayments uploadId"+
+		// uploadId);
+		// System.out.println("Inside Payment orders  viewpayments manualPay"+
+		// manualPay);
+		Map<String, Object> model = new HashMap<String, Object>();
+		String manualpayid = null;
+		int sellerId;
+		try {
+			sellerId = HelperClass.getSellerIdfromSession(request);
+			if (manualPay != null && manualPay.equals("true")) {
+				if (paymentUploadService.getManualPayment(sellerId) != null)
+					manualpayid = String.valueOf(paymentUploadService
+							.getManualPayment(sellerId).getUploadId());
+				model.put("uploadId", manualpayid);
+			} else {
+				model.put("uploadId", uploadId);
+			}
+		} catch (CustomException ce) {
+			log.error("viewPayment exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			log.error(e);
+		}
+		log.info("***viewPayments Exit****");
+		return new ModelAndView("dailyactivities/orderPaymentDetails", model);
+	}
 
-	// Delegate to downloadService. Make sure to pass an instance of HttpServletResponse
-	downloadService.downloadPaymentXLS(response);
-}
-/**
- * Redirect to upload download page.
- * <p>
+	@RequestMapping(value = "/seller/paymentDetails", method = RequestMethod.POST)
+	public @ResponseBody String viewPaymentDetails(HttpServletRequest request) {
 
- */
-@RequestMapping(value = "/seller/orderPaymentSheet", method = RequestMethod.GET)
-public String displayForm() {
+		log.info("***viewPaymentDetails Start****");
+
+		System.out.println("****Inside payment details Ssave");
+		Map<String, Object> model = new HashMap<String, Object>();
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		PaymentUpload payment = null;
+		List<OrderBean> orderlist = null;
+		String action = request.getParameter("action");
+		String uploadId = request.getParameter("uploadId");
+		try {
+			if (action != null && action.equals("list") && uploadId != null
+					&& uploadId.length() != 0) {
+				payment = paymentUploadService.getPaymentUpload(Integer
+						.parseInt(uploadId));
+				orderlist = ConverterClass.prepareListofBean(payment
+						.getOrders());
+
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		System.out.println(" Inside find order method controller");
+
+		model.put("Result", "OK");
+		model.put("Records", orderlist);
+
+		// Convert Java Object to Json
+		String jsonArray = gson.toJson(model);
+		// model.put("employees", jsonArray);
+
+		log.info("***viewPaymentDetails Start****");
+		return jsonArray;
+	}
+
+	/**
+	 * Downloads the report as an Excel format.
+	 * <p>
+	 * Make sure this method doesn't return any model. Otherwise, you'll get an
+	 * "IllegalStateException: getOutputStream() has already been called for this response"
+	 */
+	@RequestMapping(value = "/seller/download/paymentXls", method = RequestMethod.GET)
+	public void getXLS(HttpServletResponse response)
+			throws ClassNotFoundException {
+
+		// Delegate to downloadService. Make sure to pass an instance of
+		// HttpServletResponse
+		downloadService.downloadPaymentXLS(response);
+	}
+
+	/**
+	 * Redirect to upload download page.
+	 * <p>
+	 */
+	@RequestMapping(value = "/seller/orderPaymentSheet", method = RequestMethod.GET)
+	public String displayForm() {
 
 		return "dailyactivities/payment_upload_form";
 	}
 
-@RequestMapping(value = "/seller/addManualPayment", method = RequestMethod.GET)
-public ModelAndView addManualPayment(HttpServletRequest request,@ModelAttribute("command")OrderBean orderBean,
-  BindingResult result) {
-	System.out.println(" Inside add order payment");
- Map<String, Object> model = new HashMap<String, Object>();
- Map<Integer, String> orderIdmap = new HashMap<>();
- Map<String, String> partnermap = new HashMap<>();
- int sellerId=HelperClass.getSellerIdfromSession(request);
- List<Order> orderlist=orderService.listOrders(sellerId);
- for(Order order:orderlist)
- {
-	 orderIdmap.put(order.getOrderId(), order.getChannelOrderID());
- }
- List<Partner> partnerList=partnerService.listPartners(sellerId);
- for(Partner partner:partnerList)
- {
-	 partnermap.put(partner.getPcName(), partner.getPcName());
- }
- model.put("orderIdmap",orderIdmap);
- model.put("partnermap",partnermap);
- return new ModelAndView("dailyactivities/addManualPayment", model);
-}
+	@RequestMapping(value = "/seller/addManualPayment", method = RequestMethod.GET)
+	public ModelAndView addManualPayment(HttpServletRequest request,
+			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
-@RequestMapping(value = "/seller/saveManualPayment", method = RequestMethod.POST)
-public ModelAndView saveManualPayment(HttpServletRequest request,@ModelAttribute("command")OrderBean orderBean,
-  BindingResult result) {
- int sellerId=HelperClass.getSellerIdfromSession(request);
- Order order=null;
- PaymentUpload paymentUpload=null;
- OrderPayment payment=new OrderPayment();
+		log.info("***addManualPayment Start****");
 
- System.out.println(" channelOrderId "+orderBean.getChannelOrderID());
- if((int)orderBean.getOrderPayment().getNegativeAmount()!=0)
- {
-
-         payment.setNegativeAmount(orderBean.getOrderPayment().getNegativeAmount());
- }
-
-else
-{
-	payment.setPositiveAmount(orderBean.getOrderPayment().getPositiveAmount());
-
-}
-payment.setDateofPayment(orderBean.getOrderPayment().getDateofPayment());
-System.out.println("order id in payment controller : "+orderBean.getOrderId());
-order=orderService.addOrderPayment(orderBean.getOrderId(), payment,sellerId);
-
-paymentUpload=paymentUploadService.getManualPayment(sellerId);
-if(paymentUpload==null)
-{
-	paymentUpload=new PaymentUpload();
-	paymentUpload.setTotalpositivevalue(payment.getPositiveAmount());
-	paymentUpload.setTotalnegativevalue(payment.getNegativeAmount());
-	paymentUpload.setNetRecievedAmount(payment.getPositiveAmount()-payment.getNegativeAmount());
-	paymentUpload.setUploadDesc("Manual Upload");
-	paymentUpload.setUploadStatus("Success");
-
-}
-else
-{
-	paymentUpload.setTotalpositivevalue(paymentUpload.getTotalpositivevalue()+payment.getPositiveAmount());
-	paymentUpload.setTotalnegativevalue(paymentUpload.getTotalnegativevalue()+payment.getNegativeAmount());
-	paymentUpload.setNetRecievedAmount(paymentUpload.getTotalpositivevalue()-paymentUpload.getTotalnegativevalue());
-	paymentUpload.setUploadStatus("Success");
-}
-if(order!=null)
-{
-	   System.out.println(order);
-	   paymentUpload.getOrders().add(order);
-}
-
-paymentUploadService.addPaymentUpload(paymentUpload, sellerId);
-
-
- return new ModelAndView("redirect:/seller/paymentUploadList.html");
-}
-
-
-@RequestMapping(value = "/seller/savePaymentUpload", method = RequestMethod.POST)
-public ModelAndView save(HttpServletRequest request,
-		@ModelAttribute("uploadForm") FileUploadForm uploadForm,
-				Model map) {
-	System.out.println("Inside save method");
-	List<MultipartFile> files = uploadForm.getFiles();
-
-	List<String> fileNames = new ArrayList<String>();
-	MultipartFile fileinput=files.get(0);
-	int sellerId=HelperClass.getSellerIdfromSession(request);
-	System.out.println(" got file");
-	if(null != files && files.size() > 0) {
-		fileNames.add(files.get(0).getOriginalFilename());
-		try{
-			System.out.println(" Filename : "+files.get(0).getOriginalFilename());
-			System.out.println(" Filename : "+files.get(0).getName());
-		 ValidateUpload.validateOfficeData(files.get(0));
-		 System.out.println(" fileinput "+fileinput.getName());
-		 saveContents.savePaymentContents(files.get(0),sellerId);
+		System.out.println(" Inside add order payment");
+		Map<String, Object> model = new HashMap<String, Object>();
+		Map<Integer, String> orderIdmap = new HashMap<>();
+		Map<String, String> partnermap = new HashMap<>();
+		try {
+			int sellerId = HelperClass.getSellerIdfromSession(request);
+			List<Order> orderlist = orderService.listOrders(sellerId);
+			for (Order order : orderlist) {
+				orderIdmap.put(order.getOrderId(), order.getChannelOrderID());
+			}
+			List<Partner> partnerList = partnerService.listPartners(sellerId);
+			for (Partner partner : partnerList) {
+				partnermap.put(partner.getPcName(), partner.getPcName());
+			}
+		} catch (CustomException ce) {
+			log.error("addManualPayment exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			log.error(e);
 		}
-		catch (Exception e) {
-			System.out.println("Inside exception , filetype not accepted "+e.getLocalizedMessage());
-
-		}
-
+		model.put("orderIdmap", orderIdmap);
+		model.put("partnermap", partnermap);
+		return new ModelAndView("dailyactivities/addManualPayment", model);
 	}
 
+	@RequestMapping(value = "/seller/saveManualPayment", method = RequestMethod.POST)
+	public ModelAndView saveManualPayment(HttpServletRequest request,
+			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
-	  return new ModelAndView("dailyactivities/dailyactivities");
+		log.info("*** saveManualPayment starts ***");
+		int sellerId;
+		Order order = null;
+		PaymentUpload paymentUpload = null;
+		OrderPayment payment = new OrderPayment();
+		Map<String, Object> model = new HashMap<String, Object>();
+		System.out.println(" channelOrderId " + orderBean.getChannelOrderID());
+		try {
+			sellerId = HelperClass.getSellerIdfromSession(request);
+			if ((int) orderBean.getOrderPayment().getNegativeAmount() != 0) {
 
-}
+				payment.setNegativeAmount(orderBean.getOrderPayment()
+						.getNegativeAmount());
+			}
 
+			else {
+				payment.setPositiveAmount(orderBean.getOrderPayment()
+						.getPositiveAmount());
+
+			}
+			payment.setDateofPayment(orderBean.getOrderPayment()
+					.getDateofPayment());
+			System.out.println("order id in payment controller : "
+					+ orderBean.getOrderId());
+			order = orderService.addOrderPayment(orderBean.getOrderId(),
+					payment, sellerId);
+
+			paymentUpload = paymentUploadService.getManualPayment(sellerId);
+			if (paymentUpload == null) {
+				paymentUpload = new PaymentUpload();
+				paymentUpload
+						.setTotalpositivevalue(payment.getPositiveAmount());
+				paymentUpload
+						.setTotalnegativevalue(payment.getNegativeAmount());
+				paymentUpload.setNetRecievedAmount(payment.getPositiveAmount()
+						- payment.getNegativeAmount());
+				paymentUpload.setUploadDesc("Manual Upload");
+				paymentUpload.setUploadStatus("Success");
+
+			} else {
+				paymentUpload.setTotalpositivevalue(paymentUpload
+						.getTotalpositivevalue() + payment.getPositiveAmount());
+				paymentUpload.setTotalnegativevalue(paymentUpload
+						.getTotalnegativevalue() + payment.getNegativeAmount());
+				paymentUpload.setNetRecievedAmount(paymentUpload
+						.getTotalpositivevalue()
+						- paymentUpload.getTotalnegativevalue());
+				paymentUpload.setUploadStatus("Success");
+			}
+			if (order != null) {
+				System.out.println(order);
+				paymentUpload.getOrders().add(order);
+			}
+
+			paymentUploadService.addPaymentUpload(paymentUpload, sellerId);
+		} catch (CustomException ce) {
+			log.error("changeInventorygroup exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			log.error(e);
+		}
+
+		log.info("*** saveManualPayment ***");
+		return new ModelAndView("redirect:/seller/paymentUploadList.html");
+	}
+
+	@RequestMapping(value = "/seller/savePaymentUpload", method = RequestMethod.POST)
+	public ModelAndView save(HttpServletRequest request,
+			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
+
+		log.info("*** save starts ***");
+		// System.out.println("Inside save method");
+		List<MultipartFile> files = uploadForm.getFiles();
+
+		List<String> fileNames = new ArrayList<String>();
+		MultipartFile fileinput = files.get(0);
+		int sellerId;
+		System.out.println(" got file");
+		if (null != files && files.size() > 0) {
+			fileNames.add(files.get(0).getOriginalFilename());
+			try {
+				sellerId = HelperClass.getSellerIdfromSession(request);
+				System.out.println(" Filename : "
+						+ files.get(0).getOriginalFilename());
+				System.out.println(" Filename : " + files.get(0).getName());
+				ValidateUpload.validateOfficeData(files.get(0));
+				System.out.println(" fileinput " + fileinput.getName());
+				saveContents.savePaymentContents(files.get(0), sellerId);
+			} catch (Exception e) {
+				System.out.println("Inside exception , filetype not accepted "
+						+ e.getLocalizedMessage());
+
+			}
+
+		}
+
+		log.info("*** save ends ***");
+		return new ModelAndView("dailyactivities/dailyactivities");
+
+	}
 
 }

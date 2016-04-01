@@ -299,7 +299,7 @@ public int deleteCategory(Category category,int sellerId) throws CustomException
 		 session.getTransaction().commit();
 		  session.close();
 	 }
-	 log.info("***deleteCategory Start****");
+	 log.info("***deleteCategory Exit****");
 	 if(updated!=0&&catdelete!=0)
 	return 1;
 	 else

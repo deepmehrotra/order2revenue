@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.dao.ManualChargesDao;
+import com.o2r.helper.CustomException;
 import com.o2r.model.ManualCharges;
 
 /**
@@ -24,30 +25,30 @@ public class ManualChargesServiceImpl implements ManualChargesService {
 
 @Override
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public void addManualCharges(ManualCharges manualCharges , int sellerId) {
+public void addManualCharges(ManualCharges manualCharges , int sellerId)throws CustomException {
 	manualChargesDao.addManualCharges(manualCharges, sellerId);
 	
 }
 
 @Override
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public List<ManualCharges> listManualCharges(int sellerId) {
+public List<ManualCharges> listManualCharges(int sellerId)throws CustomException {
 	return manualChargesDao.listManualCharges(sellerId);
 	
 }
 
 @Override
-public ManualCharges getManualCharges(int mcId)
+public ManualCharges getManualCharges(int mcId)throws CustomException
 {
 	return manualChargesDao.getManualCharges(mcId);
 }
 @Override
-public void deleteManualCharges(ManualCharges manualCharges,int sellerId) {
+public void deleteManualCharges(ManualCharges manualCharges,int sellerId)throws CustomException {
 	manualChargesDao.deleteManualCharges(manualCharges, sellerId);
 }
 
 @Override
-public Double getMCforPaymentID(String paymentId, int sellerId)
+public Double getMCforPaymentID(String paymentId, int sellerId)throws CustomException
 {
 	return manualChargesDao.getMCforPaymentID(paymentId, sellerId);
 }

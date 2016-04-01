@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.dao.SellerDao;
+import com.o2r.helper.CustomException;
 
 
 
@@ -27,9 +28,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String login)
-			throws UsernameNotFoundException {
+			throws UsernameNotFoundException{
+		com.o2r.model.Seller domainSeller=null;
 		System.out.println("Inside customer user details..."+login);
-		com.o2r.model.Seller domainSeller = sellerDao.getSeller(login);
+		
+		try{
+		domainSeller = sellerDao.getSeller(login);
+		}catch(CustomException ce){
+			System.out.println(ce.getMessage());
+		}
+		
 		System.out.println("Inside customer user details...login"+domainSeller.getEmail());
 		System.out.println("Inside customer user details...pass"+domainSeller.getPassword());
 		 System.out.println(" Role "+getAuthorities(domainSeller.getRole().getRole()));

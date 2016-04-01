@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.dao.ProductDao;
+import com.o2r.helper.CustomException;
 import com.o2r.model.Product;
 
 /**
@@ -25,46 +26,46 @@ public class ProductServiceImpl implements ProductService {
 
 @Override
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public void addProduct(Product product ,int sellerId) {
+public void addProduct(Product product ,int sellerId)throws CustomException {
 	System.out.println("Inside add order OrderServiceImpl awb :"+product.getProductName());
 	productDao.addProduct(product,sellerId);
 
 }
 
 @Override
-public List<Product> listProducts(int sellerId,int pageNo) {
+public List<Product> listProducts(int sellerId,int pageNo)throws CustomException {
 	return productDao.listProducts(sellerId, pageNo);
 }
 
 @Override
-public List<Product> listProducts(int sellerId) {
+public List<Product> listProducts(int sellerId)throws CustomException {
 	return productDao.listProducts(sellerId);
 }
 @Override
-public Product getProduct(int orderId) {
+public Product getProduct(int orderId)throws CustomException {
 	return productDao.getProduct(orderId);
 }
 
 @Override
-public void deleteProduct(Product product,int sellerId) {
+public void deleteProduct(Product product,int sellerId)throws CustomException {
 
 	productDao.deleteProduct(product,sellerId);
 }
 
 @Override
-public void updateInventory(String sku , int currentInventory , int quantoAdd , int quantoSub ,boolean status,int sellerId)
+public void updateInventory(String sku , int currentInventory , int quantoAdd , int quantoSub ,boolean status,int sellerId)throws CustomException
 {
 	productDao.updateInventory(sku ,currentInventory ,quantoAdd ,quantoSub ,status,sellerId);
 }
 
 @Override
-public Product getProduct(String skuCode, int sellerId)
+public Product getProduct(String skuCode, int sellerId)throws CustomException
 {
 	return productDao.getProduct(skuCode, sellerId);
 }
 
 @Override
-public List<Product> getProductwithCreatedDate(Date startDate,Date endDate, int sellerId)
+public List<Product> getProductwithCreatedDate(Date startDate,Date endDate, int sellerId)throws CustomException
 {
 	return productDao.getProductwithCreatedDate(startDate,endDate,sellerId);
 }

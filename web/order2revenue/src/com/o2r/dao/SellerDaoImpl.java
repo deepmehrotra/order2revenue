@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,10 +12,11 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.helper.CustomException;
+import com.o2r.helper.GlobalConstant;
 import com.o2r.model.AccountTransaction;
 import com.o2r.model.Plan;
 import com.o2r.model.Seller;
-import com.o2r.model.State;
 
 /**
  * @author Deep Mehrotra
@@ -26,7 +28,9 @@ public class SellerDaoImpl implements SellerDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	public void addSeller(Seller seller) {
+	static Logger log = Logger.getLogger(SellerDaoImpl.class.getName());
+
+	public void addSeller(Seller seller)throws CustomException {
 
 		// sessionFactory.getCurrentSession().saveOrUpdate(seller);
 		try {
@@ -37,24 +41,38 @@ public class SellerDaoImpl implements SellerDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			System.out.println(" Seller DAO IMPL :" + e.getLocalizedMessage());
+			
+			log.error(e);
+			throw new CustomException(GlobalConstant.addSellerError, new Date(), 1, GlobalConstant.addSellerErrorCode, e);
+			//System.out.println(" Seller DAO IMPL :" + e.getLocalizedMessage());
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Seller> listSeller() {
-
+	public List<Seller> listSeller()throws CustomException {
+		try{
 		return (List<Seller>) sessionFactory.getCurrentSession()
 				.createCriteria(Seller.class).list();
-
+		}catch(Exception e){
+			log.error(e);
+			throw new CustomException(GlobalConstant.listSellerError, new Date(), 3, GlobalConstant.listSellerErrorCode, e);
+			
+		}
 	}
 
-	public Seller getSeller(int sellerid) {
+	public Seller getSeller(int sellerid)throws CustomException {
+		
+		try{
 		return (Seller) sessionFactory.getCurrentSession().get(Seller.class,
 				sellerid);
+		}catch(Exception e){
+			log.error(e);
+			throw new CustomException(GlobalConstant.getSellerByIdError, new Date(), 3, GlobalConstant.getSellerByIdErrorCode, e);
+			
+		}
 	}
 
-	public Seller getSeller(String email) {
+	public Seller getSeller(String email)throws CustomException {
 		// return (Seller) sessionFactory.getCurrentSession().get(Seller.class,
 		// sellerid);
 		Seller seller = null;
@@ -68,13 +86,17 @@ public class SellerDaoImpl implements SellerDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			System.out.println(" Seller  DAO IMPL :" + e.getLocalizedMessage());
-			e.printStackTrace();
+			
+			log.error(e);
+			throw new CustomException(GlobalConstant.getSellerByEmailError, new Date(), 3, GlobalConstant.getSellerByEmailErrorCode, e);
+			
+//			System.out.println(" Seller  DAO IMPL :" + e.getLocalizedMessage());
+//			e.printStackTrace();
 		}
 		return seller;
 	}
 
-	public void deleteSeller(Seller seller) {
+	public void deleteSeller(Seller seller)throws CustomException {
 		// sessionFactory.getCurrentSession().createQuery("DELETE FROM Seller WHERE id = "+seller.getId()).executeUpdate();
 
 		System.out.println(" In seller  delete sellerid " + seller.getId());
@@ -97,14 +119,17 @@ public class SellerDaoImpl implements SellerDao {
 			session.close();
 
 		} catch (Exception e) {
-			System.out.println(" Inside delleting partner"
-					+ e.getLocalizedMessage());
-			e.printStackTrace();
+			
+			log.error(e);
+			throw new CustomException(GlobalConstant.deleteSellerError, new Date(), 3, GlobalConstant.deleteSellerErrorCode, e);
+			
+//			System.out.println(" Inside delleting partner"+ e.getLocalizedMessage());
+//			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void planUpgrade(int pid, int sellerid) {
+	public void planUpgrade(int pid, int sellerid)throws CustomException {
 		System.out.println("Inside Plan Upgrade");
 		System.out.println("Dao Pid " + pid);
 		/* System.out.println("Dao price "+plan.getPlanPrice()); */
@@ -167,9 +192,12 @@ public class SellerDaoImpl implements SellerDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			System.out.println(" Inside exception in plN Dao impl :  "
-					+ e.getLocalizedMessage());
-			e.printStackTrace();
+			
+			log.error(e);
+			throw new CustomException(GlobalConstant.planUpgradeError, new Date(), 1, GlobalConstant.planUpgradeErrorCode, e);
+			
+			/*System.out.println(" Inside exception in plN Dao impl :  "+ e.getLocalizedMessage());
+			e.printStackTrace();*/
 		}
 
 	}
@@ -182,13 +210,5 @@ public class SellerDaoImpl implements SellerDao {
 		at.setInvoiceId("invoice123");
 		at.setTransactionId("transac123"); // It has Recived From Third Party
 		return at;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<State> listStates() {
-
-		return (List<State>) sessionFactory.getCurrentSession()
-				.createCriteria(State.class).list();
 	}
 }
