@@ -29,7 +29,9 @@ public class NRnReturnConfig {
 	private String shippingFeeType ; // - variable  or fixed
 
 	@Column
-	private 	String retCharType;
+	private String retCharSFType;
+	@Column
+	private String retCharBRType;
 	@Column
 	private boolean retCharSFFF;
 	@Column
@@ -47,8 +49,9 @@ public class NRnReturnConfig {
 	@Column
 	private boolean retCharBRPCC;
 	@Column
-	private String RTOCharType;
-
+	private 	String RTOCharSFType;
+	@Column
+	private 	String RTOCharBRType;
 	@Column
 	private boolean RTOCharSFFF;
 	@Column
@@ -66,7 +69,9 @@ public class NRnReturnConfig {
 	@Column
 	private boolean RTOCharBRPCC;
 	@Column
-	private 	String repCharType;
+	private String repCharSFType;
+	@Column
+	private String repCharBRType;
 	@Column
 	private boolean repCharSFFF;
 	@Column
@@ -84,7 +89,9 @@ public class NRnReturnConfig {
 	@Column
 	private boolean repCharBRPCC;
 	@Column
-	private String PDCharType;
+	private String PDCharSFType;
+	@Column
+	private String PDCharBRType;
 	//@Column
 	//private float PDCharSFFixAmt;
 	//@Column
@@ -110,9 +117,11 @@ public class NRnReturnConfig {
 	@Column
 	private boolean PDCharBRPCC;
 	@Column
-	private String canCharType;
+	private String canCharSFARTDType;
 	@Column
-	private String canCharSFType;
+	private String canCharSFBFRTDType;
+	@Column
+	private String canCharBRType;
 	//@Column
 	//private float canCharSFFixAmt;
 	//@Column
@@ -182,12 +191,6 @@ public class NRnReturnConfig {
 	public void setShippingFeeType(String shippingFeeType) {
 		this.shippingFeeType = shippingFeeType;
 	}
-	public String getRetCharType() {
-		return retCharType;
-	}
-	public void setRetCharType(String retCharType) {
-		this.retCharType = retCharType;
-	}
 	public boolean isRetCharBRFF() {
 		return retCharBRFF;
 	}
@@ -205,12 +208,6 @@ public class NRnReturnConfig {
 	}
 	public void setRetCharBRSerTax(boolean retCharBRSerTax) {
 		this.retCharBRSerTax = retCharBRSerTax;
-	}
-	public String getRTOCharType() {
-		return RTOCharType;
-	}
-	public void setRTOCharType(String rTOCharType) {
-		RTOCharType = rTOCharType;
 	}
 	public boolean isRTOCharSFFF() {
 		return RTOCharSFFF;
@@ -248,12 +245,7 @@ public class NRnReturnConfig {
 	public void setRTOCharBRSerTax(boolean rTOCharBRSerTax) {
 		RTOCharBRSerTax = rTOCharBRSerTax;
 	}
-	public String getRepCharType() {
-		return repCharType;
-	}
-	public void setRepCharType(String repCharType) {
-		this.repCharType = repCharType;
-	}
+	
 	public boolean isRepCharSFFF() {
 		return repCharSFFF;
 	}
@@ -289,12 +281,6 @@ public class NRnReturnConfig {
 	}
 	public void setRepCharBRSerTax(boolean repCharBRSerTax) {
 		this.repCharBRSerTax = repCharBRSerTax;
-	}
-	public String getPDCharType() {
-		return PDCharType;
-	}
-	public void setPDCharType(String pDCharType) {
-		PDCharType = pDCharType;
 	}
 	public boolean isPDCharSFFF() {
 		return PDCharSFFF;
@@ -332,12 +318,7 @@ public class NRnReturnConfig {
 	public void setPDCharBRSerTax(boolean pDCharBRSerTax) {
 		PDCharBRSerTax = pDCharBRSerTax;
 	}
-	public String getCanCharType() {
-		return canCharType;
-	}
-	public void setCanCharType(String canCharType) {
-		this.canCharType = canCharType;
-	}
+	
 	public boolean isCanCharSFFF() {
 		return canCharSFFF;
 	}
@@ -489,12 +470,7 @@ public class NRnReturnConfig {
 	public void setPDCharBRPCC(boolean pDCharBRPCC) {
 		PDCharBRPCC = pDCharBRPCC;
 	}
-	public String getCanCharSFType() {
-		return canCharSFType;
-	}
-	public void setCanCharSFType(String canCharSFType) {
-		this.canCharSFType = canCharSFType;
-	}
+	
 	public boolean isCanCharSFPCC() {
 		return canCharSFPCC;
 	}
@@ -530,6 +506,72 @@ public class NRnReturnConfig {
 	}
 	public void setCanCharSFBRTDPCC(boolean canCharSFBRTDPCC) {
 		this.canCharSFBRTDPCC = canCharSFBRTDPCC;
+	}
+	public String getRetCharSFType() {
+		return retCharSFType;
+	}
+	public void setRetCharSFType(String retCharSFType) {
+		this.retCharSFType = retCharSFType;
+	}
+	public String getRetCharBRType() {
+		return retCharBRType;
+	}
+	public void setRetCharBRType(String retCharBRType) {
+		this.retCharBRType = retCharBRType;
+	}
+	public String getRTOCharSFType() {
+		return RTOCharSFType;
+	}
+	public void setRTOCharSFType(String rTOCharSFType) {
+		RTOCharSFType = rTOCharSFType;
+	}
+	public String getRTOCharBRType() {
+		return RTOCharBRType;
+	}
+	public void setRTOCharBRType(String rTOCharBRType) {
+		RTOCharBRType = rTOCharBRType;
+	}
+	public String getRepCharSFType() {
+		return repCharSFType;
+	}
+	public void setRepCharSFType(String repCharSFType) {
+		this.repCharSFType = repCharSFType;
+	}
+	public String getRepCharBRType() {
+		return repCharBRType;
+	}
+	public void setRepCharBRType(String repCharBRType) {
+		this.repCharBRType = repCharBRType;
+	}
+	public String getPDCharSFType() {
+		return PDCharSFType;
+	}
+	public void setPDCharSFType(String pDCharSFType) {
+		PDCharSFType = pDCharSFType;
+	}
+	public String getPDCharBRType() {
+		return PDCharBRType;
+	}
+	public void setPDCharBRType(String pDCharBRType) {
+		PDCharBRType = pDCharBRType;
+	}
+	public String getCanCharSFARTDType() {
+		return canCharSFARTDType;
+	}
+	public void setCanCharSFARTDType(String canCharSFARTDType) {
+		this.canCharSFARTDType = canCharSFARTDType;
+	}
+	public String getCanCharSFBFRTDType() {
+		return canCharSFBFRTDType;
+	}
+	public void setCanCharSFBFRTDType(String canCharSFBFRTDType) {
+		this.canCharSFBFRTDType = canCharSFBFRTDType;
+	}
+	public String getCanCharBRType() {
+		return canCharBRType;
+	}
+	public void setCanCharBRType(String canCharBRType) {
+		this.canCharBRType = canCharBRType;
 	}
 
 
