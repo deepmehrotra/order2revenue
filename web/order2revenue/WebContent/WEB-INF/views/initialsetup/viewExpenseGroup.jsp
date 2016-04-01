@@ -56,18 +56,22 @@
                                             <select class="form-control" name="searchExpense"  id="searchExpense">
                                                 <option value="expenseCategory">Expense Group</option>
                                                 <option value="expenseDate">Expense Date</option>
+                                                <option value="expName">Expense Name</option>
                                             </select>
+                                        </div>
+                                      	<div class="form-group ProductSearch-box" id="expName">
+                                           <input type="text" placeholder="Expense Name" class="form-control" name="expName">
                                         </div>
                                         <div class="form-group ProductSearch-box" id="expenseCategory">
                                            <input type="text" placeholder="Expense Group" class="form-control" name="expenseCategory">
                                         </div>
                                         <div class="form-group ProductSearch-box" id="expenseDate" style="display:none">
                                             <div class="input-group date">
-                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control"  placeholder="Start Date"
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control"  placeholder=""
                                                 name="startDate">
                                             </div>
                                             <div class="input-group date">
-                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" placeholder="End Date"
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" placeholder=""
                                                  name="endDate">
                                             </div>
                                         </div>

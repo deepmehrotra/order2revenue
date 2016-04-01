@@ -86,14 +86,14 @@
                         <i class="fa fa-gear"></i>
                     </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a href="addSeller.html">Seller Info</a></li>
+                            <li><a href="#">Seller Info</a></li>
                             <li><a href="#">Goeasy Account</a></li>
                             <li><a href="upgrade.html">Plan Upgrade</a></li>
                             <li><a href="#">Summary</a></li>
                         </ul>
                 </li>
                 <li>
-                    <a href="login.html">
+                    <a href="/j_spring_security_logout">
                         <i class="fa fa-sign-out"></i> Log out
                     </a>
                 </li>

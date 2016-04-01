@@ -157,6 +157,30 @@ public class ExpenseDaoImpl implements ExpenseDao {
 		return 0.0;
 	}
 
+ public void addExpenseByName(ExpenseCategory category , int sellerId){
+	 //sellerId=4;
+	 Seller seller=null;
+	  try
+	   {
+		   Session session=sessionFactory.openSession();
+		   session.beginTransaction();
+		   Criteria criteria=session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
+		   seller=(Seller)criteria.list().get(0);
+		   category.setCreatedOn(new Date());
+
+		   System.out.println(" Inside expense category  add");
+			   seller.getExpensecategories().add(category);
+	   session.saveOrUpdate(seller);
+	    session.getTransaction().commit();
+	   session.close();
+	   }
+	   catch (Exception e) {
+		   System.out.println("Inside exception  "+e.getLocalizedMessage());
+	}
+	  System.out.println(" Saved Expense Group : "+category.getExpcategoryId());
+ 
+ }
+ 
 
  @Override
 public void addExpenseCategory(ExpenseCategory category , int sellerId)
@@ -355,6 +379,44 @@ public int deleteExpenseCategory(ExpenseCategory expenseCat,int sellerId)
 		 return updated;
 	 }
 	 return 0;
+ }
+ 
+ @Override
+ public List<Expenses> getExpenseByName(String expName ,int sellerId){
+		List returnlist=null;
+		List<Expenses> expenselist=null;
+		 System.out.println(" ***Insid get pexpCatName ***"+expName);
+
+			 try
+			 {
+		   Session session=sessionFactory.openSession();
+		   session.beginTransaction();
+		   Criteria criteria=session.createCriteria(Expenses.class)
+		   .add(Restrictions.eq("sellerId", sellerId))
+		   .add(Restrictions.like("expenseName", expName+"%").ignoreCase())
+		   .addOrder(org.hibernate.criterion.Order.desc("expenseDate"))
+		   .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+
+			returnlist=criteria.list();
+			if(returnlist==null||returnlist.get(0)==null)
+			{
+				System.out.println(" Return no results");
+			}
+			else
+			{
+				expenselist=returnlist;
+			}
+
+		   System.out.println(" Return object :#### "+returnlist);
+		   session.getTransaction().commit();
+		   session.close();
+			 }
+			 catch (Exception e) {
+				System.out.println(" Product   DAO IMPL :"+e.getLocalizedMessage());
+				e.printStackTrace();
+			}
+
+			 return expenselist;
  }
 
 @Override

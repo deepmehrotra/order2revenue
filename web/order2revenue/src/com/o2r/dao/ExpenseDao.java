@@ -16,6 +16,8 @@ public interface ExpenseDao {
 
  public void addExpenseCategory(ExpenseCategory category , int sellerId);
 
+ public void addExpenseByName(ExpenseCategory category , int sellerId);
+ 
  public List<Expenses> listExpenses(int sellerId);
 
  public List<ExpenseCategory> listExpenseCategories(int sellerId);
@@ -31,6 +33,8 @@ public interface ExpenseDao {
 double getMonthlyAmount(int catId, int sellerId);
 
 public List<Expenses> getExpenseByCategory(String expCatName ,int sellerId);
+
+public List<Expenses> getExpenseByName(String expCatName ,int sellerId);
 
 public List<Expenses> getExpenseByDate(Date startDate,Date endDate ,int sellerId);
 }

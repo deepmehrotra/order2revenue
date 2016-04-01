@@ -15,6 +15,10 @@ public interface ExpenseService {
  public void addExpense(Expenses expense , int sellerId);
 
  public void addExpenseCategory(ExpenseCategory category , int sellerId);
+ 
+ public  List<Expenses>  getExpenseByName(String expenseCat ,int sellerId);
+ 
+ public void addExpenseByName(ExpenseCategory expenseCat ,int sellerId);
 
  public List<Expenses> listExpenses(int sellerId);
 

@@ -39,6 +39,11 @@ public void addExpenseCategory(ExpenseCategory expenseCat ,int sellerId) {
 }
 
 @Override
+@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+public void addExpenseByName(ExpenseCategory expenseCat ,int sellerId){
+	expenseDao.addExpenseByName(expenseCat,sellerId);
+}
+@Override
 public List<Expenses> listExpenses(int sellerId) {
 	return expenseDao.listExpenses(sellerId);
 }
@@ -74,6 +79,11 @@ public int deleteExpense(Expenses expenses,int sellerId) {
 public double getMonthlyAmount(int catId, int sellerId)
 {
 	return expenseDao.getMonthlyAmount(catId, sellerId);
+}
+
+@Override
+public List<Expenses> getExpenseByName(String expName, int sellerId) {
+	return expenseDao.getExpenseByName(expName, sellerId);
 }
 
 @Override

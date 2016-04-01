@@ -76,7 +76,6 @@
                                     <th>Threshold Limit</th>
                                     <th>Channel SKU(Separated by ;)</th>
                                      <th>Action</th>
-                                    
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -93,8 +92,8 @@
                                      <td>${product.threholdLimit}</td>
                                       <td>${product.channelSKU}</td>
                                         <td class="tooltip-demo">
-                                  <a href="editProduct.html?id=${product.productId}"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a>
-                                    
+                           <a href="editProduct.html?id=${product.productId}"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a>
+  							<a href="javascript:onclickNavigatePayment(${product.productId})"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Update Inventory"></i></a></td>
                                 </tr>
                                 </c:forEach>
                                 </c:if>
@@ -217,7 +216,15 @@
                }
            });
        }
-   
+ 
+      
+      
+      function onclickNavigatePayment(value) {
+    	 // window.open("updateInventory.html?id="+value, 'liveMatches', 'width=720,height=800,toolbar=0,location=0, directories=0, status=0,location=no,menubar=0');
+    	 window.open("updateInventory.html?id="+value,null, "location=no,height=400,width=1200,top=100,left=50,status=yes,resizable=no,titlebar=no,toolbar=no,menubar=no,scrollbars=no,location=no");
+    	}
+
+
 </script>
 <style>
     body.DTTT_Print {

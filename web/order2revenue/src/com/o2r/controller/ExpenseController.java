@@ -65,6 +65,7 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
  List<ExpenseBean> expenseList=new ArrayList<>();
  int sellerId=HelperClass.getSellerIdfromSession(request);
  String expenseCategory=request.getParameter("expenseCategory");
+ String searchByName=request.getParameter("expName");
  String startDate=request.getParameter("startDate");
  String endDate=request.getParameter("endDate");
  String searchExpense=request.getParameter("searchExpense");
@@ -74,10 +75,14 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
 	  productList.add(productBean);*/
 	 expenseList=ConverterClass.prepareListofExpenseBean(expenseService.getExpenseByCategory(expenseCategory, sellerId));
  }
- else if(searchExpense!=null&&startDate!=null&&endDate!=null)
+ else if(searchExpense!=null&&!startDate.equals(""))
  {
 
 	 expenseList=ConverterClass.prepareListofExpenseBean(expenseService.getExpenseByDate(new Date(startDate), new Date(endDate), sellerId));
+ }
+ else if(searchExpense!=null&&searchExpense.equals("expName")&&expenseCategory!=null)
+ {
+	 expenseList=ConverterClass.prepareListofExpenseBean(expenseService.getExpenseByName(searchByName, sellerId));
  }
 request.getSession().setAttribute("expenseSearchObject", expenseList);
  //model.put("productList", productList);

@@ -109,7 +109,30 @@ public class ProductController {
   return new ModelAndView("initialsetup/Product", model);
 
  }
+ @RequestMapping(value = "/seller/saveUpdateInventory", method = RequestMethod.POST)
+ public ModelAndView saveDeleteProduct(HttpServletRequest request,@ModelAttribute("command")ProductBean productBean,
+    BindingResult result) {
+	 	System.out.println("Inside Delete  Product");
+	 	String var1=request.getParameter("quantityToAdd");
+	 	String var2=request.getParameter("quantityToSubtract");
 
+ 	if(productBean.getProductSkuCode()!=null)
+ 	{
+ 	productBean.setProductDate(new Date());
+ 	Product product = ConverterClass.prepareProductModel(productBean);
+ 	
+ 	int productId=request.getParameter("productId")!=null?Integer.parseInt(request.getParameter("productId")):0;
+ 	String productSkuCode=productBean.getProductSkuCode();
+//   int currentInventory=request.getParameter("currentInventory")!=null?Integer.parseInt(request.getParameter("currentInventory")):0;
+   int quantityToAdd=(request.getParameter("quantityToAdd")!=null&&request.getParameter("quantityToAdd").toString().length()!=0)?Integer.parseInt(request.getParameter("quantityToAdd")):0;
+   int quantityToSubstract=(request.getParameter("quantityToSubtract")!=null&&request.getParameter("quantityToSubtract").toString().length()!=0)?Integer.parseInt(request.getParameter("quantityToSubtract")):0;
+   int sellerId=HelperClass.getSellerIdfromSession(request);
+
+	   productService.updateInventory(productSkuCode, 0, quantityToAdd, quantityToSubstract,true,sellerId);
+ 	
+ 	}
+   return new ModelAndView("success");
+  }
 
  @RequestMapping(value = "/seller/saveProduct", method = RequestMethod.POST)
  public ModelAndView saveProduct(HttpServletRequest request,@ModelAttribute("command")ProductBean productBean,
@@ -175,7 +198,24 @@ public class ProductController {
 	model.put("product", product);
    return new ModelAndView("initialsetup/addProduct",model);
   }
+ @RequestMapping(value = "/seller/updateInventory", method = RequestMethod.GET)
+ public ModelAndView updateInventory(HttpServletRequest request,@ModelAttribute("command")ProductBean productBean,
+    BindingResult result) {
 
+ 	
+ 	Product product=null;
+ 	Map<String, Object> model = new HashMap<String, Object>();
+ 	if(request.getParameter("id")!=null)
+ 	{
+ 	int productId = Integer.parseInt(request.getParameter("id"));
+ 	product=productService.getProduct(productId);
+	}
+ 	if(product!=null)
+	model.put("product", product);
+ 	model.put("variable1", "0");
+ 	model.put("variable2", "0");
+   return new ModelAndView("initialsetup/updateInventory",model);
+  }
  @RequestMapping(value = "/seller/saveProductJson", method = RequestMethod.POST)
  public @ResponseBody String saveProductJson(HttpServletRequest request) {
  	System.out.println("Inside Product Ssave");

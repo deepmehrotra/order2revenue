@@ -55,8 +55,6 @@ import com.o2r.service.TaxDetailService;
  * @author Deep Mehrotra
  *
  */
-
-// GIT Test - Darshan
 @Controller
 public class OrderController {
 
