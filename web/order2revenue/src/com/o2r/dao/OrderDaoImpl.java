@@ -1516,7 +1516,7 @@ private Map<String,Float> calculateNR(Partner partner,Order order ,double SP , S
 			fixedAmount=GlobalConstant.ReturnChargesSellerFaultFixedAmount;
 			varPercentSP=GlobalConstant.ReturnChargesSellerFaultVariablePercentSP;
 			varPercentFixAmt=GlobalConstant.ReturnChargesSellerFaultVariableFixedAmt;
-			chargesType=partner.getNrnReturnConfig().getRetCharType();
+			chargesType=partner.getNrnReturnConfig().getRetCharSFType();
 			 shippingfee=partner.getNrnReturnConfig().isRetCharSFShipFee();
 			 servicetax=partner.getNrnReturnConfig().isRetCharSFSerTax();
 			fixedfee=partner.getNrnReturnConfig().isRetCharSFFF();
@@ -1527,7 +1527,7 @@ private Map<String,Float> calculateNR(Partner partner,Order order ,double SP , S
 				fixedAmount=GlobalConstant.ReturnChargesBuyerReturnFixedAmount;
 				varPercentSP=GlobalConstant.ReturnChargesBuyerReturnVariablePercentSP;
 				varPercentFixAmt=GlobalConstant.ReturnChargesBuyerReturnVariableFixedAmt;
-				chargesType=partner.getNrnReturnConfig().getRetCharType();
+				chargesType=partner.getNrnReturnConfig().getRetCharBRType();
 				 shippingfee=partner.getNrnReturnConfig().isRetCharBRShipFee();
 				 servicetax=partner.getNrnReturnConfig().isRetCharBRSerTax();
 				fixedfee=partner.getNrnReturnConfig().isRetCharSFFF();
@@ -1541,7 +1541,7 @@ private Map<String,Float> calculateNR(Partner partner,Order order ,double SP , S
 			fixedAmount=GlobalConstant.RTOChargesSellerFaultFixedAmount;
 		varPercentSP=GlobalConstant.RTOChargesSellerFaultVariablePercentSP;
 		varPercentFixAmt=GlobalConstant.RTOChargesSellerFaultVariableFixedAmt;
-		chargesType=partner.getNrnReturnConfig().getRTOCharType();
+		chargesType=partner.getNrnReturnConfig().getRTOCharSFType();
 		 shippingfee=partner.getNrnReturnConfig().isRTOCharSFShipFee();
 		 servicetax=partner.getNrnReturnConfig().isRTOCharSFSerTax();
 		fixedfee=partner.getNrnReturnConfig().isRTOCharSFFF();
@@ -1552,7 +1552,7 @@ private Map<String,Float> calculateNR(Partner partner,Order order ,double SP , S
 			fixedAmount=GlobalConstant.RTOChargesBuyerReturnFixedAmount;
 			varPercentSP=GlobalConstant.RTOChargesBuyerReturnVariablePercentSP;
 			varPercentFixAmt=GlobalConstant.RTOChargesBuyerReturnVariableFixedAmt;
-			chargesType=partner.getNrnReturnConfig().getRTOCharType();
+			chargesType=partner.getNrnReturnConfig().getRTOCharBRType();
 			 shippingfee=partner.getNrnReturnConfig().isRTOCharBRShipFee();
 			 servicetax=partner.getNrnReturnConfig().isRTOCharBRSerTax();
 			fixedfee=partner.getNrnReturnConfig().isRTOCharSFFF();
@@ -1566,7 +1566,7 @@ private Map<String,Float> calculateNR(Partner partner,Order order ,double SP , S
 			fixedAmount=GlobalConstant.CancellationChargesSellerFaultFixedAmount;
 		varPercentSP=GlobalConstant.CancellationChargesSellerFaultVariablePercentSP;
 		varPercentFixAmt=GlobalConstant.CancellationChargesSellerFaultVariableFixedAmt;
-		chargesType=partner.getNrnReturnConfig().getCanCharType();
+		chargesType=partner.getNrnReturnConfig().getCanCharSFARTDType();
 		 shippingfee=partner.getNrnReturnConfig().isCanCharSFShipFee();
 		 servicetax=partner.getNrnReturnConfig().isCanCharSFSerTax();
 		fixedfee=partner.getNrnReturnConfig().isCanCharSFFF();
@@ -1577,7 +1577,7 @@ private Map<String,Float> calculateNR(Partner partner,Order order ,double SP , S
 		fixedAmount=GlobalConstant.CancellationChargesSellerFaultBRTDFixedAmount;
 		varPercentSP=GlobalConstant.CancellationChargesSellerFaultBRTDVariablePercentSP;
 		varPercentFixAmt=GlobalConstant.CancellationChargesSellerFaultBRTDVariableFixedAmt;
-		chargesType=partner.getNrnReturnConfig().getCanCharType();
+		chargesType=partner.getNrnReturnConfig().getCanCharSFBFRTDType();
 		 shippingfee=partner.getNrnReturnConfig().isCanCharSFBRTDShipFee();
 		 servicetax=partner.getNrnReturnConfig().isCanCharSFBRTDSerTax();
 		fixedfee=partner.getNrnReturnConfig().isCanCharSFBRTDFF();
@@ -1588,7 +1588,7 @@ private Map<String,Float> calculateNR(Partner partner,Order order ,double SP , S
 			fixedAmount=GlobalConstant.CancellationChargesBuyerReturnFixedAmount;
 			varPercentSP=GlobalConstant.CancellationChargesBuyerReturnVariablePercentSP;
 			varPercentFixAmt=GlobalConstant.CancellationChargesBuyerReturnVariableFixedAmt;
-			chargesType=partner.getNrnReturnConfig().getCanCharType();
+			chargesType=partner.getNrnReturnConfig().getCanCharBRType();
 			 shippingfee=partner.getNrnReturnConfig().isCanCharBRShipFee();
 			 servicetax=partner.getNrnReturnConfig().isCanCharBRSerTax();
 			fixedfee=partner.getNrnReturnConfig().isCanCharSFFF();
@@ -1602,7 +1602,7 @@ private Map<String,Float> calculateNR(Partner partner,Order order ,double SP , S
 		fixedAmount=GlobalConstant.ReplacementChargesSellerFaultFixedAmount;
 		varPercentSP=GlobalConstant.ReplacementChargesSellerFaultVariablePercentSP;
 		varPercentFixAmt=GlobalConstant.ReplacementChargesSellerFaultVariableFixedAmt;
-		chargesType=partner.getNrnReturnConfig().getRepCharType();
+		chargesType=partner.getNrnReturnConfig().getRepCharSFType();
 		 shippingfee=partner.getNrnReturnConfig().isRepCharSFShipFee();
 		 servicetax=partner.getNrnReturnConfig().isRepCharSFSerTax();
 		fixedfee=partner.getNrnReturnConfig().isRepCharSFFF();
@@ -1613,7 +1613,7 @@ private Map<String,Float> calculateNR(Partner partner,Order order ,double SP , S
 			fixedAmount=GlobalConstant.ReplacementChargesBuyerReturnFixedAmount;
 			varPercentSP=GlobalConstant.ReplacementChargesBuyerReturnVariablePercentSP;
 			varPercentFixAmt=GlobalConstant.ReplacementChargesBuyerReturnVariableFixedAmt;
-			chargesType=partner.getNrnReturnConfig().getRepCharType();
+			chargesType=partner.getNrnReturnConfig().getRepCharBRType();
 			 shippingfee=partner.getNrnReturnConfig().isRepCharBRShipFee();
 			 servicetax=partner.getNrnReturnConfig().isRepCharBRSerTax();
 			fixedfee=partner.getNrnReturnConfig().isRepCharSFFF();
@@ -1628,7 +1628,7 @@ private Map<String,Float> calculateNR(Partner partner,Order order ,double SP , S
 			fixedAmount=GlobalConstant.PartialDelChargesSellerFaultFixedAmount;
 		varPercentSP=GlobalConstant.PartialDelChargesSellerFaultVariablePercentSP;
 		varPercentFixAmt=GlobalConstant.PartialDelChargesSellerFaultVariableFixedAmt;
-		chargesType=partner.getNrnReturnConfig().getPDCharType();
+		chargesType=partner.getNrnReturnConfig().getPDCharSFType();
 		 shippingfee=partner.getNrnReturnConfig().isPDCharSFShipFee();
 		 servicetax=partner.getNrnReturnConfig().isPDCharSFSerTax();
 		fixedfee=partner.getNrnReturnConfig().isPDCharSFFF();
@@ -1639,7 +1639,7 @@ private Map<String,Float> calculateNR(Partner partner,Order order ,double SP , S
 			fixedAmount=GlobalConstant.PartialDelChargesBuyerReturnFixedAmount;
 			varPercentSP=GlobalConstant.PartialDelChargesBuyerReturnVariablePercentSP;
 			varPercentFixAmt=GlobalConstant.PartialDelChargesBuyerReturnVariableFixedAmt;
-			chargesType=partner.getNrnReturnConfig().getPDCharType();
+			chargesType=partner.getNrnReturnConfig().getPDCharBRType();
 			 shippingfee=partner.getNrnReturnConfig().isPDCharBRShipFee();
 			 servicetax=partner.getNrnReturnConfig().isPDCharBRSerTax();
 			fixedfee=partner.getNrnReturnConfig().isPDCharSFFF();

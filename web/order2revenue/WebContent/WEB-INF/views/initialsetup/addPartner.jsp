@@ -869,7 +869,8 @@ span.#error{
                   <div class="col-sm-6">
                     <div class="radio">
                       <label>
-                        <input type="radio" value="10" id="optionsRadios1" name="toggler">
+                      <form:radiobutton path="nrnReturnConfig.retCharType" value="variable" id="retrun-sf-variable" name="toggler"/>
+                       <!--  <input type="radio" value="10" id="optionsRadios1" name="toggler"> -->
                         Fixed Amount</label>
                     </div>
                   </div>
