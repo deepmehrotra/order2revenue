@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+// GIT Test
 @Entity
 @Table(name="states")
 public class State {

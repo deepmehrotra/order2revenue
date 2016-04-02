@@ -9,6 +9,7 @@ import javax.persistence.OneToMany;
 import com.o2r.model.Role;
 import com.o2r.model.TaxCategory;
 
+//GIT Test
 public class SellerBean {
 
 	private int id;

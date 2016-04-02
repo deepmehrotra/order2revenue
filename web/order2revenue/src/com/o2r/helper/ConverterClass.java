@@ -44,6 +44,7 @@ import com.o2r.model.StateDeliveryTime;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.TaxDetail;
 
+//GIT Test
 public class ConverterClass {
 
 	public static Order prepareModel(OrderBean orderBean) {

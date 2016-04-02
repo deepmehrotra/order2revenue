@@ -9,6 +9,7 @@ import com.o2r.model.State;
  * @author Deep Mehrotra
  *
  */
+//GIT Test
 public interface SellerService {
 
 	public void addSeller(Seller seller);

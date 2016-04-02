@@ -18,6 +18,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 
+//GIT Test
 @Entity
 @Table(name = "Seller")
 public class Seller {

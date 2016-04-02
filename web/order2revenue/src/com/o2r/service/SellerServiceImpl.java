@@ -15,6 +15,7 @@ import com.o2r.model.State;
  * @author Deep Mehrotra
  *
  */
+//GIT Test
 @Service("sellerService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class SellerServiceImpl implements SellerService {
