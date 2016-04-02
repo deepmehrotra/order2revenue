@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -63,15 +64,22 @@ public class SellerDaoImpl implements SellerDao {
 	}
 
 	public Seller getSeller(int sellerid)throws CustomException {
-		
+		Seller seller=null;
 		try{
-		return (Seller) sessionFactory.getCurrentSession().get(Seller.class,
-				sellerid);
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			seller=(Seller) session.get(Seller.class,
+					sellerid);
+			Hibernate.initialize(seller.getStateDeliveryTime());
+			session.getTransaction().commit();
+			session.close();
+		
 		}catch(Exception e){
 			log.error(e);
 			throw new CustomException(GlobalConstant.getSellerByIdError, new Date(), 3, GlobalConstant.getSellerByIdErrorCode, e);
 			
 		}
+		return seller;
 	}
 
 	public Seller getSeller(String email)throws CustomException {

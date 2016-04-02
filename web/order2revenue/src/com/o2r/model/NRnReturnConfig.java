@@ -18,7 +18,7 @@ public class NRnReturnConfig {
 	@Column
 	private int configId;
 	@Column
-	private boolean isNRCalculator;
+	private boolean nrCalculator;
 	@Column
 	private String commissionType;   // - fixed or categoryWise
 	@Column
@@ -173,12 +173,7 @@ public class NRnReturnConfig {
 	public void setConfigId(int configId) {
 		this.configId = configId;
 	}
-	public boolean isNRCalculator() {
-		return isNRCalculator;
-	}
-	public void setNRCalculator(boolean isNRCalculator) {
-		this.isNRCalculator = isNRCalculator;
-	}
+	
 	public String getCommissionType() {
 		return commissionType;
 	}
@@ -572,6 +567,12 @@ public class NRnReturnConfig {
 	}
 	public void setCanCharBRType(String canCharBRType) {
 		this.canCharBRType = canCharBRType;
+	}
+	public boolean isNrCalculator() {
+		return nrCalculator;
+	}
+	public void setNrCalculator(boolean nrCalculator) {
+		this.nrCalculator = nrCalculator;
 	}
 
 
