@@ -17,11 +17,13 @@ import com.o2r.helper.GlobalConstant;
 import com.o2r.model.AccountTransaction;
 import com.o2r.model.Plan;
 import com.o2r.model.Seller;
+import com.o2r.model.State;
 
 /**
  * @author Deep Mehrotra
  *
  */
+//GIT Test
 @Repository("sellerDao")
 public class SellerDaoImpl implements SellerDao {
 
@@ -210,5 +212,13 @@ public class SellerDaoImpl implements SellerDao {
 		at.setInvoiceId("invoice123");
 		at.setTransactionId("transac123"); // It has Recived From Third Party
 		return at;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<State> listStates() {
+
+		return (List<State>) sessionFactory.getCurrentSession()
+				.createCriteria(State.class).list();
 	}
 }

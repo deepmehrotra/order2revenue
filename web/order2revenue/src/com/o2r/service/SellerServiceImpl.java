@@ -10,11 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.o2r.dao.SellerDao;
 import com.o2r.helper.CustomException;
 import com.o2r.model.Seller;
+import com.o2r.model.State;
 
 /**
  * @author Deep Mehrotra
  *
  */
+//GIT Test
 @Service("sellerService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class SellerServiceImpl implements SellerService {
@@ -45,5 +47,9 @@ public class SellerServiceImpl implements SellerService {
 
 	public void planUpgrade(int pid, int sellerid) throws CustomException {
 		sellerDao.planUpgrade(pid, sellerid);
+	}
+	
+	public List<State> listStates() {
+		return sellerDao.listStates();
 	}
 }

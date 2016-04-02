@@ -1,5 +1,6 @@
 package com.o2r.bean;
 
+//GIT Test
 public class StateDeliveryTimeBean {
 
 	private Integer id;

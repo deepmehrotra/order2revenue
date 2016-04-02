@@ -24,7 +24,6 @@ span .#error {
 			}
 		});
 	};
-
 	reqObj = null;
 	function varify() {
 		document.getElementById("res").innerHTML = "Checking";
@@ -33,7 +32,6 @@ span .#error {
 		} else {
 			reqObj = new ActiveXObject("Microsoft.XMLHTTP");
 		}
-
 		reqObj.onreadystatechange = process;
 		reqObj.open("GET", "checkSeller.html?id="
 				+ document.getElementById("test").value, true);
@@ -44,7 +42,6 @@ span .#error {
 			document.getElementById("res").innerHTML = reqObj.responseText;
 		}
 	}
-
 	function blurFunction() {
 		document.getElementById("myInput").style.background = "red";
 	}
@@ -181,7 +178,6 @@ span .#error {
 															path="stateDeliveryTime.state.id" />
 														<form:label class="col-sm-4 control-label" value="${state.value}"
 															path="stateDeliveryTime.state.stateName" />
-
 														<div class="col-sm-8">
 															<form:input type="text" class="form-control"
 																path="stateDeliveryTime.deliveryTime" />

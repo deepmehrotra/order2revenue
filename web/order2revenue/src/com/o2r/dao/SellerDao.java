@@ -4,11 +4,13 @@ import java.util.List;
 
 import com.o2r.helper.CustomException;
 import com.o2r.model.Seller;
+import com.o2r.model.State;
 
 /**
  * @author Deep Mehrotra
  *
  */
+//GIT Test
 public interface SellerDao {
  
  public void addSeller(Seller seller)throws CustomException;
@@ -22,4 +24,6 @@ public interface SellerDao {
  public Seller getSeller(String email)throws CustomException;
  
  public void planUpgrade(int pid, int sellerid)throws CustomException;
+
+ public List<State> listStates();
 }

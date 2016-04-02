@@ -86,7 +86,7 @@
                         <i class="fa fa-gear"></i>
                     </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a href="#">Seller Info</a></li>
+                            <li><a href="addSeller.html">Seller Info</a></li>
                             <li><a href="#">Goeasy Account</a></li>
                             <li><a href="upgrade.html">Plan Upgrade</a></li>
                             <li><a href="#">Summary</a></li>
