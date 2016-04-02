@@ -11,27 +11,44 @@
 	font-weight:bold;
 }
 </style>
-<link href="/O2R/seller/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
-<link href="/O2R/seller/css/plugins/switchery/switchery.css" rel="stylesheet">
-</head>
- <body>
-
 <style type="text/css">
 span.#error{
   color: red;
   font-weight: bold;
 }
-</style>
 
+.pickListButtons {
+  padding: 10px;
+  text-align: center;
+}
+
+
+
+.pickListSelect {
+  height: 200px !important;
+}
+.pickList1Select {
+  height: 200px !important;
+}
+
+</style>
+<link href="/O2R/seller/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+<link href="/O2R/seller/css/plugins/switchery/switchery.css" rel="stylesheet">
+</head>
+ <body>
+
+
+  <form:form method="POST" action="savePartner.html" id="addpartnerform"
+                         role="form" class="form-horizontal" enctype="multipart/form-data">
  <div class="row">
+
    <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <h5>Partner</h5>
                         </div>
                         <div class="ibox-content add-company">
-                        <form:form method="POST" action="savePartner.html" id="addpartnerform"
-                         role="form" class="form-horizontal" enctype="multipart/form-data">
+                       
                            <c:if test="${!empty partner.pcId}">
                         <%--  <form:hidden path="pcId" value="${partner.pcId}"/> --%>
                          <input type="hidden" name="pcId" id="pcId" value="${partner.pcId}"/>
@@ -160,39 +177,29 @@ span.#error{
     </div>
     <div class="ibox-content add-company">
       <div class="row">
-        <div class="col-lg-2 m-l-n"></div>
-        <div class="col-lg-2 m-l-n"></div>
-        <div class="col-lg-2 m-l-n">Local</div>
-        <div class="col-lg-2 m-l-n">Zonal</div>
-        <div class="col-lg-2 m-l-n">National</div>
-        <div class="col-lg-2 m-l-n">Metro</div>
+        <div class="col-sm-2">Select State</div>
+        <div class="col-sm-2">Local</div>
+        <div class="col-sm-2">Zonal</div>
+        <div class="col-sm-2">National</div>
+        <div class="col-sm-2">Metro</div>
+      
+
       </div>
       <div class="row">
-        <div class="col-lg-2 m-l-n">
-          <select class="form-control" multiple="">
-            <option>option 1</option>
-            <option>option 2</option>
-            <option>option 3</option>
-            <option>option 4</option>
-          </select>
+        <div class="col-lg-12 m-l-n">
+          <div class="panel panel-default">        
+            <div class="panel-body">
+               <div id="pickList">
+               
+               </div>
+               <br><br>
+            </div>
+         </div>
         </div>
-        <div class="col-lg-2 m-l-n "> <a class="btn btn-white btn-bitbucket center-block"> <i class="fa fa-exchange"></i> </a> </div>
-        <div class="col-lg-2 m-l-n">
-          <select class="form-control" multiple="">
-          </select>
+
+        
         </div>
-        <div class="col-lg-2 m-l-n">
-          <select class="form-control" multiple="">
-          </select>
-        </div>
-        <div class="col-lg-2 m-l-n">
-          <select class="form-control" multiple="">
-          </select>
-        </div>
-        <div class="col-lg-2 m-l-n">
-          <select class="form-control" multiple="">
-          </select>
-        </div>
+
       </div>
     </div>
   </div>
@@ -240,7 +247,7 @@ span.#error{
                       <div class="col-sm-12">
                         <div class="form-group">
                           <div class="input-group m-b col-md-4">
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" name="fixedCommissionPercent">
                             <span class="input-group-addon">%</span></div>
                         </div>
                       </div>
@@ -251,7 +258,7 @@ span.#error{
                       <div class="form-group col-md-12">
                         <label class="col-md-4 control-label">${category}</label>
                         <div class="input-group m-b col-md-4">
-                          <input type="text" class="form-control" name="${category}">
+                          <input type="text" class="form-control" name='"prodcat"+${category}'>
                         <!--   <span class="input-group-addon">%</span> --></div>
                       </div>
                     </c:forEach>
@@ -260,39 +267,73 @@ span.#error{
                   </div>
                 </div>
               </div>
-              <div class="panel panel-default">
+             
+                <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo1">Fixed Fee</a> </h4>
                 </div>
                 <div id="collapseTwo1" class="panel-collapse collapse">
                   <div class="panel-body">
-                    <div class="col-sm-12">
+                    <div class="col-sm-4" style="border-right:1px dotted #ccc;">
                       <div class="form-group col-md-12">
-                        <label class="col-md-4 control-label content-rgt">&lt; 250</label>
-                        <div class="col-md-4 content-rgt">
-                          <input type="text" placeholder="Enter value" class="form-control" name="fixedfeelt250">
+                        <label class="col-md-4 control-label content-rgt">&lt;250</label>
+                        <div class="col-md-12 content-rgt">
+                          <input type="text" placeholder="" class="form-control" style="width:50%;" name="fixedfeelt250">
                         </div>
                       </div>
                       <div class="form-group col-md-12">
-                        <label class="col-md-4 control-label">&gt; 250 && &lt; 500</label>
-                        <div class="col-md-4 content-rgt">
-                          <input type="text" name="fixedfeegt250lt500" placeholder="Enter Value" class="form-control">
+                        <label class="col-md-12 control-label">&gt;250&&&lt;500</label>
+                        <div class="col-md-12 content-rgt">
+                          <input type="text" placeholder="" class="form-control" style="width:50%;" name="fixedfeegt250lt500">
                         </div>
                       </div>
                       <div class="form-group col-md-12">
-                        <label class="col-md-4 control-label">&lt; 500</label>
-                        <div class="col-md-4 content-rgt">
-                          <input type="text" placeholder="" class="form-control"  name="fixedfeelt500">
-                        </div>
-                      </div>
-                      <div class="form-group col-md-12">
-                        <label class="col-md-4 control-label">&gt; 500</label>
-                        <div class="col-md-4 content-rgt">
-                          <input type="text" placeholder="" class="form-control">
+                        <label class="col-md-4 control-label">&gt;500</label>
+                        <div class="col-md-12 content-rgt">
+                          <input type="text" placeholder="" class="form-control" style="width:50%;" name="fixedfeegt500">
                         </div>
                       </div>
                     </div>
-                  </div>
+                    <div class="col-sm-4" style="border-right:1px dotted #ccc;">
+                      <div class="form-group col-md-12">
+                        <label class="col-md-4 control-label content-rgt">&lt;500</label>
+                        <div class="col-md-12 content-rgt">
+                          <input type="text" placeholder="" class="form-control" style="width:50%;" name="fixedfeelt500Big">
+                        </div>
+                      </div>
+                      <div class="form-group col-md-12">
+                        <label class="col-md-12 control-label">&gt;500&&&lt;1000</label>
+                        <div class="col-md-12 content-rgt">
+                          <input type="text" placeholder="" class="form-control" style="width:50%;" name="fixedfeegt500lt1000">
+                        </div>
+                      </div>
+                      <div class="form-group col-md-12">
+                        <label class="col-md-4 control-label">&gt;1000&&&lt;10000</label>
+                        <div class="col-md-12 content-rgt">
+                          <input type="text" placeholder="" class="form-control" style="width:50%;" name="fixedfeegt1000lt10000">
+                        </div>
+                      </div>
+                      <div class="form-group col-md-12">
+                        <label class="col-md-4 control-label">&gt;10000</label>
+                        <div class="col-md-12 content-rgt">
+                          <input type="text" placeholder="" class="form-control" style="width:50%;" name="fixedfeegt10000">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group col-md-12">
+                        <label class="col-md-4 control-label content-rgt">&gt;500</label>
+                        <div class="col-md-12 content-rgt">
+                          <input type="text" placeholder="" class="form-control" style="width:50%;" name="fixedfeelt500">
+                        </div>
+                      </div>
+                      <div class="form-group col-md-12">
+                        <label class="col-md-12 control-label">&gt;500</label>
+                        <div class="col-md-12 content-rgt">
+                          <input type="text" placeholder="" class="form-control" style="width:50%;" name="fixedfeegt500">
+                        </div>
+                      </div>
+                    </div>
                 </div>
               </div>
               <div class="panel panel-default">
@@ -3168,7 +3209,7 @@ span.#error{
                               </div>
                             </div>
                           </div>
-                             </form:form>
+                          
                           <div class="footer">
                             <div class="pull-right"> <img alt="image"  src="img/go-easy-logo.jpg" /> </div>
                             <div> <a href="">Support</a> | <a href="">Contact Us</a> </div>
@@ -3185,12 +3226,15 @@ span.#error{
       </div>
     </div>
   </div>
+  
 </div>
-	</div>
+  	</div>
+	 </form:form>
 	<!-- iCheck --> 
 <script src="/O2R/seller/js/plugins/iCheck/icheck.min.js"></script> 
 <!-- Switchery --> 
 <script src="/O2R/seller/js/plugins/switchery/switchery.js"></script> 
+<script src="js/pickList.js"></script>
 <script type="text/javascript">
 $(document).ready(function () {
     $('.i-checks').iCheck({
@@ -3356,6 +3400,54 @@ function submitForm(){
 function getRole() {
     return $("#addpartnerform").find("input[type=radio]:checked").val();
 }
+
+//Code for state selection module 
+  var val = 
+         {
+            01: {id:01, text: 'Andhra Pradesh'},
+            02: {id:02,text:'Andaman and Nicobar Islands'},
+            03: {id:03, text: 'Arunachal Pradesh'},
+            04: {id:04, text:'Assam'},
+            05: {id:05, text:'Chhattisgarh'},
+            06: {id:06, text:'Chandigarh'},
+            07: {id:07, text:'Dadra and Nagar Haveli'},
+            08: {id:08, text:'Daman and Diu'},
+            09: {id:09, text:'Delhi'},
+            10: {id:10, text:'Goa'},
+            11: {id:11, text:'Gujarat'},
+            12: {id:12, text:'Haryana'},
+            13: {id:13, text:'Himachal Pradesh'},
+            14: {id:14, text:'Jammu and Kashmir'},
+            15: {id:15, text:'Jharkhand'},
+            16: {id:16, text:'Karnataka'},
+            17: {id:17, text:'Kerala'},
+            18: {id:18, text:'Lakshadweep'},
+            19: {id:19, text:'Madhya Pradesh'},
+            20: {id:20, text:'Maharashtra'},
+            21: {id:21, text:'Manipur'},
+            22: {id:22, text:'Meghalaya'},
+            23: {id:23, text:'Mizoram'},
+            24: {id:24, text:'Nagaland'},
+            25: {id:25, text:'Odisha'},
+            26: {id:26, text:'Punjab'},
+            27: {id:27, text:'Pondicherry'},
+            28: {id:28, text:'Rajasthan'},
+            29: {id:29, text:'Sikkim'},
+            30: {id:30, text:'Tamil Nadu'},
+            31: {id:31, text:'Telangana'},
+            32: {id:32, text:'Tripura'},
+            33: {id:33, text:'Uttar Pradesh'},
+            34: {id:34, text:'Uttarakhand'},
+            35: {id:35, text:'West Bengal'}
+         };
+
+         var pick = $("#pickList").pickList({data: val});
+
+
+         $("#getSelected").click(function () {
+            console.log(pick.getValues());
+         });
+      
 </script>                 
  </body>
 </html>

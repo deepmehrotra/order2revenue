@@ -73,7 +73,7 @@ public class PartnerController {
 
 
 
-@RequestMapping(value = "/seller/savePartner", method = RequestMethod.POST)
+/*@RequestMapping(value = "/seller/savePartner", method = RequestMethod.POST)
 public ModelAndView savePartner(HttpServletRequest request,@ModelAttribute("command")PartnerBean partnerBean,
    BindingResult result,@RequestParam(value = "image", required = false) MultipartFile image) {
 	System.out.println("Inside partner Ssave ");
@@ -117,8 +117,61 @@ public ModelAndView savePartner(HttpServletRequest request,@ModelAttribute("comm
 	Partner partner=ConverterClass.preparePartnerModel(partnerBean);
 	partnerService.addPartner(partner,HelperClass.getSellerIdfromSession(request));
   return new ModelAndView("redirect:/seller/partners.html");
- }
+ }*/
+/*
+ * 
+ * Save partner inmplementation with NR and return configuration
+ */
+@RequestMapping(value = "/seller/savePartner", method = RequestMethod.POST)
+public ModelAndView savePartner(HttpServletRequest request,@ModelAttribute("command")PartnerBean partnerBean,
+   BindingResult result,@RequestParam(value = "image", required = false) MultipartFile image) {
+	System.out.println("Inside partner Ssave ");
+	System.out.println(" partnerBean : **** "+partnerBean);
+	System.out.println("inside controller noofdaysfromshipped date : "+partnerBean.getNoofdaysfromshippeddate());
+	System.out.println(" Seller id :"+partnerBean.getPcId());
+	Map<String, String[]> parameters = request.getParameterMap();
+	for(String parameter : parameters.keySet()) {
+	   System.out.println(" Request param name : "+parameter);
+	    
+	}
 
+	if(!partnerBean.isIsshippeddatecalc())
+	{
+		partnerBean.setNoofdaysfromshippeddate(partnerBean.getNoofdaysfromdeliverydate());
+	}
+	//int sellerId=HelperClass.getSellerIdfromSession(request);
+	if(image!=null)
+	{
+		System.out.println(" Not getting any image");
+	 if (!image.isEmpty()) {
+		  try {
+		  validateImage(image);
+
+		  } catch (RuntimeException re) {
+			  result.reject(re.getMessage());
+		  }
+	 }
+	}
+	 try {
+		 props= PropertiesLoaderUtils.loadProperties(resource);
+
+		 if(!partnerList.contains(partnerBean.getPcName()))
+		 {
+		 partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")+HelperClass.getSellerIdfromSession(request) +partnerBean.getPcName()+".jpg");
+		 saveImage(HelperClass.getSellerIdfromSession(request) +partnerBean.getPcName()+".jpg", image);
+		 }
+		 else
+		 {
+			 partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")+partnerBean.getPcName()+".jpg");
+		 }
+		 } catch (IOException e) {
+		 result.reject(e.getMessage());
+		 return new ModelAndView("redirect:/seller/partners.html");
+		 }
+	Partner partner=ConverterClass.preparePartnerModel(partnerBean);
+	partnerService.addPartner(partner,HelperClass.getSellerIdfromSession(request));
+  return new ModelAndView("redirect:/seller/partners.html");
+ }
 @RequestMapping(value="/seller/listPartners", method = RequestMethod.GET)
 public ModelAndView listAllPartners(HttpServletRequest request) {
  Map<String, Object> model = new HashMap<String, Object>();
