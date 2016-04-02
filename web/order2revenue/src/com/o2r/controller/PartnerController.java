@@ -80,7 +80,11 @@ public class PartnerController {
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		log.info("*** savePartner start ***");
-
+Map<String, String[]> parameters = request.getParameterMap();
+	for(String parameter : parameters.keySet()) {
+	   System.out.println(" Request param name : "+parameter);
+	    
+	}
 		/*
 		 * System.out.println("Inside partner Ssave ");
 		 * System.out.println(" partnerBean : **** "+partnerBean);
