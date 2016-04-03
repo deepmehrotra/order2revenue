@@ -21,8 +21,7 @@
                             <h5>Update Inventory</h5>
                         </div>
                         <div class="ibox-content overflow-h">
-                            <form:form method="POST" action="saveUpdateInventory.html" id="addProductForm"
-                             role="form" class="form-horizontal">
+<form:form method="POST" action="saveUpdateInventory.html" id="addProductForm" role="form" class="form-horizontal">
  							
  							 <c:if test="${!empty product.productId}">
                         <input type="hidden" name="productId" id="productId" value="${product.productId}"/>
@@ -57,12 +56,11 @@
        								 </div>
                                     </div>
                                     <div class="mar-btm-20-oh"><label class="col-sm-4 control-label">Subtract From Inventory</label>
-                                    <div class="col-sm-8">   
-                                    
+                                    <div class="col-sm-8">                                       
                                     <input name="quantityToSubtract" value="${variable2 }" />
                                      
                                     </div>
-                                      </div>
+                                    </div>
 
                                  
                                   

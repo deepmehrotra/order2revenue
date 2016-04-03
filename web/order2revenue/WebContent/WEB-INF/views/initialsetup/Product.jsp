@@ -92,7 +92,6 @@
                                       <td>${product.channelSKU}</td>
                                         <td class="tooltip-demo">
                            <a href="editProduct.html?id=${product.productId}"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a>
-  							<a href="javascript:onclickNavigatePayment(${product.productId})"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Update Inventory"></i></a>
    							<a href="javascript:onclickNavigatePayment(${product.productId},${product.productName})"  ><i class="fa fa-edit text-navy" data-toggle="modal" data-target="#myModal" data-placement="top" data-original-title="Update Inventory"></i></a>
  							</td>
 
