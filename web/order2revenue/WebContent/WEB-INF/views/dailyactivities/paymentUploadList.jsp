@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
  <head>
@@ -76,10 +77,10 @@
                                 <tr>
                                     <td>${loop.index+1}</td>
                                     <td>${payment.uploadDesc}</td>
-                                   <td>${payment.totalpositivevalue}</td>
+                                    <td><fmt:formatNumber type="number" maxIntegerDigits="2" value="${payment.totalpositivevalue}" /></td>
                                     <td>${payment.totalnegativevalue}</td>
-                                     <td>${payment.manualCharges}</td>
-                                    <td>${payment.netRecievedAmount-payment.manualCharges}</td>
+                                    <td>${payment.manualCharges}</td>
+                                    <td><fmt:formatNumber type="number" maxIntegerDigits="2" value="${payment.netRecievedAmount-payment.manualCharges}" /></td>
                                     <td>${payment.uploadDate}</td>
                                     <td>${payment.uploadStatus}</td>
                                     <td class="tooltip-demo">

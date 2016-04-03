@@ -210,7 +210,7 @@
                               <div>
                                   <span>PR</span>
                                   <span></span>
-                                  <span>${order.pr}</span>
+                                  <span><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${order.pr}" /></span>
                               </div>
                               <div>
                                   <span>Partner Commission</span>
@@ -220,12 +220,12 @@
                               <div>
                                   <span>Tax</span>
                                   <span></span>
-                                  <span>${order.orderTax.tax}</span>
+                                  <span><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${order.orderTax.tax}" /></span>
                               </div>
 							  <div>
                                   <span>TDS</span>
                                   <span></span>
-                                  <span>${order.orderTax.tdsToDeduct}</span>
+                                  <span><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${order.orderTax.tdsToDeduct}" /></span>
                               </div>
 							   <div>
                                  <span>Net receivable</span>
