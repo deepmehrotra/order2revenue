@@ -9,7 +9,6 @@
  <jsp:include page="../globalcsslinks.jsp"></jsp:include>
   <!-- Data Tables -->
     <link href="/O2R/seller/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
-    <link href="/O2R/seller/css/plugins/dataTables/dataTables.responsive.css" rel="stylesheet">
     <link href="/O2R/seller/css/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet">
 
 </head>
@@ -93,7 +92,10 @@
                                       <td>${product.channelSKU}</td>
                                         <td class="tooltip-demo">
                            <a href="editProduct.html?id=${product.productId}"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a>
-  							<a href="javascript:onclickNavigatePayment(${product.productId})"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Update Inventory"></i></a></td>
+  							<a href="javascript:onclickNavigatePayment(${product.productId})"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Update Inventory"></i></a>
+   							<a href="javascript:onclickNavigatePayment(${product.productId},${product.productName})"  ><i class="fa fa-edit text-navy" data-toggle="modal" data-target="#myModal" data-placement="top" data-original-title="Update Inventory"></i></a>
+ 							</td>
+
                                 </tr>
                                 </c:forEach>
                                 </c:if>
@@ -219,10 +221,7 @@
  
       
       
-      function onclickNavigatePayment(value) {
-    	 // window.open("updateInventory.html?id="+value, 'liveMatches', 'width=720,height=800,toolbar=0,location=0, directories=0, status=0,location=no,menubar=0');
-    	 window.open("updateInventory.html?id="+value,null, "location=no,height=400,width=1200,top=100,left=50,status=yes,resizable=no,titlebar=no,toolbar=no,menubar=no,scrollbars=no,location=no");
-    	}
+
 
 
 </script>
@@ -256,6 +255,88 @@
 
     }
 </style>
+<div class="modal inmodal fade" id="myModal" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content animated bounceInRight">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span> </button>
+        <h4 class="modal-title">EDIT RECORD </h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+<form:form method="POST" action="saveUpdateInventory.html" id="addProductForm" role="form" class="form-horizontal">    
+
+							 <c:if test="${!empty product.productId}">
+                        <input type="hidden" name="productId" id="productId" value="${product.productId}"/>
+                         </c:if>
+
+    
+          <div class="col-sm-12">
+            <div class="col-sm-6">
+                <label> 
+                    Product Name
+                </label>
+                <form:input path="productName" value="${product.productName}" class="form-control"/>
+            </div>
+            <div class="col-sm-6">
+                <label>SKU 
+                </label>
+                              <c:choose>
+                                    	 <c:when test="${empty product.productSkuCode}">
+                                    	 <form:input path="productSkuCode"  id="addproductSkuCode"
+                                     class="form-control"  onchange="checkOnBlur()"/><span id="skucodeMsg" style="color:red"></span></c:when>
+                                     <c:otherwise> 
+                                     <form:input path="productSkuCode" value="${product.productSkuCode}"  id="productSkuCode"
+                                     class="form-control" readonly="true"/></c:otherwise>
+                                     </c:choose>
+            </div>
+        </div>
+        <div class="col-sm-12" style="margin-top:10px;">
+            <div class="col-sm-6">
+                <label>Add to Inventory</label>
+                <input type="text" value="${variable1}" name="quantityToAdd" class="form-control">
+            </div>
+            <div class="col-sm-6">
+              <label>
+                Substract from Inventory </label>
+                <input value="${variable2 }"  name="quantityToSubtract" class="form-control">
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-primary" type="button" onclick="updateInventory()">Update</button>
+        </form:form>
+</div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+function updateInventory(){
+	//alert('delete producrt goes here');
+	var xxx = $('form#addProductForm').submit();
+	//alert('delete producrt goes here');
+	//$('form#addProductForm').submit();
+	//opener.location.reload();
+	//window.close();
+}	
+function onclickNavigatePayment(value) {
+	  alert(value1);
+	  //alert(value2);
+ // window.open("updateInventory.html?id="+value, 'liveMatches', 'width=720,height=800,toolbar=0,location=0, directories=0, status=0,location=no,menubar=0');
+	 //window.open("updateInventory.html?id="+value,null, "location=no,height=400,width=1200,top=100,left=50,status=yes,resizable=no,titlebar=no,toolbar=no,menubar=no,scrollbars=no,location=no");
+	}
+function show(){
+    alert('saveed');
+}
+
+</script>
+
+
+
+
+
  </body>
 </html>
 </body>
