@@ -89,5 +89,7 @@ http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 	</bean>
 	 <bean id="customUserDetailsService" class="com.o2r.service.CustomUserDetailsService"></bean>
     <bean id="sellerDao" class="com.o2r.dao.SellerDaoImpl"></bean>
+    
+    <bean id="cStartEventHandler" class="com.schedulers.CStartEventHandler"/>
    
 </beans>

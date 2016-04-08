@@ -15,6 +15,5 @@ public interface ReportsGeneratorDao {
 	public TotalShippedOrder getPartnerTSOdetails(String pcName,Date startDate ,Date endDate, int sellerId)throws CustomException;
 
 	 public List<TotalShippedOrder> getAllPartnerTSOdetails(Date startDate ,Date endDate, int sellerId)throws CustomException;
-	 
- 
+
 }

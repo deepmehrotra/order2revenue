@@ -192,6 +192,8 @@ var GeneralReports = [
                  {display: "Best Selling Region Report", value: "bestSellingRegionReport" }];
 var RevenueReports = [
                  {display: "Net Sale Report", value: "netSaleReport" }, 
+                 {display: "Product Sale Report", value: "productSaleReport" },
+                 {display: "Channel Sale Report", value: "channelSaleReport" },
                  {display: "Net Debtors", value: "netDebtors" }, 
                  {display: "Gross Profitability Report", value: "grossProfitabilityReport" },
                  {display: "Net Profitability Report", value: "netProfitabilityReport" }, 

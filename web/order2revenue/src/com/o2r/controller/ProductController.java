@@ -144,6 +144,43 @@ public class ProductController {
 		return new ModelAndView("initialsetup/Product", model);
 
 	}
+	
+	 @RequestMapping(value = "/seller/saveUpdateInventory", method = RequestMethod.POST)
+	 public ModelAndView saveDeleteProduct(HttpServletRequest request,@ModelAttribute("command")ProductBean productBean,
+	    BindingResult result) {
+		 	System.out.println("Inside Delete  Product");
+		 	String var1=request.getParameter("quantityToAdd");
+		 	String var2=request.getParameter("quantityToSubtract");
+
+	 	if(productBean.getProductSkuCode()!=null)
+	 	{
+	 	productBean.setProductDate(new Date());
+	 	Product product = ConverterClass.prepareProductModel(productBean);
+	 	
+	 	int productId=request.getParameter("productId")!=null?Integer.parseInt(request.getParameter("productId")):0;
+	 	String productSkuCode=productBean.getProductSkuCode();
+	//   int currentInventory=request.getParameter("currentInventory")!=null?Integer.parseInt(request.getParameter("currentInventory")):0;
+	   int quantityToAdd=(request.getParameter("quantityToAdd")!=null&&request.getParameter("quantityToAdd").toString().length()!=0)?Integer.parseInt(request.getParameter("quantityToAdd")):0;
+	   int quantityToSubstract=(request.getParameter("quantityToSubtract")!=null&&request.getParameter("quantityToSubtract").toString().length()!=0)?Integer.parseInt(request.getParameter("quantityToSubtract")):0;
+	   int sellerId=0;
+	try {
+		sellerId = HelperClass.getSellerIdfromSession(request);
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
+		   try {
+			productService.updateInventory(productSkuCode, 0, quantityToAdd, quantityToSubstract,true,sellerId);
+		} catch (CustomException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	 	
+	 	}
+	 	return new ModelAndView("redirect:/seller/Product.html");
+	  }
+
 
 	@RequestMapping(value = "/seller/saveProduct", method = RequestMethod.POST)
 	public ModelAndView saveProduct(HttpServletRequest request,

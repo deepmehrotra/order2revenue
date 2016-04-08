@@ -68,11 +68,12 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<String> partnerlist = new ArrayList<String>();
 		List<Partner> partners=new ArrayList<Partner>();
+		String reportName = request.getParameter("reportName");
 		try{
 		partners = partnerService.listPartners(HelperClass.getSellerIdfromSession(request));
 		for (Partner partner : partners)
 			partnerlist.add(partner.getPcName());
-		String reportName = request.getParameter("reportName");
+		
 		model.put("reportName", reportName);
 		model.put("partnerlist", partnerlist);
 		}catch(CustomException ce){
@@ -85,7 +86,10 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			log.error(e);
 		}
 		log.info("*** addmanualPayment exit ***");
-		return new ModelAndView("reports/filterReports", model);
+		if(reportName.equals("channelSaleReport"))
+			return new ModelAndView("reports/channelSaleReport", model);
+		else
+			return new ModelAndView("reports/filterReports", model);
 }
 
 
@@ -123,7 +127,7 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 		log.info("*** getReport start ***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<TotalShippedOrder> ttso = new ArrayList<>();
-		String reportName;
+		String reportName=null;
 		Date startDate;
 		Date endDate;
 		String partner;
@@ -176,7 +180,77 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 			log.error(e);
 		}
 		log.info("*** getReport exit ***");
-		return new ModelAndView("reports/viewGraphReport", model);
+		if(reportName.equals("channelSaleReport"))
+			return new ModelAndView("reports/viewChannelSaleGraphReport", model);
+		else
+			return new ModelAndView("reports/viewGraphReport", model);
+		
+}
+
+
+@RequestMapping(value = "/seller/getChannelReport", method = RequestMethod.POST)
+public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
+{
+		log.info("*** get  channel Report start ***");
+		Map<String, Object> model = new HashMap<String, Object>();
+		List<TotalShippedOrder> ttso = new ArrayList<>();
+		String reportName=null;
+		Date startDate;
+		Date endDate;
+		String partner;
+		String selectedPartner;
+		//System.out.println(" Cat :" + partner);
+		try{
+	//	selectedPartner = request.getParameter("selectedPartner");
+		reportName = request.getParameter("reportName");
+		startDate = new Date(request.getParameter("startdate"));
+		endDate = new Date(request.getParameter("enddate"));
+	//	partner = request.getParameter("toggler");
+		
+		ttso = reportGeneratorService.getChannelSalesDetails(startDate,endDate, HelperClass.getSellerIdfromSession(request));
+		if (ttso != null)
+			System.out.println(" ****Inside controller after gettitng ttso objkect : "+ ttso.size());
+		else
+			System.out.println(" TTSO object is geting null");
+
+		model.put("ttsolist", ttso);
+		if (ttso.size() > 0) {
+			System.out.println(" Citi quantity size : "	+ ttso.get(0).getCityQuantity());
+			System.out.println(" Citi percent size : " + ttso.get(0).getCityPercentage());
+			model.put("citicount", ttso.get(0).getCityQuantity());
+			model.put("citipercent", ttso.get(0).getCityPercentage());
+		}
+		Collections.sort(ttso, new TotalShippedOrder.OrderByNR());
+		model.put("NRsortedttso", getSortedList(ttso));
+		Collections.sort(ttso, new TotalShippedOrder.OrderByReturnamount());
+		model.put("returnAmountsortedttso", getSortedList(ttso));
+		Collections.sort(ttso, new TotalShippedOrder.OrderByReturnQuantity());
+		model.put("returnQsortedttso", getSortedList(ttso));
+		Collections.sort(ttso, new TotalShippedOrder.OrderBySaleQuantity());
+		model.put("saleQsortedttso", getSortedList(ttso));
+		Collections.sort(ttso, new TotalShippedOrder.OrderBySaleamount());
+		model.put("saleAmounrsortedttso", getSortedList(ttso));
+
+		model.put("period",dateFormat.format(startDate) + " to "+ dateFormat.format(endDate));
+		/*
+		 * model.put("reportName",reportName);
+		 * model.put("partnerlist",partnerlist);
+		 */
+		}catch(CustomException ce){
+			log.error("getReport exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		}catch(Exception e){
+			log.error(e);
+		}
+		log.info("*** getReport exit ***");
+		if(reportName.equals("channelSaleReport"))
+			return new ModelAndView("reports/viewChannelSaleGraphReport", model);
+		else
+			return new ModelAndView("reports/viewProductSaleGraphReport", model);
+		
 }
 
 

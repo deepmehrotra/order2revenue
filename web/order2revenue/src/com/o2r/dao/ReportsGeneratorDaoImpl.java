@@ -128,6 +128,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao{
 		 .add(Restrictions.eq("seller.id", sellerId))
 		 .add(Restrictions.between("orderDate",startDate, endDate));
 		 criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+		 
 		 ProjectionList projList = Projections.projectionList();
 		 projList.add(Projections.groupProperty("pcName"));
 		 projList.add(Projections.sum("quantity"));
@@ -136,6 +137,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao{
 		 projList.add(Projections.sum("orderPayment.negativeAmount"));
 		 projList.add(Projections.sum("orderSP"));
 		 projList.add(Projections.sum("orderPayment.positiveAmount"));
+		 
 		 criteria.setProjection(projList);
 		 criteria.addOrder(org.hibernate.criterion.Order.asc("pcName"));
 		 List<Object[]> results = criteria.list();

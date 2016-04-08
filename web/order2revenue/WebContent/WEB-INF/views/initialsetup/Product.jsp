@@ -98,7 +98,7 @@
                                       <td>${product.channelSKU}</td>
                                         <td class="tooltip-demo">
                            <a href="editProduct.html?id=${product.productId}"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a>
-   							<a href="javascript:onclickNavigatePayment(${product.productId},${product.productName})"  ><i class="fa fa-edit text-navy" data-toggle="modal" data-target="#myModal" data-placement="top" data-original-title="Update Inventory"></i></a>
+   							<a href="javascript:show('${product.productName}','${product.productSkuCode}')"  ><i class="fa fa-edit text-navy" data-toggle="modal" data-target="#myModal" data-placement="top" data-original-title="Update Inventory"></i></a>
  							</td>
 
                                 </tr>
@@ -143,17 +143,17 @@
                 <label> 
                     Product Name
                 </label>
-                <form:input path="productName" value="" class="form-control"/>
+                <form:input path="productName" id="productName" value="mahesh" class="form-control"/>
             </div>
             <div class="col-sm-6">
                 <label>SKU 
                 </label>
                               <c:choose>
                                     	 <c:when test="${globalValue}">
-                                    	 <form:input path="productSkuCode"  value="${globalValue }" id="addproductSkuCode"
+                                    	 <form:input path="productSkuCode"  value="kumar" id="productSkuCode"
                                      class="form-control"/><span id="skucodeMsg" style="color:red"></span></c:when>
                                      <c:otherwise> 
-                                     <form:input path="productSkuCode" value="${globalValue }"  id="productSkuCode"
+                                     <form:input path="productSkuCode" value="kollipara"  id="productSkuCode"
                                      class="form-control" readonly="true"/></c:otherwise>
                                      </c:choose>
             </div>
@@ -175,7 +175,7 @@
 <div class="modal-footer">
    <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
 <button class="btn btn-primary" type="button" onclick="updateInventory()">Update</button>
-        </form:form>
+   
 </div>
 </div>
 </div>
@@ -279,12 +279,37 @@
            });
        }
  
+      function show(vale,valf){
+    		var valued=document.getElementById('productName');
+    		var valuee=document.getElementById('productSkuCode');
+    		
+    		valued.value=vale;
+    		valuee.value=valf;
+    		//editProduct.html?id=${product.productId}
+    		var xxx = $('editProduct.html?id'+vale).submit();
+    	}
+    	function updateInventory(){
+    		var sx=document.getElementById("oneone").value;
+    		var xxx = $('form#addProductForm').submit();
+    	  //  $.ajax({url: "demo_test.txt", success: function(result){
+    	 //       $("#div1").html(result);
+    	  //  }});
+    		//alert('delete producrt goes here');
+    		//$('form#addProductForm').submit();
+    		//opener.location.reload();
+    		//window.close();
+    	}	
+    	function onclickNavigatePayment(value,value1) {
+    		
+    		  //alert(value2);
+    	 // window.open("updateInventory.html?id="+value, 'liveMatches', 'width=720,height=800,toolbar=0,location=0, directories=0, status=0,location=no,menubar=0');
+    		 //window.open("updateInventory.html?id="+value,null, "location=no,height=400,width=1200,top=100,left=50,status=yes,resizable=no,titlebar=no,toolbar=no,menubar=no,scrollbars=no,location=no");
+    		}     
       
-      
 
 
 
-</script>
+</script>     </form:form>
 <style>
     body.DTTT_Print {
         background: #fff;
@@ -317,21 +342,7 @@
 </style>
 
 <script type="text/javascript">
-function updateInventory(){
-	var sx=document.getElementById("oneone").value;
-	alert(sx);
-	var xxx = $('form#addProductForm').submit();
-	//alert('delete producrt goes here');
-	//$('form#addProductForm').submit();
-	//opener.location.reload();
-	//window.close();
-}	
-function onclickNavigatePayment(value,value1) {
-	  alert(value1);
-	  //alert(value2);
- // window.open("updateInventory.html?id="+value, 'liveMatches', 'width=720,height=800,toolbar=0,location=0, directories=0, status=0,location=no,menubar=0');
-	 //window.open("updateInventory.html?id="+value,null, "location=no,height=400,width=1200,top=100,left=50,status=yes,resizable=no,titlebar=no,toolbar=no,menubar=no,scrollbars=no,location=no");
-	}
+
 
 
 </script>
