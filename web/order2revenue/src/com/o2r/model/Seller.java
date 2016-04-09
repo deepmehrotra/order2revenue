@@ -50,6 +50,7 @@ public class Seller {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "seller_roles", joinColumns = { @JoinColumn(name = "seller_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "role_id", referencedColumnName = "id") })
 	private Role role;
+	
 	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<Order> orders = new ArrayList<Order>();
@@ -63,6 +64,7 @@ public class Seller {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "Seller_ExpCat", joinColumns = @JoinColumn(name = "ID"), inverseJoinColumns = @JoinColumn(name = "EXPCATID"))
 	private List<ExpenseCategory> expensecategories = new ArrayList<ExpenseCategory>();
+	
 	@OneToMany(cascade = CascadeType.ALL)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<Partner> partners = new ArrayList<Partner>();

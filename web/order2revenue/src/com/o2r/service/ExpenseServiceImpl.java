@@ -59,6 +59,7 @@ public ExpenseCategory getExpenseCategory(int expenseCatId)throws CustomExceptio
 	return expenseDao.getExpenseCategory(expenseCatId);
 }
 
+
 @Override
 public int deleteExpenseCategory(ExpenseCategory expenseCat,int sellerId)throws CustomException {
 
@@ -86,5 +87,11 @@ public List<Expenses> getExpenseByCategory(String expCatName, int sellerId)throw
 public List<Expenses> getExpenseByDate(Date startDate, Date endDate,
 		int sellerId)throws CustomException {
 	return expenseDao.getExpenseByDate(startDate, endDate, sellerId);
+}
+
+@Override
+public List<Expenses> getExpenseByName(String expname, int sellerId)
+		throws CustomException {
+	return expenseDao.getExpenseByName(expname, sellerId);
 }
 }

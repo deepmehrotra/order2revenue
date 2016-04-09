@@ -743,7 +743,9 @@ public class ConverterClass {
 
 				beans.add(bean);
 			}
-		}
+		}else
+			beans.add(new ExpenseBean());
+		
 		return beans;
 	}
 

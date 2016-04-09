@@ -34,4 +34,9 @@ public double getMonthlyAmount(int catId, int sellerId)throws CustomException;
 public List<Expenses> getExpenseByCategory(String expCatName ,int sellerId)throws CustomException;
 
 public List<Expenses> getExpenseByDate(Date startDate,Date endDate ,int sellerId)throws CustomException;
+
+public ExpenseCategory getExpenseByName(String expname);
+
+List<Expenses> getExpenseByName(String expCatName, int sellerId)
+		throws CustomException;
 }

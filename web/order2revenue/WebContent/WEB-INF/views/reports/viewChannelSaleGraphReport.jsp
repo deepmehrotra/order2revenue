@@ -556,7 +556,7 @@ linearrayRA.push(arr2);
 	//Calling all the charts
  $(window).load(function() {
 	 
-			flotbar(temp,ticks,"#flot-bar-chart");
+		flotbar(temp,ticks,"#flot-bar-chart");
 		flotline(linetemp,linearrayfortick,"#flot-line-chart");
 		flotbar(RQBarData,ticksforRQBar,"#flot-bar-chart-RQ");
 		flotline(lineDataRA,linearrayRA,"#flot-line-chart-RA");
