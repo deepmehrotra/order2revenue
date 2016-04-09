@@ -32,6 +32,8 @@
                                                 <select class="form-control" name="reportGroup" id="reportGroup" >
                                                     <option value="">Select Report Category</option>
                                                     <option value="OrderRelatedReport">Order Related Reports</option>
+                                                    <option value="ChannelRelatedReport">Channel Related Report</option>
+                                                    <option value="ProductRelatedReport">Product Related Report</option>
                                                     <option value="PartnerRelated">Partner Related Reports</option>
                                                     <option value="ExpenseReports">Expense Reports</option>
                                                     <option value="InventoryReports">Inventory Reports</option>
@@ -173,6 +175,16 @@ var OrderRelatedReport = [
                   {display: "Disputed Orders", value: "disputedOrders" }, 
                   {display: " Return/RTO limit crossed Orders", value: " returnRTOLimitCrossed" },
                   {display: "Settled Orders", value: "settledOrders" }];
+var ChannelRelatedReport = [
+                          {display: "Channel Shipped Orders", value: "getChannelReport" }, 
+                          {display: "Payment Difference Orders", value: "getChannelReport" }, 
+                          {display: " Return/RTO limit crossed Orders", value: " returnRTOLimitCrossed" },
+                          {display: "Settled Orders", value: "settledOrders" }];
+var ProductRelatedReport = [
+                          {display: "Product Shipped Orders", value: "getChannelReport" }, 
+                          {display: "Payment Difference Orders", value: "getChannelReport" }, 
+                          {display: " Return/RTO limit crossed Orders", value: " getChannelReport" },
+                          {display: "Settled Orders", value: "settledOrders" }];
                   
 var PartnerRelated = [
                   {display: "Partner Commission Paid Report", value: "partnerCommissionReport" }, 
@@ -222,6 +234,10 @@ $("#reportGroup").change(function() {
            break; 
         case 'RevenueReports':
             list(RevenueReports);
+        case 'ChannelRelatedReport':
+            list(ChannelRelatedReport);
+        case 'ProductRelatedReport':
+            list(ProductRelatedReport);
            break; 
         default: //default child option is blank
             $("#reportName").html('');  
