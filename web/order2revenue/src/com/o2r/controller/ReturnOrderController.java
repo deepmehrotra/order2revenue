@@ -471,6 +471,9 @@ public class ReturnOrderController {
 	public String save(HttpServletRequest request,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 		System.out.println("Inside save method");
+		// gets absolute path of the web application
+		String applicationPath = request.getServletContext().getRealPath("");
+
 		List<MultipartFile> files = uploadForm.getFiles();
 		List<String> fileNames = new ArrayList<String>();
 		MultipartFile fileinput = files.get(0);
@@ -485,7 +488,8 @@ public class ReturnOrderController {
 				System.out.println(" Filename : " + files.get(0).getName());
 				ValidateUpload.validateOfficeData(files.get(0));
 				System.out.println(" fileinput " + fileinput.getName());
-				saveContents.saveOrderReturnDetails(files.get(0), sellerId);
+				saveContents.saveOrderReturnDetails(files.get(0), sellerId,
+						applicationPath);
 			} catch (Exception e) {
 				System.out.println("Inside exception , filetype not accepted "
 						+ e.getLocalizedMessage());

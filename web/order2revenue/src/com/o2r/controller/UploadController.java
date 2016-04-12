@@ -315,6 +315,8 @@ public class UploadController {
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
 		log.info("*** save starts ***");
+		// gets absolute path of the web application
+		String applicationPath = request.getServletContext().getRealPath("");
 		// System.out.println("Inside save method");
 		List<MultipartFile> files = uploadForm.getFiles();
 
@@ -331,7 +333,8 @@ public class UploadController {
 				System.out.println(" Filename : " + files.get(0).getName());
 				ValidateUpload.validateOfficeData(files.get(0));
 				System.out.println(" fileinput " + fileinput.getName());
-				saveContents.savePaymentContents(files.get(0), sellerId);
+				saveContents.savePaymentContents(files.get(0), sellerId,
+						applicationPath);
 			} catch (Exception e) {
 				System.out.println("Inside exception , filetype not accepted "
 						+ e.getLocalizedMessage());

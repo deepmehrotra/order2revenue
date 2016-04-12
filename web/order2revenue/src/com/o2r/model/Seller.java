@@ -95,6 +95,10 @@ public class Seller {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Plan plan;
 
+	/*@OneToMany(cascade = CascadeType.ALL)
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	private List<UploadReport> uploadReportList = new ArrayList<UploadReport>();*/
+	
 	public SellerAccount getSellerAccount() {
 		return sellerAccount;
 	}
@@ -286,4 +290,12 @@ public class Seller {
 	public void setStateDeliveryTime(List<StateDeliveryTime> stateDeliveryTime) {
 		this.stateDeliveryTime = stateDeliveryTime;
 	}
+	
+	/*public List<UploadReport> getUploadReportList() {
+		return uploadReportList;
+	}
+
+	public void setUploadReportList(List<UploadReport> uploadReportList) {
+		this.uploadReportList = uploadReportList;
+	}*/
 }

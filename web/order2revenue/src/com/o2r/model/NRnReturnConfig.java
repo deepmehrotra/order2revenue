@@ -14,19 +14,20 @@ import javax.persistence.OneToMany;
 @Entity
 public class NRnReturnConfig {
 
-	@Id @GeneratedValue(strategy=GenerationType.AUTO)
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column
 	private int configId;
 	@Column
 	private boolean nrCalculator;
 	@Column
-	private String commissionType;   // - fixed or categoryWise
+	private String commissionType; // - fixed or categoryWise
 	@Column
 	private String categoryWiseCommsion;
 	@Column
 	private boolean whicheverGreaterPCC;
 	@Column
-	private String shippingFeeType ; // - variable  or fixed
+	private String shippingFeeType; // - variable or fixed
 
 	@Column
 	private String retCharSFType;
@@ -49,9 +50,9 @@ public class NRnReturnConfig {
 	@Column
 	private boolean retCharBRPCC;
 	@Column
-	private 	String RTOCharSFType;
+	private String RTOCharSFType;
 	@Column
-	private 	String RTOCharBRType;
+	private String RTOCharBRType;
 	@Column
 	private boolean RTOCharSFFF;
 	@Column
@@ -92,10 +93,10 @@ public class NRnReturnConfig {
 	private String PDCharSFType;
 	@Column
 	private String PDCharBRType;
-	//@Column
-	//private float PDCharSFFixAmt;
-	//@Column
-	//private float PDCharSFVarPerSP;
+	// @Column
+	// private float PDCharSFFixAmt;
+	// @Column
+	// private float PDCharSFVarPerSP;
 	@Column
 	private boolean PDCharSFFF;
 	@Column
@@ -104,10 +105,10 @@ public class NRnReturnConfig {
 	private boolean PDCharSFSerTax;
 	@Column
 	private boolean PDCharSFPCC;
-	//@Column
-	//private 	float PDCharBRFixAmt;
-	//@Column
-	//private float PDCharBRVarPerSP;
+	// @Column
+	// private float PDCharBRFixAmt;
+	// @Column
+	// private float PDCharBRVarPerSP;
 	@Column
 	private boolean PDCharBRFF;
 	@Column
@@ -122,10 +123,10 @@ public class NRnReturnConfig {
 	private String canCharSFBFRTDType;
 	@Column
 	private String canCharBRType;
-	//@Column
-	//private float canCharSFFixAmt;
-	//@Column
-	//private float canCharSFVarPerSP;
+	// @Column
+	// private float canCharSFFixAmt;
+	// @Column
+	// private float canCharSFVarPerSP;
 	@Column
 	private boolean canCharSFFF;
 	@Column
@@ -143,10 +144,10 @@ public class NRnReturnConfig {
 	private boolean canCharSFBRTDSerTax;
 	@Column
 	private boolean canCharSFBRTDPCC;
-	//@Column
-	//private 	float canCharBRFixAmt;
-	//@Column
-	//private float canCharBRVarPerSP;
+	// @Column
+	// private float canCharBRFixAmt;
+	// @Column
+	// private float canCharBRVarPerSP;
 	@Column
 	private boolean canCharBRFF;
 	@Column
@@ -164,171 +165,222 @@ public class NRnReturnConfig {
 	@Column
 	private String localList;
 	@Column
-	private String revShippingFeeType ; // - variable  or fixed
-	@OneToMany(cascade=CascadeType.ALL)
-	private List<NRnReturnCharges> charges=new ArrayList<>();
+	private String revShippingFeeType; // - variable or fixed
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<NRnReturnCharges> charges = new ArrayList<>();
+
 	public int getConfigId() {
 		return configId;
 	}
+
 	public void setConfigId(int configId) {
 		this.configId = configId;
 	}
-	
+
 	public String getCommissionType() {
 		return commissionType;
 	}
+
 	public void setCommissionType(String commissionType) {
 		this.commissionType = commissionType;
 	}
+
 	public String getShippingFeeType() {
 		return shippingFeeType;
 	}
+
 	public void setShippingFeeType(String shippingFeeType) {
 		this.shippingFeeType = shippingFeeType;
 	}
+
 	public boolean isRetCharBRFF() {
 		return retCharBRFF;
 	}
+
 	public void setRetCharBRFF(boolean retCharBRFF) {
 		this.retCharBRFF = retCharBRFF;
 	}
+
 	public boolean isRetCharBRShipFee() {
 		return retCharBRShipFee;
 	}
+
 	public void setRetCharBRShipFee(boolean retCharBRShipFee) {
 		this.retCharBRShipFee = retCharBRShipFee;
 	}
+
 	public boolean isRetCharBRSerTax() {
 		return retCharBRSerTax;
 	}
+
 	public void setRetCharBRSerTax(boolean retCharBRSerTax) {
 		this.retCharBRSerTax = retCharBRSerTax;
 	}
+
 	public boolean isRTOCharSFFF() {
 		return RTOCharSFFF;
 	}
+
 	public void setRTOCharSFFF(boolean rTOCharSFFF) {
 		RTOCharSFFF = rTOCharSFFF;
 	}
+
 	public boolean isRTOCharSFShipFee() {
 		return RTOCharSFShipFee;
 	}
+
 	public void setRTOCharSFShipFee(boolean rTOCharSFShipFee) {
 		RTOCharSFShipFee = rTOCharSFShipFee;
 	}
+
 	public boolean isRTOCharSFSerTax() {
 		return RTOCharSFSerTax;
 	}
+
 	public void setRTOCharSFSerTax(boolean rTOCharSFSerTax) {
 		RTOCharSFSerTax = rTOCharSFSerTax;
 	}
+
 	public boolean isRTOCharBRFF() {
 		return RTOCharBRFF;
 	}
+
 	public void setRTOCharBRFF(boolean rTOCharBRFF) {
 		RTOCharBRFF = rTOCharBRFF;
 	}
+
 	public boolean isRTOCharBRShipFee() {
 		return RTOCharBRShipFee;
 	}
+
 	public void setRTOCharBRShipFee(boolean rTOCharBRShipFee) {
 		RTOCharBRShipFee = rTOCharBRShipFee;
 	}
+
 	public boolean isRTOCharBRSerTax() {
 		return RTOCharBRSerTax;
 	}
+
 	public void setRTOCharBRSerTax(boolean rTOCharBRSerTax) {
 		RTOCharBRSerTax = rTOCharBRSerTax;
 	}
-	
+
 	public boolean isRepCharSFFF() {
 		return repCharSFFF;
 	}
+
 	public void setRepCharSFFF(boolean repCharSFFF) {
 		this.repCharSFFF = repCharSFFF;
 	}
+
 	public boolean isRepCharSFShipFee() {
 		return repCharSFShipFee;
 	}
+
 	public void setRepCharSFShipFee(boolean repCharSFShipFee) {
 		this.repCharSFShipFee = repCharSFShipFee;
 	}
+
 	public boolean isRepCharSFSerTax() {
 		return repCharSFSerTax;
 	}
+
 	public void setRepCharSFSerTax(boolean repCharSFSerTax) {
 		this.repCharSFSerTax = repCharSFSerTax;
 	}
+
 	public boolean isRepCharBRFF() {
 		return repCharBRFF;
 	}
+
 	public void setRepCharBRFF(boolean repCharBRFF) {
 		this.repCharBRFF = repCharBRFF;
 	}
+
 	public boolean isRepCharBRShipFee() {
 		return repCharBRShipFee;
 	}
+
 	public void setRepCharBRShipFee(boolean repCharBRShipFee) {
 		this.repCharBRShipFee = repCharBRShipFee;
 	}
+
 	public boolean isRepCharBRSerTax() {
 		return repCharBRSerTax;
 	}
+
 	public void setRepCharBRSerTax(boolean repCharBRSerTax) {
 		this.repCharBRSerTax = repCharBRSerTax;
 	}
+
 	public boolean isPDCharSFFF() {
 		return PDCharSFFF;
 	}
+
 	public void setPDCharSFFF(boolean pDCharSFFF) {
 		PDCharSFFF = pDCharSFFF;
 	}
+
 	public boolean isPDCharSFShipFee() {
 		return PDCharSFShipFee;
 	}
+
 	public void setPDCharSFShipFee(boolean pDCharSFShipFee) {
 		PDCharSFShipFee = pDCharSFShipFee;
 	}
+
 	public boolean isPDCharSFSerTax() {
 		return PDCharSFSerTax;
 	}
+
 	public void setPDCharSFSerTax(boolean pDCharSFSerTax) {
 		PDCharSFSerTax = pDCharSFSerTax;
 	}
+
 	public boolean isPDCharBRFF() {
 		return PDCharBRFF;
 	}
+
 	public void setPDCharBRFF(boolean pDCharBRFF) {
 		PDCharBRFF = pDCharBRFF;
 	}
+
 	public boolean isPDCharBRShipFee() {
 		return PDCharBRShipFee;
 	}
+
 	public void setPDCharBRShipFee(boolean pDCharBRShipFee) {
 		PDCharBRShipFee = pDCharBRShipFee;
 	}
+
 	public boolean isPDCharBRSerTax() {
 		return PDCharBRSerTax;
 	}
+
 	public void setPDCharBRSerTax(boolean pDCharBRSerTax) {
 		PDCharBRSerTax = pDCharBRSerTax;
 	}
-	
+
 	public boolean isCanCharSFFF() {
 		return canCharSFFF;
 	}
+
 	public void setCanCharSFFF(boolean canCharSFFF) {
 		this.canCharSFFF = canCharSFFF;
 	}
+
 	public boolean isCanCharSFShipFee() {
 		return canCharSFShipFee;
 	}
+
 	public void setCanCharSFShipFee(boolean canCharSFShipFee) {
 		this.canCharSFShipFee = canCharSFShipFee;
 	}
+
 	public boolean isCanCharSFSerTax() {
 		return canCharSFSerTax;
 	}
+
 	public void setCanCharSFSerTax(boolean canCharSFSerTax) {
 		this.canCharSFSerTax = canCharSFSerTax;
 	}
@@ -336,245 +388,321 @@ public class NRnReturnConfig {
 	public boolean isCanCharBRFF() {
 		return canCharBRFF;
 	}
+
 	public void setCanCharBRFF(boolean canCharBRFF) {
 		this.canCharBRFF = canCharBRFF;
 	}
+
 	public boolean isCanCharBRShipFee() {
 		return canCharBRShipFee;
 	}
+
 	public void setCanCharBRShipFee(boolean canCharBRShipFee) {
 		this.canCharBRShipFee = canCharBRShipFee;
 	}
+
 	public boolean isCanCharBRSerTax() {
 		return canCharBRSerTax;
 	}
+
 	public void setCanCharBRSerTax(boolean canCharBRSerTax) {
 		this.canCharBRSerTax = canCharBRSerTax;
 	}
+
 	public String getNationalList() {
 		return nationalList;
 	}
+
 	public void setNationalList(String nationalList) {
 		this.nationalList = nationalList;
 	}
+
 	public String getZonalList() {
 		return zonalList;
 	}
+
 	public void setZonalList(String zonalList) {
 		this.zonalList = zonalList;
 	}
+
 	public String getMetroList() {
 		return metroList;
 	}
+
 	public void setMetroList(String metroList) {
 		this.metroList = metroList;
 	}
+
 	public String getLocalList() {
 		return localList;
 	}
+
 	public void setLocalList(String localList) {
 		this.localList = localList;
 	}
+
 	public String getRevShippingFeeType() {
 		return revShippingFeeType;
 	}
+
 	public void setRevShippingFeeType(String revShippingFeeType) {
 		this.revShippingFeeType = revShippingFeeType;
 	}
+
 	public List<NRnReturnCharges> getCharges() {
 		return charges;
 	}
+
 	public void setCharges(List<NRnReturnCharges> charges) {
 		this.charges = charges;
 	}
+
 	public String getCategoryWiseCommsion() {
 		return categoryWiseCommsion;
 	}
+
 	public void setCategoryWiseCommsion(String categoryWiseCommsion) {
 		this.categoryWiseCommsion = categoryWiseCommsion;
 	}
+
 	public boolean isWhicheverGreaterPCC() {
 		return whicheverGreaterPCC;
 	}
+
 	public void setWhicheverGreaterPCC(boolean whicheverGreaterPCC) {
 		this.whicheverGreaterPCC = whicheverGreaterPCC;
 	}
+
 	public boolean isRetCharSFFF() {
 		return retCharSFFF;
 	}
+
 	public void setRetCharSFFF(boolean retCharSFFF) {
 		this.retCharSFFF = retCharSFFF;
 	}
+
 	public boolean isRetCharSFShipFee() {
 		return retCharSFShipFee;
 	}
+
 	public void setRetCharSFShipFee(boolean retCharSFShipFee) {
 		this.retCharSFShipFee = retCharSFShipFee;
 	}
+
 	public boolean isRetCharSFSerTax() {
 		return retCharSFSerTax;
 	}
+
 	public void setRetCharSFSerTax(boolean retCharSFSerTax) {
 		this.retCharSFSerTax = retCharSFSerTax;
 	}
+
 	public boolean isRetCharSFPCC() {
 		return retCharSFPCC;
 	}
+
 	public void setRetCharSFPCC(boolean retCharSFPCC) {
 		this.retCharSFPCC = retCharSFPCC;
 	}
+
 	public boolean isRetCharBRPCC() {
 		return retCharBRPCC;
 	}
+
 	public void setRetCharBRPCC(boolean retCharBRPCC) {
 		this.retCharBRPCC = retCharBRPCC;
 	}
+
 	public boolean isRTOCharSFPCC() {
 		return RTOCharSFPCC;
 	}
+
 	public void setRTOCharSFPCC(boolean rTOCharSFPCC) {
 		RTOCharSFPCC = rTOCharSFPCC;
 	}
+
 	public boolean isRTOCharBRPCC() {
 		return RTOCharBRPCC;
 	}
+
 	public void setRTOCharBRPCC(boolean rTOCharBRPCC) {
 		RTOCharBRPCC = rTOCharBRPCC;
 	}
+
 	public boolean isRepCharSFPCC() {
 		return repCharSFPCC;
 	}
+
 	public void setRepCharSFPCC(boolean repCharSFPCC) {
 		this.repCharSFPCC = repCharSFPCC;
 	}
+
 	public boolean isRepCharBRPCC() {
 		return repCharBRPCC;
 	}
+
 	public void setRepCharBRPCC(boolean repCharBRPCC) {
 		this.repCharBRPCC = repCharBRPCC;
 	}
+
 	public boolean isPDCharSFPCC() {
 		return PDCharSFPCC;
 	}
+
 	public void setPDCharSFPCC(boolean pDCharSFPCC) {
 		PDCharSFPCC = pDCharSFPCC;
 	}
+
 	public boolean isPDCharBRPCC() {
 		return PDCharBRPCC;
 	}
+
 	public void setPDCharBRPCC(boolean pDCharBRPCC) {
 		PDCharBRPCC = pDCharBRPCC;
 	}
-	
+
 	public boolean isCanCharSFPCC() {
 		return canCharSFPCC;
 	}
+
 	public void setCanCharSFPCC(boolean canCharSFPCC) {
 		this.canCharSFPCC = canCharSFPCC;
 	}
+
 	public boolean isCanCharBRPCC() {
 		return canCharBRPCC;
 	}
+
 	public void setCanCharBRPCC(boolean canCharBRPCC) {
 		this.canCharBRPCC = canCharBRPCC;
 	}
+
 	public boolean isCanCharSFBRTDFF() {
 		return canCharSFBRTDFF;
 	}
+
 	public void setCanCharSFBRTDFF(boolean canCharSFBRTDFF) {
 		this.canCharSFBRTDFF = canCharSFBRTDFF;
 	}
+
 	public boolean isCanCharSFBRTDShipFee() {
 		return canCharSFBRTDShipFee;
 	}
+
 	public void setCanCharSFBRTDShipFee(boolean canCharSFBRTDShipFee) {
 		this.canCharSFBRTDShipFee = canCharSFBRTDShipFee;
 	}
+
 	public boolean isCanCharSFBRTDSerTax() {
 		return canCharSFBRTDSerTax;
 	}
+
 	public void setCanCharSFBRTDSerTax(boolean canCharSFBRTDSerTax) {
 		this.canCharSFBRTDSerTax = canCharSFBRTDSerTax;
 	}
+
 	public boolean isCanCharSFBRTDPCC() {
 		return canCharSFBRTDPCC;
 	}
+
 	public void setCanCharSFBRTDPCC(boolean canCharSFBRTDPCC) {
 		this.canCharSFBRTDPCC = canCharSFBRTDPCC;
 	}
+
 	public String getRetCharSFType() {
 		return retCharSFType;
 	}
+
 	public void setRetCharSFType(String retCharSFType) {
 		this.retCharSFType = retCharSFType;
 	}
+
 	public String getRetCharBRType() {
 		return retCharBRType;
 	}
+
 	public void setRetCharBRType(String retCharBRType) {
 		this.retCharBRType = retCharBRType;
 	}
+
 	public String getRTOCharSFType() {
 		return RTOCharSFType;
 	}
+
 	public void setRTOCharSFType(String rTOCharSFType) {
 		RTOCharSFType = rTOCharSFType;
 	}
+
 	public String getRTOCharBRType() {
 		return RTOCharBRType;
 	}
+
 	public void setRTOCharBRType(String rTOCharBRType) {
 		RTOCharBRType = rTOCharBRType;
 	}
+
 	public String getRepCharSFType() {
 		return repCharSFType;
 	}
+
 	public void setRepCharSFType(String repCharSFType) {
 		this.repCharSFType = repCharSFType;
 	}
+
 	public String getRepCharBRType() {
 		return repCharBRType;
 	}
+
 	public void setRepCharBRType(String repCharBRType) {
 		this.repCharBRType = repCharBRType;
 	}
+
 	public String getPDCharSFType() {
 		return PDCharSFType;
 	}
+
 	public void setPDCharSFType(String pDCharSFType) {
 		PDCharSFType = pDCharSFType;
 	}
+
 	public String getPDCharBRType() {
 		return PDCharBRType;
 	}
+
 	public void setPDCharBRType(String pDCharBRType) {
 		PDCharBRType = pDCharBRType;
 	}
+
 	public String getCanCharSFARTDType() {
 		return canCharSFARTDType;
 	}
+
 	public void setCanCharSFARTDType(String canCharSFARTDType) {
 		this.canCharSFARTDType = canCharSFARTDType;
 	}
+
 	public String getCanCharSFBFRTDType() {
 		return canCharSFBFRTDType;
 	}
+
 	public void setCanCharSFBFRTDType(String canCharSFBFRTDType) {
 		this.canCharSFBFRTDType = canCharSFBFRTDType;
 	}
+
 	public String getCanCharBRType() {
 		return canCharBRType;
 	}
+
 	public void setCanCharBRType(String canCharBRType) {
 		this.canCharBRType = canCharBRType;
 	}
+
 	public boolean isNrCalculator() {
 		return nrCalculator;
 	}
+
 	public void setNrCalculator(boolean nrCalculator) {
 		this.nrCalculator = nrCalculator;
 	}
 
-
 }
-

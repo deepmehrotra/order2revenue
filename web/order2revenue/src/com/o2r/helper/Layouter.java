@@ -508,9 +508,16 @@ public class Layouter {
 		cell8.setCellStyle(headerCellStyle);
 
 		HSSFCell cell9 = rowHeader.createCell(startColIndex+8);
-		cell9.setCellValue("Return Charge");
+		cell9.setCellValue("Return Type");
 		cell9.setCellStyle(headerCellStyle);
 
+		HSSFCell cell10 = rowHeader.createCell(startColIndex+9);
+		cell10.setCellValue("Fault Type");
+		cell10.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell11 = rowHeader.createCell(startColIndex+10);
+		cell11.setCellValue("Stage");
+		cell11.setCellStyle(headerCellStyle);
 	}
 
 	public static void buildOrderPOHeaders(HSSFSheet worksheet, int startRowIndex, int startColIndex) {

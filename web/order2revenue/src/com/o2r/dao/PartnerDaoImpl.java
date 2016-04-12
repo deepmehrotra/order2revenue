@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,9 +31,9 @@ public class PartnerDaoImpl implements PartnerDao {
 
 	static Logger log = Logger.getLogger(PartnerDaoImpl.class.getName());
 
-	
 	@Override
-	public void addPartner(Partner partner, int sellerId)throws CustomException {
+	public void addPartner(Partner partner, int sellerId)
+			throws CustomException {
 		// sellerId=4;
 		// sessionFactory.getCurrentSession().saveOrUpdate(partner);
 		System.out.println(" Inside PartnerDaoIMpl partner id :"
@@ -51,14 +52,15 @@ public class PartnerDaoImpl implements PartnerDao {
 			session.close();
 		} catch (Exception e) {
 			log.error(e);
-			throw new CustomException(GlobalConstant.addPartnerError, new Date(), 1, GlobalConstant.addPartnerErrorCode, e);
-			
-			//System.out.println(" pcId DAO IMPL :" + e.getLocalizedMessage());
+			throw new CustomException(GlobalConstant.addPartnerError,
+					new Date(), 1, GlobalConstant.addPartnerErrorCode, e);
+
+			// System.out.println(" pcId DAO IMPL :" + e.getLocalizedMessage());
 		}
 	}
 
 	@Override
-	public List<Partner> listPartner(int sellerId)throws CustomException {
+	public List<Partner> listPartner(int sellerId) throws CustomException {
 
 		// sellerId=4;
 		List<Partner> returnlist = null;
@@ -79,27 +81,40 @@ public class PartnerDaoImpl implements PartnerDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			
+
 			log.error(e);
-			throw new CustomException(GlobalConstant.listPartnerError, new Date(), 3, GlobalConstant.listPartnerErrorCode, e);
-			//System.out.println(" Exception in getting partner list :"+ e.getLocalizedMessage());
+			throw new CustomException(GlobalConstant.listPartnerError,
+					new Date(), 3, GlobalConstant.listPartnerErrorCode, e);
+			// System.out.println(" Exception in getting partner list :"+
+			// e.getLocalizedMessage());
 		}
 		return returnlist;
 	}
 
 	@Override
-	public Partner getPartner(int partnerid)throws CustomException {
-		try{
-		return (Partner) sessionFactory.getCurrentSession().get(Partner.class,
-				partnerid);
-		}catch (Exception e){
+	public Partner getPartner(int partnerid) throws CustomException {
+		try {
+			
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Partner partner =(Partner) session.get(Partner.class,
+					partnerid);
+			Hibernate.initialize(partner.getNrnReturnConfig().getCharges());
+			session.getTransaction().commit();
+			session.close();
+			return partner;
+			/*return (Partner) sessionFactory.getCurrentSession().get(
+					Partner.class, partnerid);*/
+		} catch (Exception e) {
 			log.error(e);
-			throw new CustomException(GlobalConstant.getPartnerError, new Date(), 3, GlobalConstant.getPartnerErrorCode, e);
+			throw new CustomException(GlobalConstant.getPartnerError,
+					new Date(), 3, GlobalConstant.getPartnerErrorCode, e);
 		}
 	}
 
 	@Override
-	public Partner getPartner(String partnername, int sellerId)throws CustomException {
+	public Partner getPartner(String partnername, int sellerId)
+			throws CustomException {
 		// sellerId=4;
 		Partner returnpartner = null;
 		Seller seller = null;
@@ -120,14 +135,17 @@ public class PartnerDaoImpl implements PartnerDao {
 			if (criteria.list() != null && criteria.list().size() != 0) {
 				seller = (Seller) criteria.list().get(0);
 				returnpartner = seller.getPartners().get(0);
+				Hibernate.initialize(returnpartner.getNrnReturnConfig().getCharges());
 			}
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			
+
 			log.error(e);
-			throw new CustomException(GlobalConstant.getPartnerError, new Date(), 3, GlobalConstant.getPartnerErrorCode, e);
-			//System.out.println(" Partner  DAO IMPL :" + e.getLocalizedMessage());
+			throw new CustomException(GlobalConstant.getPartnerError,
+					new Date(), 3, GlobalConstant.getPartnerErrorCode, e);
+			// System.out.println(" Partner  DAO IMPL :" +
+			// e.getLocalizedMessage());
 		}
 
 		return returnpartner;
@@ -135,7 +153,8 @@ public class PartnerDaoImpl implements PartnerDao {
 	}
 
 	@Override
-	public void deletePartner(Partner partner, int sellerId)throws CustomException {
+	public void deletePartner(Partner partner, int sellerId)
+			throws CustomException {
 		System.out.println(" In partner delete pid " + partner.getPcId()
 				+ "   pcname " + partner.getPcName());
 		// sellerId=4;
@@ -172,11 +191,13 @@ public class PartnerDaoImpl implements PartnerDao {
 			session.close();
 
 		} catch (Exception e) {
-			
+
 			log.error(e);
-			throw new CustomException(GlobalConstant.deletePartnerError, new Date(), 3, GlobalConstant.deletePartnerErrorCode, e);
-			//System.out.println(" Inside delleting partner"+ e.getLocalizedMessage());
-			
+			throw new CustomException(GlobalConstant.deletePartnerError,
+					new Date(), 3, GlobalConstant.deletePartnerErrorCode, e);
+			// System.out.println(" Inside delleting partner"+
+			// e.getLocalizedMessage());
+
 		}
 
 	}

@@ -194,6 +194,10 @@ public class OrderController {
 		MultipartFile fileinput = files.get(0);
 		int sellerId;
 		System.out.println(" got file");
+
+		// gets absolute path of the web application
+		String applicationPath = request.getServletContext().getRealPath("");
+
 		if (null != files && files.size() > 0) {
 			fileNames.add(files.get(0).getOriginalFilename());
 			try {
@@ -208,52 +212,57 @@ public class OrderController {
 				switch (uploadForm.getSheetValue()) {
 				case "ordersummary":
 					model.put("orderMap", saveContents.saveOrderContents(
-							files.get(0), sellerId));
+							files.get(0), sellerId, applicationPath));
 					model.put("mapType", "orderMap");
 					// saveContents.saveOrderContents(files.get(0),sellerId);
 					break;
 				case "orderPoSummary":
 					model.put("orderPoMap", saveContents.saveOrderContents(
-							files.get(0), sellerId));
+							files.get(0), sellerId, applicationPath));
 					model.put("mapType", "orderPoMap");
 					// saveContents.saveOrderPOContents(files.get(0),sellerId);
 					break;
 				case "paymentSummary":
 					model.put("orderPaymentMap", saveContents
-							.savePaymentContents(files.get(0), sellerId));
+							.savePaymentContents(files.get(0), sellerId,
+									applicationPath));
 					model.put("mapType", "orderPaymentMap");
 					// saveContents.savePaymentContents(files.get(0),sellerId);
 					break;
 				case "returnSummary":
 					model.put("orderReturnMap", saveContents
-							.saveOrderReturnDetails(files.get(0), sellerId));
+							.saveOrderReturnDetails(files.get(0), sellerId,
+									applicationPath));
 					model.put("mapType", "orderReturnMap");
 					break;
 				case "productSummary":
 					model.put("productMap", saveContents.saveProductContents(
-							files.get(0), sellerId));
+							files.get(0), sellerId, applicationPath));
 					model.put("mapType", "productMap");
 					// saveContents.saveProductContents(files.get(0),sellerId);
 					break;
 				case "inventorySummary":
 					model.put("inventoryMap", saveContents
-							.saveInventoryDetails(files.get(0), sellerId));
+							.saveInventoryDetails(files.get(0), sellerId,
+									applicationPath));
 					model.put("mapType", "inventoryMap");
 					// saveContents.saveInventoryDetails(files.get(0),sellerId);
 					break;
 				case "debitNoteSummary":
 					// model.put("debitNotetMap",saveContents.saveInventoryDetails(files.get(0),sellerId));
-					saveContents.saveDebitNoteDetails(files.get(0), sellerId);
+					saveContents.saveDebitNoteDetails(files.get(0), sellerId,
+							applicationPath);
 					model.put("mapType", "debitNoteSummary");
 					break;
 				case "poPaymentSummary":
 					// model.put("poPaymentMap",saveContents.saveInventoryDetails(files.get(0),sellerId));
-					saveContents.savePoPaymetnDetails(files.get(0), sellerId);
+					saveContents.savePoPaymetnDetails(files.get(0), sellerId,
+							applicationPath);
 					model.put("mapType", "poPaymentSummary");
 					break;
 				case "expenseSummary":
 					model.put("expensesMap", saveContents.saveExpenseDetails(
-							files.get(0), sellerId));
+							files.get(0), sellerId, applicationPath));
 					model.put("mapType", "expensesMap");
 					// saveContents.saveExpenseDetails(files.get(0),sellerId);
 					break;
@@ -261,9 +270,11 @@ public class OrderController {
 				}
 				inputStream = files.get(0).getInputStream();
 
-				// gets absolute path of the web application
-				String applicationPath = request.getServletContext()
-						.getRealPath("");
+				/*
+				 * // gets absolute path of the web application String
+				 * applicationPath = request.getServletContext()
+				 * .getRealPath("");
+				 */
 				// constructs path of the directory to save uploaded file
 				String uploadFilePath = applicationPath + File.separator
 						+ UPLOAD_DIR;
@@ -421,7 +432,7 @@ public class OrderController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 		int sellerId;
-		Product product=null;
+		Product product = null;
 		try {
 			sellerId = HelperClass.getSellerIdfromSession(request);
 			Order order = orderService.getOrder(orderBean.getOrderId(),
@@ -437,7 +448,7 @@ public class OrderController {
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
-		}catch(Throwable e){
+		} catch (Throwable e) {
 			log.error(e);
 		}
 		if (product != null)
@@ -461,7 +472,7 @@ public class OrderController {
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
-		}catch(Throwable e){
+		} catch (Throwable e) {
 			log.error(e);
 		}
 		return new ModelAndView("dailyactivities/editOrder", model);
@@ -597,7 +608,7 @@ public class OrderController {
 			String errors = gson.toJson(mode);
 			return errors;
 			// return new ModelAndView("globalErorPage", model);
-		}catch (Throwable e) {
+		} catch (Throwable e) {
 			log.error(e);
 		}
 		if (parner != null && parner.size() != 0 && parner.get(0) != null) {

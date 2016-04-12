@@ -19,27 +19,30 @@ import com.o2r.model.Partner;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class PartnerServiceImpl implements PartnerService {
 
- @Autowired
- private PartnerDao partnerDao;
- 
- @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
- public void addPartner(Partner partner,int sellerId)throws CustomException {
-	 partnerDao.addPartner(partner,sellerId);
- }
- 
- public List<Partner> listPartners(int sellerId)throws CustomException {
-  return partnerDao.listPartner(sellerId);
- }
+	@Autowired
+	private PartnerDao partnerDao;
 
- public Partner getPartner(int partnerid)throws CustomException {
-  return partnerDao.getPartner(partnerid);
- }
- 
- public void deletePartner(Partner partner,int sellerId)throws CustomException {
-	 partnerDao.deletePartner(partner,sellerId);
- }
- public Partner getPartner(String name ,int sellerId)throws CustomException
- {
-	 return partnerDao.getPartner(name,sellerId);
- }
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public void addPartner(Partner partner, int sellerId)
+			throws CustomException {
+		partnerDao.addPartner(partner, sellerId);
+	}
+
+	public List<Partner> listPartners(int sellerId) throws CustomException {
+		return partnerDao.listPartner(sellerId);
+	}
+
+	public Partner getPartner(int partnerid) throws CustomException {
+		return partnerDao.getPartner(partnerid);
+	}
+
+	public void deletePartner(Partner partner, int sellerId)
+			throws CustomException {
+		partnerDao.deletePartner(partner, sellerId);
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public Partner getPartner(String name, int sellerId) throws CustomException {
+		return partnerDao.getPartner(name, sellerId);
+	}
 }

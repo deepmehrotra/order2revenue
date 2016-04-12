@@ -5,15 +5,22 @@ import java.util.List;
 
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.CustomException;
+import com.o2r.model.UploadReport;
 
 /**
  * @author Deep Mehrotra
  *
  */
 public interface ReportGeneratorService {
- 
-	public TotalShippedOrder getPartnerTSOdetails(String pcName,Date startDate ,Date endDate, int sellerId)throws CustomException;
 
-	 public List<TotalShippedOrder> getAllPartnerTSOdetails(Date startDate ,Date endDate, int sellerId)throws CustomException;
-	 
+	public TotalShippedOrder getPartnerTSOdetails(String pcName,
+			Date startDate, Date endDate, int sellerId) throws CustomException;
+
+	public List<TotalShippedOrder> getAllPartnerTSOdetails(Date startDate,
+			Date endDate, int sellerId) throws CustomException;
+
+	/*public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
+			throws CustomException;
+
+	public List<UploadReport> listUploadReport() throws CustomException;*/
 }
