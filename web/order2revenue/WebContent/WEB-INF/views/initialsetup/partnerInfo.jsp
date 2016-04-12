@@ -11,9 +11,15 @@
     	if(value=="add")
     		{
     	if(id!=0)
+    		{
     		urltogo='addPartner.html?pid='+id;
+    		location.href=urltogo;
+    		}
     	else
+    		{
     		urltogo='addPartner.html';
+    		location.href=urltogo;
+    		}
     		
     	}
     	else if(value=="partnerDetails")
@@ -35,14 +41,15 @@
     function onclickConfigurepartner(value) {
     	var urltogo="";
     urltogo='addPartner.html?partnerName='+value;
+    location.href=urltogo;
     	
-        $.ajax({
+       /*  $.ajax({
         	
             url : urltogo,
             success : function(data) {
             $('#centerpane').html(data);
             }
-        });
+        }); */
     }
 </script>
 </head>
@@ -70,7 +77,7 @@
                         <div class="panel panel-default add-logo-page">
                             <div class="panel-body text-center" style="height: 100px; width: 200px;">
                                 <img alt="image"  src="${partner.pcLogoUrl}"  title="${partner.pcName}">
-                                <a href="#"  onclick="onclickaddpartner('edit',${partner.pcId})"><i class="fa fa-pencil"></i></a>
+                                <a href="editPartner.html?pcId=${partner.pcId}"  onclick=""><i class="fa fa-pencil"></i></a>
                             </div>
                         </div>
                     </div>

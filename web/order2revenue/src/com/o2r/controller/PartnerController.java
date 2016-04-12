@@ -3,6 +3,7 @@ package com.o2r.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,11 +30,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.o2r.bean.PartnerBean;
-import com.o2r.dao.PartnerDaoImpl;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.HelperClass;
 import com.o2r.model.Category;
+import com.o2r.model.NRnReturnCharges;
 import com.o2r.model.Partner;
 import com.o2r.service.CategoryService;
 import com.o2r.service.PartnerService;
@@ -72,6 +73,8 @@ public class PartnerController {
 	};
 
 	static Logger log = Logger.getLogger(PartnerController.class.getName());
+	
+	List<NRnReturnCharges> chargeList=new ArrayList<NRnReturnCharges>();
 
 	@RequestMapping(value = "/seller/savePartner", method = RequestMethod.POST)
 	public ModelAndView savePartner(HttpServletRequest request,
@@ -80,11 +83,34 @@ public class PartnerController {
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		log.info("*** savePartner start ***");
-Map<String, String[]> parameters = request.getParameterMap();
-	for(String parameter : parameters.keySet()) {
-	   System.out.println(" Request param name : "+parameter);
-	    
-	}
+		Map<String, String[]> parameters = request.getParameterMap();
+		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+			System.out.println(" Request Param: " + entry.getKey()
+					+ "  Values  : " + entry.getValue().length);
+
+			if (entry.getKey() != null && !entry.getKey().isEmpty())
+				System.out.println(" Print : " + entry.getValue()[0]);
+
+			if (entry.getValue()[0] != null && !entry.getValue()[0].isEmpty()) {
+				if (entry.getKey().contains("nr-")) {
+					String temp = entry.getKey().substring(3);
+					NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+					nrnReturncharge.setChargeAmount(Float.parseFloat(entry
+							.getValue()[0]));
+					nrnReturncharge.setChargeName(temp);
+					chargeList.add(nrnReturncharge);
+				} else if (entry.getKey().contains("local")) {
+					partnerBean.getNrnReturnConfig().setLocalList(Arrays.toString(entry.getValue()));
+				} else if (entry.getKey().contains("zonal")) {
+					partnerBean.getNrnReturnConfig().setZonalList(Arrays.toString(entry.getValue()));
+				} else if (entry.getKey().contains("national")) {
+					partnerBean.getNrnReturnConfig().setNationalList(Arrays.toString(entry.getValue()));
+				} else if (entry.getKey().contains("metro")) {
+					partnerBean.getNrnReturnConfig().setMetroList(Arrays.toString(entry.getValue()));
+				}
+			}
+		}
+
 		/*
 		 * System.out.println("Inside partner Ssave ");
 		 * System.out.println(" partnerBean : **** "+partnerBean);
@@ -93,6 +119,7 @@ Map<String, String[]> parameters = request.getParameterMap();
 		 * .getNoofdaysfromshippeddate());
 		 * System.out.println(" Seller id :"+partnerBean.getPcId());
 		 */
+		partnerBean.getNrnReturnConfig().setCharges(chargeList);
 		if (!partnerBean.isIsshippeddatecalc()) {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
@@ -141,25 +168,27 @@ Map<String, String[]> parameters = request.getParameterMap();
 	@RequestMapping(value = "/seller/listPartners", method = RequestMethod.GET)
 	public ModelAndView listAllPartners(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		List<PartnerBean> addedlist=null;
-		try{
-		addedlist = ConverterClass.prepareListofPartnerBean(partnerService.listPartners(HelperClass.getSellerIdfromSession(request)));
-		}catch(Exception e){
+		List<PartnerBean> addedlist = null;
+		try {
+			addedlist = ConverterClass.prepareListofPartnerBean(partnerService
+					.listPartners(HelperClass.getSellerIdfromSession(request)));
+		} catch (Exception e) {
 			log.error(e.getCause());
-		}		
-		model.put("partners", addedlist);			
+		}
+		model.put("partners", addedlist);
 		return new ModelAndView("initialsetup/partnerDetail", model);
 	}
 
 	@RequestMapping(value = "/seller/partners", method = RequestMethod.GET)
 	public ModelAndView listPartners(HttpServletRequest request) {
-		
+
 		log.info("*** listPartners start ***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<PartnerBean> toAddPartner = new ArrayList<PartnerBean>();
-		List<PartnerBean> addedlist=null;
+		List<PartnerBean> addedlist = null;
 		try {
-			addedlist = ConverterClass.prepareListofPartnerBean(partnerService.listPartners(HelperClass.getSellerIdfromSession(request)));
+			addedlist = ConverterClass.prepareListofPartnerBean(partnerService
+					.listPartners(HelperClass.getSellerIdfromSession(request)));
 
 			props = PropertiesLoaderUtils.loadProperties(resource);
 
@@ -169,7 +198,8 @@ Map<String, String[]> parameters = request.getParameterMap();
 			 */
 
 			for (String partner : partnerList) {
-				if (partnerService.getPartner(partner,	HelperClass.getSellerIdfromSession(request)) == null) {
+				if (partnerService.getPartner(partner,
+						HelperClass.getSellerIdfromSession(request)) == null) {
 					String pcUrl = props.getProperty("partnerimage.view")
 							+ partner + ".jpg";
 					System.out.println(" Pc logourl set to partner baen "
@@ -178,12 +208,12 @@ Map<String, String[]> parameters = request.getParameterMap();
 				}
 			}
 		} catch (CustomException ce) {
-			log.error("listPartners exception : "+ce.toString());
+			log.error("listPartners exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
-		}catch(Throwable e){
+		} catch (Throwable e) {
 			log.error(e);
 		}
 		model.put("partners", addedlist);
@@ -197,7 +227,7 @@ Map<String, String[]> parameters = request.getParameterMap();
 	public ModelAndView addPartner(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
-		
+
 		log.info("*** addPartner start ***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
@@ -214,27 +244,30 @@ Map<String, String[]> parameters = request.getParameterMap();
 				categoryList.add(cat.getCatName());
 			}
 		} catch (CustomException ce) {
-			log.error("addPartner exception : "+ce.toString());
+			log.error("addPartner exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
-		} catch(Exception e){
+		} catch (Exception e) {
 			log.error(e);
 		}
 		String partnerName = request.getParameter("partnerName");
-		try{
-		if (partnerName != null) {
-			partner.setPcName(partnerName);
-		}
-		model.put("partner", partner);
-		model.put("categoryList", categoryList);
-		model.put("datemap", datemap);
-		model.put("partners", ConverterClass.prepareListofPartnerBean(partnerService.listPartners(HelperClass.getSellerIdfromSession(request))));
-		}catch(Exception e){
+		try {
+			if (partnerName != null) {
+				partner.setPcName(partnerName);
+			}
+			model.put("partner", partner);
+			model.put("categoryList", categoryList);
+			model.put("datemap", datemap);
+			model.put("partners", ConverterClass
+					.prepareListofPartnerBean(partnerService
+							.listPartners(HelperClass
+									.getSellerIdfromSession(request))));
+		} catch (Exception e) {
 			log.error(e);
 		}
-		log.info("*** addPartner exit ***");		
+		log.info("*** addPartner exit ***");
 		return new ModelAndView("initialsetup/addPartner", model);
 	}
 
@@ -247,16 +280,19 @@ Map<String, String[]> parameters = request.getParameterMap();
 		PartnerBean partner = new PartnerBean();
 		String id = request.getParameter("pid");
 		System.out.println(" Inside partner controller :" + id);
-		
-		try{
-		if (id != null) {
 
-			if (id.equals("1"))
-				partner.setPcName("Amazon");
-		}
-		model.put("partner", partner);
-		model.put("partners", ConverterClass.prepareListofPartnerBean(partnerService.listPartners(HelperClass.getSellerIdfromSession(request))));
-		}catch(Exception e){
+		try {
+			if (id != null) {
+
+				if (id.equals("1"))
+					partner.setPcName("Amazon");
+			}
+			model.put("partner", partner);
+			model.put("partners", ConverterClass
+					.prepareListofPartnerBean(partnerService
+							.listPartners(HelperClass
+									.getSellerIdfromSession(request))));
+		} catch (Exception e) {
 			log.error(e);
 		}
 		log.info("*** addPartertest exit ***");
@@ -274,15 +310,23 @@ Map<String, String[]> parameters = request.getParameterMap();
 			BindingResult result) {
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		/*System.out.println(" pcid in controller " + partnerBean.getPcId());
-		System.out.println(" pcname in controller " + partnerBean.getPcName());*/
-		try{
-		partnerService.deletePartner(ConverterClass.preparePartnerModel(partnerBean),HelperClass.getSellerIdfromSession(request));
-		model.put("partner", null);
-		model.put("partners", ConverterClass.prepareListofPartnerBean(partnerService.listPartners(HelperClass.getSellerIdfromSession(request))));
-		}catch(CustomException ce){
-			
-		}catch(Exception e){
+		/*
+		 * System.out.println(" pcid in controller " + partnerBean.getPcId());
+		 * System.out.println(" pcname in controller " +
+		 * partnerBean.getPcName());
+		 */
+		try {
+			partnerService.deletePartner(
+					ConverterClass.preparePartnerModel(partnerBean),
+					HelperClass.getSellerIdfromSession(request));
+			model.put("partner", null);
+			model.put("partners", ConverterClass
+					.prepareListofPartnerBean(partnerService
+							.listPartners(HelperClass
+									.getSellerIdfromSession(request))));
+		} catch (CustomException ce) {
+
+		} catch (Exception e) {
 			log.error(e);
 		}
 		return new ModelAndView("addPartner", model);
@@ -295,14 +339,16 @@ Map<String, String[]> parameters = request.getParameterMap();
 		log.info("*** editPartner start ***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
-		try{
-		datemap.put("default", "Select payment from");
-		datemap.put("true", "Shipping Date");
-		datemap.put("false", "Delivery Date");
-		model.put("datemap", datemap);
-		model.put("partner", ConverterClass.preparePartnerBean(partnerService.getPartner(partnerBean.getPcId())));
-		}catch(CustomException ce){
-			log.error("editPartner exception : "+ce.toString());
+		try {
+			datemap.put("default", "Select payment from");
+			datemap.put("true", "Shipping Date");
+			datemap.put("false", "Delivery Date");
+			model.put("datemap", datemap);
+			model.put("partner", ConverterClass
+					.preparePartnerBean(partnerService.getPartner(partnerBean
+							.getPcId())));
+		} catch (CustomException ce) {
+			log.error("editPartner exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
@@ -343,26 +389,31 @@ Map<String, String[]> parameters = request.getParameterMap();
 							+ file.toString()
 							+ " on your computer and verify that the image has been stored.");
 		} catch (IOException e) {
-			
+
 			log.error(e.getCause());
-			/*System.out.println(" Error in saving image : "+ e.getLocalizedMessage());
-			e.printStackTrace();
-			throw e;*/
+			/*
+			 * System.out.println(" Error in saving image : "+
+			 * e.getLocalizedMessage()); e.printStackTrace(); throw e;
+			 */
 		}
 		log.info("*** saveImage exit ***");
 	}
 
 	@RequestMapping(value = "/seller/ajaxPartnerCheck.html", method = RequestMethod.GET)
-	public @ResponseBody String getCheckPartner(HttpServletRequest request,	@ModelAttribute("command") PartnerBean partnerBean,	BindingResult result, Model model) {
+	public @ResponseBody String getCheckPartner(HttpServletRequest request,
+			@ModelAttribute("command") PartnerBean partnerBean,
+			BindingResult result, Model model) {
 		System.out.println(request.getParameter("partner"));
-		try{
-		Partner parner = partnerService.getPartner(request.getParameter("partner"),	HelperClass.getSellerIdfromSession(request));
-		if (parner != null) {
-			return "false";
-		} else {
-			return "true";
-		}
-		}catch(Exception e){
+		try {
+			Partner parner = partnerService.getPartner(
+					request.getParameter("partner"),
+					HelperClass.getSellerIdfromSession(request));
+			if (parner != null) {
+				return "false";
+			} else {
+				return "true";
+			}
+		} catch (Exception e) {
 			log.error(e);
 			return "Error";
 		}

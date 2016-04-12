@@ -1,5 +1,6 @@
 package com.o2r.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -60,6 +61,8 @@ public class ProductController {
 	private CategoryService categoryService;
 
 	static Logger log = Logger.getLogger(ProductController.class.getName());
+	
+	private static final String UPLOAD_DIR = "upload";
 
 	@RequestMapping(value = "/seller/searchProduct", method = RequestMethod.POST)
 	public ModelAndView searchProduct(HttpServletRequest request,
@@ -287,7 +290,7 @@ public class ProductController {
 		} catch (CustomException ce) {
 			log.error("saveProduct exception : " + ce.toString());
 			model.put("error", ce.getLocalMessage());
-			String errors=gson.toJson(model);
+			String errors = gson.toJson(model);
 			return errors;
 		} catch (Throwable e) {
 			log.error(e);
@@ -348,7 +351,7 @@ public class ProductController {
 
 	@RequestMapping(value = "/seller/listProductJson", method = RequestMethod.POST)
 	public @ResponseBody String listProductsJSON(HttpServletRequest request) {
-		
+
 		log.info("*** listProductsJSON start ***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		GsonBuilder gsonBuilder = new GsonBuilder();
@@ -371,7 +374,7 @@ public class ProductController {
 
 	@RequestMapping(value = "/seller/showInventory", method = RequestMethod.POST)
 	public @ResponseBody String inventoryList(HttpServletRequest request) {
-		
+
 		log.info("***inventoryList start***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -415,7 +418,7 @@ public class ProductController {
 		} catch (CustomException ce) {
 			log.error("inventoryList exception : " + ce.toString());
 			model.put("error", ce.getLocalMessage());
-			String error=gson.toJson(model);
+			String error = gson.toJson(model);
 			return error;
 		} catch (Throwable e) {
 			log.error(e);
@@ -430,7 +433,7 @@ public class ProductController {
 	@RequestMapping(value = "/seller/saveProductSheet", method = RequestMethod.POST)
 	public ModelAndView save(HttpServletRequest request,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
-		
+
 		log.info("*** save start ***");
 		System.out.println("Inside save method");
 		List<MultipartFile> files = uploadForm.getFiles();
@@ -439,6 +442,13 @@ public class ProductController {
 		MultipartFile fileinput = files.get(0);
 		System.out.println(" got file");
 		int sellerId;
+
+		// gets absolute path of the web application
+		String applicationPath = request.getServletContext().getRealPath("");
+		// constructs path of the directory to save uploaded file
+		String uploadFilePath = applicationPath + File.separator + UPLOAD_DIR;
+		System.out.println("***** uploadFilePath path  : " + uploadFilePath);
+
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			if (null != files && files.size() > 0) {
@@ -451,7 +461,7 @@ public class ProductController {
 				System.out.println(" Filename : " + files.get(0).getName());
 				ValidateUpload.validateOfficeData(files.get(0));
 				System.out.println(" fileinput " + fileinput.getName());
-				saveContents.saveProductContents(files.get(0), sellerId);
+				saveContents.saveProductContents(files.get(0), sellerId, uploadFilePath);
 
 			}
 			model.put("products", ConverterClass
@@ -467,7 +477,7 @@ public class ProductController {
 			log.error(e);
 
 		}
-		
+
 		log.info("*** save exit ***");
 		return new ModelAndView("productList", model);
 
@@ -476,9 +486,12 @@ public class ProductController {
 	@RequestMapping(value = "/seller/saveInventorySheet", method = RequestMethod.POST)
 	public ModelAndView saveInventories(HttpServletRequest request,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
-		
+
 		log.info("*** saveInventories start ***");
 		System.out.println("Inside save method");
+		// gets absolute path of the web application
+		String applicationPath = request.getServletContext().getRealPath("");
+				
 		List<MultipartFile> files = uploadForm.getFiles();
 
 		List<String> fileNames = new ArrayList<String>();
@@ -487,32 +500,30 @@ public class ProductController {
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		try {
-			
+
 			sellerId = HelperClass.getSellerIdfromSession(request);
-		if (null != files && files.size() > 0) {
-			fileNames.add(files.get(0).getOriginalFilename());
-			
+			if (null != files && files.size() > 0) {
+				fileNames.add(files.get(0).getOriginalFilename());
+
 				System.out.println(" Filename : "
 						+ files.get(0).getOriginalFilename());
 				System.out.println(" Filename : " + files.get(0).getName());
 				ValidateUpload.validateOfficeData(files.get(0));
 				System.out.println(" fileinput " + fileinput.getName());
-				saveContents.saveInventoryDetails(files.get(0), sellerId);
-			
+				saveContents.saveInventoryDetails(files.get(0), sellerId, applicationPath);
 
-		}
-		model.put("products", ConverterClass
-				.prepareListofProductBean(productService.listProducts(
-						HelperClass.getSellerIdfromSession(request), 0)));		
-		
-		}catch(CustomException ce){
+			}
+			model.put("products", ConverterClass
+					.prepareListofProductBean(productService.listProducts(
+							HelperClass.getSellerIdfromSession(request), 0)));
+
+		} catch (CustomException ce) {
 			log.error("saveInventories exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
-		}		
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error(e);
 		}
 		log.info("*** saveInventories exit ***");
@@ -554,15 +565,14 @@ public class ProductController {
 
 	@RequestMapping(value = "/seller/checkSKUAvailability", method = RequestMethod.GET)
 	public @ResponseBody String checkSKUAvailability(HttpServletRequest request) {
-		
+
 		log.info("*** checkSKUAvailability start ***");
-		Product product=null;
-		try{
-		product = productService.getProduct(
-				request.getParameter("sku"),
-				HelperClass.getSellerIdfromSession(request));
-		//System.out.println(product);
-		}catch(Exception e){
+		Product product = null;
+		try {
+			product = productService.getProduct(request.getParameter("sku"),
+					HelperClass.getSellerIdfromSession(request));
+			// System.out.println(product);
+		} catch (Exception e) {
 			log.error(e);
 		}
 		log.info("*** checkSKUAvailability exit ***");
