@@ -30,6 +30,8 @@ import com.o2r.model.TaxDetail;
  */
 @Repository("taxDetailDao")
 public class TaxDetailsDaoImpl implements TaxDetailsDao {
+	
+	private static final String taxTdRetriveQuery = "Select td.taxId from taxDetail td,Seller s, Seller_taxDetail st where s.id=:sellerId and s.id=st.seller_id and st.taxDetails_taxId=td.taxId and MONTH(td.uploadDate)=:month and td.particular=:particular";
 
 
  @Autowired
@@ -82,6 +84,8 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 	 log.debug("***Add Monthly TDS : cat : "+taxDetail.getParticular()+" Amoun :"+taxDetail.getBalanceRemaining());
 
 	// sellerId=4;
+	 
+	 	List<Integer> taxIds=null;
 		Seller seller=null;
 		TaxDetail existingObj=null;
 		Date todaysDate=new Date();
@@ -102,9 +106,25 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 				  session=sessionFactory.getCurrentSession();
 				  session.beginTransaction();
 			  }
+			  Query gettingTaxId = session
+                      .createSQLQuery(taxTdRetriveQuery)
+                      .setParameter("sellerId", sellerId)
+                      .setParameter("month", taxDetail.getUploadDate().getMonth()+1)
+                      .setParameter("particular", taxDetail.getParticular());
+			  
+				System.out.println("**************************************************************** Month : "+taxDetail.getUploadDate().getMonth()+1);
+				System.out.println("**************************************************************** Seller Id : "+sellerId);
+				System.out.println("**************************************************************** Particulars : "+taxDetail.getParticular());
+
+			  
+			  taxIds=gettingTaxId.list();
+			  
+			  		
 
 
-				   DetachedCriteria maxQuery = DetachedCriteria.forClass( Seller.class );
+
+
+				  /* DetachedCriteria maxQuery = DetachedCriteria.forClass( Seller.class );
 				   maxQuery.createAlias("taxDetails", "taxDetail", CriteriaSpecification.LEFT_JOIN)
 				    .add(Restrictions.eq("taxDetail.particular", taxDetail.getParticular()))
 				   .setProjection(Projections.max("taxDetail.uploadDate"))
@@ -115,9 +135,9 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			   criteria.createAlias("taxDetails", "taxDetail", CriteriaSpecification.LEFT_JOIN)
 			   .add(Restrictions.eq("taxDetail.particular", taxDetail.getParticular()))
 			     .add( Property.forName( "taxDetail.uploadDate" ).eq( maxQuery ))
-			   .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			   .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);*/
 
-			   if(criteria.list()!=null&&criteria.list().size()!=0)
+			  /* if(criteria.list()!=null&&criteria.list().size()!=0)
 			   {
 				   seller=(Seller)criteria.list().get(0);
 				   if(seller.getTaxDetails()!=null&&seller.getTaxDetails().size()!=0)
@@ -141,7 +161,20 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 						   session.saveOrUpdate(existingObj);
 					   }
 				   }
-			   }
+			   }*/
+			  
+			  if (taxIds != null && taxIds.size() != 0 && taxIds.get(0)!=null) {
+					
+					Integer taxId=taxIds.get(0);
+					System.out.println("**************************************************************** Tax Id : "+taxId);
+					existingObj = (TaxDetail) session.get(TaxDetail.class, taxId);
+					
+					existingObj.setBalanceRemaining(existingObj.getBalanceRemaining() + amount);
+					existingObj.setUploadDate(taxDetail.getUploadDate());
+					session.saveOrUpdate(existingObj);
+						
+					
+				}
 			   else
 			   {
 				   seller=(Seller)session.get(Seller.class, sellerId);

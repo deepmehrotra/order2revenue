@@ -267,8 +267,12 @@ public class ProductController {
 					.parseLong(request.getParameter("quantity")) : 0;
 			long threholdLimit = request.getParameter("threholdLimit") != null ? Long
 					.parseLong(request.getParameter("threholdLimit")) : 0;
-			String channelSKU = request.getParameter("channelSKU") != null ? request
-					.getParameter("channelSKU") : "";
+			String channelSKU = request.getParameter("channelSKU") != null ? request.getParameter("channelSKU") : "";
+			float productLength = request.getParameter("length") != null ? Float.valueOf(request.getParameter("length")) : 0;
+			float productBreadth = request.getParameter("breadth") != null ? Float.valueOf(request.getParameter("breadth")) : 0;
+			float productHeight = request.getParameter("height") != null ? Float.valueOf(request.getParameter("height")) : 0;
+			float productDeadweight = request.getParameter("deadWeight") != null ? Float.valueOf(request.getParameter("deadWeight")) : 0;
+					
 
 			if (productId != 0) {
 				product.setProductId(productId);
@@ -284,13 +288,17 @@ public class ProductController {
 			product.setQuantity(quantity);
 			product.setThreholdLimit(threholdLimit);
 			product.setChannelSKU(channelSKU);
+			product.setLength(productLength);
+			product.setBreadth(productBreadth);
+			product.setHeight(productHeight);
+			product.setDeadWeight(productDeadweight);
 			productService.addProduct(product,
 					HelperClass.getSellerIdfromSession(request));
 
 		} catch (CustomException ce) {
 			log.error("saveProduct exception : " + ce.toString());
 			model.put("error", ce.getLocalMessage());
-			String errors = gson.toJson(model);
+			String errors=gson.toJson(model);
 			return errors;
 		} catch (Throwable e) {
 			log.error(e);
