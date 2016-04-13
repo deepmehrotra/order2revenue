@@ -138,7 +138,7 @@
 <div class="col-sm-3">
 	<!-- <button type="button" class="btn btn-primary" data-toggle="modal"
 						data-target="#myModal22">View</button> -->
-	<form:form method="POST" action="saveReturnOrder.html">
+	<form:form method="POST" action="saveReturnorRTO.html">
 		<div class="modal inmodal fade" id="myModal22" tabindex="-1"
 			role="dialog" aria-hidden="true">
 			<div class="modal-dialog modal-lg">
@@ -160,7 +160,7 @@
 												id="returnchannelOrderID" class="form-control" type="hidden"/>
 									<label class="col-sm-4 control-label">Return Id</label>
 									<div class="col-sm-8">
-										<form:input path="orderReturnOrRTO.returnId"
+										<form:input path="orderReturnOrRTO.returnOrRTOId"
 											placeholder="Return ID" class="form-control" />
 									</div>
 								</div>

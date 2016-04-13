@@ -27,100 +27,6 @@
 	display: none;
 }
 </style>
-<script type="text/javascript">
-$(document).ready(function(){
-    $('#data_1 .input-group.date').datepicker({
-            todayBtn: "linked",
-            keyboardNavigation: false,
-            forceParse: false,
-            calendarWeeks: true,
-            autoclose: true
-        });
-    
-     $("#saveReturnorRTOForm").validate();
-    $("#returnOrRTOId").rules("add", {
-        required:true,
-        messages: {
-               required: "Please Enter  Return Id."
-        }
-     });
-    $("#returnCharges").rules("add", {
-        required:true,
-        min: 1,
-        messages: {
-               required: "Return Charges  are mandatory"
-        }
-     });
-    $("#returnDate").rules("add", {
-        required:true,
-        messages: {
-               required: "Return Date is mandatory"
-        }
-     });
-    
-    $("#saveOrderPaymentForm").validate();
-    $("#returnOrRTOId").rules("add", {
-        required:true,
-        messages: {
-               required: "Please Enter  Payment Date."
-        }
-     });
-  
-});
-
-function setOrderID(orderid,channelorderid,value)
-{
-	if(value=='return')
-		{
-	setVisibility('register', 'inline');
-	setVisibility('payment', 'none');
-	document.getElementById("returnorderId").value=orderid;
-	document.getElementById("returnchannelOrderID").value=channelorderid;
-}
-	else
-		{
-		setVisibility('payment', 'inline');
-		document.getElementById("paymentOrderId").value=orderid;
-		document.getElementById("paymentChannelOrderID").value=channelorderid;
-		}
-
-}
-
-function setVisibility(id, visibility) {
-	document.getElementById(id).style.display = visibility;
-	}
-	
-function onclickNavigateOrder(id)
-{
-	   $.ajax({
-           url :"viewOrderDA.html?orderId="+id,
-           success : function(data) {
-               $('#centerpane').html(data);
-           }
-       });
-	}
-
-function show1(){
-
-	var option = document.getElementById("category").value;
-    var option1 = document.getElementById("category1").value;
-    
-    if(option == "cancellationCharges" && option1 == "sellerFault")
-    {
-      document.getElementById("showit").style.display="block";
-    }   
-  }
-  function mydate() {
-	  d = new Date(document.getElementById("datefield").value);
-	  dt = d.getDate();
-	  mn = d.getMonth();
-	  mn++;
-	  yy = d.getFullYear();
-	  date = mn + "/" + dt + "/" + yy;
-	  document.getElementById("datevalue").value = date;
-	}
-  
-</script>
 </head>
 <body>
 	<div id="wrapper">
@@ -188,9 +94,11 @@ function show1(){
 				<div class="col-sm-3">
 					<!-- <button type="button" class="btn btn-primary" data-toggle="modal"
 						data-target="#myModal22">View</button> -->
-					<form:form method="POST" action="saveReturnOrder.html">
-						<div class="modal inmodal fade" id="myModal22" tabindex="-1"
-							role="dialog" aria-hidden="true">
+					<div class="modal inmodal fade" id="myModal22" tabindex="-1"
+						role="dialog" aria-hidden="true">
+						<form:form method="POST" action="saveReturnorRTO.html"
+							id="saveReturnorRTOForm" role="form" class="form-horizontal">
+
 							<div class="modal-dialog modal-lg">
 								<div class="modal-content animated bounceInRight"
 									style="left: 22%; width: 50%;">
@@ -210,8 +118,9 @@ function show1(){
 														class="form-control" type="hidden" />
 													<label class="col-sm-4 control-label">Return Id</label>
 													<div class="col-sm-8">
-														<form:input path="orderReturnOrRTO.returnId"
-															placeholder="Return ID" class="form-control" />
+														<form:input path="orderReturnOrRTO.returnOrRTOId"
+															placeholder="Return ID" class="form-control"
+															id="returnOrRTOId" />
 													</div>
 												</div>
 											</div>
@@ -220,7 +129,7 @@ function show1(){
 												<div class="mar-btm-20-oh">
 													<label class="col-sm-4 control-label">Return Date</label>
 													<div class="col-sm-8">
-														<div class="input-group date">
+														<div class="input-group">
 															<form:input path="" type="date" id="datefield"
 																onchange="mydate();" class="form-control" />
 															<form:input path="orderReturnOrRTO.returnDate"
@@ -303,8 +212,8 @@ function show1(){
 									</div>
 								</div>
 							</div>
-						</div>
-					</form:form>
+						</form:form>
+					</div>
 				</div>
 
 				<!--  -->
@@ -380,4 +289,90 @@ function show1(){
 	</div>
 
 	<jsp:include page="globaljslinks.jsp"></jsp:include>
+	<script type="text/javascript">
+$(document).ready(function(){
+    $('#data_1 .input-group.date').datepicker({
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+    
+     $("#saveReturnorRTOForm").validate();
+    $("#returnOrRTOId").rules("add", {
+        required:true,
+        messages: {
+               required: "Please Enter  Return Id."
+        }
+     });
+    $("#returnDate").rules("add", {
+        required:true,
+        messages: {
+               required: "Return Date is mandatory"
+        }
+     });
+    
+    $("#saveOrderPaymentForm").validate();
+    $("#returnOrRTOId").rules("add", {
+        required:true,
+        messages: {
+               required: "Please Enter  Payment Date."
+        }
+     });
+  
+});
+
+function setOrderID(orderid,channelorderid,value)
+{
+	if(value=='return')
+		{
+	setVisibility('payment', 'none');
+	document.getElementById("returnorderId").value=orderid;
+	document.getElementById("returnchannelOrderID").value=channelorderid;
+}
+	else
+		{
+		setVisibility('payment', 'inline');
+		document.getElementById("paymentOrderId").value=orderid;
+		document.getElementById("paymentChannelOrderID").value=channelorderid;
+		}
+
+}
+
+function setVisibility(id, visibility) {
+	document.getElementById(id).style.display = visibility;
+	}
+	
+function onclickNavigateOrder(id)
+{
+	   $.ajax({
+           url :"viewOrderDA.html?orderId="+id,
+           success : function(data) {
+               $('#centerpane').html(data);
+           }
+       });
+	}
+
+function show1(){
+
+	var option = document.getElementById("category").value;
+    var option1 = document.getElementById("category1").value;
+    
+    if(option == "cancellationCharges" && option1 == "sellerFault")
+    {
+      document.getElementById("showit").style.display="block";
+    }   
+  }
+  function mydate() {
+	  d = new Date(document.getElementById("datefield").value);
+	  dt = d.getDate();
+	  mn = d.getMonth();
+	  mn++;
+	  yy = d.getFullYear();
+	  date = mn + "/" + dt + "/" + yy;
+	  document.getElementById("datevalue").value = date;
+	}
+  
+</script>
 </html>
