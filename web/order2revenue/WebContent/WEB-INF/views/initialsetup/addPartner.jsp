@@ -985,7 +985,7 @@ span .#error {
 																	<div class="hr-line-dashed"></div>
 																</div>
 																<div class="col-sm-12">
-																	<div class="col-sm-6">
+																	<div class="col-sm-4">
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.retCharBRType" value="fixed"
@@ -994,12 +994,21 @@ span .#error {
 																			</label>
 																		</div>
 																	</div>
-																	<div class="col-sm-6">
+																	<div class="col-sm-4">
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.retCharBRType"
 																					value="variable" id="retrun-br-variable"
 																					name="toggler" class="retCharBRType" /> Variable
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-4">
+																		<div class="radio">
+																			<label> <form:radiobutton
+																					path="nrnReturnConfig.retCharBRType"
+																					value="noCharges" id="retrun-br-nocharges"
+																					name="toggler" class="retCharBRType" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1183,7 +1192,7 @@ span .#error {
 																	<div class="hr-line-dashed"></div>
 																</div>
 																<div class="col-sm-12">
-																	<div class="col-sm-6">
+																	<div class="col-sm-4">
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.RTOCharBRType" value="fixed"
@@ -1192,12 +1201,21 @@ span .#error {
 																			</label>
 																		</div>
 																	</div>
-																	<div class="col-sm-6">
+																	<div class="col-sm-4">
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.RTOCharBRType"
 																					value="variable" id="RTO-br-variable"
 																					name="toggler" class="RTOCharBRType" /> Variable
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-4">
+																		<div class="radio">
+																			<label> <form:radiobutton
+																					path="nrnReturnConfig.RTOCharBRType"
+																					value="noCharges" id="RTO-br-nocharges"
+																					name="toggler" class="RTOCharBRType" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1379,7 +1397,7 @@ span .#error {
 																	<div class="hr-line-dashed"></div>
 																</div>
 																<div class="col-sm-12">
-																	<div class="col-sm-6">
+																	<div class="col-sm-4">
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.repCharBRType" value="fixed"
@@ -1388,12 +1406,21 @@ span .#error {
 																			</label>
 																		</div>
 																	</div>
-																	<div class="col-sm-6">
+																	<div class="col-sm-4">
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.repCharBRType"
 																					value="variable" id="rep-br-variable"
 																					name="toggler" class="repCharBRType" /> Variable
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-4">
+																		<div class="radio">
+																			<label> <form:radiobutton
+																					path="nrnReturnConfig.repCharBRType"
+																					value="noCharges" id="rep-br-nocharges"
+																					name="toggler" class="repCharBRType" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1575,7 +1602,7 @@ span .#error {
 																	<div class="hr-line-dashed"></div>
 																</div>
 																<div class="col-sm-12">
-																	<div class="col-sm-6">
+																	<div class="col-sm-4">
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.PDCharBRType" value="fixed"
@@ -1584,12 +1611,21 @@ span .#error {
 																			</label>
 																		</div>
 																	</div>
-																	<div class="col-sm-6">
+																	<div class="col-sm-4">
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.PDCharBRType"
 																					value="variable" id="PD-br-variable" name="toggler"
 																					class="PDCharBRType" /> Variable
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-4">
+																		<div class="radio">
+																			<label> <form:radiobutton
+																					path="nrnReturnConfig.PDCharBRType"
+																					value="noCharges" id="PD-br-nocharges" name="toggler"
+																					class="PDCharBRType" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1883,7 +1919,7 @@ span .#error {
 																	<div class="hr-line-dashed"></div>
 																</div>
 																<div class="col-sm-12">
-																	<div class="col-sm-6">
+																	<div class="col-sm-4">
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.canCharBRType" value="fixed"
@@ -1892,12 +1928,22 @@ span .#error {
 																			</label>
 																		</div>
 																	</div>
-																	<div class="col-sm-6">
+																	<div class="col-sm-4">
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.canCharBRType"
 																					value="variable" id="can-br-variable"
 																					name="toggler" class="canCharBRType" /> Variable
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-4">
+																		<div class="radio">
+																			<label> <form:radiobutton
+																					path="nrnReturnConfig.canCharBRType"
+																					value="noCharges" id="can-br-nocharges"
+																					name="toggler" class="canCharBRType" />
+																				No Charges
 																			</label>
 																		</div>
 																	</div>
