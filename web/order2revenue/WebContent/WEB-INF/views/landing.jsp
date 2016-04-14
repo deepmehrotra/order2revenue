@@ -466,7 +466,7 @@
 <script src="/O2R/seller/js/plugins/morris/raphael-2.1.0.min.js"></script>
 <script src="/O2R/seller/js/plugins/morris/morris.js"></script>
 <!-- Morris demo data-->
-<script src="/O2R/seller/js/demo/morris-demo01.js"></script>
+<script src="/O2R/seller/js/demo/morris-o2r.js"></script>
 
 <script>
  
@@ -766,6 +766,6 @@ var expenseColor=[];
     </script>
 <!-- ChartJS-->
 <script src="/O2R/seller/js/plugins/chartJs/Chart.min.js"></script>
-<script src="/O2R/seller/js/demo/chartjs-demo-backup.js"></script>
+<script src="/O2R/seller/js/demo/chartjs-o2r.js"></script>
 </body>
 </html>
