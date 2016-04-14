@@ -166,6 +166,20 @@ public class NRnReturnConfig {
 	private String localList;
 	@Column
 	private String revShippingFeeType; // - variable or fixed
+	
+	@Column
+	private boolean retCharSFRevShipFee;
+	@Column
+	private boolean repCharSFRevShipFee;
+	@Column
+	private boolean PDCharSFRevShipFee;
+	@Column
+	private boolean RTOCharSFRevShipFee;
+	@Column
+	private boolean canCharSFBRTDRevShipFee;
+	@Column
+	private boolean canCharSFARTDRevShipFee;
+	
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<NRnReturnCharges> charges = new ArrayList<>();
 
@@ -703,6 +717,54 @@ public class NRnReturnConfig {
 
 	public void setNrCalculator(boolean nrCalculator) {
 		this.nrCalculator = nrCalculator;
+	}
+
+	public boolean isRetCharSFRevShipFee() {
+		return retCharSFRevShipFee;
+	}
+
+	public void setRetCharSFRevShipFee(boolean retCharSFRevShipFee) {
+		this.retCharSFRevShipFee = retCharSFRevShipFee;
+	}
+
+	public boolean isRepCharSFRevShipFee() {
+		return repCharSFRevShipFee;
+	}
+
+	public void setRepCharSFRevShipFee(boolean repCharSFRevShipFee) {
+		this.repCharSFRevShipFee = repCharSFRevShipFee;
+	}
+
+	public boolean isPDCharSFRevShipFee() {
+		return PDCharSFRevShipFee;
+	}
+
+	public void setPDCharSFRevShipFee(boolean pDCharSFRevShipFee) {
+		PDCharSFRevShipFee = pDCharSFRevShipFee;
+	}
+
+	public boolean isRTOCharSFRevShipFee() {
+		return RTOCharSFRevShipFee;
+	}
+
+	public void setRTOCharSFRevShipFee(boolean rTOCharSFRevShipFee) {
+		RTOCharSFRevShipFee = rTOCharSFRevShipFee;
+	}
+
+	public boolean isCanCharSFBRTDRevShipFee() {
+		return canCharSFBRTDRevShipFee;
+	}
+
+	public void setCanCharSFBRTDRevShipFee(boolean canCharSFBRTDRevShipFee) {
+		this.canCharSFBRTDRevShipFee = canCharSFBRTDRevShipFee;
+	}
+
+	public boolean isCanCharSFARTDRevShipFee() {
+		return canCharSFARTDRevShipFee;
+	}
+
+	public void setCanCharSFARTDRevShipFee(boolean canCharSFARTDRevShipFee) {
+		this.canCharSFARTDRevShipFee = canCharSFARTDRevShipFee;
 	}
 
 }

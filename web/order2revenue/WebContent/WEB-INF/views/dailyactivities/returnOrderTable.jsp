@@ -190,6 +190,16 @@
 									</div>
 								</div>
 							</div>
+							<br> <br> <br>
+							<div class="col-sm-12">
+								<div class="mar-btm-20-oh">
+									<label class="col-sm-4 control-label">Return Quantity</label>
+									<div class="col-sm-8">
+										<form:input path="orderReturnOrRTO.returnorrtoQty"
+											class="form-control" />
+									</div>
+								</div>
+							</div>
 							<br> <br>
 							<div class="col-sm-12">
 								<div class="form-group">

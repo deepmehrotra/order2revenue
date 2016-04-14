@@ -30,7 +30,8 @@ import com.o2r.model.TaxDetail;
  */
 @Repository("taxDetailDao")
 public class TaxDetailsDaoImpl implements TaxDetailsDao {
-
+	
+	private static final String taxTdRetriveQuery = "Select td.taxId from taxDetail td,Seller s, Seller_taxDetail st where s.id=:sellerId and s.id=st.seller_id and st.taxDetails_taxId=td.taxId and MONTH(td.uploadDate)=:month and td.particular=:particular";
 
  @Autowired
  private SessionFactory sessionFactory;
@@ -75,7 +76,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
  }
 
 
- @Override
+ /*@Override
  public TaxDetail addMonthlyTaxDetail(Session session,TaxDetail taxDetail , int sellerId)
  {
 	 log.info("***addMonthlyTaxDetail Start****");
@@ -161,6 +162,105 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		   catch (Exception e) {
 			   log.equals("Inside exception in add monthly taxdetails  ");
 			   log.error(e);
+			   throw e;
+		}
+		  log.info("***addMonthlyTaxDetail Exit****");
+		  return taxDetail;
+
+
+ }*/
+
+ @Override
+ public TaxDetail addMonthlyTaxDetail(Session session,TaxDetail taxDetail , int sellerId)
+ {
+	 log.info("***addMonthlyTaxDetail Start****");
+	 log.debug("***Add Monthly TDS : cat : "+taxDetail.getParticular()+" Amoun :"+taxDetail.getBalanceRemaining());
+
+	// sellerId=4;
+	 	List<Integer> taxIds=null;
+	 	
+		Seller seller=null;
+		TaxDetail existingObj=null;
+		Date todaysDate=new Date();
+		double amount=taxDetail.getBalanceRemaining();
+		boolean status=false;
+		//Session session=null;
+		  try
+		   {
+			  // Session session=sessionFactory.openSession();
+			  if(session!=null)
+			  {
+			   session.beginTransaction();
+			   status=true;
+			  }
+			  else
+			  {
+				  
+				  session=sessionFactory.getCurrentSession();
+				  session.beginTransaction();
+			  }
+			  Query gettingTaxId = session
+                      .createSQLQuery(taxTdRetriveQuery)
+                      .setParameter("sellerId", sellerId)
+                      .setParameter("month", taxDetail.getUploadDate().getMonth()+1)
+                      .setParameter("particular", taxDetail.getParticular());
+			  
+				System.out.println("**************************************************************** Month : "+taxDetail.getUploadDate().getMonth()+1);
+				System.out.println("**************************************************************** Seller Id : "+sellerId);
+				System.out.println("**************************************************************** Particulars : "+taxDetail.getParticular());
+
+			  
+			  taxIds=gettingTaxId.list();
+			  
+			  		
+
+				   /*	DetachedCriteria maxQuery = DetachedCriteria.forClass( Seller.class );
+				   	maxQuery.createAlias("taxDetails", "taxDetail", CriteriaSpecification.LEFT_JOIN)
+				    .add(Restrictions.eq("taxDetail.particular", taxDetail.getParticular()))
+				    .setProjection(Projections.max("taxDetail.uploadDate"))
+				   	.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+				   	
+				   	//.add(Restrictions.le("taxDetail.uploadDate", taxDetail.getUploadDate()))
+
+				   	Criteria criteria=session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
+				   	criteria.createAlias("taxDetails", "taxDetail", CriteriaSpecification.LEFT_JOIN)
+				   	.add(Restrictions.eq("taxDetail.particular", taxDetail.getParticular()))
+				   	.add( Property.forName( "taxDetail.uploadDate" ).le( maxQuery )) 
+				   	.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);*/
+			   
+			   
+
+			   
+			if (taxIds != null && taxIds.size() != 0 && taxIds.get(0)!=null) {
+				
+				Integer taxId=taxIds.get(0);
+				System.out.println("**************************************************************** Tax Id : "+taxId);
+				existingObj = (TaxDetail) session.get(TaxDetail.class, taxId);
+				
+				existingObj.setBalanceRemaining(existingObj.getBalanceRemaining() + amount);
+				existingObj.setUploadDate(taxDetail.getUploadDate());
+				session.saveOrUpdate(existingObj);
+					
+				
+			}  else
+			   {
+				   seller=(Seller)session.get(Seller.class, sellerId);
+				   log.debug("Saving new tax object");
+				    taxDetail.setStatus("Due");
+				   taxDetail.setDescription("Tax Amount for "+formatter.format(taxDetail.getUploadDate()));
+				   taxDetail.setTaxortds("Tax");
+				   taxDetail.setTaxortdsCycle(formatter.format(taxDetail.getUploadDate()));
+				   seller.getTaxDetails().add(taxDetail);
+				   session.saveOrUpdate(seller);
+			   }
+
+			   if(!status)
+		    session.getTransaction().commit();
+		  // session.close();
+		   }
+		   catch (Exception e) {
+			   log.equals("Inside exception in add monthly taxdetails  ");
+			   log.error(e.getStackTrace());
 			   throw e;
 		}
 		  log.info("***addMonthlyTaxDetail Exit****");

@@ -49,8 +49,8 @@ span .#error {
 			<div class="wrapper wrapper-content animated fadeInRight"
 				id="centerpane">
 				<form:form method="POST" action="savePartner.html"
-					id="addpartnerform" name="addpartnerform" role="form" class="form-horizontal"
-					enctype="multipart/form-data">
+					id="addpartnerform" name="addpartnerform" role="form"
+					class="form-horizontal" enctype="multipart/form-data">
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="ibox float-e-margins">
@@ -258,7 +258,8 @@ span .#error {
 												<span>%</span>
 											</div> --%>
 											<div class="col-md-4">
-												<form:checkbox path="tdsApplicable" id="tdsApplicable"/> TDS Applicable
+												<form:checkbox path="tdsApplicable" id="tdsApplicable" />
+												TDS Applicable
 											</div>
 										</div>
 									</div>
@@ -928,6 +929,14 @@ span .#error {
 																				</div>
 																			</div>
 																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.retCharSFRevShipFee" /> <i></i>
+																					Reverse Shipping Fee
+																				</label>
+																			</div>
+																		</div>
 																	</div>
 																	<div class="col-sm-12 radio1"
 																		id="blk-retrun-sf-variable">
@@ -971,6 +980,14 @@ span .#error {
 																				<label><form:checkbox
 																						path="nrnReturnConfig.retCharSFSerTax" /> <i></i>
 																					Service Tax </label>
+																			</div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.retCharSFRevShipFee" /> <i></i>
+																					Reverse Shipping Fee
+																				</label>
 																			</div>
 																		</div>
 																	</div>
@@ -1076,6 +1093,14 @@ span .#error {
 																				</div>
 																			</div>
 																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.RTOCharSFRevShipFee" /> <i></i>
+																					Reverse Shipping Fee
+																				</label>
+																			</div>
+																		</div>
 																	</div>
 																	<div class="col-sm-12 radio1" id="blk-RTO-sf-variable">
 																		<div class="form-group col-md-12">
@@ -1119,6 +1144,14 @@ span .#error {
 																				<label> <form:checkbox
 																						path="nrnReturnConfig.RTOCharSFSerTax" /> <i></i>
 																					Service Tax
+																				</label>
+																			</div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.RTOCharSFRevShipFee" /> <i></i>
+																					Reverse Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1224,6 +1257,14 @@ span .#error {
 																				</div>
 																			</div>
 																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.repCharSFRevShipFee" /> <i></i>
+																					Reverse Shipping Fee
+																				</label>
+																			</div>
+																		</div>
 																	</div>
 																	<div class="col-sm-12 radio1" id="blk-rep-sf-variable">
 																		<div class="form-group col-md-12">
@@ -1243,7 +1284,7 @@ span .#error {
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
 																						path="nrnReturnConfig.repCharSFPCC" /> <i></i>
-																						Commission
+																					Commission
 																				</label>
 																			</div>
 																		</div>
@@ -1268,6 +1309,14 @@ span .#error {
 																				<label> <form:checkbox
 																						path="nrnReturnConfig.repCharSFSerTax" /> <i></i>
 																					Service Tax
+																				</label>
+																			</div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.repCharSFRevShipFee" /> <i></i>
+																					Reverse Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1354,8 +1403,8 @@ span .#error {
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.PDCharSFType"
-																					value="noCharges" id="PD-sf-nocharges" name="toggler"
-																					class="PDCharSFType" /> No Charges
+																					value="noCharges" id="PD-sf-nocharges"
+																					name="toggler" class="PDCharSFType" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1371,6 +1420,14 @@ span .#error {
 																					<input type="text" class="form-control"
 																						name="nr-PDCharSFFixedAmt">
 																				</div>
+																			</div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.PDCharSFRevShipFee" /> <i></i>
+																					Reverse Shipping Fee
+																				</label>
 																			</div>
 																		</div>
 																	</div>
@@ -1392,7 +1449,7 @@ span .#error {
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
 																						path="nrnReturnConfig.PDCharSFPCC" /> <i></i>
-																						Commission
+																					Commission
 																				</label>
 																			</div>
 																		</div>
@@ -1420,6 +1477,14 @@ span .#error {
 																				</label>
 																			</div>
 																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.PDCharSFRevShipFee" /> <i></i>
+																					Reverse Shipping Fee
+																				</label>
+																			</div>
+																		</div>
 																	</div>
 																</div>
 																<div class="col-sm-12">
@@ -1443,8 +1508,8 @@ span .#error {
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.PDCharBRType"
-																					value="noCharges" id="PD-br-nocharges" name="toggler"
-																					class="PDCharBRType" /> No Charges
+																					value="noCharges" id="PD-br-nocharges"
+																					name="toggler" class="PDCharBRType" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1509,8 +1574,8 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.canCharSFBFRTDType"
 																					value="noCharges" id="can-sfbfrtd-nocharges"
-																					name="toggler" class="canCharSFBFRTDType" />
-																				No Charges
+																					name="toggler" class="canCharSFBFRTDType" /> No
+																				Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1527,6 +1592,14 @@ span .#error {
 																					<input type="text" class="form-control"
 																						name="nr-canCharSFBFRTDFixedAmt">
 																				</div>
+																			</div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.canCharSFBRTDRevShipFee" /> <i></i>
+																					Reverse Shipping Fee
+																				</label>
 																			</div>
 																		</div>
 																	</div>
@@ -1551,7 +1624,7 @@ span .#error {
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
 																						path="nrnReturnConfig.canCharSFBRTDPCC" /> <i></i>
-																						Commission
+																					Commission
 																				</label>
 																			</div>
 																		</div>
@@ -1576,6 +1649,14 @@ span .#error {
 																				<label> <form:checkbox
 																						path="nrnReturnConfig.canCharSFBRTDSerTax" /> <i></i>
 																					Service Tax
+																				</label>
+																			</div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.canCharSFBRTDRevShipFee" /> <i></i>
+																					Reverse Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1613,8 +1694,8 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.canCharSFARTDType"
 																					value="noCharges" id="can-sfartd-nocharges"
-																					name="toggler" class="canCharSFARTDType" />
-																				No Charges
+																					name="toggler" class="canCharSFARTDType" /> No
+																				Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1631,6 +1712,14 @@ span .#error {
 																					<input type="text" class="form-control"
 																						name="nr-canCharSFFixedAmt">
 																				</div>
+																			</div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.canCharSFARTDRevShipFee" /> <i></i>
+																					Reverse Shipping Fee
+																				</label>
 																			</div>
 																		</div>
 																	</div>
@@ -1653,7 +1742,7 @@ span .#error {
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
 																						path="nrnReturnConfig.canCharSFPCC" /> <i></i>
-																						Commission
+																					Commission
 																				</label>
 																			</div>
 																		</div>
@@ -1681,6 +1770,14 @@ span .#error {
 																				</label>
 																			</div>
 																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.canCharSFARTDRevShipFee" /> <i></i>
+																					Reverse Shipping Fee
+																				</label>
+																			</div>
+																		</div>
 																	</div>
 																</div>
 																<div class="col-sm-12">
@@ -1705,8 +1802,7 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.canCharBRType"
 																					value="noCharges" id="can-br-nocharges"
-																					name="toggler" class="canCharBRType" />
-																				No Charges
+																					name="toggler" class="canCharBRType" /> No Charges
 																			</label>
 																		</div>
 																	</div>
