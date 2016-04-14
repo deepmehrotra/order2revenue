@@ -183,9 +183,9 @@
 							<br> <br> <br>
 							<div class="col-sm-12">
 								<div class="mar-btm-20-oh">
-									<label class="col-sm-4 control-label">Return Reason</label>
+									<label class="col-sm-4 control-label">Return Quantity</label>
 									<div class="col-sm-8">
-										<form:input path="orderReturnOrRTO.returnOrRTOreason"
+										<form:input path="orderReturnOrRTO.returnorrtoQty"
 											class="form-control" />
 									</div>
 								</div>
@@ -193,9 +193,9 @@
 							<br> <br> <br>
 							<div class="col-sm-12">
 								<div class="mar-btm-20-oh">
-									<label class="col-sm-4 control-label">Return Quantity</label>
+									<label class="col-sm-4 control-label">Return Reason</label>
 									<div class="col-sm-8">
-										<form:input path="orderReturnOrRTO.returnorrtoQty"
+										<form:input path="orderReturnOrRTO.returnOrRTOreason"
 											class="form-control" />
 									</div>
 								</div>

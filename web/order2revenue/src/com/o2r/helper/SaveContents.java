@@ -1263,7 +1263,7 @@ public class SaveContents {
 					if (entry.getCell(9) != null
 							&& StringUtils.isNotBlank(entry.getCell(9)
 									.toString())) {
-						orderReturn.setType(entry.getCell(9)
+						orderReturn.setCancelType(entry.getCell(9)
 								.toString());
 					} else {
 						errorMessage.append(" Mark order Return Stage Type");

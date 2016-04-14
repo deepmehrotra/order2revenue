@@ -180,6 +180,17 @@ public class NRnReturnConfig {
 	@Column
 	private boolean canCharSFARTDRevShipFee;
 	
+	@Column
+	private boolean retCharBRRevShipFee;
+	@Column
+	private boolean repCharBRRevShipFee;
+	@Column
+	private boolean PDCharBRRevShipFee;
+	@Column
+	private boolean RTOCharBRRevShipFee;
+	@Column
+	private boolean canCharBRRevShipFee;
+	
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<NRnReturnCharges> charges = new ArrayList<>();
 
@@ -765,6 +776,46 @@ public class NRnReturnConfig {
 
 	public void setCanCharSFARTDRevShipFee(boolean canCharSFARTDRevShipFee) {
 		this.canCharSFARTDRevShipFee = canCharSFARTDRevShipFee;
+	}
+
+	public boolean isRetCharBRRevShipFee() {
+		return retCharBRRevShipFee;
+	}
+
+	public void setRetCharBRRevShipFee(boolean retCharBRRevShipFee) {
+		this.retCharBRRevShipFee = retCharBRRevShipFee;
+	}
+
+	public boolean isRepCharBRRevShipFee() {
+		return repCharBRRevShipFee;
+	}
+
+	public void setRepCharBRRevShipFee(boolean repCharBRRevShipFee) {
+		this.repCharBRRevShipFee = repCharBRRevShipFee;
+	}
+
+	public boolean isPDCharBRRevShipFee() {
+		return PDCharBRRevShipFee;
+	}
+
+	public void setPDCharBRRevShipFee(boolean pDCharBRRevShipFee) {
+		PDCharBRRevShipFee = pDCharBRRevShipFee;
+	}
+
+	public boolean isRTOCharBRRevShipFee() {
+		return RTOCharBRRevShipFee;
+	}
+
+	public void setRTOCharBRRevShipFee(boolean rTOCharBRRevShipFee) {
+		RTOCharBRRevShipFee = rTOCharBRRevShipFee;
+	}
+
+	public boolean isCanCharBRRevShipFee() {
+		return canCharBRRevShipFee;
+	}
+
+	public void setCanCharBRRevShipFee(boolean canCharBRRevShipFee) {
+		this.canCharBRRevShipFee = canCharBRRevShipFee;
 	}
 
 }
