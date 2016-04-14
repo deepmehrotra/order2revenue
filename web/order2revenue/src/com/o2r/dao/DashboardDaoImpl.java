@@ -321,7 +321,7 @@ public class DashboardDaoImpl implements DashboardDao {
                      Query closingStockValueThisMonth = session
                                   .createSQLQuery(stockValuationQuery)
                                   .setParameter("year", endDate.getYear())
-                                  .setParameter("month", endDate.getMonth() - 1)
+                                  .setParameter("month", endDate.getMonth() )
                                   .setParameter("sellerId", sellerId);
                      csValuation = closingStockValueThisMonth.list();
                      if (osValuation != null && osValuation.size() != 0&&osValuation.get(0)!=null)

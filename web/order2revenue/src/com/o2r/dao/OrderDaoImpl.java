@@ -684,6 +684,9 @@ public class OrderDaoImpl implements OrderDao {
 				order = seller.getOrders().get(0);
 				returnChargesCalculated = calculateReturnCharges(order,
 						orderReturn, sellerId);
+				if (orderReturn.getReturnorrtoQty() > 0) {
+					returnChargesCalculated = returnChargesCalculated * orderReturn.getReturnorrtoQty();
+				}
 				order.getOrderReturnOrRTO().setReturnOrRTOChargestoBeDeducted(
 						returnChargesCalculated);
 
