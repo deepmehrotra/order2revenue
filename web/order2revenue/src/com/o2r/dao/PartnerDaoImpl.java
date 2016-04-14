@@ -99,13 +99,14 @@ public class PartnerDaoImpl implements PartnerDao {
 			session.beginTransaction();
 			Partner partner =(Partner) session.get(Partner.class,
 					partnerid);
-			Hibernate.initialize(partner.getNrnReturnConfig().getCharges());
+			//Hibernate.initialize(partner.getNrnReturnConfig().getCharges());
 			session.getTransaction().commit();
 			session.close();
 			return partner;
 			/*return (Partner) sessionFactory.getCurrentSession().get(
 					Partner.class, partnerid);*/
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.getPartnerError,
 					new Date(), 3, GlobalConstant.getPartnerErrorCode, e);
@@ -135,12 +136,13 @@ public class PartnerDaoImpl implements PartnerDao {
 			if (criteria.list() != null && criteria.list().size() != 0) {
 				seller = (Seller) criteria.list().get(0);
 				returnpartner = seller.getPartners().get(0);
+				if(returnpartner.getNrnReturnConfig()!=null)
 				Hibernate.initialize(returnpartner.getNrnReturnConfig().getCharges());
 			}
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-
+e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.getPartnerError,
 					new Date(), 3, GlobalConstant.getPartnerErrorCode, e);
