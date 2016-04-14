@@ -496,7 +496,7 @@ public class Layouter {
 		cell5.setCellStyle(headerCellStyle);
 
 		HSSFCell cell6 = rowHeader.createCell(startColIndex+5);
-		cell6.setCellValue(" Date");
+		cell6.setCellValue("Date");
 		cell6.setCellStyle(headerCellStyle);
 
 		HSSFCell cell7 = rowHeader.createCell(startColIndex+6);
@@ -504,20 +504,16 @@ public class Layouter {
 		cell7.setCellStyle(headerCellStyle);
 
 		HSSFCell cell8 = rowHeader.createCell(startColIndex+7);
-		cell8.setCellValue("Return/RTO");
+		cell8.setCellValue("Return Type");
 		cell8.setCellStyle(headerCellStyle);
 
 		HSSFCell cell9 = rowHeader.createCell(startColIndex+8);
-		cell9.setCellValue("Return Type");
+		cell9.setCellValue("Fault Type");
 		cell9.setCellStyle(headerCellStyle);
-
-		HSSFCell cell10 = rowHeader.createCell(startColIndex+9);
-		cell10.setCellValue("Fault Type");
-		cell10.setCellStyle(headerCellStyle);
 		
-		HSSFCell cell11 = rowHeader.createCell(startColIndex+10);
-		cell11.setCellValue("Stage");
-		cell11.setCellStyle(headerCellStyle);
+		HSSFCell cell10 = rowHeader.createCell(startColIndex+9);
+		cell10.setCellValue("Stage");
+		cell10.setCellStyle(headerCellStyle);
 	}
 
 	public static void buildOrderPOHeaders(HSSFSheet worksheet, int startRowIndex, int startColIndex) {
