@@ -910,7 +910,8 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.retCharSFType"
 																					value="noCharges" id="retrun-sf-nocharges"
-																					name="toggler" class="retCharSFType" /> No Charges
+																					name="toggler" class="retCharSFType"
+																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -920,7 +921,7 @@ span .#error {
 																		id="blk-retrun-sf-fix">
 																		<div class="col-sm-12">
 																			<div class="form-group">
-																				<div class="col-md-2 content-rgt">
+																				<div class="col-md-2 control-label">
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
@@ -941,26 +942,19 @@ span .#error {
 																	<div class="col-sm-12 radio1"
 																		id="blk-retrun-sf-variable">
 																		<div class="form-group col-md-12">
-																			<label class="col-sm-2 control-label">% of SP</label>
-																			<div class="col-sm-3">
-																				<input type="text" placeholder=""
-																					class="form-control" name="nr-retCharSFPercentSP">
-																			</div>
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
-																			<div class="col-sm-3">
+																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-retCharSFVarFixedAmt">
 																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="col-md-4 checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.retCharSFPCC" /> <i></i>Commission
-																				</label>
+																			<label class="col-sm-2 control-label">% of SP</label>
+																			<div class="col-sm-2">
+																				<input type="text" placeholder=""
+																					class="form-control" name="nr-retCharSFPercentSP">
 																			</div>
-																			<label class="col-sm-2 control-label">
-																				% of Commision</label>
+																			<label class="col-sm-2 control-label"> % of
+																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-retCharSFPercentPCC">
@@ -979,13 +973,6 @@ span .#error {
 																				<label><form:checkbox
 																						path="nrnReturnConfig.retCharSFShipFee" /> <i></i>
 																					Shipping Fee </label>
-																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="checkbox i-checks">
-																				<label><form:checkbox
-																						path="nrnReturnConfig.retCharSFSerTax" /> <i></i>
-																					Service Tax </label>
 																			</div>
 																		</div>
 																		<div class="col-sm-12">
@@ -1018,9 +1005,9 @@ span .#error {
 																	<div class="col-sm-4">
 																		<div class="radio">
 																			<label> <form:radiobutton
-																					path="nrnReturnConfig.retCharBRType" value="variable"
-																					id="retrun-br-variable" name="toggler"
-																					class="retCharBRType" /> Variable
+																					path="nrnReturnConfig.retCharBRType"
+																					value="variable" id="retrun-br-variable"
+																					name="toggler" class="retCharBRType" /> Variable
 																			</label>
 																		</div>
 																	</div>
@@ -1029,7 +1016,8 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.retCharBRType"
 																					value="noCharges" id="retrun-br-nocharges"
-																					name="toggler" class="retCharBRType" /> No Charges
+																					name="toggler" class="retCharBRType"
+																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1039,7 +1027,7 @@ span .#error {
 																		id="blk-retrun-br-fix">
 																		<div class="col-sm-12">
 																			<div class="form-group">
-																				<div class="col-md-2 content-rgt">
+																				<div class="col-md-2 control-label">
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
@@ -1052,26 +1040,19 @@ span .#error {
 																	<div class="col-sm-12 radio1"
 																		id="blk-retrun-br-variable">
 																		<div class="form-group col-md-12">
-																			<label class="col-sm-2 control-label">% of SP</label>
-																			<div class="col-sm-3">
-																				<input type="text" placeholder=""
-																					class="form-control" name="nr-retCharBRPercentSP">
-																			</div>
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
-																			<div class="col-sm-3">
+																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-retCharBRVarFixedAmt">
 																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="col-md-4 checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.retCharBRPCC" /> <i></i>Commission
-																				</label>
+																			<label class="col-sm-2 control-label">% of SP</label>
+																			<div class="col-sm-2">
+																				<input type="text" placeholder=""
+																					class="form-control" name="nr-retCharBRPercentSP">
 																			</div>
-																			<label class="col-sm-2 control-label">
-																				% of Commision</label>
+																			<label class="col-sm-2 control-label"> % of
+																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-retCharBRPercentPCC">
@@ -1090,21 +1071,6 @@ span .#error {
 																				<label><form:checkbox
 																						path="nrnReturnConfig.retCharBRShipFee" /> <i></i>
 																					Shipping Fee </label>
-																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="checkbox i-checks">
-																				<label><form:checkbox
-																						path="nrnReturnConfig.retCharBRSerTax" /> <i></i>
-																					Service Tax </label>
-																			</div>
-																		</div>
-																		<div class="col-sm-12">
-																			<div class="checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.retCharBRRevShipFee" /> <i></i>
-																					Reverse Shipping Fee
-																				</label>
 																			</div>
 																		</div>
 																	</div>
@@ -1149,7 +1115,8 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.RTOCharSFType"
 																					value="noCharges" id="RTO-sf-nocharges"
-																					name="toggler" class="RTOCharSFType" /> No Charges
+																					name="toggler" class="RTOCharSFType"
+																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1158,7 +1125,7 @@ span .#error {
 																	<div class="col-sm-12 radio1 m-b" id="blk-RTO-sf-fix">
 																		<div class="col-sm-12">
 																			<div class="form-group">
-																				<div class="col-md-2 content-rgt">
+																				<div class="col-md-2 control-label">
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
@@ -1178,26 +1145,19 @@ span .#error {
 																	</div>
 																	<div class="col-sm-12 radio1" id="blk-RTO-sf-variable">
 																		<div class="form-group col-md-12">
-																			<label class="col-sm-2 control-label">% of SP</label>
-																			<div class="col-sm-3">
-																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharSFPercentSP">
-																			</div>
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
-																			<div class="col-sm-3">
+																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-RTOCharSFVarFixedAmt">
 																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="col-md-4 checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.RTOCharSFPCC" /> <i></i>Commission
-																				</label>
+																			<label class="col-sm-2 control-label">% of SP</label>
+																			<div class="col-sm-2">
+																				<input type="text" placeholder=""
+																					class="form-control" name="nr-RTOCharSFPercentSP">
 																			</div>
-																			<label class="col-sm-2 control-label">
-																				% of Commision</label>
+																			<label class="col-sm-2 control-label"> % of
+																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-RTOCharSFPercentPCC">
@@ -1216,14 +1176,6 @@ span .#error {
 																				<label> <form:checkbox
 																						path="nrnReturnConfig.RTOCharSFShipFee" /> <i></i>
 																					Shipping Fee
-																				</label>
-																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.RTOCharSFSerTax" /> <i></i>
-																					Service Tax
 																				</label>
 																			</div>
 																		</div>
@@ -1257,9 +1209,9 @@ span .#error {
 																	<div class="col-sm-4">
 																		<div class="radio">
 																			<label> <form:radiobutton
-																					path="nrnReturnConfig.RTOCharBRType" value="variable"
-																					id="RTO-br-variable" name="toggler"
-																					class="RTOCharBRType" /> Variable
+																					path="nrnReturnConfig.RTOCharBRType"
+																					value="variable" id="RTO-br-variable"
+																					name="toggler" class="RTOCharBRType" /> Variable
 																			</label>
 																		</div>
 																	</div>
@@ -1268,7 +1220,8 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.RTOCharBRType"
 																					value="noCharges" id="RTO-br-nocharges"
-																					name="toggler" class="RTOCharBRType" /> No Charges
+																					name="toggler" class="RTOCharBRType"
+																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1277,7 +1230,7 @@ span .#error {
 																	<div class="col-sm-12 radio1 m-b" id="blk-RTO-br-fix">
 																		<div class="col-sm-12">
 																			<div class="form-group">
-																				<div class="col-md-2 content-rgt">
+																				<div class="col-md-2 control-label">
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
@@ -1289,26 +1242,19 @@ span .#error {
 																	</div>
 																	<div class="col-sm-12 radio1" id="blk-RTO-br-variable">
 																		<div class="form-group col-md-12">
-																			<label class="col-sm-2 control-label">% of SP</label>
-																			<div class="col-sm-3">
-																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharBRPercentSP">
-																			</div>
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
-																			<div class="col-sm-3">
+																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-RTOCharBRVarFixedAmt">
 																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="col-md-4 checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.RTOCharBRPCC" /> <i></i>Commission
-																				</label>
+																			<label class="col-sm-2 control-label">% of SP</label>
+																			<div class="col-sm-2">
+																				<input type="text" placeholder=""
+																					class="form-control" name="nr-RTOCharBRPercentSP">
 																			</div>
-																			<label class="col-sm-2 control-label">
-																				% of Commision</label>
+																			<label class="col-sm-2 control-label"> % of
+																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-RTOCharBRPercentPCC">
@@ -1327,22 +1273,6 @@ span .#error {
 																				<label> <form:checkbox
 																						path="nrnReturnConfig.RTOCharBRShipFee" /> <i></i>
 																					Shipping Fee
-																				</label>
-																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.RTOCharBRSerTax" /> <i></i>
-																					Service Tax
-																				</label>
-																			</div>
-																		</div>
-																		<div class="col-sm-12">
-																			<div class="checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.RTOCharBRRevShipFee" /> <i></i>
-																					Reverse Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1388,7 +1318,8 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.repCharSFType"
 																					value="noCharges" id="rep-sf-nocharges"
-																					name="toggler" class="repCharSFType" /> No Charges
+																					name="toggler" class="repCharSFType"
+																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1397,7 +1328,7 @@ span .#error {
 																	<div class="col-sm-12 radio1 m-b" id="blk-rep-sf-fix">
 																		<div class="col-sm-12">
 																			<div class="form-group">
-																				<div class="col-md-2 content-rgt">
+																				<div class="col-md-2 control-label">
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
@@ -1417,27 +1348,19 @@ span .#error {
 																	</div>
 																	<div class="col-sm-12 radio1" id="blk-rep-sf-variable">
 																		<div class="form-group col-md-12">
-																			<label class="col-sm-2 control-label">% of SP</label>
-																			<div class="col-sm-3">
-																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharSFPercentSP">
-																			</div>
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
-																			<div class="col-sm-3">
+																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-repCharSFVarFixedAmt">
 																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="col-md-4 checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.repCharSFPCC" /> <i></i>
-																					Commission
-																				</label>
+																			<label class="col-sm-2 control-label">% of SP</label>
+																			<div class="col-sm-2">
+																				<input type="text" placeholder=""
+																					class="form-control" name="nr-repCharSFPercentSP">
 																			</div>
-																			<label class="col-sm-2 control-label">
-																				% of Commision</label>
+																			<label class="col-sm-2 control-label"> % of
+																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-repCharSFPercentPCC">
@@ -1456,14 +1379,6 @@ span .#error {
 																				<label> <form:checkbox
 																						path="nrnReturnConfig.repCharSFShipFee" /> <i></i>
 																					Shipping Fee
-																				</label>
-																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.repCharSFSerTax" /> <i></i>
-																					Service Tax
 																				</label>
 																			</div>
 																		</div>
@@ -1497,9 +1412,9 @@ span .#error {
 																	<div class="col-sm-4">
 																		<div class="radio">
 																			<label> <form:radiobutton
-																					path="nrnReturnConfig.repCharBRType" value="variable"
-																					id="rep-br-variable" name="toggler"
-																					class="repCharBRType" /> Variable
+																					path="nrnReturnConfig.repCharBRType"
+																					value="variable" id="rep-br-variable"
+																					name="toggler" class="repCharBRType" /> Variable
 																			</label>
 																		</div>
 																	</div>
@@ -1508,7 +1423,8 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.repCharBRType"
 																					value="noCharges" id="rep-br-nocharges"
-																					name="toggler" class="repCharBRType" /> No Charges
+																					name="toggler" class="repCharBRType"
+																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1517,7 +1433,7 @@ span .#error {
 																	<div class="col-sm-12 radio1 m-b" id="blk-rep-br-fix">
 																		<div class="col-sm-12">
 																			<div class="form-group">
-																				<div class="col-md-2 content-rgt">
+																				<div class="col-md-2 control-label">
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
@@ -1529,27 +1445,19 @@ span .#error {
 																	</div>
 																	<div class="col-sm-12 radio1" id="blk-rep-br-variable">
 																		<div class="form-group col-md-12">
-																			<label class="col-sm-2 control-label">% of SP</label>
-																			<div class="col-sm-3">
-																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharBRPercentSP">
-																			</div>
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
-																			<div class="col-sm-3">
+																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-repCharBRVarFixedAmt">
 																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="col-md-4 checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.repCharBRPCC" /> <i></i>
-																					Commission
-																				</label>
+																			<label class="col-sm-2 control-label">% of SP</label>
+																			<div class="col-sm-2">
+																				<input type="text" placeholder=""
+																					class="form-control" name="nr-repCharBRPercentSP">
 																			</div>
-																			<label class="col-sm-2 control-label">
-																				% of Commision</label>
+																			<label class="col-sm-2 control-label"> % of
+																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-repCharBRPercentPCC">
@@ -1568,22 +1476,6 @@ span .#error {
 																				<label> <form:checkbox
 																						path="nrnReturnConfig.repCharBRShipFee" /> <i></i>
 																					Shipping Fee
-																				</label>
-																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.repCharBRSerTax" /> <i></i>
-																					Service Tax
-																				</label>
-																			</div>
-																		</div>
-																		<div class="col-sm-12">
-																			<div class="checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.repCharBRRevShipFee" /> <i></i>
-																					Reverse Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1629,7 +1521,8 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.PDCharSFType"
 																					value="noCharges" id="PD-sf-nocharges"
-																					name="toggler" class="PDCharSFType" /> No Charges
+																					name="toggler" class="PDCharSFType"
+																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1638,7 +1531,7 @@ span .#error {
 																	<div class="col-sm-12 radio1 m-b" id="blk-PD-sf-fix">
 																		<div class="col-sm-12">
 																			<div class="form-group">
-																				<div class="col-md-2 content-rgt">
+																				<div class="col-md-2 control-label">
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
@@ -1658,27 +1551,19 @@ span .#error {
 																	</div>
 																	<div class="col-sm-12 radio1" id="blk-PD-sf-variable">
 																		<div class="form-group col-md-12">
-																			<label class="col-sm-2 control-label">% of SP</label>
-																			<div class="col-sm-3">
-																				<input type="text" placeholder=""
-																					class="form-control" name="nr-PDCharSFPercentSP">
-																			</div>
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
-																			<div class="col-sm-3">
+																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-PDCharSFVarFixedAmt">
 																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="col-md-4 checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.PDCharSFPCC" /> <i></i>
-																					Commission
-																				</label>
+																			<label class="col-sm-2 control-label">% of SP</label>
+																			<div class="col-sm-2">
+																				<input type="text" placeholder=""
+																					class="form-control" name="nr-PDCharSFPercentSP">
 																			</div>
-																			<label class="col-sm-2 control-label">
-																				% of Commision</label>
+																			<label class="col-sm-2 control-label"> % of
+																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-PDCharSFPercentPCC">
@@ -1697,14 +1582,6 @@ span .#error {
 																				<label> <form:checkbox
 																						path="nrnReturnConfig.PDCharSFShipFee" /> <i></i>
 																					Shipping Fee
-																				</label>
-																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.PDCharSFSerTax" /> <i></i>
-																					Service Tax
 																				</label>
 																			</div>
 																		</div>
@@ -1739,8 +1616,8 @@ span .#error {
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.PDCharBRType"
-																					value="variable" id="PD-br-variable"
-																					name="toggler" class="PDCharBRType" /> Variable
+																					value="variable" id="PD-br-variable" name="toggler"
+																					class="PDCharBRType" /> Variable
 																			</label>
 																		</div>
 																	</div>
@@ -1749,7 +1626,8 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.PDCharBRType"
 																					value="noCharges" id="PD-br-nocharges"
-																					name="toggler" class="PDCharBRType" /> No Charges
+																					name="toggler" class="PDCharBRType"
+																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -1758,7 +1636,7 @@ span .#error {
 																	<div class="col-sm-12 radio1 m-b" id="blk-PD-br-fix">
 																		<div class="col-sm-12">
 																			<div class="form-group">
-																				<div class="col-md-2 content-rgt">
+																				<div class="col-md-2 control-label">
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
@@ -1770,27 +1648,19 @@ span .#error {
 																	</div>
 																	<div class="col-sm-12 radio1" id="blk-PD-br-variable">
 																		<div class="form-group col-md-12">
-																			<label class="col-sm-2 control-label">% of SP</label>
-																			<div class="col-sm-3">
-																				<input type="text" placeholder=""
-																					class="form-control" name="nr-PDCharBRPercentSP">
-																			</div>
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
-																			<div class="col-sm-3">
+																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-PDCharBRVarFixedAmt">
 																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="col-md-4 checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.PDCharBRPCC" /> <i></i>
-																					Commission
-																				</label>
+																			<label class="col-sm-2 control-label">% of SP</label>
+																			<div class="col-sm-2">
+																				<input type="text" placeholder=""
+																					class="form-control" name="nr-PDCharBRPercentSP">
 																			</div>
-																			<label class="col-sm-2 control-label">
-																				% of Commision</label>
+																			<label class="col-sm-2 control-label"> % of
+																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-PDCharBRPercentPCC">
@@ -1809,22 +1679,6 @@ span .#error {
 																				<label> <form:checkbox
 																						path="nrnReturnConfig.PDCharBRShipFee" /> <i></i>
 																					Shipping Fee
-																				</label>
-																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.PDCharBRSerTax" /> <i></i>
-																					Service Tax
-																				</label>
-																			</div>
-																		</div>
-																		<div class="col-sm-12">
-																			<div class="checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.PDCharBRRevShipFee" /> <i></i>
-																					Reverse Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1875,7 +1729,8 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.canCharSFBFRTDType"
 																					value="noCharges" id="can-sfbfrtd-nocharges"
-																					name="toggler" class="canCharSFBFRTDType" /> No
+																					name="toggler" class="canCharSFBFRTDType"
+																					checked="checked" /> No
 																				Charges
 																			</label>
 																		</div>
@@ -1886,7 +1741,7 @@ span .#error {
 																		id="blk-can-sfbfrtd-fix">
 																		<div class="col-sm-12">
 																			<div class="form-group">
-																				<div class="col-md-2 content-rgt">
+																				<div class="col-md-2 control-label">
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
@@ -1898,8 +1753,8 @@ span .#error {
 																		<div class="col-sm-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharSFBRTDRevShipFee" /> <i></i>
-																					Reverse Shipping Fee
+																						path="nrnReturnConfig.canCharSFBRTDRevShipFee" />
+																					<i></i> Reverse Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1907,32 +1762,25 @@ span .#error {
 																	<div class="col-sm-12 radio1"
 																		id="blk-can-sfbfrtd-variable">
 																		<div class="form-group col-md-12">
-																			<label class="col-sm-2 control-label">% of SP</label>
-																			<div class="col-sm-3">
-																				<input type="text" placeholder=""
-																					class="form-control"
-																					name="nr-canCharSFBFRTDPercentSP">
-																			</div>
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
-																			<div class="col-sm-3">
+																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control"
 																					name="nr-canCharSFBFRTDVarFixedAmt">
 																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="col-md-4 checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharSFBRTDPCC" /> <i></i>
-																					Commission
-																				</label>
-																			</div>
-																			<label class="col-sm-2 control-label">
-																				% of Commision</label>
+																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-canCharSFBFRTDPercentPCC">
+																					class="form-control"
+																					name="nr-canCharSFBFRTDPercentSP">
+																			</div>
+																			<label class="col-sm-2 control-label"> % of
+																				Commision</label>
+																			<div class="col-sm-2">
+																				<input type="text" placeholder=""
+																					class="form-control"
+																					name="nr-canCharSFBFRTDPercentPCC">
 																			</div>
 																		</div>
 																		<div class="col-md-12">
@@ -1951,19 +1799,11 @@ span .#error {
 																				</label>
 																			</div>
 																		</div>
-																		<div class="col-md-12">
-																			<div class="checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharSFBRTDSerTax" /> <i></i>
-																					Service Tax
-																				</label>
-																			</div>
-																		</div>
 																		<div class="col-sm-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharSFBRTDRevShipFee" /> <i></i>
-																					Reverse Shipping Fee
+																						path="nrnReturnConfig.canCharSFBRTDRevShipFee" />
+																					<i></i> Reverse Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -2001,7 +1841,8 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.canCharSFARTDType"
 																					value="noCharges" id="can-sfartd-nocharges"
-																					name="toggler" class="canCharSFARTDType" /> No
+																					name="toggler" class="canCharSFARTDType"
+																					checked="checked" /> No
 																				Charges
 																			</label>
 																		</div>
@@ -2012,7 +1853,7 @@ span .#error {
 																		id="blk-can-sfartd-fix">
 																		<div class="col-sm-12">
 																			<div class="form-group">
-																				<div class="col-md-2 content-rgt">
+																				<div class="col-md-2 control-label">
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
@@ -2024,8 +1865,8 @@ span .#error {
 																		<div class="col-sm-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharSFARTDRevShipFee" /> <i></i>
-																					Reverse Shipping Fee
+																						path="nrnReturnConfig.canCharSFARTDRevShipFee" />
+																					<i></i> Reverse Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -2033,27 +1874,19 @@ span .#error {
 																	<div class="col-sm-12 radio1"
 																		id="blk-can-sfartd-variable">
 																		<div class="form-group col-md-12">
-																			<label class="col-sm-2 control-label">% of SP</label>
-																			<div class="col-sm-3">
-																				<input type="text" placeholder=""
-																					class="form-control" name="nr-canCharSFPercentSP">
-																			</div>
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
-																			<div class="col-sm-3">
+																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-canCharSFVarFixedAmt">
 																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="col-md-4 checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharSFPCC" /> <i></i>
-																					Commission
-																				</label>
+																			<label class="col-sm-2 control-label">% of SP</label>
+																			<div class="col-sm-2">
+																				<input type="text" placeholder=""
+																					class="form-control" name="nr-canCharSFPercentSP">
 																			</div>
-																			<label class="col-sm-2 control-label">
-																				% of Commision</label>
+																			<label class="col-sm-2 control-label"> % of
+																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-canCharSFPercentPCC">
@@ -2075,19 +1908,11 @@ span .#error {
 																				</label>
 																			</div>
 																		</div>
-																		<div class="col-md-12">
-																			<div class="checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharSFSerTax" /> <i></i>
-																					Service Tax
-																				</label>
-																			</div>
-																		</div>
 																		<div class="col-sm-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharSFARTDRevShipFee" /> <i></i>
-																					Reverse Shipping Fee
+																						path="nrnReturnConfig.canCharSFARTDRevShipFee" />
+																					<i></i> Reverse Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -2113,9 +1938,9 @@ span .#error {
 																	<div class="col-sm-4">
 																		<div class="radio">
 																			<label> <form:radiobutton
-																					path="nrnReturnConfig.canCharBRType" value="variable"
-																					id="can-br-variable" name="toggler"
-																					class="canCharBRType" /> Variable
+																					path="nrnReturnConfig.canCharBRType"
+																					value="variable" id="can-br-variable"
+																					name="toggler" class="canCharBRType" /> Variable
 																			</label>
 																		</div>
 																	</div>
@@ -2124,7 +1949,8 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.canCharBRType"
 																					value="noCharges" id="can-br-nocharges"
-																					name="toggler" class="canCharBRType" /> No Charges
+																					name="toggler" class="canCharBRType"
+																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
@@ -2133,7 +1959,7 @@ span .#error {
 																	<div class="col-sm-12 radio1 m-b" id="blk-can-br-fix">
 																		<div class="col-sm-12">
 																			<div class="form-group">
-																				<div class="col-md-2 content-rgt">
+																				<div class="col-md-2 control-label">
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
@@ -2143,30 +1969,21 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
-																	<div class="col-sm-12 radio1"
-																		id="blk-can-br-variable">
+																	<div class="col-sm-12 radio1" id="blk-can-br-variable">
 																		<div class="form-group col-md-12">
-																			<label class="col-sm-2 control-label">% of SP</label>
-																			<div class="col-sm-3">
-																				<input type="text" placeholder=""
-																					class="form-control" name="nr-canCharBRPercentSP">
-																			</div>
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
-																			<div class="col-sm-3">
+																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-canCharBRVarFixedAmt">
 																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="col-md-4 checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharBRPCC" /> <i></i>
-																					Commission
-																				</label>
+																			<label class="col-sm-2 control-label">% of SP</label>
+																			<div class="col-sm-2">
+																				<input type="text" placeholder=""
+																					class="form-control" name="nr-canCharBRPercentSP">
 																			</div>
-																			<label class="col-sm-2 control-label">
-																				% of Commision</label>
+																			<label class="col-sm-2 control-label"> % of
+																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-canCharBRPercentPCC">
@@ -2185,14 +2002,6 @@ span .#error {
 																				<label> <form:checkbox
 																						path="nrnReturnConfig.canCharBRShipFee" /> <i></i>
 																					Shipping Fee
-																				</label>
-																			</div>
-																		</div>
-																		<div class="col-md-12">
-																			<div class="checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharBRSerTax" /> <i></i>
-																					Service Tax
 																				</label>
 																			</div>
 																		</div>
@@ -2234,19 +2043,6 @@ span .#error {
 																			<input type="text" placeholder=""
 																				class="form-control" name="nr-revShipFeePCC">
 																			<span class="input-group-addon">%</span>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-sm-12">
-																	<div class="hr-line-dashed"></div>
-																</div>
-																<div class="col-sm-12">
-																	<div class="col-sm-6">
-																		<div class="checkbox i-checks">
-																			<label> <form:checkbox
-																					path="nrnReturnConfig.revShippingFeeType"
-																					value="revShipFeeNA" /> <i></i>No Reverse Fee
-																			</label>
 																		</div>
 																	</div>
 																</div>
@@ -2348,70 +2144,91 @@ span .#error {
 																	</div>
 																	<div class="col-sm-6"></div>
 																</div>
+																<br> <br>
 																<div class="col-sm-12">
-																	<div class="col-sm-6">
-																		<div class="radio">
-																			<label> Dead Weight </label>
-																		</div>
+																	<div class="col-sm-3 control-label">
+																		<label> Dead Weight </label>
 																	</div>
-																	<div class="col-sm-6">
-																		<div class="radio">
-																			<label> Volume Weight </label>
-																		</div>
+																	<div class="col-sm-3">
+																		<label> </label>
+																	</div>
+																	<div class="col-sm-3 control-label">
+																		<label> Volume Weight </label>
+																	</div>
+																	<div class="col-sm-3">
+																		<label> </label>
 																	</div>
 																</div>
 																<div class="row">
 																	<div class="col-sm-12">
 																		<div class="form-group">
-																			<div class="col-md-2 content-rgt">
+																			<div class="col-md-2 control-label">
 																				<label>Amount</label>
 																			</div>
-																			<div class="col-md-3 content-rgt">
+																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-revShipFeeDWAmt">
 																			</div>
-																			<div class="col-md-2 content-rgt">
+																			<div class="col-md-2">
+																				<label> </label>
+																			</div>
+																			<div class="col-md-2 control-label">
 																				<label>Amount</label>
 																			</div>
-																			<div class="col-md-3 content-rgt">
+																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-revShipFeeVWAmt">
 																			</div>
+																			<div class="col-md-2">
+																				<label> </label>
+																			</div>
 																		</div>
 																	</div>
 																	<div class="col-sm-12">
 																		<div class="form-group">
-																			<div class="col-md-2 content-rgt">
+																			<div class="col-md-2 control-label">
 																				<label>Per Weight</label>
 																			</div>
-																			<div class="col-md-3 content-rgt">
+																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-revShipFeeDWPW">
 																			</div>
-																			<div class="col-md-2 content-rgt">
+																			<div class="col-md-2">
+																				<label> </label>
+																			</div>
+																			<div class="col-md-2 control-label">
 																				<label>Per Weight</label>
 																			</div>
-																			<div class="col-md-3 content-rgt">
+																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-revShipFeeVWPW">
+																			</div>
+																			<div class="col-md-2">
+																				<label> </label>
 																			</div>
 																		</div>
 																	</div>
 																	<div class="col-sm-12">
 																		<div class="form-group">
-																			<div class="col-md-2 content-rgt">
+																			<div class="col-md-2 control-label">
 																				<label>Min Weight</label>
 																			</div>
-																			<div class="col-md-3 content-rgt">
+																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-revShipFeeDWMW">
 																			</div>
-																			<div class="col-md-2 content-rgt">
+																			<div class="col-md-2">
+																				<label> </label>
+																			</div>
+																			<div class="col-md-2 control-label">
 																				<label>Min Weight</label>
 																			</div>
-																			<div class="col-md-3 content-rgt">
+																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
 																					class="form-control" name="nr-revShipFeeVWMW">
+																			</div>
+																			<div class="col-md-2">
+																				<label> </label>
 																			</div>
 																		</div>
 																	</div>

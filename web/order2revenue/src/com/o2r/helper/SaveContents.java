@@ -1265,9 +1265,6 @@ public class SaveContents {
 									.toString())) {
 						orderReturn.setCancelType(entry.getCell(9)
 								.toString());
-					} else {
-						errorMessage.append(" Mark order Return Stage Type");
-						validaterow = false;
 					}
 				} else {
 					validaterow = false;

@@ -700,8 +700,8 @@ public class OrderDaoImpl implements OrderDao {
 					returnChargesCalculated = returnChargesCalculated
 							* orderReturn.getReturnorrtoQty();
 				}
-				order.getOrderReturnOrRTO().setReturnOrRTOChargestoBeDeducted(
-						returnChargesCalculated);
+				orderReturn
+						.setReturnOrRTOChargestoBeDeducted(returnChargesCalculated);
 
 				if ((int) order.getOrderReturnOrRTO()
 						.getReturnOrRTOChargestoBeDeducted() == 0) {
@@ -1834,7 +1834,8 @@ public class OrderDaoImpl implements OrderDao {
 			}
 
 			// Getting Fixed fee
-			if (chargesMap.containsKey(GlobalConstant.fixedfeelt250) && chargesMap.get(GlobalConstant.fixedfeelt250).intValue() != 0) {
+			if (chargesMap.containsKey(GlobalConstant.fixedfeelt250)
+					&& chargesMap.get(GlobalConstant.fixedfeelt250).intValue() != 0) {
 				if (SP < 251)
 					fixedfee = chargesMap.get(GlobalConstant.fixedfeelt250);
 				else if (SP > 250 && SP < 501)
@@ -1842,41 +1843,56 @@ public class OrderDaoImpl implements OrderDao {
 							.get(GlobalConstant.fixedfeegt250lt500);
 				else
 					fixedfee = chargesMap.get(GlobalConstant.fixedfeegt500);
-			} else if (chargesMap.containsKey(GlobalConstant.fixedfeelt500) && chargesMap.get(GlobalConstant.fixedfeelt500).intValue() != 0) {
+			} else if (chargesMap.containsKey(GlobalConstant.fixedfeelt500)
+					&& chargesMap.get(GlobalConstant.fixedfeelt500).intValue() != 0) {
 				if (SP < 501)
 					fixedfee = chargesMap.get(GlobalConstant.fixedfeelt500);
 				else
-					fixedfee = chargesMap.containsKey(GlobalConstant.fixedfeegt500) ? chargesMap.get(GlobalConstant.fixedfeegt500) : 0;
+					fixedfee = chargesMap
+							.containsKey(GlobalConstant.fixedfeegt500) ? chargesMap
+							.get(GlobalConstant.fixedfeegt500) : 0;
 			} else {
 				if (SP < 501)
-					fixedfee = chargesMap.containsKey(GlobalConstant.fixedfeelt500Big) ? chargesMap.get(GlobalConstant.fixedfeelt500Big) : 0;
+					fixedfee = chargesMap
+							.containsKey(GlobalConstant.fixedfeelt500Big) ? chargesMap
+							.get(GlobalConstant.fixedfeelt500Big) : 0;
 				else if (SP > 500 && SP < 1001)
-					fixedfee = chargesMap.containsKey(GlobalConstant.fixedfeegt500lt1000) ? chargesMap
+					fixedfee = chargesMap
+							.containsKey(GlobalConstant.fixedfeegt500lt1000) ? chargesMap
 							.get(GlobalConstant.fixedfeegt500lt1000) : 0;
 				else if (SP > 1000 && SP < 10001)
-					fixedfee = chargesMap.containsKey(GlobalConstant.fixedfeegt1000lt10000) ? chargesMap
+					fixedfee = chargesMap
+							.containsKey(GlobalConstant.fixedfeegt1000lt10000) ? chargesMap
 							.get(GlobalConstant.fixedfeegt1000lt10000) : 0;
 				else
-					fixedfee = chargesMap.containsKey(GlobalConstant.fixedfeegt10000) ? chargesMap.get(GlobalConstant.fixedfeegt10000) : 0;
+					fixedfee = chargesMap
+							.containsKey(GlobalConstant.fixedfeegt10000) ? chargesMap
+							.get(GlobalConstant.fixedfeegt10000) : 0;
 
 			}
 
 			// Payment collection charges
 			if (partner.getNrnReturnConfig().isWhicheverGreaterPCC()) {
-				double percentAmount = chargesMap.containsKey(GlobalConstant.percentSPPCC) ? chargesMap
+				double percentAmount = chargesMap
+						.containsKey(GlobalConstant.percentSPPCC) ? chargesMap
 						.get(GlobalConstant.percentSPPCC) * SP / 100 : 0;
-				if (chargesMap.containsKey(GlobalConstant.fixedAmtPCC) &&
-						percentAmount > chargesMap.get(GlobalConstant.fixedAmtPCC)) {
+				if (chargesMap.containsKey(GlobalConstant.fixedAmtPCC)
+						&& percentAmount > chargesMap
+								.get(GlobalConstant.fixedAmtPCC)) {
 					pccAmount = percentAmount;
 				} else
-					pccAmount = chargesMap.containsKey(GlobalConstant.fixedAmtPCC) ? chargesMap.get(GlobalConstant.fixedAmtPCC) : 0;
+					pccAmount = chargesMap
+							.containsKey(GlobalConstant.fixedAmtPCC) ? chargesMap
+							.get(GlobalConstant.fixedAmtPCC) : 0;
 
-			} else if (chargesMap.containsKey(GlobalConstant.fixedAmtPCC) && chargesMap.get(GlobalConstant.fixedAmtPCC) != 0.0)
+			} else if (chargesMap.containsKey(GlobalConstant.fixedAmtPCC)
+					&& chargesMap.get(GlobalConstant.fixedAmtPCC) != 0.0)
 				pccAmount = chargesMap.get(GlobalConstant.fixedAmtPCC);
 
 			else
-				pccAmount = chargesMap.containsKey(GlobalConstant.percentSPPCC) ? chargesMap.get(GlobalConstant.percentSPPCC) * SP
-						/ 100 : 0;
+				pccAmount = chargesMap.containsKey(GlobalConstant.percentSPPCC) ? chargesMap
+						.get(GlobalConstant.percentSPPCC) * SP / 100
+						: 0;
 
 			System.out.println(" States : MetroLsit : "
 					+ partner.getNrnReturnConfig().getMetroList()
@@ -1887,14 +1903,16 @@ public class OrderDaoImpl implements OrderDao {
 					+ " zonallist: "
 					+ partner.getNrnReturnConfig().getZonalList());
 			System.out.println(" State we are geting ofrom excel : " + state);
-			/*System.out
-					.println("partner.getNrnReturnConfig().getMetroList().contains(state) "
-							+ partner.getNrnReturnConfig().getMetroList()
-									.contains(state));*/
+			/*
+			 * System.out .println(
+			 * "partner.getNrnReturnConfig().getMetroList().contains(state) " +
+			 * partner.getNrnReturnConfig().getMetroList() .contains(state));
+			 */
 
 			// ****Shipping charges
-			if (partner.getNrnReturnConfig().getShippingFeeType() != null && partner.getNrnReturnConfig().getShippingFeeType()
-					.equals("variable")) {
+			if (partner.getNrnReturnConfig().getShippingFeeType() != null
+					&& partner.getNrnReturnConfig().getShippingFeeType()
+							.equals("variable")) {
 				if (partner.getNrnReturnConfig().getMetroList() != null
 						&& partner.getNrnReturnConfig().getMetroList()
 								.contains(state)) {
@@ -1924,15 +1942,18 @@ public class OrderDaoImpl implements OrderDao {
 			if (deadWeight < 500) {
 				area.append("dwlt500");
 				order.setDwShippingString(area.toString());
-				dwchargetemp = chargesMap.containsKey(area.toString()) ? chargesMap.get(area.toString()) : 0;
+				dwchargetemp = chargesMap.containsKey(area.toString()) ? chargesMap
+						.get(area.toString()) : 0;
 
 			} else {
 				temp = area;
 				area.append("dwlt500");
-				dwchargetemp = chargesMap.containsKey(area.toString()) ? chargesMap.get(area.toString()) : 0;
+				dwchargetemp = chargesMap.containsKey(area.toString()) ? chargesMap
+						.get(area.toString()) : 0;
 				float range = (float) Math.ceil((deadWeight - 500) / 500);
 				dwchargetemp = dwchargetemp
-						+ (range * (chargesMap.containsKey(area.toString()) ? chargesMap.get(temp.append("dwgt500")) : 0));
+						+ (range * (chargesMap.containsKey(area.toString()) ? chargesMap
+								.get(temp.append("dwgt500")) : 0));
 				order.setDwShippingString(temp.toString());
 
 			}
@@ -1946,30 +1967,37 @@ public class OrderDaoImpl implements OrderDao {
 				 * vwchargetemp =
 				 * chargesMap.get(volarea.append("vwlt500").toString());
 				 */
-				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap.get(tempStr) : 0;
+				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
+						.get(tempStr) : 0;
 				order.setVolShippingString(tempStr);
 			} else if (volWeight > 500 && volWeight < 1001) {
 				tempStr = volarea.append("vwgt500lt1000").toString();
 				System.out.println(" tempStr " + tempStr);
-				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap.get(tempStr) : 0;
+				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
+						.get(tempStr) : 0;
 				order.setVolShippingString(volarea.toString());
 			} else if (volWeight > 1000 && volWeight < 1501) {
 				tempStr = volarea.append("vwgt1000lt1500").toString();
 				System.out.println(" tempStr " + tempStr);
-				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap.get(tempStr) : 0;
+				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
+						.get(tempStr) : 0;
 				order.setVolShippingString(volarea.toString());
 			} else if (volWeight > 1500 && volWeight < 5001) {
 				tempStr = volarea.append("vwgt1500lt5000").toString();
 				System.out.println(" tempStr " + tempStr);
-				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap.get(tempStr) : 0;
+				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
+						.get(tempStr) : 0;
 				order.setVolShippingString(volarea.toString());
 			} else if (volWeight > 5000) {
 				temp = new StringBuffer(volarea);
 				volarea.append("vwgt1500lt5000");
-				vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap.get(volarea.toString()) : 0;
+				vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap
+						.get(volarea.toString()) : 0;
 				temp.append("vwgt5000");
-				vwchargetemp = vwchargetemp + ((volWeight - 5000) / 1000)
-						* (chargesMap.containsKey(temp.toString()) ? chargesMap.get(temp.toString()) : 0);
+				vwchargetemp = vwchargetemp
+						+ ((volWeight - 5000) / 1000)
+						* (chargesMap.containsKey(temp.toString()) ? chargesMap
+								.get(temp.toString()) : 0);
 				order.setVolShippingString(temp.toString());
 
 			}
@@ -1978,7 +2006,8 @@ public class OrderDaoImpl implements OrderDao {
 			else
 				shippingCharges = dwchargetemp;
 			comission = (float) (comission * SP) / 100;
-			serviceTax = (chargesMap.containsKey("serviceTax") ? chargesMap.get("serviceTax") : 0) * (float) SP / 100;
+			serviceTax = (chargesMap.containsKey("serviceTax") ? chargesMap
+					.get("serviceTax") : 0) * (float) SP / 100;
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
 			tds = ((comission / 10) + ((fixedfee + pccAmount) / 50))
@@ -2032,7 +2061,8 @@ public class OrderDaoImpl implements OrderDao {
 
 		String returnType = ordereturn.getType();
 		String faultType = ordereturn.getReturnCategory();
-		String cancelType = ordereturn.getCancelType();
+		String cancelType = (ordereturn.getCancelType() != null) ? ordereturn
+				.getCancelType() : "";
 
 		Map<String, Float> chargesMap = new HashMap<String, Float>();
 		List<NRnReturnCharges> chargesList = partner.getNrnReturnConfig()
@@ -2207,17 +2237,18 @@ public class OrderDaoImpl implements OrderDao {
 							.get(varPercentFixAmt) : 0);
 			totalcharge = totalcharge
 					+ (float) (shippingfee ? order.getShippingCharges() : 0);
-			totalcharge = totalcharge + (servicetax ? partner.getTaxrate() : 0);
 			totalcharge = totalcharge
 					+ (float) (fixedfee ? order.getFixedfee() : 0);
+			/*
+			 * totalcharge = totalcharge + (float) (paycollcharges ?
+			 * order.getPccAmount() : 0);
+			 */
+			
 			totalcharge = totalcharge
-					+ (float) (paycollcharges ? order.getPccAmount() : 0);
-			if (paycollcharges) {
-				totalcharge = totalcharge
-						+ (float) (chargesMap.containsKey(varPercentPCC) ? (chargesMap
-								.get(varPercentPCC)
-								* order.getPartnerCommission() / 100) : 0);
-			}
+					+ (float) (chargesMap.containsKey(varPercentPCC) ? (chargesMap
+							.get(varPercentPCC) * order.getPartnerCommission() / 100)
+							: 0);
+
 		}
 
 		if (isRevShippingFee) {
@@ -2292,6 +2323,13 @@ public class OrderDaoImpl implements OrderDao {
 		}
 
 		totalcharge = totalcharge + revShippingFee;
+
+		float serviceTax = chargesMap.containsKey("serviceTax") ? chargesMap
+				.get("serviceTax") : 0;
+
+		if (serviceTax > 0) {
+			totalcharge = totalcharge + (totalcharge * serviceTax) / 100;
+		}
 		return totalcharge;
 	}
 
