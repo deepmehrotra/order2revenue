@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -28,7 +26,6 @@ import com.o2r.bean.DebitNoteBean;
 import com.o2r.bean.PoPaymentBean;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
-import com.o2r.model.Customer;
 import com.o2r.model.NRnReturnCharges;
 import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
@@ -286,7 +283,7 @@ public class OrderDaoImpl implements OrderDao {
 		// sellerId=4;
 		Seller seller = null;
 		Date reconciledate = null;
-		Customer customer = null;
+		// Customer customer = null;
 		Date tempDate = null;
 		Session session = null;
 		TaxDetail taxDetails = null;
@@ -332,6 +329,7 @@ public class OrderDaoImpl implements OrderDao {
 								product.getCategoryName(),
 								product.getDeadWeight(), product.getVolWeight()))
 							throw new Exception();
+
 						System.out.println(" Shipping charges :"
 								+ order.getShippingCharges()
 								+ " >> Gross net rate "
@@ -402,8 +400,8 @@ public class OrderDaoImpl implements OrderDao {
 						 * order.getPartnerCommission() * (.1));
 						 */
 						taxDetails = new TaxDetail();
-						taxDetails.setBalanceRemaining(order
-								.getPartnerCommission() * (.1));
+						taxDetails.setBalanceRemaining(order.getOrderTax()
+								.getTdsToDeduct());
 						taxDetails.setParticular("TDS");
 						taxDetails.setUploadDate(order.getOrderDate());
 						taxDetailService.addMonthlyTDSDetail(session,
@@ -426,15 +424,17 @@ public class OrderDaoImpl implements OrderDao {
 						System.out.println(" Customer Email id in add order :"
 								+ order.getCustomer().getCustomerEmail());
 						order.getCustomer().setSellerId(sellerId);
+						order.getCustomer().getOrders().add(order);
 						System.out
 								.println(" After setting seller id in customer");
-						CustomerDao customerdao = new CustomerDaoImpl();
-						customer = customerdao.getCustomer(order.getCustomer()
-								.getCustomerEmail(), sellerId, session);
-						if (customer != null) {
-							order.setCustomer(customer);
-							customer.getOrders().add(order);
-						}
+						/*
+						 * CustomerDao customerdao = new CustomerDaoImpl();
+						 * customer =
+						 * customerdao.getCustomer(order.getCustomer()
+						 * .getCustomerEmail(), sellerId, session); if (customer
+						 * != null) { order.setCustomer(customer);
+						 * customer.getOrders().add(order); }
+						 */
 					}
 					// Adding order to the Partner
 					if (partner.getOrders() != null && order.getOrderId() == 0) {
@@ -2243,7 +2243,7 @@ public class OrderDaoImpl implements OrderDao {
 			 * totalcharge = totalcharge + (float) (paycollcharges ?
 			 * order.getPccAmount() : 0);
 			 */
-			
+
 			totalcharge = totalcharge
 					+ (float) (chargesMap.containsKey(varPercentPCC) ? (chargesMap
 							.get(varPercentPCC) * order.getPartnerCommission() / 100)

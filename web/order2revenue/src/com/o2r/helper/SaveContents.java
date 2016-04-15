@@ -832,18 +832,18 @@ public class SaveContents {
 					validaterow = false;
 				}
 				if (entry.getCell(10) != null
-						&& entry.getCell(10).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					try {
-						product.setHeight(Float.valueOf(
-								entry.getCell(10).toString()).longValue());
-					} catch (NumberFormatException e) {
-						errorMessage.append(" Dead Weight should be a number ");
-						validaterow = false;
-					}
-				} else {
-					errorMessage.append(" Dead Weight is null ");
-					validaterow = false;
-				}
+                        && entry.getCell(10).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+                    try {
+                        product.setDeadWeight((float)
+                                entry.getCell(10).getNumericCellValue());
+                    } catch (NumberFormatException e) {
+                        errorMessage.append(" Dead Weight should be a number ");
+                        validaterow = false;
+                    }
+                } else {
+                    errorMessage.append(" Dead Weight is null ");
+                    validaterow = false;
+                }
 				product.setProductDate(new Date());
 				product.setVolume(product.getHeight() * product.getLength()
 						* product.getBreadth());
