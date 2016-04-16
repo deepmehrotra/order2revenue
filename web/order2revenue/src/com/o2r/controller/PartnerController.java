@@ -84,9 +84,9 @@ public class PartnerController {
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		log.info("*** savePartner start ***");
+		System.out.println(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
 		Map<String, String[]> parameters = request.getParameterMap();
-		NRnReturnConfig configobj=new NRnReturnConfig();
-		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+				for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
 			System.out.println(" Request Param: " + entry.getKey()
 					+ "  Values  : " + entry.getValue().length);
 
@@ -100,7 +100,7 @@ public class PartnerController {
 					nrnReturncharge.setChargeAmount(Float.parseFloat(entry
 							.getValue()[0]));
 					nrnReturncharge.setChargeName(temp);
-					nrnReturncharge.setConfig(configobj);
+					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
 					chargeList.add(nrnReturncharge);
 				} else if (entry.getKey().contains("local")) {
 					partnerBean.getNrnReturnConfig().setLocalList(Arrays.toString(entry.getValue()));
@@ -122,9 +122,9 @@ public class PartnerController {
 		 * .getNoofdaysfromshippeddate());
 		 * System.out.println(" Seller id :"+partnerBean.getPcId());
 		 */
-		//partnerBean.getNrnReturnConfig().setCharges(chargeList);
-		configobj.setCharges(chargeList);
-		partnerBean.setNrnReturnConfig(configobj);
+		partnerBean.getNrnReturnConfig().setCharges(chargeList);
+		//configobj.setCharges(chargeList);
+		//partnerBean.setNrnReturnConfig(configobj);
 		if (!partnerBean.isIsshippeddatecalc()) {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
