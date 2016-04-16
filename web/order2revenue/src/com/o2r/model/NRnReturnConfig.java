@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Cascade;
+
 @Entity
 public class NRnReturnConfig {
 
@@ -191,7 +193,8 @@ public class NRnReturnConfig {
 	@Column
 	private boolean canCharBRRevShipFee;
 	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "config", cascade = CascadeType.ALL)
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<NRnReturnCharges> charges = new ArrayList<>();
 
 	public int getConfigId() {

@@ -35,6 +35,7 @@ import com.o2r.helper.CustomException;
 import com.o2r.helper.HelperClass;
 import com.o2r.model.Category;
 import com.o2r.model.NRnReturnCharges;
+import com.o2r.model.NRnReturnConfig;
 import com.o2r.model.Partner;
 import com.o2r.service.CategoryService;
 import com.o2r.service.PartnerService;
@@ -84,6 +85,7 @@ public class PartnerController {
 
 		log.info("*** savePartner start ***");
 		Map<String, String[]> parameters = request.getParameterMap();
+		NRnReturnConfig configobj=new NRnReturnConfig();
 		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
 			System.out.println(" Request Param: " + entry.getKey()
 					+ "  Values  : " + entry.getValue().length);
@@ -98,6 +100,7 @@ public class PartnerController {
 					nrnReturncharge.setChargeAmount(Float.parseFloat(entry
 							.getValue()[0]));
 					nrnReturncharge.setChargeName(temp);
+					nrnReturncharge.setConfig(configobj);
 					chargeList.add(nrnReturncharge);
 				} else if (entry.getKey().contains("local")) {
 					partnerBean.getNrnReturnConfig().setLocalList(Arrays.toString(entry.getValue()));
@@ -119,7 +122,9 @@ public class PartnerController {
 		 * .getNoofdaysfromshippeddate());
 		 * System.out.println(" Seller id :"+partnerBean.getPcId());
 		 */
-		partnerBean.getNrnReturnConfig().setCharges(chargeList);
+		//partnerBean.getNrnReturnConfig().setCharges(chargeList);
+		configobj.setCharges(chargeList);
+		partnerBean.setNrnReturnConfig(configobj);
 		if (!partnerBean.isIsshippeddatecalc()) {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());

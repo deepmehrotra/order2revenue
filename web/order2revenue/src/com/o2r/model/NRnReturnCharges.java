@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -12,13 +13,15 @@ import javax.persistence.Table;
 public class NRnReturnCharges {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private int nrchargeId;
 	@Column
 	private String chargeName;
 	@Column
 	private float chargeAmount;
+	@ManyToOne
+	private NRnReturnConfig config;
 
 	public int getNrchargeId() {
 		return nrchargeId;
@@ -48,6 +51,14 @@ public class NRnReturnCharges {
 	public String toString() {
 		return "NRnReturnCharges [nrchargeId=" + nrchargeId + ", chargeName="
 				+ chargeName + ", chargeAmount=" + chargeAmount + "]";
+	}
+
+	public NRnReturnConfig getConfig() {
+		return config;
+	}
+
+	public void setConfig(NRnReturnConfig config) {
+		this.config = config;
 	}
 
 }

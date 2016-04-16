@@ -49,6 +49,7 @@ public class PartnerDaoImpl implements PartnerDao {
 				session.saveOrUpdate(seller);
 			}
 			session.getTransaction().commit();
+			session.flush();
 			session.close();
 		} catch (Exception e) {
 			log.error(e);
