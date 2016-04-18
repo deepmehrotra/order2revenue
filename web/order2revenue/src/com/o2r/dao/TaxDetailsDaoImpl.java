@@ -253,6 +253,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		log.debug("Add Monthly TDS : cat : " + taxDetail.getParticular()
 				+ " Amoun :" + taxDetail.getBalanceRemaining());
 		Seller seller = null;
+		List<Integer> taxIds = null;
 		TaxDetail existingObj = null;
 		double amount = taxDetail.getBalanceRemaining();
 		boolean sessionState = false;
@@ -260,12 +261,41 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			// Session session=sessionFactory.openSession();
 			if (session != null) {
 				sessionState = true;
-			} else
+			} else{
 				session = sessionFactory.getCurrentSession();
+				session.beginTransaction();
+			}
+		
+				Query gettingTaxId = session
+						.createSQLQuery(taxTdRetriveQuery)
+						.setParameter("sellerId", sellerId)
+						.setParameter("month",taxDetail.getUploadDate().getMonth() + 1)
+						.setParameter("particular", taxDetail.getParticular());
+		
+				System.out
+						.println("**************************************************************** Month 4 TDS : "+ taxDetail.getUploadDate().getMonth() + 1);
+				System.out
+						.println("**************************************************************** Seller Id 4 TDS : "+ sellerId);
+				System.out
+						.println("**************************************************************** Particulars 4 TDS : "+ taxDetail.getParticular());
+		
+				taxIds = gettingTaxId.list();
+				
+				if (taxIds != null && taxIds.size() != 0 && taxIds.get(0) != null) {
 
-			session.beginTransaction();
+					Integer taxId = taxIds.get(0);
+					System.out
+							.println("**************************************************************** Tax Id 4 TDS : "+ taxId);
+					existingObj = (TaxDetail) session.get(TaxDetail.class, taxId);
 
-			DetachedCriteria maxQuery = DetachedCriteria.forClass(Seller.class);
+					existingObj.setBalanceRemaining(existingObj.getBalanceRemaining() + amount);
+					existingObj.setUploadDate(taxDetail.getUploadDate());
+					session.saveOrUpdate(existingObj);
+
+				}
+		
+			
+			/*DetachedCriteria maxQuery = DetachedCriteria.forClass(Seller.class);
 			maxQuery.createAlias("taxDetails", "taxDetail",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("taxDetail.particular", "TDS"))
@@ -308,23 +338,24 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 						existingObj.setUploadDate(taxDetail.getUploadDate());
 						session.saveOrUpdate(existingObj);
 					}
+				}*/
+				
+				else {
+					seller = (Seller) session.get(Seller.class, sellerId);
+					System.out.println(" saving new TDS object ");
+	
+					taxDetail.setStatus("Due");
+					taxDetail.setDescription("TDS for "
+							+ formatter.format(taxDetail.getUploadDate()));
+					taxDetail.setTaxortds("TDS");
+					taxDetail.setParticular("TDS");
+					taxDetail.setTaxortdsCycle(formatter.format(taxDetail
+							.getUploadDate()));
+					// taxDetail.setUploadDate(todaysDate);
+					seller.getTaxDetails().add(taxDetail);
+	
+					session.saveOrUpdate(seller);
 				}
-			} else {
-				seller = (Seller) session.get(Seller.class, sellerId);
-				System.out.println(" saving new TDS object ");
-
-				taxDetail.setStatus("Due");
-				taxDetail.setDescription("TDS for "
-						+ formatter.format(taxDetail.getUploadDate()));
-				taxDetail.setTaxortds("TDS");
-				taxDetail.setParticular("TDS");
-				taxDetail.setTaxortdsCycle(formatter.format(taxDetail
-						.getUploadDate()));
-				// taxDetail.setUploadDate(todaysDate);
-				seller.getTaxDetails().add(taxDetail);
-
-				session.saveOrUpdate(seller);
-			}
 
 			if (!sessionState) {
 				session.getTransaction().commit();
