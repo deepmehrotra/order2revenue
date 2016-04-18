@@ -42,9 +42,12 @@ public class PartnerDaoImpl implements PartnerDao {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			if (partner.getPcId() != 0) {
+				System.out.println(" Inside partnerdaoimpl saving partner nrCalculator values : "+partner.getNrnReturnConfig().isNrCalculator());
 				session.saveOrUpdate(partner);
 			} else {
 				Seller seller = (Seller) session.get(Seller.class, sellerId);
+				System.out.println(" Inside partnerdaoimpl saving partner nrCalculator values : "+partner.getNrnReturnConfig().isNrCalculator());
+				
 				seller.getPartners().add(partner);
 				session.saveOrUpdate(seller);
 			}

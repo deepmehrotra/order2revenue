@@ -319,6 +319,7 @@ public class SaveContents {
 					errorMessage.append(" Quantity can not be null ");
 					validaterow = false;
 				}
+				System.out.println(" NR calculator state: "+partner.getNrnReturnConfig().isNrCalculator());
 				if (partner != null && partner.getNrnReturnConfig() != null
 						&& !partner.getNrnReturnConfig().isNrCalculator()) {
 					if (entry.getCell(17) != null
@@ -847,7 +848,7 @@ public class SaveContents {
 				product.setProductDate(new Date());
 				product.setVolume(product.getHeight() * product.getLength()
 						* product.getBreadth());
-				product.setVolWeight(product.getVolume() / 5000);
+				product.setVolWeight(product.getVolume() / 5);
 				if (entry.getCell(6) != null
 						&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK)
 					product.setChannelSKU(entry.getCell(6).toString());

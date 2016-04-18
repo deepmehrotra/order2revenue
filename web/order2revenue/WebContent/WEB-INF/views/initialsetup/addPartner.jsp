@@ -2573,7 +2573,10 @@ span .#error {
 					.validate(
 							{
 								rules : {
-									pcName : "required",
+									pcName : {
+										required : true,
+										number : false,
+									},
 									maxReturnAcceptance : {
 										required : true,
 										min : 1,
