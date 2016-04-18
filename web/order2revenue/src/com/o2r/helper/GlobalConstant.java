@@ -390,6 +390,7 @@ public class GlobalConstant {
 	public static final String fixedfeelt500Big = "fixedfeelt500Big";
 	public static final String fixedfeegt250lt500 = "fixedfeegt250lt500";
 	public static final String fixedfeegt500 = "fixedfeegt500";
+	public static final String fixedfeegt500Big = "fixedfeegt500Big";
 	public static final String fixedfeegt500lt1000 = "fixedfeegt500lt100";
 	public static final String fixedfeegt1000lt10000 = "fixedfeegt250lt500";
 	public static final String fixedfeegt10000 = "fixedfeegt1000";

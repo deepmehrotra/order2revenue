@@ -464,7 +464,7 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt500">
+																				name="nr-fixedfeegt500Big">
 																		</div>
 																	</div>
 																</div>

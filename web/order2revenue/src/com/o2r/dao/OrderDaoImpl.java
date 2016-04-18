@@ -1849,8 +1849,8 @@ public class OrderDaoImpl implements OrderDao {
 					fixedfee = chargesMap.get(GlobalConstant.fixedfeelt500);
 				else
 					fixedfee = chargesMap
-							.containsKey(GlobalConstant.fixedfeegt500) ? chargesMap
-							.get(GlobalConstant.fixedfeegt500) : 0;
+							.containsKey(GlobalConstant.fixedfeegt500Big) ? chargesMap
+							.get(GlobalConstant.fixedfeegt500Big) : 0;
 			} else {
 				if (SP < 501)
 					fixedfee = chargesMap
@@ -2007,7 +2007,7 @@ public class OrderDaoImpl implements OrderDao {
 				shippingCharges = dwchargetemp;
 			comission = (float) (comission * SP) / 100;
 			serviceTax = (chargesMap.containsKey("serviceTax") ? chargesMap
-					.get("serviceTax") : 0) * (float) SP / 100;
+					.get("serviceTax") : 0) * (float) (shippingCharges+pccAmount+fixedfee+comission) / 100;
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
 			tds = ((comission / 10) + ((fixedfee + pccAmount) / 50))

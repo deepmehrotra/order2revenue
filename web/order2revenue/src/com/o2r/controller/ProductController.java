@@ -74,7 +74,6 @@ public class ProductController {
 		System.out.println("Inside list products ");
 		List<ProductBean> productList = new ArrayList<>();
 		int sellerId;
-		ProductBean product = null;
 		String skuCode = request.getParameter("skuCode");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
@@ -165,6 +164,9 @@ public class ProductController {
 		try {
 			if (productBean.getProductSkuCode() != null) {
 				productBean.setProductDate(new Date());
+				productBean.setVolume(productBean.getHeight() * productBean.getLength()
+						* productBean.getBreadth());
+				productBean.setVolWeight(productBean.getVolume() / 5);
 				Product product = ConverterClass
 						.prepareProductModel(productBean);
 				productService.addProduct(product,
