@@ -12,6 +12,7 @@ import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 /**
  * Builds the report layout, the template, the design, the pattern
@@ -804,11 +805,18 @@ public class Layouter {
 		headerCellStyle.setWrapText(true);
 		headerCellStyle.setFont(font);
 		headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
-
+		
+	    	CellStyle style = worksheet.getWorkbook().createCellStyle();
+	//    	style.setFillBackgroundColor(IndexedColors.BLUE.getIndex());
+	    	//style.setFillPattern(CellStyle.);
+	    	Font font1 = worksheet.getWorkbook().createFont();
+            font1.setColor(HSSFColor.LIGHT_BLUE.index);
+            font1.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            style.setFont(font1);
 		
 		// Create the column headers
 		HSSFRow rowHeadera = worksheet.createRow(2);
-		rowHeadera.setHeight((short) 200);
+		rowHeadera.setHeight((short) 250);
 		
 		
 		
@@ -822,14 +830,14 @@ public class Layouter {
 		worksheet.addMergedRegion(new CellRangeAddress(2,2,8,10));
 		worksheet.addMergedRegion(new CellRangeAddress(2,2,12,14));
 		worksheet.addMergedRegion(new CellRangeAddress(2,2,17,19));
-		
 		HSSFRow rowHeader = worksheet.createRow(3);
 		rowHeader.setHeight((short) 500);
 		int i=0;
 		
 		cellz = rowHeadera.createCell(j++);
 		cellz.setCellStyle(headerCellStyle);
-		cellz.setCellValue("Selected Period");		
+		cellz.setCellValue("Selected Period");
+		cellz.setCellStyle(style);
 		HSSFCell cell = rowHeader.createCell(i++);
 		cell.setCellValue("Start Date");
 		cell.setCellStyle(headerCellStyle);
@@ -878,6 +886,8 @@ public class Layouter {
 		cellz = rowHeadera.createCell(j++);
 		cellz.setCellStyle(headerCellStyle);
 		cellz.setCellValue("Gross Sale");
+		cellz.setCellStyle(style);
+		cellz.getCellStyle().setFillBackgroundColor(HSSFColor.LIGHT_BLUE.index);
 		 cell = rowHeader.createCell(startColIndex+ i++);
 		cell.setCellValue("N/R Amount");
 		cell.setCellStyle(headerCellStyle);
@@ -902,6 +912,8 @@ public class Layouter {
 		cellz = rowHeadera.createCell(j++);
 		cellz.setCellStyle(headerCellStyle);
 		cellz.setCellValue("Sale Return");
+		cellz.setCellStyle(style);
+		cellz.getCellStyle().setFillBackgroundColor(HSSFColor.LIGHT_GREEN.index);
 		 cell = rowHeader.createCell(startColIndex+ i++);
 		cell.setCellValue("N/R Amount");
 		cell.setCellStyle(headerCellStyle);
@@ -931,6 +943,8 @@ public class Layouter {
 		cellz = rowHeadera.createCell(j++);
 		cellz.setCellStyle(headerCellStyle);
 		cellz.setCellValue("Net Sale");
+		cellz.setCellStyle(style);
+		cellz.getCellStyle().setFillBackgroundColor(HSSFColor.LIGHT_BLUE.index);
 		 cell = rowHeader.createCell(startColIndex+ i++);
 		cell.setCellValue("N/R Amount");
 		cell.setCellStyle(headerCellStyle);
@@ -966,6 +980,8 @@ public class Layouter {
 		cellz = rowHeadera.createCell(j++);
 		cellz.setCellStyle(headerCellStyle);
 		cellz.setCellValue("Net Pure Sale");
+		cellz.setCellStyle(style);
+		cellz.getCellStyle().setFillBackgroundColor(HSSFColor.LIGHT_BLUE.index);
 		cell = rowHeader.createCell(startColIndex+ i++);
 		cell.setCellValue("N/R Amount");
 		cell.setCellStyle(headerCellStyle);
