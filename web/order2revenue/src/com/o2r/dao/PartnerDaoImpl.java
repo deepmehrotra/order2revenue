@@ -38,16 +38,15 @@ public class PartnerDaoImpl implements PartnerDao {
 		// sessionFactory.getCurrentSession().saveOrUpdate(partner);
 		System.out.println(" Inside PartnerDaoIMpl partner id :"
 				+ partner.getPcId());
+		int id=partner.getPcId();
+		//Partner exisitingObj=null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			if (partner.getPcId() != 0) {
-				System.out.println(" Inside partnerdaoimpl saving partner nrCalculator values : "+partner.getNrnReturnConfig().isNrCalculator());
+			if (id != 0) {
 				session.saveOrUpdate(partner);
 			} else {
 				Seller seller = (Seller) session.get(Seller.class, sellerId);
-				System.out.println(" Inside partnerdaoimpl saving partner nrCalculator values : "+partner.getNrnReturnConfig().isNrCalculator());
-				
 				seller.getPartners().add(partner);
 				session.saveOrUpdate(seller);
 			}

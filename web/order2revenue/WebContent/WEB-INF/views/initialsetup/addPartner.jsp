@@ -308,7 +308,7 @@ span .#error {
 									<div class="col-lg-12">
 										<!--   <input type="checkbox" class="js-switch_2" id="nr-switch" /> -->
 										<form:checkbox path="nrnReturnConfig.nrCalculator"
-											class="js-switch_2" id="nr-switch" />
+											value="${partner.nrnReturnConfig.nrCalculator}" class="js-switch_2" id="nr-switch" />
 										<label>NR Switch</label>
 										<div class="col-sm-12 radio5" id="nr-switch-sec">
 											<!--<div class="col-sm-12 radio1" id="blk-200">-->
@@ -353,8 +353,8 @@ span .#error {
 																		<div class="form-group">
 																			<div class="input-group m-b col-md-4">
 																				<input type="text" class="form-control"
-																					name="nr-fixedCommissionPercent"> <span
-																					class="input-group-addon">%</span>
+																					name="nr-fixedCommissionPercent" value="${fixedCommissionPercent}"> <span
+																					class="input-group-addon" >%</span>
 																			</div>
 																		</div>
 																	</div>
@@ -395,7 +395,7 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeelt250">
+																				name="nr-fixedfeelt250" value="${fixedfeelt250}">
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
@@ -403,7 +403,7 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt250lt500">
+																				name="nr-fixedfeegt250lt500" value="${fixedfeegt250lt500}">
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
@@ -411,7 +411,7 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt500">
+																				name="nr-fixedfeegt500" value="${fixedfeegt500}">
 																		</div>
 																	</div>
 																</div>
@@ -422,7 +422,7 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeelt500Big">
+																				name="nr-fixedfeelt500Big" value="${fixedfeelt500Big}">
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
@@ -430,7 +430,7 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt500lt1000">
+																				name="nr-fixedfeegt500lt1000" value="${fixedfeegt500lt1000}">
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
@@ -438,7 +438,7 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt1000lt10000">
+																				name="nr-fixedfeegt1000lt10000" value="${fixedfeegt1000lt10000}">
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
@@ -446,7 +446,7 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt10000">
+																				name="nr-fixedfeegt10000" value="${fixedfeegt10000}">
 																		</div>
 																	</div>
 																</div>
@@ -456,7 +456,7 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeelt500">
+																				name="nr-fixedfeelt500" value="${fixedfeelt500}">
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
@@ -464,7 +464,7 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt500Big">
+																				name="nr-fixedfeegt500Big" value="${fixedfeegt500Big}">
 																		</div>
 																	</div>
 																</div>
@@ -503,7 +503,7 @@ span .#error {
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
 																					<input type="text" class="form-control"
-																						name="nr-percentSPPCC"> <span
+																						name="nr-percentSPPCC" value="${percentSPPCC}"> <span
 																						class="input-group-addon">%</span>
 																				</div>
 																			</div>
@@ -511,8 +511,8 @@ span .#error {
 																		<div class="col-sm-12">
 																			<div class="col-sm-6">
 																				<div class="checkbox i-checks">
-																					<label> <input type="checkbox" value=""
-																						name="nr-isfixedAmountPCC"> <i></i> Fixed
+																					<label> <input type="checkbox" 
+																						name="nr-isfixedAmountPCC" value="${partner.nrnReturnConfig.isfixedAmountPCC}"> <i></i> Fixed
 																						Amount
 																					</label>
 																				</div>
@@ -520,7 +520,7 @@ span .#error {
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
 																					<input type="text" class="form-control"
-																						name="nr-fixedAmtPCC"> <span
+																						name="nr-fixedAmtPCC" value="${fixedAmtPCC}"> <span
 																						class="input-group-addon">%</span>
 																				</div>
 																			</div>
@@ -568,7 +568,7 @@ span .#error {
 																			<h4 class="text-info">Which Ever is Higher</h4>
 																		</div>
 																		<div class="col-sm-6">
-																			<h4>Volume calculation= (lxbxh)(cm)/5000</h4>
+																			<h4>Volume calculation= (lxbxh)(cm)/5</h4>
 																			<table class="table table-bordered">
 																				<thead>
 																					<tr>
@@ -585,20 +585,20 @@ span .#error {
 																						<td><div class="form-group ">
 																								<div class=" content-rgt">
 																									<input type="text" placeholder=""
-																										class="form-control" name="nr-localvwlt500">
+																										class="form-control" name="nr-localvwlt500" value="${localvwlt500}">
 																								</div>
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-zonalvwlt500">
+																									class="form-control" name="nr-zonalvwlt500" value="${zonalvwlt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-nationalvwlt500">
+																									class="form-control" name="nr-nationalvwlt500" value="${nationalvwlt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-metrovwlt500">
+																									class="form-control" name="nr-metrovwlt500" value="${metrovwlt500}">
 																							</div></td>
 																					</tr>
 																					<tr>
@@ -606,22 +606,22 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-localvwgt500lt1000">
+																									name="nr-localvwgt500lt1000" value="${localvwgt500lt1000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-zonalvwgt500lt1000">
+																									name="nr-zonalvwgt500lt1000" value="${zonalvwgt500lt1000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-nationalvwgt500lt1000">
+																									name="nr-nationalvwgt500lt1000" value="${nationalvwgt500lt1000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-metrovwgt500lt1000">
+																									name="nr-metrovwgt500lt1000" value="${metrovwgt500lt1000}">
 																							</div></td>
 																					</tr>
 																					<tr>
@@ -629,22 +629,22 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-localvwgt1000lt1500">
+																									name="nr-localvwgt1000lt1500" value="${localvwgt1000lt1500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-zonalvwgt1000lt1500">
+																									name="nr-zonalvwgt1000lt1500"  value="${zonalvwgt1000lt1500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-nationalvwgt1000lt1500">
+																									name="nr-nationalvwgt1000lt1500"  value="${nationalvwgt1000lt1500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-metrovwgt1000lt1500">
+																									name="nr-metrovwgt1000lt1500"  value="${metrovwgt1000lt1500}">
 																							</div></td>
 																					</tr>
 																					<tr>
@@ -652,41 +652,41 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-localvwgt1500lt5000">
+																									name="nr-localvwgt1500lt5000"  value="${localvwgt1000lt1500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-zonalvwgt1500lt5000">
+																									name="nr-zonalvwgt1500lt5000" value="${zonalvwgt1500lt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-nationalvwgt1500lt5000">
+																									name="nr-nationalvwgt1500lt5000" value="${nationalvwgt1500lt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-metrovwgt1500lt5000">
+																									name="nr-metrovwgt1500lt5000" value="${metrovwgt1500lt5000}">
 																							</div></td>
 																					</tr>
 																					<tr>
 																						<td><label>add 1 kg</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-localvwgt5000">
+																									class="form-control" name="nr-localvwgt5000" value="${metrovwgt1500lt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-zonalvwgt5000">
+																									class="form-control" name="nr-zonalvwgt5000" value="${zonalvwgt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-nationalvwgt5000">
+																									class="form-control" name="nr-nationalvwgt5000" value="${nationalvwgt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-metrovwgt5000">
+																									class="form-control" name="nr-metrovwgt5000" value="${metrovwgt5000}">
 																							</div></td>
 																					</tr>
 																				</tbody>
@@ -710,39 +710,39 @@ span .#error {
 																						<td><div class="form-group ">
 																								<div class=" content-rgt">
 																									<input type="text" placeholder=""
-																										class="form-control" name="nr-localdwlt500">
+																										class="form-control" name="nr-localdwlt500" value="${metrovwgt5000}">
 																								</div>
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-zonaldwlt500">
+																									class="form-control" name="nr-zonaldwlt500" value="${zonaldwlt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-nationaldwlt500">
+																									class="form-control" name="nr-nationaldwlt500" value="${nationaldwlt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-metrodwlt500">
+																									class="form-control" name="nr-metrodwlt500" value="${metrodwlt500}">
 																							</div></td>
 																					</tr>
 																					<tr>
 																						<td><label>additional &gt; 500</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-localdwgt500">
+																									class="form-control" name="nr-localdwgt500" value="${localdwgt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-zonaldwgt500">
+																									class="form-control" name="nr-zonaldwgt500" value="${zonaldwgt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-nationaldwgt500">
+																									class="form-control" name="nr-nationaldwgt500" value="${nationaldwgt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-metrodwgt500">
+																									class="form-control" name="nr-metrodwgt500" value="${metrodwgt500}">
 																							</div></td>
 																					</tr>
 																				</tbody>
@@ -770,7 +770,7 @@ span .#error {
 																						<td><div class="form-group ">
 																								<div class=" content-rgt">
 																									<input type="text" placeholder=""
-																										class="form-control" name="nr-fixeddwlt500">
+																										class="form-control" name="nr-fixeddwlt500" value="${fixeddwlt500}">
 																								</div>
 																							</div></td>
 																					</tr>
@@ -778,7 +778,7 @@ span .#error {
 																						<td><label>additional &gt; 500</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-fixeddwgt500">
+																									class="form-control" name="nr-fixeddwgt500" value="${fixeddwgt500}">
 																							</div></td>
 																					</tr>
 																				</tbody>
@@ -799,7 +799,7 @@ span .#error {
 																						<td><div class="form-group ">
 																								<div class=" content-rgt">
 																									<input type="text" placeholder=""
-																										class="form-control" name="nr-fixedvwlt500">
+																										class="form-control" name="nr-fixedvwlt500" value="${fixedvwlt500}">
 																								</div>
 																							</div></td>
 																					</tr>
@@ -808,7 +808,7 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-fixedvwgt500lt1000">
+																									name="nr-fixedvwgt500lt1000" value="${fixedvwgt500lt1000}">
 																							</div></td>
 																					</tr>
 																					<tr>
@@ -816,7 +816,7 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-fixedvwgt1000lt1500">
+																									name="nr-fixedvwgt1000lt1500" value="${fixedvwgt1000lt1500}">
 																							</div></td>
 																					</tr>
 																					<tr>
@@ -824,14 +824,14 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-fixedvwgt1500lt5000">
+																									name="nr-fixedvwgt1500lt5000" value="${fixedvwgt1000lt1500}">
 																							</div></td>
 																					</tr>
 																					<tr>
 																						<td><label>add 1 kg</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-fixedvwgt5000">
+																									class="form-control" name="nr-fixedvwgt5000" value="${fixedvwgt5000}">
 																							</div></td>
 																					</tr>
 																				</tbody>
@@ -853,7 +853,7 @@ span .#error {
 																	<div class="form-group col-md-12">
 																		<div class="col-md-4 content-rgt">
 																			<input type="text" placeholder=""
-																				class="form-control" name="nr-serviceTax">
+																				class="form-control" name="nr-serviceTax" value="${serviceTax}">
 																		</div>
 																	</div>
 																</div>
@@ -926,7 +926,7 @@ span .#error {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text" class="form-control"
-																						name="nr-retCharSFFixedAmt">
+																						name="nr-retCharSFFixedAmt"  value="${retCharSFFixedAmt}">
 																				</div>
 																			</div>
 																		</div>
@@ -946,18 +946,18 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-retCharSFVarFixedAmt">
+																					class="form-control" name="nr-retCharSFVarFixedAmt" value="${retCharSFVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-retCharSFPercentSP">
+																					class="form-control" name="nr-retCharSFPercentSP" value="${retCharSFPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-retCharSFPercentPCC">
+																					class="form-control" name="nr-retCharSFPercentPCC" value="${retCharSFPercentPCC}">
 																			</div>
 																		</div>
 																		<div class="col-md-12">
@@ -1032,7 +1032,7 @@ span .#error {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text" class="form-control"
-																						name="nr-retCharBRFixedAmt">
+																						name="nr-retCharBRFixedAmt" value="${retCharBRFixedAmt}">
 																				</div>
 																			</div>
 																		</div>
@@ -1044,18 +1044,18 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-retCharBRVarFixedAmt">
+																					class="form-control" name="nr-retCharBRVarFixedAmt" value="${retCharBRVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-retCharBRPercentSP">
+																					class="form-control" name="nr-retCharBRPercentSP" value="${retCharBRPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-retCharBRPercentPCC">
+																					class="form-control" name="nr-retCharBRPercentPCC" value="${retCharBRPercentPCC}">
 																			</div>
 																		</div>
 																		<div class="col-md-12">
@@ -1130,7 +1130,7 @@ span .#error {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text" class="form-control"
-																						name="nr-RTOCharSFFixedAmt">
+																						name="nr-RTOCharSFFixedAmt" value="${RTOCharSFFixedAmt}">
 																				</div>
 																			</div>
 																		</div>
@@ -1149,18 +1149,18 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharSFVarFixedAmt">
+																					class="form-control" name="nr-RTOCharSFVarFixedAmt" value="${RTOCharSFFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharSFPercentSP">
+																					class="form-control" name="nr-RTOCharSFPercentSP" value="${RTOCharSFPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharSFPercentPCC">
+																					class="form-control" name="nr-RTOCharSFPercentPCC" value="${RTOCharSFPercentPCC}">
 																			</div>
 																		</div>
 																		<div class="col-md-12">
@@ -1235,7 +1235,7 @@ span .#error {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text" class="form-control"
-																						name="nr-RTOCharBRFixedAmt">
+																						name="nr-RTOCharBRFixedAmt" value="${RTOCharBRFixedAmt}">
 																				</div>
 																			</div>
 																		</div>
@@ -1246,18 +1246,18 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharBRVarFixedAmt">
+																					class="form-control" name="nr-RTOCharBRVarFixedAmt" value="${RTOCharBRVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharBRPercentSP">
+																					class="form-control" name="nr-RTOCharBRPercentSP" value="${RTOCharBRPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharBRPercentPCC">
+																					class="form-control" name="nr-RTOCharBRPercentPCC" value="${RTOCharBRPercentPCC}">
 																			</div>
 																		</div>
 																		<div class="col-md-12">
@@ -1333,7 +1333,7 @@ span .#error {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text" class="form-control"
-																						name="nr-repCharSFFixedAmt">
+																						name="nr-repCharSFFixedAmt" value="${repCharSFFixedAmt}"  >
 																				</div>
 																			</div>
 																		</div>
@@ -1352,18 +1352,18 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharSFVarFixedAmt">
+																					class="form-control" name="nr-repCharSFVarFixedAmt" value="${repCharSFFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharSFPercentSP">
+																					class="form-control" name="nr-repCharSFPercentSP" value="${repCharSFPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharSFPercentPCC">
+																					class="form-control" name="nr-repCharSFPercentPCC" value="${repCharSFPercentPCC}">
 																			</div>
 																		</div>
 																		<div class="col-md-12">
@@ -1438,7 +1438,7 @@ span .#error {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text" class="form-control"
-																						name="nr-repCharBRFixedAmt">
+																						name="nr-repCharBRFixedAmt" value="${repCharBRFixedAmt}">
 																				</div>
 																			</div>
 																		</div>
@@ -1449,18 +1449,18 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharBRVarFixedAmt">
+																					class="form-control" name="nr-repCharBRVarFixedAmt" value="${repCharBRFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharBRPercentSP">
+																					class="form-control" name="nr-repCharBRPercentSP" value="${repCharBRPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharBRPercentPCC">
+																					class="form-control" name="nr-repCharBRPercentPCC" value="${repCharBRPercentPCC}">
 																			</div>
 																		</div>
 																		<div class="col-md-12">
@@ -1536,7 +1536,7 @@ span .#error {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text" class="form-control"
-																						name="nr-PDCharSFFixedAmt">
+																						name="nr-PDCharSFFixedAmt" value="${PDCharSFFixedAmt}">
 																				</div>
 																			</div>
 																		</div>
@@ -1555,18 +1555,18 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-PDCharSFVarFixedAmt">
+																					class="form-control" name="nr-PDCharSFVarFixedAmt" value="${PDCharSFVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-PDCharSFPercentSP">
+																					class="form-control" name="nr-PDCharSFPercentSP" value="${PDCharSFPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-PDCharSFPercentPCC">
+																					class="form-control" name="nr-PDCharSFPercentPCC" value="${PDCharSFPercentPCC}">
 																			</div>
 																		</div>
 																		<div class="col-md-12">
@@ -1641,7 +1641,7 @@ span .#error {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text" class="form-control"
-																						name="nr-PDCharBRFixedAmt">
+																						name="nr-PDCharBRFixedAmt" value="${PDCharBRFixedAmt}">
 																				</div>
 																			</div>
 																		</div>
@@ -1652,18 +1652,18 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-PDCharBRVarFixedAmt">
+																					class="form-control" name="nr-PDCharBRVarFixedAmt" value="${PDCharBRVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-PDCharBRPercentSP">
+																					class="form-control" name="nr-PDCharBRPercentSP" value="${PDCharBRPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-PDCharBRPercentPCC">
+																					class="form-control" name="nr-PDCharBRPercentPCC" value="${PDCharBRPercentPCC}">
 																			</div>
 																		</div>
 																		<div class="col-md-12">
@@ -1746,7 +1746,7 @@ span .#error {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text" class="form-control"
-																						name="nr-canCharSFBFRTDFixedAmt">
+																						name="nr-canCharSFBFRTDFixedAmt" value="${canCharSFBFRTDFixedAmt}">
 																				</div>
 																			</div>
 																		</div>
@@ -1767,20 +1767,20 @@ span .#error {
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control"
-																					name="nr-canCharSFBFRTDVarFixedAmt">
+																					name="nr-canCharSFBFRTDVarFixedAmt" value="${canCharSFBFRTDVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control"
-																					name="nr-canCharSFBFRTDPercentSP">
+																					name="nr-canCharSFBFRTDPercentSP" value="${canCharSFBFRTDPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control"
-																					name="nr-canCharSFBFRTDPercentPCC">
+																					name="nr-canCharSFBFRTDPercentPCC" value="${canCharSFBFRTDPercentPCC}">
 																			</div>
 																		</div>
 																		<div class="col-md-12">
@@ -1858,7 +1858,7 @@ span .#error {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text" class="form-control"
-																						name="nr-canCharSFFixedAmt">
+																						name="nr-canCharSFFixedAmt" value="${canCharSFFixedAmt}">
 																				</div>
 																			</div>
 																		</div>
@@ -1878,18 +1878,18 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-canCharSFVarFixedAmt">
+																					class="form-control" name="nr-canCharSFVarFixedAmt" value="${canCharSFVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-canCharSFPercentSP">
+																					class="form-control" name="nr-canCharSFPercentSP" value="${canCharSFPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-canCharSFPercentPCC">
+																					class="form-control" name="nr-canCharSFPercentPCC" value="${canCharSFPercentPCC}">
 																			</div>
 																		</div>
 																		<div class="col-md-12">
@@ -1964,7 +1964,7 @@ span .#error {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text" class="form-control"
-																						name="nr-canCharBRFixedAmt">
+																						name="nr-canCharBRFixedAmt" value="${canCharSFPercentPCC}">
 																				</div>
 																			</div>
 																		</div>
@@ -1975,18 +1975,18 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-canCharBRVarFixedAmt">
+																					class="form-control" name="nr-canCharBRVarFixedAmt" value="${canCharBRVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-canCharBRPercentSP">
+																					class="form-control" name="nr-canCharBRPercentSP" value="${canCharBRPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-canCharBRPercentPCC">
+																					class="form-control" name="nr-canCharBRPercentPCC" value="${canCharBRPercentPCC}">
 																			</div>
 																		</div>
 																		<div class="col-md-12">
@@ -2041,7 +2041,7 @@ span .#error {
 																	<div class="col-sm-6">
 																		<div class="input-group m-b">
 																			<input type="text" placeholder=""
-																				class="form-control" name="nr-revShipFeePCC">
+																				class="form-control" name="nr-revShipFeePCC" value="${revShipFeePCC}"> 
 																			<span class="input-group-addon">%</span>
 																		</div>
 																	</div>
@@ -2075,7 +2075,7 @@ span .#error {
 																		<div class="col-sm-6">
 																			<div class="input-group m-b">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeeFlatAmt">
+																					class="form-control" name="nr-revShipFeeFlatAmt" value="${revShipFeeFlatAmt}">
 																			</div>
 																		</div>
 																	</div>
@@ -2090,7 +2090,7 @@ span .#error {
 																		<div class="col-sm-6">
 																			<div class="input-group m-b">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeePCCMF">
+																					class="form-control" name="nr-revShipFeePCCMF" value="${revShipFeePCCMF}">
 																				<span class="input-group-addon">%</span>
 																			</div>
 																		</div>
@@ -2111,7 +2111,7 @@ span .#error {
 																	<div class="col-sm-6">
 																		<div class="input-group m-b" style="width: 96%;">
 																			<input type="text" placeholder=""
-																				class="form-control" name="nr-revShipFeeFF">
+																				class="form-control" name="nr-revShipFeeFF" value="${revShipFeeFF}">
 																		</div>
 																	</div>
 																</div>
@@ -2167,7 +2167,7 @@ span .#error {
 																			</div>
 																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeeDWAmt">
+																					class="form-control" name="nr-revShipFeeDWAmt" value="${revShipFeeDWAmt}">
 																			</div>
 																			<div class="col-md-2">
 																				<label> </label>
@@ -2177,7 +2177,7 @@ span .#error {
 																			</div>
 																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeeVWAmt">
+																					class="form-control" name="nr-revShipFeeVWAmt" value="${revShipFeeVWAmt}">
 																			</div>
 																			<div class="col-md-2">
 																				<label> </label>
@@ -2191,7 +2191,7 @@ span .#error {
 																			</div>
 																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeeDWPW">
+																					class="form-control" name="nr-revShipFeeDWPW" value="${revShipFeeDWPW}">
 																			</div>
 																			<div class="col-md-2">
 																				<label> </label>
@@ -2201,7 +2201,7 @@ span .#error {
 																			</div>
 																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeeVWPW">
+																					class="form-control" name="nr-revShipFeeVWPW" value="${revShipFeeVWPW}">
 																			</div>
 																			<div class="col-md-2">
 																				<label> </label>
@@ -2215,7 +2215,7 @@ span .#error {
 																			</div>
 																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeeDWMW">
+																					class="form-control" name="nr-revShipFeeDWMW" value="${revShipFeeDWMW}">
 																			</div>
 																			<div class="col-md-2">
 																				<label> </label>
@@ -2225,7 +2225,7 @@ span .#error {
 																			</div>
 																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeeVWMW">
+																					class="form-control" name="nr-revShipFeeVWMW" value="${revShipFeeVWMW}">
 																			</div>
 																			<div class="col-md-2">
 																				<label> </label>
