@@ -22,6 +22,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.DebitNoteBean;
 import com.o2r.bean.PoPaymentBean;
 import com.o2r.helper.CustomException;
@@ -2332,5 +2333,106 @@ public class OrderDaoImpl implements OrderDao {
 		}
 		return totalcharge;
 	}
+	
+	@Override
+	public List<ChannelSalesDetails> findChannelOrdersbyDate(String string,
+			Date startDate, Date endDate, int sellerIdfromSession) {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		 Criteria criteria1=session.createCriteria(Order.class);
+		 criteria1.createAlias("seller", "seller", CriteriaSpecification.LEFT_JOIN);
+		 criteria1.createAlias("customer", "customer", CriteriaSpecification.LEFT_JOIN);
+		 criteria1.createAlias("orderPayment", "orderPayment", CriteriaSpecification.LEFT_JOIN);
+		 criteria1.createAlias("orderTax", "orderTax", CriteriaSpecification.LEFT_JOIN);
+		 criteria1.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.LEFT_JOIN);
+		 criteria1.createAlias("orderTimeline", "orderTimeline", CriteriaSpecification.LEFT_JOIN)
+		 .add(Restrictions.eq("seller.id", sellerIdfromSession));
+		 criteria1.add(Restrictions.between("orderDate",startDate, endDate));
+		 criteria1.setProjection(getPL("pcName"));
+		 
+		 List pcNameList=criteria1.list();
+			Iterator pcNameItr=pcNameList.iterator();
+			List<ChannelSalesDetails> ttso=new ArrayList<ChannelSalesDetails>();
+			ChannelSalesDetails temp;
+			while(pcNameItr.hasNext()){
+				 Object[] recordsRow = (Object[])pcNameItr.next();
+				 temp=new ChannelSalesDetails();
+				 populateChannelSalesDetails(temp,recordsRow,startDate,endDate);
+				 System.out.println("PC NAME "+ temp.getPcName()+"  "+temp.getStartDate()+" "+temp.getOrderId()+"  "+temp.getInvoiceID());
+				 ttso.add(temp);
+			} 
+			System.out.println("THIS IS THE TOTAL LIST OF ORDERS "+ttso.size());
+		return ttso;
+	}
+	
+	public static void populateChannelSalesDetails(ChannelSalesDetails temp,Object[] recordsRow,Date startDate,Date endDate){
+		
+		 temp.setPcName(recordsRow[0].toString());
+		 temp.setTaxCategtory(recordsRow[0].toString());
+		 temp.setQuantity(Integer.parseInt(recordsRow[1].toString()));
+		 temp.setDiscount(Double.parseDouble(recordsRow[2].toString()));
+		 temp.setOrderMRP(Double.parseDouble(recordsRow[3].toString()));
+		 temp.setOrderSP(Double.parseDouble(recordsRow[4].toString()));
+		 temp.setShippingCharges(Double.parseDouble(recordsRow[5].toString()));
+		 temp.setNetSaleQuantity(Integer.parseInt(recordsRow[6].toString()));
+		 temp.setNetRate(Double.parseDouble(recordsRow[7].toString()));
+		 temp.setGrossNetRate(Double.parseDouble(recordsRow[8].toString()));
+		 temp.setPartnerCommission(Double.parseDouble(recordsRow[9].toString()));
+		 temp.setPr(Double.parseDouble(recordsRow[10].toString()));
+		 temp.setTotalAmountRecieved(Double.parseDouble(recordsRow[11].toString()));
+		 temp.setPoPrice(Double.parseDouble(recordsRow[12].toString()));
+		 temp.setGrossProfit(Double.parseDouble(recordsRow[13].toString()));
+		 temp.setServiceTax(Float.parseFloat(recordsRow[14].toString()));
+		 temp.setFixedfee(Double.parseDouble(recordsRow[15].toString()));
+		 temp.setPccAmount(Double.parseDouble(recordsRow[16].toString()));
+		 temp.setNegativeAmount(Double.parseDouble(recordsRow[17].toString()));
+		 temp.setPositiveAmount(Double.parseDouble(recordsRow[18].toString()));
+		 temp.setActualrecived2(Double.parseDouble(recordsRow[19].toString()));
+		 temp.setNetPaymentResult(Double.parseDouble(recordsRow[20].toString()));
+		 temp.setPaymentDifference(Double.parseDouble(recordsRow[21].toString()));
+		 temp.setReturnOrRTOCharges(Double.parseDouble(recordsRow[22].toString()));
+		 temp.setReturnorrtoQty(Integer.parseInt(recordsRow[23].toString()));
+		 temp.setStartDate(startDate.getDate()+"|"+startDate.getMonth()+"|"+startDate.getYear());
+		 temp.setEndDate(endDate.getDate()+"|"+endDate.getMonth()+"|"+endDate.getYear());
+		 temp.setReturnOrRTOChargestoBeDeducted(Double.parseDouble(recordsRow[24].toString()));
+		 temp.setOrderId(Integer.parseInt(recordsRow[25].toString()));
+		 temp.setInvoiceID(recordsRow[26].toString());;
+		 temp.setProductSkuCode(recordsRow[27].toString());
+		 temp.setTaxCategtory(recordsRow[28].toString());
+	}
+	public static ProjectionList getPL(String name){
+		 ProjectionList projList = Projections.projectionList();
+ 	 
+		 projList.add(Projections.property("pcName"));
+		 projList.add(Projections.property("quantity"));
+		 projList.add(Projections.property("discount"));
+		 projList.add(Projections.property("orderMRP"));
+		 projList.add(Projections.property("orderSP"));
+		 projList.add(Projections.property("shippingCharges"));
+		 projList.add(Projections.property("netSaleQuantity"));
+		 projList.add(Projections.property("netRate"));
+		 projList.add(Projections.property("grossNetRate"));
+		 projList.add(Projections.property("partnerCommission"));
+		 projList.add(Projections.property("pr"));
+		 projList.add(Projections.property("totalAmountRecieved"));
+		 projList.add(Projections.property("poPrice"));
+		 projList.add(Projections.property("grossProfit"));
+		 projList.add(Projections.property("serviceTax"));
+		 projList.add(Projections.property("fixedfee"));
+		 projList.add(Projections.property("pccAmount"));		 
+		 projList.add(Projections.property("orderPayment.negativeAmount"));
+		 projList.add(Projections.property("orderPayment.positiveAmount"));
+		 projList.add(Projections.property("orderPayment.actualrecived2"));
+		 projList.add(Projections.property("orderPayment.netPaymentResult"));
+		 projList.add(Projections.property("orderPayment.paymentDifference"));			 
+		 projList.add(Projections.property("orderReturnOrRTO.returnOrRTOCharges"));
+		 projList.add(Projections.property("orderReturnOrRTO.returnorrtoQty"));
+		 projList.add(Projections.property("orderReturnOrRTO.returnOrRTOChargestoBeDeducted"));
+		 projList.add(Projections.property("orderId"));
+		 projList.add(Projections.property("invoiceID"));
+		 projList.add(Projections.property("productSkuCode"));
+		 projList.add(Projections.property("orderTax.taxCategtory"));
 
+		 return projList;
+	}
 }

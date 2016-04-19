@@ -401,46 +401,6 @@ public class ExpenseDaoImpl implements ExpenseDao {
 	}
 
 	@Override
-	public List<Expenses> getExpenseByCategory(String expCatName, int sellerId)throws CustomException {
-		
-		log.info("*** getExpenseByCategory start ***");
-		List returnlist = null;
-		List<Expenses> expenselist = null;
-		/*System.out.println(" ***Insid get pexpCatName ***" + expCatName);*/
-
-		try {
-			Session session = sessionFactory.openSession();
-			session.beginTransaction();
-			Criteria criteria = session
-					.createCriteria(Expenses.class)
-					.add(Restrictions.eq("sellerId", sellerId))
-					.add(Restrictions.eq("expenseCatName", expCatName)
-							.ignoreCase())
-					.addOrder(org.hibernate.criterion.Order.desc("expenseDate"))
-					.setResultTransformer(
-							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-
-			returnlist = criteria.list();
-			if (returnlist == null || returnlist.get(0) == null) {
-				System.out.println(" Return no results");
-			} else {
-				expenselist = returnlist;
-			}
-
-			System.out.println(" Return object :#### " + returnlist);
-			session.getTransaction().commit();
-			session.close();
-		} catch (Exception e) {
-			log.error(e);
-			throw new CustomException(GlobalConstant.getExpenseByCategoryError, new Date(), 3,GlobalConstant.getExpenseByCategoryErrorCode, e);
-			/*System.out.println(" Product   DAO IMPL :"+e.getLocalizedMessage());
-			e.printStackTrace();*/
-		}
-		log.info("*** geetExpenseByCategory exit***");
-		return expenselist;
-	}
-
-	@Override
 	public List<Expenses> getExpenseByDate(Date startDate, Date endDate,
 			int sellerId)throws CustomException {
 		log.info("*** getExpenseByDate start ***");
@@ -468,6 +428,91 @@ public class ExpenseDaoImpl implements ExpenseDao {
 		}
 		log.info("*** getExpenseByDate exit ***");
 		return expenselist;
+	}
+	@Override
+	public List<Expenses> getExpenseByCategory(String expCatName, int sellerId)throws CustomException {
+		
+		log.info("*** getExpenseByCategory start ***");
+		List returnlist = null;
+		List<Expenses> expenselist = null;
+		/*System.out.println(" ***Insid get pexpCatName ***" + expCatName);*/
+
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session
+					.createCriteria(Expenses.class)
+					.add(Restrictions.eq("sellerId", sellerId))
+					.add(Restrictions.eq("expenseName", expCatName)
+							.ignoreCase())
+					.addOrder(org.hibernate.criterion.Order.desc("expenseDate"))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+
+			returnlist = criteria.list();
+			if (returnlist == null || returnlist.get(0) == null) {
+				System.out.println(" Return no results");
+			} else {
+				expenselist = returnlist;
+			}
+
+			System.out.println(" Return object :#### " + returnlist);
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			log.error(e);
+			throw new CustomException(GlobalConstant.getExpenseByCategoryError, new Date(), 3,GlobalConstant.getExpenseByCategoryErrorCode, e);
+			/*System.out.println(" Product   DAO IMPL :"+e.getLocalizedMessage());
+			e.printStackTrace();*/
+		}
+		log.info("*** geetExpenseByCategory exit***");
+		return expenselist;
+	}
+
+	@Override
+	public List<Expenses> getExpenseByName(String expname,int sellerId) throws CustomException {
+		
+		log.info("*** getExpenseByCategory start ***");
+		List returnlist = null;
+		List<Expenses> expenselist = null;
+		/*System.out.println(" ***Insid get pexpCatName ***" + expCatName);*/
+
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session
+					.createCriteria(Expenses.class)
+					.add(Restrictions.eq("sellerId", sellerId))
+					.add(Restrictions.like("expenseName", expname).ignoreCase())
+					.addOrder(org.hibernate.criterion.Order.desc("expenseDate"))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+
+			returnlist = criteria.list();
+			if (returnlist == null || returnlist.size()==0 ||returnlist.get(0) == null) {
+				System.out.println(" Return no results");
+			} else {
+				expenselist = returnlist;
+			}
+
+			System.out.println(" Return object :#### " + returnlist);
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			log.error(e);
+			throw new CustomException(GlobalConstant.getExpenseByCategoryError, new Date(), 3,GlobalConstant.getExpenseByCategoryErrorCode, e);
+			/*System.out.println(" Product   DAO IMPL :"+e.getLocalizedMessage());
+			e.printStackTrace();*/
+		}
+		log.info("*** geetExpenseByCategory exit***");
+		return expenselist;
+
+	}
+
+	@Override
+	public ExpenseCategory getExpenseByName(String expname) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

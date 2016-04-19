@@ -1,0 +1,30 @@
+DELIMITER //
+CREATE PROCEDURE product_list
+()
+BEGIN
+DECLARE aProductId long;
+DECLARE bQuantity long;
+DECLARE cProductPrice double;
+DECLARE dProductDate DATETIME;
+DECLARE today DATETIME;
+DECLARE stockIdVar long;
+DECLARE cur1 CURSOR FOR SELECT productId,quantity,productPrice,productDate FROM order2revenue_schema.product;
+SELECT MAX(closingStocks_stockId) into stockIdVar from product_productstocklist;
+
+OPEN cur1;
+
+  read_loop: LOOP
+  
+    FETCH cur1 INTO aProductId, bQuantity,cProductPrice,dProductDate;
+    SET stockIdVar=stockIdVar+20;
+    
+    insert into product_productstocklist values (aProductId,stockIdVar);
+    insert into productstocklist values(stockIdVar,today,month(today),cProductPrice,bQuantity,dProductDate,YEAR(today));
+                                        /* stockId  CRDate MONTH  PRICE STOCKAVAILABLE UDDate   YEAR */
+    
+   END LOOP;
+   commit;
+END //
+DELIMITER ;
+
+10:26:01	truncate order2revenue_schema.productstocklist	Error Code: 1701. Cannot truncate a table referenced in a foreign key constraint (`order2revenue_schema`.`product_productstocklist`, CONSTRAINT `FK99DDAA35A12EE39A` FOREIGN KEY (`closingStocks_stockId`) REFERENCES `order2revenue_schema`.`productstocklist` (`stockId`))	0.000 sec

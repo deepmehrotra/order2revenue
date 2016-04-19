@@ -67,7 +67,7 @@ public class DownloadService {
 		response.setContentType("application/vnd.ms-excel");
 		
 		//7. Write to the output stream
-		Writer.write(response, worksheet);
+		Writer.write(response, worksheet,fileName);
 	}
 	
 	
@@ -80,7 +80,7 @@ public class DownloadService {
 		String fileName = "ProductReport.xls";
 		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
 		response.setContentType("application/vnd.ms-excel");
-		Writer.write(response, worksheet);
+		Writer.write(response, worksheet,fileName);
 	}
 	
 	public void downloadOrderPOXLS(HttpServletResponse response) throws ClassNotFoundException {
@@ -92,7 +92,7 @@ public class DownloadService {
 		String fileName = "OrderPOSheet.xls";
 		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
 		response.setContentType("application/vnd.ms-excel");
-		Writer.write(response, worksheet);
+		Writer.write(response, worksheet,fileName);
 	}
 	
 	public void downloadPaymentXLS(HttpServletResponse response) throws ClassNotFoundException {
@@ -106,7 +106,7 @@ public class DownloadService {
 		String fileName = "PaymentReport.xls";
 		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
 		response.setContentType("application/vnd.ms-excel");
-		Writer.write(response, worksheet);
+		Writer.write(response, worksheet,fileName);
 	}
 	
 public void downloadInventoryXLS(HttpServletResponse response) throws ClassNotFoundException {
@@ -119,7 +119,7 @@ public void downloadInventoryXLS(HttpServletResponse response) throws ClassNotFo
 		String fileName = "InventoryReport.xls";
 		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
 		response.setContentType("application/vnd.ms-excel");
-		Writer.write(response, worksheet);
+		Writer.write(response, worksheet,fileName);
 	}
 
 public void downloadReturnXLS(HttpServletResponse response) throws ClassNotFoundException {
@@ -131,7 +131,7 @@ public void downloadReturnXLS(HttpServletResponse response) throws ClassNotFound
 	String fileName = "ReturnReport.xls";
 	response.setHeader("Content-Disposition", "inline; filename=" + fileName);
 	response.setContentType("application/vnd.ms-excel");
-	Writer.write(response, worksheet);
+	Writer.write(response, worksheet,fileName);
 }
 
 public void downloadDebitNoteXLS(HttpServletResponse response) throws ClassNotFoundException {
@@ -143,7 +143,7 @@ public void downloadDebitNoteXLS(HttpServletResponse response) throws ClassNotFo
 	String fileName = "DebitNoteSheet.xls";
 	response.setHeader("Content-Disposition", "inline; filename=" + fileName);
 	response.setContentType("application/vnd.ms-excel");
-	Writer.write(response, worksheet);
+	Writer.write(response, worksheet,fileName);
 }
 
 public void downloadPOPaymentXLS(HttpServletResponse response) throws ClassNotFoundException {
@@ -155,7 +155,7 @@ public void downloadPOPaymentXLS(HttpServletResponse response) throws ClassNotFo
 	String fileName = "POPaymentSheet.xls";
 	response.setHeader("Content-Disposition", "inline; filename=" + fileName);
 	response.setContentType("application/vnd.ms-excel");
-	Writer.write(response, worksheet);
+	Writer.write(response, worksheet,fileName);
 }
 
 public void downloadExpensesXLS(HttpServletResponse response) throws ClassNotFoundException {
@@ -167,7 +167,7 @@ public void downloadExpensesXLS(HttpServletResponse response) throws ClassNotFou
 	String fileName = "ExpenseSheet.xls";
 	response.setHeader("Content-Disposition", "inline; filename=" + fileName);
 	response.setContentType("application/vnd.ms-excel");
-	Writer.write(response, worksheet);
+	Writer.write(response, worksheet,fileName);
 }
 
 }

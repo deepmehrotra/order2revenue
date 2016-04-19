@@ -6,12 +6,12 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 
+import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.model.Order;
-
-
-
 
 public class FillManager {
 
@@ -32,8 +32,7 @@ public class FillManager {
 		HSSFCellStyle bodyCellStyle = worksheet.getWorkbook().createCellStyle();
 		bodyCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
 		bodyCellStyle.setWrapText(true);
-		
-		
+				
 		System.out.println(" Insidee fill manage : datasource size : "+datasource.size());
 		System.out.println(" Start ro index : "+startRowIndex);
 		System.out.println(" header length  : "+headers.length);
@@ -47,7 +46,6 @@ public class FillManager {
 		
 			for(int j=0;j<headers.length;j++)
 			{
-			
 				if(headers[j].equals("SelectAll"))
 					startColIndex--;
 			
@@ -121,11 +119,123 @@ public class FillManager {
 					HSSFCell cell = row.createCell(startColIndex+j);
 					cell.setCellValue(datasource.get(i-2).getOrderPayment().getPaymentDifference());
 					cell.setCellStyle(bodyCellStyle);
-				}
-				
-				
-			}
-		
+				}				
+			}	
 		}
 	}
-}
+
+	public static void fillCOReport(HSSFSheet worksheet, int startRowIndex, int startColIndex, List<ChannelSalesDetails> datasource , String[] headers) {
+		// Row offset
+		startRowIndex =2;
+		int startCol=0;
+		
+		// Create cell style for the body
+		HSSFCellStyle bodyCellStyle = worksheet.getWorkbook().createCellStyle();
+		bodyCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		bodyCellStyle.setWrapText(true);
+		// Create body
+
+		for (int j=0; j< datasource.size(); j++) {
+			Font font = worksheet.getWorkbook().createFont();
+	        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+	        startColIndex=0;
+	        // Create cell style for the headers
+			HSSFCellStyle headerCellStyle = worksheet.getWorkbook().createCellStyle();
+			headerCellStyle.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);
+			headerCellStyle.setFillPattern(CellStyle.FINE_DOTS);
+			headerCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+			headerCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+			headerCellStyle.setWrapText(true);
+			headerCellStyle.setFont(font);
+			headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
+			
+			// Create the column headers
+			HSSFRow rowHeader = worksheet.createRow(j+4);
+			//rowHeader.setHeight((short) 500);
+			int i=0;
+			
+			HSSFCell cell = rowHeader.createCell(i++);
+			cell.setCellValue(datasource.get(j).getStartDate());
+
+					 cell = rowHeader.createCell(i++);
+			cell.setCellValue(datasource.get(j).getEndDate());
+
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getOrderId());
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getInvoiceID());
+/*			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue("TBD");
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue("TBD");
+*/			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getProductSkuCode());
+			
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getNetRate());
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getOrderSP());
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getQuantity());
+			
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getNetRate());
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getReturnOrRTOCharges());
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getReturnorrtoQty());
+
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getReturnorrtoQty()*100/datasource.get(j).getQuantity());
+			
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getNetRate());
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getOrderSP()-datasource.get(j).getReturnOrRTOCharges());
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getQuantity()-datasource.get(j).getReturnorrtoQty());
+
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getTaxCategtory());
+
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue((datasource.get(j).getOrderSP()-datasource.get(j).getReturnOrRTOCharges())-((datasource.get(j).getOrderSP()-datasource.get(j).getReturnOrRTOCharges())*100/105));			
+
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(" N/R ");
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(" SP ");
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(" Qty ");
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue("  ");
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue("  ");
+	
+			
+		}
+	}		
+	}
+
+
+
+
+

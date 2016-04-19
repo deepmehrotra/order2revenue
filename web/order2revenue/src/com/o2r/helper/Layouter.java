@@ -1,5 +1,6 @@
 package com.o2r.helper;
 
+import java.awt.Color;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -11,12 +12,14 @@ import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 /**
  * Builds the report layout, the template, the design, the pattern
  *
  * @author Deep Mehrotra
  */
+
 public class Layouter {
 
 	private static Logger logger = Logger.getLogger("service");
@@ -26,6 +29,7 @@ public class Layouter {
 	 * <p>
 	 * This doesn't have any data yet. This is your template.
 	 */
+
 	public static void buildReport(HSSFSheet worksheet, int startRowIndex, int startColIndex , String sheetName) {
 		// Set column widths
 		worksheet.setColumnWidth(0, 5000);
@@ -183,7 +187,9 @@ public class Layouter {
 		headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
 
 		// Create the column headers
-		HSSFRow rowHeader = worksheet.createRow((short) startRowIndex +2);
+		HSSFRow rowHeaderq = worksheet.createRow((short) startRowIndex +2);
+		rowHeaderq.setHeight((short) 500);
+		HSSFRow rowHeader = worksheet.createRow((short) startRowIndex +3);
 		rowHeader.setHeight((short) 500);
 
 		HSSFCell cell1 = rowHeader.createCell(startColIndex+0);
@@ -764,5 +770,259 @@ public class Layouter {
 		cell7.setCellStyle(headerCellStyle);
 
 		}
+
+
+	public static void buildChannelOrderReport(HSSFSheet worksheet,
+			int startRowIndex, int startColIndex, String reportName,
+			String[] reportheaders) {
+		 
+//		worksheet.setColumnWidth(0, 5000);
+//		worksheet.setColumnWidth(1, 5000);
+//		worksheet.setColumnWidth(2, 5000);
+//		worksheet.setColumnWidth(3, 5000);
+//		worksheet.setColumnWidth(4, 5000);
+//		worksheet.setColumnWidth(5, 5000);
+
+		// Build the title and date headers
+		buildTitleCO(worksheet, startRowIndex, startColIndex,reportName);
+		// Build the column headers
+		buildReportHeadersCO(worksheet,reportheaders,startRowIndex, startColIndex);
+		// TODO Auto-generated method stub	
+	}
+	private static void buildReportHeadersCO(HSSFSheet worksheet,
+			String[] headers, int startRowIndex, int startColIndex) {
+		Font font = worksheet.getWorkbook().createFont();
+	//	worksheet.addMergedRegion(new CellRangeAddress(2,2,6,8));
+	//	worksheet.addMergedRegion(new CellRangeAddress(2,2,9,11));
+	//	worksheet.addMergedRegion(new CellRangeAddress(2,2,13,15));
+	//	worksheet.addMergedRegion(new CellRangeAddress(2,2,18,20));
+		
+        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        startColIndex=0;        // Create cell style for the headers
+        font.setColor((short)125);
+		HSSFCellStyle headerCellStyle = worksheet.getWorkbook().createCellStyle();
+		headerCellStyle.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);
+		//headerCellStyle.setFillPattern(CellStyle.FINE_DOTS);
+		headerCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		headerCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		headerCellStyle.setWrapText(true);
+		headerCellStyle.setFont(font);
+		headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
+		
+	    	CellStyle style = worksheet.getWorkbook().createCellStyle();
+	//    	style.setFillBackgroundColor(IndexedColors.BLUE.getIndex());
+	    	//style.setFillPattern(CellStyle.);
+	    	Font font1 = worksheet.getWorkbook().createFont();
+            font1.setColor(HSSFColor.LIGHT_BLUE.index);
+            font1.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            style.setFont(font1);
+		
+		// Create the column headers
+		HSSFRow rowHeadera = worksheet.createRow(2);
+		rowHeadera.setHeight((short) 250);
+		
+		
+		
+		int j=0;
+		HSSFCell cellz=null;
+//(int j=0;j<21;j++){
+	//	}
+		
+		worksheet.addMergedRegion(new CellRangeAddress(2,2,0,1));
+		worksheet.addMergedRegion(new CellRangeAddress(2,2,5,7));
+		worksheet.addMergedRegion(new CellRangeAddress(2,2,8,10));
+		worksheet.addMergedRegion(new CellRangeAddress(2,2,12,14));
+		worksheet.addMergedRegion(new CellRangeAddress(2,2,17,19));
+		HSSFRow rowHeader = worksheet.createRow(3);
+		rowHeader.setHeight((short) 500);
+		int i=0;
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("Selected Period");
+		cellz.setCellStyle(style);
+		HSSFCell cell = rowHeader.createCell(i++);
+		cell.setCellValue("Start Date");
+		cell.setCellStyle(headerCellStyle);
+		
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");		
+		cell = rowHeader.createCell(i++);
+		cell.setCellValue("End Date");
+		cell.setCellStyle(headerCellStyle);
+		
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");		
+		 cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("OrderId");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");	
+		 cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("InvoiceId");
+		cell.setCellStyle(headerCellStyle);
+/*		
+		 cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("Product Category");
+		cell.setCellStyle(headerCellStyle);
+		
+		 cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("Inventory Group");
+		cell.setCellStyle(headerCellStyle);
+	*/	
+		
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		 cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("SKU");
+		cell.setCellStyle(headerCellStyle);
+		
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("Gross Sale");
+		cellz.setCellStyle(style);
+		cellz.getCellStyle().setFillBackgroundColor(HSSFColor.LIGHT_BLUE.index);
+		 cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("N/R Amount");
+		cell.setCellStyle(headerCellStyle);
+		
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		 cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("SP Amount");
+		cell.setCellStyle(headerCellStyle);
+		
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		 cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("Quantity");
+		cell.setCellStyle(headerCellStyle);
+		
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("Sale Return");
+		cellz.setCellStyle(style);
+		cellz.getCellStyle().setFillBackgroundColor(HSSFColor.LIGHT_GREEN.index);
+		 cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("N/R Amount");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		 cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("SP Amount");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		 cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("Quantity");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		 cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("Sale Rtn Vs Gross Sale %");
+		cell.setCellStyle(headerCellStyle);
+		
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("Net Sale");
+		cellz.setCellStyle(style);
+		cellz.getCellStyle().setFillBackgroundColor(HSSFColor.LIGHT_BLUE.index);
+		 cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("N/R Amount");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		 cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("SP Amount");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("Quantity");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("Tax Category");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("Net Tax Liability On SP");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("Net Pure Sale");
+		cellz.setCellStyle(style);
+		cellz.getCellStyle().setFillBackgroundColor(HSSFColor.LIGHT_BLUE.index);
+		cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("N/R Amount");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("SP Amount");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("Quantity");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("Net A/R");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		cell = rowHeader.createCell(startColIndex+ i++);
+		cell.setCellValue("Net Due TBR");
+		cell.setCellStyle(headerCellStyle);
+	
+		
+	}
+
+	private static void buildTitleCO(HSSFSheet worksheet, int startRowIndex,
+			int startColIndex, String reportName) {
+			buildTitle(worksheet,startRowIndex,startColIndex, reportName);
+	}
 
 }

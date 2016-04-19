@@ -3,6 +3,7 @@ package com.o2r.service;
 import java.util.Date;
 import java.util.List;
 
+import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.DebitNoteBean;
 import com.o2r.bean.PoPaymentBean;
 import com.o2r.helper.CustomException;
@@ -49,6 +50,8 @@ public interface OrderService {
  public void addPOPayment(PoPaymentBean popaBean,int sellerId)throws CustomException;
 
  public List<Order> listOrders(int sellerId, int pageNo)throws CustomException;
+
+public List<ChannelSalesDetails> findChannelOrdersbyDate(String string,Date startDate, Date endDate, int sellerIdfromSession);
 
 
 }

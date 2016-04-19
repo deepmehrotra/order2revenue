@@ -19,16 +19,17 @@ public class Writer {
 	/**
 	 * Writes the report to the output stream
 	 */
-	public static void write(HttpServletResponse response, HSSFSheet worksheet) {
-		
+	public static void write(HttpServletResponse response, HSSFSheet worksheet,String reportName) {
+ 		
 		logger.debug("Writing report to the stream");
 		try {
-			// Retrieve the output stream
-			ServletOutputStream outputStream = response.getOutputStream();
-			// Write to the output stream
-			worksheet.getWorkbook().write(outputStream);
-			// Flush the stream
-			outputStream.flush();
+				if(!reportName.endsWith(".xls"))
+					reportName = reportName+".xls";
+		        response.setContentType("application/vnd.openxml");
+		        response.setHeader("Content-disposition", "attachment; filename=\"" + reportName + "\"" );
+		        ServletOutputStream out = response.getOutputStream();
+		        worksheet.getWorkbook().write(out);		//response.setContentType("application/msexcel");
+			    response.flushBuffer();
 
 		} catch (Exception e) {
 			logger.error("Unable to write report to the output stream");

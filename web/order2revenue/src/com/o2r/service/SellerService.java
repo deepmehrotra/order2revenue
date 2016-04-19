@@ -1,6 +1,7 @@
 package com.o2r.service;
 
 import java.util.List;
+import java.util.Properties;
 
 import com.o2r.helper.CustomException;
 import com.o2r.model.Seller;
@@ -13,7 +14,7 @@ import com.o2r.model.State;
 //GIT Test
 public interface SellerService {
  
- public void addSeller(Seller seller)throws CustomException;
+ public void addSeller(Seller seller, Properties p)throws CustomException;
 
  public List<Seller> listSellers()throws CustomException;
  

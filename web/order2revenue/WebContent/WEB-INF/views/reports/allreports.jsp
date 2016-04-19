@@ -32,6 +32,8 @@
                                                 <select class="form-control" name="reportGroup" id="reportGroup" >
                                                     <option value="">Select Report Category</option>
                                                     <option value="OrderRelatedReport">Order Related Reports</option>
+                                                    <option value="ChannelRelatedReport">Channel Related Report</option>
+                                                    <option value="ProductRelatedReport">Product Related Report</option>
                                                     <option value="PartnerRelated">Partner Related Reports</option>
                                                     <option value="ExpenseReports">Expense Reports</option>
                                                     <option value="InventoryReports">Inventory Reports</option>
@@ -173,6 +175,14 @@ var OrderRelatedReport = [
                   {display: "Disputed Orders", value: "disputedOrders" }, 
                   {display: " Return/RTO limit crossed Orders", value: " returnRTOLimitCrossed" },
                   {display: "Settled Orders", value: "settledOrders" }];
+var ChannelRelatedReport = [
+                          {display: "Channel Wise Sales Order", value: "channelSaleReport" },
+                          {display: "Order Wise Sales Order", value: "orderWiseSaleReport" }];
+var ProductRelatedReport = [
+                          {display: "Product Shipped Orders", value: "productSaleReport" }, 
+                          {display: "Payment Difference Orders", value: "productSaleReport" }, 
+                          {display: " Return/RTO limit crossed Orders", value: " productSaleReport" },
+                          {display: "Settled Orders", value: "productSaleReport" }];
                   
 var PartnerRelated = [
                   {display: "Partner Commission Paid Report", value: "partnerCommissionReport" }, 
@@ -192,6 +202,8 @@ var GeneralReports = [
                  {display: "Best Selling Region Report", value: "bestSellingRegionReport" }];
 var RevenueReports = [
                  {display: "Net Sale Report", value: "netSaleReport" }, 
+                 {display: "Product Sale Report", value: "productSaleReport" },
+                 {display: "Channel Sale Report", value: "channelSaleReport" },
                  {display: "Net Debtors", value: "netDebtors" }, 
                  {display: "Gross Profitability Report", value: "grossProfitabilityReport" },
                  {display: "Net Profitability Report", value: "netProfitabilityReport" }, 
@@ -206,9 +218,15 @@ $("#reportGroup").change(function() {
         case 'OrderRelatedReport':
              list(OrderRelatedReport);
             break;
+        case 'ChannelRelatedReport':
+             list(ChannelRelatedReport);
+            break;   
+        case 'ProductRelatedReport':
+            list(ProductRelatedReport);
+           break;
         case 'PartnerRelated':
-             list(PartnerRelated);
-            break;              
+            list(PartnerRelated);
+           break;
         case 'ExpenseReports':
              list(ExpenseReports);
             break; 
@@ -220,6 +238,10 @@ $("#reportGroup").change(function() {
            break; 
         case 'RevenueReports':
             list(RevenueReports);
+        case 'ChannelRelatedReport':
+            list(ChannelRelatedReport);
+        case 'ProductRelatedReport':
+            list(ProductRelatedReport);
            break; 
         default: //default child option is blank
             $("#reportName").html('');  
@@ -242,7 +264,7 @@ function list(array_list)
 });
 
 function submitReport(value){
-	alert("insir=de submit"+value);
+	//alert("insir=de submit"+value);
 	var targeturl='';
 	if(value=='SelectBox')
 		{

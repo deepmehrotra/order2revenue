@@ -91,6 +91,7 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
 		log.info("*** searchExpense start ***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<ExpenseBean> expenseList = new ArrayList<>();
+		String expenseName= request.getParameter("expName");
 		String expenseCategory = request.getParameter("expenseCategory");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
@@ -108,6 +109,12 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
 				expenseList = ConverterClass
 						.prepareListofExpenseBean(expenseService
 								.getExpenseByCategory(expenseCategory, sellerId));
+			} else if (searchExpense != null
+					&& searchExpense.equals("expName")
+					&& expenseCategory != null) {
+				expenseList = ConverterClass
+						.prepareListofExpenseBean(expenseService
+								.getExpenseByName(expenseName, sellerId));
 			} else if (searchExpense != null && startDate != null
 					&& endDate != null) {
 

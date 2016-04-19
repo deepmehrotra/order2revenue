@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.helper.FillManager;
 import com.o2r.helper.Layouter;
 import com.o2r.helper.Writer;
@@ -72,7 +73,38 @@ public class ReportDownloadService {
 		response.setContentType("application/vnd.ms-excel");
 		
 		//7. Write to the output stream
-		Writer.write(response, worksheet);
+		Writer.write(response, worksheet,fileName);
+	}
+
+	public void downloadCOReport(HttpServletResponse response,List<ChannelSalesDetails> orderlist, String[] reportheaders,
+			String reportName, int sellerIdfromSession) {
+		
+		// 1. Create new workbook
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		
+		// 2. Create new worksheet
+		HSSFSheet worksheet = workbook.createSheet(reportName);
+		
+		// 3. Define starting indices for rows and columns
+		int startRowIndex = 0;
+		int startColIndex = 0;
+		
+		// 4. Build layout 
+		// Build title, date, and column headers
+		Layouter.buildChannelOrderReport(worksheet, startRowIndex, startColIndex,reportName,reportheaders);
+
+		// 5. Fill report
+		FillManager.fillCOReport(worksheet, startRowIndex, startColIndex, orderlist , reportheaders);
+		
+		// 6. Set the response properties
+		String fileName = "Total_Shipped_Order_Report.xls";
+		response.setHeader("Content-Disposition", "inline; filename=" + reportName);
+		// Make sure to set the correct content type
+	//	response.setContentType("application/vnd.ms-excel");
+ 		
+		//7. Write to the output stream
+		Writer.write(response, worksheet,reportName);
+	
 	}
 	
 
