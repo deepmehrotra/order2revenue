@@ -155,7 +155,11 @@ public class FillManager {
 			int i=0;
 			
 			HSSFCell cell = rowHeader.createCell(i++);
-			cell.setCellValue(datasource.get(j).getStartDate()+" To "+datasource.get(j).getEndDate());
+			cell.setCellValue(datasource.get(j).getStartDate());
+
+					 cell = rowHeader.createCell(i++);
+			cell.setCellValue(datasource.get(j).getEndDate());
+
 			
 			 cell = rowHeader.createCell(startColIndex+ i++);
 			cell.setCellValue(datasource.get(j).getOrderId());

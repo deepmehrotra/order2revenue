@@ -816,10 +816,12 @@ public class Layouter {
 		HSSFCell cellz=null;
 //(int j=0;j<21;j++){
 	//	}
-		worksheet.addMergedRegion(new CellRangeAddress(2,2,4,6));
-		worksheet.addMergedRegion(new CellRangeAddress(2,2,7,9));
-		worksheet.addMergedRegion(new CellRangeAddress(2,2,11,13));
-		worksheet.addMergedRegion(new CellRangeAddress(2,2,16,18));
+		
+		worksheet.addMergedRegion(new CellRangeAddress(2,2,0,1));
+		worksheet.addMergedRegion(new CellRangeAddress(2,2,5,7));
+		worksheet.addMergedRegion(new CellRangeAddress(2,2,8,10));
+		worksheet.addMergedRegion(new CellRangeAddress(2,2,12,14));
+		worksheet.addMergedRegion(new CellRangeAddress(2,2,17,19));
 		
 		HSSFRow rowHeader = worksheet.createRow(3);
 		rowHeader.setHeight((short) 500);
@@ -827,10 +829,19 @@ public class Layouter {
 		
 		cellz = rowHeadera.createCell(j++);
 		cellz.setCellStyle(headerCellStyle);
-		cellz.setCellValue("");		
+		cellz.setCellValue("Selected Period");		
 		HSSFCell cell = rowHeader.createCell(i++);
-		cell.setCellValue("Selected Period");
+		cell.setCellValue("Start Date");
 		cell.setCellStyle(headerCellStyle);
+		
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");		
+		cell = rowHeader.createCell(i++);
+		cell.setCellValue("End Date");
+		cell.setCellStyle(headerCellStyle);
+		
 		
 		cellz = rowHeadera.createCell(j++);
 		cellz.setCellStyle(headerCellStyle);
