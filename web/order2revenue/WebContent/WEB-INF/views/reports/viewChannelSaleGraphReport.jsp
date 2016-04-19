@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -43,83 +44,59 @@
                             </div>
                             <div class="tab-content">
                             <div id="tab-1" class="tab-pane active col-sm-12 chart-even">
+							
                                 <div class="row">
-                                    <div class="col-lg-6">
-                                    <div class="float-e-margins graph-brd">
-                                    <div class="ibox-content">
+                                
+                                
+                                                                <div class="col-lg-6">
                                          <table class="table table-bordered custom-table">
                                             <thead>
-                                             <tr>
-                                                <th>Partner</th>
-                                                <th>Total N/R</th>
-                                                <th>% N/R</th>
-                                            </tr>
+				                                            <tr>
+				                                                <th>Partner</th>
+				                                                <th color="green">SP</th>
+				                                                <th>NR</th>
+				                                                <th>AR</th>
+				                                            </tr>
                                             </thead>
                                             <tbody>
-                                            <c:if test="${!empty NRsortedttso}">
-                                 			 <c:forEach items="${NRsortedttso}" var="nrttso" varStatus="loop">
+                                             <c:if test="${!empty ttsolist}">
+                                 			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
+                                 			 <c:if test="${!empty ttso.groupByName}">
                                             <tr>
-                                                <td>${nrttso.pcName}</td>
-                                                <td>${nrttso.nr}</td>
-                                                <td>${nrttso.nrPercent}</td>
+                                                <td>${ttso.pcName}</td>
+                                                <td>${ttso.netRate}</td>
+                                                <td>${ttso.orderSP}</td>
+                                                <td>${ttso.orderSP/2}</td>
                                             </tr>
+                                            </c:if>
                                             </c:forEach>
                                             </c:if>
-                                                 </tbody>
+                                            </tbody>
                                         </table>
-                                    </div>
-                                    </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="float-e-margins graph-brd">
-                                        <div class="ibox-content">
-                                            <div class="flot-chart" >
-                                                    <div class="flot-chart-content" id="flot-bar-chart"></div>
-                                                </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                </div>
-								
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                    <div class="float-e-margins graph-brd">
-                                    <div class="ibox-content">
-                                         <table class="table table-bordered custom-table">
-                                            <thead>
-                                           <tr>
-                                                <th>Partner</th>
-                                                <th>Sale Quantity</th>
-                                                <th>% Sale Quantity</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <c:if test="${!empty saleQsortedttso}">
-                                 			 <c:forEach items="${saleQsortedttso}" var="saleQsortedttso" varStatus="loop">
-                                            <tr>
-                                                <td>${saleQsortedttso.pcName}</td>
-                                                <td>${saleQsortedttso.saleQuantity}</td>
-                                                <td>${saleQsortedttso.saleQuantityPercent}</td>
-                                            </tr>
-                                            </c:forEach>
-                                            </c:if>
-                                           </tbody>
-                                        </table>
-                                    </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="float-e-margins graph-brd">
-                                        <div class="ibox-content">
-                                            <div class="flot-chart">
-                                                <div class="flot-chart-content" id="flot-line-chart"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                
+                                
+                                
+								                <div class="col-lg-6">
+								                    <div class="ibox float-e-margins">
+								                        <div class="ibox-title">
+								                            <h5>Line Chart
+								                                <small>With custom colors.</small>
+								                            </h5>
+								                            <div ibox-tools></div>
+								                        </div>
+								                        <div class="ibox-content">
+								                            <div>
+								                                <canvas id="flot-chart-content" height="140"></canvas>
+								                            </div>
+								                        </div>
+								                    </div>
+								                </div>
+
+                                
                                 </div>
 
-                                <div class="row">
+                        <div class="row">
                                     <div class="col-lg-6">
                                     <div class="float-e-margins graph-brd">
                                     <div class="ibox-content">
@@ -127,18 +104,20 @@
                                             <thead>
                                             <tr>
                                                 <th>Partner</th>
-                                                <th>Sale Amount</th>
-                                                <th>Sale Amount Percent</th>
+                                                <th>Gross Sale Qty</th>
+                                                <th>Sale Return</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                             <c:if test="${!empty saleAmounrsortedttso}">
-                                 			 <c:forEach items="${saleAmounrsortedttso}" var="saleAmounrsortedttso" varStatus="loop">
+                                             <c:if test="${!empty ttsolist}">
+                                 			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
+                                 			 <c:if test="${empty ttso.groupByName}">
                                             <tr>
-                                                <td>${saleAmounrsortedttso.pcName}</td>
-                                                <td>${saleAmounrsortedttso.netSaleAmount}</td>
-                                                <td>${saleAmounrsortedttso.netSaleAmountPercent}</td>
+                                                <td>${ttso.pcName}</td>
+                                                <td>${ttso.quantity}</td>
+                                                <td>${ttso.returnorrtoQty}</td>
                                             </tr>
+                                            </c:if>
                                             </c:forEach>
                                             </c:if>
                                             </tbody>
@@ -146,74 +125,42 @@
                                     </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="float-e-margins graph-brd">
-                                        <div class="ibox-content">
-                                            <div class="flot-chart">
-                                                    <div class="flot-chart-pie-content" id="flot-pie-chart"></div>
-                                                </div>
-                                        </div>
-                                    </div>
+										                <div class="col-lg-6">
+										                    <div class="ibox float-e-margins">
+										                        <div class="ibox-title">
+										                            <h5>Bar Chart</h5>
+										                            <div ibox-tools></div>
+										                        </div>
+										                        <div class="ibox-content">
+										                            <div>
+										                                <canvas id="barChart" height="140"></canvas>
+										                            </div>
+										                        </div>
+										                    </div>
+										                </div>
                                 </div>
-                                </div>
-								<div class="row">
+                        <div class="row">
                                     <div class="col-lg-6">
                                     <div class="float-e-margins graph-brd">
                                     <div class="ibox-content">
                                          <table class="table table-bordered custom-table">
                                             <thead>
-                                             <tr>
-                                                <th>Partner</th>
-                                                <th>Return Quantity</th>
-                                                <th>% Return Quantity</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                           <c:if test="${!empty returnQsortedttso}">
-                                 			 <c:forEach items="${returnQsortedttso}" var="returnQsortedttso" varStatus="loop">
                                             <tr>
-                                                <td>${returnQsortedttso.pcName}</td>
-                                                <td>${returnQsortedttso.returnQuantity}</td>
-                                                <td>${returnQsortedttso.returnQuantityPercent}</td>
-                                            </tr>
-                                            </c:forEach>
-                                            </c:if>
-                                            
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="float-e-margins graph-brd">
-                                        <div class="ibox-content">
-                                            <div class="flot-chart">
-                                                    <div class="flot-chart-content" id="flot-bar-chart-RQ"></div>
-                                                </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                </div>
-								<div class="row">
-                                    <div class="col-lg-6">
-                                    <div class="float-e-margins graph-brd">
-                                    <div class="ibox-content">
-                                         <table class="table table-bordered custom-table">
-                                            <thead>
-                                           <tr>
                                                 <th>Partner</th>
+                                                <th>Gross Sale</th>
                                                 <th>Return Amount</th>
-                                                <th>% Return Amount</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                              <c:if test="${!empty returnAmountsortedttso}">
-                                 			 <c:forEach items="${returnAmountsortedttso}" var="returnAmountsortedttso" varStatus="loop">
+                                             <c:if test="${!empty ttsolist}">
+                                 			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
+                                 			 <c:if test="${empty ttso.groupByName}">
                                             <tr>
-                                                <td>${returnAmountsortedttso.pcName}</td>
-                                                <td>${returnAmountsortedttso.returnAmount}</td>
-                                                <td>${returnAmountsortedttso.returnAmountPercent}</td>
+                                                <td>${ttso.pcName}</td>
+                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossProfit}" /></td>
+                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossProfit/2}" /></td>
                                             </tr>
+                                            </c:if>
                                             </c:forEach>
                                             </c:if>
                                             </tbody>
@@ -221,106 +168,73 @@
                                     </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="float-e-margins graph-brd">
-                                        <div class="ibox-content">
-                                            <div class="flot-chart">
-                                             <div class="flot-chart-content" id="flot-line-chart-RA"></div>
-                                                    
-                                                </div>
-                                        </div>
-                                    </div>
+					                <div class="col-lg-6">
+					                    <div class="ibox float-e-margins">
+					                        <div class="ibox-title">
+					                            <h5>Line Chart
+					                                <small>With custom colors.</small>
+					                            </h5>
+					                            <div ibox-tools></div>
+					                        </div>
+					                        <div class="ibox-content">
+					                            <div>
+					                                <canvas id="lineChart" height="140"></canvas>
+					                            </div>
+					                        </div>
+					                    </div>
+					                </div>
                                 </div>
-                                </div>
-
-                                 <div class="row">
+                        <div class="row">
                                     <div class="col-lg-6">
                                     <div class="float-e-margins graph-brd">
                                     <div class="ibox-content">
                                          <table class="table table-bordered custom-table">
                                             <thead>
                                             <tr>
-                                                <th>Cities</th>
-                                                <th>Order Count</th>
-                                                <th>% Orders</th>
+                                                <th>Partner</th>
+                                                <th>Net AR</th>
+                                                <th>Net Due</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                             <c:if test="${!empty citicount}">
-                                 			 <c:forEach items="${citicount}" var="citimap" varStatus="loop">
-                                           
+                                             <c:if test="${!empty ttsolist}">
+                                 			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
+                                 			 <c:if test="${empty ttso.groupByName}">
                                             <tr>
-                                                <td>${citimap.key}</td>
-                                                <td>${citimap.value}</td>
-                                                <td>${citipercent[citimap.key]}</td>
+                                                <td>${ttso.pcName}</td>
+                                                <td>${ttso.quantity}</td>
+                                                <td>${ttso.returnorrtoQty}</td>
                                             </tr>
-                                           </c:forEach>
-                                           </c:if>
+                                            </c:if>
+                                            </c:forEach>
+                                            </c:if>
                                             </tbody>
                                         </table>
                                     </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="float-e-margins graph-brd">
-                                        <div class="ibox-content">
-                                            <div class="flot-chart">
-                                                <div class="flot-chart-pie-content" id="flot-pie-chart-CITY"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+								                <div class="col-lg-6">
+								                    <div class="ibox float-e-margins">
+								                        <div class="ibox-title">
+								                            <h5>Bar Chart
+								                                <small>With custom colors.</small>
+								                            </h5>
+								                            <div ibox-tools></div>
+								                        </div>
+								                        <div class="ibox-content">
+								                            <div>
+								                                <canvas id="barSecondChart" height="140"></canvas>
+								                            </div>
+								                        </div>
+								                    </div>
+								                </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="float-e-margins graph-brd">
                                         <div >
-                                         <table class="table table-bordered custom-table">
-                                            <thead>
-                                            <tr>
-                                                 <th>Partner</th>
-                                                <th>Delivered</th>
-                                                <th>% Delivered</th>
-                                                <th>Return</th>
-                                                <th>% Return</th>
-                                                <th>RTO</th>
-                                                <th>% RTO</th>
-                                                <th>Actionable</th>
-                                                <th>% Actionable</th>
-                                                <th>Settled</th>
-                                                <th>% Settled</th>
-                                                <th>Return Limit Crossed</th>
-                                                <th>% Return Limit Crossed</th>
-                                                 <th>RTO Limit Crossed</th>
-                                                <th>% RTO Limit Crossed</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                              <c:if test="${!empty NRsortedttso}">
-                                 			 <c:forEach items="${NRsortedttso}" var="NRsortedttso" varStatus="loop">
-                                            <tr>
-                                                <td>${NRsortedttso.pcName}</td>
-                                                <td>${NRsortedttso.noOfDeliveredOrder}</td>
-                                                <td>${NRsortedttso.deliveredOrderPercent}</td>
-                                                <td>${NRsortedttso.noOfReturnOrder}</td>
-                                                <td>${NRsortedttso.returnOrderPercent}</td>
-                                                <td>${NRsortedttso.noOfRTOOrder}</td>
-                                                <td>${NRsortedttso.RTOOrderPercent}</td>
-                                                <td>${NRsortedttso.noOfActionableOrders}</td>
-                                                <td>${NRsortedttso.actionableOrdersPercent}</td>
-                                                <td>${NRsortedttso.noOfSettledOrders}</td>
-                                                <td>${NRsortedttso.settledOrdersPercent}</td>
-                                                 <td>${NRsortedttso.noOfReturnLimitCrossed}</td>
-                                                <td>${NRsortedttso.returnLimitCrossedPercent}</td>
-                                                 <td>${NRsortedttso.noOfRTOLimitCrossed}</td>
-                                                <td>${NRsortedttso.RTOLimitCrossedPercent}</td>
-                                            </tr>
-                                            </c:forEach>
-                                            </c:if>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                      </div>
                                             
                                             <div class="ibox-content">
                                                 <div id="morris-line-chart"></div>
@@ -336,49 +250,71 @@
                             
                             <div id="tab-2" class="tab-pane col-sm-12">
                             <form role="form" class="form-horizontal">
-                            <div class="col-sm-12">
-                                <table class="table table-striped table-bordered table-hover dataTables-example" >
+                            <div class="col-sm-12"  style="overflow-x: scroll;">
+                            <div id="tbdata1">
+                            <p id="selectTriggerFilter"><label><b>Filter:</b></label><br></p>
+                                <table id="filterTable" style="width:50%" class="table table-striped table-bordered table-hover dataTables-example" >
                                 <thead>
                                 <tr>
-                                    <th></th>
                                     <th>#</th>
+                                    <th>Date Range</th>
                                     <th>Partner Name</th>
-                                    <th>Period</th>
-                                    <th>Net Payment Result</th>
-                                    <th>Sale Quantity</th>
-                                    <th>Return Quantity</th>
-                                    <th>Delivered Order</th>
-                                    <th>Payment Difference Amount</th>
-                                    <th>Return Order</th>
-                                    <th>Settled Order</th>
-                                    <th>Actionable Order</th>
-                                    <th>Return Limit Crossed</th>
-                                    <th>RTO limit Crossed</th>
+                                    
+                                    <th colspan="3" style="color:blue">N/R Amount, Gross SP, Gross Qty</th>
+                                    
+                                    <th  colspan="3" style="color:blue">N/R Amount,Rtn SP,Rtn Qty</th>
+
+                                    <th>Return Vs Gross</th>
+                                    
+                                    <th   colspan="3" style="color:blue">N/R Amount,Net SP,Net Qty</th>
+                                    
+                                    <th>Tax Category </th>
+                                    <th>Net Tax Liability On SP</th>
+                                    
+                                    <th  colspan="3" style="color:blue">N/R Amount,Net Pure Sale,Qty</th>
+                                     <th>Net A/R</th>
+                                     <th>Net Due</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                  <c:if test="${!empty ttsolist}">
-                                 			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
+                                 
+                               <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
+                              
+                              <c:if test="${!empty ttso.groupByName}">
                                 <tr>
-                                    <td><input type="checkbox"></td>
                                     <td>${loop.index+1}</td>
+                                    <td>${ttso.startDate} ${ttso.endDate}</td>
                                     <td>${ttso.pcName}</td>
-                                    <td>${period}</td>
-                                    <td>${ttso.netPaymentResult}</td>
-                                    <td>${ttso.saleQuantity}</td>
-                                    <td>${ttso.returnQuantity}</td>
-                                    <td>${ttso.noOfDeliveredOrder}</td>
-                                     <td>${ttso.totalPaymentDiffference}</td>
-                                    <td>${ttso.noOfReturnOrder}</td>
-                                    <td>${ttso.noOfSettledOrders}</td>
-                                    <td>${ttso.noOfActionableOrders}</td>
-                                    <td>${ttso.noOfReturnLimitCrossed}</td>
-                                    <td>${ttso.noOfRTOLimitCrossed}</td>
-                                     </tr>
+                                    
+                                    <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossNetRate}" /></td>
+									<td>${ttso.orderSP}</td>
+									<td>${ttso.quantity}</td>
+									
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
+									<td>${ttso.returnOrRTOChargestoBeDeducted}</td>
+									<td>${ttso.returnorrtoQty}</td>
+									
+									<td>${ttso.returnorrtoQty * 100/ttso.quantity}</td>
+									
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.orderSP - ttso.returnOrRTOChargestoBeDeducted}" /></td>
+									<td>${ttso.quantity - ttso.returnorrtoQty}</td>
+									
+									<td>${ttso.taxCategtory}</td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossNetRate - ttso.grossNetRate * 100/105}" /></td>
+
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${(ttso.orderSP - ttso.returnOrRTOChargestoBeDeducted)-(ttso.grossNetRate - ttso.grossNetRate * 100/105)}" /></td>
+									<td>${ttso.quantity - ttso.returnorrtoQty}</td>
+									<td>${ttso.positiveAmount + ttso.negativeAmount}</td>
+									<td>TBD</td>
+                                  </tr>
+                                </c:if>
                                 </c:forEach>
                                 </c:if>
                                 </tbody>
-                                </table>
+                                </table></div>
                             </div>
                                 <div class="col-sm-12">
                                 <div class="hr-line-dashed"></div>
@@ -422,150 +358,294 @@
 <!-- ChartJS-->
 <script src="/O2R/seller/js/plugins/chartJs/Chart.min.js"></script>
 <script src="/O2R/seller/js/demo/flot-demo-1.js"></script>
-
+<script   language="javascript">
+   function changeTable(svalue){
+	   document.getElementById("tbdata1").innerHTML="";
+   }
+</script>
 
 <!-- Data Tables -->
 <script src="/O2R/seller/js/plugins/dataTables/jquery.dataTables.js"></script>
 <script src="/O2R/seller/js/plugins/dataTables/dataTables.bootstrap.js"></script>
 <script src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
 <script src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
+
+
+
+
+
+
+
 <script>
 
-//Script for Bar Chart
+$(window).load(function() {
+	 	
+	 	var labelsdata = [];
+	 	var adata = [];
+	 	var bdata = [];
+	 	var cdata = [];
+ 		 	
+	 	<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
+	 	<c:if test="${empty ttso.groupByName}">
+			labelsdata.push('${ttso.pcName}');
+	 		adata.push('${ttso.orderSP}');
+	 		bdata.push('${ttso.orderSP - 6000}');
+	 		cdata.push('${ttso.orderSP - 9000}');
+	 	</c:if>
+		</c:forEach>
+	 	
+	    var lineData = {
+	            labels: labelsdata,
+	            datasets: [
+	                {
+	                    label: "Example dataset",
+	                    fillColor: "rgba(220,220,220,0.5)",
+	                    strokeColor: "red",
+	                    pointColor: "green",
+	                    pointStrokeColor: "#fff",
+	                    pointHighlightFill: "#fff",
+	                    pointHighlightStroke: "rgba(220,220,220,1)",
+	                    data: adata
+	                },
+	                {
+	                    label: "Example dataset",
+	                    fillColor: "rgba(120,120,220,0.5)",
+	                    strokeColor: "green",
+	                    pointColor: "red",
+	                    pointStrokeColor: "#fff",
+	                    pointHighlightFill: "#fff",
+	                    pointHighlightStroke: "rgba(26,179,148,1)",
+	                    data: bdata
+	                },
+	                {
+	                    label: "Example dataset",
+	                    fillColor: "rgba(220,220,220,0.5)",
+	                    strokeColor: "blue",
+	                    pointColor: "blue",
+	                    pointStrokeColor: "#fff",
+	                    pointHighlightFill: "#fff",
+	                    pointHighlightStroke: "rgba(55,100,118,1)",
+	                    data: cdata
+	                }
+	            ]
+	        };
 
-var temp=[];
-var arrayfortick=[];
-var i=1;
-<c:forEach items="${NRsortedttso}" var="NRsortedttso" varStatus="loop">
-var arr1 = [i,'${NRsortedttso.nrPercent}'];
-var arr2=[i++,'${NRsortedttso.pcName}'];
-temp.push(arr1);
-arrayfortick.push(arr2);
-</c:forEach>
- var ticks = arrayfortick; 
-    
-    
-   //Script for  return quantity
-   
-var RQBarData=[];
-var ticksforRQBar=[];
-i=1;
-<c:forEach items="${returnQsortedttso}" var="returnQsortedttso" varStatus="loop">
-var arr1 = [i,'${returnQsortedttso.returnQuantityPercent}'];
-var arr2=[i++,'${returnQsortedttso.pcName}'];
-RQBarData.push(arr1);
-ticksforRQBar.push(arr2);
-</c:forEach>
+	        var lineOptions = {
+	            scaleShowGridLines: true,
+	            scaleGridLineColor: "rgba(0,0,0,.05)",
+	            scaleGridLineWidth: 1,
+	            bezierCurve: true,
+	            bezierCurveTension: 0.4,
+	            pointDot: true,
+	            pointDotRadius: 4,
+	            pointDotStrokeWidth: 1,
+	            pointHitDetectionRadius: 20,
+	            datasetStroke: true,
+	            datasetStrokeWidth: 2,
+	            datasetFill: true,
+	            responsive: true,
+	        };
 
- 
-//Script for line chart saleQsortedttso
 
-//Populating Line data
- var linetemp=[];
- var linearrayfortick=[];
- i=1;
- <c:forEach items="${saleQsortedttso}" var="saleQsortedttso" varStatus="loop">
- var salqpercent = [i,'${saleQsortedttso.saleQuantityPercent}'];
- var saleqpartner=[i++,'${saleQsortedttso.pcName}'];
- linetemp.push(salqpercent);
- linearrayfortick.push(saleqpartner);
- </c:forEach>
-
- 
-//Script for line chart returnAmountsortedttso
-
-//Populating Line data
-var lineDataRA=[];
-var linearrayRA=[];
-i=1;
-<c:forEach items="${returnAmountsortedttso}" var="returnAmountsortedttso" varStatus="loop">
-var arr1 = [i,'${returnAmountsortedttso.returnAmountPercent}'];
-var arr2=[i++,'${returnAmountsortedttso.pcName}'];
-lineDataRA.push(arr1);
-linearrayRA.push(arr2);
-</c:forEach>
-   
-//Script for pie chart saleAmounrsortedttso
-
-//Populating Pie Chart 
-
- var piedata = [];
-    var piecolor =['#d3d3d3','#bababa','#79d2c0','#1ab394','#bababa'];
-
-    <c:forEach items="${saleAmounrsortedttso}" var="saleAmounrsortedttso" varStatus="loop">
-    piedata.push({label:'${saleAmounrsortedttso.pcName}',data:'${saleAmounrsortedttso.netSaleAmountPercent}',color:piecolor['${loop.index}']});
-	 </c:forEach>
-	 
-	   
-	//Script for pie chart cities count
-
-	//Populating Pie Chart 
-
-	 var citipiedata = [];
-	//    var piecolor =['#d3d3d3','#bababa','#79d2c0','#1ab394','#bababa'];
-
-	    <c:forEach items="${citipercent}" var="citipercent" varStatus="loop">
-	    citipiedata.push({label:'${citipercent.key}',data:'${citipercent.value}',color:piecolor['${loop.index}']});
-		 </c:forEach>
-		 
-		 
-	//Script for morris line chart 
+	        var ctx = document.getElementById("flot-chart-content").getContext("2d");
+	        var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+	        
 	
-		//Populating Morris line Chart 
+	var axislabels=[];
+	var dataset1 = [];
+	var dataset2 = [];
 	
-		 var linedata = [];
-		var deliverobj={y:'Delivered'};
-		 var returnobj={y:'Return'};
-		 var rtoobj={y:'RTO'};
-		 var actionobj={y:'Actionable'};
-		 var settlebj={y:'Settled'};
-		 var rlcobj={y:'Return Limit Crossed'};
-		 var rtlcobj={y:'RTO Limit Crossed'};
-		 var yaxis=[];
-		// alert(" before "+deliverobj);
-		    <c:forEach items="${NRsortedttso}" var="morisNRsortedttso" varStatus="loop">
-		    deliverobj['${morisNRsortedttso.pcName}']=${morisNRsortedttso.deliveredOrderPercent};
-		    returnobj['${morisNRsortedttso.pcName}']=${morisNRsortedttso.returnOrderPercent};
-		    rtoobj['${morisNRsortedttso.pcName}']=${morisNRsortedttso.RTOOrderPercent};
-		    settlebj['${morisNRsortedttso.pcName}']=${morisNRsortedttso.settledOrdersPercent};
-		    actionobj['${morisNRsortedttso.pcName}']=${morisNRsortedttso.actionableOrdersPercent};
-		    rlcobj['${morisNRsortedttso.pcName}']=${morisNRsortedttso.returnLimitCrossedPercent};
-		    rtlcobj['${morisNRsortedttso.pcName}']=${morisNRsortedttso.RTOLimitCrossedPercent};
-		    yaxis.push('${morisNRsortedttso.pcName}');
-			 </c:forEach>
-	//alert("Incynk Deklivery "+deliverobj.Incynk);
+	
+	 var barData = {
+		       
+			 labels:axislabels,
+		        datasets: [
+		            {
+		                label: "label1",
+		                fillColor: "rgba(26,179,148,1)",
+		                strokeColor: "rgba(220,220,220,0.8)",
+		                highlightFill: "rgba(220,220,220,0.75)",
+		                highlightStroke: "rgba(220,220,220,1)",
+		                data: dataset1
+		            },
+		            {
+		                label: "label2",
+		                fillColor: "rgba(226,109,148,1)",
+		                strokeColor: "rgba(26,179,148,0.8)",
+		                highlightFill: "rgba(26,179,148,0.75)",
+		                highlightStroke: "rgba(26,179,148,1)",
+		                data:dataset2
+		            }
+		        ]
+		    };
+
+		    var barOptions1 = {
+		        scaleBeginAtZero: true,
+		        scaleShowGridLines: true,
+		        scaleGridLineColor: "rgba(0,0,0,.05)",
+		        scaleGridLineWidth: 1,
+		        barShowStroke: true,
+		        barStrokeWidth: 2,
+		        barValueSpacing: 5,
+		        showTooltips : true,
+		        barDatasetSpacing: 1,
+		        responsive: true,
+		        multiTooltipTemplate: ""
+		    }
+		 	<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
+		 	<c:if test="${empty ttso.groupByName}">
+		 	axislabels.push('${ttso.pcName}');
+		 		dataset1.push('${ttso.quantity}');
+		 		dataset2.push('${ttso.quantity/2}');
+		 	</c:if>
+			</c:forEach>
+        	
+		    var ctx = document.getElementById("barChart").getContext("2d"); 
+		    var myNewChart = new Chart(ctx).Bar(barData, barOptions1);
+	      //  var ctx = document.getElementById("flot-chart-content_1").getContext("2d");
+	      //  var myNewChart = new Chart(ctx).Line(lineData1, lineOptions);
+	      
+	      var labelsx=[];
+	      var data1x=[];
+	      var data2x=[];
+	      
+	      
+	  var lineDatax = {
+		        labels: labelsx,
+		        datasets: [
+		            {
+		                label: "Gross Profit",
+		                fillColor: "rgba(120,120,120,0.5)",
+		                strokeColor: "black",
+		                pointColor: "rgba(220,220,220,1)",
+		                pointStrokeColor: "#fff",
+		                pointHighlightFill: "#fff",
+		                pointHighlightStroke: "rgba(220,220,220,1)",
+		                data: data1x
+		            },
+		            {
+		                label: "Expense",
+		                fillColor: "rgba(26,179,148,0.5)",
+		                strokeColor: "rgba(26,179,148,0.7)",
+		                pointColor: "rgba(26,179,148,1)",
+		                pointStrokeColor: "#fff",
+		                pointHighlightFill: "#fff",
+		                pointHighlightStroke: "rgba(26,179,148,1)",
+		                data: data2x
+		            }
+		        ]
+		    };
 	  
-			 linedata.push(deliverobj);
-			 linedata.push(returnobj);
-			 linedata.push(rtoobj);
-			 linedata.push(settlebj);
-			 linedata.push(actionobj);
-			 linedata.push(rlcobj);
-			 linedata.push(rtlcobj);
-			 
-			 
-			/* var tempdata=[{ y: 'Delivered', a: 100, b: 90, c:100 },
-		            { y: 'Return', a: 75, b: 65, c:10},
-		            { y: 'RTO', a: 50, b: 40, c:55 },
-		            { y: 'Actionable', a: 75, b: 65, c:76 },
-		            { y: 'Settled', a: 50, b: 40, c:40 },
-		            { y: 'Return Limt', a: 75, b: 65, c:90 },
-		            { y: 'RTO limit', a: 100, b: 90, c:80 } ]; */
-  // alert(yaxis);
-			 
-	//Calling all the charts
- $(window).load(function() {
-	 
-		flotbar(temp,ticks,"#flot-bar-chart");
-		flotline(linetemp,linearrayfortick,"#flot-line-chart");
-		flotbar(RQBarData,ticksforRQBar,"#flot-bar-chart-RQ");
-		flotline(lineDataRA,linearrayRA,"#flot-line-chart-RA");
-		flotpie(piedata,"#flot-pie-chart");
-		flotpie(citipiedata,"#flot-pie-chart-CITY");
-		morrisline(linedata,yaxis,yaxis);
-		
-		
-	    $('.dataTables-example').dataTable({
+	  var lineOptionsx = {
+		        scaleShowGridLines: true,
+		        scaleGridLineColor: "rgba(0,0,0,.05)",
+		        scaleGridLineWidth: 1,
+		        bezierCurve: true,
+		        bezierCurveTension: 0.4,
+		        pointDot: true,
+		        pointDotRadius: 4,
+		        pointDotStrokeWidth: 1,
+		        pointHitDetectionRadius: 20,
+		        datasetStroke: true,
+		        datasetStrokeWidth: 2,
+		        datasetFill: true,
+		        responsive: true,
+		        multiTooltipTemplate: "",
+		    };
+	  
+		<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
+	 	<c:if test="${empty ttso.groupByName}">
+			labelsx.push('${ttso.pcName}');
+			data1x.push('${ttso.grossProfit}');
+			data2x.push('${ttso.grossProfit/2}');
+	 	</c:if>
+		</c:forEach>
+
+
+		    var ctx = document.getElementById("lineChart").getContext("2d");
+		    var myNewChart = new Chart(ctx).Line(lineDatax, lineOptionsx);
+
+
+			var axislabelsx=[];
+			var dataset1x = [];
+			var dataset2x = [];
+			
+			
+			 var barDatax = {
+				       
+					 labels:axislabelsx,
+				        datasets: [
+				            {
+				                label: "label1",
+				                fillColor: "rgba(220,220,220,0.8)",
+				                strokeColor: "rgba(220,220,220,0.8)",
+				                highlightFill: "rgba(220,220,220,0.75)",
+				                highlightStroke: "rgba(220,220,220,1)",
+				                data: dataset1x
+				            },
+				            {
+				                label: "label2",
+				                fillColor: "rgba(26,179,148,0.8)",
+				                strokeColor: "rgba(26,179,148,0.8)",
+				                highlightFill: "rgba(26,179,148,0.75)",
+				                highlightStroke: "rgba(26,179,148,1)",
+				                data:dataset2x
+				            }
+				        ]
+				    };
+
+				    var barOptions1x = {
+				        scaleBeginAtZero: true,
+				        scaleShowGridLines: true,
+				        scaleGridLineColor: "rgba(0,0,0,.05)",
+				        scaleGridLineWidth: 1,
+				        barShowStroke: true,
+				        barStrokeWidth: 2,
+				        barValueSpacing: 5,
+				        showTooltips : true,
+				        barDatasetSpacing: 1,
+				        responsive: true,
+				        multiTooltipTemplate: ""
+				    }
+				 	<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
+				 	<c:if test="${empty ttso.groupByName}">
+				 	axislabelsx.push('${ttso.pcName}');
+				 		dataset1x.push('${ttso.quantity}');
+				 		dataset2x.push('${ttso.quantity/2}');
+				 	</c:if>
+					</c:forEach>
+		        	
+				    var ctx = document.getElementById("barSecondChart").getContext("2d"); 
+				    var myNewChart = new Chart(ctx).Bar(barDatax, barOptions1x);
+				    
+				    
+				    $(document).ready(function() {
+				    	   $('#filterTable').DataTable({
+				    	        "lengthMenu": [
+				    	            [10, 25, 50, 100, -1],
+				    	            [10, 25, 50, 100, "All"]
+				    	        ],
+				    	        "scrollY": "200px",
+				    	        "dom": 'rtipS',
+				    	        // searching: false,
+				    	        "deferRender": true,
+				    	        initComplete: function () {
+				    	           var column = this.api().column(0);
+				    	           var select = $('<select class="filter"><option value=""></option></select>')
+				    	               .appendTo('#selectTriggerFilter')
+				    	               .on('change', function () {
+				    	                  var val = $(this).val();
+				    	                  column.search(val ? '^' + $(this).val() + '$' : val, true, false).draw();
+				    	               });
+
+				    	           column.data().unique().sort().each(function (d, j) {
+				    	               select.append('<option value="' + d + '">' + d + '</option>');
+				    	           });
+				    	        }
+				    	    });
+				    	});
+
+    $('.dataTables-example').dataTable({
 	            responsive: true,
 	            "dom": 'T<"clear">lfrtip',
 	            "tableTools": {
@@ -574,8 +654,7 @@ linearrayRA.push(arr2);
 	    });
 	});
 	
-
- 
+ 	
 </script>
 <style>
     body.DTTT_Print {

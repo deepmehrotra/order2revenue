@@ -1,10 +1,13 @@
 package com.o2r.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,13 +58,23 @@ public class SellerController {
 	@RequestMapping(value = "/saveSeller", method = RequestMethod.POST)
 	public ModelAndView saveOrder(
 			@ModelAttribute("command") SellerBean sellerBean,
-			BindingResult result) {
+			BindingResult result,HttpServletRequest request) {
 		log.info("*** saveOrder starts ***");
+		Properties p=new Properties(); 		
+		
+			try {
+			InputStream input = request.getServletContext().getResourceAsStream("/WEB-INF/mail.properties");
+ 		    p.load(input);				   
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			Seller seller = ConverterClass.prepareSellerModel(sellerBean);
-			// seller.getRole().setRole("moderator");
-			sellerService.addSeller(seller);
+
+			sellerService.addSeller(seller,p);
 		} catch (CustomException ce) {
 			log.error("saveOrder exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -123,6 +136,7 @@ public class SellerController {
 		log.info("***addSeller Start***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+
 			int sellerId = HelperClass.getSellerIdfromSession(request);
 			SellerBean seller = ConverterClass.prepareSellerBean(sellerService
 					.getSeller(sellerId));
@@ -161,7 +175,7 @@ public class SellerController {
 			Set<Seller> sellerRoles = new HashSet<Seller>();
 			sellerRoles.add(seller);
 			seller.getRole().setSellerRoles(sellerRoles);
-			sellerService.addSeller(seller);
+			sellerService.addSeller(seller, null);
 			model.put("seller", seller);
 		} catch (Throwable e) {
 			log.error(e);

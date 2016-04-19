@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.DebitNoteBean;
 import com.o2r.bean.PoPaymentBean;
 import com.o2r.dao.OrderDao;
@@ -120,5 +121,12 @@ public List<Order> listOrders(int sellerId, int pageNo)throws CustomException
 @Override
 public Order getOrder(int orderId, int sellerId)throws CustomException {
 	return orderDao.getOrder(orderId, sellerId);
+}
+
+@Override
+public List<ChannelSalesDetails> findChannelOrdersbyDate(String string,
+		Date startDate, Date endDate, int sellerIdfromSession) {
+	// TODO Auto-generated method stub
+	return orderDao.findChannelOrdersbyDate(string ,startDate,endDate,sellerIdfromSession);
 }
 }

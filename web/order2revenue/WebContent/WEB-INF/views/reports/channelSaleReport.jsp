@@ -212,7 +212,7 @@
 
               //document.getElementById("requestType").value = "download";
 
-              document.getElementById('selectReportForm').action = "downloadreport.html";
+              document.getElementById('selectReportForm').action = "downloadOrderReport.html";
 
               }
        else

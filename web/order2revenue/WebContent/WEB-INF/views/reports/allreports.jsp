@@ -176,15 +176,13 @@ var OrderRelatedReport = [
                   {display: " Return/RTO limit crossed Orders", value: " returnRTOLimitCrossed" },
                   {display: "Settled Orders", value: "settledOrders" }];
 var ChannelRelatedReport = [
-                          {display: "Channel Shipped Orders", value: "getChannelReport" }, 
-                          {display: "Payment Difference Orders", value: "getChannelReport" }, 
-                          {display: " Return/RTO limit crossed Orders", value: " returnRTOLimitCrossed" },
-                          {display: "Settled Orders", value: "settledOrders" }];
+                          {display: "Channel Wise Sales Order", value: "channelSaleReport" },
+                          {display: "Order Wise Sales Order", value: "orderWiseSaleReport" }];
 var ProductRelatedReport = [
-                          {display: "Product Shipped Orders", value: "getChannelReport" }, 
-                          {display: "Payment Difference Orders", value: "getChannelReport" }, 
-                          {display: " Return/RTO limit crossed Orders", value: " getChannelReport" },
-                          {display: "Settled Orders", value: "settledOrders" }];
+                          {display: "Product Shipped Orders", value: "productSaleReport" }, 
+                          {display: "Payment Difference Orders", value: "productSaleReport" }, 
+                          {display: " Return/RTO limit crossed Orders", value: " productSaleReport" },
+                          {display: "Settled Orders", value: "productSaleReport" }];
                   
 var PartnerRelated = [
                   {display: "Partner Commission Paid Report", value: "partnerCommissionReport" }, 
@@ -220,9 +218,15 @@ $("#reportGroup").change(function() {
         case 'OrderRelatedReport':
              list(OrderRelatedReport);
             break;
+        case 'ChannelRelatedReport':
+             list(ChannelRelatedReport);
+            break;   
+        case 'ProductRelatedReport':
+            list(ProductRelatedReport);
+           break;
         case 'PartnerRelated':
-             list(PartnerRelated);
-            break;              
+            list(PartnerRelated);
+           break;
         case 'ExpenseReports':
              list(ExpenseReports);
             break; 
@@ -260,7 +264,7 @@ function list(array_list)
 });
 
 function submitReport(value){
-	alert("insir=de submit"+value);
+	//alert("insir=de submit"+value);
 	var targeturl='';
 	if(value=='SelectBox')
 		{

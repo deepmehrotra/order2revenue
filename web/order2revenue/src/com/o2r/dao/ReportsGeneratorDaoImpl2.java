@@ -1,5 +1,6 @@
 package com.o2r.dao;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
@@ -33,373 +35,106 @@ public class ReportsGeneratorDaoImpl2 implements ReportsGeneratorDao2 {
 	 static Logger log = Logger.getLogger(ReportsGeneratorDaoImpl.class.getName());
 	
 	@Override
-	public List<TotalShippedOrder> getChannelSalesDetails(Date startDate,Date endDate, int sellerId) throws CustomException{
+	public List<ChannelSalesDetails> getChannelSalesDetails(Date startDate,Date endDate, int sellerId) throws CustomException{
 		// TODO Auto-generated method stub
 		System.out.println("GET CHNNEL SALES DETAILS");
 		 log.info("*** getAllPartnerTSOdetails start ***");
 		 //http://howtodoinjava.com/2014/10/28/hibernate-criteria-queries-tutorial-and-examples/#unique_result
 		 /*System.out.println(" getAllPartnerTSOdetails   :  >>startDate"+startDate+">>endDate :"+endDate);*/
-		 TotalShippedOrder[] ttso=null;
+		// TotalShippedOrder[] ttso=null;
+		// ChannelSalesDetails[] ttso=null;
+		 List<ChannelSalesDetails> ttso=new ArrayList<ChannelSalesDetails>();
 		 
-		 int  totalQuantity=0;
-		 int  returnQuantity=0;
-		 double  totalNR=0;
-		 double returnAmount=0;
-		 double netSaleAmoount=0;
-		 int cityTotalQuantity=0;
-		 int totalNoofDO=0;
-		 int totalNoofRO=0;
-		 int totalNoofSO=0;
-		 int totalNoofAO=0;
-		 int totalNoofRTOCross=0;
-		 int totalNoofreturnCross=0;
-		 TotalShippedOrder ttsoTemp=null;
-		 Map<String,Double> cityMap=new HashMap<>();
-		 Map<String,Double> cityPercentMap=new HashMap<>();
 		 try
 		 {
 			 Session session=sessionFactory.openSession();
+			 
+			 Criteria criteria1=session.createCriteria(Order.class);
+			 criteria1.createAlias("seller", "seller", CriteriaSpecification.LEFT_JOIN);
+			 criteria1.createAlias("customer", "customer", CriteriaSpecification.LEFT_JOIN);
+			 criteria1.createAlias("orderPayment", "orderPayment", CriteriaSpecification.LEFT_JOIN);
+			 criteria1.createAlias("orderTax", "orderTax", CriteriaSpecification.LEFT_JOIN);
+			 criteria1.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.LEFT_JOIN);
+			 criteria1.createAlias("orderTimeline", "orderTimeline", CriteriaSpecification.LEFT_JOIN)
+			 .add(Restrictions.eq("seller.id", sellerId));
+			 criteria1.add(Restrictions.between("orderDate",startDate, endDate));
+			 criteria1.setProjection(getPL("pcName"));
+			 
+			 List pcNameList=criteria1.list();
+			 
+		 
+			 Criteria ctr=session.createCriteria(Order.class);
+			 ProjectionList p=Projections.projectionList()	;
+			 p.add(Projections.groupProperty("pcName"));
+			 ctr.setProjection(p);
+			 List lst=ctr.list();
+			 String arr[]=new String[lst.size()];
+			 Iterator itrx=lst.iterator();int a=0;
+			 while(itrx.hasNext())
+			 {
+				 arr[a]=itrx.next().toString();a++;
+			 }
+			 Criteria carr[]=new Criteria[lst.size()];
+			 Criteria criteria;
 			 session.beginTransaction();
-			 Criteria criteria=session.createCriteria(Order.class);
-			 criteria.createAlias("seller", "seller", CriteriaSpecification.LEFT_JOIN);
-			 criteria.createAlias("customer", "customer", CriteriaSpecification.LEFT_JOIN);
-			 criteria.createAlias("orderPayment", "orderPayment", CriteriaSpecification.LEFT_JOIN);
-			 criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.LEFT_JOIN)
-			 .add(Restrictions.eq("seller.id", sellerId))
-			 .add(Restrictions.between("orderDate",startDate, endDate));
-			 criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			 for(int x=0;x<carr.length;x++){
+				 criteria=null;
+				 criteria=session.createCriteria(Order.class);
+				 criteria.createAlias("seller", "seller", CriteriaSpecification.LEFT_JOIN);
+				 criteria.createAlias("customer", "customer", CriteriaSpecification.LEFT_JOIN);
+				 criteria.createAlias("orderPayment", "orderPayment", CriteriaSpecification.LEFT_JOIN);
+				 criteria.createAlias("orderTax", "orderTax", CriteriaSpecification.LEFT_JOIN);
+				 criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.LEFT_JOIN);
+				 criteria.createAlias("orderTimeline", "orderTimeline", CriteriaSpecification.LEFT_JOIN)
+				 .add(Restrictions.eq("seller.id", sellerId)).add(Restrictions.eq("pcName", arr[x]))
+				 .add(Restrictions.between("orderDate",startDate, endDate));
+				 criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+				 System.out.println("CRITERIA LISR SIZE IS "+criteria.list().size()+"  "+  arr[x]);
+				 carr[x]=criteria;
+				 }
 			 
-			 ProjectionList projList = Projections.projectionList();
-			 projList.add(Projections.groupProperty("pcName"));
-			 projList.add(Projections.sum("quantity"));
-			 projList.add(Projections.sum("netRate"));
-			 projList.add(Projections.sum("orderReturnOrRTO.returnorrtoQty"));
-			 projList.add(Projections.sum("orderPayment.negativeAmount"));
-			 projList.add(Projections.sum("orderSP"));
-			 projList.add(Projections.sum("orderPayment.positiveAmount"));
+
 			 
-			 criteria.setProjection(projList);
-			 criteria.addOrder(org.hibernate.criterion.Order.asc("pcName"));
-			 List<Object[]> results = criteria.list();
-			 System.out.println("results.size()  "+results.size());
-			 ttso=new TotalShippedOrder[results.size()];
-			 System.out.println(" Array size :"+ttso.length);
-			 System.out.println("ttso  Object "+ttso[0]);
-			 Iterator iterator1 = results.iterator();
-			 int iteratorCount=0;
-			 if(results != null){
-				 while(iterator1.hasNext()){
-					 System.out.println("\n");
-					 ttsoTemp=new TotalShippedOrder();
-					 Object[] recordsRow = (Object[])iterator1.next();
-					 System.out.println("recordsRow.length  "+recordsRow.length);
-					 System.out.println(" Quantity  NR ReturnQty  Return Amount SaleAmount  PositiveAmount");
-					 for(int i = 0; i < recordsRow.length;i++){
-						 if(i==0)
-						 {System.out.println(" Setting pc name :"+recordsRow[i].toString());
-						 //ttso[iteratorCount].setPcName(recordsRow[i].toString());
-						 ttsoTemp.setPcName(recordsRow[i].toString());
-						 System.out.println(" After setting pc name = "+ttsoTemp.getPcName());
-						 }
-						 if(i==1)
-						 {
-							 ttsoTemp.setSaleQuantity(Integer.parseInt(recordsRow[i].toString()));
-							 totalQuantity=totalQuantity+Integer.parseInt(recordsRow[i].toString());
-						 }
-						 else if(i==2)
-						 {
-							 ttsoTemp.setNr(Double.parseDouble(recordsRow[i].toString()));
-							 totalNR=totalNR+Double.parseDouble(recordsRow[i].toString());
-						 }
-						 else if(i==3)
-						 {
-							 ttsoTemp.setReturnQuantity(Integer.parseInt(recordsRow[i].toString()));
-							 returnQuantity=returnQuantity+Integer.parseInt(recordsRow[i].toString());
-						 }
-						 else if(i==4)
-						 {
-							 ttsoTemp.setReturnAmount(Double.parseDouble(recordsRow[i].toString()));
-							 returnAmount=returnAmount+Double.parseDouble(recordsRow[i].toString());
-						 }
-						 else if(i==5)
-						 {
-							 ttsoTemp.setNetSaleAmount(Double.parseDouble(recordsRow[i].toString()));
-							 netSaleAmoount=netSaleAmoount+Double.parseDouble(recordsRow[i].toString());
-						 }
-						
-						 System.out.print("\t"+recordsRow[i]);
-
-					 }
-					 ttso[iteratorCount]=ttsoTemp;
-					 iteratorCount++;
-				 }
+			 for(int y=0;y<carr.length;y++){
+			 carr[y].setProjection(getPL("orderTax"));
+			 System.out.println("CRITERIA LISR SIZE IS "+carr[y].list().size()+"  "+  arr[y]);
 			 }
-
-
-			 /*
-			  * Code for caluclating no of deliverred orders
-			  */
-			 Criteria criteriaforDeliveredOrder=session.createCriteria(Order.class);
-			 criteriaforDeliveredOrder.createAlias("seller", "seller", CriteriaSpecification.LEFT_JOIN)
-			 .add(Restrictions.eq("seller.id", sellerId))
-			 .add(Restrictions.between("orderDate",startDate, endDate))
-			 .add(Restrictions.le("deliveryDate", new Date()));
-			 criteriaforDeliveredOrder.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			 ProjectionList DOprojList = Projections.projectionList();
-			 DOprojList.add(Projections.groupProperty("pcName"));
-			 DOprojList.add(Projections.rowCount());
-			 criteriaforDeliveredOrder.setProjection(DOprojList);
-			// Object deliveredOrderCount = criteriaforDeliveredOrder.list().get(0);
-			 List<Object[]> deliveredOrderCount = criteriaforDeliveredOrder.list();
-			 Iterator DOiterator = deliveredOrderCount.iterator();
-			 if(deliveredOrderCount != null){
-				 iteratorCount=0;
-				 while(DOiterator.hasNext()){
-					 System.out.println("\n");
-					 Object[] recordsRow = (Object[])DOiterator.next();
-					 System.out.println(" Delivered order partner :"+recordsRow[0].toString()+" coumt :"+recordsRow[1].toString());
-					 totalNoofDO=totalNoofDO+Integer.parseInt(recordsRow[1].toString());
-					 ttso[iteratorCount++].setNoOfDeliveredOrder(Integer.parseInt(recordsRow[1].toString()));
-				 }
-			 }
-
-			 /*
-			  * Code for caluclating no of return orders
-			  */
-			 Criteria criteriaforReturnOrder=session.createCriteria(Order.class);
-			 criteriaforReturnOrder.createAlias("seller", "seller", CriteriaSpecification.LEFT_JOIN);
-			 criteriaforReturnOrder.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.LEFT_JOIN)
-			 .add(Restrictions.eq("seller.id", sellerId))
-			 .add(Restrictions.between("orderDate",startDate, endDate))
-			 .add(Restrictions.isNotNull("orderReturnOrRTO.returnOrRTOId"));
-			 criteriaforReturnOrder.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			 ProjectionList ROprojList = Projections.projectionList();
-			 ROprojList.add(Projections.groupProperty("pcName"));
-			 ROprojList.add(Projections.rowCount());
-			 criteriaforReturnOrder.setProjection(ROprojList);
 			 
-			 List<Object[]> returnOrderCount = criteriaforReturnOrder.list();
-			 Iterator ROiterator = returnOrderCount.iterator();
-			 if(returnOrderCount != null){
-				 iteratorCount=0;
-				 while(ROiterator.hasNext()){
-					 System.out.println("\n");
-					 Object[] recordsRow = (Object[])ROiterator.next();
-					 System.out.println(" Return order partner :"+recordsRow[0].toString()+" coumt :"+recordsRow[1].toString());
-						
-					 totalNoofRO=totalNoofRO+Integer.parseInt(recordsRow[1].toString());
-					 ttso[iteratorCount++].setNoOfReturnOrder(Integer.parseInt(recordsRow[1].toString()));
-						
-				 }
-			 }
-
-			 /*
-			  * Code for caluclating no of actionalble orders
-			  */
-			 Criteria criteriaforActionalbleOrder=session.createCriteria(Order.class);
-			 criteriaforActionalbleOrder.createAlias("seller", "seller", CriteriaSpecification.LEFT_JOIN)
-			 .add(Restrictions.eq("seller.id", sellerId))
-			 .add(Restrictions.between("orderDate",startDate, endDate))
-			 .add(Restrictions.eq("finalStatus", "Actionable"));
-			 criteriaforActionalbleOrder.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			 ProjectionList AOprojList = Projections.projectionList();
-			 AOprojList.add(Projections.groupProperty("pcName"));
-			 AOprojList.add(Projections.rowCount());
-			 criteriaforActionalbleOrder.setProjection(AOprojList);
-			
-			 List<Object[]> actionableOrderCount = criteriaforActionalbleOrder.list();
-			 Iterator AOiterator = actionableOrderCount.iterator();
-			 if(actionableOrderCount != null){
-				 iteratorCount=0;
-				 while(AOiterator.hasNext()){
-					 System.out.println("\n");
-					 Object[] recordsRow = (Object[])AOiterator.next();
-					 System.out.println(" Actionable order partner :"+recordsRow[0].toString()+" coumt :"+recordsRow[1].toString());
-						
-					 totalNoofAO=totalNoofAO+Integer.parseInt(recordsRow[1].toString());
-					 ttso[iteratorCount++].setNoOfActionableOrders(Integer.parseInt(recordsRow[1].toString()));
-						
-				 }
-			 }
-
-			 /*
-			  * Code for caluclating no of settled orders
-			  */
-			 Criteria criteriaforSettledOrder=session.createCriteria(Order.class);
-			 criteriaforSettledOrder.createAlias("seller", "seller", CriteriaSpecification.LEFT_JOIN)
-			 .add(Restrictions.eq("seller.id", sellerId))
-			 .add(Restrictions.between("orderDate",startDate, endDate))
-			 .add(Restrictions.eq("finalStatus", "Settled"));
-			 criteriaforSettledOrder.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			 ProjectionList SOprojList = Projections.projectionList();
-			 SOprojList.add(Projections.groupProperty("pcName"));
-			 SOprojList.add(Projections.rowCount());
-			 criteriaforSettledOrder.setProjection(SOprojList);
-			
-			 List<Object[]> settledOrderCount = criteriaforSettledOrder.list();
-			 Iterator SOiterator = settledOrderCount.iterator();
-			 if(settledOrderCount != null){
-				 iteratorCount=0;
-				 while(SOiterator.hasNext()){
-					 System.out.println("\n");
-					 Object[] recordsRow = (Object[])SOiterator.next();
-					 System.out.println(" Settled order partner :"+recordsRow[0].toString()+" coumt :"+recordsRow[1].toString());
-					 totalNoofSO=totalNoofSO+Integer.parseInt(recordsRow[1].toString());
-					 ttso[iteratorCount++].setNoOfSettledOrders(Integer.parseInt(recordsRow[1].toString()));
-						
-				 }
-			 }
-
-			 /*
-			  * Code for caluclating no of RTOlimit crossed orders
-			  */
-			 Criteria criteriaRTOlimitCross=session.createCriteria(Order.class);
-			 criteriaRTOlimitCross.createAlias("seller", "seller", CriteriaSpecification.LEFT_JOIN);
-			 criteriaRTOlimitCross.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.LEFT_JOIN)
-			 .add(Restrictions.eq("seller.id", sellerId))
-			 .add(Restrictions.geProperty("orderReturnOrRTO.returnDate", "rTOLimitCrossed"));
-			 criteriaRTOlimitCross.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			 ProjectionList RTOprojList = Projections.projectionList();
-			 RTOprojList.add(Projections.groupProperty("pcName"));
-			 RTOprojList.add(Projections.rowCount());
-			 criteriaRTOlimitCross.setProjection(RTOprojList);
-			
-			 List<Object[]> RTOlimitCrossOrderCount = criteriaRTOlimitCross.list();
-			 Iterator rtoOiterator = RTOlimitCrossOrderCount.iterator();
-			 if(RTOlimitCrossOrderCount != null){
-				 iteratorCount=0;
-				 while(rtoOiterator.hasNext()){
-					 System.out.println("\n");
-					 Object[] recordsRow = (Object[])rtoOiterator.next();
-					 System.out.println(" Rto limit partner :"+recordsRow[0].toString()+" coumt :"+recordsRow[1].toString());
-						
-					 totalNoofRTOCross=totalNoofRTOCross+Integer.parseInt(recordsRow[1].toString());
-					 ttso[iteratorCount++].setNoOfRTOLimitCrossed(Integer.parseInt(recordsRow[1].toString()));
-						
-				 }
-			 }
-			
-
-			 /*
-			  * Code for caluclating no of retunrLimit crossed orders
-			  */
-			 Criteria criteriaReturnlimitCross=session.createCriteria(Order.class);
-			 criteriaReturnlimitCross.createAlias("seller", "seller", CriteriaSpecification.LEFT_JOIN);
-			 criteriaReturnlimitCross.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.LEFT_JOIN)
-			 .add(Restrictions.eq("seller.id", sellerId))
-			 .add(Restrictions.geProperty("orderReturnOrRTO.returnDate", "returnLimitCrossed"));
-			 criteriaReturnlimitCross.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			 ProjectionList returnprojList = Projections.projectionList();
-			 returnprojList.add(Projections.groupProperty("pcName"));
-			 returnprojList.add(Projections.rowCount());
-			 criteriaReturnlimitCross.setProjection(returnprojList);
-			 List<Object[]> returnlimitCrossOrderCount = criteriaReturnlimitCross.list();
-			 Iterator returniterator = returnlimitCrossOrderCount.iterator();
-			 if(returnlimitCrossOrderCount != null){
-				 while(returniterator.hasNext()){
-					 iteratorCount=0;
-					 System.out.println("\n");
-					 Object[] recordsRow = (Object[])returniterator.next();
-					 System.out.println(" Return limit partner :"+recordsRow[0].toString()+" coumt :"+recordsRow[1].toString());
-						
-					 totalNoofreturnCross=totalNoofreturnCross+Integer.parseInt(recordsRow[1].toString());
-					 ttso[iteratorCount++].setNoOfReturnLimitCrossed(Integer.parseInt(recordsRow[1].toString()));
-						
-				 }
-			 }
-			
-			 /*
-			  * 
-			  */
-			  /*
-			   * Code for caluclating cities wise distribution of orders
-			   */
-			 Criteria criteriaforCitiesOrder=session.createCriteria(Order.class);
-			 criteriaforCitiesOrder.createAlias("seller", "seller", CriteriaSpecification.LEFT_JOIN);
-			 criteriaforCitiesOrder.createAlias("customer", "customer", CriteriaSpecification.LEFT_JOIN)
-			 .add(Restrictions.eq("seller.id", sellerId))
-			 .add(Restrictions.between("orderDate",startDate, endDate))
-			 .add(Restrictions.isNotNull("customer.customerCity"))
-			 .add(Restrictions.ne("customer.customerCity",""));
-			 criteriaforCitiesOrder.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			 ProjectionList ccprojList = Projections.projectionList();
-			 ccprojList.add(Projections.groupProperty("customer.customerCity"));
-			 ccprojList.add(Projections.rowCount());
-			 criteriaforCitiesOrder.setProjection(ccprojList);
-			 List<Object[]> cityresults = criteriaforCitiesOrder.list();
-			 Iterator cityIterator = cityresults.iterator();
-			 if(cityresults != null){
-				 while(cityIterator.hasNext()){
-					 System.out.println("\n");
-					 Object[] recordsRow = (Object[])cityIterator.next();
-					 
-					 System.out.println(" Cities row length "+recordsRow.length);
-					 if(recordsRow.length>0)
-					 {
-						 if(!cityMap.containsKey(recordsRow[0].toString()))
-						 {
-							 cityMap.put(recordsRow[0].toString(), Double.parseDouble(recordsRow[1].toString()));
-						 }
-					 System.out.println("city "+ recordsRow[0]+" count : "+recordsRow[1]);
-					 cityTotalQuantity=cityTotalQuantity+Integer.parseInt(recordsRow[1].toString());
-					 }
-
-					 
-				 }
-			 }
-			 System.out.println(" ***cityTotalQuantity "+cityTotalQuantity);
-			 ttso[0].setCityQuantity(cityMap);
-			 for (Map.Entry<String, Double> entry : cityMap.entrySet()) {
-				 System.out.println("for city : "+entry.getKey()+" count is :"+entry.getValue()+" percent is :"+ (entry.getValue())/cityTotalQuantity*100);
-				 cityPercentMap.put(entry.getKey(), (entry.getValue())/cityTotalQuantity*100);
+			 ChannelSalesDetails temp=null;int i=0;
+	for(int m=0;m<carr.length;m++){
+			 List<Object[]> results = carr[m].list();
+			               
+			 Iterator channelItr = results.iterator();
+			 while(channelItr.hasNext()){
+				 Object[] recordsRow = (Object[])channelItr.next();
+				 temp=new ChannelSalesDetails();
+				 populateChannelSalesDetails(temp,recordsRow,startDate,endDate);
+				 temp.setGroupByName("orderTax");
+				 temp.setPcName(arr[i]);
+				 ttso.add(temp);
+			 }i++;}
+		
+				Iterator pcNameItr=pcNameList.iterator();
+				
+				while(pcNameItr.hasNext()){
+					 Object[] recordsRow = (Object[])pcNameItr.next();
+					 temp=new ChannelSalesDetails();
+					 populateChannelSalesDetails(temp,recordsRow,startDate,endDate);
+					 temp.setGroupByName(null);
+					 ttso.add(temp);
 			}
 
-			 ttso[0].setCityQuantity(cityMap);
-			 ttso[0].setCityPercentage(cityPercentMap);
-			
-			 
-			 for(int i=0;i<ttso.length;i++)
-			 {
-				 ttso[i].setSaleQuantityPercent( ttso[i].getSaleQuantity()*100/totalQuantity);
-				 if((int)returnQuantity!=0)
-				 ttso[i].setReturnQuantityPercent( ttso[i].getReturnQuantity()*100/returnQuantity);
-				 ttso[i].setNrPercent(ttso[i].getNr()*100/totalNR);
-				 if((int)returnAmount!=0)
-				 ttso[i].setReturnAmountPercent(ttso[i].getReturnAmount()*100/returnAmount);
-				 if((int)netSaleAmoount!=0)
-				 ttso[i].setNetSaleAmountPercent(ttso[i].getNetSaleAmount()*100/netSaleAmoount);
-				 if((int)totalNoofDO!=0)
-				 ttso[i].setDeliveredOrderPercent(ttso[i].getNoOfDeliveredOrder()*100/totalNoofDO);
-				 if((int)totalNoofAO!=0)
-				 ttso[i].setActionableOrdersPercent(ttso[i].getNoOfActionableOrders()*100/totalNoofAO);
-				 if((int)totalNoofRO!=0)
-				 ttso[i].setReturnOrderPercent(ttso[i].getNoOfReturnOrder()*100/totalNoofRO);
-				 ttso[i].setRTOOrderPercent(ttso[i].getNoOfRTOOrder());
-
-				 if((int)totalNoofRTOCross!=0)
-				 ttso[i].setRTOLimitCrossedPercent(ttso[i].getNoOfRTOLimitCrossed()*100/totalNoofRTOCross);
-				 if((int)totalNoofreturnCross!=0)
-				 ttso[i].setReturnLimitCrossedPercent(ttso[i].getNoOfReturnLimitCrossed()*100/totalNoofreturnCross);
-				 if((int)totalNoofSO!=0)
-				 ttso[i].setSettledOrdersPercent(ttso[i].getNoOfSettledOrders()*100/totalNoofSO);
-				 
-				 
-			 }
-			 
-		    session.getTransaction().commit();
-		   session.close();
+			 session.getTransaction().commit();
+		     session.close();
 		   }
-		   catch (Exception e) {
-			   
+		   catch (Exception e) {			   
 			   log.error(e);
 			   log.info("Error :",e);
 			   throw new CustomException(GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3, GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
-			  /* System.out.println("Inside exception  "+e.getLocalizedMessage());
-			   e.printStackTrace();*/
 		}
 		 log.info("*** getAllPartnerTSOdetails exit ***");
-		 return Arrays.asList(ttso);
-
+	 
+		 return ttso;
 	}
 
 
@@ -408,6 +143,77 @@ public class ReportsGeneratorDaoImpl2 implements ReportsGeneratorDao2 {
 		// TODO Auto-generated method stub
 		System.out.println("GET PRODUCTS SALES DETAILS");
 		return null;
+	}
+	
+	public static ProjectionList getPL(String name){
+		 ProjectionList projList = Projections.projectionList();
+		 if(name.equals("pcName"))
+			 projList.add(Projections.groupProperty("pcName"));
+		 else if(name.equals("orderTax"))
+		 projList.add(Projections.groupProperty("orderTax.taxCategtory"));
+		 
+		 projList.add(Projections.sum("quantity"));
+		 projList.add(Projections.sum("discount"));
+		 projList.add(Projections.sum("orderMRP"));
+		 projList.add(Projections.sum("orderSP"));
+		 projList.add(Projections.sum("shippingCharges"));
+		 projList.add(Projections.sum("netSaleQuantity"));
+		 projList.add(Projections.sum("netRate"));
+		 projList.add(Projections.sum("grossNetRate"));
+		 projList.add(Projections.sum("partnerCommission"));
+		 projList.add(Projections.sum("pr"));
+		 projList.add(Projections.sum("totalAmountRecieved"));
+		 projList.add(Projections.sum("poPrice"));
+		 projList.add(Projections.sum("grossProfit"));
+		 projList.add(Projections.sum("serviceTax"));
+		 projList.add(Projections.sum("fixedfee"));
+		 projList.add(Projections.sum("pccAmount"));		 
+		 projList.add(Projections.sum("orderPayment.negativeAmount"));
+		 projList.add(Projections.sum("orderPayment.positiveAmount"));
+		 projList.add(Projections.sum("orderPayment.actualrecived2"));
+		 projList.add(Projections.sum("orderPayment.netPaymentResult"));
+		 projList.add(Projections.sum("orderPayment.paymentDifference"));			 
+		 projList.add(Projections.sum("orderReturnOrRTO.returnOrRTOCharges"));
+		 projList.add(Projections.sum("orderReturnOrRTO.returnorrtoQty"));
+		 projList.add(Projections.sum("orderReturnOrRTO.returnOrRTOChargestoBeDeducted"));
+		 projList.add(Projections.rowCount());
+
+		 return projList;
+	}
+	
+	
+	public static void populateChannelSalesDetails(ChannelSalesDetails temp,Object[] recordsRow,Date startDate,Date endDate){
+		
+		 temp.setPcName(recordsRow[0].toString());
+		 temp.setTaxCategtory(recordsRow[0].toString());
+		 temp.setQuantity(Integer.parseInt(recordsRow[1].toString()));
+		 temp.setDiscount(Double.parseDouble(recordsRow[2].toString()));
+		 temp.setOrderMRP(Double.parseDouble(recordsRow[3].toString()));
+		 temp.setOrderSP(Double.parseDouble(recordsRow[4].toString()));
+		 temp.setShippingCharges(Double.parseDouble(recordsRow[5].toString()));
+		 temp.setNetSaleQuantity(Integer.parseInt(recordsRow[6].toString()));
+		 temp.setNetRate(Double.parseDouble(recordsRow[7].toString()));
+		 temp.setGrossNetRate(Double.parseDouble(recordsRow[8].toString()));
+		 temp.setPartnerCommission(Double.parseDouble(recordsRow[9].toString()));
+		 temp.setPr(Double.parseDouble(recordsRow[10].toString()));
+		 temp.setTotalAmountRecieved(Double.parseDouble(recordsRow[11].toString()));
+		 temp.setPoPrice(Double.parseDouble(recordsRow[12].toString()));
+		 temp.setGrossProfit(Double.parseDouble(recordsRow[13].toString()));
+		 temp.setServiceTax(Float.parseFloat(recordsRow[14].toString()));
+		 temp.setFixedfee(Double.parseDouble(recordsRow[15].toString()));
+		 temp.setPccAmount(Double.parseDouble(recordsRow[16].toString()));
+		 temp.setNegativeAmount(Double.parseDouble(recordsRow[17].toString()));
+		 temp.setPositiveAmount(Double.parseDouble(recordsRow[18].toString()));
+		 temp.setActualrecived2(Double.parseDouble(recordsRow[19].toString()));
+		 temp.setNetPaymentResult(Double.parseDouble(recordsRow[20].toString()));
+		 temp.setPaymentDifference(Double.parseDouble(recordsRow[21].toString()));
+		 temp.setReturnOrRTOCharges(Double.parseDouble(recordsRow[22].toString()));
+		 temp.setReturnorrtoQty(Integer.parseInt(recordsRow[23].toString()));
+		 temp.setStartDate(startDate.getDate()+"|"+startDate.getMonth()+"|"+startDate.getYear());
+		 temp.setEndDate(endDate.getDate()+"|"+endDate.getMonth()+"|"+endDate.getYear());
+		 temp.setRowCount(Integer.parseInt(recordsRow[23].toString()));
+		 temp.setReturnOrRTOChargestoBeDeducted(Double.parseDouble(recordsRow[24].toString()));
+		
 	}
 
 }
