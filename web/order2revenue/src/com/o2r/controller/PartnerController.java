@@ -35,7 +35,6 @@ import com.o2r.helper.CustomException;
 import com.o2r.helper.HelperClass;
 import com.o2r.model.Category;
 import com.o2r.model.NRnReturnCharges;
-import com.o2r.model.NRnReturnConfig;
 import com.o2r.model.Partner;
 import com.o2r.service.CategoryService;
 import com.o2r.service.PartnerService;
@@ -344,14 +343,22 @@ public class PartnerController {
 		log.info("*** editPartner start ***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
+		PartnerBean pbean=null;
+		Map<String,Float> chargeMap=new HashMap<String, Float>();
 		try {
 			datemap.put("default", "Select payment from");
 			datemap.put("true", "Shipping Date");
 			datemap.put("false", "Delivery Date");
 			model.put("datemap", datemap);
-			model.put("partner", ConverterClass
-					.preparePartnerBean(partnerService.getPartner(partnerBean
-							.getPcId())));
+			pbean=ConverterClass
+			.preparePartnerBean(partnerService.getPartner(partnerBean
+					.getPcId()));
+			for(NRnReturnCharges charge:pbean.getNrnReturnConfig().getCharges())
+			{
+				chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
+			}
+			model.put("partner", pbean);
+			model.put("chargeMap", chargeMap);
 		} catch (CustomException ce) {
 			log.error("editPartner exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());

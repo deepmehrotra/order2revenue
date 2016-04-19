@@ -30,7 +30,7 @@ import com.o2r.model.TaxDetail;
 @Repository("taxDetailDao")
 public class TaxDetailsDaoImpl implements TaxDetailsDao {
 
-	private static final String taxTdRetriveQuery = "Select td.taxId from taxDetail td,Seller s, Seller_taxDetail st where s.id=:sellerId and s.id=st.seller_id and st.taxDetails_taxId=td.taxId and MONTH(td.uploadDate)=:month and td.particular=:particular";
+	private static final String taxTdRetriveQuery = "Select td.taxId from TaxDetail td,Seller s, Seller_TaxDetail st where s.id=:sellerId and s.id=st.seller_id and st.taxDetails_taxId=td.taxId and MONTH(td.uploadDate)=:month and td.particular=:particular";
 
 	@Autowired
 	private SessionFactory sessionFactory;

@@ -174,6 +174,7 @@ public class SellerController {
 	public ModelAndView register(
 			@ModelAttribute("command") SellerBean sellerBean,
 			BindingResult result) {
+		System.out.println(" Calling register");
 		return new ModelAndView("register", model);
 	}
 

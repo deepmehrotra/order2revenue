@@ -58,6 +58,7 @@ public class CategoryController {
 			BindingResult result) {
 		log.info("***changeInventorygroup Start****");
 		log.debug(" Category ID in changeInventorygroup: " + catId);
+		System.out.println(" Category ID in changeInventorygroup: " + catId);
 		List<CategoryBean> categorylist = null;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, String> catageorymap = new HashMap<String, String>();
@@ -201,7 +202,7 @@ public class CategoryController {
 			BindingResult result) {
 		log.info("***viewsingleInventorygroup Start****");
 		log.debug(" Category  to view  :" + categoryBean.getId());
-
+System.out.println(" Category  to view  :" + categoryBean.getId());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			if (categoryBean.getId() != 0) {
@@ -209,6 +210,7 @@ public class CategoryController {
 						.prepareListofCategoryBean(categoryService
 								.listParentCategories(HelperClass
 										.getSellerIdfromSession(request)));
+				System.out.println(" Parent catgeories : "+categorylist.get(0));
 				Map<String, String> catageorymap = new HashMap<String, String>();
 				Category category = categoryService.getCategory(categoryBean
 						.getId());
