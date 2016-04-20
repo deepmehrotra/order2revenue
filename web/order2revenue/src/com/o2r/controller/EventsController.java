@@ -3,6 +3,7 @@ package com.o2r.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,10 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.o2r.bean.EventsBean;
+import com.o2r.bean.ProductBean;
 import com.o2r.helper.ConverterClass;
+import com.o2r.helper.CustomException;
 import com.o2r.helper.HelperClass;
 import com.o2r.model.Events;
 import com.o2r.model.NRnReturnCharges;
@@ -33,8 +38,7 @@ public class EventsController {
 	@SuppressWarnings("deprecation")
 	public ModelAndView saveEvents(HttpServletRequest request,@ModelAttribute("command") EventsBean eventsBean, BindingResult result){
 		
-		log.info("**** saveEvents Starts****");
-		
+		log.info("$$$ saveEvents Starts $$$");		
 		List<NRnReturnCharges> chargeList=new ArrayList<NRnReturnCharges>();
 		Map<String, String[]> parameters = request.getParameterMap();
 		
@@ -93,11 +97,34 @@ public class EventsController {
 			e.printStackTrace();
 		}
 		
-		log.info("**** saveEvents Exit ***");
+		log.info("$$$ saveEvents Exit $$$");
 		return new ModelAndView("redirect:/miscellaneous/EventsDetail.html");
 		
 	}
 	
-	
+	@RequestMapping(value = "/seller/eventsList", method = RequestMethod.GET)
+	public ModelAndView eventsList(HttpServletRequest request, @ModelAttribute("command") EventsBean eventsBean, BindingResult result) {
+		
+		log.info("$$$ eventsList starts $$$");
+		System.out.println(" Inside eventList method");
+		Map<String, Object> model = new HashMap<String, Object>();
+		try { 
+			model.put("eventsList", ConverterClass
+					.prepareListOfEventsBean(eventsService
+							.listEvents(HelperClass
+									.getSellerIdfromSession(request))));
+		} /*catch (CustomException ce) {
+			log.error("productList exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		}*/ catch (Exception e) {
+			log.error(e);
+			e.printStackTrace();
+		}
+		log.info("$$$ eventsList Exit $$$");
+		return new ModelAndView("miscellaneous/eventsList",model);
+	}
 
 }

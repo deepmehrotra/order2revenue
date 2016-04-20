@@ -11,14 +11,17 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.o2r.model.Events;
 import com.o2r.model.Partner;
 import com.o2r.model.Seller;
 
+@Repository("eventsDao")
 public class EventsDaoImpl implements EventsDao {	
 	
-		
+	@Autowired	
 	private SessionFactory sessionFactory;
 	static Logger log = Logger.getLogger(EventsDaoImpl.class.getName());
 	

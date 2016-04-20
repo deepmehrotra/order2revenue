@@ -54,6 +54,9 @@ function onclickSideNavigation(value) {
 	case "TDS" :
 		targeturl="tdsDetailList.html";
 	break;
+	case "Events" :
+		targeturl="eventsList.html";
+	break;
 	case "Reports" :
 		targeturl="getAllReports.html";
 	break;

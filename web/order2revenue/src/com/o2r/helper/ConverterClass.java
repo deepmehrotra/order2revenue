@@ -1271,6 +1271,32 @@ public class ConverterClass {
 		eventsBean.setNetSalesAmount(events.getNetSalesAmount());
 		return eventsBean;
 	}
+	public static List<EventsBean> prepareListOfEventsBean(List<Events> events){
+		List<EventsBean> beans = null;
+		if (events != null && !events.isEmpty()) {
+			beans = new ArrayList<EventsBean>();
+			EventsBean bean = null;
+			for (Events event: events) {
+				bean = new EventsBean();
+				bean.setEventId(event.getEventId());
+				bean.setSellerId(event.getSellerId());
+				bean.setEventName(event.getEventName());
+				bean.setChannelName(event.getChannelName());
+				bean.setStartDate(event.getStartDate());
+				bean.setEndDate(event.getEndDate());
+				bean.setProductCategories(event.getProductCategories());
+				bean.setNrType(event.getNrType());
+				bean.setReturnCharges(event.getReturnCharges());
+				bean.setNrnReturnConfig(event.getNrnReturnConfig());
+				bean.setPartner(event.getPartner());
+				bean.setCreatedDate(event.getCreatedDate());
+				bean.setNetSalesQuantity(event.getNetSalesQuantity());
+				bean.setNetSalesAmount(event.getNetSalesAmount());
+				beans.add(bean);
+			}
+		}		
+		return beans;
+	}
 	
 
 }

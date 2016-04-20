@@ -58,16 +58,12 @@ public class Partner {
 	@OneToMany(mappedBy="partner", cascade=CascadeType.ALL)
 	private List<Events> events;
 	
-	public List<Events> getEvents() {
-		return events;
-	}
-	public void setEvents(List<Events> events) {
-		this.events = events;
-	}
 	@OneToOne(cascade=CascadeType.ALL)
 	private NRnReturnConfig nrnReturnConfig;
+	
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<Order> orders = new ArrayList<Order>();
+	
 	public int getPcId() {
 		return pcId;
 	}
@@ -183,6 +179,12 @@ public class Partner {
 	}
 	public void setNrnReturnConfig(NRnReturnConfig nrnReturnConfig) {
 		this.nrnReturnConfig = nrnReturnConfig;
+	}
+	public List<Events> getEvents() {
+		return events;
+	}
+	public void setEvents(List<Events> events) {
+		this.events = events;
 	}
 
 

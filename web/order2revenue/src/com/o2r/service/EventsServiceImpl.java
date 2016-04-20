@@ -3,12 +3,20 @@ package com.o2r.service;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.o2r.dao.EventsDao;
 import com.o2r.model.Events;
 import com.o2r.model.Partner;
 
+@Service("eventsService")
+@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class EventsServiceImpl implements EventsService{
 	
+	@Autowired
 	private EventsDao eventsDao;
 	
 	@Override

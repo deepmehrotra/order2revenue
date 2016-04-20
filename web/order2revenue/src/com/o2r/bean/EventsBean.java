@@ -19,7 +19,7 @@ public class EventsBean {
 	private NRnReturnConfig nrnReturnConfig;
 	private Partner partner;
 	private Date createdDate;
-	private int netSalesQuantity;
+	private long netSalesQuantity;
 	private double netSalesAmount;
 	
 	
@@ -95,10 +95,10 @@ public class EventsBean {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
-	public int getNetSalesQuantity() {
+	public long getNetSalesQuantity() {
 		return netSalesQuantity;
 	}
-	public void setNetSalesQuantity(int netSalesQuantity) {
+	public void setNetSalesQuantity(long netSalesQuantity) {
 		this.netSalesQuantity = netSalesQuantity;
 	}
 	public double getNetSalesAmount() {
