@@ -128,11 +128,9 @@ public class PartnerDaoImpl implements PartnerDao {
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Seller.class).add(
 					Restrictions.eq("id", sellerId));
-			criteria.createAlias("partners", "partner",
-					CriteriaSpecification.LEFT_JOIN)
+			criteria.createAlias("partners", "partner",CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("partner.pcName", partnername))
-					.setResultTransformer(
-							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
 			if (criteria.list() != null && criteria.list().size() != 0) {
 				seller = (Seller) criteria.list().get(0);

@@ -6,6 +6,7 @@ import java.util.List;
 import com.o2r.bean.AccountTransactionBean;
 import com.o2r.bean.CategoryBean;
 import com.o2r.bean.CustomerBean;
+import com.o2r.bean.EventsBean;
 import com.o2r.bean.ExpenseBean;
 import com.o2r.bean.ExpenseCategoryBean;
 import com.o2r.bean.ManualChargesBean;
@@ -26,6 +27,7 @@ import com.o2r.bean.TaxDetailBean;
 import com.o2r.model.AccountTransaction;
 import com.o2r.model.Category;
 import com.o2r.model.Customer;
+import com.o2r.model.Events;
 import com.o2r.model.ExpenseCategory;
 import com.o2r.model.Expenses;
 import com.o2r.model.ManualCharges;
@@ -410,6 +412,7 @@ public class ConverterClass {
 					.isPaycyclefromshipordel());
 			partner.setMonthlypaydate(partnerBean.getMonthlypaydate());
 			partner.setNrnReturnConfig(partnerBean.getNrnReturnConfig());
+			partner.setEvents(partnerBean.getEvents());
 		}
 		return partner;
 	}
@@ -441,6 +444,7 @@ public class ConverterClass {
 				bean.setPaycyclefromshipordel(partner.isPaycyclefromshipordel());
 				bean.setMonthlypaydate(partner.getMonthlypaydate());
 				bean.setNrnReturnConfig(partner.getNrnReturnConfig());
+				bean.setEvents(partner.getEvents());
 				beans.add(bean);
 			}
 		}
@@ -468,6 +472,7 @@ public class ConverterClass {
 			bean.setTdsApplicable(partner.isTdsApplicable());
 			bean.setPaycyclefromshipordel(partner.isPaycyclefromshipordel());
 			bean.setMonthlypaydate(partner.getMonthlypaydate());
+			bean.setEvents(partner.getEvents());
 			bean.setNrnReturnConfig(partner.getNrnReturnConfig());
 		}
 		return bean;
@@ -1226,5 +1231,46 @@ public class ConverterClass {
 		}
 		return beanArray;
 	}
+	
+	public static Events prepareEventsModel(EventsBean eventsBean){
+		
+		Events events=new Events();
+		events.setEventId(eventsBean.getEventId());
+		events.setSellerId(eventsBean.getSellerId());
+		events.setEventName(eventsBean.getEventName());
+		events.setChannelName(eventsBean.getChannelName());
+		events.setStartDate(eventsBean.getStartDate());
+		events.setEndDate(eventsBean.getEndDate());
+		events.setProductCategories(eventsBean.getProductCategories());
+		events.setNrType(eventsBean.getNrType());
+		events.setReturnCharges(eventsBean.getReturnCharges());
+		events.setNrnReturnConfig(eventsBean.getNrnReturnConfig());
+		events.setPartner(eventsBean.getPartner());
+		events.setCreatedDate(eventsBean.getCreatedDate());
+		events.setNetSalesQuantity(eventsBean.getNetSalesQuantity());
+		events.setNetSalesAmount(eventsBean.getNetSalesAmount());
+		return events;
+		
+	}
+	public static EventsBean prepareEventsBean(Events events){
+		
+		EventsBean eventsBean=new EventsBean();
+		eventsBean.setEventId(events.getEventId());
+		eventsBean.setSellerId(events.getSellerId());
+		eventsBean.setEventName(events.getEventName());
+		eventsBean.setChannelName(events.getChannelName());
+		eventsBean.setStartDate(events.getStartDate());
+		eventsBean.setEndDate(events.getEndDate());
+		eventsBean.setProductCategories(events.getProductCategories());
+		eventsBean.setNrType(events.getNrType());
+		eventsBean.setReturnCharges(events.getReturnCharges());
+		eventsBean.setNrnReturnConfig(events.getNrnReturnConfig());
+		eventsBean.setPartner(events.getPartner());
+		eventsBean.setCreatedDate(events.getCreatedDate());
+		eventsBean.setNetSalesQuantity(events.getNetSalesQuantity());
+		eventsBean.setNetSalesAmount(events.getNetSalesAmount());
+		return eventsBean;
+	}
+	
 
 }

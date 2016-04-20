@@ -262,6 +262,11 @@ public class ManualChargesController {
 
 		return "miscellaneous/tdsDetails";
 	}
+	@RequestMapping(value = "/seller/eventsDetail", method = RequestMethod.GET)
+	public String eventsDetailList() {
+
+		return "miscellaneous/EventsDetail";
+	}
 
 	@RequestMapping(value = "/seller/manualCharges", method = RequestMethod.GET)
 	public String manualChargesList() {

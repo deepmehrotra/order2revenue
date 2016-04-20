@@ -54,6 +54,16 @@ public class Partner {
 	private boolean paycyclefromshipordel;
 	@Column
 	private int monthlypaydate;
+	
+	@OneToMany(mappedBy="partner", cascade=CascadeType.ALL)
+	private List<Events> events;
+	
+	public List<Events> getEvents() {
+		return events;
+	}
+	public void setEvents(List<Events> events) {
+		this.events = events;
+	}
 	@OneToOne(cascade=CascadeType.ALL)
 	private NRnReturnConfig nrnReturnConfig;
 	@OneToMany(cascade=CascadeType.ALL)

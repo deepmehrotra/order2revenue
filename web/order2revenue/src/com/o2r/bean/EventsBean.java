@@ -5,8 +5,9 @@ import java.util.Date;
 import com.o2r.model.NRnReturnConfig;
 import com.o2r.model.Partner;
 
-public class Events {
+public class EventsBean {
 	
+	private int sellerId;	
 	private int eventId;
 	private String eventName;
 	private String channelName;
@@ -18,7 +19,16 @@ public class Events {
 	private NRnReturnConfig nrnReturnConfig;
 	private Partner partner;
 	private Date createdDate;
+	private int netSalesQuantity;
+	private double netSalesAmount;
 	
+	
+	public int getSellerId() {
+		return sellerId;
+	}
+	public void setSellerId(int sellerId) {
+		this.sellerId = sellerId;
+	}
 	public int getEventId() {
 		return eventId;
 	}
@@ -84,6 +94,18 @@ public class Events {
 	}
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+	public int getNetSalesQuantity() {
+		return netSalesQuantity;
+	}
+	public void setNetSalesQuantity(int netSalesQuantity) {
+		this.netSalesQuantity = netSalesQuantity;
+	}
+	public double getNetSalesAmount() {
+		return netSalesAmount;
+	}
+	public void setNetSalesAmount(double netSalesAmount) {
+		this.netSalesAmount = netSalesAmount;
 	}
 	
 

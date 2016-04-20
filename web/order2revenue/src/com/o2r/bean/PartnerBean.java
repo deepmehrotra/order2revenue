@@ -4,6 +4,7 @@ package com.o2r.bean;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.o2r.model.Events;
 import com.o2r.model.NRnReturnConfig;
 import com.o2r.model.Order;
 
@@ -29,8 +30,18 @@ public class PartnerBean {
 	private boolean tdsApplicable;
 	private boolean paycyclefromshipordel;
 	private int monthlypaydate;
+	private List<Events> events=new ArrayList<Events>();
 	private List<Order> orders = new ArrayList<Order>();
 	private NRnReturnConfig nrnReturnConfig;
+	
+	
+	public List<Events> getEvents() {
+		return events;
+	}
+	public void setEvents(List<Events> events) {
+		this.events = events;
+	}
+	
 	public int getPcId() {
 		return pcId;
 	}

@@ -1,12 +1,14 @@
 package com.o2r.model;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 public class Events {
@@ -14,6 +16,8 @@ public class Events {
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	@Column
 	private int eventId;
+	@Column
+	private int sellerId;
 	@Column	
 	private String eventName;
 	@Column
@@ -31,10 +35,14 @@ public class Events {
 	@Column
 	private Date createdDate;
 	
+	private int netSalesQuantity;
+	private double netSalesAmount;
+	
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	private NRnReturnConfig nrnReturnConfig;
 	
-	
+	@ManyToOne(cascade=CascadeType.ALL)	
 	private Partner partner;
 	
 	
@@ -43,6 +51,12 @@ public class Events {
 	}
 	public void setEventId(int eventId) {
 		this.eventId = eventId;
+	}
+	public int getSellerId() {
+		return sellerId;
+	}
+	public void setSellerId(int sellerId) {
+		this.sellerId = sellerId;
 	}
 	public String getEventName() {
 		return eventName;
@@ -103,5 +117,17 @@ public class Events {
 	}
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+	public int getNetSalesQuantity() {
+		return netSalesQuantity;
+	}
+	public void setNetSalesQuantity(int netSalesQuantity) {
+		this.netSalesQuantity = netSalesQuantity;
+	}
+	public double getNetSalesAmount() {
+		return netSalesAmount;
+	}
+	public void setNetSalesAmount(double netSalesAmount) {
+		this.netSalesAmount = netSalesAmount;
 	}
 }
