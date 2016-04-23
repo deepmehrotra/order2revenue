@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.dao.ReportsGeneratorDao;
-import com.o2r.dao.ReportsGeneratorDao2;
+import com.o2r.dao.ReportsChannelnCategoryDao;
 import com.o2r.helper.CustomException;
 import com.o2r.model.UploadReport;
 
@@ -26,7 +26,7 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 	@Autowired
 	private ReportsGeneratorDao reportGeneratorDao;
 	@Autowired
-	private ReportsGeneratorDao2 reportGeneratorDao2;
+	private ReportsChannelnCategoryDao reportGeneratorDao2;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
@@ -72,6 +72,14 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 		// TODO Auto-generated method stub
 		return reportGeneratorDao2.getChannelSalesDetails(startDate, endDate,
 				sellerId);
+	}
+
+	@Override
+	public List<ChannelSalesDetails> getCategorySalesDetails(Date startDate,
+			Date endDate, int sellerIdfromSession) throws CustomException {
+		// TODO Auto-generated method stub
+		return reportGeneratorDao2.getCategorySalesDetails(startDate, endDate,
+				sellerIdfromSession);
 	}
 
 	/*

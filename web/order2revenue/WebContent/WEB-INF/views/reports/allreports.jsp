@@ -177,7 +177,7 @@ var OrderRelatedReport = [
                   {display: "Settled Orders", value: "settledOrders" }];
 var ChannelRelatedReport = [
                           {display: "Channel Wise Sales Order", value: "channelSaleReport" },
-                          {display: "Order Wise Sales Order", value: "orderWiseSaleReport" }];
+                          {display: "Category Wise Sales Order", value: "categoryWiseSaleReport" }];
 var ProductRelatedReport = [
                           {display: "Product Shipped Orders", value: "productSaleReport" }, 
                           {display: "Payment Difference Orders", value: "productSaleReport" }, 

@@ -29,4 +29,7 @@ public interface ReportGeneratorService {
 
 	 public List<TotalShippedOrder> getProductSalesDetails(Date startDate ,Date endDate, int sellerId)throws CustomException;
 
+	public List<ChannelSalesDetails> getCategorySalesDetails(Date startDate,
+			Date endDate, int sellerIdfromSession) throws CustomException;
+
 }

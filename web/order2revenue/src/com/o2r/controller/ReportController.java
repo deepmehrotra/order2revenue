@@ -85,7 +85,7 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			log.error(e);
 		} 
 		log.info("*** addmanualPayment exit ***");
-		if(reportName.equals("channelSaleReport") || reportName.equals("productSaleReport"))
+		if(reportName.equals("channelSaleReport") || reportName.equals("categoryWiseSaleReport"))
 			return new ModelAndView("reports/channelSaleReport", model);
 		else
 			return new ModelAndView("reports/filterReports", model);
@@ -181,9 +181,10 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 		log.info("*** getReport exit ***");
 		if(reportName.equals("channelSaleReport"))
 			return new ModelAndView("reports/viewChannelSaleGraphReport", model);
+		else if(reportName.equals("categoryWiseSaleReport"))
+			return new ModelAndView("reports/viewCategorySaleGraphReport", model);
 		else
 			return new ModelAndView("reports/viewGraphReport", model);
-		
 }
 
 
@@ -205,14 +206,18 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 		startDate = new Date(request.getParameter("startdate"));
 		endDate = new Date(request.getParameter("enddate"));
 	//	partner = request.getParameter("toggler");
-		
+		if(reportName.equals("categoryWiseSaleReport"))
+		ttso = reportGeneratorService.getCategorySalesDetails(startDate,endDate, HelperClass.getSellerIdfromSession(request));
+		else
 		ttso = reportGeneratorService.getChannelSalesDetails(startDate,endDate, HelperClass.getSellerIdfromSession(request));
+
 		if (ttso != null)
 			System.out.println(" ****Inside controller after gettitng ttso objkect : "+ ttso.size());
 		else
 			System.out.println(" TTSO object is geting null");
 
 		model.put("ttsolist", ttso);
+		
 		model.put("period",dateFormat.format(startDate) + " to "+ dateFormat.format(endDate));
 		/*
 		 * model.put("reportName",reportName);
@@ -230,6 +235,8 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 		log.info("*** getReport exit ***");
 		if(reportName.equals("channelSaleReport"))
 			return new ModelAndView("reports/viewChannelSaleGraphReport", model);
+		else if(reportName.equals("categoryWiseSaleReport"))
+			return new ModelAndView("reports/viewCategorySaleGraphReport", model);
 		else
 			return new ModelAndView("reports/viewProductSaleGraphReport", model);		
 }
@@ -311,7 +318,7 @@ public void downloadOrderReport(HttpServletRequest request ,HttpServletResponse 
 		reportheaders = request.getParameterValues("headers");
 		try {
 			orderlist = orderService.findChannelOrdersbyDate("orderDate", startDate,endDate, HelperClass.getSellerIdfromSession(request));
-			reportDownloadService.downloadCOReport(response, orderlist,reportheaders, reportName,	HelperClass.getSellerIdfromSession(request));
+			reportDownloadService.downloadCOReport(response, orderlist,reportheaders, "ChannelSalesReport",	HelperClass.getSellerIdfromSession(request));
 		} catch (ClassNotFoundException e) {
 			log.error(e);
 			/*
