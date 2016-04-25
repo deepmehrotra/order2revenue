@@ -40,6 +40,7 @@ public class ChannelSalesDetails {
 	private String uniqueItemId;
 	private String channelOrderID;
 	private String productSkuCode;
+	private String productCategory;
 	
 	public String getProductSkuCode() {
 		return productSkuCode;
@@ -252,5 +253,11 @@ public class ChannelSalesDetails {
 	}
 	public void setServiceTax(float serviceTax) {
 		this.serviceTax = serviceTax;
+	}
+	public String getProductCategory() {
+		return productCategory;
+	}
+	public void setProductCategory(String productCategory) {
+		this.productCategory = productCategory;
 	}
 }
