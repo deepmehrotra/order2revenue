@@ -10,9 +10,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -150,7 +147,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 
 		Seller seller = null;
 		TaxDetail existingObj = null;
-		Date todaysDate = new Date();
+		//Date todaysDate = new Date();
 		double amount = taxDetail.getBalanceRemaining();
 		boolean status = false;
 		// Session session=null;

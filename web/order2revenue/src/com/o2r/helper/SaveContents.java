@@ -319,7 +319,7 @@ public class SaveContents {
 					errorMessage.append(" Quantity can not be null ");
 					validaterow = false;
 				}
-				System.out.println(" NR calculator state: "+partner.getNrnReturnConfig().isNrCalculator());
+
 				if (partner != null && partner.getNrnReturnConfig() != null
 						&& !partner.getNrnReturnConfig().isNrCalculator()) {
 					if (entry.getCell(17) != null
@@ -339,6 +339,7 @@ public class SaveContents {
 
 				if (entry.getCell(18) != null
 						&& entry.getCell(18).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					System.out.println(" Email from sheet ************ "+rowIndex+":"+entry.getCell(18).toString());
 					customerBean.setCustomerEmail(entry.getCell(18).toString());
 				}
 				if (entry.getCell(19) != null
