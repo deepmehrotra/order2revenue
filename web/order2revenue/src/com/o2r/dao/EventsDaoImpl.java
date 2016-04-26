@@ -28,13 +28,15 @@ public class EventsDaoImpl implements EventsDao {
 	@Override
 	public void addEvent(Events events, int sellerId) {
 		
+		log.info("$$$ addEvent Starts.... $$$");
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();			
 			Partner partner = null;
 			Seller seller = null;
 			List<Events> event = null;
-			String currentPartnerName = events.getPartner().getPcName();
+					
+			String currentPartnerName = events.getChannelName();			
 			
 			Criteria criterias = session.createCriteria(Events.class).add(Restrictions.eq("sellerId", sellerId));
 			Criterion res1=Restrictions.and(Restrictions.ge("startDate",events.getStartDate()),Restrictions.le("endDate",events.getStartDate()));
@@ -74,13 +76,31 @@ public class EventsDaoImpl implements EventsDao {
 			session.close();
 		} catch (Exception e) {
 			log.error(e);
+			e.printStackTrace();
 			//throw new CustomException(GlobalConstant.addPartnerError,new Date(), 1, GlobalConstant.addPartnerErrorCode, e);
-		}		
+		}
+		
+		log.info("$$$ addEvent Exit...");
 	}	
 	
 	@Override
-	public Events getEvent(int eventId) {
-		return null;
+	public Events getEvent(int eventId) {		
+		Events event=null;
+		Session session=null;
+		try {			
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Seller.class).add(Restrictions.eq("eventId", eventId));
+			event=(Events)criteria.list().get(0);
+		} catch (Exception e) {
+			log.error(e);
+			e.printStackTrace();
+		}finally{
+			if(session != null){
+				session.close();
+			}			
+		}
+		return event;
 	}
 	
 	@Override
@@ -94,7 +114,7 @@ public class EventsDaoImpl implements EventsDao {
 			
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
+			Criteria criteria = session.createCriteria(Seller.class).add(Restrictions.eq("sellerId", sellerId));
 			criteria.createAlias("events", "events", CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("channelName", partner.getPcName()))
 					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
@@ -115,9 +135,7 @@ public class EventsDaoImpl implements EventsDao {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			
-			Criteria criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
-			criteria.createAlias("events", "events", CriteriaSpecification.LEFT_JOIN)
-					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			Criteria criteria = session.createCriteria(Events.class).add(Restrictions.eq("sellerId", sellerId));			
 			returnlist=criteria.list();
 			
 			session.getTransaction().commit();

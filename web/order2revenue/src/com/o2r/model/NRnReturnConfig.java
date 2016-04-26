@@ -192,6 +192,10 @@ public class NRnReturnConfig {
 	private boolean RTOCharBRRevShipFee;
 	@Column
 	private boolean canCharBRRevShipFee;
+	@Column
+	private String nrCalculatorEvent;
+	@Column
+	private String returnCalculatorEvent;
 	
 	@OneToMany(mappedBy = "config", cascade = CascadeType.ALL)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
@@ -819,6 +823,22 @@ public class NRnReturnConfig {
 
 	public void setCanCharBRRevShipFee(boolean canCharBRRevShipFee) {
 		this.canCharBRRevShipFee = canCharBRRevShipFee;
+	}
+
+	public String getNrCalculatorEvent() {
+		return nrCalculatorEvent;
+	}
+
+	public void setNrCalculatorEvent(String nrCalculatorEvent) {
+		this.nrCalculatorEvent = nrCalculatorEvent;
+	}
+
+	public String getReturnCalculatorEvent() {
+		return returnCalculatorEvent;
+	}
+
+	public void setReturnCalculatorEvent(String returnCalculatorEvent) {
+		this.returnCalculatorEvent = returnCalculatorEvent;
 	}
 
 }

@@ -118,8 +118,7 @@ public class ProductController {
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		try {
-			Object obj = request.getSession().getAttribute(
-					"productSearchObject");
+			Object obj = request.getSession().getAttribute("productSearchObject");
 			if (obj != null) {
 				System.out.println(" Getting list from session" + obj);
 				model.put("productList", obj);
@@ -198,8 +197,7 @@ public class ProductController {
 					.listCategories(HelperClass.getSellerIdfromSession(request));
 			if (categoryList != null && categoryList.size() != 0) {
 				for (Category category : categoryList) {
-					categoryMap.put(category.getCatName(),
-							category.getCatName());
+					categoryMap.put(category.getCatName(), category.getCatName());
 
 				}
 			}

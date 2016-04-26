@@ -1248,7 +1248,7 @@ public class ConverterClass {
 		events.setPartner(eventsBean.getPartner());
 		events.setCreatedDate(eventsBean.getCreatedDate());
 		events.setNetSalesQuantity(eventsBean.getNetSalesQuantity());
-		events.setNetSalesAmount(eventsBean.getNetSalesAmount());
+		events.setNetSalesAmount(eventsBean.getNetSalesAmount());		
 		return events;
 		
 	}

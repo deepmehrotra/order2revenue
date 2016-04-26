@@ -60,8 +60,7 @@ span .#error {
 					<h5>Create Order</h5>
 				</div>
 				<div class="ibox-content overflow-h">
-					<form:form method="POST" action="saveOrderDA.html" role="form"
-						class="form-horizontal" id="addOrderForm">
+					<form:form method="POST" action="saveOrderDA.html" role="form" class="form-horizontal" id="addOrderForm">
 						<c:if test="${!empty order.orderId}">
 							<input type="hidden" name="orderId" id="orderId"
 								value="${order.orderId}" />
