@@ -62,226 +62,14 @@ public class OrderDaoImpl implements OrderDao {
 
 	static Logger log = Logger.getLogger(SellerDaoImpl.class.getName());
 
-	// @SuppressWarnings("deprecation")
-	// @Override
-	// public void addOrder(Order order, int sellerId)throws CustomException {
-	// /*
-	// * System.out.println(" Order id "+order.getOrderId());
-	// * System.out.println(" Order Partner "+order.getPcName());
-	// * System.out.println("Order delivery date "+order.getDeliveryDate());
-	// */// sellerId=4;
-	//
-	// Seller seller = null;
-	// Date reconciledate = null;
-	// Customer customer = null;
-	// Date tempDate = null;
-	// Session session = null;
-	// TaxDetail taxDetails = null;
-	// Map<String, Float> nrMap = null;
-	//
-	// Product product = productService.getProduct(order.getProductSkuCode(),
-	// sellerId);
-	// if (product != null) {
-	// try {
-	// session = sessionFactory.openSession();
-	// session.beginTransaction();
-	// Criteria criteria = session.createCriteria(Seller.class).add(
-	// Restrictions.eq("id", sellerId));
-	// criteria.createAlias("partners", "partner",
-	// CriteriaSpecification.LEFT_JOIN)
-	// .add(Restrictions.eq("partner.pcName",
-	// order.getPcName()).ignoreCase())
-	// .setResultTransformer(
-	// CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-	// seller = (Seller) criteria.list().get(0);
-	// seller.getPartners().get(0);
-	// float taxpercent = taxDetailService.getTaxCategory(
-	// order.getOrderTax().getTaxCategtory(), sellerId)
-	// .getTaxPercent();
-	// if (seller.getPartners() != null
-	// && seller.getPartners().size() != 0) {
-	// reconciledate = getreconciledate(order, seller
-	// .getPartners().get(0), order.getOrderDate());
-	// if (reconciledate != null)
-	// order.setPaymentDueDate(reconciledate);
-	// System.out
-	// .println(" after settinf rec date delivery date :"
-	// + order.getDeliveryDate());
-	// }
-	// /* populating derived values of order */
-	// order.setStatus("Shipped");
-	//
-	// nrMap = calculateNR(seller.getPartners().get(0), order,
-	// order.getOrderSP(), product.getCategoryName(),
-	// product.getDeadWeight(), product.getVolWeight(), order
-	// .getCustomer().getCustomerAddress());
-	// System.out.println(" NR MAP " + nrMap);
-	// System.out.println(" Shipping charges :"
-	// + order.getShippingCharges() + " >> Gross net rate "
-	// + order.getGrossNetRate() + " delivery date :"
-	// + order.getDeliveryDate());
-	// // order.setNetRate(order.getGrossNetRate()+order.getShippingCharges());
-	//
-	// if ((int) order.getPoPrice() != 0
-	// && order.getPcName().equals("Myntra")) {
-	// double taxvalue = order.getPoPrice()
-	// - (order.getPoPrice() * (100 / (100 + taxpercent)));
-	// order.setDiscount((Math.abs(order.getPoPrice()
-	// - order.getNetRate())));
-	// order.getOrderTax().setTax(taxvalue);
-	// } else {
-	// order.setDiscount((Math.abs(order.getOrderMRP()
-	// - order.getOrderSP())));
-	// System.out
-	// .println(" Tax cal SP:"
-	// + order.getOrderSP()
-	// + " >>TAxReate="
-	// + taxpercent
-	// + "  Tax>>"
-	// + (order.getOrderSP() - (order.getOrderSP() * (100 / (100 + seller
-	// .getPartners().get(0).getTaxrate())))));
-	// order.getOrderTax()
-	// .setTax(order.getOrderSP()
-	// - (order.getOrderSP() * (100 / (100 + taxpercent))));
-	// taxDetails = new TaxDetail();
-	// taxDetails
-	// .setBalanceRemaining(order.getOrderTax().getTax());
-	// taxDetails.setParticular(order.getOrderTax()
-	// .getTaxCategtory());
-	// taxDetails.setUploadDate(order.getOrderDate());
-	// taxDetailService.addMonthlyTaxDetail(session, taxDetails,
-	// sellerId);
-	//
-	// }
-	// order.setPartnerCommission(order.getOrderSP()
-	// - order.getGrossNetRate());
-	// order.setTotalAmountRecieved(order.getNetRate());
-	// order.setFinalStatus("In Process");
-	// // Set Order Timeline
-	// OrderTimeline timeline = new OrderTimeline();
-	//
-	// // populating tax related values of order
-	// System.out.println(" Tax before pr:"
-	// + order.getOrderTax().getTax());
-	// order.setPr(order.getNetRate() - order.getOrderTax().getTax());
-	// if (seller.getPartners().get(0).isTdsApplicable()) {
-	// System.out.println(" PC " + order.getPartnerCommission());
-	// order.getOrderTax().setTdsToDeduct(
-	// order.getPartnerCommission() * (.1));
-	// taxDetails = new TaxDetail();
-	// taxDetails
-	// .setBalanceRemaining(order.getPartnerCommission() * (.1));
-	// taxDetails.setParticular("TDS");
-	// taxDetails.setUploadDate(order.getOrderDate());
-	// taxDetailService.addMonthlyTDSDetail(session, taxDetails,
-	// sellerId);
-	// }
-	// // Reducing Product Inventory For Order
-	// productService.updateInventory(order.getProductSkuCode(), 0, 0,
-	// order.getQuantity(), false, sellerId);
-	// /*
-	// * product=productService.getProduct(order.getProductSkuCode(),
-	// * sellerId); product.setQuantity(product.getQuantity()-
-	// * order.getQuantity()); session.saveOrUpdate(product);
-	// */
-	//
-	// /* checking if customer is available */
-	// System.out
-	// .println(" Inside add order before checking customer");
-	// if (order.getCustomer() != null
-	// && order.getCustomer().getCustomerEmail() != null
-	// && seller.getPartners().get(0).isTdsApplicable()) {
-	// System.out.println(" Customer Email id in add order :"
-	// + order.getCustomer().getCustomerEmail());
-	// order.getCustomer().setSellerId(sellerId);
-	// System.out.println(" After setting seller id in customer");
-	// CustomerDao customerdao = new CustomerDaoImpl();
-	// customer = customerdao.getCustomer(order.getCustomer()
-	// .getCustomerEmail(), sellerId, session);
-	// if (customer != null) {
-	// order.setCustomer(customer);
-	// customer.getOrders().add(order);
-	// }
-	//
-	// }
-	//
-	// // Adding order to the Partner
-	// Partner partner = seller.getPartners().get(0);
-	// if (partner.getOrders() != null && order.getOrderId() == 0) {
-	// partner.getOrders().add(order);
-	// }
-	//
-	// // Setting return and rto limits
-	// tempDate = (Date) order.getDeliveryDate().clone();
-	// tempDate.setDate(tempDate.getDate()
-	// + partner.getMaxReturnAcceptance());
-	// order.setReturnLimitCrossed(tempDate);
-	// tempDate = (Date) order.getDeliveryDate().clone();
-	// tempDate.setDate(tempDate.getDate()
-	// + partner.getMaxRTOAcceptance());
-	// order.setrTOLimitCrossed(tempDate);
-	//
-	// // Setting Gross Profit for Order
-	// order.setGrossProfit(order.getNetRate()
-	// - (product.getProductPrice() * order.getQuantity()));
-	//
-	// if (order.getOrderId() != 0) {
-	// System.out.println(" Saving edited order");
-	// // Code for order timeline
-	// timeline.setEventDate(new Date());
-	// timeline.setEvent(" Order Edited");
-	// order.getOrderTimeline().add(timeline);
-	// order.setLastActivityOnOrder(new Date());
-	// session.merge(order);
-	// } else {
-	// System.out
-	// .println(" ****************Saving new  order delivery date :"
-	// + order.getDeliveryDate());
-	//
-	// // Code for order timeline
-	// timeline.setEvent("Order Created");
-	// order.setLastActivityOnOrder(new Date());
-	// timeline.setEventDate(new Date());
-	// order.getOrderTimeline().add(timeline);
-	// order.setSeller(seller);
-	// seller.getOrders().add(order);
-	// session.saveOrUpdate(partner);
-	// session.saveOrUpdate(seller);
-	// }
-	// session.getTransaction().commit();
-	// /*
-	// * session.getTransaction().commit(); session.close();
-	// */
-	// } catch (Exception e) {
-	// /*//
-	// if(session.getTransaction()!=null&&session.getTransaction().isActive())
-	// // session.getTransaction().rollback();
-	// System.out.println("Inside exception in add order "
-	// + e.getLocalizedMessage() + " message: "
-	// + e.getMessage());
-	// e.printStackTrace();*/
-	// log.error(e);
-	// throw new CustomException(GlobalConstant.addOrderError, new Date(), 1,
-	// GlobalConstant.addOrderErrorCode, e);
-	//
-	// }
-	//
-	// finally {
-	//
-	// session.close();
-	// }
-	//
-	// }
-	//
-	// }
-
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public void addOrder(Order order, int sellerId) throws CustomException {
 		System.out.println(" Order id " + order.getOrderId());
 		System.out.println(" Order Partner " + order.getPcName());
 		System.out.println("Order delivery date " + order.getDeliveryDate());
-		// sellerId=4;
+		System.out.println("Order customer email : " + order.getCustomer().getCustomerEmail());
 		Seller seller = null;
 		Date reconciledate = null;
 		// Customer customer = null;
@@ -1688,7 +1476,7 @@ public class OrderDaoImpl implements OrderDao {
 		int enddate = partner.getPaycycleduration();
 		Date paymentCycleStartDate = null;
 		Date paymentCycleEndDate = null;
-		Map<String, Date> returndates = new HashMap<>();
+		//Map<String, Date> returndates = new HashMap<>();
 
 		System.out.println(" ORder delivery date in rec 2 : "
 				+ order.getDeliveryDate());
@@ -1815,8 +1603,8 @@ public class OrderDaoImpl implements OrderDao {
 		}
 		// Extracting comiision value
 		try {
-			if (partner.getNrnReturnConfig().getCommissionType()
-					.equals("fixed")) {
+			if (partner.getNrnReturnConfig().getCommissionType()!=null&&
+					partner.getNrnReturnConfig().getCommissionType().equals("fixed")) {
 				comission = chargesMap
 						.get(GlobalConstant.fixedCommissionPercent);
 
@@ -1840,10 +1628,11 @@ public class OrderDaoImpl implements OrderDao {
 				if (SP < 251)
 					fixedfee = chargesMap.get(GlobalConstant.fixedfeelt250);
 				else if (SP > 250 && SP < 501)
-					fixedfee = chargesMap
-							.get(GlobalConstant.fixedfeegt250lt500);
+					fixedfee = chargesMap.containsKey(GlobalConstant.fixedfeegt250lt500)?chargesMap
+							.get(GlobalConstant.fixedfeegt250lt500):0;
 				else
-					fixedfee = chargesMap.get(GlobalConstant.fixedfeegt500);
+					fixedfee = chargesMap.containsKey(GlobalConstant.fixedfeegt500)?
+							chargesMap.get(GlobalConstant.fixedfeegt500):0;
 			} else if (chargesMap.containsKey(GlobalConstant.fixedfeelt500)
 					&& chargesMap.get(GlobalConstant.fixedfeelt500).intValue() != 0) {
 				if (SP < 501)
@@ -1949,12 +1738,13 @@ public class OrderDaoImpl implements OrderDao {
 			} else {
 				temp = area;
 				area.append("dwlt500");
+				temp.append("dwgt500");
 				dwchargetemp = chargesMap.containsKey(area.toString()) ? chargesMap
 						.get(area.toString()) : 0;
 				float range = (float) Math.ceil((deadWeight - 500) / 500);
 				dwchargetemp = dwchargetemp
 						+ (range * (chargesMap.containsKey(area.toString()) ? chargesMap
-								.get(temp.append("dwgt500")) : 0));
+								.get(temp.toString()) : 0));
 				order.setDwShippingString(temp.toString());
 
 			}

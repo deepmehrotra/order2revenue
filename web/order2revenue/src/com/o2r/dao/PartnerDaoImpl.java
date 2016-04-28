@@ -30,6 +30,8 @@ public class PartnerDaoImpl implements PartnerDao {
 	private SessionFactory sessionFactory;
 
 	static Logger log = Logger.getLogger(PartnerDaoImpl.class.getName());
+	private static final String chargesDeleteQuery = "delete from NRnReturnCharges where config_configId=:configId";
+
 
 	@Override
 	public void addPartner(Partner partner, int sellerId)
@@ -44,6 +46,9 @@ public class PartnerDaoImpl implements PartnerDao {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			if (id != 0) {
+				Query gettingTaxId = session
+						.createSQLQuery(chargesDeleteQuery)
+						.setParameter("configId", partner.getNrnReturnConfig().getConfigId());
 				session.saveOrUpdate(partner);
 			} else {
 				Seller seller = (Seller) session.get(Seller.class, sellerId);
@@ -102,7 +107,7 @@ public class PartnerDaoImpl implements PartnerDao {
 			session.beginTransaction();
 			Partner partner =(Partner) session.get(Partner.class,
 					partnerid);
-			//Hibernate.initialize(partner.getNrnReturnConfig().getCharges());
+			Hibernate.initialize(partner.getNrnReturnConfig().getCharges());
 			session.getTransaction().commit();
 			session.close();
 			return partner;
@@ -206,5 +211,55 @@ e.printStackTrace();
 		}
 
 	}
+	
+	/*@Override
+	public void deleteNrConfigFromPartner(Partner partner, int sellerId)
+			throws CustomException {
+		System.out.println(" In deleteNrConfigFromPartner pid " + partner.getPcId()
+				+ "   pcname " + partner.getPcName());
+		// sellerId=4;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query deleteQuery = session
+					.createSQLQuery("delete from Seller_Partner where partners_pcId=? and Seller_id=?");
+
+			deleteQuery.setInteger(0, partner.getPcId());
+			deleteQuery.setInteger(1, sellerId);
+			int updated = deleteQuery.executeUpdate();
+			int sellerdelete = session.createQuery(
+					"DELETE FROM Partner WHERE pcId = " + partner.getPcId())
+					.executeUpdate();
+			
+			 * Criteria
+			 * criteria=session.createCriteria(Seller.class).add(Restrictions
+			 * .eq("id", sellerId)); criteria.createAlias("partners", "partner",
+			 * CriteriaSpecification.LEFT_JOIN)
+			 * .add(Restrictions.eq("partner.pcId", partner.getPcId()))
+			 * .setResultTransformer
+			 * (CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			 * seller=(Seller)criteria.list().get(0); Partner
+			 * partneris=seller.getPartners().get(0);
+			 * seller.getPartners().remove(partneris);
+			 * session.delete(partneris);
+			 * System.out.println(" List size after deletion :"
+			 * +seller.getPartners().size()); session.saveOrUpdate(seller);
+			 
+			System.out.println(" update : " + updated + " sellerdelete "
+					+ sellerdelete);
+			session.getTransaction().commit();
+			session.close();
+
+		} catch (Exception e) {
+
+			log.error(e);
+			throw new CustomException(GlobalConstant.deletePartnerError,
+					new Date(), 3, GlobalConstant.deletePartnerErrorCode, e);
+			// System.out.println(" Inside delleting partner"+
+			// e.getLocalizedMessage());
+
+		}
+
+	}*/
 
 }

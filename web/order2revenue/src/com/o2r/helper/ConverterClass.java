@@ -410,6 +410,7 @@ public class ConverterClass {
 					.isPaycyclefromshipordel());
 			partner.setMonthlypaydate(partnerBean.getMonthlypaydate());
 			partner.setNrnReturnConfig(partnerBean.getNrnReturnConfig());
+			
 		}
 		return partner;
 	}

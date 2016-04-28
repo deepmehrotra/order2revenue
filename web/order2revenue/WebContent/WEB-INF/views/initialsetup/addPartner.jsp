@@ -110,14 +110,14 @@ span .#error {
 									<div class="col-sm-4">
 										<div class="radio">
 											<label><form:radiobutton path="paymentType"
-													value="paymentcycle" id="paymentcycle" name="toggler" />Payment
+													value="paymentcycle" id="paymentcycle" name="toggler" class="paymentcycleClass"/>Payment
 												Cycle</label>
 										</div>
 									</div>
 									<div class="col-sm-4">
 										<div class="radio">
 											<label><form:radiobutton path="paymentType"
-													value="datewisepay" id="datewisepay" name="toggler" />Payment
+													value="datewisepay" id="datewisepay" name="toggler" class="paymentcycleClass"/>Payment
 												From Delivery</label>
 										</div>
 									</div>
@@ -512,7 +512,7 @@ span .#error {
 																			<div class="col-sm-6">
 																				<div class="checkbox i-checks">
 																					<label> <input type="checkbox" 
-																						name="nr-isfixedAmountPCC" value="${partner.nrnReturnConfig.isfixedAmountPCC}"> <i></i> Fixed
+																						name="nr-isfixedAmountPCC"> <i></i> Fixed
 																						Amount
 																					</label>
 																				</div>
@@ -892,7 +892,7 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.retCharSFType" value="fixed"
 																					id="retrun-sf-fix" name="toggler"
-																					class="retCharSFType" /> Fixed Amount
+																					class="retCharSFType"/> Fixed Amount
 																			</label>
 																		</div>
 																	</div>
@@ -901,7 +901,7 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.retCharSFType"
 																					value="variable" id="retrun-sf-variable"
-																					name="toggler" class="retCharSFType" /> Variable
+																					name="toggler" class="retCharSFType"/> Variable
 																			</label>
 																		</div>
 																	</div>
@@ -2392,10 +2392,32 @@ span .#error {
 
 					if ('${partner.tdsApplicable}' == 'true')
 						$("#tdsApplicable").prop("checked", true);
+					
 
 					$("#submitButton").click(function() {
 						submitForm();
 					});
+					
+					var radioButtons = $('form#addpartnerform input[type="radio"]');
+					/* alert(" radio buttons length: "+radioButtons.length);
+					alert(" radio buttons value: "+radioButtons[0].value);
+					alert(" radio buttons  id: "+radioButtons[0].id);
+					alert(" radio buttons  name: "+radioButtons[0].name);
+					alert(" radio buttons  classname: "+radioButtons[0].className); */
+					  for(i=0;i<radioButtons.length;i++)
+					{
+						/* alert(" Getting name : "+radioButtons[i].name);
+				       alert("Getting value of radio button "+'${map[radioButtons[i].name]}');
+					 */
+					 var temp="partner."+radioButtons[i].name;
+					/*  alert("Temp value : "+temp);
+					 alert(" getting temp value from map : "+'${map[temp]}') */
+				       if('${map[temp]}'==radioButtons[i].value)
+					   {
+					   $('#'+radioButtons[i].id).prop("checked", true).trigger(
+												"click");
+												}
+				    }
 
 					/* $("#getSelected").click(function () {
 					 console.log(pick.getValues());
