@@ -100,7 +100,7 @@ public class EventsController {
 		}
 		
 		log.info("$$$ saveEvents Exit $$$");
-		return new ModelAndView("miscellaneous/eventsList");
+		return new ModelAndView("redirect:/seller/eventsList.html");
 		
 	}
 	

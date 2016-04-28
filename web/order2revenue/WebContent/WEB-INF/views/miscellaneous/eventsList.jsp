@@ -15,7 +15,10 @@
 
 </head>
 <body>
-  
+  <%-- <div id="wrapper">
+		<jsp:include page="../sidenavigation.jsp"></jsp:include>
+		<div id="page-wrapper" class="gray-bg">
+			<jsp:include page="../globalheader.jsp"></jsp:include> --%>
 
 
 	<div class="wrapper wrapper-content animated fadeInRight"
@@ -76,7 +79,7 @@
 			</div>
 		</div>
 	</div>
-
+	
 
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
 

@@ -37,6 +37,7 @@ span .#error {
 	rel="stylesheet">
 <link href="/O2R/seller/css/plugins/iCheck/custom.css" rel="stylesheet">
 
+
 <script type="text/javascript">
 	
 </script>
@@ -714,27 +715,21 @@ span .#error {
                         <div class="row">
                           <div class="col-sm-12 radio1 m-b" id="blk-42">
                             <div class="col-sm-12">
-                                <div class="col-md-12">
-                                  <div class="checkbox i-checks">
-                                    <label>
-                                      <input type="checkbox" value="">
-                                      <i></i> Label </label>
-                                  </div>
-                                </div>
+                                
                             </div>
                           </div>
                           <div class="col-sm-12 radio1" id="blk-43">
                                 <div class="ibox-content add-company">
 							<div class="panel-body">
-												<div class="panel-group" id="accordion">
+												<div class="panel-group" id="accordion1">
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h5 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
-																	href="#collapseOne">Return Charges</a>
+																<a data-toggle="collapse" data-parent="#accordion1"
+																	href="#collapsesix1">Return Charges</a>
 															</h5>
 														</div>
-														<div id="collapseOne" class="panel-collapse collapse">
+														<div id="collapsesix1" class="panel-collapse collapse">
 															<div class="panel-body">
 																<h4>Seller Fault</h4>
 																<div class="col-sm-12">
@@ -941,11 +936,11 @@ span .#error {
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
-																	href="#collapseTwo">RTO Charges</a>
+																<a data-toggle="collapse" data-parent="#accordion1"
+																	href="#collapseseven1">RTO Charges</a>
 															</h4>
 														</div>
-														<div id="collapseTwo" class="panel-collapse collapse">
+														<div id="collapseseven1" class="panel-collapse collapse">
 															<div class="panel-body">
 																<h4>Seller Fault</h4>
 																<div class="col-sm-12">
@@ -1148,11 +1143,11 @@ span .#error {
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
-																	href="#collapseThree">Replacement Charges</a>
+																<a data-toggle="collapse" data-parent="#accordion1"
+																	href="#collapseeight1">Replacement Charges</a>
 															</h4>
 														</div>
-														<div id="collapseThree" class="panel-collapse collapse">
+														<div id="collapseeight1" class="panel-collapse collapse">
 															<div class="panel-body">
 																<h4>Seller Fault</h4>
 																<div class="col-sm-12">
@@ -1355,11 +1350,11 @@ span .#error {
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
-																	href="#collapsefive">Partial Delivery Charges</a>
+																<a data-toggle="collapse" data-parent="#accordion1"
+																	href="#collapsenine1">Partial Delivery Charges</a>
 															</h4>
 														</div>
-														<div id="collapsefive" class="panel-collapse collapse">
+														<div id="collapsenine1" class="panel-collapse collapse">
 															<div class="panel-body">
 																<h4>Seller Fault</h4>
 																<div class="col-sm-12">
@@ -1562,11 +1557,11 @@ span .#error {
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
-																	href="#collapsesix">Cancellation Charges</a>
+																<a data-toggle="collapse" data-parent="#accordion1"
+																	href="#collapseten1">Cancellation Charges</a>
 															</h4>
 														</div>
-														<div id="collapsesix" class="panel-collapse collapse">
+														<div id="collapseten1" class="panel-collapse collapse">
 															<div class="panel-body">
 																<h4>Seller Fault</h4>
 																<div class="col-sm-12">
@@ -1899,11 +1894,11 @@ span .#error {
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
-																	href="#collapseseven">Reverse Shipping Fee</a>
+																<a data-toggle="collapse" data-parent="#accordion1"
+																	href="#collapseeleven1">Reverse Shipping Fee</a>
 															</h4>
 														</div>
-														<div id="collapseseven" class="panel-collapse collapse">
+														<div id="collapseeleven1" class="panel-collapse collapse">
 															<div class="panel-body">
 																<div class="col-sm-12">
 																	<div class="col-sm-6">
@@ -2193,6 +2188,9 @@ span .#error {
 
     }
 </style>
+
+
+
 <script src="/O2R/seller/js/jquery-2.1.1.js"></script> 
 <script src="/O2R/seller/js/bootstrap.min.js"></script> 
 <script src="/O2R/seller/js/plugins/metisMenu/jquery.metisMenu.js"></script> 
@@ -2260,6 +2258,31 @@ span .#error {
         	    $("#blk-42").slideUp();
         	    $("#blk-43").slideUp();
         	    }
+        	     if(x==40){
+             	$("#blk-94").slideUp();
+             	$("#blk-41").slideUp();
+             	$("#blk-42").slideUp();
+             	$("#blk-43").slideUp();
+             	}
+        	     if(x==42){
+                $("#blk-94").slideUp();
+                $("#blk-41").slideUp();
+                $("#blk-40").slideUp();
+                $("#blk-43").slideUp();
+                }
+        	     if(x==43){
+                $("#blk-94").slideUp();
+                $("#blk-41").slideUp();
+                $("#blk-42").slideUp();
+                $("#blk-40").slideUp();
+                }
+        	     if(x==41){
+                $("#blk-94").slideUp();
+                $("#blk-40").slideUp();
+                $("#blk-42").slideUp();
+                $("#blk-43").slideUp();
+                }
+        	     
         	    $("#blk-"+x).slideDown();
         }
 

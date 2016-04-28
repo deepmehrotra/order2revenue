@@ -50,6 +50,7 @@ public class Category {
 	private List<Category> subCategory = new ArrayList<Category>();
 	@Column
 	private long productCount;
+	
 	public String getCatName() {
 		return catName;
 	}

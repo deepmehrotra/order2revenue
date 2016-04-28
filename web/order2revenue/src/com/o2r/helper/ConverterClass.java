@@ -24,6 +24,7 @@ import com.o2r.bean.StateBean;
 import com.o2r.bean.StateDeliveryTimeBean;
 import com.o2r.bean.TaxCategoryBean;
 import com.o2r.bean.TaxDetailBean;
+import com.o2r.bean.ProductConfigBean;
 import com.o2r.model.AccountTransaction;
 import com.o2r.model.Category;
 import com.o2r.model.Customer;
@@ -39,6 +40,7 @@ import com.o2r.model.Partner;
 import com.o2r.model.PaymentUpload;
 import com.o2r.model.Plan;
 import com.o2r.model.Product;
+import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
 import com.o2r.model.SellerAccount;
 import com.o2r.model.State;
@@ -1298,5 +1300,78 @@ public class ConverterClass {
 		return beans;
 	}
 	
+	public static ProductConfigBean prepareProductConfigBean(ProductConfig productConfig){
+		
+		ProductConfigBean productConfigBean=new ProductConfigBean();
+		productConfigBean.setProductConfigId(productConfig.getProductConfigId());
+		productConfigBean.setProductId(productConfig.getProductId());
+		productConfigBean.setProductName(productConfig.getProductName());
+		productConfigBean.setProductSKuCode(productConfig.getProductSKuCode());
+		productConfigBean.setChannelSKuRef(productConfig.getChannelSKuRef());
+		productConfigBean.setCommision(productConfig.getCommision());
+		productConfigBean.setTaxSp(productConfig.getTaxSp());
+		productConfigBean.setTaxPo(productConfig.getTaxPo());
+		productConfigBean.setDiscount(productConfig.getDiscount());
+		productConfigBean.setEossDiscount(productConfig.getEossDiscount());
+		productConfigBean.setMrp(productConfig.getMrp());
+		productConfigBean.setSp(productConfig.getSp());
+		productConfigBean.setProductPrice(productConfig.getProductPrice());
+		productConfigBean.setSuggestedPOPrice(productConfig.getSuggestedPOPrice());
+		productConfigBean.setEossDiscountValue(productConfig.getEossDiscountValue());
+		productConfigBean.setGrossNR(productConfig.getGrossNR());
+		productConfigBean.setProduct(productConfig.getProduct());
+		return productConfigBean;
+	}
+	
+	public static ProductConfig prepareProductConfigModel(ProductConfigBean productConfigBean){
+		
+		ProductConfig productConfig=new ProductConfig();
+		
+		productConfig.setProductConfigId(productConfigBean.getProductConfigId());
+		productConfig.setProductId(productConfigBean.getProductId());
+		productConfig.setProductName(productConfigBean.getProductName());
+		productConfig.setProductSKuCode(productConfigBean.getProductSKuCode());
+		productConfig.setChannelSKuRef(productConfigBean.getChannelSKuRef());
+		productConfig.setCommision(productConfigBean.getCommision());
+		productConfig.setTaxSp(productConfigBean.getTaxSp());
+		productConfig.setTaxPo(productConfigBean.getTaxPo());
+		productConfig.setDiscount(productConfigBean.getDiscount());
+		productConfig.setEossDiscount(productConfigBean.getEossDiscount());
+		productConfig.setMrp(productConfigBean.getMrp());
+		productConfig.setSp(productConfigBean.getSp());
+		productConfig.setProductPrice(productConfigBean.getProductPrice());
+		productConfig.setSuggestedPOPrice(productConfigBean.getSuggestedPOPrice());
+		productConfig.setEossDiscountValue(productConfigBean.getEossDiscountValue());
+		productConfig.setGrossNR(productConfigBean.getGrossNR());
+		return productConfig;
+	}
+	public static List<ProductConfigBean> prepareListOfProductConfigBean(List<ProductConfig> productConfigs){
+		List<ProductConfigBean> beans = null;
+		if (productConfigs != null && !productConfigs.isEmpty()) {
+			beans = new ArrayList<ProductConfigBean>();
+			ProductConfigBean bean = null;
+			for (ProductConfig productConfig: productConfigs) {
+				bean = new ProductConfigBean();
+				bean.setProductConfigId(productConfig.getProductConfigId());
+				bean.setProductId(productConfig.getProductId());
+				bean.setProductName(productConfig.getProductName());
+				bean.setProductSKuCode(productConfig.getProductSKuCode());
+				bean.setChannelSKuRef(productConfig.getChannelSKuRef());
+				bean.setCommision(productConfig.getCommision());
+				bean.setTaxSp(productConfig.getTaxSp());
+				bean.setTaxPo(productConfig.getTaxPo());
+				bean.setDiscount(productConfig.getDiscount());
+				bean.setEossDiscount(productConfig.getEossDiscount());
+				bean.setMrp(productConfig.getMrp());
+				bean.setSp(productConfig.getSp());
+				bean.setProductPrice(productConfig.getProductPrice());
+				bean.setSuggestedPOPrice(productConfig.getSuggestedPOPrice());
+				bean.setEossDiscountValue(productConfig.getEossDiscountValue());
+				bean.setGrossNR(productConfig.getGrossNR());
+				beans.add(bean);
+			}
+		}		
+		return beans;
+	}
 
 }

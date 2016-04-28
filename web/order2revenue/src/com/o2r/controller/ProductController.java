@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.o2r.bean.ProductBean;
+import com.o2r.bean.ProductConfigBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.DateDeserializer;
@@ -37,6 +38,7 @@ import com.o2r.helper.SaveContents;
 import com.o2r.helper.ValidateUpload;
 import com.o2r.model.Category;
 import com.o2r.model.Product;
+import com.o2r.model.ProductConfig;
 import com.o2r.service.CategoryService;
 import com.o2r.service.DownloadService;
 import com.o2r.service.OrderService;
@@ -115,7 +117,9 @@ public class ProductController {
 			BindingResult result) {
 
 		log.info("*** productList start ***");
+		List<Product> products=null;
 		Map<String, Object> model = new HashMap<String, Object>();
+		List<List<ProductConfig>> productConfigs= new ArrayList<List<ProductConfig>>();
 
 		try {
 			Object obj = request.getSession().getAttribute("productSearchObject");
@@ -124,12 +128,15 @@ public class ProductController {
 				model.put("productList", obj);
 				request.getSession().removeAttribute("productSearchObject");
 			} else {
-				int pageNo = request.getParameter("page") != null ? Integer
-						.parseInt(request.getParameter("page")) : 0;
-				model.put("productList", ConverterClass
-						.prepareListofProductBean(productService.listProducts(
-								HelperClass.getSellerIdfromSession(request),
-								pageNo)));
+				int pageNo = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 0;
+				model.put("productList", ConverterClass.prepareListofProductBean(productService.listProducts(HelperClass.getSellerIdfromSession(request),pageNo)));
+			}
+			products=productService.listProducts(HelperClass.getSellerIdfromSession(request));
+			if(products != null){
+				for(Product product : products){
+					productConfigs.add(product.getProductConfig());					
+				}
+				model.put("productConfigList", productConfigs);
 			}
 		} catch (CustomException ce) {
 			log.error("productList exception : " + ce.toString());
@@ -183,6 +190,68 @@ public class ProductController {
 		log.info("*** saveProduct exit ***");
 		return new ModelAndView("redirect:/seller/Product.html");
 	}
+	
+	/*Product Config*/
+	
+	@RequestMapping(value = "/seller/saveProductConfig", method = RequestMethod.POST)
+	public ModelAndView saveProductConfig(HttpServletRequest request,
+			@ModelAttribute("command") ProductConfigBean productConfigBean,
+			BindingResult result) {
+
+		log.info("*** saveProductConfig start ***");
+		//Map<String, Object> model = new HashMap<String, Object>();
+		try {	
+				ProductConfig productConfig=ConverterClass.prepareProductConfigModel(productConfigBean);
+				productService.addProductConfig(productConfig, HelperClass.getSellerIdfromSession(request));
+			
+		/*} catch (CustomException ce) {
+			log.error("saveProduct exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);*/
+		} catch (Throwable e) {
+			log.equals(e);
+			e.printStackTrace();
+		}
+		log.info("*** saveProductConfig exit ***");
+		return new ModelAndView("redirect:/seller/Product.html");
+	}
+	
+	/*Product Config*/
+	
+	@RequestMapping(value = "/seller/addProductConfig", method = RequestMethod.GET)
+	public ModelAndView addProductConfig(HttpServletRequest request,
+			@ModelAttribute("command") ProductConfigBean productConfigBean,
+			BindingResult result) {
+
+		log.info("***addProduct  Start****");
+		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, String> productMap = new LinkedHashMap<>();
+		try {
+			List<Product> products = productService.listProducts(HelperClass.getSellerIdfromSession(request));
+					
+			if (products != null && products.size() != 0) {
+				for (Product product : products) {
+					productMap.put(product.getProductName(), product.getProductName());
+				}
+			}
+			/*} catch (CustomException ce) {
+			log.error("addProduct exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);*/
+		} catch (Throwable e) {
+			log.error(e);
+			e.printStackTrace();
+			return new ModelAndView("globalErorPage", model);
+		}
+		model.put("productMap", productMap);
+		log.info("*** addProduct exit ***");
+		return new ModelAndView("initialsetup/addProductConfig", model);
+	}
+	
 
 	@RequestMapping(value = "/seller/addProduct", method = RequestMethod.GET)
 	public ModelAndView addProduct(HttpServletRequest request,
