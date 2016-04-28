@@ -19,6 +19,7 @@ import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Category;
 import com.o2r.model.Product;
+import com.o2r.model.ProductConfig;
 import com.o2r.model.ProductStockList;
 import com.o2r.model.Seller;
 
@@ -52,8 +53,7 @@ public class ProductDaoImpl implements ProductDao {
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Seller.class).add(
-					Restrictions.eq("id", sellerId));
+			Criteria criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
 			seller = (Seller) criteria.list().get(0);
 			for (Category category : seller.getCategories()) {
 				if (category.getCatName().equalsIgnoreCase(catName)) {
@@ -98,6 +98,41 @@ public class ProductDaoImpl implements ProductDao {
 			//System.out.println("Inside exception  " + e.getLocalizedMessage());
 		}
 
+	}
+	
+	@Override
+	public void addProductConfig(ProductConfig productConfig, int sellerId) {
+		
+		Product product=null;
+		List<ProductConfig> productConfigs=null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Product.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN).add(Restrictions.eq("seller.id", sellerId));
+					 criteria.add(Restrictions.eq("productName", productConfig.getProductName()));
+			product=(Product)criteria.list().get(0);
+			if(product != null){
+				productConfig.setProduct(product);
+				productConfigs=product.getProductConfig();
+				if(productConfigs != null && productConfigs.size() != 0){
+					product.getProductConfig().add(productConfig);
+					session.saveOrUpdate(product);
+				}else{
+					
+					productConfigs.add(productConfig);
+					product.setProductConfig(productConfigs);
+					session.saveOrUpdate(product);
+				}
+			}
+
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override

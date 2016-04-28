@@ -6,6 +6,7 @@ import java.util.List;
 import com.o2r.bean.AccountTransactionBean;
 import com.o2r.bean.CategoryBean;
 import com.o2r.bean.CustomerBean;
+import com.o2r.bean.EventsBean;
 import com.o2r.bean.ExpenseBean;
 import com.o2r.bean.ExpenseCategoryBean;
 import com.o2r.bean.ManualChargesBean;
@@ -23,9 +24,11 @@ import com.o2r.bean.StateBean;
 import com.o2r.bean.StateDeliveryTimeBean;
 import com.o2r.bean.TaxCategoryBean;
 import com.o2r.bean.TaxDetailBean;
+import com.o2r.bean.ProductConfigBean;
 import com.o2r.model.AccountTransaction;
 import com.o2r.model.Category;
 import com.o2r.model.Customer;
+import com.o2r.model.Events;
 import com.o2r.model.ExpenseCategory;
 import com.o2r.model.Expenses;
 import com.o2r.model.ManualCharges;
@@ -37,6 +40,7 @@ import com.o2r.model.Partner;
 import com.o2r.model.PaymentUpload;
 import com.o2r.model.Plan;
 import com.o2r.model.Product;
+import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
 import com.o2r.model.SellerAccount;
 import com.o2r.model.State;
@@ -410,6 +414,7 @@ public class ConverterClass {
 					.isPaycyclefromshipordel());
 			partner.setMonthlypaydate(partnerBean.getMonthlypaydate());
 			partner.setNrnReturnConfig(partnerBean.getNrnReturnConfig());
+			partner.setEvents(partnerBean.getEvents());
 		}
 		return partner;
 	}
@@ -441,6 +446,7 @@ public class ConverterClass {
 				bean.setPaycyclefromshipordel(partner.isPaycyclefromshipordel());
 				bean.setMonthlypaydate(partner.getMonthlypaydate());
 				bean.setNrnReturnConfig(partner.getNrnReturnConfig());
+				bean.setEvents(partner.getEvents());
 				beans.add(bean);
 			}
 		}
@@ -468,6 +474,7 @@ public class ConverterClass {
 			bean.setTdsApplicable(partner.isTdsApplicable());
 			bean.setPaycyclefromshipordel(partner.isPaycyclefromshipordel());
 			bean.setMonthlypaydate(partner.getMonthlypaydate());
+			bean.setEvents(partner.getEvents());
 			bean.setNrnReturnConfig(partner.getNrnReturnConfig());
 		}
 		return bean;
@@ -1227,6 +1234,146 @@ public class ConverterClass {
 			}
 		}
 		return beanArray;
+	}
+	
+	public static Events prepareEventsModel(EventsBean eventsBean){
+		
+		Events events=new Events();
+		events.setEventId(eventsBean.getEventId());
+		events.setSellerId(eventsBean.getSellerId());
+		events.setEventName(eventsBean.getEventName());
+		events.setChannelName(eventsBean.getChannelName());
+		events.setStartDate(eventsBean.getStartDate());
+		events.setEndDate(eventsBean.getEndDate());
+		events.setProductCategories(eventsBean.getProductCategories());
+		events.setNrType(eventsBean.getNrType());
+		events.setReturnCharges(eventsBean.getReturnCharges());
+		events.setNrnReturnConfig(eventsBean.getNrnReturnConfig());
+		events.setPartner(eventsBean.getPartner());
+		events.setCreatedDate(eventsBean.getCreatedDate());
+		events.setNetSalesQuantity(eventsBean.getNetSalesQuantity());
+		events.setNetSalesAmount(eventsBean.getNetSalesAmount());		
+		return events;
+		
+	}
+	public static EventsBean prepareEventsBean(Events events){
+		
+		EventsBean eventsBean=new EventsBean();
+		eventsBean.setEventId(events.getEventId());
+		eventsBean.setSellerId(events.getSellerId());
+		eventsBean.setEventName(events.getEventName());
+		eventsBean.setChannelName(events.getChannelName());
+		eventsBean.setStartDate(events.getStartDate());
+		eventsBean.setEndDate(events.getEndDate());
+		eventsBean.setProductCategories(events.getProductCategories());
+		eventsBean.setNrType(events.getNrType());
+		eventsBean.setReturnCharges(events.getReturnCharges());
+		eventsBean.setNrnReturnConfig(events.getNrnReturnConfig());
+		eventsBean.setPartner(events.getPartner());
+		eventsBean.setCreatedDate(events.getCreatedDate());
+		eventsBean.setNetSalesQuantity(events.getNetSalesQuantity());
+		eventsBean.setNetSalesAmount(events.getNetSalesAmount());
+		return eventsBean;
+	}
+	public static List<EventsBean> prepareListOfEventsBean(List<Events> events){
+		List<EventsBean> beans = null;
+		if (events != null && !events.isEmpty()) {
+			beans = new ArrayList<EventsBean>();
+			EventsBean bean = null;
+			for (Events event: events) {
+				bean = new EventsBean();
+				bean.setEventId(event.getEventId());
+				bean.setSellerId(event.getSellerId());
+				bean.setEventName(event.getEventName());
+				bean.setChannelName(event.getChannelName());
+				bean.setStartDate(event.getStartDate());
+				bean.setEndDate(event.getEndDate());
+				bean.setProductCategories(event.getProductCategories());
+				bean.setNrType(event.getNrType());
+				bean.setReturnCharges(event.getReturnCharges());
+				bean.setNrnReturnConfig(event.getNrnReturnConfig());
+				bean.setPartner(event.getPartner());
+				bean.setCreatedDate(event.getCreatedDate());
+				bean.setNetSalesQuantity(event.getNetSalesQuantity());
+				bean.setNetSalesAmount(event.getNetSalesAmount());
+				beans.add(bean);
+			}
+		}		
+		return beans;
+	}
+	
+	public static ProductConfigBean prepareProductConfigBean(ProductConfig productConfig){
+		
+		ProductConfigBean productConfigBean=new ProductConfigBean();
+		productConfigBean.setProductConfigId(productConfig.getProductConfigId());
+		productConfigBean.setProductId(productConfig.getProductId());
+		productConfigBean.setProductName(productConfig.getProductName());
+		productConfigBean.setProductSKuCode(productConfig.getProductSKuCode());
+		productConfigBean.setChannelSKuRef(productConfig.getChannelSKuRef());
+		productConfigBean.setCommision(productConfig.getCommision());
+		productConfigBean.setTaxSp(productConfig.getTaxSp());
+		productConfigBean.setTaxPo(productConfig.getTaxPo());
+		productConfigBean.setDiscount(productConfig.getDiscount());
+		productConfigBean.setEossDiscount(productConfig.getEossDiscount());
+		productConfigBean.setMrp(productConfig.getMrp());
+		productConfigBean.setSp(productConfig.getSp());
+		productConfigBean.setProductPrice(productConfig.getProductPrice());
+		productConfigBean.setSuggestedPOPrice(productConfig.getSuggestedPOPrice());
+		productConfigBean.setEossDiscountValue(productConfig.getEossDiscountValue());
+		productConfigBean.setGrossNR(productConfig.getGrossNR());
+		productConfigBean.setProduct(productConfig.getProduct());
+		return productConfigBean;
+	}
+	
+	public static ProductConfig prepareProductConfigModel(ProductConfigBean productConfigBean){
+		
+		ProductConfig productConfig=new ProductConfig();
+		
+		productConfig.setProductConfigId(productConfigBean.getProductConfigId());
+		productConfig.setProductId(productConfigBean.getProductId());
+		productConfig.setProductName(productConfigBean.getProductName());
+		productConfig.setProductSKuCode(productConfigBean.getProductSKuCode());
+		productConfig.setChannelSKuRef(productConfigBean.getChannelSKuRef());
+		productConfig.setCommision(productConfigBean.getCommision());
+		productConfig.setTaxSp(productConfigBean.getTaxSp());
+		productConfig.setTaxPo(productConfigBean.getTaxPo());
+		productConfig.setDiscount(productConfigBean.getDiscount());
+		productConfig.setEossDiscount(productConfigBean.getEossDiscount());
+		productConfig.setMrp(productConfigBean.getMrp());
+		productConfig.setSp(productConfigBean.getSp());
+		productConfig.setProductPrice(productConfigBean.getProductPrice());
+		productConfig.setSuggestedPOPrice(productConfigBean.getSuggestedPOPrice());
+		productConfig.setEossDiscountValue(productConfigBean.getEossDiscountValue());
+		productConfig.setGrossNR(productConfigBean.getGrossNR());
+		return productConfig;
+	}
+	public static List<ProductConfigBean> prepareListOfProductConfigBean(List<ProductConfig> productConfigs){
+		List<ProductConfigBean> beans = null;
+		if (productConfigs != null && !productConfigs.isEmpty()) {
+			beans = new ArrayList<ProductConfigBean>();
+			ProductConfigBean bean = null;
+			for (ProductConfig productConfig: productConfigs) {
+				bean = new ProductConfigBean();
+				bean.setProductConfigId(productConfig.getProductConfigId());
+				bean.setProductId(productConfig.getProductId());
+				bean.setProductName(productConfig.getProductName());
+				bean.setProductSKuCode(productConfig.getProductSKuCode());
+				bean.setChannelSKuRef(productConfig.getChannelSKuRef());
+				bean.setCommision(productConfig.getCommision());
+				bean.setTaxSp(productConfig.getTaxSp());
+				bean.setTaxPo(productConfig.getTaxPo());
+				bean.setDiscount(productConfig.getDiscount());
+				bean.setEossDiscount(productConfig.getEossDiscount());
+				bean.setMrp(productConfig.getMrp());
+				bean.setSp(productConfig.getSp());
+				bean.setProductPrice(productConfig.getProductPrice());
+				bean.setSuggestedPOPrice(productConfig.getSuggestedPOPrice());
+				bean.setEossDiscountValue(productConfig.getEossDiscountValue());
+				bean.setGrossNR(productConfig.getGrossNR());
+				beans.add(bean);
+			}
+		}		
+		return beans;
 	}
 
 }

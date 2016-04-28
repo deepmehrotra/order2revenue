@@ -72,6 +72,8 @@ http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 				<value>com.o2r.model.NRnReturnConfig</value>
 				<value>com.o2r.model.State</value>
 				<value>com.o2r.model.StateDeliveryTime</value>
+				<value>com.o2r.model.Events</value>
+				<value>com.o2r.model.ProductConfig</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

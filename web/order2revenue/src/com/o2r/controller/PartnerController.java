@@ -159,8 +159,7 @@ public class PartnerController {
 		}
 		try {
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
-			partnerService.addPartner(partner,
-					HelperClass.getSellerIdfromSession(request));
+			partnerService.addPartner(partner,HelperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
 			log.error(e);
 		}
@@ -174,8 +173,7 @@ public class PartnerController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<PartnerBean> addedlist = null;
 		try {
-			addedlist = ConverterClass.prepareListofPartnerBean(partnerService
-					.listPartners(HelperClass.getSellerIdfromSession(request)));
+			addedlist = ConverterClass.prepareListofPartnerBean(partnerService.listPartners(HelperClass.getSellerIdfromSession(request)));
 		} catch (Exception e) {
 			log.error(e.getCause());
 		}

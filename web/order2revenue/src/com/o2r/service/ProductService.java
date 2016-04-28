@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.o2r.helper.CustomException;
 import com.o2r.model.Product;
+import com.o2r.model.ProductConfig;
 
 /**
  * @author Deep Mehrotra
@@ -13,6 +14,8 @@ import com.o2r.model.Product;
 public interface ProductService {
 
  public void addProduct(Product product , int sellerId)throws CustomException;
+ 
+ public void addProductConfig(ProductConfig productConfig , int sellerId);
 
  public List<Product> listProducts(int sellerId,int pageNo)throws CustomException;
 
