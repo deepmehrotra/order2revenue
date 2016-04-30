@@ -69,7 +69,7 @@ public class OrderDaoImpl implements OrderDao {
 		System.out.println(" Order id " + order.getOrderId());
 		System.out.println(" Order Partner " + order.getPcName());
 		System.out.println("Order delivery date " + order.getDeliveryDate());
-		System.out.println("Order customer email : " + order.getCustomer().getCustomerEmail());
+		System.out.println("Order customer email in order: " + order.getCustomer().getCustomerEmail());
 		Seller seller = null;
 		Date reconciledate = null;
 		// Customer customer = null;
@@ -205,13 +205,12 @@ public class OrderDaoImpl implements OrderDao {
 					 * order.getQuantity()); session.saveOrUpdate(product);
 					 */
 					/* checking if customer is available */
-					System.out
-							.println(" Inside add order before checking customer");
-					if (order.getCustomer() != null
+					System.out.println(" Customer Email id in add order :"
+							+ order.getCustomer().getCustomerEmail());
+					/*if (order.getCustomer() != null
 							&& order.getCustomer().getCustomerEmail() != null
-							&& seller.getPartners().get(0).isTdsApplicable()) {
-						System.out.println(" Customer Email id in add order :"
-								+ order.getCustomer().getCustomerEmail());
+							&& seller.getPartners().get(0).isTdsApplicable()) {*/
+						
 						order.getCustomer().setSellerId(sellerId);
 						order.getCustomer().getOrders().add(order);
 						System.out
@@ -224,11 +223,22 @@ public class OrderDaoImpl implements OrderDao {
 						 * != null) { order.setCustomer(customer);
 						 * customer.getOrders().add(order); }
 						 */
-					}
+					//}
 					// Adding order to the Partner
 					if (partner.getOrders() != null && order.getOrderId() == 0) {
 						partner.getOrders().add(order);
 					}
+					//Setting payment difference for old orders
+					
+					if(order.getPaymentDueDate().compareTo(java.util.Calendar.getInstance().getTime())<0)
+					{
+						System.out.println(" Setting payment difference for old orders");
+						order.getOrderPayment().setPaymentDifference(0-order.getNetRate());
+						order.setStatus("Payment Disputed");
+						order.setFinalStatus("Actionable");
+						
+					}
+					
 					// Setting return and rto limits
 					tempDate = (Date) order.getDeliveryDate().clone();
 					tempDate.setDate(tempDate.getDate()
@@ -241,6 +251,12 @@ public class OrderDaoImpl implements OrderDao {
 					// Setting Gross Profit for Order
 					order.setGrossProfit(order.getNetRate()
 							- (product.getProductPrice() * order.getQuantity()));
+					
+					//Setting order status if return limit is crossed
+					if(order.getReturnLimitCrossed().compareTo(java.util.Calendar.getInstance().getTime())<0)
+					{
+						order.setStatus("Return Limit Crossed");
+					}
 					if (order.getOrderId() != 0) {
 						System.out.println(" Saving edited order");
 						// Code for order timeline
@@ -879,7 +895,7 @@ public class OrderDaoImpl implements OrderDao {
 					Restrictions.eq("orderId", orderid));
 			if (criteria.list() != null && criteria.list().size() != 0)
 				order = (Order) criteria.list().get(0);
-
+			orderPayment.setNegativeAmount(Math.abs(orderPayment.getNegativeAmount()));
 			if (order != null && order.getOrderReturnOrRTO() != null
 					&& order.getOrderReturnOrRTO().getReturnDate() != null
 					&& order.getOrderReturnOrRTO().getReturnorrtoQty() != 0) {
@@ -1085,6 +1101,7 @@ public class OrderDaoImpl implements OrderDao {
 				System.out.println(" Null order");
 			}
 			if (order != null) {
+				orderPayment.setNegativeAmount(Math.abs(orderPayment.getNegativeAmount()));
 				if (order.getOrderReturnOrRTO() != null
 						&& order.getOrderReturnOrRTO().getReturnDate() != null
 						&& order.getOrderReturnOrRTO().getReturnorrtoQty() != 0) {
@@ -1729,29 +1746,34 @@ public class OrderDaoImpl implements OrderDao {
 				area.append("fixed");
 				volarea.append("fixed");
 			}
-			if (deadWeight < 500) {
+			if (deadWeight < 501) {
 				area.append("dwlt500");
 				order.setDwShippingString(area.toString());
 				dwchargetemp = chargesMap.containsKey(area.toString()) ? chargesMap
 						.get(area.toString()) : 0;
 
 			} else {
-				temp = area;
+				temp = new StringBuffer(area);
 				area.append("dwlt500");
 				temp.append("dwgt500");
+				System.out.println(" Area : "+area+" temp : "+temp);
 				dwchargetemp = chargesMap.containsKey(area.toString()) ? chargesMap
 						.get(area.toString()) : 0;
+						System.out.println(" Charges for lesstthan 500 : "+dwchargetemp);
 				float range = (float) Math.ceil((deadWeight - 500) / 500);
+				System.out.println(" Range : "+range);
 				dwchargetemp = dwchargetemp
-						+ (range * (chargesMap.containsKey(area.toString()) ? chargesMap
+						+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
 								.get(temp.toString()) : 0));
+				System.out.println(" Charges for greater than 500 : "+chargesMap
+								.get(temp.toString()));
 				order.setDwShippingString(temp.toString());
 
 			}
 
 			System.out.println("volarea  " + volarea);
 
-			if (volWeight < 500) {
+			if (volWeight < 501) {
 				tempStr = volarea.append("vwlt500").toString();
 				System.out.println(" tempStr " + tempStr);
 				/*
@@ -1763,13 +1785,11 @@ public class OrderDaoImpl implements OrderDao {
 				order.setVolShippingString(tempStr);
 			} else if (volWeight > 500 && volWeight < 1001) {
 				tempStr = volarea.append("vwgt500lt1000").toString();
-				System.out.println(" tempStr " + tempStr);
 				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
 						.get(tempStr) : 0;
 				order.setVolShippingString(volarea.toString());
 			} else if (volWeight > 1000 && volWeight < 1501) {
 				tempStr = volarea.append("vwgt1000lt1500").toString();
-				System.out.println(" tempStr " + tempStr);
 				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
 						.get(tempStr) : 0;
 				order.setVolShippingString(volarea.toString());
@@ -1782,16 +1802,28 @@ public class OrderDaoImpl implements OrderDao {
 			} else if (volWeight > 5000) {
 				temp = new StringBuffer(volarea);
 				volarea.append("vwgt1500lt5000");
+				/*System.out.println(" Charges for lesstthan 500 : "+dwchargetemp);
+				float range = (float) Math.ceil((deadWeight - 500) / 500);
+				System.out.println(" Range : "+range);
+				dwchargetemp = dwchargetemp
+						+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
+								.get(temp.toString()) : 0));
+				System.out.println(" Charges for greater than 500 : "+chargesMap
+								.get(temp.toString()));*/
 				vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap
 						.get(volarea.toString()) : 0;
+						System.out.println(" vol Charges for lesstthan 500 : "+vwchargetemp);	
 				temp.append("vwgt5000");
+				float range = (float) Math.ceil((volWeight - 5000) / 1000);
+				System.out.println("volarea  "+volarea+" temp : "+temp+ " range invol: "+range);
 				vwchargetemp = vwchargetemp
-						+ ((volWeight - 5000) / 1000)
+						+ (range
 						* (chargesMap.containsKey(temp.toString()) ? chargesMap
-								.get(temp.toString()) : 0);
+								.get(temp.toString()) : 0));
 				order.setVolShippingString(temp.toString());
 
 			}
+			System.out.println(" vwchargetemp : "+vwchargetemp +" dwchargetemp : "+dwchargetemp);
 			if (vwchargetemp > dwchargetemp)
 				shippingCharges = vwchargetemp;
 			else

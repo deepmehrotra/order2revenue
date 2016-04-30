@@ -21,7 +21,7 @@ public class Partner {
 
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	@Column
-	private int pcId;
+	private long pcId;
 	@Column
 	private String pcName;
 	@Column
@@ -58,10 +58,10 @@ public class Partner {
 	private NRnReturnConfig nrnReturnConfig;
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<Order> orders = new ArrayList<Order>();
-	public int getPcId() {
+	public long getPcId() {
 		return pcId;
 	}
-	public void setPcId(int pcId) {
+	public void setPcId(long pcId) {
 		this.pcId = pcId;
 	}
 	public String getPcName() {

@@ -85,15 +85,19 @@ public class PartnerController {
 		log.info("*** savePartner start ***");
 		System.out.println(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
 		Map<String, String[]> parameters = request.getParameterMap();
+		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+			if (entry.getKey().contains("nr-")) 
+			{
+				System.out.println(" Key with nr: "+entry.getKey()+" Values is : "+entry.getValue()[0]);
+			}
+		}
 				for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
-			System.out.println(" Request Param: " + entry.getKey()
-					+ "  Values  : " + entry.getValue().length);
-
-			if (entry.getKey() != null && !entry.getKey().isEmpty())
-				System.out.println(" Print : " + entry.getValue()[0]);
+		if (entry.getKey() != null && !entry.getKey().isEmpty())
+				System.out.println(" Print :entry.getKey()  " +entry.getKey()+" value: "+ entry.getValue()[0]);
 
 			if (entry.getValue()[0] != null && !entry.getValue()[0].isEmpty()) {
 				if (entry.getKey().contains("nr-")) {
+					System.out.println(" Key : "+entry.getKey());
 					String temp = entry.getKey().substring(3);
 					NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
 					nrnReturncharge.setChargeAmount(Float.parseFloat(entry

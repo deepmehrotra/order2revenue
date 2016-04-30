@@ -15,7 +15,7 @@ public interface PartnerDao {
 
  public List<Partner> listPartner(int sellerId)throws CustomException;
  
- public Partner getPartner(int partnerid)throws CustomException;
+ public Partner getPartner(long partnerid)throws CustomException;
  
  public void deletePartner(Partner partner,int sellerId)throws CustomException;
  

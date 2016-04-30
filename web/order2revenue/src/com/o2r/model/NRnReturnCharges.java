@@ -1,5 +1,6 @@
 package com.o2r.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,16 +16,22 @@ public class NRnReturnCharges {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
-	private int nrchargeId;
+	private long nrchargeId;
 	@Column
 	private String chargeName;
 	@Column
 	private float chargeAmount;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private NRnReturnConfig config;
 
-	public int getNrchargeId() {
+	
+
+	public long getNrchargeId() {
 		return nrchargeId;
+	}
+
+	public void setNrchargeId(long nrchargeId) {
+		this.nrchargeId = nrchargeId;
 	}
 
 	public void setNrchargeId(int nrchargeId) {

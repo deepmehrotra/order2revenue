@@ -11,7 +11,7 @@ import com.o2r.model.Order;
 public class PartnerBean {
 
 
-	private int pcId;
+	private long pcId;
 	private String pcName;
 	private String pcDesc;
 	private String pcLogoUrl;
@@ -31,10 +31,10 @@ public class PartnerBean {
 	private int monthlypaydate;
 	private List<Order> orders = new ArrayList<Order>();
 	private NRnReturnConfig nrnReturnConfig;
-	public int getPcId() {
+	public long getPcId() {
 		return pcId;
 	}
-	public void setPcId(int pcId) {
+	public void setPcId(long pcId) {
 		this.pcId = pcId;
 	}
 	public String getPcName() {

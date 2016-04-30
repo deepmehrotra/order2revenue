@@ -61,4 +61,11 @@ public Category getCategory(String catname ,int sellerId) throws CustomException
 {
 	return categoryDao.getCategory(catname ,sellerId);
 }
+
+@Override
+public Category getSubCategory(String catname, int sellerId)
+		throws CustomException
+		{
+	return categoryDao.getSubCategory(catname,sellerId);
+		}
 }

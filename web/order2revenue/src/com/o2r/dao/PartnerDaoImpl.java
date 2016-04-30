@@ -40,7 +40,7 @@ public class PartnerDaoImpl implements PartnerDao {
 		// sessionFactory.getCurrentSession().saveOrUpdate(partner);
 		System.out.println(" Inside PartnerDaoIMpl partner id :"
 				+ partner.getPcId());
-		int id=partner.getPcId();
+		long id=partner.getPcId();
 		//Partner exisitingObj=null;
 		try {
 			Session session = sessionFactory.openSession();
@@ -56,9 +56,9 @@ public class PartnerDaoImpl implements PartnerDao {
 				session.saveOrUpdate(seller);
 			}
 			session.getTransaction().commit();
-			session.flush();
 			session.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.addPartnerError,
 					new Date(), 1, GlobalConstant.addPartnerErrorCode, e);
@@ -100,7 +100,7 @@ public class PartnerDaoImpl implements PartnerDao {
 	}
 
 	@Override
-	public Partner getPartner(int partnerid) throws CustomException {
+	public Partner getPartner(long partnerid) throws CustomException {
 		try {
 			
 			Session session = sessionFactory.openSession();
@@ -174,7 +174,7 @@ e.printStackTrace();
 			Query deleteQuery = session
 					.createSQLQuery("delete from Seller_Partner where partners_pcId=? and Seller_id=?");
 
-			deleteQuery.setInteger(0, partner.getPcId());
+			deleteQuery.setLong(0, partner.getPcId());
 			deleteQuery.setInteger(1, sellerId);
 			int updated = deleteQuery.executeUpdate();
 			int sellerdelete = session.createQuery(

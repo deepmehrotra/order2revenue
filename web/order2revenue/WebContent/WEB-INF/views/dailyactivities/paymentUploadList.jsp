@@ -77,10 +77,10 @@
                                 <tr>
                                     <td>${loop.index+1}</td>
                                     <td>${payment.uploadDesc}</td>
-                                    <td><fmt:formatNumber type="number" maxIntegerDigits="2" value="${payment.totalpositivevalue}" /></td>
+                                    <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${payment.totalpositivevalue}" /></td>
                                     <td>${payment.totalnegativevalue}</td>
                                     <td>${payment.manualCharges}</td>
-                                    <td><fmt:formatNumber type="number" maxIntegerDigits="2" value="${payment.netRecievedAmount-payment.manualCharges}" /></td>
+                                    <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${payment.netRecievedAmount-payment.manualCharges}" /></td>
                                     <td>${payment.uploadDate}</td>
                                     <td>${payment.uploadStatus}</td>
                                     <td class="tooltip-demo">

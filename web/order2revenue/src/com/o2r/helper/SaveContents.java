@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -734,7 +735,7 @@ public class SaveContents {
 				}
 				if (entry.getCell(2) != null
 						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					Category cat = categoryService.getCategory(entry.getCell(2)
+					Category cat = categoryService.getSubCategory(entry.getCell(2)
 							.toString(), sellerId);
 					if (cat != null) {
 						product.setCategoryName(entry.getCell(2).toString());
@@ -952,11 +953,11 @@ public class SaveContents {
 						&& StringUtils.isNotBlank(entry.getCell(4).toString())
 						&& (int) Float.parseFloat(entry.getCell(4).toString()) != 0) {
 					try {
-						payment.setNegativeAmount(Double.parseDouble(entry
-								.getCell(4).toString()));
+						payment.setNegativeAmount(Math.abs(Double.parseDouble(entry
+								.getCell(4).toString())));
 						totalnegative = totalnegative
-								+ Double.parseDouble(entry.getCell(4)
-										.toString());
+								+ Math.abs(Double.parseDouble(entry.getCell(4)
+										.toString()));
 						System.out.println(" ******toatal totalnegative :"
 								+ totalnegative);
 					} catch (NumberFormatException e) {
@@ -1016,9 +1017,12 @@ public class SaveContents {
 				}
 				if (order != null) {
 					System.out.println(order);
+					order.setUpload(paymentUpload);
 					paymentUpload.getOrders().add(order);
 				}
 			}
+			System.out.println(" Total Positive Amount : "+totalpositive);
+			System.out.println(" Total Negative Amount : "+totalnegative);
 			paymentUpload.setTotalpositivevalue(totalpositive);
 			paymentUpload.setTotalnegativevalue(totalnegative);
 			paymentUpload.setNetRecievedAmount(totalpositive - totalnegative);
@@ -1164,8 +1168,16 @@ public class SaveContents {
 					orderlist = orderService.findOrders("channelOrderID", entry
 							.getCell(0).toString(), sellerId);
 					if (orderlist != null && orderlist.size() != 0) {
+						
 						System.out.println(" Found match for channel order id");
+						if(orderlist.get(0).getOrderReturnOrRTO()!=null&&
+								orderlist.get(0).getOrderReturnOrRTO().getReturnDate()==null)
 						order.setChannelOrderID(entry.getCell(0).toString());
+						else
+						{
+							validaterow = false;
+							errorMessage.append("Return already recieved for order");
+						}
 					} else {
 						validaterow = false;
 						errorMessage.append("Order Id doesnt exist");

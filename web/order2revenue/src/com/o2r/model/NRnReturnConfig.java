@@ -11,15 +11,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.Cascade;
-
 @Entity
 public class NRnReturnConfig {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column
-	private int configId;
+	private long configId;
 	@Column
 	private boolean nrCalculator;
 	@Column
@@ -194,14 +192,13 @@ public class NRnReturnConfig {
 	private boolean canCharBRRevShipFee;
 	
 	@OneToMany(mappedBy = "config", cascade = CascadeType.ALL)
-	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<NRnReturnCharges> charges = new ArrayList<>();
 
-	public int getConfigId() {
+	public long getConfigId() {
 		return configId;
 	}
 
-	public void setConfigId(int configId) {
+	public void setConfigId(long configId) {
 		this.configId = configId;
 	}
 

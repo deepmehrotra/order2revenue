@@ -921,6 +921,7 @@ public class ConverterClass {
 				bean.setUploadDate(payUpload.getUploadDate());
 				bean.setUploadId(payUpload.getUploadId());
 				bean.setUploadDesc(payUpload.getUploadDesc());
+				bean.setTotalnegativevalue(payUpload.getTotalnegativevalue());
 				// bean.setOrders(ConverterClass.prepareListofBean(payUpload.getOrders()));
 
 				beans.add(bean);

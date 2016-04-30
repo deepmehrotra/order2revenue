@@ -32,7 +32,7 @@ public class PartnerServiceImpl implements PartnerService {
 		return partnerDao.listPartner(sellerId);
 	}
 
-	public Partner getPartner(int partnerid) throws CustomException {
+	public Partner getPartner(long partnerid) throws CustomException {
 		return partnerDao.getPartner(partnerid);
 	}
 

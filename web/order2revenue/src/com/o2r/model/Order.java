@@ -114,10 +114,10 @@ public class Order {
 	private OrderRTOorReturn orderReturnOrRTO;
 	@OneToOne(cascade=CascadeType.ALL)
 	private OrderTax orderTax;
-	@ManyToOne(cascade=CascadeType.ALL)
-	private PaymentUpload paymentUpload;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Seller seller;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private PaymentUpload upload;
 
 	public Customer getCustomer() {
 		return customer;
@@ -383,13 +383,7 @@ public class Order {
 		this.sellerNote = sellerNote;
 	}
 
-	public PaymentUpload getPaymentUpload() {
-		return paymentUpload;
-	}
-
-	public void setPaymentUpload(PaymentUpload paymentUpload) {
-		this.paymentUpload = paymentUpload;
-	}
+	
 	public String getPaymentType() {
 		return paymentType;
 	}
@@ -454,7 +448,7 @@ public class Order {
 				+ ", rTOLimitCrossed=" + rTOLimitCrossed + ", orderTimeline="
 				+ orderTimeline + ", customer=" + customer + ", orderPayment="
 				+ orderPayment + ", orderReturnOrRTO=" + orderReturnOrRTO
-				+ ", orderTax=" + orderTax + ", paymentUpload=" + paymentUpload
+				+ ", orderTax=" + orderTax 
 				+ "]";
 	}
 
@@ -528,6 +522,14 @@ public class Order {
 
 	public void setDwShippingString(String dwShippingString) {
 		this.dwShippingString = dwShippingString;
+	}
+
+	public PaymentUpload getUpload() {
+		return upload;
+	}
+
+	public void setUpload(PaymentUpload upload) {
+		this.upload = upload;
 	}
 
 

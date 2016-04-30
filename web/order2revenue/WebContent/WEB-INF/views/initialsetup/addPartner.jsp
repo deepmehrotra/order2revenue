@@ -495,7 +495,7 @@ span .#error {
 																			<div class="col-sm-6">
 																				<div class="checkbox i-checks">
 																					<label> <input type="checkbox" value=""
-																						name="nr-ispercentSPPCC"> <i></i>
+																						name="ispercentSPPCC"> <i></i>
 																						Percentage of SP
 																					</label>
 																				</div>
@@ -512,7 +512,7 @@ span .#error {
 																			<div class="col-sm-6">
 																				<div class="checkbox i-checks">
 																					<label> <input type="checkbox" 
-																						name="nr-isfixedAmountPCC"> <i></i> Fixed
+																						name="isfixedAmountPCC"> <i></i> Fixed
 																						Amount
 																					</label>
 																				</div>

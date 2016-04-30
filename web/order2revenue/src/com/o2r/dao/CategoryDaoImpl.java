@@ -251,6 +251,43 @@ public Category getCategory(String catname ,int sellerId) throws CustomException
 
 }
 
+@Override
+public Category getSubCategory(String catname ,int sellerId) throws CustomException
+{
+	log.info("***getCategory Start****");
+	Category returnObject=null;
+	 Seller seller=null;
+	 List tempList=null;
+	 log.debug("***Insid get sub category from catname ***"+catname);
+	try
+	 {
+  Session session=sessionFactory.openSession();
+  session.beginTransaction();
+  Criteria criteria=session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
+  criteria.createAlias("categories", "category", CriteriaSpecification.LEFT_JOIN)
+   .add(Restrictions.eq("category.isSubCategory",true))
+ .add(Restrictions.eq("category.catName", catname).ignoreCase());
+  criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+  tempList=criteria.list();
+		  if(tempList!=null&&tempList.size()!=0)
+		  {
+		  seller=(Seller)tempList.get(0);
+		  returnObject=seller.getCategories().get(0);
+		  }
+
+		  session.getTransaction().commit();
+		  session.close();
+	 }
+	 catch (Exception e) {
+		  log.equals("**Error Code : "+(sellerId+"-"+GlobalConstant.getCategorywithNameErrorCode));
+		 log.error(e);
+			throw new CustomException(GlobalConstant.getCategorywithNameError, new Date(),3, (sellerId+"-"+GlobalConstant.getCategorywithNameErrorCode),e);
+	}
+	log.info("***getCategory Exit****");
+	return returnObject;
+
+}
+
 
 @Override
 public int deleteCategory(Category category,int sellerId) throws CustomException {

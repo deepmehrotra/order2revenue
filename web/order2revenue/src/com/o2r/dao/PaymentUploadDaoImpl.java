@@ -48,8 +48,7 @@ public class PaymentUploadDaoImpl implements PaymentUploadDao{
 				   upload.setUploadDate(new Date());
 			 seller.getPaymentUploads().add(upload);
 			   System.out.println(" Inside upload add");
-	   
-		   session.saveOrUpdate(seller);
+			   session.saveOrUpdate(seller);
 			   }
 			   else
 			   {
@@ -60,6 +59,7 @@ public class PaymentUploadDaoImpl implements PaymentUploadDao{
 		   }
 		   catch (Exception e) {
 			   log.error(e);
+			   e.printStackTrace();
 			   throw new CustomException(GlobalConstant.addPaymentUploadError, new Date(), 1, GlobalConstant.addPaymentUploadErrorCode, e);
 			   //System.out.println("Inside exception  "+e.getLocalizedMessage());
 		}
@@ -184,7 +184,10 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomExceptio
 		 e.printStackTrace();
 	 }
  }
- 
+
+
+
+
  
 
 }

@@ -45,7 +45,7 @@ public class CStartEventHandler implements
 					.withIdentity("job1", "group1").build();
 			scheduler.scheduleJob(job, trigger);
 			scheduler.start();
-			Thread.sleep(5000);
+			Thread.sleep(50000000);
 		} catch (Exception se) {
 			se.printStackTrace();
 		}

@@ -15,7 +15,7 @@ public interface PartnerService {
 
  public List<Partner> listPartners(int sellerId)throws CustomException;
  
- public Partner getPartner(int partnerid)throws CustomException;
+ public Partner getPartner(long partnerid)throws CustomException;
  
  public Partner getPartner(String name ,int sellerId)throws CustomException;
  

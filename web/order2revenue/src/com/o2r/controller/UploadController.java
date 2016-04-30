@@ -81,6 +81,7 @@ public class UploadController {
 			if (payuploadbeanlist != null) {
 
 				for (PaymentUploadBean bean : payuploadbeanlist) {
+					System.out.println(" Positive paymein in controller : "+bean.getTotalpositivevalue());
 					bean.setManualCharges(manualChargesService.getMCforPaymentID(
 							bean.getUploadDesc(),
 							HelperClass.getSellerIdfromSession(request)));
@@ -252,8 +253,8 @@ public class UploadController {
 			sellerId = HelperClass.getSellerIdfromSession(request);
 			if ((int) orderBean.getOrderPayment().getNegativeAmount() != 0) {
 
-				payment.setNegativeAmount(orderBean.getOrderPayment()
-						.getNegativeAmount());
+				payment.setNegativeAmount(Math.abs(orderBean.getOrderPayment()
+						.getNegativeAmount()));
 			}
 
 			else {
@@ -267,7 +268,7 @@ public class UploadController {
 					+ orderBean.getOrderId());
 			order = orderService.addOrderPayment(orderBean.getOrderId(),
 					payment, sellerId);
-
+			
 			paymentUpload = paymentUploadService.getManualPayment(sellerId);
 			if (paymentUpload == null) {
 				paymentUpload = new PaymentUpload();
@@ -292,6 +293,7 @@ public class UploadController {
 			}
 			if (order != null) {
 				System.out.println(order);
+				order.setUpload(paymentUpload);
 				paymentUpload.getOrders().add(order);
 			}
 

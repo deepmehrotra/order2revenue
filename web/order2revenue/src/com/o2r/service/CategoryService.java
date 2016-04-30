@@ -25,4 +25,6 @@ public interface CategoryService {
  public int deleteCategory(Category category,int sellerId)  throws CustomException;
 
 public List<Long> getSKuCount(String catname, int catId, int sellerId)  throws CustomException;
+
+public Category getSubCategory(String catname, int sellerId) throws CustomException;
 }

@@ -24,4 +24,7 @@ public interface CategoryDao {
 	public List<Long> getSKuCount(String catname, int catId, int sellerId)  throws CustomException;
 
 	public Category getCategory(String catname ,int sellerId )  throws CustomException;
+
+	public Category getSubCategory(String catname, int sellerId)
+			throws CustomException;
 }
