@@ -189,7 +189,7 @@ span .#error {
 																<div class="form-group col-md-12">
 																	<label class="col-md-4 control-label">${category}</label>
 																		<div class="input-group m-b col-md-4">
-																			<input type="text" class="form-control"	name='nr-${category}'>																					
+																			<input type="text" class="form-control"	name='nr-comm-${category}'>																					
 																		</div>
 																</div>
 														</c:forEach>
@@ -239,7 +239,7 @@ span .#error {
 																<div class="form-group col-md-12">
 																	<label class="col-md-4 control-label">${category}</label>
 																		<div class="input-group m-b col-md-4">
-																			<input type="text" class="form-control"	name='nr-${category}'>																					
+																			<input type="text" class="form-control"	name='nr-taxSp-${category}'>																					
 																		</div>
 																</div>
 														</c:forEach>
@@ -284,7 +284,7 @@ span .#error {
 																<div class="form-group col-md-12">
 																	<label class="col-md-4 control-label">${category}</label>
 																		<div class="input-group m-b col-md-4">
-																			<input type="text" class="form-control"	name='nr-${category}'>																					
+																			<input type="text" class="form-control"	name='nr-taxPo-${category}'>																					
 																		</div>
 																</div>
 														</c:forEach>
