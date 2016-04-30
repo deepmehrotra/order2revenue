@@ -158,7 +158,7 @@
 														<tr>
 															<th>SL No.</th>
 															<th>Product SKU_Code</th>
-															<th>Product SKU_Ref</th>
+															<th>Channel SKU_Ref</th>
 															<th>Commision</th>
 															<th>Tax(SP)</th>
 															<th>Tax(PO)</th>
@@ -283,7 +283,7 @@
 		
 		$('#upload1').click(function() {
 			$.ajax({
-				url : 'uploadOrderDA.html?value=productSummary',
+				url : 'uploadOrderDA.html?value=productConfigSummary',
 				success : function(data) {
 					$('#centerpane').html(data);
 				},

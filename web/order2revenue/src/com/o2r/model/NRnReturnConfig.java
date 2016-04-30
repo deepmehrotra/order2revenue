@@ -196,6 +196,10 @@ public class NRnReturnConfig {
 	private String nrCalculatorEvent;
 	@Column
 	private String returnCalculatorEvent;
+	@Column
+	private String taxSpType;
+	@Column
+	private String taxPoType;
 	
 	@OneToMany(mappedBy = "config", cascade = CascadeType.ALL)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
@@ -839,6 +843,22 @@ public class NRnReturnConfig {
 
 	public void setReturnCalculatorEvent(String returnCalculatorEvent) {
 		this.returnCalculatorEvent = returnCalculatorEvent;
+	}
+
+	public String getTaxSpType() {
+		return taxSpType;
+	}
+
+	public void setTaxSpType(String taxSpType) {
+		this.taxSpType = taxSpType;
+	}
+
+	public String getTaxPoType() {
+		return taxPoType;
+	}
+
+	public void setTaxPoType(String taxPoType) {
+		this.taxPoType = taxPoType;
 	}
 
 }

@@ -167,6 +167,7 @@ public class PartnerController {
 		log.info("*** savePartner exit ***");
 		return new ModelAndView("redirect:/seller/partners.html");
 	}
+	
 
 	@RequestMapping(value = "/seller/listPartners", method = RequestMethod.GET)
 	public ModelAndView listAllPartners(HttpServletRequest request) {
@@ -272,7 +273,180 @@ public class PartnerController {
 		log.info("*** addPartner exit ***");
 		return new ModelAndView("initialsetup/addPartner", model);
 	}
+	
+	/*My Code Ranjan*/
+	
+	@RequestMapping(value = "/seller/saveJabong", method = RequestMethod.POST)
+	public ModelAndView saveJabong(HttpServletRequest request,
+			@ModelAttribute("command") PartnerBean partnerBean,
+			BindingResult result,
+			@RequestParam(value = "image", required = false) MultipartFile image) {
 
+		log.info("*** saveJabong start ***");
+		System.out.println(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
+		Map<String, String[]> parameters = request.getParameterMap();
+				for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+			System.out.println(" Request Param: " + entry.getKey()+ "  Values  : " + entry.getValue().length);
+
+			if (entry.getKey() != null && !entry.getKey().isEmpty())
+				System.out.println(" Print : " + entry.getValue()[0]);
+
+			if (entry.getValue()[0] != null && !entry.getValue()[0].isEmpty()) {
+				if (entry.getKey().contains("nr-")) {
+					String temp = entry.getKey().substring(3);
+					NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+					nrnReturncharge.setChargeAmount(Float.parseFloat(entry.getValue()[0]));
+					nrnReturncharge.setChargeName(temp);
+					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
+					chargeList.add(nrnReturncharge);
+				}
+			}
+		}
+
+		partnerBean.getNrnReturnConfig().setCharges(chargeList);
+		
+		if (!partnerBean.isIsshippeddatecalc()) {
+			partnerBean.setNoofdaysfromshippeddate(partnerBean
+					.getNoofdaysfromdeliverydate());
+		}
+		
+		/*if (image != null) {
+			System.out.println(" Not getting any image");
+			if (!image.isEmpty()) {
+				try {
+					validateImage(image);
+
+				} catch (RuntimeException re) {
+					result.reject(re.getMessage());
+				}
+			}
+		}*/
+		/*try {
+			props = PropertiesLoaderUtils.loadProperties(resource);
+
+			if (!partnerList.contains(partnerBean.getPcName())) {
+				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
+						+ HelperClass.getSellerIdfromSession(request)
+						+ partnerBean.getPcName() + ".jpg");
+				saveImage(HelperClass.getSellerIdfromSession(request)
+						+ partnerBean.getPcName() + ".jpg", image);
+			} else {
+				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
+						+ partnerBean.getPcName() + ".jpg");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.reject(e.getMessage());
+			return new ModelAndView("redirect:/seller/partners.html");
+		}*/
+		try {
+			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
+			partnerService.addPartner(partner,HelperClass.getSellerIdfromSession(request));
+		} catch (Exception e) {
+			log.error(e);
+			e.printStackTrace();
+		}
+
+		log.info("*** saveJabong exit ***");
+		return new ModelAndView("redirect:/seller/partners.html");
+	}
+	
+	@RequestMapping(value = "/seller/addJabong", method = RequestMethod.GET)
+	public ModelAndView addJabong(HttpServletRequest request,
+			@ModelAttribute("command") PartnerBean partnerBean,
+			BindingResult result) {
+
+		log.info("*** addJabong start ***");
+		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
+		List<String> categoryList = new ArrayList<String>();
+		List<Category> categoryObjects = null;
+		datemap.put("default", "Select payment from");
+		datemap.put("true", "Shipping Date");
+		datemap.put("false", "Delivery Date");
+		PartnerBean partner = new PartnerBean();
+		try {
+			categoryObjects = categoryService.listCategories(HelperClass.getSellerIdfromSession(request));
+			for (Category cat : categoryObjects) {
+				categoryList.add(cat.getCatName());
+			}
+		} catch (CustomException ce) {
+			log.error("addPartner exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Exception e) {
+			log.error(e);
+		}
+		String partnerName = request.getParameter("partnerName");
+		try {
+			if (partnerName != null) {
+				partner.setPcName(partnerName);
+			}
+			model.put("partner", partner);
+			model.put("categoryList", categoryList);
+			model.put("datemap", datemap);			
+		} catch (Exception e) {
+			log.error(e);
+		}
+		log.info("*** addJabong exit ***");
+		return new ModelAndView("initialsetup/addJabong", model);
+	}
+	
+	
+	@RequestMapping(value = "/seller/addMyntra", method = RequestMethod.GET)
+	public ModelAndView addMyntra(HttpServletRequest request,
+			@ModelAttribute("command") PartnerBean partnerBean,
+			BindingResult result) {
+
+		log.info("*** addMyntra start ***");
+		Map<String, Object> model = new HashMap<String, Object>();
+		/*Map<String, Object> datemap = new LinkedHashMap<String, Object>();
+		List<String> categoryList = new ArrayList<String>();
+		List<Category> categoryObjects = null;
+		datemap.put("default", "Select payment from");
+		datemap.put("true", "Shipping Date");
+		datemap.put("false", "Delivery Date");
+		PartnerBean partner = new PartnerBean();
+		try {
+			categoryObjects = categoryService.listCategories(HelperClass
+					.getSellerIdfromSession(request));
+			for (Category cat : categoryObjects) {
+				categoryList.add(cat.getCatName());
+			}
+		} catch (CustomException ce) {
+			log.error("addPartner exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Exception e) {
+			log.error(e);
+		}
+		String partnerName = request.getParameter("partnerName");
+		try {
+			if (partnerName != null) {
+				partner.setPcName(partnerName);
+			}
+			model.put("partner", partner);
+			model.put("categoryList", categoryList);
+			model.put("datemap", datemap);
+			model.put("partners", ConverterClass
+					.prepareListofPartnerBean(partnerService
+							.listPartners(HelperClass
+									.getSellerIdfromSession(request))));
+		} catch (Exception e) {
+			log.error(e);
+		}*/
+		log.info("*** addMyntra exit ***");
+		return new ModelAndView("initialsetup/addMyntra", model);
+	}
+	
+	
+	/*My Code Ranjan Ends*/
+	
+	
 	@RequestMapping(value = "/seller/addPartnertest", method = RequestMethod.GET)
 	public ModelAndView addPartnertest(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,

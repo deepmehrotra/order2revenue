@@ -264,13 +264,13 @@ public class ProductController {
 
 		log.info("***addProduct  Start****");
 		Map<String, Object> model = new HashMap<String, Object>();
-		Map<String, String> productMap = new LinkedHashMap<>();
+		Map<String, String> productSKuCodeMap = new LinkedHashMap<>();
 		try {
 			List<Product> products = productService.listProducts(HelperClass.getSellerIdfromSession(request));
 					
 			if (products != null && products.size() != 0) {
 				for (Product product : products) {
-					productMap.put(product.getProductName(), product.getProductName());
+					productSKuCodeMap.put(product.getProductSkuCode(), product.getProductSkuCode());
 				}
 			}
 			/*} catch (CustomException ce) {
@@ -284,7 +284,7 @@ public class ProductController {
 			e.printStackTrace();
 			return new ModelAndView("globalErorPage", model);
 		}
-		model.put("productMap", productMap);
+		model.put("productSKuMap", productSKuCodeMap);
 		log.info("*** addProduct exit ***");
 		return new ModelAndView("initialsetup/addProductConfig", model);
 	}

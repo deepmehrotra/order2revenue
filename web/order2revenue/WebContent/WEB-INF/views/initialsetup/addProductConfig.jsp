@@ -30,21 +30,13 @@
 										<div class="col-sm-6">
 										
 											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Products</label>
+												<label class="col-sm-5 control-label">Product SKU Code</label>
 												<div class="col-sm-7">
-													<form:select path="productName" items="${productMap}"
+													<form:select path="productSKuCode" items="${productSKuMap}"
 																class="form-control" id="productName">
 											</form:select>
 												</div>
-											</div>
-											
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Product SKU Code</label>
-												<div class="col-sm-7">
-													<form:input path="productSKuCode"
-														value="${productConfigBean.productSKuCode}" class="form-control" />
-												</div>
-											</div>
+											</div>										
 
 											<div class="mar-btm-20-oh">
 												<label class="col-sm-5 control-label">Product SKU Reference</label>
