@@ -69,6 +69,7 @@ public class PartnerController {
 			add("ebay");
 			add("ShopClues");
 			add("Jabong");
+			add("Myntra");
 		}
 	};
 
@@ -340,6 +341,7 @@ public class PartnerController {
 			return new ModelAndView("redirect:/seller/partners.html");
 		}*/
 		try {
+			partnerBean.setPcName("Jabong");
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
 			partnerService.addPartner(partner,HelperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
@@ -348,6 +350,82 @@ public class PartnerController {
 		}
 
 		log.info("*** saveJabong exit ***");
+		return new ModelAndView("redirect:/seller/partners.html");
+	}
+	
+	@RequestMapping(value = "/seller/saveMyntra", method = RequestMethod.POST)
+	public ModelAndView saveMyntra(HttpServletRequest request,
+			@ModelAttribute("command") PartnerBean partnerBean,
+			BindingResult result,
+			@RequestParam(value = "image", required = false) MultipartFile image) {
+
+		log.info("*** saveMyntra start ***");
+		System.out.println(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
+		Map<String, String[]> parameters = request.getParameterMap();
+				for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+			System.out.println(" Request Param: " + entry.getKey()+ "  Values  : " + entry.getValue().length);
+
+			if (entry.getKey() != null && !entry.getKey().isEmpty())
+				System.out.println(" Print : " + entry.getValue()[0]);
+
+			if (entry.getValue()[0] != null && !entry.getValue()[0].isEmpty()) {
+				if (entry.getKey().contains("nr-")) {
+					String temp = entry.getKey().substring(3);
+					NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+					nrnReturncharge.setChargeAmount(Float.parseFloat(entry.getValue()[0]));
+					nrnReturncharge.setChargeName(temp);
+					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
+					chargeList.add(nrnReturncharge);
+				}
+			}
+		}
+
+		partnerBean.getNrnReturnConfig().setCharges(chargeList);
+		
+		if (!partnerBean.isIsshippeddatecalc()) {
+			partnerBean.setNoofdaysfromshippeddate(partnerBean
+					.getNoofdaysfromdeliverydate());
+		}
+		
+		/*if (image != null) {
+			System.out.println(" Not getting any image");
+			if (!image.isEmpty()) {
+				try {
+					validateImage(image);
+
+				} catch (RuntimeException re) {
+					result.reject(re.getMessage());
+				}
+			}
+		}*/
+		/*try {
+			props = PropertiesLoaderUtils.loadProperties(resource);
+
+			if (!partnerList.contains(partnerBean.getPcName())) {
+				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
+						+ HelperClass.getSellerIdfromSession(request)
+						+ partnerBean.getPcName() + ".jpg");
+				saveImage(HelperClass.getSellerIdfromSession(request)
+						+ partnerBean.getPcName() + ".jpg", image);
+			} else {
+				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
+						+ partnerBean.getPcName() + ".jpg");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.reject(e.getMessage());
+			return new ModelAndView("redirect:/seller/partners.html");
+		}*/
+		try {
+			partnerBean.setPcName("Myntra");
+			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
+			partnerService.addPartner(partner,HelperClass.getSellerIdfromSession(request));
+		} catch (Exception e) {
+			log.error(e);
+			e.printStackTrace();
+		}
+
+		log.info("*** saveMyntra exit ***");
 		return new ModelAndView("redirect:/seller/partners.html");
 	}
 	
@@ -370,13 +448,13 @@ public class PartnerController {
 			for (Category cat : categoryObjects) {
 				categoryList.add(cat.getCatName());
 			}
-		} catch (CustomException ce) {
-			log.error("addPartner exception : " + ce.toString());
+		} /*catch (CustomException ce) {
+			log.error("addJabong exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
-		} catch (Exception e) {
+		}*/ catch (Exception e) {
 			log.error(e);
 		}
 		String partnerName = request.getParameter("partnerName");
@@ -402,7 +480,7 @@ public class PartnerController {
 
 		log.info("*** addMyntra start ***");
 		Map<String, Object> model = new HashMap<String, Object>();
-		/*Map<String, Object> datemap = new LinkedHashMap<String, Object>();
+		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
 		List<Category> categoryObjects = null;
 		datemap.put("default", "Select payment from");
@@ -415,20 +493,20 @@ public class PartnerController {
 			for (Category cat : categoryObjects) {
 				categoryList.add(cat.getCatName());
 			}
-		} catch (CustomException ce) {
+		} /*catch (CustomException ce) {
 			log.error("addPartner exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
-		} catch (Exception e) {
+		}*/ catch (Exception e) {
 			log.error(e);
 		}
-		String partnerName = request.getParameter("partnerName");
+		//String partnerName = request.getParameter("partnerName");
 		try {
-			if (partnerName != null) {
+			/*if (partnerName != null) {
 				partner.setPcName(partnerName);
-			}
+			}*/
 			model.put("partner", partner);
 			model.put("categoryList", categoryList);
 			model.put("datemap", datemap);
@@ -438,7 +516,7 @@ public class PartnerController {
 									.getSellerIdfromSession(request))));
 		} catch (Exception e) {
 			log.error(e);
-		}*/
+		}
 		log.info("*** addMyntra exit ***");
 		return new ModelAndView("initialsetup/addMyntra", model);
 	}
