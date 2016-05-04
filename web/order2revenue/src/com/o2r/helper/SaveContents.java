@@ -936,7 +936,8 @@ public class SaveContents {
 					validaterow = false;
 				}
 				if (entry.getCell(2) != null
-						&& StringUtils.isNotBlank(entry.getCell(2).toString())) {
+						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK)
+						{
 					Product product = productService.getProduct(entry
 							.getCell(2).toString(), sellerId);
 					if (product == null) {
@@ -949,26 +950,23 @@ public class SaveContents {
 					errorMessage.append(" Product SKU is null ");
 					validaterow = false;
 				}
+				try
+				{
 				if (entry.getCell(4) != null
 						&& StringUtils.isNotBlank(entry.getCell(4).toString())
-						&& (int) Float.parseFloat(entry.getCell(4).toString()) != 0) {
-					try {
+						&& (int)entry.getCell(4).getNumericCellValue() != 0) {
+					
 						payment.setNegativeAmount(Math.abs(Double.parseDouble(entry
 								.getCell(4).toString())));
 						totalnegative = totalnegative
 								+ Math.abs(Double.parseDouble(entry.getCell(4)
 										.toString()));
-						System.out.println(" ******toatal totalnegative :"
-								+ totalnegative);
-					} catch (NumberFormatException e) {
-						errorMessage
-								.append(" Negative value should be number ");
-						validaterow = false;
+					
 					}
-				} else if (entry.getCell(3) != null
+				else if (entry.getCell(3) != null
 						&& StringUtils.isNotBlank(entry.getCell(3).toString())
 						&& (int) Float.parseFloat(entry.getCell(3).toString()) != 0) {
-					try {
+					
 						payment.setPositiveAmount(Double.parseDouble(entry
 								.getCell(3).toString()));
 						totalpositive = totalpositive
@@ -976,13 +974,15 @@ public class SaveContents {
 										.toString());
 						System.out.println(" ******toatal psitive :"
 								+ totalpositive);
-					} catch (NumberFormatException e) {
-						errorMessage
-								.append(" Recieved amount should be number ");
-						validaterow = false;
-					}
+					
 				} else {
 					errorMessage.append(" Amount should be given ");
+					validaterow = false;
+				}
+				}
+				catch (NumberFormatException e) {
+					errorMessage
+							.append(" Recieved amount should be number ");
 					validaterow = false;
 				}
 				if (entry.getCell(5) != null

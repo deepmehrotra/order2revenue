@@ -86,6 +86,9 @@
                                 <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="orderId" name="headers"> Order Id</label></div>
 
                                 <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="invoiceId" name="headers"> Invoice Id </label></div>
+                                
+                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="returnCharges" name="headers"> Return Charges </label></div>
+                                
 
                             </div>
 

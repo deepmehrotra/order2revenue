@@ -1,6 +1,5 @@
 package com.o2r.helper;
 
-import java.awt.Color;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -12,7 +11,6 @@ import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.IndexedColors;
 
 /**
  * Builds the report layout, the template, the design, the pattern

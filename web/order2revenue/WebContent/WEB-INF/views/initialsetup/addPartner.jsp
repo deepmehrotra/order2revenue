@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@page import="java.util.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -1337,14 +1338,7 @@ span .#error {
 																				</div>
 																			</div>
 																		</div>
-																		<div class="col-sm-12">
-																			<div class="checkbox i-checks">
-																				<label> <form:checkbox
-																						path="nrnReturnConfig.repCharSFRevShipFee" /> <i></i>
-																					Reverse Shipping Fee
-																				</label>
-																			</div>
-																		</div>
+																		
 																	</div>
 																	<div class="col-sm-12 radio1" id="blk-rep-sf-variable">
 																		<div class="form-group col-md-12">
@@ -1352,7 +1346,7 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharSFVarFixedAmt" value="${repCharSFFixedAmt}">
+																					class="form-control" name="nr-repCharSFVarFixedAmt" value="${repCharSFVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
@@ -2399,6 +2393,7 @@ span .#error {
 					});
 					
 					var radioButtons = $('form#addpartnerform input[type="radio"]');
+					
 					/* alert(" radio buttons length: "+radioButtons.length);
 					alert(" radio buttons value: "+radioButtons[0].value);
 					alert(" radio buttons  id: "+radioButtons[0].id);
@@ -2409,10 +2404,11 @@ span .#error {
 						/* alert(" Getting name : "+radioButtons[i].name);
 				       alert("Getting value of radio button "+'${map[radioButtons[i].name]}');
 					 */
-					 var temp="partner."+radioButtons[i].name;
+					// <c:set var="temp" value='"partner."+radioButtons[i].name' scope="session"/> 
+					 var temp="chargeMap."+radioButtons[i].name;
 					/*  alert("Temp value : "+temp);
 					 alert(" getting temp value from map : "+'${map[temp]}') */
-				       if('${map[temp]}'==radioButtons[i].value)
+					   if('${map[temp]}'==radioButtons[i].value)
 					   {
 					   $('#'+radioButtons[i].id).prop("checked", true).trigger(
 												"click");
