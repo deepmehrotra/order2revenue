@@ -58,12 +58,12 @@ span .#error {
                             </div>
                         </div>
                         <div class="ibox-content add-company"> 
-                            <form:form method="POST" action="saveEvent.html" role="form" class="form-horizontal" id="addEvent">
+                     <form:form method="POST" action="saveEvent.html" role="form" class="form-horizontal" id="addEvent">
                         <div class="col-sm-6">
                           <div class="form-group">
                             <label class="col-sm-4 control-label">Event Name</label>
                             <div class="col-sm-8">
-                              <form:input path="eventName" value="${eventBean.eventName}"	class="form-control" />
+                              <form:input path="eventName" value="${eventsBean.eventName}"	class="form-control" />
                             </div>
                           </div>
                         </div>
@@ -84,7 +84,7 @@ span .#error {
                                 <label class="col-sm-4 control-label">Start Date</label>
                                 <div class="col-sm-8" id="data_1">
                                     <div class="input-group date"> <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                        <form:input path="startDate" value="${eventBean.startDate}"	class="form-control" />
+                                        <form:input path="startDate" value="${eventsBean.startDate}"	class="form-control" />
                                     </div>
                                 </div>
                             </div> 
@@ -94,7 +94,7 @@ span .#error {
                                 <label class="col-sm-4 control-label">End Date</label>
                                 <div class="col-sm-8" id="data_1">
                                     <div class="input-group date"> <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                        <form:input path="endDate" value="${eventBean.endDate}"	class="form-control" />
+                                        <form:input path="endDate" value="${eventsBean.endDate}"	class="form-control" />
                                     </div>
                                 </div>
                             </div>  

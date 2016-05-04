@@ -42,7 +42,7 @@ public class EventsController {
 	
 	static Logger log = Logger.getLogger(EventsController.class.getName());
 	
-	@SuppressWarnings("deprecation")
+	
 	@RequestMapping(value = "/seller/saveEvent", method = RequestMethod.POST)
 	public ModelAndView saveEvents(HttpServletRequest request,@ModelAttribute("command") EventsBean eventsBean, BindingResult result){
 		
@@ -55,6 +55,10 @@ public class EventsController {
 		//System.out.println("Inside Events Controller : "+eventsBean.getChannelName());
 		
 		try {
+			if(eventsBean.getEventId() != 0){
+				eventsBean.setEventId(0);
+			}
+			
 			for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
 				
 				if (entry.getValue()[0] != null	&& !entry.getValue()[0].isEmpty()) {
@@ -110,11 +114,14 @@ public class EventsController {
 		log.info("$$$ addEvent Start $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Events event=null;
-		
+		eventsBean.setEventId(Integer.parseInt(request.getParameter("eventId")));
+		System.out.println("****************** Check : "+eventsBean.getEventId());
 		try {
 			if (eventsBean.getEventId() != 0) {
 				event = eventsService.getEvent(eventsBean.getEventId());
-				model.put("event", event);
+				eventsBean=ConverterClass.prepareEventsBean(event);
+				model.put("eventsBean", eventsBean);
+				System.out.println("Got event object !!!!  yaa......");
 			}
 			try {
 				List<Partner> partnerList = partnerService.listPartners(HelperClass.getSellerIdfromSession(request));
@@ -133,10 +140,8 @@ public class EventsController {
 		}
 		log.info("$$$ addEvent Exit $$$");
 		return new ModelAndView("miscellaneous/addEvent", model);
-	}
-	
-	
-	
+	}	
+		
 	@RequestMapping(value = "/seller/eventsList", method = RequestMethod.GET)
 	public ModelAndView eventsList(HttpServletRequest request, @ModelAttribute("command") EventsBean eventsBean, BindingResult result) {
 		

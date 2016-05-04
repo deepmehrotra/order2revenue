@@ -29,7 +29,7 @@
 					<div class="ibox-title">
 						<h5>Total Events (${eventsList.size()})</h5>
 						<div class="ibox-tools">
-							<a href="addEvent.html" onclick=""   class="btn btn-primary btn-xs">Create New Duplicate Event</a>
+							<a href = "javascript:getURI()" class="btn btn-primary btn-xs">Create New Duplicate Event</a>
 							<a href="addEvent.html"	class="btn btn-primary btn-xs">Create New Event</a>
 						</div>
 					</div>
@@ -54,8 +54,7 @@
 									<c:if test="${!empty eventsList}">
 										<c:forEach items="${eventsList}" var="event" varStatus="loop">
 											<tr>
-												<td><input type="checkbox" name="eventId"
-													value="${event.eventId}"></td>
+												<td><input type="checkbox" name="eventId" value="${event.eventId}" onclick="selectOne(this);"></td>
 												<td>${event.eventName}</td>
 												<td><fmt:formatDate value="${event.createdDate}"
 														pattern="MMM dd ,YY" /></td>
@@ -93,8 +92,31 @@
 <script src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
 <script src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
 
-<script>
+<script language="javascript" type="text/javascript">
+	
+	var checkedValue = null;
+	
+	function selectOne(obj){
+		
+		var current=obj;
+		var inputElements = document.getElementsByName("eventId");
+		var len=inputElements.length;
+		for(var i=0; i<len; ++i){		      
+		     if(inputElements[i].checked){
+		    	inputElements[i].checked=false;
+		    } 	
+		}	
+		current.checked=true;
+		checkedValue = current.value;
+		getURI = function() {
+			location.href = "addEvent.html?eventId="+checkedValue;
+		}
+	}
+	
+	
 	$(document).ready(function() {
+		
+	
 		$('.dataTables-example').dataTable({
 			responsive : true,
 			"dom" : 'T<"clear">lfrtip',

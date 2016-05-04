@@ -46,8 +46,7 @@ span .#error {
 		<jsp:include page="../sidenavigation.jsp"></jsp:include>
 		<div id="page-wrapper" class="gray-bg">
 			<jsp:include page="../globalheader.jsp"></jsp:include>
-			<div class="wrapper wrapper-content animated fadeInRight"
-				id="centerpane">
+			<div class="wrapper wrapper-content animated fadeInRight" id="centerpane">
 				<form:form method="POST" action="savePartner.html"
 					id="addpartnerform" name="addpartnerform" role="form"
 					class="form-horizontal" enctype="multipart/form-data">
