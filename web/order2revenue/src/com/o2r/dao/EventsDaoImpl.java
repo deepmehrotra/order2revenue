@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
@@ -92,6 +93,8 @@ public class EventsDaoImpl implements EventsDao {
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Events.class).add(Restrictions.eq("eventId", eventId));
 			event=(Events)criteria.list().get(0);
+			if(event.getNrnReturnConfig()!=null)
+				Hibernate.initialize(event.getNrnReturnConfig().getCharges());
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();

@@ -48,10 +48,8 @@ public class EventsController {
 		
 		log.info("$$$ saveEvents Starts $$$");		
 		List<NRnReturnCharges> chargeList=new ArrayList<NRnReturnCharges>();
-		Map<String, String[]> parameters = request.getParameterMap();
-		
-		System.out.println("-------************----------++++++++++++************** Events Data :  "+ parameters);
-		
+		Map<String, String[]> parameters = request.getParameterMap();		
+			
 		//System.out.println("Inside Events Controller : "+eventsBean.getChannelName());
 		
 		try {
@@ -113,6 +111,29 @@ public class EventsController {
 
 		log.info("$$$ addEvent Start $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			List<Partner> partnerList = partnerService.listPartners(HelperClass
+					.getSellerIdfromSession(request));
+			Map<String, String> partnerMap = new HashMap<String, String>();
+			if (partnerList != null && !partnerList.isEmpty()) {
+				for (Partner bean : partnerList) {
+					partnerMap.put(bean.getPcName(), bean.getPcName());
+				}
+			}
+			model.put("partnerMap", partnerMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		log.info("$$$ addEvent Exit $$$");
+		return new ModelAndView("miscellaneous/addEvent", model);
+	}
+	
+	@RequestMapping(value = "/seller/addDuplicateEvent", method = RequestMethod.GET)
+	public ModelAndView addDuplicateEvent(HttpServletRequest request, @ModelAttribute("command") EventsBean eventsBean, BindingResult result) {
+
+		log.info("$$$ addDuplicateEvent Start $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String,Float> chargeMap=new HashMap<String, Float>();
 		Events event=null;
 		eventsBean.setEventId(Integer.parseInt(request.getParameter("eventId")));
 		System.out.println("****************** Check : "+eventsBean.getEventId());
@@ -121,26 +142,28 @@ public class EventsController {
 				event = eventsService.getEvent(eventsBean.getEventId());
 				eventsBean=ConverterClass.prepareEventsBean(event);
 				model.put("eventsBean", eventsBean);
+				for(NRnReturnCharges charge:eventsBean.getNrnReturnConfig().getCharges())
+				{
+					chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
+				}
+				model.put("chargeMap", chargeMap);
 				System.out.println("Got event object !!!!  yaa......");
 			}
-			try {
-				List<Partner> partnerList = partnerService.listPartners(HelperClass.getSellerIdfromSession(request));
-				Map<String, String> partnerMap = new HashMap<String, String>();
-				if (partnerList != null && !partnerList.isEmpty()) {
-					for (Partner bean : partnerList) {
-						partnerMap.put(bean.getPcName(), bean.getPcName());
-					}
+			List<Partner> partnerList = partnerService.listPartners(HelperClass.getSellerIdfromSession(request));
+			Map<String, String> partnerMap = new HashMap<String, String>();
+			if (partnerList != null && !partnerList.isEmpty()) {
+				for (Partner bean : partnerList) {
+					partnerMap.put(bean.getPcName(), bean.getPcName());
 				}
-				model.put("partnerMap", partnerMap);
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
+			model.put("partnerMap", partnerMap);			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		log.info("$$$ addEvent Exit $$$");
+		log.info("$$$ addDuplicateEvent Exit $$$");
 		return new ModelAndView("miscellaneous/addEvent", model);
-	}	
+	}
+	
 		
 	@RequestMapping(value = "/seller/eventsList", method = RequestMethod.GET)
 	public ModelAndView eventsList(HttpServletRequest request, @ModelAttribute("command") EventsBean eventsBean, BindingResult result) {
@@ -152,7 +175,7 @@ public class EventsController {
 			model.put("eventsList", ConverterClass
 					.prepareListOfEventsBean(eventsService
 							.listEvents(HelperClass
-									.getSellerIdfromSession(request))));
+									.getSellerIdfromSession(request))));			
 		} /*catch (CustomException ce) {
 			log.error("productList exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());

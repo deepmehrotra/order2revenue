@@ -4,9 +4,44 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page import="java.util.*"%>
+ <%Date date = new java.util.Date();
+               pageContext.setAttribute("currentDate", date);%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
  <head>
+ 
+ <style type="text/css">
+    body.DTTT_Print {
+        background: #fff;
+
+    }
+    .DTTT_Print #page-wrapper {
+        margin: 0;
+        background:#fff;
+    }
+
+    button.DTTT_button, div.DTTT_button, a.DTTT_button {
+        border: 1px solid #e7eaec;
+        background: #fff;
+        color: #676a6c;
+        box-shadow: none;
+        padding: 6px 8px;
+    }
+    button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
+        border: 1px solid #d2d2d2;
+        background: #fff;
+        color: #676a6c;
+        box-shadow: none;
+        padding: 6px 8px;
+    }
+
+    .dataTables_filter label {
+        margin-right: 5px;
+
+    }
+</style>
+ 
  <jsp:include page="../globalcsslinks.jsp"></jsp:include>
   <!-- Data Tables -->
     <link href="/O2R/seller/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
@@ -15,13 +50,14 @@
 
 </head>
 <body>
-  <%-- <div id="wrapper">
+	
+	<div id="wrapper">
 		<jsp:include page="../sidenavigation.jsp"></jsp:include>
 		<div id="page-wrapper" class="gray-bg">
-			<jsp:include page="../globalheader.jsp"></jsp:include> --%>
-
-
-	<div class="wrapper wrapper-content animated fadeInRight"
+			<jsp:include page="../globalheader.jsp"></jsp:include>
+	
+	
+  	<div class="wrapper wrapper-content animated fadeInRight"
 		id="centerpane">
 		<div class="row">
 			<div class="col-lg-12">
@@ -61,9 +97,20 @@
 												<td>${event.channelName}</td>
 												<td><fmt:formatDate value="${event.startDate}"
 														pattern="MMM dd ,YY" /></td>
-												<td><fmt:formatDate value="${event.endDate}"
-														pattern="MMM dd ,YY" /></td>													  
-												<td>Active</td>			
+												<td><fmt:formatDate  value="${event.endDate}"
+														pattern="MMM dd ,YY" /></td>																								
+												<c:set var="now" value="${currentDate}" />
+												<fmt:formatDate var="start" value="${event.startDate}"	pattern="MMM dd ,YY" />
+												<fmt:formatDate var="end" value="${event.endDate}"	pattern="MMM dd ,YY" />
+												<fmt:formatDate var="now" value="${now}" pattern="MMM dd ,YY" />
+												<c:choose>
+													<c:when test="${start <= now && end >= now}">
+	        													<td><font color="green">Active</font></td>
+	    											</c:when>
+	    											<c:otherwise>
+	        													<td><font color="red">Inactive</font></td>
+	    											</c:otherwise>	
+    											</c:choose>																										  
 												<td>${event.netSalesQuantity}</td>
 												<td>${event.netSalesAmount}</td>
 												
@@ -109,7 +156,7 @@
 		current.checked=true;
 		checkedValue = current.value;
 		getURI = function() {
-			location.href = "addEvent.html?eventId="+checkedValue;
+			location.href = "addDuplicateEvent.html?eventId="+checkedValue;
 		}
 	}
 	
@@ -213,37 +260,7 @@
 						"location=no,height=400,width=1200,top=100,left=50,status=yes,resizable=no,titlebar=no,toolbar=no,menubar=no,scrollbars=no,location=no");
 	}
 </script>
-<style>
-    body.DTTT_Print {
-        background: #fff;
-
-    }
-    .DTTT_Print #page-wrapper {
-        margin: 0;
-        background:#fff;
-    }
-
-    button.DTTT_button, div.DTTT_button, a.DTTT_button {
-        border: 1px solid #e7eaec;
-        background: #fff;
-        color: #676a6c;
-        box-shadow: none;
-        padding: 6px 8px;
-    }
-    button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
-        border: 1px solid #d2d2d2;
-        background: #fff;
-        color: #676a6c;
-        box-shadow: none;
-        padding: 6px 8px;
-    }
-
-    .dataTables_filter label {
-        margin-right: 5px;
-
-    }
-</style>
+	</div>
+</div>
  </body>
-</html>
-</body>
 </html>
