@@ -83,6 +83,13 @@ public class PartnerController {
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		log.info("*** savePartner start ***");
+		if(partnerBean.getPcId() != 0){		
+			System.out.println("****************************** ConfigId : "+partnerBean.getNrnReturnConfig().getConfigId());
+			System.out.println("****************************** Partner ID : "+partnerBean.getPcId());
+					
+		}
+		
+		
 		System.out.println(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
 		Map<String, String[]> parameters = request.getParameterMap();
 		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
@@ -168,7 +175,7 @@ public class PartnerController {
 		} catch (Exception e) {
 			log.error(e);
 		}
-
+		
 		log.info("*** savePartner exit ***");
 		return new ModelAndView("redirect:/seller/partners.html");
 	}
@@ -357,6 +364,7 @@ public class PartnerController {
 			pbean=ConverterClass
 			.preparePartnerBean(partnerService.getPartner(partnerBean
 					.getPcId()));
+			System.out.println("************** Inside edit partner : config ID :"+pbean.getNrnReturnConfig().getConfigId());
 			for(NRnReturnCharges charge:pbean.getNrnReturnConfig().getCharges())
 			{
 				chargeMap.put(charge.getChargeName(), charge.getChargeAmount());

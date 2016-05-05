@@ -38,18 +38,21 @@ public class PartnerDaoImpl implements PartnerDao {
 			throws CustomException {
 		// sellerId=4;
 		// sessionFactory.getCurrentSession().saveOrUpdate(partner);
-		System.out.println(" Inside PartnerDaoIMpl partner id :"
-				+ partner.getPcId());
+		System.out.println("******* Inside PartnerDaoIMpl partner id :"+ partner.getPcId()+"******* ConfigId : "+partner.getNrnReturnConfig().getConfigId());
 		long id=partner.getPcId();
+		
 		//Partner exisitingObj=null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			if (id != 0) {
+				System.out.println("*************** Inside If : "+id);
 				Query gettingTaxId = session
 						.createSQLQuery(chargesDeleteQuery)
 						.setParameter("configId", partner.getNrnReturnConfig().getConfigId());
+				gettingTaxId.executeUpdate();
 				session.saveOrUpdate(partner);
+				System.out.println("*********** Charges deleted with ID : "+id);
 			} else {
 				Seller seller = (Seller) session.get(Seller.class, sellerId);
 				seller.getPartners().add(partner);
@@ -114,7 +117,7 @@ public class PartnerDaoImpl implements PartnerDao {
 			/*return (Partner) sessionFactory.getCurrentSession().get(
 					Partner.class, partnerid);*/
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.printStackTrace();			
 			log.error(e);
 			throw new CustomException(GlobalConstant.getPartnerError,
 					new Date(), 3, GlobalConstant.getPartnerErrorCode, e);
