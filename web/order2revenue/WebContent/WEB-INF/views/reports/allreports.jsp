@@ -176,18 +176,18 @@ var OrderRelatedReport = [
                   {display: " Return/RTO limit crossed Orders", value: " returnRTOLimitCrossed" },
                   {display: "Settled Orders", value: "settledOrders" }];
 var ChannelRelatedReport = [
-                          {display: "Channel Wise Sales Order", value: "channelSaleReport" },
-                          {display: "Category Wise Sales Order", value: "categoryWiseSaleReport" }];
+                  {display: "Channel Wise Sales Order", value: "channelSaleReport" },
+                  {display: "Category Wise Sales Order", value: "categoryWiseSaleReport" },
+                  {display: "Total Payments Receieved", value: "paymentsReceievedReport" },
+                  {display: "Orderwise GP Report", value: "orderwiseGPReport" }];
 var ProductRelatedReport = [
-                          {display: "Product Shipped Orders", value: "productSaleReport" }, 
-                          {display: "Payment Difference Orders", value: "productSaleReport" }, 
-                          {display: " Return/RTO limit crossed Orders", value: " productSaleReport" },
-                          {display: "Settled Orders", value: "productSaleReport" }];
-                  
+                  {display: "Product Shipped Orders", value: "productSaleReport" }, 
+                  {display: "Payment Difference Orders", value: "productSaleReport" }, 
+                  {display: " Return/RTO limit crossed Orders", value: " productSaleReport" },
+                  {display: "Settled Orders", value: "productSaleReport" }];                  
 var PartnerRelated = [
                   {display: "Partner Commission Paid Report", value: "partnerCommissionReport" }, 
-                  {display: "Partner Business Report", value: "partnerBusinessReport" }];
-                  
+                  {display: "Partner Business Report", value: "partnerBusinessReport" }];                  
 var ExpenseReports = [
                   {display: "Expenditure Report", value: "expenditureReport" }
                   ];

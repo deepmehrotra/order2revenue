@@ -82,6 +82,22 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 				sellerIdfromSession);
 	}
 
+	@Override
+	public List<ChannelSalesDetails> getPaymentsReceievedDetails(
+			Date startDate, Date endDate, int sellerIdfromSession) throws CustomException {
+		// TODO Auto-generated method stub
+		return reportGeneratorDao2.getPaymentsReceievedDetails(startDate, endDate,
+				sellerIdfromSession);
+	}
+
+	@Override
+	public List<ChannelSalesDetails> getOrderwiseGPDetails(Date startDate,
+			Date endDate, int sellerIdfromSession) throws CustomException {
+		// TODO Auto-generated method stub
+		return reportGeneratorDao2.getOrderwiseGPDetails(startDate, endDate,
+				sellerIdfromSession);
+	}
+
 	/*
 	 * 
 	 * @Override

@@ -61,22 +61,16 @@
                                             <tbody>
                                              <c:if test="${!empty ttsolist}">
                                  			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-                                 			 <c:if test="${empty ttso.groupByName}">
+                                 			 <c:if test="${ttso.groupByName == 'channels'}">
                                             <tr>
                                                 <td>${ttso.pcName}</td>
-                                                <td>${ttso.netRate}</td>
-                                                <td>${ttso.orderSP}</td>
-                                                <td>${ttso.orderSP/2}</td>
+                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.orderSP}" /></td>
+                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
+                                                
+                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netPaymentResult}" /></td>
                                             </tr>
                                             </c:if>
-                                 			 <c:if test="${ttso.groupByName == 'categoryName'}">
-                                            <tr>
-                                                <td>${ttso.pcName}</td>
-                                                <td>${ttso.netRate}</td>
-                                                <td>${ttso.orderSP}</td>
-                                                <td>${ttso.orderSP/2}</td>
-                                            </tr>
-                                            </c:if>
+
                                             </c:forEach>
                                             </c:if>
                                             </tbody>
@@ -119,17 +113,10 @@
                                             <tbody>
                                              <c:if test="${!empty ttsolist}">
                                  			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-                                 			 <c:if test="${empty ttso.groupByName}">
+                                 			 <c:if test="${ttso.groupByName == 'channels'}">
                                             <tr>
                                                 <td>${ttso.pcName}</td>
-                                                <td>${ttso.quantity}</td>
-                                                <td>${ttso.returnorrtoQty}</td>
-                                            </tr>
-                                            </c:if>
-                                 			 <c:if test="${ttso.groupByName == 'categoryName'}">
-                                            <tr>
-                                                <td>${ttso.pcName}</td>
-                                                <td>${ttso.quantity}</td>
+                                                <td>${ttso.netSaleQuantity}</td>
                                                 <td>${ttso.returnorrtoQty}</td>
                                             </tr>
                                             </c:if>
@@ -169,7 +156,7 @@
                                             <tbody>
                                              <c:if test="${!empty ttsolist}">
                                  			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-                                 			 <c:if test="${empty ttso.groupByName}">
+                                 			 <c:if test="${ttso.groupByName == 'channels'}">
                                             <tr>
                                                 <td>${ttso.pcName}</td>
                                                 <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossProfit}" /></td>
@@ -221,21 +208,15 @@
                                             <tbody>
                                              <c:if test="${!empty ttsolist}">
                                  			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-                                 			 <c:if test="${empty ttso.groupByName}">
+                                 			 <c:if test="${ttso.groupByName == 'channels'}">
                                             <tr>
                                                 <td>${ttso.pcName}</td>
-                                                <td>${ttso.quantity}</td>
-                                                <td>${ttso.returnorrtoQty}</td>
+                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netPaymentResult}" /></td>
+                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.paymentDifference}" /></td>
                                             </tr>
                                             </c:if>
-                                 			 <c:if test="${ttso.groupByName == 'categoryName'}">
-                                            <tr>
-                                                <td>${ttso.pcName}</td>
-                                                <td>${ttso.quantity}</td>
-                                                <td>${ttso.returnorrtoQty}</td>
-                                            </tr>
-                                            </c:if>
-                                            </c:forEach>
+                                            </c:forEach>	
+
                                             </c:if>
                                             </tbody>
                                         </table>
@@ -289,13 +270,13 @@
                                     <th>Date Range</th>
                                     <th>Partner Name</th>
                                     
-                                    <th colspan="3" style="color:blue">N/R Amount, Gross SP, Gross Qty</th>
+                                    <th colspan="4" style="color:blue">N/R Amount, Gross SP, Gross Qty, Tax</th>
                                     
-                                    <th  colspan="3" style="color:blue">N/R Amount,Rtn SP,Rtn Qty</th>
+                                    <th  colspan="4" style="color:blue">N/R Amount,Rtn SP,Rtn Qty, Tax</th>
 
                                     <th>Return Vs Gross</th>
                                     
-                                    <th   colspan="3" style="color:blue">N/R Amount,Net SP,Net Qty</th>
+                                    <th   colspan="4" style="color:blue">N/R Amount,Net SP,Net Qty, Tax</th>
                                     
                                     <th>Tax Category </th>
                                     <th>Net Tax Liability On SP</th>
@@ -310,36 +291,37 @@
                                  
                                <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
                               
-                              <c:if test="${!empty ttso.groupByName}">
+                              <c:if test="${ttso.groupByName == 'returnGroup' || ttso.groupByName == 'orderTax'}">
                                 <tr>
                                     <td>${loop.index+1}</td>
                                     <td>${ttso.startDate} ${ttso.endDate}</td>
-                                                                     
-										        <td>${ttso.pcName}</td>
-
-                                   
-                                    <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossNetRate}" /></td>
+										        <td>${ttso.pcName}</td>                             
+                                    <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
 									<td>${ttso.orderSP}</td>
 									<td>${ttso.quantity}</td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.tax}" /></td>
 									
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
-									<td>${ttso.returnOrRTOChargestoBeDeducted}</td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.nrReturn}" /></td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.returnSP}" /></td>
 									<td>${ttso.returnorrtoQty}</td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.nrTax}" /></td>
 									
-									<td>${ttso.returnorrtoQty * 100/ttso.quantity}</td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.returnorrtoQty * 100/ttso.quantity}" /></td>
 									
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.orderSP - ttso.returnOrRTOChargestoBeDeducted}" /></td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate-ttso.nrReturn}" /></td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.orderSP - ttso.returnSP}" /></td>
 									<td>${ttso.quantity - ttso.returnorrtoQty}</td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.tax - ttso.nrTax}" /></td>
 									
 									<td>${ttso.taxCategtory}</td>
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossNetRate - ttso.grossNetRate * 100/105}" /></td>
-
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${(ttso.orderSP - ttso.returnOrRTOChargestoBeDeducted)-(ttso.grossNetRate - ttso.grossNetRate * 100/105)}" /></td>
+									
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${(ttso.orderSP-ttso.returnSP)- (((ttso.orderSP-ttso.returnSP)*100)/(100+ttso.taxPercent))}" /></td>
+									
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate-ttso.nrReturn}" /></td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${(ttso.orderSP - ttso.returnSP)-((ttso.orderSP-ttso.returnSP)- (((ttso.orderSP-ttso.returnSP)*100)/(100+ttso.taxPercent)))}" /></td>
 									<td>${ttso.quantity - ttso.returnorrtoQty}</td>
-									<td>${ttso.positiveAmount + ttso.negativeAmount}</td>
-									<td>TBD</td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.positiveAmount + ttso.negativeAmount}" /></td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.paymentDifference}" /></td>
                                   </tr>
                                 </c:if>
                                 </c:forEach>
@@ -417,18 +399,13 @@ $(window).load(function() {
 	 	var cdata = [];
  		 	
 	 	<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-	 	<c:if test="${empty ttso.groupByName}">
+	 	<c:if test="${ttso.groupByName == 'channels'}">
 			labelsdata.push('${ttso.pcName}');
 	 		adata.push('${ttso.orderSP}');
-	 		bdata.push('${ttso.orderSP - 6000}');
-	 		cdata.push('${ttso.orderSP - 9000}');
+	 		bdata.push('${ttso.netRate}');
+	 		cdata.push('${ttso.netPaymentResult}');
 	 	</c:if>
-	 	<c:if test="${ttso.groupByName == 'categoryName'}">
-			labelsdata.push('${ttso.pcName}');
-	 		adata.push('${ttso.orderSP}');
-	 		bdata.push('${ttso.orderSP - 6000}');
-	 		cdata.push('${ttso.orderSP - 9000}');
- 		</c:if>
+
 		</c:forEach>
 	 	
 	    var lineData = {
@@ -530,16 +507,18 @@ $(window).load(function() {
 		        multiTooltipTemplate: ""
 		    }
 		 	<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-		 	<c:if test="${empty ttso.groupByName}">
+		 	<c:if test="${ttso.groupByName == 'channels'}">
 		 	axislabels.push('${ttso.pcName}');
-		 		dataset1.push('${ttso.quantity}');
-		 		dataset2.push('${ttso.quantity/2}');
+		 		dataset1.push('${ttso.netSaleQuantity}');
+		 		dataset2.push('${ttso.returnorrtoQty}');
 		 	</c:if>
+		 	<!--
 		 	<c:if test="${ttso.groupByName == 'categoryName'}">
 		 	axislabels.push('${ttso.pcName}');
 	 		dataset1.push('${ttso.quantity}');
 	 		dataset2.push('${ttso.quantity/2}');
  		   </c:if>
+ 		   -->
 			</c:forEach>
         	
 		    var ctx = document.getElementById("barChart").getContext("2d"); 
@@ -596,79 +575,77 @@ $(window).load(function() {
 		    };
 	  
 		<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-	 	<c:if test="${empty ttso.groupByName}">
+		<c:if test="${ttso.groupByName == 'channels'}">
 			labelsx.push('${ttso.pcName}');
 			data1x.push('${ttso.grossProfit}');
 			data2x.push('${ttso.grossProfit/2}');
 	 	</c:if>
-	 	<c:if test="${ttso.groupByName == 'categoryName'}">
-		labelsx.push('${ttso.pcName}');
-		data1x.push('${ttso.grossProfit}');
-		data2x.push('${ttso.grossProfit/2}');
-		   </c:if>
+
 		</c:forEach>
 
 
 		    var ctx = document.getElementById("lineChart").getContext("2d");
 		    var myNewChart = new Chart(ctx).Line(lineDatax, lineOptionsx);
 
-
-			var axislabelsx=[];
+		  	var axislabelsx=[];
 			var dataset1x = [];
 			var dataset2x = [];
-			
-			
-			 var barDatax = {
-				       
-					 labels:axislabelsx,
-				        datasets: [
-				            {
-				                label: "label1",
-				                fillColor: "rgba(220,220,220,0.8)",
-				                strokeColor: "rgba(220,220,220,0.8)",
-				                highlightFill: "rgba(220,220,220,0.75)",
-				                highlightStroke: "rgba(220,220,220,1)",
-				                data: dataset1x
-				            },
-				            {
-				                label: "label2",
-				                fillColor: "rgba(26,179,148,0.8)",
-				                strokeColor: "rgba(26,179,148,0.8)",
-				                highlightFill: "rgba(26,179,148,0.75)",
-				                highlightStroke: "rgba(26,179,148,1)",
-				                data:dataset2x
-				            }
-				        ]
-				    };
+	      
+	      
+	  var lineDataxac = {
+		        labels: axislabelsx,
+		        datasets: [
+		            {
+		                label: "GrossProfit",
+		                fillColor: "rgba(120,120,120,0.5)",
+		                strokeColor: "black",
+		                pointColor: "rgba(220,220,220,1)",
+		                pointStrokeColor: "#fff",
+		                pointHighlightFill: "#fff",
+		                pointHighlightStroke: "rgba(220,220,220,1)",
+		                data: dataset1x
+		            },
+		            {
+		                label: "Expensex",
+		                fillColor: "rgba(26,179,148,0.5)",
+		                strokeColor: "rgba(26,179,148,0.7)",
+		                pointColor: "rgba(26,179,148,1)",
+		                pointStrokeColor: "#fff",
+		                pointHighlightFill: "#fff",
+		                pointHighlightStroke: "rgba(26,179,148,1)",
+		                data: dataset2x
+		            }
+		        ]
+		    };
+	  
+	  var lineOptionsxac = {
+		        scaleShowGridLines: true,
+		        scaleGridLineColor: "rgba(0,0,0,.05)",
+		        scaleGridLineWidth: 1,
+		        bezierCurve: true,
+		        bezierCurveTension: 0.4,
+		        pointDot: true,
+		        pointDotRadius: 4,
+		        pointDotStrokeWidth: 1,
+		        pointHitDetectionRadius: 20,
+		        datasetStroke: true,
+		        datasetStrokeWidth: 2,
+		        datasetFill: true,
+		        responsive: true,
+		        multiTooltipTemplate: "",
+		    };
+	  
+		<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
+		<c:if test="${ttso.groupByName == 'channels'}">
+			axislabelsx.push('${ttso.pcName}');
+			dataset1x.push('${ttso.netPaymentResult}');
+			dataset2x.push('${ttso.paymentDifference}');
+	 	</c:if>
 
-				    var barOptions1x = {
-				        scaleBeginAtZero: true,
-				        scaleShowGridLines: true,
-				        scaleGridLineColor: "rgba(0,0,0,.05)",
-				        scaleGridLineWidth: 1,
-				        barShowStroke: true,
-				        barStrokeWidth: 2,
-				        barValueSpacing: 5,
-				        showTooltips : true,
-				        barDatasetSpacing: 1,
-				        responsive: true,
-				        multiTooltipTemplate: ""
-				    }
-				 	<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-				 	<c:if test="${empty ttso.groupByName}">
-				 	axislabelsx.push('${ttso.pcName}');
-				 		dataset1x.push('${ttso.quantity}');
-				 		dataset2x.push('${ttso.quantity/2}');
-				 	</c:if>
-				 	<c:if test="${ttso.groupByName == 'categoryName'}">
-				 	axislabelsx.push('${ttso.pcName}');
-			 		dataset1x.push('${ttso.quantity}');
-			 		dataset2x.push('${ttso.quantity/2}');
-					   </c:if>
-					</c:forEach>
-		        	
-				    var ctx = document.getElementById("barSecondChart").getContext("2d"); 
-				    var myNewChart = new Chart(ctx).Bar(barDatax, barOptions1x);
+		</c:forEach>
+
+		    var ctx = document.getElementById("barSecondChart").getContext("2d");
+		    var myNewChart = new Chart(ctx).Line(lineDataxac, lineOptionsxac);
 				    
 				    
 				    $(document).ready(function() {

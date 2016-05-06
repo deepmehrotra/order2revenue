@@ -10,7 +10,6 @@
  </head>
  <body>
  <div>
-
     <div>
        
       <div class="wrapper wrapper-content animated fadeInRight" id="centerpane"> 

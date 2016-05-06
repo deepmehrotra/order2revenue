@@ -420,14 +420,14 @@ $(window).load(function() {
 	 	<c:if test="${empty ttso.groupByName}">
 			labelsdata.push('${ttso.pcName}');
 	 		adata.push('${ttso.orderSP}');
-	 		bdata.push('${ttso.orderSP}');
-	 		cdata.push('${ttso.orderSP}');
+	 		bdata.push('${ttso.orderSP - 6000}');
+	 		cdata.push('${ttso.orderSP - 9000}');
 	 	</c:if>
 	 	<c:if test="${ttso.groupByName == 'categoryName'}">
 			labelsdata.push('${ttso.pcName}');
 	 		adata.push('${ttso.orderSP}');
-	 		bdata.push('${ttso.orderSP}');
-	 		cdata.push('${ttso.orderSP}');
+	 		bdata.push('${ttso.orderSP - 6000}');
+	 		cdata.push('${ttso.orderSP - 9000}');
  		</c:if>
 		</c:forEach>
 	 	

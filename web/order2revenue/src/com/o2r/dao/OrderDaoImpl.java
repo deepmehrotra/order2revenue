@@ -2167,11 +2167,12 @@ public class OrderDaoImpl implements OrderDao {
 		 criteria1.createAlias("orderPayment", "orderPayment", CriteriaSpecification.LEFT_JOIN);
 		 criteria1.createAlias("orderTax", "orderTax", CriteriaSpecification.LEFT_JOIN);
 		 criteria1.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.LEFT_JOIN);
-		 criteria1.createAlias("orderTimeline", "orderTimeline", CriteriaSpecification.LEFT_JOIN)
-		 .add(Restrictions.eq("seller.id", sellerIdfromSession));
+		 criteria1.createAlias("orderTimeline", "orderTimeline", CriteriaSpecification.LEFT_JOIN);
+		 criteria1.add(Restrictions.eq("seller.id", sellerIdfromSession));
+		 criteria1.setProjection(Projections.distinct(Projections.property("orderId")));
 		 criteria1.add(Restrictions.between("orderDate",startDate, endDate));
 		 criteria1.setProjection(getPL("pcName"));
-		 
+		 ArrayList<Integer> orderId=new ArrayList<Integer>();
 		 List pcNameList=criteria1.list();
 			Iterator pcNameItr=pcNameList.iterator();
 			List<ChannelSalesDetails> ttso=new ArrayList<ChannelSalesDetails>();
@@ -2181,7 +2182,10 @@ public class OrderDaoImpl implements OrderDao {
 				 temp=new ChannelSalesDetails();
 				 populateChannelSalesDetails(temp,recordsRow,startDate,endDate);
 				 System.out.println("PC NAME "+ temp.getPcName()+"  "+temp.getStartDate()+" "+temp.getOrderId()+"  "+temp.getInvoiceID());
+				 if(!orderId.contains(new Integer(temp.getOrderId())))
 				 ttso.add(temp);
+				 orderId.add(new Integer(temp.getOrderId()));
+				// ttso.add(temp);
 			} 
 			System.out.println("THIS IS THE TOTAL LIST OF ORDERS "+ttso.size());
 		return ttso;

@@ -31,7 +31,7 @@
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>Reports</h5>
+                            <h5>Total Payments Receieved</h5>
                         </div>
                         <div class="ibox-content overflow-h">
                             
@@ -49,42 +49,39 @@
                                 
                                 
                                                                 <div class="col-lg-6">
-                                         <table class="table table-bordered custom-table">
-                                            <thead>
-				                                            <tr>
-				                                                <th>Partner</th>
-				                                                <th color="green">SP</th>
-				                                                <th>NR</th>
-				                                                <th>AR</th>
-				                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                             <c:if test="${!empty ttsolist}">
-                                 			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-                                 			 <c:if test="${empty ttso.groupByName}">
-                                            <tr>
-                                                <td>${ttso.pcName}</td>
-                                                <td>${ttso.netRate}</td>
-                                                <td>${ttso.orderSP}</td>
-                                                <td>${ttso.orderSP/2}</td>
-                                            </tr>
-                                            </c:if>
-                                 			 <c:if test="${ttso.groupByName == 'categoryName'}">
-                                            <tr>
-                                                <td>${ttso.pcName}</td>
-                                                <td>${ttso.netRate}</td>
-                                                <td>${ttso.orderSP}</td>
-                                                <td>${ttso.orderSP/2}</td>
-                                            </tr>
-                                            </c:if>
-                                            </c:forEach>
-                                            </c:if>
-                                            </tbody>
-                                        </table>
-                                </div>
-                                
-                                
-                                
+                                <table id="filterTable" style="width:50%" class="table table-striped table-bordered table-hover dataTables-example" >
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Partner</th>
+                                    <th>Payment Type</th>
+                                    <th>Total +Ve</th>                                   
+                                    <th>Total -ve</th>
+                                    <th>Net Pay</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                 <c:set var="numberOfRows" value="0"/>
+                                 
+                               <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
+                               <c:if test="${ttso.groupByName == 'paymentTypeOne'}">
+                               <c:set var="numberOfRows" value="${numberOfRows+1}"/>
+                                <tr>
+                                    <td><c:out value="${numberOfRows}"/></td>
+                                    <td>${ttso.pcName}</td>
+									<td>${ttso.paymentType}</td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.positiveAmount}"/></td>									
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.negativeAmount}"/></td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netPaymentResult}"/></td>
+                                  </tr>
+								</c:if>
+                                </c:forEach>
+									     
+                                </tbody>
+                                </table>
+                                </div>    
+                                                      
 								                <div class="col-lg-6">
 								                    <div class="ibox float-e-margins">
 								                        <div class="ibox-title">
@@ -95,169 +92,20 @@
 								                        </div>
 								                        <div class="ibox-content">
 								                            <div>
-								                                <canvas id="flot-chart-content" height="140"></canvas>
+								                                <canvas id="flot-chart-content" height="240"></canvas>
 								                            </div>
 								                        </div>
 								                    </div>
-								                </div>
+								                </div> 
+								                                
+                                </div>
+								<div class="row">
+								
+								
+								
+								
+								</div>
 
-                                
-                                </div>
-
-                        <div class="row">
-                                    <div class="col-lg-6">
-                                    <div class="float-e-margins graph-brd">
-                                    <div class="ibox-content">
-                                         <table class="table table-bordered custom-table">
-                                            <thead>
-                                            <tr>
-                                                <th>Partner</th>
-                                                <th>Gross Sale Qty</th>
-                                                <th>Sale Return</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                             <c:if test="${!empty ttsolist}">
-                                 			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-                                 			 <c:if test="${empty ttso.groupByName}">
-                                            <tr>
-                                                <td>${ttso.pcName}</td>
-                                                <td>${ttso.quantity}</td>
-                                                <td>${ttso.returnorrtoQty}</td>
-                                            </tr>
-                                            </c:if>
-                                 			 <c:if test="${ttso.groupByName == 'categoryName'}">
-                                            <tr>
-                                                <td>${ttso.pcName}</td>
-                                                <td>${ttso.quantity}</td>
-                                                <td>${ttso.returnorrtoQty}</td>
-                                            </tr>
-                                            </c:if>
-                                            </c:forEach>
-                                            </c:if>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    </div>
-                                </div>
-										                <div class="col-lg-6">
-										                    <div class="ibox float-e-margins">
-										                        <div class="ibox-title">
-										                            <h5>Bar Chart</h5>
-										                            <div ibox-tools></div>
-										                        </div>
-										                        <div class="ibox-content">
-										                            <div>
-										                                <canvas id="barChart" height="140"></canvas>
-										                            </div>
-										                        </div>
-										                    </div>
-										                </div>
-                                </div>
-                        <div class="row">
-                                    <div class="col-lg-6">
-                                    <div class="float-e-margins graph-brd">
-                                    <div class="ibox-content">
-                                         <table class="table table-bordered custom-table">
-                                            <thead>
-                                            <tr>
-                                                <th>Partner</th>
-                                                <th>Gross Sale</th>
-                                                <th>Return Amount</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                             <c:if test="${!empty ttsolist}">
-                                 			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-                                 			 <c:if test="${empty ttso.groupByName}">
-                                            <tr>
-                                                <td>${ttso.pcName}</td>
-                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossProfit}" /></td>
-                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossProfit/2}" /></td>
-                                            </tr>
-                                            </c:if>
-                                 			 <c:if test="${ttso.groupByName == 'categoryName'}">
-                                            <tr>
-                                                <td>${ttso.pcName}</td>
-                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossProfit}" /></td>
-                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossProfit/2}" /></td>
-                                            </tr>
-                                            </c:if>
-                                            </c:forEach>
-                                            </c:if>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    </div>
-                                </div>
-					                <div class="col-lg-6">
-					                    <div class="ibox float-e-margins">
-					                        <div class="ibox-title">
-					                            <h5>Line Chart
-					                                <small>With custom colors.</small>
-					                            </h5>
-					                            <div ibox-tools></div>
-					                        </div>
-					                        <div class="ibox-content">
-					                            <div>
-					                                <canvas id="lineChart" height="140"></canvas>
-					                            </div>
-					                        </div>
-					                    </div>
-					                </div>
-                                </div>
-                        <div class="row">
-                                    <div class="col-lg-6">
-                                    <div class="float-e-margins graph-brd">
-                                    <div class="ibox-content">
-                                         <table class="table table-bordered custom-table">
-                                            <thead>
-                                            <tr>
-                                                <th>Partner</th>
-                                                <th>Net AR</th>
-                                                <th>Net Due</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                             <c:if test="${!empty ttsolist}">
-                                 			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-                                 			 <c:if test="${empty ttso.groupByName}">
-                                            <tr>
-                                                <td>${ttso.pcName}</td>
-                                                <td>${ttso.quantity}</td>
-                                                <td>${ttso.returnorrtoQty}</td>
-                                            </tr>
-                                            </c:if>
-                                 			 <c:if test="${ttso.groupByName == 'categoryName'}">
-                                            <tr>
-                                                <td>${ttso.pcName}</td>
-                                                <td>${ttso.quantity}</td>
-                                                <td>${ttso.returnorrtoQty}</td>
-                                            </tr>
-                                            </c:if>
-                                            </c:forEach>
-                                            </c:if>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    </div>
-                                </div>
-								                <div class="col-lg-6">
-								                    <div class="ibox float-e-margins">
-								                        <div class="ibox-title">
-								                            <h5>Bar Chart
-								                                <small>With custom colors.</small>
-								                            </h5>
-								                            <div ibox-tools></div>
-								                        </div>
-								                        <div class="ibox-content">
-								                            <div>
-								                                <canvas id="barSecondChart" height="140"></canvas>
-								                            </div>
-								                        </div>
-								                    </div>
-								                </div>
-                                </div>
 
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -286,64 +134,39 @@
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Date Range</th>
-                                    <th>Partner Name</th>
+                                    <th>Date Of Payment</th>
+                                    <th>Uploaded On Date</th>
+                                   
+                                    <th>Payment Type</th>
+                                    <th>Payment Cycle</th>
+                                    <th>Channel</th>
                                     
-                                    <th colspan="3" style="color:blue">N/R Amount, Gross SP, Gross Qty</th>
+                                    <th>Positive Amount Receieved</th>
+                                    <th>Negetive Amount Receieved</th>
                                     
-                                    <th  colspan="3" style="color:blue">N/R Amount,Rtn SP,Rtn Qty</th>
-
-                                    <th>Return Vs Gross</th>
-                                    
-                                    <th   colspan="3" style="color:blue">N/R Amount,Net SP,Net Qty</th>
-                                    
-                                    <th>Tax Category </th>
-                                    <th>Net Tax Liability On SP</th>
-                                    
-                                    <th  colspan="3" style="color:blue">N/R Amount,Net Pure Sale,Qty</th>
-                                     <th>Net A/R</th>
-                                     <th>Net Due</th>
+                                     <th>Net Amount Receieved</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                 <c:if test="${!empty ttsolist}">
+                                 
                                  
                                <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
+                               <c:if test="${ttso.groupByName == 'getPayments'}">
                               
-                              <c:if test="${!empty ttso.groupByName}">
                                 <tr>
                                     <td>${loop.index+1}</td>
-                                    <td>${ttso.startDate} ${ttso.endDate}</td>
-                                                                     
-										        <td>${ttso.pcName}</td>
-
-                                   
-                                    <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossNetRate}" /></td>
-									<td>${ttso.orderSP}</td>
-									<td>${ttso.quantity}</td>
-									
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
-									<td>${ttso.returnOrRTOChargestoBeDeducted}</td>
-									<td>${ttso.returnorrtoQty}</td>
-									
-									<td>${ttso.returnorrtoQty * 100/ttso.quantity}</td>
-									
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.orderSP - ttso.returnOrRTOChargestoBeDeducted}" /></td>
-									<td>${ttso.quantity - ttso.returnorrtoQty}</td>
-									
-									<td>${ttso.taxCategtory}</td>
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossNetRate - ttso.grossNetRate * 100/105}" /></td>
-
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${(ttso.orderSP - ttso.returnOrRTOChargestoBeDeducted)-(ttso.grossNetRate - ttso.grossNetRate * 100/105)}" /></td>
-									<td>${ttso.quantity - ttso.returnorrtoQty}</td>
-									<td>${ttso.positiveAmount + ttso.negativeAmount}</td>
-									<td>TBD</td>
+									<td>${ttso.dateofPayment}</td>
+									<td>${ttso.uploadDate}</td>
+									<td>${ttso.paymentType}</td>
+									<td>${ttso.paymentCycle}</td>
+									<td>${ttso.pcName}</td>
+									<td>${ttso.positiveAmount}</td>									
+									<td>${ttso.negativeAmount}</td>
+									<td>${ttso.netPaymentResult}</td>
                                   </tr>
-                                </c:if>
+								</c:if>
                                 </c:forEach>
-                                </c:if>
+									     
                                 </tbody>
                                 </table></div>
                             </div>
@@ -400,13 +223,6 @@
 <script src="/O2R/seller/js/plugins/dataTables/dataTables.bootstrap.js"></script>
 <script src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
 <script src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
-
-
-
-
-
-
-
 <script>
 
 $(window).load(function() {
@@ -417,17 +233,11 @@ $(window).load(function() {
 	 	var cdata = [];
  		 	
 	 	<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-	 	<c:if test="${empty ttso.groupByName}">
-			labelsdata.push('${ttso.pcName}');
-	 		adata.push('${ttso.orderSP}');
-	 		bdata.push('${ttso.orderSP}');
-	 		cdata.push('${ttso.orderSP}');
-	 	</c:if>
-	 	<c:if test="${ttso.groupByName == 'categoryName'}">
-			labelsdata.push('${ttso.pcName}');
-	 		adata.push('${ttso.orderSP}');
-	 		bdata.push('${ttso.orderSP}');
-	 		cdata.push('${ttso.orderSP}');
+	 	<c:if test="${ttso.groupByName == 'paymentTypeOne'}">
+			labelsdata.push('${ttso.pcName}/${ttso.paymentType}');
+	 		adata.push('${ttso.positiveAmount}');
+	 		bdata.push('${ttso.negativeAmount}');
+	 		cdata.push('${ttso.netPaymentResult}');
  		</c:if>
 		</c:forEach>
 	 	

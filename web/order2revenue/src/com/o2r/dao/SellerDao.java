@@ -26,4 +26,6 @@ public interface SellerDao {
  public void planUpgrade(int pid, int sellerid)throws CustomException;
 
  public List<State> listStates();
+ 
+ public void addToProductStockList();
 }

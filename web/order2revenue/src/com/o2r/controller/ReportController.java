@@ -87,6 +87,8 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 		log.info("*** addmanualPayment exit ***");
 		if(reportName.equals("channelSaleReport") || reportName.equals("categoryWiseSaleReport"))
 			return new ModelAndView("reports/channelSaleReport", model);
+		else if(reportName.equals("paymentsReceievedReport" )|| reportName.equals("orderwiseGPReport"))
+			return new ModelAndView("reports/channelSaleReport", model);
 		else
 			return new ModelAndView("reports/filterReports", model);
 }
@@ -208,6 +210,10 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 	//	partner = request.getParameter("toggler");
 		if(reportName.equals("categoryWiseSaleReport"))
 		ttso = reportGeneratorService.getCategorySalesDetails(startDate,endDate, HelperClass.getSellerIdfromSession(request));
+		else if(reportName.equals("paymentsReceievedReport"))
+			ttso = reportGeneratorService.getPaymentsReceievedDetails(startDate,endDate, HelperClass.getSellerIdfromSession(request));
+		else if(reportName.equals("orderwiseGPReport"))
+			ttso = reportGeneratorService.getOrderwiseGPDetails(startDate,endDate, HelperClass.getSellerIdfromSession(request));
 		else
 		ttso = reportGeneratorService.getChannelSalesDetails(startDate,endDate, HelperClass.getSellerIdfromSession(request));
 
@@ -237,8 +243,10 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			return new ModelAndView("reports/viewChannelSaleGraphReport", model);
 		else if(reportName.equals("categoryWiseSaleReport"))
 			return new ModelAndView("reports/viewCategorySaleGraphReport", model);
+		else if(reportName.equals("orderwiseGPReport"))
+			return new ModelAndView("reports/orderwiseGPReport", model);
 		else
-			return new ModelAndView("reports/viewProductSaleGraphReport", model);		
+			return new ModelAndView("reports/paymentsReceievedReport", model);		
 }
 
 @RequestMapping(value = "/seller/downloadreport", method = RequestMethod.POST)
