@@ -41,6 +41,78 @@ public class ChannelSalesDetails {
 	private String channelOrderID;
 	private String productSkuCode;
 	private String productCategory;
+	private Date uploadDate;
+	private String paymentCycle;
+	private String paymentType;
+	private float productPrice;
+	private float taxPercent;
+	private float tax;
+	private double nrTax;
+	private double returnSP;
+	
+	public double getReturnSP() {
+		return returnSP;
+	}
+	public void setReturnSP(double returnSP) {
+		this.returnSP = returnSP;
+	}
+	public double getNrTax() {
+		return nrTax;
+	}
+	public void setNrTax(double nrTax) {
+		this.nrTax = nrTax;
+	}
+	private double nrReturn;
+	
+	public double getNrReturn() {
+		return nrReturn;
+	}
+	public void setNrReturn(double nrReturn) {
+		this.nrReturn = nrReturn;
+	}
+	public float getTax() {
+		return tax;
+	}
+	public void setTax(float tax) {
+		this.tax = tax;
+	}
+	public float getTaxPercent() {
+		return taxPercent;
+	}
+	public void setTaxPercent(float taxPercent) {
+		this.taxPercent = taxPercent;
+	}
+	public float getProductPrice() {
+		return productPrice;
+	}
+	public void setProductPrice(float productPrice) {
+		this.productPrice = productPrice;
+	}
+	public Date getUploadDate() {
+		return uploadDate;
+	}
+	public void setUploadDate(Date uploadDate) {
+		this.uploadDate = uploadDate;
+	}
+	public String getPaymentCycle() {
+		return paymentCycle;
+	}
+	public void setPaymentCycle(String paymentCycle) {
+		this.paymentCycle = paymentCycle;
+	}
+	public String getPaymentType() {
+		return paymentType;
+	}
+	public void setPaymentType(String paymentType) {
+		this.paymentType = paymentType;
+	}
+	public Date getDateofPayment() {
+		return dateofPayment;
+	}
+	public void setDateofPayment(Date dateofPayment) {
+		this.dateofPayment = dateofPayment;
+	}
+	private Date dateofPayment;
 	
 	public String getProductSkuCode() {
 		return productSkuCode;

@@ -17,6 +17,8 @@ import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.AccountTransaction;
 import com.o2r.model.Plan;
+import com.o2r.model.Product;
+import com.o2r.model.ProductStockList;
 import com.o2r.model.Seller;
 import com.o2r.model.State;
 
@@ -229,4 +231,28 @@ public class SellerDaoImpl implements SellerDao {
 		return (List<State>) sessionFactory.getCurrentSession()
 				.createCriteria(State.class).list();
 	}
+	
+	 public void addToProductStockList(){
+		 System.out.println("THIS IS SPRING BEAN IMPLEMENTATION");
+		Session session=sessionFactory.openSession();
+		session.beginTransaction();
+		   Criteria criteria=session.createCriteria(Product.class);
+		   java.util.List<Product> list=criteria.list();
+		   Product stockProduct=null;
+		   ProductStockList stockList=null;
+			for (Product product : list ) {
+				stockList=new ProductStockList();
+				stockList.setCreatedDate(new Date());
+				stockList.setStockAvailable(product.getQuantity());
+				stockList.setUpdatedate(product.getProductDate().getDate());
+				stockList.setMonth(product.getProductDate().getMonth());
+				stockList.setYear(product.getProductDate().getYear());
+				stockList.setPrice(product.getProductPrice());
+				product.getClosingStocks().add(stockList);
+				session.saveOrUpdate(product);
+				session.saveOrUpdate(stockList);
+		System.out.println("PRODUCT ID IS hehehe "+product.getProductId());
+			}
+			session.getTransaction().commit();
+	 }
 }

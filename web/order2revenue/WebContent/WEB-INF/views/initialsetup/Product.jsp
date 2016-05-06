@@ -7,11 +7,16 @@
 <html>
  <head>
  <jsp:include page="../globalcsslinks.jsp"></jsp:include>
+ <script src="/O2R/seller/js/plugins/dataTables/jquery.dataTables.js"></script>
+<script src="/O2R/seller/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+<script src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
+<script src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
   <!-- Data Tables -->
     <link href="/O2R/seller/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
-    <link href="/O2R/seller/css/plugins/dataTables/dataTables.responsive.css" rel="stylesheet">
     <link href="/O2R/seller/css/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet">
-
+<script>
+ var globalValue="Mahesh kOLLIPAR";
+ </script>
 </head>
 <body>
 <div id="wrapper">
@@ -74,8 +79,6 @@
                                     <th>Category</th>
                                     <th>Stock Available</th>
                                     <th>Threshold Limit</th>
-                                    <th>Measurement:(L*B*H)(cm)</th>
-                                    <th>Deadweight(gm)</th>
                                     <th>Channel SKU(Separated by ;)</th>
                                      <th>Action</th>
                                 </tr>
@@ -85,19 +88,19 @@
                                 <c:forEach items="${productList}" var="product" varStatus="loop">
                                 <tr>
                                     <td>${loop.index+1}</td>
-                                    <td>${product.productName}</td>
+                                    <td id="oneone">${product.productName}</td>
                                      <td>${product.productSkuCode}</td>
                                     <td><fmt:formatDate value="${product.productDate}" pattern="MMM dd ,YY"/></td>
                                     <td>${product.productPrice}</td>
                                     <td>${product.categoryName}</td>
                                     <td>${product.quantity}</td>
                                      <td>${product.threholdLimit}</td>
-                                     <td>${product.length}*${product.breadth}*${product.height}</td>
-                                     <td>${product.deadWeight}</td>
                                       <td>${product.channelSKU}</td>
                                         <td class="tooltip-demo">
                            <a href="editProduct.html?id=${product.productId}"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a>
-  							<a href="javascript:onclickNavigatePayment(${product.productId})"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Update Inventory"></i></a></td>
+   							<a href="javascript:show('${product.productName}','${product.productSkuCode}')"  ><i class="fa fa-edit text-navy" data-toggle="modal" data-target="#myModal" data-placement="top" data-original-title="Update Inventory"></i></a>
+ 							</td>
+
                                 </tr>
                                 </c:forEach>
                                 </c:if>
@@ -119,7 +122,64 @@
 
     </div>
 </div>
+<div class="modal inmodal fade" id="myModal" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content animated bounceInRight">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span> </button>
+        <h4 class="modal-title">Update Inventory </h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+<form:form method="POST" action="saveUpdateInventory.html" id="addProductForm" role="form" class="form-horizontal">    
 
+							 <c:if test="${!empty product.productId}">
+                        <input  name="productId" id="productId" value="${product.productId}"/>
+                         </c:if>
+
+    
+          <div class="col-sm-12">
+            <div class="col-sm-6">
+                <label> 
+                    Product Name
+                </label>
+                <form:input path="productName" id="productName" value="mahesh" class="form-control"/>
+            </div>
+            <div class="col-sm-6">
+                <label>SKU 
+                </label>
+                              <c:choose>
+                                    	 <c:when test="${globalValue}">
+                                    	 <form:input path="productSkuCode"  value="kumar" id="productSkuCode"
+                                     class="form-control"/><span id="skucodeMsg" style="color:red"></span></c:when>
+                                     <c:otherwise> 
+                                     <form:input path="productSkuCode" value="kollipara"  id="productSkuCode"
+                                     class="form-control" readonly="true"/></c:otherwise>
+                                     </c:choose>
+            </div>
+        </div>
+        <div class="col-sm-12" style="margin-top:10px;">
+            <div class="col-sm-6">
+                <label>Add to Inventory</label>
+                <input type="text" value="${variable1}" name="quantityToAdd" class="form-control">
+            </div>
+            <div class="col-sm-6">
+              <label>
+                Substract from Inventory </label>
+                <input value="${variable2 }"  name="quantityToSubtract" class="form-control">
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal-footer">
+   <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+<button class="btn btn-primary" type="button" onclick="updateInventory()">Update</button>
+   
+</div>
+</div>
+</div>
+</div>
 <jsp:include page="../globaljslinks.jsp"></jsp:include>
 
 <!-- Scripts ro Table -->
@@ -127,12 +187,10 @@
 
 
 <!-- Data Tables -->
-<script src="/O2R/seller/js/plugins/dataTables/jquery.dataTables.js"></script>
-<script src="/O2R/seller/js/plugins/dataTables/dataTables.bootstrap.js"></script>
-<script src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
-<script src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
+
 
 <script>
+ var globalValue="Mahesh kOLLIPAR";
     $(document).ready(function(){
         $('.dataTables-example').dataTable({
                 responsive: true,
@@ -221,15 +279,37 @@
            });
        }
  
-      
-      
-      function onclickNavigatePayment(value) {
-    	 // window.open("updateInventory.html?id="+value, 'liveMatches', 'width=720,height=800,toolbar=0,location=0, directories=0, status=0,location=no,menubar=0');
-    	 window.open("updateInventory.html?id="+value,null, "location=no,height=400,width=1200,top=100,left=50,status=yes,resizable=no,titlebar=no,toolbar=no,menubar=no,scrollbars=no,location=no");
+      function show(vale,valf){
+    		var valued=document.getElementById('productName');
+    		var valuee=document.getElementById('productSkuCode');
+    		
+    		valued.value=vale;
+    		valuee.value=valf;
+    		//editProduct.html?id=${product.productId}
+    		var xxx = $('editProduct.html?id'+vale).submit();
     	}
+    	function updateInventory(){
+    		var sx=document.getElementById("oneone").value;
+    		var xxx = $('form#addProductForm').submit();
+    	  //  $.ajax({url: "demo_test.txt", success: function(result){
+    	 //       $("#div1").html(result);
+    	  //  }});
+    		//alert('delete producrt goes here');
+    		//$('form#addProductForm').submit();
+    		//opener.location.reload();
+    		//window.close();
+    	}	
+    	function onclickNavigatePayment(value,value1) {
+    		
+    		  //alert(value2);
+    	 // window.open("updateInventory.html?id="+value, 'liveMatches', 'width=720,height=800,toolbar=0,location=0, directories=0, status=0,location=no,menubar=0');
+    		 //window.open("updateInventory.html?id="+value,null, "location=no,height=400,width=1200,top=100,left=50,status=yes,resizable=no,titlebar=no,toolbar=no,menubar=no,scrollbars=no,location=no");
+    		}     
+      
 
 
-</script>
+
+</script>     </form:form>
 <style>
     body.DTTT_Print {
         background: #fff;
@@ -260,6 +340,17 @@
 
     }
 </style>
+
+<script type="text/javascript">
+
+
+
+</script>
+
+
+
+
+
  </body>
 </html>
 </body>
