@@ -38,6 +38,7 @@ import com.o2r.model.Partner;
 import com.o2r.model.Product;
 import com.o2r.model.Seller;
 import com.o2r.model.TaxDetail;
+import com.o2r.service.EventsService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.ProductService;
 import com.o2r.service.TaxDetailService;
@@ -49,8 +50,8 @@ import com.o2r.service.TaxDetailService;
 @Repository("orderDao")
 public class OrderDaoImpl implements OrderDao {
 
-	private static final String isEventActive = "select * from events ev where ev.sellerId=:sellerId and ev.channelName=:partner and (:orderDate between ev.startDate and ev.endDate)";
-	
+	@Autowired
+	private EventsService eventsService;
 	@Autowired
 	private SessionFactory sessionFactory;
 	@Autowired
@@ -332,14 +333,19 @@ public class OrderDaoImpl implements OrderDao {
 					if (partner != null && partner.getNrnReturnConfig() != null	&& partner.getNrnReturnConfig().isNrCalculator()) {
 						
 						//Check conditions here....
-						event=isEventActiive(order.getOrderDate(), partner.getPcName(), sellerId);
-						if(event != null){
-							if(event.getNrnReturnConfig().getNrCalculatorEvent().equalsIgnoreCase("fixed") || event.getNrnReturnConfig().getNrCalculatorEvent().equalsIgnoreCase("variable") ){
+						event=eventsService.isEventActiive(order.getOrderDate(), partner.getPcName(), sellerId);
+						if(event != null){	
+							
+							event.setNetSalesQuantity(event.getNetSalesQuantity()+order.getQuantity());
+							
+							if(event.getNrnReturnConfig().getNrCalculatorEvent().equalsIgnoreCase("variable") ){
 								if(!calculateNR(event.getNrnReturnConfig(), order, product.getCategoryName(), product.getDeadWeight(), product.getVolWeight()))
 									throw new Exception();
-							}else{
+								event.setNetSalesAmount(event.getNetSalesAmount()+order.getNetRate());
+							}else if(event.getNrnReturnConfig().getNrCalculatorEvent().equalsIgnoreCase("original")){
 								if (!calculateNR(seller.getPartners().get(0), order,product.getCategoryName(),product.getDeadWeight(), product.getVolWeight()))
 									throw new Exception();
+								event.setNetSalesAmount(event.getNetSalesAmount()+order.getNetRate());
 							}
 						}						
 						else if (!calculateNR(seller.getPartners().get(0), order,product.getCategoryName(),product.getDeadWeight(), product.getVolWeight()))
@@ -712,7 +718,7 @@ public class OrderDaoImpl implements OrderDao {
 				order = seller.getOrders().get(0);
 				
 				//Check condition here
-				event=isEventActiive(order.getOrderDate(), order.getPcName(), sellerId);
+				event=eventsService.isEventActiive(order.getOrderDate(), order.getPcName(), sellerId);
 				if(event != null){	
 					if(event.getNrnReturnConfig().getReturnCalculatorEvent().equalsIgnoreCase("newTerms")){
 						returnChargesCalculated=calculateReturnCharges(order, orderReturn, sellerId, event.getNrnReturnConfig());
@@ -2975,27 +2981,5 @@ public class OrderDaoImpl implements OrderDao {
 			log.info("$$$ calculateReturnCharges for Events Exit $$$");
 			return totalcharge;
 	}
-	private Events isEventActiive(Date orderDate,String channelName, int sellerId){
 		
-		log.info("$$$ isEventActive Start $$$");
-		Query getEventId=null;
-		try{
-			Session session = sessionFactory.openSession();
-			session.beginTransaction();
-			getEventId = session
-					.createSQLQuery(isEventActive)
-					.setParameter("sellerId", sellerId)
-					.setParameter("partner",channelName)
-					.setParameter("orderDate", orderDate);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		if(getEventId.list() != null && getEventId.list().size() !=0){
-			log.info("$$$ isEventActive Exit $$$");
-			return (Events)getEventId.list().get(0);
-		}
-		log.info("$$$ isEventActive Exit $$$");
-		return null;
-	}
-	
 }

@@ -25,6 +25,9 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +45,7 @@ import com.o2r.bean.PoPaymentBean;
 import com.o2r.bean.ProductBean;
 import com.o2r.bean.ProductConfigBean;
 import com.o2r.model.Category;
+import com.o2r.model.Events;
 import com.o2r.model.ExpenseCategory;
 import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
@@ -53,6 +57,7 @@ import com.o2r.model.ProductConfig;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
 import com.o2r.service.CategoryService;
+import com.o2r.service.EventsService;
 import com.o2r.service.ExpenseService;
 import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
@@ -65,11 +70,12 @@ import com.o2r.service.TaxDetailService;
 @Service("saveContents")
 @Transactional
 public class SaveContents {
-	private static final Logger logger = LoggerFactory
-			.getLogger(SaveContents.class);
+	private static final Logger logger = LoggerFactory.getLogger(SaveContents.class);	
 	/*
 	 * @Resource(name="sessionFactory") private SessionFactory sessionFactory;
 	 */
+	@Autowired
+	private SessionFactory sessionFactory;	
 	@Autowired
 	private OrderService orderService;
 	@Autowired
@@ -86,6 +92,8 @@ public class SaveContents {
 	private TaxDetailService taxDetailService;
 	@Autowired
 	private SellerService sellerService;
+	@Autowired
+	private EventsService eventsService;
 	@Autowired
 	private ReportGeneratorService reportGeneratorService;
 
@@ -105,6 +113,7 @@ public class SaveContents {
 		CustomerBean customerBean = null;
 		OrderTaxBean otb = null;
 		Partner partner = null;
+		Events event=null;
 		try {
 			System.out.println("Inside save content -->");
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -322,8 +331,9 @@ public class SaveContents {
 					validaterow = false;
 				}
 				System.out.println(" NR calculator state: "+partner.getNrnReturnConfig().isNrCalculator());
-				if (partner != null && partner.getNrnReturnConfig() != null
-						&& !partner.getNrnReturnConfig().isNrCalculator()) {
+				event=eventsService.isEventActiive(order.getOrderDate(), partner.getPcName(), sellerId);
+				if(event != null){
+				if(event.getNrnReturnConfig().getNrCalculatorEvent().equalsIgnoreCase("fixed")){
 					if (entry.getCell(17) != null
 							&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						try {
@@ -336,6 +346,24 @@ public class SaveContents {
 					} else {
 						errorMessage.append(" Net Rate is null ");
 						validaterow = false;
+					}
+				}
+				}else{
+					if (partner != null && partner.getNrnReturnConfig() != null
+						&& !partner.getNrnReturnConfig().isNrCalculator()) {
+						if (entry.getCell(17) != null
+								&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							try {
+								order.setGrossNetRate(Double.parseDouble(entry
+										.getCell(17).toString()));
+							} catch (NumberFormatException e) {
+								errorMessage.append(" Net Rate should be number ");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append(" Net Rate is null ");
+							validaterow = false;
+						}
 					}
 				}
 
@@ -1939,4 +1967,5 @@ public class SaveContents {
 			e.printStackTrace();
 		}
 	}
+	
 }

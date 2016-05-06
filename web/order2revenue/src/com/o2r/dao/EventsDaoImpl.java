@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
@@ -21,6 +22,8 @@ import com.o2r.model.Seller;
 
 @Repository("eventsDao")
 public class EventsDaoImpl implements EventsDao {	
+	
+	private static final String isEventActive = "select * from events ev where ev.sellerId=:sellerId and ev.channelName=:partner and (:orderDate between ev.startDate and ev.endDate)";
 	
 	@Autowired	
 	private SessionFactory sessionFactory;
@@ -179,6 +182,28 @@ public class EventsDaoImpl implements EventsDao {
 		}
 		
 		return returnlist;
+	}
+	@Override
+	public Events isEventActiive(Date orderDate, String channelName,int sellerId) {
+		log.info("$$$ isEventActive Start $$$");
+		Query getEventId=null;
+		try{
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			getEventId = session
+					.createSQLQuery(isEventActive)
+					.setParameter("sellerId", sellerId)
+					.setParameter("partner",channelName)
+					.setParameter("orderDate", orderDate);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		if(getEventId.list() != null && getEventId.list().size() !=0){
+			log.info("$$$ isEventActive Exit $$$");
+			return (Events)getEventId.list().get(0);
+		}
+		log.info("$$$ isEventActive Exit $$$");
+		return null;
 	}
 
 }

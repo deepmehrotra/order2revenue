@@ -14,4 +14,5 @@ public interface EventsService {
 	public Events getEvent(int partnerId, int sellerId);
 	public List<Events> listEvents(int sellerId);
 	public List<Events> listEvents(Date sDate, Date eDate, int sellerID);
+	public Events isEventActiive(Date orderDate,String channelName, int sellerId);
 }
