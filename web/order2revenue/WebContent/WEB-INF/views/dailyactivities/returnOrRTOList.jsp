@@ -81,7 +81,7 @@ $('#LoadOnSubmit').click(function (e) {
                              <div class="row">
                                 <div class="col-md-4">
                                     <select class="form-control" id="searchCriteria" name="searchCriteria">
-                                   <option value="channelOrderID">Order ID/PO No</option>
+                                   	<option value="channelOrderID">Order ID/PO No</option>
 							    	<option value="awbNum">AWB</option>
 							    	<option value="invoiceID">Invoice ID</option>
 							    	<option value="subOrderID">Sub Order ID</option>

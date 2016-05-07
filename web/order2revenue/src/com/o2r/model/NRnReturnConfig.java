@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -190,6 +191,14 @@ public class NRnReturnConfig {
 	private boolean RTOCharBRRevShipFee;
 	@Column
 	private boolean canCharBRRevShipFee;
+	@Column
+	private String nrCalculatorEvent;
+	@Column
+	private String returnCalculatorEvent;
+	@Column
+	private String taxSpType;
+	@Column
+	private String taxPoType;
 	
 	@OneToMany(mappedBy = "config", cascade = CascadeType.ALL)
 	private List<NRnReturnCharges> charges = new ArrayList<>();
@@ -816,6 +825,38 @@ public class NRnReturnConfig {
 
 	public void setCanCharBRRevShipFee(boolean canCharBRRevShipFee) {
 		this.canCharBRRevShipFee = canCharBRRevShipFee;
+	}
+
+	public String getNrCalculatorEvent() {
+		return nrCalculatorEvent;
+	}
+
+	public void setNrCalculatorEvent(String nrCalculatorEvent) {
+		this.nrCalculatorEvent = nrCalculatorEvent;
+	}
+
+	public String getReturnCalculatorEvent() {
+		return returnCalculatorEvent;
+	}
+
+	public void setReturnCalculatorEvent(String returnCalculatorEvent) {
+		this.returnCalculatorEvent = returnCalculatorEvent;
+	}
+
+	public String getTaxSpType() {
+		return taxSpType;
+	}
+
+	public void setTaxSpType(String taxSpType) {
+		this.taxSpType = taxSpType;
+	}
+
+	public String getTaxPoType() {
+		return taxPoType;
+	}
+
+	public void setTaxPoType(String taxPoType) {
+		this.taxPoType = taxPoType;
 	}
 
 }

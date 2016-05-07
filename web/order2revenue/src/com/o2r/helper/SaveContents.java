@@ -26,6 +26,9 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +44,9 @@ import com.o2r.bean.OrderBean;
 import com.o2r.bean.OrderTaxBean;
 import com.o2r.bean.PoPaymentBean;
 import com.o2r.bean.ProductBean;
+import com.o2r.bean.ProductConfigBean;
 import com.o2r.model.Category;
+import com.o2r.model.Events;
 import com.o2r.model.ExpenseCategory;
 import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
@@ -49,9 +54,11 @@ import com.o2r.model.OrderRTOorReturn;
 import com.o2r.model.Partner;
 import com.o2r.model.PaymentUpload;
 import com.o2r.model.Product;
+import com.o2r.model.ProductConfig;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
 import com.o2r.service.CategoryService;
+import com.o2r.service.EventsService;
 import com.o2r.service.ExpenseService;
 import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
@@ -64,11 +71,12 @@ import com.o2r.service.TaxDetailService;
 @Service("saveContents")
 @Transactional
 public class SaveContents {
-	private static final Logger logger = LoggerFactory
-			.getLogger(SaveContents.class);
+	private static final Logger logger = LoggerFactory.getLogger(SaveContents.class);	
 	/*
 	 * @Resource(name="sessionFactory") private SessionFactory sessionFactory;
 	 */
+	@Autowired
+	private SessionFactory sessionFactory;	
 	@Autowired
 	private OrderService orderService;
 	@Autowired
@@ -85,6 +93,8 @@ public class SaveContents {
 	private TaxDetailService taxDetailService;
 	@Autowired
 	private SellerService sellerService;
+	@Autowired
+	private EventsService eventsService;
 	@Autowired
 	private ReportGeneratorService reportGeneratorService;
 
@@ -104,6 +114,7 @@ public class SaveContents {
 		CustomerBean customerBean = null;
 		OrderTaxBean otb = null;
 		Partner partner = null;
+		Events event=null;
 		try {
 			System.out.println("Inside save content -->");
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -321,8 +332,13 @@ public class SaveContents {
 					validaterow = false;
 				}
 
+
 				if (partner != null && partner.getNrnReturnConfig() != null
 						&& !partner.getNrnReturnConfig().isNrCalculator()) {
+				System.out.println(" NR calculator state: "+partner.getNrnReturnConfig().isNrCalculator());
+				event=eventsService.isEventActiive(order.getOrderDate(), partner.getPcName(), sellerId);
+				if(event != null){
+				if(event.getNrnReturnConfig().getNrCalculatorEvent().equalsIgnoreCase("fixed")){
 					if (entry.getCell(17) != null
 							&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						try {
@@ -335,6 +351,24 @@ public class SaveContents {
 					} else {
 						errorMessage.append(" Net Rate is null ");
 						validaterow = false;
+					}
+				}
+				}else{
+					if (partner != null && partner.getNrnReturnConfig() != null
+						&& !partner.getNrnReturnConfig().isNrCalculator()) {
+						if (entry.getCell(17) != null
+								&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							try {
+								order.setGrossNetRate(Double.parseDouble(entry
+										.getCell(17).toString()));
+							} catch (NumberFormatException e) {
+								errorMessage.append(" Net Rate should be number ");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append(" Net Rate is null ");
+							validaterow = false;
+						}
 					}
 				}
 
@@ -398,6 +432,7 @@ public class SaveContents {
 			Set<String> errorSet = returnOrderMap.keySet();
 			downloadUploadReportXLS(offices, "Order Report", 24, errorSet,
 					path, sellerId);
+			}
 		} catch (Exception e) {
 			System.out.println("Inside save contents exception :"
 					+ e.getLocalizedMessage());
@@ -878,7 +913,179 @@ public class SaveContents {
 
 		return returnProductMap;
 	}
+	
+	
+	// My coding Product Config *********
+	
+	
+	public Map<String, ProductConfigBean> saveProductConfigContents(MultipartFile file,
+			int sellerId, String path) throws IOException {
+		boolean validaterow = true;
+		Map<String, ProductConfigBean> returnProductConfigMap = new LinkedHashMap<>();
+		StringBuffer errorMessage = null;
+		try {
+			System.out.println("Inside saveProductConfigContent -->");
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			// HSSFSheet worksheet = offices.getSheet("OrderReport");
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			HSSFRow entry;
+			Integer noOfEntries = 1;
+			// sellerId=4;
+			// getLastRowNum and getPhysicalNumberOfRows showing false values
+			// sometimes.
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			logger.info(noOfEntries.toString());
+			System.out.println("After getting no of rows" + noOfEntries);
+			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
+				System.out.println("Product 1" + entry.getCell(1).toString());
+				System.out.println("Product  2" + entry.getCell(2).toString());
+				System.out.println(entry.getCell(3).toString());
+				System.out.println(entry.getCell(4).toString());
+				ProductConfig productConfig = new ProductConfig();
+				if (entry.getCell(0) != null
+						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					productConfig.setProductSKuCode(entry.getCell(0).toString());											
+				} else {
+					errorMessage.append(" Product SKU is null ");
+					validaterow = false;
+				}
+				if (entry.getCell(1) != null
+						&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					productConfig.setChannelSKuRef(entry.getCell(1).toString());					
+				} else {
+					errorMessage.append(" Channel SKU is null ");
+					validaterow = false;
+				}
+				if (entry.getCell(2) != null
+						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					try{
+						productConfig.setCommision(Float.valueOf(entry.getCell(2).toString()));
+					}catch(NumberFormatException e){
+						errorMessage.append(" Commision should be a number ");
+						validaterow = false;
+					}
+				} else {
+					errorMessage.append(" Commission is null ");
+					validaterow = false;
+				}
+				if (entry.getCell(3) != null
+						&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					try {
+						productConfig.setTaxSp(Float.valueOf(entry.getCell(3).toString()));
+					} catch (NumberFormatException e) {
+						errorMessage.append(" Tax(SP) should be a number ");
+						validaterow = false;
+					}
+				} else {
+					errorMessage.append(" Tax(SP) is null ");
+					validaterow = false;
+				}
+				if (entry.getCell(4) != null
+						&& entry.getCell(4).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					try {
+						productConfig.setTaxPo(Float.valueOf(entry.getCell(4).toString()));
+					} catch (NumberFormatException e) {
+						errorMessage.append(" tax(PO) should be a number ");
+						validaterow = false;
+					}
+				} else {
+					errorMessage.append(" Tax(PO) is null");
+					validaterow = false;
+				}
+				if (entry.getCell(5) != null
+						&& entry.getCell(5).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					try {
+						productConfig.setEossDiscount(Float.valueOf(entry.getCell(5).toString()));
+					} catch (NumberFormatException e) {
+						errorMessage.append(" EOSS Discount should be a number ");
+						validaterow = false;
+					}
+				} else {
+					errorMessage.append(" EOSS Discount is null ");
+					validaterow = false;
+				}
+				if (entry.getCell(6) != null
+						&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					try {
+						productConfig.setDiscount(Float.valueOf(entry.getCell(6).toString()));
+					} catch (NumberFormatException e) {
+						errorMessage.append(" Discount should be a number ");
+						validaterow = false;
+					}
+				} else {
+					errorMessage.append(" Discount is null ");
+					validaterow = false;
+				}
+				if (entry.getCell(7) != null
+						&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					try {
+						productConfig.setMrp(Double.valueOf(entry.getCell(7).toString()));
+					} catch (NumberFormatException e) {
+						errorMessage.append(" MRP should be a number ");
+						validaterow = false;
+					}
+				} else {
+					errorMessage.append(" MRP is null ");
+					validaterow = false;
+				}
 
+				if (entry.getCell(8) != null
+						&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					try {
+						productConfig.setSp(Double.valueOf(entry.getCell(8).toString()));
+					} catch (NumberFormatException e) {
+						errorMessage.append(" Selling Price should be a number ");
+						validaterow = false;
+					}
+				} else {
+					errorMessage.append(" SP is null ");
+					validaterow = false;
+				}
+				if (entry.getCell(9) != null
+                        && entry.getCell(9).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+                    try {
+                        productConfig.setProductPrice((double)entry.getCell(9).getNumericCellValue());
+                    } catch (NumberFormatException e) {
+                        errorMessage.append(" Product Price should be a number ");
+                        validaterow = false;
+                    }
+                } else {
+                    errorMessage.append(" Product Price is null ");
+                    validaterow = false;
+                }
+				//product.setVolume(product.getHeight() * product.getLength()	* product.getBreadth());
+				//product.setVolWeight(product.getVolume() / 5);
+				if (validaterow) {
+					productService.addProductConfig(productConfig, sellerId);
+				} else {
+					returnProductConfigMap.put(errorMessage.toString(),ConverterClass.prepareProductConfigBean(productConfig));
+				}
+				System.out.println("Sheet values :1 :" + entry.getCell(1)
+								+ " 2 :" + entry.getCell(2) + " 3 :"
+								+ entry.getCell(3));
+				// Pre save to generate id for use in hierarchy
+			}
+			Set<String> errorSet = returnProductConfigMap.keySet();
+			downloadUploadReportXLS(offices, "ProductConfigReport", 11, errorSet,	path, sellerId);
+		} catch (Exception e) {
+			System.out.println("Inside save contents exception :"
+					+ e.getLocalizedMessage());
+			e.printStackTrace();
+			throw new MultipartException("Constraints Violated");
+		}
+
+		return returnProductConfigMap;
+	}	
+	
+	
+	
+	// My Coding Product Config Ends ********
+	
 	public Map<String, OrderBean> savePaymentContents(MultipartFile file,
 			int sellerId, String path) throws IOException {
 		PaymentUpload paymentUpload = new PaymentUpload();
@@ -1778,4 +1985,5 @@ public class SaveContents {
 			e.printStackTrace();
 		}
 	}
+	
 }

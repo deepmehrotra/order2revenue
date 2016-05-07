@@ -144,26 +144,107 @@ function checkOnBlur()
                                     </table>
                                     <div class="hr-line-dashed"></div>
                                 </div>
-                                <form:form method="POST" action="saveCatInventory.html" id="addCategoryForm"
-                                role="form" class="form-horizontal">
-								<%-- <c:if test="${!empty category.id}">
-		                         <input type="hidden" name="id" id="id" value="${category.id}"/>
-		                         </c:if> --%>
-		                         <input type="hidden" name="parentid" id="parentid" value="${category.id}"/>
-		                          <input type="hidden" name="parentCatName" id="parentCatName" value="${category.catName}"/>
-                                <div class="col-sm-12">
-                                <div class="col-md-5"><form:input path="catName"  placeholder="Product Category" 
-                                class="form-control" id="categoryName" onblur="checkOnBlur()"/>
-                                  <span id="catNameMessage"  style="color:red;font-weight:bold"></span></div>
-                                <div class="col-md-5"><form:input path="catDescription" placeholder="Alias Name" class="form-control"/></div>
-                                </div>
-                                <div class="col-sm-12">
-                                <div class="hr-line-dashed"></div>
-                                    <button class="btn btn-primary pull-right" type="button" onclick="submitCategory()">Add Product Category</button>
-                                </div>
-                                </form:form>
-                   
-                        </div>
+					<form:form method="POST" action="saveCatInventory.html"	id="addCategoryForm" role="form" class="form-horizontal">
+						
+						<input type="hidden" name="parentid" id="parentid"
+							value="${category.id}" />
+						<input type="hidden" name="parentCatName" id="parentCatName"
+							value="${category.catName}" />
+						<div class="col-sm-12">
+							<div class="col-md-5">
+								<form:input path="catName" placeholder="Product Category"
+									class="form-control" id="categoryName" onblur="checkOnBlur()" style="margin-bottom:5px;" />
+								<span id="catNameMessage" style="color: red; font-weight: bold"></span>
+							</div>
+							<div class="col-md-5">
+								<form:input path="catDescription" placeholder="Alias Name"
+									class="form-control" style="margin-bottom:5px;" />
+							</div>
+						</div>
+						<%-- <div class="col-sm-12">
+							<div class="col-md-5">
+								<form:input path="product.productConfig.productSKuCode" placeholder="Product SKU Code"
+									class="form-control" id="categoryName" onblur="checkOnBlur()" style="margin-bottom:5px;"/>
+								<span id="catNameMessage" style="color: red; font-weight: bold"></span>
+							</div>
+							<div class="col-md-5">
+								<form:input path="product.productConfig.channelSKuRef" placeholder="Channel SKU Reference"
+									class="form-control" style="margin-bottom:5px;"/>
+							</div>
+						</div>
+						
+						<div class="col-sm-12">
+							<div class="col-md-5">
+								<form:input path="product.productConfig.commision" placeholder="Commision"
+									class="form-control" id="categoryName" onblur="checkOnBlur()" style="margin-bottom:5px;" />
+								<span id="catNameMessage" style="color: red; font-weight: bold;"></span>
+							</div>
+							<div class="col-md-5">
+								<form:input path="productConfig.taxSp" placeholder="Tax(SP)"
+									class="form-control" style="margin-bottom:5px;" />
+							</div>
+						</div>
+						
+						<div class="col-sm-12">
+							<div class="col-md-5">
+								<form:input path="productConfig.taxPo" placeholder="Tax(PO)"
+									class="form-control" id="categoryName" onblur="checkOnBlur()" style="margin-bottom:5px;" />
+								<span id="catNameMessage" style="color: red; font-weight: bold"></span>
+							</div>
+							<div class="col-md-5">
+								<form:input path="productConfig.discount" placeholder="Discount"
+									class="form-control" style="margin-bottom:5px;" />
+							</div>
+						</div>
+							
+						<div class="col-sm-12">
+							<div class="col-md-5">
+								<form:input path="productConfig.mrp" placeholder="MRP"
+									class="form-control" id="categoryName" onblur="checkOnBlur()" style="margin-bottom:5px;" />
+								<span id="catNameMessage" style="color: red; font-weight: bold"></span>
+							</div>
+							<div class="col-md-5">
+								<form:input path="productConfig.sp" placeholder="Selling Price"
+									class="form-control" style="margin-bottom:5px;" />
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="col-md-5">
+								<form:input path="productConfig.eossDiscount" placeholder="EOSS Discount"
+									class="form-control" id="categoryName" onblur="checkOnBlur()" style="margin-bottom:5px;" />
+								<span id="catNameMessage" style="color: red; font-weight: bold"></span>
+							</div>
+							<div class="col-md-5">
+								<form:input path="productConfig.productPrice" placeholder="Product Price"
+									class="form-control" style="margin-bottom:5px;" />
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="col-md-5">
+								<form:input path="productConfig.suggestedPOPrice" placeholder="Suggested PO Price"
+									class="form-control" id="categoryName" onblur="checkOnBlur()" style="margin-bottom:5px;" />
+								<span id="catNameMessage" style="color: red; font-weight: bold"></span>
+							</div>
+							<div class="col-md-5">
+								<form:input path="productConfig.eossDiscountValue" placeholder="EOSS Discount Value"
+									class="form-control" style="margin-bottom:5px;" />
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="col-md-5">
+								<form:input path="productConfig.grossNR" placeholder="Gross NR"
+									class="form-control" id="categoryName" onblur="checkOnBlur()" style="margin-bottom:5px;" />
+								<span id="catNameMessage" style="color: red; font-weight: bold"></span>
+							</div>
+						</div> --%>
+						<div class="col-sm-12">
+							<div class="hr-line-dashed"></div>
+							<button class="btn btn-primary pull-right" type="button"
+								onclick="submitCategory()">Add Product Category</button>
+						</div>
+					</form:form>
+
+				</div>
                     </div>
                 </div>
             </div>

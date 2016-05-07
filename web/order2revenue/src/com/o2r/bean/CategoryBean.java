@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.o2r.model.Category;
+import com.o2r.model.ProductConfig;
 
 public class CategoryBean {
 	private int id;
@@ -18,6 +19,9 @@ public class CategoryBean {
 	private long skuCount;
 	private long openingStock;
 	private Date osUpdate;
+	
+	private ProductConfig productConfig;
+	
 	private List<CategoryBean> subCategory = new ArrayList<CategoryBean>();
 	public int getId() {
 		return id;
@@ -91,6 +95,12 @@ public class CategoryBean {
 	}
 	public void setOsUpdate(Date osUpdate) {
 		this.osUpdate = osUpdate;
+	}
+	public ProductConfig getProductConfig() {
+		return productConfig;
+	}
+	public void setProductConfig(ProductConfig productConfig) {
+		this.productConfig = productConfig;
 	}
 
 

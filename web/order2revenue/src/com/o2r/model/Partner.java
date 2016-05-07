@@ -54,10 +54,16 @@ public class Partner {
 	private boolean paycyclefromshipordel;
 	@Column
 	private int monthlypaydate;
+	
+	@OneToMany(mappedBy="partner", cascade=CascadeType.ALL)
+	private List<Events> events;
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	private NRnReturnConfig nrnReturnConfig;
+	
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<Order> orders = new ArrayList<Order>();
+
 	public long getPcId() {
 		return pcId;
 	}
@@ -173,6 +179,12 @@ public class Partner {
 	}
 	public void setNrnReturnConfig(NRnReturnConfig nrnReturnConfig) {
 		this.nrnReturnConfig = nrnReturnConfig;
+	}
+	public List<Events> getEvents() {
+		return events;
+	}
+	public void setEvents(List<Events> events) {
+		this.events = events;
 	}
 
 

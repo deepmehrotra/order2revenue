@@ -37,11 +37,12 @@ $('#download').click(function(){
                                             <option value="">Select file to download</option>
                                             <option value="ordersummary">Order Summary</option>
 									    	<option value="orderPoSummary">Order PO Summary</option>
-									    	<option value="paymentSummary">Payment Summary</option>
+									    	<option value="paymentSummary">Payment Summary</option>									    	
 									    	<option value="poPaymentSummary">PO Payment Summary</option>
 									    	<option value="returnSummary">Return Summary</option>
 									    	<option value="debitNoteSummary">Debit Note</option>
 									    	<option value="productSummary">Product Summary</option>
+									    	<option value="productConfigSummary">Product Config Summary</option>
 									    	<option value="inventorySummary">Inventory Summary</option>
 									    	<option value="expenseSummary">Expense Summary</option>
                                             </select>
@@ -67,6 +68,7 @@ $('#download').click(function(){
 									    	<option value="returnSummary">Return Summary</option>
 									    	<option value="debitNoteSummary">Debit Note</option>
 									    	<option value="productSummary">Product Summary</option>
+									    	<option value="productConfigSummary">Product Config Summary</option>
 									    	<option value="inventorySummary">Inventory Summary</option>
 									    	<option value="poPaymentSummary">PO Payment Summary</option>
 									    	<option value="expenseSummary">Expense Summary</option>

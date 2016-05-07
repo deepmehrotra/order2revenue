@@ -23,8 +23,7 @@
 								<h5>Create Product</h5>
 							</div>
 							<div class="ibox-content overflow-h">
-								<form:form method="POST" action="saveProduct.html"
-									id="addProductForm" role="form" class="form-horizontal">
+								<form:form method="POST" action="saveProduct.html" id="addProductForm" role="form" class="form-horizontal">
 
 									<c:if test="${!empty product.productId}">
 										<input type="hidden" name="productId" id="productId"
@@ -150,6 +149,9 @@
 
 										</div>
 									</div>
+									
+									
+									
 									<div class="col-sm-12">
 										<div class="hr-line-dashed"></div>
 										<button class="btn btn-primary pull-right" type="button"
