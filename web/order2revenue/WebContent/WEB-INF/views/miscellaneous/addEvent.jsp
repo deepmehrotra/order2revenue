@@ -185,7 +185,7 @@ span .#error {
 																				<label class="col-md-4 control-label">${category}</label>
 																				<div class="input-group m-b col-md-4">
 																					<input type="text" class="form-control"
-																						name='nr-${category}'>
+																						name='nr-${category}' value="" >
 																					<!--   <span class="input-group-addon">%</span> -->
 																				</div>
 																			</div>

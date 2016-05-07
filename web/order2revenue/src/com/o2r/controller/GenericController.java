@@ -172,7 +172,7 @@ public class GenericController {
 		try{
 		sellerId = HelperClass.getSellerIdfromSession(request);
 		searchCriteria = request.getParameter("searchCriteria");
-		searchString = request.getParameter("searchstring");
+		searchString = request.getParameter("searchString");
 		if (request.getParameter("startDate") != null
 				&& request.getParameter("endDate") != null
 				&& (request.getParameter("startDate").length() != 0)
@@ -184,20 +184,27 @@ public class GenericController {
 		System.out.println(" Values in global search header :searchCriteria : "
 				+ searchCriteria + "  -->searchString : " + searchString + " "
 				+ "startDate : " + startDate + " endDate  " + endDate);
-		if (searchCriteria.equals("channelOrderID") && searchString != null) {
-			System.out.println(" Inside search find channel order id orders");
-			orderlist = ConverterClass.prepareListofBean(orderService.findOrders(searchCriteria, searchString, sellerId));
-
-		} else if (searchCriteria.equals("orderDate") && startDate != null
+		
+		if (searchCriteria.equals("customerName")
+				|| searchCriteria.equals("customerCity")
+				|| searchCriteria.equals("customerEmail")
+				|| searchCriteria.equals("customerPhnNo") && searchString != null) {
+			orderlist = ConverterClass
+					.prepareListofBean(orderService.findOrdersbyCustomerDetails(
+							searchCriteria, searchString,sellerId));
+		}else{
+			orderlist = ConverterClass
+					.prepareListofBean(orderService.findOrders(
+							searchCriteria, searchString,sellerId));
+		}
+		if (searchCriteria.equals("orderDate") && startDate != null
 				&& endDate != null) {
 			orderlist = new ArrayList<OrderBean>();
 			temporaryorderlist = orderService.findOrdersbyDate(searchCriteria,startDate, endDate, sellerId);
 			if (temporaryorderlist != null && temporaryorderlist.size() != 0)
-				orderlist = ConverterClass
-						.prepareListofBean(temporaryorderlist);
+				orderlist = ConverterClass.prepareListofBean(temporaryorderlist);
 
 		}
-		/*System.out.println(" Search order list :  " + orderlist);*/
 		model.put("searchOrderList", orderlist);
 		}catch(CustomException ce){
 			logger.error("findGlobalOrders exception : " + ce.toString());

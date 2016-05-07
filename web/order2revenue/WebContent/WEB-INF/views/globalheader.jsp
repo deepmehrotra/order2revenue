@@ -4,15 +4,7 @@
 <html>
 <head>
 
-<script type="text/javascript">
 
-function globalSearch(value){
-	var idValue=document.getElementById(value);
-	
-}
-
-
-</script>
 
 
 
@@ -22,11 +14,12 @@ function globalSearch(value){
             <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
                     <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                    <form role="search" class="navbar-form-new" method="post" action="findGlobalOrders.html">
-                        <div class="form-group  top-search-100">
+                    <form role="search" class="navbar-form-new" method="post" action="findGlobalOrders.html" id="findOrderForm"
+                        class="form-horizontal">
+                        <div class="form-group  top-search-180" id="search1">
                         	<div class="top-search-30 f-left">
-                            	<select class="form-control" name="searchCriteria"  id="searchCriteria">
-	                             <option value="">Select Criteria</option>
+                            	<select class="form-control" name="searchCriteria"  id="searchCriteria" >
+	                             	<option value="">Select Criteria</option>
 	                                <option id="1" value="channelOrderID">Channel Order Id</option>
 	                                <option id="2" value="awbNum">AWB</option>
 								    <option id="3" value="invoiceID">Invoice ID</option>
@@ -43,27 +36,32 @@ function globalSearch(value){
 								    <option id="14" value="status"> Order Status</option>
 								    <option id="15" value="sellerNote">Seller Notes</option>
 	                                <option id="16" value="orderDate">Order Date</option>
-	                                <option id="17" value="orderDate">Order Received Date</option>
+	                                <option id="17" value="orderReceivedDate">Order Received Date</option>
 									<option id="18" value="shippedDate">Order Shipped Date</option>
 									<option id="19" value="deliveryDate">Order Delivery Expected Date</option> 
 									<option id="20" value="paymentDueDate">Payment Due Date</option>
 									<option id="21" value="dateofPayment">Actual Date of Payment</option>
                             	</select>
                            </div>
-                        <div class="top-search-60 f-left TopSearch-box" id="channelOrderID">
-                            	<input type="text" placeholder="Enter Search String" class="form-control"  id="searchstring" name="searchstring">
+                           
+                        <div class="top-search-60 f-left TopSearch-box1"  id="newdiv" >
+                            	<input type="text" name="searchString" class="form-control" placeholder="Search String">
                         </div>
-                        <div class="top-search-60 f-left TopSearch-box" id="orderDate" style="display:none">
-                            <div class="input-group date f-left top-search-50">
-                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text"  name="startDate"  id="startDate"   class="form-control" >
+                        
+                        <div class="top-search-60 f-left TopSearch-box2" id="option2" style="display:none">
+                            <div class="input-group f-left" >
+                            	<div class="input-group date">
+                                	<span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" name="startDate" id="startDate" class="form-control" value="startDate">
+                            	</div>
                             </div>
-                            <div class="input-group date f-left top-search-50">
-                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text"   name="endDate"  id="endDate"    class="form-control" >
+                            <div class="input-group f-left" >
+                            	<div class="input-group date">
+                                	<span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text"  name="endDate" id="endDate" class="form-control" value="endDate">
+                            	</div>
                             </div>
-                        </div>
-                        <div>
-                            <button class="btn btn-white" type="submit"><i class="fa fa-search"></i></button>
-                        </div>
+                        </div>  
+                                              
+                            <button class="btn btn-white" type="submit"><i class="fa fa-search"></i></button>                        
                       </div>
                     </form>
                 </div>
@@ -138,5 +136,27 @@ function globalSearch(value){
             </nav>
         </div>
 
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript">
+
+	$(document).ready(function(){
+			$('#searchCriteria').change(function () {     
+	     
+	        var thisValue = $(this).children(":selected").attr("id");
+	       
+	         if(thisValue == 1 || thisValue == 2 || thisValue == 3 || thisValue == 4 ||thisValue == 5 || thisValue == 6 || thisValue == 7 || thisValue == 8 || thisValue == 9 || thisValue == 10 || thisValue == 11 || thisValue == 12 || thisValue == 13 || thisValue == 14 || thisValue == 15){
+	        
+	        	$('.TopSearch-box1').show();
+	        	$('.TopSearch-box2').hide();
+	        }
+	        else{
+	        	 $('.TopSearch-box1').hide();
+	        	 $('.TopSearch-box2').show();
+	        } 
+	    });
+	
+	});
+	
+</script>
 </body>
 </html>
