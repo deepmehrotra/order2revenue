@@ -117,7 +117,15 @@ public class Order {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Seller seller;
 	@ManyToOne(fetch = FetchType.LAZY)
-	private PaymentUpload upload;
+	private PaymentUpload paymentUpload;
+
+	public PaymentUpload getPaymentUpload() {
+		return paymentUpload;
+	}
+
+	public void setPaymentUpload(PaymentUpload paymentUpload) {
+		this.paymentUpload = paymentUpload;
+	}
 
 	public Customer getCustomer() {
 		return customer;
@@ -524,13 +532,6 @@ public class Order {
 		this.dwShippingString = dwShippingString;
 	}
 
-	public PaymentUpload getUpload() {
-		return upload;
-	}
-
-	public void setUpload(PaymentUpload upload) {
-		this.upload = upload;
-	}
 
 
 }

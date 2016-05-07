@@ -33,7 +33,7 @@ public class PaymentUpload {
 	private double netRecievedAmount;
 	@Column
 	private String uploadStatus;
-	@OneToMany(mappedBy = "upload", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "paymentUpload", cascade = CascadeType.ALL)
 	private List<Order> orders =new ArrayList<Order>();
 	public int getUploadId() {
 		return uploadId;

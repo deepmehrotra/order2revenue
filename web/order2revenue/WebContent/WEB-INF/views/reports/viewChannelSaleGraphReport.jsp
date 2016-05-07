@@ -116,7 +116,7 @@
                                  			 <c:if test="${ttso.groupByName == 'channels'}">
                                             <tr>
                                                 <td>${ttso.pcName}</td>
-                                                <td>${ttso.netSaleQuantity}</td>
+                                                <td>${ttso.quantity}</td>
                                                 <td>${ttso.returnorrtoQty}</td>
                                             </tr>
                                             </c:if>
@@ -509,7 +509,7 @@ $(window).load(function() {
 		 	<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
 		 	<c:if test="${ttso.groupByName == 'channels'}">
 		 	axislabels.push('${ttso.pcName}');
-		 		dataset1.push('${ttso.netSaleQuantity}');
+		 		dataset1.push('${ttso.quantity}');
 		 		dataset2.push('${ttso.returnorrtoQty}');
 		 	</c:if>
 		 	<!--

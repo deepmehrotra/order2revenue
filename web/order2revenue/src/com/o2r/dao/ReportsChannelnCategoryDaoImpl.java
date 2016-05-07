@@ -247,13 +247,12 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		 temp.setReturnOrRTOChargestoBeDeducted(Double.parseDouble(recordsRow[24].toString()));
 		 temp.setTax(Float.parseFloat(recordsRow[25].toString()));
 		// temp.setTax(Float.parseFloat(recordsRow[26].toString()));
-		 
-		 System.out.println("THE VALUES  IS  "+recordsRow[26].toString());
-		 System.out.println("THE VALUES  IS  "+recordsRow[27].toString());
+		 if(!nme.equals("categoryName") && !nme.equals("getPayments")){
 		 temp.setNrTax(Double.parseDouble(recordsRow[26].toString()));
 		 temp.setNrReturn(Double.parseDouble(recordsRow[27].toString()));
 		 temp.setReturnSP(Double.parseDouble(recordsRow[28].toString()));
-		 
+
+		 }
 		 if(nme.equals("categoryName") || nme.equals("getPayments")){
 		 temp.setOrderId(Integer.parseInt(recordsRow[25].toString()));
 		 temp.setInvoiceID(recordsRow[26].toString());
@@ -283,6 +282,26 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		 {
 			 Session session=sessionFactory.openSession();
 			 session.getTransaction().begin();
+			 
+			 
+			 Criteria criteriaTax=session.createCriteria(TaxCategory.class);
+			 ProjectionList tList = Projections.projectionList();
+			 HashMap<String,Float> taxMap=new HashMap<String,Float>();
+			 tList.add(Projections.property("taxCatId"));
+			 tList.add(Projections.property("taxCatName"));
+			 tList.add(Projections.property("taxPercent"));
+			 criteriaTax.setProjection(tList);			 
+			 List taxList=criteriaTax.list();
+			 Iterator txItr=taxList.iterator();
+			 while(txItr.hasNext()){
+				 Object[] recordsRow = (Object[])txItr.next();
+				 taxMap.put(recordsRow[1].toString(),Float.parseFloat(recordsRow[2].toString()));
+			 }
+			 
+			 
+			 
+			 
+			 
 			 Criteria criteria1=getCriteria(startDate,endDate,sellerIdfromSession);
 			 
 			 List pcNameList=criteria1.list();
@@ -321,6 +340,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 					 temp.setGroupByName(null);
 					 temp.setProductCategory(prMap.get(temp.getProductSkuCode()));
 					 temp.setPcName(prMap.get(temp.getProductSkuCode()));
+					 temp.setTaxPercent(taxMap.get(temp.getTaxCategtory()));
 					 temp.setProductPrice(Float.parseFloat(prPriceMap.get(temp.getProductSkuCode())));
 					 if(!orderId.contains(new Integer(temp.getOrderId())))
 					 ttso.add(temp);
@@ -364,6 +384,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		        		 System.out.println(temp1.getQuantity());
 		        		 temp.setPcName(temp1.getPcName());
 		        		 temp.setTaxCategtory(temp1.getTaxCategtory());
+		        		 temp.setTaxPercent(temp1.getTaxPercent());
 		        		 temp.setProductCategory(temp1.getProductCategory());
 		        		 temp.setProductSkuCode(temp1.getProductSkuCode());
 		        		 temp.setDiscount(temp.getDiscount()+temp1.getDiscount());
@@ -395,8 +416,15 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		        		 temp.setDateofPayment(temp1.getDateofPayment());
 		        		 temp.setUploadDate(temp1.getUploadDate());
 		        		 temp.setProductPrice(temp1.getProductPrice());
-		        		 //temp.setGroupByName("pcName");
+		        		 temp.setTax(temp.getTax()+temp1.getTax());
+		        		 temp.setStartDate(startDate.getDate()+"|"+startDate.getMonth()+"|"+startDate.getYear());
+		        		 temp.setEndDate(endDate.getDate()+"|"+endDate.getMonth()+"|"+endDate.getYear());
+		        		 //temp.setTaxPercent(temp1.getTaxPercent());
 		        		 
+	        			 temp.setNrTax(temp.getNrTax()+ ((temp1.getTax()/temp1.getQuantity())* temp1.getReturnorrtoQty()));
+	        			 temp.setNrReturn(temp.getNrReturn()+(temp1.getGrossNetRate()*temp1.getReturnorrtoQty()));
+	        			 temp.setReturnSP(temp.getReturnSP()+((temp1.getOrderSP()/temp1.getQuantity())*temp1.getReturnorrtoQty()));
+	        			 
 		        	 }
 	       	 
 		         }  ttsonew.add(temp);    }
@@ -452,7 +480,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		 projList.add(Projections.property("orderPayment.paymentCycle"));
 		 projList.add(Projections.property("orderPayment.uploadDate"));
 		 projList.add(Projections.property("orderPayment.dateofPayment"));
-		 
+		 projList.add(Projections.property("orderTax.tax"));
 		 
 		 return projList;
 	}

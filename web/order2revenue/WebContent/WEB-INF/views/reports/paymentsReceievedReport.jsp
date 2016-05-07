@@ -49,7 +49,7 @@
                                 
                                 
                                                                 <div class="col-lg-6">
-                                <table id="filterTable" style="width:50%" class="table table-striped table-bordered table-hover dataTables-example" >
+                                <table id="filterTableX" style="width:50%" class="table table-striped table-bordered table-hover dataTables-example" >
                                 <thead>
                                 <tr>
                                     <th>#</th>
@@ -130,7 +130,7 @@
                             <div class="col-sm-12"  style="overflow-x: scroll;">
                             <div id="tbdata1">
                             <p id="selectTriggerFilter"><label><b>Filter:</b></label><br></p>
-                                <table id="filterTable" style="width:50%" class="table table-striped table-bordered table-hover dataTables-example" >
+                        <table id="filterOneTable" style="width:50%" class="table table-striped table-bordered table-hover dataTables-example" >
                                 <thead>
                                 <tr>
                                     <th>#</th>
@@ -482,7 +482,7 @@ $(window).load(function() {
 				    
 				    
 				    $(document).ready(function() {
-				    	   $('#filterTable').DataTable({
+				    	   $('#filterOneTable').DataTable({
 				    	        "lengthMenu": [
 				    	            [10, 25, 50, 100, -1],
 				    	            [10, 25, 50, 100, "All"]

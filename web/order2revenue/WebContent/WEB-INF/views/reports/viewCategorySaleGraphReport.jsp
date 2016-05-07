@@ -289,13 +289,13 @@
                                     <th>Date Range</th>
                                     <th>Partner Name</th>
                                     
-                                    <th colspan="3" style="color:blue">N/R Amount, Gross SP, Gross Qty</th>
+                                    <th colspan="4" style="color:blue">N/R Amount, Gross SP, Gross Qty</th>
                                     
-                                    <th  colspan="3" style="color:blue">N/R Amount,Rtn SP,Rtn Qty</th>
+                                    <th colspan="4" style="color:blue">N/R Amount,Rtn SP,Rtn Qty</th>
 
                                     <th>Return Vs Gross</th>
                                     
-                                    <th   colspan="3" style="color:blue">N/R Amount,Net SP,Net Qty</th>
+                                    <th colspan="4" style="color:blue">N/R Amount,Net SP,Net Qty</th>
                                     
                                     <th>Tax Category </th>
                                     <th>Net Tax Liability On SP</th>
@@ -321,25 +321,31 @@
                                     <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossNetRate}" /></td>
 									<td>${ttso.orderSP}</td>
 									<td>${ttso.quantity}</td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.tax}" /></td>
 									
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
-									<td>${ttso.returnOrRTOChargestoBeDeducted}</td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.nrReturn}" /></td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.returnSP}" /></td>
 									<td>${ttso.returnorrtoQty}</td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.nrTax}" /></td>
 									
-									<td>${ttso.returnorrtoQty * 100/ttso.quantity}</td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.returnorrtoQty * 100/ttso.quantity}" /></td>
 									
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.orderSP - ttso.returnOrRTOChargestoBeDeducted}" /></td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate-ttso.nrReturn}" /></td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.orderSP - ttso.returnSP}" /></td>
 									<td>${ttso.quantity - ttso.returnorrtoQty}</td>
-									
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.tax - ttso.nrTax}" /></td>
+										
 									<td>${ttso.taxCategtory}</td>
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossNetRate - ttso.grossNetRate * 100/105}" /></td>
 
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${(ttso.orderSP - ttso.returnOrRTOChargestoBeDeducted)-(ttso.grossNetRate - ttso.grossNetRate * 100/105)}" /></td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${(ttso.orderSP-ttso.returnSP)- (((ttso.orderSP-ttso.returnSP)*100)/(100+ttso.taxPercent))}" /></td>
+									
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate-ttso.nrReturn}" /></td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${(ttso.orderSP - ttso.returnSP)-((ttso.orderSP-ttso.returnSP)- (((ttso.orderSP-ttso.returnSP)*100)/(100+ttso.taxPercent)))}" /></td>
 									<td>${ttso.quantity - ttso.returnorrtoQty}</td>
-									<td>${ttso.positiveAmount + ttso.negativeAmount}</td>
-									<td>TBD</td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.positiveAmount + ttso.negativeAmount}" /></td>
+									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.paymentDifference}" /></td>
+
+
                                   </tr>
                                 </c:if>
                                 </c:forEach>

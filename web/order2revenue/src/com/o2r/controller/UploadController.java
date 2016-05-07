@@ -293,7 +293,7 @@ public class UploadController {
 			}
 			if (order != null) {
 				System.out.println(order);
-				order.setUpload(paymentUpload);
+				order.setPaymentUpload(paymentUpload);
 				paymentUpload.getOrders().add(order);
 			}
 
