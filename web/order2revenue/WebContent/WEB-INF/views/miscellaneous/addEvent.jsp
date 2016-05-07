@@ -37,6 +37,7 @@ span .#error {
 	rel="stylesheet">
 <link href="/O2R/seller/css/plugins/iCheck/custom.css" rel="stylesheet">
 
+
 <script type="text/javascript">
 	
 </script>
@@ -47,274 +48,88 @@ span .#error {
 		<div id="page-wrapper" class="gray-bg">
 			<jsp:include page="../globalheader.jsp"></jsp:include>
 			<div class="wrapper wrapper-content animated fadeInRight" id="centerpane">
-				<form:form method="POST" action="savePartner.html"
-					id="addpartnerform" name="addpartnerform" role="form"
-					class="form-horizontal" enctype="multipart/form-data">
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="ibox float-e-margins">
-								<div class="ibox-title">
-									<h5>Partner</h5>
-								</div>
-								<div class="ibox-content add-company">
-
-									<c:if test="${!empty partner.pcId}">
-										<%--  <form:hidden path="pcId" value="${partner.pcId}"/> --%>
-										<input type="hidden" name="pcId" id="pcId"
-											value="${partner.pcId}" />
-										<input type="hidden" name="nrnReturnConfig.configId" id="nrnReturnConfig.configId"
-											value="${partner.nrnReturnConfig.configId}" />
-									</c:if>
-
-									<div class="col-sm-6">
-										<div class="form-group">
-											<label class="col-sm-4 control-label">Partner Name</label>
-
-											<div class="col-sm-8">
-												<form:input path="pcName" value="${partner.pcName}"
-													class="form-control" id="partnerName"
-													onblur="checkOnBlur()" />
-												<span id="partnerNameMessage"
-													style="font-weight: bold;color=red"></span>
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="form-group">
-											<label class="col-sm-4 control-label">Alias Name</label>
-
-											<div class="col-sm-8">
-												<form:input path="pcDesc" value="${partner.pcDesc}"
-													class="form-control" />
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-12">
-										<div class="form-group">
-											<label class="col-sm-2 control-label">Upload Brand
-												Logo</label>
-
-											<div class="col-md-4">
-												<label title="Upload image file" for="image"
-													class="btn btn-white btn-block"> <i
-													class="fa fa-upload"></i> <input type="file"
-													accept="image/*" name="image" id="image" class="hide">
-													Upload Logo
-												</label>
-											</div>
-
-										</div>
-
-
-										<div class="hr-line-dashed"></div>
-									</div>
-									<div class="col-sm-4">
-										<div class="radio">
-											<label><form:radiobutton path="paymentType"
-													value="paymentcycle" id="paymentcycle" name="toggler" class="paymentcycleClass"/>Payment
-												Cycle</label>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="radio">
-											<label><form:radiobutton path="paymentType"
-													value="datewisepay" id="datewisepay" name="toggler" class="paymentcycleClass"/>Payment
-												From Delivery</label>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="radio">
-											<label><form:radiobutton path="paymentType"
-													value="monthly" id="monthly" name="toggler" />Monthly
-												Payment</label>
-										</div>
-									</div>
-
-									<div class="col-sm-12 radio1" id="blk-paymentcycle">
-										<div class="col-sm-6">
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-4 control-label">Cycle Start
-													date</label>
-												<div class="col-sm-8">
-													<form:input path="startcycleday"
-														value="${partner.startcycleday}"
-														placeholder="Duration of Payment from Start Date"
-														class="form-control" />
-												</div>
-											</div>
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-4 control-label">Cycle End date</label>
-												<div class="col-sm-8">
-													<form:input path="paycycleduration"
-														value="${partner.paycycleduration}"
-														placeholder="Duration of Payment from Start Date"
-														class="form-control" />
-												</div>
-											</div>
-										</div>
-										<div class="col-sm-6">
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-4 control-label">Payment date</label>
-												<div class="col-sm-8">
-													<form:input path="paydaysfromstartday"
-														value="${partner.paydaysfromstartday}"
-														placeholder="Duration of Payment from Start Date"
-														class="form-control" />
-												</div>
-											</div>
-
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-4 control-label">Payment From</label>
-												<div class="col-sm-8">
-													<form:select path="paycyclefromshipordel"
-														items="${datemap}" class="form-control" name="account"
-														id="paymentField">
-													</form:select>
-												</div>
-											</div>
-										</div>
-										<small class="help-block">(For ex: If your first
-											payment cycle of month is staring from 5th May to 10th May
-											and Payment date for that cycel is 15th May , then you Start
-											Date will have 5 End day will have 10 and Payment day will
-											have 15)</small>
-									</div>
-									<div class="col-sm-12 radio1" id="blk-datewisepay">
-										<div class="row">
-											<div class="col-md-6">
-												<form:select path="isshippeddatecalc" items="${datemap}"
-													class="form-control" id="paymentField1">
-												</form:select>
-											</div>
-
-											<div class="col-md-6 payment-box" id="true">
-												<form:input path="noofdaysfromshippeddate"
-													id="noofdaysfromshippeddate"
-													value="${partner.noofdaysfromshippeddate}"
-													placeholder="Payment Days From Shipped Date"
-													class="form-control" />
-											</div>
-											<div class="col-md-6 payment-box" id="false">
-												<form:input path="noofdaysfromdeliverydate"
-													id="noofdaysfromdeliverydate"
-													value="${partner.noofdaysfromdeliverydate}"
-													placeholder="Payment Days From Delivery Date"
-													class="form-control" />
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-12 radio1" id="blk-monthly">
-										<div class="row">
-											<div class="col-md-4">
-												<form:input path="monthlypaydate"
-													value="${partner.monthlypaydate}" placeholder="Enter Day"
-													class="form-control" />
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-12">
-										<div class="hr-line-dashed"></div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label">Max RTO
-												Acceptance Period</label>
-											<div class="col-md-4">
-												<form:input path="maxRTOAcceptance"
-													value="${partner.maxRTOAcceptance}"
-													placeholder="Enter Value" class="form-control" />
-											</div>
-											<div class="col-md-4">
-												<select class="form-control" name="account">
-													<option>Days</option>
-												</select>
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-12">
-										<div class="form-group">
-											<label class="col-sm-3 control-label">Max Return
-												Acceptance</label>
-											<div class="col-md-4">
-												<form:input path="maxReturnAcceptance"
-													value="${partner.maxReturnAcceptance}"
-													placeholder="Enter Value" class="form-control" />
-											</div>
-											<div class="col-md-4">
-												<select class="form-control" name="account">
-													<option>Days</option>
-												</select>
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-12">
-										<div class="form-group">
-											<%-- <div class="col-md-3">
-												<form:input path="taxcategory"
-													value="${partner.taxcategory}"
-													placeholder="Tax Category" class="form-control" />
-											</div>
-											<div class="col-md-4 content-rgt">
-												<form:input path="taxrate"
-													value="${partner.taxrate}"
-													placeholder="Tax Rate" class="form-control" />
-												<span>%</span>
-											</div> --%>
-											<div class="col-md-4">
-												<form:checkbox path="tdsApplicable" id="tdsApplicable" />
-												TDS Applicable
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-lg-12">
-							<div class="ibox float-e-margins">
-								<div class="ibox-title">
-									<h5>State Selection</h5>
-								</div>
-								<div class="ibox-content add-company">
-									<div class="row">
-										<div class="col-sm-2">Select State</div>
-										<div class="col-sm-2">Local</div>
-										<div class="col-sm-2">Zonal</div>
-										<div class="col-sm-2">National</div>
-										<div class="col-sm-2">Metro</div>
-
-
-									</div>
-									<div class="row">
-										<div class="col-lg-12 m-l-n">
-											<div class="panel panel-default">
-												<div class="panel-body">
-													<div id="pickList"></div>
-													<br> <br>
-												</div>
-											</div>
-										</div>
-
-
-									</div>
-
-								</div>
-							</div>
-						</div>
-
-						<div class="col-lg-12">
-							<div class="ibox float-e-margins">
-								<div class="ibox-title">
-									<h5>Dropship</h5>
-								</div>
-								<div class="ibox-content add-company">
-									<div class="col-lg-12">
-										<!--   <input type="checkbox" class="js-switch_2" id="nr-switch" /> -->
-										<form:checkbox path="nrnReturnConfig.nrCalculator"
-											value="${partner.nrnReturnConfig.nrCalculator}" class="js-switch_2" id="nr-switch" />
-										<label>NR Switch</label>
-										<div class="col-sm-12 radio5" id="nr-switch-sec">
-											<!--<div class="col-sm-12 radio1" id="blk-200">-->
-											<h3>NR Calculator</h3>
-											<div class="panel-body">
+				<div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Events</h5>
+                            <div class="ibox-tools">
+                                <a href="" class="btn btn-primary btn-xs" >Create New Events</a>
+                            </div>
+                        </div>
+                        <div class="ibox-content add-company"> 
+                     <form:form method="POST" action="saveEvent.html" role="form" class="form-horizontal" id="addEvent">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label class="col-sm-4 control-label">Event Name</label>
+                            <div class="col-sm-8">
+                              <form:input path="eventName" value="${eventsBean.eventName}"	class="form-control" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label class="col-sm-4 control-label">Select Channel</label>
+                            <div class="col-sm-8">
+                              <form:select path="channelName" items="${partnerMap}" class="form-control"></form:select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <h4>Event Period</h4>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Start Date</label>
+                                <div class="col-sm-8" id="data_1">
+                                    <div class="input-group date"> <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <form:input path="startDate" value="${eventsBean.startDate}"	class="form-control" />
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">End Date</label>
+                                <div class="col-sm-8" id="data_1">
+                                    <div class="input-group date"> <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <form:input path="endDate" value="${eventsBean.endDate}"	class="form-control" />
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>
+                        <div class="col-sm-12">
+                          <h4>NR Calculator</h4>
+                        </div>
+                        <div class="col-sm-12">
+							<div class="col-sm-4">
+                            <div class="radio">
+                              <label>
+                                <form:radiobutton  value="original" id="94" path="nrnReturnConfig.nrCalculatorEvent" onChange="handleRadioEvent(this);" />
+                                Original </label>
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="radio">
+                              <label>
+                                <form:radiobutton  value="variable" id="40" path="nrnReturnConfig.nrCalculatorEvent"  onChange="handleRadioEvent(this);"  />
+                                Variable NR</label>
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="radio">
+                              <label>
+                                <form:radiobutton  value="fixed" id="41" path="nrnReturnConfig.nrCalculatorEvent" onChange="handleRadioEvent(this);"  />
+                                Fixed TP </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-12 radio1 m-b" id="blk-40">
+                            <div class="col-sm-12">
+								<div class="col-sm-12 radio5" id="nr-switch-sec" style="display: block;">
+									<div class="panel-body">
 												<div class="panel-group" id="accordion">
 													<div class="panel panel-default">
 														<div class="panel-heading">
@@ -323,45 +138,46 @@ span .#error {
 																	href="#collapseOne1">Commission</a>
 															</h5>
 														</div>
-														<div id="collapseOne1" class="panel-collapse collapse in">
+														<div id="collapseOne1" class="panel-collapse collapse">
 															<div class="panel-body">
 																<div class="col-sm-12">
 																	<div class="col-sm-6">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.commissionType" value="fixed"
-																					id="commisionType-fixed" name="commissionType"
-																					class="commissionType" /> <!--       <input type="radio" value="4" id="optionsRadios1" name="toggler"> -->
+																					id="1" name="commissionType"
+																					class="commissionType"  /> <!--       <input type="radio" value="4" id="optionsRadios1" > -->
 																				Fixed
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-6">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.commissionType"
 																					value="categoryWise"
-																					id="commisionType-categoryWise"
-																					name="commissionType" class="commissionType" /> <!--  <input type="radio" value="5" id="optionsRadios1" name="toggler"> -->
+																					id="2"
+																					name="commissionType" class="commissionType"  /> <!--  <input type="radio" value="5" id="optionsRadios1" > -->
 																				Category Wise
 																			</label>
 																		</div>
 																	</div>
+																	
 																</div>
 																<div class="col-sm-12 radio1"
-																	id="blk-commisionType-fixed">
+																	id="blk-1">
 																	<div class="col-sm-12">
 																		<div class="form-group">
 																			<div class="input-group m-b col-md-4">
 																				<input type="text" class="form-control"
 																					name="nr-fixedCommissionPercent" value="${chargeMap.fixedCommissionPercent}"> <span
-																					class="input-group-addon" >%</span>
+																					class="input-group-addon">%</span>
 																			</div>
 																		</div>
 																	</div>
 																</div>
 																<div class="col-sm-12 radio1"
-																	id="blk-commisionType-categoryWise">
+																	id="blk-2">
 																	<c:if test="${!empty categoryList}">
 																		<c:forEach items="${categoryList}" var="category"
 																			varStatus="loop">
@@ -369,7 +185,7 @@ span .#error {
 																				<label class="col-md-4 control-label">${category}</label>
 																				<div class="input-group m-b col-md-4">
 																					<input type="text" class="form-control"
-																						name='nr-${category}'>
+																						name='nr-${category}' value="" >
 																					<!--   <span class="input-group-addon">%</span> -->
 																				</div>
 																			</div>
@@ -396,7 +212,7 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeelt250" value="${chargeMap.fixedfeelt250}">
+																				name="nr-fixedfeelt250" value="${chargeMap.fixedfeelt250}"/>
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
@@ -404,7 +220,7 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt250lt500" value="${chargeMap.fixedfeegt250lt500}">
+																				name="nr-fixedfeegt250lt500" value="${chargeMap.fixedfeegt250lt500}"/>
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
@@ -471,6 +287,7 @@ span .#error {
 																</div>
 															</div>
 														</div>
+														</div>
 														<div class="panel panel-default">
 															<div class="panel-heading">
 																<h4 class="panel-title">
@@ -496,7 +313,7 @@ span .#error {
 																			<div class="col-sm-6">
 																				<div class="checkbox i-checks">
 																					<label> <input type="checkbox" value=""
-																						name="ispercentSPPCC"> <i></i>
+																						name="nr-ispercentSPPCC"> <i></i>
 																						Percentage of SP
 																					</label>
 																				</div>
@@ -512,8 +329,8 @@ span .#error {
 																		<div class="col-sm-12">
 																			<div class="col-sm-6">
 																				<div class="checkbox i-checks">
-																					<label> <input type="checkbox" 
-																						name="isfixedAmountPCC"> <i></i> Fixed
+																					<label> <input type="checkbox" value=""
+																						name="nr-isfixedAmountPCC"> <i></i> Fixed
 																						Amount
 																					</label>
 																				</div>
@@ -522,7 +339,7 @@ span .#error {
 																				<div class="input-group m-b">
 																					<input type="text" class="form-control"
 																						name="nr-fixedAmtPCC" value="${chargeMap.fixedAmtPCC}"> <span
-																						class="input-group-addon">%</span>
+																						class="input-group-addon" >%</span>
 																				</div>
 																			</div>
 																		</div>
@@ -542,34 +359,35 @@ span .#error {
 																	<div class="col-sm-12">
 																		<div class="col-sm-6">
 																			<div class="radio">
-																				<label> <!-- <input type="radio" value="6" id="optionsRadios1" name="toggler"> -->
-																					<form:radiobutton
+																				<label> <!-- <input type="radio" value="6" id="optionsRadios1" > -->
+																					<form:radiobutton  onChange="handleRadioEvent(this);"
 																						path="nrnReturnConfig.shippingFeeType"
-																						value="variable" id="shippingfee-variable"
-																						name="toggler" class="shippingFeeType" />
+																						value="variable" id="46"
+																						 class="shippingFeeType" />
 																					Variable Shipping Charges
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-sm-6">
 																			<div class="radio">
-																				<label> <!--    <input type="radio" value="7" id="optionsRadios1" name="toggler"> -->
-																					<form:radiobutton
+																				<label>
+																					<form:radiobutton  onChange="handleRadioEvent(this);"
 																						path="nrnReturnConfig.shippingFeeType"
-																						value="fixed" id="shippingfee-fixed"
-																						class="shippingFeeType" /> Fixed Shipping Charges
+																						value="fixed" id="47"
+																						class="shippingFeeType"  /> Fixed Shipping Charges
 																				</label>
 																			</div>
 																		</div>
+							
 																	</div>
 																	<div class="col-sm-12 radio1"
-																		id="blk-shippingfee-variable">
+																		id="blk-46">
 																		<div
 																			class="col-sm-12 center-align text-center font-bold">
 																			<h4 class="text-info">Which Ever is Higher</h4>
 																		</div>
 																		<div class="col-sm-6">
-																			<h4>Volume calculation= (lxbxh)(cm)/5</h4>
+																			<h4>Volume calculation= (lxbxh)(cm)/5000</h4>
 																			<table class="table table-bordered">
 																				<thead>
 																					<tr>
@@ -635,17 +453,17 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-zonalvwgt1000lt1500"  value="${chargeMap.zonalvwgt1000lt1500}">
+																									name="nr-zonalvwgt1000lt1500" value="${chargeMap.zonalvwgt1000lt1500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-nationalvwgt1000lt1500"  value="${chargeMap.nationalvwgt1000lt1500}">
+																									name="nr-nationalvwgt1000lt1500" value="${chargeMap.nationalvwgt1000lt1500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-metrovwgt1000lt1500"  value="${chargeMap.metrovwgt1000lt1500}">
+																									name="nr-metrovwgt1000lt1500" value="${chargeMap.metrovwgt1000lt1500}">
 																							</div></td>
 																					</tr>
 																					<tr>
@@ -653,7 +471,7 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-localvwgt1500lt5000"  value="${chargeMap.localvwgt1000lt1500}">
+																									name="nr-localvwgt1500lt5000" value="${chargeMap.localvwgt1500lt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
@@ -675,7 +493,7 @@ span .#error {
 																						<td><label>add 1 kg</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-localvwgt5000" value="${chargeMap.metrovwgt1500lt5000}">
+																									class="form-control" name="nr-localvwgt5000" value="${chargeMap.localvwgt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
@@ -751,7 +569,7 @@ span .#error {
 																		</div>
 																	</div>
 																	<div class="col-sm-12 radio1"
-																		id="blk-shippingfee-fixed">
+																		id="blk-47">
 																		<div
 																			class="col-sm-12 center-align text-center font-bold">
 																			<h4 class="text-info">Which Ever is Higher</h4>
@@ -825,7 +643,7 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-fixedvwgt1500lt5000" value="${chargeMap.fixedvwgt1000lt1500}">
+																									name="nr-fixedvwgt1500lt5000" value="${chargeMap.fixedvwgt1500lt5000}">
 																							</div></td>
 																					</tr>
 																					<tr>
@@ -860,28 +678,58 @@ span .#error {
 																</div>
 															</div>
 														</div>
-													</div>
+													
 												</div>
 											</div>
-										</div>
-									</div>
-								</div>
-								<div class="ibox float-e-margins">
-									<div class="ibox-title">
-										<h5>Return Calculator</h5>
-									</div>
-									<div class="ibox-content add-company">
-										<form class="form-horizontal">
-											<div class="panel-body">
-												<div class="panel-group" id="accordion">
+		</div><!-- -----------------------------id-40----------------------------- -->
+                            </div>
+                          </div>
+                          <div class="col-sm-12 radio1" id="blk-41">
+                            <div class="form-group col-md-12">
+                              <label class="col-sm-2 control-label">label</label>
+                              <div class="col-sm-3">
+                                <input type="text" placeholder="" class="form-control">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12">
+                          <h4>Return Calculator/Charges</h4>
+                        </div>
+                        <div class="col-sm-12">
+                          <div class="col-sm-6">
+                            <div class="radio">
+                              <label>
+                                <form:radiobutton  onChange="handleRadioEvent(this);" value="original" id="42" path="nrnReturnConfig.returnCalculatorEvent" />
+                                Original Terms</label>
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="radio">
+                              <label>
+                                <form:radiobutton  onChange="handleRadioEvent(this);" value="newTerms" id="43" path="nrnReturnConfig.returnCalculatorEvent" />
+                                New Terms </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-12 radio1 m-b" id="blk-42">
+                            <div class="col-sm-12">
+                                
+                            </div>
+                          </div>
+                          <div class="col-sm-12 radio1" id="blk-43">
+                                <div class="ibox-content add-company">
+							<div class="panel-body">
+												<div class="panel-group" id="accordion1">
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h5 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
-																	href="#collapseOne">Return Charges</a>
+																<a data-toggle="collapse" data-parent="#accordion1"
+																	href="#collapsesix1">Return Charges</a>
 															</h5>
 														</div>
-														<div id="collapseOne" class="panel-collapse collapse in">
+														<div id="collapsesix1" class="panel-collapse collapse">
 															<div class="panel-body">
 																<h4>Seller Fault</h4>
 																<div class="col-sm-12">
@@ -890,28 +738,28 @@ span .#error {
 																<div class="col-sm-12">
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.retCharSFType" value="fixed"
-																					id="retrun-sf-fix" name="toggler"
-																					class="retCharSFType"/> Fixed Amount
+																					id="48" 
+																					class="retCharSFType" /> Fixed Amount
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.retCharSFType"
-																					value="variable" id="retrun-sf-variable"
-																					name="toggler" class="retCharSFType"/> Variable
+																					value="variable" id="49"
+																					 class="retCharSFType" /> Variable
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.retCharSFType"
-																					value="noCharges" id="retrun-sf-nocharges"
-																					name="toggler" class="retCharSFType"
+																					value="noCharges" id="95"
+																					 class="retCharSFType"
 																					checked="checked" /> No Charges
 																			</label>
 																		</div>
@@ -919,7 +767,7 @@ span .#error {
 																</div>
 																<div class="row">
 																	<div class="col-sm-12 radio1 m-b"
-																		id="blk-retrun-sf-fix">
+																		id="blk-48">
 																		<div class="col-sm-12">
 																			<div class="form-group">
 																				<div class="col-md-2 control-label">
@@ -927,7 +775,7 @@ span .#error {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text" class="form-control"
-																						name="nr-retCharSFFixedAmt"  value="${chargeMap.retCharSFFixedAmt}">
+																						name="nr-retCharSFFixedAmt" value="${chargeMap.retCharSFFixedAmt}">
 																				</div>
 																			</div>
 																		</div>
@@ -941,7 +789,7 @@ span .#error {
 																		</div>
 																	</div>
 																	<div class="col-sm-12 radio1"
-																		id="blk-retrun-sf-variable">
+																		id="blk-49">
 																		<div class="form-group col-md-12">
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
@@ -985,6 +833,10 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
+																	
+																	<div class="col-sm-12 radio1 m-b" id="blk-95">
+																	</div>
+																																		
 																</div>
 																<div class="col-sm-12">
 																	<div class="hr-line-dashed"></div>
@@ -996,28 +848,28 @@ span .#error {
 																<div class="col-sm-12">
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.retCharBRType" value="fixed"
-																					id="retrun-br-fix" name="toggler"
+																					id="60" 
 																					class="retCharBRType" /> Fixed Amount
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.retCharBRType"
-																					value="variable" id="retrun-br-variable"
-																					name="toggler" class="retCharBRType" /> Variable
+																					value="variable" id="61"
+																					 class="retCharBRType" /> Variable
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.retCharBRType"
-																					value="noCharges" id="retrun-br-nocharges"
-																					name="toggler" class="retCharBRType"
+																					value="noCharges" id="96"
+																					 class="retCharBRType"
 																					checked="checked" /> No Charges
 																			</label>
 																		</div>
@@ -1025,7 +877,7 @@ span .#error {
 																</div>
 																<div class="row">
 																	<div class="col-sm-12 radio1 m-b"
-																		id="blk-retrun-br-fix">
+																		id="blk-60">
 																		<div class="col-sm-12">
 																			<div class="form-group">
 																				<div class="col-md-2 control-label">
@@ -1039,7 +891,7 @@ span .#error {
 																		</div>
 																	</div>
 																	<div class="col-sm-12 radio1"
-																		id="blk-retrun-br-variable">
+																		id="blk-61">
 																		<div class="form-group col-md-12">
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
@@ -1075,6 +927,8 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
+																	<div class="col-sm-12 radio1 m-b" id="blk-96">
+																	</div>
 																</div>
 															</div>
 														</div>
@@ -1082,11 +936,11 @@ span .#error {
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
-																	href="#collapseTwo">RTO Charges</a>
+																<a data-toggle="collapse" data-parent="#accordion1"
+																	href="#collapseseven1">RTO Charges</a>
 															</h4>
 														</div>
-														<div id="collapseTwo" class="panel-collapse collapse">
+														<div id="collapseseven1" class="panel-collapse collapse">
 															<div class="panel-body">
 																<h4>Seller Fault</h4>
 																<div class="col-sm-12">
@@ -1095,35 +949,35 @@ span .#error {
 																<div class="col-sm-12">
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.RTOCharSFType" value="fixed"
-																					id="RTO-sf-fix" name="toggler"
+																					id="56" 
 																					class="RTOCharSFType" /> Fixed Amount
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.RTOCharSFType"
-																					value="variable" id="RTO-sf-variable"
-																					name="toggler" class="RTOCharSFType" /> Variable
+																					value="variable" id="57"
+																					 class="RTOCharSFType" /> Variable
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.RTOCharSFType"
-																					value="noCharges" id="RTO-sf-nocharges"
-																					name="toggler" class="RTOCharSFType"
+																					value="noCharges" id="97"
+																					 class="RTOCharSFType"
 																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
 																</div>
 																<div class="row">
-																	<div class="col-sm-12 radio1 m-b" id="blk-RTO-sf-fix">
+																	<div class="col-sm-12 radio1 m-b" id="blk-56">
 																		<div class="col-sm-12">
 																			<div class="form-group">
 																				<div class="col-md-2 control-label">
@@ -1144,13 +998,13 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
-																	<div class="col-sm-12 radio1" id="blk-RTO-sf-variable">
+																	<div class="col-sm-12 radio1" id="blk-57">
 																		<div class="form-group col-md-12">
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharSFVarFixedAmt" value="${chargeMap.RTOCharSFFixedAmt}">
+																					class="form-control" name="nr-RTOCharSFVarFixedAmt" value="${chargeMap.RTOCharSFVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
@@ -1189,6 +1043,8 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
+																	<div class="col-sm-12 radio1 m-b" id="blk-97">
+																	</div>
 																</div>
 																<div class="col-sm-12">
 																	<div class="hr-line-dashed"></div>
@@ -1200,35 +1056,35 @@ span .#error {
 																<div class="col-sm-12">
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.RTOCharBRType" value="fixed"
-																					id="RTO-br-fix" name="toggler"
+																					id="66" 
 																					class="RTOCharBRType" /> Fixed Amount
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.RTOCharBRType"
-																					value="variable" id="RTO-br-variable"
-																					name="toggler" class="RTOCharBRType" /> Variable
+																					value="variable" id="67"
+																					 class="RTOCharBRType" /> Variable
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.RTOCharBRType"
-																					value="noCharges" id="RTO-br-nocharges"
-																					name="toggler" class="RTOCharBRType"
+																					value="noCharges" id="98"
+																					 class="RTOCharBRType"
 																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
 																</div>
 																<div class="row">
-																	<div class="col-sm-12 radio1 m-b" id="blk-RTO-br-fix">
+																	<div class="col-sm-12 radio1 m-b" id="blk-66">
 																		<div class="col-sm-12">
 																			<div class="form-group">
 																				<div class="col-md-2 control-label">
@@ -1241,7 +1097,7 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
-																	<div class="col-sm-12 radio1" id="blk-RTO-br-variable">
+																	<div class="col-sm-12 radio1" id="blk-67">
 																		<div class="form-group col-md-12">
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
@@ -1278,6 +1134,8 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
+																	<div class="col-sm-12 radio1 m-b" id="blk-98">
+																	</div>
 																</div>
 															</div>
 														</div>
@@ -1285,11 +1143,11 @@ span .#error {
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
-																	href="#collapseThree">Replacement Charges</a>
+																<a data-toggle="collapse" data-parent="#accordion1"
+																	href="#collapseeight1">Replacement Charges</a>
 															</h4>
 														</div>
-														<div id="collapseThree" class="panel-collapse collapse">
+														<div id="collapseeight1" class="panel-collapse collapse">
 															<div class="panel-body">
 																<h4>Seller Fault</h4>
 																<div class="col-sm-12">
@@ -1298,35 +1156,35 @@ span .#error {
 																<div class="col-sm-12">
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.repCharSFType" value="fixed"
-																					id="rep-sf-fix" name="toggler"
+																					id="64" 
 																					class="repCharSFType" /> Fixed Amount
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.repCharSFType"
-																					value="variable" id="rep-sf-variable"
-																					name="toggler" class="repCharSFType" /> Variable
+																					value="variable" id="65"
+																					 class="repCharSFType" /> Variable
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.repCharSFType"
-																					value="noCharges" id="rep-sf-nocharges"
-																					name="toggler" class="repCharSFType"
+																					value="noCharges" id="99"
+																					 class="repCharSFType"
 																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
 																</div>
 																<div class="row">
-																	<div class="col-sm-12 radio1 m-b" id="blk-rep-sf-fix">
+																	<div class="col-sm-12 radio1 m-b" id="blk-64">
 																		<div class="col-sm-12">
 																			<div class="form-group">
 																				<div class="col-md-2 control-label">
@@ -1334,7 +1192,7 @@ span .#error {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text" class="form-control"
-																						name="nr-repCharSFFixedAmt" value="${chargeMap.repCharSFFixedAmt}"  >
+																						name="nr-repCharSFFixedAmt" value="${chargeMap.repCharSFFixedAmt}">
 																				</div>
 																			</div>
 																		</div>
@@ -1347,13 +1205,13 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
-																	<div class="col-sm-12 radio1" id="blk-rep-sf-variable">
+																	<div class="col-sm-12 radio1" id="blk-65">
 																		<div class="form-group col-md-12">
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharSFVarFixedAmt" value="${chargeMap.repCharSFFixedAmt}">
+																					class="form-control" name="nr-repCharSFVarFixedAmt" value="${chargeMap.repCharSFVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
@@ -1392,6 +1250,8 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
+																	<div class="col-sm-12 radio1 m-b" id="blk-99">
+																	</div>
 																</div>
 																<div class="col-sm-12">
 																	<div class="hr-line-dashed"></div>
@@ -1403,35 +1263,35 @@ span .#error {
 																<div class="col-sm-12">
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.repCharBRType" value="fixed"
-																					id="rep-br-fix" name="toggler"
+																					id="68" 
 																					class="repCharBRType" /> Fixed Amount
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.repCharBRType"
-																					value="variable" id="rep-br-variable"
-																					name="toggler" class="repCharBRType" /> Variable
+																					value="variable" id="69"
+																					 class="repCharBRType" /> Variable
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.repCharBRType"
-																					value="noCharges" id="rep-br-nocharges"
-																					name="toggler" class="repCharBRType"
+																					value="noCharges" id="100"
+																					 class="repCharBRType"
 																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
 																</div>
 																<div class="row">
-																	<div class="col-sm-12 radio1 m-b" id="blk-rep-br-fix">
+																	<div class="col-sm-12 radio1 m-b" id="blk-68">
 																		<div class="col-sm-12">
 																			<div class="form-group">
 																				<div class="col-md-2 control-label">
@@ -1444,13 +1304,13 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
-																	<div class="col-sm-12 radio1" id="blk-rep-br-variable">
+																	<div class="col-sm-12 radio1" id="blk-69">
 																		<div class="form-group col-md-12">
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharBRVarFixedAmt" value="${chargeMap.repCharBRFixedAmt}">
+																					class="form-control" name="nr-repCharBRVarFixedAmt" value="${chargeMap.repCharBRVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
@@ -1481,6 +1341,8 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
+																	<div class="col-sm-12 radio1 m-b" id="blk-100">
+																	</div>
 																</div>
 															</div>
 														</div>
@@ -1488,11 +1350,11 @@ span .#error {
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
-																	href="#collapsefive">Partial Delivery Charges</a>
+																<a data-toggle="collapse" data-parent="#accordion1"
+																	href="#collapsenine1">Partial Delivery Charges</a>
 															</h4>
 														</div>
-														<div id="collapsefive" class="panel-collapse collapse">
+														<div id="collapsenine1" class="panel-collapse collapse">
 															<div class="panel-body">
 																<h4>Seller Fault</h4>
 																<div class="col-sm-12">
@@ -1501,35 +1363,35 @@ span .#error {
 																<div class="col-sm-12">
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.PDCharSFType" value="fixed"
-																					id="PD-sf-fix" name="toggler" class="PDCharSFType" />
+																					id="72"  class="PDCharSFType" />
 																				Fixed Amount
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.PDCharSFType"
-																					value="variable" id="PD-sf-variable" name="toggler"
+																					value="variable" id="73" 
 																					class="PDCharSFType" /> Variable
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.PDCharSFType"
-																					value="noCharges" id="PD-sf-nocharges"
-																					name="toggler" class="PDCharSFType"
+																					value="noCharges" id="101"
+																					 class="PDCharSFType"
 																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
 																</div>
 																<div class="row">
-																	<div class="col-sm-12 radio1 m-b" id="blk-PD-sf-fix">
+																	<div class="col-sm-12 radio1 m-b" id="blk-72">
 																		<div class="col-sm-12">
 																			<div class="form-group">
 																				<div class="col-md-2 control-label">
@@ -1550,7 +1412,7 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
-																	<div class="col-sm-12 radio1" id="blk-PD-sf-variable">
+																	<div class="col-sm-12 radio1" id="blk-73">
 																		<div class="form-group col-md-12">
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
@@ -1595,6 +1457,8 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
+																	<div class="col-sm-12 radio1 m-b" id="blk-101">
+																	</div>
 																</div>
 																<div class="col-sm-12">
 																	<div class="hr-line-dashed"></div>
@@ -1606,35 +1470,35 @@ span .#error {
 																<div class="col-sm-12">
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.PDCharBRType" value="fixed"
-																					id="PD-br-fix" name="toggler" class="PDCharBRType" />
+																					id="76"  class="PDCharBRType" />
 																				Fixed Amount
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.PDCharBRType"
-																					value="variable" id="PD-br-variable" name="toggler"
+																					value="variable" id="77" 
 																					class="PDCharBRType" /> Variable
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.PDCharBRType"
-																					value="noCharges" id="PD-br-nocharges"
-																					name="toggler" class="PDCharBRType"
+																					value="noCharges" id="102"
+																					 class="PDCharBRType"
 																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
 																</div>
 																<div class="row">
-																	<div class="col-sm-12 radio1 m-b" id="blk-PD-br-fix">
+																	<div class="col-sm-12 radio1 m-b" id="blk-76">
 																		<div class="col-sm-12">
 																			<div class="form-group">
 																				<div class="col-md-2 control-label">
@@ -1647,7 +1511,7 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
-																	<div class="col-sm-12 radio1" id="blk-PD-br-variable">
+																	<div class="col-sm-12 radio1" id="blk-77">
 																		<div class="form-group col-md-12">
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
@@ -1684,6 +1548,8 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
+																	<div class="col-sm-12 radio1 m-b" id="blk-102">
+																	</div>
 																</div>
 															</div>
 														</div>
@@ -1691,11 +1557,11 @@ span .#error {
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
-																	href="#collapsesix">Cancellation Charges</a>
+																<a data-toggle="collapse" data-parent="#accordion1"
+																	href="#collapseten1">Cancellation Charges</a>
 															</h4>
 														</div>
-														<div id="collapsesix" class="panel-collapse collapse">
+														<div id="collapseten1" class="panel-collapse collapse">
 															<div class="panel-body">
 																<h4>Seller Fault</h4>
 																<div class="col-sm-12">
@@ -1708,38 +1574,37 @@ span .#error {
 																<div class="col-sm-12">
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.canCharSFBFRTDType"
-																					value="fixed" id="can-sfbfrtd-fix" name="toggler"
+																					value="fixed" id="80" 
 																					class="canCharSFBFRTDType" /> Fixed Amount
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.canCharSFBFRTDType"
-																					value="variable" id="can-sfbfrtd-variable"
-																					name="toggler" class="canCharSFBFRTDType" />
+																					value="variable" id="81"
+																					 class="canCharSFBFRTDType" />
 																				Variable
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.canCharSFBFRTDType"
-																					value="noCharges" id="can-sfbfrtd-nocharges"
-																					name="toggler" class="canCharSFBFRTDType"
-																					checked="checked" /> No
-																				Charges
+																					value="noCharges" id="82"
+																					 class="canCharSFBFRTDType"
+																					checked="checked" /> No	Charges
 																			</label>
 																		</div>
 																	</div>
 																</div>
 																<div class="row">
 																	<div class="col-sm-12 radio1 m-b"
-																		id="blk-can-sfbfrtd-fix">
+																		id="blk-80">
 																		<div class="col-sm-12">
 																			<div class="form-group">
 																				<div class="col-md-2 control-label">
@@ -1761,7 +1626,7 @@ span .#error {
 																		</div>
 																	</div>
 																	<div class="col-sm-12 radio1"
-																		id="blk-can-sfbfrtd-variable">
+																		id="blk-81">
 																		<div class="form-group col-md-12">
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
@@ -1809,6 +1674,8 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
+																	<div class="col-sm-12 radio1 m-b" id="blk-82">
+																	</div>
 																</div>
 																<div class="col-sm-12">
 																	<div class="hr-line-dashed"></div>
@@ -1820,29 +1687,29 @@ span .#error {
 																<div class="col-sm-12">
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.canCharSFARTDType"
-																					value="fixed" id="can-sfartd-fix" name="toggler"
+																					value="fixed" id="83" 
 																					class="canCharSFARTDType" /> Fixed Amount
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.canCharSFARTDType"
-																					value="variable" id="can-sfartd-variable"
-																					name="toggler" class="canCharSFARTDType" />
+																					value="variable" id="84"
+																					 class="canCharSFARTDType" />
 																				Variable
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.canCharSFARTDType"
-																					value="noCharges" id="can-sfartd-nocharges"
-																					name="toggler" class="canCharSFARTDType"
+																					value="noCharges" id="103"
+																					 class="canCharSFARTDType"
 																					checked="checked" /> No
 																				Charges
 																			</label>
@@ -1851,7 +1718,7 @@ span .#error {
 																</div>
 																<div class="row">
 																	<div class="col-sm-12 radio1 m-b"
-																		id="blk-can-sfartd-fix">
+																		id="blk-83">
 																		<div class="col-sm-12">
 																			<div class="form-group">
 																				<div class="col-md-2 control-label">
@@ -1873,7 +1740,7 @@ span .#error {
 																		</div>
 																	</div>
 																	<div class="col-sm-12 radio1"
-																		id="blk-can-sfartd-variable">
+																		id="blk-84">
 																		<div class="form-group col-md-12">
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
@@ -1918,6 +1785,8 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
+																	<div class="col-sm-12 radio1 m-b" id="blk-103">
+																	</div>
 																</div>
 																<div class="col-sm-12">
 																	<div class="hr-line-dashed"></div>
@@ -1929,35 +1798,35 @@ span .#error {
 																<div class="col-sm-12">
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.canCharBRType" value="fixed"
-																					id="can-br-fix" name="toggler"
+																					id="88" 
 																					class="canCharBRType" /> Fixed Amount
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.canCharBRType"
-																					value="variable" id="can-br-variable"
-																					name="toggler" class="canCharBRType" /> Variable
+																					value="variable" id="89"
+																					 class="canCharBRType" /> Variable
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-4">
 																		<div class="radio">
-																			<label> <form:radiobutton
+																			<label> <form:radiobutton  onChange="handleRadioEvent(this);"
 																					path="nrnReturnConfig.canCharBRType"
-																					value="noCharges" id="can-br-nocharges"
-																					name="toggler" class="canCharBRType"
+																					value="noCharges" id="104"
+																					 class="canCharBRType"
 																					checked="checked" /> No Charges
 																			</label>
 																		</div>
 																	</div>
 																</div>
 																<div class="row">
-																	<div class="col-sm-12 radio1 m-b" id="blk-can-br-fix">
+																	<div class="col-sm-12 radio1 m-b" id="blk-88">
 																		<div class="col-sm-12">
 																			<div class="form-group">
 																				<div class="col-md-2 control-label">
@@ -1965,12 +1834,12 @@ span .#error {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text" class="form-control"
-																						name="nr-canCharBRFixedAmt" value="${chargeMap.canCharSFPercentPCC}">
+																						name="nr-canCharBRFixedAmt" value="${chargeMap.canCharBRFixedAmt}">
 																				</div>
 																			</div>
 																		</div>
 																	</div>
-																	<div class="col-sm-12 radio1" id="blk-can-br-variable">
+																	<div class="col-sm-12 radio1" id="blk-89">
 																		<div class="form-group col-md-12">
 																			<label class="col-sm-2 control-label">Fix
 																				Amount</label>
@@ -2015,6 +1884,8 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
+																	<div class="col-sm-12 radio1 m-b" id="blk-104">
+																	</div>
 																</div>
 															</div>
 														</div>
@@ -2023,11 +1894,11 @@ span .#error {
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
-																	href="#collapseseven">Reverse Shipping Fee</a>
+																<a data-toggle="collapse" data-parent="#accordion1"
+																	href="#collapseeleven1">Reverse Shipping Fee</a>
 															</h4>
 														</div>
-														<div id="collapseseven" class="panel-collapse collapse">
+														<div id="collapseeleven1" class="panel-collapse collapse">
 															<div class="panel-body">
 																<div class="col-sm-12">
 																	<div class="col-sm-6">
@@ -2042,7 +1913,7 @@ span .#error {
 																	<div class="col-sm-6">
 																		<div class="input-group m-b">
 																			<input type="text" placeholder=""
-																				class="form-control" name="nr-revShipFeePCC" value="${chargeMap.revShipFeePCC}"> 
+																				class="form-control" name="nr-revShipFeePCC" value="${chargeMap.revShipFeePCC}">
 																			<span class="input-group-addon">%</span>
 																		</div>
 																	</div>
@@ -2239,437 +2110,288 @@ span .#error {
 													</div>
 												</div>
 											</div>
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div></div>
-					</div>
-
-					<div class="ibox float-e-margins">
-						<div class="ibox-content add-company">
-							<input class="btn btn-primary pull-right" id="submitButton"
-								type="submit" value="Save">
-						</div>
-					</div>
+      </div>
+                          </div>
+                        </div>
+                    
+                
+				<div class="ibox-content add-company">
+					<button class="btn btn-primary pull-right" type="submit"
+								onclick="submitOrder()">Save</button>
+				</div>
 				</form:form>
-				<jsp:include page="../globalfooter.jsp"></jsp:include>
+                </div>
+			</div>	
+            </div>
+			<div class="col-lg-12">
+				
 			</div>
-
+            </div>
+				
+			</div>
+			<jsp:include page="../globalfooter.jsp"></jsp:include>
 		</div>
+		
 	</div>
 
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
-	<!-- iCheck -->
-	<script src="/O2R/seller/js/plugins/iCheck/icheck.min.js"></script>
+	
 	<!-- Switchery -->
 	<script src="/O2R/seller/js/plugins/switchery/switchery.js"></script>
 	<script src="/O2R/seller/js/pickList.js"></script>
+	
+<!-- Mainly scripts -->
 
-	<script type="text/javascript">
-		$(document).ready(
-				function() {
-					$('.i-checks').iCheck({
-						checkboxClass : 'icheckbox_square-green',
-						radioClass : 'iradio_square-green',
-					});
-					var elem = document.querySelector('.js-switch');
-					var switchery = new Switchery(elem, {
-						color : '#1AB394'
-					});
 
-					var elem_2 = document.querySelector('.js-switch_2');
-					var switchery_2 = new Switchery(elem_2, {
-						color : '#ED5565'
-					});
+<script src="/O2R/seller/js/plugins/dataTables/jquery.dataTables.js"></script>
+<script src="/O2R/seller/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+<script src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
+<script src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.dataTables-example').dataTable({
+                responsive: true,
+                "dom": 'T<"clear">lfrtip',
+                "tableTools": {
+                    "sSwfPath": "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
+                }
+        });
+    });
+</script>
+<style>
+    body.DTTT_Print {
+        background: #fff;
 
-					var elem_3 = document.querySelector('.js-switch_3');
-					var switchery_3 = new Switchery(elem_3, {
-						color : '#1AB394'
-					});
+    }
+    .DTTT_Print #page-wrapper {
+        margin: 0;
+        background:#fff;
+    }
 
-					$("#nr-switch").change(function() {
-						if (this.checked) {
+    button.DTTT_button, div.DTTT_button, a.DTTT_button {
+        border: 1px solid #e7eaec;
+        background: #fff;
+        color: #676a6c;
+        box-shadow: none;
+        padding: 6px 8px;
+    }
+    button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
+        border: 1px solid #d2d2d2;
+        background: #fff;
+        color: #676a6c;
+        box-shadow: none;
+        padding: 6px 8px;
+    }
 
-							$('.radio5').hide();
-							$("#nr-switch-sec").slideDown();
-						} else {
-							$("#nr-switch-sec").slideUp();
+    .dataTables_filter label {
+        margin-right: 5px;
 
-						}
-					});
+    }
+</style>
 
-					$(".commissionType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".shippingFeeType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".retCharSFType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".retCharBRType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".RTOCharSFType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".RTOCharBRType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".repCharSFType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".repCharBRType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".PDCharSFType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".PDCharBRType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".canCharSFBFRTDType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".canCharSFARTDType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".canCharBRType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".weight").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
 
-					$("[name=paymentType]").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).val()).slideDown();
-					});
-					$('#paymentField').change(function() {
-						$('.payment-box').hide();
-						$('#' + $(this).val()).fadeIn();
-					});
-					$('#paymentField1').change(function() {
-						$('.payment-box').hide();
-						$('#' + $(this).val()).fadeIn();
-					});
-					$('#data_1 .input-group.date').datepicker({
-						todayBtn : "linked",
-						keyboardNavigation : false,
-						forceParse : false,
-						calendarWeeks : true,
-						autoclose : true
-					});
 
-					if ('${partner.paymentType}' == 'paymentcycle')
-						$("#paymentcycle").prop("checked", true).trigger(
-								"click");
-					else if ('${partner.paymentType}' == 'datewisepay') {
-						$("#datewisepay").prop("checked", true)
-								.trigger("click");
-						$('#paymentField1').trigger('change');
-						if ('${partner.isshippeddatecalc}' != true) {
-							$("#noofdaysfromdeliverydate").val(
-									'${partner.noofdaysfromshippeddate}');
-						}
-					} else if ('${partner.paymentType}' == 'monthly')
-						$('#monthly').prop("checked", true).trigger("click");
+<script src="/O2R/seller/js/jquery-2.1.1.js"></script> 
+<script src="/O2R/seller/js/bootstrap.min.js"></script> 
+<script src="/O2R/seller/js/plugins/metisMenu/jquery.metisMenu.js"></script> 
+<script src="/O2R/seller/js/plugins/slimscroll/jquery.slimscroll.min.js"></script> 
+<!-- Data picker --> 
+<script src="/O2R/seller/js/plugins/datapicker/bootstrap-datepicker.js"></script> 
+<!-- Custom and plugin javascript --> 
+<script src="/O2R/seller/js/inspinia.js"></script> 
+<script src="/O2R/seller/js/plugins/pace/pace.min.js"></script> 
+<!-- iCheck --> 
+<script src="/O2R/seller/js/plugins/iCheck/icheck.min.js"></script> 
+<!-- Switchery --> 
+<script type="text/javascript">
+            $(document).ready(function () {
+                $('.i-checks').iCheck({
+                    checkboxClass: 'icheckbox_square-green',
+                    radioClass: 'iradio_square-green',
+                });
+				var elem = document.querySelector('.js-switch');
+            var switchery = new Switchery(elem, { color: '#1AB394' });
 
-					if ('${partner.tdsApplicable}' == 'true')
-						$("#tdsApplicable").prop("checked", true);
+            var elem_2 = document.querySelector('.js-switch_2');
+            var switchery_2 = new Switchery(elem_2, { color: '#ED5565' });
+
+            var elem_3 = document.querySelector('.js-switch_3');
+            var switchery_3 = new Switchery(elem_3, { color: '#1AB394' });
+
+
+            });
+        </script> 	
+	
+	
+	
+	
+	
+	
+	
+	
+<script>
+
+        function handleRadioEvent(thiss){
+        	   var x=thiss.id;
+
+        	   if(!(x>=1 &&  x<=105))
+        	            $('.radio1').hide();
+
+        	            $("#blk-"+ x).slideDown();
+
+        	    for(var a=0;a<105;a++){
+        	        if(a!=x && a!=41 && a!=40 && a!=42 && a!=43)
+        	    $("#blk-"+a).slideUp();
+        	    if(x==41)
+        	    $("#blk-40").slideUp();
+        	    if(x==40)
+        	    $("#blk-41").slideUp();
+        	    if(x==42)
+        	    $("#blk-43").slideUp();
+        	    if(x==43)
+        	    $("#blk-42").slideUp();
+        	    }
+        	    
+        	     if(x==94){
+        	    $("#blk-40").slideUp();
+        	    $("#blk-41").slideUp();
+        	    $("#blk-42").slideUp();
+        	    $("#blk-43").slideUp();
+        	    }
+        	     if(x==40){
+             	$("#blk-94").slideUp();
+             	$("#blk-41").slideUp();
+             	$("#blk-42").slideUp();
+             	$("#blk-43").slideUp();
+             	}
+        	     if(x==42){
+                $("#blk-94").slideUp();
+                $("#blk-41").slideUp();
+                $("#blk-40").slideUp();
+                $("#blk-43").slideUp();
+                }
+        	     if(x==43){
+                $("#blk-94").slideUp();
+                $("#blk-41").slideUp();
+                $("#blk-42").slideUp();
+                $("#blk-40").slideUp();
+                }
+        	     if(x==41){
+                $("#blk-94").slideUp();
+                $("#blk-40").slideUp();
+                $("#blk-42").slideUp();
+                $("#blk-43").slideUp();
+                }
+        	     
+        	    $("#blk-"+x).slideDown();
+        }
+
+		function submitOrder() {
+			var validator = $("#addEvent").validate({
+				rules : {
+					eventName : {
+						required : true,
+					},
+					channelName : {
+						required : true,
+					},
 					
-
-					$("#submitButton").click(function() {
-						submitForm();
-					});
+					startDate : {
+						required : true,
+					},
+					endDate : {
+						required : true,
+					},
 					
-					var radioButtons = $('form#addpartnerform input[type="radio"]');
-					/* alert(" radio buttons length: "+radioButtons.length);
-					alert(" radio buttons value: "+radioButtons[0].value);
-					alert(" radio buttons  id: "+radioButtons[0].id);
-					alert(" radio buttons  name: "+radioButtons[0].name);
-					alert(" radio buttons  classname: "+radioButtons[0].className); */
-					  for(i=0;i<radioButtons.length;i++)
-					{
-						/* alert(" Getting name : "+radioButtons[i].name);
-				       alert("Getting value of radio button "+'${map[radioButtons[i].name]}');
-					 */
-					 var temp="partner."+radioButtons[i].name;
-					/*  alert("Temp value : "+temp);
-					 alert(" getting temp value from map : "+'${map[temp]}') */
-				       if('${map[temp]}'==radioButtons[i].value)
-					   {
-					   $('#'+radioButtons[i].id).prop("checked", true).trigger(
-												"click");
-												}
-				    }
-
-					/* $("#getSelected").click(function () {
-					 console.log(pick.getValues());
-					 }); */
-
-					var val = {
-						01 : {
-							id : 01,
-							text : 'Andhra Pradesh'
-						},
-						02 : {
-							id : 02,
-							text : 'Andaman and Nicobar Islands'
-						},
-						03 : {
-							id : 03,
-							text : 'Arunachal Pradesh'
-						},
-						04 : {
-							id : 04,
-							text : 'Assam'
-						},
-						05 : {
-							id : 05,
-							text : 'Chhattisgarh'
-						},
-						06 : {
-							id : 06,
-							text : 'Chandigarh'
-						},
-						07 : {
-							id : 07,
-							text : 'Dadra and Nagar Haveli'
-						},
-						08 : {
-							id : 08,
-							text : 'Daman and Diu'
-						},
-						09 : {
-							id : 09,
-							text : 'Delhi'
-						},
-						10 : {
-							id : 10,
-							text : 'Goa'
-						},
-						11 : {
-							id : 11,
-							text : 'Gujarat'
-						},
-						12 : {
-							id : 12,
-							text : 'Haryana'
-						},
-						13 : {
-							id : 13,
-							text : 'Himachal Pradesh'
-						},
-						14 : {
-							id : 14,
-							text : 'Jammu and Kashmir'
-						},
-						15 : {
-							id : 15,
-							text : 'Jharkhand'
-						},
-						16 : {
-							id : 16,
-							text : 'Karnataka'
-						},
-						17 : {
-							id : 17,
-							text : 'Kerala'
-						},
-						18 : {
-							id : 18,
-							text : 'Lakshadweep'
-						},
-						19 : {
-							id : 19,
-							text : 'Madhya Pradesh'
-						},
-						20 : {
-							id : 20,
-							text : 'Maharashtra'
-						},
-						21 : {
-							id : 21,
-							text : 'Manipur'
-						},
-						22 : {
-							id : 22,
-							text : 'Meghalaya'
-						},
-						23 : {
-							id : 23,
-							text : 'Mizoram'
-						},
-						24 : {
-							id : 24,
-							text : 'Nagaland'
-						},
-						25 : {
-							id : 25,
-							text : 'Odisha'
-						},
-						26 : {
-							id : 26,
-							text : 'Punjab'
-						},
-						27 : {
-							id : 27,
-							text : 'Pondicherry'
-						},
-						28 : {
-							id : 28,
-							text : 'Rajasthan'
-						},
-						29 : {
-							id : 29,
-							text : 'Sikkim'
-						},
-						30 : {
-							id : 30,
-							text : 'Tamil Nadu'
-						},
-						31 : {
-							id : 31,
-							text : 'Telangana'
-						},
-						32 : {
-							id : 32,
-							text : 'Tripura'
-						},
-						33 : {
-							id : 33,
-							text : 'Uttar Pradesh'
-						},
-						34 : {
-							id : 34,
-							text : 'Uttarakhand'
-						},
-						35 : {
-							id : 35,
-							text : 'West Bengal'
-						}
-					};
-
-					var pick = $("#pickList").pickList({
-						data : val
-					});
-				});
-
-		var nameAvailability = true;
-
-		function checkOnBlur() {
-			var partner = document.getElementById("partnerName").value;
-			$.ajax({
-				url : "ajaxPartnerCheck.html?partner=" + partner,
-				success : function(res) {
-					if (res == "false" && partner.pcId == 0) {
-						nameAvailability = false;
-						$("#partnerNameMessage").html(
-								"Partner Name  already exist");
-					} else {
-						nameAvailability = true;
-						$("#partnerNameMessage").html(
-								"Partner Name   available");
-					}
+				},
+				messages : {
+					eventName : "Event Name Should Be Entered !",
+					channelName : "Channel Name Should be Selected !",
+					startDate : "Select a Starting Date !",
+					endDate : "select an Ending Date !"
 				}
 			});
 		}
-		function submitForm() {
-			var validator = $("#addpartnerform")
-					.validate(
-							{
-								rules : {
-									pcName : {
-										required : true,
-										number : false,
-									},
-									maxReturnAcceptance : {
-										required : true,
-										min : 1,
-										max : 100,
-										number : true,
-									},
-									maxRTOAcceptance : {
-										required : true,
-										min : 1,
-										max : 100,
-										number : true,
-									},
-									toggler : {
-										required : true
-									},
-									startcycleday : {
-										required : function(element) {
-											return (getRole() == 'paymentcycle');
-										},
-										number : true,
-										min : 1,
-										max : 31,
-
-									},
-									paycycleduration : {
-										required : function(element) {
-											return (getRole() == 'paymentcycle');
-										},
-										number : true,
-										min : 1,
-										max : 31,
-
-									},
-									paydaysfromstartday : {
-										required : function(element) {
-											return (getRole() == 'paymentcycle');
-										},
-										number : true,
-										min : 1,
-										max : 31,
-
-									},
-									monthlypaydate : {
-										required : function(element) {
-											return (getRole() == 'monthly');
-										},
-										number : true,
-										min : 1,
-										max : 31,
-
-									}
-								},
-								errorElement : "span",
-								messages : {
-									pcName : " Enter partner name",
-									maxReturnAcceptance : "Max return required between 1 and 100",
-									maxRTOAcceptance : "RTO acceptance required between 1 and 100",
-									toggler : "Please select any Payment Cycle"
-								}
-							});
-			if (validator.form() && nameAvailability) {
-				alert("Calling form submit");// validation perform
-				$('form#addpartnerform').submit();
-			}
-		}
-		function getRole() {
-			return $("#addpartnerform").find("input[type=radio]:checked").val();
-		}
-
-		//Code for state selection module
 	</script>
+	
+	
+<script type="text/javascript">
+    $(document).ready(function(){
+    	//alert("ready");
+        $("[name=toggler]").click(function(){
+
+   var x=this.id;
+
+   if(!(x>=1 &&  x<=95))
+            $('.radio1').hide();
+
+            $("#blk-"+ x).slideDown();
+
+    for(var a=0;a<95;a++){
+        if(a!=x && a!=41 && a!=40 && a!=42 && a!=43)
+    $("#blk-"+a).slideUp();
+    if(x==41)
+    $("#blk-40").slideUp();
+    if(x==40)
+    $("#blk-41").slideUp();
+    if(x==42)
+    $("#blk-43").slideUp();
+    if(x==43)
+    $("#blk-42").slideUp();
+    }
+    alert(x);
+     if(x==94){
+    $("#blk-40").slideUp();
+    $("#blk-41").slideUp();
+    $("#blk-42").slideUp();
+    $("#blk-43").slideUp();
+    }
+    $("#blk-"+x).slideDown();
+        });
+
+  
+  
+$("#nr-switch").change(function() {
+    if(this.checked) {
+            $('.radio5').hide();
+            $("#nr-switch-sec").slideDown();
+    }
+ else
+ {
+  
+            $("#nr-switch-sec").slideUp();
+   
+  
+ }
+ });
+ 
+  
+        $('#paymentField').change(function () {
+            $('.payment-box').hide();
+            $('#'+$(this).val()).fadeIn();
+        });
+        $('#data_1 .input-group.date').datepicker({
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true
+            });
+    });
+</script>
+<script type="text/javascript">
+	div = {
+		show: function(elem) {
+			document.getElementById(elem).style.visibility = 'visible';
+		},
+		hide: function(elem) {
+			document.getElementById(elem).style.visibility = 'hidden';
+		}
+	}	
+</script>
+
+
+
+	
 </body>
 </html>

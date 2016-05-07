@@ -40,8 +40,16 @@
     }
     function onclickConfigurepartner(value) {
     	var urltogo="";
-    urltogo='addPartner.html?partnerName='+value;
-    location.href=urltogo;
+    	if(value.localeCompare("Jabong") != 0){
+    		if(value.localeCompare("Myntra") != 0){
+    			urltogo='addPartner.html?partnerName='+value;
+    		}else{
+    			urltogo='addMyntra.html?partnerName='+value;
+    		}
+    	}else{
+    		urltogo='addJabong.html?partnerName='+value;
+    	}    	
+    	location.href=urltogo;
     	
        /*  $.ajax({
         	

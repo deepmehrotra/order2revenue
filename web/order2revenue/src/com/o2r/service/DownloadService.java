@@ -83,6 +83,18 @@ public class DownloadService {
 		Writer.write(response, worksheet,fileName);
 	}
 	
+	public void downloadProductConfigXLS(HttpServletResponse response) throws ClassNotFoundException {
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet worksheet = workbook.createSheet("ProductConfigReport");
+		int startRowIndex = 0;
+		int startColIndex = 0;
+		Layouter.buildReport(worksheet, startRowIndex, startColIndex , "ProductConfigReport");
+		String fileName = "ProductConfigReport.xls";
+		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
+		response.setContentType("application/vnd.ms-excel");
+		Writer.write(response, worksheet,fileName);
+	}
+	
 	public void downloadOrderPOXLS(HttpServletResponse response) throws ClassNotFoundException {
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet worksheet = workbook.createSheet("OrderPOSheet");

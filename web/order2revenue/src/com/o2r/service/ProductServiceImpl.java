@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.o2r.dao.ProductDao;
 import com.o2r.helper.CustomException;
 import com.o2r.model.Product;
+import com.o2r.model.ProductConfig;
 
 /**
  * @author Deep Mehortra
@@ -29,8 +30,13 @@ public class ProductServiceImpl implements ProductService {
 public void addProduct(Product product ,int sellerId)throws CustomException {
 	System.out.println("Inside add order OrderServiceImpl awb :"+product.getProductName());
 	productDao.addProduct(product,sellerId);
-
 }
+
+@Override
+@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public void addProductConfig(ProductConfig productConfig, int sellerId) {
+		productDao.addProductConfig(productConfig, sellerId);
+	}
 
 @Override
 public List<Product> listProducts(int sellerId,int pageNo)throws CustomException {

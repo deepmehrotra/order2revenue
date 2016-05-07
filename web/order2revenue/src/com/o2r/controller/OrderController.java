@@ -102,6 +102,8 @@ public class OrderController {
 				downloadService.downloadReturnXLS(response);
 			} else if (sheetvalue.equals("productSummary")) {
 				downloadService.downloadProductXLS(response);
+			}else if (sheetvalue.equals("productConfigSummary")) {
+				downloadService.downloadProductConfigXLS(response);
 			} else if (sheetvalue.equals("inventorySummary")) {
 				downloadService.downloadInventoryXLS(response);
 			} else if (sheetvalue.equals("debitNoteSummary")) {
@@ -237,6 +239,12 @@ public class OrderController {
 					break;
 				case "productSummary":
 					model.put("productMap", saveContents.saveProductContents(
+							files.get(0), sellerId, applicationPath));
+					model.put("mapType", "productMap");
+					// saveContents.saveProductContents(files.get(0),sellerId);
+					break;
+				case "productConfigSummary":
+					model.put("productMap", saveContents.saveProductConfigContents(
 							files.get(0), sellerId, applicationPath));
 					model.put("mapType", "productMap");
 					// saveContents.saveProductContents(files.get(0),sellerId);

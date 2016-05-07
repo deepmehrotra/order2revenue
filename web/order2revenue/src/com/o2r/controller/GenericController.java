@@ -184,6 +184,7 @@ public class GenericController {
 		System.out.println(" Values in global search header :searchCriteria : "
 				+ searchCriteria + "  -->searchString : " + searchString + " "
 				+ "startDate : " + startDate + " endDate  " + endDate);
+
 		if(searchString != null && searchString.length() != 0){
 			if (searchCriteria.equals("customerName")
 					|| searchCriteria.equals("customerCity")
@@ -206,6 +207,28 @@ public class GenericController {
 					orderlist = ConverterClass.prepareListofBean(temporaryorderlist);
 	
 			}
+
+		
+		if (searchCriteria.equals("customerName")
+				|| searchCriteria.equals("customerCity")
+				|| searchCriteria.equals("customerEmail")
+				|| searchCriteria.equals("customerPhnNo") && searchString != null) {
+			orderlist = ConverterClass
+					.prepareListofBean(orderService.findOrdersbyCustomerDetails(
+							searchCriteria, searchString,sellerId));
+		}else{
+			orderlist = ConverterClass
+					.prepareListofBean(orderService.findOrders(
+							searchCriteria, searchString,sellerId));
+		}
+		if (searchCriteria.equals("orderDate") && startDate != null
+				&& endDate != null) {
+			orderlist = new ArrayList<OrderBean>();
+			temporaryorderlist = orderService.findOrdersbyDate(searchCriteria,startDate, endDate, sellerId);
+			if (temporaryorderlist != null && temporaryorderlist.size() != 0)
+				orderlist = ConverterClass.prepareListofBean(temporaryorderlist);
+
+		}
 		}
 		model.put("searchOrderList", orderlist);
 		}catch(CustomException ce){

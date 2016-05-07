@@ -2,6 +2,8 @@ package com.o2r.bean;
 
 import java.util.Date;
 
+import com.o2r.model.ProductConfig;
+
 public class ProductBean {
 	private int productId;
 	private String productName;
@@ -19,6 +21,9 @@ public class ProductBean {
 	private float breadth;
 	private float volume;
 	private float volWeight;
+	private ProductConfig productConfig;
+	
+	
 	public int getProductId() {
 		return productId;
 	}
@@ -114,6 +119,12 @@ public class ProductBean {
 	}
 	public void setVolWeight(float volWeight) {
 		this.volWeight = volWeight;
+	}
+	public ProductConfig getProductConfig() {
+		return productConfig;
+	}
+	public void setProductConfig(ProductConfig productConfig) {
+		this.productConfig = productConfig;
 	}
 
 

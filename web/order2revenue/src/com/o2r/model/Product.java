@@ -60,6 +60,9 @@ public class Product {
 	private float volume;
 	@Column
 	private float volWeight;
+	
+	@OneToMany(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
+	private List<ProductConfig> productConfig;
 
 	public Seller getSeller() {
 		return seller;
@@ -168,6 +171,12 @@ public class Product {
 	}
 	public void setVolWeight(float volWeight) {
 		this.volWeight = volWeight;
+	}
+	public List<ProductConfig> getProductConfig() {
+		return productConfig;
+	}
+	public void setProductConfig(List<ProductConfig> productConfig) {
+		this.productConfig = productConfig;
 	}
 
 
