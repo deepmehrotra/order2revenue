@@ -169,16 +169,18 @@ public class GenericController {
 		String searchCriteria = null;
 		String searchString =null;
 		
-		try{
+		try{		
 		sellerId = HelperClass.getSellerIdfromSession(request);
 		searchCriteria = request.getParameter("searchCriteria");
 		searchString = request.getParameter("searchString");
+		
 		if (request.getParameter("startDate") != null
 				&& request.getParameter("endDate") != null
 				&& (request.getParameter("startDate").length() != 0)
 				&& (request.getParameter("endDate").length() != 0)) {
 			startDate = new Date(request.getParameter("startDate"));
 			endDate = new Date(request.getParameter("endDate"));
+			orderlist = new ArrayList<OrderBean>();
 		}
 
 		System.out.println(" Values in global search header :searchCriteria : "
@@ -198,38 +200,19 @@ public class GenericController {
 						.prepareListofBean(orderService.findOrders(
 								searchCriteria, searchString,sellerId));
 			}
-		}else{
+		}else{			
 			if (searchCriteria.equals("orderDate") && startDate != null
-					&& endDate != null) {
-				orderlist = new ArrayList<OrderBean>();
-				temporaryorderlist = orderService.findOrdersbyDate(searchCriteria,startDate, endDate, sellerId);
-				if (temporaryorderlist != null && temporaryorderlist.size() != 0)
-					orderlist = ConverterClass.prepareListofBean(temporaryorderlist);
-	
+					&& endDate != null) {				
+				temporaryorderlist = orderService.findOrdersbyDate(
+						searchCriteria,startDate, endDate, sellerId);	
+			}else if(searchCriteria.equalsIgnoreCase("dateofPayment") && startDate != null
+					&& endDate != null){
+				temporaryorderlist = orderService.findOrdersbyPaymentDate(
+						searchCriteria, startDate, endDate,sellerId);
 			}
-
-		
-		if (searchCriteria.equals("customerName")
-				|| searchCriteria.equals("customerCity")
-				|| searchCriteria.equals("customerEmail")
-				|| searchCriteria.equals("customerPhnNo") && searchString != null) {
-			orderlist = ConverterClass
-					.prepareListofBean(orderService.findOrdersbyCustomerDetails(
-							searchCriteria, searchString,sellerId));
-		}else{
-			orderlist = ConverterClass
-					.prepareListofBean(orderService.findOrders(
-							searchCriteria, searchString,sellerId));
-		}
-		if (searchCriteria.equals("orderDate") && startDate != null
-				&& endDate != null) {
-			orderlist = new ArrayList<OrderBean>();
-			temporaryorderlist = orderService.findOrdersbyDate(searchCriteria,startDate, endDate, sellerId);
 			if (temporaryorderlist != null && temporaryorderlist.size() != 0)
 				orderlist = ConverterClass.prepareListofBean(temporaryorderlist);
-
-		}
-		}
+		}		
 		model.put("searchOrderList", orderlist);
 		}catch(CustomException ce){
 			logger.error("findGlobalOrders exception : " + ce.toString());

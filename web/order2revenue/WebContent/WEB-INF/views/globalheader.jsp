@@ -45,31 +45,20 @@
                            </div>
                            
                         <div class="top-search-60 f-left TopSearch-box1"  id="newdiv" >
-
                             	<input type="text" name="searchString" class="form-control" >
-
-                            	<input type="text" name="searchString" class="form-control" placeholder="Search String">
-
                         </div>
                         
                         <div class="top-search-60 f-left TopSearch-box2" id="option2" style="display:none">
                             <div class="input-group f-left" >
                             	<div class="input-group date">
-
                                 	<span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" name="startDate" id="startDate" class="form-control" >
-
-                                	<span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" name="startDate" id="startDate" class="form-control" value="startDate">
 
                             	</div>
                             </div>
                             <div class="input-group f-left" >
                             	<div class="input-group date">
-
                                 	<span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text"  name="endDate" id="endDate" class="form-control" >
-
-                                	<span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text"  name="endDate" id="endDate" class="form-control" value="endDate">
-
-                            	</div>
+								</div>
                             </div>
                         </div>  
                                               

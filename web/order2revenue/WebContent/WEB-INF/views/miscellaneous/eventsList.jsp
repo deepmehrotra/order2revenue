@@ -155,8 +155,12 @@
 		}	
 		current.checked=true;
 		checkedValue = current.value;
+		if(checkedValue > 0){
+			alert("Select The Event You Want To Create Duplicate !!!");
+		}
 		getURI = function() {
 			location.href = "addDuplicateEvent.html?eventId="+checkedValue;
+					
 		}
 	}
 	

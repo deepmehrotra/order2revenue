@@ -263,7 +263,7 @@
                             <div class="col-sm-12"  style="overflow-x: scroll;">
                             <div id="tbdata1">
                             <p id="selectTriggerFilter"><label><b>Filter:</b></label><br></p>
-                                <table id="filterTable" style="width:50%" class="table table-striped table-bordered table-hover dataTables-example" >
+                                <table id="filterTable" style="width:100%" class="table table-striped table-bordered table-hover dataTables-example" >
                                 <thead>
                                 <tr>
                                     <th>#</th>
