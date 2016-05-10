@@ -185,9 +185,9 @@ public class Layouter {
 		headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
 
 		// Create the column headers
-		HSSFRow rowHeaderq = worksheet.createRow((short) startRowIndex +2);
-		rowHeaderq.setHeight((short) 500);
-		HSSFRow rowHeader = worksheet.createRow((short) startRowIndex +3);
+		/*HSSFRow rowHeaderq = worksheet.createRow((short) startRowIndex +2);
+		rowHeaderq.setHeight((short) 500);*/
+		HSSFRow rowHeader = worksheet.createRow((short) startRowIndex +2);
 		rowHeader.setHeight((short) 500);
 
 		HSSFCell cell1 = rowHeader.createCell(startColIndex+0);
@@ -256,34 +256,34 @@ public class Layouter {
 		cell15.setCellStyle(headerCellStyle);
 
 		HSSFCell cell16 = rowHeader.createCell(startColIndex+15);
-		cell16.setCellValue("Delivery Date");
+		cell16.setCellValue("Quantity");
 		cell16.setCellStyle(headerCellStyle);
 
 
 		HSSFCell cell17 = rowHeader.createCell(startColIndex+16);
-		cell17.setCellValue("Quantity");
+		cell17.setCellValue("Net Rate");
 		cell17.setCellStyle(headerCellStyle);
 
 		HSSFCell cell18 = rowHeader.createCell(startColIndex+17);
-		cell18.setCellValue("Net Rate");
+		cell18.setCellValue("Customer Email");
 		cell18.setCellStyle(headerCellStyle);
 
 		HSSFCell cell19 = rowHeader.createCell(startColIndex+18);
-		cell19.setCellValue("Customer Email");
+		cell19.setCellValue("Customer Phone No");
 		cell19.setCellStyle(headerCellStyle);
 
 		HSSFCell cell20 = rowHeader.createCell(startColIndex+19);
-		cell20.setCellValue("Customer Phone No");
+		cell20.setCellValue("Customer City");
 		cell20.setCellStyle(headerCellStyle);
 
 		HSSFCell cell21 = rowHeader.createCell(startColIndex+20);
-		cell21.setCellValue("Customer City");
+		cell21.setCellValue("Customer Address");
 		cell21.setCellStyle(headerCellStyle);
 
 		HSSFCell cell22 = rowHeader.createCell(startColIndex+21);
-		cell22.setCellValue("Customer Address");
+		cell22.setCellValue("PinCode");
 		cell22.setCellStyle(headerCellStyle);
-
+		
 		HSSFCell cell23 = rowHeader.createCell(startColIndex+22);
 		cell23.setCellValue("Tax Category");
 		cell23.setCellStyle(headerCellStyle);
@@ -291,6 +291,7 @@ public class Layouter {
 		HSSFCell cell24 = rowHeader.createCell(startColIndex+23);
 		cell24.setCellValue("Seller Notes");
 		cell24.setCellStyle(headerCellStyle);
+
 
 
 

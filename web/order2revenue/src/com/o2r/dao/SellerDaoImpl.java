@@ -9,6 +9,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,7 @@ import com.o2r.model.AccountTransaction;
 import com.o2r.model.Plan;
 import com.o2r.model.Seller;
 import com.o2r.model.State;
+import com.o2r.model.StateDeliveryTime;
 
 /**
  * @author Deep Mehrotra
@@ -85,7 +87,8 @@ public class SellerDaoImpl implements SellerDao {
 	public Seller getSeller(String email)throws CustomException {
 		// return (Seller) sessionFactory.getCurrentSession().get(Seller.class,
 		// sellerid);
-		Seller seller = null;
+		System.out.println(" Getting seelrthrough email : "+email);
+	Seller seller = null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -96,7 +99,8 @@ public class SellerDaoImpl implements SellerDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			
+			System.out.println(" Error getting seller  ");
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.getSellerByEmailError, new Date(), 3, GlobalConstant.getSellerByEmailErrorCode, e);
 			
@@ -212,7 +216,7 @@ public class SellerDaoImpl implements SellerDao {
 
 	}
 
-	AccountTransaction payementStatus(Plan plan) {
+	public AccountTransaction payementStatus(Plan plan) {
 		AccountTransaction at = new AccountTransaction();
 		at.setTransactionDate(new Date());
 		at.setTransactionAmount(plan.getPlanPrice());
@@ -228,5 +232,39 @@ public class SellerDaoImpl implements SellerDao {
 
 		return (List<State>) sessionFactory.getCurrentSession()
 				.createCriteria(State.class).list();
+	}
+	
+	@Override
+	public int getStateDeliveryTime(int sellerId,String statename)throws CustomException {
+		// return (Seller) sessionFactory.getCurrentSession().get(Seller.class,
+		// sellerid);
+		System.out.println(" Getting seelrthrough email : "+statename);
+		List<StateDeliveryTime> listofstates=null;
+		int returntime=0;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(StateDeliveryTime.class).add(
+					Restrictions.eq("seller.id", sellerId));
+			criteria.createAlias("state", "state",
+					CriteriaSpecification.LEFT_JOIN).add(Restrictions.eq("state.stateName", statename))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			listofstates=criteria.list();
+
+			if ( listofstates!= null && listofstates.size() != 0) 
+				returntime=listofstates.get(0).getDeliveryTime();
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			System.out.println(" Error getting state elivery time  ");
+			e.printStackTrace();
+			log.error(e);
+			throw new CustomException(GlobalConstant.getSellerByEmailError, new Date(), 3, GlobalConstant.getSellerByEmailErrorCode, e);
+			
+//			System.out.println(" Seller  DAO IMPL :" + e.getLocalizedMessage());
+//			e.printStackTrace();
+		}
+		return returntime;
 	}
 }

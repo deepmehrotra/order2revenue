@@ -55,6 +55,10 @@ public class OrderDaoImpl implements OrderDao {
 	private TaxDetailService taxDetailService;
 	@Autowired
 	private PartnerService partnerService;
+	@Autowired
+	private AreaConfigDao areaConfigDao;
+	@Autowired
+	private SellerDao sellerDao;
 
 	private final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
 
@@ -81,6 +85,7 @@ public class OrderDaoImpl implements OrderDao {
 		try {
 			product = productService.getProduct(order.getProductSkuCode(),
 					sellerId);
+			calculateDeliveryDate(order,sellerId);
 			if (product != null) {
 				try {
 					System.out
@@ -617,12 +622,13 @@ public class OrderDaoImpl implements OrderDao {
 
 				// Reverting Tax information for Return Order
 				taxDetails = new TaxDetail();
-				taxDetails.setBalanceRemaining(-order.getOrderTax().getTax());
+				taxDetails.setBalanceRemaining(-(order.getOrderTax().getTax()/order.getQuantity())*orderReturn.getReturnorrtoQty());
 				taxDetails.setParticular(order.getOrderTax().getTaxCategtory());
 				taxDetails.setUploadDate(orderReturn.getReturnDate());
 				taxDetailService.addMonthlyTaxDetail(session, taxDetails,
 						sellerId);
 
+				order.getOrderTax().setToxToReturn((order.getOrderTax().getTax()/order.getQuantity())*orderReturn.getReturnorrtoQty());
 				order.setFinalStatus("Actionable");
 				order.setNetSaleQuantity(order.getQuantity()
 						- order.getOrderReturnOrRTO().getReturnorrtoQty());
@@ -1623,7 +1629,11 @@ public class OrderDaoImpl implements OrderDao {
 		float dwchargetemp = 0;
 		float shippingCharges = 0;
 		String tempStr = null;
-		String state = order.getCustomer().getCustomerAddress();
+		//String state = order.getCustomer().getCustomerAddress();
+		String state=areaConfigDao.getCityFromZipCode(order.getCustomer().getZipcode());
+		if(!(state.equalsIgnoreCase("Chennai")||state.equalsIgnoreCase("Delhi")||
+				state.equalsIgnoreCase("Mumbai")||state.equalsIgnoreCase("Kolkata")))
+		state =areaConfigDao.getStateFromZipCode(order.getCustomer().getZipcode());
 		double SP = order.getOrderSP();
 		StringBuffer temp = new StringBuffer("");
 		Map<String, Float> chargesMap = new HashMap<String, Float>();
@@ -1912,8 +1922,8 @@ public class OrderDaoImpl implements OrderDao {
 				chargesType = partner.getNrnReturnConfig().getRetCharBRType();
 				shippingfee = partner.getNrnReturnConfig().isRetCharBRShipFee();
 				servicetax = partner.getNrnReturnConfig().isRetCharBRSerTax();
-				fixedfee = partner.getNrnReturnConfig().isRetCharSFFF();
-				paycollcharges = partner.getNrnReturnConfig().isRetCharSFPCC();
+				fixedfee = partner.getNrnReturnConfig().isRetCharBRFF();
+				paycollcharges = partner.getNrnReturnConfig().isRetCharBRPCC();
 			}
 
 			break;
@@ -1937,8 +1947,8 @@ public class OrderDaoImpl implements OrderDao {
 				chargesType = partner.getNrnReturnConfig().getRTOCharBRType();
 				shippingfee = partner.getNrnReturnConfig().isRTOCharBRShipFee();
 				servicetax = partner.getNrnReturnConfig().isRTOCharBRSerTax();
-				fixedfee = partner.getNrnReturnConfig().isRTOCharSFFF();
-				paycollcharges = partner.getNrnReturnConfig().isRTOCharSFPCC();
+				fixedfee = partner.getNrnReturnConfig().isRTOCharBRFF();
+				paycollcharges = partner.getNrnReturnConfig().isRTOCharBRPCC();
 			}
 
 			break;
@@ -1983,8 +1993,8 @@ public class OrderDaoImpl implements OrderDao {
 				chargesType = partner.getNrnReturnConfig().getCanCharBRType();
 				shippingfee = partner.getNrnReturnConfig().isCanCharBRShipFee();
 				servicetax = partner.getNrnReturnConfig().isCanCharBRSerTax();
-				fixedfee = partner.getNrnReturnConfig().isCanCharSFFF();
-				paycollcharges = partner.getNrnReturnConfig().isCanCharSFPCC();
+				fixedfee = partner.getNrnReturnConfig().isCanCharBRFF();
+				paycollcharges = partner.getNrnReturnConfig().isCanCharBRPCC();
 			}
 
 			break;
@@ -2008,8 +2018,8 @@ public class OrderDaoImpl implements OrderDao {
 				chargesType = partner.getNrnReturnConfig().getRepCharBRType();
 				shippingfee = partner.getNrnReturnConfig().isRepCharBRShipFee();
 				servicetax = partner.getNrnReturnConfig().isRepCharBRSerTax();
-				fixedfee = partner.getNrnReturnConfig().isRepCharSFFF();
-				paycollcharges = partner.getNrnReturnConfig().isRepCharSFPCC();
+				fixedfee = partner.getNrnReturnConfig().isRepCharBRFF();
+				paycollcharges = partner.getNrnReturnConfig().isRepCharBRPCC();
 			}
 
 			break;
@@ -2034,8 +2044,8 @@ public class OrderDaoImpl implements OrderDao {
 				chargesType = partner.getNrnReturnConfig().getPDCharBRType();
 				shippingfee = partner.getNrnReturnConfig().isPDCharBRShipFee();
 				servicetax = partner.getNrnReturnConfig().isPDCharBRSerTax();
-				fixedfee = partner.getNrnReturnConfig().isPDCharSFFF();
-				paycollcharges = partner.getNrnReturnConfig().isPDCharSFPCC();
+				fixedfee = partner.getNrnReturnConfig().isPDCharBRFF();
+				paycollcharges = partner.getNrnReturnConfig().isPDCharBRPCC();
 			}
 			break;
 
@@ -2050,7 +2060,8 @@ public class OrderDaoImpl implements OrderDao {
 							.get(fixedAmount) : 0);
 		} else if (chargesType.equalsIgnoreCase(GlobalConstant.variableString)) {
 			System.out.println(" Variable amount in Return : "+varPercentSP
-					+" varPercentFixAmt :"+varPercentFixAmt+" varPercentPCC : "+varPercentPCC);
+					+" varPercentFixAmt :"+varPercentFixAmt+" varPercentPCC : "+varPercentPCC
+					+"shipping fee : "+shippingfee+" fixedfee  :"+fixedfee+" paycollcharges "+paycollcharges);
 			totalcharge = totalcharge
 					+ (float) (chargesMap.containsKey(varPercentSP) ? (chargesMap
 							.get(varPercentSP) * (order.getOrderSP()/order.getQuantity()) / 100)
@@ -2062,10 +2073,10 @@ public class OrderDaoImpl implements OrderDao {
 					+ (float) (shippingfee ? order.getShippingCharges() : 0);
 			totalcharge = totalcharge
 					+ (float) (fixedfee ? order.getFixedfee() : 0);
-			/*
-			 * totalcharge = totalcharge + (float) (paycollcharges ?
-			 * order.getPccAmount() : 0);
-			 */
+			
+			 totalcharge = totalcharge + (float) (paycollcharges ?
+			 order.getPccAmount() : 0);
+			 
 
 			totalcharge = totalcharge
 					+ (float) (chargesMap.containsKey(varPercentPCC) ? (chargesMap
@@ -2152,13 +2163,36 @@ public class OrderDaoImpl implements OrderDao {
 		float serviceTax = chargesMap.containsKey("serviceTax") ? chargesMap
 				.get("serviceTax") : 0;
 
-				System.out.println(" Total return charge calculated : "+totalcharge+" Service tax applied  : "+serviceTax);
+				System.out.println(" Total return charge calculated : "+totalcharge+"Reverse shiping fee : "+revShippingFee +" Service tax applied  : "+serviceTax);
 		if (serviceTax > 0) {
 			totalcharge = totalcharge + (totalcharge * serviceTax) / 100;
 		}
 		return totalcharge;
 	}
 	
+	private boolean calculateDeliveryDate(Order order, int sellerId)
+	{
+		boolean result=false;
+		String pincode=order.getCustomer().getZipcode();
+		String statename=areaConfigDao.getStateFromZipCode(pincode);
+		Date temp=null;
+		try {
+			int deliverydays=sellerDao.getStateDeliveryTime(sellerId, statename);
+			temp=(Date)order.getShippedDate().clone();
+			temp.setDate(temp.getDate()+deliverydays);
+			order.setDeliveryDate(temp);
+			System.out.println(" Delivery days : "+deliverydays);
+			System.out.println(" Shipped date : "+order.getShippedDate());
+			System.out.println(" Delivery date : "+order.getDeliveryDate());
+			result=true;
+		} catch (CustomException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		System.out.println(" State from order :  "+statename);
+		return result;
+	}
 	@Override
 	public List<ChannelSalesDetails> findChannelOrdersbyDate(String string,
 			Date startDate, Date endDate, int sellerIdfromSession) {

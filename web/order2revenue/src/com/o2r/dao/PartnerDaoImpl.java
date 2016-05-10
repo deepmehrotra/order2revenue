@@ -49,7 +49,9 @@ public class PartnerDaoImpl implements PartnerDao {
 				Query gettingTaxId = session
 						.createSQLQuery(chargesDeleteQuery)
 						.setParameter("configId", partner.getNrnReturnConfig().getConfigId());
+				gettingTaxId.executeUpdate();
 				session.saveOrUpdate(partner);
+				
 			} else {
 				Seller seller = (Seller) session.get(Seller.class, sellerId);
 				seller.getPartners().add(partner);

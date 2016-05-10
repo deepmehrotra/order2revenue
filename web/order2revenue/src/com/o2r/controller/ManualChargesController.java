@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.undo.CannotUndoException;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -75,6 +74,7 @@ public class ManualChargesController {
 				&& request.getParameter("mcId").toString().length() != 0) {
 			mcId = Integer.parseInt(request.getParameter("mcId"));
 		}
+		System.out.println(" paidAmouny :  "+request.getParameter("paidAmount"));
 		String chargesCategory = request.getParameter("chargesCategory") != null ? request
 				.getParameter("chargesCategory") : "";
 		String chargesDesc = request.getParameter("chargesDesc") != null ? request

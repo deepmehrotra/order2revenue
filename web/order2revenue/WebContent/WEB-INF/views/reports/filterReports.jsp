@@ -96,9 +96,12 @@
 
                                 <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="Partner" name="headers"> Partner </label></div>
 
-                                <div class="checkbox"><label> <input type="checkbox"  class="checkbox1" value="recievedDate" name="headers"> Recieved Date </label></div>
+                                <div class="checkbox"><label> <input type="checkbox"  class="checkbox1" value="recievedDate" name="headers"> Received Date </label></div>
 
                                 <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="status" name="headers"> Status</label></div>
+                                  
+                                 <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="netRate" name="headers"> Net Receivable </label></div>
+                             
 
                             </div>
 

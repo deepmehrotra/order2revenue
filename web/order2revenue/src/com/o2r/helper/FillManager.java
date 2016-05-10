@@ -119,7 +119,13 @@ public class FillManager {
 					HSSFCell cell = row.createCell(startColIndex+j);
 					cell.setCellValue(datasource.get(i-2).getOrderPayment().getPaymentDifference());
 					cell.setCellStyle(bodyCellStyle);
-				}	
+				}
+				else if(headers[j].equals("netRate"))
+				{
+					HSSFCell cell = row.createCell(startColIndex+j);
+					cell.setCellValue(datasource.get(i-2).getNetRate());
+					cell.setCellStyle(bodyCellStyle);
+				}
 				else if(headers[j].equals("returnCharges"))
 				{
 					HSSFCell cell = row.createCell(startColIndex+j);

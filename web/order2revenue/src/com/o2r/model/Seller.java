@@ -86,7 +86,7 @@ public class Seller {
 	private List<TaxCategory> taxCategories = new ArrayList<>();
 
 	// Seller to state wise delivery time OneToMany
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
 	private List<StateDeliveryTime> stateDeliveryTime = new ArrayList<StateDeliveryTime>();
 
 	// Seller to SellerAccount OneToOne
