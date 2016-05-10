@@ -40,6 +40,7 @@ $('#download').click(function(){
 									    	<option value="paymentSummary">Payment Summary</option>									    	
 									    	<option value="poPaymentSummary">PO Payment Summary</option>
 									    	<option value="returnSummary">Return Summary</option>
+									    	<option value="returnSummary">GatePass</option>
 									    	<option value="debitNoteSummary">Debit Note</option>
 									    	<option value="productSummary">Product Summary</option>
 									    	<option value="productConfigSummary">Product Config Summary</option>
@@ -66,6 +67,7 @@ $('#download').click(function(){
 									    	<option value="orderPoSummary">Order PO Summary</option>
 									    	<option value="paymentSummary">Payment Summary</option> 
 									    	<option value="returnSummary">Return Summary</option>
+									    	<option value="returnSummary">GatePass</option>
 									    	<option value="debitNoteSummary">Debit Note</option>
 									    	<option value="productSummary">Product Summary</option>
 									    	<option value="productConfigSummary">Product Config Summary</option>
