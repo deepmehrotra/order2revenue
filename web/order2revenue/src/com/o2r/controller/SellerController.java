@@ -56,7 +56,7 @@ public class SellerController {
 	Map<String, Object> model = new HashMap<String, Object>();
 
 	@RequestMapping(value = "/saveSeller", method = RequestMethod.POST)
-	public ModelAndView saveOrder(
+	public ModelAndView registerSeller(
 			@ModelAttribute("command") SellerBean sellerBean,
 			BindingResult result,HttpServletRequest request) {
 		log.info("*** saveOrder starts ***");
@@ -181,7 +181,7 @@ public class SellerController {
 			log.error(e);
 			return new ModelAndView("globalErorPage", model);
 		}
-		return new ModelAndView("selleraccount/addSeller", model);
+		return new ModelAndView("redirect:/seller/dashboard.html");
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)

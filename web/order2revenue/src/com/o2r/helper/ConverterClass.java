@@ -624,6 +624,7 @@ public class ConverterClass {
 			customer.setCustomerEmail(customerBean.getCustomerEmail());
 			customer.setCustomerName(customerBean.getCustomerName());
 			customer.setCustomerPhnNo(customerBean.getCustomerPhnNo());
+			customer.setZipcode(customerBean.getZipcode());
 
 		}
 
@@ -640,6 +641,8 @@ public class ConverterClass {
 			customerBean.setCustomerEmail(customer.getCustomerEmail());
 			customerBean.setCustomerName(customer.getCustomerName());
 			customerBean.setCustomerPhnNo(customer.getCustomerPhnNo());
+			customerBean.setZipcode(customer.getZipcode());
+
 		}
 
 		return customerBean;

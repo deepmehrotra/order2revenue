@@ -116,6 +116,7 @@ public class Order {
 	private OrderTax orderTax;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Seller seller;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	private PaymentUpload paymentUpload;
 
@@ -126,6 +127,10 @@ public class Order {
 	public void setPaymentUpload(PaymentUpload paymentUpload) {
 		this.paymentUpload = paymentUpload;
 	}
+
+	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+	private PaymentUpload upload;
+
 
 	public Customer getCustomer() {
 		return customer;

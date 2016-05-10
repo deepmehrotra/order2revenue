@@ -391,9 +391,9 @@ public class GlobalConstant {
 	public static final String fixedfeegt250lt500 = "fixedfeegt250lt500";
 	public static final String fixedfeegt500 = "fixedfeegt500";
 	public static final String fixedfeegt500Big = "fixedfeegt500Big";
-	public static final String fixedfeegt500lt1000 = "fixedfeegt500lt100";
-	public static final String fixedfeegt1000lt10000 = "fixedfeegt250lt500";
-	public static final String fixedfeegt10000 = "fixedfeegt1000";
+	public static final String fixedfeegt500lt1000 = "fixedfeegt500lt1000";
+	public static final String fixedfeegt1000lt10000 = "fixedfeegt1000lt10000";
+	public static final String fixedfeegt10000 = "fixedfeegt10000";
 	public static final String percentSPPCC = "percentSPPCC";
 	public static final String fixedAmtPCC = "fixedAmtPCC";
 
@@ -434,10 +434,10 @@ public class GlobalConstant {
 	public static final String CancellationChargesSellerFaultVariableFixedAmt = "canCharSFVarFixedAmt";
 	public static final String CancellationChargesSellerFaultVariablePercentPCC = "canCharSFPercentPCC";
 	
-	public static final String CancellationChargesSellerFaultBRTDVariablePercentSP = "canCharSFBRTDPercentSP";
-	public static final String CancellationChargesSellerFaultBRTDFixedAmount = "canCharSFBRTDFixedAmt";
-	public static final String CancellationChargesSellerFaultBRTDVariableFixedAmt = "canCharSFVarBRTDFixedAmt";
-	public static final String CancellationChargesSellerFaultBRTDVariablePercentPCC = "canCharSFBRTDPercentPCC";
+	public static final String CancellationChargesSellerFaultBRTDVariablePercentSP = "canCharSFBFRTDPercentSP";
+	public static final String CancellationChargesSellerFaultBRTDFixedAmount = "canCharSFBFRTDFixedAmt";
+	public static final String CancellationChargesSellerFaultBRTDVariableFixedAmt = "canCharSFBFRTDVarFixedAmt";
+	public static final String CancellationChargesSellerFaultBRTDVariablePercentPCC = "canCharSFBFRTDPercentPCC";
 	
 	// Cancellation Chager Buyer Return Configuration Strings
 	public static final String CancellationChargesBuyerReturnFixedAmount = "canCharBRFixedAmt";
@@ -445,26 +445,26 @@ public class GlobalConstant {
 	public static final String CancellationChargesBuyerReturnVariablePercentSP = "canCharBRPercentSP";
 
 	// Replacement Charges Configuration
-	public static final String ReplacementChargesSellerFaultVariablePercentSP = "replacementCharSFPercentSP";
-	public static final String ReplacementChargesSellerFaultFixedAmount = "replacementCharSFFixedAmt";
-	public static final String ReplacementChargesSellerFaultVariableFixedAmt = "replacementCharSFFixedAmt";
-	public static final String ReplacementChargesSellerFaultVariablePercentPCC = "replacementCharSFPercentPCC";
+	public static final String ReplacementChargesSellerFaultVariablePercentSP = "repCharSFPercentSP";
+	public static final String ReplacementChargesSellerFaultFixedAmount = "repCharSFFixedAmt";
+	public static final String ReplacementChargesSellerFaultVariableFixedAmt = "repCharSFVarFixedAmt";
+	public static final String ReplacementChargesSellerFaultVariablePercentPCC = "repCharSFPercentPCC";
 	
 	// Replacement Chages Buyer Return Configuration Strings
-	public static final String ReplacementChargesBuyerReturnFixedAmount = "replacementCharBRFixedAmt";
-	public static final String ReplacementChargesBuyerReturnVariableFixedAmt = "replacementCharBRVarFixedAmt";
-	public static final String ReplacementChargesBuyerReturnVariablePercentSP = "replacementCharBRPercentSP";
+	public static final String ReplacementChargesBuyerReturnFixedAmount = "repCharBRFixedAmt";
+	public static final String ReplacementChargesBuyerReturnVariableFixedAmt = "repCharBRVarFixedAmt";
+	public static final String ReplacementChargesBuyerReturnVariablePercentSP = "repCharBRPercentSP";
 
 	// Partial Delivery Charges Configuration
-	public static final String PartialDelChargesSellerFaultVariablePercentSP = "partialDelCharSFPercentSP";
-	public static final String PartialDelChargesSellerFaultFixedAmount = "partialDelCharSFFixedAmt";
-	public static final String PartialDelChargesSellerFaultVariableFixedAmt = "partialDelCharSFVarFixedAmt";
-	public static final String PartialDelChargesSellerFaultVariablePercentPCC = "partialDelCharSFPercentPCC";
+	public static final String PartialDelChargesSellerFaultVariablePercentSP = "PDCharSFPercentSP";
+	public static final String PartialDelChargesSellerFaultFixedAmount = "PDCharSFFixedAmt";
+	public static final String PartialDelChargesSellerFaultVariableFixedAmt = "PDCharSFVarFixedAmt";
+	public static final String PartialDelChargesSellerFaultVariablePercentPCC = "PDCharSFPercentPCC";
 
 	// PartialDelivery Chager Buyer Return Configuration Strings
-	public static final String PartialDelChargesBuyerReturnFixedAmount = "partialDelCharBRFixedAmt";
-	public static final String PartialDelChargesBuyerReturnVariableFixedAmt = "partialDelCharBRVarFixedAmt";
-	public static final String PartialDelChargesBuyerReturnVariablePercentSP = "partialDelCharBRPercentSP";
+	public static final String PartialDelChargesBuyerReturnFixedAmount = "PDCharBRFixedAmt";
+	public static final String PartialDelChargesBuyerReturnVariableFixedAmt = "PDCharBRVarFixedAmt";
+	public static final String PartialDelChargesBuyerReturnVariablePercentSP = "PDCharBRPercentSP";
 	
 	// Reverse Shipping Fee Configuration
 	public static final String ReverseShippingFeePercentShipFee = "revShipFeePCC";

@@ -128,9 +128,10 @@ public class SaveContents {
 				validaterow = true;
 				entry = worksheet.getRow(rowIndex);
 				errorMessage = new StringBuffer("Row : " + (rowIndex - 2));
-				// System.out.println(entry.getCell(0).toString());
-				// System.out.println(entry.getCell(1).getDateCellValue());
-				// System.out.println(entry.getCell(2).toString());
+				System.out.println(" Row index : "+(rowIndex - 2));
+				System.out.println(entry.getCell(0).toString());
+				System.out.println(entry.getCell(1).getDateCellValue());
+				 System.out.println(entry.getCell(2).toString());
 				// System.out.println(entry.getCell(3).toString());
 				// System.out.println(entry.getCell(4).toString());
 				order = new OrderBean();
@@ -298,7 +299,7 @@ public class SaveContents {
 					errorMessage.append(" Shipping Date is null ");
 					validaterow = false;
 				}
-				if (entry.getCell(15) != null
+				/*if (entry.getCell(15) != null
 						&& entry.getCell(15).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(15))) {
 						order.setDeliveryDate(entry.getCell(15)
@@ -311,14 +312,14 @@ public class SaveContents {
 				} else {
 					errorMessage.append(" Delivery Date is null ");
 					validaterow = false;
-				}
-				if (entry.getCell(16) != null
-						&& entry.getCell(16).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+				}*/
+				if (entry.getCell(15) != null
+						&& entry.getCell(15).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
 						if ((int) Float
-								.parseFloat(entry.getCell(16).toString()) != 0) {
+								.parseFloat(entry.getCell(15).toString()) != 0) {
 							order.setQuantity((int) Float.parseFloat(entry
-									.getCell(16).toString()));
+									.getCell(15).toString()));
 						} else {
 							errorMessage.append(" Quantity can not be 0 ");
 							validaterow = false;
@@ -335,15 +336,18 @@ public class SaveContents {
 
 				if (partner != null && partner.getNrnReturnConfig() != null
 						&& !partner.getNrnReturnConfig().isNrCalculator()) {
+
 				System.out.println(" NR calculator state: "+partner.getNrnReturnConfig().isNrCalculator());
 				event=eventsService.isEventActiive(order.getOrderDate(), partner.getPcName(), sellerId);
 				if(event != null){
 				if(event.getNrnReturnConfig().getNrCalculatorEvent().equalsIgnoreCase("fixed")){
-					if (entry.getCell(17) != null
-							&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					
+					if (entry.getCell(16) != null
+							&& entry.getCell(16).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+
 						try {
 							order.setGrossNetRate(Double.parseDouble(entry
-									.getCell(17).toString()));
+									.getCell(16).toString()));
 						} catch (NumberFormatException e) {
 							errorMessage.append(" Net Rate should be number ");
 							validaterow = false;
@@ -356,11 +360,11 @@ public class SaveContents {
 				}else{
 					if (partner != null && partner.getNrnReturnConfig() != null
 						&& !partner.getNrnReturnConfig().isNrCalculator()) {
-						if (entry.getCell(17) != null
-								&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						if (entry.getCell(16) != null
+								&& entry.getCell(16).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
 								order.setGrossNetRate(Double.parseDouble(entry
-										.getCell(17).toString()));
+										.getCell(16).toString()));
 							} catch (NumberFormatException e) {
 								errorMessage.append(" Net Rate should be number ");
 								validaterow = false;
@@ -372,23 +376,34 @@ public class SaveContents {
 					}
 				}
 
+				if (entry.getCell(17) != null
+						&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					System.out.println(" Email from sheet ************ "+rowIndex+":"+entry.getCell(17).toString());
+					customerBean.setCustomerEmail(entry.getCell(17).toString());
+				}
 				if (entry.getCell(18) != null
 						&& entry.getCell(18).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					System.out.println(" Email from sheet ************ "+rowIndex+":"+entry.getCell(18).toString());
-					customerBean.setCustomerEmail(entry.getCell(18).toString());
+					customerBean.setCustomerPhnNo(entry.getCell(18).toString());
 				}
 				if (entry.getCell(19) != null
 						&& entry.getCell(19).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					customerBean.setCustomerPhnNo(entry.getCell(19).toString());
+					customerBean.setCustomerCity(entry.getCell(19).toString());
 				}
 				if (entry.getCell(20) != null
 						&& entry.getCell(20).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					customerBean.setCustomerCity(entry.getCell(20).toString());
+					customerBean.setCustomerAddress(entry.getCell(20)
+							.toString());
 				}
 				if (entry.getCell(21) != null
 						&& entry.getCell(21).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					customerBean.setCustomerAddress(entry.getCell(21)
-							.toString());
+					try
+					{
+					customerBean.setZipcode(String.valueOf((long)entry.getCell(21).getNumericCellValue()));
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+					}
 				}
 				if (entry.getCell(22) != null
 						&& entry.getCell(22).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -1143,7 +1158,8 @@ public class SaveContents {
 					validaterow = false;
 				}
 				if (entry.getCell(2) != null
-						&& StringUtils.isNotBlank(entry.getCell(2).toString())) {
+						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK)
+						{
 					Product product = productService.getProduct(entry
 							.getCell(2).toString(), sellerId);
 					if (product == null) {
@@ -1156,26 +1172,23 @@ public class SaveContents {
 					errorMessage.append(" Product SKU is null ");
 					validaterow = false;
 				}
+				try
+				{
 				if (entry.getCell(4) != null
 						&& StringUtils.isNotBlank(entry.getCell(4).toString())
-						&& (int) Float.parseFloat(entry.getCell(4).toString()) != 0) {
-					try {
+						&& (int)entry.getCell(4).getNumericCellValue() != 0) {
+					
 						payment.setNegativeAmount(Math.abs(Double.parseDouble(entry
 								.getCell(4).toString())));
 						totalnegative = totalnegative
 								+ Math.abs(Double.parseDouble(entry.getCell(4)
 										.toString()));
-						System.out.println(" ******toatal totalnegative :"
-								+ totalnegative);
-					} catch (NumberFormatException e) {
-						errorMessage
-								.append(" Negative value should be number ");
-						validaterow = false;
+					
 					}
-				} else if (entry.getCell(3) != null
+				else if (entry.getCell(3) != null
 						&& StringUtils.isNotBlank(entry.getCell(3).toString())
 						&& (int) Float.parseFloat(entry.getCell(3).toString()) != 0) {
-					try {
+					
 						payment.setPositiveAmount(Double.parseDouble(entry
 								.getCell(3).toString()));
 						totalpositive = totalpositive
@@ -1183,13 +1196,15 @@ public class SaveContents {
 										.toString());
 						System.out.println(" ******toatal psitive :"
 								+ totalpositive);
-					} catch (NumberFormatException e) {
-						errorMessage
-								.append(" Recieved amount should be number ");
-						validaterow = false;
-					}
+					
 				} else {
 					errorMessage.append(" Amount should be given ");
+					validaterow = false;
+				}
+				}
+				catch (NumberFormatException e) {
+					errorMessage
+							.append(" Recieved amount should be number ");
 					validaterow = false;
 				}
 				if (entry.getCell(5) != null

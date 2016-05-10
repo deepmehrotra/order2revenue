@@ -58,10 +58,13 @@ public class OrderDaoImpl implements OrderDao {
 	private TaxDetailService taxDetailService;
 	@Autowired
 	private PartnerService partnerService;
-	//@Autowired
-	//private AreaConfigDao areaConfigDao;
 	@Autowired
 	private EventsService eventsService;
+
+	@Autowired
+	private AreaConfigDao areaConfigDao;
+	@Autowired
+	private SellerDao sellerDao;
 
 	private final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
 
@@ -89,7 +92,8 @@ public class OrderDaoImpl implements OrderDao {
 		try {
 			product = productService.getProduct(order.getProductSkuCode(),
 					sellerId);
-			//calculateDeliveryDate(order);
+
+			calculateDeliveryDate(order,sellerId);
 			if (product != null) {
 				try {
 					System.out
@@ -1658,7 +1662,11 @@ public class OrderDaoImpl implements OrderDao {
 		float dwchargetemp = 0;
 		float shippingCharges = 0;
 		String tempStr = null;
-		String state = order.getCustomer().getCustomerAddress();
+		//String state = order.getCustomer().getCustomerAddress();
+		String state=areaConfigDao.getCityFromZipCode(order.getCustomer().getZipcode());
+		if(!(state.equalsIgnoreCase("Chennai")||state.equalsIgnoreCase("Delhi")||
+				state.equalsIgnoreCase("Mumbai")||state.equalsIgnoreCase("Kolkata")))
+		state =areaConfigDao.getStateFromZipCode(order.getCustomer().getZipcode());
 		double SP = order.getOrderSP();
 		StringBuffer temp = new StringBuffer("");
 		Map<String, Float> chargesMap = new HashMap<String, Float>();
@@ -1841,7 +1849,14 @@ public class OrderDaoImpl implements OrderDao {
 			} else if (volWeight > 5000) {
 				temp = new StringBuffer(volarea);
 				volarea.append("vwgt1500lt5000");
-				
+				/*System.out.println(" Charges for lesstthan 500 : "+dwchargetemp);
+				float range = (float) Math.ceil((deadWeight - 500) / 500);
+				System.out.println(" Range : "+range);
+				dwchargetemp = dwchargetemp
+						+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
+								.get(temp.toString()) : 0));
+				System.out.println(" Charges for greater than 500 : "+chargesMap
+								.get(temp.toString()));*/
 				vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap
 						.get(volarea.toString()) : 0;
 						System.out.println(" vol Charges for lesstthan 500 : "+vwchargetemp);	
@@ -2195,6 +2210,7 @@ public class OrderDaoImpl implements OrderDao {
 		return totalcharge;
 	}
 	
+
 	/*private boolean calculateDeliveryDate(Order order)
 	{
 		boolean result=false;
@@ -2204,6 +2220,31 @@ public class OrderDaoImpl implements OrderDao {
 		System.out.println(" State from order :  "+statename);
 		return result;
 	}*/
+
+	private boolean calculateDeliveryDate(Order order, int sellerId)
+	{
+		boolean result=false;
+		String pincode=order.getCustomer().getZipcode();
+		String statename=areaConfigDao.getStateFromZipCode(pincode);
+		Date temp=null;
+		try {
+			int deliverydays=sellerDao.getStateDeliveryTime(sellerId, statename);
+			temp=(Date)order.getShippedDate().clone();
+			temp.setDate(temp.getDate()+deliverydays);
+			order.setDeliveryDate(temp);
+			System.out.println(" Delivery days : "+deliverydays);
+			System.out.println(" Shipped date : "+order.getShippedDate());
+			System.out.println(" Delivery date : "+order.getDeliveryDate());
+			result=true;
+		} catch (CustomException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		System.out.println(" State from order :  "+statename);
+		return result;
+	}
+
 	@Override
 	public List<ChannelSalesDetails> findChannelOrdersbyDate(String string,
 			Date startDate, Date endDate, int sellerIdfromSession) {

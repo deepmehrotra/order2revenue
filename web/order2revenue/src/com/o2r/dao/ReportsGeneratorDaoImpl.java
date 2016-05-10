@@ -22,9 +22,6 @@ import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Order;
-import com.o2r.model.Seller;
-import com.o2r.model.TaxCategory;
-import com.o2r.model.UploadReport;
 
 /**
  * @author Deep Mehrotra

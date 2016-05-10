@@ -112,7 +112,8 @@ public class PartnerController {
 							.getValue()[0]));
 					nrnReturncharge.setChargeName(temp);
 					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
-					chargeList.add(nrnReturncharge);
+					partnerBean.getNrnReturnConfig().getCharges().add(nrnReturncharge);
+					//chargeList.add(nrnReturncharge);
 				} else if (entry.getKey().contains("local")) {
 					partnerBean.getNrnReturnConfig().setLocalList(Arrays.toString(entry.getValue()));
 				} else if (entry.getKey().contains("zonal")) {
@@ -133,7 +134,7 @@ public class PartnerController {
 		 * .getNoofdaysfromshippeddate());
 		 * System.out.println(" Seller id :"+partnerBean.getPcId());
 		 */
-		partnerBean.getNrnReturnConfig().setCharges(chargeList);
+		//partnerBean.getNrnReturnConfig().setCharges(chargeList);
 		//configobj.setCharges(chargeList);
 		//partnerBean.setNrnReturnConfig(configobj);
 		if (!partnerBean.isIsshippeddatecalc()) {
@@ -248,23 +249,26 @@ public class PartnerController {
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
 		List<Category> categoryObjects = null;
-		datemap.put("default", "Select payment from");
+		datemap.put("true", "Select payment from");
 		datemap.put("true", "Shipping Date");
 		datemap.put("false", "Delivery Date");
 		PartnerBean partner = new PartnerBean();
 		try {
 			categoryObjects = categoryService.listCategories(HelperClass
 					.getSellerIdfromSession(request));
+			if(categoryObjects!=null)
 			for (Category cat : categoryObjects) {
 				categoryList.add(cat.getCatName());
 			}
 		} catch (CustomException ce) {
 			log.error("addPartner exception : " + ce.toString());
+			ce.printStackTrace();
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e);
 		}
 		String partnerName = request.getParameter("partnerName");
@@ -606,8 +610,10 @@ public class PartnerController {
 		Map<String, Object> datemap = new HashMap<String, Object>();
 		PartnerBean pbean=null;
 		Map<String,Float> chargeMap=new HashMap<String, Float>();
+		Map<String,Float> categoryMap=new HashMap<String, Float>();
+		List<Category> categoryObjects = null;
 		try {
-			datemap.put("default", "Select payment from");
+			datemap.put("true", "Select payment from");
 			datemap.put("true", "Shipping Date");
 			datemap.put("false", "Delivery Date");
 			model.put("datemap", datemap);
@@ -619,6 +625,13 @@ public class PartnerController {
 			{
 				chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
 			}
+			
+			categoryObjects = categoryService.listCategories(HelperClass
+					.getSellerIdfromSession(request));
+			for (Category cat : categoryObjects) {
+				categoryMap.put(cat.getCatName(), chargeMap.get(cat.getCatName()));
+			}
+			model.put("categoryMap", categoryMap);
 			model.put("partner", pbean);
 			model.put("chargeMap", chargeMap);
 		} catch (CustomException ce) {
@@ -627,6 +640,12 @@ public class PartnerController {
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			log.error("editPartner exception : " + e.getLocalizedMessage());
+			model.put("errorMessage", e.getMessage());
+			
 		}
 		log.info("*** editPartner exit ***");
 		return new ModelAndView("initialsetup/addPartner", model);

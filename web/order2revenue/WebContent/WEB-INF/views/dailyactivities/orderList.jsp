@@ -164,7 +164,9 @@
 														<td><fmt:formatDate value="${order.paymentDueDate}"
 																pattern="MMM dd ,YY" /></td>
 														<td>${order.quantity}</td>
-														<td>${order.netRate}</td>
+														<td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.netRate}" /></td>
 														<td>${order.orderPayment.paymentDifference}</td>
 														<td>${order.status}</td>
 														<td class="tooltip-demo"><a href="#"

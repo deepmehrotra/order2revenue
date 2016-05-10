@@ -74,6 +74,7 @@ public class ManualChargesController {
 				&& request.getParameter("mcId").toString().length() != 0) {
 			mcId = Integer.parseInt(request.getParameter("mcId"));
 		}
+		System.out.println(" paidAmouny :  "+request.getParameter("paidAmount"));
 		String chargesCategory = request.getParameter("chargesCategory") != null ? request
 				.getParameter("chargesCategory") : "";
 		String chargesDesc = request.getParameter("chargesDesc") != null ? request

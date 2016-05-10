@@ -10,6 +10,7 @@ public class CustomerBean {
 	private String customerEmail;
 	private String customerCity;
 	private String customerAddress;
+	private String zipcode;
 	private int sellerId;
 	
 	public String getCustomerName() {
@@ -53,5 +54,11 @@ public class CustomerBean {
 	}
 	public void setSellerId(int sellerId) {
 		this.sellerId = sellerId;
+	}
+	public String getZipcode() {
+		return zipcode;
+	}
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
 	}
 }

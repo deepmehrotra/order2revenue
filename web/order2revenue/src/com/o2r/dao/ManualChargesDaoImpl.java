@@ -13,7 +13,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.o2r.controller.AdminController;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.ManualCharges;
@@ -102,7 +101,7 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 	 //sellerId=4;
 		Double returnValue=0.0;
 		Seller seller=null;
-		ManualCharges mc=null;
+		List<ManualCharges> mc=null;
 		try
 		{
 			Session session=sessionFactory.openSession();
@@ -115,17 +114,18 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 			   if(criteria.list()!=null&&criteria.list().size()!=0)
 			   {
 			   seller=(Seller)criteria.list().get(0);
-			   mc=seller.getManualCharges().get(0);
+			   mc=seller.getManualCharges();
 			   }
-			   if(mc!=null)
+			   for(ManualCharges manchar:mc)
 			   {
-				   returnValue=mc.getPaidAmount();
+				   returnValue=returnValue+manchar.getPaidAmount();
 			   }
 			   session.getTransaction().commit();
 			   session.close();
 		}
 		catch(Exception e)
-		{
+		{ 
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.getMCforPaymentIDError, new Date(), 3, GlobalConstant.getMCforPaymentIDErrorCode, e);
 			/*System.out.println(" Exception in getting Manual Charges list :"+e.getLocalizedMessage());*/

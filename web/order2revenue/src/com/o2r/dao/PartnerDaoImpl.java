@@ -52,7 +52,7 @@ public class PartnerDaoImpl implements PartnerDao {
 						.setParameter("configId", partner.getNrnReturnConfig().getConfigId());
 				gettingTaxId.executeUpdate();
 				session.saveOrUpdate(partner);
-				System.out.println("*********** Charges deleted with ID : "+id);
+
 			} else {
 				Seller seller = (Seller) session.get(Seller.class, sellerId);
 				seller.getPartners().add(partner);
