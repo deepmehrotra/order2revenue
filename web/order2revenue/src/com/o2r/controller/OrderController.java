@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -219,7 +218,7 @@ public class OrderController {
 					// saveContents.saveOrderContents(files.get(0),sellerId);
 					break;
 				case "orderPoSummary":
-					model.put("orderPoMap", saveContents.saveOrderContents(
+					model.put("orderPoMap", saveContents.saveOrderPOContents(
 							files.get(0), sellerId, applicationPath));
 					model.put("mapType", "orderPoMap");
 					// saveContents.saveOrderPOContents(files.get(0),sellerId);

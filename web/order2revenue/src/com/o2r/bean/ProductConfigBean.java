@@ -7,8 +7,8 @@ public class ProductConfigBean {
 	private int productConfigId;
 	private int productId;
 	private String productName;
-	private String productSKuCode;
-	private String channelSKuRef;
+	private String productSkuCode;
+	private String channelSkuRef;
 	private float commision;
 	private float taxSp;
 	private float taxPo;
@@ -41,17 +41,17 @@ public class ProductConfigBean {
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
-	public String getProductSKuCode() {
-		return productSKuCode;
+	public String getProductSkuCode() {
+		return productSkuCode;
 	}
-	public void setProductSKuCode(String productSKuCode) {
-		this.productSKuCode = productSKuCode;
+	public void setProductSkuCode(String productSkuCode) {
+		this.productSkuCode = productSkuCode;
 	}
-	public String getChannelSKuRef() {
-		return channelSKuRef;
+	public String getChannelSkuRef() {
+		return channelSkuRef;
 	}
-	public void setChannelSKuRef(String channelSKuRef) {
-		this.channelSKuRef = channelSKuRef;
+	public void setChannelSkuRef(String channelSkuRef) {
+		this.channelSkuRef = channelSkuRef;
 	}
 	public float getCommision() {
 		return commision;

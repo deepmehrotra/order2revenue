@@ -36,6 +36,7 @@ import com.o2r.model.OrderRTOorReturn;
 import com.o2r.model.OrderTimeline;
 import com.o2r.model.Partner;
 import com.o2r.model.Product;
+import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
 import com.o2r.model.TaxDetail;
 import com.o2r.service.EventsService;
@@ -332,6 +333,149 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	@Override
+	public void addPO(Order order, int sellerId) throws CustomException {
+		
+		order.setPO(true);
+		order.setOrderDate(new Date());
+		System.out.println(" PO id " + order.getSubOrderID());
+		System.out.println(" Order Partner " + order.getPcName());
+		System.out.println(" Invoice id " + order.getInvoiceID());
+		
+		Seller seller = null;
+		Date reconciledate = null;
+		// Customer customer = null;
+		Session session = null;
+		Partner partner = null;
+		Product product = null;
+		try {
+			
+			ProductConfig productConfig = productService.getProductConfig(
+					order.getProductSkuCode(), order.getPcName(), sellerId);
+			if (productConfig != null) {
+				order.setProductConfig(productConfig);
+				product = productService.getProduct(productConfig.getProductSkuCode(),
+						sellerId);
+			}
+			if (product != null) {
+				try {
+					System.out
+							.println(" Before starting the session in orderdaolimpl");
+					session = sessionFactory.openSession();
+					session.beginTransaction();
+					Criteria criteria = session.createCriteria(Seller.class)
+							.add(Restrictions.eq("id", sellerId));
+					criteria.createAlias("partners", "partner",
+							CriteriaSpecification.LEFT_JOIN)
+							.add(Restrictions.eq("partner.pcName",
+									order.getPcName()).ignoreCase())
+							.setResultTransformer(
+									CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+					seller = (Seller) criteria.list().get(0);
+					/*float taxpercent = taxDetailService.getTaxCategory(
+							order.getOrderTax().getTaxCategtory(), sellerId)
+							.getTaxPercent();*/
+					if (seller.getPartners() != null
+							&& seller.getPartners().size() != 0) {
+						partner = seller.getPartners().get(0);
+						/*reconciledate = getreconciledate(order, seller
+								.getPartners().get(0), order.getOrderDate());
+						if (reconciledate != null)
+							order.setPaymentDueDate(reconciledate);
+						System.out
+								.println(" after settinf rec date delivery date :"
+										+ order.getDeliveryDate());*/
+					}
+					/* populating derived values of order */
+					order.setStatus("Shipped");
+					order.setEossValue((order.getPoPrice() * order.getProductConfig().getDiscount()) / 100);
+					order.setGrossNetRate(order.getPoPrice() - order.getEossValue());
+					order.setNetRate(order.getGrossNetRate() * order.getQuantity());
+					double taxvalue =  (float)
+							(order.getPoPrice() - (order.getPoPrice() * 100 /
+									(100 + order.getProductConfig().getTaxPo())));					
+					
+					order.setOrderMRP(order.getOrderMRP() * order.getQuantity());
+					order.setOrderSP(order.getOrderSP() * order.getQuantity());
+					
+					order.setDiscount(order.getProductConfig().getDiscount());
+					order.getOrderTax().setTax(taxvalue);
+
+					order.setTotalAmountRecieved(order.getNetRate());
+					order.setFinalStatus("In Process");
+					// Set Order Timeline
+					OrderTimeline timeline = new OrderTimeline();
+					// populating tax related values of order
+					System.out.println(" Tax before pr:"
+							+ order.getOrderTax().getTax());
+					order.setPr(order.getNetRate()
+							- order.getOrderTax().getTax());
+					
+					// Reducing Product Inventory For Order
+					productService.updateInventory(order.getProductConfig().getProductSkuCode(),
+							0, 0, order.getQuantity(), false, sellerId);
+					/*
+					 * product=productService.getProduct(order.getProductSkuCode(
+					 * ), sellerId); product.setQuantity(product.getQuantity()-
+					 * order.getQuantity()); session.saveOrUpdate(product);
+					 */
+					
+					// Adding order to the Partner
+					if (partner.getOrders() != null && order.getOrderId() == 0) {
+						partner.getOrders().add(order);
+					}
+					// Setting Gross Profit for Order
+					order.setGrossProfit((order.getPr() * order.getQuantity()) - 
+							(order.getProductConfig().getProductPrice() * order.getQuantity()));
+					
+					if (order.getOrderId() != 0) {
+						System.out.println(" Saving edited order");
+						// Code for order timeline
+						timeline.setEventDate(new Date());
+						timeline.setEvent(" Order Edited");
+						order.getOrderTimeline().add(timeline);
+						order.setLastActivityOnOrder(new Date());
+						session.merge(order);
+					} else {
+						System.out
+								.println(" ****************Saving new  order delivery date :"
+										+ order.getDeliveryDate());
+						// Code for order timeline
+						timeline.setEvent("Order Created");
+						order.setLastActivityOnOrder(new Date());
+						timeline.setEventDate(new Date());
+						order.getOrderTimeline().add(timeline);
+						order.setSeller(seller);
+						seller.getOrders().add(order);
+						session.saveOrUpdate(partner);
+						session.saveOrUpdate(seller);  
+					}
+					session.getTransaction().commit();
+					/*
+					 * session.getTransaction().commit(); session.close();
+					 */
+				} catch (Exception e) {
+					// if(session.getTransaction()!=null&&session.getTransaction().isActive())
+					// session.getTransaction().rollback();
+					System.out.println("Inside exception in add order "
+							+ e.getLocalizedMessage() + " message: "
+							+ e.getMessage());
+					e.printStackTrace();
+				} finally {
+					session.close();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e);
+			log.info("Error : " + GlobalConstant.addOrderError);
+			log.info("Error : " + GlobalConstant.addOrderErrorCode);
+			throw new CustomException(GlobalConstant.addOrderError, new Date(),
+					1, GlobalConstant.addOrderErrorCode, e);
+		}
+	}
+
+	
+	@Override
 	public List<Order> listOrders(int sellerId) throws CustomException {
 		// sellerId=4;
 		List<Order> returnlist = null;
@@ -426,6 +570,47 @@ public class OrderDaoImpl implements OrderDao {
 		// orderId);
 	}
 
+	@Override
+	public Order getConsolidatedOrder(String poId, String invoiceId) throws CustomException {
+		Order order = null;
+		List returnList = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.add(Restrictions.eq("subOrderID", poId));
+			criteria.add(Restrictions.eq("invoiceID", invoiceId));
+			criteria.add(Restrictions.eq("isPO", false));
+			
+			returnList = criteria.list();
+			if (returnList != null && returnList.size() != 0
+					&& returnList.get(0) != null) {
+
+				order = (Order) returnList.get(0);
+				Hibernate.initialize(order.getOrderReturnOrRTO());
+				Hibernate.initialize(order.getOrderTax());
+				Hibernate.initialize(order.getOrderPayment());
+				Hibernate.initialize(order.getOrderTimeline());
+				Hibernate.initialize(order.getCustomer());
+			}
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+
+			log.error(e);
+			throw new CustomException(GlobalConstant.getOrderError, new Date(),
+					3, GlobalConstant.getOrderErrorCode, e);
+
+			/*
+			 * System.out.println(" Exception in getting order list :" +
+			 * e.getLocalizedMessage());
+			 */
+		}
+		return order;
+		// return (Order) sessionFactory.getCurrentSession().get(Order.class,
+		// orderId);
+	}
+	
 	@Override
 	public Order getOrder(int orderId, int sellerId) throws CustomException {
 		Order returnorder = null;

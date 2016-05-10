@@ -61,7 +61,7 @@ public class Product {
 	@Column
 	private float volWeight;
 	
-	@OneToMany(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<ProductConfig> productConfig;
 
 	public Seller getSeller() {

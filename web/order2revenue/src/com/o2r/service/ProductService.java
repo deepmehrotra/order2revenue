@@ -13,22 +13,32 @@ import com.o2r.model.ProductConfig;
  */
 public interface ProductService {
 
- public void addProduct(Product product , int sellerId)throws CustomException;
- 
- public void addProductConfig(ProductConfig productConfig , int sellerId);
+	public void addProduct(Product product, int sellerId)
+			throws CustomException;
 
- public List<Product> listProducts(int sellerId,int pageNo)throws CustomException;
+	public void addProductConfig(ProductConfig productConfig, int sellerId);
 
- public List<Product> listProducts(int sellerId)throws CustomException;
+	public List<Product> listProducts(int sellerId, int pageNo)
+			throws CustomException;
 
- public Product getProduct(int orderId)throws CustomException;
+	public List<Product> listProducts(int sellerId) throws CustomException;
 
- public void deleteProduct(Product product,int sellerId)throws CustomException;
+	public Product getProduct(int orderId) throws CustomException;
 
- public void updateInventory(String sku , int currentInventory , int quantoAdd , int quantoSub ,boolean status,int sellerId)throws CustomException;
+	public void deleteProduct(Product product, int sellerId)
+			throws CustomException;
 
- public Product getProduct(String skuCode, int sellerId)throws CustomException;
+	public void updateInventory(String sku, int currentInventory,
+			int quantoAdd, int quantoSub, boolean status, int sellerId)
+			throws CustomException;
 
- public List<Product> getProductwithCreatedDate(Date startDate,Date endDate, int sellerId)throws CustomException;
+	public Product getProduct(String skuCode, int sellerId)
+			throws CustomException;
+
+	public List<Product> getProductwithCreatedDate(Date startDate,
+			Date endDate, int sellerId) throws CustomException;
+
+	public ProductConfig getProductConfig(String skuCode, String channel,
+			int sellerId) throws CustomException;
 
 }

@@ -188,8 +188,8 @@
 																<c:forEach items="${productConfigs}" var="productConfig" varStatus="loop">
 																<tr>
 																	<td>${loop.index+1}</td>
-																	<td>${productConfig.productSKuCode}</td>
-																	<td>${productConfig.channelSKuRef}</td>
+																	<td>${productConfig.productSkuCode}</td>
+																	<td>${productConfig.channelSkuRef}</td>
 																	<td>${productConfig.commision}</td>
 																	<td>${productConfig.taxSp}</td>
 																	<td>${productConfig.taxPo}</td>

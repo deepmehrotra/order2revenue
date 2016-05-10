@@ -1,5 +1,6 @@
 package com.o2r.helper;
 
+import java.awt.Color;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -29,7 +30,8 @@ public class Layouter {
 	 * This doesn't have any data yet. This is your template.
 	 */
 
-	public static void buildReport(HSSFSheet worksheet, int startRowIndex, int startColIndex , String sheetName) {
+	public static void buildReport(HSSFSheet worksheet, int startRowIndex,
+			int startColIndex, String sheetName) {
 		// Set column widths
 		worksheet.setColumnWidth(0, 5000);
 		worksheet.setColumnWidth(1, 5000);
@@ -377,10 +379,11 @@ public class Layouter {
 	public static void buildProductConfigHeaders(HSSFSheet worksheet, int startRowIndex, int startColIndex) {
 		// Create font style for the headers
 		Font font = worksheet.getWorkbook().createFont();
-        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		font.setBoldweight(Font.BOLDWEIGHT_BOLD);
 
-        // Create cell style for the headers
-		HSSFCellStyle headerCellStyle = worksheet.getWorkbook().createCellStyle();
+		// Create cell style for the headers
+		HSSFCellStyle headerCellStyle = worksheet.getWorkbook()
+				.createCellStyle();
 		headerCellStyle.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);
 		headerCellStyle.setFillPattern(CellStyle.FINE_DOTS);
 		headerCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
@@ -390,48 +393,36 @@ public class Layouter {
 		headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
 
 		// Create the column headers
-		HSSFRow rowHeader = worksheet.createRow((short) startRowIndex +2);
+		HSSFRow rowHeader = worksheet.createRow((short) startRowIndex + 2);
 		rowHeader.setHeight((short) 500);
 
-		HSSFCell cell1 = rowHeader.createCell(startColIndex+0);
+		HSSFCell cell1 = rowHeader.createCell(startColIndex + 0);
 		cell1.setCellValue("ProductSKUCode");
 		cell1.setCellStyle(headerCellStyle);
 
-		HSSFCell cell2 = rowHeader.createCell(startColIndex+1);
-		cell2.setCellValue("ChannelSKUReference");
+		HSSFCell cell2 = rowHeader.createCell(startColIndex + 1);
+		cell2.setCellValue("ChannelName");
 		cell2.setCellStyle(headerCellStyle);
 
-		HSSFCell cell3 = rowHeader.createCell(startColIndex+2);
-		cell3.setCellValue("Commision");
+		HSSFCell cell3 = rowHeader.createCell(startColIndex + 2);
+		cell3.setCellValue("ChannelSKUReference");
 		cell3.setCellStyle(headerCellStyle);
 
-		HSSFCell cell4 = rowHeader.createCell(startColIndex+3);
-		cell4.setCellValue("Tax(SP)");
+		HSSFCell cell4 = rowHeader.createCell(startColIndex + 3);
+		cell4.setCellValue("MRP");
 		cell4.setCellStyle(headerCellStyle);
 
-		HSSFCell cell5 = rowHeader.createCell(startColIndex+4);
-		cell5.setCellValue("Tax(PO)");
+		HSSFCell cell5 = rowHeader.createCell(startColIndex + 4);
+		cell5.setCellValue("ProductPrice");
 		cell5.setCellStyle(headerCellStyle);
 
-		HSSFCell cell6 = rowHeader.createCell(startColIndex+5);
-		cell6.setCellValue("EOSS Discount");
+		HSSFCell cell6 = rowHeader.createCell(startColIndex + 5);
+		cell6.setCellValue("Discount");
 		cell6.setCellStyle(headerCellStyle);
 
-		HSSFCell cell7 = rowHeader.createCell(startColIndex+6);
-		cell7.setCellValue("Discount");
+		HSSFCell cell7 = rowHeader.createCell(startColIndex + 6);
+		cell7.setCellValue("EOSS Discount");
 		cell7.setCellStyle(headerCellStyle);
-
-		HSSFCell cell8 = rowHeader.createCell(startColIndex+7);
-		cell8.setCellValue("MRP");
-		cell8.setCellStyle(headerCellStyle);
-
-		HSSFCell cell9 = rowHeader.createCell(startColIndex+8);
-		cell9.setCellValue("SellingPrice");
-		cell9.setCellStyle(headerCellStyle);
-
-		HSSFCell cell10 = rowHeader.createCell(startColIndex+9);
-		cell10.setCellValue("ProductPrice");
-		cell10.setCellStyle(headerCellStyle);
 
 	}
 	
@@ -604,71 +595,52 @@ public class Layouter {
 		headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
 
 		// Create the column headers
-		HSSFRow rowHeader = worksheet.createRow((short) startRowIndex +2);
+		HSSFRow rowHeader = worksheet.createRow((short) startRowIndex + 2);
 		rowHeader.setHeight((short) 500);
 
-		HSSFCell cell1 = rowHeader.createCell(startColIndex+0);
-		cell1.setCellValue("POOrderID");
+		HSSFCell cell1 = rowHeader.createCell(startColIndex + 0);
+		cell1.setCellValue("Channel");
 		cell1.setCellStyle(headerCellStyle);
 
-
-		HSSFCell cell2 = rowHeader.createCell(startColIndex+1);
-		cell2.setCellValue("Order Recieved Date");
+		HSSFCell cell2 = rowHeader.createCell(startColIndex + 1);
+		cell2.setCellValue("PO ID");
 		cell2.setCellStyle(headerCellStyle);
 
-		HSSFCell cell3 = rowHeader.createCell(startColIndex+2);
+		HSSFCell cell3 = rowHeader.createCell(startColIndex + 2);
 		cell3.setCellValue("SkUCode");
 		cell3.setCellStyle(headerCellStyle);
 
-		HSSFCell cell4 = rowHeader.createCell(startColIndex+3);
-		cell4.setCellValue("Partner");
+		HSSFCell cell4 = rowHeader.createCell(startColIndex + 3);
+		cell4.setCellValue("Gross Sale Qty");
 		cell4.setCellStyle(headerCellStyle);
 
-
-		HSSFCell cell5 = rowHeader.createCell(startColIndex+4);
-		cell5.setCellValue("Seal No.");
+		HSSFCell cell5 = rowHeader.createCell(startColIndex + 4);
+		cell5.setCellValue("Rate(Gross PO Price)");
 		cell5.setCellStyle(headerCellStyle);
 
-
-		HSSFCell cell6 = rowHeader.createCell(startColIndex+5);
-		cell6.setCellValue("InvoiceID");
+		HSSFCell cell6 = rowHeader.createCell(startColIndex + 5);
+		cell6.setCellValue("PO MRP/unit");
 		cell6.setCellStyle(headerCellStyle);
 
-
-		HSSFCell cell7 = rowHeader.createCell(startColIndex+6);
-		cell7.setCellValue("Order MRP");
+		HSSFCell cell7 = rowHeader.createCell(startColIndex + 6);
+		cell7.setCellValue("Amount(Net PO Price)");
 		cell7.setCellStyle(headerCellStyle);
 
-		HSSFCell cell8 = rowHeader.createCell(startColIndex+7);
-		cell8.setCellValue("Order SP");
+		HSSFCell cell8 = rowHeader.createCell(startColIndex + 7);
+		cell8.setCellValue("Invoice ID");
 		cell8.setCellStyle(headerCellStyle);
 
-		HSSFCell cell9 = rowHeader.createCell(startColIndex+8);
-		cell9.setCellValue("Shipped Date");
+		HSSFCell cell9 = rowHeader.createCell(startColIndex + 8);
+		cell9.setCellValue("Seal No(AWB)");
 		cell9.setCellStyle(headerCellStyle);
 
-		HSSFCell cell10 = rowHeader.createCell(startColIndex+9);
-		cell10.setCellValue("Delivery Date");
+		HSSFCell cell10 = rowHeader.createCell(startColIndex + 9);
+		cell10.setCellValue("Ship Date");
 		cell10.setCellStyle(headerCellStyle);
 
-		HSSFCell cell11 = rowHeader.createCell(startColIndex+10);
-		cell11.setCellValue("Quantity");
+		HSSFCell cell11 = rowHeader.createCell(startColIndex + 10);
+		cell11.setCellValue("Seller Notes");
 		cell11.setCellStyle(headerCellStyle);
-
-		HSSFCell cell12 = rowHeader.createCell(startColIndex+11);
-		cell12.setCellValue("Net Rate");
-		cell12.setCellStyle(headerCellStyle);
-
-		HSSFCell cell13 = rowHeader.createCell(startColIndex+12);
-		cell13.setCellValue("PO Price");
-		cell13.setCellStyle(headerCellStyle);
-
-		HSSFCell cell14 = rowHeader.createCell(startColIndex+13);
-		cell14.setCellValue("Seller Notes");
-		cell14.setCellStyle(headerCellStyle);
-
-
-
 
 	}
 
@@ -734,13 +706,16 @@ public class Layouter {
 
 	}
 
-	public static void buildPOPaymentHeaders(HSSFSheet worksheet, int startRowIndex, int startColIndex) {
+
+	public static void buildPOPaymentHeaders(HSSFSheet worksheet,
+			int startRowIndex, int startColIndex) {
 		// Create font style for the headers
 		Font font = worksheet.getWorkbook().createFont();
-        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		font.setBoldweight(Font.BOLDWEIGHT_BOLD);
 
-        // Create cell style for the headers
-		HSSFCellStyle headerCellStyle = worksheet.getWorkbook().createCellStyle();
+		// Create cell style for the headers
+		HSSFCellStyle headerCellStyle = worksheet.getWorkbook()
+				.createCellStyle();
 		headerCellStyle.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);
 		headerCellStyle.setFillPattern(CellStyle.FINE_DOTS);
 		headerCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
@@ -750,41 +725,36 @@ public class Layouter {
 		headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
 
 		// Create the column headers
-		HSSFRow rowHeader = worksheet.createRow((short) startRowIndex +2);
+		HSSFRow rowHeader = worksheet.createRow((short) startRowIndex + 2);
 		rowHeader.setHeight((short) 500);
 
-		HSSFCell cell1 = rowHeader.createCell(startColIndex+0);
-		cell1.setCellValue("POOrderId");
+		HSSFCell cell1 = rowHeader.createCell(startColIndex + 0);
+		cell1.setCellValue("Channel");
 		cell1.setCellStyle(headerCellStyle);
 
-		HSSFCell cell2 = rowHeader.createCell(startColIndex+1);
+		HSSFCell cell2 = rowHeader.createCell(startColIndex + 1);
 		cell2.setCellValue("InvoiceID");
 		cell2.setCellStyle(headerCellStyle);
 
-		HSSFCell cell3 = rowHeader.createCell(startColIndex+2);
-		cell3.setCellValue("Partner");
+		HSSFCell cell3 = rowHeader.createCell(startColIndex + 2);
+		cell3.setCellValue("Date of Payment");
 		cell3.setCellStyle(headerCellStyle);
 
-		HSSFCell cell4 = rowHeader.createCell(startColIndex+3);
-		cell4.setCellValue("Gate Pass Id");
+		HSSFCell cell4 = rowHeader.createCell(startColIndex + 3);
+		cell4.setCellValue("Positive Amount");
 		cell4.setCellStyle(headerCellStyle);
 
-		HSSFCell cell5 = rowHeader.createCell(startColIndex+4);
-		cell5.setCellValue("Positive Amount");
+		HSSFCell cell5 = rowHeader.createCell(startColIndex + 4);
+		cell5.setCellValue("Negative Amount");
 		cell5.setCellStyle(headerCellStyle);
 
-		HSSFCell cell6 = rowHeader.createCell(startColIndex+5);
-		cell6.setCellValue("Negative Amount");
+		HSSFCell cell6 = rowHeader.createCell(startColIndex + 5);
+		cell6.setCellValue("NPR");
 		cell6.setCellStyle(headerCellStyle);
 
-		HSSFCell cell7 = rowHeader.createCell(startColIndex+6);
-		cell7.setCellValue("Payment Date");
+		HSSFCell cell7 = rowHeader.createCell(startColIndex + 6);
+		cell7.setCellValue("Seller Notes");
 		cell7.setCellStyle(headerCellStyle);
-
-		HSSFCell cell8 = rowHeader.createCell(startColIndex+7);
-		cell8.setCellValue("Quantity");
-		cell8.setCellStyle(headerCellStyle);
-
 
 	}
 

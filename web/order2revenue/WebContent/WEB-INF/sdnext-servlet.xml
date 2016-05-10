@@ -79,6 +79,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
 				<value>com.o2r.model.StateDeliveryTime</value>
 				<value>com.o2r.model.Events</value>
 				<value>com.o2r.model.ProductConfig</value>
+				<value>com.o2r.model.GatePass</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

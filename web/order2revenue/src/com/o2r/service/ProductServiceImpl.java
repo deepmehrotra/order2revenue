@@ -71,6 +71,12 @@ public Product getProduct(String skuCode, int sellerId)throws CustomException
 }
 
 @Override
+public ProductConfig getProductConfig(String skuCode, String channel, int sellerId)throws CustomException
+{
+	return productDao.getProductConfig(skuCode, channel, sellerId);
+}
+
+@Override
 public List<Product> getProductwithCreatedDate(Date startDate,Date endDate, int sellerId)throws CustomException
 {
 	return productDao.getProductwithCreatedDate(startDate,endDate,sellerId);
