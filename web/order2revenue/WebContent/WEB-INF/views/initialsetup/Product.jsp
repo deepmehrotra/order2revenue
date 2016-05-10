@@ -30,6 +30,39 @@
 <script>
  var globalValue="Mahesh kOLLIPAR";
  </script>
+ 
+ <style>
+    body.DTTT_Print {
+        background: #fff;
+
+    }
+    .DTTT_Print #page-wrapper {
+        margin: 0;
+        background:#fff;
+    }
+
+    button.DTTT_button, div.DTTT_button, a.DTTT_button {
+        border: 1px solid #e7eaec;
+        background: #fff;
+        color: #676a6c;
+        box-shadow: none;
+        padding: 6px 8px;
+    }
+    button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
+        border: 1px solid #d2d2d2;
+        background: #fff;
+        color: #676a6c;
+        box-shadow: none;
+        padding: 6px 8px;
+    }
+
+    .dataTables_filter label {
+        margin-right: 5px;
+
+    }
+</style>
+ 
+ 
 </head>
 <body>
 <div id="wrapper">
@@ -240,7 +273,7 @@
     </div>
     <div class="modal-body">
         <div class="row">
-<form:form method="POST" action="saveUpdateInventory.html" id="addProductForm" role="form" class="form-horizontal">    
+			<form:form method="POST" action="saveUpdateInventory.html" id="addProductForm" role="form" class="form-horizontal">    
 
 							 <c:if test="${!empty product.productId}">
                         <input  name="productId" id="productId" value="${product.productId}"/>
@@ -278,7 +311,7 @@
                 <input value="${variable2 }"  name="quantityToSubtract" class="form-control">
             </div>
         </div>
-
+		</form:form>
     </div>
 </div>
 <div class="modal-footer">
@@ -401,23 +434,7 @@
     		//editProduct.html?id=${product.productId}
     		var xxx = $('editProduct.html?id'+vale).submit();
     	}
-    	function updateInventory(){
-    		var sx=document.getElementById("oneone").value;
-    		var xxx = $('form#addProductForm').submit();
-    	  //  $.ajax({url: "demo_test.txt", success: function(result){
-    	 //       $("#div1").html(result);
-    	  //  }});
-    		//alert('delete producrt goes here');
-    		//$('form#addProductForm').submit();
-    		//opener.location.reload();
-    		//window.close();
-    	}	
-    	function onclickNavigatePayment(value,value1) {
-    		
-    		  //alert(value2);
-    	 // window.open("updateInventory.html?id="+value, 'liveMatches', 'width=720,height=800,toolbar=0,location=0, directories=0, status=0,location=no,menubar=0');
-    		 //window.open("updateInventory.html?id="+value,null, "location=no,height=400,width=1200,top=100,left=50,status=yes,resizable=no,titlebar=no,toolbar=no,menubar=no,scrollbars=no,location=no");
-    		}     
+    	 
       
 
 	$(document).ready(function() {
@@ -445,10 +462,10 @@
 			calendarWeeks : true,
 			autoclose : true
 		});
+	});
 
 
-
-</script>     </form:form>
+   
 
 		$('#download').click(function() {
 			$.ajax({
@@ -495,7 +512,7 @@
 			window.location = "Product.html?page=" + 0;
 
 		});
-	});
+	
 
 	function getQueryVariable(variable) {
 		var query = window.location.search.substring(1);
@@ -534,45 +551,6 @@
 						"location=no,height=400,width=1200,top=100,left=50,status=yes,resizable=no,titlebar=no,toolbar=no,menubar=no,scrollbars=no,location=no");
 	}
 </script>
-<style>
-    body.DTTT_Print {
-        background: #fff;
-
-    }
-    .DTTT_Print #page-wrapper {
-        margin: 0;
-        background:#fff;
-    }
-
-    button.DTTT_button, div.DTTT_button, a.DTTT_button {
-        border: 1px solid #e7eaec;
-        background: #fff;
-        color: #676a6c;
-        box-shadow: none;
-        padding: 6px 8px;
-    }
-    button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
-        border: 1px solid #d2d2d2;
-        background: #fff;
-        color: #676a6c;
-        box-shadow: none;
-        padding: 6px 8px;
-    }
-
-    .dataTables_filter label {
-        margin-right: 5px;
-
-    }
-</style>
-
-<script type="text/javascript">
-
-
-
-</script>
-
-
-
 
 
  </body>
