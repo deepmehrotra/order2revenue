@@ -118,6 +118,16 @@ public class Order {
 	private PaymentUpload paymentUpload;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Seller seller;
+	
+	@Column
+	private boolean isPO;
+	@Column
+	private double eossValue;
+	@ManyToOne(cascade=CascadeType.ALL)
+	private ProductConfig productConfig;
+	@ManyToOne(cascade=CascadeType.ALL)
+	private Order consolidatedOrder;
+	
 
 	public Customer getCustomer() {
 		return customer;
@@ -528,6 +538,38 @@ public class Order {
 
 	public void setDwShippingString(String dwShippingString) {
 		this.dwShippingString = dwShippingString;
+	}
+
+	public ProductConfig getProductConfig() {
+		return productConfig;
+	}
+
+	public void setProductConfig(ProductConfig productConfig) {
+		this.productConfig = productConfig;
+	}
+
+	public Order getConsolidatedOrder() {
+		return consolidatedOrder;
+	}
+
+	public void setConsolidatedOrderID(Order consolidatedOrder) {
+		this.consolidatedOrder = consolidatedOrder;
+	}
+
+	public boolean isPO() {
+		return isPO;
+	}
+
+	public void setPO(boolean isPO) {
+		this.isPO = isPO;
+	}
+
+	public double getEossValue() {
+		return eossValue;
+	}
+
+	public void setEossValue(double eossValue) {
+		this.eossValue = eossValue;
 	}
 
 

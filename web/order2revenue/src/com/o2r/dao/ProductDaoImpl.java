@@ -2,7 +2,9 @@ package com.o2r.dao;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -15,13 +17,17 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.controller.PartnerController;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Category;
+import com.o2r.model.NRnReturnCharges;
+import com.o2r.model.Partner;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.ProductStockList;
 import com.o2r.model.Seller;
+import com.o2r.service.PartnerService;
 
 /**
  * @author Deep Mehrotra
@@ -32,12 +38,16 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	@Autowired
+	private PartnerService partnerService;
+
 	private final int pageSize = 500;
 
 	static Logger log = Logger.getLogger(ProductDaoImpl.class.getName());
 
 	@Override
-	public void addProduct(Product product, int sellerId)throws CustomException {
+	public void addProduct(Product product, int sellerId)
+			throws CustomException {
 		// sellerId=4;
 		Seller seller = null;
 		Category productcat = null;
@@ -53,7 +63,8 @@ public class ProductDaoImpl implements ProductDao {
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
 			seller = (Seller) criteria.list().get(0);
 			for (Category category : seller.getCategories()) {
 				if (category.getCatName().equalsIgnoreCase(catName)) {
@@ -93,34 +104,112 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			log.error(e);
-			throw new CustomException(GlobalConstant.addProductError, new Date(), 1, GlobalConstant.addProductErrorCode, e);
-			
-			//System.out.println("Inside exception  " + e.getLocalizedMessage());
+			throw new CustomException(GlobalConstant.addProductError,
+					new Date(), 1, GlobalConstant.addProductErrorCode, e);
+
+			// System.out.println("Inside exception  " +
+			// e.getLocalizedMessage());
 		}
 
 	}
-	
+
 	@Override
 	public void addProductConfig(ProductConfig productConfig, int sellerId) {
-		
-		Product product=null;
-		List<ProductConfig> productConfigs=null;
+
+		Product product = null;
+		List<ProductConfig> productConfigs = null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Product.class);
 			criteria.createAlias("seller", "seller",
-					CriteriaSpecification.LEFT_JOIN).add(Restrictions.eq("seller.id", sellerId));
-					 criteria.add(Restrictions.eq("productName", productConfig.getProductName()));
-			product=(Product)criteria.list().get(0);
-			if(product != null){
+					CriteriaSpecification.LEFT_JOIN).add(
+					Restrictions.eq("seller.id", sellerId));
+			criteria.add(Restrictions.eq("productSkuCode",
+					productConfig.getProductSkuCode()));
+			product = (Product) criteria.list().get(0);
+			if (product != null) {
 				productConfig.setProduct(product);
-				productConfigs=product.getProductConfig();
-				if(productConfigs != null && productConfigs.size() != 0){
+
+				productConfig.setSp(productConfig.getMrp()
+						- ((productConfig.getMrp() * productConfig
+								.getDiscount()) / 100));
+
+				Partner partner = partnerService.getPartner(
+						productConfig.getChannelName(), sellerId);
+				String category = product.getCategoryName();
+
+				List<NRnReturnCharges> chargesList = partner
+						.getNrnReturnConfig().getCharges();
+				Map<String, Float> chargesMap = new HashMap<String, Float>();
+
+				System.out.println(" Putting values in chargeMap from db : ");
+				for (NRnReturnCharges charge : chargesList) {
+					System.out.println(" Charge : " + charge.getChargeName());
+					chargesMap.put(charge.getChargeName(),
+							charge.getChargeAmount());
+				}
+
+				float commision = 0;
+				if (partner.getNrnReturnConfig().getCommissionType()
+						.equals("fixed")) {
+					commision = chargesMap
+							.get(GlobalConstant.fixedCommissionPercent);
+				} else {
+					commision = chargesMap.get(GlobalConstant.CommPOPrefix
+							+ category);
+				}
+				productConfig.setCommision(commision);
+				productConfig
+						.setCommisionAmt((productConfig.getSp() * commision) / 100);
+
+				float taxsp = 0;
+				if (partner.getNrnReturnConfig().getTaxSpType().equals("fixed")) {
+					taxsp = chargesMap.get(GlobalConstant.fixedtaxSPPercent);
+				} else {
+					taxsp = chargesMap.get(GlobalConstant.TaxSPPrefix
+							+ category);
+				}
+				productConfig.setTaxSp(taxsp);
+				productConfig.setTaxSpAmt(productConfig.getSp()
+						- (productConfig.getSp() * 100 / (100 + taxsp)));
+
+				productConfig.setProductPrice(productConfig.getSp()
+						- productConfig.getCommisionAmt()
+						- productConfig.getTaxSpAmt());
+
+				float taxpo = 0;
+				if (partner.getNrnReturnConfig().getTaxSpType().equals("fixed")) {
+					taxpo = chargesMap.get(GlobalConstant.fixedtaxPOPercent);
+				} else {
+					taxpo = chargesMap.get(GlobalConstant.TaxPOPrefix
+							+ category);
+				}
+				productConfig.setTaxPo(taxpo);
+				productConfig
+						.setTaxPoAmt((productConfig.getProductPrice() * taxpo) / 100);
+
+				productConfig.setSuggestedPOPrice(productConfig
+						.getProductPrice() + productConfig.getTaxPoAmt());
+
+				if (productConfig.getEossDiscount() > 0) {
+					productConfig.setEossDiscountValue((productConfig
+							.getSuggestedPOPrice() * productConfig
+							.getEossDiscount()) / 100);
+					productConfig.setGrossNR(productConfig
+							.getSuggestedPOPrice()
+							- productConfig.getEossDiscountValue());
+				} else {
+					productConfig.setGrossNR(productConfig
+							.getSuggestedPOPrice());
+				}
+
+				productConfigs = product.getProductConfig();
+				if (productConfigs != null && productConfigs.size() != 0) {
 					product.getProductConfig().add(productConfig);
 					session.saveOrUpdate(product);
-				}else{
-					
+				} else {
+
 					productConfigs.add(productConfig);
 					product.setProductConfig(productConfigs);
 					session.saveOrUpdate(product);
@@ -132,11 +221,12 @@ public class ProductDaoImpl implements ProductDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Override
-	public List<Product> listProducts(int sellerId, int pageNo)throws CustomException {
+	public List<Product> listProducts(int sellerId, int pageNo)
+			throws CustomException {
 		// sellerId=4;
 		List<Product> returnlist = null;
 		try {
@@ -155,17 +245,21 @@ public class ProductDaoImpl implements ProductDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			
+
 			log.error(e);
-			throw new CustomException(GlobalConstant.listProductsError, new Date(), 3, GlobalConstant.listProductsErrorCode, e);
-			/*System.out.println(" Exception in getting order list :"
-					+ e.getLocalizedMessage());*/
+			throw new CustomException(GlobalConstant.listProductsError,
+					new Date(), 3, GlobalConstant.listProductsErrorCode, e);
+			/*
+			 * System.out.println(" Exception in getting order list :" +
+			 * e.getLocalizedMessage());
+			 */
 		}
 		return returnlist;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<Product> listProducts(int sellerId)throws CustomException {
+	public List<Product> listProducts(int sellerId) throws CustomException {
 		// sellerId=4;
 		List<Product> returnlist = null;
 		try {
@@ -179,26 +273,50 @@ public class ProductDaoImpl implements ProductDao {
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			criteria.addOrder(org.hibernate.criterion.Order.desc("productDate"));
 			returnlist = criteria.list();
+			for (Product product: returnlist)
+				Hibernate.initialize(product.getProductConfig());
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			
+
 			log.error(e);
-			throw new CustomException(GlobalConstant.listProductsError, new Date(), 3, GlobalConstant.listProductsErrorCode, e);
-			/*System.out.println(" Exception in getting order list :"
-					+ e.getLocalizedMessage());*/
+			throw new CustomException(GlobalConstant.listProductsError,
+					new Date(), 3, GlobalConstant.listProductsErrorCode, e);
+			/*
+			 * System.out.println(" Exception in getting order list :" +
+			 * e.getLocalizedMessage());
+			 */
 		}
 		return returnlist;
 	}
 
 	@Override
 	public Product getProduct(int productId) {
-		return (Product) sessionFactory.getCurrentSession().get(Product.class,
-				productId);
+		
+		Product product=null;
+		try{
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			product=(Product) session.get(Product.class,
+					productId);
+			Hibernate.initialize(product.getProductConfig());
+			session.getTransaction().commit();
+			session.close();
+		
+		}catch(Exception e){
+			log.error(e);
+			//throw new CustomException(GlobalConstant.getSellerByIdError, new Date(), 3, GlobalConstant.getSellerByIdErrorCode, e);
+			
+		}
+		return product;
+		
+		//return (Product) sessionFactory.getCurrentSession().get(Product.class,
+		//		productId);
 	}
 
 	@Override
-	public Product getProduct(String skuCode, int sellerId)throws CustomException {
+	public Product getProduct(String skuCode, int sellerId)
+			throws CustomException {
 		Product returnObject = null;
 		List returnlist = null;
 		System.out.println(" ***Insid get product from sku ***" + skuCode);
@@ -228,11 +346,66 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			log.error(e);
-			throw new CustomException(GlobalConstant.getProductError, new Date(), 3, GlobalConstant.getProductErrorCode, e);
-			
-			/*System.out.println(" Product   DAO IMPL :"
-					+ e.getLocalizedMessage());*/
-			
+			throw new CustomException(GlobalConstant.getProductError,
+					new Date(), 3, GlobalConstant.getProductErrorCode, e);
+
+			/*
+			 * System.out.println(" Product   DAO IMPL :" +
+			 * e.getLocalizedMessage());
+			 */
+
+		}
+
+		return returnObject;
+
+	}
+	
+	@Override
+	public ProductConfig getProductConfig(String skuCode, String channel,
+			int sellerId) throws CustomException {
+		ProductConfig returnObject = null;
+		List returnlist = null;
+		System.out.println(" ***Insid get product config from sku and channel ***" + skuCode + " - " + channel);
+
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(ProductConfig.class);
+			criteria.createAlias("product", "product",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("channelSkuRef", skuCode)
+							.ignoreCase())
+					.add(Restrictions.eq("channelName", channel)
+							.ignoreCase())
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			criteria.createAlias("product.seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+
+			returnlist = criteria.list();
+
+			if (returnlist != null && returnlist.size() != 0) {
+
+				returnObject = (ProductConfig) returnlist.get(0);
+			} else {
+				System.out.println("Product sku " + skuCode + " not found");
+			}
+			System.out.println(" Return object :#### " + returnObject);
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			log.error(e);
+			throw new CustomException(GlobalConstant.getProductError,
+					new Date(), 3, GlobalConstant.getProductErrorCode, e);
+
+			/*
+			 * System.out.println(" Product   DAO IMPL :" +
+			 * e.getLocalizedMessage());
+			 */
+
 		}
 
 		return returnObject;
@@ -240,7 +413,8 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public void deleteProduct(Product product, int sellerId)throws CustomException {
+	public void deleteProduct(Product product, int sellerId)
+			throws CustomException {
 		System.out.println(" In Category delete sku id "
 				+ product.getProductSkuCode());
 		// sellerId=4;
@@ -264,17 +438,20 @@ public class ProductDaoImpl implements ProductDao {
 
 		} catch (Exception e) {
 			log.error(e);
-			throw new CustomException(GlobalConstant.deleteProductError, new Date(), 3, GlobalConstant.deleteProductErrorCode, e);
-			/*System.out.println(" Inside delleting order"
-					+ e.getLocalizedMessage());*/
-			
+			throw new CustomException(GlobalConstant.deleteProductError,
+					new Date(), 3, GlobalConstant.deleteProductErrorCode, e);
+			/*
+			 * System.out.println(" Inside delleting order" +
+			 * e.getLocalizedMessage());
+			 */
+
 		}
 
 	}
 
 	@Override
 	public List<Product> getProductwithCreatedDate(Date startDate,
-			Date endDate, int sellerId)throws CustomException {
+			Date endDate, int sellerId) throws CustomException {
 
 		List<Product> productlist = null;
 
@@ -294,19 +471,24 @@ public class ProductDaoImpl implements ProductDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			
+
 			log.error(e);
-			throw new CustomException(GlobalConstant.getProductwithCreatedDateError, new Date(), 3, GlobalConstant.getProductwithCreatedDateErrorCode, e);
-			/*System.out.println(" Inside find  product by date  exception :"
-					+ e.getMessage());*/
-			
+			throw new CustomException(
+					GlobalConstant.getProductwithCreatedDateError, new Date(),
+					3, GlobalConstant.getProductwithCreatedDateErrorCode, e);
+			/*
+			 * System.out.println(" Inside find  product by date  exception :" +
+			 * e.getMessage());
+			 */
+
 		}
 		return productlist;
 	}
 
 	@Override
 	public void updateInventory(String sku, int currentInventory,
-			int quantoAdd, int quantoSub, boolean status, int sellerId)throws CustomException {
+			int quantoAdd, int quantoSub, boolean status, int sellerId)
+			throws CustomException {
 		System.out.println(" Inside inventory update method :" + sku
 				+ " quantoAdd " + quantoAdd + "quantoSub " + quantoSub);
 		Product product = null;
@@ -411,10 +593,14 @@ public class ProductDaoImpl implements ProductDao {
 			 * session.getTransaction().commit(); session.close();
 			 */
 		} catch (Exception e) {
-			
+
 			log.error(e);
-			throw new CustomException(GlobalConstant.updateInventoryError, new Date(), 3, GlobalConstant.updateInventoryErrorCode, e);
-			/*System.out.println(" Exception in updating inventories  :"+ e.getMessage());*/
+			throw new CustomException(GlobalConstant.updateInventoryError,
+					new Date(), 3, GlobalConstant.updateInventoryErrorCode, e);
+			/*
+			 * System.out.println(" Exception in updating inventories  :"+
+			 * e.getMessage());
+			 */
 		} finally {
 
 			System.out.println(" Commiting inventory update");

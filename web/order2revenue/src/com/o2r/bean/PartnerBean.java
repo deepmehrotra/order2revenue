@@ -34,7 +34,6 @@ public class PartnerBean {
 	private List<Order> orders = new ArrayList<Order>();
 	private NRnReturnConfig nrnReturnConfig;
 	
-	
 	public List<Events> getEvents() {
 		return events;
 	}

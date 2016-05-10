@@ -478,6 +478,12 @@ public class GlobalConstant {
 	public static final String ReverseShippingFeeVolumeWeightPerWeight = "revShipFeeVWPW";
 	public static final String ReverseShippingFeeVolumeWeightMinWeight = "revShipFeeVWMW";
 	
+	// Product Config Prefix
+	public static final String TaxSPPrefix = "taxSp-";
+	public static final String TaxPOPrefix = "taxPo-";
+	public static final String CommPOPrefix = "comm-";
+	public static final String fixedtaxSPPercent = "fixedTaxSpPercent";
+	public static final String fixedtaxPOPercent = "fixedTaxPoPercent";
 
 	/*
 	 * public static final String

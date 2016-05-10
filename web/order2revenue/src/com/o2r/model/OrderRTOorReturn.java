@@ -1,22 +1,26 @@
 package com.o2r.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="OrderReturn")
+@Table(name = "OrderReturn")
 public class OrderRTOorReturn {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column
-	    private int returnId;
+	private int returnId;
 	@Column
 	private String returnOrRTOreason;
 	@Column
@@ -30,7 +34,7 @@ public class OrderRTOorReturn {
 	@Column
 	private Date returnUploadDate;
 
-	@Column(name="estimateddeduction")
+	@Column(name = "estimateddeduction")
 	private double returnOrRTOChargestoBeDeducted;
 	@Column
 	private String returnOrRTOstatus;
@@ -40,49 +44,66 @@ public class OrderRTOorReturn {
 	private String returnCategory;
 	@Column
 	private String cancelType;
+	
+	@OneToMany(mappedBy="consolidatedReturn", cascade=CascadeType.ALL)  
+	private List<GatePass> gatepasses =new ArrayList<GatePass>();
 
 	public String getReturnOrRTOreason() {
 		return returnOrRTOreason;
 	}
+
 	public void setReturnOrRTOreason(String returnOrRTOreason) {
 		this.returnOrRTOreason = returnOrRTOreason;
 	}
+
 	public Date getReturnDate() {
 		return returnDate;
 	}
+
 	public void setReturnDate(Date returnDate) {
 		this.returnDate = returnDate;
 	}
+
 	public double getReturnOrRTOCharges() {
 		return returnOrRTOCharges;
 	}
+
 	public void setReturnOrRTOCharges(double returnOrRTOCharges) {
 		this.returnOrRTOCharges = returnOrRTOCharges;
 	}
+
 	public int getReturnorrtoQty() {
 		return returnorrtoQty;
 	}
+
 	public void setReturnorrtoQty(int returnorrtoQty) {
 		this.returnorrtoQty = returnorrtoQty;
 	}
+
 	public String getReturnOrRTOId() {
 		return returnOrRTOId;
 	}
+
 	public void setReturnOrRTOId(String returnOrRTOId) {
 		this.returnOrRTOId = returnOrRTOId;
 	}
+
 	public Date getReturnUploadDate() {
 		return returnUploadDate;
 	}
+
 	public void setReturnUploadDate(Date returnUploadDate) {
 		this.returnUploadDate = returnUploadDate;
 	}
+
 	public int getReturnId() {
 		return returnId;
 	}
+
 	public void setReturnId(int returnId) {
 		this.returnId = returnId;
 	}
+
 	@Override
 	public String toString() {
 		return "OrderRTOorReturn [returnId=" + returnId
@@ -92,38 +113,46 @@ public class OrderRTOorReturn {
 				+ returnOrRTOId + ", returnUploadDate=" + returnUploadDate
 				+ "]";
 	}
+
 	public double getReturnOrRTOChargestoBeDeducted() {
 		return returnOrRTOChargestoBeDeducted;
 	}
+
 	public void setReturnOrRTOChargestoBeDeducted(
 			double returnOrRTOChargestoBeDeducted) {
 		this.returnOrRTOChargestoBeDeducted = returnOrRTOChargestoBeDeducted;
 	}
+
 	public String getReturnOrRTOstatus() {
 		return returnOrRTOstatus;
 	}
+
 	public void setReturnOrRTOstatus(String returnOrRTOstatus) {
 		this.returnOrRTOstatus = returnOrRTOstatus;
 	}
+
 	public String getType() {
 		return type;
 	}
+
 	public void setType(String type) {
 		this.type = type;
 	}
+
 	public String getReturnCategory() {
 		return returnCategory;
 	}
+
 	public void setReturnCategory(String returnCategory) {
 		this.returnCategory = returnCategory;
 	}
+
 	public String getCancelType() {
 		return cancelType;
 	}
+
 	public void setCancelType(String cancelType) {
 		this.cancelType = cancelType;
 	}
-
-
 
 }

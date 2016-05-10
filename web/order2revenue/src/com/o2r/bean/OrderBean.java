@@ -4,7 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ManyToOne;
+
+import com.o2r.model.Order;
 import com.o2r.model.OrderTimeline;
+import com.o2r.model.ProductConfig;
 
 public class OrderBean {
 
@@ -51,7 +57,11 @@ public class OrderBean {
 	private OrderPaymentBean orderPayment=new OrderPaymentBean();
 	private OrderRTOorReturnBean orderReturnOrRTO = new OrderRTOorReturnBean();
 	private OrderTaxBean orderTax = new OrderTaxBean();
-
+	
+	private boolean isPO;
+	private double eossValue;
+	private ProductConfigBean productConfig;
+	private OrderBean consolidatedOrder;
 
 	public CustomerBean getCustomer() {
 		return customer;
@@ -399,6 +409,38 @@ public class OrderBean {
 
 	public void setPccAmount(double pccAmount) {
 		this.pccAmount = pccAmount;
+	}
+
+	public boolean isPO() {
+		return isPO;
+	}
+
+	public void setPO(boolean isPO) {
+		this.isPO = isPO;
+	}
+
+	public double getEossValue() {
+		return eossValue;
+	}
+
+	public void setEossValue(double eossValue) {
+		this.eossValue = eossValue;
+	}
+
+	public ProductConfigBean getProductConfig() {
+		return productConfig;
+	}
+
+	public void setProductConfig(ProductConfigBean productConfig) {
+		this.productConfig = productConfig;
+	}
+
+	public OrderBean getConsolidatedOrder() {
+		return consolidatedOrder;
+	}
+
+	public void setConsolidatedOrder(OrderBean consolidatedOrder) {
+		this.consolidatedOrder = consolidatedOrder;
 	}
 
 

@@ -1308,8 +1308,8 @@ public class ConverterClass {
 		productConfigBean.setProductConfigId(productConfig.getProductConfigId());
 		productConfigBean.setProductId(productConfig.getProductId());
 		productConfigBean.setProductName(productConfig.getProductName());
-		productConfigBean.setProductSKuCode(productConfig.getProductSKuCode());
-		productConfigBean.setChannelSKuRef(productConfig.getChannelSKuRef());
+		productConfigBean.setProductSkuCode(productConfig.getProductSkuCode());
+		productConfigBean.setChannelSkuRef(productConfig.getChannelSkuRef());
 		productConfigBean.setCommision(productConfig.getCommision());
 		productConfigBean.setTaxSp(productConfig.getTaxSp());
 		productConfigBean.setTaxPo(productConfig.getTaxPo());
@@ -1332,8 +1332,8 @@ public class ConverterClass {
 		productConfig.setProductConfigId(productConfigBean.getProductConfigId());
 		productConfig.setProductId(productConfigBean.getProductId());
 		productConfig.setProductName(productConfigBean.getProductName());
-		productConfig.setProductSKuCode(productConfigBean.getProductSKuCode());
-		productConfig.setChannelSKuRef(productConfigBean.getChannelSKuRef());
+		productConfig.setProductSkuCode(productConfigBean.getProductSkuCode());
+		productConfig.setChannelSkuRef(productConfigBean.getChannelSkuRef());
 		productConfig.setCommision(productConfigBean.getCommision());
 		productConfig.setTaxSp(productConfigBean.getTaxSp());
 		productConfig.setTaxPo(productConfigBean.getTaxPo());
@@ -1357,8 +1357,8 @@ public class ConverterClass {
 				bean.setProductConfigId(productConfig.getProductConfigId());
 				bean.setProductId(productConfig.getProductId());
 				bean.setProductName(productConfig.getProductName());
-				bean.setProductSKuCode(productConfig.getProductSKuCode());
-				bean.setChannelSKuRef(productConfig.getChannelSKuRef());
+				bean.setProductSkuCode(productConfig.getProductSkuCode());
+				bean.setChannelSkuRef(productConfig.getChannelSkuRef());
 				bean.setCommision(productConfig.getCommision());
 				bean.setTaxSp(productConfig.getTaxSp());
 				bean.setTaxPo(productConfig.getTaxPo());
