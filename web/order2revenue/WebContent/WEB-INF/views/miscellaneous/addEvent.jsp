@@ -2,6 +2,8 @@
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page import="java.util.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -116,9 +118,10 @@ span .#error {
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Start Date</label>
-                                <div class="col-sm-8" id="data_1">
+                                <div class="col-sm-8" id="data_1">                                
                                     <div class="input-group date"> <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                        <form:input path="startDate" value="${eventsBean.startDate}"	class="form-control" />
+                                    	<fmt:formatDate value="${eventsBean.startDate}" var="startDate" type="date" pattern="MM/dd/yyyy"/>
+                                        <form:input path="startDate"  value="${startDate}" type="date" class="form-control"></form:input>
                                     </div>
                                 </div>
                             </div> 
@@ -128,7 +131,8 @@ span .#error {
                                 <label class="col-sm-4 control-label">End Date</label>
                                 <div class="col-sm-8" id="data_1">
                                     <div class="input-group date"> <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                        <form:input path="endDate" value="${eventsBean.endDate}"	class="form-control" />
+                                    	<fmt:formatDate value="${eventsBean.endDate}" var="endDate" type="date" pattern="MM/dd/yyyy"/>
+                                        <form:input path="endDate"   value="${endDate}" type="date" class="form-control"></form:input>
                                     </div>
                                 </div>
                             </div>  

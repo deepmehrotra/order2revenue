@@ -132,12 +132,7 @@ span .#error {
 									<h4>Seller Brand</h4>
 									<br>
 									<div>
-										<div class="col-md-4">
-											<form:input type="text" class="form-control"
-												value="${seller.brandName}" path="brandName" />
-											<div class="hr-line-dashed"></div>
-										</div>
-										<div class="col-md-8">
+										<div class="col-md-12">
 											<label title="Upload image file" for="inputImage"
 												class="btn btn-white btn-block"> <i
 												class="fa fa-upload"></i> <input type="file"

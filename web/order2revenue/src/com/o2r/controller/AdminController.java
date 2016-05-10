@@ -151,6 +151,7 @@ public class AdminController {
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public ModelAndView welcome() {
+		
 		return new ModelAndView("redirect:/landing/home.html");
 	}
 

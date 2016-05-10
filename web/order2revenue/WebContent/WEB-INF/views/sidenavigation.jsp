@@ -8,21 +8,19 @@
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">
                 <li class="nav-header">
-                        <div class="dropdown profile-element"> <span>
-                            <img alt="image" class="img-circle" src="/O2R/seller/img/profile_small.jpg" />
+                        <div class="dropdown profile-element" align="center" > <span>
+                            <img alt="image" class="img-circle" src="/O2R/sellerImages/defaultSeller.jpg" />
                              </span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">David Williams</strong>
-                             </span> <span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span> </a>
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">${sellerBean.name}</strong>
+                             </span> <span class="text-muted text-xs block">Seller<b class="caret"></b></span> </span> </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a href="profile.html">Profile</a></li>
-                                <li><a href="contacts.html">Partners</a></li>
+                                <li><a href="partners.html">Partners</a></li>
                                 <li class="divider"></li>
-                                <li><a href="login.html">Logout</a></li>
+                                <li><a href="/j_spring_security_logout">Logout</a></li>
                             </ul>
-                            <div class="rating">
-                                <span >☆</span><span>☆</span><span>☆</span><span class="active">☆</span><span class="active">☆</span>
-                            </div>
+                            
                         </div>
                         <div class="logo-element">
                             GE
