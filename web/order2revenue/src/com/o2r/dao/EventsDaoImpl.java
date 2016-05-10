@@ -53,7 +53,7 @@ public class EventsDaoImpl implements EventsDao {
 					
 			
 			if (criterias.list() != null && criterias.list().size() != 0) {
-				System.out.println("You can not create Events during these Dates.....");
+				System.out.println("*******************************You can not create Events during these Dates.....");
 			} else {
 				Criteria criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
 				criteria.createAlias("partners", "partner",	CriteriaSpecification.LEFT_JOIN)

@@ -65,7 +65,7 @@
 					<div class="ibox-title">
 						<h5>Total Events (${eventsList.size()})</h5>
 						<div class="ibox-tools">
-							<a href = "javascript:getURI()" class="btn btn-primary btn-xs">Create New Duplicate Event</a>
+							<a href = "javascript:getURI()" onclick="checkOne()"  class="btn btn-primary btn-xs">Create New Duplicate Event</a>
 							<a href="addEvent.html"	class="btn btn-primary btn-xs">Create New Event</a>
 						</div>
 					</div>
@@ -143,6 +143,24 @@
 	
 	var checkedValue = null;
 	
+	function checkOne(obj){
+		var current=obj;
+		var inputElements = document.getElementsByName("eventId");
+		var len=inputElements.length;
+		for(var i=0; i<len; ++i){		      
+		     if(inputElements[i].checked){
+		    	inputElements[i].checked=false;
+		    } 	
+		}	
+		current.checked=true;
+		checkedValue = current.value;
+		if(!checkedValue > 0){
+			alert("Select The Event You Want To Create Duplicate !!!");
+		}else{
+			alert("Use logic !!!");
+		}
+	}
+	
 	function selectOne(obj){
 		
 		var current=obj;
@@ -154,10 +172,7 @@
 		    } 	
 		}	
 		current.checked=true;
-		checkedValue = current.value;
-		if(checkedValue > 0){
-			alert("Select The Event You Want To Create Duplicate !!!");
-		}
+		checkedValue = current.value;		
 		getURI = function() {
 			location.href = "addDuplicateEvent.html?eventId="+checkedValue;
 					
@@ -167,7 +182,7 @@
 	
 	$(document).ready(function() {
 		
-	
+		
 		$('.dataTables-example').dataTable({
 			responsive : true,
 			"dom" : 'T<"clear">lfrtip',

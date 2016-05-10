@@ -29,6 +29,7 @@ import com.o2r.model.Category;
 import com.o2r.model.Events;
 import com.o2r.model.NRnReturnCharges;
 import com.o2r.model.Partner;
+import com.o2r.service.CategoryService;
 import com.o2r.service.EventsService;
 import com.o2r.service.PartnerService;
 
@@ -39,6 +40,8 @@ public class EventsController {
 	private EventsService eventsService;
 	@Autowired
 	private PartnerService partnerService;
+	@Autowired
+	private CategoryService categoryService;
 	
 	static Logger log = Logger.getLogger(EventsController.class.getName());
 	
@@ -110,6 +113,8 @@ public class EventsController {
 	public ModelAndView addEvent(HttpServletRequest request, @ModelAttribute("command") EventsBean eventsBean, BindingResult result) {
 
 		log.info("$$$ addEvent Start $$$");
+		Map<String,Float> chargeMap=new HashMap<String, Float>();
+		Map<String,Float> categoryMap=new HashMap<String, Float>();
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			List<Partner> partnerList = partnerService.listPartners(HelperClass
@@ -119,8 +124,14 @@ public class EventsController {
 				for (Partner bean : partnerList) {
 					partnerMap.put(bean.getPcName(), bean.getPcName());
 				}
+			}			
+			List<Category> categoryList = categoryService
+					.listCategories(HelperClass.getSellerIdfromSession(request));
+			for (Category cat : categoryList) {
+				categoryMap.put(cat.getCatName(), chargeMap.get(cat.getCatName()));
 			}
 			model.put("partnerMap", partnerMap);
+			model.put("categoryMap", categoryMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
@@ -135,6 +146,7 @@ public class EventsController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String,Float> chargeMap=new HashMap<String, Float>();
 		Events event=null;
+		Map<String,Float> categoryMap=new HashMap<String, Float>();
 		eventsBean.setEventId(Integer.parseInt(request.getParameter("eventId")));
 		System.out.println("****************** Check : "+eventsBean.getEventId());
 		try {
@@ -142,12 +154,18 @@ public class EventsController {
 				event = eventsService.getEvent(eventsBean.getEventId());
 				eventsBean=ConverterClass.prepareEventsBean(event);
 				model.put("eventsBean", eventsBean);
+				System.out.println("************ "+(eventsBean.getNrnReturnConfig().getNrCalculatorEvent()).toString());
 				for(NRnReturnCharges charge:eventsBean.getNrnReturnConfig().getCharges())
 				{
 					chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
 				}
 				model.put("chargeMap", chargeMap);
 				System.out.println("Got event object !!!!  yaa......");
+			}
+			List<Category> categoryList = categoryService
+					.listCategories(HelperClass.getSellerIdfromSession(request));
+			for (Category cat : categoryList) {
+				categoryMap.put(cat.getCatName(), chargeMap.get(cat.getCatName()));
 			}
 			List<Partner> partnerList = partnerService.listPartners(HelperClass.getSellerIdfromSession(request));
 			Map<String, String> partnerMap = new HashMap<String, String>();
@@ -156,6 +174,7 @@ public class EventsController {
 					partnerMap.put(bean.getPcName(), bean.getPcName());
 				}
 			}
+			model.put("categoryMap", categoryMap);
 			model.put("partnerMap", partnerMap);			
 		} catch (Exception e) {
 			e.printStackTrace();

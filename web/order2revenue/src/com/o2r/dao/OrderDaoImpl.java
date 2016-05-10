@@ -51,8 +51,6 @@ import com.o2r.service.TaxDetailService;
 public class OrderDaoImpl implements OrderDao {
 
 	@Autowired
-	private EventsService eventsService;
-	@Autowired
 	private SessionFactory sessionFactory;
 	@Autowired
 	private ProductService productService;
@@ -60,6 +58,10 @@ public class OrderDaoImpl implements OrderDao {
 	private TaxDetailService taxDetailService;
 	@Autowired
 	private PartnerService partnerService;
+	//@Autowired
+	//private AreaConfigDao areaConfigDao;
+	@Autowired
+	private EventsService eventsService;
 
 	private final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
 
@@ -81,12 +83,13 @@ public class OrderDaoImpl implements OrderDao {
 		Date tempDate = null;
 		Session session = null;
 		TaxDetail taxDetails = null;
-		Partner partner = null;
 		Events event=null;
+		Partner partner = null;
 		Product product;
 		try {
 			product = productService.getProduct(order.getProductSkuCode(),
 					sellerId);
+			//calculateDeliveryDate(order);
 			if (product != null) {
 				try {
 					System.out
@@ -548,9 +551,12 @@ public class OrderDaoImpl implements OrderDao {
 						orderReturn.getReturnDate()) < 0) {
 					order.getOrderReturnOrRTO()
 							.setReturnOrRTOChargestoBeDeducted(0);
-					order.getOrderPayment().setPaymentDifference(
+					/*order.getOrderPayment().setPaymentDifference(
 							order.getOrderPayment().getNetPaymentResult()
-									- order.getNetRate());
+									- order.getNetRate());*/
+					//Changing PD return quantity wise
+					order.getOrderPayment().setPaymentDifference(
+							order.getOrderPayment().getNetPaymentResult());
 					order.setStatus("Return Limit Crossed");
 					OrderTimeline timeline = new OrderTimeline();
 					timeline.setEvent("Return Recieved");
@@ -564,9 +570,12 @@ public class OrderDaoImpl implements OrderDao {
 						orderReturn.getReturnDate()) < 0) {
 					order.getOrderReturnOrRTO()
 							.setReturnOrRTOChargestoBeDeducted(0);
-					order.getOrderPayment().setPaymentDifference(
+					/*order.getOrderPayment().setPaymentDifference(
 							order.getOrderPayment().getNetPaymentResult()
-									- order.getNetRate());
+									- order.getNetRate());*/
+					//Changing PD return quantity wise
+					order.getOrderPayment().setPaymentDifference(
+							order.getOrderPayment().getNetPaymentResult());
 					order.setStatus("RTO Limit Crossed");
 					OrderTimeline timeline = new OrderTimeline();
 					timeline.setEvent("Return Recieved");
@@ -584,7 +593,7 @@ public class OrderDaoImpl implements OrderDao {
 					order.getOrderPayment()
 							.setPaymentDifference(
 									order.getOrderPayment()
-											.getPaymentDifference()
+											.getNetPaymentResult()
 											+ order.getOrderReturnOrRTO()
 													.getReturnOrRTOChargestoBeDeducted());
 					order.setStatus("Return Recieved");
@@ -613,13 +622,14 @@ public class OrderDaoImpl implements OrderDao {
 					order.getOrderTimeline().add(timeline);
 
 				}
-				if ((int) order.getOrderPayment().getNegativeAmount() != 0) {
+			/*	if ((int) order.getOrderPayment().getNegativeAmount() != 0) {
 					order.getOrderPayment()
 							.setPaymentDifference(
 									order.getOrderPayment()
 											.getNetPaymentResult()
 											+ order.getOrderReturnOrRTO()
-													.getReturnOrRTOChargestoBeDeducted());
+													.getReturnOrRTOChargestoBeDeducted()
+													);
 
 				}
 				if (order.getOrderPayment().getNetPaymentResult() > 0) {
@@ -629,7 +639,7 @@ public class OrderDaoImpl implements OrderDao {
 											.getNetPaymentResult() + order
 											.getOrderReturnOrRTO()
 											.getReturnOrRTOChargestoBeDeducted()));
-				}
+				}*/
 				// order.setStatus("Return Recieved");
 
 				if (order.getQuantity() != orderReturn.getReturnorrtoQty()) {
@@ -641,12 +651,13 @@ public class OrderDaoImpl implements OrderDao {
 
 				// Reverting Tax information for Return Order
 				taxDetails = new TaxDetail();
-				taxDetails.setBalanceRemaining(-order.getOrderTax().getTax());
+				taxDetails.setBalanceRemaining(-(order.getOrderTax().getTax()/order.getQuantity())*orderReturn.getReturnorrtoQty());
 				taxDetails.setParticular(order.getOrderTax().getTaxCategtory());
 				taxDetails.setUploadDate(orderReturn.getReturnDate());
 				taxDetailService.addMonthlyTaxDetail(session, taxDetails,
 						sellerId);
 
+				order.getOrderTax().setToxToReturn((order.getOrderTax().getTax()/order.getQuantity())*orderReturn.getReturnorrtoQty());
 				order.setFinalStatus("Actionable");
 				order.setNetSaleQuantity(order.getQuantity()
 						- order.getOrderReturnOrRTO().getReturnorrtoQty());
@@ -930,6 +941,11 @@ public class OrderDaoImpl implements OrderDao {
 			if (order != null && order.getOrderReturnOrRTO() != null
 					&& order.getOrderReturnOrRTO().getReturnDate() != null
 					&& order.getOrderReturnOrRTO().getReturnorrtoQty() != 0) {
+				if(order.getOrderReturnOrRTO().getReturnorrtoQty()!=order.getQuantity() )
+				{
+					order.setTotalAmountRecieved(order.getGrossNetRate()*(order.getQuantity()
+							-order.getOrderReturnOrRTO().getReturnorrtoQty()));
+				}
 				if (((int) orderPayment.getPositiveAmount()) != 0) {
 					if (order.getReturnLimitCrossed().compareTo(
 							order.getOrderReturnOrRTO().getReturnDate()) < 0) {
@@ -1136,6 +1152,12 @@ public class OrderDaoImpl implements OrderDao {
 				if (order.getOrderReturnOrRTO() != null
 						&& order.getOrderReturnOrRTO().getReturnDate() != null
 						&& order.getOrderReturnOrRTO().getReturnorrtoQty() != 0) {
+					
+					if(order.getOrderReturnOrRTO().getReturnorrtoQty()!=order.getQuantity() )
+					{
+						order.setTotalAmountRecieved(order.getGrossNetRate()*(order.getQuantity()
+								-order.getOrderReturnOrRTO().getReturnorrtoQty()));
+					}
 					if (((int) orderPayment.getPositiveAmount()) != 0) {
 
 						order.getOrderPayment().setPositiveAmount(
@@ -1657,16 +1679,6 @@ public class OrderDaoImpl implements OrderDao {
 						.get(GlobalConstant.fixedCommissionPercent);
 
 			} else {
-				/*
-				 * Pattern p = Pattern.compile(Pattern.quote(pattern1) + "(.*?)"
-				 * + Pattern.quote(pattern2)); Matcher m =
-				 * p.matcher(partner.getNrnReturnConfig()
-				 * .getCategoryWiseCommsion()); //
-				 * System.out.println(m.group(1)); while (m.find()) { comission
-				 * = Float.parseFloat(m.group(1));
-				 * System.out.println(m.group(1)); }
-				 */
-
 				comission = chargesMap.get(prodCat);
 			}
 
@@ -1741,11 +1753,7 @@ public class OrderDaoImpl implements OrderDao {
 					+ " zonallist: "
 					+ partner.getNrnReturnConfig().getZonalList());
 			System.out.println(" State we are geting ofrom excel : " + state);
-			/*
-			 * System.out .println(
-			 * "partner.getNrnReturnConfig().getMetroList().contains(state) " +
-			 * partner.getNrnReturnConfig().getMetroList() .contains(state));
-			 */
+			
 
 			// ****Shipping charges
 			if (partner.getNrnReturnConfig().getShippingFeeType() != null
@@ -1833,14 +1841,7 @@ public class OrderDaoImpl implements OrderDao {
 			} else if (volWeight > 5000) {
 				temp = new StringBuffer(volarea);
 				volarea.append("vwgt1500lt5000");
-				/*System.out.println(" Charges for lesstthan 500 : "+dwchargetemp);
-				float range = (float) Math.ceil((deadWeight - 500) / 500);
-				System.out.println(" Range : "+range);
-				dwchargetemp = dwchargetemp
-						+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
-								.get(temp.toString()) : 0));
-				System.out.println(" Charges for greater than 500 : "+chargesMap
-								.get(temp.toString()));*/
+				
 				vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap
 						.get(volarea.toString()) : 0;
 						System.out.println(" vol Charges for lesstthan 500 : "+vwchargetemp);	
@@ -1946,8 +1947,8 @@ public class OrderDaoImpl implements OrderDao {
 				chargesType = partner.getNrnReturnConfig().getRetCharBRType();
 				shippingfee = partner.getNrnReturnConfig().isRetCharBRShipFee();
 				servicetax = partner.getNrnReturnConfig().isRetCharBRSerTax();
-				fixedfee = partner.getNrnReturnConfig().isRetCharSFFF();
-				paycollcharges = partner.getNrnReturnConfig().isRetCharSFPCC();
+				fixedfee = partner.getNrnReturnConfig().isRetCharBRFF();
+				paycollcharges = partner.getNrnReturnConfig().isRetCharBRPCC();
 			}
 
 			break;
@@ -1971,8 +1972,8 @@ public class OrderDaoImpl implements OrderDao {
 				chargesType = partner.getNrnReturnConfig().getRTOCharBRType();
 				shippingfee = partner.getNrnReturnConfig().isRTOCharBRShipFee();
 				servicetax = partner.getNrnReturnConfig().isRTOCharBRSerTax();
-				fixedfee = partner.getNrnReturnConfig().isRTOCharSFFF();
-				paycollcharges = partner.getNrnReturnConfig().isRTOCharSFPCC();
+				fixedfee = partner.getNrnReturnConfig().isRTOCharBRFF();
+				paycollcharges = partner.getNrnReturnConfig().isRTOCharBRPCC();
 			}
 
 			break;
@@ -2017,8 +2018,8 @@ public class OrderDaoImpl implements OrderDao {
 				chargesType = partner.getNrnReturnConfig().getCanCharBRType();
 				shippingfee = partner.getNrnReturnConfig().isCanCharBRShipFee();
 				servicetax = partner.getNrnReturnConfig().isCanCharBRSerTax();
-				fixedfee = partner.getNrnReturnConfig().isCanCharSFFF();
-				paycollcharges = partner.getNrnReturnConfig().isCanCharSFPCC();
+				fixedfee = partner.getNrnReturnConfig().isCanCharBRFF();
+				paycollcharges = partner.getNrnReturnConfig().isCanCharBRPCC();
 			}
 
 			break;
@@ -2042,8 +2043,8 @@ public class OrderDaoImpl implements OrderDao {
 				chargesType = partner.getNrnReturnConfig().getRepCharBRType();
 				shippingfee = partner.getNrnReturnConfig().isRepCharBRShipFee();
 				servicetax = partner.getNrnReturnConfig().isRepCharBRSerTax();
-				fixedfee = partner.getNrnReturnConfig().isRepCharSFFF();
-				paycollcharges = partner.getNrnReturnConfig().isRepCharSFPCC();
+				fixedfee = partner.getNrnReturnConfig().isRepCharBRFF();
+				paycollcharges = partner.getNrnReturnConfig().isRepCharBRPCC();
 			}
 
 			break;
@@ -2068,8 +2069,8 @@ public class OrderDaoImpl implements OrderDao {
 				chargesType = partner.getNrnReturnConfig().getPDCharBRType();
 				shippingfee = partner.getNrnReturnConfig().isPDCharBRShipFee();
 				servicetax = partner.getNrnReturnConfig().isPDCharBRSerTax();
-				fixedfee = partner.getNrnReturnConfig().isPDCharSFFF();
-				paycollcharges = partner.getNrnReturnConfig().isPDCharSFPCC();
+				fixedfee = partner.getNrnReturnConfig().isPDCharBRFF();
+				paycollcharges = partner.getNrnReturnConfig().isPDCharBRPCC();
 			}
 			break;
 
@@ -2078,13 +2079,17 @@ public class OrderDaoImpl implements OrderDao {
 		}
 
 		if (chargesType.equalsIgnoreCase(GlobalConstant.fixedString)) {
+			System.out.println(" Fixed amount in return : "+fixedAmount);
 			totalcharge = totalcharge
 					+ (chargesMap.containsKey(fixedAmount) ? chargesMap
 							.get(fixedAmount) : 0);
 		} else if (chargesType.equalsIgnoreCase(GlobalConstant.variableString)) {
+			System.out.println(" Variable amount in Return : "+varPercentSP
+					+" varPercentFixAmt :"+varPercentFixAmt+" varPercentPCC : "+varPercentPCC
+					+"shipping fee : "+shippingfee+" fixedfee  :"+fixedfee+" paycollcharges "+paycollcharges);
 			totalcharge = totalcharge
 					+ (float) (chargesMap.containsKey(varPercentSP) ? (chargesMap
-							.get(varPercentSP) * order.getOrderSP() / 100)
+							.get(varPercentSP) * (order.getOrderSP()/order.getQuantity()) / 100)
 							: 0);
 			totalcharge = totalcharge
 					+ (chargesMap.containsKey(varPercentFixAmt) ? chargesMap
@@ -2093,10 +2098,10 @@ public class OrderDaoImpl implements OrderDao {
 					+ (float) (shippingfee ? order.getShippingCharges() : 0);
 			totalcharge = totalcharge
 					+ (float) (fixedfee ? order.getFixedfee() : 0);
-			/*
-			 * totalcharge = totalcharge + (float) (paycollcharges ?
-			 * order.getPccAmount() : 0);
-			 */
+			
+			 totalcharge = totalcharge + (float) (paycollcharges ?
+			 order.getPccAmount() : 0);
+			 
 
 			totalcharge = totalcharge
 					+ (float) (chargesMap.containsKey(varPercentPCC) ? (chargesMap
@@ -2111,9 +2116,9 @@ public class OrderDaoImpl implements OrderDao {
 			switch (revShippingType) {
 			case "revShipFeePCC":
 
-				revShippingFee = (float) (chargesMap
+				revShippingFee = (float) (chargesMap.containsKey(GlobalConstant.ReverseShippingFeePercentShipFee) ?(chargesMap
 						.get(GlobalConstant.ReverseShippingFeePercentShipFee)
-						* order.getShippingCharges() / 100);
+						* order.getShippingCharges() / 100):0);
 				break;
 			case "revShipFeeNA":
 
@@ -2121,9 +2126,11 @@ public class OrderDaoImpl implements OrderDao {
 				break;
 			case "revShipFeeGRT":
 
-				float revShipMarketFee = (float) (chargesMap
-						.get(GlobalConstant.ReverseShippingFeePercentMarketFee) * order
-						.getPccAmount());
+				float revShipMarketFee = 
+				(float) (chargesMap.containsKey(GlobalConstant.ReverseShippingFeePercentMarketFee)?
+						((chargesMap
+						.get(GlobalConstant.ReverseShippingFeePercentMarketFee)/100)* order
+						.getPartnerCommission()):0);
 				if (chargesMap.get(GlobalConstant.ReverseShippingFeeFlatAmt) > revShipMarketFee) {
 					revShippingFee = chargesMap
 							.get(GlobalConstant.ReverseShippingFeeFlatAmt);
@@ -2150,9 +2157,9 @@ public class OrderDaoImpl implements OrderDao {
 				if (deadWeight < product.getDeadWeight()) {
 					deadWeight = product.getDeadWeight();
 				}
-				float revShippingFeeDW = (deadWeight / (float) (chargesMap
-						.get(GlobalConstant.ReverseShippingFeeDeadWeightPerWeight)))
-						* (float) (chargesMap
+				float revShippingFeeDW = (float)(Math.ceil(deadWeight /(chargesMap
+						.get(GlobalConstant.ReverseShippingFeeDeadWeightPerWeight))))
+						* (chargesMap
 								.get(GlobalConstant.ReverseShippingFeeDeadWeightAmt));
 
 				float volumeWeight = (float) (chargesMap
@@ -2160,9 +2167,9 @@ public class OrderDaoImpl implements OrderDao {
 				if (volumeWeight < product.getVolWeight()) {
 					volumeWeight = product.getVolWeight();
 				}
-				float revShippingFeeVW = (deadWeight / (float) (chargesMap
-						.get(GlobalConstant.ReverseShippingFeeVolumeWeightPerWeight)))
-						* (float) (chargesMap
+				float revShippingFeeVW = (float)(Math.ceil(volumeWeight /(chargesMap
+						.get(GlobalConstant.ReverseShippingFeeVolumeWeightPerWeight))))
+						* (chargesMap
 								.get(GlobalConstant.ReverseShippingFeeVolumeWeightAmt));
 
 				if (revShippingFeeDW > revShippingFeeVW) {
@@ -2181,12 +2188,22 @@ public class OrderDaoImpl implements OrderDao {
 		float serviceTax = chargesMap.containsKey("serviceTax") ? chargesMap
 				.get("serviceTax") : 0;
 
+				System.out.println(" Total return charge calculated : "+totalcharge+"Reverse shiping fee : "+revShippingFee +" Service tax applied  : "+serviceTax);
 		if (serviceTax > 0) {
 			totalcharge = totalcharge + (totalcharge * serviceTax) / 100;
 		}
 		return totalcharge;
 	}
 	
+	/*private boolean calculateDeliveryDate(Order order)
+	{
+		boolean result=false;
+		String pincode=order.getCustomer().getZipcode();
+		String statename=areaConfigDao.getStateFromZipCode(pincode);
+		int deliverydays=sellerD
+		System.out.println(" State from order :  "+statename);
+		return result;
+	}*/
 	@Override
 	public List<ChannelSalesDetails> findChannelOrdersbyDate(String string,
 			Date startDate, Date endDate, int sellerIdfromSession) {
@@ -2198,12 +2215,11 @@ public class OrderDaoImpl implements OrderDao {
 		 criteria1.createAlias("orderPayment", "orderPayment", CriteriaSpecification.LEFT_JOIN);
 		 criteria1.createAlias("orderTax", "orderTax", CriteriaSpecification.LEFT_JOIN);
 		 criteria1.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.LEFT_JOIN);
-		 criteria1.createAlias("orderTimeline", "orderTimeline", CriteriaSpecification.LEFT_JOIN);
-		 criteria1.add(Restrictions.eq("seller.id", sellerIdfromSession));
-		 criteria1.setProjection(Projections.distinct(Projections.property("orderId")));
+		 criteria1.createAlias("orderTimeline", "orderTimeline", CriteriaSpecification.LEFT_JOIN)
+		 .add(Restrictions.eq("seller.id", sellerIdfromSession));
 		 criteria1.add(Restrictions.between("orderDate",startDate, endDate));
 		 criteria1.setProjection(getPL("pcName"));
-		 ArrayList<Integer> orderId=new ArrayList<Integer>();
+		 
 		 List pcNameList=criteria1.list();
 			Iterator pcNameItr=pcNameList.iterator();
 			List<ChannelSalesDetails> ttso=new ArrayList<ChannelSalesDetails>();
@@ -2213,10 +2229,7 @@ public class OrderDaoImpl implements OrderDao {
 				 temp=new ChannelSalesDetails();
 				 populateChannelSalesDetails(temp,recordsRow,startDate,endDate);
 				 System.out.println("PC NAME "+ temp.getPcName()+"  "+temp.getStartDate()+" "+temp.getOrderId()+"  "+temp.getInvoiceID());
-				 if(!orderId.contains(new Integer(temp.getOrderId())))
 				 ttso.add(temp);
-				 orderId.add(new Integer(temp.getOrderId()));
-				// ttso.add(temp);
 			} 
 			System.out.println("THIS IS THE TOTAL LIST OF ORDERS "+ttso.size());
 		return ttso;
@@ -2297,24 +2310,21 @@ public class OrderDaoImpl implements OrderDao {
 	private boolean calculateNR(NRnReturnConfig nrnReturnConfig, Order order, String prodCat, float deadWeight, float volWeight) {
 		
 		log.info("$$$ calculateNR for Events Start $$$");
-		/*System.out.println("**Parameters recieved : pcNAme -> "
-				+ partner.getPcName() + " channelorderid - > "
-				+ order.getChannelOrderID() + " prodCat " + prodCat
-				+ "deadWeight " + deadWeight + " volWeight " + volWeight);
-		log.debug("**Parameters recieved : pcNAme -> " + partner.getPcName()
-				+ " channelorderid - > " + order.getChannelOrderID()
-				+ " prodCat " + prodCat + "deadWeight " + deadWeight
-				+ " volWeight " + volWeight);*/
+		
 		double nrValue = 0;
 		float comission = 0;
 		float fixedfee = 0;
 		double pccAmount = 0;
 		float serviceTax = 0;
 		double tds = 0;
-		
+		/*
+		 * String pattern1 = prodCat + "="; String pattern2 = ",";
+		 */
 		StringBuffer area = new StringBuffer("");
 		StringBuffer volarea = new StringBuffer("");
-		
+		/*
+		 * float deadWieghtCharges = 0; float volWeightCharges = 0;
+		 */
 		float vwchargetemp = 0;
 		float dwchargetemp = 0;
 		float shippingCharges = 0;
@@ -2323,7 +2333,6 @@ public class OrderDaoImpl implements OrderDao {
 		double SP = order.getOrderSP();
 		StringBuffer temp = new StringBuffer("");
 		Map<String, Float> chargesMap = new HashMap<String, Float>();
-		
 		/* Map<String, Float> returnMap = new HashMap<String, Float>(); */
 
 		List<NRnReturnCharges> chargesList = nrnReturnConfig.getCharges();
@@ -2332,11 +2341,12 @@ public class OrderDaoImpl implements OrderDao {
 			System.out.println(" Charge : " + charge.getChargeName());
 			chargesMap.put(charge.getChargeName(), charge.getChargeAmount());
 		}
-		// Extracting commission value
+		// Extracting comiision value
 		try {
-			if (nrnReturnConfig.getCommissionType()
-					.equals("fixed")) {
-				comission = chargesMap.get(GlobalConstant.fixedCommissionPercent);
+			if (nrnReturnConfig.getCommissionType()!=null&&
+					nrnReturnConfig.getCommissionType().equals("fixed")) {
+				comission = chargesMap
+						.get(GlobalConstant.fixedCommissionPercent);
 
 			} else {
 				comission = chargesMap.get(prodCat);
@@ -2348,10 +2358,11 @@ public class OrderDaoImpl implements OrderDao {
 				if (SP < 251)
 					fixedfee = chargesMap.get(GlobalConstant.fixedfeelt250);
 				else if (SP > 250 && SP < 501)
-					fixedfee = chargesMap
-							.get(GlobalConstant.fixedfeegt250lt500);
+					fixedfee = chargesMap.containsKey(GlobalConstant.fixedfeegt250lt500)?chargesMap
+							.get(GlobalConstant.fixedfeegt250lt500):0;
 				else
-					fixedfee = chargesMap.get(GlobalConstant.fixedfeegt500);
+					fixedfee = chargesMap.containsKey(GlobalConstant.fixedfeegt500)?
+							chargesMap.get(GlobalConstant.fixedfeegt500):0;
 			} else if (chargesMap.containsKey(GlobalConstant.fixedfeelt500)
 					&& chargesMap.get(GlobalConstant.fixedfeelt500).intValue() != 0) {
 				if (SP < 501)
@@ -2413,6 +2424,8 @@ public class OrderDaoImpl implements OrderDao {
 					+ nrnReturnConfig.getZonalList());
 			System.out.println(" State we are geting ofrom excel : " + state);
 			
+
+			// ****Shipping charges
 			if (nrnReturnConfig.getShippingFeeType() != null
 					&& nrnReturnConfig.getShippingFeeType()
 							.equals("variable")) {
@@ -2442,28 +2455,34 @@ public class OrderDaoImpl implements OrderDao {
 				area.append("fixed");
 				volarea.append("fixed");
 			}
-			if (deadWeight < 500) {
+			if (deadWeight < 501) {
 				area.append("dwlt500");
 				order.setDwShippingString(area.toString());
 				dwchargetemp = chargesMap.containsKey(area.toString()) ? chargesMap
 						.get(area.toString()) : 0;
 
 			} else {
-				temp = area;
+				temp = new StringBuffer(area);
 				area.append("dwlt500");
+				temp.append("dwgt500");
+				System.out.println(" Area : "+area+" temp : "+temp);
 				dwchargetemp = chargesMap.containsKey(area.toString()) ? chargesMap
 						.get(area.toString()) : 0;
+						System.out.println(" Charges for lesstthan 500 : "+dwchargetemp);
 				float range = (float) Math.ceil((deadWeight - 500) / 500);
+				System.out.println(" Range : "+range);
 				dwchargetemp = dwchargetemp
-						+ (range * (chargesMap.containsKey(area.toString()) ? chargesMap
-								.get(temp.append("dwgt500")) : 0));
+						+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
+								.get(temp.toString()) : 0));
+				System.out.println(" Charges for greater than 500 : "+chargesMap
+								.get(temp.toString()));
 				order.setDwShippingString(temp.toString());
 
 			}
 
 			System.out.println("volarea  " + volarea);
 
-			if (volWeight < 500) {
+			if (volWeight < 501) {
 				tempStr = volarea.append("vwlt500").toString();
 				System.out.println(" tempStr " + tempStr);
 				/*
@@ -2475,13 +2494,11 @@ public class OrderDaoImpl implements OrderDao {
 				order.setVolShippingString(tempStr);
 			} else if (volWeight > 500 && volWeight < 1001) {
 				tempStr = volarea.append("vwgt500lt1000").toString();
-				System.out.println(" tempStr " + tempStr);
 				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
 						.get(tempStr) : 0;
 				order.setVolShippingString(volarea.toString());
 			} else if (volWeight > 1000 && volWeight < 1501) {
 				tempStr = volarea.append("vwgt1000lt1500").toString();
-				System.out.println(" tempStr " + tempStr);
 				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
 						.get(tempStr) : 0;
 				order.setVolShippingString(volarea.toString());
@@ -2494,16 +2511,21 @@ public class OrderDaoImpl implements OrderDao {
 			} else if (volWeight > 5000) {
 				temp = new StringBuffer(volarea);
 				volarea.append("vwgt1500lt5000");
+				
 				vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap
 						.get(volarea.toString()) : 0;
+						System.out.println(" vol Charges for lesstthan 500 : "+vwchargetemp);	
 				temp.append("vwgt5000");
+				float range = (float) Math.ceil((volWeight - 5000) / 1000);
+				System.out.println("volarea  "+volarea+" temp : "+temp+ " range invol: "+range);
 				vwchargetemp = vwchargetemp
-						+ ((volWeight - 5000) / 1000)
+						+ (range
 						* (chargesMap.containsKey(temp.toString()) ? chargesMap
-								.get(temp.toString()) : 0);
+								.get(temp.toString()) : 0));
 				order.setVolShippingString(temp.toString());
 
 			}
+			System.out.println(" vwchargetemp : "+vwchargetemp +" dwchargetemp : "+dwchargetemp);
 			if (vwchargetemp > dwchargetemp)
 				shippingCharges = vwchargetemp;
 			else
@@ -2511,8 +2533,10 @@ public class OrderDaoImpl implements OrderDao {
 			comission = (float) (comission * SP) / 100;
 			serviceTax = (chargesMap.containsKey("serviceTax") ? chargesMap
 					.get("serviceTax") : 0) * (float) (shippingCharges+pccAmount+fixedfee+comission) / 100;
-			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges - serviceTax;
-			tds = ((comission / 10) + ((fixedfee + pccAmount) / 50))* order.getQuantity();
+			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
+					- serviceTax;
+			tds = ((comission / 10) + ((fixedfee + pccAmount) / 50))
+					* order.getQuantity();
 			order.getOrderTax().setTdsToDeduct(tds);
 			order.setGrossNetRate(nrValue);
 			order.setPartnerCommission(comission);
@@ -2523,289 +2547,307 @@ public class OrderDaoImpl implements OrderDao {
 			e.printStackTrace();
 			return false;
 		}
+		// Or we can pass order reference in parameterand set these values
+		/*
+		 * returnMap.put("nrValue", (float) nrValue); returnMap.put("comission",
+		 * comission); returnMap.put("fixedfee", fixedfee);
+		 * returnMap.put("pccAmount", (float) pccAmount);
+		 * returnMap.put("shippingCharges", shippingCharges);
+		 */
+		System.out.println(" Setting values for Nr in nrcalculator NR: "
+				+ order.getNetRate() + ", commison : "
+				+ order.getPartnerCommission() + " fixedfee : "
+				+ order.getFixedfee() + " pcc : " + order.getPccAmount()
+				+ " ->service tax : " + serviceTax + "shippingCharges : "
+				+ order.getShippingCharges());
 		
-		log.info("$$$ calculateNR for Events Exit $$$");
+		log.info("$$$ calculateNR for Events exit $$$");
 		return true;
 	}
 	
 	private float calculateReturnCharges(Order order, OrderRTOorReturn ordereturn, int sellerId,NRnReturnConfig nrnReturnConfig)throws Exception{
 		
 		log.info("$$$ calculateReturnCharges for Events Start $$$");
-			float totalcharge = 0;
-			float revShippingFee = 0;
-			String varPercentSP = null;
-			String varPercentPCC = null;
-			String varPercentFixAmt = null;
-			String chargesType = null;
-			String fixedAmount = null;
-			boolean shippingfee = false;
-			boolean servicetax = false;
-			boolean fixedfee = false;
-			boolean paycollcharges = false;
-			boolean isRevShippingFee = false;
+			
+		float totalcharge = 0;
+		float revShippingFee = 0;
+		String varPercentSP = null;
+		String varPercentPCC = null;
+		String varPercentFixAmt = null;
+		String chargesType = null;
+		String fixedAmount = null;
+		boolean shippingfee = false;
+		boolean servicetax = false;
+		boolean fixedfee = false;
+		boolean paycollcharges = false;
+		boolean isRevShippingFee = false;
 
-			//Partner partner = partnerService.getPartner(order.getPcName(), sellerId);
+		String returnType = ordereturn.getType();
+		String faultType = ordereturn.getReturnCategory();
+		String cancelType = (ordereturn.getCancelType() != null) ? ordereturn
+				.getCancelType() : "";
 
-			String returnType = ordereturn.getType();
-			String faultType = ordereturn.getReturnCategory();
-			String cancelType = (ordereturn.getCancelType() != null) ? ordereturn
-					.getCancelType() : "";
+		Map<String, Float> chargesMap = new HashMap<String, Float>();
+		List<NRnReturnCharges> chargesList = nrnReturnConfig.getCharges();
+		for (NRnReturnCharges charge : chargesList) {
+			chargesMap.put(charge.getChargeName(), charge.getChargeAmount());
+		}
 
-			Map<String, Float> chargesMap = new HashMap<String, Float>();
-			List<NRnReturnCharges> chargesList = nrnReturnConfig.getCharges();
-			for (NRnReturnCharges charge : chargesList) {
-				chargesMap.put(charge.getChargeName(), charge.getChargeAmount());
+		switch (returnType) {
+		case "returnCharges":
+			if (faultType.equals(GlobalConstant.SellerFaultString)) {
+				fixedAmount = GlobalConstant.ReturnChargesSellerFaultFixedAmount;
+				varPercentSP = GlobalConstant.ReturnChargesSellerFaultVariablePercentSP;
+				varPercentFixAmt = GlobalConstant.ReturnChargesSellerFaultVariableFixedAmt;
+				varPercentPCC = GlobalConstant.ReturnChargesSellerFaultVariablePercentPCC;
+				chargesType = nrnReturnConfig.getRetCharSFType();
+				shippingfee = nrnReturnConfig.isRetCharSFShipFee();
+				servicetax = nrnReturnConfig.isRetCharSFSerTax();
+				fixedfee = nrnReturnConfig.isRetCharSFFF();
+				paycollcharges = nrnReturnConfig.isRetCharSFPCC();
+				isRevShippingFee = nrnReturnConfig.isRetCharSFRevShipFee();
+			} else {
+				fixedAmount = GlobalConstant.ReturnChargesBuyerReturnFixedAmount;
+				varPercentSP = GlobalConstant.ReturnChargesBuyerReturnVariablePercentSP;
+				varPercentFixAmt = GlobalConstant.ReturnChargesBuyerReturnVariableFixedAmt;
+				chargesType = nrnReturnConfig.getRetCharBRType();
+				shippingfee = nrnReturnConfig.isRetCharBRShipFee();
+				servicetax = nrnReturnConfig.isRetCharBRSerTax();
+				fixedfee = nrnReturnConfig.isRetCharBRFF();
+				paycollcharges = nrnReturnConfig.isRetCharBRPCC();
 			}
 
-			switch (returnType) {
-			case "returnCharges":
-				if (faultType.equals(GlobalConstant.SellerFaultString)) {
-					fixedAmount = GlobalConstant.ReturnChargesSellerFaultFixedAmount;
-					varPercentSP = GlobalConstant.ReturnChargesSellerFaultVariablePercentSP;
-					varPercentFixAmt = GlobalConstant.ReturnChargesSellerFaultVariableFixedAmt;
-					varPercentPCC = GlobalConstant.ReturnChargesSellerFaultVariablePercentPCC;
-					chargesType = nrnReturnConfig.getRetCharSFType();
-					shippingfee = nrnReturnConfig.isRetCharSFShipFee();
-					servicetax = nrnReturnConfig.isRetCharSFSerTax();
-					fixedfee = nrnReturnConfig.isRetCharSFFF();
-					paycollcharges = nrnReturnConfig.isRetCharSFPCC();
-					isRevShippingFee = nrnReturnConfig.isRetCharSFRevShipFee();
-				} else {
-					fixedAmount = GlobalConstant.ReturnChargesBuyerReturnFixedAmount;
-					varPercentSP = GlobalConstant.ReturnChargesBuyerReturnVariablePercentSP;
-					varPercentFixAmt = GlobalConstant.ReturnChargesBuyerReturnVariableFixedAmt;
-					chargesType = nrnReturnConfig.getRetCharBRType();
-					shippingfee = nrnReturnConfig.isRetCharBRShipFee();
-					servicetax = nrnReturnConfig.isRetCharBRSerTax();
-					fixedfee = nrnReturnConfig.isRetCharSFFF();
-					paycollcharges = nrnReturnConfig.isRetCharSFPCC();
-				}
+			break;
+		case "RTOCharges":
+			if (faultType.equals(GlobalConstant.SellerFaultString)) {
+				fixedAmount = GlobalConstant.RTOChargesSellerFaultFixedAmount;
+				varPercentSP = GlobalConstant.RTOChargesSellerFaultVariablePercentSP;
+				varPercentFixAmt = GlobalConstant.RTOChargesSellerFaultVariableFixedAmt;
+				varPercentPCC = GlobalConstant.RTOChargesSellerFaultVariablePercentPCC;
+				chargesType = nrnReturnConfig.getRTOCharSFType();
+				shippingfee = nrnReturnConfig.isRTOCharSFShipFee();
+				servicetax = nrnReturnConfig.isRTOCharSFSerTax();
+				fixedfee = nrnReturnConfig.isRTOCharSFFF();
+				paycollcharges = nrnReturnConfig.isRTOCharSFPCC();
+				isRevShippingFee = nrnReturnConfig.isRTOCharSFRevShipFee();
+			} else {
+				fixedAmount = GlobalConstant.RTOChargesBuyerReturnFixedAmount;
+				varPercentSP = GlobalConstant.RTOChargesBuyerReturnVariablePercentSP;
+				varPercentFixAmt = GlobalConstant.RTOChargesBuyerReturnVariableFixedAmt;
+				chargesType = nrnReturnConfig.getRTOCharBRType();
+				shippingfee = nrnReturnConfig.isRTOCharBRShipFee();
+				servicetax = nrnReturnConfig.isRTOCharBRSerTax();
+				fixedfee = nrnReturnConfig.isRTOCharBRFF();
+				paycollcharges = nrnReturnConfig.isRTOCharBRPCC();
+			}
 
-				break;
-			case "RTOCharges":
-				if (faultType.equals(GlobalConstant.SellerFaultString)) {
-					fixedAmount = GlobalConstant.RTOChargesSellerFaultFixedAmount;
-					varPercentSP = GlobalConstant.RTOChargesSellerFaultVariablePercentSP;
-					varPercentFixAmt = GlobalConstant.RTOChargesSellerFaultVariableFixedAmt;
-					varPercentPCC = GlobalConstant.RTOChargesSellerFaultVariablePercentPCC;
-					chargesType = nrnReturnConfig.getRTOCharSFType();
-					shippingfee = nrnReturnConfig.isRTOCharSFShipFee();
-					servicetax = nrnReturnConfig.isRTOCharSFSerTax();
-					fixedfee = nrnReturnConfig.isRTOCharSFFF();
-					paycollcharges = nrnReturnConfig.isRTOCharSFPCC();
-					isRevShippingFee = nrnReturnConfig.isRTOCharSFRevShipFee();
-				} else {
-					fixedAmount = GlobalConstant.RTOChargesBuyerReturnFixedAmount;
-					varPercentSP = GlobalConstant.RTOChargesBuyerReturnVariablePercentSP;
-					varPercentFixAmt = GlobalConstant.RTOChargesBuyerReturnVariableFixedAmt;
-					chargesType = nrnReturnConfig.getRTOCharBRType();
-					shippingfee = nrnReturnConfig.isRTOCharBRShipFee();
-					servicetax = nrnReturnConfig.isRTOCharBRSerTax();
-					fixedfee = nrnReturnConfig.isRTOCharSFFF();
-					paycollcharges = nrnReturnConfig.isRTOCharSFPCC();
-				}
+			break;
+		case "cancellationCharges":
+			if (faultType.equals(GlobalConstant.SellerFaultString)
+					&& cancelType
+							.equals(GlobalConstant.SFCancellationAfterRTDString)) {
+				fixedAmount = GlobalConstant.CancellationChargesSellerFaultFixedAmount;
+				varPercentSP = GlobalConstant.CancellationChargesSellerFaultVariablePercentSP;
+				varPercentFixAmt = GlobalConstant.CancellationChargesSellerFaultVariableFixedAmt;
+				varPercentPCC = GlobalConstant.CancellationChargesSellerFaultVariablePercentPCC;
+				chargesType = nrnReturnConfig.getCanCharSFARTDType();
+				shippingfee = nrnReturnConfig.isCanCharSFShipFee();
+				servicetax = nrnReturnConfig.isCanCharSFSerTax();
+				fixedfee = nrnReturnConfig.isCanCharSFFF();
+				paycollcharges = nrnReturnConfig.isCanCharSFPCC();
+				isRevShippingFee = nrnReturnConfig.isCanCharSFARTDRevShipFee();
+			} else if (faultType.equals(GlobalConstant.SellerFaultString)
+					&& cancelType
+							.equals(GlobalConstant.SFCancellationBeforeRTDString)) {
+				fixedAmount = GlobalConstant.CancellationChargesSellerFaultBRTDFixedAmount;
+				varPercentSP = GlobalConstant.CancellationChargesSellerFaultBRTDVariablePercentSP;
+				varPercentFixAmt = GlobalConstant.CancellationChargesSellerFaultBRTDVariableFixedAmt;
+				varPercentPCC = GlobalConstant.CancellationChargesSellerFaultBRTDVariablePercentPCC;
+				chargesType = nrnReturnConfig.getCanCharSFBFRTDType();
+				shippingfee = nrnReturnConfig.isCanCharSFBRTDShipFee();
+				servicetax = nrnReturnConfig.isCanCharSFBRTDSerTax();
+				fixedfee = nrnReturnConfig.isCanCharSFBRTDFF();
+				paycollcharges = nrnReturnConfig.isCanCharSFBRTDPCC();
+				isRevShippingFee = nrnReturnConfig.isCanCharSFBRTDRevShipFee();
+			} else {
+				fixedAmount = GlobalConstant.CancellationChargesBuyerReturnFixedAmount;
+				varPercentSP = GlobalConstant.CancellationChargesBuyerReturnVariablePercentSP;
+				varPercentFixAmt = GlobalConstant.CancellationChargesBuyerReturnVariableFixedAmt;
+				chargesType = nrnReturnConfig.getCanCharBRType();
+				shippingfee = nrnReturnConfig.isCanCharBRShipFee();
+				servicetax = nrnReturnConfig.isCanCharBRSerTax();
+				fixedfee = nrnReturnConfig.isCanCharBRFF();
+				paycollcharges = nrnReturnConfig.isCanCharBRPCC();
+			}
 
-				break;
-			case "cancellationCharges":
-				if (faultType.equals(GlobalConstant.SellerFaultString)
-						&& cancelType
-								.equals(GlobalConstant.SFCancellationAfterRTDString)) {
-					fixedAmount = GlobalConstant.CancellationChargesSellerFaultFixedAmount;
-					varPercentSP = GlobalConstant.CancellationChargesSellerFaultVariablePercentSP;
-					varPercentFixAmt = GlobalConstant.CancellationChargesSellerFaultVariableFixedAmt;
-					varPercentPCC = GlobalConstant.CancellationChargesSellerFaultVariablePercentPCC;
-					chargesType = nrnReturnConfig.getCanCharSFARTDType();
-					shippingfee = nrnReturnConfig.isCanCharSFShipFee();
-					servicetax = nrnReturnConfig.isCanCharSFSerTax();
-					fixedfee = nrnReturnConfig.isCanCharSFFF();
-					paycollcharges = nrnReturnConfig.isCanCharSFPCC();
-					isRevShippingFee = nrnReturnConfig.isCanCharSFARTDRevShipFee();
-				} else if (faultType.equals(GlobalConstant.SellerFaultString)
-						&& cancelType
-								.equals(GlobalConstant.SFCancellationBeforeRTDString)) {
-					fixedAmount = GlobalConstant.CancellationChargesSellerFaultBRTDFixedAmount;
-					varPercentSP = GlobalConstant.CancellationChargesSellerFaultBRTDVariablePercentSP;
-					varPercentFixAmt = GlobalConstant.CancellationChargesSellerFaultBRTDVariableFixedAmt;
-					varPercentPCC = GlobalConstant.CancellationChargesSellerFaultBRTDVariablePercentPCC;
-					chargesType = nrnReturnConfig.getCanCharSFBFRTDType();
-					shippingfee = nrnReturnConfig.isCanCharSFBRTDShipFee();
-					servicetax = nrnReturnConfig.isCanCharSFBRTDSerTax();
-					fixedfee = nrnReturnConfig.isCanCharSFBRTDFF();
-					paycollcharges = nrnReturnConfig.isCanCharSFBRTDPCC();
-					isRevShippingFee = nrnReturnConfig.isCanCharSFBRTDRevShipFee();
-				} else {
-					fixedAmount = GlobalConstant.CancellationChargesBuyerReturnFixedAmount;
-					varPercentSP = GlobalConstant.CancellationChargesBuyerReturnVariablePercentSP;
-					varPercentFixAmt = GlobalConstant.CancellationChargesBuyerReturnVariableFixedAmt;
-					chargesType = nrnReturnConfig.getCanCharBRType();
-					shippingfee = nrnReturnConfig.isCanCharBRShipFee();
-					servicetax = nrnReturnConfig.isCanCharBRSerTax();
-					fixedfee = nrnReturnConfig.isCanCharSFFF();
-					paycollcharges = nrnReturnConfig.isCanCharSFPCC();
-				}
+			break;
+		case "replacementCharges":
+			if (faultType.equals(GlobalConstant.SellerFaultString)) {
+				fixedAmount = GlobalConstant.ReplacementChargesSellerFaultFixedAmount;
+				varPercentSP = GlobalConstant.ReplacementChargesSellerFaultVariablePercentSP;
+				varPercentFixAmt = GlobalConstant.ReplacementChargesSellerFaultVariableFixedAmt;
+				varPercentPCC = GlobalConstant.ReplacementChargesSellerFaultVariablePercentPCC;
+				chargesType = nrnReturnConfig.getRepCharSFType();
+				shippingfee = nrnReturnConfig.isRepCharSFShipFee();
+				servicetax = nrnReturnConfig.isRepCharSFSerTax();
+				fixedfee = nrnReturnConfig.isRepCharSFFF();
+				paycollcharges = nrnReturnConfig.isRepCharSFPCC();
+				isRevShippingFee = nrnReturnConfig.isRepCharSFRevShipFee();
+			} else {
+				fixedAmount = GlobalConstant.ReplacementChargesBuyerReturnFixedAmount;
+				varPercentSP = GlobalConstant.ReplacementChargesBuyerReturnVariablePercentSP;
+				varPercentFixAmt = GlobalConstant.ReplacementChargesBuyerReturnVariableFixedAmt;
+				chargesType = nrnReturnConfig.getRepCharBRType();
+				shippingfee = nrnReturnConfig.isRepCharBRShipFee();
+				servicetax = nrnReturnConfig.isRepCharBRSerTax();
+				fixedfee = nrnReturnConfig.isRepCharBRFF();
+				paycollcharges = nrnReturnConfig.isRepCharBRPCC();
+			}
 
-				break;
-			case "replacementCharges":
-				if (faultType.equals(GlobalConstant.SellerFaultString)) {
-					fixedAmount = GlobalConstant.ReplacementChargesSellerFaultFixedAmount;
-					varPercentSP = GlobalConstant.ReplacementChargesSellerFaultVariablePercentSP;
-					varPercentFixAmt = GlobalConstant.ReplacementChargesSellerFaultVariableFixedAmt;
-					varPercentPCC = GlobalConstant.ReplacementChargesSellerFaultVariablePercentPCC;
-					chargesType = nrnReturnConfig.getRepCharSFType();
-					shippingfee = nrnReturnConfig.isRepCharSFShipFee();
-					servicetax = nrnReturnConfig.isRepCharSFSerTax();
-					fixedfee = nrnReturnConfig.isRepCharSFFF();
-					paycollcharges = nrnReturnConfig.isRepCharSFPCC();
-					isRevShippingFee = nrnReturnConfig.isRepCharSFRevShipFee();
-				} else {
-					fixedAmount = GlobalConstant.ReplacementChargesBuyerReturnFixedAmount;
-					varPercentSP = GlobalConstant.ReplacementChargesBuyerReturnVariablePercentSP;
-					varPercentFixAmt = GlobalConstant.ReplacementChargesBuyerReturnVariableFixedAmt;
-					chargesType = nrnReturnConfig.getRepCharBRType();
-					shippingfee = nrnReturnConfig.isRepCharBRShipFee();
-					servicetax = nrnReturnConfig.isRepCharBRSerTax();
-					fixedfee = nrnReturnConfig.isRepCharSFFF();
-					paycollcharges = nrnReturnConfig.isRepCharSFPCC();
-				}
+			break;
+		case "partialDeliveryCharges":
 
-				break;
-			case "partialDeliveryCharges":
+			if (faultType.equals(GlobalConstant.SellerFaultString)) {
+				fixedAmount = GlobalConstant.PartialDelChargesSellerFaultFixedAmount;
+				varPercentSP = GlobalConstant.PartialDelChargesSellerFaultVariablePercentSP;
+				varPercentFixAmt = GlobalConstant.PartialDelChargesSellerFaultVariableFixedAmt;
+				varPercentPCC = GlobalConstant.PartialDelChargesSellerFaultVariablePercentPCC;
+				chargesType = nrnReturnConfig.getPDCharSFType();
+				shippingfee = nrnReturnConfig.isPDCharSFShipFee();
+				servicetax = nrnReturnConfig.isPDCharSFSerTax();
+				fixedfee = nrnReturnConfig.isPDCharSFFF();
+				paycollcharges = nrnReturnConfig.isPDCharSFPCC();
+				isRevShippingFee = nrnReturnConfig.isPDCharSFRevShipFee();
+			} else {
+				fixedAmount = GlobalConstant.PartialDelChargesBuyerReturnFixedAmount;
+				varPercentSP = GlobalConstant.PartialDelChargesBuyerReturnVariablePercentSP;
+				varPercentFixAmt = GlobalConstant.PartialDelChargesBuyerReturnVariableFixedAmt;
+				chargesType = nrnReturnConfig.getPDCharBRType();
+				shippingfee = nrnReturnConfig.isPDCharBRShipFee();
+				servicetax = nrnReturnConfig.isPDCharBRSerTax();
+				fixedfee = nrnReturnConfig.isPDCharBRFF();
+				paycollcharges = nrnReturnConfig.isPDCharBRPCC();
+			}
+			break;
 
-				if (faultType.equals(GlobalConstant.SellerFaultString)) {
-					fixedAmount = GlobalConstant.PartialDelChargesSellerFaultFixedAmount;
-					varPercentSP = GlobalConstant.PartialDelChargesSellerFaultVariablePercentSP;
-					varPercentFixAmt = GlobalConstant.PartialDelChargesSellerFaultVariableFixedAmt;
-					varPercentPCC = GlobalConstant.PartialDelChargesSellerFaultVariablePercentPCC;
-					chargesType = nrnReturnConfig.getPDCharSFType();
-					shippingfee = nrnReturnConfig.isPDCharSFShipFee();
-					servicetax = nrnReturnConfig.isPDCharSFSerTax();
-					fixedfee = nrnReturnConfig.isPDCharSFFF();
-					paycollcharges = nrnReturnConfig.isPDCharSFPCC();
-					isRevShippingFee = nrnReturnConfig.isPDCharSFRevShipFee();
+		default:
+			break;
+		}
+
+		if (chargesType.equalsIgnoreCase(GlobalConstant.fixedString)) {
+			System.out.println(" Fixed amount in return : "+fixedAmount);
+			totalcharge = totalcharge
+					+ (chargesMap.containsKey(fixedAmount) ? chargesMap
+							.get(fixedAmount) : 0);
+		} else if (chargesType.equalsIgnoreCase(GlobalConstant.variableString)) {
+			System.out.println(" Variable amount in Return : "+varPercentSP
+					+" varPercentFixAmt :"+varPercentFixAmt+" varPercentPCC : "+varPercentPCC
+					+"shipping fee : "+shippingfee+" fixedfee  :"+fixedfee+" paycollcharges "+paycollcharges);
+			totalcharge = totalcharge
+					+ (float) (chargesMap.containsKey(varPercentSP) ? (chargesMap
+							.get(varPercentSP) * (order.getOrderSP()/order.getQuantity()) / 100)
+							: 0);
+			totalcharge = totalcharge
+					+ (chargesMap.containsKey(varPercentFixAmt) ? chargesMap
+							.get(varPercentFixAmt) : 0);
+			totalcharge = totalcharge
+					+ (float) (shippingfee ? order.getShippingCharges() : 0);
+			totalcharge = totalcharge
+					+ (float) (fixedfee ? order.getFixedfee() : 0);
+			
+			 totalcharge = totalcharge + (float) (paycollcharges ?
+			 order.getPccAmount() : 0);
+			 
+
+			totalcharge = totalcharge
+					+ (float) (chargesMap.containsKey(varPercentPCC) ? (chargesMap
+							.get(varPercentPCC) * order.getPartnerCommission() / 100)
+							: 0);
+
+		}
+
+		if (isRevShippingFee) {
+			String revShippingType = nrnReturnConfig.getRevShippingFeeType();
+			switch (revShippingType) {
+			case "revShipFeePCC":
+
+				revShippingFee = (float) (chargesMap.containsKey(GlobalConstant.ReverseShippingFeePercentShipFee) ?(chargesMap
+						.get(GlobalConstant.ReverseShippingFeePercentShipFee)
+						* order.getShippingCharges() / 100):0);
+				break;
+			case "revShipFeeNA":
+
+				revShippingFee = 0;
+				break;
+			case "revShipFeeGRT":
+
+				float revShipMarketFee = 
+				(float) (chargesMap.containsKey(GlobalConstant.ReverseShippingFeePercentMarketFee)?
+						((chargesMap
+						.get(GlobalConstant.ReverseShippingFeePercentMarketFee)/100)* order
+						.getPartnerCommission()):0);
+				if (chargesMap.get(GlobalConstant.ReverseShippingFeeFlatAmt) > revShipMarketFee) {
+					revShippingFee = chargesMap
+							.get(GlobalConstant.ReverseShippingFeeFlatAmt);
 				} else {
-					fixedAmount = GlobalConstant.PartialDelChargesBuyerReturnFixedAmount;
-					varPercentSP = GlobalConstant.PartialDelChargesBuyerReturnVariablePercentSP;
-					varPercentFixAmt = GlobalConstant.PartialDelChargesBuyerReturnVariableFixedAmt;
-					chargesType = nrnReturnConfig.getPDCharBRType();
-					shippingfee = nrnReturnConfig.isPDCharBRShipFee();
-					servicetax = nrnReturnConfig.isPDCharBRSerTax();
-					fixedfee = nrnReturnConfig.isPDCharSFFF();
-					paycollcharges = nrnReturnConfig.isPDCharSFPCC();
+					revShippingFee = revShipMarketFee;
 				}
 				break;
+			case "revShipFeeFF":
+
+				revShippingFee = (float) (chargesMap
+						.get(GlobalConstant.ReverseShippingFeeFixedAmt));
+				break;
+			case "revShipFeeShipFee":
+
+				revShippingFee = (float) order.getShippingCharges();
+				break;
+
+			case "revShipFeeVar":
+
+				Product product = productService.getProduct(
+						order.getProductSkuCode(), sellerId);
+				float deadWeight = (float) (chargesMap
+						.get(GlobalConstant.ReverseShippingFeeDeadWeightMinWeight));
+				if (deadWeight < product.getDeadWeight()) {
+					deadWeight = product.getDeadWeight();
+				}
+				float revShippingFeeDW = (float)(Math.ceil(deadWeight /(chargesMap
+						.get(GlobalConstant.ReverseShippingFeeDeadWeightPerWeight))))
+						* (chargesMap
+								.get(GlobalConstant.ReverseShippingFeeDeadWeightAmt));
+
+				float volumeWeight = (float) (chargesMap
+						.get(GlobalConstant.ReverseShippingFeeVolumeWeightMinWeight));
+				if (volumeWeight < product.getVolWeight()) {
+					volumeWeight = product.getVolWeight();
+				}
+				float revShippingFeeVW = (float)(Math.ceil(volumeWeight /(chargesMap
+						.get(GlobalConstant.ReverseShippingFeeVolumeWeightPerWeight))))
+						* (chargesMap
+								.get(GlobalConstant.ReverseShippingFeeVolumeWeightAmt));
+
+				if (revShippingFeeDW > revShippingFeeVW) {
+					revShippingFee = revShippingFeeDW;
+				} else {
+					revShippingFee = revShippingFeeVW;
+				}
 
 			default:
 				break;
 			}
+		}
 
-			if (chargesType.equalsIgnoreCase(GlobalConstant.fixedString)) {
-				totalcharge = totalcharge
-						+ (chargesMap.containsKey(fixedAmount) ? chargesMap
-								.get(fixedAmount) : 0);
-			} else if (chargesType.equalsIgnoreCase(GlobalConstant.variableString)) {
-				totalcharge = totalcharge
-						+ (float) (chargesMap.containsKey(varPercentSP) ? (chargesMap
-								.get(varPercentSP) * order.getOrderSP() / 100)
-								: 0);
-				totalcharge = totalcharge
-						+ (chargesMap.containsKey(varPercentFixAmt) ? chargesMap
-								.get(varPercentFixAmt) : 0);
-				totalcharge = totalcharge
-						+ (float) (shippingfee ? order.getShippingCharges() : 0);
-				totalcharge = totalcharge
-						+ (float) (fixedfee ? order.getFixedfee() : 0);
-				/*
-				 * totalcharge = totalcharge + (float) (paycollcharges ?
-				 * order.getPccAmount() : 0);
-				 */
+		totalcharge = totalcharge + revShippingFee;
 
-				totalcharge = totalcharge
-						+ (float) (chargesMap.containsKey(varPercentPCC) ? (chargesMap
-								.get(varPercentPCC) * order.getPartnerCommission() / 100)
-								: 0);
+		float serviceTax = chargesMap.containsKey("serviceTax") ? chargesMap
+				.get("serviceTax") : 0;
 
-			}
-
-			if (isRevShippingFee) {
-				String revShippingType = nrnReturnConfig.getRevShippingFeeType();
-				switch (revShippingType) {
-				case "revShipFeePCC":
-
-					revShippingFee = (float) (chargesMap
-							.get(GlobalConstant.ReverseShippingFeePercentShipFee)
-							* order.getShippingCharges() / 100);
-					break;
-				case "revShipFeeNA":
-
-					revShippingFee = 0;
-					break;
-				case "revShipFeeGRT":
-
-					float revShipMarketFee = (float) (chargesMap
-							.get(GlobalConstant.ReverseShippingFeePercentMarketFee) * order
-							.getPccAmount());
-					if (chargesMap.get(GlobalConstant.ReverseShippingFeeFlatAmt) > revShipMarketFee) {
-						revShippingFee = chargesMap
-								.get(GlobalConstant.ReverseShippingFeeFlatAmt);
-					} else {
-						revShippingFee = revShipMarketFee;
-					}
-					break;
-				case "revShipFeeFF":
-
-					revShippingFee = (float) (chargesMap
-							.get(GlobalConstant.ReverseShippingFeeFixedAmt));
-					break;
-				case "revShipFeeShipFee":
-
-					revShippingFee = (float) order.getShippingCharges();
-					break;
-
-				case "revShipFeeVar":
-
-					Product product = productService.getProduct(
-							order.getProductSkuCode(), sellerId);
-					float deadWeight = (float) (chargesMap
-							.get(GlobalConstant.ReverseShippingFeeDeadWeightMinWeight));
-					if (deadWeight < product.getDeadWeight()) {
-						deadWeight = product.getDeadWeight();
-					}
-					float revShippingFeeDW = (deadWeight / (float) (chargesMap
-							.get(GlobalConstant.ReverseShippingFeeDeadWeightPerWeight)))
-							* (float) (chargesMap
-									.get(GlobalConstant.ReverseShippingFeeDeadWeightAmt));
-
-					float volumeWeight = (float) (chargesMap
-							.get(GlobalConstant.ReverseShippingFeeVolumeWeightMinWeight));
-					if (volumeWeight < product.getVolWeight()) {
-						volumeWeight = product.getVolWeight();
-					}
-					float revShippingFeeVW = (deadWeight / (float) (chargesMap
-							.get(GlobalConstant.ReverseShippingFeeVolumeWeightPerWeight)))
-							* (float) (chargesMap
-									.get(GlobalConstant.ReverseShippingFeeVolumeWeightAmt));
-
-					if (revShippingFeeDW > revShippingFeeVW) {
-						revShippingFee = revShippingFeeDW;
-					} else {
-						revShippingFee = revShippingFeeVW;
-					}
-
-				default:
-					break;
-				}
-			}
-
-			totalcharge = totalcharge + revShippingFee;
-
-			float serviceTax = chargesMap.containsKey("serviceTax") ? chargesMap
-					.get("serviceTax") : 0;
-
-			if (serviceTax > 0) {
-				totalcharge = totalcharge + (totalcharge * serviceTax) / 100;
-			}
-			log.info("$$$ calculateReturnCharges for Events Exit $$$");
-			return totalcharge;
+				System.out.println(" Total return charge calculated : "+totalcharge+"Reverse shiping fee : "+revShippingFee +" Service tax applied  : "+serviceTax);
+		if (serviceTax > 0) {
+			totalcharge = totalcharge + (totalcharge * serviceTax) / 100;
+		}
+		return totalcharge;
 	}
 		
 }
