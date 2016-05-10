@@ -43,9 +43,9 @@ public class EventsDaoImpl implements EventsDao {
 			String currentPartnerName = events.getChannelName();			
 			
 			Criteria criterias = session.createCriteria(Events.class).add(Restrictions.eq("sellerId", sellerId));
-			Criterion res1=Restrictions.and(Restrictions.ge("startDate",events.getStartDate()),Restrictions.le("endDate",events.getStartDate()));
-			Criterion res2=Restrictions.and(Restrictions.ge("startDate",events.getEndDate()),Restrictions.le("endDate",events.getEndDate()));
-			Criterion res3=Restrictions.and(Restrictions.le("startDate",events.getStartDate()),Restrictions.ge("endDate",events.getEndDate()));
+			Criterion res1=Restrictions.and(Restrictions.le("startDate",events.getStartDate()),Restrictions.ge("endDate",events.getStartDate()));
+			Criterion res2=Restrictions.and(Restrictions.le("startDate",events.getEndDate()),Restrictions.ge("endDate",events.getEndDate()));
+			Criterion res3=Restrictions.and(Restrictions.ge("startDate",events.getStartDate()),Restrictions.le("endDate",events.getEndDate()));
 
 				criterias.add(Restrictions.eq("channelName", events.getChannelName()));
 				criterias.add(Restrictions.or((Restrictions.or(res1, res2)), res3));
