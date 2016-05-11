@@ -153,6 +153,50 @@ public class ProductController {
 
 	}
 	
+	
+	@RequestMapping(value = "/seller/ProductMapping", method = RequestMethod.GET)
+	public ModelAndView productConfigList(HttpServletRequest request,
+			@ModelAttribute("command") ProductBean productBean,
+			BindingResult result) {
+
+		log.info("*** productConfigList start ***");
+		List<Product> products=null;
+		Map<String, Object> model = new HashMap<String, Object>();
+		List<List<ProductConfig>> productConfigs= new ArrayList<List<ProductConfig>>();
+
+		try {
+			Object obj = request.getSession().getAttribute("productSearchObject");
+			if (obj != null) {
+				System.out.println(" Getting list from session" + obj);
+				model.put("productList", obj);
+				request.getSession().removeAttribute("productSearchObject");
+			} else {
+				int pageNo = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 0;
+				model.put("productList", ConverterClass.prepareListofProductBean(productService.listProducts(HelperClass.getSellerIdfromSession(request),pageNo)));
+			}
+			products=productService.listProducts(HelperClass.getSellerIdfromSession(request));
+			if(products != null){
+				for(Product product : products){
+					productConfigs.add(product.getProductConfig());					
+				}
+				model.put("productConfigList", productConfigs);
+			}
+		} catch (CustomException ce) {
+			log.error("productList exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			log.error(e);
+		}
+
+		log.info("*** productConfigList exit ***");
+		return new ModelAndView("initialsetup/ProductMapping", model);
+
+	}
+	
+	
 	 @RequestMapping(value = "/seller/saveUpdateInventory", method = RequestMethod.POST)
 	 public ModelAndView saveDeleteProduct(HttpServletRequest request,@ModelAttribute("command")ProductBean productBean,
 	    BindingResult result) {
@@ -252,7 +296,7 @@ public class ProductController {
 			e.printStackTrace();
 		}
 		log.info("*** saveProductConfig exit ***");
-		return new ModelAndView("redirect:/seller/Product.html");
+		return new ModelAndView("redirect:/seller/ProductMapping.html");
 	}
 	
 	/*Product Config*/

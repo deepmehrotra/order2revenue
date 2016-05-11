@@ -118,19 +118,12 @@
 									<button type="button" class="btn btn-xs btn-white">1000</button>
 									<button type="button" id="LoadMoreProduct"
 										class="btn btn-xs btn-white">More</button>
-									<a href="addProduct.html" class="btn btn-primary btn-xs">Add SKU</a>
-									<a href="addProductConfig.html" class="btn btn-primary btn-xs">Add Product Config</a>
+									<a href="addProduct.html" class="btn btn-primary btn-xs">Add SKU</a>									
 								</div>
 							</div>
-							<div class="bs-example">
-								<ul class="nav nav-tabs">
-									<li class="active"><a data-toggle="tab" href="#sectionA">All
-											SKU</a></li>
-									<li><a data-toggle="tab" href="#sectionB">Product</a></li>
-								</ul>
+							<div class="bs-example">								
 								<div class="tab-content">
-									<div id="sectionA" class="tab-pane fade in active">
-										<div class="ibox-content cus-table-filters">
+									<div class="ibox-content cus-table-filters">
 											<div class="scroll-y">
 												<table
 													class="table table-striped table-bordered table-hover dataTables-example">
@@ -188,70 +181,7 @@
 													Upload Product</a>&nbsp;&nbsp; <a href="#" id="download"
 													class="btn btn-success btn-xs">Download Product Summary</a>
 											</div>
-										</div>
-
-									</div>
-									<div id="sectionB" class="tab-pane fade">
-										<div class="ibox-content cus-table-filters">
-											<div class="scroll-y">
-												<table
-													class="table table-striped table-bordered table-hover dataTables-example">
-													<thead>
-														<tr>
-															<th>SL No.</th>
-															<th>Product SKU_Code</th>
-															<th>Channel SKU_Ref</th>
-															<th>Commision</th>
-															<th>Tax(SP)</th>
-															<th>Tax(PO)</th>
-															<th>EOSS Discount</th>
-															<th>Discount</th>
-															<th>MRP</th>
-															<th>Selling Price</th>
-															<th>Product Price</th>
-															<th>Suggested PO Price</th>
-															<th>EOSS Discount Value</th>
-															<th>Gross NR</th>
-
-														</tr>
-													</thead>
-													<tbody>
-														<c:if test="${!empty productConfigList}">
-															<c:forEach items="${productConfigList}" var="productConfigs" varStatus="loop">
-																<c:forEach items="${productConfigs}" var="productConfig" varStatus="loop">
-																<tr>
-																	<td>${loop.index+1}</td>
-																	<td>${productConfig.productSKuCode}</td>
-																	<td>${productConfig.channelSKuRef}</td>
-																	<td>${productConfig.commision}</td>
-																	<td>${productConfig.taxSp}</td>
-																	<td>${productConfig.taxPo}</td>
-																	<td>${productConfig.eossDiscount}</td>
-																	<td>${productConfig.discount}</td>
-																	<td>${productConfig.mrp}</td>
-																	<td>${productConfig.sp}</td>
-																	<td>${productConfig.productPrice}</td>
-																	<td>${productConfig.suggestedPOPrice}</td>
-																	<td>${productConfig.eossDiscountValue}</td>
-																	<td>${productConfig.grossNR}</td>
-																</tr>
-																</c:forEach>
-															</c:forEach>
-														</c:if>
-													</tbody>
-												</table>
-											</div>
-											<div class="col-sm-12">
-												<div class="hr-line-dashed"></div>
-												<a href="#" id="upload1" class="btn btn-success btn-xs">Bulk
-													Upload Product</a>&nbsp;&nbsp; <a href="#" id="download"
-													class="btn btn-success btn-xs">Download Product Summary</a>
-											</div>
-
-										</div>
-
-
-									</div>
+										</div>									
 								</div>
 							</div>
 
@@ -346,22 +276,24 @@
                 }
         });
         
-        $('#searchProduct').change(function () {
-            $('.ProductSearch-box').hide();
-            $('#'+$(this).val()).fadeIn();
-        });
-        $('.search-dd').on('click', function(e){
-            e.stopPropagation();
-            $('.search-more-wrp').slideToggle();
-        });
-        $('.input-group.date').datepicker({
-            todayBtn: "linked",
-            keyboardNavigation: false,
-            forceParse: false,
-            calendarWeeks: true,
-            autoclose: true
-        });
-       
+        
+		$('#searchProduct').change(function() {
+			$('.ProductSearch-box').hide();
+			$('#' + $(this).val()).fadeIn();
+		});
+		$('.search-dd').on('click', function(e) {
+			e.stopPropagation();
+			$('.search-more-wrp').slideToggle();
+		});
+		$('.input-group.date').datepicker({
+			todayBtn : "linked",
+			keyboardNavigation : false,
+			forceParse : false,
+			calendarWeeks : true,
+			autoclose : true
+		});           
+        
+            
         $('#download').click(function(){
     		 $.ajax({
     	            url : 'downloadOrderDA.html?value=productSummary',
@@ -436,37 +368,6 @@
     	}
     	 
       
-
-	$(document).ready(function() {
-		$('.dataTables-example').dataTable({
-			responsive : true,
-			"dom" : 'T<"clear">lfrtip',
-			"tableTools" : {
-				"sSwfPath" : "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
-			}
-		});
-
-
-		$('#searchProduct').change(function() {
-			$('.ProductSearch-box').hide();
-			$('#' + $(this).val()).fadeIn();
-		});
-		$('.search-dd').on('click', function(e) {
-			e.stopPropagation();
-			$('.search-more-wrp').slideToggle();
-		});
-		$('.input-group.date').datepicker({
-			todayBtn : "linked",
-			keyboardNavigation : false,
-			forceParse : false,
-			calendarWeeks : true,
-			autoclose : true
-		});
-	});
-
-
-   
-
 		$('#download').click(function() {
 			$.ajax({
 				url : 'downloadOrderDA.html?value=productSummary',

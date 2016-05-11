@@ -1,18 +1,44 @@
+<%@page import="com.o2r.helper.HelperClass"%>
+<%@page import="com.o2r.bean.SellerBean"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<%
+
+	if(session.getAttribute("logoUrl") == null){
+	SellerBean bean=(SellerBean)request.getAttribute("sellerBean");
+  	session.setAttribute("logoUrl",bean.getLogoUrl());
+  	session.setAttribute("sellerName",bean.getName());
+	}
+%>
+
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+<head>
+
+</head>
 <body>
 
 <nav class="navbar-default navbar-static-side" role="navigation">
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">
                 <li class="nav-header">
-                        <div class="dropdown profile-element" align="center" > <span>
-                            <img alt="image" class="img-circle" src="/O2R/sellerImages/defaultSeller.jpg" />
-                             </span>
+                	     <div class="dropdown profile-element" align="center" > <span>
+                        		<c:choose>
+									<c:when test='<%= session.getAttribute("logoUrl") != null %>'>
+	        								<img alt="image" class="img-circle" src='<%= session.getAttribute("logoUrl") %>' />
+	    							</c:when>
+	    							<c:otherwise>
+	        								<img alt="image" class="img-circle" src="/O2R/sellerimages/defaultSeller.jpg" />
+	    							</c:otherwise>	
+    							</c:choose>	    						                     
+                           </span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">${sellerBean.name}</strong>
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"><%= session.getAttribute("sellerName")%></strong>
                              </span> <span class="text-muted text-xs block">Seller<b class="caret"></b></span> </span> </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a href="profile.html">Profile</a></li>
@@ -37,9 +63,11 @@
                             <ul class="nav nav-third-level">
                                 <li><a href="#" onclick="onclickSideNavigation('InventoryGroup')">Inventory Groups</a></li>
                                 <li><a href="Product.html">SKUs</a></li>
-                                <li><a href="expenseCategories.html">Expense Group</a></li>
+                                <li><a href="ProductMapping.html">Product Mapping</a></li>
+                                
                             </ul>
                         </li>
+                        <li><a href="expenseCategories.html">Expense Group</a></li>
                         <li><a href="listTaxCategories.html">Tax Categories</a></li>
                     </ul>
                 </li>

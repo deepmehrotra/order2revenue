@@ -64,7 +64,8 @@ span .#error {
 										<%--  <form:hidden path="pcId" value="${partner.pcId}"/> --%>
 										<input type="hidden" name="pcId" id="pcId"
 											value="${partner.pcId}" />
-										<input type="hidden" name="nrnReturnConfig.configId" id="nrnReturnConfig.configId"
+										<input type="hidden" name="nrnReturnConfig.configId"
+											id="nrnReturnConfig.configId"
 											value="${partner.nrnReturnConfig.configId}" />
 									</c:if>
 
@@ -113,15 +114,15 @@ span .#error {
 									<div class="col-sm-4">
 										<div class="radio">
 											<label><form:radiobutton path="paymentType"
-													value="paymentcycle" id="paymentcycle" name="toggler" class="paymentcycleClass"/>Payment
-												Cycle</label>
+													value="paymentcycle" id="paymentcycle" name="toggler"
+													class="paymentcycleClass" />Payment Cycle</label>
 										</div>
 									</div>
 									<div class="col-sm-4">
 										<div class="radio">
 											<label><form:radiobutton path="paymentType"
-													value="datewisepay" id="datewisepay" name="toggler" class="paymentcycleClass"/>Payment
-												From Delivery</label>
+													value="datewisepay" id="datewisepay" name="toggler"
+													class="paymentcycleClass" />Payment From Delivery</label>
 										</div>
 									</div>
 									<div class="col-sm-4">
@@ -311,7 +312,8 @@ span .#error {
 									<div class="col-lg-12">
 										<!--   <input type="checkbox" class="js-switch_2" id="nr-switch" /> -->
 										<form:checkbox path="nrnReturnConfig.nrCalculator"
-											value="${partner.nrnReturnConfig.nrCalculator}" class="js-switch_2" id="nr-switch" />
+											value="${partner.nrnReturnConfig.nrCalculator}"
+											class="js-switch_2" id="nr-switch" />
 										<label>NR Switch</label>
 										<div class="col-sm-12 radio5" id="nr-switch-sec">
 											<!--<div class="col-sm-12 radio1" id="blk-200">-->
@@ -356,8 +358,9 @@ span .#error {
 																		<div class="form-group">
 																			<div class="input-group m-b col-md-4">
 																				<input type="text" class="form-control"
-																					name="nr-fixedCommissionPercent" value="${chargeMap.fixedCommissionPercent}"> <span
-																					class="input-group-addon" >%</span>
+																					name="nr-fixedCommissionPercent"
+																					value="${chargeMap.fixedCommissionPercent}">
+																				<span class="input-group-addon">%</span>
 																			</div>
 																		</div>
 																	</div>
@@ -365,34 +368,34 @@ span .#error {
 																<div class="col-sm-12 radio1"
 																	id="blk-commisionType-categoryWise">
 																	<c:choose>
-																	<c:when test="${!empty categoryMap}">
-																	<c:forEach items="${categoryMap}" var="cat"
-																			varStatus="loop">
-																			<div class="form-group col-md-12">
-																				<label class="col-md-4 control-label">${cat.key}</label>
-																				<div class="input-group m-b col-md-4">
-																					<input type="text" class="form-control"
-																						name='nr-${cat.key}' value='${cat.value}'>
-																					<!--   <span class="input-group-addon">%</span> -->
+																		<c:when test="${!empty categoryMap}">
+																			<c:forEach items="${categoryMap}" var="cat"
+																				varStatus="loop">
+																				<div class="form-group col-md-12">
+																					<label class="col-md-4 control-label">${cat.key}</label>
+																					<div class="input-group m-b col-md-4">
+																						<input type="text" class="form-control"
+																							name='nr-${cat.key}' value='${cat.value}'>
+																						<!--   <span class="input-group-addon">%</span> -->
+																					</div>
 																				</div>
-																			</div>
-																		</c:forEach>
-																	</c:when>
-																	<c:when test="${!empty categoryList}">
-																	<c:forEach items="${categoryList}" var="category"
-																			varStatus="loop">
-																			<div class="form-group col-md-12">
-																				<label class="col-md-4 control-label">${category}</label>
-																				<div class="input-group m-b col-md-4">
-																					<input type="text" class="form-control"
-																						name='nr-${category}'>
-																					<!--   <span class="input-group-addon">%</span> -->
+																			</c:forEach>
+																		</c:when>
+																		<c:when test="${!empty categoryList}">
+																			<c:forEach items="${categoryList}" var="category"
+																				varStatus="loop">
+																				<div class="form-group col-md-12">
+																					<label class="col-md-4 control-label">${category}</label>
+																					<div class="input-group m-b col-md-4">
+																						<input type="text" class="form-control"
+																							name='nr-${category}'>
+																						<!--   <span class="input-group-addon">%</span> -->
+																					</div>
 																				</div>
-																			</div>
-																		</c:forEach>
-																	</c:when>
+																			</c:forEach>
+																		</c:when>
 																	</c:choose>
-																
+
 																</div>
 															</div>
 														</div>
@@ -414,7 +417,8 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeelt250" value="${chargeMap.fixedfeelt250}">
+																				name="nr-fixedfeelt250"
+																				value="${chargeMap.fixedfeelt250}">
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
@@ -422,7 +426,8 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt250lt500" value="${chargeMap.fixedfeegt250lt500}">
+																				name="nr-fixedfeegt250lt500"
+																				value="${chargeMap.fixedfeegt250lt500}">
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
@@ -430,7 +435,8 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt500" value="${chargeMap.fixedfeegt500}">
+																				name="nr-fixedfeegt500"
+																				value="${chargeMap.fixedfeegt500}">
 																		</div>
 																	</div>
 																</div>
@@ -441,7 +447,8 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeelt500Big" value="${chargeMap.fixedfeelt500Big}">
+																				name="nr-fixedfeelt500Big"
+																				value="${chargeMap.fixedfeelt500Big}">
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
@@ -449,7 +456,8 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt500lt1000" value="${chargeMap.fixedfeegt500lt1000}">
+																				name="nr-fixedfeegt500lt1000"
+																				value="${chargeMap.fixedfeegt500lt1000}">
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
@@ -457,7 +465,8 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt1000lt10000" value="${chargeMap.fixedfeegt1000lt10000}">
+																				name="nr-fixedfeegt1000lt10000"
+																				value="${chargeMap.fixedfeegt1000lt10000}">
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
@@ -465,7 +474,8 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt10000" value="${chargeMap.fixedfeegt10000}">
+																				name="nr-fixedfeegt10000"
+																				value="${chargeMap.fixedfeegt10000}">
 																		</div>
 																	</div>
 																</div>
@@ -475,7 +485,8 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeelt500" value="${chargeMap.fixedfeelt500}">
+																				name="nr-fixedfeelt500"
+																				value="${chargeMap.fixedfeelt500}">
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
@@ -483,7 +494,8 @@ span .#error {
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt500Big" value="${chargeMap.fixedfeegt500Big}">
+																				name="nr-fixedfeegt500Big"
+																				value="${chargeMap.fixedfeegt500Big}">
 																		</div>
 																	</div>
 																</div>
@@ -514,15 +526,16 @@ span .#error {
 																			<div class="col-sm-6">
 																				<div class="checkbox i-checks">
 																					<label> <input type="checkbox" value=""
-																						name="ispercentSPPCC"> <i></i>
-																						Percentage of SP
+																						name="ispercentSPPCC"> <i></i> Percentage
+																						of SP
 																					</label>
 																				</div>
 																			</div>
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
 																					<input type="text" class="form-control"
-																						name="nr-percentSPPCC" value="${chargeMap.percentSPPCC}"> <span
+																						name="nr-percentSPPCC"
+																						value="${chargeMap.percentSPPCC}"> <span
 																						class="input-group-addon">%</span>
 																				</div>
 																			</div>
@@ -530,7 +543,7 @@ span .#error {
 																		<div class="col-sm-12">
 																			<div class="col-sm-6">
 																				<div class="checkbox i-checks">
-																					<label> <input type="checkbox" 
+																					<label> <input type="checkbox"
 																						name="isfixedAmountPCC"> <i></i> Fixed
 																						Amount
 																					</label>
@@ -539,7 +552,8 @@ span .#error {
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
 																					<input type="text" class="form-control"
-																						name="nr-fixedAmtPCC" value="${chargeMap.fixedAmtPCC}"> <span
+																						name="nr-fixedAmtPCC"
+																						value="${chargeMap.fixedAmtPCC}"> <span
 																						class="input-group-addon">%</span>
 																				</div>
 																			</div>
@@ -604,20 +618,24 @@ span .#error {
 																						<td><div class="form-group ">
 																								<div class=" content-rgt">
 																									<input type="text" placeholder=""
-																										class="form-control" name="nr-localvwlt500" value="${chargeMap.localvwlt500}">
+																										class="form-control" name="nr-localvwlt500"
+																										value="${chargeMap.localvwlt500}">
 																								</div>
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-zonalvwlt500" value="${chargeMap.zonalvwlt500}">
+																									class="form-control" name="nr-zonalvwlt500"
+																									value="${chargeMap.zonalvwlt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-nationalvwlt500" value="${chargeMap.nationalvwlt500}">
+																									class="form-control" name="nr-nationalvwlt500"
+																									value="${chargeMap.nationalvwlt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-metrovwlt500" value="${chargeMap.metrovwlt500}">
+																									class="form-control" name="nr-metrovwlt500"
+																									value="${chargeMap.metrovwlt500}">
 																							</div></td>
 																					</tr>
 																					<tr>
@@ -625,22 +643,26 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-localvwgt500lt1000" value="${chargeMap.localvwgt500lt1000}">
+																									name="nr-localvwgt500lt1000"
+																									value="${chargeMap.localvwgt500lt1000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-zonalvwgt500lt1000" value="${chargeMap.zonalvwgt500lt1000}">
+																									name="nr-zonalvwgt500lt1000"
+																									value="${chargeMap.zonalvwgt500lt1000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-nationalvwgt500lt1000" value="${chargeMap.nationalvwgt500lt1000}">
+																									name="nr-nationalvwgt500lt1000"
+																									value="${chargeMap.nationalvwgt500lt1000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-metrovwgt500lt1000" value="${chargeMap.metrovwgt500lt1000}">
+																									name="nr-metrovwgt500lt1000"
+																									value="${chargeMap.metrovwgt500lt1000}">
 																							</div></td>
 																					</tr>
 																					<tr>
@@ -648,22 +670,26 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-localvwgt1000lt1500" value="${chargeMap.localvwgt1000lt1500}">
+																									name="nr-localvwgt1000lt1500"
+																									value="${chargeMap.localvwgt1000lt1500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-zonalvwgt1000lt1500"  value="${chargeMap.zonalvwgt1000lt1500}">
+																									name="nr-zonalvwgt1000lt1500"
+																									value="${chargeMap.zonalvwgt1000lt1500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-nationalvwgt1000lt1500"  value="${chargeMap.nationalvwgt1000lt1500}">
+																									name="nr-nationalvwgt1000lt1500"
+																									value="${chargeMap.nationalvwgt1000lt1500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-metrovwgt1000lt1500"  value="${chargeMap.metrovwgt1000lt1500}">
+																									name="nr-metrovwgt1000lt1500"
+																									value="${chargeMap.metrovwgt1000lt1500}">
 																							</div></td>
 																					</tr>
 																					<tr>
@@ -671,41 +697,49 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-localvwgt1500lt5000"  value="${chargeMap.localvwgt1000lt1500}">
+																									name="nr-localvwgt1500lt5000"
+																									value="${chargeMap.localvwgt1000lt1500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-zonalvwgt1500lt5000" value="${chargeMap.zonalvwgt1500lt5000}">
+																									name="nr-zonalvwgt1500lt5000"
+																									value="${chargeMap.zonalvwgt1500lt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-nationalvwgt1500lt5000" value="${chargeMap.nationalvwgt1500lt5000}">
+																									name="nr-nationalvwgt1500lt5000"
+																									value="${chargeMap.nationalvwgt1500lt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-metrovwgt1500lt5000" value="${chargeMap.metrovwgt1500lt5000}">
+																									name="nr-metrovwgt1500lt5000"
+																									value="${chargeMap.metrovwgt1500lt5000}">
 																							</div></td>
 																					</tr>
 																					<tr>
 																						<td><label>add 1 kg</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-localvwgt5000" value="${chargeMap.metrovwgt1500lt5000}">
+																									class="form-control" name="nr-localvwgt5000"
+																									value="${chargeMap.metrovwgt1500lt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-zonalvwgt5000" value="${chargeMap.zonalvwgt5000}">
+																									class="form-control" name="nr-zonalvwgt5000"
+																									value="${chargeMap.zonalvwgt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-nationalvwgt5000" value="${chargeMap.nationalvwgt5000}">
+																									class="form-control" name="nr-nationalvwgt5000"
+																									value="${chargeMap.nationalvwgt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-metrovwgt5000" value="${chargeMap.metrovwgt5000}">
+																									class="form-control" name="nr-metrovwgt5000"
+																									value="${chargeMap.metrovwgt5000}">
 																							</div></td>
 																					</tr>
 																				</tbody>
@@ -729,39 +763,47 @@ span .#error {
 																						<td><div class="form-group ">
 																								<div class=" content-rgt">
 																									<input type="text" placeholder=""
-																										class="form-control" name="nr-localdwlt500" value="${chargeMap.metrovwgt5000}">
+																										class="form-control" name="nr-localdwlt500"
+																										value="${chargeMap.metrovwgt5000}">
 																								</div>
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-zonaldwlt500" value="${chargeMap.zonaldwlt500}">
+																									class="form-control" name="nr-zonaldwlt500"
+																									value="${chargeMap.zonaldwlt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-nationaldwlt500" value="${chargeMap.nationaldwlt500}">
+																									class="form-control" name="nr-nationaldwlt500"
+																									value="${chargeMap.nationaldwlt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-metrodwlt500" value="${chargeMap.metrodwlt500}">
+																									class="form-control" name="nr-metrodwlt500"
+																									value="${chargeMap.metrodwlt500}">
 																							</div></td>
 																					</tr>
 																					<tr>
 																						<td><label>additional &gt; 500</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-localdwgt500" value="${chargeMap.localdwgt500}">
+																									class="form-control" name="nr-localdwgt500"
+																									value="${chargeMap.localdwgt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-zonaldwgt500" value="${chargeMap.zonaldwgt500}">
+																									class="form-control" name="nr-zonaldwgt500"
+																									value="${chargeMap.zonaldwgt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-nationaldwgt500" value="${chargeMap.nationaldwgt500}">
+																									class="form-control" name="nr-nationaldwgt500"
+																									value="${chargeMap.nationaldwgt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-metrodwgt500" value="${chargeMap.metrodwgt500}">
+																									class="form-control" name="nr-metrodwgt500"
+																									value="${chargeMap.metrodwgt500}">
 																							</div></td>
 																					</tr>
 																				</tbody>
@@ -789,7 +831,8 @@ span .#error {
 																						<td><div class="form-group ">
 																								<div class=" content-rgt">
 																									<input type="text" placeholder=""
-																										class="form-control" name="nr-fixeddwlt500" value="${chargeMap.fixeddwlt500}">
+																										class="form-control" name="nr-fixeddwlt500"
+																										value="${chargeMap.fixeddwlt500}">
 																								</div>
 																							</div></td>
 																					</tr>
@@ -797,7 +840,8 @@ span .#error {
 																						<td><label>additional &gt; 500</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-fixeddwgt500" value="${chargeMap.fixeddwgt500}">
+																									class="form-control" name="nr-fixeddwgt500"
+																									value="${chargeMap.fixeddwgt500}">
 																							</div></td>
 																					</tr>
 																				</tbody>
@@ -818,7 +862,8 @@ span .#error {
 																						<td><div class="form-group ">
 																								<div class=" content-rgt">
 																									<input type="text" placeholder=""
-																										class="form-control" name="nr-fixedvwlt500" value="${chargeMap.fixedvwlt500}">
+																										class="form-control" name="nr-fixedvwlt500"
+																										value="${chargeMap.fixedvwlt500}">
 																								</div>
 																							</div></td>
 																					</tr>
@@ -827,7 +872,8 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-fixedvwgt500lt1000" value="${chargeMap.fixedvwgt500lt1000}">
+																									name="nr-fixedvwgt500lt1000"
+																									value="${chargeMap.fixedvwgt500lt1000}">
 																							</div></td>
 																					</tr>
 																					<tr>
@@ -835,7 +881,8 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-fixedvwgt1000lt1500" value="${chargeMap.fixedvwgt1000lt1500}">
+																									name="nr-fixedvwgt1000lt1500"
+																									value="${chargeMap.fixedvwgt1000lt1500}">
 																							</div></td>
 																					</tr>
 																					<tr>
@@ -843,14 +890,16 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control"
-																									name="nr-fixedvwgt1500lt5000" value="${chargeMap.fixedvwgt1000lt1500}">
+																									name="nr-fixedvwgt1500lt5000"
+																									value="${chargeMap.fixedvwgt1000lt1500}">
 																							</div></td>
 																					</tr>
 																					<tr>
 																						<td><label>add 1 kg</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-fixedvwgt5000" value="${chargeMap.fixedvwgt5000}">
+																									class="form-control" name="nr-fixedvwgt5000"
+																									value="${chargeMap.fixedvwgt5000}">
 																							</div></td>
 																					</tr>
 																				</tbody>
@@ -872,7 +921,8 @@ span .#error {
 																	<div class="form-group col-md-12">
 																		<div class="col-md-4 content-rgt">
 																			<input type="text" placeholder=""
-																				class="form-control" name="nr-serviceTax" value="${chargeMap.serviceTax}">
+																				class="form-control" name="nr-serviceTax"
+																				value="${chargeMap.serviceTax}">
 																		</div>
 																	</div>
 																</div>
@@ -979,23 +1029,24 @@ span .#error {
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.retCharSFFF" id="retCharSFFF"/> <i></i>
-																					Fixed Fee
+																						path="nrnReturnConfig.retCharSFFF"
+																						id="retCharSFFF" /> <i></i> Fixed Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label><form:checkbox
-																						path="nrnReturnConfig.retCharSFShipFee" id="retCharSFShipFee"/> <i></i>
-																					Shipping Fee </label>
+																						path="nrnReturnConfig.retCharSFShipFee"
+																						id="retCharSFShipFee" /> <i></i> Shipping Fee </label>
 																			</div>
 																		</div>
 																		<div class="col-sm-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.retCharSFRevShipFee" id="retCharSFRevShipFee"/> <i></i>
-																					Reverse Shipping Fee
+																						path="nrnReturnConfig.retCharSFRevShipFee"
+																						id="retCharSFRevShipFee" /> <i></i> Reverse
+																					Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1081,16 +1132,16 @@ span .#error {
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.retCharBRFF" id="retCharBRFF"/> <i></i>
-																					Fixed Fee
+																						path="nrnReturnConfig.retCharBRFF"
+																						id="retCharBRFF" /> <i></i> Fixed Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label><form:checkbox
-																						path="nrnReturnConfig.retCharBRShipFee" id="retCharBRShipFee"/> <i></i>
-																					Shipping Fee </label>
+																						path="nrnReturnConfig.retCharBRShipFee"
+																						id="retCharBRShipFee" /> <i></i> Shipping Fee </label>
 																			</div>
 																		</div>
 																	</div>
@@ -1183,24 +1234,25 @@ span .#error {
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.RTOCharSFFF" id="RTOCharSFFF"/> <i></i>
-																					Fixed Fee
+																						path="nrnReturnConfig.RTOCharSFFF"
+																						id="RTOCharSFFF" /> <i></i> Fixed Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.RTOCharSFShipFee" id="RTOCharSFShipFee"/> <i></i>
-																					Shipping Fee
+																						path="nrnReturnConfig.RTOCharSFShipFee"
+																						id="RTOCharSFShipFee" /> <i></i> Shipping Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-sm-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.RTOCharSFRevShipFee" id="RTOCharSFRevShipFee"/> <i></i>
-																					Reverse Shipping Fee
+																						path="nrnReturnConfig.RTOCharSFRevShipFee"
+																						id="RTOCharSFRevShipFee" /> <i></i> Reverse
+																					Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1284,16 +1336,16 @@ span .#error {
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.RTOCharBRFF" id="RTOCharBRFF"/> <i></i>
-																					Fixed Fee
+																						path="nrnReturnConfig.RTOCharBRFF"
+																						id="RTOCharBRFF" /> <i></i> Fixed Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.RTOCharBRShipFee" id='RTOCharBRShipFee'/> <i></i>
-																					Shipping Fee
+																						path="nrnReturnConfig.RTOCharBRShipFee"
+																						id='RTOCharBRShipFee' /> <i></i> Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1387,24 +1439,25 @@ span .#error {
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.repCharSFFF" id="repCharSFFF"/> <i></i>
-																					Fixed Fee
+																						path="nrnReturnConfig.repCharSFFF"
+																						id="repCharSFFF" /> <i></i> Fixed Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.repCharSFShipFee" id="repCharSFShipFee"/> <i></i>
-																					Shipping Fee
+																						path="nrnReturnConfig.repCharSFShipFee"
+																						id="repCharSFShipFee" /> <i></i> Shipping Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-sm-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.repCharSFRevShipFee" id="repCharSFRevShipFee"/> <i></i>
-																					Reverse Shipping Fee
+																						path="nrnReturnConfig.repCharSFRevShipFee"
+																						id="repCharSFRevShipFee" /> <i></i> Reverse
+																					Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1488,16 +1541,16 @@ span .#error {
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.repCharBRFF" id="repCharBRFF"/> <i></i>
-																					Fixed Fee
+																						path="nrnReturnConfig.repCharBRFF"
+																						id="repCharBRFF" /> <i></i> Fixed Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.repCharBRShipFee" id="repCharBRShipFee"/> <i></i>
-																					Shipping Fee
+																						path="nrnReturnConfig.repCharBRShipFee"
+																						id="repCharBRShipFee" /> <i></i> Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1591,24 +1644,25 @@ span .#error {
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.PDCharSFFF" id="PDCharSFFF"/> <i></i>
-																					Fixed Fee
+																						path="nrnReturnConfig.PDCharSFFF" id="PDCharSFFF" />
+																					<i></i> Fixed Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.PDCharSFShipFee" id="PDCharSFShipFee"/> <i></i>
-																					Shipping Fee
+																						path="nrnReturnConfig.PDCharSFShipFee"
+																						id="PDCharSFShipFee" /> <i></i> Shipping Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-sm-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.PDCharSFRevShipFee" id="PDCharSFRevShipFee"/> <i></i>
-																					Reverse Shipping Fee
+																						path="nrnReturnConfig.PDCharSFRevShipFee"
+																						id="PDCharSFRevShipFee" /> <i></i> Reverse
+																					Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1692,16 +1746,16 @@ span .#error {
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.PDCharBRFF" id="PDCharBRFF"/> <i></i>
-																					Fixed Fee
+																						path="nrnReturnConfig.PDCharBRFF" id="PDCharBRFF" />
+																					<i></i> Fixed Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.PDCharBRShipFee" id="PDCharBRShipFee"/> <i></i>
-																					Shipping Fee
+																						path="nrnReturnConfig.PDCharBRShipFee"
+																						id="PDCharBRShipFee" /> <i></i> Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1805,24 +1859,25 @@ span .#error {
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharSFBRTDFF" id="canCharSFBRTDFF"/> <i></i>
-																					Fixed Fee
+																						path="nrnReturnConfig.canCharSFBRTDFF"
+																						id="canCharSFBRTDFF" /> <i></i> Fixed Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharSFBRTDShipFee" id="canCharSFBRTDShipFee"/> <i></i>
-																					Shipping Fee
+																						path="nrnReturnConfig.canCharSFBRTDShipFee"
+																						id="canCharSFBRTDShipFee" /> <i></i> Shipping Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-sm-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharSFBRTDRevShipFee" id="canCharSFBRTDRevShipFee" />
-																					<i></i> Reverse Shipping Fee
+																						path="nrnReturnConfig.canCharSFBRTDRevShipFee"
+																						id="canCharSFBRTDRevShipFee" /> <i></i> Reverse
+																					Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -1910,24 +1965,25 @@ span .#error {
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharSFFF" id="canCharSFFF"/> <i></i>
-																					Fixed Fee
+																						path="nrnReturnConfig.canCharSFFF"
+																						id="canCharSFFF" /> <i></i> Fixed Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharSFShipFee" id="canCharSFShipFee" /> <i></i>
-																					Shipping Fee
+																						path="nrnReturnConfig.canCharSFShipFee"
+																						id="canCharSFShipFee" /> <i></i> Shipping Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-sm-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharSFARTDRevShipFee" id="canCharSFARTDRevShipFee"/>
-																					<i></i> Reverse Shipping Fee
+																						path="nrnReturnConfig.canCharSFARTDRevShipFee"
+																						id="canCharSFARTDRevShipFee" /> <i></i> Reverse
+																					Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -2011,24 +2067,25 @@ span .#error {
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharBRFF" id="canCharBRFF"/> <i></i>
-																					Fixed Fee
+																						path="nrnReturnConfig.canCharBRFF"
+																						id="canCharBRFF" /> <i></i> Fixed Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharBRShipFee" id="canCharBRShipFee"/> <i></i>
-																					Shipping Fee
+																						path="nrnReturnConfig.canCharBRShipFee"
+																						id="canCharBRShipFee" /> <i></i> Shipping Fee
 																				</label>
 																			</div>
 																		</div>
 																		<div class="col-sm-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
-																						path="nrnReturnConfig.canCharBRRevShipFee" id="canCharBRRevShipFee"/> <i></i>
-																					Reverse Shipping Fee
+																						path="nrnReturnConfig.canCharBRRevShipFee"
+																						id="canCharBRRevShipFee" /> <i></i> Reverse
+																					Shipping Fee
 																				</label>
 																			</div>
 																		</div>
@@ -2051,7 +2108,8 @@ span .#error {
 																	<div class="col-sm-6">
 																		<div class="checkbox i-checks">
 																			<label> <form:checkbox
-																					path="nrnReturnConfig.revShippingFeeType" id="revShippingFeeType_revShipFeePCC"
+																					path="nrnReturnConfig.revShippingFeeType"
+																					id="revShippingFeeType_revShipFeePCC"
 																					value="revShipFeePCC" /> <i></i>( % of Shipping
 																				Fee )
 																			</label>
@@ -2073,7 +2131,8 @@ span .#error {
 																	<div class="col-sm-6">
 																		<div class="checkbox i-checks">
 																			<label> <form:checkbox
-																					path="nrnReturnConfig.revShippingFeeType" id="revShippingFeeType_revShipFeeGRT"
+																					path="nrnReturnConfig.revShippingFeeType"
+																					id="revShippingFeeType_revShipFeeGRT"
 																					value="revShipFeeGRT" /> <i></i> Which Ever Is
 																				Greater
 																			</label>
@@ -2125,7 +2184,8 @@ span .#error {
 																	<div class="col-sm-6">
 																		<div class="checkbox i-checks">
 																			<label> <form:checkbox
-																					path="nrnReturnConfig.revShippingFeeType" id="revShippingFeeType_revShipFeeFF"
+																					path="nrnReturnConfig.revShippingFeeType"
+																					id="revShippingFeeType_revShipFeeFF"
 																					value="revShipFeeFF" /> <i></i>Fix Amount
 																			</label>
 																		</div>
@@ -2145,7 +2205,8 @@ span .#error {
 																	<div class="col-sm-6">
 																		<div class="checkbox i-checks">
 																			<label> <form:checkbox
-																					path="nrnReturnConfig.revShippingFeeType" id="revShippingFeeType_revShipFeeShipFee"
+																					path="nrnReturnConfig.revShippingFeeType"
+																					id="revShippingFeeType_revShipFeeShipFee"
 																					value="revShipFeeShipFee" /> <i></i>Same as
 																				Shipping Fee
 																			</label>
@@ -2160,7 +2221,8 @@ span .#error {
 																	<div class="col-sm-6">
 																		<div class="checkbox i-checks">
 																			<label> <form:checkbox
-																					path="nrnReturnConfig.revShippingFeeType" id="revShippingFeeType_revShipFeeVar"
+																					path="nrnReturnConfig.revShippingFeeType"
+																					id="revShippingFeeType_revShipFeeVar"
 																					value="revShipFeeVar" /> <i></i>Variable Shipping
 																			</label>
 																		</div>
@@ -2267,33 +2329,29 @@ span .#error {
 													</div>
 												</div>
 											</div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
 										</form>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div></div>
 					</div>
-
 					<div class="ibox float-e-margins">
 						<div class="ibox-content add-company">
 							<input class="btn btn-primary pull-right" id="submitButton"
 								type="submit" value="Save">
 						</div>
 					</div>
+
 				</form:form>
-				<jsp:include page="../globalfooter.jsp"></jsp:include>
+			<jsp:include page="../globalfooter.jsp"></jsp:include>
 			</div>
 
 		</div>
+		
 	</div>
 
+	
+			
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
 	<!-- iCheck -->
 	<script src="/O2R/seller/js/plugins/iCheck/icheck.min.js"></script>

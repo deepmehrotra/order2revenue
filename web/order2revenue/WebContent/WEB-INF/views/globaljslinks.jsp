@@ -33,6 +33,9 @@ function onclickSideNavigation(value) {
 	case "Product" :
 		targeturl="Product.html";
 	break;
+	case "ProductMapping" :
+		targeturl="ProductMapping.html";
+	break;
 	case "Expenses" :
 		targeturl="expenseCategories.html";
 	break;
@@ -53,9 +56,6 @@ function onclickSideNavigation(value) {
 	break;
 	case "TDS" :
 		targeturl="tdsDetailList.html";
-	break;
-	case "Events" :
-		targeturl="eventsList.html";
 	break;
 	case "Reports" :
 		targeturl="getAllReports.html";
