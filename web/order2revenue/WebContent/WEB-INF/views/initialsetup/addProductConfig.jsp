@@ -11,7 +11,7 @@
 <body>
 	<div id="wrapper">
 		<jsp:include page="../sidenavigation.jsp"></jsp:include>
-		
+
 		<div id="page-wrapper" class="gray-bg">
 			<jsp:include page="../globalheader.jsp"></jsp:include>
 			<div class="wrapper wrapper-content animated fadeInRight"
@@ -23,59 +23,37 @@
 								<h5>Create Product</h5>
 							</div>
 							<div class="ibox-content overflow-h">
-								<form:form method="POST" action="saveProductConfig.html" id="addProductForm" role="form" class="form-horizontal">
-																		
+								<form:form method="POST" action="saveProductConfig.html"
+									id="addProductForm" role="form" class="form-horizontal">
+
 									<div class="col-sm-12">
 										<div class="hr-line-dashed"></div>
 										<div class="col-sm-6">
-										
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Product SKU Code</label>
-												<div class="col-sm-7">
-													<form:select path="productSKuCode" items="${productSKuMap}"
-																class="form-control" id="productName">
-											</form:select>
-												</div>
-											</div>										
 
 											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Product SKU Reference</label>
+												<label class="col-sm-5 control-label">Product SKU
+													Code</label>
 												<div class="col-sm-7">
-													<form:input path="channelSKuRef"
-														value="${productConfigBean.channelSKuRef}" class="form-control" />
+													<form:select path="productSkuCode" items="${productSkuMap}"
+														class="form-control" id="productName">
+													</form:select>
 												</div>
 											</div>
 											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Commision</label>
+												<label class="col-sm-5 control-label">Channel Name</label>
 												<div class="col-sm-7">
-													<form:input path="commision"
-														value="${productConfigBean.commision}" class="form-control" />
+													<form:input path="channelName"
+														value="${productConfigBean.channelName}"
+														class="form-control" />
 												</div>
 											</div>
-
 											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Tax(SP)</label>
+												<label class="col-sm-5 control-label">Channel SKU
+													Reference</label>
 												<div class="col-sm-7">
-													<form:input path="taxSp"
-														value="${productConfigBean.taxSp}" class="form-control" />
-												</div>
-											</div>
-											
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Tax(PO)</label>
-												<div class="col-sm-7">
-													<form:input path="taxPo"
-														value="${productConfigBean.taxPo}" class="form-control" />
-												</div>
-											</div>																				
-										</div>
-										<div class="col-sm-6">
-
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">EOSS Discount</label>
-												<div class="col-sm-7">
-													<form:input path="eossDiscount"
-														value="${productConfigBean.eossDiscount}" class="form-control" />
+													<form:input path="channelSkuRef"
+														value="${productConfigBean.channelSkuRef}"
+														class="form-control" />
 												</div>
 											</div>
 											<div class="mar-btm-20-oh">
@@ -84,19 +62,12 @@
 													<form:input path="discount"
 														value="${productConfigBean.discount}" class="form-control" />
 												</div>
-											</div>	
+											</div>
 											<div class="mar-btm-20-oh">
 												<label class="col-sm-5 control-label">MRP</label>
 												<div class="col-sm-7">
-													<form:input path="mrp"
-														value="${productConfigBean.mrp}" class="form-control" />
-												</div>
-											</div>
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Selling Price</label>
-												<div class="col-sm-7">
-													<form:input path="sp"
-														value="${productConfigBean.sp}" class="form-control" />
+													<form:input path="mrp" value="${productConfigBean.mrp}"
+														class="form-control" />
 												</div>
 											</div>
 
@@ -104,17 +75,17 @@
 												<label class="col-sm-5 control-label">Product Price</label>
 												<div class="col-sm-7">
 													<form:input path="productPrice"
-														value="${productConfigBean.productPrice}" class="form-control" />
+														value="${productConfigBean.productPrice}"
+														class="form-control" />
 												</div>
 											</div>
-										</div>								
-									</div>
-									
-									<div class="col-sm-12">
-										<div class="hr-line-dashed"></div>
-										<button class="btn btn-primary pull-right" type="button"
-											onclick="submitProduct()">Save</button>
-									</div>
+										</div>
+
+										<div class="col-sm-12">
+											<div class="hr-line-dashed"></div>
+											<button class="btn btn-primary pull-right" type="button"
+												onclick="submitProduct()">Save</button>
+										</div>
 								</form:form>
 							</div>
 						</div>

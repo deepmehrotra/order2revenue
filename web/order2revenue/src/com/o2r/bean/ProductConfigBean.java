@@ -6,12 +6,16 @@ public class ProductConfigBean {
 	
 	private int productConfigId;
 	private int productId;
+	private String channelName;
 	private String productName;
 	private String productSkuCode;
 	private String channelSkuRef;
 	private float commision;
 	private float taxSp;
 	private float taxPo;
+	private double commisionAmt;
+	private double taxSpAmt;
+	private double taxPoAmt;
 	private float discount;
 	private float eossDiscount;
 	private double mrp;
@@ -124,5 +128,29 @@ public class ProductConfigBean {
 	}
 	public void setProduct(Product product) {
 		this.product = product;
+	}
+	public String getChannelName() {
+		return channelName;
+	}
+	public void setChannelName(String channelName) {
+		this.channelName = channelName;
+	}
+	public double getCommisionAmt() {
+		return commisionAmt;
+	}
+	public void setCommisionAmt(double commisionAmt) {
+		this.commisionAmt = commisionAmt;
+	}
+	public double getTaxSpAmt() {
+		return taxSpAmt;
+	}
+	public void setTaxSpAmt(double taxSpAmt) {
+		this.taxSpAmt = taxSpAmt;
+	}
+	public double getTaxPoAmt() {
+		return taxPoAmt;
+	}
+	public void setTaxPoAmt(double taxPoAmt) {
+		this.taxPoAmt = taxPoAmt;
 	}
 }

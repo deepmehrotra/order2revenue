@@ -11,6 +11,13 @@
 <script src="/O2R/seller/js/jquery.fileupload.js"></script>
 <script type="text/javascript">
 	$(function() {
+		var downloadValue = '${downloadValue}';
+		var uploadValue = '${uploadValue}';
+		if (uploadValue != null && uploadValue.length != 0)
+			$("#sheetValue").val(uploadValue);
+		else
+			$("#downloadreporttype").val(downloadValue);
+		
 		$('#fileupload1').fileupload({
 			dataType : 'json',
 
@@ -24,6 +31,7 @@
 			},
 
 			done : function(e, data) {
+				
 				NProgress.done();
 				NProgress.configure({
 					parent : "#bar1"

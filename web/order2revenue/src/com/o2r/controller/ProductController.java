@@ -174,14 +174,12 @@ public class ProductController {
 	try {
 		sellerId = HelperClass.getSellerIdfromSession(request);
 	} catch (Exception e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 
 		   try {
 			productService.updateInventory(productSkuCode, 0, quantityToAdd, quantityToSubstract,true,sellerId);
 		} catch (CustomException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	 	
@@ -264,13 +262,13 @@ public class ProductController {
 
 		log.info("***addProduct  Start****");
 		Map<String, Object> model = new HashMap<String, Object>();
-		Map<String, String> productSKuCodeMap = new LinkedHashMap<>();
+		Map<String, String> productSkuCodeMap = new LinkedHashMap<>();
 		try {
 			List<Product> products = productService.listProducts(HelperClass.getSellerIdfromSession(request));
 					
 			if (products != null && products.size() != 0) {
 				for (Product product : products) {
-					productSKuCodeMap.put(product.getProductSkuCode(), product.getProductSkuCode());
+					productSkuCodeMap.put(product.getProductSkuCode(), product.getProductSkuCode());
 				}
 			}
 			/*} catch (CustomException ce) {
@@ -284,7 +282,7 @@ public class ProductController {
 			e.printStackTrace();
 			return new ModelAndView("globalErorPage", model);
 		}
-		model.put("productSKuMap", productSKuCodeMap);
+		model.put("productSkuMap", productSkuCodeMap);
 		log.info("*** addProduct exit ***");
 		return new ModelAndView("initialsetup/addProductConfig", model);
 	}
