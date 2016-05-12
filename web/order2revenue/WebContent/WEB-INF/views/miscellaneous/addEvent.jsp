@@ -87,9 +87,9 @@ span .#error {
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <h5>Events</h5>
-                            <div class="ibox-tools">
+                            <!-- <div class="ibox-tools">
                                 <a href="" class="btn btn-primary btn-xs" >Create New Events</a>
-                            </div>
+                            </div> -->
                         </div>
                         
              	<form:form method="POST" action="saveEvent.html" role="form" class="form-horizontal" id="addEvent">
