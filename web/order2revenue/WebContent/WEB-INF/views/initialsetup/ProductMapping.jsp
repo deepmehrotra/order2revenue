@@ -131,41 +131,34 @@
 														<tr>
 															<th>SL No.</th>
 															<th>Product SKU_Code</th>
+															<th>Channel Name</th>
 															<th>Channel SKU_Ref</th>
-															<th>Commision</th>
-															<th>Tax(SP)</th>
-															<th>Tax(PO)</th>
-															<th>EOSS Discount</th>
 															<th>Discount</th>
 															<th>MRP</th>
-															<th>Selling Price</th>
 															<th>Product Price</th>
 															<th>Suggested PO Price</th>
 															<th>EOSS Discount Value</th>
 															<th>Gross NR</th>
-
 														</tr>
 													</thead>
 													<tbody>
 														<c:if test="${!empty productConfigList}">
-															<c:forEach items="${productConfigList}" var="productConfigs" varStatus="loop">
-																<c:forEach items="${productConfigs}" var="productConfig" varStatus="loop">
-																<tr>
-																	<td>${loop.index+1}</td>
-																	<td>${productConfig.productSKuCode}</td>
-																	<td>${productConfig.channelSKuRef}</td>
-																	<td>${productConfig.commision}</td>
-																	<td>${productConfig.taxSp}</td>
-																	<td>${productConfig.taxPo}</td>
-																	<td>${productConfig.eossDiscount}</td>
-																	<td>${productConfig.discount}</td>
-																	<td>${productConfig.mrp}</td>
-																	<td>${productConfig.sp}</td>
-																	<td>${productConfig.productPrice}</td>
-																	<td>${productConfig.suggestedPOPrice}</td>
-																	<td>${productConfig.eossDiscountValue}</td>
-																	<td>${productConfig.grossNR}</td>
-																</tr>
+															<c:forEach items="${productConfigList}"
+																var="productConfigs" varStatus="loop">
+																<c:forEach items="${productConfigs}" var="productConfig"
+																	varStatus="loop">
+																	<tr>
+																		<td>${loop.index+1}</td>
+																		<td>${productConfig.productSkuCode}</td>
+																		<td>${productConfig.channelName}</td>
+																		<td>${productConfig.channelSkuRef}</td>
+																		<td>${productConfig.discount}</td>
+																		<td>${productConfig.mrp}</td>
+																		<td>${productConfig.productPrice}</td>
+																		<td>${productConfig.suggestedPOPrice}</td>
+																		<td>${productConfig.eossDiscountValue}</td>
+																		<td>${productConfig.grossNR}</td>
+																	</tr>
 																</c:forEach>
 															</c:forEach>
 														</c:if>
@@ -175,10 +168,11 @@
 											<div class="col-sm-12">
 												<div class="hr-line-dashed"></div>
 												<a href="#" id="upload1" class="btn btn-success btn-xs">Bulk
-													Upload Product</a>&nbsp;&nbsp; <a href="#" id="download"
+													Upload Product</a>&nbsp;&nbsp; <a href="#" id="download1"
 													class="btn btn-success btn-xs">Download Product Summary</a>
 											</div>
-										</div>									
+
+										</div>								
 								</div>
 							</div>
 
