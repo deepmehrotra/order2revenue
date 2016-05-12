@@ -514,7 +514,47 @@ public class OrderDaoImpl implements OrderDao {
 			Criteria criteria = session.createCriteria(Order.class);
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN).add(
-					Restrictions.eq("seller.id", sellerId));
+					Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions.eq("isPO", false));
+
+			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			criteria.addOrder(org.hibernate.criterion.Order
+					.desc("lastActivityOnOrder"));
+			criteria.setFirstResult(pageNo * pageSize);
+			criteria.setMaxResults(pageSize);
+			returnlist = criteria.list();
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+
+			log.error(e);
+			throw new CustomException(GlobalConstant.listOrdersError,
+					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
+
+			/*
+			 * System.out.println(" Exception in getting order list :" +
+			 * e.getLocalizedMessage());
+			 */
+		}
+
+		return returnlist;
+	}
+	
+	@Override
+	public List<Order> listPOOrders(int sellerId, int pageNo)
+			throws CustomException {
+		// sellerId=4;
+		System.out.println(" inside list POorder pageNo " + pageNo);
+		List<Order> returnlist = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN).add(
+					Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions.eq("isPO", true));
+					
 
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			criteria.addOrder(org.hibernate.criterion.Order
@@ -889,7 +929,7 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	@Override
-	public List<Order> findOrders(String column, String value, int sellerId)
+	public List<Order> findOrders(String column, String value, int sellerId, boolean isPO)
 			throws CustomException {
 		String searchString = "order." + column;
 		System.out.println(" Inside Find order dao method searchString :"
@@ -907,6 +947,7 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.createAlias("orders", "order",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq(searchString, value).ignoreCase())
+					.add(Restrictions.eq("isPO", isPO))
 					.addOrder(
 							org.hibernate.criterion.Order
 									.desc("order.lastActivityOnOrder"))

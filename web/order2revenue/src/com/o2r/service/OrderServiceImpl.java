@@ -71,9 +71,9 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public List<Order> findOrders(String column, String value, int sellerId)
+	public List<Order> findOrders(String column, String value, int sellerId, boolean isPO)
 			throws CustomException {
-		return orderDao.findOrders(column, value, sellerId);
+		return orderDao.findOrders(column, value, sellerId, isPO);
 	}
 
 	@Override
@@ -136,6 +136,12 @@ public class OrderServiceImpl implements OrderService {
 	public List<Order> listOrders(int sellerId, int pageNo)
 			throws CustomException {
 		return orderDao.listOrders(sellerId, pageNo);
+	}
+	
+	@Override
+	public List<Order> listPOOrders(int sellerId, int pageNo)
+			throws CustomException {
+		return orderDao.listPOOrders(sellerId, pageNo);
 	}
 
 	@Override

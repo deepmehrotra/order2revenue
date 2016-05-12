@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.POIDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -99,6 +100,8 @@ public class OrderController {
 				downloadService.downloadPaymentXLS(response);
 			} else if (sheetvalue.equals("returnSummary")) {
 				downloadService.downloadReturnXLS(response);
+			} else if (sheetvalue.equals("gatepassSummary")) {
+				downloadService.downloadGatePassXLS(response);
 			} else if (sheetvalue.equals("productSummary")) {
 				downloadService.downloadProductXLS(response);
 			}else if (sheetvalue.equals("productConfigSummary")) {
@@ -349,7 +352,7 @@ public class OrderController {
 					&& channelOrderID != null) {
 				orderList = ConverterClass
 						.prepareListofBean(orderService.findOrders(
-								"channelOrderID", channelOrderID, sellerId));
+								"channelOrderID", channelOrderID, sellerId, false));
 			} else if (searchOrder != null && startDate != null
 					&& endDate != null) {
 				orderList = ConverterClass.prepareListofBean(orderService
@@ -379,6 +382,7 @@ public class OrderController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		String savedOrder = request.getParameter("savedOrder");
 		List<OrderBean> returnlist = new ArrayList<OrderBean>();
+		List<OrderBean> poOrderlist = new ArrayList<OrderBean>();
 		Object obj = request.getSession().getAttribute("orderSearchObject");
 		int sellerId;
 		try {
@@ -391,31 +395,50 @@ public class OrderController {
 				String status = request.getParameter("status");
 				if (status.equalsIgnoreCase("return")) {
 					returnlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("status", "Return Recieved", sellerId));
+							.findOrders("status", "Return Recieved", sellerId, false));
 					returnlist
 							.addAll(ConverterClass
 									.prepareListofBean(orderService.findOrders(
 											"status", "Return Limit Crossed",
-											sellerId)));
+											sellerId, false)));
 					model.put("orders", returnlist);
+					
+					poOrderlist = ConverterClass.prepareListofBean(orderService
+							.findOrders("status", "Return Recieved", sellerId, true));
+					model.put("poOrders", poOrderlist);
+					
 				} else if (status.equalsIgnoreCase("payment")) {
 					returnlist = ConverterClass
 							.prepareListofBean(orderService.findOrders(
-									"status", "Payment Recieved", sellerId));
+									"status", "Payment Recieved", sellerId, false));
 					returnlist.addAll(ConverterClass
 							.prepareListofBean(orderService.findOrders(
-									"status", "Payment Deducted", sellerId)));
+									"status", "Payment Deducted", sellerId, false)));
 					model.put("orders", returnlist);
+					
+					poOrderlist = ConverterClass
+							.prepareListofBean(orderService.findOrders(
+									"status", "Payment Recieved", sellerId, true));				
+					model.put("poOrders", poOrderlist);
 				} else if (status.equalsIgnoreCase("actionable")) {
 					returnlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("finalStatus", "Actionable", sellerId));
+							.findOrders("finalStatus", "Actionable", sellerId, false));
 					model.put("orders", returnlist);
+					
+					poOrderlist = ConverterClass.prepareListofBean(orderService
+							.findOrders("finalStatus", "Actionable", sellerId, true));
+					model.put("poOrders", poOrderlist);
 				}
 			} else {
 				int pageNo = request.getParameter("page") != null ? Integer
 						.parseInt(request.getParameter("page")) : 0;
 				model.put("orders", ConverterClass
 						.prepareListofBean(orderService.listOrders(
+								HelperClass.getSellerIdfromSession(request),
+								pageNo)));
+				
+				model.put("poOrders", ConverterClass
+						.prepareListofBean(orderService.listPOOrders(
 								HelperClass.getSellerIdfromSession(request),
 								pageNo)));
 			}
@@ -435,6 +458,36 @@ public class OrderController {
 
 	@RequestMapping(value = "/seller/viewOrderDA", method = RequestMethod.GET)
 	public ModelAndView viewOrderDailyAct(HttpServletRequest request,
+			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
+
+		Map<String, Object> model = new HashMap<String, Object>();
+		int sellerId;
+		Product product = null;
+		try {
+			sellerId = HelperClass.getSellerIdfromSession(request);
+			Order order = orderService.getOrder(orderBean.getOrderId(),
+					sellerId);
+			product = productService.getProduct(order.getProductSkuCode(),
+					sellerId);
+			System.out.println(" Payment difference :"
+					+ order.getOrderPayment().getPaymentDifference());
+			model.put("order", ConverterClass.prepareOrderBean(order));
+		} catch (CustomException ce) {
+			log.error("viewOrderDailyAct exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			log.error(e);
+		}
+		if (product != null)
+			model.put("productCost", product.getProductPrice());
+		return new ModelAndView("dailyactivities/viewOrder", model);
+	}
+	
+	@RequestMapping(value = "/seller/viewPOOrderDA", method = RequestMethod.GET)
+	public ModelAndView viewPOOrderDailyAct(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -608,7 +661,7 @@ public class OrderController {
 		try {
 			parner = orderService.findOrders("channelOrderID",
 					request.getParameter("id"),
-					HelperClass.getSellerIdfromSession(request));
+					HelperClass.getSellerIdfromSession(request), false);
 		} catch (CustomException ce) {
 			log.error("addOrderDA exception : " + ce.toString());
 			mode.put("error", ce.getLocalMessage());

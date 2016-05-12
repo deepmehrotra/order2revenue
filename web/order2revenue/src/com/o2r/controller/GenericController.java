@@ -198,7 +198,7 @@ public class GenericController {
 			}else{
 				orderlist = ConverterClass
 						.prepareListofBean(orderService.findOrders(
-								searchCriteria, searchString,sellerId));
+								searchCriteria, searchString,sellerId, false));
 			}
 		}else{			
 			if (searchCriteria.equals("orderDate") && startDate != null

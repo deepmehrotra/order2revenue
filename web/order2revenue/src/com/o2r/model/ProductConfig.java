@@ -47,6 +47,8 @@ public class ProductConfig {
 	@Column
 	private double sp;
 	@Column
+	private double pr;
+	@Column
 	private double productPrice;
 	@Column
 	private double suggestedPOPrice;
@@ -224,5 +226,13 @@ public class ProductConfig {
 
 	public void setTaxPoAmt(double taxPoAmt) {
 		this.taxPoAmt = taxPoAmt;
+	}
+
+	public double getPr() {
+		return pr;
+	}
+
+	public void setPr(double pr) {
+		this.pr = pr;
 	}
 }

@@ -32,7 +32,7 @@ public interface OrderDao {
 
 	public void deleteReturnInfo(String orderId) throws CustomException;
 
-	public List<Order> findOrders(String column, String value, int sellerId)
+	public List<Order> findOrders(String column, String value, int sellerId, boolean isPO)
 			throws CustomException;
 
 	public List<Order> findOrdersbyDate(String column, Date startDate,
@@ -68,4 +68,6 @@ public interface OrderDao {
 	public Order getConsolidatedOrder(String poId, String invoiceId) throws CustomException;
 
 	public void addPO(Order order, int sellerId) throws CustomException;
+
+	List<Order> listPOOrders(int sellerId, int pageNo) throws CustomException;
 }

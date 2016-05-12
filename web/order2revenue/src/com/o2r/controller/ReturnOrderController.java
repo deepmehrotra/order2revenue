@@ -122,7 +122,7 @@ public class ReturnOrderController {
 					orderlist = ConverterClass
 							.prepareListofBean(orderService.findOrders(
 									searchColumn, searchString,
-									HelperClass.getSellerIdfromSession(request)));
+									HelperClass.getSellerIdfromSession(request), false));
 				}
 			} else {
 				orderlist = new ArrayList<OrderBean>();
@@ -274,7 +274,7 @@ public class ReturnOrderController {
 						temporaryorderlist = new ArrayList<Order>();
 						temporaryorderlist = orderService.findOrders(
 								searchColumn, searchString,
-								HelperClass.getSellerIdfromSession(request));
+								HelperClass.getSellerIdfromSession(request), false);
 						if (temporaryorderlist != null) {
 							for (Order ordertemp : temporaryorderlist) {
 								if (ordertemp.getOrderReturnOrRTO()

@@ -4,13 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ManyToOne;
-
-import com.o2r.model.Order;
 import com.o2r.model.OrderTimeline;
-import com.o2r.model.ProductConfig;
 
 public class OrderBean {
 
@@ -38,7 +32,7 @@ public class OrderBean {
 	private double netRate;
 	private double grossNetRate;
 	private double discount;
-    private double partnerCommission;
+	private double partnerCommission;
 	private double pr;
 	private double totalAmountRecieved;
 	private String uniqueItemId;
@@ -52,12 +46,12 @@ public class OrderBean {
 	private float serviceTax;
 	private double fixedfee;
 	private double pccAmount;
-	private List<OrderTimeline> orderTimeline=new ArrayList<>();
-	private CustomerBean customer=new CustomerBean();
-	private OrderPaymentBean orderPayment=new OrderPaymentBean();
+	private List<OrderTimeline> orderTimeline = new ArrayList<>();
+	private CustomerBean customer = new CustomerBean();
+	private OrderPaymentBean orderPayment = new OrderPaymentBean();
 	private OrderRTOorReturnBean orderReturnOrRTO = new OrderRTOorReturnBean();
 	private OrderTaxBean orderTax = new OrderTaxBean();
-	
+
 	private boolean isPO;
 	private double eossValue;
 	private ProductConfigBean productConfig;
@@ -70,8 +64,6 @@ public class OrderBean {
 	public void setCustomer(CustomerBean customer) {
 		this.customer = customer;
 	}
-
-
 
 	public int getOrderId() {
 		return orderId;
@@ -241,7 +233,6 @@ public class OrderBean {
 		this.netRate = netRate;
 	}
 
-
 	public double getDiscount() {
 		return discount;
 	}
@@ -313,7 +304,6 @@ public class OrderBean {
 	public void setPartnerCommission(double partnerCommission) {
 		this.partnerCommission = partnerCommission;
 	}
-
 
 	public String getUniqueItemId() {
 		return uniqueItemId;
@@ -442,7 +432,4 @@ public class OrderBean {
 	public void setConsolidatedOrder(OrderBean consolidatedOrder) {
 		this.consolidatedOrder = consolidatedOrder;
 	}
-
-
-
 }

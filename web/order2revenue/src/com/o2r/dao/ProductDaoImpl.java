@@ -17,7 +17,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.o2r.controller.PartnerController;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Category;
@@ -174,7 +173,7 @@ public class ProductDaoImpl implements ProductDao {
 				productConfig.setTaxSpAmt(productConfig.getSp()
 						- (productConfig.getSp() * 100 / (100 + taxsp)));
 
-				productConfig.setProductPrice(productConfig.getSp()
+				productConfig.setPr(productConfig.getSp()
 						- productConfig.getCommisionAmt()
 						- productConfig.getTaxSpAmt());
 
@@ -192,7 +191,7 @@ public class ProductDaoImpl implements ProductDao {
 				productConfig.setSuggestedPOPrice(productConfig
 						.getProductPrice() + productConfig.getTaxPoAmt());
 
-				if (productConfig.getEossDiscount() > 0) {
+				if (productConfig.getChannelName().equalsIgnoreCase("Myntra")) {
 					productConfig.setEossDiscountValue((productConfig
 							.getSuggestedPOPrice() * productConfig
 							.getEossDiscount()) / 100);
@@ -273,7 +272,7 @@ public class ProductDaoImpl implements ProductDao {
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			criteria.addOrder(org.hibernate.criterion.Order.desc("productDate"));
 			returnlist = criteria.list();
-			for (Product product: returnlist)
+			for (Product product : returnlist)
 				Hibernate.initialize(product.getProductConfig());
 			session.getTransaction().commit();
 			session.close();
@@ -292,26 +291,27 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Override
 	public Product getProduct(int productId) {
-		
-		Product product=null;
-		try{
+
+		Product product = null;
+		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			product=(Product) session.get(Product.class,
-					productId);
+			product = (Product) session.get(Product.class, productId);
 			Hibernate.initialize(product.getProductConfig());
 			session.getTransaction().commit();
 			session.close();
-		
-		}catch(Exception e){
+
+		} catch (Exception e) {
 			log.error(e);
-			//throw new CustomException(GlobalConstant.getSellerByIdError, new Date(), 3, GlobalConstant.getSellerByIdErrorCode, e);
-			
+			// throw new CustomException(GlobalConstant.getSellerByIdError, new
+			// Date(), 3, GlobalConstant.getSellerByIdErrorCode, e);
+
 		}
 		return product;
-		
-		//return (Product) sessionFactory.getCurrentSession().get(Product.class,
-		//		productId);
+
+		// return (Product)
+		// sessionFactory.getCurrentSession().get(Product.class,
+		// productId);
 	}
 
 	@Override
@@ -359,13 +359,15 @@ public class ProductDaoImpl implements ProductDao {
 		return returnObject;
 
 	}
-	
+
 	@Override
 	public ProductConfig getProductConfig(String skuCode, String channel,
 			int sellerId) throws CustomException {
 		ProductConfig returnObject = null;
 		List returnlist = null;
-		System.out.println(" ***Insid get product config from sku and channel ***" + skuCode + " - " + channel);
+		System.out
+				.println(" ***Insid get product config from sku and channel ***"
+						+ skuCode + " - " + channel);
 
 		try {
 			Session session = sessionFactory.openSession();
@@ -373,10 +375,8 @@ public class ProductDaoImpl implements ProductDao {
 			Criteria criteria = session.createCriteria(ProductConfig.class);
 			criteria.createAlias("product", "product",
 					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("channelSkuRef", skuCode)
-							.ignoreCase())
-					.add(Restrictions.eq("channelName", channel)
-							.ignoreCase())
+					.add(Restrictions.eq("channelSkuRef", skuCode).ignoreCase())
+					.add(Restrictions.eq("channelName", channel).ignoreCase())
 					.setResultTransformer(
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			criteria.createAlias("product.seller", "seller",

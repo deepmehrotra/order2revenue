@@ -314,12 +314,12 @@ public class PartnerController {
 					nrnReturncharge.setChargeAmount(Float.parseFloat(entry.getValue()[0]));
 					nrnReturncharge.setChargeName(temp);
 					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
-					chargeList.add(nrnReturncharge);
+					partnerBean.getNrnReturnConfig().getCharges().add(nrnReturncharge);
 				}
 			}
 		}
 
-		partnerBean.getNrnReturnConfig().setCharges(chargeList);
+		//partnerBean.getNrnReturnConfig().setCharges(chargeList);
 		
 		if (!partnerBean.isIsshippeddatecalc()) {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
@@ -390,12 +390,12 @@ public class PartnerController {
 					nrnReturncharge.setChargeAmount(Float.parseFloat(entry.getValue()[0]));
 					nrnReturncharge.setChargeName(temp);
 					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
-					chargeList.add(nrnReturncharge);
+					partnerBean.getNrnReturnConfig().getCharges().add(nrnReturncharge);
 				}
 			}
 		}
 
-		partnerBean.getNrnReturnConfig().setCharges(chargeList);
+		//partnerBean.getNrnReturnConfig().setCharges(chargeList);
 		
 		if (!partnerBean.isIsshippeddatecalc()) {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
@@ -454,7 +454,7 @@ public class PartnerController {
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
 		List<Category> categoryObjects = null;
-		datemap.put("default", "Select payment from");
+		datemap.put("true", "Select payment from");
 		datemap.put("true", "Shipping Date");
 		datemap.put("false", "Delivery Date");
 		PartnerBean partner = new PartnerBean();
@@ -498,7 +498,7 @@ public class PartnerController {
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
 		List<Category> categoryObjects = null;
-		datemap.put("default", "Select payment from");
+		datemap.put("true", "Select payment from");
 		datemap.put("true", "Shipping Date");
 		datemap.put("false", "Delivery Date");
 		PartnerBean partner = new PartnerBean();

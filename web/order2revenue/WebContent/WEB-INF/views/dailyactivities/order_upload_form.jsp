@@ -100,7 +100,7 @@
 								<option value="paymentSummary">Payment Summary</option>
 								<option value="poPaymentSummary">PO Payment Summary</option>
 								<option value="returnSummary">Return Summary</option>
-								<option value="returnSummary">GatePass</option>
+								<option value="gatepassSummary">GatePass Summary</option>
 								<option value="debitNoteSummary">Debit Note</option>
 								<option value="productSummary">Product Summary</option>
 								<option value="productConfigSummary">Product Config
@@ -130,7 +130,7 @@
 											<option value="orderPoSummary">Order PO Summary</option>
 											<option value="paymentSummary">Payment Summary</option>
 											<option value="returnSummary">Return Summary</option>
-											<option value="returnSummary">GatePass</option>
+											<option value="gatepassSummary">GatePass Summary</option>
 											<option value="debitNoteSummary">Debit Note</option>
 											<option value="productSummary">Product Summary</option>
 											<option value="productConfigSummary">Product Config

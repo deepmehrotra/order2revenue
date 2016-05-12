@@ -132,7 +132,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 								<ul class="nav nav-tabs">
 									<li class="active"><a data-toggle="tab" href="#sectionA">All
 											SKU</a></li>
-									<li><a data-toggle="tab" href="#sectionB">Product</a></li>
+									<li><a data-toggle="tab" href="#sectionB">Product Config</a></li>
 								</ul>
 								<div class="tab-content">
 									<div id="sectionA" class="tab-pane fade in active">
@@ -243,7 +243,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 											<div class="col-sm-12">
 												<div class="hr-line-dashed"></div>
 												<a href="#" id="upload1" class="btn btn-success btn-xs">Bulk
-													Upload Product</a>&nbsp;&nbsp; <a href="#" id="download"
+													Upload Product</a>&nbsp;&nbsp; <a href="#" id="download1"
 													class="btn btn-success btn-xs">Download Product Summary</a>
 											</div>
 
@@ -372,7 +372,6 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
              $.ajax({
                     url : 'downloadOrderDA.html?value=productSummary',
                     success : function(data) {
-                        alert(data);
                          $('#centerpane').html(data);
                     }
                 });
@@ -445,11 +444,19 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
             $.ajax({
                 url : 'downloadOrderDA.html?value=productSummary',
                 success : function(data) {
-                    alert(data);
                     $('#centerpane').html(data);
                 }
             });
         });
+        $('#download1').click(function() {
+            $.ajax({
+                url : 'downloadOrderDA.html?value=productConfigSummary',
+                success : function(data) {
+                    $('#centerpane').html(data);
+                }
+            });
+        });
+        
         $('#upload').click(function() {
             $.ajax({
                 url : 'uploadOrderDA.html?value=productSummary',

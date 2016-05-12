@@ -144,7 +144,7 @@ public class SaveContents {
 					System.out.println(" Getting string value form : "
 							+ entry.getCell(0));
 					List<Order> onj = orderService.findOrders("channelOrderID",
-							entry.getCell(0).toString(), sellerId);
+							entry.getCell(0).toString(), sellerId, false);
 					if (onj == null || onj.size() == 0) {
 						order.setChannelOrderID(entry.getCell(0).toString());
 					} else {
@@ -677,7 +677,7 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = returnOrderMap.keySet();
-			downloadUploadReportXLS(offices, "OrderPOSheet", 24, errorSet,
+			downloadUploadReportXLS(offices, "OrderPOSheet", 11, errorSet,
 					path, sellerId);
 			/*
 			 * poOrder=new OrderBean(); entry=worksheet.getRow(3);
@@ -996,20 +996,7 @@ public class SaveContents {
 					errorMessage.append(" Discount is null ");
 					validaterow = false;
 				}
-				if (entry.getCell(6) != null
-						&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					try {
-						productConfig.setEossDiscount(Float.valueOf(entry
-								.getCell(6).toString()));
-					} catch (NumberFormatException e) {
-						errorMessage
-								.append(" EOSS Discount should be a number ");
-						validaterow = false;
-					}
-				} else {
-					errorMessage.append(" EOSS Discount is null ");
-					validaterow = false;
-				}
+				
 				// product.setVolume(product.getHeight() * product.getLength() *
 				// product.getBreadth());
 				// product.setVolWeight(product.getVolume() / 5);
@@ -1084,7 +1071,7 @@ public class SaveContents {
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					List<Order> onj = orderService.findOrders("channelOrderID",
-							entry.getCell(0).toString(), sellerId);
+							entry.getCell(0).toString(), sellerId, false);
 					if (onj != null && onj.size() != 0) {
 						channelOrderId = entry.getCell(0).toString();
 					} else {
@@ -1326,7 +1313,7 @@ public class SaveContents {
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					id = entry.getCell(0).toString();
 					orderlist = orderService.findOrders("channelOrderID", entry
-							.getCell(0).toString(), sellerId);
+							.getCell(0).toString(), sellerId, false);
 					if (orderlist != null && orderlist.size() != 0) {
 
 						System.out.println(" Found match for channel order id");
@@ -1347,7 +1334,7 @@ public class SaveContents {
 						&& StringUtils.isNotBlank(entry.getCell(1).toString())) {
 					id = entry.getCell(1).toString();
 					orderlist = orderService.findOrders("subOrderID", entry
-							.getCell(1).toString(), sellerId);
+							.getCell(1).toString(), sellerId, false);
 					if (orderlist != null && orderlist.size() != 0) {
 						System.out.println(" Found match for sub order id");
 						order.setChannelOrderID(orderlist.get(0)

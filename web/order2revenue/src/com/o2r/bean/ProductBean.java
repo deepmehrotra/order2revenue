@@ -126,6 +126,4 @@ public class ProductBean {
 	public void setProductConfig(ProductConfig productConfig) {
 		this.productConfig = productConfig;
 	}
-
-
 }

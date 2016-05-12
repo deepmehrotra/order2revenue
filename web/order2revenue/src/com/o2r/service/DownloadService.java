@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.o2r.helper.Layouter;
 import com.o2r.helper.Writer;
 
-
 /**
  * Service for processing Apache POI-based reports
  * 
@@ -22,15 +21,14 @@ import com.o2r.helper.Writer;
 @Transactional
 public class DownloadService {
 
-	
-	
-	@Resource(name="sessionFactory")
+	@Resource(name = "sessionFactory")
 	private SessionFactory sessionFactory;
-	
+
 	/**
-	 * Processes the download for Excel format.
-	 * It does the following steps:
-	 * <pre>1. Create new workbook
+	 * Processes the download for Excel format. It does the following steps:
+	 * 
+	 * <pre>
+	 * 1. Create new workbook
 	 * 2. Create new worksheet
 	 * 3. Define starting indices for rows and columns
 	 * 4. Build layout 
@@ -39,147 +37,190 @@ public class DownloadService {
 	 * 7. Write to the output stream
 	 * </pre>
 	 */
-	
-	public void downloadXLS(HttpServletResponse response) throws ClassNotFoundException {
-		
-		
+
+	public void downloadXLS(HttpServletResponse response)
+			throws ClassNotFoundException {
+
 		// 1. Create new workbook
 		HSSFWorkbook workbook = new HSSFWorkbook();
-		
+
 		// 2. Create new worksheet
 		HSSFSheet worksheet = workbook.createSheet("OrderReport");
-		
+
 		// 3. Define starting indices for rows and columns
 		int startRowIndex = 0;
 		int startColIndex = 0;
-		
-		// 4. Build layout 
-		// Build title, date, and column headers
-		Layouter.buildReport(worksheet, startRowIndex, startColIndex,"Order Report");
 
-		/*// 5. Fill report
-		FillManager.fillReport(worksheet, startRowIndex, startColIndex, getDatasource());
-		*/
+		// 4. Build layout
+		// Build title, date, and column headers
+		Layouter.buildReport(worksheet, startRowIndex, startColIndex,
+				"Order Report");
+
+		/*
+		 * // 5. Fill report FillManager.fillReport(worksheet, startRowIndex,
+		 * startColIndex, getDatasource());
+		 */
 		// 6. Set the response properties
 		String fileName = "OrderReport.xls";
-		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
+		response.setHeader("Content-Disposition", "inline; filename="
+				+ fileName);
 		// Make sure to set the correct content type
 		response.setContentType("application/vnd.ms-excel");
-		
-		//7. Write to the output stream
-		Writer.write(response, worksheet,fileName);
+
+		// 7. Write to the output stream
+		Writer.write(response, worksheet, fileName);
 	}
-	
-	
-	public void downloadProductXLS(HttpServletResponse response) throws ClassNotFoundException {
+
+	public void downloadProductXLS(HttpServletResponse response)
+			throws ClassNotFoundException {
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet worksheet = workbook.createSheet("ProductReport");
 		int startRowIndex = 0;
 		int startColIndex = 0;
-		Layouter.buildReport(worksheet, startRowIndex, startColIndex , "ProductReport");
+		Layouter.buildReport(worksheet, startRowIndex, startColIndex,
+				"ProductReport");
 		String fileName = "ProductReport.xls";
-		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
+		response.setHeader("Content-Disposition", "inline; filename="
+				+ fileName);
 		response.setContentType("application/vnd.ms-excel");
-		Writer.write(response, worksheet,fileName);
+		Writer.write(response, worksheet, fileName);
 	}
-	
-	public void downloadProductConfigXLS(HttpServletResponse response) throws ClassNotFoundException {
+
+	public void downloadProductConfigXLS(HttpServletResponse response)
+			throws ClassNotFoundException {
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet worksheet = workbook.createSheet("ProductConfigReport");
 		int startRowIndex = 0;
 		int startColIndex = 0;
-		Layouter.buildReport(worksheet, startRowIndex, startColIndex , "ProductConfigReport");
+		Layouter.buildReport(worksheet, startRowIndex, startColIndex,
+				"ProductConfigReport");
 		String fileName = "ProductConfigReport.xls";
-		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
+		response.setHeader("Content-Disposition", "inline; filename="
+				+ fileName);
 		response.setContentType("application/vnd.ms-excel");
-		Writer.write(response, worksheet,fileName);
+		Writer.write(response, worksheet, fileName);
 	}
-	
-	public void downloadOrderPOXLS(HttpServletResponse response) throws ClassNotFoundException {
+
+	public void downloadOrderPOXLS(HttpServletResponse response)
+			throws ClassNotFoundException {
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet worksheet = workbook.createSheet("OrderPOSheet");
 		int startRowIndex = 0;
 		int startColIndex = 0;
-		Layouter.buildReport(worksheet, startRowIndex, startColIndex , "OrderPOSheet");
+		Layouter.buildReport(worksheet, startRowIndex, startColIndex,
+				"OrderPOSheet");
 		String fileName = "OrderPOSheet.xls";
-		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
+		response.setHeader("Content-Disposition", "inline; filename="
+				+ fileName);
 		response.setContentType("application/vnd.ms-excel");
-		Writer.write(response, worksheet,fileName);
+		Writer.write(response, worksheet, fileName);
 	}
-	
-	public void downloadPaymentXLS(HttpServletResponse response) throws ClassNotFoundException {
-		
-		
+
+	public void downloadPaymentXLS(HttpServletResponse response)
+			throws ClassNotFoundException {
+
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet worksheet = workbook.createSheet("PaymentReport");
 		int startRowIndex = 0;
 		int startColIndex = 0;
-		Layouter.buildReport(worksheet, startRowIndex, startColIndex , "PaymentReport");
+		Layouter.buildReport(worksheet, startRowIndex, startColIndex,
+				"PaymentReport");
 		String fileName = "PaymentReport.xls";
-		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
+		response.setHeader("Content-Disposition", "inline; filename="
+				+ fileName);
 		response.setContentType("application/vnd.ms-excel");
-		Writer.write(response, worksheet,fileName);
+		Writer.write(response, worksheet, fileName);
 	}
-	
-public void downloadInventoryXLS(HttpServletResponse response) throws ClassNotFoundException {
-		
+
+	public void downloadInventoryXLS(HttpServletResponse response)
+			throws ClassNotFoundException {
+
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet worksheet = workbook.createSheet("InventoryReport");
 		int startRowIndex = 0;
 		int startColIndex = 0;
-		Layouter.buildReport(worksheet, startRowIndex, startColIndex , "InventoryReport");
+		Layouter.buildReport(worksheet, startRowIndex, startColIndex,
+				"InventoryReport");
 		String fileName = "InventoryReport.xls";
-		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
+		response.setHeader("Content-Disposition", "inline; filename="
+				+ fileName);
 		response.setContentType("application/vnd.ms-excel");
-		Writer.write(response, worksheet,fileName);
+		Writer.write(response, worksheet, fileName);
 	}
 
-public void downloadReturnXLS(HttpServletResponse response) throws ClassNotFoundException {
-	HSSFWorkbook workbook = new HSSFWorkbook();
-	HSSFSheet worksheet = workbook.createSheet("OrderReturnReport");
-	int startRowIndex = 0;
-	int startColIndex = 0;
-	Layouter.buildReport(worksheet, startRowIndex, startColIndex , "OrderReturnReport");
-	String fileName = "ReturnReport.xls";
-	response.setHeader("Content-Disposition", "inline; filename=" + fileName);
-	response.setContentType("application/vnd.ms-excel");
-	Writer.write(response, worksheet,fileName);
-}
+	public void downloadReturnXLS(HttpServletResponse response)
+			throws ClassNotFoundException {
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet worksheet = workbook.createSheet("OrderReturnReport");
+		int startRowIndex = 0;
+		int startColIndex = 0;
+		Layouter.buildReport(worksheet, startRowIndex, startColIndex,
+				"OrderReturnReport");
+		String fileName = "ReturnReport.xls";
+		response.setHeader("Content-Disposition", "inline; filename="
+				+ fileName);
+		response.setContentType("application/vnd.ms-excel");
+		Writer.write(response, worksheet, fileName);
+	}
+	
+	public void downloadGatePassXLS(HttpServletResponse response)
+			throws ClassNotFoundException {
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet worksheet = workbook.createSheet("GatePassReport");
+		int startRowIndex = 0;
+		int startColIndex = 0;
+		Layouter.buildReport(worksheet, startRowIndex, startColIndex,
+				"GatePassReport");
+		String fileName = "GatePassReport.xls";
+		response.setHeader("Content-Disposition", "inline; filename="
+				+ fileName);
+		response.setContentType("application/vnd.ms-excel");
+		Writer.write(response, worksheet, fileName);
+	}
 
-public void downloadDebitNoteXLS(HttpServletResponse response) throws ClassNotFoundException {
-	HSSFWorkbook workbook = new HSSFWorkbook();
-	HSSFSheet worksheet = workbook.createSheet("DebitNoteSheet");
-	int startRowIndex = 0;
-	int startColIndex = 0;
-	Layouter.buildReport(worksheet, startRowIndex, startColIndex , "DebitNoteSheet");
-	String fileName = "DebitNoteSheet.xls";
-	response.setHeader("Content-Disposition", "inline; filename=" + fileName);
-	response.setContentType("application/vnd.ms-excel");
-	Writer.write(response, worksheet,fileName);
-}
+	public void downloadDebitNoteXLS(HttpServletResponse response)
+			throws ClassNotFoundException {
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet worksheet = workbook.createSheet("DebitNoteSheet");
+		int startRowIndex = 0;
+		int startColIndex = 0;
+		Layouter.buildReport(worksheet, startRowIndex, startColIndex,
+				"DebitNoteSheet");
+		String fileName = "DebitNoteSheet.xls";
+		response.setHeader("Content-Disposition", "inline; filename="
+				+ fileName);
+		response.setContentType("application/vnd.ms-excel");
+		Writer.write(response, worksheet, fileName);
+	}
 
-public void downloadPOPaymentXLS(HttpServletResponse response) throws ClassNotFoundException {
-	HSSFWorkbook workbook = new HSSFWorkbook();
-	HSSFSheet worksheet = workbook.createSheet("POPaymentSheet");
-	int startRowIndex = 0;
-	int startColIndex = 0;
-	Layouter.buildReport(worksheet, startRowIndex, startColIndex , "POPaymentSheet");
-	String fileName = "POPaymentSheet.xls";
-	response.setHeader("Content-Disposition", "inline; filename=" + fileName);
-	response.setContentType("application/vnd.ms-excel");
-	Writer.write(response, worksheet,fileName);
-}
+	public void downloadPOPaymentXLS(HttpServletResponse response)
+			throws ClassNotFoundException {
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet worksheet = workbook.createSheet("POPaymentSheet");
+		int startRowIndex = 0;
+		int startColIndex = 0;
+		Layouter.buildReport(worksheet, startRowIndex, startColIndex,
+				"POPaymentSheet");
+		String fileName = "POPaymentSheet.xls";
+		response.setHeader("Content-Disposition", "inline; filename="
+				+ fileName);
+		response.setContentType("application/vnd.ms-excel");
+		Writer.write(response, worksheet, fileName);
+	}
 
-public void downloadExpensesXLS(HttpServletResponse response) throws ClassNotFoundException {
-	HSSFWorkbook workbook = new HSSFWorkbook();
-	HSSFSheet worksheet = workbook.createSheet("ExpenseSheet");
-	int startRowIndex = 0;
-	int startColIndex = 0;
-	Layouter.buildReport(worksheet, startRowIndex, startColIndex , "ExpenseSheet");
-	String fileName = "ExpenseSheet.xls";
-	response.setHeader("Content-Disposition", "inline; filename=" + fileName);
-	response.setContentType("application/vnd.ms-excel");
-	Writer.write(response, worksheet,fileName);
-}
+	public void downloadExpensesXLS(HttpServletResponse response)
+			throws ClassNotFoundException {
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet worksheet = workbook.createSheet("ExpenseSheet");
+		int startRowIndex = 0;
+		int startColIndex = 0;
+		Layouter.buildReport(worksheet, startRowIndex, startColIndex,
+				"ExpenseSheet");
+		String fileName = "ExpenseSheet.xls";
+		response.setHeader("Content-Disposition", "inline; filename="
+				+ fileName);
+		response.setContentType("application/vnd.ms-excel");
+		Writer.write(response, worksheet, fileName);
+	}
 
 }
