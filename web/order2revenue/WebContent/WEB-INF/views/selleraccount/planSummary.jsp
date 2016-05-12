@@ -167,7 +167,7 @@
 							<div class="col-md-6 text-center">
 								<p><b>Price per order</b></p>
 								<h1>&#8377; <c:out value="${myAccount.plan.planPrice}"/></h1>
-								 <button class="btn" style="background-color:#00a1f1;color:#fff;">Upgrade</button>
+								<a href="upgrade.html"><button class="btn" style="background-color:#00a1f1;color:#fff;">Upgrade</button></a>
                                  <br><br><br>
 								<h3 style="margin-top: 16px;">Last Plan Upgrade Date</h3>
 								<p><b><fmt:formatDate type="date" value="${myAccount.sellerAccount.lastTransaction}" /></b></p>
