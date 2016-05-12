@@ -20,11 +20,13 @@ import org.springframework.stereotype.Repository;
 
 import com.o2r.bean.DashboardBean;
 import com.o2r.helper.ConverterClass;
+import com.o2r.helper.CustomException;
 import com.o2r.model.Customer;
 import com.o2r.model.Expenses;
 import com.o2r.model.Order;
 import com.o2r.model.Seller;
 import com.o2r.model.TaxDetail;
+import com.o2r.service.TaxDetailService;
 /**
 *
 * @author Deep Mehrotra
@@ -35,6 +37,10 @@ import com.o2r.model.TaxDetail;
 public class DashboardDaoImpl implements DashboardDao {
        @Autowired
        private SessionFactory sessionFactory;
+       @Autowired
+       private TaxDetailService taxDetailService;
+       
+       
        private static final String stockValuationQuery = "Select sum(quantity*price) as valuation from(select ps.stockAvailable "
                + "as quantity,ps.price as price from ProductStockList ps, Product pr,"
                + "Product_ProductStockList prps where ps.stockId=prps.closingStocks_stockId"
@@ -655,7 +661,15 @@ public class DashboardDaoImpl implements DashboardDao {
        public List<TaxDetail> getTaxAlert(Session session, Date taxDate,
                      int sellerId)
        {
-              Seller seller = null;
+    	   List<TaxDetail> taxList=null;
+		try {
+			taxList = taxDetailService.listTaxDetails(sellerId, "Tax");
+			System.out.println(" Getting tax Lsit");
+		} catch (CustomException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+             /* Seller seller = null;
               List<TaxDetail> taxList = null;
               try
               {
@@ -675,9 +689,9 @@ public class DashboardDaoImpl implements DashboardDao {
                      }
               }
               catch (Exception e) {
-                     System.out.println("Inside exception getTotalSKUCount " + e.getLocalizedMessage());
+                     System.out.println("Inside exception getTax Alert " + e.getLocalizedMessage());
                      e.printStackTrace();
-              }
+              }*/
               return taxList;
        }
        public List<TaxDetail> getTDSAlert(Session session, Date taxDate,

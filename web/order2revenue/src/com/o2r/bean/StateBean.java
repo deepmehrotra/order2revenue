@@ -1,11 +1,12 @@
 package com.o2r.bean;
 
+
 //GIT Test
 public class StateBean {
 	
 	private Integer id;
 	private String stateName;
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -21,4 +22,5 @@ public class StateBean {
 	public void setStateName(String stateName) {
 		this.stateName = stateName;
 	}
+
 }

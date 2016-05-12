@@ -949,7 +949,7 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.createAlias("orders", "order",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq(searchString, value).ignoreCase())
-					.add(Restrictions.eq("isPO", isPO))
+					.add(Restrictions.eq("order.isPO", isPO))
 					.addOrder(
 							org.hibernate.criterion.Order
 									.desc("order.lastActivityOnOrder"))
@@ -970,7 +970,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 
 		} catch (Exception e) {
-
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.findOrdersError,
 					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
@@ -1890,11 +1890,21 @@ public class OrderDaoImpl implements OrderDao {
 		float dwchargetemp = 0;
 		float shippingCharges = 0;
 		String tempStr = null;
+		String state=null;
 		//String state = order.getCustomer().getCustomerAddress();
-		String state=areaConfigDao.getCityFromZipCode(order.getCustomer().getZipcode());
-		if(!(state.equalsIgnoreCase("Chennai")||state.equalsIgnoreCase("Delhi")||
+		if(partner.getNrnReturnConfig()!=null
+				&&partner.getNrnReturnConfig().getMetroList()!=null&&
+				partner.getNrnReturnConfig().getMetroList().length()!=0)
+		{
+		state=areaConfigDao.getCityFromZipCode(order.getCustomer().getZipcode());
+		System.out.println(" City from zipcode : "+state);
+		}
+		if(state==null||!(state.equalsIgnoreCase("Chennai")||
 				state.equalsIgnoreCase("Mumbai")||state.equalsIgnoreCase("Kolkata")))
+		{
 		state =areaConfigDao.getStateFromZipCode(order.getCustomer().getZipcode());
+		System.out.println(" State from zipcode : "+state);
+		}
 		double SP = order.getOrderSP();
 		StringBuffer temp = new StringBuffer("");
 		Map<String, Float> chargesMap = new HashMap<String, Float>();
@@ -1904,7 +1914,6 @@ public class OrderDaoImpl implements OrderDao {
 				.getCharges();
 		System.out.println(" Putting values in chargeMap from db : ");
 		for (NRnReturnCharges charge : chargesList) {
-			System.out.println(" Charge : " + charge.getChargeName());
 			chargesMap.put(charge.getChargeName(), charge.getChargeAmount());
 		}
 		// Extracting comiision value

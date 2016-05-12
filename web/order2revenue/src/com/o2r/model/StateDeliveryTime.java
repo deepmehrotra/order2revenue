@@ -23,13 +23,13 @@ public class StateDeliveryTime {
 	@Column
 	private int deliveryTime;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	//@JoinTable(name="states",
 	//	joinColumns = {@JoinColumn(name="id", referencedColumnName="id")}
 	//)
 	private State state;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	private Seller seller;
 	
 	public int getId() {

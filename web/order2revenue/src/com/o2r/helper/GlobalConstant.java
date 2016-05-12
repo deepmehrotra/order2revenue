@@ -116,7 +116,7 @@ public class GlobalConstant {
 
 	{
 		put("Petty","Petty");
-		put("Assets","Assets");
+		put("Assets","Not included in Net Profit");
 		put("Salaries","Salaries");
 		put("Overheads","Overheads");
 		put("Taxable Purchases","Taxable Purchases");

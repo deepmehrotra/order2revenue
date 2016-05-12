@@ -18,7 +18,7 @@ public class State {
 	
 	@Column
 	private String stateName;
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -34,4 +34,6 @@ public class State {
 	public void setStateName(String stateName) {
 		this.stateName = stateName;
 	}
+
+
 }

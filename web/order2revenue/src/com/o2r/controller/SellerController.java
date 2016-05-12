@@ -3,7 +3,6 @@ package com.o2r.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -151,21 +150,38 @@ public class SellerController {
 			int sellerId = HelperClass.getSellerIdfromSession(request);
 			SellerBean seller = ConverterClass.prepareSellerBean(sellerService
 					.getSeller(sellerId));
+			Map<String,Integer> stateTimes=new HashMap<String, Integer>();
 
 			if (seller.getStateDeliveryTime() == null
 					|| seller.getStateDeliveryTime().size() == 0) {
 				List<State> stateList = sellerService.listStates();
-				List<StateDeliveryTime> stateDeliveryTimeList = new ArrayList<StateDeliveryTime>();
+				//List<StateDeliveryTime> stateDeliveryTimeList = new ArrayList<StateDeliveryTime>();
 				if (stateList != null && stateList.size() != 0) {
+					
 					for (State bean : stateList) {
-						StateDeliveryTime stateDeliveryTime = new StateDeliveryTime();
+					/*	StateDeliveryTime stateDeliveryTime = new StateDeliveryTime();
 						stateDeliveryTime.setState(bean);
-						stateDeliveryTimeList.add(stateDeliveryTime);
+						seller.getStateDeliveryTime().add(stateDeliveryTime);*/
+						stateTimes.put(bean.getStateName(), 0);
+						//stateDeliveryTimeList.add(stateDeliveryTime);
 					}
 				}
-				seller.setStateDeliveryTime(ConverterClass
-						.prepareStateDeliveryTimeBean(stateDeliveryTimeList));
+				/*seller.setStateDeliveryTime(ConverterClass
+						.prepareStateDeliveryTimeBean(stateDeliveryTimeList));*/
 			}
+			else
+			{
+				List<StateDeliveryTime> sdtlist=seller.getStateDeliveryTime();
+				for (StateDeliveryTime sdt : sdtlist) {
+					/*	StateDeliveryTime stateDeliveryTime = new StateDeliveryTime();
+						stateDeliveryTime.setState(bean);
+						seller.getStateDeliveryTime().add(stateDeliveryTime);*/
+						stateTimes.put(sdt.getState().getStateName(), sdt.getDeliveryTime());
+						//stateDeliveryTimeList.add(stateDeliveryTime);
+					}
+				
+			}
+			model.put("stateTimes", stateTimes);
 			model.put("seller", seller);
 		} catch (Throwable e) {
 			log.error(e);
@@ -174,7 +190,26 @@ public class SellerController {
 		return new ModelAndView("selleraccount/addSeller", model);
 
 	}
-
+/*	@RequestMapping(value = "/seller/saveSeller", method = RequestMethod.POST)
+	public ModelAndView saveSeller(
+			@ModelAttribute("command") SellerBean sellerBean,
+			BindingResult result) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			log.info("***saveSeller Start***");
+			Seller seller = ConverterClass.prepareSellerModel(sellerBean);
+			Set<Seller> sellerRoles = new HashSet<Seller>();
+			sellerRoles.add(seller);
+			seller.getRole().setSellerRoles(sellerRoles);
+			sellerService.addSeller(seller,null);
+			model.put("seller", seller);
+		} catch (Throwable e) {
+			log.error(e);
+			return new ModelAndView("globalErorPage", model);
+		}
+		return new ModelAndView("selleraccount/addSeller", model);
+	}*/
+	
 	@RequestMapping(value = "/seller/saveSeller",headers=("content-type=multipart/*"), method = RequestMethod.POST)
 	public ModelAndView saveSeller(
 			@ModelAttribute("command") SellerBean sellerBean,HttpServletRequest request,
@@ -206,12 +241,31 @@ public class SellerController {
 					result.reject(e.getMessage());
 					//return new ModelAndView("redirect:/seller/partners.html");
 				}
-			}			
+			}	
+			Map<String, String[]> parameters = request.getParameterMap();
+			
+			for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+				if (entry.getKey() != null && !entry.getKey().isEmpty())
+				{
+					if (entry.getKey().contains("sdt-")) {
+						String temp = entry.getKey().substring(4);
+						System.out.println(" Sdt : "+temp);
+						StateDeliveryTime sdtobj=new StateDeliveryTime();
+						sdtobj.setDeliveryTime(entry.getValue()[0]!=null?Integer.parseInt(entry.getValue()[0]):0);
+						sdtobj.setState(sellerService.getStateByName(temp));
+						sdtobj.setSeller(ConverterClass.prepareSellerModel(sellerBean));
+						sellerBean.getStateDeliveryTime().add(sdtobj);
+						
+					}
+				}
+			}
+			//System.out.println(" Seellerbean populating : "+sellerBean.getStateDeliveryTime().size());
 			Seller seller = ConverterClass.prepareSellerModel(sellerBean);
 			System.out.println("***************** : "+seller.getLogoUrl());
 			Set<Seller> sellerRoles = new HashSet<Seller>();
 			sellerRoles.add(seller);
 			seller.getRole().setSellerRoles(sellerRoles);
+			
 			sellerService.addSeller(seller, null);
 			model.put("seller", seller);
 		} catch (Throwable e) {

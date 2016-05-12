@@ -330,14 +330,10 @@ public class SaveContents {
 					errorMessage.append(" Quantity can not be null ");
 					validaterow = false;
 				}
-				System.out.println(" NR calculator state: "
-						+ partner.getNrnReturnConfig().isNrCalculator());
-
-			/*	if (partner != null && partner.getNrnReturnConfig() != null
+				/*	if (partner != null && partner.getNrnReturnConfig() != null
 						&& !partner.getNrnReturnConfig().isNrCalculator()) {*/
-
-					System.out.println(" NR calculator state: "
-							+ partner.getNrnReturnConfig().isNrCalculator());
+				if(partner!=null)
+				{
 					event = eventsService.isEventActiive(order.getOrderDate(),
 							partner.getPcName(), sellerId);
 					if (event != null) {
@@ -383,7 +379,8 @@ public class SaveContents {
 							}
 						}
 										
-
+					}
+			}
 					if (entry.getCell(17) != null
 							&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						System.out
@@ -454,7 +451,7 @@ public class SaveContents {
 							&& StringUtils.isNotBlank(entry.getCell(23)
 									.toString())) {
 						order.setSellerNote(entry.getCell(23).toString());
-						;
+						
 					}
 					System.out.println("Sheet values :1 :" + entry.getCell(1)
 							+ " 2 :" + entry.getCell(2) + " 3 :"
@@ -477,7 +474,7 @@ public class SaveContents {
 				Set<String> errorSet = returnOrderMap.keySet();
 				downloadUploadReportXLS(offices, "Order Report", 24, errorSet,
 						path, sellerId);
-			}
+			
 		} catch (Exception e) {
 			System.out.println("Inside save contents exception :"
 					+ e.getLocalizedMessage());

@@ -289,7 +289,7 @@ public class ConverterClass {
 			seller.setTinNumber(sellerBean.getTinNumber());
 			seller.setTanNumber(sellerBean.getTanNumber());
 			seller.setRole(sellerBean.getRole());
-			seller.setStateDeliveryTime(prepareStateDeliveryTimeModel(sellerBean.getStateDeliveryTime()));
+			seller.setStateDeliveryTime(sellerBean.getStateDeliveryTime());
 		}
 		return seller;
 	}
@@ -361,12 +361,24 @@ public class ConverterClass {
 			bean.setTinNumber(seller.getTinNumber());
 			bean.setTanNumber(seller.getTanNumber());
 			bean.setRole(seller.getRole());
-			bean.setStateDeliveryTime(prepareStateDeliveryTimeBean(seller.getStateDeliveryTime()));
+			bean.setStateDeliveryTime(seller.getStateDeliveryTime());
 		}
 		return bean;
 	}
 
-	public static List<StateDeliveryTimeBean> prepareStateDeliveryTimeBean(List<StateDeliveryTime> stateDeliveryTime) {
+	public static StateDeliveryTimeBean prepareStateDeliveryTimeBean(StateDeliveryTime stateDeliveryTime) {
+		StateDeliveryTimeBean bean = null;
+		if(stateDeliveryTime!=null)
+		{
+				bean = new StateDeliveryTimeBean();
+				bean.setDeliveryTime(stateDeliveryTime.getDeliveryTime());
+				bean.setState(prepareStateBean(stateDeliveryTime.getState()));
+		}
+				
+		return bean;
+	}
+	
+	public static List<StateDeliveryTimeBean> prepareStateDeliveryTimeBeanList(List<StateDeliveryTime> stateDeliveryTime) {
 		List<StateDeliveryTimeBean> beans = null;
 		if (stateDeliveryTime != null && !stateDeliveryTime.isEmpty()) {
 			beans = new ArrayList<StateDeliveryTimeBean>();

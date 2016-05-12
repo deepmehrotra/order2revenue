@@ -149,6 +149,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		TaxDetail existingObj = null;
 		//Date todaysDate = new Date();
 		double amount = taxDetail.getBalanceRemaining();
+		Date uploadDate=(Date)taxDetail.getUploadDate().clone();
 		boolean status = false;
 		// Session session=null;
 		try {
@@ -165,18 +166,18 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 					.createSQLQuery(taxTdRetriveQuery)
 					.setParameter("sellerId", sellerId)
 					.setParameter("month",
-							taxDetail.getUploadDate().getMonth() + 1)
+							uploadDate.getMonth() + 1)
 					.setParameter("particular", taxDetail.getParticular());
 
 			System.out
 					.println("**************************************************************** Month : "
-							+ taxDetail.getUploadDate().getMonth() + 1);
+							+ uploadDate.getMonth() + 1);
 			System.out
 					.println("**************************************************************** Seller Id : "
 							+ sellerId);
-			System.out
+		/*	System.out
 					.println("**************************************************************** Particulars : "
-							+ taxDetail.getParticular());
+							+ taxDetail.getParticular());*/
 
 			taxIds = gettingTaxId.list();
 
@@ -214,7 +215,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 
 				existingObj.setBalanceRemaining(existingObj
 						.getBalanceRemaining() + amount);
-				existingObj.setUploadDate(taxDetail.getUploadDate());
+				existingObj.setUploadDate(uploadDate);
 				session.saveOrUpdate(existingObj);
 
 			} else {
@@ -512,6 +513,8 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 	public List<TaxDetail> listTaxDetails(int sellerId, String taxortds)
 			throws CustomException {
 		log.info("***listTaxDetails Start****");
+		System.out.println(" *listTaxDetails taxortds****:"+taxortds);
+		log.debug("***listTaxDetails taxortds****:"+taxortds);
 		List<TaxDetail> returnlist = null;
 		Seller seller = null;
 		try {
@@ -529,14 +532,17 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 					.setResultTransformer(
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			if (criteria.list() != null && criteria.list().size() != 0) {
+				
 				seller = (Seller) criteria.list().get(0);
 				returnlist = seller.getTaxDetails();
+				System.out.println(" Getting return list : "+returnlist);
 
 			}
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			log.equals("**Error Code : "
+			e.printStackTrace();
+			log.error("**Error Code : "
 					+ (sellerId + "-" + GlobalConstant.getTaxDetailListErrorCode));
 			log.error(e);
 			throw new CustomException(GlobalConstant.getTaxDetailListError,

@@ -31,4 +31,6 @@ public interface SellerDao {
 
 public int getStateDeliveryTime(int sellerId, String statename) throws CustomException;
 
+public State getStateByName(String statename) throws CustomException;
+
 }

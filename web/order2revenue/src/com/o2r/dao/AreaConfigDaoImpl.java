@@ -65,6 +65,7 @@ public class AreaConfigDaoImpl implements AreaConfigDao {
 					zipcode);
 			stateNames = gettingStates.list();
 			System.out.println(" stateNames.size() " + stateNames.size());
+			System.out.println(" States  : "+stateNames.toString());
 			if (stateNames != null && stateNames.size() != 0)
 				returnState = stateNames.get(0);
 			session.getTransaction().commit();

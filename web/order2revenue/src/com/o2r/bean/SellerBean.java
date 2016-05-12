@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
 
 import com.o2r.model.Role;
+import com.o2r.model.StateDeliveryTime;
 import com.o2r.model.TaxCategory;
 
 //GIT Test
@@ -29,7 +30,7 @@ public class SellerBean {
 	private List<ProductBean> products = new ArrayList<ProductBean>();
 	private List<ExpenseCategoryBean> expensecategories = new ArrayList<ExpenseCategoryBean>();
 	private List<TaxCategory> taxCategories = new ArrayList<>();
-	private List<StateDeliveryTimeBean> stateDeliveryTime = new ArrayList<StateDeliveryTimeBean>();
+	private List<StateDeliveryTime> stateDeliveryTime = new ArrayList<StateDeliveryTime>();
 
 	public List<OrderBean> getOrders() {
 		return orders;
@@ -170,11 +171,11 @@ public class SellerBean {
 		this.taxCategories = taxCategories;
 	}
 
-	public List<StateDeliveryTimeBean> getStateDeliveryTime() {
+	public List<StateDeliveryTime> getStateDeliveryTime() {
 		return stateDeliveryTime;
 	}
 
-	public void setStateDeliveryTime(List<StateDeliveryTimeBean> stateDeliveryTime) {
+	public void setStateDeliveryTime(List<StateDeliveryTime> stateDeliveryTime) {
 		this.stateDeliveryTime = stateDeliveryTime;
 	}
 

@@ -190,10 +190,11 @@ span .#error {
 														</div>
 													</div>
 												</c:forEach> --%>
+												<c:if test="${!empty stateTimes}">
 												<c:forEach var="stateDeliveryTime"
-													items="${seller.stateDeliveryTime}" varStatus="status">
+													items="${stateTimes}" varStatus="status">
 													<div class="form-group">
-														<input type="hidden" class="form-control"
+														<%-- <input type="hidden" class="form-control"
 															name="stateDeliveryTime[${status.index}].seller.id"
 															value="${seller.id}" /> <input type="hidden"
 															class="form-control"
@@ -201,16 +202,18 @@ span .#error {
 															value="${stateDeliveryTime.state.id}" /> <input
 															type="hidden" class="form-control"
 															name="stateDeliveryTime[${status.index}].state.stateName"
-															value="${stateDeliveryTime.state.stateName}" /> <label
-															class="col-sm-4 control-label">${stateDeliveryTime.state.stateName}
+															value="${stateDeliveryTime.state.stateName}" /> --%> 
+															<label
+															class="col-sm-4 control-label">${stateDeliveryTime.key}
 														</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control"
-																name="stateDeliveryTime[${status.index}].deliveryTime" 
-																value="${stateDeliveryTime.deliveryTime}" />
+																name="sdt-${stateDeliveryTime.key}" 
+																value="${stateDeliveryTime.value}" />
 														</div>
 													</div>
 												</c:forEach>
+												</c:if>
 											</div>
 											<div class="col-lg-4 m-l-n"></div>
 										</div>
@@ -231,31 +234,14 @@ span .#error {
 
 				</div>
 			</div>
-			<div class="footer">
-				<div class="pull-right">
-					<img alt="image" src="/O2R/seller/img/go-easy-logo.jpg" />
-				</div>
-				<div>
-					<a href="">Support</a> | <a href="">Contact Us</a>
-				</div>
-			</div>
+			<jsp:include page="../globalfooter.jsp"></jsp:include>
+			
 
 		</div>
 	</div>
 
 	<!-- Mainly scripts -->
-	<script src="/O2R/seller/js/jquery-2.1.1.js"></script>
-	<script src="/O2R/seller/js/bootstrap.min.js"></script>
-	<script src="/O2R/seller/js/custom.js"></script>
-	<script src="/O2R/seller/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-	<script src="/O2R/seller/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
-	<!-- Custom and plugin javascript -->
-	<script src="/O2R/seller/js/inspinia.js"></script>
-	<script src="/O2R/seller/js/plugins/pace/pace.min.js"></script>
-
-	<!-- Jquery Validate -->
-	<script src="/O2R/seller/js/plugins/validate/jquery.validate.min.js"></script>
+<jsp:include page="../globaljslinks.jsp"></jsp:include>
 	<script>
 		$(document).ready(function() {
 			$("#form").validate({

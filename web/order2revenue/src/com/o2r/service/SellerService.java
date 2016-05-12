@@ -27,5 +27,7 @@ public interface SellerService {
  public void planUpgrade(int pid, int sellerid)throws CustomException;
  
  public List<State> listStates();
+ 
+ public State getStateByName(String statename) throws CustomException;
  public void addToProductStockList();
 }

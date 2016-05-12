@@ -108,9 +108,16 @@ public class SellerServiceImpl implements SellerService {
 		sellerDao.planUpgrade(pid, sellerid);
 	}
 	
+	@Override
 	public List<State> listStates() {
 		return sellerDao.listStates();
 	}
+	
+	@Override
+	 public State getStateByName(String statename) throws CustomException
+	 {
+		return sellerDao.getStateByName(statename);
+	 }
 	
 	 public void addToProductStockList(){
 		 	sellerDao.addToProductStockList();

@@ -8,6 +8,7 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
@@ -42,20 +43,43 @@ public class SellerDaoImpl implements SellerDao {
 	private ExpenseService expenseService;
 
 	static Logger log = Logger.getLogger(SellerDaoImpl.class.getName());
+	
+	private static final String deliveryTimeDeleteQuery = "delete from seller_state_deliverytime  where seller_id=:sellerId";
+
 
 	public void addSeller(Seller seller)throws CustomException {
-
+		boolean firsttimeflag=true;
+		
 		// sessionFactory.getCurrentSession().saveOrUpdate(seller);
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-
+			if(seller!=null&&seller.getId()!=0)
+			{
+				firsttimeflag=false;
+				
+					System.out.println("*****Saving Seller Again : "+seller.getId());
+					Query gettingTaxId = session
+							.createSQLQuery(deliveryTimeDeleteQuery)
+							.setParameter("sellerId",seller.getId() );
+					gettingTaxId.executeUpdate();
+					System.out.println(" Merging seller : "+seller.getId());
+					//session.clear();
+					//session.merge(seller);
+					session.merge(seller);
+					
+				
+			}
+			else
+			{
 			session.saveOrUpdate(seller);
+			}
 			session.getTransaction().commit();
 			session.close();
+			if(firsttimeflag)
 			setExpenseGroupsForSeller(seller.getId());
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.addSellerError, new Date(), 1, GlobalConstant.addSellerErrorCode, e);
 			//System.out.println(" Seller DAO IMPL :" + e.getLocalizedMessage());
@@ -309,6 +333,36 @@ public class SellerDaoImpl implements SellerDao {
 		 for(Entry<String, String> e : GlobalConstant.preDefinedExpenseCategoryMap.entrySet()) {
 			 expenseService.addExpenseCategory(new ExpenseCategory(e.getKey(), e.getValue(),new Date()), sellerId);
 		       }
+	}
+	
+	@Override
+	public State getStateByName(String statename) throws CustomException
+	{
+		log.info("***getStateByName : "+statename);
+		List listofstates=null;
+		State returnstate=null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(State.class).add(
+					Restrictions.eq("stateName", statename));
+			
+			listofstates=criteria.list();
+
+			if ( listofstates!= null && listofstates.size() != 0) 
+				returnstate=(State)listofstates.get(0);
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			System.out.println(" Error getting state elivery time  ");
+			e.printStackTrace();
+			log.error(e);
+			throw new CustomException(GlobalConstant.getSellerByEmailError, new Date(), 3, GlobalConstant.getSellerByEmailErrorCode, e);
+			
+//			System.out.println(" Seller  DAO IMPL :" + e.getLocalizedMessage());
+//			e.printStackTrace();
+		}
+		return returnstate;
 	}
 
 }
