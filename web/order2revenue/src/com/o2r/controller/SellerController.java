@@ -1,5 +1,6 @@
 package com.o2r.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -10,16 +11,22 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.o2r.bean.PlanBean;
@@ -51,6 +58,11 @@ public class SellerController {
 	private TaxDetailService taxDetailService;
 	@Autowired
 	private PartnerService partnerService;
+	@Autowired
+	ServletContext context;
+	Properties props = null;
+	org.springframework.core.io.Resource resource = new ClassPathResource(
+			"database.properties");
 
 	static Logger log = Logger.getLogger(SellerController.class.getName());
 	Map<String, Object> model = new HashMap<String, Object>();
@@ -68,8 +80,7 @@ public class SellerController {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		}		
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			Seller seller = ConverterClass.prepareSellerModel(sellerBean);
@@ -164,14 +175,40 @@ public class SellerController {
 
 	}
 
-	@RequestMapping(value = "/seller/saveSeller", method = RequestMethod.POST)
+	@RequestMapping(value = "/seller/saveSeller",headers=("content-type=multipart/*"), method = RequestMethod.POST)
 	public ModelAndView saveSeller(
-			@ModelAttribute("command") SellerBean sellerBean,
-			BindingResult result) {
+			@ModelAttribute("command") SellerBean sellerBean,HttpServletRequest request,
+			BindingResult result, @RequestParam(value = "image", required = false) MultipartFile image) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			log.info("***saveSeller Start***");
+			
+			if (image != null) {
+				System.out.println(" Not getting any image");
+				if (!image.isEmpty()) {
+					try {
+						validateImage(image);
+
+					} catch (RuntimeException re) {
+						result.reject(re.getMessage());
+					}
+				}
+				
+				try {
+					props = PropertiesLoaderUtils.loadProperties(resource);
+
+					if (sellerBean.getName() != null) {
+						sellerBean.setLogoUrl(props.getProperty("sellerimages.view")
+								+ sellerBean.getName() + ".jpg");
+						saveImage(sellerBean.getName() + ".jpg", image);
+					}
+				} catch (Exception e) {
+					result.reject(e.getMessage());
+					//return new ModelAndView("redirect:/seller/partners.html");
+				}
+			}			
 			Seller seller = ConverterClass.prepareSellerModel(sellerBean);
+			System.out.println("***************** : "+seller.getLogoUrl());
 			Set<Seller> sellerRoles = new HashSet<Seller>();
 			sellerRoles.add(seller);
 			seller.getRole().setSellerRoles(sellerRoles);
@@ -181,6 +218,7 @@ public class SellerController {
 			log.error(e);
 			return new ModelAndView("globalErorPage", model);
 		}
+		log.info("***saveSeller Exit***");
 		return new ModelAndView("redirect:/seller/dashboard.html");
 	}
 
@@ -318,6 +356,44 @@ public class SellerController {
 			log.error(e);
 			return "false";
 		}
+	}
+	
+	private void validateImage(MultipartFile image) {
+		if (!image.getContentType().equals("image/jpeg")) {
+			throw new RuntimeException("Only JPG images are accepted");
+		}
+	}
+	
+	private void saveImage(String filename, MultipartFile image)
+			throws RuntimeException, IOException {
+		log.info("*** saveImage for seller start ***");
+		try {
+			String catalinabase = System.getProperty("catalina.base");
+
+			try {
+				props = PropertiesLoaderUtils.loadProperties(resource);
+			} catch (IOException e) {
+				log.error(e.getCause());
+
+			}
+			System.out.println("dialect in order controller : "
+					+ props.getProperty("sellerimages.path"));
+			File file = new File(catalinabase
+					+ props.getProperty("sellerimages.path") + filename);
+			System.out.println(" context.getRealPath(/) "
+					+ context.getRealPath("/"));
+			System.out.println(" Path to save file : " + file.toString());
+			FileUtils.writeByteArrayToFile(file, image.getBytes());
+			System.out.println("Go to the location:  "+ file.toString()+ " on your computer and verify that the image has been stored.");
+		} catch (IOException e) {
+
+			log.error(e.getCause());
+			/*
+			 * System.out.println(" Error in saving image : "+
+			 * e.getLocalizedMessage()); e.printStackTrace(); throw e;
+			 */
+		}
+		log.info("*** saveImage for seller exit ***");
 	}
 
 }

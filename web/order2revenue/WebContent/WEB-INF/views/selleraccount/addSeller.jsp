@@ -62,7 +62,7 @@ span .#error {
 							</div>
 							<div class="ibox-content add-company">
 								<form:form method="POST" action="saveSeller.html" role="form"
-									class="form-horizontal" id="addSellerForm">
+									class="form-horizontal" id="addSellerForm" enctype="multipart/form-data">
 									<div class="col-sm-6">
 										<div class="form-group">
 											<label class="col-sm-4 control-label">Seller Name</label>
@@ -129,28 +129,34 @@ span .#error {
 										<div class="hr-line-dashed"></div>
 									</div>
 
-									<h4>Seller Brand</h4>
+									<h4 align="center">Seller Brand</h4>
 									<br>
 									<div>
-										<div class="col-md-4">
-											<form:input type="text" class="form-control"
-												value="${seller.brandName}" path="brandName" />
-											<div class="hr-line-dashed"></div>
+										<div class="col-md-6">
+											<c:choose>
+												<c:when test="${seller.logoUrl != null}">
+	        											<img alt="image" class="img-circle" src="${seller.logoUrl}" />
+	    										</c:when>
+	    										<c:otherwise>
+	        											<img alt="image" class="img-circle" src="/O2R/sellerimages/defaultSeller.jpg" />
+	    										</c:otherwise>	
+    										</c:choose>
 										</div>
-										<div class="col-md-8">
-											<label title="Upload image file" for="inputImage"
-												class="btn btn-white btn-block"> <i
-												class="fa fa-upload"></i> <input type="file"
-												accept="image/*" name="file" id="inputImage" class="hide">
-												Upload Logo
+										
+										<div class="col-md-6" >
+											<label title="Upload image file" for="image"
+													class="btn btn-white btn-block"> <i
+													class="fa fa-upload"></i> <input type="file"
+													accept="image/*" name="image" id="image" class="hide">
+													Upload Logo
 											</label>
-											<div class="hr-line-dashed"></div>
-										</div>
+											<div class="hr-line-dashed"></div>										
+										</div>	
+																
 									</div>
-									<!-- <div class="col-md-2">
-										<button class="btn btn-success" type="submit">Add
-											Brand</button>
-									</div> -->
+									
+									
+									
 
 									<h4>Expected Delivery Time</h4>
 									<p>
@@ -238,18 +244,18 @@ span .#error {
 	</div>
 
 	<!-- Mainly scripts -->
-	<script src="js/jquery-2.1.1.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/custom.js"></script>
-	<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-	<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="/O2R/seller/js/jquery-2.1.1.js"></script>
+	<script src="/O2R/seller/js/bootstrap.min.js"></script>
+	<script src="/O2R/seller/js/custom.js"></script>
+	<script src="/O2R/seller/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+	<script src="/O2R/seller/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
 	<!-- Custom and plugin javascript -->
-	<script src="js/inspinia.js"></script>
-	<script src="js/plugins/pace/pace.min.js"></script>
+	<script src="/O2R/seller/js/inspinia.js"></script>
+	<script src="/O2R/seller/js/plugins/pace/pace.min.js"></script>
 
 	<!-- Jquery Validate -->
-	<script src="js/plugins/validate/jquery.validate.min.js"></script>
+	<script src="/O2R/seller/js/plugins/validate/jquery.validate.min.js"></script>
 	<script>
 		$(document).ready(function() {
 			$("#form").validate({

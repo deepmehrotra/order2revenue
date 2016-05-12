@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.o2r.bean.DashboardBean;
 import com.o2r.bean.OrderBean;
+import com.o2r.bean.SellerBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.HelperClass;
@@ -90,8 +91,12 @@ public class GenericController {
 		logger.info("*** displayDashboard start ***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		DashboardBean dbean=null;
+		Seller seller=null;
 		try{
+		seller=sellerService.getSeller(HelperClass.getSellerIdfromSession(request));
+		SellerBean sellerBean=ConverterClass.prepareSellerBean(seller);
 		dbean = dashboardService.getDashboardDetails(HelperClass.getSellerIdfromSession(request));
+		model.put("sellerBean", sellerBean);
 		model.put("dashboardValue", dbean);
 		}catch(CustomException ce){
 			logger.error("displayDashboard exception : " + ce.toString());
@@ -149,10 +154,7 @@ public class GenericController {
 	@RequestMapping(value = "/login-form", method = RequestMethod.GET)
 	public String redirectlogin() {
 		System.out.println(" Inside login-form ");
-		/*
-		 * System.out.println(" Afterlogin"+request.getUserPrincipal().getName())
-		 * ;
-		 */
+		
 		return "login-form";
 	}
 

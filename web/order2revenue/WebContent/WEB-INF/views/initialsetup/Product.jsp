@@ -36,6 +36,7 @@
 <script>
  var globalValue="Mahesh kOLLIPAR";
  </script>
+
 <style>
 body.DTTT_Print {
 	background: #fff;
@@ -66,6 +67,41 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 	margin-right: 5px;
 }
 </style>
+
+
+ 
+ <style>
+    body.DTTT_Print {
+        background: #fff;
+
+    }
+    .DTTT_Print #page-wrapper {
+        margin: 0;
+        background:#fff;
+    }
+
+    button.DTTT_button, div.DTTT_button, a.DTTT_button {
+        border: 1px solid #e7eaec;
+        background: #fff;
+        color: #676a6c;
+        box-shadow: none;
+        padding: 6px 8px;
+    }
+    button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
+        border: 1px solid #d2d2d2;
+        background: #fff;
+        color: #676a6c;
+        box-shadow: none;
+        padding: 6px 8px;
+    }
+
+    .dataTables_filter label {
+        margin-right: 5px;
+
+    }
+</style>
+ 
+ 
 
 </head>
 <body>
@@ -123,20 +159,27 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 									<button type="button" class="btn btn-xs btn-white">1000</button>
 									<button type="button" id="LoadMoreProduct"
 										class="btn btn-xs btn-white">More</button>
+
 									<a href="addProduct.html" class="btn btn-primary btn-xs">Add
 										SKU</a> <a href="addProductConfig.html"
 										class="btn btn-primary btn-xs">Add Product Config</a>
+
+									<a href="addProduct.html" class="btn btn-primary btn-xs">Add SKU</a>									
+
 								</div>
 							</div>
+
 							<div class="bs-example">
 								<ul class="nav nav-tabs">
 									<li class="active"><a data-toggle="tab" href="#sectionA">All
 											SKU</a></li>
 									<li><a data-toggle="tab" href="#sectionB">Product Config</a></li>
 								</ul>
+
+							<div class="bs-example">								
+
 								<div class="tab-content">
-									<div id="sectionA" class="tab-pane fade in active">
-										<div class="ibox-content cus-table-filters">
+									<div class="ibox-content cus-table-filters">
 											<div class="scroll-y">
 												<table
 													class="table table-striped table-bordered table-hover dataTables-example">
@@ -194,6 +237,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 													Upload Product</a>&nbsp;&nbsp; <a href="#" id="download"
 													class="btn btn-success btn-xs">Download Product Summary</a>
 											</div>
+
 										</div>
 
 									</div>
@@ -251,6 +295,9 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 
 
 									</div>
+
+										</div>									
+
 								</div>
 							</div>
 
@@ -260,6 +307,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 				</div>
 			</div>
 			<jsp:include page="../globalfooter.jsp"></jsp:include>
+
 
 		</div>
 	</div>
@@ -277,6 +325,20 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 					<div class="row">
 						<form:form method="POST" action="saveUpdateInventory.html"
 							id="addProductForm" role="form" class="form-horizontal">
+
+    </div>
+</div>
+<div class="modal inmodal fade" id="myModal" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content animated bounceInRight">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span> </button>
+        <h4 class="modal-title">Update Inventory </h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+			<form:form method="POST" action="saveUpdateInventory.html" id="addProductForm" role="form" class="form-horizontal">    
+
 
 							<c:if test="${!empty product.productId}">
 								<input name="productId" id="productId"
@@ -324,6 +386,52 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 					<button class="btn btn-primary" type="button"
 						onclick="updateInventory()">Update</button>
 
+    
+          <div class="col-sm-12">
+            <div class="col-sm-6">
+                <label> 
+                    Product Name
+                </label>
+                <form:input path="productName" id="productName" value="mahesh" class="form-control"/>
+            </div>
+            <div class="col-sm-6">
+                <label>SKU 
+                </label>
+                              <c:choose>
+                                    	 <c:when test="${globalValue}">
+                                    	 <form:input path="productSkuCode"  value="kumar" id="productSkuCode"
+                                     class="form-control"/><span id="skucodeMsg" style="color:red"></span></c:when>
+                                     <c:otherwise> 
+                                     <form:input path="productSkuCode" value="kollipara"  id="productSkuCode"
+                                     class="form-control" readonly="true"/></c:otherwise>
+                                     </c:choose>
+            </div>
+        </div>
+        <div class="col-sm-12" style="margin-top:10px;">
+            <div class="col-sm-6">
+                <label>Add to Inventory</label>
+                <input type="text" value="${variable1}" name="quantityToAdd" class="form-control">
+            </div>
+            <div class="col-sm-6">
+              <label>
+                Substract from Inventory </label>
+                <input value="${variable2 }"  name="quantityToSubtract" class="form-control">
+            </div>
+        </div>
+		</form:form>
+    </div>
+</div>
+<div class="modal-footer">
+   <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+<button class="btn btn-primary" type="button" onclick="updateInventory()">Update</button>
+   
+</div>
+</div>
+</div>
+</div>
+<jsp:include page="../globaljslinks.jsp"></jsp:include>
+>>>>>>> refs/heads/Testing_New_Updated
+
 				</div>
 			</div>
 		</div>
@@ -352,22 +460,24 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
                 }
         });
         
-        $('#searchProduct').change(function () {
-            $('.ProductSearch-box').hide();
-            $('#'+$(this).val()).fadeIn();
-        });
-        $('.search-dd').on('click', function(e){
-            e.stopPropagation();
-            $('.search-more-wrp').slideToggle();
-        });
-        $('.input-group.date').datepicker({
-            todayBtn: "linked",
-            keyboardNavigation: false,
-            forceParse: false,
-            calendarWeeks: true,
-            autoclose: true
-        });
-       
+        
+		$('#searchProduct').change(function() {
+			$('.ProductSearch-box').hide();
+			$('#' + $(this).val()).fadeIn();
+		});
+		$('.search-dd').on('click', function(e) {
+			e.stopPropagation();
+			$('.search-more-wrp').slideToggle();
+		});
+		$('.input-group.date').datepicker({
+			todayBtn : "linked",
+			keyboardNavigation : false,
+			forceParse : false,
+			calendarWeeks : true,
+			autoclose : true
+		});           
+        
+            
         $('#download').click(function(){
              $.ajax({
                     url : 'downloadOrderDA.html?value=productSummary',
@@ -431,6 +541,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
        }
  
       function show(vale,valf){
+<<<<<<< HEAD
             var valued=document.getElementById('productName');
             var valuee=document.getElementById('productSkuCode');
             
@@ -529,6 +640,105 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 </script>
 
 </body>
+=======
+    		var valued=document.getElementById('productName');
+    		var valuee=document.getElementById('productSkuCode');
+    		
+    		valued.value=vale;
+    		valuee.value=valf;
+    		//editProduct.html?id=${product.productId}
+    		var xxx = $('editProduct.html?id'+vale).submit();
+    	}
+    	 
+      
+		$('#download').click(function() {
+			$.ajax({
+				url : 'downloadOrderDA.html?value=productSummary',
+				success : function(data) {
+					alert(data);
+					$('#centerpane').html(data);
+				}
+			});
+		});
+		$('#upload').click(function() {
+			$.ajax({
+				url : 'uploadOrderDA.html?value=productSummary',
+				success : function(data) {
+					$('#centerpane').html(data);
+				},
+				error : function(data) {
+					alert(" Failing to get the data");
+				}
+			});
+		});
+		
+		$('#upload1').click(function() {
+			$.ajax({
+				url : 'uploadOrderDA.html?value=productConfigSummary',
+				success : function(data) {
+					$('#centerpane').html(data);
+				},
+				error : function(data) {
+					alert(" Failing to get the data");
+				}
+			});
+		});
+
+		$('#LoadMoreProduct').click(function(e) {
+			e.preventDefault();
+			pageno = parseInt(getQueryVariable("page"));
+			alert(" Page number in loadmore : " + pageno);
+			pageno = pageno + 1;
+			window.location = "Product.html?page=" + pageno;
+
+		});
+		$('#LoadFirst500').click(function(e) {
+			window.location = "Product.html?page=" + 0;
+
+		});
+	
+
+	function getQueryVariable(variable) {
+		var query = window.location.search.substring(1);
+		var vars = query.split("&");
+		for (var i = 0; i < vars.length; i++) {
+			var pair = vars[i].split("=");
+			if (pair[0] == variable) {
+				return pair[1];
+			}
+		}
+		return 0;
+	}
+	function onclickAddProduct() {
+		$.ajax({
+			url : 'addProduct.html',
+			success : function(data) {
+				$('#centerpane').html(data);
+			}
+		});
+	}
+	function onclickEditProduct(id) {
+		$.ajax({
+			url : 'editProduct.html?id=' + id,
+			success : function(data) {
+				$('#centerpane').html(data);
+			}
+		});
+	}
+
+	function onclickNavigatePayment(value) {
+		// window.open("updateInventory.html?id="+value, 'liveMatches', 'width=720,height=800,toolbar=0,location=0, directories=0, status=0,location=no,menubar=0');
+		window
+				.open(
+						"updateInventory.html?id=" + value,
+						null,
+						"location=no,height=400,width=1200,top=100,left=50,status=yes,resizable=no,titlebar=no,toolbar=no,menubar=no,scrollbars=no,location=no");
+	}
+</script>
+
+
+ </body>
+>>>>>>> refs/heads/Testing_New_Updated
 </html>
 </body>
 </html>
