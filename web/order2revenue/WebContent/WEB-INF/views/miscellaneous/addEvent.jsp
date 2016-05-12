@@ -172,7 +172,7 @@ span .#error {
 																	href="#collapseOne1">Commission</a>
 															</h5>
 														</div>
-														<div id="collapseOne1" class="panel-collapse collapse in">
+														<div id="collapseOne1" class="panel-collapse collapse">
 															<div class="panel-body">
 																<div class="col-sm-12">
 																	<div class="col-sm-6">
@@ -769,16 +769,17 @@ span .#error {
                           </div>
                           <div class="col-sm-12 radio2" id="blk-nrCalculatorEvent_fixed">
                             <div class="form-group col-md-12">
-                              <label class="col-sm-2 control-label">label</label>
+                              <label class="col-sm-2 control-label">Amount</label>
                               <div class="col-sm-3">
                                 <input type="text" placeholder="" class="form-control">
                               </div>
                             </div>
                           </div>
                         </div>
-                        <div class="col-sm-12">
-                  <h4>Return Calculator/Charges</h4>
-                        </div>
+                 <div class="ibox-content add-company">
+              			<div class="col-sm-12 ">
+                  			<h4>Return Calculator/Charges</h4>
+                        
                         <div class="col-sm-12">
                           <div class="col-sm-6">
                             <div class="radio">
@@ -797,6 +798,7 @@ span .#error {
                             </div>
                           </div>
                         </div>
+                        </div>
                         <div class="row">
                           <div class="col-sm-12 radio3 m-b" id="blk-returnCalculatorEvent_original">
                             <div class="col-sm-12">
@@ -814,7 +816,7 @@ span .#error {
 																	href="#collapseOne">Return Charges</a>
 															</h5>
 														</div>
-														<div id="collapseOne" class="panel-collapse collapse in">
+														<div id="collapseOne" class="panel-collapse collapse">
 															<div class="panel-body">
 																<h4>Seller Fault</h4>
 																<div class="col-sm-12">
@@ -2184,7 +2186,7 @@ span .#error {
 											</div>
                           </div>
                         </div>
-                    
+                    </div>
                 
 				<div class="ibox-content add-company">
 					<button class="btn btn-primary pull-right" type="submit"
@@ -2192,14 +2194,12 @@ span .#error {
 				</div>
 				
 				
-                </div>
+              </div>
                 
-              </form:form>
+             </form:form>
 			</div>	
             </div>
-			<div class="col-lg-12">
-				
-			</div>
+			
             </div>
 				
 			</div>
