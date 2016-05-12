@@ -176,7 +176,7 @@ public class SellerDaoImpl implements SellerDao {
 	}
 
 	@Override
-	public void planUpgrade(int pid, int sellerid)throws CustomException {
+	public void planUpgrade(int pid, double totalAmount, long orderCount, int sellerid)throws CustomException {
 		System.out.println("Inside Plan Upgrade");
 		System.out.println("Dao Pid " + pid);
 		/* System.out.println("Dao price "+plan.getPlanPrice()); */
@@ -203,9 +203,12 @@ public class SellerDaoImpl implements SellerDao {
 			if (acct.getStatus().equals("Success")) {
 				seller.getSellerAccount().setOrderBucket(
 						seller.getSellerAccount().getOrderBucket()
-								+ plan.getOrderCount());
+								+ orderCount);
 				seller.getSellerAccount().setTotalAmountPaidToO2r(
-						plan.getPlanPrice());
+						seller.getSellerAccount().getTotalAmountPaidToO2r() + 
+						totalAmount);
+				seller.getSellerAccount().setPlanId(
+						plan.getPid());
 				seller.setPlan(plan);
 
 			}
@@ -365,4 +368,23 @@ public class SellerDaoImpl implements SellerDao {
 		return returnstate;
 	}
 
+
+	@Override
+	public void updateProcessedOrdersCount(int sellerId, int processedOrderCount) throws CustomException {
+		try{
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Seller seller = (Seller) session.get(Seller.class, sellerId);
+			long totalOrderProcessed = seller.getSellerAccount().getTotalOrderProcessed();
+			totalOrderProcessed += processedOrderCount;
+			seller.getSellerAccount().setTotalOrderProcessed(totalOrderProcessed);
+			session.saveOrUpdate(seller);
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			
+			log.error(e);
+			throw new CustomException(GlobalConstant.updateProcessedOrdersCountError, new Date(), 1, GlobalConstant.updateProcessedOrdersCountErrorCode, e);
+		}
+	}
 }

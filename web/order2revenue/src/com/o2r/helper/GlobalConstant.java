@@ -192,6 +192,7 @@ public class GlobalConstant {
 	public static final String getSellerByEmailError = "Error while retriving the seller by Email. Either try again with correct seller ID or contact admin with the error details.";
 	public static final String deleteSellerError = "Error while deleting the seller. Either try again with correct seller ID or contact admin with the error details.";
 	public static final String planUpgradeError = "Error while upgrading te seller. Either try again or contact admin with the error details.";
+	public static final String updateProcessedOrdersCountError = "Error while upgrading te seller. Either try again or contact admin with the error details.";
 
 	// Error codes
 	public static final String addSellerErrorCode = "#00021";
@@ -200,6 +201,7 @@ public class GlobalConstant {
 	public static final String getSellerByEmailErrorCode = "#00024";
 	public static final String deleteSellerErrorCode = "#00025";
 	public static final String planUpgradeErrorCode = "#00026";
+	public static final String updateProcessedOrdersCountErrorCode = "#00027";
 
 	/** Seller Area **/
 

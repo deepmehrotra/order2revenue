@@ -50,6 +50,7 @@ import com.o2r.service.DownloadService;
 import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.ProductService;
+import com.o2r.service.SellerService;
 import com.o2r.service.TaxDetailService;
 
 /**
@@ -67,6 +68,8 @@ public class OrderController {
 	private SaveContents saveContents;
 	@Autowired
 	private PartnerService partnerService;
+	@Autowired
+	private SellerService serviceService;
 	@Autowired
 	private ProductService productService;
 	@Autowired
@@ -212,17 +215,29 @@ public class OrderController {
 						+ uploadForm.getSheetValue());
 
 				ValidateUpload.validateOfficeData(files.get(0));
+				Map orderProcessedMap = null;
 				System.out.println(" fileinput " + fileinput.getName());
 				switch (uploadForm.getSheetValue()) {
 				case "ordersummary":
-					model.put("orderMap", saveContents.saveOrderContents(
-							files.get(0), sellerId, applicationPath));
+					orderProcessedMap = saveContents.saveOrderContents(
+							files.get(0), sellerId, applicationPath);
+
+					if(orderProcessedMap!=null && !orderProcessedMap.isEmpty())
+						serviceService.updateProcessedOrdersCount(sellerId, orderProcessedMap.size());
+					else
+						System.out.println("No Orders processed, so not updating the totalProcessedOrder");
+					model.put("orderMap", orderProcessedMap);
 					model.put("mapType", "orderMap");
 					// saveContents.saveOrderContents(files.get(0),sellerId);
 					break;
 				case "orderPoSummary":
-					model.put("orderPoMap", saveContents.saveOrderPOContents(
-							files.get(0), sellerId, applicationPath));
+					orderProcessedMap = saveContents.saveOrderPOContents(
+							files.get(0), sellerId, applicationPath);
+					if(orderProcessedMap!=null && !orderProcessedMap.isEmpty())
+						serviceService.updateProcessedOrdersCount(sellerId, orderProcessedMap.size());
+					else
+						System.out.println("No Orders processed, so not updating the totalProcessedOrder");
+					model.put("orderPoMap", orderProcessedMap);
 					model.put("mapType", "orderPoMap");
 					// saveContents.saveOrderPOContents(files.get(0),sellerId);
 					break;

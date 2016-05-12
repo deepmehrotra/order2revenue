@@ -3,6 +3,7 @@ package com.o2r.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -77,7 +78,6 @@ public class SellerController {
 			InputStream input = request.getServletContext().getResourceAsStream("/WEB-INF/mail.properties");
  		    p.load(input);				   
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -337,6 +337,22 @@ public class SellerController {
 		return new ModelAndView("addSeller", model);
 	}
 
+	@RequestMapping("/seller/summary.html")
+	public ModelAndView planSummary(
+			@ModelAttribute("command") PlanBean planBean, BindingResult result) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			model.put("myAccount", sellerService.getSeller(5));
+		} catch (CustomException ce) {
+			log.error("planUpgrade exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		}
+		return new ModelAndView("selleraccount/planSummary", model);
+	}
+
 	@RequestMapping("/seller/upgrade.html")
 	public ModelAndView planUpgrade(
 			@ModelAttribute("command") PlanBean planBean, BindingResult result) {
@@ -351,23 +367,32 @@ public class SellerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}
-		return new ModelAndView("planUpgrade", model);
+		return new ModelAndView("selleraccount/planUpgrade", model);
+	}
+	
+	@RequestMapping("/seller/payumoney.html")
+	public ModelAndView payuMoney(HttpServletRequest request,
+			@ModelAttribute("command") PlanBean planBean, BindingResult result) {
+		return new ModelAndView("selleraccount/payuform");
 	}
 
-	@RequestMapping("/seller/upgrade2.html")
+	@RequestMapping("/seller/thankyou.html")
 	public ModelAndView planUpgrade2(HttpServletRequest request,
 			@ModelAttribute("command") PlanBean planBean, BindingResult result) {
 		// System.out.println("inside upgrade controller");
 		// System.out.println("PPlan id in controller " + planBean.getPid());
 		// System.out.println("Plan id from request in controller "+
-		// request.getParameter("pid"));
+		Double currTotalAmount = new Double(request.getParameter("totalAmount"));
+		Long currOrderCount = new Long(request.getParameter("orderCount"));
 		// Plan plan=ConverterClass.preparePlanModel(planBean);
 		// System.out.println(" Controller : "+plan.getPid());
 
 		log.info("*** planUpgrade2 starts ***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerService.planUpgrade(planBean.getPid(),
+			model.put("currTotalAmount", currTotalAmount);
+			model.put("currOrderCount", currOrderCount);
+			sellerService.planUpgrade(planBean.getPid(), currTotalAmount, currOrderCount,
 					HelperClass.getSellerIdfromSession(request));
 		} catch (CustomException ce) {
 			log.error("planUpgrade2 exception : " + ce.toString());
@@ -380,7 +405,7 @@ public class SellerController {
 		}
 
 		log.info("*** planUpgrade2 ends ***");
-		return new ModelAndView("planUpgrade2");
+		return new ModelAndView("selleraccount/planUpgrade2", model);
 	}
 
 	@RequestMapping(value = "/checkExistingUser", method = RequestMethod.GET)

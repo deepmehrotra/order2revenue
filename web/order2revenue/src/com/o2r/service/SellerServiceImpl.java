@@ -104,8 +104,12 @@ public class SellerServiceImpl implements SellerService {
 		return sellerDao.getSeller(email);
 	}
 
-	public void planUpgrade(int pid, int sellerid) throws CustomException {
-		sellerDao.planUpgrade(pid, sellerid);
+	public void planUpgrade(int pid, double totalAmount, long orderCount, int sellerid) throws CustomException {
+		sellerDao.planUpgrade(pid, totalAmount,orderCount, sellerid);
+	}
+	
+	public void updateProcessedOrdersCount(int sellerId, int processedOrderCount) throws CustomException {
+		sellerDao.updateProcessedOrdersCount(sellerId, processedOrderCount);
 	}
 	
 	@Override

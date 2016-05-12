@@ -24,10 +24,10 @@ public interface SellerService {
  
  public Seller getSeller(String email)throws CustomException;
  
- public void planUpgrade(int pid, int sellerid)throws CustomException;
+ public void planUpgrade(int pid, double totalAmount, long orderCount, int sellerid)throws CustomException;
  
  public List<State> listStates();
- 
  public State getStateByName(String statename) throws CustomException;
  public void addToProductStockList();
+	public void updateProcessedOrdersCount(int sellerId, int processedOrderCount) throws CustomException;
 }

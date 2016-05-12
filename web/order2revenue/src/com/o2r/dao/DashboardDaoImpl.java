@@ -40,7 +40,6 @@ public class DashboardDaoImpl implements DashboardDao {
        @Autowired
        private TaxDetailService taxDetailService;
        
-       
        private static final String stockValuationQuery = "Select sum(quantity*price) as valuation from(select ps.stockAvailable "
                + "as quantity,ps.price as price from ProductStockList ps, Product pr,"
                + "Product_ProductStockList prps where ps.stockId=prps.closingStocks_stockId"

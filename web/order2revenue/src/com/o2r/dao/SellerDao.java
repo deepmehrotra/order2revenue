@@ -23,7 +23,7 @@ public interface SellerDao {
  
  public Seller getSeller(String email)throws CustomException;
  
- public void planUpgrade(int pid, int sellerid)throws CustomException;
+ public void planUpgrade(int pid, double totalAmount, long orderCount, int sellerid)throws CustomException;
 
  public List<State> listStates();
 
@@ -32,5 +32,7 @@ public interface SellerDao {
 public int getStateDeliveryTime(int sellerId, String statename) throws CustomException;
 
 public State getStateByName(String statename) throws CustomException;
+
+public void updateProcessedOrdersCount(int pid, int processedOrderCount) throws CustomException;
 
 }
