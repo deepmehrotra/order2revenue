@@ -171,7 +171,7 @@ public class SellerController {
 			}
 			else
 			{
-				List<StateDeliveryTime> sdtlist=seller.getStateDeliveryTime();
+				List<StateDeliveryTime> sdtlist = ConverterClass.prepareStateDeliveryTimeModel(seller.getStateDeliveryTime());
 				for (StateDeliveryTime sdt : sdtlist) {
 					/*	StateDeliveryTime stateDeliveryTime = new StateDeliveryTime();
 						stateDeliveryTime.setState(bean);
@@ -254,7 +254,7 @@ public class SellerController {
 						sdtobj.setDeliveryTime(entry.getValue()[0]!=null?Integer.parseInt(entry.getValue()[0]):0);
 						sdtobj.setState(sellerService.getStateByName(temp));
 						sdtobj.setSeller(ConverterClass.prepareSellerModel(sellerBean));
-						sellerBean.getStateDeliveryTime().add(sdtobj);
+						sellerBean.getStateDeliveryTime().add(ConverterClass.prepareStateDeliveryTimeBean(sdtobj));
 						
 					}
 				}
