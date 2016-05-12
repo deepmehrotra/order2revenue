@@ -97,7 +97,7 @@ public class SaveContents {
 	@Autowired
 	private ReportGeneratorService reportGeneratorService;
 	@Autowired
-    private AreaConfigDao areaConfigDao;
+	private AreaConfigDao areaConfigDao;
 
 	private final SimpleDateFormat formatter = new SimpleDateFormat(
 			"mm/dd/yyyy");
@@ -144,7 +144,7 @@ public class SaveContents {
 					System.out.println(" Getting string value form : "
 							+ entry.getCell(0));
 					List<Order> onj = orderService.findOrders("channelOrderID",
-							entry.getCell(0).toString(), sellerId,false);
+							entry.getCell(0).toString(), sellerId, false);
 					if (onj == null || onj.size() == 0) {
 						order.setChannelOrderID(entry.getCell(0).toString());
 					} else {
@@ -333,56 +333,54 @@ public class SaveContents {
 				System.out.println(" NR calculator state: "
 						+ partner.getNrnReturnConfig().isNrCalculator());
 
-			/*	if (partner != null && partner.getNrnReturnConfig() != null
-						&& !partner.getNrnReturnConfig().isNrCalculator()) {*/
+				/*
+				 * if (partner != null && partner.getNrnReturnConfig() != null
+				 * && !partner.getNrnReturnConfig().isNrCalculator()) {
+				 */
 
-					System.out.println(" NR calculator state: "
-							+ partner.getNrnReturnConfig().isNrCalculator());
-					event = eventsService.isEventActiive(order.getOrderDate(),
-							partner.getPcName(), sellerId);
-					if (event != null) {
-						if (event.getNrnReturnConfig().getNrCalculatorEvent()
-								.equalsIgnoreCase("fixed")) {
+				System.out.println(" NR calculator state: "
+						+ partner.getNrnReturnConfig().isNrCalculator());
+				event = eventsService.isEventActiive(order.getOrderDate(),
+						partner.getPcName(), sellerId);
+				if (event != null) {
+					if (event.getNrnReturnConfig().getNrCalculatorEvent()
+							.equalsIgnoreCase("fixed")) {
 
-							if (entry.getCell(16) != null
-									&& entry.getCell(16).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						if (entry.getCell(16) != null
+								&& entry.getCell(16).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 
-								try {
-									order.setGrossNetRate(Double
-											.parseDouble(entry.getCell(16)
-													.toString()));
-								} catch (NumberFormatException e) {
-									errorMessage
-											.append(" Net Rate should be number ");
-									validaterow = false;
-								}
-							} else {
-								errorMessage.append(" Net Rate is null and ongoing event on the order with fixed price.");
+							try {
+								order.setGrossNetRate(Double.parseDouble(entry
+										.getCell(16).toString()));
+							} catch (NumberFormatException e) {
+								errorMessage
+										.append(" Net Rate should be number ");
 								validaterow = false;
 							}
+						} else {
+							errorMessage
+									.append(" Net Rate is null and ongoing event on the order with fixed price.");
+							validaterow = false;
 						}
-					} else {
-						if (partner != null
-								&& partner.getNrnReturnConfig() != null
-								&& !partner.getNrnReturnConfig()
-										.isNrCalculator()) {
-							if (entry.getCell(16) != null
-									&& entry.getCell(16).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-								try {
-									order.setGrossNetRate(Double
-											.parseDouble(entry.getCell(16)
-													.toString()));
-								} catch (NumberFormatException e) {
-									errorMessage
-											.append(" Net Rate should be number ");
-									validaterow = false;
-								}
-							} else {
-								errorMessage.append(" Net Rate is null ");
+					}
+				} else {
+					if (partner != null && partner.getNrnReturnConfig() != null
+							&& !partner.getNrnReturnConfig().isNrCalculator()) {
+						if (entry.getCell(16) != null
+								&& entry.getCell(16).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							try {
+								order.setGrossNetRate(Double.parseDouble(entry
+										.getCell(16).toString()));
+							} catch (NumberFormatException e) {
+								errorMessage
+										.append(" Net Rate should be number ");
 								validaterow = false;
 							}
+						} else {
+							errorMessage.append(" Net Rate is null ");
+							validaterow = false;
 						}
-										
+					}
 
 					if (entry.getCell(17) != null
 							&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -537,6 +535,7 @@ public class SaveContents {
 				if (entry.getCell(1) != null
 						&& StringUtils.isNotBlank(entry.getCell(1).toString())) {
 					order.setSubOrderID(entry.getCell(1).toString());
+					order.setChannelOrderID(entry.getCell(1).toString());
 				} else {
 					errorMessage.append(" PO ID is null ");
 					validaterow = false;
@@ -640,18 +639,12 @@ public class SaveContents {
 
 				if (entry.getCell(9) != null
 						&& StringUtils.isNotBlank(entry.getCell(9).toString())) {
-					try {
-						Date dateobj = formatter.parse(entry.getCell(9)
-								.toString());
-						if (dateobj.getDate() > 31 || dateobj.getMonth() > 12) {
-							throw new ParseException(
-									"Date is not in mm/dd/yyyy format", 0);
-						} else {
-							order.setShippedDate(dateobj);
-						}
-					} catch (ParseException e) {
+
+					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(9))) {
+						order.setOrderDate(entry.getCell(9).getDateCellValue());
+					} else {
 						errorMessage
-								.append(" Shipped Date format is wrong ,enter mm/dd/yyyy ");
+								.append(" Order Recieved Date formate is wrong ,enter mm/dd/yyyy,");
 						validaterow = false;
 					}
 				} else {
@@ -997,7 +990,7 @@ public class SaveContents {
 					errorMessage.append(" Discount is null ");
 					validaterow = false;
 				}
-				
+
 				// product.setVolume(product.getHeight() * product.getLength() *
 				// product.getBreadth());
 				// product.setVolWeight(product.getVolume() / 5);
