@@ -656,6 +656,7 @@ public class ConverterClass {
 			bean.setCreatedOn(category.getCreatedOn());
 			bean.setExpcatDescription(category.getExpcatDescription());
 			bean.setExpcatName(category.getExpcatName());
+			bean.setExpenseSize(category.getExpenses().size());
 		}
 		// bean.setExpenses(prepareListofExpenseBean(category.getExpenses()));
 
@@ -687,6 +688,7 @@ public class ConverterClass {
 				bean.setCreatedOn(category.getCreatedOn());
 				bean.setExpcatDescription(category.getExpcatDescription());
 				bean.setExpcatName(category.getExpcatName());
+				bean.setExpenseSize(category.getExpenses().size());
 				// bean.setExpenses(prepareListofExpenseBean(category.getExpenses()));
 
 				beans.add(bean);

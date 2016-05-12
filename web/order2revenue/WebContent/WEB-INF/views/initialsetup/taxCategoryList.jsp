@@ -53,8 +53,7 @@
                                     <th>Description</th>
                                     <th>Modified On</th>
                                     <th>Percentage</th>
-                                   <th>Actions</th>
-                                </tr>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                 <c:if test="${!empty taxCategories}">
@@ -65,9 +64,7 @@
                                     <td>${category.taxCatDescription}</td>
                                     <td>${category.uploadDate}</td>
                                     <td>${category.taxPercent}</td>
-                                     <td class="tooltip-demo">
-                                    <a href=""><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a></td>
-                                </tr>
+                                     </tr>
                                 </c:forEach>
                                 </c:if>
                                 </tbody>

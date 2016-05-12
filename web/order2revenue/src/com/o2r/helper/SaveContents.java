@@ -144,7 +144,7 @@ public class SaveContents {
 					System.out.println(" Getting string value form : "
 							+ entry.getCell(0));
 					List<Order> onj = orderService.findOrders("channelOrderID",
-							entry.getCell(0).toString(), sellerId, false);
+							entry.getCell(0).toString(), sellerId,false);
 					if (onj == null || onj.size() == 0) {
 						order.setChannelOrderID(entry.getCell(0).toString());
 					} else {
@@ -333,8 +333,8 @@ public class SaveContents {
 				System.out.println(" NR calculator state: "
 						+ partner.getNrnReturnConfig().isNrCalculator());
 
-				if (partner != null && partner.getNrnReturnConfig() != null
-						&& !partner.getNrnReturnConfig().isNrCalculator()) {
+			/*	if (partner != null && partner.getNrnReturnConfig() != null
+						&& !partner.getNrnReturnConfig().isNrCalculator()) {*/
 
 					System.out.println(" NR calculator state: "
 							+ partner.getNrnReturnConfig().isNrCalculator());
@@ -357,7 +357,7 @@ public class SaveContents {
 									validaterow = false;
 								}
 							} else {
-								errorMessage.append(" Net Rate is null ");
+								errorMessage.append(" Net Rate is null and ongoing event on the order with fixed price.");
 								validaterow = false;
 							}
 						}
@@ -382,7 +382,7 @@ public class SaveContents {
 								validaterow = false;
 							}
 						}
-					}
+										
 
 					if (entry.getCell(17) != null
 							&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -410,6 +410,7 @@ public class SaveContents {
 					}
 					if (entry.getCell(21) != null
 							&& entry.getCell(21).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						System.out.println(" getting zipcode ");
 						if (areaConfigDao.isZipCodeValid(String
 								.valueOf((long) entry.getCell(21)
 										.getNumericCellValue()))) {

@@ -1,6 +1,7 @@
 package com.o2r.helper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GlobalConstant {
 
@@ -106,6 +107,21 @@ public class GlobalConstant {
 
 		}
 	};
+	
+
+	public static final HashMap<String, String> preDefinedExpenseCategoryMap = new HashMap<String, String>() {/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+	{
+		put("Petty","Petty");
+		put("Assets","Assets");
+		put("Salaries","Salaries");
+		put("Overheads","Overheads");
+		put("Taxable Purchases","Taxable Purchases");
+	    put("Tax/TDS","Tax/TDS");
+	}};
 
 	/* Null Area */
 	public static final String nullException = "NullException !";

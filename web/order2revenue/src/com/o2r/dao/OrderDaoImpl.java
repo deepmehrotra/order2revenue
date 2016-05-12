@@ -735,6 +735,7 @@ public class OrderDaoImpl implements OrderDao {
 		Events event=null;
 		Product product = null;
 		TaxDetail taxDetails = null;
+		TaxDetail tdsDetails = null;
 		float returnChargesCalculated = 0;
 
 		// To add change order status
@@ -876,6 +877,7 @@ public class OrderDaoImpl implements OrderDao {
 							order.getOrderPayment().getPaymentDifference()
 									+ order.getGrossNetRate()
 									* orderReturn.getReturnorrtoQty());
+					order.setGrossProfit(order.getGrossProfit()*orderReturn.getReturnorrtoQty()/order.getQuantity());
 				}
 
 				// Reverting Tax information for Return Order
@@ -884,6 +886,14 @@ public class OrderDaoImpl implements OrderDao {
 				taxDetails.setParticular(order.getOrderTax().getTaxCategtory());
 				taxDetails.setUploadDate(orderReturn.getReturnDate());
 				taxDetailService.addMonthlyTaxDetail(session, taxDetails,
+						sellerId);
+				
+				// Reverting TDS information for Return Order
+				tdsDetails = new TaxDetail();
+				tdsDetails.setBalanceRemaining(-(order.getOrderTax().getTdsToDeduct()/order.getQuantity())*orderReturn.getReturnorrtoQty());
+				tdsDetails.setParticular("TDS");
+				tdsDetails.setUploadDate(orderReturn.getReturnDate());
+				taxDetailService.addMonthlyTDSDetail(session, tdsDetails,
 						sellerId);
 
 				order.getOrderTax().setToxToReturn((order.getOrderTax().getTax()/order.getQuantity())*orderReturn.getReturnorrtoQty());
@@ -906,9 +916,6 @@ public class OrderDaoImpl implements OrderDao {
 						false, sellerId);
 
 				order.setOrderReturnOrRTO(orderReturn);
-
-				// session.saveOrUpdate(order);
-
 				session.getTransaction().commit();
 				session.close();
 			}
@@ -919,15 +926,10 @@ public class OrderDaoImpl implements OrderDao {
 			throw new CustomException(GlobalConstant.addReturnOrderError,
 					new Date(), 1, GlobalConstant.addReturnOrderErrorCode, e);
 
-			/*
-			 * System.out.println("Inside exception  " +
-			 * e.getLocalizedMessage()); e.printStackTrace();
-			 */
+			
 		}
-		// System.out.println(" Retun order saved channle order : "+
-		// channelOrderId);
+		
 	}
-
 	@Override
 	public List<Order> findOrders(String column, String value, int sellerId, boolean isPO)
 			throws CustomException {

@@ -61,8 +61,7 @@
                                     <th>Created On</th>
                                     <th>Expense Count</th>
                                     <th>Current Month Expense</th>
-                                  <!--   <th>Actions</th> -->
-                                </tr>
+                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:if test="${!empty expenseCategories}">
@@ -72,11 +71,9 @@
                                     <td>${category.expcatName}</td>
                                     <td>${category.expcatDescription}</td>
                                     <td>${category.createdOn}</td>
-                                    <td>${category.expenses.size()}</td>
+                                    <td>${category.expenseSize}</td>
                                      <td>${category.monthlyAmount}</td>
-                                   <%--  <td class="tooltip-demo">
-                                    <a href="deleteExpenseCategory.html?expcategoryId=${category.expcategoryId}"><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Delete Empty Category"></i></a></td> --%>
-                                </tr>
+                                    </tr>
                                 </c:forEach>
                                 </c:if>
                                 </tbody>

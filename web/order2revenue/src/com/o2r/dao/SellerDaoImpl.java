@@ -2,6 +2,7 @@ package com.o2r.dao;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
@@ -17,12 +18,14 @@ import org.springframework.stereotype.Repository;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.AccountTransaction;
+import com.o2r.model.ExpenseCategory;
 import com.o2r.model.Plan;
 import com.o2r.model.Product;
 import com.o2r.model.ProductStockList;
 import com.o2r.model.Seller;
 import com.o2r.model.State;
 import com.o2r.model.StateDeliveryTime;
+import com.o2r.service.ExpenseService;
 
 /**
  * @author Deep Mehrotra
@@ -34,6 +37,9 @@ public class SellerDaoImpl implements SellerDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private ExpenseService expenseService;
 
 	static Logger log = Logger.getLogger(SellerDaoImpl.class.getName());
 
@@ -47,6 +53,7 @@ public class SellerDaoImpl implements SellerDao {
 			session.saveOrUpdate(seller);
 			session.getTransaction().commit();
 			session.close();
+			setExpenseGroupsForSeller(seller.getId());
 		} catch (Exception e) {
 			
 			log.error(e);
@@ -292,6 +299,16 @@ public class SellerDaoImpl implements SellerDao {
 //			e.printStackTrace();
 		}
 		return returntime;
+	}
+	
+	/*
+	 * Method to add Default Categories in new Seller
+	 */
+	private void setExpenseGroupsForSeller(int sellerId) throws CustomException {
+		System.out.println(" Getting setExpenseGroupsForSeller sellerId : "+sellerId);
+		 for(Entry<String, String> e : GlobalConstant.preDefinedExpenseCategoryMap.entrySet()) {
+			 expenseService.addExpenseCategory(new ExpenseCategory(e.getKey(), e.getValue(),new Date()), sellerId);
+		       }
 	}
 
 }

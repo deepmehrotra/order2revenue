@@ -18,6 +18,7 @@ import javax.persistence.Table;
 @Table(name="ExpCat")
 public class ExpenseCategory {
 	
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column
@@ -28,8 +29,21 @@ public class ExpenseCategory {
 	private String expcatDescription;
 	@Column
 	private Date createdOn;
-	@OneToMany( cascade = {CascadeType.ALL}, mappedBy="expenseCategory")
+	@OneToMany( cascade = {CascadeType.ALL}, mappedBy="expenseCategory",fetch=FetchType.EAGER)
 	private List<Expenses> expenses = new ArrayList<Expenses>();
+	
+	public ExpenseCategory(String expcatName,
+			String expcatDescription, Date createdOn) {
+		super();
+		this.expcatName = expcatName;
+		this.expcatDescription = expcatDescription;
+		this.createdOn = createdOn;
+			}
+
+	public ExpenseCategory() {
+		super();
+	}
+
 	public int getExpcategoryId() {
 		return expcategoryId;
 	}
