@@ -268,6 +268,7 @@ public class GlobalConstant {
 	// Constants for Error messages
 	public static final String addExpenseError = "Error while Adding the Expense. Either try again with correct data or contact admin with the error details.";
 	public static final String addExpenseCategoryError = "Error while Adding the Expense Category. Either try again with correct data or contact admin with the error details.";
+	public static final String addStateDeliveryTimeError = "Error while Adding the State Delivery Time. Either try again with correct data or contact admin with the error details.";
 	public static final String listExpensesError = "Error while Getting the Expenses. Either try again with correct data or contact admin with the error details.";
 	public static final String listExpensesCategoriesError = "Error while Getting the Expense Catagories. Either try again with correct data or contact admin with the error details.";
 	public static final String getExpenseError = "Error while retriving the Expense. Either try again with correct ID or contact admin with the error details.";
@@ -278,7 +279,7 @@ public class GlobalConstant {
 	public static final String getExpenseByCategoryError = "Error while retriving Expenses By Category. Either try again with correct Data or contact admin with the error details.";
 	public static final String getExpenseByDateError = "Error while retriving Expenses By Date. Either try again with correct Data or contact admin with the error details.";
 
-	// Error codes
+	// Error codes 
 	public static final String addExpenseErrorCode = "#00080";
 	public static final String addExpenseCategoryErrorCode = "#00081";
 	public static final String listExpensesErrorCode = "#00082";
@@ -291,6 +292,8 @@ public class GlobalConstant {
 	public static final String getExpenseByCategoryErrorCode = "#00089";
 	public static final String getExpenseByDateErrorCode = "#00090";
 
+	public static final String addStateDeliveryTimeErrorCode = "#00011";
+	
 	/** Expense Area **/
 
 	/** Partner Area **/

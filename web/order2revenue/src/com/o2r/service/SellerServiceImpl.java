@@ -16,6 +16,7 @@ import com.o2r.model.Product;
 import com.o2r.model.ProductStockList;
 import com.o2r.model.Seller;
 import com.o2r.model.State;
+import com.o2r.model.StateDeliveryTime;
 
 import java.io.FileInputStream;
 
@@ -127,5 +128,10 @@ public class SellerServiceImpl implements SellerService {
 		 	sellerDao.addToProductStockList();
 	 }
 	
-	
+	@Override
+	public void addStateDeliveryTime(List<StateDeliveryTime> stateDelTimeList, int sellerId)
+			throws CustomException
+			{
+		sellerDao.addStateDeliveryTime(stateDelTimeList, sellerId);
+			}
 }
