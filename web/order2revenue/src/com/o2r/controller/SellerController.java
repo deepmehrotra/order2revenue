@@ -338,16 +338,19 @@ public class SellerController {
 	}
 
 	@RequestMapping("/seller/summary.html")
-	public ModelAndView planSummary(
-			@ModelAttribute("command") PlanBean planBean, BindingResult result) {
+	public ModelAndView planSummary(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			model.put("myAccount", sellerService.getSeller(5));
+			int sellerId = HelperClass.getSellerIdfromSession(request);
+			model.put("myAccount", sellerService.getSeller(sellerId));
 		} catch (CustomException ce) {
 			log.error("planUpgrade exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Exception ex) {
+			log.error("planUpgrade exception : " + ex.toString());
 			return new ModelAndView("globalErorPage", model);
 		}
 		return new ModelAndView("selleraccount/planSummary", model);
