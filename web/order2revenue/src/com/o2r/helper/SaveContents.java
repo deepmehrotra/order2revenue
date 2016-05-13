@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -46,6 +47,7 @@ import com.o2r.dao.AreaConfigDao;
 import com.o2r.model.Category;
 import com.o2r.model.Events;
 import com.o2r.model.ExpenseCategory;
+import com.o2r.model.GatePass;
 import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
 import com.o2r.model.OrderRTOorReturn;
@@ -144,7 +146,7 @@ public class SaveContents {
 					System.out.println(" Getting string value form : "
 							+ entry.getCell(0));
 					List<Order> onj = orderService.findOrders("channelOrderID",
-							entry.getCell(0).toString(), sellerId,false);
+							entry.getCell(0).toString(), sellerId, false);
 					if (onj == null || onj.size() == 0) {
 						order.setChannelOrderID(entry.getCell(0).toString());
 					} else {
@@ -330,10 +332,11 @@ public class SaveContents {
 					errorMessage.append(" Quantity can not be null ");
 					validaterow = false;
 				}
-				/*	if (partner != null && partner.getNrnReturnConfig() != null
-						&& !partner.getNrnReturnConfig().isNrCalculator()) {*/
-				if(partner!=null)
-				{
+				/*
+				 * if (partner != null && partner.getNrnReturnConfig() != null
+				 * && !partner.getNrnReturnConfig().isNrCalculator()) {
+				 */
+				if (partner != null) {
 					event = eventsService.isEventActiive(order.getOrderDate(),
 							partner.getPcName(), sellerId);
 					if (event != null) {
@@ -353,7 +356,8 @@ public class SaveContents {
 									validaterow = false;
 								}
 							} else {
-								errorMessage.append(" Net Rate is null and ongoing event on the order with fixed price.");
+								errorMessage
+										.append(" Net Rate is null and ongoing event on the order with fixed price.");
 								validaterow = false;
 							}
 						}
@@ -378,103 +382,96 @@ public class SaveContents {
 								validaterow = false;
 							}
 						}
-										
-					}
-			}
-					if (entry.getCell(17) != null
-							&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						System.out
-								.println(" Email from sheet ************ "
-										+ rowIndex + ":"
-										+ entry.getCell(17).toString());
-						customerBean.setCustomerEmail(entry.getCell(17)
-								.toString());
-					}
-					if (entry.getCell(18) != null
-							&& entry.getCell(18).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						customerBean.setCustomerPhnNo(entry.getCell(18)
-								.toString());
-					}
-					if (entry.getCell(19) != null
-							&& entry.getCell(19).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						customerBean.setCustomerCity(entry.getCell(19)
-								.toString());
-					}
-					if (entry.getCell(20) != null
-							&& entry.getCell(20).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						customerBean.setCustomerAddress(entry.getCell(20)
-								.toString());
-					}
-					if (entry.getCell(21) != null
-							&& entry.getCell(21).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						System.out.println(" getting zipcode ");
-						if (areaConfigDao.isZipCodeValid(String
-								.valueOf((long) entry.getCell(21)
-										.getNumericCellValue()))) {
-							try {
-								customerBean.setZipcode(String
-										.valueOf((long) entry.getCell(21)
-												.getNumericCellValue()));
-							} catch (Exception e) {
-								e.printStackTrace();
-								errorMessage
-										.append("Customer zipcode is corrupted ");
-								validaterow = false;
-							}
-						} else {
-							errorMessage
-									.append("Customer zipcode is not valid ");
-							validaterow = false;
-							customerBean.setZipcode(String.valueOf((long) entry
-									.getCell(21).getNumericCellValue()));
-						}
-					} else {
-						errorMessage.append("Customer zipcode is blank ");
-						validaterow = false;
-					}
-					if (entry.getCell(22) != null
-							&& entry.getCell(22).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						TaxCategory taxcat = taxDetailService.getTaxCategory(
-								entry.getCell(22).toString(), sellerId);
-						if (taxcat != null)
-							otb.setTaxCategtory(entry.getCell(22).toString());
-						else {
-							otb.setTaxCategtory(entry.getCell(22).toString());
-							errorMessage.append("Tax Category does not exist ");
-							validaterow = false;
-						}
-					} else {
-						errorMessage.append("Tax Category is null ");
-						validaterow = false;
-					}
-					if (entry.getCell(23) != null
-							&& StringUtils.isNotBlank(entry.getCell(23)
-									.toString())) {
-						order.setSellerNote(entry.getCell(23).toString());
-						
-					}
-					System.out.println("Sheet values :1 :" + entry.getCell(1)
-							+ " 2 :" + entry.getCell(2) + " 3 :"
-							+ entry.getCell(3));
-					// Pre save to generate id for use in hierarchy
-					if (validaterow) {
-						order.setCustomer(customerBean);
-						order.setOrderTax(otb);
-						orderService.addOrder(
-								ConverterClass.prepareModel(order), sellerId);
-					} else {
-						order.setCustomer(customerBean);
-						order.setOrderTax(otb);
-						System.out.println(" Error while saving order : "
-								+ order.getChannelOrderID()
-								+ " errorMessage : " + errorMessage);
-						returnOrderMap.put(errorMessage.toString(), order);
+
 					}
 				}
-				Set<String> errorSet = returnOrderMap.keySet();
-				downloadUploadReportXLS(offices, "Order Report", 24, errorSet,
-						path, sellerId);
-			
+				if (entry.getCell(17) != null
+						&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					System.out.println(" Email from sheet ************ "
+							+ rowIndex + ":" + entry.getCell(17).toString());
+					customerBean.setCustomerEmail(entry.getCell(17).toString());
+				}
+				if (entry.getCell(18) != null
+						&& entry.getCell(18).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					customerBean.setCustomerPhnNo(entry.getCell(18).toString());
+				}
+				if (entry.getCell(19) != null
+						&& entry.getCell(19).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					customerBean.setCustomerCity(entry.getCell(19).toString());
+				}
+				if (entry.getCell(20) != null
+						&& entry.getCell(20).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					customerBean.setCustomerAddress(entry.getCell(20)
+							.toString());
+				}
+				if (entry.getCell(21) != null
+						&& entry.getCell(21).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					System.out.println(" getting zipcode ");
+					if (areaConfigDao.isZipCodeValid(String
+							.valueOf((long) entry.getCell(21)
+									.getNumericCellValue()))) {
+						try {
+							customerBean.setZipcode(String.valueOf((long) entry
+									.getCell(21).getNumericCellValue()));
+						} catch (Exception e) {
+							e.printStackTrace();
+							errorMessage
+									.append("Customer zipcode is corrupted ");
+							validaterow = false;
+						}
+					} else {
+						errorMessage.append("Customer zipcode is not valid ");
+						validaterow = false;
+						customerBean.setZipcode(String.valueOf((long) entry
+								.getCell(21).getNumericCellValue()));
+					}
+				} else {
+					errorMessage.append("Customer zipcode is blank ");
+					validaterow = false;
+				}
+				if (entry.getCell(22) != null
+						&& entry.getCell(22).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					TaxCategory taxcat = taxDetailService.getTaxCategory(entry
+							.getCell(22).toString(), sellerId);
+					if (taxcat != null)
+						otb.setTaxCategtory(entry.getCell(22).toString());
+					else {
+						otb.setTaxCategtory(entry.getCell(22).toString());
+						errorMessage.append("Tax Category does not exist ");
+						validaterow = false;
+					}
+				} else {
+					errorMessage.append("Tax Category is null ");
+					validaterow = false;
+				}
+				if (entry.getCell(23) != null
+						&& StringUtils.isNotBlank(entry.getCell(23).toString())) {
+					order.setSellerNote(entry.getCell(23).toString());
+
+				}
+				System.out
+						.println("Sheet values :1 :" + entry.getCell(1)
+								+ " 2 :" + entry.getCell(2) + " 3 :"
+								+ entry.getCell(3));
+				// Pre save to generate id for use in hierarchy
+				if (validaterow) {
+					order.setCustomer(customerBean);
+					order.setOrderTax(otb);
+					orderService.addOrder(ConverterClass.prepareModel(order),
+							sellerId);
+				} else {
+					order.setCustomer(customerBean);
+					order.setOrderTax(otb);
+					System.out.println(" Error while saving order : "
+							+ order.getChannelOrderID() + " errorMessage : "
+							+ errorMessage);
+					returnOrderMap.put(errorMessage.toString(), order);
+				}
+			}
+			Set<String> errorSet = returnOrderMap.keySet();
+			downloadUploadReportXLS(offices, "Order Report", 24, errorSet,
+					path, sellerId);
+
 		} catch (Exception e) {
 			System.out.println("Inside save contents exception :"
 					+ e.getLocalizedMessage());
@@ -483,7 +480,7 @@ public class SaveContents {
 		}
 		return returnOrderMap;
 	}
-	
+
 	public Map<String, OrderBean> saveOrderPOContents(MultipartFile file,
 			int sellerId, String path) throws IOException {
 		HSSFRow entry;
@@ -493,13 +490,12 @@ public class SaveContents {
 		OrderBean order = null;
 		Partner partner = null;
 		StringBuffer errorMessage = null;
-		double poprice = 0;
-		double poMRP = 0;
-		double poSP = 0;
-		double poNR = 0;
-		int totalquantity = 0;
-		// StringBuffer totalSkucode=new StringBuffer("");
-		// OrderBean poOrder=null;
+
+		String poId = null;
+		String invoiceId = null;
+
+		List<Order> orderlist = new ArrayList<Order>();
+
 		try {
 			System.out.println("Inside save content -->");
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -535,6 +531,16 @@ public class SaveContents {
 						&& StringUtils.isNotBlank(entry.getCell(1).toString())) {
 					order.setSubOrderID(entry.getCell(1).toString());
 					order.setChannelOrderID(entry.getCell(1).toString());
+
+					if (poId != null
+							&& !poId.equalsIgnoreCase(order.getSubOrderID())) {
+						Order consolidatedOrder = orderService
+								.generateConsolidatedOrder(orderlist, sellerId);
+						orderService.updatePOOrders(orderlist,
+								consolidatedOrder);
+						orderlist.clear();
+					}
+					poId = order.getSubOrderID();
 				} else {
 					errorMessage.append(" PO ID is null ");
 					validaterow = false;
@@ -616,12 +622,24 @@ public class SaveContents {
 				if (entry.getCell(7) != null
 						&& StringUtils.isNotBlank(entry.getCell(7).toString())) {
 					order.setInvoiceID(entry.getCell(7).toString());
-					Order consolidateOrder = orderService.getConsolidatedOrder(
-							order.getSubOrderID(), order.getInvoiceID());
-					if (consolidateOrder != null) {
-						errorMessage.append(" PO already uploaded ");
-						validaterow = false;
+
+					if (invoiceId != null
+							&& !invoiceId
+									.equalsIgnoreCase(order.getInvoiceID())
+							&& !orderlist.isEmpty()) {
+						Order consolidateOrder = orderService
+								.getConsolidatedOrder(order.getSubOrderID(),
+										order.getInvoiceID());
+						if (consolidateOrder != null) {
+							errorMessage.append(" PO already uploaded ");
+							validaterow = false;
+						} else {
+							orderService.generateConsolidatedOrder(orderlist,
+									sellerId);
+						}
 					}
+					invoiceId = order.getInvoiceID();
+
 				} else {
 					errorMessage.append(" Invoice ID is null ");
 					validaterow = false;
@@ -641,9 +659,11 @@ public class SaveContents {
 
 					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(9))) {
 						order.setOrderDate(entry.getCell(9).getDateCellValue());
+						order.setShippedDate(entry.getCell(9)
+								.getDateCellValue());
 					} else {
 						errorMessage
-								.append(" Order Recieved Date formate is wrong ,enter mm/dd/yyyy,");
+								.append(" Order Recieved Date format is wrong ");
 						validaterow = false;
 					}
 				} else {
@@ -662,8 +682,9 @@ public class SaveContents {
 								+ entry.getCell(3));
 				// Pre save to generate id for use in hierarchy
 				if (validaterow) {
-					orderService.addPO(ConverterClass.prepareModel(order),
-							sellerId);
+					Order savedOrder = orderService.addPO(
+							ConverterClass.prepareModel(order), sellerId);
+					orderlist.add(savedOrder);
 				} else {
 					returnOrderMap.put(errorMessage.toString(), order);
 				}
@@ -672,23 +693,7 @@ public class SaveContents {
 			Set<String> errorSet = returnOrderMap.keySet();
 			downloadUploadReportXLS(offices, "OrderPOSheet", 11, errorSet,
 					path, sellerId);
-			/*
-			 * poOrder=new OrderBean(); entry=worksheet.getRow(3);
-			 * poOrder.setChannelOrderID(entry.getCell(0).toString());
-			 * poOrder.setOrderDate(new Date(entry.getCell(1).toString()));
-			 * poOrder.setProductSkuCode("Multiple SKU");
-			 * poOrder.setPcName(entry.getCell(3).toString());
-			 * poOrder.setSealNo(entry.getCell(4).toString());
-			 * poOrder.setInvoiceID(entry.getCell(5).toString());
-			 * poOrder.setOrderMRP(poMRP); poOrder.setOrderSP(poSP);
-			 * poOrder.setQuantity(totalquantity);
-			 * poOrder.setGrossNetRate(poNR); poOrder.setPoPrice(poprice);
-			 * poOrder.setSellerNote(totalSkucode.toString());
-			 * poOrder.setShippedDate(new Date(entry.getCell(8).toString()));
-			 * poOrder.setDeliveryDate(new Date(entry.getCell(9).toString()));
-			 * orderService
-			 * .addOrder(ConverterClass.prepareModel(poOrder),sellerId);
-			 */
+
 		} catch (Exception e) {
 			System.out.println("Inside save contents exception :"
 					+ e.getLocalizedMessage());
@@ -1918,4 +1923,167 @@ public class SaveContents {
 		}
 	}
 
+	public Map<String, Order> saveGatePassDetails(MultipartFile file,
+			int sellerId, String path) throws IOException {
+		HSSFRow entry;
+		Integer noOfEntries = 1;
+
+		GatePass gatepass;
+		// Order order = new Order();
+		StringBuffer errorMessage = null;
+		boolean validaterow = true;
+		// int returnId = 0;
+		// OrderRTOorReturn orderReturn = null;
+		Map<String, Order> returnlist = new LinkedHashMap<>();
+		// List<Order> orderlist = null;
+		try {
+			System.out.println("Inside save gate pass data -->");
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			logger.info(noOfEntries.toString());
+			System.out.println("After getting no of rows" + noOfEntries);
+			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
+				// orderReturn = new OrderRTOorReturn();
+				gatepass = new GatePass();
+
+				if (entry.getCell(0) != null
+						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
+					gatepass.setGatepassId(entry.getCell(0).toString());
+				} else {
+					errorMessage.append(" GatePass ID is null ");
+					validaterow = false;
+				}
+
+				if (entry.getCell(1) != null
+						&& StringUtils.isNotBlank(entry.getCell(1).toString())) {
+					gatepass.setPoID(entry.getCell(1).toString());
+				} else {
+					errorMessage.append(" PO ID is null ");
+					validaterow = false;
+				}
+
+				if (entry.getCell(2) != null
+						&& StringUtils.isNotBlank(entry.getCell(2).toString())) {
+					gatepass.setInvoiceID(entry.getCell(2).toString());
+				} else {
+					errorMessage.append(" Invoice ID is null ");
+					validaterow = false;
+				}
+
+				if (entry.getCell(3) != null
+						&& StringUtils.isNotBlank(entry.getCell(3).toString())) {
+					gatepass.setChannelSkuRef(entry.getCell(3).toString());
+				} else {
+					errorMessage.append(" Vendor SKU is null ");
+					validaterow = false;
+				}
+
+				Order poOrder = orderService.findPOOrder(gatepass.getPoID(),
+						gatepass.getInvoiceID(), gatepass.getChannelSkuRef(),
+						sellerId);
+				if (poOrder == null) {
+					errorMessage.append(" PO Not received ");
+					validaterow = false;
+				}
+
+				if (entry.getCell(4) != null
+						&& StringUtils.isNotBlank(entry.getCell(4).toString())) {
+					gatepass.setQuantity((int) Float.parseFloat(entry
+							.getCell(4).toString()));
+				} else {
+					errorMessage.append(" Quantity is null ");
+					validaterow = false;
+				}
+
+				if (entry.getCell(5) != null
+						&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
+					gatepass.setReturnRate(Double.parseDouble(entry.getCell(5)
+							.toString()));
+				} else {
+					errorMessage.append(" Return Rate is null ");
+					validaterow = false;
+				}
+
+				if (entry.getCell(6) != null
+						&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
+					gatepass.setTaxAmt(Double.parseDouble(entry.getCell(6)
+							.toString()));
+				} else {
+					errorMessage.append(" Tax Amount is null ");
+					validaterow = false;
+				}
+
+				if (entry.getCell(7) != null
+						&& StringUtils.isNotBlank(entry.getCell(7).toString())) {
+					gatepass.setReturnCharges(Double.parseDouble(entry.getCell(
+							7).toString()));
+				} else {
+					errorMessage.append(" Return Charges is null ");
+					validaterow = false;
+				}
+
+				if (entry.getCell(8) != null
+						&& StringUtils.isNotBlank(entry.getCell(8).toString())) {
+					gatepass.setTotalReturnCharges(Double.parseDouble(entry
+							.getCell(8).toString()));
+				} else {
+					errorMessage.append(" Total Return Charges is null ");
+					validaterow = false;
+				}
+
+				if (entry.getCell(9) != null
+						&& StringUtils.isNotBlank(entry.getCell(9).toString())) {
+					gatepass.setSellerNotes(entry.getCell(9).toString());
+				} else {
+					errorMessage.append(" Seller Note is null ");
+					validaterow = false;
+				}
+
+				if (entry.getCell(11) != null
+						&& StringUtils.isNotBlank(entry.getCell(11).toString())) {
+					gatepass.setReturnReason(entry.getCell(11).toString());
+				} else {
+					errorMessage.append(" Return Reason is null ");
+					validaterow = false;
+				}
+
+				if (entry.getCell(12) != null
+						&& StringUtils.isNotBlank(entry.getCell(12).toString())) {
+					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(12))) {
+						gatepass.setReturnDate(entry.getCell(12)
+								.getDateCellValue());
+
+					} else {
+						errorMessage.append(" Return Date format is wrong ");
+						validaterow = false;
+					}
+				} else {
+					errorMessage.append(" Return Date is null ");
+					validaterow = false;
+				}
+
+				if (validaterow) {
+					orderService.addGatePass(poOrder, gatepass, sellerId);
+				} else {
+					poOrder.setGatepass(gatepass);
+					returnlist.put(errorMessage.toString(), poOrder);
+				}
+			}
+			Set<String> errorSet = returnlist.keySet();
+			downloadUploadReportXLS(offices, "GatePassReport", 13, errorSet,
+					path, sellerId);
+		} catch (Exception e) {
+			System.out.println("Inside save contents exception :"
+					+ e.getLocalizedMessage());
+			e.printStackTrace();
+			throw new MultipartException("Constraints Violated");
+		}
+		return returnlist;
+	}
 }

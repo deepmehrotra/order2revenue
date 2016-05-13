@@ -289,7 +289,7 @@ public class ConverterClass {
 			seller.setTinNumber(sellerBean.getTinNumber());
 			seller.setTanNumber(sellerBean.getTanNumber());
 			seller.setRole(sellerBean.getRole());
-			seller.setStateDeliveryTime(prepareStateDeliveryTimeModel(sellerBean.getStateDeliveryTime()));
+			seller.setStateDeliveryTime(sellerBean.getStateDeliveryTime());
 		}
 		return seller;
 	}
@@ -361,7 +361,7 @@ public class ConverterClass {
 			bean.setTinNumber(seller.getTinNumber());
 			bean.setTanNumber(seller.getTanNumber());
 			bean.setRole(seller.getRole());
-			bean.setStateDeliveryTime(prepareStateDeliveryTimeBeanList(seller.getStateDeliveryTime()));
+			bean.setStateDeliveryTime(seller.getStateDeliveryTime());
 		}
 		return bean;
 	}

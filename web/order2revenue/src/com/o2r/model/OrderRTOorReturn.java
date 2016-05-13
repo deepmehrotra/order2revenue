@@ -45,6 +45,15 @@ public class OrderRTOorReturn {
 	@Column
 	private String cancelType;
 	
+	@Column
+	private double netNR;
+	@Column
+	private double taxPOAmt;
+	@Column
+	private double netPR;
+	@Column
+	private double grossProfit;
+	
 	@OneToMany(mappedBy="consolidatedReturn", cascade=CascadeType.ALL)  
 	private List<GatePass> gatepasses =new ArrayList<GatePass>();
 
@@ -153,6 +162,38 @@ public class OrderRTOorReturn {
 
 	public void setCancelType(String cancelType) {
 		this.cancelType = cancelType;
+	}
+
+	public double getNetNR() {
+		return netNR;
+	}
+
+	public void setNetNR(double netNR) {
+		this.netNR = netNR;
+	}
+
+	public double getTaxPOAmt() {
+		return taxPOAmt;
+	}
+
+	public void setTaxPOAmt(double taxPOAmt) {
+		this.taxPOAmt = taxPOAmt;
+	}
+
+	public double getNetPR() {
+		return netPR;
+	}
+
+	public void setNetPR(double netPR) {
+		this.netPR = netPR;
+	}
+
+	public double getGrossProfit() {
+		return grossProfit;
+	}
+
+	public void setGrossProfit(double grossProfit) {
+		this.grossProfit = grossProfit;
 	}
 
 }
