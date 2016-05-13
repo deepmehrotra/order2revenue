@@ -254,10 +254,11 @@ public class SellerController {
 						StateDeliveryTime sdtobj=new StateDeliveryTime();
 						sdtobj.setDeliveryTime(entry.getValue()[0]!=null?Integer.parseInt(entry.getValue()[0]):0);
 						sdtobj.setState(sellerService.getStateByName(temp));
-						sdtList.add(sdtobj);
-						//sdtobj.setSeller(ConverterClass.prepareSellerModel(sellerBean));
-						//sellerBean.getStateDeliveryTime().add(sdtobj);
 						
+						sdtList.add(sdtobj);
+		
+						sdtobj.setSeller(ConverterClass.prepareSellerModel(sellerBean));
+						sellerBean.getStateDeliveryTime().add(sdtobj);						
 					}
 				}
 			}

@@ -13,6 +13,7 @@ import com.o2r.bean.DebitNoteBean;
 import com.o2r.bean.PoPaymentBean;
 import com.o2r.dao.OrderDao;
 import com.o2r.helper.CustomException;
+import com.o2r.model.GatePass;
 import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
 import com.o2r.model.OrderRTOorReturn;
@@ -34,11 +35,18 @@ public class OrderServiceImpl implements OrderService {
 		orderDao.addOrder(order, sellerId);
 
 	}
-	
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public void addPO(Order order, int sellerId) throws CustomException {
-		orderDao.addPO(order, sellerId);
+	public Order addPO(Order order, int sellerId) throws CustomException {
+		return orderDao.addPO(order, sellerId);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public Order generateConsolidatedOrder(List<Order> orderlist, int sellerId)
+			throws CustomException {
+		return orderDao.generateConsolidatedOrder(orderlist, sellerId);
 
 	}
 
@@ -71,8 +79,8 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public List<Order> findOrders(String column, String value, int sellerId, boolean isPO)
-			throws CustomException {
+	public List<Order> findOrders(String column, String value, int sellerId,
+			boolean isPO) throws CustomException {
 		return orderDao.findOrders(column, value, sellerId, isPO);
 	}
 
@@ -137,7 +145,7 @@ public class OrderServiceImpl implements OrderService {
 			throws CustomException {
 		return orderDao.listOrders(sellerId, pageNo);
 	}
-	
+
 	@Override
 	public List<Order> listPOOrders(int sellerId, int pageNo)
 			throws CustomException {
@@ -154,5 +162,25 @@ public class OrderServiceImpl implements OrderService {
 			Date startDate, Date endDate, int sellerIdfromSession) {
 		return orderDao.findChannelOrdersbyDate(string, startDate, endDate,
 				sellerIdfromSession);
+	}
+
+	@Override
+	public void updatePOOrders(List<Order> orderlist, Order consolidatedOrder)
+			throws CustomException {
+		orderDao.updatePOOrders(orderlist, consolidatedOrder);
+
+	}
+
+	@Override
+	public Order findPOOrder(String poID, String invoiceID, String channelSkuRef, int sellerId)
+			throws CustomException {
+		return orderDao.findPOOrder(poID, invoiceID, channelSkuRef, sellerId);
+	}
+
+	@Override
+	public void addGatePass(Order order, GatePass gatepass, int sellerId)
+			throws CustomException {
+		orderDao.addGatePass(order, gatepass, sellerId);
+		
 	}
 }

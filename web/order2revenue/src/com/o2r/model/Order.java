@@ -111,6 +111,8 @@ public class Order {
 	@OneToOne(cascade=CascadeType.ALL)
 	private OrderPayment orderPayment;
 	@OneToOne(cascade=CascadeType.ALL)
+	private GatePass gatepass;
+	@OneToOne(cascade=CascadeType.ALL)
 	private OrderRTOorReturn orderReturnOrRTO;
 	@OneToOne(cascade=CascadeType.ALL)
 	private OrderTax orderTax;
@@ -133,7 +135,7 @@ public class Order {
 	private boolean isPO;
 	@Column
 	private double eossValue;
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	private ProductConfig productConfig;
 	@ManyToOne(cascade=CascadeType.ALL)
 	private Order consolidatedOrder;
@@ -573,6 +575,14 @@ public class Order {
 
 	public void setEossValue(double eossValue) {
 		this.eossValue = eossValue;
+	}
+
+	public GatePass getGatepass() {
+		return gatepass;
+	}
+
+	public void setGatepass(GatePass gatepass) {
+		this.gatepass = gatepass;
 	}
 
 

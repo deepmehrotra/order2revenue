@@ -186,15 +186,15 @@ public class ProductDaoImpl implements ProductDao {
 				}
 				productConfig.setTaxPo(taxpo);
 				productConfig
-						.setTaxPoAmt((productConfig.getProductPrice() * taxpo) / 100);
+						.setTaxPoAmt((productConfig.getPr() * taxpo) / 100);
 
 				productConfig.setSuggestedPOPrice(productConfig
-						.getProductPrice() + productConfig.getTaxPoAmt());
+						.getPr() + productConfig.getTaxPoAmt());
 
 				if (productConfig.getChannelName().equalsIgnoreCase("Myntra")) {
 					productConfig.setEossDiscountValue((productConfig
 							.getSuggestedPOPrice() * productConfig
-							.getEossDiscount()) / 100);
+							.getDiscount()) / 100);
 					productConfig.setGrossNR(productConfig
 							.getSuggestedPOPrice()
 							- productConfig.getEossDiscountValue());

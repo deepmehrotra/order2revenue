@@ -241,6 +241,12 @@ public class OrderController {
 					model.put("mapType", "orderPoMap");
 					// saveContents.saveOrderPOContents(files.get(0),sellerId);
 					break;
+				case "gatepassSummary":
+					model.put("gatepassMap", saveContents
+							.saveGatePassDetails(files.get(0), sellerId,
+									applicationPath));
+					model.put("mapType", "gatepassMap");
+					break;
 				case "paymentSummary":
 					model.put("orderPaymentMap", saveContents
 							.savePaymentContents(files.get(0), sellerId,

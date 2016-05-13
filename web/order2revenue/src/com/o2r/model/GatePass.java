@@ -1,5 +1,7 @@
 package com.o2r.model;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,47 +12,63 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="gatepass")
+@Table(name = "gatepass")
 public class GatePass {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column
-	private int gatepassId;
+	private int gpId;
+	@Column
+	private String gatepassId;
 	@Column
 	private String poID;
 	@Column
 	private String invoiceID;
 	@Column
-	private String productSkuCode;
+	private String channelSkuRef;
 	@Column
 	private int quantity;
 	@Column
-	private double returnpr;
+	private double returnRate;
 	@Column
-	private float serviceTax;
+	private double taxAmt;
 	@Column
-	private double landedPrice;
+	private double returnCharges;
 	@Column
-	private double netReturn;
-	@ManyToOne(cascade=CascadeType.ALL)
+	private double totalReturnCharges;
+	@Column
+	private String sellerNotes;
+	@Column
+	private String returnReason;
+	@Column
+	private Date returnDate;
+	@Column
+	private double netNR;
+	@Column
+	private double taxPOAmt;
+	@Column
+	private double retutnPR;
+	@Column
+	private double netPR;
+	@Column
+	private double grossProfit;
+	@ManyToOne(cascade = CascadeType.ALL)
 	private OrderRTOorReturn consolidatedReturn;
-	
-	/*@Override
-	public String toString() {
-		return "OrderRTOorReturn [returnId=" + returnId
-				+ ", returnOrRTOreason=" + returnOrRTOreason + ", returnDate="
-				+ returnDate + ", returnOrRTOCharges=" + returnOrRTOCharges
-				+ ", returnorrtoQty=" + returnorrtoQty + ", returnOrRTOId="
-				+ returnOrRTOId + ", returnUploadDate=" + returnUploadDate
-				+ "]";
-	}*/
 
-	public int getGatepassId() {
+	public int getGpId() {
+		return gpId;
+	}
+
+	public void setGpId(int gpId) {
+		this.gpId = gpId;
+	}
+
+	public String getGatepassId() {
 		return gatepassId;
 	}
 
-	public void setGatepassId(int gatepassId) {
+	public void setGatepassId(String gatepassId) {
 		this.gatepassId = gatepassId;
 	}
 
@@ -70,12 +88,12 @@ public class GatePass {
 		this.invoiceID = invoiceID;
 	}
 
-	public String getProductSkuCode() {
-		return productSkuCode;
+	public String getChannelSkuRef() {
+		return channelSkuRef;
 	}
 
-	public void setProductSkuCode(String productSkuCode) {
-		this.productSkuCode = productSkuCode;
+	public void setChannelSkuRef(String channelSkuRef) {
+		this.channelSkuRef = channelSkuRef;
 	}
 
 	public int getQuantity() {
@@ -86,35 +104,107 @@ public class GatePass {
 		this.quantity = quantity;
 	}
 
-	public double getReturnpr() {
-		return returnpr;
+	public double getTaxAmt() {
+		return taxAmt;
 	}
 
-	public void setReturnpr(double returnpr) {
-		this.returnpr = returnpr;
+	public void setTaxAmt(double taxAmt) {
+		this.taxAmt = taxAmt;
 	}
 
-	public float getServiceTax() {
-		return serviceTax;
+	public double getReturnCharges() {
+		return returnCharges;
 	}
 
-	public void setServiceTax(float serviceTax) {
-		this.serviceTax = serviceTax;
+	public void setReturnCharges(double returnCharges) {
+		this.returnCharges = returnCharges;
 	}
 
-	public double getLandedPrice() {
-		return landedPrice;
+	public double getTotalReturnCharges() {
+		return totalReturnCharges;
 	}
 
-	public void setLandedPrice(double landedPrice) {
-		this.landedPrice = landedPrice;
+	public void setTotalReturnCharges(double totalReturnCharges) {
+		this.totalReturnCharges = totalReturnCharges;
 	}
 
-	public double getNetReturn() {
-		return netReturn;
+	public String getSellerNotes() {
+		return sellerNotes;
 	}
 
-	public void setNetReturn(double netReturn) {
-		this.netReturn = netReturn;
+	public void setSellerNotes(String sellerNotes) {
+		this.sellerNotes = sellerNotes;
 	}
+
+	public String getReturnReason() {
+		return returnReason;
+	}
+
+	public void setReturnReason(String returnReason) {
+		this.returnReason = returnReason;
+	}
+
+	public Date getReturnDate() {
+		return returnDate;
+	}
+
+	public void setReturnDate(Date returnDate) {
+		this.returnDate = returnDate;
+	}
+
+	public double getNetNR() {
+		return netNR;
+	}
+
+	public void setNetNR(double netNR) {
+		this.netNR = netNR;
+	}
+
+	public double getTaxPOAmt() {
+		return taxPOAmt;
+	}
+
+	public void setTaxPOAmt(double taxPOAmt) {
+		this.taxPOAmt = taxPOAmt;
+	}
+
+	public double getRetutnPR() {
+		return retutnPR;
+	}
+
+	public void setRetutnPR(double retutnPR) {
+		this.retutnPR = retutnPR;
+	}
+
+	public double getNetPR() {
+		return netPR;
+	}
+
+	public void setNetPR(double netPR) {
+		this.netPR = netPR;
+	}
+
+	public double getGrossProfit() {
+		return grossProfit;
+	}
+
+	public void setGrossProfit(double grossProfit) {
+		this.grossProfit = grossProfit;
+	}
+
+	public double getReturnRate() {
+		return returnRate;
+	}
+
+	public void setReturnRate(double returnRate) {
+		this.returnRate = returnRate;
+	}
+
+	/*
+	 * @Override public String toString() { return "OrderRTOorReturn [returnId="
+	 * + returnId + ", returnOrRTOreason=" + returnOrRTOreason + ", returnDate="
+	 * + returnDate + ", returnOrRTOCharges=" + returnOrRTOCharges +
+	 * ", returnorrtoQty=" + returnorrtoQty + ", returnOrRTOId=" + returnOrRTOId
+	 * + ", returnUploadDate=" + returnUploadDate + "]"; }
+	 */
 }
