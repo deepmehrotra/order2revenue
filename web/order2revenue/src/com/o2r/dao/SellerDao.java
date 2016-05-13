@@ -5,6 +5,7 @@ import java.util.List;
 import com.o2r.helper.CustomException;
 import com.o2r.model.Seller;
 import com.o2r.model.State;
+import com.o2r.model.StateDeliveryTime;
 
 /**
  * @author Deep Mehrotra
@@ -34,5 +35,8 @@ public int getStateDeliveryTime(int sellerId, String statename) throws CustomExc
 public State getStateByName(String statename) throws CustomException;
 
 public void updateProcessedOrdersCount(int pid, int processedOrderCount) throws CustomException;
+
+public void addStateDeliveryTime(List<StateDeliveryTime> stateDelTimeList, int sellerId)
+		throws CustomException;
 
 }

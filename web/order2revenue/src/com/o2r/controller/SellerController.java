@@ -215,10 +215,11 @@ public class SellerController {
 			@ModelAttribute("command") SellerBean sellerBean,HttpServletRequest request,
 			BindingResult result, @RequestParam(value = "image", required = false) MultipartFile image) {
 		Map<String, Object> model = new HashMap<String, Object>();
+		List<StateDeliveryTime> sdtList=new ArrayList<StateDeliveryTime>();
 		try {
 			log.info("***saveSeller Start***");
 			
-			if (image != null) {
+			if (image.getSize() != 0) {
 				System.out.println(" Not getting any image");
 				if (!image.isEmpty()) {
 					try {
@@ -253,8 +254,9 @@ public class SellerController {
 						StateDeliveryTime sdtobj=new StateDeliveryTime();
 						sdtobj.setDeliveryTime(entry.getValue()[0]!=null?Integer.parseInt(entry.getValue()[0]):0);
 						sdtobj.setState(sellerService.getStateByName(temp));
-						sdtobj.setSeller(ConverterClass.prepareSellerModel(sellerBean));
-						sellerBean.getStateDeliveryTime().add(sdtobj);
+						sdtList.add(sdtobj);
+						//sdtobj.setSeller(ConverterClass.prepareSellerModel(sellerBean));
+						//sellerBean.getStateDeliveryTime().add(sdtobj);
 						
 					}
 				}
@@ -267,6 +269,7 @@ public class SellerController {
 			seller.getRole().setSellerRoles(sellerRoles);
 			
 			sellerService.addSeller(seller, null);
+			sellerService.addStateDeliveryTime(sdtList, seller.getId());
 			model.put("seller", seller);
 		} catch (Throwable e) {
 			log.error(e);
@@ -414,7 +417,7 @@ public class SellerController {
 	@RequestMapping(value = "/checkExistingUser", method = RequestMethod.GET)
 	public @ResponseBody String checkExistingUser(HttpServletRequest request) {
 		log.info("***checkExistingUser Start****");
-		Map<String, Object> model = new HashMap<String, Object>();
+		//Map<String, Object> model = new HashMap<String, Object>();
 		log.debug("Registered seller email : " + request.getParameter("email"));
 		try {
 			String email = request.getParameter("email");

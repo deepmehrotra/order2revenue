@@ -897,6 +897,7 @@ public class OrderDaoImpl implements OrderDao {
 						sellerId);
 
 				order.getOrderTax().setToxToReturn((order.getOrderTax().getTax()/order.getQuantity())*orderReturn.getReturnorrtoQty());
+				order.getOrderTax().setTdsToReturn((order.getOrderTax().getTdsToDeduct()/order.getQuantity())*orderReturn.getReturnorrtoQty());
 				order.setFinalStatus("Actionable");
 				order.setNetSaleQuantity(order.getQuantity()
 						- order.getOrderReturnOrRTO().getReturnorrtoQty());

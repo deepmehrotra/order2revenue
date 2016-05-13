@@ -1,3 +1,4 @@
+<%@page import="java.io.File"%>
 <%@page import="com.o2r.helper.HelperClass"%>
 <%@page import="com.o2r.bean.SellerBean"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -6,37 +7,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%
-
-	if(session.getAttribute("logoUrl") == null){
-		if(request.getAttribute("sellerBean")!=null)
-		{
-	SellerBean bean=(SellerBean)request.getAttribute("sellerBean");
-	if(bean.getLogoUrl()!=null)
-	{
-  	session.setAttribute("logoUrl",bean.getLogoUrl());
-	}
-	else
-	{
-		session.setAttribute("logoUrl","/O2R/sellerimages/defaultSeller.jpg");
-	}
-  	session.setAttribute("sellerName",bean.getName());
-		}
-	}
-if(session.getAttribute("logoUrl") == null){
-    if(request.getAttribute("sellerBean")!=null)
-    {
-SellerBean bean=(SellerBean)request.getAttribute("sellerBean");
-if(bean.getLogoUrl()!=null)
-{
- session.setAttribute("logoUrl",bean.getLogoUrl());
-}
-else
-{
-    session.setAttribute("logoUrl","/O2R/sellerimages/defaultSeller.jpg");
-}
- session.setAttribute("sellerName",bean.getName());
+    if(session.getAttribute("logoUrl") == null){
+        if (request.getAttribute("sellerBean") != null) {
+            SellerBean bean = (SellerBean) request.getAttribute("sellerBean");
+            if (bean.getLogoUrl() != null && new File(bean.getLogoUrl()).isFile()) {
+                session.setAttribute("logoUrl", bean.getLogoUrl());
+            } else {
+                session.setAttribute("logoUrl",   "/O2R/sellerimages/defaultSeller.jpg");
+            }
+            session.setAttribute("sellerName", bean.getName());
+        }
     }
-}
 %>
 
 

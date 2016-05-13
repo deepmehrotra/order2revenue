@@ -142,7 +142,7 @@ public class PartnerController {
 					.getNoofdaysfromdeliverydate());
 		}
 		// int sellerId=HelperClass.getSellerIdfromSession(request);
-		if (image != null) {
+		if (image.getSize() != 0) {
 			System.out.println(" Not getting any image");
 			if (!image.isEmpty()) {
 				try {

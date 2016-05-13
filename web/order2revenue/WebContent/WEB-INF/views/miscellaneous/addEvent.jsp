@@ -2194,7 +2194,7 @@ span .#error {
                 
 				<div class="ibox-content add-company">
 					<button class="btn btn-primary pull-right" type="submit"
-								onclick="submitOrder()">Save</button>
+								onclick="submitOrder();">Save</button>
 				</div>
 				
 				
@@ -2333,6 +2333,15 @@ span .#error {
 					else if ('${eventsBean.nrnReturnConfig.nrCalculatorEvent}' == 'fixed')
 						$("#nrCalculatorEvent_fixed").prop("checked", true)
 						.trigger("click");
+					
+					if ('${eventsBean.nrnReturnConfig.returnCalculatorEvent}' == 'original')
+						$("#returnCalculatorEvent_original").prop("checked", true)
+								.trigger("click");
+					else if ('${eventsBean.nrnReturnConfig.returnCalculatorEvent}' == 'newTerms')
+						$("#returnCalculatorEvent_newTerms").prop("checked", true)
+						.trigger("click");
+					
+					
 					
 					if ('${eventsBean.nrnReturnConfig.commissionType}' == 'fixed')
 						$("#commisionType-fixed").prop("checked", true)

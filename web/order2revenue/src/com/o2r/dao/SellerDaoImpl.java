@@ -49,7 +49,31 @@ public class SellerDaoImpl implements SellerDao {
 
 	public void addSeller(Seller seller)throws CustomException {
 		boolean firsttimeflag=true;
-		
+		Seller sellerNew=null;
+		int id =0;
+		String name = null;
+		String address =  null;
+		String companyName = null; 
+		String contactNo = null;
+		String password = null;
+		String email=null;
+		String tinNumber = null;
+		String tanNumber = null;
+		String brandName = null;
+		String logoUrl = null;
+		if (seller != null && seller.getId() != 0) {
+             id = seller.getId();
+             name = seller.getName();
+             address = seller.getAddress();
+             email = seller.getEmail();
+             companyName = seller.getCompanyName();
+             contactNo = seller.getContactNo();
+             password = seller.getPassword();
+             tinNumber = seller.getTinNumber();
+             tanNumber = seller.getTanNumber();
+             brandName = seller.getBrandName();
+             logoUrl = seller.getLogoUrl();
+		}
 		// sessionFactory.getCurrentSession().saveOrUpdate(seller);
 		try {
 			Session session = sessionFactory.openSession();
@@ -59,14 +83,25 @@ public class SellerDaoImpl implements SellerDao {
 				firsttimeflag=false;
 				
 					System.out.println("*****Saving Seller Again : "+seller.getId());
-					Query gettingTaxId = session
-							.createSQLQuery(deliveryTimeDeleteQuery)
-							.setParameter("sellerId",seller.getId() );
-					gettingTaxId.executeUpdate();
+					/**/
+					 sellerNew = (Seller) session.get(Seller.class, id);
+					  if(sellerNew != null){
+		                    sellerNew.setId(id);
+		                    sellerNew.setName(name);
+		                    sellerNew.setAddress(address);
+		                    sellerNew.setEmail(email);
+		                    sellerNew.setCompanyName(companyName);
+		                    sellerNew.setContactNo(contactNo);
+		                    sellerNew.setPassword(password);
+		                    sellerNew.setTinNumber(tinNumber);
+		                    sellerNew.setTanNumber(tanNumber);
+		                    sellerNew.setBrandName(brandName);
+		                    sellerNew.setLogoUrl(logoUrl);                  
+		                }
 					System.out.println(" Merging seller : "+seller.getId());
 					//session.clear();
 					//session.merge(seller);
-					session.merge(seller);
+					session.saveOrUpdate(sellerNew);
 					
 				
 			}
@@ -84,6 +119,7 @@ public class SellerDaoImpl implements SellerDao {
 			throw new CustomException(GlobalConstant.addSellerError, new Date(), 1, GlobalConstant.addSellerErrorCode, e);
 			//System.out.println(" Seller DAO IMPL :" + e.getLocalizedMessage());
 		}
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -336,6 +372,45 @@ public class SellerDaoImpl implements SellerDao {
 		 for(Entry<String, String> e : GlobalConstant.preDefinedExpenseCategoryMap.entrySet()) {
 			 expenseService.addExpenseCategory(new ExpenseCategory(e.getKey(), e.getValue(),new Date()), sellerId);
 		       }
+	}
+	
+	@Override
+	public void addStateDeliveryTime(List<StateDeliveryTime> stateDelTimeList, int sellerId)throws CustomException {
+		log.info("*** addStateDeliveryTime start ***");
+		// sellerId=4;
+		Seller seller = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query gettingTaxId = session
+					.createSQLQuery(deliveryTimeDeleteQuery)
+					.setParameter("sellerId",sellerId);
+			gettingTaxId.executeUpdate();
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
+			seller = (Seller) criteria.list().get(0);
+			
+			for(StateDeliveryTime sdt:stateDelTimeList)
+			{
+				sdt.setSeller(seller);
+			seller.getStateDeliveryTime().add(sdt);
+			}
+			session.saveOrUpdate(seller);
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e);
+			throw new CustomException(GlobalConstant.addStateDeliveryTimeError,
+					new Date(), 1, GlobalConstant.addStateDeliveryTimeErrorCode,
+					e);
+			/* System.out.println("Inside exception  "+e.getLocalizedMessage()); */
+		}
+		log.info("*** addStateDeliveryTime exit ***");
+		/*
+		 * System.out.println(" Saved Expense Group : "+category.getExpcategoryId
+		 * ());
+		 */
 	}
 	
 	@Override
