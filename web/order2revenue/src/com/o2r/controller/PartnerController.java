@@ -50,6 +50,8 @@ public class PartnerController {
 	private PartnerService partnerService;
 	@Autowired
 	private CategoryService categoryService;
+	@Autowired
+	private HelperClass helperClass;
 
 	@Autowired
 	ServletContext context;
@@ -176,9 +178,9 @@ public class PartnerController {
 
 			if (!partnerList.contains(partnerBean.getPcName())) {
 				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
-						+ HelperClass.getSellerIdfromSession(request)
+						+ helperClass.getSellerIdfromSession(request)
 						+ partnerBean.getPcName() + ".jpg");
-				saveImage(HelperClass.getSellerIdfromSession(request)
+				saveImage(helperClass.getSellerIdfromSession(request)
 						+ partnerBean.getPcName() + ".jpg", image);
 			} else {
 				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
@@ -190,7 +192,7 @@ public class PartnerController {
 		}
 		try {
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
-			partnerService.addPartner(partner,HelperClass.getSellerIdfromSession(request));
+			partnerService.addPartner(partner,helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
 			log.error(e);
 		}
@@ -205,7 +207,7 @@ public class PartnerController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<PartnerBean> addedlist = null;
 		try {
-			addedlist = ConverterClass.prepareListofPartnerBean(partnerService.listPartners(HelperClass.getSellerIdfromSession(request)));
+			addedlist = ConverterClass.prepareListofPartnerBean(partnerService.listPartners(helperClass.getSellerIdfromSession(request)));
 		} catch (Exception e) {
 			log.error(e.getCause());
 		}
@@ -222,7 +224,7 @@ public class PartnerController {
 		List<PartnerBean> addedlist = null;
 		try {
 			addedlist = ConverterClass.prepareListofPartnerBean(partnerService
-					.listPartners(HelperClass.getSellerIdfromSession(request)));
+					.listPartners(helperClass.getSellerIdfromSession(request)));
 
 			props = PropertiesLoaderUtils.loadProperties(resource);
 
@@ -233,7 +235,7 @@ public class PartnerController {
 
 			for (String partner : partnerList) {
 				if (partnerService.getPartner(partner,
-						HelperClass.getSellerIdfromSession(request)) == null) {
+						helperClass.getSellerIdfromSession(request)) == null) {
 					String pcUrl = props.getProperty("partnerimage.view")
 							+ partner + ".jpg";
 					System.out.println(" Pc logourl set to partner baen "
@@ -272,7 +274,7 @@ public class PartnerController {
 		datemap.put("false", "Delivery Date");
 		PartnerBean partner = new PartnerBean();
 		try {
-			categoryObjects = categoryService.listCategories(HelperClass
+			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
 			if(categoryObjects!=null)
 			for (Category cat : categoryObjects) {
@@ -299,7 +301,7 @@ public class PartnerController {
 			model.put("datemap", datemap);
 			model.put("partners", ConverterClass
 					.prepareListofPartnerBean(partnerService
-							.listPartners(HelperClass
+							.listPartners(helperClass
 									.getSellerIdfromSession(request))));
 		} catch (Exception e) {
 			log.error(e);
@@ -360,9 +362,9 @@ public class PartnerController {
 
 			if (!partnerList.contains(partnerBean.getPcName())) {
 				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
-						+ HelperClass.getSellerIdfromSession(request)
+						+ helperClass.getSellerIdfromSession(request)
 						+ partnerBean.getPcName() + ".jpg");
-				saveImage(HelperClass.getSellerIdfromSession(request)
+				saveImage(helperClass.getSellerIdfromSession(request)
 						+ partnerBean.getPcName() + ".jpg", image);
 			} else {
 				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
@@ -376,7 +378,7 @@ public class PartnerController {
 		try {
 			partnerBean.setPcName("Jabong");
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
-			partnerService.addPartner(partner,HelperClass.getSellerIdfromSession(request));
+			partnerService.addPartner(partner,helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
@@ -436,9 +438,9 @@ public class PartnerController {
 
 			if (!partnerList.contains(partnerBean.getPcName())) {
 				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
-						+ HelperClass.getSellerIdfromSession(request)
+						+ helperClass.getSellerIdfromSession(request)
 						+ partnerBean.getPcName() + ".jpg");
-				saveImage(HelperClass.getSellerIdfromSession(request)
+				saveImage(helperClass.getSellerIdfromSession(request)
 						+ partnerBean.getPcName() + ".jpg", image);
 			} else {
 				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
@@ -452,7 +454,7 @@ public class PartnerController {
 		try {
 			partnerBean.setPcName("Myntra");
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
-			partnerService.addPartner(partner,HelperClass.getSellerIdfromSession(request));
+			partnerService.addPartner(partner,helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
@@ -477,7 +479,7 @@ public class PartnerController {
 		datemap.put("false", "Delivery Date");
 		PartnerBean partner = new PartnerBean();
 		try {
-			categoryObjects = categoryService.listCategories(HelperClass.getSellerIdfromSession(request));
+			categoryObjects = categoryService.listCategories(helperClass.getSellerIdfromSession(request));
 			for (Category cat : categoryObjects) {
 				categoryList.add(cat.getCatName());
 			}
@@ -521,7 +523,7 @@ public class PartnerController {
 		datemap.put("false", "Delivery Date");
 		PartnerBean partner = new PartnerBean();
 		try {
-			categoryObjects = categoryService.listCategories(HelperClass
+			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
 			for (Category cat : categoryObjects) {
 				categoryList.add(cat.getCatName());
@@ -545,7 +547,7 @@ public class PartnerController {
 			model.put("datemap", datemap);
 			model.put("partners", ConverterClass
 					.prepareListofPartnerBean(partnerService
-							.listPartners(HelperClass
+							.listPartners(helperClass
 									.getSellerIdfromSession(request))));
 		} catch (Exception e) {
 			log.error(e);
@@ -577,7 +579,7 @@ public class PartnerController {
 			model.put("partner", partner);
 			model.put("partners", ConverterClass
 					.prepareListofPartnerBean(partnerService
-							.listPartners(HelperClass
+							.listPartners(helperClass
 									.getSellerIdfromSession(request))));
 		} catch (Exception e) {
 			log.error(e);
@@ -605,11 +607,11 @@ public class PartnerController {
 		try {
 			partnerService.deletePartner(
 					ConverterClass.preparePartnerModel(partnerBean),
-					HelperClass.getSellerIdfromSession(request));
+					helperClass.getSellerIdfromSession(request));
 			model.put("partner", null);
 			model.put("partners", ConverterClass
 					.prepareListofPartnerBean(partnerService
-							.listPartners(HelperClass
+							.listPartners(helperClass
 									.getSellerIdfromSession(request))));
 		} catch (CustomException ce) {
 
@@ -646,7 +648,7 @@ public class PartnerController {
 				chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
 			}
 			
-			categoryObjects = categoryService.listCategories(HelperClass
+			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
 			for (Category cat : categoryObjects) {
 				categoryMap.put(cat.getCatName(), chargeMap.get(cat.getCatName()));
@@ -720,7 +722,7 @@ public class PartnerController {
 		try {
 			Partner parner = partnerService.getPartner(
 					request.getParameter("partner"),
-					HelperClass.getSellerIdfromSession(request));
+					helperClass.getSellerIdfromSession(request));
 			if (parner != null) {
 				return "false";
 			} else {

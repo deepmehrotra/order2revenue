@@ -29,6 +29,7 @@ import com.o2r.model.Category;
 import com.o2r.model.TaxCategory;
 import com.o2r.service.CategoryService;
 import com.o2r.service.DownloadService;
+import com.o2r.service.SellerService;
 import com.o2r.service.TaxDetailService;
 
 /**
@@ -43,6 +44,10 @@ public class CategoryController {
 
 	@Autowired
 	private TaxDetailService taxDetailService;
+	@Autowired
+	private SellerService sellerService;
+	@Autowired
+	private HelperClass helperClass;
 
 	@Resource(name = "downloadService")
 	private DownloadService downloadService;
@@ -67,7 +72,7 @@ public class CategoryController {
 			try {
 				categorylist = ConverterClass
 						.prepareListofCategoryBean(categoryService
-								.listParentCategories(HelperClass
+								.listParentCategories(helperClass
 										.getSellerIdfromSession(request)));
 				category = categoryService.getCategory(Integer.parseInt(catId));
 				for (CategoryBean bean : categorylist) {
@@ -104,7 +109,7 @@ public class CategoryController {
 		try {
 
 			if (categoryBean.getId() != 0) {
-				int sellerId = HelperClass.getSellerIdfromSession(request);
+				int sellerId = helperClass.getSellerIdfromSession(request);
 				int deleted = categoryService.deleteCategory(
 						ConverterClass.prepareCategoryModel(categoryBean),
 						sellerId);
@@ -151,7 +156,7 @@ public class CategoryController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			if (categoryBean.getId() != 0) {
-				int sellerId = HelperClass.getSellerIdfromSession(request);
+				int sellerId = helperClass.getSellerIdfromSession(request);
 				int deleted = categoryService.deleteCategory(
 						ConverterClass.prepareCategoryModel(categoryBean),
 						sellerId);
@@ -162,7 +167,7 @@ public class CategoryController {
 				}
 				List<CategoryBean> categorylist = ConverterClass
 						.prepareListofCategoryBean(categoryService
-								.listParentCategories(HelperClass
+								.listParentCategories(helperClass
 										.getSellerIdfromSession(request)));
 				Map<String, String> catageorymap = new HashMap<String, String>();
 				Category category = categoryService.getCategory(Integer
@@ -208,7 +213,7 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 			if (categoryBean.getId() != 0) {
 				List<CategoryBean> categorylist = ConverterClass
 						.prepareListofCategoryBean(categoryService
-								.listParentCategories(HelperClass
+								.listParentCategories(helperClass
 										.getSellerIdfromSession(request)));
 				System.out.println(" Parent catgeories : "+categorylist.get(0));
 				Map<String, String> catageorymap = new HashMap<String, String>();
@@ -250,7 +255,7 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 		int sellerId;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerId = HelperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 
 			List<CategoryBean> categorylist = ConverterClass
 					.prepareListofCategoryBean(categoryService
@@ -298,7 +303,7 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 			Category category = ConverterClass
 					.prepareCategoryModel(categoryBean);
 			categoryService.addCategory(category,
-					HelperClass.getSellerIdfromSession(request));
+					helperClass.getSellerIdfromSession(request));
 		} catch (CustomException ce) {
 			log.error("saveInventoryGroup exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -333,7 +338,7 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 			Category category = ConverterClass
 					.prepareCategoryModel(categoryBean);
 			categoryService.addCategory(category,
-					HelperClass.getSellerIdfromSession(request));
+					helperClass.getSellerIdfromSession(request));
 		} catch (CustomException ce) {
 			log.error("saveCatInventory exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -367,7 +372,7 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 		try {
 			if (name != null && name.length() != 0) {
 				Category cat = categoryService.getCategory(name,
-						HelperClass.getSellerIdfromSession(request));
+						helperClass.getSellerIdfromSession(request));
 				if (cat != null)
 					return "false";
 				else
@@ -397,7 +402,7 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 			TaxCategory category = ConverterClass
 					.prepareTaxCategoryModel(taxCategoryBean);
 			taxDetailService.addTaxCategory(category,
-					HelperClass.getSellerIdfromSession(request));
+					helperClass.getSellerIdfromSession(request));
 		} catch (CustomException ce) {
 			log.error("saveTaxCategory exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -422,7 +427,7 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 		try {
 			model.put("taxCategories", ConverterClass
 					.prepareListofTaxCategoryBean(taxDetailService
-							.listTaxCategories(HelperClass
+							.listTaxCategories(helperClass
 									.getSellerIdfromSession(request))));
 		} catch (CustomException ce) {
 			log.error("saveTaxCategory exception : " + ce.toString());
@@ -453,7 +458,7 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 		try {
 			TaxCategory taxCategory = taxDetailService.getTaxCategory(
 					request.getParameter("name"),
-					HelperClass.getSellerIdfromSession(request));
+					helperClass.getSellerIdfromSession(request));
 			if (taxCategory != null) {
 				return "false";
 			} else {

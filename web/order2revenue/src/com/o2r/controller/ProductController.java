@@ -61,6 +61,8 @@ public class ProductController {
 	private SaveContents saveContents;
 	@Autowired
 	private CategoryService categoryService;
+	@Autowired
+	private HelperClass helperClass;
 
 	static Logger log = Logger.getLogger(ProductController.class.getName());
 	
@@ -81,7 +83,7 @@ public class ProductController {
 		String endDate = request.getParameter("endDate");
 		String searchProduct = request.getParameter("searchProduct");
 		try {
-			sellerId = HelperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (searchProduct != null && searchProduct.equals("SKU")
 					&& skuCode != null) {
 				productBean = ConverterClass.prepareProductBean(productService
@@ -129,9 +131,9 @@ public class ProductController {
 				request.getSession().removeAttribute("productSearchObject");
 			} else {
 				int pageNo = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 0;
-				model.put("productList", ConverterClass.prepareListofProductBean(productService.listProducts(HelperClass.getSellerIdfromSession(request),pageNo)));
+				model.put("productList", ConverterClass.prepareListofProductBean(productService.listProducts(helperClass.getSellerIdfromSession(request),pageNo)));
 			}
-			products=productService.listProducts(HelperClass.getSellerIdfromSession(request));
+			products=productService.listProducts(helperClass.getSellerIdfromSession(request));
 			if(products != null){
 				for(Product product : products){
 					productConfigs.add(product.getProductConfig());					
@@ -172,9 +174,9 @@ public class ProductController {
 				request.getSession().removeAttribute("productSearchObject");
 			} else {
 				int pageNo = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 0;
-				model.put("productList", ConverterClass.prepareListofProductBean(productService.listProducts(HelperClass.getSellerIdfromSession(request),pageNo)));
+				model.put("productList", ConverterClass.prepareListofProductBean(productService.listProducts(helperClass.getSellerIdfromSession(request),pageNo)));
 			}
-			products=productService.listProducts(HelperClass.getSellerIdfromSession(request));
+			products=productService.listProducts(helperClass.getSellerIdfromSession(request));
 			if(products != null){
 				for(Product product : products){
 					productConfigs.add(product.getProductConfig());					
@@ -201,13 +203,13 @@ public class ProductController {
 	 public ModelAndView saveDeleteProduct(HttpServletRequest request,@ModelAttribute("command")ProductBean productBean,
 	    BindingResult result) {
 		 	System.out.println("Inside Delete  Product");
-		 	String var1=request.getParameter("quantityToAdd");
-		 	String var2=request.getParameter("quantityToSubtract");
+		 	/*String var1=request.getParameter("quantityToAdd");
+		 	String var2=request.getParameter("quantityToSubtract");*/
 
 	 	if(productBean.getProductSkuCode()!=null)
 	 	{
 	 	productBean.setProductDate(new Date());
-	 	Product product = ConverterClass.prepareProductModel(productBean);
+	 	//Product product = ConverterClass.prepareProductModel(productBean);
 	 	
 	 	int productId=request.getParameter("productId")!=null?Integer.parseInt(request.getParameter("productId")):0;
 	 	String productSkuCode=productBean.getProductSkuCode();
@@ -216,7 +218,7 @@ public class ProductController {
 	   int quantityToSubstract=(request.getParameter("quantityToSubtract")!=null&&request.getParameter("quantityToSubtract").toString().length()!=0)?Integer.parseInt(request.getParameter("quantityToSubtract")):0;
 	   int sellerId=0;
 	try {
-		sellerId = HelperClass.getSellerIdfromSession(request);
+		sellerId = helperClass.getSellerIdfromSession(request);
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -255,7 +257,7 @@ public class ProductController {
 				Product product = ConverterClass
 						.prepareProductModel(productBean);
 				productService.addProduct(product,
-						HelperClass.getSellerIdfromSession(request));
+						helperClass.getSellerIdfromSession(request));
 			}
 		} catch (CustomException ce) {
 			log.error("saveProduct exception : " + ce.toString());
@@ -281,7 +283,7 @@ public class ProductController {
 		//Map<String, Object> model = new HashMap<String, Object>();
 		try {	
 				ProductConfig productConfig=ConverterClass.prepareProductConfigModel(productConfigBean);
-				productService.addProductConfig(productConfig, HelperClass.getSellerIdfromSession(request));
+				productService.addProductConfig(productConfig, helperClass.getSellerIdfromSession(request));
 			
 		/*} catch (CustomException ce) {
 			log.error("saveProduct exception : " + ce.toString());
@@ -308,7 +310,7 @@ public class ProductController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, String> productSkuCodeMap = new LinkedHashMap<>();
 		try {
-			List<Product> products = productService.listProducts(HelperClass.getSellerIdfromSession(request));
+			List<Product> products = productService.listProducts(helperClass.getSellerIdfromSession(request));
 					
 			if (products != null && products.size() != 0) {
 				for (Product product : products) {
@@ -342,7 +344,7 @@ public class ProductController {
 		Map<String, String> categoryMap = new LinkedHashMap<>();
 		try {
 			List<Category> categoryList = categoryService
-					.listCategories(HelperClass.getSellerIdfromSession(request));
+					.listCategories(helperClass.getSellerIdfromSession(request));
 			if (categoryList != null && categoryList.size() != 0) {
 				for (Category category : categoryList) {
 					categoryMap.put(category.getCatName(), category.getCatName());
@@ -441,7 +443,7 @@ public class ProductController {
 			product.setHeight(productHeight);
 			product.setDeadWeight(productDeadweight);
 			productService.addProduct(product,
-					HelperClass.getSellerIdfromSession(request));
+					helperClass.getSellerIdfromSession(request));
 
 		} catch (CustomException ce) {
 			log.error("saveProduct exception : " + ce.toString());
@@ -518,7 +520,7 @@ public class ProductController {
 		try {
 			model.put("Records", ConverterClass
 					.prepareListofProductBean(productService.listProducts(
-							HelperClass.getSellerIdfromSession(request), 0)));
+							helperClass.getSellerIdfromSession(request), 0)));
 		} catch (Throwable e) {
 			log.error(e);
 		}
@@ -538,11 +540,11 @@ public class ProductController {
 		int sellerId;
 
 		try {
-			sellerId = HelperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (action != null && action.equals("list")) {
 				model.put("Records",
 						ConverterClass.prepareListofProductBean(productService
-								.listProducts(HelperClass
+								.listProducts(helperClass
 										.getSellerIdfromSession(request), 0)));
 
 			} else {
@@ -610,7 +612,7 @@ public class ProductController {
 			if (null != files && files.size() > 0) {
 				fileNames.add(files.get(0).getOriginalFilename());
 
-				sellerId = HelperClass.getSellerIdfromSession(request);
+				sellerId = helperClass.getSellerIdfromSession(request);
 
 				System.out.println(" Filename : "
 						+ files.get(0).getOriginalFilename());
@@ -622,7 +624,7 @@ public class ProductController {
 			}
 			model.put("products", ConverterClass
 					.prepareListofProductBean(productService.listProducts(
-							HelperClass.getSellerIdfromSession(request), 0)));
+							helperClass.getSellerIdfromSession(request), 0)));
 		} catch (CustomException ce) {
 			log.error("save exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -657,7 +659,7 @@ public class ProductController {
 
 		try {
 
-			sellerId = HelperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (null != files && files.size() > 0) {
 				fileNames.add(files.get(0).getOriginalFilename());
 
@@ -671,7 +673,7 @@ public class ProductController {
 			}
 			model.put("products", ConverterClass
 					.prepareListofProductBean(productService.listProducts(
-							HelperClass.getSellerIdfromSession(request), 0)));
+							helperClass.getSellerIdfromSession(request), 0)));
 
 		} catch (CustomException ce) {
 			log.error("saveInventories exception : " + ce.toString());
@@ -692,7 +694,7 @@ public class ProductController {
 	 * @RequestMapping(value="/seller/getProductCategories", method =
 	 * RequestMethod.POST) public @ResponseBody String
 	 * getProductCategories(HttpServletRequest request) { int
-	 * sellerId=HelperClass.getSellerIdfromSession(request);
+	 * sellerId=helperClass.getSellerIdfromSession(request);
 	 * System.out.println("Inside getProductCategories list json"); Map<String,
 	 * Object> model = new HashMap<String, Object>();
 	 * 
@@ -726,7 +728,7 @@ public class ProductController {
 		Product product = null;
 		try {
 			product = productService.getProduct(request.getParameter("sku"),
-					HelperClass.getSellerIdfromSession(request));
+					helperClass.getSellerIdfromSession(request));
 			// System.out.println(product);
 		} catch (Exception e) {
 			log.error(e);

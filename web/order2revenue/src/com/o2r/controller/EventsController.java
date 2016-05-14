@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -21,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.o2r.bean.EventsBean;
-import com.o2r.bean.ProductBean;
 import com.o2r.helper.ConverterClass;
-import com.o2r.helper.CustomException;
 import com.o2r.helper.HelperClass;
 import com.o2r.model.Category;
 import com.o2r.model.Events;
@@ -42,7 +38,8 @@ public class EventsController {
 	private PartnerService partnerService;
 	@Autowired
 	private CategoryService categoryService;
-	
+	@Autowired
+	private HelperClass helperClass;
 	static Logger log = Logger.getLogger(EventsController.class.getName());
 	
 	
@@ -91,10 +88,10 @@ public class EventsController {
 			eventsBean.getNrnReturnConfig().setCharges(chargeList);
 			
 			try{
-				eventsBean.setSellerId(HelperClass.getSellerIdfromSession(request));
+				eventsBean.setSellerId(helperClass.getSellerIdfromSession(request));
 				eventsBean.setCreatedDate(new Date());
 				Events events=ConverterClass.prepareEventsModel(eventsBean);
-				eventsService.addEvent(events, HelperClass.getSellerIdfromSession(request));
+				eventsService.addEvent(events, helperClass.getSellerIdfromSession(request));
 			}catch(Exception e){
 				log.info("*** Exception In EventsDaoImpl ***");
 				e.printStackTrace();
@@ -117,7 +114,7 @@ public class EventsController {
 		Map<String,Float> categoryMap=new HashMap<String, Float>();
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			List<Partner> partnerList = partnerService.listPartners(HelperClass
+			List<Partner> partnerList = partnerService.listPartners(helperClass
 					.getSellerIdfromSession(request));
 			Map<String, String> partnerMap = new HashMap<String, String>();
 			if (partnerList != null && !partnerList.isEmpty()) {
@@ -126,7 +123,7 @@ public class EventsController {
 				}
 			}			
 			List<Category> categoryList = categoryService
-					.listCategories(HelperClass.getSellerIdfromSession(request));
+					.listCategories(helperClass.getSellerIdfromSession(request));
 			for (Category cat : categoryList) {
 				categoryMap.put(cat.getCatName(), chargeMap.get(cat.getCatName()));
 			}
@@ -163,11 +160,11 @@ public class EventsController {
 				System.out.println("Got event object !!!!  yaa......");
 			}
 			List<Category> categoryList = categoryService
-					.listCategories(HelperClass.getSellerIdfromSession(request));
+					.listCategories(helperClass.getSellerIdfromSession(request));
 			for (Category cat : categoryList) {
 				categoryMap.put(cat.getCatName(), chargeMap.get(cat.getCatName()));
 			}
-			List<Partner> partnerList = partnerService.listPartners(HelperClass.getSellerIdfromSession(request));
+			List<Partner> partnerList = partnerService.listPartners(helperClass.getSellerIdfromSession(request));
 			Map<String, String> partnerMap = new HashMap<String, String>();
 			if (partnerList != null && !partnerList.isEmpty()) {
 				for (Partner bean : partnerList) {
@@ -193,7 +190,7 @@ public class EventsController {
 		try { 
 			model.put("eventsList", ConverterClass
 					.prepareListOfEventsBean(eventsService
-							.listEvents(HelperClass
+							.listEvents(helperClass
 									.getSellerIdfromSession(request))));			
 		} /*catch (CustomException ce) {
 			log.error("productList exception : " + ce.toString());

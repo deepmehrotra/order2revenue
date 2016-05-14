@@ -50,6 +50,8 @@ public class ManualChargesController {
 
 	@Autowired
 	private PaymentUploadService paymentUploadService;
+	@Autowired
+	 private HelperClass helperClass;
 
 	static Logger log = Logger.getLogger(ManualChargesController.class.getName());
 
@@ -69,7 +71,7 @@ public class ManualChargesController {
 		int mcId = 0;
 		int sellerId;
 		try{
-		sellerId = HelperClass.getSellerIdfromSession(request);
+		sellerId = helperClass.getSellerIdfromSession(request);
 		if (request.getParameter("mcId") != null
 				&& request.getParameter("mcId").toString().length() != 0) {
 			mcId = Integer.parseInt(request.getParameter("mcId"));
@@ -139,7 +141,7 @@ public class ManualChargesController {
 		int taxId = 0;
 		int sellerId;
 		try{
-		sellerId = HelperClass.getSellerIdfromSession(request);
+		sellerId = helperClass.getSellerIdfromSession(request);
 		if (request.getParameter("taxId") != null
 				&& request.getParameter("taxId").toString().length() != 0) {
 			taxId = Integer.parseInt(request.getParameter("taxId"));
@@ -211,7 +213,7 @@ public class ManualChargesController {
 			TaxDetail taxDetail = new TaxDetail();
 			System.out.println("taxId id " + request.getParameter("taxId"));
 			int taxId = 0;
-			int sellerId = HelperClass.getSellerIdfromSession(request);
+			int sellerId = helperClass.getSellerIdfromSession(request);
 			if (request.getParameter("taxId") != null
 					&& request.getParameter("taxId").toString().length() != 0) {
 				taxId = Integer.parseInt(request.getParameter("taxId"));
@@ -283,7 +285,7 @@ public class ManualChargesController {
 
 		Gson gson = gsonBuilder.setPrettyPrinting().create();
 		try{
-		sellerId = HelperClass.getSellerIdfromSession(request);
+		sellerId = helperClass.getSellerIdfromSession(request);
 		model.put("Records", ConverterClass
 				.prepareListofManualChargesBean(manualChargesService
 						.listManualCharges(sellerId)));
@@ -311,7 +313,7 @@ public class ManualChargesController {
 		Gson gson = null;
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		try {
-			sellerId = HelperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
 			gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer());
 
@@ -344,7 +346,7 @@ public class ManualChargesController {
 		try {
 
 			GsonBuilder gsonBuilder = new GsonBuilder();
-			int sellerId = HelperClass.getSellerIdfromSession(request);
+			int sellerId = helperClass.getSellerIdfromSession(request);
 			gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
 			gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer());
 
@@ -375,7 +377,7 @@ public class ManualChargesController {
 		System.out.println("taxId id " + request.getParameter("taxId"));
 		int taxId = 0;
 		try{
-		sellerId = HelperClass.getSellerIdfromSession(request);
+		sellerId = helperClass.getSellerIdfromSession(request);
 		if (request.getParameter("taxId") != null
 				&& request.getParameter("taxId").toString().length() != 0) {
 			taxId = Integer.parseInt(request.getParameter("taxId"));
@@ -411,7 +413,7 @@ public class ManualChargesController {
 		int mcId = 0;
 		int sellerId;
 		try{
-		sellerId = HelperClass.getSellerIdfromSession(request);
+		sellerId = helperClass.getSellerIdfromSession(request);
 		if (request.getParameter("mcId") != null
 				&& request.getParameter("mcId").toString().length() != 0) {
 			mcId = Integer.parseInt(request.getParameter("mcId"));
@@ -457,9 +459,8 @@ public class ManualChargesController {
 		otherjo.put("Value", "Others");
 		ja.add(otherjo);
 		List<Partner> partnerList;
-		Map<String, String> partnerMap = new HashMap<>();
 		try{
-		sellerId = HelperClass.getSellerIdfromSession(request);
+		sellerId = helperClass.getSellerIdfromSession(request);
 		partnerList = partnerService.listPartners(sellerId);
 		for (Partner partner : partnerList) {
 			System.out.println(" Partner name : " + partner.getPcName());
@@ -477,6 +478,7 @@ public class ManualChargesController {
 			String errors = gson.toJson(model);
 			return errors;
 		}catch (Exception e) {
+			e.printStackTrace();
 			log.error(e);
 			model.put("Error ", e.getLocalizedMessage());
 		}
@@ -509,7 +511,7 @@ public class ManualChargesController {
 		List<PaymentUpload> paymentUploadList;
 		
 		try{
-		sellerId = HelperClass.getSellerIdfromSession(request);
+		sellerId = helperClass.getSellerIdfromSession(request);
 		paymentUploadList = paymentUploadService.listPaymentUploads(sellerId);
 		if (paymentUploadList != null) {
 			for (PaymentUpload upload : paymentUploadList) {

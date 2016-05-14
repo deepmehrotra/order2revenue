@@ -34,7 +34,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.o2r.bean.OrderBean;
-import com.o2r.bean.ProductBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.FileUploadForm;
@@ -73,6 +72,8 @@ public class OrderController {
 	private ProductService productService;
 	@Autowired
 	private TaxDetailService taxDetailService;
+	@Autowired
+	private HelperClass helperClass;
 
 	private static final String UPLOAD_DIR = "upload";
 
@@ -158,7 +159,6 @@ public class OrderController {
 	@RequestMapping(value = "/user-login", method = RequestMethod.GET)
 	public ModelAndView loginForm() {
 
-		Map<String, Object> model = new HashMap<String, Object>();
 		System.out.println("catalina.base  "
 				+ System.getProperty("catalina.base"));
 
@@ -183,6 +183,7 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/seller/saveSheet", method = RequestMethod.POST)
+	@SuppressWarnings("rawtypes")
 	public ModelAndView save(HttpServletRequest request,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
@@ -207,13 +208,14 @@ public class OrderController {
 		if (null != files && files.size() > 0) {
 			fileNames.add(files.get(0).getOriginalFilename());
 			try {
-				sellerId = HelperClass.getSellerIdfromSession(request);
+				sellerId = helperClass.getSellerIdfromSession(request);
 				System.out.println(" Filename : "
 						+ files.get(0).getOriginalFilename());
 				System.out.println(" uploadForm.getSheetValue() : "
 						+ uploadForm.getSheetValue());
 
 				ValidateUpload.validateOfficeData(files.get(0));
+				
 				Map orderProcessedMap = null;
 				System.out.println(" fileinput " + fileinput.getName());
 				switch (uploadForm.getSheetValue()) {
@@ -366,7 +368,7 @@ public class OrderController {
 		String endDate = request.getParameter("endDate");
 		String searchOrder = request.getParameter("searchOrder");
 		try {
-			sellerId = HelperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (searchOrder != null
 					&& searchOrder.equals("searchchannelOrderID")
 					&& channelOrderID != null) {
@@ -406,7 +408,7 @@ public class OrderController {
 		Object obj = request.getSession().getAttribute("orderSearchObject");
 		int sellerId;
 		try {
-			sellerId = HelperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (obj != null) {
 				System.out.println(" Getting list from session" + obj);
 				model.put("orders", obj);
@@ -454,12 +456,12 @@ public class OrderController {
 						.parseInt(request.getParameter("page")) : 0;
 				model.put("orders", ConverterClass
 						.prepareListofBean(orderService.listOrders(
-								HelperClass.getSellerIdfromSession(request),
+								helperClass.getSellerIdfromSession(request),
 								pageNo)));
 				
 				model.put("poOrders", ConverterClass
 						.prepareListofBean(orderService.listPOOrders(
-								HelperClass.getSellerIdfromSession(request),
+								helperClass.getSellerIdfromSession(request),
 								pageNo)));
 			}
 		} catch (CustomException ce) {
@@ -485,7 +487,7 @@ public class OrderController {
 		int sellerId;
 		Product product = null;
 		try {
-			sellerId = HelperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			Order order = orderService.getOrder(orderBean.getOrderId(),
 					sellerId);
 			product = productService.getProduct(order.getProductSkuCode(),
@@ -515,7 +517,7 @@ public class OrderController {
 		int sellerId;
 		Product product = null;
 		try {
-			sellerId = HelperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			Order order = orderService.getOrder(orderBean.getOrderId(),
 					sellerId);
 			product = productService.getProduct(order.getProductSkuCode(),
@@ -546,7 +548,7 @@ public class OrderController {
 			model.put("order", ConverterClass.prepareOrderBean(orderService
 					.getOrder(orderBean.getOrderId())));
 			model.put("orders", ConverterClass.prepareListofBean(orderService
-					.listOrders(HelperClass.getSellerIdfromSession(request))));
+					.listOrders(helperClass.getSellerIdfromSession(request))));
 		} catch (CustomException ce) {
 			log.error("editOrderDA exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -567,10 +569,10 @@ public class OrderController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			orderService.deleteOrder(ConverterClass.prepareModel(orderBean),
-					HelperClass.getSellerIdfromSession(request));
+					helperClass.getSellerIdfromSession(request));
 			model.put("order", null);
 			model.put("orders", ConverterClass.prepareListofBean(orderService
-					.listOrders(HelperClass.getSellerIdfromSession(request))));
+					.listOrders(helperClass.getSellerIdfromSession(request))));
 		} catch (CustomException ce) {
 			log.error("deleteOrderDA exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -598,7 +600,7 @@ public class OrderController {
 		try {
 			Order order = ConverterClass.prepareModel(orderBean);
 			orderService.addOrder(order,
-					HelperClass.getSellerIdfromSession(request));
+					helperClass.getSellerIdfromSession(request));
 		} catch (CustomException ce) {
 			log.error("saveOrderDA exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -622,12 +624,12 @@ public class OrderController {
 		log.info("***addOrderDA Start***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			List<Partner> partnerlist = partnerService.listPartners(HelperClass
+			List<Partner> partnerlist = partnerService.listPartners(helperClass
 					.getSellerIdfromSession(request));
 			List<TaxCategory> taxCatList = taxDetailService
-					.listTaxCategories(HelperClass
+					.listTaxCategories(helperClass
 							.getSellerIdfromSession(request));
-			List<Product> productList = productService.listProducts(HelperClass
+			List<Product> productList = productService.listProducts(helperClass
 					.getSellerIdfromSession(request));
 			Map<String, String> partnermap = new HashMap<String, String>();
 			Map<String, String> taxcatmap = new HashMap<String, String>();
@@ -682,7 +684,7 @@ public class OrderController {
 		try {
 			parner = orderService.findOrders("channelOrderID",
 					request.getParameter("id"),
-					HelperClass.getSellerIdfromSession(request), false);
+					helperClass.getSellerIdfromSession(request), false);
 		} catch (CustomException ce) {
 			log.error("addOrderDA exception : " + ce.toString());
 			mode.put("error", ce.getLocalMessage());

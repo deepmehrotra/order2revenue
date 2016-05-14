@@ -60,6 +60,9 @@ public class SellerController {
 	private PartnerService partnerService;
 	@Autowired
 	ServletContext context;
+	@Autowired
+	private HelperClass helperClass;
+
 	Properties props = null;
 	org.springframework.core.io.Resource resource = new ClassPathResource(
 			"database.properties");
@@ -147,7 +150,7 @@ public class SellerController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 
-			int sellerId = HelperClass.getSellerIdfromSession(request);
+			int sellerId = helperClass.getSellerIdfromSession(request);
 			SellerBean seller = ConverterClass.prepareSellerBean(sellerService
 					.getSeller(sellerId));
 			Map<String,Integer> stateTimes=new HashMap<String, Integer>();
@@ -345,7 +348,7 @@ public class SellerController {
 	public ModelAndView planSummary(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			int sellerId = HelperClass.getSellerIdfromSession(request);
+			int sellerId = helperClass.getSellerIdfromSession(request);
 			model.put("myAccount", sellerService.getSeller(sellerId));
 		} catch (CustomException ce) {
 			log.error("planUpgrade exception : " + ce.toString());
@@ -400,7 +403,7 @@ public class SellerController {
 			model.put("currTotalAmount", currTotalAmount);
 			model.put("currOrderCount", currOrderCount);
 			sellerService.planUpgrade(planBean.getPid(), currTotalAmount, currOrderCount,
-					HelperClass.getSellerIdfromSession(request));
+					helperClass.getSellerIdfromSession(request));
 		} catch (CustomException ce) {
 			log.error("planUpgrade2 exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());

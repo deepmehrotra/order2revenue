@@ -1,10 +1,15 @@
 package com.o2r.service;
 
+import java.io.FileInputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import org.hibernate.Criteria;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -12,19 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.dao.SellerDao;
 import com.o2r.helper.CustomException;
-import com.o2r.model.Product;
-import com.o2r.model.ProductStockList;
 import com.o2r.model.Seller;
 import com.o2r.model.State;
 import com.o2r.model.StateDeliveryTime;
-
-import java.io.FileInputStream;
-
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.InternetAddress;
-
 import com.sun.mail.smtp.SMTPTransport;
 
 /**

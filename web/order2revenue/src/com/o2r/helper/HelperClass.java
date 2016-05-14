@@ -2,15 +2,19 @@ package com.o2r.helper;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.o2r.dao.SellerDao;
-import com.o2r.dao.SellerDaoImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.o2r.model.Seller;
+import com.o2r.service.SellerService;
 
-
+@Service("helperClass")
 public class HelperClass {
 	
+	@Autowired
+	SellerService sellerService;
 	
-	public static int getSellerIdfromSession(HttpServletRequest request) throws Exception
+	public int getSellerIdfromSession(HttpServletRequest request) throws Exception
 	{
 		int sellerId=0;
 		System.out.println(" Inside seller id from session :"+request.getUserPrincipal().getName());
@@ -20,8 +24,8 @@ public class HelperClass {
 		}
 		else
 		{
-		SellerDao sellerdao=new SellerDaoImpl();
-		Seller seller=sellerdao.getSeller(request.getUserPrincipal().getName());
+		//SellerDao sellerdao=new SellerDaoImpl();
+		Seller seller=sellerService.getSeller(request.getUserPrincipal().getName());
 		if(seller!=null)
 		{
 		request.getSession().setAttribute("sellerId", seller.getId());

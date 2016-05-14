@@ -99,6 +99,8 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
 	 <bean id="customUserDetailsService" class="com.o2r.service.CustomUserDetailsService"></bean>
     <bean id="sellerDao" class="com.o2r.dao.SellerDaoImpl"></bean>
      <bean id="sellerService" class="com.o2r.service.SellerServiceImpl"></bean>
+     <bean id="helperClass" class="com.o2r.helper.HelperClass">
+    </bean>
     
     <!-- <bean id="cStartEventHandler" class="com.schedulers.CStartEventHandler"/> -->
    

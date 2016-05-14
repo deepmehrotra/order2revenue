@@ -52,6 +52,8 @@ public class ReturnOrderController {
 	private DownloadService downloadService;
 	@Resource(name = "saveContents")
 	private SaveContents saveContents;
+	@Autowired
+	private HelperClass helperClass;
 	Map<String, Object> model = new HashMap<String, Object>();
 
 	static Logger log = Logger.getLogger(ReturnOrderController.class.getName());
@@ -73,7 +75,7 @@ public class ReturnOrderController {
 		int sellerId;
 		System.out.println("Inside expense category Ssave");
 		try {
-			sellerId = HelperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			orderService.addReturnOrder(orderBean.getChannelOrderID(),
 					ConverterClass.prepareOrderRTOorReturnModel(orderBean
 							.getOrderReturnOrRTO()), sellerId);
@@ -105,7 +107,7 @@ public class ReturnOrderController {
 		String action = request.getParameter("action");
 
 		try {
-			sellerId = HelperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (searchType.equals("searchByProperty") && searchColumn != null) {
 				if (searchColumn.equals("customerName")
 						|| searchColumn.equals("customerCity")
@@ -114,7 +116,7 @@ public class ReturnOrderController {
 					orderlist = ConverterClass
 							.prepareListofBean(orderService.findOrdersbyCustomerDetails(
 									searchColumn, searchString,
-									HelperClass.getSellerIdfromSession(request)));
+									helperClass.getSellerIdfromSession(request)));
 				}
 
 				else {
@@ -122,7 +124,7 @@ public class ReturnOrderController {
 					orderlist = ConverterClass
 							.prepareListofBean(orderService.findOrders(
 									searchColumn, searchString,
-									HelperClass.getSellerIdfromSession(request), false));
+									helperClass.getSellerIdfromSession(request), false));
 				}
 			} else {
 				orderlist = new ArrayList<OrderBean>();
@@ -131,11 +133,11 @@ public class ReturnOrderController {
 				if (searchDateCriteria.equalsIgnoreCase("returnDate")) {
 					temporaryorderlist = orderService.findOrdersbyReturnDate(
 							searchDateCriteria, startDate, endDate,
-							HelperClass.getSellerIdfromSession(request));
+							helperClass.getSellerIdfromSession(request));
 				} else if (searchColumn.equals("dateofPayment")) {
 					temporaryorderlist = orderService.findOrdersbyPaymentDate(
 							searchDateCriteria, startDate, endDate,
-							HelperClass.getSellerIdfromSession(request));
+							helperClass.getSellerIdfromSession(request));
 
 				}
 
@@ -193,7 +195,7 @@ public class ReturnOrderController {
 					&& orderBean.getOrderReturnOrRTO().getReturnOrRTOId() != null) {
 				orderService.addReturnOrder(orderBean.getChannelOrderID(),
 						ConverterClass.prepareOrderRTOorReturnModel(orderBean
-								.getOrderReturnOrRTO()), HelperClass
+								.getOrderReturnOrRTO()), helperClass
 								.getSellerIdfromSession(request));
 
 			}
@@ -208,7 +210,7 @@ public class ReturnOrderController {
 		}
 		System.out.println(" Returnorders list : " + orderlist);
 		// model.put("orders",
-		// ConverterClass.prepareListofBean(orderService.listOrders(HelperClass.getSellerIdfromSession(request),0)));
+		// ConverterClass.prepareListofBean(orderService.listOrders(helperClass.getSellerIdfromSession(request),0)));
 		return new ModelAndView("redirect:/seller/orderList.html?savedOrder="
 				+ orderBean.getChannelOrderID());
 	}
@@ -249,7 +251,7 @@ public class ReturnOrderController {
 				+ request.getParameter("returnId"));
 
 		try {
-			sellerId = HelperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (action != null && action.equals("list")) {
 				if (searchType != null && searchType.equals("searchByProperty")
 						&& searchColumn != null) {
@@ -262,7 +264,7 @@ public class ReturnOrderController {
 										.findOrdersbyCustomerDetails(
 												searchColumn,
 												searchString,
-												HelperClass
+												helperClass
 														.getSellerIdfromSession(request)));
 					} else if (searchColumn.equals("returnOrRTOId")) {
 
@@ -274,7 +276,7 @@ public class ReturnOrderController {
 						temporaryorderlist = new ArrayList<Order>();
 						temporaryorderlist = orderService.findOrders(
 								searchColumn, searchString,
-								HelperClass.getSellerIdfromSession(request), false);
+								helperClass.getSellerIdfromSession(request), false);
 						if (temporaryorderlist != null) {
 							for (Order ordertemp : temporaryorderlist) {
 								if (ordertemp.getOrderReturnOrRTO()
@@ -308,7 +310,7 @@ public class ReturnOrderController {
 										searchDateCriteria,
 										startDate,
 										endDate,
-										HelperClass
+										helperClass
 												.getSellerIdfromSession(request));
 					} else if (searchColumn.equals("dateofPayment")) {
 						temporaryorderlist = orderService
@@ -316,7 +318,7 @@ public class ReturnOrderController {
 										searchDateCriteria,
 										startDate,
 										endDate,
-										HelperClass
+										helperClass
 												.getSellerIdfromSession(request));
 
 					} else {
@@ -482,7 +484,7 @@ public class ReturnOrderController {
 		if (null != files && files.size() > 0) {
 			fileNames.add(files.get(0).getOriginalFilename());
 			try {
-				sellerId = HelperClass.getSellerIdfromSession(request);
+				sellerId = helperClass.getSellerIdfromSession(request);
 				System.out.println(" Filename : "
 						+ files.get(0).getOriginalFilename());
 				System.out.println(" Filename : " + files.get(0).getName());

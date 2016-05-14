@@ -48,6 +48,8 @@ public class GenericController {
 	private OrderService orderService;
 	@Autowired
 	private AdminService adminService;
+	@Autowired
+	 private HelperClass helperClass;
 
 	private Logger logger = Logger.getLogger(GenericController.class);
 
@@ -93,9 +95,9 @@ public class GenericController {
 		DashboardBean dbean=null;
 		Seller seller=null;
 		try{
-		seller=sellerService.getSeller(HelperClass.getSellerIdfromSession(request));
+		seller=sellerService.getSeller(helperClass.getSellerIdfromSession(request));
 		SellerBean sellerBean=ConverterClass.prepareSellerBean(seller);
-		dbean = dashboardService.getDashboardDetails(HelperClass.getSellerIdfromSession(request));
+		dbean = dashboardService.getDashboardDetails(helperClass.getSellerIdfromSession(request));
 		model.put("sellerBean", sellerBean);
 		model.put("dashboardValue", dbean);
 		}catch(CustomException ce){
@@ -172,7 +174,7 @@ public class GenericController {
 		String searchString =null;
 		
 		try{		
-		sellerId = HelperClass.getSellerIdfromSession(request);
+		sellerId = helperClass.getSellerIdfromSession(request);
 		searchCriteria = request.getParameter("searchCriteria");
 		searchString = request.getParameter("searchString");
 		

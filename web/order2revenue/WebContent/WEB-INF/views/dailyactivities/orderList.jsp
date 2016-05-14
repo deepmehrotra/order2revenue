@@ -182,7 +182,8 @@
 																	<td>${order.quantity}</td>
 																	<td><fmt:formatNumber type="number"
 																			maxFractionDigits="2" value="${order.netRate}" /></td>
-																	<td>${order.orderPayment.paymentDifference}</td>
+																	<td><fmt:formatNumber type="number"
+																			maxFractionDigits="2" value="${order.orderPayment.paymentDifference}" /></td>
 																	<td>${order.status}</td>
 																	<td class="tooltip-demo"><a href="#"
 																		onclick="onclickNavigateOrder('editOrder',${order.orderId})"><i

@@ -60,6 +60,8 @@ public class UploadController {
 	private PartnerService partnerService;
 	@Autowired
 	private ManualChargesService manualChargesService;
+	@Autowired
+	private HelperClass helperClass;
 
 	static Logger log = Logger.getLogger(UploadController.class.getName());
 
@@ -75,7 +77,7 @@ public class UploadController {
 		try {
 			payuploadbeanlist = ConverterClass
 					.prepareListofPaymentUploadBean(paymentUploadService
-							.listPaymentUploads(HelperClass
+							.listPaymentUploads(helperClass
 									.getSellerIdfromSession(request)));
 
 			if (payuploadbeanlist != null) {
@@ -84,7 +86,7 @@ public class UploadController {
 					System.out.println(" Positive paymein in controller : "+bean.getTotalpositivevalue());
 					bean.setManualCharges(manualChargesService.getMCforPaymentID(
 							bean.getUploadDesc(),
-							HelperClass.getSellerIdfromSession(request)));
+							helperClass.getSellerIdfromSession(request)));
 				}
 			}
 		} catch (CustomException ce) {
@@ -120,7 +122,7 @@ public class UploadController {
 		String manualpayid = null;
 		int sellerId;
 		try {
-			sellerId = HelperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (manualPay != null && manualPay.equals("true")) {
 				if (paymentUploadService.getManualPayment(sellerId) != null)
 					manualpayid = String.valueOf(paymentUploadService
@@ -215,7 +217,7 @@ public class UploadController {
 		Map<Integer, String> orderIdmap = new HashMap<>();
 		Map<String, String> partnermap = new HashMap<>();
 		try {
-			int sellerId = HelperClass.getSellerIdfromSession(request);
+			int sellerId = helperClass.getSellerIdfromSession(request);
 			List<Order> orderlist = orderService.listOrders(sellerId);
 			for (Order order : orderlist) {
 				orderIdmap.put(order.getOrderId(), order.getChannelOrderID());
@@ -250,7 +252,7 @@ public class UploadController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		System.out.println(" channelOrderId " + orderBean.getChannelOrderID());
 		try {
-			sellerId = HelperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if ((int) orderBean.getOrderPayment().getNegativeAmount() != 0) {
 
 				payment.setNegativeAmount(Math.abs(orderBean.getOrderPayment()
@@ -329,7 +331,7 @@ public class UploadController {
 		if (null != files && files.size() > 0) {
 			fileNames.add(files.get(0).getOriginalFilename());
 			try {
-				sellerId = HelperClass.getSellerIdfromSession(request);
+				sellerId = helperClass.getSellerIdfromSession(request);
 				System.out.println(" Filename : "
 						+ files.get(0).getOriginalFilename());
 				System.out.println(" Filename : " + files.get(0).getName());

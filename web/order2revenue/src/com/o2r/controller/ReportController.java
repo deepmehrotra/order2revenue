@@ -48,6 +48,8 @@ private PartnerService partnerService;
 
 @Autowired
 private OrderService orderService;
+@Autowired
+private HelperClass helperClass;
 
 private static final SimpleDateFormat dateFormat = new SimpleDateFormat("mm/dd/yy");
 
@@ -68,7 +70,7 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 		List<Partner> partners=new ArrayList<Partner>();
 		String reportName = request.getParameter("reportName");
 		try{
-		partners = partnerService.listPartners(HelperClass.getSellerIdfromSession(request));
+		partners = partnerService.listPartners(helperClass.getSellerIdfromSession(request));
 		for (Partner partner : partners)
 			partnerlist.add(partner.getPcName());
 		
@@ -106,12 +108,12 @@ public ModelAndView getReport(HttpServletRequest request) {
  System.out.println(" Cat :"+partner);
  if(partner!=null&&partner.equals("allPartners"))
  {
-	 ttso= reportGeneratorService.getAllPartnerTSOdetails(startDate, endDate,  HelperClass.getSellerIdfromSession(request));
+	 ttso= reportGeneratorService.getAllPartnerTSOdetails(startDate, endDate,  helperClass.getSellerIdfromSession(request));
 	 System.out.println(" Got response ttso size in controller: "+ttso.size());
  }
  else
  {
-	 reportGeneratorService.getPartnerTSOdetails(selectedPartner, startDate, endDate, HelperClass.getSellerIdfromSession(request));
+	 reportGeneratorService.getPartnerTSOdetails(selectedPartner, startDate, endDate, helperClass.getSellerIdfromSession(request));
  }
  model.put("ttsolist",ttso);
  
@@ -141,7 +143,7 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 		partner = request.getParameter("toggler");
 		
 		ttso = reportGeneratorService.getAllPartnerTSOdetails(startDate,
-				endDate, HelperClass.getSellerIdfromSession(request));
+				endDate, helperClass.getSellerIdfromSession(request));
 		if (ttso != null)
 			System.out.println(" ****Inside controller after gettitng ttso objkect : "+ ttso.size());
 		else
@@ -177,6 +179,7 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}catch(Exception e){
+			e.printStackTrace();
 			log.error(e);
 		}
 		log.info("*** getReport exit ***");
@@ -198,8 +201,8 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 		String reportName=null;
 		Date startDate;
 		Date endDate;
-		String partner;
-		String selectedPartner;
+		/*String partner;
+		String selectedPartner;*/
 		//System.out.println(" Cat :" + partner);
 		try{
 	//	selectedPartner = request.getParameter("selectedPartner");
@@ -208,13 +211,13 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 		endDate = new Date(request.getParameter("enddate"));
 	//	partner = request.getParameter("toggler");
 		if(reportName.equals("categoryWiseSaleReport"))
-		ttso = reportGeneratorService.getCategorySalesDetails(startDate,endDate, HelperClass.getSellerIdfromSession(request));
+		ttso = reportGeneratorService.getCategorySalesDetails(startDate,endDate, helperClass.getSellerIdfromSession(request));
 		else if(reportName.equals("paymentsReceievedReport"))
-			ttso = reportGeneratorService.getPaymentsReceievedDetails(startDate,endDate, HelperClass.getSellerIdfromSession(request));
+			ttso = reportGeneratorService.getPaymentsReceievedDetails(startDate,endDate, helperClass.getSellerIdfromSession(request));
 		else if(reportName.equals("orderwiseGPReport"))
-			ttso = reportGeneratorService.getOrderwiseGPDetails(startDate,endDate, HelperClass.getSellerIdfromSession(request));
+			ttso = reportGeneratorService.getOrderwiseGPDetails(startDate,endDate, helperClass.getSellerIdfromSession(request));
 		else
-		ttso = reportGeneratorService.getChannelSalesDetails(startDate,endDate, HelperClass.getSellerIdfromSession(request));
+		ttso = reportGeneratorService.getChannelSalesDetails(startDate,endDate, helperClass.getSellerIdfromSession(request));
 
 		if (ttso != null)
 			System.out.println(" ****Inside controller after gettitng ttso objkect : "+ ttso.size());
@@ -270,8 +273,8 @@ public void downloadreport(HttpServletRequest request ,HttpServletResponse respo
 		selectedPartner = request.getParameter("selectedPartner");
 		reportheaders = request.getParameterValues("headers");
 		try {
-			orderlist = orderService.findOrdersbyDate("orderDate", startDate,endDate, HelperClass.getSellerIdfromSession(request));
-			reportDownloadService.downloadReport(response, orderlist,reportheaders, reportName,	HelperClass.getSellerIdfromSession(request));
+			orderlist = orderService.findOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
+			reportDownloadService.downloadReport(response, orderlist,reportheaders, reportName,	helperClass.getSellerIdfromSession(request));
 		} catch (ClassNotFoundException e) {
 			log.error(e);
 			/*
@@ -324,8 +327,8 @@ public void downloadOrderReport(HttpServletRequest request ,HttpServletResponse 
 		selectedPartner = request.getParameter("selectedPartner");
 		reportheaders = request.getParameterValues("headers");
 		try {
-			orderlist = orderService.findChannelOrdersbyDate("orderDate", startDate,endDate, HelperClass.getSellerIdfromSession(request));
-			reportDownloadService.downloadCOReport(response, orderlist,reportheaders, "ChannelSalesReport",	HelperClass.getSellerIdfromSession(request));
+			orderlist = orderService.findChannelOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
+			reportDownloadService.downloadCOReport(response, orderlist,reportheaders, "ChannelSalesReport",	helperClass.getSellerIdfromSession(request));
 		} catch (ClassNotFoundException e) {
 			log.error(e);
 			/*
