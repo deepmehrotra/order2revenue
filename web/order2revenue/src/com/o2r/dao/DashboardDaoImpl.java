@@ -284,10 +284,30 @@ public class DashboardDaoImpl implements DashboardDao {
                                   .createAlias("orderReturnOrRTO", "orderReturnOrRTO",
                                                 CriteriaSpecification.LEFT_JOIN)
                                   .add(Restrictions.eq("seller.id", sellerId))
+                                  //.add(Restrictions.eq("isPo", false))
                                   .add(Restrictions.between("orderDate", startDate, endDate));
 
                      criteriaForNR
                                   .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+                     
+                     //Criteria for calculating values pf PO
+                   /*  Criteria criteriaForPOprice = session.createCriteria(Order.class);
+                     criteriaForPOprice.createAlias("seller", "seller",
+                                  CriteriaSpecification.LEFT_JOIN);
+                     criteriaForPOprice.createAlias("orderPayment", "orderPayment",
+                                  CriteriaSpecification.LEFT_JOIN);
+                     criteriaForPOprice
+                                  .createAlias("orderReturnOrRTO", "orderReturnOrRTO",
+                                                CriteriaSpecification.LEFT_JOIN)
+                                  .add(Restrictions.eq("seller.id", sellerId))
+                                  .add(Restrictions.eq("isPo", false))
+                                  .add(Restrictions.between("orderDate", startDate, endDate));
+
+                     criteriaForPOprice
+                                  .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+                     
+                     */
+                     
                      ProjectionList projList = Projections.projectionList();
                      projList.add(Projections.sum("netRate"));
                      criteriaForNR.setProjection(projList);

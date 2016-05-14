@@ -698,7 +698,7 @@ span .#error {
 																								<input type="text" placeholder=""
 																									class="form-control"
 																									name="nr-localvwgt1500lt5000"
-																									value="${chargeMap.localvwgt1000lt1500}">
+																									value="${chargeMap.localvwgt1500lt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
@@ -724,7 +724,7 @@ span .#error {
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control" name="nr-localvwgt5000"
-																									value="${chargeMap.metrovwgt1500lt5000}">
+																									value="${chargeMap.localvwgt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
@@ -764,7 +764,7 @@ span .#error {
 																								<div class=" content-rgt">
 																									<input type="text" placeholder=""
 																										class="form-control" name="nr-localdwlt500"
-																										value="${chargeMap.metrovwgt5000}">
+																										value="${chargeMap.localdwlt500}">
 																								</div>
 																							</div></td>
 																						<td><div class=" content-rgt">
@@ -891,7 +891,7 @@ span .#error {
 																								<input type="text" placeholder=""
 																									class="form-control"
 																									name="nr-fixedvwgt1500lt5000"
-																									value="${chargeMap.fixedvwgt1000lt1500}">
+																									value="${chargeMap.fixedvwgt1500lt5000}">
 																							</div></td>
 																					</tr>
 																					<tr>
@@ -2327,6 +2327,10 @@ span .#error {
 															</div>
 														</div>
 													</div>
+													<input type="hidden" id="hidlocalList" value='${partner.nrnReturnConfig.localList}'/>
+													<input type="hidden" id="hidzonalList" value='${partner.nrnReturnConfig.zonalList}'/>
+													<input type="hidden" id="hidmetroList" value='${partner.nrnReturnConfig.metroList}'/>
+													<input type="hidden" id="hidnationalList" value='${partner.nrnReturnConfig.nationalList}'/>
 												</div>
 											</div>
 										</form>
@@ -2728,6 +2732,8 @@ span .#error {
 						
 				 if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeVar')
 					 $('#revShippingFeeType_revShipFeeVar').iCheck('check');
+				 if ('${partner.nrnReturnConfig.retCharSFFF}' == 'true')
+                     $('#retCharSFFF').iCheck('check');
 						
 				 else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeShipFee')
 					 $('#revShippingFeeType_revShipFeeShipFee').iCheck('check');			
@@ -2737,11 +2743,64 @@ span .#error {
 					 $('#revShippingFeeType_revShipFeeGRT').iCheck('check');			
 				 else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeePCC')
 					 $('#revShippingFeeType_revShipFeePCC').iCheck('check');
-				
+				 
 					
 					//var radioButtons = $('form#addpartnerform input[type="radio"]');
 					
-					
+					//Code for populating state fields
+					/* var metroList;
+					var nationalList;
+					var zonalList;
+					var localList;
+					if('${partner.nrnReturnConfig.metroList}'!=null)
+						metroList='${partner.nrnReturnConfig.metroList}'.split(",");
+					if('${partner.nrnReturnConfig.nationalList}'!=null)
+						nationalList='${partner.nrnReturnConfig.nationalList}'.split(",");
+					if('${partner.nrnReturnConfig.zonalList}'!=null)
+						zonalList='${partner.nrnReturnConfig.zonalList}'.split(",");
+					if('${partner.nrnReturnConfig.localList}'!=null)
+						localList='${partner.nrnReturnConfig.localList}'.split(","); */
+						
+						/* localList.appendTo("#pickListResult"); */
+						/*  $.fn.pickList = function (options) {
+
+						      var opts = $.extend({}, $.fn.pickList.defaults, options);
+
+						      this.fill = function () {
+						         var localoption = '';
+						         var nationaloption = '';
+						         var zonaloption = '';
+						         var metrooption = '';
+
+						       
+						         for(var temp in localList)
+									{
+									 localoption += '<option id=' +temp + '>' + temp+ '</option>';
+					               	} 
+						         
+						         this.find('#pickListResult').append(localoption);
+						      };
+						}  */
+						
+					/* 	 for(var temp in metroList)
+							{
+							 $('#pickListResult33').append('<option value="' + temp + '">' +temp+ '</option>');
+							// p.clone().appendTo("#pickListResult33");
+			               	} 
+						 for(var temp in nationalList)
+							{
+							 $('#pickListResult22').append('<option value="' + temp + '">' +temp+ '</option>');
+			               	} 
+						 for(var temp in zonalList)
+							{
+							 $('#pickListResult11').append('<option value="' + temp + '">' +temp+ '</option>');
+			               	} 
+						 for(var temp in localList)
+							{
+							 $('#pickListResult').append('<option value="' + temp + '">' +temp+ '</option>');
+			               	} 
+						 */
+						
 
 					var val = {
 						01 : {

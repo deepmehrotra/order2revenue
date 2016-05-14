@@ -55,7 +55,7 @@
                             
                         </div>
                         <div class="logo-element">
-                            GE
+                            O2R
                         </div>
                     </li>
                 <li class="active">
@@ -102,15 +102,10 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="orders.html"><i class="fa fa-envelope"></i> <span class="nav-label">Orders</span> </a>
+                    <a href="#"><i class="fa fa-envelope"></i> <span class="nav-label">Orders</span> </a>
                 </li>
             </ul>
-            <div class="SN-wrapper">
-                <a href="" class="btn btn-info btn-circle"><i class="fa fa-facebook"></i></a>
-                <a href="" class="btn btn-info btn-circle"><i class="fa fa-google-plus"></i></a>
-                <a href="" class="btn btn-info btn-circle"><i class="fa fa-twitter"></i></a>
-                <a href="" class="btn btn-info btn-circle"><i class="fa fa-youtube"></i></a>
-            </div>
+           
         </div>
     </nav>
 

@@ -511,6 +511,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public List<Order> listOrders(int sellerId) throws CustomException {
 		// sellerId=4;
+		System.out.println(" Getting list of order orderDaoimpl");
 		List<Order> returnlist = null;
 		try {
 			Session session = sessionFactory.openSession();
@@ -522,7 +523,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.listOrderError,
 					new Date(), 3, GlobalConstant.listOrderErrorCode, e);
@@ -559,17 +560,14 @@ public class OrderDaoImpl implements OrderDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-
+          e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.listOrdersError,
 					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
 
-			/*
-			 * System.out.println(" Exception in getting order list :" +
-			 * e.getLocalizedMessage());
-			 */
+		
 		}
-
+	     log.info(" Exiting orderlist- orderdaomipl");
 		return returnlist;
 	}
 
@@ -2523,6 +2521,7 @@ public class OrderDaoImpl implements OrderDao {
 		System.out.println(" Total return charge calculated : " + totalcharge
 				+ "Reverse shiping fee : " + revShippingFee
 				+ " Service tax applied  : " + serviceTax);
+		order.setServiceTax(serviceTax);
 		if (serviceTax > 0) {
 			totalcharge = totalcharge + (totalcharge * serviceTax) / 100;
 		}

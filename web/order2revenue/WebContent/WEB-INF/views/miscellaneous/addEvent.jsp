@@ -2229,15 +2229,15 @@ span .#error {
 
 
 
-<script src="/O2R/seller/js/jquery-2.1.1.js"></script> 
+<!-- <script src="/O2R/seller/js/jquery-2.1.1.js"></script> 
 <script src="/O2R/seller/js/bootstrap.min.js"></script> 
 <script src="/O2R/seller/js/plugins/metisMenu/jquery.metisMenu.js"></script> 
 <script src="/O2R/seller/js/plugins/slimscroll/jquery.slimscroll.min.js"></script> 
-<!-- Data picker --> 
+Data picker 
 <script src="/O2R/seller/js/plugins/datapicker/bootstrap-datepicker.js"></script> 
-<!-- Custom and plugin javascript --> 
+Custom and plugin javascript 
 <script src="/O2R/seller/js/inspinia.js"></script> 
-<script src="/O2R/seller/js/plugins/pace/pace.min.js"></script> 
+<script src="/O2R/seller/js/plugins/pace/pace.min.js"></script>  -->
 <!-- iCheck --> 
 <script src="/O2R/seller/js/plugins/iCheck/icheck.min.js"></script> 
 <!-- Switchery --> 
@@ -2578,7 +2578,8 @@ span .#error {
 			
 	 if ('${eventsBean.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeVar')
 		 $('#revShippingFeeType_revShipFeeVar').iCheck('check');
-			
+	 if ('${eventsBean.nrnReturnConfig.retCharSFFF}' == 'true')
+         $('#retCharSFFF').iCheck('check');
 	 else if ('${eventsBean.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeShipFee')
 		 $('#revShippingFeeType_revShipFeeShipFee').iCheck('check');			
 	 else if ('${eventsBean.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeFF')

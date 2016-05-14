@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.apache.poi.POIDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -361,7 +360,7 @@ public class OrderController {
 		System.out.println("Inside list products ");
 		List<OrderBean> orderList = new ArrayList<>();
 		int sellerId;
-		ProductBean product = null;
+		//ProductBean product = null;
 		String channelOrderID = request.getParameter("channelOrderID");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
@@ -464,6 +463,7 @@ public class OrderController {
 								pageNo)));
 			}
 		} catch (CustomException ce) {
+			ce.printStackTrace();
 			log.error("orderListDailyAct exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());

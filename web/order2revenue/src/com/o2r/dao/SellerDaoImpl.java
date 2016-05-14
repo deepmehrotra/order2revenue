@@ -128,6 +128,7 @@ public class SellerDaoImpl implements SellerDao {
 		return (List<Seller>) sessionFactory.getCurrentSession()
 				.createCriteria(Seller.class).list();
 		}catch(Exception e){
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.listSellerError, new Date(), 3, GlobalConstant.listSellerErrorCode, e);
 			
@@ -146,6 +147,7 @@ public class SellerDaoImpl implements SellerDao {
 			session.close();
 		
 		}catch(Exception e){
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.getSellerByIdError, new Date(), 3, GlobalConstant.getSellerByIdErrorCode, e);
 			
@@ -202,7 +204,7 @@ public class SellerDaoImpl implements SellerDao {
 			session.close();
 
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.deleteSellerError, new Date(), 3, GlobalConstant.deleteSellerErrorCode, e);
 			
@@ -278,7 +280,7 @@ public class SellerDaoImpl implements SellerDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.planUpgradeError, new Date(), 1, GlobalConstant.planUpgradeErrorCode, e);
 			
@@ -457,7 +459,7 @@ public class SellerDaoImpl implements SellerDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.updateProcessedOrdersCountError, new Date(), 1, GlobalConstant.updateProcessedOrdersCountErrorCode, e);
 		}

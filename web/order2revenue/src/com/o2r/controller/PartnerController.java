@@ -115,13 +115,31 @@ public class PartnerController {
 					partnerBean.getNrnReturnConfig().getCharges().add(nrnReturncharge);
 					//chargeList.add(nrnReturncharge);
 				} else if (entry.getKey().contains("local")) {
-					partnerBean.getNrnReturnConfig().setLocalList(Arrays.toString(entry.getValue()));
+					
+					String localstring=Arrays.toString(entry.getValue());
+					System.out.println("localstring "+localstring);
+					partnerBean.getNrnReturnConfig().setLocalList(localstring
+							.substring(localstring.toString().indexOf('[')+1, 
+									localstring.toString().indexOf(']')));
 				} else if (entry.getKey().contains("zonal")) {
-					partnerBean.getNrnReturnConfig().setZonalList(Arrays.toString(entry.getValue()));
+					String zonalstring=Arrays.toString(entry.getValue());
+					System.out.println("zonalstring "+zonalstring);
+					
+					partnerBean.getNrnReturnConfig().setZonalList(zonalstring
+							.substring(zonalstring.toString().indexOf('[')+1, 
+									zonalstring.toString().indexOf(']')));
 				} else if (entry.getKey().contains("national")) {
-					partnerBean.getNrnReturnConfig().setNationalList(Arrays.toString(entry.getValue()));
+					String nationalstring=Arrays.toString(entry.getValue());
+					partnerBean.getNrnReturnConfig().setNationalList(nationalstring
+							.substring(nationalstring.toString().indexOf('[')+1, 
+									nationalstring.toString().indexOf(']')));
 				} else if (entry.getKey().contains("metro")) {
-					partnerBean.getNrnReturnConfig().setMetroList(Arrays.toString(entry.getValue()));
+					String metrostring=Arrays.toString(entry.getValue());
+					System.out.println("metrostring "+metrostring);
+					
+					partnerBean.getNrnReturnConfig().setMetroList(metrostring
+							.substring(metrostring.toString().indexOf('[')+1, 
+									metrostring.toString().indexOf(']')));
 				}
 			}
 		}
@@ -612,6 +630,8 @@ public class PartnerController {
 		Map<String,Float> chargeMap=new HashMap<String, Float>();
 		Map<String,Float> categoryMap=new HashMap<String, Float>();
 		List<Category> categoryObjects = null;
+		
+		
 		try {
 			datemap.put("true", "Select payment from");
 			datemap.put("true", "Shipping Date");

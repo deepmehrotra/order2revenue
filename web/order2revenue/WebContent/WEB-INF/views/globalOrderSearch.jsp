@@ -67,7 +67,10 @@
 													<td><fmt:formatDate
 															value="${searchOrder.returnLimitCrossed}"
 															pattern="MMM dd ,YY" /></td>
-													<td>${searchOrder.orderPayment.netPaymentResult}</td>
+													<td><fmt:formatNumber type="number"
+                                                                maxFractionDigits="2" 
+                                                                value="${searchOrder.orderPayment.netPaymentResult}" />
+                                                                </td>
 													<td>${searchOrder.status}</td>
 													<c:if
 														test="${empty searchOrder.orderReturnOrRTO.returnDate}">

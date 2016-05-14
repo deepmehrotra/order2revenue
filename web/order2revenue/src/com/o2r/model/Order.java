@@ -120,7 +120,16 @@ public class Order {
 	private Seller seller;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private PaymentUpload paymentUpload;
-
+	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+	private PaymentUpload upload;	
+	@Column
+	private boolean isPO=false;
+	@Column
+	private double eossValue;
+	@ManyToOne
+	private ProductConfig productConfig;
+	@ManyToOne(cascade=CascadeType.ALL)
+	private Order consolidatedOrder;
 	public PaymentUpload getPaymentUpload() {
 		return paymentUpload;
 	}
@@ -129,16 +138,7 @@ public class Order {
 		this.paymentUpload = paymentUpload;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
-	private PaymentUpload upload;	
-	@Column
-	private boolean isPO;
-	@Column
-	private double eossValue;
-	@ManyToOne
-	private ProductConfig productConfig;
-	@ManyToOne(cascade=CascadeType.ALL)
-	private Order consolidatedOrder;
+	
 	
 	public Customer getCustomer() {
 		return customer;

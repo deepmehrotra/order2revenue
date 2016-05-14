@@ -63,7 +63,7 @@
 
 					<div class="top-search-60 f-left TopSearch-box2" id="option2"
 						style="display: none">
-						<div class="input-group f-left">
+						<div class="input-group f-left" style="width: 150px;">
 							<div class="input-group date">
 								<span class="input-group-addon"><i class="fa fa-calendar"></i></span><input
 									type="text" name="startDate" id="startDate"
@@ -71,7 +71,7 @@
 
 							</div>
 						</div>
-						<div class="input-group f-left">
+						<div class="input-group f-left" style="width: 150px;">
 							<div class="input-group date">
 								<span class="input-group-addon"><i class="fa fa-calendar"></i></span><input
 									type="text" name="endDate" id="endDate" class="form-control">
