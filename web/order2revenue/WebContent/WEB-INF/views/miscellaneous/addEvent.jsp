@@ -71,10 +71,63 @@ span .#error {
 	rel="stylesheet">
 <link href="/O2R/seller/css/plugins/iCheck/custom.css" rel="stylesheet">
 
-
 <script type="text/javascript">
+var nameAvailability=true;
+
+function checkOnBlur()
+{
+	var name=document.getElementById("eventName").value;
 	
+	$.ajax({
+        url: "checkEvent.html?name="+name,
+       success : function(res) {
+        	   if(res=="false")
+                	{
+                	nameAvailability=false;
+                	 $("#eventNameMessage").html("Inventory Group already exist");
+                	}
+                else
+                	{
+                	nameAvailability=true;
+                	$("#eventNameMessage").html("Inventory Group name available");
+                	}
+            
+       
+ 	   }
+	 });
+	}
+    function submitInventoryGroup(){
+    	 	 var validator = $("#eventName").validate({
+	    		  rules: {
+	    			  catName: {
+	    			        required: true,
+	    			            }
+	    			  },
+	    	     messages: {
+	    	    	 catName: "Inventory group name required"
+	    	    	
+	    	     }
+	    	 });
+	    	 if(validator.form()&&nameAvailability){ // validation perform
+	    		     $.ajax({
+                    url: $("#eventName").attr("action"),
+                    context: document.body,
+                    type: 'post',
+                    data:$("#eventName").serialize(),
+                    success : function(res) {
+                                  
+                        $("#centerpane").html(res);
+                   
+             	   }
+            	 });
+	    	 }
+ 	   };
+
+
+
 </script>
+
+
 </head>
 <body>
 	<div id="wrapper">
@@ -99,7 +152,8 @@ span .#error {
                           <div class="form-group">
                             <label class="col-sm-4 control-label">Event Name</label>
                             <div class="col-sm-8">
-                              <form:input path="eventName" value="${eventsBean.eventName}"	class="form-control" />
+                              <form:input path="eventName" value="${eventsBean.eventName}"	class="form-control" id="eventName" onblur="checkOnBlur()"/>
+                              <span id="eventNameMessage"  style="color:red;font-weight:bold"></span>
                             </div>
                           </div>
                         </div>

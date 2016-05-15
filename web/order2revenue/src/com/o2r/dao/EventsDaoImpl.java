@@ -205,5 +205,24 @@ public class EventsDaoImpl implements EventsDao {
 		log.info("$$$ isEventActive Exit $$$");
 		return null;
 	}
+	
+	@Override
+	public Events getEvent(String eventName, int sellerID) {
+		Events event=null;
+		Session session=null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Events.class).add(Restrictions.eq("sellerId", sellerID)).add(Restrictions.eq("eventName", eventName));
+			event=(Events)criteria.list().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(session != null){
+				session.close();
+			}			
+		}
+		return event;
+	}
 
 }

@@ -620,6 +620,59 @@ public class PartnerController {
 		}
 		return new ModelAndView("addPartner", model);
 	}
+	
+	@RequestMapping(value = "/seller/viewPartner", method = RequestMethod.GET)
+	public ModelAndView viewPartner(HttpServletRequest request,
+			@ModelAttribute("command") PartnerBean partnerBean,
+			BindingResult result) {
+
+		log.info("*** viewPartner start ***");
+		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> datemap = new HashMap<String, Object>();
+		PartnerBean pbean=null;
+		Map<String,Float> chargeMap=new HashMap<String, Float>();
+		Map<String,Float> categoryMap=new HashMap<String, Float>();
+		List<Category> categoryObjects = null;
+		try {
+			datemap.put("true", "Select payment from");
+			datemap.put("true", "Shipping Date");
+			datemap.put("false", "Delivery Date");
+			model.put("datemap", datemap);
+			pbean=ConverterClass
+			.preparePartnerBean(partnerService.getPartner(partnerBean
+					.getPcId()));
+			System.out.println("************** Inside edit partner : config ID :"+pbean.getNrnReturnConfig().getConfigId());
+			for(NRnReturnCharges charge:pbean.getNrnReturnConfig().getCharges())
+			{
+				chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
+			}
+			
+			categoryObjects = categoryService.listCategories(helperClass.getSellerIdfromSession(request));
+			for (Category cat : categoryObjects) {
+				categoryMap.put(cat.getCatName(), chargeMap.get(cat.getCatName()));
+			}
+			model.put("categoryMap", categoryMap);
+			model.put("partner", pbean);
+			model.put("chargeMap", chargeMap);
+			model.put("partnerList", ConverterClass
+					.prepareListofPartnerBean(partnerService
+							.listPartners(helperClass.getSellerIdfromSession(request))));
+		} catch (CustomException ce) {
+			log.error("editPartner exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("editPartner exception : " + e.getLocalizedMessage());
+			model.put("errorMessage", e.getMessage());
+			
+		}
+		log.info("*** viewPartner exit ***");
+		return new ModelAndView("initialsetup/viewPartner", model);
+	}
+	
 
 	@RequestMapping(value = "/seller/editPartner", method = RequestMethod.GET)
 	public ModelAndView editPartner(HttpServletRequest request,
@@ -663,7 +716,7 @@ public class PartnerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			log.error("editPartner exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());

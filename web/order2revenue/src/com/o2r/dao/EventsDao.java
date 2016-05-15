@@ -15,4 +15,5 @@ public interface EventsDao {
 	public List<Events> listEvents(int sellerId);
 	public List<Events> listEvents(Date sDate, Date eDate, int sellerId);
 	public Events isEventActiive(Date orderDate,String channelName, int sellerId);
+	public Events getEvent(String eventName, int sellerID);
 }

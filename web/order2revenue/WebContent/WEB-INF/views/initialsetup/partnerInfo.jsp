@@ -85,7 +85,8 @@
                         <div class="panel panel-default add-logo-page">
                             <div class="panel-body text-center" style="height: 100px; width: 200px;">
                                 <img alt="image"  src="${partner.pcLogoUrl}"  title="${partner.pcName}">
-                                <a href="editPartner.html?pcId=${partner.pcId}"  onclick=""><i class="fa fa-pencil"></i></a>
+                                <div><a href="editPartner.html?pcId=${partner.pcId}"  style="width:49%;z-index: 9999;" onclick=""><i class="fa fa-pencil"></i></a>
+								<a href="viewPartner.html?pcId=${partner.pcId}"><i class="fa fa-eye" style="position: relative;left: 54px;"></i></a></div>	
                             </div>
                         </div>
                     </div>

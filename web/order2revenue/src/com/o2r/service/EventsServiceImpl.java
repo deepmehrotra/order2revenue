@@ -53,5 +53,10 @@ public class EventsServiceImpl implements EventsService{
 	public Events isEventActiive(Date orderDate, String channelName,int sellerId) {
 		return eventsDao.isEventActiive(orderDate, channelName, sellerId);
 	}
+	
+	@Override
+	public Events getEvent(String eventName, int sellerID) {
+		return eventsDao.getEvent(eventName, sellerID);
+	}
 
 }

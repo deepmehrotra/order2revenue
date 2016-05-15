@@ -16,10 +16,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.o2r.bean.EventsBean;
 import com.o2r.helper.ConverterClass;
+import com.o2r.helper.CustomException;
 import com.o2r.helper.HelperClass;
 import com.o2r.model.Category;
 import com.o2r.model.Events;
@@ -204,6 +206,32 @@ public class EventsController {
 		}
 		log.info("$$$ eventsList Exit $$$");
 		return new ModelAndView("miscellaneous/eventsList", model);
+	}
+	
+	@RequestMapping(value = "/seller/checkEvent", method = RequestMethod.GET)
+	public @ResponseBody String checkEvent(HttpServletRequest request,
+			@ModelAttribute("command") EventsBean eventsBean,
+			BindingResult result) {
+		log.info("***checkEvent Start****");
+		
+		String eventName = request.getParameter("name");
+		try {
+			if (eventName != null && eventName.length() != 0) {
+				Events event = eventsService.getEvent(eventName, helperClass.getSellerIdfromSession(request));
+				if (event != null)
+					return "false";
+				else
+					return "true";
+			}
+		} catch (CustomException ce) {
+			log.error("CheckEventsException: " + ce.toString());
+			return "false";
+		} catch (Throwable e) {
+			log.error(e);
+			return "false";
+		}
+		log.info("***checkEvent Exit****");
+		return "false";
 	}
 
 }
