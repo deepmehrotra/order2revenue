@@ -359,7 +359,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public Order addPO(Order order, int sellerId) throws CustomException {
 
-		order.setPO(true);
+		order.setPoOrder(true);
 		order.setOrderDate(new Date());
 		System.out.println(" PO id " + order.getSubOrderID());
 		System.out.println(" Order Partner " + order.getPcName());
@@ -548,7 +548,7 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.eq("isPO", false));
+					.add(Restrictions.eq("poOrder", false));
 
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			criteria.addOrder(org.hibernate.criterion.Order
@@ -586,8 +586,9 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.eq("isPO", true));
-
+					.add(Restrictions.eq("poOrder", true))
+					.add(Restrictions.isNull("consolidatedOrder"));
+			
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			criteria.addOrder(org.hibernate.criterion.Order
 					.desc("lastActivityOnOrder"));
@@ -653,7 +654,7 @@ public class OrderDaoImpl implements OrderDao {
 			Criteria criteria = session.createCriteria(Order.class);
 			criteria.add(Restrictions.eq("subOrderID", poId));
 			criteria.add(Restrictions.eq("invoiceID", invoiceId));
-			criteria.add(Restrictions.eq("isPO", true));
+			criteria.add(Restrictions.eq("poOrder", true));
 			criteria.add(Restrictions.eq("consolidatedOrder.orderId", 0));
 
 			returnList = criteria.list();
@@ -724,6 +725,56 @@ public class OrderDaoImpl implements OrderDao {
 			 */
 		}
 		return returnorder;
+	}
+
+	@Override
+	public List<Order> getPOOrdersFromConsolidated(int orderId, int sellerId)
+			throws CustomException {
+
+		Seller seller = null;
+		List<Order> orderlist = null;
+
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
+			criteria.createAlias("orders", "order",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("order.consolidatedOrder.orderId",
+							orderId))
+					.add(Restrictions.eq("order.poOrder", true))
+					.addOrder(
+							org.hibernate.criterion.Order
+									.desc("order.lastActivityOnOrder"))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			if (criteria.list().size() != 0) {
+				seller = (Seller) criteria.list().get(0);
+				if (seller == null)
+					System.out.println("Null seller");
+				orderlist = seller.getOrders();
+				if (orderlist != null && orderlist.size() != 0) {
+					for (Order order : orderlist) {
+						Hibernate.initialize(order.getOrderTimeline());
+					}
+				}
+			}
+			session.getTransaction().commit();
+			session.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e);
+			throw new CustomException(GlobalConstant.findOrdersError,
+					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
+
+			/*
+			 * System.out.println(" Exception in find order "+
+			 * e.getLocalizedMessage()); e.printStackTrace();
+			 */
+		}
+		return orderlist;
 	}
 
 	@Override
@@ -984,12 +1035,11 @@ public class OrderDaoImpl implements OrderDao {
 					new Date(), 1, GlobalConstant.addReturnOrderErrorCode, e);
 
 		}
-
 	}
 
 	@Override
 	public List<Order> findOrders(String column, String value, int sellerId,
-			boolean isPO) throws CustomException {
+			boolean poOrder) throws CustomException {
 		String searchString = "order." + column;
 		System.out.println(" Inside Find order dao method searchString :"
 				+ searchString + " value :" + value + "   sellerId :"
@@ -1006,12 +1056,14 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.createAlias("orders", "order",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq(searchString, value).ignoreCase())
-					.add(Restrictions.eq("order.isPO", isPO))
+					.add(Restrictions.eq("order.poOrder", poOrder))
 					.addOrder(
 							org.hibernate.criterion.Order
 									.desc("order.lastActivityOnOrder"))
 					.setResultTransformer(
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			if (poOrder)
+				criteria.add(Restrictions.eq("order.consolidatedOrder", null));
 			if (criteria.list().size() != 0) {
 				seller = (Seller) criteria.list().get(0);
 				if (seller == null)
@@ -3246,7 +3298,7 @@ public class OrderDaoImpl implements OrderDao {
 		double grossProfit = 0;
 
 		Order consolidatedOrder = new Order();
-		consolidatedOrder.setPO(true);
+		consolidatedOrder.setPoOrder(true);
 		consolidatedOrder.setOrderDate(new Date());
 
 		consolidatedOrder.setPcName(orderlist.get(0).getPcName());
@@ -3408,7 +3460,7 @@ public class OrderDaoImpl implements OrderDao {
 					.add(Restrictions.eq("invoiceID", invoiceID).ignoreCase())
 					.add(Restrictions.eq("productSkuCode", channelSkuRef)
 							.ignoreCase())
-					.add(Restrictions.eq("order.isPO", true))
+					.add(Restrictions.eq("order.poOrder", true))
 					.addOrder(
 							org.hibernate.criterion.Order
 									.desc("order.lastActivityOnOrder"))
@@ -3483,8 +3535,6 @@ public class OrderDaoImpl implements OrderDao {
 			log.error(e);
 			throw new CustomException(GlobalConstant.addReturnOrderError,
 					new Date(), 1, GlobalConstant.addReturnOrderErrorCode, e);
-
 		}
-
 	}
 }

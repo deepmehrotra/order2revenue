@@ -50,6 +50,10 @@
     		targeturl="downloadOrderDA.html?value=orderPoSummary";
     	break;
     	
+    	case "viewPOOrderList" :
+    		targeturl="poorderlist.html";
+    	break;
+    	
     	}
         $.ajax({
             url : targeturl,
@@ -73,7 +77,8 @@
 							<div class="ibox-title">
 								<h5>Orders(${orders.size()})</h5>
 								<div class="table-menu-links">
-									<a href="#" id="POOrders">PO Orders</a> <a href="#"
+									<a href="#" id="POOrders" 
+										onclick="onclickNavigateOrder('viewPOOrderList','0')">PO Orders</a> <a href="#"
 										id="returnOrders">Return</a> <a href="#" id="paymentOrders">Payment</a>
 									<a href="#" id="actionableOrders">Actionable</a>
 								</div>

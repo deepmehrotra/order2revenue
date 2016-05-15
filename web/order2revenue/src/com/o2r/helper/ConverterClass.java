@@ -217,6 +217,9 @@ public class ConverterClass {
 				bean.setPccAmount(order.getPccAmount());
 				bean.setServiceTax(order.getServiceTax());
 				bean.setFixedfee(order.getFixedfee());
+				bean.setEossValue(order.getEossValue());
+				if (order.getProductConfig() != null)
+					bean.setProductConfig(prepareProductConfigBean(order.getProductConfig()));
 				beans.add(bean);
 			}
 		}
@@ -1329,6 +1332,7 @@ public class ConverterClass {
 		productConfigBean.setProductSkuCode(productConfig.getProductSkuCode());
 		productConfigBean.setChannelSkuRef(productConfig.getChannelSkuRef());
 		productConfigBean.setCommision(productConfig.getCommision());
+		productConfigBean.setCommisionAmt(productConfig.getCommisionAmt());
 		productConfigBean.setTaxSp(productConfig.getTaxSp());
 		productConfigBean.setTaxPo(productConfig.getTaxPo());
 		productConfigBean.setDiscount(productConfig.getDiscount());

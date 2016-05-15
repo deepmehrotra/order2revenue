@@ -80,8 +80,8 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<Order> findOrders(String column, String value, int sellerId,
-			boolean isPO) throws CustomException {
-		return orderDao.findOrders(column, value, sellerId, isPO);
+			boolean poOrder) throws CustomException {
+		return orderDao.findOrders(column, value, sellerId, poOrder);
 	}
 
 	@Override
@@ -172,8 +172,8 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public Order findPOOrder(String poID, String invoiceID, String channelSkuRef, int sellerId)
-			throws CustomException {
+	public Order findPOOrder(String poID, String invoiceID,
+			String channelSkuRef, int sellerId) throws CustomException {
 		return orderDao.findPOOrder(poID, invoiceID, channelSkuRef, sellerId);
 	}
 
@@ -181,6 +181,12 @@ public class OrderServiceImpl implements OrderService {
 	public void addGatePass(Order order, GatePass gatepass, int sellerId)
 			throws CustomException {
 		orderDao.addGatePass(order, gatepass, sellerId);
-		
+
+	}
+
+	@Override
+	public List<Order> getPOOrdersFromConsolidated(int orderId, int sellerId)
+			throws CustomException {
+		return orderDao.getPOOrdersFromConsolidated(orderId, sellerId);
 	}
 }

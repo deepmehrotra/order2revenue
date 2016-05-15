@@ -132,7 +132,7 @@ public class Order {
 	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
 	private PaymentUpload upload;	
 	@Column
-	private boolean isPO;
+	private boolean poOrder;
 	@Column
 	private double eossValue;
 	@ManyToOne
@@ -561,14 +561,6 @@ public class Order {
 		this.consolidatedOrder = consolidatedOrder;
 	}
 
-	public boolean isPO() {
-		return isPO;
-	}
-
-	public void setPO(boolean isPO) {
-		this.isPO = isPO;
-	}
-
 	public double getEossValue() {
 		return eossValue;
 	}
@@ -583,6 +575,14 @@ public class Order {
 
 	public void setGatepass(GatePass gatepass) {
 		this.gatepass = gatepass;
+	}
+
+	public boolean isPoOrder() {
+		return poOrder;
+	}
+
+	public void setPoOrder(boolean poOrder) {
+		this.poOrder = poOrder;
 	}
 
 

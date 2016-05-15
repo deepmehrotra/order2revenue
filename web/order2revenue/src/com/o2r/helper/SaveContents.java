@@ -690,6 +690,11 @@ public class SaveContents {
 				}
 			}
 
+			Order consolidatedOrder = orderService
+					.generateConsolidatedOrder(orderlist, sellerId);
+			orderService.updatePOOrders(orderlist,
+					consolidatedOrder);
+			
 			Set<String> errorSet = returnOrderMap.keySet();
 			downloadUploadReportXLS(offices, "OrderPOSheet", 11, errorSet,
 					path, sellerId);
