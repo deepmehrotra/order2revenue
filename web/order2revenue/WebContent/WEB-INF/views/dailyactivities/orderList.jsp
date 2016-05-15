@@ -53,6 +53,9 @@
     	case "viewPOOrderList" :
     		targeturl="poorderlist.html";
     	break;
+    	case "viewGatePassList" :
+    		targeturl="gatepasslist.html";
+    	break;
     	
     	}
         $.ajax({
@@ -77,10 +80,13 @@
 							<div class="ibox-title">
 								<h5>Orders(${orders.size()})</h5>
 								<div class="table-menu-links">
-									<a href="#" id="POOrders" 
-										onclick="onclickNavigateOrder('viewPOOrderList','0')">PO Orders</a> <a href="#"
-										id="returnOrders">Return</a> <a href="#" id="paymentOrders">Payment</a>
-									<a href="#" id="actionableOrders">Actionable</a>
+									<a href="#" id="POOrders"
+										onclick="onclickNavigateOrder('viewPOOrderList','0')">PO
+										Orders</a> <a href="#" id="returnOrders">Return</a> <a href="#"
+										id="gatepass"
+										onclick="onclickNavigateOrder('viewGatePassList','0')">GatePass</a>
+									<a href="#" id="paymentOrders">Payment</a> <a href="#"
+										id="actionableOrders">Actionable</a>
 								</div>
 								<div class="ibox-tools">
 									<button class="btn btn-white table-menu-search search-dd">
@@ -188,7 +194,8 @@
 																	<td><fmt:formatNumber type="number"
 																			maxFractionDigits="2" value="${order.netRate}" /></td>
 																	<td><fmt:formatNumber type="number"
-																			maxFractionDigits="2" value="${order.orderPayment.paymentDifference}" /></td>
+																			maxFractionDigits="2"
+																			value="${order.orderPayment.paymentDifference}" /></td>
 																	<td>${order.status}</td>
 																	<td class="tooltip-demo"><a href="#"
 																		onclick="onclickNavigateOrder('editOrder',${order.orderId})"><i
@@ -288,23 +295,24 @@
 
 					</div>
 				</div>
+			</div>
+		</div>
+	</div>
+	<jsp:include page="../globaljslinks.jsp"></jsp:include>
 
-				<jsp:include page="../globaljslinks.jsp"></jsp:include>
-
-				<!-- Scripts ro Table -->
+	<!-- Scripts ro Table -->
 
 
 
-				<!-- Data Tables -->
-				<script src="/O2R/seller/js/plugins/dataTables/jquery.dataTables.js"></script>
-				<script
-					src="/O2R/seller/js/plugins/dataTables/dataTables.bootstrap.js"></script>
-				<script
-					src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
-				<script
-					src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
+	<!-- Data Tables -->
+	<script src="/O2R/seller/js/plugins/dataTables/jquery.dataTables.js"></script>
+	<script src="/O2R/seller/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+	<script
+		src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
+	<script
+		src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
 
-				<script>
+	<script>
     $(document).ready(function(){
         $('.dataTables-example').dataTable({
                 responsive: true,
@@ -367,7 +375,7 @@
     	 return 0;
     	}
 </script>
-				<style>
+	<style>
 body.DTTT_Print {
 	background: #fff;
 }

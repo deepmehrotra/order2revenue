@@ -189,4 +189,22 @@ public class OrderServiceImpl implements OrderService {
 			throws CustomException {
 		return orderDao.getPOOrdersFromConsolidated(orderId, sellerId);
 	}
+
+	@Override
+	public List<Order> listGatePasses(int sellerId, int pageNo)
+			throws CustomException {
+		return orderDao.listGatePasses(sellerId, pageNo);
+	}
+
+	@Override
+	public OrderRTOorReturn generateConsolidatedReturn(
+			List<GatePass> gatepasslist, int sellerId) throws CustomException {
+		return orderDao.generateConsolidatedReturn(gatepasslist, sellerId);
+	}
+
+	@Override
+	public void updateGatePasses(List<GatePass> gatepasslist,
+			OrderRTOorReturn consolidatedReturn) throws CustomException {
+		orderDao.updateGatePasses(gatepasslist, consolidatedReturn);
+	}
 }

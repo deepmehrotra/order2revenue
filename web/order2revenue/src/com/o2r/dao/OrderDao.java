@@ -88,4 +88,13 @@ public interface OrderDao {
 
 	public List<Order> getPOOrdersFromConsolidated(int orderId, int sellerId)
 			throws CustomException;
+
+	public List<Order> listGatePasses(int sellerId, int pageNo)
+			throws CustomException;
+
+	public OrderRTOorReturn generateConsolidatedReturn(
+			List<GatePass> gatepasslist, int sellerId) throws CustomException;
+
+	public void updateGatePasses(List<GatePass> gatepasslist,
+			OrderRTOorReturn consolidatedReturn) throws CustomException;
 }

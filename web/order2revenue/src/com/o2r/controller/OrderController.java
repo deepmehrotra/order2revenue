@@ -107,7 +107,7 @@ public class OrderController {
 				downloadService.downloadGatePassXLS(response);
 			} else if (sheetvalue.equals("productSummary")) {
 				downloadService.downloadProductXLS(response);
-			}else if (sheetvalue.equals("productConfigSummary")) {
+			} else if (sheetvalue.equals("productConfigSummary")) {
 				downloadService.downloadProductConfigXLS(response);
 			} else if (sheetvalue.equals("inventorySummary")) {
 				downloadService.downloadInventoryXLS(response);
@@ -215,7 +215,7 @@ public class OrderController {
 						+ uploadForm.getSheetValue());
 
 				ValidateUpload.validateOfficeData(files.get(0));
-				
+
 				Map orderProcessedMap = null;
 				System.out.println(" fileinput " + fileinput.getName());
 				switch (uploadForm.getSheetValue()) {
@@ -223,10 +223,13 @@ public class OrderController {
 					orderProcessedMap = saveContents.saveOrderContents(
 							files.get(0), sellerId, applicationPath);
 
-					if(orderProcessedMap!=null && !orderProcessedMap.isEmpty())
-						serviceService.updateProcessedOrdersCount(sellerId, orderProcessedMap.size());
+					if (orderProcessedMap != null
+							&& !orderProcessedMap.isEmpty())
+						serviceService.updateProcessedOrdersCount(sellerId,
+								orderProcessedMap.size());
 					else
-						System.out.println("No Orders processed, so not updating the totalProcessedOrder");
+						System.out
+								.println("No Orders processed, so not updating the totalProcessedOrder");
 					model.put("orderMap", orderProcessedMap);
 					model.put("mapType", "orderMap");
 					// saveContents.saveOrderContents(files.get(0),sellerId);
@@ -234,18 +237,20 @@ public class OrderController {
 				case "orderPoSummary":
 					orderProcessedMap = saveContents.saveOrderPOContents(
 							files.get(0), sellerId, applicationPath);
-					if(orderProcessedMap!=null && !orderProcessedMap.isEmpty())
-						serviceService.updateProcessedOrdersCount(sellerId, orderProcessedMap.size());
+					if (orderProcessedMap != null
+							&& !orderProcessedMap.isEmpty())
+						serviceService.updateProcessedOrdersCount(sellerId,
+								orderProcessedMap.size());
 					else
-						System.out.println("No Orders processed, so not updating the totalProcessedOrder");
+						System.out
+								.println("No Orders processed, so not updating the totalProcessedOrder");
 					model.put("orderPoMap", orderProcessedMap);
 					model.put("mapType", "orderPoMap");
 					// saveContents.saveOrderPOContents(files.get(0),sellerId);
 					break;
 				case "gatepassSummary":
-					model.put("gatepassMap", saveContents
-							.saveGatePassDetails(files.get(0), sellerId,
-									applicationPath));
+					model.put("gatepassMap", saveContents.saveGatePassDetails(
+							files.get(0), sellerId, applicationPath));
 					model.put("mapType", "gatepassMap");
 					break;
 				case "paymentSummary":
@@ -268,8 +273,9 @@ public class OrderController {
 					// saveContents.saveProductContents(files.get(0),sellerId);
 					break;
 				case "productConfigSummary":
-					model.put("productMap", saveContents.saveProductConfigContents(
-							files.get(0), sellerId, applicationPath));
+					model.put("productMap", saveContents
+							.saveProductConfigContents(files.get(0), sellerId,
+									applicationPath));
 					model.put("mapType", "productMap");
 					// saveContents.saveProductContents(files.get(0),sellerId);
 					break;
@@ -362,7 +368,7 @@ public class OrderController {
 		System.out.println("Inside list products ");
 		List<OrderBean> orderList = new ArrayList<>();
 		int sellerId;
-		//ProductBean product = null;
+		// ProductBean product = null;
 		String channelOrderID = request.getParameter("channelOrderID");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
@@ -372,9 +378,9 @@ public class OrderController {
 			if (searchOrder != null
 					&& searchOrder.equals("searchchannelOrderID")
 					&& channelOrderID != null) {
-				orderList = ConverterClass
-						.prepareListofBean(orderService.findOrders(
-								"channelOrderID", channelOrderID, sellerId, false));
+				orderList = ConverterClass.prepareListofBean(orderService
+						.findOrders("channelOrderID", channelOrderID, sellerId,
+								false));
 			} else if (searchOrder != null && startDate != null
 					&& endDate != null) {
 				orderList = ConverterClass.prepareListofBean(orderService
@@ -417,38 +423,42 @@ public class OrderController {
 				String status = request.getParameter("status");
 				if (status.equalsIgnoreCase("return")) {
 					returnlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("status", "Return Recieved", sellerId, false));
-					returnlist
-							.addAll(ConverterClass
-									.prepareListofBean(orderService.findOrders(
-											"status", "Return Limit Crossed",
-											sellerId, false)));
-					model.put("orders", returnlist);
-					
-					poOrderlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("status", "Return Recieved", sellerId, true));
-					model.put("poOrders", poOrderlist);
-					
-				} else if (status.equalsIgnoreCase("payment")) {
-					returnlist = ConverterClass
-							.prepareListofBean(orderService.findOrders(
-									"status", "Payment Recieved", sellerId, false));
+							.findOrders("status", "Return Recieved", sellerId,
+									false));
 					returnlist.addAll(ConverterClass
 							.prepareListofBean(orderService.findOrders(
-									"status", "Payment Deducted", sellerId, false)));
+									"status", "Return Limit Crossed", sellerId,
+									false)));
 					model.put("orders", returnlist);
-					
-					poOrderlist = ConverterClass
+
+					poOrderlist = ConverterClass.prepareListofBean(orderService
+							.findOrders("status", "Return Recieved", sellerId,
+									true));
+					model.put("poOrders", poOrderlist);
+
+				} else if (status.equalsIgnoreCase("payment")) {
+					returnlist = ConverterClass.prepareListofBean(orderService
+							.findOrders("status", "Payment Recieved", sellerId,
+									false));
+					returnlist.addAll(ConverterClass
 							.prepareListofBean(orderService.findOrders(
-									"status", "Payment Recieved", sellerId, true));				
+									"status", "Payment Deducted", sellerId,
+									false)));
+					model.put("orders", returnlist);
+
+					poOrderlist = ConverterClass.prepareListofBean(orderService
+							.findOrders("status", "Payment Recieved", sellerId,
+									true));
 					model.put("poOrders", poOrderlist);
 				} else if (status.equalsIgnoreCase("actionable")) {
 					returnlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("finalStatus", "Actionable", sellerId, false));
+							.findOrders("finalStatus", "Actionable", sellerId,
+									false));
 					model.put("orders", returnlist);
-					
+
 					poOrderlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("finalStatus", "Actionable", sellerId, true));
+							.findOrders("finalStatus", "Actionable", sellerId,
+									true));
 					model.put("poOrders", poOrderlist);
 				}
 			} else {
@@ -458,7 +468,7 @@ public class OrderController {
 						.prepareListofBean(orderService.listOrders(
 								helperClass.getSellerIdfromSession(request),
 								pageNo)));
-				
+
 				model.put("poOrders", ConverterClass
 						.prepareListofBean(orderService.listPOOrders(
 								helperClass.getSellerIdfromSession(request),
@@ -477,7 +487,7 @@ public class OrderController {
 			model.put("savedOrder", savedOrder);
 		return new ModelAndView("dailyactivities/poorderlist", model);
 	}
-	
+
 	@RequestMapping(value = "/seller/orderList", method = RequestMethod.GET)
 	public ModelAndView orderListDailyAct(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
@@ -498,38 +508,42 @@ public class OrderController {
 				String status = request.getParameter("status");
 				if (status.equalsIgnoreCase("return")) {
 					returnlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("status", "Return Recieved", sellerId, false));
-					returnlist
-							.addAll(ConverterClass
-									.prepareListofBean(orderService.findOrders(
-											"status", "Return Limit Crossed",
-											sellerId, false)));
-					model.put("orders", returnlist);
-					
-					poOrderlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("status", "Return Recieved", sellerId, true));
-					model.put("poOrders", poOrderlist);
-					
-				} else if (status.equalsIgnoreCase("payment")) {
-					returnlist = ConverterClass
-							.prepareListofBean(orderService.findOrders(
-									"status", "Payment Recieved", sellerId, false));
+							.findOrders("status", "Return Recieved", sellerId,
+									false));
 					returnlist.addAll(ConverterClass
 							.prepareListofBean(orderService.findOrders(
-									"status", "Payment Deducted", sellerId, false)));
+									"status", "Return Limit Crossed", sellerId,
+									false)));
 					model.put("orders", returnlist);
-					
-					poOrderlist = ConverterClass
+
+					poOrderlist = ConverterClass.prepareListofBean(orderService
+							.findOrders("status", "Return Recieved", sellerId,
+									true));
+					model.put("poOrders", poOrderlist);
+
+				} else if (status.equalsIgnoreCase("payment")) {
+					returnlist = ConverterClass.prepareListofBean(orderService
+							.findOrders("status", "Payment Recieved", sellerId,
+									false));
+					returnlist.addAll(ConverterClass
 							.prepareListofBean(orderService.findOrders(
-									"status", "Payment Recieved", sellerId, true));				
+									"status", "Payment Deducted", sellerId,
+									false)));
+					model.put("orders", returnlist);
+
+					poOrderlist = ConverterClass.prepareListofBean(orderService
+							.findOrders("status", "Payment Recieved", sellerId,
+									true));
 					model.put("poOrders", poOrderlist);
 				} else if (status.equalsIgnoreCase("actionable")) {
 					returnlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("finalStatus", "Actionable", sellerId, false));
+							.findOrders("finalStatus", "Actionable", sellerId,
+									false));
 					model.put("orders", returnlist);
-					
+
 					poOrderlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("finalStatus", "Actionable", sellerId, true));
+							.findOrders("finalStatus", "Actionable", sellerId,
+									true));
 					model.put("poOrders", poOrderlist);
 				}
 			} else {
@@ -539,7 +553,7 @@ public class OrderController {
 						.prepareListofBean(orderService.listOrders(
 								helperClass.getSellerIdfromSession(request),
 								pageNo)));
-				
+
 				model.put("poOrders", ConverterClass
 						.prepareListofBean(orderService.listPOOrders(
 								helperClass.getSellerIdfromSession(request),
@@ -589,7 +603,7 @@ public class OrderController {
 			model.put("productCost", product.getProductPrice());
 		return new ModelAndView("dailyactivities/viewOrder", model);
 	}
-	
+
 	@RequestMapping(value = "/seller/viewPOOrderDA", method = RequestMethod.GET)
 	public ModelAndView viewPOOrderDailyAct(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
@@ -602,7 +616,7 @@ public class OrderController {
 					sellerId);
 			List<Order> orderlist = orderService.getPOOrdersFromConsolidated(
 					order.getOrderId(), sellerId);
-			
+
 			model.put("order", ConverterClass.prepareOrderBean(order));
 			model.put("orderlist", ConverterClass.prepareListofBean(orderlist));
 		} catch (CustomException ce) {
@@ -777,5 +791,31 @@ public class OrderController {
 		} else {
 			return "<font color='green'>Order ID Available</font>";
 		}
+	}
+
+	@RequestMapping(value = "/seller/gatepasslist", method = RequestMethod.GET)
+	public ModelAndView gatepasslistDA(HttpServletRequest request,
+			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
+
+		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			int pageNo = request.getParameter("page") != null ? Integer
+					.parseInt(request.getParameter("page")) : 0;
+
+			model.put(
+					"gatepasses",
+					ConverterClass.prepareListofBean(orderService.listGatePasses(
+							helperClass.getSellerIdfromSession(request), pageNo)));
+		} catch (CustomException ce) {
+			ce.printStackTrace();
+			log.error("orderListDailyAct exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			log.error(e);
+		}
+		return new ModelAndView("dailyactivities/gatepasslist", model);
 	}
 }

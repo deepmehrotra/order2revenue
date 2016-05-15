@@ -10,6 +10,7 @@ public class PoPaymentBean {
 	private String gatePassId;
 	private double positiveAmount;
 	private double negativeAmount;
+	private double npr;
 	private Date paymentDate;
 	private int quantity;
 	public String getPoOrderId() {
@@ -60,6 +61,12 @@ public class PoPaymentBean {
 	}
 	public void setNegativeAmount(double negativeAmount) {
 		this.negativeAmount = negativeAmount;
+	}
+	public double getNpr() {
+		return npr;
+	}
+	public void setNpr(double npr) {
+		this.npr = npr;
 	}
 	
 }

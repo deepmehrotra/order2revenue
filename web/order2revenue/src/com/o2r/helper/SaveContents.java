@@ -634,8 +634,11 @@ public class SaveContents {
 							errorMessage.append(" PO already uploaded ");
 							validaterow = false;
 						} else {
-							orderService.generateConsolidatedOrder(orderlist,
+							Order consolidatedOrder = orderService.generateConsolidatedOrder(orderlist,
 									sellerId);
+							orderService.updatePOOrders(orderlist,
+									consolidatedOrder);
+							orderlist.clear();
 						}
 					}
 					invoiceId = order.getInvoiceID();
@@ -694,6 +697,7 @@ public class SaveContents {
 					.generateConsolidatedOrder(orderlist, sellerId);
 			orderService.updatePOOrders(orderlist,
 					consolidatedOrder);
+			orderlist.clear();
 			
 			Set<String> errorSet = returnOrderMap.keySet();
 			downloadUploadReportXLS(offices, "OrderPOSheet", 11, errorSet,
@@ -1589,7 +1593,7 @@ public class SaveContents {
 			int sellerId, String path) throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
-		// sellerId=4;
+		
 		String errorMessage = null;
 		boolean validaterow = true;
 		PoPaymentBean popabean = null;
@@ -1934,13 +1938,13 @@ public class SaveContents {
 		Integer noOfEntries = 1;
 
 		GatePass gatepass;
-		// Order order = new Order();
 		StringBuffer errorMessage = null;
 		boolean validaterow = true;
-		// int returnId = 0;
-		// OrderRTOorReturn orderReturn = null;
 		Map<String, Order> returnlist = new LinkedHashMap<>();
-		// List<Order> orderlist = null;
+		
+		String gpId = null;
+		List<GatePass> gatepasslist = new ArrayList<GatePass>();
+		
 		try {
 			System.out.println("Inside save gate pass data -->");
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -1960,6 +1964,15 @@ public class SaveContents {
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					gatepass.setGatepassId(entry.getCell(0).toString());
+					if (gpId != null
+							&& !gpId.equalsIgnoreCase(gatepass.getGatepassId())) {
+						OrderRTOorReturn consolidatedReturn = orderService
+								.generateConsolidatedReturn(gatepasslist, sellerId);
+						orderService.updateGatePasses(gatepasslist,
+								consolidatedReturn);
+						gatepasslist.clear();
+					}
+					gpId = gatepass.getGatepassId();
 				} else {
 					errorMessage.append(" GatePass ID is null ");
 					validaterow = false;
@@ -2049,6 +2062,14 @@ public class SaveContents {
 					errorMessage.append(" Seller Note is null ");
 					validaterow = false;
 				}
+				
+				if (entry.getCell(10) != null
+						&& StringUtils.isNotBlank(entry.getCell(10).toString())) {
+					gatepass.setPcName(entry.getCell(10).toString());
+				} else {
+					errorMessage.append(" Channel is null ");
+					validaterow = false;
+				}
 
 				if (entry.getCell(11) != null
 						&& StringUtils.isNotBlank(entry.getCell(11).toString())) {
@@ -2080,6 +2101,13 @@ public class SaveContents {
 					returnlist.put(errorMessage.toString(), poOrder);
 				}
 			}
+			
+			OrderRTOorReturn consolidatedReturn = orderService
+					.generateConsolidatedReturn(gatepasslist, sellerId);
+			orderService.updateGatePasses(gatepasslist,
+					consolidatedReturn);
+			gatepasslist.clear();
+			
 			Set<String> errorSet = returnlist.keySet();
 			downloadUploadReportXLS(offices, "GatePassReport", 13, errorSet,
 					path, sellerId);

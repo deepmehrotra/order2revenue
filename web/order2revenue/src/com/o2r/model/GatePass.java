@@ -26,6 +26,8 @@ public class GatePass {
 	@Column
 	private String invoiceID;
 	@Column
+	private String pcName;
+	@Column
 	private String channelSkuRef;
 	@Column
 	private int quantity;
@@ -198,6 +200,22 @@ public class GatePass {
 
 	public void setReturnRate(double returnRate) {
 		this.returnRate = returnRate;
+	}
+
+	public OrderRTOorReturn getConsolidatedReturn() {
+		return consolidatedReturn;
+	}
+
+	public void setConsolidatedReturn(OrderRTOorReturn consolidatedReturn) {
+		this.consolidatedReturn = consolidatedReturn;
+	}
+
+	public String getPcName() {
+		return pcName;
+	}
+
+	public void setPcName(String pcName) {
+		this.pcName = pcName;
 	}
 
 	/*

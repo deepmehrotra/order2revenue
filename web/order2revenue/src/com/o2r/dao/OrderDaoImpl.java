@@ -560,21 +560,20 @@ public class OrderDaoImpl implements OrderDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-          e.printStackTrace();
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.listOrdersError,
 					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
 
-		
 		}
-	     log.info(" Exiting orderlist- orderdaomipl");
+		log.info(" Exiting orderlist- orderdaomipl");
 		return returnlist;
 	}
 
 	@Override
 	public List<Order> listPOOrders(int sellerId, int pageNo)
 			throws CustomException {
-		// sellerId=4;
+
 		System.out.println(" inside list POorder pageNo " + pageNo);
 		List<Order> returnlist = null;
 		try {
@@ -585,8 +584,9 @@ public class OrderDaoImpl implements OrderDao {
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
 					.add(Restrictions.eq("poOrder", true))
-					.add(Restrictions.isNull("consolidatedOrder"));
-			
+					.add(Restrictions.isNull("consolidatedOrder"))
+					.add(Restrictions.isNull("orderReturnOrRTO"));
+
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			criteria.addOrder(org.hibernate.criterion.Order
 					.desc("lastActivityOnOrder"));
@@ -596,15 +596,10 @@ public class OrderDaoImpl implements OrderDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.listOrdersError,
 					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
-
-			/*
-			 * System.out.println(" Exception in getting order list :" +
-			 * e.getLocalizedMessage());
-			 */
 		}
 
 		return returnlist;
@@ -3438,7 +3433,6 @@ public class OrderDaoImpl implements OrderDao {
 		} finally {
 			session.close();
 		}
-
 	}
 
 	@Override
@@ -3535,5 +3529,210 @@ public class OrderDaoImpl implements OrderDao {
 			throw new CustomException(GlobalConstant.addReturnOrderError,
 					new Date(), 1, GlobalConstant.addReturnOrderErrorCode, e);
 		}
+	}
+
+	@Override
+	public List<Order> listGatePasses(int sellerId, int pageNo)
+			throws CustomException {
+		System.out.println(" inside list POorder pageNo " + pageNo);
+		List<Order> returnlist = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions.eq("poOrder", true))
+					.add(Restrictions.isNull("consolidatedOrder"))
+					.add(Restrictions.isNotNull("orderReturnOrRTO"));
+
+			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			criteria.addOrder(org.hibernate.criterion.Order
+					.desc("lastActivityOnOrder"));
+			criteria.setFirstResult(pageNo * pageSize);
+			criteria.setMaxResults(pageSize);
+			returnlist = criteria.list();
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e);
+			throw new CustomException(GlobalConstant.listOrdersError,
+					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
+		}
+
+		return returnlist;
+	}
+
+	@Override
+	public OrderRTOorReturn generateConsolidatedReturn(
+			List<GatePass> gatepasslist, int sellerId) throws CustomException {
+		int quantity = 0;
+		double totalReturnCharges = 0;
+		double eossValue = 0;
+		double netRate = 0;
+		double taxValue = 0;
+		double grossPR = 0;
+		double grossProfit = 0;
+
+		OrderRTOorReturn consolidateReturn = new OrderRTOorReturn();
+		Order consolidatedOrder = new Order();
+		
+		consolidatedOrder.setPoOrder(true);
+		consolidatedOrder.setOrderDate(new Date());
+
+		consolidatedOrder.setPcName(gatepasslist.get(0).getPcName());
+		consolidatedOrder.setSubOrderID(gatepasslist.get(0).getGatepassId());
+		consolidatedOrder.setChannelOrderID(gatepasslist.get(0)
+				.getGatepassId());
+		consolidatedOrder.setProductSkuCode(gatepasslist.size() + " SKUs");
+		consolidatedOrder.setInvoiceID(gatepasslist.get(0).getInvoiceID());
+		
+		consolidateReturn.setReturnDate(gatepasslist.get(0).getReturnDate());
+
+		Seller seller = null;
+		Session session = null;
+		Partner partner = null;
+		try {
+			System.out.println(" Before starting the session in orderdaolimpl");
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
+			criteria.createAlias("partners", "partner",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("partner.pcName",
+							consolidatedOrder.getPcName()).ignoreCase())
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			seller = (Seller) criteria.list().get(0);
+
+			for (GatePass gatepass : gatepasslist) {
+				
+				Order poOrder = findPOOrder(gatepass.getPoID(),
+						gatepass.getInvoiceID(), gatepass.getChannelSkuRef(),
+						sellerId);
+				
+				quantity += gatepass.getQuantity();
+				totalReturnCharges += gatepass.getTotalReturnCharges();
+				eossValue += (poOrder.getProductConfig().getSuggestedPOPrice() * poOrder.getDiscount()) / 100;
+				netRate += gatepass.getNetNR();
+				taxValue += gatepass.getTaxAmt();
+				grossPR += gatepass.getNetPR();
+				grossProfit += gatepass.getGrossProfit();
+			}
+
+			if (seller.getPartners() != null
+					&& seller.getPartners().size() != 0) {
+				partner = seller.getPartners().get(0);
+			}
+
+			/* populating derived values of order */
+			consolidatedOrder.setStatus("Return Recieved");
+			
+			consolidateReturn.setReturnorrtoQty(quantity);
+			consolidateReturn.setReturnOrRTOChargestoBeDeducted(totalReturnCharges);
+			consolidateReturn.setNetNR(netRate);
+			consolidateReturn.setTaxPOAmt(taxValue);
+			consolidateReturn.setNetPR(grossPR);
+			consolidateReturn.setGrossProfit(grossProfit);
+			
+			consolidatedOrder.setQuantity(quantity);
+			consolidatedOrder.setEossValue(eossValue);
+
+			consolidatedOrder.setNetRate(netRate);
+
+			consolidatedOrder.setOrderTax(new OrderTax());
+			consolidatedOrder.getOrderTax().setTax(taxValue);
+
+			consolidatedOrder.setTotalAmountRecieved(consolidatedOrder
+					.getNetRate());
+			consolidatedOrder.setFinalStatus("In Process");
+			// Set Order Timeline
+			OrderTimeline timeline = new OrderTimeline();
+			// populating tax related values of order
+			System.out.println(" Tax before pr:"
+					+ consolidatedOrder.getOrderTax().getTax());
+			consolidatedOrder.setPr(grossPR);
+
+			// Adding order to the Partner
+			if (partner.getOrders() != null
+					&& consolidatedOrder.getOrderId() == 0) {
+				partner.getOrders().add(consolidatedOrder);
+			}
+			// Setting Gross Profit for Order
+			consolidatedOrder.setGrossProfit(grossProfit);
+
+			if (consolidatedOrder.getOrderId() != 0) {
+				System.out.println(" Saving edited order");
+				// Code for order timeline
+				timeline.setEventDate(new Date());
+				timeline.setEvent(" Return Recieved");
+				consolidatedOrder.getOrderTimeline().add(timeline);
+				consolidatedOrder.setLastActivityOnOrder(new Date());
+				session.merge(consolidatedOrder);
+			} else {
+				System.out
+						.println(" ****************Saving new  order delivery date :"
+								+ consolidatedOrder.getDeliveryDate());
+				// Code for order timeline
+				timeline.setEvent("Return Recieved");
+				consolidatedOrder.setLastActivityOnOrder(new Date());
+				timeline.setEventDate(new Date());
+				consolidatedOrder.getOrderTimeline().add(timeline);
+				consolidatedOrder.setSeller(seller);
+				consolidatedOrder.setOrderReturnOrRTO(consolidateReturn);
+				seller.getOrders().add(consolidatedOrder);
+				session.saveOrUpdate(partner);
+				session.saveOrUpdate(seller);
+				/*
+				 * for (Order order : orderlist) {
+				 * order.setConsolidatedOrderID(consolidatedOrder);
+				 * session.merge(order); }
+				 */
+			}
+			session.getTransaction().commit();
+			return consolidateReturn;
+		} catch (Exception e) {
+			System.out.println("Inside exception in generateConsolidatedReturn "
+					+ e.getLocalizedMessage() + " message: " + e.getMessage());
+			e.printStackTrace();
+			log.error(e);
+			log.info("Error : " + GlobalConstant.addOrderError);
+			log.info("Error : " + GlobalConstant.addOrderErrorCode);
+			throw new CustomException(GlobalConstant.addOrderError, new Date(),
+					1, GlobalConstant.addOrderErrorCode, e);
+		} finally {
+			session.close();
+		}
+
+	}
+
+	@Override
+	public void updateGatePasses(List<GatePass> gatepasslist,
+			OrderRTOorReturn consolidatedReturn) throws CustomException {
+		Session session = null;
+		try {
+
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			for (GatePass gatepass : gatepasslist) {
+				gatepass.setConsolidatedReturn(consolidatedReturn);
+				session.merge(gatepass);
+			}
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			System.out.println("Inside exception in update gatepass "
+					+ e.getLocalizedMessage() + " message: " + e.getMessage());
+			e.printStackTrace();
+			log.error(e);
+			throw new CustomException(GlobalConstant.addOrderError, new Date(),
+					1, GlobalConstant.addOrderErrorCode, e);
+		} finally {
+			session.close();
+		}
+
+
 	}
 }
