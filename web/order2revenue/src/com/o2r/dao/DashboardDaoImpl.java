@@ -284,7 +284,7 @@ public class DashboardDaoImpl implements DashboardDao {
                                   .createAlias("orderReturnOrRTO", "orderReturnOrRTO",
                                                 CriteriaSpecification.LEFT_JOIN)
                                   .add(Restrictions.eq("seller.id", sellerId))
-                                  //.add(Restrictions.eq("isPo", false))
+                                  //.add(Restrictions.eq("poOrder", false))
                                   .add(Restrictions.between("orderDate", startDate, endDate));
 
                      criteriaForNR
@@ -300,7 +300,7 @@ public class DashboardDaoImpl implements DashboardDao {
                                   .createAlias("orderReturnOrRTO", "orderReturnOrRTO",
                                                 CriteriaSpecification.LEFT_JOIN)
                                   .add(Restrictions.eq("seller.id", sellerId))
-                                  .add(Restrictions.eq("isPo", false))
+                                  .add(Restrictions.eq("poOrder", false))
                                   .add(Restrictions.between("orderDate", startDate, endDate));
 
                      criteriaForPOprice

@@ -52,7 +52,7 @@ public class OrderBean {
 	private OrderRTOorReturnBean orderReturnOrRTO = new OrderRTOorReturnBean();
 	private OrderTaxBean orderTax = new OrderTaxBean();
 
-	private boolean isPO;
+	private boolean poOrder;
 	private double eossValue;
 	private ProductConfigBean productConfig;
 	private OrderBean consolidatedOrder;
@@ -400,15 +400,7 @@ public class OrderBean {
 	public void setPccAmount(double pccAmount) {
 		this.pccAmount = pccAmount;
 	}
-
-	public boolean isPO() {
-		return isPO;
-	}
-
-	public void setPO(boolean isPO) {
-		this.isPO = isPO;
-	}
-
+	
 	public double getEossValue() {
 		return eossValue;
 	}
@@ -431,5 +423,13 @@ public class OrderBean {
 
 	public void setConsolidatedOrder(OrderBean consolidatedOrder) {
 		this.consolidatedOrder = consolidatedOrder;
+	}
+
+	public boolean isPoOrder() {
+		return poOrder;
+	}
+
+	public void setPoOrder(boolean poOrder) {
+		this.poOrder = poOrder;
 	}
 }

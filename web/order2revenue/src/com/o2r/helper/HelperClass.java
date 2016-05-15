@@ -10,30 +10,29 @@ import com.o2r.service.SellerService;
 
 @Service("helperClass")
 public class HelperClass {
-	
+
 	@Autowired
-	SellerService sellerService;
-	
-	public int getSellerIdfromSession(HttpServletRequest request) throws Exception
-	{
-		int sellerId=0;
-		System.out.println(" Inside seller id from session :"+request.getUserPrincipal().getName());
-		if(request.getSession().getAttribute("sellerId")!=null)
-		{
-			sellerId=Integer.parseInt(request.getSession().getAttribute("sellerId").toString());
+	private SellerService sellerService;
+
+	public int getSellerIdfromSession(HttpServletRequest request)
+			throws Exception {
+		int sellerId = 0;
+		System.out.println(" Inside seller id from session :"
+				+ request.getUserPrincipal().getName());
+		if (request.getSession().getAttribute("sellerId") != null) {
+			sellerId = Integer.parseInt(request.getSession()
+					.getAttribute("sellerId").toString());
+		} else {
+			// SellerDao sellerdao=new SellerDaoImpl();
+			Seller seller = sellerService.getSeller(request.getUserPrincipal()
+					.getName());
+			if (seller != null) {
+				request.getSession().setAttribute("sellerId", seller.getId());
+				sellerId = seller.getId();
+			}
 		}
-		else
-		{
-		//SellerDao sellerdao=new SellerDaoImpl();
-		Seller seller=sellerService.getSeller(request.getUserPrincipal().getName());
-		if(seller!=null)
-		{
-		request.getSession().setAttribute("sellerId", seller.getId());
-		sellerId=seller.getId();
-		}
-		}
-		if(sellerId!=0)
-		return sellerId;
+		if (sellerId != 0)
+			return sellerId;
 		else
 			throw new NullPointerException("User not available");
 	}

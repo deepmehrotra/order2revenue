@@ -34,7 +34,7 @@ public interface OrderDao {
 	public void deleteReturnInfo(String orderId) throws CustomException;
 
 	public List<Order> findOrders(String column, String value, int sellerId,
-			boolean isPO) throws CustomException;
+			boolean poOrder) throws CustomException;
 
 	public List<Order> findOrdersbyDate(String column, Date startDate,
 			Date endDate, int sellerId) throws CustomException;
@@ -84,5 +84,8 @@ public interface OrderDao {
 			String channelSkuRef, int sellerId) throws CustomException;
 
 	public void addGatePass(Order Order, GatePass gatepass, int sellerId)
+			throws CustomException;
+
+	public List<Order> getPOOrdersFromConsolidated(int orderId, int sellerId)
 			throws CustomException;
 }
