@@ -138,23 +138,23 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 													<tr>
 														<td>${poOrder.productSkuCode}</td>
 														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2" value="${poOrder.orderMRP}" /></td>
+																maxFractionDigits="2" value="${poOrder.orderMRP / poOrder.quantity}" /></td>
 														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2" value="${poOrder.orderSP}" /></td>
+																maxFractionDigits="2" value="${((poOrder.orderMRP / poOrder.quantity) * poOrder.productConfig.discount) / 100}" /></td>
 														<td><fmt:formatNumber type="number"
 																maxFractionDigits="2"
-																value="${poOrder.orderMRP - poOrder.orderSP}" /></td>
+																value="${(poOrder.orderMRP / poOrder.quantity) - (((poOrder.orderMRP / poOrder.quantity) * poOrder.productConfig.discount) / 100)}" /></td>
 														<td><fmt:formatNumber type="number"
 																maxFractionDigits="2"
 																value="${poOrder.productConfig.commisionAmt}" /></td>
 														<td><fmt:formatNumber type="number"
 																maxFractionDigits="2" value="${poOrder.eossValue}" /></td>
 														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2" value="${poOrder.netRate}" /></td>
+																maxFractionDigits="2" value="${poOrder.grossNetRate}" /></td>
 														<td><fmt:formatNumber type="number"
 																maxFractionDigits="2" value="${poOrder.orderTax.tax}" /></td>
 														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2" value="${poOrder.pr}" /></td>
+																maxFractionDigits="2" value="${(poOrder.pr  / poOrder.quantity)}" /></td>
 														<td><fmt:formatNumber type="number"
 																maxFractionDigits="2"
 																value="${poOrder.productConfig.suggestedPOPrice}" /></td>

@@ -1610,8 +1610,6 @@ public class SaveContents {
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
-				System.out.println(entry.getCell(1).toString());
-				System.out.println(entry.getCell(2).toString());
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					popabean = new PoPaymentBean();
