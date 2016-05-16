@@ -8,13 +8,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -219,12 +222,16 @@ public class DashboardDaoImpl implements DashboardDao {
                      Criteria criteria = session.createCriteria(Order.class);
                      criteria.createAlias("seller", "seller",
                                   CriteriaSpecification.LEFT_JOIN);
-                     criteria.createAlias("orderPayment", "orderPayment",
+                     criteria.createAlias("consolidatedOrder", "consolidatedOrder",
                                   CriteriaSpecification.LEFT_JOIN);
                      criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
                                   CriteriaSpecification.LEFT_JOIN)
                      .add(Restrictions.eq("seller.id", sellerId))
                      .add(Restrictions.between("orderDate", startDate, endDate));
+                     Criterion rest1= Restrictions.eq("poOrder",false);
+                     Criterion rest2= Restrictions.and(Restrictions.eq("poOrder", true), 
+                             Restrictions.isNull("consolidatedOrder.orderId"));
+                     criteria.add(Restrictions.or(rest1, rest2));
                      criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
                      ProjectionList projList = Projections.projectionList();
                      projList.add(Projections.sum("quantity"));
@@ -263,8 +270,8 @@ public class DashboardDaoImpl implements DashboardDao {
               System.out.println(" Calculating net profit ");
               List<Double> osValuation = null;
               List<Double> csValuation = null;
-              List<Double> results = null;
-              List<Double> returnCharges = null;
+              List results = null;
+             // List<Double> returnCharges = null;
               double openStock = 0;
               double currentStock = 0;
               double netProfit = 0;
@@ -284,37 +291,72 @@ public class DashboardDaoImpl implements DashboardDao {
                                   .createAlias("orderReturnOrRTO", "orderReturnOrRTO",
                                                 CriteriaSpecification.LEFT_JOIN)
                                   .add(Restrictions.eq("seller.id", sellerId))
-                                  //.add(Restrictions.eq("poOrder", false))
+                                  .add(Restrictions.eq("poOrder", false))
                                   .add(Restrictions.between("orderDate", startDate, endDate));
 
                      criteriaForNR
                                   .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
                      
                      //Criteria for calculating values pf PO
-                   /*  Criteria criteriaForPOprice = session.createCriteria(Order.class);
+                     Criteria criteriaForPOprice = session.createCriteria(Order.class);
                      criteriaForPOprice.createAlias("seller", "seller",
                                   CriteriaSpecification.LEFT_JOIN);
-                     criteriaForPOprice.createAlias("orderPayment", "orderPayment",
+                     criteriaForPOprice.createAlias("consolidatedOrder", "consolidatedOrder",
                                   CriteriaSpecification.LEFT_JOIN);
                      criteriaForPOprice
                                   .createAlias("orderReturnOrRTO", "orderReturnOrRTO",
                                                 CriteriaSpecification.LEFT_JOIN)
                                   .add(Restrictions.eq("seller.id", sellerId))
-                                  .add(Restrictions.eq("poOrder", false))
+                                  .add(Restrictions.eq("poOrder", true))
+                                   .add(Restrictions.isNull("consolidatedOrder.orderId"))
                                   .add(Restrictions.between("orderDate", startDate, endDate));
 
                      criteriaForPOprice
                                   .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
                      
-                     */
+                     
                      
                      ProjectionList projList = Projections.projectionList();
-                     projList.add(Projections.sum("netRate"));
+                     projList.add(Projections.sqlProjection("(sum( grossNetRate * (quantity-returnorrtoQty) )) as grossNR", new String[]{"grossNR"},new Type[]{Hibernate.DOUBLE}));
+                     projList.add(Projections.sum("orderReturnOrRTO.returnOrRTOChargestoBeDeducted"));
+                     
+                     ProjectionList POprojList = Projections.projectionList();
+                     POprojList.add(Projections.sum("netRate"));
+                     POprojList.add(Projections.sum("orderReturnOrRTO.netNR"));
+                     
+             		
                      criteriaForNR.setProjection(projList);
                      results = criteriaForNR.list();
                      if (results != null && results.size() != 0&&results.get(0)!=null)
-                           orderNr = results.get(0);
-                     Criteria criteriaForRetrun = session.createCriteria(Order.class);
+                     {
+                    	  Object[] objArray=(Object[])results.get(0);
+                    	 if(objArray[0]!=null&&objArray[1]!=null)
+                    	 {
+                    		
+                    	 orderNr = (Double)objArray[0];
+                    	 totalReturn=(Double)objArray[1];
+                    	 System.out.println(" results.size() : "+results.size());
+                           System.out.println("**** Gross NR : "+orderNr+" Return "+objArray[1]);
+                    	 }
+                           
+                     }
+                     
+                     criteriaForPOprice.setProjection(POprojList);
+                     results = criteriaForPOprice.list();
+                     if (results != null && results.size() != 0&&results.get(0)!=null)
+                     {
+                         Object[] objArray=(Object[])results.get(0);
+                         if(objArray[0]!=null&&objArray[1]!=null)
+                    	 {
+                    	 orderNr =orderNr+ (Double)objArray[0];
+                    	 totalReturn=totalReturn+(Double)objArray[1];
+                    	 System.out.println(" results.size() : "+results.size());
+                           System.out.println("**** Gross NR : "+orderNr+" Return "+objArray[1]);
+                    	 }
+                           
+                     }
+                    
+                   /*  Criteria criteriaForRetrun = session.createCriteria(Order.class);
                      criteriaForRetrun.createAlias("seller", "seller",
                                   CriteriaSpecification.LEFT_JOIN);
                      criteriaForRetrun.createAlias("orderPayment", "orderPayment",
@@ -323,6 +365,7 @@ public class DashboardDaoImpl implements DashboardDao {
                                   .createAlias("orderReturnOrRTO", "orderReturnOrRTO",
                                                 CriteriaSpecification.LEFT_JOIN)
                                   .add(Restrictions.eq("seller.id", sellerId))
+                                  .add(Restrictions.eq("poOrder", false))
                                   .add(Restrictions.between("orderDate", startDate, endDate))
                                   .add(Restrictions
                                                 .isNotNull("orderReturnOrRTO.returnOrRTOId"))
@@ -332,11 +375,12 @@ public class DashboardDaoImpl implements DashboardDao {
                      ProjectionList returnProjList = Projections.projectionList();
                      returnProjList.add(Projections
                                   .sum("orderReturnOrRTO.returnOrRTOChargestoBeDeducted"));
+                     
                      criteriaForRetrun.setProjection(returnProjList);
                      returnCharges = criteriaForRetrun.list();
                      System.out.println(" Chekcing returnCharges : "+returnCharges+" returnCharges size : "+returnCharges.size());
                      if (returnCharges != null && returnCharges.size() != 0&&returnCharges.get(0)!=null)
-                           totalReturn = returnCharges.get(0);
+                           totalReturn = returnCharges.get(0);*/
                      Query openingStockValueThisYear = session
                                   .createSQLQuery(stockValuationQuery)
                                   .setParameter("year", startDate.getYear())
@@ -935,7 +979,8 @@ System.out.println(" Monthly Expense : "+expenseMonthly);
                      session.beginTransaction();
                      Criteria criteria = session.createCriteria(Expenses.class)
                      .add(Restrictions.eq("sellerId", sellerId))
-                     .add(Restrictions.between("expenseDate", startDate, endDate));
+                     .add(Restrictions.between("expenseDate", startDate, endDate))
+                     .add(Restrictions.ne("expenseCatName", "Assets"));
                      criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
                      ProjectionList projList = Projections.projectionList();
                      projList.add(Projections.sum("amount"));
