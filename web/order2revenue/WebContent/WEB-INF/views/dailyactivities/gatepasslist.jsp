@@ -168,25 +168,25 @@
 												<td><input type="checkbox"></td>
 												<td>${loop.index+1}</td>
 												<td><a href="#"
-													onclick="onclickNavigateOrder('viewPOOrder',${gatepasses.orderId})">${gatepasses.subOrderID}</a></td>
-												<td>${gatepasses.pcName}</td>
-												<td>${gatepasses.productSkuCode}</td>
-												<td>${gatepasses.invoiceID}</td>
-												<td><fmt:formatDate value="${gatepasses.orderDate}"
+													onclick="onclickNavigateOrder('viewPOOrder',${gatepass.orderId})">${gatepass.subOrderID}</a></td>
+												<td>${gatepass.pcName}</td>
+												<td>${gatepass.productSkuCode}</td>
+												<td>${gatepass.invoiceID}</td>
+												<td><fmt:formatDate value="${gatepass.orderDate}"
 														pattern="MMM dd ,YY" /></td>
-												<td><fmt:formatDate value="${gatepasses.shippedDate}"
+												<td><fmt:formatDate value="${gatepass.shippedDate}"
 														pattern="MMM dd ,YY" /></td>
-												<td>${gatepasses.quantity}</td>
+												<td>${gatepass.quantity}</td>
 												<td><fmt:formatNumber type="number"
-														maxFractionDigits="2" value="${gatepasses.poPrice}" /></td>
+														maxFractionDigits="2" value="${gatepass.poPrice}" /></td>
 												<td><fmt:formatNumber type="number"
-														maxFractionDigits="2" value="${gatepasses.orderMRP}" /></td>
+														maxFractionDigits="2" value="${gatepass.orderMRP}" /></td>
 												<td><fmt:formatNumber type="number"
-														maxFractionDigits="2" value="${gatepasses.orderSP}" /></td>
+														maxFractionDigits="2" value="${gatepass.orderSP}" /></td>
 												<td><fmt:formatNumber type="number"
-														maxFractionDigits="2" value="${gatepasses.netRate}" /></td>
-												<td>${gatepasses.orderPayment.paymentDifference}</td>
-												<td>${gatepasses.status}</td>
+														maxFractionDigits="2" value="${gatepass.netRate}" /></td>
+												<td>${gatepass.orderPayment.paymentDifference}</td>
+												<td>${gatepass.status}</td>
 											</tr>
 										</c:forEach>
 									</c:if>

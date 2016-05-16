@@ -3441,6 +3441,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		Seller seller = null;
 		List<Order> orderlist = null;
+		Order poOrder = null;
 
 		try {
 			Session session = sessionFactory.openSession();
@@ -3449,9 +3450,9 @@ public class OrderDaoImpl implements OrderDao {
 					Restrictions.eq("id", sellerId));
 			criteria.createAlias("orders", "order",
 					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("subOrderID", poID).ignoreCase())
-					.add(Restrictions.eq("invoiceID", invoiceID).ignoreCase())
-					.add(Restrictions.eq("productSkuCode", channelSkuRef)
+					.add(Restrictions.eq("order.subOrderID", poID).ignoreCase())
+					.add(Restrictions.eq("order.invoiceID", invoiceID).ignoreCase())
+					.add(Restrictions.eq("order.productSkuCode", channelSkuRef)
 							.ignoreCase())
 					.add(Restrictions.eq("order.poOrder", true))
 					.addOrder(
@@ -3472,7 +3473,11 @@ public class OrderDaoImpl implements OrderDao {
 			}
 			session.getTransaction().commit();
 			session.close();
-
+			if (orderlist != null && orderlist.size() != 0) {
+				poOrder = orderlist.get(0);
+			}
+			return poOrder;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e);
@@ -3484,12 +3489,10 @@ public class OrderDaoImpl implements OrderDao {
 			 * e.getLocalizedMessage()); e.printStackTrace();
 			 */
 		}
-		return orderlist.get(0);
-
 	}
 
 	@Override
-	public void addGatePass(Order order, GatePass gatepass, int sellerId)
+	public GatePass addGatePass(Order order, GatePass gatepass, int sellerId)
 			throws CustomException {
 		try {
 			Session session = sessionFactory.openSession();
@@ -3521,6 +3524,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.merge(order);
 			session.getTransaction().commit();
 			session.close();
+			return gatepass;
 
 		} catch (Exception e) {
 
@@ -3553,6 +3557,13 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.setFirstResult(pageNo * pageSize);
 			criteria.setMaxResults(pageSize);
 			returnlist = criteria.list();
+			for (Order order: returnlist) {
+				Hibernate.initialize(order.getOrderReturnOrRTO());
+				Hibernate.initialize(order.getOrderTax());
+				Hibernate.initialize(order.getOrderPayment());
+				Hibernate.initialize(order.getOrderTimeline());
+				Hibernate.initialize(order.getCustomer());
+			}
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
@@ -3580,7 +3591,7 @@ public class OrderDaoImpl implements OrderDao {
 		Order consolidatedOrder = new Order();
 		
 		consolidatedOrder.setPoOrder(true);
-		consolidatedOrder.setOrderDate(new Date());
+		consolidatedOrder.setOrderDate(gatepasslist.get(0).getReturnDate());
 
 		consolidatedOrder.setPcName(gatepasslist.get(0).getPcName());
 		consolidatedOrder.setSubOrderID(gatepasslist.get(0).getGatepassId());
@@ -3638,7 +3649,6 @@ public class OrderDaoImpl implements OrderDao {
 			consolidateReturn.setNetPR(grossPR);
 			consolidateReturn.setGrossProfit(grossProfit);
 			
-			consolidatedOrder.setQuantity(quantity);
 			consolidatedOrder.setEossValue(eossValue);
 
 			consolidatedOrder.setNetRate(netRate);

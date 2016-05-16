@@ -83,7 +83,7 @@ public interface OrderDao {
 	public Order findPOOrder(String poID, String invoiceID,
 			String channelSkuRef, int sellerId) throws CustomException;
 
-	public void addGatePass(Order Order, GatePass gatepass, int sellerId)
+	public GatePass addGatePass(Order Order, GatePass gatepass, int sellerId)
 			throws CustomException;
 
 	public List<Order> getPOOrdersFromConsolidated(int orderId, int sellerId)

@@ -1932,7 +1932,7 @@ public class SaveContents {
 		}
 	}
 
-	public Map<String, Order> saveGatePassDetails(MultipartFile file,
+	public Map<String, GatePass> saveGatePassDetails(MultipartFile file,
 			int sellerId, String path) throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
@@ -1940,7 +1940,7 @@ public class SaveContents {
 		GatePass gatepass;
 		StringBuffer errorMessage = null;
 		boolean validaterow = true;
-		Map<String, Order> returnlist = new LinkedHashMap<>();
+		Map<String, GatePass> returnlist = new LinkedHashMap<>();
 		
 		String gpId = null;
 		List<GatePass> gatepasslist = new ArrayList<GatePass>();
@@ -2048,8 +2048,7 @@ public class SaveContents {
 
 				if (entry.getCell(8) != null
 						&& StringUtils.isNotBlank(entry.getCell(8).toString())) {
-					gatepass.setTotalReturnCharges(Double.parseDouble(entry
-							.getCell(8).toString()));
+					gatepass.setTotalReturnCharges(entry.getCell(8).getNumericCellValue());
 				} else {
 					errorMessage.append(" Total Return Charges is null ");
 					validaterow = false;
@@ -2095,10 +2094,9 @@ public class SaveContents {
 				}
 
 				if (validaterow) {
-					orderService.addGatePass(poOrder, gatepass, sellerId);
+					gatepasslist.add(orderService.addGatePass(poOrder, gatepass, sellerId));
 				} else {
-					poOrder.setGatepass(gatepass);
-					returnlist.put(errorMessage.toString(), poOrder);
+					returnlist.put(errorMessage.toString(), gatepass);
 				}
 			}
 			

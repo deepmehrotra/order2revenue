@@ -178,9 +178,9 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public void addGatePass(Order order, GatePass gatepass, int sellerId)
+	public GatePass addGatePass(Order order, GatePass gatepass, int sellerId)
 			throws CustomException {
-		orderDao.addGatePass(order, gatepass, sellerId);
+		return orderDao.addGatePass(order, gatepass, sellerId);
 
 	}
 
