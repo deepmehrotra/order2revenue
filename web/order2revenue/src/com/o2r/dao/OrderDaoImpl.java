@@ -811,7 +811,7 @@ public class OrderDaoImpl implements OrderDao {
 		Seller seller = null;
 		Order order = null;
 		Events event = null;
-		Product product = null;
+		//Product product = null;
 		TaxDetail taxDetails = null;
 		TaxDetail tdsDetails = null;
 		float returnChargesCalculated = 0;
@@ -855,12 +855,16 @@ public class OrderDaoImpl implements OrderDao {
 				}
 				orderReturn
 						.setReturnOrRTOChargestoBeDeducted(returnChargesCalculated);
+				order.setTotalAmountRecieved(order.getGrossNetRate()
+						* (order.getQuantity() - orderReturn.getReturnorrtoQty()));
 
-				if ((int) order.getOrderReturnOrRTO()
+				/*if ((int) order.getOrderReturnOrRTO()
 						.getReturnOrRTOChargestoBeDeducted() == 0) {
 					order.getOrderReturnOrRTO().setReturnUploadDate(
 							orderReturn.getReturnUploadDate());
-				}
+				}*/
+				order.getOrderReturnOrRTO().setReturnUploadDate(
+						orderReturn.getReturnUploadDate());
 				if (order.getReturnLimitCrossed().compareTo(
 						orderReturn.getReturnDate()) < 0) {
 					order.getOrderReturnOrRTO()
@@ -920,7 +924,7 @@ public class OrderDaoImpl implements OrderDao {
 					if (orderReturn.getReturnorrtoQty() == order.getQuantity())
 						order.setGrossProfit(-orderReturn
 								.getReturnOrRTOChargestoBeDeducted());
-
+/*
 					else {
 						product = productService.getProduct(
 								order.getProductSkuCode(), sellerId);
@@ -932,7 +936,7 @@ public class OrderDaoImpl implements OrderDao {
 								- (product.getProductPrice() * (order
 										.getQuantity() - orderReturn
 										.getReturnorrtoQty())));
-					}
+					}*/
 
 					OrderTimeline timeline = new OrderTimeline();
 					timeline.setEvent("Return Recieved");
@@ -956,15 +960,21 @@ public class OrderDaoImpl implements OrderDao {
 				// order.setStatus("Return Recieved");
 
 				if (order.getQuantity() != orderReturn.getReturnorrtoQty()) {
-					order.getOrderPayment().setPaymentDifference(
+				/*	order.getOrderPayment().setPaymentDifference(
 							order.getOrderPayment().getPaymentDifference()
 									+ order.getGrossNetRate()
-									* orderReturn.getReturnorrtoQty());
+									* orderReturn.getReturnorrtoQty());*/
 					order.setGrossProfit(order.getGrossProfit()
 							* orderReturn.getReturnorrtoQty()
 							/ order.getQuantity());
 				}
 
+				order.getOrderPayment()
+				.setPaymentDifference(
+						order.getOrderPayment()
+								.getNetPaymentResult()-order.getTotalAmountRecieved()
+								+order.getOrderReturnOrRTO()
+								.getReturnOrRTOChargestoBeDeducted());
 				// Reverting Tax information for Return Order
 				taxDetails = new TaxDetail();
 				taxDetails
@@ -994,9 +1004,6 @@ public class OrderDaoImpl implements OrderDao {
 								.getQuantity())
 								* orderReturn.getReturnorrtoQty());
 
-				order.getOrderTax().setToxToReturn(
-						(order.getOrderTax().getTax() / order.getQuantity())
-								* orderReturn.getReturnorrtoQty());
 
 				order.setFinalStatus("Actionable");
 				order.setNetSaleQuantity(order.getQuantity()
@@ -1273,15 +1280,13 @@ public class OrderDaoImpl implements OrderDao {
 				order = (Order) criteria.list().get(0);
 			orderPayment.setNegativeAmount(Math.abs(orderPayment
 					.getNegativeAmount()));
+			order.setTotalAmountRecieved(order.getGrossNetRate()
+					* (order.getQuantity() - order
+							.getOrderReturnOrRTO().getReturnorrtoQty()));
 			if (order != null && order.getOrderReturnOrRTO() != null
 					&& order.getOrderReturnOrRTO().getReturnDate() != null
 					&& order.getOrderReturnOrRTO().getReturnorrtoQty() != 0) {
-				if (order.getOrderReturnOrRTO().getReturnorrtoQty() != order
-						.getQuantity()) {
-					order.setTotalAmountRecieved(order.getGrossNetRate()
-							* (order.getQuantity() - order
-									.getOrderReturnOrRTO().getReturnorrtoQty()));
-				}
+				
 				if (((int) orderPayment.getPositiveAmount()) != 0) {
 					if (order.getReturnLimitCrossed().compareTo(
 							order.getOrderReturnOrRTO().getReturnDate()) < 0) {
@@ -1504,41 +1509,37 @@ public class OrderDaoImpl implements OrderDao {
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
 										+ orderPayment.getPositiveAmount());
-						if (order.getOrderPayment().getNetPaymentResult() > 0) {
-							if (order.getReturnLimitCrossed()
-									.compareTo(
-											order.getOrderReturnOrRTO()
-													.getReturnDate()) < 0) {
+						/*if(order.getQuantity()==order.getOrderReturnOrRTO().getReturnorrtoQty())
+						{
+						order.getOrderPayment()
+						.setPaymentDifference(
 								order.getOrderPayment()
-										.setPaymentDifference(
-												order.getOrderPayment()
-														.getNetPaymentResult()
-														- order.getTotalAmountRecieved());
-							} else {
-								order.getOrderPayment()
-										.setPaymentDifference(
-												order.getOrderPayment()
-														.getNetPaymentResult()
-														- (order.getTotalAmountRecieved() - order
-																.getOrderReturnOrRTO()
-																.getReturnOrRTOChargestoBeDeducted()));
-							}
-						} else {
-							order.getOrderPayment()
-									.setPaymentDifference(
-											order.getOrderPayment()
-													.getNetPaymentResult()
-													+ order.getOrderReturnOrRTO()
-															.getReturnOrRTOChargestoBeDeducted());
-
+										.getNetPaymentResult()
+										+order.getOrderReturnOrRTO()
+										.getReturnOrRTOChargestoBeDeducted());
 						}
-
+						else
+						{
+							order.getOrderPayment()
+							.setPaymentDifference(
+									order.getOrderPayment()
+											.getNetPaymentResult()
+											+order.getOrderReturnOrRTO()
+											.getReturnOrRTOChargestoBeDeducted()-(order.getGrossNetRate()*(order.getQuantity()-order.getOrderReturnOrRTO()
+													.getReturnorrtoQty())));
+						}*/
+						order.getOrderPayment()
+						.setPaymentDifference(
+								order.getOrderPayment()
+										.getNetPaymentResult()-order.getTotalAmountRecieved()
+										+order.getOrderReturnOrRTO()
+										.getReturnOrRTOChargestoBeDeducted());
 						order.setStatus("Payment Recieved");
 						OrderTimeline timeline = new OrderTimeline();
 						timeline.setEvent("Rs "
 								+ orderPayment.getPositiveAmount()
 								+ " Recieved");
-						timeline.setEventDate(new Date());
+						timeline.setEventDate(orderPayment.getDateofPayment());
 						order.getOrderTimeline().add(timeline);
 
 					} else {
@@ -1547,7 +1548,7 @@ public class OrderDaoImpl implements OrderDao {
 						timeline.setEvent("Rs "
 								+ orderPayment.getNegativeAmount()
 								+ " Deducted");
-						timeline.setEventDate(new Date());
+						timeline.setEventDate(orderPayment.getDateofPayment());
 						order.getOrderTimeline().add(timeline);
 						order.getOrderPayment().setNegativeAmount(
 								orderPayment.getNegativeAmount());
@@ -1556,24 +1557,39 @@ public class OrderDaoImpl implements OrderDao {
 										- orderPayment.getNegativeAmount());
 						if (order.getReturnLimitCrossed().compareTo(
 								order.getOrderReturnOrRTO().getReturnDate()) < 0) {
-							order.getOrderPayment().setPaymentDifference(
-									order.getOrderPayment()
-											.getNetPaymentResult()
-											- order.getTotalAmountRecieved());
+						
 							order.setStatus("Return Limit Crossed");
 							OrderTimeline timeline1 = new OrderTimeline();
 							timeline1.setEvent("Return Limit Crossed");
 							timeline1.setEventDate(new Date());
 							order.getOrderTimeline().add(timeline1);
-						} else {
-							order.getOrderPayment()
-									.setPaymentDifference(
-											order.getOrderPayment()
-													.getNetPaymentResult()
-													+ order.getOrderReturnOrRTO()
-															.getReturnOrRTOChargestoBeDeducted());
 						}
-
+						/*if(order.getQuantity()==order.getOrderReturnOrRTO().getReturnorrtoQty())
+						{
+						order.getOrderPayment()
+						.setPaymentDifference(
+								order.getOrderPayment()
+										.getNetPaymentResult()
+										+ order.getOrderReturnOrRTO()
+												.getReturnOrRTOChargestoBeDeducted());
+						}
+						else
+						{
+							order.getOrderPayment()
+							.setPaymentDifference(
+									order.getOrderPayment()
+											.getNetPaymentResult()
+											+order.getOrderReturnOrRTO()
+											.getReturnOrRTOChargestoBeDeducted()-(order.getGrossNetRate()*(order.getQuantity()-order.getOrderReturnOrRTO()
+													.getReturnorrtoQty())));
+						}*/
+						
+						order.getOrderPayment()
+						.setPaymentDifference(
+								order.getOrderPayment()
+										.getNetPaymentResult()
+										+order.getOrderReturnOrRTO()
+										.getReturnOrRTOChargestoBeDeducted()-order.getTotalAmountRecieved());
 					}
 				} else {
 
@@ -1585,12 +1601,11 @@ public class OrderDaoImpl implements OrderDao {
 								order.getOrderPayment().getNetPaymentResult()
 										+ orderPayment.getPositiveAmount());
 						order.getOrderPayment()
-								.setPaymentDifference(
-										order.getOrderPayment()
-												.getNetPaymentResult()
-												- (order.getTotalAmountRecieved() - order
-														.getOrderReturnOrRTO()
-														.getReturnOrRTOChargestoBeDeducted()));
+						.setPaymentDifference(
+								order.getOrderPayment()
+										.getNetPaymentResult()
+										+order.getOrderReturnOrRTO()
+										.getReturnOrRTOChargestoBeDeducted()-order.getTotalAmountRecieved());
 						System.out.println("payment difference :"
 								+ order.getOrderPayment()
 										.getPaymentDifference());
@@ -1600,7 +1615,7 @@ public class OrderDaoImpl implements OrderDao {
 						timeline.setEvent("Rs "
 								+ orderPayment.getPositiveAmount()
 								+ " Recieved");
-						timeline.setEventDate(new Date());
+						timeline.setEventDate(orderPayment.getDateofPayment());
 						order.getOrderTimeline().add(timeline);
 
 					} else {
@@ -1609,7 +1624,7 @@ public class OrderDaoImpl implements OrderDao {
 						timeline.setEvent("Rs "
 								+ orderPayment.getNegativeAmount()
 								+ " Deducted");
-						timeline.setEventDate(new Date());
+						timeline.setEventDate(orderPayment.getDateofPayment());
 						order.getOrderTimeline().add(timeline);
 						if (order.getReturnLimitCrossed().compareTo(new Date()) < 0) {
 							order.setStatus("Return Limit Crossed");
@@ -1625,13 +1640,31 @@ public class OrderDaoImpl implements OrderDao {
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
 										- orderPayment.getNegativeAmount());
+						/*if(order.getOrderPayment()
+								.getNetPaymentResult()<0)
+						{
 						order.getOrderPayment()
 								.setPaymentDifference(
 										order.getOrderPayment()
 												.getNetPaymentResult()
 												- order.getNetRate()
-												+ order.getOrderReturnOrRTO()
-														.getReturnOrRTOChargestoBeDeducted());
+												);
+						}
+						else
+						{
+							order.getOrderPayment()
+							.setPaymentDifference(
+									order.getOrderPayment()
+											.getNetPaymentResult()
+											-order.getNetRate()
+											);
+						}*/
+						order.getOrderPayment()
+						.setPaymentDifference(
+								order.getOrderPayment()
+										.getNetPaymentResult()
+										+order.getOrderReturnOrRTO()
+										.getReturnOrRTOChargestoBeDeducted()-order.getTotalAmountRecieved());
 
 					}
 				}
@@ -1642,21 +1675,20 @@ public class OrderDaoImpl implements OrderDao {
 				order.getOrderPayment().setUploadDate(new Date());
 				if (order.getOrderPayment().getPaymentDifference() > 0
 						|| (int) order.getOrderPayment().getPaymentDifference() == 0) {
-					// order.setStatus("OK Payment");
-					order.setFinalStatus("Settled");
+				order.setFinalStatus("Settled");
 				} else {
-					// order.setStatus("Payment Difference");
+					
 					order.setFinalStatus("Actionable");
 				}
 				System.out.println("order in add payment :   **" + order);
-				// To Do - implement netactualrate 2
+				
 				order.setLastActivityOnOrder(new Date());
 				session.saveOrUpdate(order);
 				session.getTransaction().commit();
 				session.close();
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.addOrderPaymentError,
 					new Date(), 1, GlobalConstant.addOrderPaymentErrorCode, e);
