@@ -1041,12 +1041,7 @@ public class OrderDaoImpl implements OrderDao {
 	public List<Order> findOrders(String column, String value, int sellerId,
 			boolean poOrder) throws CustomException {
 		
-		String searchString="";
-		if(column.equals("returnOrRTOId")){
-			searchString = "order.orderReturnOrRTO." + column;
-		}else{
-			searchString = "order." + column;
-		}
+		String searchString = "order." + column;
 		
 		System.out.println(" Inside Find order dao method searchString :"
 				+ searchString + " value :" + value + "   sellerId :"
@@ -1054,22 +1049,26 @@ public class OrderDaoImpl implements OrderDao {
 
 		Seller seller = null;
 		List<Order> orderlist = null;
-
+		Criteria criteria=null;
+		
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Seller.class).add(
-					Restrictions.eq("id", sellerId));
-			criteria.createAlias("orders", "order",CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq(searchString, value).ignoreCase())
-					.add(Restrictions.eq("order.poOrder", poOrder))
-					.addOrder(
-							org.hibernate.criterion.Order
-									.desc("order.lastActivityOnOrder"))
-					.setResultTransformer(
-							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			if (poOrder)
-				criteria.add(Restrictions.eq("order.consolidatedOrder", null));
+			
+			if(column.equals("returnOrRTOId")){
+				criteria = session.createCriteria(Order.class);
+				criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",CriteriaSpecification.LEFT_JOIN)					
+					.add(Restrictions.like("orderReturnOrRTO.returnOrRTOId",value));
+			}else{
+				criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
+				criteria.createAlias("orders", "order",CriteriaSpecification.LEFT_JOIN)
+						.add(Restrictions.like(searchString, value).ignoreCase())
+						.add(Restrictions.like("order.poOrder", poOrder))
+						.addOrder(org.hibernate.criterion.Order.desc("order.lastActivityOnOrder"))
+						.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+				if (poOrder)
+					criteria.add(Restrictions.eq("order.consolidatedOrder", null));
+			}
 			if (criteria.list().size() != 0) {
 				seller = (Seller) criteria.list().get(0);
 				if (seller == null)
