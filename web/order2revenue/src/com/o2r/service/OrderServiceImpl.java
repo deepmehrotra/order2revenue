@@ -17,6 +17,7 @@ import com.o2r.model.GatePass;
 import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
 import com.o2r.model.OrderRTOorReturn;
+import com.o2r.model.ProductConfig;
 
 /**
  * @author Deep Mehortra
@@ -178,9 +179,9 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public GatePass addGatePass(Order order, GatePass gatepass, int sellerId)
+	public GatePass addGatePass(ProductConfig productConfig, GatePass gatepass, int sellerId)
 			throws CustomException {
-		return orderDao.addGatePass(order, gatepass, sellerId);
+		return orderDao.addGatePass(productConfig, gatepass, sellerId);
 
 	}
 

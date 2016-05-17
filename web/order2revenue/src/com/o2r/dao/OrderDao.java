@@ -11,6 +11,7 @@ import com.o2r.model.GatePass;
 import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
 import com.o2r.model.OrderRTOorReturn;
+import com.o2r.model.ProductConfig;
 
 /**
  * @author Deep Mehrotra
@@ -83,7 +84,7 @@ public interface OrderDao {
 	public Order findPOOrder(String poID, String invoiceID,
 			String channelSkuRef, int sellerId) throws CustomException;
 
-	public GatePass addGatePass(Order Order, GatePass gatepass, int sellerId)
+	public GatePass addGatePass(ProductConfig productConfig, GatePass gatepass, int sellerId)
 			throws CustomException;
 
 	public List<Order> getPOOrdersFromConsolidated(int orderId, int sellerId)
