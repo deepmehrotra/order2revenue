@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -44,9 +46,13 @@ span .#error {
 	<link href="/O2R/seller/css/plugins/iCheck/custom.css" rel="stylesheet">
 
 	<!-- <script src="/O2R/seller/js/inspinia.js"></script> -->
-    
-
-
+ <script type="text/javascript">
+ 	function relodPage(id) { 		
+ 		window.location.href = 'viewPartner.html?pcId='+id;
+ 		//location.reload();	
+ }
+ 
+ </script>
 </head>
 <body>
 	<div id="wrapper">
@@ -54,158 +60,182 @@ span .#error {
 		<div id="page-wrapper" class="gray-bg">
 			<jsp:include page="../globalheader.jsp"></jsp:include>
 			<div class="wrapper wrapper-content animated fadeInRight">
-			
+
 				<div class="row">
-                    <div class="col-lg-12">
-                        <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                             <div class="jcarousel-wrapper">
-                                <div class="jcarousel">
-                                     <ul class="nav nav-pills nav-justified">
-                                     	<c:if test="${!empty partnerList }">
-                                     		<c:forEach items="${partnerList}" var="partner" varStatus="loop">
-												<li data-target="#myCarousel" data-slide-to="0" class="active">
-                                            		<a href="viewPartner.html?pcId=${partner.pcId}">
-                                                		<img src="${partner.pcLogoUrl}" alt="Image 1">
-                                            		</a>
-                                        		</li>
+					<div class="col-lg-12">
+						<div id="myCarousel" class="carousel slide" data-ride="carousel">
+							<div class="jcarousel-wrapper">
+								<div class="jcarousel">
+									<ul class="nav nav-pills nav-justified">
+										<c:if test="${!empty partnerList }">
+											<c:forEach items="${partnerList}" var="each" varStatus="loop">
+												<c:choose>
+													<c:when test="${each.pcId == partner.pcId}">
+														<li data-target="#myCarousel" data-slide-to="0" class="active">
+														<a href="">														
+															<c:if test="${each.pcLogoUrl == null}">
+																<img src="/O2R/partnerimages/5Yamaha.jpg" id="${each.pcId}" onclick="relodPage(this.id);">
+															</c:if>
+															<c:if test="${each.pcLogoUrl != null}">
+																<img src="${each.pcLogoUrl}" id="${each.pcId}" onclick="relodPage(this.id);">
+															</c:if>															
+														</a></li>
+													</c:when>
+													<c:otherwise>
+														<li data-target="#myCarousel" data-slide-to="0" class="">
+															<a href="">
+																<c:if test="${each.pcLogoUrl == null}">
+																	<img src="/O2R/partnerimages/5Yamaha.jpg" id="${each.pcId}" onclick="relodPage(this.id);">
+																</c:if>
+																<c:if test="${each.pcLogoUrl != null}">
+																	<img src="${each.pcLogoUrl}" id="${each.pcId}" onclick="relodPage(this.id);">
+																</c:if>
+															</a>
+														</li>
+													</c:otherwise>
+												</c:choose>
 											</c:forEach>
-                                     	</c:if>
-                                        <!-- <li data-target="#myCarousel" data-slide-to="0" class="active">
-                                            <a href="#about">
-                                                <img src="img/Snapdeal.jpg" alt="Image 1">
-                                            </a>
-                                        </li>
-                                        <li data-target="#myCarousel" data-slide-to="1">
-                                            <a href="#">
-                                                <img src="img/Flipkart.jpg" alt="Image 2">
-                                            </a>
-                                        </li>
-                                        <li data-target="#myCarousel" data-slide-to="2">
-                                            <a href="#">
-                                                <img src="img/Snapdeal.jpg" alt="Image 3">
-                                            </a>
-                                        </li>
-                                        <li data-target="#myCarousel" data-slide-to="3">
-                                            <a href="#">
-                                                <img src="img/Snapdeal.jpg" alt="Image 4">
-                                            </a>
-                                        </li>
-                                        <li data-target="#myCarousel" data-slide-to="4">
-                                            <a href="#">
-                                                <img src="img/Snapdeal.jpg" alt="Image 5">
-                                            </a>
-                                        </li>
-                                        <li data-target="#myCarousel" data-slide-to="5">
-                                            <a href="#">
-                                                <img src="img/Flipkart.jpg" alt="Image 6">
-                                            </a>
-                                        </li>
-                                        <li data-target="#myCarousel" data-slide-to="6">
-                                            <a href="#">
-                                                <img src="img/Flipkart.jpg" alt="Image 7">
-                                            </a>
-                                        </li>
-                                        <li data-target="#myCarousel" data-slide-to="7">
-                                            <a href="#">
-                                                <img src="img/Flipkart.jpg" alt="Image 8">
-                                            </a>
-                                        </li> -->
-                                    </ul>
-                                </div>
-                                <a href="#" class="jcarousel-control-prev">&lsaquo;</a>
-                                <a href="#" class="jcarousel-control-next">&rsaquo;</a>
-                            </div>
-                            <div class="carousel-inner">
-                                <div class="item active">
-                                    <div class="col-lg-12">  
-                                        <div class="float-e-margins col-lg-4">
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading">
-                                                    <h4 class="panel-title ibox-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapsebasic">Basic Settings</a> </h4>
-                                                </div>
-                                                <div id="collapsebasic" class="panel-collapse collapse in">
-                                                    <div class="panel-body">
-                                                        <div class="ibox-content add-company view-order">
-                                                            <table style="border-spacing: 0 5px;">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td><label>ALIAS NAME </label></td>
-                                                                        <td><label class="labelfix">: ${partner.pcDesc}</label></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td><label>TDS APPLICABLE</label></td>
-                                                                        <td><label class="labelfix">: ${partner.tdsApplicable}</label></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td><label>RETURN LIMIT</label></td>
-                                                                        <td><label class="labelfix">: ${partner.maxReturnAcceptance}</label></td><%-- <input type="text" value="${partner.maxReturnAcceptance}" class="form-control" disabled> --%>
-                                                                    </tr>
-                                                                    <tr>
-                                                                    	<td><label>PAYMENT TYPE</label></td>
-                                                                    	<td><c:choose>
-									    										<c:when test="${partner.paymentType == 'paymentcycle'}">
-									    											<label class="labelfix">: Payment Cycle</label>
-									    										</c:when>
-									   											<c:when test="${partner.paymentType == 'datewisepay'}">
-										    									   	<label class="labelfix">: Day Wise</label>
-										    									</c:when>
-									    										<c:otherwise>
-									     											<label class="labelfix">: Monthly</label>
-									        									</c:otherwise>
-																			</c:choose>
-                                                                    	</td>	                                                                    							    										
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td><label>PAYMENT CYCLE</label></td>
-                                                                        <td>
-                                                                        <c:choose>
-									    										<c:when test="${partner.paymentType == 'paymentcycle'}">
-																					<label class="labelfix">: ${partner.startcycleday} to ${partner.paycycleduration} ,payment on ${partner.paydaysfromstartday}</label>
-									    										</c:when>
-									   											<c:when test="${partner.paymentType == 'datewisepay'}">
-										    									<c:choose>
-										    										<c:when test="${partner.isshippeddatecalc}">
-										    											<label class="labelfix">: ${partner.noofdaysfromshippeddate} days from shipped date</label>
-										    									    	<%-- <input type="text" value="${partner.noofdaysfromshippeddate} days from shipped date" class="form-control" disabled> --%>
-										    										</c:when>
-										    	 									<c:otherwise>
-										    	 										<label class="labelfix">: ${partner.noofdaysfromshippeddate} days from delivery date</label>
-										    	 										<%-- <input type="text" value="${partner.noofdaysfromshippeddate} days from delivery date" class="form-control" disabled> --%>
-										    	 									</c:otherwise>
-										    									</c:choose>									       
-									   	 										</c:when>
-									    										<c:otherwise>
-									     											<input type="text" value="${partner.monthlypaydate} of every month" class="form-control" disabled>
-									        									</c:otherwise>
-																		</c:choose>
-																		</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                            <h4 style="text-align: center;">STATE DISTRIBUTION </h4>
-                                                            <div class="row">
-                                                            <div class="col-lg-12">
-                                                            
-                                                               <div id="pickList" form="form2">
+										</c:if>
+									</ul>
+								</div>
+								<a href="#" class="jcarousel-control-prev">&lsaquo;</a> <a
+									href="#" class="jcarousel-control-next">&rsaquo;</a>
+							</div>
+							<div class="carousel-inner">
+								<div class="item active">
+									<div class="col-lg-12">
+										<div class="float-e-margins col-lg-4">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h4 class="panel-title ibox-title">
+														<a data-toggle="collapse" data-parent="#accordion"
+															href="#collapsebasic">Basic Settings</a>
+													</h4>
+												</div>
+												<div id="collapsebasic" class="panel-collapse collapse in">
+													<div class="panel-body">
+														<div class="ibox-content add-company view-order">
+															<table class="table table hover"
+																style="border-spacing: 0 5px;">
+																<tbody>
+																	<tr>
+																		<td><label>ALIAS NAME </label></td>
+																		<td><label class="labelfix">:
+																				${partner.pcDesc}</label></td>
+																	</tr>
+																	<tr>
+																		<td><label>TDS APPLICABLE</label></td>
+																		<td><label class="labelfix">:
+																				${partner.tdsApplicable}</label></td>
+																	</tr>
+																	<tr>
+																		<td><label>RETURN LIMIT</label></td>
+																		<td><label class="labelfix">:
+																				${partner.maxReturnAcceptance}</label></td>
+																		<%-- <input type="text" value="${partner.maxReturnAcceptance}" class="form-control" disabled> --%>
+																	</tr>
+																	<tr>
+																		<td><label>PAYMENT TYPE</label></td>
+																		<td><c:choose>
+																				<c:when
+																					test="${partner.paymentType == 'paymentcycle'}">
+																					<label class="labelfix">: Payment Cycle</label>
+																				</c:when>
+																				<c:when
+																					test="${partner.paymentType == 'datewisepay'}">
+																					<label class="labelfix">: Day Wise</label>
+																				</c:when>
+																				<c:otherwise>
+																					<label class="labelfix">: Monthly</label>
+																				</c:otherwise>
+																			</c:choose></td>
+																	</tr>
+																	<tr>
+																		<td><label>PAYMENT CYCLE</label></td>
+																		<td><c:choose>
+																				<c:when
+																					test="${partner.paymentType == 'paymentcycle'}">
+																					<label class="labelfix">:
+																						${partner.startcycleday} to
+																						${partner.paycycleduration} ,payment on
+																						${partner.paydaysfromstartday}</label>
+																				</c:when>
+																				<c:when
+																					test="${partner.paymentType == 'datewisepay'}">
+																					<c:choose>
+																						<c:when test="${partner.isshippeddatecalc}">
+																							<label class="labelfix">:
+																								${partner.noofdaysfromshippeddate} days from
+																								shipped date</label>
+																							<%-- <input type="text" value="${partner.noofdaysfromshippeddate} days from shipped date" class="form-control" disabled> --%>
+																						</c:when>
+																						<c:otherwise>
+																							<label class="labelfix">:
+																								${partner.noofdaysfromshippeddate} days from
+																								delivery date</label>
+																							<%-- <input type="text" value="${partner.noofdaysfromshippeddate} days from delivery date" class="form-control" disabled> --%>
+																						</c:otherwise>
+																					</c:choose>
+																				</c:when>
+																				<c:otherwise>
+																					<input type="text"
+																						value="${partner.monthlypaydate} of every month"
+																						class="form-control" disabled>
+																				</c:otherwise>
+																			</c:choose></td>
+																	</tr>
+																</tbody>
+															</table>
+															<h4 style="text-align: center;">STATE DISTRIBUTION</h4>
+															<div class="row">
+																<div class="col-lg-12">
+																	<table class="table table hover"
+																		style="border-spacing: 0 5px;">
+																		<tbody>
+																			<tr>
+																				<td style="width: 50%;"><label>Local
+																						List :</label></td>
+																				<td><textarea disabled>${partner.nrnReturnConfig.localList}</textarea></td>
+																			</tr>
+																			<tr>
+																				<td style="width: 50%;"><label>Zonal
+																						List :</label></td>
+																				<td><textarea disabled>${partner.nrnReturnConfig.zonalList}</textarea></td>
+																			</tr>
+																			<tr>
+																				<td style="width: 50%;"><label>Metro
+																						List :</label></td>
+																				<td><textarea disabled>${partner.nrnReturnConfig.metroList}</textarea></td>
+																			</tr>
+																			<tr>
+																				<td style="width: 50%;"><label>National
+																						List :</label></td>
+																				<td><textarea disabled>${partner.nrnReturnConfig.nationalList}</textarea></td>
+																			</tr>
+																		</tbody>
+																	</table>
+
+																	<%-- <div id="pickList" form="form2">
 
                                                                </div>
 	                                                            <input type="hidden" id="hidlocalList" value='${partner.nrnReturnConfig.localList}'/>
                                                     			<input type="hidden" id="hidzonalList" value='${partner.nrnReturnConfig.zonalList}'/>
                                                     			<input type="hidden" id="hidmetroList" value='${partner.nrnReturnConfig.metroList}'/>
                                                     			<input type="hidden" id="hidnationalList" value='${partner.nrnReturnConfig.nationalList}'/>
-                                                       		</div>
-                                                   		</div>
-
-                                               </div>
-                                           </div>
-                                       </div>
-                                   </div>
-                                   </div>
+                                                       			</div> --%>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 										<div class="float-e-margins col-lg-4">
 											<div class="panel panel-default">
 												<div class="panel-heading">
 													<h4 class="panel-title ibox-title">
-														<a data-toggle="collapse" data-parent="#accordion" href="#collapseship">N/R Config</a>
+														<a data-toggle="collapse" data-parent="#accordion"
+															href="#collapseship">N/R Config</a>
 													</h4>
 												</div>
 												<div id="collapseship" class="panel-collapse collapse in">
@@ -219,12 +249,15 @@ span .#error {
 																		<td style="width: 50%;"><label>COMMISSION</label></td>
 																		<td>
 																			<div>
-																				<c:if test="${partner.nrnReturnConfig.commissionType == 'fixed' }">
+																				<c:if
+																					test="${partner.nrnReturnConfig.commissionType == 'fixed' }">
 																					<button class="btn btn-grey" id="button1">Fixed</button>
 																				</c:if>
-																				<c:if test="${partner.nrnReturnConfig.commissionType == 'categoryWise' }">
-																					<button class="btn btn-grey" id="button1">Category Wise</button>
-																				</c:if>																				
+																				<c:if
+																					test="${partner.nrnReturnConfig.commissionType == 'categoryWise' }">
+																					<button class="btn btn-grey" id="button1">Category
+																						Wise</button>
+																				</c:if>
 																			</div>
 																		</td>
 																	</tr>
@@ -232,18 +265,23 @@ span .#error {
 																	<tr>
 																		<td colspan="10">
 																			<div id="accordion" class="collapse">
-																				<c:if test="${partner.nrnReturnConfig.commissionType == 'fixed' }">
-																					<label class="labelfix">Fixed Amount : ${chargeMap.fixedCommissionPercent} %</label>
+																				<c:if
+																					test="${partner.nrnReturnConfig.commissionType == 'fixed' }">
+																					<label class="labelfix">Fixed Amount :
+																						${chargeMap.fixedCommissionPercent} %</label>
 																				</c:if>
-																				<c:if test="${partner.nrnReturnConfig.commissionType == 'categoryWise' }">
+																				<c:if
+																					test="${partner.nrnReturnConfig.commissionType == 'categoryWise' }">
 																					<c:choose>
 																						<c:when test="${!empty categoryMap}">
-																							<c:forEach items="${categoryMap}" var="cat" varStatus="loop">
+																							<c:forEach items="${categoryMap}" var="cat"
+																								varStatus="loop">
 																								<div class="form-group col-md-12">
-																									<label class="labelfix">${cat.key} : ${cat.value}</label>																									
+																									<label class="labelfix">${cat.key} :
+																										${cat.value}</label>
 																								</div>
 																							</c:forEach>
-																						</c:when>																						
+																						</c:when>
 																					</c:choose>
 																				</c:if>
 																			</div>
@@ -251,56 +289,90 @@ span .#error {
 																	</tr>
 																	<tr>
 																		<td style="width: 50%;"><label>FIXED FEE</label></td>
-																		<td>
-																			<c:if test="${chargeMap.fixedfeelt250 != null }">
-																				<div><label class="labelfix">&lt;250 : ${chargeMap.fixedfeelt250}</label></div>
-																				<div><label class="labelfix">&gt;250&&&lt;500 : ${chargeMap.fixedfeegt250lt500}</label></div>
-																				<div><label class="labelfix">&gt;500 : ${chargeMap.fixedfeegt500}</label></div>																			
-																			</c:if>
-																			<c:if test="${chargeMap.fixedfeelt500Big != null }">
-																				<div><label class="labelfix">&lt;500 : ${chargeMap.fixedfeelt500Big}</label></div>
-																				<div><label class="labelfix">&gt;500 && &lt;1000 : ${chargeMap.fixedfeegt500lt1000}</label></div>
-																				<div><label class="labelfix">&gt;1000 && &lt;10000 : ${chargeMap.fixedfeegt1000lt10000}</label></div>
-																				<div><label class="labelfix">&gt;10000 : ${chargeMap.fixedfeegt10000}</label></div>																			
-																			</c:if>
-																			<c:if test="${chargeMap.fixedfeelt500 != null }">
-																				<div><label class="labelfix">&lt;500 : ${chargeMap.fixedfeelt500}</label></div>
-																				<div><label class="labelfix">&gt;500 : ${chargeMap.fixedfeegt500Big}</label></div>																			
-																			</c:if>
-																		</td>
+																		<td><c:if
+																				test="${chargeMap.fixedfeelt250 != null }">
+																				<div>
+																					<label class="labelfix">&lt;250 :
+																						${chargeMap.fixedfeelt250}</label>
+																				</div>
+																				<div>
+																					<label class="labelfix">&gt;250&&&lt;500 :
+																						${chargeMap.fixedfeegt250lt500}</label>
+																				</div>
+																				<div>
+																					<label class="labelfix">&gt;500 :
+																						${chargeMap.fixedfeegt500}</label>
+																				</div>
+																			</c:if> <c:if test="${chargeMap.fixedfeelt500Big != null }">
+																				<div>
+																					<label class="labelfix">&lt;500 :
+																						${chargeMap.fixedfeelt500Big}</label>
+																				</div>
+																				<div>
+																					<label class="labelfix">&gt;500 && &lt;1000
+																						: ${chargeMap.fixedfeegt500lt1000}</label>
+																				</div>
+																				<div>
+																					<label class="labelfix">&gt;1000 &&
+																						&lt;10000 : ${chargeMap.fixedfeegt1000lt10000}</label>
+																				</div>
+																				<div>
+																					<label class="labelfix">&gt;10000 :
+																						${chargeMap.fixedfeegt10000}</label>
+																				</div>
+																			</c:if> <c:if test="${chargeMap.fixedfeelt500 != null }">
+																				<div>
+																					<label class="labelfix">&lt;500 :
+																						${chargeMap.fixedfeelt500}</label>
+																				</div>
+																				<div>
+																					<label class="labelfix">&gt;500 :
+																						${chargeMap.fixedfeegt500Big}</label>
+																				</div>
+																			</c:if></td>
 																	</tr>
 																	<tr>
 																		<td style="width: 50%;"><label>PCC</label></td>
-																		<td>
-																			<c:if test="${partner.nrnReturnConfig.whicheverGreaterPCC == 'true'}">
-																				<div><label class="labelfix">Which Ever Is Greater</label></div>
-																			</c:if>
-																			<c:if test="${chargeMap.percentSPPCC != null}">
-																				<div><label class="labelfix">% of SP : ${chargeMap.percentSPPCC}</label></div>
-																			</c:if>
-																			<c:if test="${chargeMap.fixedAmtPCC != null}">
-																				<div><label class="labelfix">Fixed AMT : ${chargeMap.fixedAmtPCC}</label></div>
-																			</c:if>																			
-																		</td>
+																		<td><c:if
+																				test="${partner.nrnReturnConfig.whicheverGreaterPCC == 'true'}">
+																				<div>
+																					<label class="labelfix">Which Ever Is
+																						Greater</label>
+																				</div>
+																			</c:if> <c:if test="${chargeMap.percentSPPCC != null}">
+																				<div>
+																					<label class="labelfix">% of SP :
+																						${chargeMap.percentSPPCC}</label>
+																				</div>
+																			</c:if> <c:if test="${chargeMap.fixedAmtPCC != null}">
+																				<div>
+																					<label class="labelfix">Fixed AMT :
+																						${chargeMap.fixedAmtPCC}</label>
+																				</div>
+																			</c:if></td>
 																	</tr>
 																	<tr data-toggle="collapse" data-target="#accordion2"
 																		class="clickable">
-																		<td style="width: 50%;"><label>Shipping	Fee</label></td>
-																		<td>
-																			<c:if test="${partner.nrnReturnConfig.shippingFeeType == 'fixed'}">
-																				<button class="btn btn-grey" id="button3">Fixed Shipping Charges</button>
-																			</c:if>
-																			<c:if test="${partner.nrnReturnConfig.shippingFeeType == 'variable'}">
-																				<button class="btn btn-grey" id="button3">Variable Shipping Charges</button>
-																			</c:if>
-																		</td>
+																		<td style="width: 50%;"><label>Shipping
+																				Fee</label></td>
+																		<td><c:if
+																				test="${partner.nrnReturnConfig.shippingFeeType == 'fixed'}">
+																				<button class="btn btn-grey" id="button3">Fixed
+																					Shipping Charges</button>
+																			</c:if> <c:if
+																				test="${partner.nrnReturnConfig.shippingFeeType == 'variable'}">
+																				<button class="btn btn-grey" id="button3">Variable
+																					Shipping Charges</button>
+																			</c:if></td>
 																	</tr>
 																	<tr>
 																		<td colspan="10">
 																			<div id="accordion2" class="collapse">
-																				<c:if test="${partner.nrnReturnConfig.shippingFeeType == 'variable'}">
+																				<c:if
+																					test="${partner.nrnReturnConfig.shippingFeeType == 'variable'}">
 																					<h5>Volume calculation= (lxbxh)(cm)/5</h5>
-																					<table class="table-bordered" style="border-spacing: 0 5px;">
+																					<table class="table-bordered"
+																						style="border-spacing: 0 5px;">
 																						<thead>
 																							<tr>
 																								<th>Volume Weight Slab(gms)</th>
@@ -379,7 +451,8 @@ span .#error {
 																						</tbody>
 																					</table>
 																				</c:if>
-																				<c:if test="${partner.nrnReturnConfig.shippingFeeType == 'fixed'}">
+																				<c:if
+																					test="${partner.nrnReturnConfig.shippingFeeType == 'fixed'}">
 																					<h5>Weight calculation</h5>
 																					<table class="table-bordered"
 																						style="border-spacing: 0 5px;">
@@ -439,10 +512,12 @@ span .#error {
 																		</td>
 																	</tr>
 																	<tr>
-																		<td style="width: 50%;"><label>Service Tax</label></td>
+																		<td style="width: 50%;"><label>Service
+																				Tax</label></td>
 																		<td>
 																			<div>
-																				<label class="labelfix">: ${chargeMap.serviceTax} %</label>
+																				<label class="labelfix">:
+																					${chargeMap.serviceTax} %</label>
 																			</div>
 																		</td>
 																	</tr>
@@ -453,683 +528,890 @@ span .#error {
 												</div>
 											</div>
 										</div>
-										
-										
-		<div class="float-e-margins col-lg-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title ibox-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapseconfig">RETURN CONFIG</a> </h4>
-                </div>
-                  <div id="collapseconfig" class="panel-collapse collapse in">
-                      <div class="panel-body" style="margin-top: -18px;">
-                        <div class="add-company"> 
-                            <hr>
-                            <div class="col-sm-12">
-                                <div class="col-sm-4">
-                                    
-                                </div>
-                                <div class="col-sm-4">
-                                    <label>SELLER FAULT</label>
-                                </div>
-                                <div class="col-sm-4">
-                                    <label>BUYER RETURN</label>
-                                </div>
-                            </div>
 
-                            <div class="col-sm-12">
-                                <div class="col-sm-4">
-                                    <div class="radio"><label><strong>RETURN</strong></label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                	<c:choose>
-									    <c:when test="${partner.nrnReturnConfig.retCharSFType == 'fixed'}">									    	                                     
-									        <div class="radio"><label class="labelfix"><input type="radio" value="" id="1" name="toggler">Fixed</label></div>
-									    </c:when>
-									    <c:when test="${partner.nrnReturnConfig.retCharSFType == 'variable'}">
-										    <div class="radio"><label class="labelfix"><input type="radio" value="" id="2" name="toggler">Variable</label></div>								       
-									    </c:when>
-									    <c:otherwise>
-									     	<div class="radio"><label class="labelfix"><input type="radio" value="" id="3" name="toggler">No-Charges </label></div>
-									    </c:otherwise>
-									</c:choose>									
-                                </div>
-                                <div class="col-sm-4">
-                                	<c:choose>
-									    <c:when test="${partner.nrnReturnConfig.retCharBRType == 'fixed'}">									    	                                     
-									        <div class="radio"><label class="labelfix"><input type="radio" value="" id="5" name="toggler">Fixed</label></div>
-									    </c:when>
-									    <c:when test="${partner.nrnReturnConfig.retCharBRType == 'variable'}">
-										    <div class="radio"><label class="labelfix"><input type="radio" value="" id="6" name="toggler">Variable</label></div>								       
-									    </c:when>
-									    <c:otherwise>
-									     	<div class="radio"><label class="labelfix"><input type="radio" value="" id="4" name="toggler">No-Charges </label></div>
-									    </c:otherwise>
-									</c:choose>																		
-                                </div>
-                                <div class="col-sm-12 radio1" id="blk-1">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <input type="text" value="${chargeMap.retCharSFFixedAmt} %" class="form-control" disabled>
-                                        </div>                                        
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 radio1" id="blk-2">
-									<div class="row">
-										<div class="col-md-12">
-											<c:if test="${chargeMap.retCharSFVarFixedAmt != null}">
-												<label class="labelfix">Fixed Amount : ${chargeMap.retCharSFVarFixedAmt}</label><br>
-											</c:if>
-											<c:if test="${chargeMap.retCharSFPercentSP != null}">
-												<label class="labelfix">% of SP : ${chargeMap.retCharSFPercentSP}</label><br>
-											</c:if>
-											<c:if test="${chargeMap.retCharSFPercentPCC != null}">
-												<label class="labelfix">% of Commision : ${chargeMap.retCharSFPercentPCC}</label><br>
-											</c:if>
-											<c:if test="${partner.nrnReturnConfig.retCharSFFF == 'true'}">
-												<label class="labelfix">Fixed Fee</label><br>
-											</c:if>
-											<c:if test="${partner.nrnReturnConfig.retCharSFShipFee == 'true'}">
-												<label class="labelfix">Shipping Fee</label><br>
-											</c:if>
-											<c:if test="${partner.nrnReturnConfig.retCharSFRevShipFee == 'true'}">
-												<label class="labelfix">Reverse Shipping Fee</label>
-											</c:if>											
+
+										<div class="float-e-margins col-lg-4">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h4 class="panel-title ibox-title">
+														<a data-toggle="collapse" data-parent="#accordion"
+															href="#collapseconfig">RETURN CONFIG</a>
+													</h4>
+												</div>
+												<div id="collapseconfig" class="panel-collapse collapse in">
+													<div class="panel-body" style="margin-top: -18px;">
+														<div class="add-company">
+															<hr>
+															<div class="col-sm-12">
+																<div class="col-sm-4"></div>
+																<div class="col-sm-4">
+																	<label>SELLER FAULT</label>
+																</div>
+																<div class="col-sm-4">
+																	<label>BUYER RETURN</label>
+																</div>
+															</div>
+
+															<div class="col-sm-12">
+																<div class="col-sm-4">
+																	<div class="radio">
+																		<label><strong>RETURN</strong></label>
+																	</div>
+																</div>
+																<div class="col-sm-4">
+																	<c:choose>
+																		<c:when
+																			test="${partner.nrnReturnConfig.retCharSFType == 'fixed'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="1" name="toggler">Fixed</label>
+																			</div>
+																		</c:when>
+																		<c:when
+																			test="${partner.nrnReturnConfig.retCharSFType == 'variable'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="2" name="toggler">Variable</label>
+																			</div>
+																		</c:when>
+																		<c:otherwise>
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="3" name="toggler">No-Charges </label>
+																			</div>
+																		</c:otherwise>
+																	</c:choose>
+																</div>
+																<div class="col-sm-4">
+																	<c:choose>
+																		<c:when
+																			test="${partner.nrnReturnConfig.retCharBRType == 'fixed'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="5" name="toggler">Fixed</label>
+																			</div>
+																		</c:when>
+																		<c:when
+																			test="${partner.nrnReturnConfig.retCharBRType == 'variable'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="6" name="toggler">Variable</label>
+																			</div>
+																		</c:when>
+																		<c:otherwise>
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="4" name="toggler">No-Charges </label>
+																			</div>
+																		</c:otherwise>
+																	</c:choose>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-1">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<input type="text"
+																				value="${chargeMap.retCharSFFixedAmt} %"
+																				class="form-control" disabled>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-2">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<c:if
+																				test="${chargeMap.retCharSFVarFixedAmt != null}">
+																				<label class="labelfix">Fixed Amount :
+																					${chargeMap.retCharSFVarFixedAmt}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.retCharSFPercentSP != null}">
+																				<label class="labelfix">% of SP :
+																					${chargeMap.retCharSFPercentSP}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.retCharSFPercentPCC != null}">
+																				<label class="labelfix">% of Commision :
+																					${chargeMap.retCharSFPercentPCC}</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.retCharSFFF == 'true'}">
+																				<label class="labelfix">Fixed Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.retCharSFShipFee == 'true'}">
+																				<label class="labelfix">Shipping Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.retCharSFRevShipFee == 'true'}">
+																				<label class="labelfix">Reverse Shipping Fee</label>
+																			</c:if>
+																		</div>
+																	</div>
+																</div>
+
+																<div class="col-sm-12 radio1" id="blk-5">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<input type="text"
+																				value="${chargeMap.retCharBRFixedAmt} %"
+																				class="form-control" disabled>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-6">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<c:if
+																				test="${chargeMap.retCharBRVarFixedAmt != null}">
+																				<label class="labelfix">Fixed Amount :
+																					${chargeMap.retCharBRVarFixedAmt}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.retCharBRPercentSP != null}">
+																				<label class="labelfix">% of SP :
+																					${chargeMap.retCharBRPercentSP}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.retCharBRPercentPCC != null}">
+																				<label class="labelfix">% of Commision :
+																					${chargeMap.retCharBRPercentPCC}</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.retCharBRFF == 'true'}">
+																				<label class="labelfix">Fixed Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.retCharBRShipFee == 'true'}">
+																				<label class="labelfix">Shipping Fee</label>
+																				<br>
+																			</c:if>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="col-sm-12">
+																<div class="hr-line-dashed"></div>
+																<div class="col-sm-4">
+																	<div class="radio">
+																		<label><strong>RTO</strong></label>
+																	</div>
+																</div>
+																<div class="col-sm-4">
+																	<c:choose>
+																		<c:when
+																			test="${partner.nrnReturnConfig.RTOCharSFType == 'fixed'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="7" name="toggler">Fixed</label>
+																			</div>
+																		</c:when>
+																		<c:when
+																			test="${partner.nrnReturnConfig.RTOCharSFType == 'variable'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="8" name="toggler">Variable</label>
+																			</div>
+																		</c:when>
+																		<c:otherwise>
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="9" name="toggler">No-Charges </label>
+																			</div>
+																		</c:otherwise>
+																	</c:choose>
+																</div>
+																<div class="col-sm-4">
+																	<c:choose>
+																		<c:when
+																			test="${partner.nrnReturnConfig.RTOCharBRType == 'fixed'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="11" name="toggler">Fixed</label>
+																			</div>
+																		</c:when>
+																		<c:when
+																			test="${partner.nrnReturnConfig.RTOCharBRType == 'variable'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="12" name="toggler">Variable</label>
+																			</div>
+																		</c:when>
+																		<c:otherwise>
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="10" name="toggler">No-Charges
+																				</label>
+																			</div>
+																		</c:otherwise>
+																	</c:choose>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-7">
+																	<div class="form-group col-md-12">
+																		<div class="col-sm-12">
+																			<input type="text"
+																				value="${chargeMap.RTOCharSFFixedAmt} %"
+																				class="form-control" disabled>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-8">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<c:if test="${chargeMap.RTOCharSFFixedAmt != null}">
+																				<label class="labelfix">Fixed Amount :
+																					${chargeMap.RTOCharSFFixedAmt}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.RTOCharSFPercentSP != null}">
+																				<label class="labelfix">% of SP :
+																					${chargeMap.RTOCharSFPercentSP}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.RTOCharSFPercentPCC != null}">
+																				<label class="labelfix">% of Commision :
+																					${chargeMap.RTOCharSFPercentPCC}</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.RTOCharSFFF == 'true'}">
+																				<label class="labelfix">Fixed Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.RTOCharSFShipFee == 'true'}">
+																				<label class="labelfix">Shipping Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.RTOCharSFRevShipFee == 'true'}">
+																				<label class="labelfix">Reverse Shipping Fee</label>
+																			</c:if>
+																		</div>
+																	</div>
+																</div>
+
+																<div class="col-sm-12 radio1" id="blk-11">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<input type="text"
+																				value="${chargeMap.RTOCharBRFixedAmt} %"
+																				class="form-control" disabled>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-12">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<c:if
+																				test="${chargeMap.RTOCharBRVarFixedAmt != null}">
+																				<label class="labelfix">Fixed Amount :
+																					${chargeMap.RTOCharBRVarFixedAmt}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.RTOCharBRPercentSP != null}">
+																				<label class="labelfix">% of SP :
+																					${chargeMap.RTOCharBRPercentSP}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.RTOCharBRPercentPCC != null}">
+																				<label class="labelfix">% of Commision :
+																					${chargeMap.RTOCharBRPercentPCC}</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.RTOCharBRFF == 'true'}">
+																				<label class="labelfix">Fixed Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.RTOCharBRShipFee == 'true'}">
+																				<label class="labelfix">Shipping Fee</label>
+																				<br>
+																			</c:if>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="col-sm-12">
+																<div class="hr-line-dashed"></div>
+																<div class="col-sm-4">
+																	<div class="radio">
+																		<label><strong>REPLACE <br>MENT
+																		</strong></label>
+																	</div>
+																</div>
+																<div class="col-sm-4">
+																	<c:choose>
+																		<c:when
+																			test="${partner.nrnReturnConfig.repCharSFType == 'fixed'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="15" name="toggler">Fixed</label>
+																			</div>
+																		</c:when>
+																		<c:when
+																			test="${partner.nrnReturnConfig.repCharSFType == 'variable'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="14" name="toggler">Variable</label>
+																			</div>
+																		</c:when>
+																		<c:otherwise>
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="13" name="toggler">No-Charges
+																				</label>
+																			</div>
+																		</c:otherwise>
+																	</c:choose>
+																</div>
+																<div class="col-sm-4">
+																	<c:choose>
+																		<c:when
+																			test="${partner.nrnReturnConfig.repCharBRType == 'fixed'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="18" name="toggler">Fixed</label>
+																			</div>
+																		</c:when>
+																		<c:when
+																			test="${partner.nrnReturnConfig.repCharBRType == 'variable'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="17" name="toggler">Variable</label>
+																			</div>
+																		</c:when>
+																		<c:otherwise>
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="16" name="toggler">No-Charges
+																				</label>
+																			</div>
+																		</c:otherwise>
+																	</c:choose>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-14">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<c:if
+																				test="${chargeMap.repCharSFVarFixedAmt != null}">
+																				<label class="labelfix">Fixed Amount :
+																					${chargeMap.repCharSFVarFixedAmt}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.repCharSFPercentSP != null}">
+																				<label class="labelfix">% of SP :
+																					${chargeMap.repCharSFPercentSP}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.repCharSFPercentPCC != null}">
+																				<label class="labelfix">% of Commision :
+																					${chargeMap.repCharSFPercentPCC}</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.repCharSFFF == 'true'}">
+																				<label class="labelfix">Fixed Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.repCharSFShipFee == 'true'}">
+																				<label class="labelfix">Shipping Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.repCharSFRevShipFee == 'true'}">
+																				<label class="labelfix">Reverse Shipping Fee</label>
+																			</c:if>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-15">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<input type="text"
+																				value="${chargeMap.repCharSFFixedAmt} %"
+																				class="form-control" disabled>
+																		</div>
+																	</div>
+																</div>
+
+																<div class="col-sm-12 radio1" id="blk-17">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<c:if test="${chargeMap.repCharBRFixedAmt != null}">
+																				<label class="labelfix">Fixed Amount :
+																					${chargeMap.repCharBRFixedAmt}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMaprepCharBRPercentSP != null}">
+																				<label class="labelfix">% of SP :
+																					${chargeMap.repCharBRPercentSP}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.repCharBRPercentPCC != null}">
+																				<label class="labelfix">% of Commision :
+																					${chargeMap.repCharBRPercentPCC}</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.repCharBRFF == 'true'}">
+																				<label class="labelfix">Fixed Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.repCharBRShipFee == 'true'}">
+																				<label class="labelfix">Shipping Fee</label>
+																				<br>
+																			</c:if>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-18">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<input type="text"
+																				value="${chargeMap.repCharBRFixedAmt} %"
+																				class="form-control" disabled>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="col-sm-12">
+																<div class="hr-line-dashed"></div>
+																<div class="col-sm-4">
+																	<div class="radio">
+																		<label><strong>PARTIAL DELIVERY</strong></label>
+																	</div>
+																</div>
+																<div class="col-sm-4">
+																	<c:choose>
+																		<c:when
+																			test="${partner.nrnReturnConfig.PDCharSFType == 'fixed'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="20" name="toggler">Fixed</label>
+																			</div>
+																		</c:when>
+																		<c:when
+																			test="${partner.nrnReturnConfig.PDCharSFType == 'variable'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="19" name="toggler">Variable</label>
+																			</div>
+																		</c:when>
+																		<c:otherwise>
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="21" name="toggler">No-Charges
+																				</label>
+																			</div>
+																		</c:otherwise>
+																	</c:choose>
+																</div>
+																<div class="col-sm-4">
+																	<c:choose>
+																		<c:when
+																			test="${partner.nrnReturnConfig.PDCharBRType == 'fixed'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="23" name="toggler">Fixed</label>
+																			</div>
+																		</c:when>
+																		<c:when
+																			test="${partner.nrnReturnConfig.PDCharBRType == 'variable'}">
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="22" name="toggler">Variable</label>
+																			</div>
+																		</c:when>
+																		<c:otherwise>
+																			<div class="radio">
+																				<label class="labelfix"><input type="radio"
+																					value="" id="24" name="toggler">No-Charges
+																				</label>
+																			</div>
+																		</c:otherwise>
+																	</c:choose>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-19">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<c:if test="${chargeMap.PDCharSFVarFixedAmt != null}">
+																				<label class="labelfix">Fixed Amount :
+																					${chargeMap.PDCharSFVarFixedAmt}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.PDCharSFPercentSP != null}">
+																				<label class="labelfix">% of SP :
+																					${chargeMap.PDCharSFPercentSP}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.PDCharSFPercentPCC != null}">
+																				<label class="labelfix">% of Commision :
+																					${chargeMap.PDCharSFPercentPCC}</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.PDCharSFFF == 'true'}">
+																				<label class="labelfix">Fixed Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.PDCharSFShipFee == 'true'}">
+																				<label class="labelfix">Shipping Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.PDCharSFRevShipFee == 'true'}">
+																				<label class="labelfix">Reverse Shipping Fee</label>
+																			</c:if>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-20">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<input type="text"
+																				value="${chargeMap.PDCharSFFixedAmt} %"
+																				class="form-control" disabled>
+																		</div>
+																	</div>
+																</div>
+
+																<div class="col-sm-12 radio1" id="blk-22">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<c:if test="${chargeMap.PDCharBRVarFixedAmt != null}">
+																				<label class="labelfix">Fixed Amount :
+																					${chargeMap.PDCharBRVarFixedAmt}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.PDCharBRPercentSP != null}">
+																				<label class="labelfix">% of SP :
+																					${chargeMap.PDCharBRPercentSP}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.PDCharBRPercentPCC != null}">
+																				<label class="labelfix">% of Commision :
+																					${chargeMap.PDCharBRPercentPCC}</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.PDCharBRFF == 'true'}">
+																				<label class="labelfix">Fixed Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.PDCharBRShipFee == 'true'}">
+																				<label class="labelfix">Shipping Fee</label>
+																				<br>
+																			</c:if>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-23">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<input type="text"
+																				value="${chargeMap.PDCharBRFixedAmt} %"
+																				class="form-control" disabled>
+																		</div>
+																	</div>
+																</div>
+
+															</div>
+
+
+
+															<div class="col-sm-12">
+																<div class="hr-line-dashed"></div>
+																<div class="col-sm-4">
+																	<div class="radio">
+																		<label><strong>CANCELLA<br>TION
+																		</strong></label>
+																	</div>
+																</div>
+																<div class="col-sm-4">
+																	<div class="col-md-12">
+																		<div class="radio">
+																			<label class="labelfix"> <input type="radio"
+																				value="" id="25" name="toggler">BEFORE RTD
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-md-12">
+																		<div class="radio">
+																			<label class="labelfix"> <input type="radio"
+																				value="" id="26" name="toggler">AFTER RTD
+																			</label>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-4">
+																	<div class="col-md-12">
+																		<div class="radio">
+																			<label class="labelfix"> <input type="radio"
+																				value="" id="27" name="toggler">BEFORE RTD
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-md-12">
+																		<div class="radio">
+																			<label class="labelfix"> <input type="radio"
+																				value="" id="28" name="toggler">AFTER RTD
+																			</label>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-25">
+																	<div class="col-sm-12">
+																		<div class="radio">
+																			<label> <input type="radio" value="" id="29"
+																				name="toggler"> Fixed Amount
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-12" style="display: none;">
+																		<div class="radio">
+																			<label> <input type="radio" value="" id="30"
+																				name="toggler"> Variable
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-12" style="display: none;">
+																		<div class="radio">
+																			<label> <input type="radio" value="" id="31"
+																				name="toggler"> No Charges
+																			</label>
+																		</div>
+																	</div>
+
+																	<div class="col-sm-12 radio1" id="blk-29">
+																		<div class="col-sm-12">
+																			<div class="form-group">
+																				<div class="col-md-2 content-rgt">
+																					<label>Lable</label>
+																				</div>
+																				<div class="col-md-3 content-rgt">
+																					<input type="text" placeholder=""
+																						class="form-control">
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-sm-12 radio1" id="blk-30">
+																		<div class="col-sm-12">
+																			<div class="form-group">
+																				<div class="col-md-2 content-rgt">
+																					<label>Lable</label>
+																				</div>
+																				<div class="col-md-3 content-rgt">
+																					<input type="text" placeholder=""
+																						class="form-control">
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-sm-12 radio1" id="blk-31">
+																		<div class="col-sm-12">
+																			<div class="form-group">
+																				<div class="col-md-2 content-rgt">
+																					<label>Lable</label>
+																				</div>
+																				<div class="col-md-3 content-rgt">
+																					<input type="text" placeholder=""
+																						class="form-control">
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-26">
+																	<div class="col-sm-12">
+																		<div class="radio">
+																			<label> <input type="radio" value="" id="32"
+																				name="toggler"> Fixed Amount
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-12" style="display: none;">
+																		<div class="radio">
+																			<label> <input type="radio" value="" id="33"
+																				name="toggler"> Variable
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-12" style="display: none;">
+																		<div class="radio">
+																			<label> <input type="radio" value="" id="34"
+																				name="toggler"> No Charges
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-12 radio1" id="blk-32">
+																		<div class="form-group">
+																			<div class="col-md-2 content-rgt">
+																				<label>Lable</label>
+																			</div>
+																			<div class="col-md-3 content-rgt">
+																				<input type="text" placeholder=""
+																					class="form-control">
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-sm-12 radio1" id="blk-33">
+																		<div class="form-group">
+																			<div class="col-md-2 content-rgt">
+																				<label>Lable</label>
+																			</div>
+																			<div class="col-md-3 content-rgt">
+																				<input type="text" placeholder=""
+																					class="form-control">
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-sm-12 radio1" id="blk-34">
+																		<div class="form-group">
+																			<div class="col-md-2 content-rgt">
+																				<label>Lable</label>
+																			</div>
+																			<div class="col-md-3 content-rgt">
+																				<input type="text" placeholder=""
+																					class="form-control">
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-27">
+																	<div class="col-sm-12">
+																		<div class="radio">
+																			<label> <input type="radio" value="" id="35"
+																				name="toggler"> Fixed Amount
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-12" style="display: none;">
+																		<div class="radio">
+																			<label> <input type="radio" value="" id="36"
+																				name="toggler"> Variable
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-12" style="display: none;">
+																		<div class="radio">
+																			<label> <input type="radio" value="" id="37"
+																				name="toggler"> No Charges
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-12 radio1" id="blk-35">
+																		<div class="form-group">
+																			<div class="col-md-2 content-rgt">
+																				<label>Lable</label>
+																			</div>
+																			<div class="col-md-3 content-rgt">
+																				<input type="text" placeholder=""
+																					class="form-control">
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-sm-12 radio1" id="blk-36">
+																		<div class="form-group">
+																			<div class="col-md-2 content-rgt">
+																				<label>Lable</label>
+																			</div>
+																			<div class="col-md-3 content-rgt">
+																				<input type="text" placeholder=""
+																					class="form-control">
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-sm-12 radio1" id="blk-37">
+																		<div class="form-group">
+																			<div class="col-md-2 content-rgt">
+																				<label>Lable</label>
+																			</div>
+																			<div class="col-md-3 content-rgt">
+																				<input type="text" placeholder=""
+																					class="form-control">
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-12 radio1" id="blk-28">
+																	<div class="col-sm-12">
+																		<div class="radio">
+																			<label> <input type="radio" value="" id="38"
+																				name="toggler"> Fixed Amount
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-12" style="display: none;">
+																		<div class="radio">
+																			<label> <input type="radio" value="" id="39"
+																				name="toggler"> Variable
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-12" style="display: none;">
+																		<div class="radio">
+																			<label> <input type="radio" value="" id="40"
+																				name="toggler"> No Charges
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-sm-12 radio1" id="blk-38">
+																		<div class="form-group">
+																			<div class="col-md-2 content-rgt"></div>
+																			<div class="col-md-3 content-rgt">
+																				<input type="text" placeholder=""
+																					class="form-control">
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-sm-12 radio1" id="blk-39">
+																		<div class="form-group">
+																			<div class="col-md-2 content-rgt">
+																				<label>Lable</label>
+																			</div>
+																			<div class="col-md-3 content-rgt">
+																				<input type="text" placeholder=""
+																					class="form-control">
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-sm-12 radio1" id="blk-40">
+																		<div class="form-group">
+																			<div class="col-md-2 content-rgt">
+																				<label>Lable</label>
+																			</div>
+																			<div class="col-md-3 content-rgt">
+																				<input type="text" placeholder=""
+																					class="form-control">
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
-								</div>			
-								
-								<div class="col-sm-12 radio1" id="blk-5">
-									<div class="row">
-										<div class="col-md-12">
-                                            <input type="text" value="${chargeMap.retCharBRFixedAmt} %" class="form-control" disabled>
-                                        </div>
-									</div>
 								</div>
-								<div class="col-sm-12 radio1" id="blk-6">
-									<div class="row">
-										<div class="col-md-12">
-											<c:if test="${chargeMap.retCharBRVarFixedAmt != null}">
-												<label class="labelfix">Fixed Amount : ${chargeMap.retCharBRVarFixedAmt}</label><br>
-											</c:if>
-											<c:if test="${chargeMap.retCharBRPercentSP != null}">
-												<label class="labelfix">% of SP : ${chargeMap.retCharBRPercentSP}</label><br>
-											</c:if>
-											<c:if test="${chargeMap.retCharBRPercentPCC != null}">
-												<label class="labelfix">% of Commision : ${chargeMap.retCharBRPercentPCC}</label><br>
-											</c:if>
-											<c:if test="${partner.nrnReturnConfig.retCharBRFF == 'true'}">
-												<label class="labelfix">Fixed Fee</label><br>
-											</c:if>
-											<c:if test="${partner.nrnReturnConfig.retCharBRShipFee == 'true'}">
-												<label class="labelfix">Shipping Fee</label><br>
-											</c:if>
-										</div>
-									</div>
-								</div>
-							</div>
-                        <div class="col-sm-12">
-                            <div class="hr-line-dashed"></div>
-                            <div class="col-sm-4">
-                                <div class="radio"><label><strong>RTO</strong></label>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-								<c:choose>
-									    <c:when test="${partner.nrnReturnConfig.RTOCharSFType == 'fixed'}">									    	                                     
-									        <div class="radio"><label class="labelfix"><input type="radio" value="" id="7" name="toggler">Fixed</label></div>
-									    </c:when>
-									    <c:when test="${partner.nrnReturnConfig.RTOCharSFType == 'variable'}">
-										    <div class="radio"><label class="labelfix"><input type="radio" value="" id="8" name="toggler">Variable</label></div>								       
-									    </c:when>
-									    <c:otherwise>
-									     	<div class="radio"><label class="labelfix"><input type="radio" value="" id="9" name="toggler">No-Charges </label></div>
-									    </c:otherwise>
-								</c:choose>
-                            </div>
-                            <div class="col-sm-4">
-                                <c:choose>
-									    <c:when test="${partner.nrnReturnConfig.RTOCharBRType == 'fixed'}">									    	                                     
-									        <div class="radio"><label class="labelfix"><input type="radio" value="" id="11" name="toggler">Fixed</label></div>
-									    </c:when>
-									    <c:when test="${partner.nrnReturnConfig.RTOCharBRType == 'variable'}">
-										    <div class="radio"><label class="labelfix"><input type="radio" value="" id="12" name="toggler">Variable</label></div>								       
-									    </c:when>
-									    <c:otherwise>
-									     	<div class="radio"><label class="labelfix"><input type="radio" value="" id="10" name="toggler">No-Charges </label></div>
-									    </c:otherwise>
-								</c:choose>
-                            </div>
-                            <div class="col-sm-12 radio1" id="blk-7">
-                    			<div class="form-group col-md-12">                      				
-                      				<div class="col-sm-12">
-                       				 	<input type="text" value="${chargeMap.RTOCharSFFixedAmt} %" class="form-control" disabled>
-                      				</div>
-                   				</div>                    		
-                  			</div>
-							<div class="col-sm-12 radio1" id="blk-8">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                     		<c:if test="${chargeMap.RTOCharSFFixedAmt != null}">
-												<label class="labelfix">Fixed Amount : ${chargeMap.RTOCharSFFixedAmt}</label><br>
-											</c:if>
-											<c:if test="${chargeMap.RTOCharSFPercentSP != null}">
-												<label class="labelfix">% of SP : ${chargeMap.RTOCharSFPercentSP}</label><br>
-											</c:if>
-											<c:if test="${chargeMap.RTOCharSFPercentPCC != null}">
-												<label class="labelfix">% of Commision : ${chargeMap.RTOCharSFPercentPCC}</label><br>
-											</c:if>
-											<c:if test="${partner.nrnReturnConfig.RTOCharSFFF == 'true'}">
-												<label class="labelfix">Fixed Fee</label><br>
-											</c:if>
-											<c:if test="${partner.nrnReturnConfig.RTOCharSFShipFee == 'true'}">
-												<label class="labelfix">Shipping Fee</label><br>
-											</c:if>
-											<c:if test="${partner.nrnReturnConfig.RTOCharSFRevShipFee == 'true'}">
-												<label class="labelfix">Reverse Shipping Fee</label>
-											</c:if>	   
-                                    </div>                                    
-                                </div>
-                            </div>
-                            							
-						<div class="col-sm-12 radio1" id="blk-11">
-                               <div class="row">
-                                <div class="col-md-12">
-                                    <input type="text" value="${chargeMap.RTOCharBRFixedAmt} %" class="form-control" disabled>
-                                </div>
-                            </div>
-                        </div>
-						<div class="col-sm-12 radio1" id="blk-12">
-                               <div class="row">
-                                <div class="col-md-12">
-                                	<c:if test="${chargeMap.RTOCharBRVarFixedAmt != null}">
-										<label class="labelfix">Fixed Amount : ${chargeMap.RTOCharBRVarFixedAmt}</label><br>
-									</c:if>
-									<c:if test="${chargeMap.RTOCharBRPercentSP != null}">
-										<label class="labelfix">% of SP : ${chargeMap.RTOCharBRPercentSP}</label><br>
-									</c:if>
-									<c:if test="${chargeMap.RTOCharBRPercentPCC != null}">
-										<label class="labelfix">% of Commision : ${chargeMap.RTOCharBRPercentPCC}</label><br>
-									</c:if>
-									<c:if test="${partner.nrnReturnConfig.RTOCharBRFF == 'true'}">
-										<label class="labelfix">Fixed Fee</label><br>
-									</c:if>
-									<c:if test="${partner.nrnReturnConfig.RTOCharBRShipFee == 'true'}">
-										<label class="labelfix">Shipping Fee</label><br>
-									</c:if>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="hr-line-dashed"></div>
-                        <div class="col-sm-4">
-                            <div class="radio"><label><strong>REPLACE <br>MENT</strong></label>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                        	<c:choose>
-								<c:when test="${partner.nrnReturnConfig.repCharSFType == 'fixed'}">									    	                                     
-									<div class="radio"><label class="labelfix"><input type="radio" value="" id="15" name="toggler">Fixed</label></div>
-								</c:when>
-								<c:when test="${partner.nrnReturnConfig.repCharSFType == 'variable'}">
-									<div class="radio"><label class="labelfix"><input type="radio" value="" id="14" name="toggler">Variable</label></div>								       
-								</c:when>
-								<c:otherwise>
-								   	<div class="radio"><label class="labelfix"><input type="radio" value="" id="13" name="toggler">No-Charges </label></div>
-								</c:otherwise>
-							</c:choose>							
-                        </div>
-                        <div class="col-sm-4">
-                        	<c:choose>
-								<c:when test="${partner.nrnReturnConfig.repCharBRType == 'fixed'}">									    	                                     
-									<div class="radio"><label class="labelfix"><input type="radio" value="" id="18" name="toggler">Fixed</label></div>
-								</c:when>
-								<c:when test="${partner.nrnReturnConfig.repCharBRType == 'variable'}">
-								    <div class="radio"><label class="labelfix"><input type="radio" value="" id="17" name="toggler">Variable</label></div>								       
-								</c:when>
-								<c:otherwise>
-								   	<div class="radio"><label class="labelfix"><input type="radio" value="" id="16" name="toggler">No-Charges </label></div>
-								</c:otherwise>
-							</c:choose>							
-                        </div>                        
-						<div class="col-sm-12 radio1" id="blk-14">
-                            <div class="row">
-                                <div class="col-md-12">
-                                     		<c:if test="${chargeMap.repCharSFVarFixedAmt != null}">
-												<label class="labelfix">Fixed Amount : ${chargeMap.repCharSFVarFixedAmt}</label><br>
-											</c:if>
-											<c:if test="${chargeMap.repCharSFPercentSP != null}">
-												<label class="labelfix">% of SP : ${chargeMap.repCharSFPercentSP}</label><br>
-											</c:if>
-											<c:if test="${chargeMap.repCharSFPercentPCC != null}">
-												<label class="labelfix">% of Commision : ${chargeMap.repCharSFPercentPCC}</label><br>
-											</c:if>
-											<c:if test="${partner.nrnReturnConfig.repCharSFFF == 'true'}">
-												<label class="labelfix">Fixed Fee</label><br>
-											</c:if>
-											<c:if test="${partner.nrnReturnConfig.repCharSFShipFee == 'true'}">
-												<label class="labelfix">Shipping Fee</label><br>
-											</c:if>
-											<c:if test="${partner.nrnReturnConfig.repCharSFRevShipFee == 'true'}">
-												<label class="labelfix">Reverse Shipping Fee</label>
-											</c:if>	   
-                                </div>
-                            </div>
-                        </div>
-						<div class="col-sm-12 radio1" id="blk-15">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <input type="text" value="${chargeMap.repCharSFFixedAmt} %" class="form-control" disabled>
-                                </div>
-                            </div>
-                        </div>
-                        
-						<div class="col-sm-12 radio1" id="blk-17">
-	                        <div class="row">
-	                            <div class="col-md-12">
-                                	<c:if test="${chargeMap.repCharBRFixedAmt != null}">
-										<label class="labelfix">Fixed Amount : ${chargeMap.repCharBRFixedAmt}</label><br>
-									</c:if>
-									<c:if test="${chargeMaprepCharBRPercentSP != null}">
-										<label class="labelfix">% of SP : ${chargeMap.repCharBRPercentSP}</label><br>
-									</c:if>
-									<c:if test="${chargeMap.repCharBRPercentPCC != null}">
-										<label class="labelfix">% of Commision : ${chargeMap.repCharBRPercentPCC}</label><br>
-									</c:if>
-									<c:if test="${partner.nrnReturnConfig.repCharBRFF == 'true'}">
-										<label class="labelfix">Fixed Fee</label><br>
-									</c:if>
-									<c:if test="${partner.nrnReturnConfig.repCharBRShipFee == 'true'}">
-										<label class="labelfix">Shipping Fee</label><br>
-									</c:if>
-                                </div>
-	                        </div>
-	                    </div>
-						<div class="col-sm-12 radio1" id="blk-18">
-	                        <div class="row">
-	                            <div class="col-md-12">
-	                                <input type="text" value="${chargeMap.repCharBRFixedAmt} %" class="form-control" disabled>
-	                            </div>
-	                        </div>
-	                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="hr-line-dashed"></div>
-                    <div class="col-sm-4">
-                        <div class="radio"><label><strong>PARTIAL DELIVERY</strong></label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                    	<c:choose>
-								<c:when test="${partner.nrnReturnConfig.PDCharSFType == 'fixed'}">									    	                                     
-									<div class="radio"><label class="labelfix"><input type="radio" value="" id="20" name="toggler">Fixed</label></div>
-								</c:when>
-								<c:when test="${partner.nrnReturnConfig.PDCharSFType == 'variable'}">
-									<div class="radio"><label class="labelfix"><input type="radio" value="" id="19" name="toggler">Variable</label></div>								       
-								</c:when>
-								<c:otherwise>
-								   	<div class="radio"><label class="labelfix"><input type="radio" value="" id="21" name="toggler">No-Charges </label></div>
-								</c:otherwise>
-						</c:choose>						
-                    </div>
-					<div class="col-sm-4">
-						<c:choose>
-								<c:when test="${partner.nrnReturnConfig.PDCharBRType == 'fixed'}">									    	                                     
-									<div class="radio"><label class="labelfix"><input type="radio" value="" id="23" name="toggler">Fixed</label></div>
-								</c:when>
-								<c:when test="${partner.nrnReturnConfig.PDCharBRType == 'variable'}">
-									<div class="radio"><label class="labelfix"><input type="radio" value="" id="22" name="toggler">Variable</label></div>								       
-								</c:when>
-								<c:otherwise>
-								   	<div class="radio"><label class="labelfix"><input type="radio" value="" id="24" name="toggler">No-Charges </label></div>
-								</c:otherwise>
-						</c:choose>						
-					</div>
-					<div class="col-sm-12 radio1" id="blk-19">
-                    	<div class="row">
-                            <div class="col-md-12">
-                                     		<c:if test="${chargeMap.PDCharSFVarFixedAmt != null}">
-												<label class="labelfix">Fixed Amount : ${chargeMap.PDCharSFVarFixedAmt}</label><br>
-											</c:if>
-											<c:if test="${chargeMap.PDCharSFPercentSP != null}">
-												<label class="labelfix">% of SP : ${chargeMap.PDCharSFPercentSP}</label><br>
-											</c:if>
-											<c:if test="${chargeMap.PDCharSFPercentPCC != null}">
-												<label class="labelfix">% of Commision : ${chargeMap.PDCharSFPercentPCC}</label><br>
-											</c:if>
-											<c:if test="${partner.nrnReturnConfig.PDCharSFFF == 'true'}">
-												<label class="labelfix">Fixed Fee</label><br>
-											</c:if>
-											<c:if test="${partner.nrnReturnConfig.PDCharSFShipFee == 'true'}">
-												<label class="labelfix">Shipping Fee</label><br>
-											</c:if>
-											<c:if test="${partner.nrnReturnConfig.PDCharSFRevShipFee == 'true'}">
-												<label class="labelfix">Reverse Shipping Fee</label>
-											</c:if>	   
-                                </div>
-						</div>
-                 	</div>
-					<div class="col-sm-12 radio1" id="blk-20">
-                        <div class="row">
-                            <div class="col-md-12">
-                            	<input type="text" value="${chargeMap.PDCharSFFixedAmt} %" class="form-control" disabled>
-							</div>
-						</div>
-					</div>
-					
-					<div class="col-sm-12 radio1" id="blk-22">
-                    	<div class="row">
-                            <div class="col-md-12">
-                                	<c:if test="${chargeMap.PDCharBRVarFixedAmt != null}">
-										<label class="labelfix">Fixed Amount : ${chargeMap.PDCharBRVarFixedAmt}</label><br>
-									</c:if>
-									<c:if test="${chargeMap.PDCharBRPercentSP != null}">
-										<label class="labelfix">% of SP : ${chargeMap.PDCharBRPercentSP}</label><br>
-									</c:if>
-									<c:if test="${chargeMap.PDCharBRPercentPCC != null}">
-										<label class="labelfix">% of Commision : ${chargeMap.PDCharBRPercentPCC}</label><br>
-									</c:if>
-									<c:if test="${partner.nrnReturnConfig.PDCharBRFF == 'true'}">
-										<label class="labelfix">Fixed Fee</label><br>
-									</c:if>
-									<c:if test="${partner.nrnReturnConfig.PDCharBRShipFee == 'true'}">
-										<label class="labelfix">Shipping Fee</label><br>
-									</c:if>
-                                </div>
-						</div>             
-                  	</div>
-					<div class="col-sm-12 radio1" id="blk-23">
-                        <div class="row">
-                            <div class="col-md-12">
-                            	<input type="text" value="${chargeMap.PDCharBRFixedAmt} %" class="form-control" disabled>
-							</div>
-						</div>
-					</div>
-					
-                </div>
-                
-                
-                
-                <div class="col-sm-12">
-                    <div class="hr-line-dashed"></div>
-                    <div class="col-sm-4">
-                        <div class="radio"><label><strong>CANCELLA<br>TION</strong></label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="col-md-12">
-                            <div class="radio"><label class="labelfix"> <input type="radio" value="" id="25" name="toggler">BEFORE RTD </label>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="radio"><label class="labelfix"> <input type="radio" value="" id="26" name="toggler">AFTER RTD </label>
-                            </div>
-                        </div> 
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="col-md-12">
-                            <div class="radio"><label class="labelfix"> <input type="radio" value="" id="27" name="toggler">BEFORE RTD </label>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="radio"><label class="labelfix"> <input type="radio" value="" id="28" name="toggler">AFTER RTD </label>
-                            </div>
-                        </div> 
-                    </div>
-					<div class="col-sm-12 radio1" id="blk-25">
-						  <div class="col-sm-12">
-							<div class="radio">
-							  <label>
-								<input type="radio" value="" id="29" name="toggler">
-								Fixed Amount</label>
-							</div>
-						  </div>
-						  <div class="col-sm-12" style="display: none;">
-							<div class="radio">
-							  <label>
-								<input type="radio" value="" id="30" name="toggler">
-								Variable </label>
-							</div>
-						  </div>
-						  <div class="col-sm-12" style="display: none;">
-							<div class="radio">
-							  <label>
-								<input type="radio" value="" id="31" name="toggler">
-								No Charges </label>
-							</div>
-						  </div>
-						  
-							<div class="col-sm-12 radio1" id="blk-29">
-								<div class="col-sm-12">
-								  <div class="form-group">
-									<div class="col-md-2 content-rgt">
-									  <label>Lable</label>
-									</div>
-									<div class="col-md-3 content-rgt">
-									  <input type="text" placeholder="" class="form-control">
-									</div>
-								  </div>
-								</div>
-							</div>
-							<div class="col-sm-12 radio1" id="blk-30">
-								<div class="col-sm-12">
-								  <div class="form-group">
-									<div class="col-md-2 content-rgt">
-									  <label>Lable</label>
-									</div>
-									<div class="col-md-3 content-rgt">
-									  <input type="text" placeholder="" class="form-control">
-									</div>
-								  </div>
-								</div>
-							</div>
-							<div class="col-sm-12 radio1" id="blk-31">
-								<div class="col-sm-12">
-								  <div class="form-group">
-									<div class="col-md-2 content-rgt">
-									  <label>Lable</label>
-									</div>
-									<div class="col-md-3 content-rgt">
-									  <input type="text" placeholder="" class="form-control">
-									</div>
-								  </div>
-								</div>
-							</div>
-					</div>
-					<div class="col-sm-12 radio1" id="blk-26">
-						  <div class="col-sm-12">
-							<div class="radio">
-							  <label>
-								<input type="radio" value="" id="32" name="toggler">
-								Fixed Amount</label>
-							</div>
-						  </div>
-						  <div class="col-sm-12" style="display: none;">
-							<div class="radio">
-							  <label>
-								<input type="radio" value="" id="33" name="toggler">
-								Variable </label>
-							</div>
-						  </div>
-						  <div class="col-sm-12" style="display: none;">
-							<div class="radio">
-							  <label>
-								<input type="radio" value="" id="34" name="toggler">
-								No Charges </label>
-							</div>
-						  </div>
-						  <div class="col-sm-12 radio1" id="blk-32">
-								<div class="form-group">
-									<div class="col-md-2 content-rgt">
-									  <label>Lable</label>
-									</div>
-									<div class="col-md-3 content-rgt">
-									  <input type="text" placeholder="" class="form-control">
-									</div>
-								  </div>
-							</div>
-							<div class="col-sm-12 radio1" id="blk-33">
-								  <div class="form-group">
-									<div class="col-md-2 content-rgt">
-									  <label>Lable</label>
-									</div>
-									<div class="col-md-3 content-rgt">
-									  <input type="text" placeholder="" class="form-control">
-									</div>
-								  </div>
-							</div>
-							<div class="col-sm-12 radio1" id="blk-34">
-								  <div class="form-group">
-									<div class="col-md-2 content-rgt">
-									  <label>Lable</label>
-									</div>
-									<div class="col-md-3 content-rgt">
-									  <input type="text" placeholder="" class="form-control">
-									</div>
-								  </div>
-							</div>
-					</div>
-					<div class="col-sm-12 radio1" id="blk-27">
-						<div class="col-sm-12">
-							<div class="radio">
-							  <label>
-								<input type="radio" value="" id="35" name="toggler">
-								Fixed Amount</label>
-							</div>
-						</div>
-						<div class="col-sm-12" style="display: none;">
-							<div class="radio">
-							  <label>
-								<input type="radio" value="" id="36" name="toggler">
-								Variable </label>
-							</div>
-						</div>
-						<div class="col-sm-12" style="display: none;">
-							<div class="radio">
-							  <label>
-								<input type="radio" value="" id="37" name="toggler">
-								No Charges </label>
-							</div>
-						</div>
-						<div class="col-sm-12 radio1" id="blk-35">
-								<div class="form-group">
-									<div class="col-md-2 content-rgt">
-									  <label>Lable</label>
-									</div>
-									<div class="col-md-3 content-rgt">
-									  <input type="text" placeholder="" class="form-control">
-									</div>
-								</div>
-						</div>
-						<div class="col-sm-12 radio1" id="blk-36">
-								<div class="form-group">
-									<div class="col-md-2 content-rgt">
-									  <label>Lable</label>
-									</div>
-									<div class="col-md-3 content-rgt">
-									  <input type="text" placeholder="" class="form-control">
-									</div>
-								</div>
-						</div>
-						<div class="col-sm-12 radio1" id="blk-37">
-								<div class="form-group">
-									<div class="col-md-2 content-rgt">
-									  <label>Lable</label>
-									</div>
-									<div class="col-md-3 content-rgt">
-									  <input type="text" placeholder="" class="form-control">
-									</div>
-								 </div>
-						</div>
-					</div>
-					<div class="col-sm-12 radio1" id="blk-28">
-						<div class="col-sm-12">
-							<div class="radio">
-							  <label>
-								<input type="radio" value="" id="38" name="toggler">
-								Fixed Amount</label>
-							</div>
-						</div>
-						<div class="col-sm-12" style="display: none;">
-							<div class="radio">
-							  <label>
-								<input type="radio" value="" id="39" name="toggler">
-								Variable </label>
-							</div>
-						</div>
-						<div class="col-sm-12" style="display: none;">
-							<div class="radio">
-							  <label>
-								<input type="radio" value="" id="40" name="toggler">
-								No Charges </label>
-							</div>
-						</div>
-						<div class="col-sm-12 radio1" id="blk-38">
-							<div class="form-group">
-								<div class="col-md-2 content-rgt">
-									
-								</div>
-								<div class="col-md-3 content-rgt">
-									<input type="text" placeholder="" class="form-control">
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-12 radio1" id="blk-39">
-							<div class="form-group">
-								<div class="col-md-2 content-rgt">
-									<label>Lable</label>
-								</div>
-								<div class="col-md-3 content-rgt">
-									<input type="text" placeholder="" class="form-control">
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-12 radio1" id="blk-40">
-							<div class="form-group">
-								<div class="col-md-2 content-rgt">
-									<label>Lable</label>
-								</div>
-								<div class="col-md-3 content-rgt">
-									<input type="text" placeholder="" class="form-control">
-								</div>
-							</div>
-						</div>
-					</div>
-                </div>
-            </div>    
-        </div>
-    </div>
-</div>
-</div>
-</div>
-                                </div>
-                                <div class="item">
-                                    
-                                </div>            
-                                <div class="item">
 
-                                </div>
-                                <div class="item">
+							</div>
+						</div>
+					</div>
+				</div>
 
-                                </div>
-                                <div class="item">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                    </p>
-                                </div>
-                                <div class="item">
-                                    
-                                </div> 
-                            </div>                
-                        </div>
-                    </div>
-                </div>
-				
 			</div>
 			<jsp:include page="../globalfooter.jsp"></jsp:include>
 		</div>

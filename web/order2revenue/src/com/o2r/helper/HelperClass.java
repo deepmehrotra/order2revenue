@@ -24,8 +24,7 @@ public class HelperClass {
 					.getAttribute("sellerId").toString());
 		} else {
 			// SellerDao sellerdao=new SellerDaoImpl();
-			Seller seller = sellerService.getSeller(request.getUserPrincipal()
-					.getName());
+			Seller seller = sellerService.getSeller(request.getUserPrincipal().getName());
 			if (seller != null) {
 				request.getSession().setAttribute("sellerId", seller.getId());
 				sellerId = seller.getId();

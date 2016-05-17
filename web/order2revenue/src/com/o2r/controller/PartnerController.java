@@ -163,32 +163,36 @@ public class PartnerController {
 		}
 		// int sellerId=HelperClass.getSellerIdfromSession(request);
 		if (image.getSize() != 0) {
-			System.out.println(" Not getting any image");
-			if (!image.isEmpty()) {
-				try {
-					validateImage(image);
+			if (image != null) {
+				System.out.println(" Not getting any image");
+				if (!image.isEmpty()) {
+					try {
+						validateImage(image);
 
-				} catch (RuntimeException re) {
-					result.reject(re.getMessage());
+					} catch (RuntimeException re) {
+						result.reject(re.getMessage());
+					}
 				}
 			}
-		}
-		try {
-			props = PropertiesLoaderUtils.loadProperties(resource);
+			try {
+				props = PropertiesLoaderUtils.loadProperties(resource);
 
-			if (!partnerList.contains(partnerBean.getPcName())) {
-				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
-						+ helperClass.getSellerIdfromSession(request)
-						+ partnerBean.getPcName() + ".jpg");
-				saveImage(helperClass.getSellerIdfromSession(request)
-						+ partnerBean.getPcName() + ".jpg", image);
-			} else {
-				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
-						+ partnerBean.getPcName() + ".jpg");
+				if (!partnerList.contains(partnerBean.getPcName())) {
+					partnerBean.setPcLogoUrl(props
+							.getProperty("partnerimage.view")
+							+ helperClass.getSellerIdfromSession(request)
+							+ partnerBean.getPcName() + ".jpg");
+					saveImage(helperClass.getSellerIdfromSession(request)
+							+ partnerBean.getPcName() + ".jpg", image);
+				} else {
+					partnerBean.setPcLogoUrl(props
+							.getProperty("partnerimage.view")
+							+ partnerBean.getPcName() + ".jpg");
+				}
+			} catch (Exception e) {
+				result.reject(e.getMessage());
+				return new ModelAndView("redirect:/seller/partners.html");
 			}
-		} catch (Exception e) {
-			result.reject(e.getMessage());
-			return new ModelAndView("redirect:/seller/partners.html");
 		}
 		try {
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
@@ -320,6 +324,7 @@ public class PartnerController {
 
 		log.info("*** saveJabong start ***");
 		System.out.println(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
+		partnerBean.setPcName("Jabong");
 		Map<String, String[]> parameters = request.getParameterMap();
 				for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
 			System.out.println(" Request Param: " + entry.getKey()+ "  Values  : " + entry.getValue().length);
@@ -345,8 +350,7 @@ public class PartnerController {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
 		}
-		
-		/*if (image != null) {
+		if (image != null) {
 			System.out.println(" Not getting any image");
 			if (!image.isEmpty()) {
 				try {
@@ -356,16 +360,15 @@ public class PartnerController {
 					result.reject(re.getMessage());
 				}
 			}
-		}*/
-		/*try {
+		}
+		try {
 			props = PropertiesLoaderUtils.loadProperties(resource);
 
 			if (!partnerList.contains(partnerBean.getPcName())) {
 				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
 						+ helperClass.getSellerIdfromSession(request)
 						+ partnerBean.getPcName() + ".jpg");
-				saveImage(helperClass.getSellerIdfromSession(request)
-						+ partnerBean.getPcName() + ".jpg", image);
+				saveImage(partnerBean.getPcName() + ".jpg", image);
 			} else {
 				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
 						+ partnerBean.getPcName() + ".jpg");
@@ -374,9 +377,9 @@ public class PartnerController {
 			e.printStackTrace();
 			result.reject(e.getMessage());
 			return new ModelAndView("redirect:/seller/partners.html");
-		}*/
-		try {
-			partnerBean.setPcName("Jabong");
+		}
+	
+		try {			
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
 			partnerService.addPartner(partner,helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
@@ -396,6 +399,7 @@ public class PartnerController {
 
 		log.info("*** saveMyntra start ***");
 		System.out.println(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
+		partnerBean.setPcName("Myntra");
 		Map<String, String[]> parameters = request.getParameterMap();
 				for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
 			System.out.println(" Request Param: " + entry.getKey()+ "  Values  : " + entry.getValue().length);
@@ -421,8 +425,7 @@ public class PartnerController {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
 		}
-		
-		/*if (image != null) {
+		if (image != null) {
 			System.out.println(" Not getting any image");
 			if (!image.isEmpty()) {
 				try {
@@ -432,8 +435,8 @@ public class PartnerController {
 					result.reject(re.getMessage());
 				}
 			}
-		}*/
-		/*try {
+		}
+		try {
 			props = PropertiesLoaderUtils.loadProperties(resource);
 
 			if (!partnerList.contains(partnerBean.getPcName())) {
@@ -450,9 +453,9 @@ public class PartnerController {
 			e.printStackTrace();
 			result.reject(e.getMessage());
 			return new ModelAndView("redirect:/seller/partners.html");
-		}*/
-		try {
-			partnerBean.setPcName("Myntra");
+		}
+
+		try {			
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
 			partnerService.addPartner(partner,helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {

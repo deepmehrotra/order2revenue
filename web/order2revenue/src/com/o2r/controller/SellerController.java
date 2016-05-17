@@ -13,6 +13,7 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -216,7 +217,7 @@ public class SellerController {
 	@RequestMapping(value = "/seller/saveSeller",headers=("content-type=multipart/*"), method = RequestMethod.POST)
 	public ModelAndView saveSeller(
 			@ModelAttribute("command") SellerBean sellerBean,HttpServletRequest request,
-			BindingResult result, @RequestParam(value = "image", required = false) MultipartFile image) {
+			BindingResult result, @RequestParam(value = "image", required = false) MultipartFile image, HttpSession session) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<StateDeliveryTime> sdtList=new ArrayList<StateDeliveryTime>();
 		try {
@@ -266,6 +267,7 @@ public class SellerController {
 				}
 			}
 			//System.out.println(" Seellerbean populating : "+sellerBean.getStateDeliveryTime().size());
+			session.setAttribute("sellerName", sellerBean.getName());
 			Seller seller = ConverterClass.prepareSellerModel(sellerBean);
 			System.out.println("***************** : "+seller.getLogoUrl());
 			Set<Seller> sellerRoles = new HashSet<Seller>();

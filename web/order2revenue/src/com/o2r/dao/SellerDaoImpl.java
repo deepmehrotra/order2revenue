@@ -96,7 +96,9 @@ public class SellerDaoImpl implements SellerDao {
 		                    sellerNew.setTinNumber(tinNumber);
 		                    sellerNew.setTanNumber(tanNumber);
 		                    sellerNew.setBrandName(brandName);
-		                    sellerNew.setLogoUrl(logoUrl);                  
+		                    if(logoUrl != null){
+		                    	sellerNew.setLogoUrl(logoUrl); 
+		                    }
 		                }
 					System.out.println(" Merging seller : "+seller.getId());
 					//session.clear();

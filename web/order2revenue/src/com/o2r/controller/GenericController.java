@@ -200,20 +200,17 @@ public class GenericController {
 						.prepareListofBean(orderService.findOrdersbyCustomerDetails(
 								searchCriteria, searchString,sellerId));
 			}else{
-				orderlist = ConverterClass
-						.prepareListofBean(orderService.findOrders(
-								searchCriteria, searchString,sellerId, false));
+				orderlist = ConverterClass.prepareListofBean(orderService.findOrders(searchCriteria, searchString, sellerId, false));
 			}
-		}else{			
-			if (searchCriteria.equals("orderDate") && startDate != null
-					&& endDate != null) {				
-				temporaryorderlist = orderService.findOrdersbyDate(
-						searchCriteria,startDate, endDate, sellerId);	
-			}else if(searchCriteria.equalsIgnoreCase("dateofPayment") && startDate != null
-					&& endDate != null){
+		}else{	
+			if(searchCriteria.equalsIgnoreCase("dateofPayment") && startDate != null && endDate != null){
 				temporaryorderlist = orderService.findOrdersbyPaymentDate(
-						searchCriteria, startDate, endDate,sellerId);
+						searchCriteria, startDate, endDate,sellerId);			
+					
+			}else {
+				temporaryorderlist = orderService.findOrdersbyDate(searchCriteria,startDate, endDate, sellerId);
 			}
+			
 			if (temporaryorderlist != null && temporaryorderlist.size() != 0)
 				orderlist = ConverterClass.prepareListofBean(temporaryorderlist);
 		}		
