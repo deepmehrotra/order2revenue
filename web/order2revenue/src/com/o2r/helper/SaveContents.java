@@ -533,7 +533,8 @@ public class SaveContents {
 					order.setChannelOrderID(entry.getCell(1).toString());
 
 					if (poId != null
-							&& !poId.equalsIgnoreCase(order.getSubOrderID())) {
+							&& !poId.equalsIgnoreCase(order.getSubOrderID())
+							&& !orderlist.isEmpty()) {
 						Order consolidatedOrder = orderService
 								.generateConsolidatedOrder(orderlist, sellerId);
 						orderService.updatePOOrders(orderlist,
@@ -693,11 +694,13 @@ public class SaveContents {
 				}
 			}
 
-			Order consolidatedOrder = orderService
-					.generateConsolidatedOrder(orderlist, sellerId);
-			orderService.updatePOOrders(orderlist,
-					consolidatedOrder);
-			orderlist.clear();
+			if (!orderlist.isEmpty()) {
+				Order consolidatedOrder = orderService
+						.generateConsolidatedOrder(orderlist, sellerId);
+				orderService.updatePOOrders(orderlist,
+						consolidatedOrder);
+				orderlist.clear();
+			}
 			
 			Set<String> errorSet = returnOrderMap.keySet();
 			downloadUploadReportXLS(offices, "OrderPOSheet", 11, errorSet,
@@ -955,6 +958,15 @@ public class SaveContents {
 					errorMessage.append(" Channel Name is null ");
 					validaterow = false;
 				}
+				
+				ProductConfig productConfigChk = productService
+						.getProductConfig(productConfig.getProductSkuCode(),
+								productConfig.getChannelName(), sellerId);
+				if (productConfigChk != null) {
+					errorMessage.append(" Product config already exist ");
+					validaterow = false;
+				}
+				
 				if (entry.getCell(2) != null
 						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					productConfig.setChannelSkuRef(entry.getCell(2).toString());
@@ -1942,6 +1954,7 @@ public class SaveContents {
 		
 		String gpId = null;
 		List<GatePass> gatepasslist = new ArrayList<GatePass>();
+		ProductConfig productConfig = null;
 		
 		try {
 			System.out.println("Inside save gate pass data -->");
@@ -1963,7 +1976,8 @@ public class SaveContents {
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					gatepass.setGatepassId(entry.getCell(0).toString());
 					if (gpId != null
-							&& !gpId.equalsIgnoreCase(gatepass.getGatepassId())) {
+							&& !gpId.equalsIgnoreCase(gatepass.getGatepassId())
+							&& !gatepasslist.isEmpty()) {
 						OrderRTOorReturn consolidatedReturn = orderService
 								.generateConsolidatedReturn(gatepasslist, sellerId);
 						orderService.updateGatePasses(gatepasslist,
@@ -1979,18 +1993,12 @@ public class SaveContents {
 				if (entry.getCell(1) != null
 						&& StringUtils.isNotBlank(entry.getCell(1).toString())) {
 					gatepass.setPoID(entry.getCell(1).toString());
-				} else {
-					errorMessage.append(" PO ID is null ");
-					validaterow = false;
-				}
+				} 
 
 				if (entry.getCell(2) != null
 						&& StringUtils.isNotBlank(entry.getCell(2).toString())) {
 					gatepass.setInvoiceID(entry.getCell(2).toString());
-				} else {
-					errorMessage.append(" Invoice ID is null ");
-					validaterow = false;
-				}
+				} 
 
 				if (entry.getCell(3) != null
 						&& StringUtils.isNotBlank(entry.getCell(3).toString())) {
@@ -2000,13 +2008,13 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				Order poOrder = orderService.findPOOrder(gatepass.getPoID(),
+				/*Order poOrder = orderService.findPOOrder(gatepass.getPoID(),
 						gatepass.getInvoiceID(), gatepass.getChannelSkuRef(),
 						sellerId);
 				if (poOrder == null) {
 					errorMessage.append(" PO Not received ");
 					validaterow = false;
-				}
+				}*/
 
 				if (entry.getCell(4) != null
 						&& StringUtils.isNotBlank(entry.getCell(4).toString())) {
@@ -2063,6 +2071,13 @@ public class SaveContents {
 				if (entry.getCell(10) != null
 						&& StringUtils.isNotBlank(entry.getCell(10).toString())) {
 					gatepass.setPcName(entry.getCell(10).toString());
+					productConfig = productService
+							.getProductConfig(gatepass.getChannelSkuRef(),
+									gatepass.getPcName(), sellerId);
+					if (productConfig == null) {
+						errorMessage.append(" Product SKU does not exist ");
+						validaterow = false;
+					} 
 				} else {
 					errorMessage.append(" Channel is null ");
 					validaterow = false;
@@ -2092,17 +2107,19 @@ public class SaveContents {
 				}
 
 				if (validaterow) {
-					gatepasslist.add(orderService.addGatePass(poOrder, gatepass, sellerId));
+					gatepasslist.add(orderService.addGatePass(productConfig, gatepass, sellerId));
 				} else {
 					returnlist.put(errorMessage.toString(), gatepass);
 				}
 			}
 			
-			OrderRTOorReturn consolidatedReturn = orderService
-					.generateConsolidatedReturn(gatepasslist, sellerId);
-			orderService.updateGatePasses(gatepasslist,
-					consolidatedReturn);
-			gatepasslist.clear();
+			if (!gatepasslist.isEmpty()) {
+				OrderRTOorReturn consolidatedReturn = orderService
+						.generateConsolidatedReturn(gatepasslist, sellerId);
+				orderService.updateGatePasses(gatepasslist,
+						consolidatedReturn);
+				gatepasslist.clear();
+			}
 			
 			Set<String> errorSet = returnlist.keySet();
 			downloadUploadReportXLS(offices, "GatePassReport", 13, errorSet,

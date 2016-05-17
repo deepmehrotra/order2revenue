@@ -375,7 +375,7 @@ public class ProductDaoImpl implements ProductDao {
 			Criteria criteria = session.createCriteria(ProductConfig.class);
 			criteria.createAlias("product", "product",
 					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("channelSkuRef", skuCode).ignoreCase())
+					.add(Restrictions.eq("productSkuCode", skuCode).ignoreCase())
 					.add(Restrictions.eq("channelName", channel).ignoreCase())
 					.setResultTransformer(
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);

@@ -3524,36 +3524,38 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	@Override
-	public GatePass addGatePass(Order order, GatePass gatepass, int sellerId)
+	public GatePass addGatePass(ProductConfig productConfig, GatePass gatepass, int sellerId)
 			throws CustomException {
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
+			
+			double eossValue = (productConfig.getSuggestedPOPrice() * 
+					productConfig.getDiscount()) / 100;
+			double grossNR = productConfig.getSuggestedPOPrice() - eossValue;
 
-			gatepass.setNetNR(order.getGrossNetRate() * gatepass.getQuantity());
-			gatepass.setTaxPOAmt(order.getGrossNetRate()
-					- (order.getGrossNetRate() * 100 / (100 + order
-							.getProductConfig().getTaxPo())));
-			gatepass.setRetutnPR(order.getGrossNetRate()
+			gatepass.setNetNR(grossNR * gatepass.getQuantity());
+			gatepass.setTaxPOAmt(grossNR
+					- (grossNR * 100 / (100 + productConfig.getTaxPo())));
+			gatepass.setRetutnPR(grossNR
 					- gatepass.getTaxPOAmt());
 			gatepass.setNetPR(gatepass.getRetutnPR() * gatepass.getQuantity());
 
 			gatepass.setGrossProfit(gatepass.getNetPR()
-					- (order.getProductConfig().getProductPrice() * gatepass
+					- (productConfig.getProductPrice() * gatepass
 							.getQuantity()));
 
-			OrderTimeline timeline = new OrderTimeline();
+			/*OrderTimeline timeline = new OrderTimeline();
 			timeline.setEvent("Return Recieved");
 			timeline.setEventDate(new Date());
 			order.getOrderTimeline().add(timeline);
-			order.setStatus("Return Recieved");
+			order.setStatus("Return Recieved");*/
 
-			productService.updateInventory(order.getProductConfig()
+			productService.updateInventory(productConfig
 					.getProductSkuCode(), 0, gatepass.getQuantity(), 0, false,
 					sellerId);
 
-			order.setGatepass(gatepass);
-			session.merge(order);
+			session.saveOrUpdate(gatepass);
 			session.getTransaction().commit();
 			session.close();
 			return gatepass;
@@ -3653,17 +3655,23 @@ public class OrderDaoImpl implements OrderDao {
 
 			for (GatePass gatepass : gatepasslist) {
 				
-				Order poOrder = findPOOrder(gatepass.getPoID(),
+				/*Order poOrder = findPOOrder(gatepass.getPoID(),
 						gatepass.getInvoiceID(), gatepass.getChannelSkuRef(),
-						sellerId);
+						sellerId);*/
 				
-				quantity += gatepass.getQuantity();
-				totalReturnCharges += gatepass.getTotalReturnCharges();
-				eossValue += (poOrder.getProductConfig().getSuggestedPOPrice() * poOrder.getDiscount()) / 100;
-				netRate += gatepass.getNetNR();
-				taxValue += gatepass.getTaxAmt();
-				grossPR += gatepass.getNetPR();
-				grossProfit += gatepass.getGrossProfit();
+				ProductConfig productConfig = productService
+						.getProductConfig(gatepass.getChannelSkuRef(),
+								gatepass.getPcName(), sellerId);
+				if (productConfig != null) {
+					quantity += gatepass.getQuantity();
+					totalReturnCharges += gatepass.getTotalReturnCharges();
+					eossValue += (productConfig.getSuggestedPOPrice() *
+							productConfig.getDiscount()) / 100;
+					netRate += gatepass.getNetNR();
+					taxValue += gatepass.getTaxAmt();
+					grossPR += gatepass.getNetPR();
+					grossProfit += gatepass.getGrossProfit();
+				} 
 			}
 
 			if (seller.getPartners() != null
