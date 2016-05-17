@@ -1040,7 +1040,14 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public List<Order> findOrders(String column, String value, int sellerId,
 			boolean poOrder) throws CustomException {
-		String searchString = "order." + column;
+		
+		String searchString="";
+		if(column.equals("returnOrRTOId")){
+			searchString = "order.orderReturnOrRTO." + column;
+		}else{
+			searchString = "order." + column;
+		}
+		
 		System.out.println(" Inside Find order dao method searchString :"
 				+ searchString + " value :" + value + "   sellerId :"
 				+ sellerId);
@@ -1053,8 +1060,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Seller.class).add(
 					Restrictions.eq("id", sellerId));
-			criteria.createAlias("orders", "order",
-					CriteriaSpecification.LEFT_JOIN)
+			criteria.createAlias("orders", "order",CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq(searchString, value).ignoreCase())
 					.add(Restrictions.eq("order.poOrder", poOrder))
 					.addOrder(

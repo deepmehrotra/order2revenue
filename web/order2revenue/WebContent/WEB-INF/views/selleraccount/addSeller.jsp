@@ -78,7 +78,7 @@ span .#error {
 											</c:if>
 											<div class="col-sm-8">
 												<form:input type="text" class="form-control"
-													value="${seller.name}" path="name" />
+													value="${seller.name}" path="name" />													
 											</div>
 										</div>
 										<div class="form-group">

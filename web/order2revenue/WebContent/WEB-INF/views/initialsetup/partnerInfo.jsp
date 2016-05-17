@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+    
+  
+ 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -84,7 +87,14 @@
                     <div class="col-lg-3">
                         <div class="panel panel-default add-logo-page">
                             <div class="panel-body text-center" style="height: 100px; width: 200px;">
-                                <img alt="image"  src="${partner.pcLogoUrl}"  title="${partner.pcName}">
+                            	<c:choose>
+                            		<c:when test="${partner.pcLogoUrl != null}">
+                            			<img alt="image"  src="${partner.pcLogoUrl}"  title="${partner.pcName}">
+                            		</c:when>
+                            		<c:otherwise>
+                            			<img alt="image"  src="/O2R/partnerimages/5Yamaha.jpg"  title="${partner.pcName}">
+                            		</c:otherwise>                            	
+                            	</c:choose>                            	
                                 <div><a href="editPartner.html?pcId=${partner.pcId}"  style="width:49%;z-index: 9999;" onclick=""><i class="fa fa-pencil"></i></a>
 								<a href="viewPartner.html?pcId=${partner.pcId}"><i class="fa fa-eye" style="position: relative;left: 54px;"></i></a></div>	
                             </div>

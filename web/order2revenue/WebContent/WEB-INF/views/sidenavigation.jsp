@@ -6,11 +6,11 @@
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<%
+<%		
     if(session.getAttribute("logoUrl") == null){
         if (request.getAttribute("sellerBean") != null) {
             SellerBean bean = (SellerBean) request.getAttribute("sellerBean");
-            if (bean.getLogoUrl() != null && new File(bean.getLogoUrl()).isFile()) {
+            if (bean.getLogoUrl() != null) {
                 session.setAttribute("logoUrl", bean.getLogoUrl());
             } else {
                 session.setAttribute("logoUrl",   "/O2R/sellerimages/defaultSeller.jpg");

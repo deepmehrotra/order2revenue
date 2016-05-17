@@ -29,14 +29,12 @@
 						<select class="form-control" name="searchCriteria"
 							id="searchCriteria">
 							<option value="">Select Criteria</option>
-							<option id="1" value="channelOrderID">Channel Order Id</option>
+							<option id="1" value="channelOrderID">Channel Order ID/PO ID</option>
 							<option id="2" value="awbNum">AWB</option>
 							<option id="3" value="invoiceID">Invoice ID</option>
 							<option id="4" value="subOrderID">Sub Order ID</option>
-							<option id="5" value="PIreferenceNo">PI Reference No</option>
-							<option id="6" value="uniqueItemId">Unique Item ID</option>
-							<option id="7" value="returnOrRTOId">Sale Return ID/
-								Debit Note No</option>
+							<option id="5" value="PIreferenceNo">PI Reference No</option>							
+							<option id="7" value="returnOrRTOId">Sale Return ID/Debit Note No</option>
 							<option id="8" value="pcName">Partner</option>
 							<option id="9" value="productSkuCode">Product SKU</option>
 							<option id="10" value="customerName">Customer Name</option>
@@ -44,16 +42,12 @@
 							<option id="12" value="customerEmail">Customer mail</option>
 							<option id="13" value="customerPhnNo">Customer Phone No</option>
 							<option id="14" value="status">Order Status</option>
-							<option id="15" value="sellerNote">Seller Notes</option>
-							<option id="16" value="orderDate">Order Date</option>
-							<option id="17" value="orderReceivedDate">Order Received
-								Date</option>
+							<option id="15" value="sellerNote">Seller Notes</option>							
+							<option id="17" value="orderDate">Order Received Date</option>
 							<option id="18" value="shippedDate">Order Shipped Date</option>
-							<option id="19" value="deliveryDate">Order Delivery
-								Expected Date</option>
+							<option id="19" value="deliveryDate">Order Delivery	Expected Date</option>
 							<option id="20" value="paymentDueDate">Payment Due Date</option>
-							<option id="21" value="dateofPayment">Actual Date of
-								Payment</option>
+							<option id="21" value="dateofPayment">Actual Date of Payment</option>
 						</select>
 					</div>
 

@@ -31,8 +31,12 @@ public class HelperClass {
 			}*/
 		} else {
 			// SellerDao sellerdao=new SellerDaoImpl();
+
 			seller = sellerService.getSeller(request.getUserPrincipal()
 					.getName());
+
+			Seller seller = sellerService.getSeller(request.getUserPrincipal().getName());
+
 			if (seller != null) {
 				System.out.println(" Getting id from db");
 				
