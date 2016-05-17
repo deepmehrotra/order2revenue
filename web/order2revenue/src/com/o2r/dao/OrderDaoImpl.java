@@ -2267,7 +2267,7 @@ public class OrderDaoImpl implements OrderDao {
 					/ 100;
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
-			tds = ((comission / 10) + ((fixedfee + pccAmount) / 50))
+			tds = ((comission / 10) + ((fixedfee + pccAmount+shippingCharges) / 50))
 					* order.getQuantity();
 			order.getOrderTax().setTdsToDeduct(tds);
 			order.setGrossNetRate(nrValue);
@@ -2279,13 +2279,7 @@ public class OrderDaoImpl implements OrderDao {
 			e.printStackTrace();
 			return false;
 		}
-		// Or we can pass order reference in parameterand set these values
-		/*
-		 * returnMap.put("nrValue", (float) nrValue); returnMap.put("comission",
-		 * comission); returnMap.put("fixedfee", fixedfee);
-		 * returnMap.put("pccAmount", (float) pccAmount);
-		 * returnMap.put("shippingCharges", shippingCharges);
-		 */
+		
 		System.out.println(" Setting values for Nr in nrcalculator NR: "
 				+ order.getNetRate() + ", commison : "
 				+ order.getPartnerCommission() + " fixedfee : "

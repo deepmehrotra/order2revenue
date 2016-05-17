@@ -274,7 +274,7 @@ public class SaveContents {
 					errorMessage.append(" Order SP is null ");
 					validaterow = false;
 				}
-				if (entry.getCell(13) != null
+				/*if (entry.getCell(13) != null
 						&& entry.getCell(13).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
 						order.setShippingCharges(Double.parseDouble(entry
@@ -286,6 +286,21 @@ public class SaveContents {
 					}
 				} else {
 					errorMessage.append(" Shipping Charges is null ");
+					validaterow = false;
+				}*/
+				if (entry.getCell(13) != null
+						&& entry.getCell(13).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					TaxCategory taxcat = taxDetailService.getTaxCategory(entry
+							.getCell(13).toString(), sellerId);
+					if (taxcat != null)
+						otb.setTaxCategtory(entry.getCell(13).toString());
+					else {
+						otb.setTaxCategtory(entry.getCell(13).toString());
+						errorMessage.append("Tax Category does not exist ");
+						validaterow = false;
+					}
+				} else {
+					errorMessage.append("Tax Category is null ");
 					validaterow = false;
 				}
 				if (entry.getCell(14) != null
@@ -429,7 +444,7 @@ public class SaveContents {
 					errorMessage.append("Customer zipcode is blank ");
 					validaterow = false;
 				}
-				if (entry.getCell(22) != null
+				/*if (entry.getCell(22) != null
 						&& entry.getCell(22).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					TaxCategory taxcat = taxDetailService.getTaxCategory(entry
 							.getCell(22).toString(), sellerId);
@@ -443,10 +458,10 @@ public class SaveContents {
 				} else {
 					errorMessage.append("Tax Category is null ");
 					validaterow = false;
-				}
-				if (entry.getCell(23) != null
-						&& StringUtils.isNotBlank(entry.getCell(23).toString())) {
-					order.setSellerNote(entry.getCell(23).toString());
+				}*/
+				if (entry.getCell(22) != null
+						&& StringUtils.isNotBlank(entry.getCell(22).toString())) {
+					order.setSellerNote(entry.getCell(22).toString());
 
 				}
 				System.out

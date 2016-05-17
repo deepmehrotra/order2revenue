@@ -243,7 +243,7 @@ public class Layouter {
 		cell13.setCellStyle(headerCellStyle);
 
 		HSSFCell cell14 = rowHeader.createCell(startColIndex + 13);
-		cell14.setCellValue("Shipping Charges");
+		cell14.setCellValue("Tax Category");
 		cell14.setCellStyle(headerCellStyle);
 
 		HSSFCell cell15 = rowHeader.createCell(startColIndex + 14);
@@ -279,12 +279,8 @@ public class Layouter {
 		cell22.setCellStyle(headerCellStyle);
 
 		HSSFCell cell23 = rowHeader.createCell(startColIndex + 22);
-		cell23.setCellValue("Tax Category");
+		cell23.setCellValue("Seller Notes");
 		cell23.setCellStyle(headerCellStyle);
-
-		HSSFCell cell24 = rowHeader.createCell(startColIndex + 23);
-		cell24.setCellValue("Seller Notes");
-		cell24.setCellStyle(headerCellStyle);
 
 	}
 

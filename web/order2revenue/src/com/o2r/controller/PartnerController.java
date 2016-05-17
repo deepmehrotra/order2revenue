@@ -60,8 +60,8 @@ public class PartnerController {
 			"database.properties");
 	ArrayList<String> partnerList = new ArrayList<String>() {
 		/**
-	 *
-	 */
+		 *
+		 */
 		private static final long serialVersionUID = 1L;
 
 		{
@@ -76,8 +76,8 @@ public class PartnerController {
 	};
 
 	static Logger log = Logger.getLogger(PartnerController.class.getName());
-	
-	List<NRnReturnCharges> chargeList=new ArrayList<NRnReturnCharges>();
+
+	List<NRnReturnCharges> chargeList = new ArrayList<NRnReturnCharges>();
 
 	@RequestMapping(value = "/seller/savePartner", method = RequestMethod.POST)
 	public ModelAndView savePartner(HttpServletRequest request,
@@ -86,62 +86,70 @@ public class PartnerController {
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		log.info("*** savePartner start ***");
-		if(partnerBean.getPcId() != 0){		
-			System.out.println("****************************** ConfigId : "+partnerBean.getNrnReturnConfig().getConfigId());
-			System.out.println("****************************** Partner ID : "+partnerBean.getPcId());
-					
+		if (partnerBean.getPcId() != 0) {
+			System.out.println("****************************** ConfigId : "
+					+ partnerBean.getNrnReturnConfig().getConfigId());
+			System.out.println("****************************** Partner ID : "
+					+ partnerBean.getPcId());
+
 		}
-		
-		
-		System.out.println(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
+
+		System.out.println(" Nr calculayor value from bean : "
+				+ partnerBean.getNrnReturnConfig().isNrCalculator());
 		Map<String, String[]> parameters = request.getParameterMap();
 		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
-			if (entry.getKey().contains("nr-")) 
-			{
-				System.out.println(" Key with nr: "+entry.getKey()+" Values is : "+entry.getValue()[0]);
+			if (entry.getKey().contains("nr-")) {
+				System.out.println(" Key with nr: " + entry.getKey()
+						+ " Values is : " + entry.getValue()[0]);
 			}
 		}
-				for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
-		if (entry.getKey() != null && !entry.getKey().isEmpty())
-				System.out.println(" Print :entry.getKey()  " +entry.getKey()+" value: "+ entry.getValue()[0]);
+		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+			if (entry.getKey() != null && !entry.getKey().isEmpty())
+				System.out.println(" Print :entry.getKey()  " + entry.getKey()
+						+ " value: " + entry.getValue()[0]);
 
 			if (entry.getValue()[0] != null && !entry.getValue()[0].isEmpty()) {
 				if (entry.getKey().contains("nr-")) {
-					System.out.println(" Key : "+entry.getKey());
+					System.out.println(" Key : " + entry.getKey());
 					String temp = entry.getKey().substring(3);
 					NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
 					nrnReturncharge.setChargeAmount(Float.parseFloat(entry
 							.getValue()[0]));
 					nrnReturncharge.setChargeName(temp);
 					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
-					partnerBean.getNrnReturnConfig().getCharges().add(nrnReturncharge);
-					//chargeList.add(nrnReturncharge);
+					partnerBean.getNrnReturnConfig().getCharges()
+							.add(nrnReturncharge);
+					// chargeList.add(nrnReturncharge);
 				} else if (entry.getKey().contains("local")) {
-					
-					String localstring=Arrays.toString(entry.getValue());
-					System.out.println("localstring "+localstring);
-					partnerBean.getNrnReturnConfig().setLocalList(localstring
-							.substring(localstring.toString().indexOf('[')+1, 
-									localstring.toString().indexOf(']')));
+
+					String localstring = Arrays.toString(entry.getValue());
+					System.out.println("localstring " + localstring);
+					partnerBean.getNrnReturnConfig().setLocalList(
+							localstring.substring(localstring.toString()
+									.indexOf('[') + 1, localstring.toString()
+									.indexOf(']')));
 				} else if (entry.getKey().contains("zonal")) {
-					String zonalstring=Arrays.toString(entry.getValue());
-					System.out.println("zonalstring "+zonalstring);
-					
-					partnerBean.getNrnReturnConfig().setZonalList(zonalstring
-							.substring(zonalstring.toString().indexOf('[')+1, 
-									zonalstring.toString().indexOf(']')));
+					String zonalstring = Arrays.toString(entry.getValue());
+					System.out.println("zonalstring " + zonalstring);
+
+					partnerBean.getNrnReturnConfig().setZonalList(
+							zonalstring.substring(zonalstring.toString()
+									.indexOf('[') + 1, zonalstring.toString()
+									.indexOf(']')));
 				} else if (entry.getKey().contains("national")) {
-					String nationalstring=Arrays.toString(entry.getValue());
-					partnerBean.getNrnReturnConfig().setNationalList(nationalstring
-							.substring(nationalstring.toString().indexOf('[')+1, 
-									nationalstring.toString().indexOf(']')));
+					String nationalstring = Arrays.toString(entry.getValue());
+					partnerBean.getNrnReturnConfig().setNationalList(
+							nationalstring.substring(nationalstring.toString()
+									.indexOf('[') + 1, nationalstring
+									.toString().indexOf(']')));
 				} else if (entry.getKey().contains("metro")) {
-					String metrostring=Arrays.toString(entry.getValue());
-					System.out.println("metrostring "+metrostring);
-					
-					partnerBean.getNrnReturnConfig().setMetroList(metrostring
-							.substring(metrostring.toString().indexOf('[')+1, 
-									metrostring.toString().indexOf(']')));
+					String metrostring = Arrays.toString(entry.getValue());
+					System.out.println("metrostring " + metrostring);
+
+					partnerBean.getNrnReturnConfig().setMetroList(
+							metrostring.substring(metrostring.toString()
+									.indexOf('[') + 1, metrostring.toString()
+									.indexOf(']')));
 				}
 			}
 		}
@@ -154,9 +162,9 @@ public class PartnerController {
 		 * .getNoofdaysfromshippeddate());
 		 * System.out.println(" Seller id :"+partnerBean.getPcId());
 		 */
-		//partnerBean.getNrnReturnConfig().setCharges(chargeList);
-		//configobj.setCharges(chargeList);
-		//partnerBean.setNrnReturnConfig(configobj);
+		// partnerBean.getNrnReturnConfig().setCharges(chargeList);
+		// configobj.setCharges(chargeList);
+		// partnerBean.setNrnReturnConfig(configobj);
 		if (!partnerBean.isIsshippeddatecalc()) {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
@@ -192,22 +200,23 @@ public class PartnerController {
 		}
 		try {
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
-			partnerService.addPartner(partner,helperClass.getSellerIdfromSession(request));
+			partnerService.addPartner(partner,
+					helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
 			log.error(e);
 		}
-		
+
 		log.info("*** savePartner exit ***");
 		return new ModelAndView("redirect:/seller/partners.html");
 	}
-	
 
 	@RequestMapping(value = "/seller/listPartners", method = RequestMethod.GET)
 	public ModelAndView listAllPartners(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<PartnerBean> addedlist = null;
 		try {
-			addedlist = ConverterClass.prepareListofPartnerBean(partnerService.listPartners(helperClass.getSellerIdfromSession(request)));
+			addedlist = ConverterClass.prepareListofPartnerBean(partnerService
+					.listPartners(helperClass.getSellerIdfromSession(request)));
 		} catch (Exception e) {
 			log.error(e.getCause());
 		}
@@ -276,10 +285,10 @@ public class PartnerController {
 		try {
 			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
-			if(categoryObjects!=null)
-			for (Category cat : categoryObjects) {
-				categoryList.add(cat.getCatName());
-			}
+			if (categoryObjects != null)
+				for (Category cat : categoryObjects) {
+					categoryList.add(cat.getCatName());
+				}
 		} catch (CustomException ce) {
 			log.error("addPartner exception : " + ce.toString());
 			ce.printStackTrace();
@@ -309,9 +318,9 @@ public class PartnerController {
 		log.info("*** addPartner exit ***");
 		return new ModelAndView("initialsetup/addPartner", model);
 	}
-	
-	/*My Code Ranjan*/
-	
+
+	/* My Code Ranjan */
+
 	@RequestMapping(value = "/seller/saveJabong", method = RequestMethod.POST)
 	public ModelAndView saveJabong(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
@@ -319,10 +328,12 @@ public class PartnerController {
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		log.info("*** saveJabong start ***");
-		System.out.println(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
+		System.out.println(" Nr calculayor value from bean : "
+				+ partnerBean.getNrnReturnConfig().isNrCalculator());
 		Map<String, String[]> parameters = request.getParameterMap();
-				for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
-			System.out.println(" Request Param: " + entry.getKey()+ "  Values  : " + entry.getValue().length);
+		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+			System.out.println(" Request Param: " + entry.getKey()
+					+ "  Values  : " + entry.getValue().length);
 
 			if (entry.getKey() != null && !entry.getKey().isEmpty())
 				System.out.println(" Print : " + entry.getValue()[0]);
@@ -331,54 +342,59 @@ public class PartnerController {
 				if (entry.getKey().contains("nr-")) {
 					String temp = entry.getKey().substring(3);
 					NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-					nrnReturncharge.setChargeAmount(Float.parseFloat(entry.getValue()[0]));
+					nrnReturncharge.setChargeAmount(Float.parseFloat(entry
+							.getValue()[0]));
 					nrnReturncharge.setChargeName(temp);
 					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
-					partnerBean.getNrnReturnConfig().getCharges().add(nrnReturncharge);
+					partnerBean.getNrnReturnConfig().getCharges()
+							.add(nrnReturncharge);
 				}
 			}
 		}
 
-		//partnerBean.getNrnReturnConfig().setCharges(chargeList);
-		
+		// partnerBean.getNrnReturnConfig().setCharges(chargeList);
+
 		if (!partnerBean.isIsshippeddatecalc()) {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
 		}
-		
-		/*if (image != null) {
-			System.out.println(" Not getting any image");
-			if (!image.isEmpty()) {
-				try {
-					validateImage(image);
+		if (image.getSize() != 0) {
+			if (image != null) {
+				System.out.println(" Not getting any image");
+				if (!image.isEmpty()) {
+					try {
+						validateImage(image);
 
-				} catch (RuntimeException re) {
-					result.reject(re.getMessage());
+					} catch (RuntimeException re) {
+						result.reject(re.getMessage());
+					}
 				}
 			}
-		}*/
-		/*try {
-			props = PropertiesLoaderUtils.loadProperties(resource);
+			try {
+				props = PropertiesLoaderUtils.loadProperties(resource);
 
-			if (!partnerList.contains(partnerBean.getPcName())) {
-				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
-						+ helperClass.getSellerIdfromSession(request)
-						+ partnerBean.getPcName() + ".jpg");
-				saveImage(helperClass.getSellerIdfromSession(request)
-						+ partnerBean.getPcName() + ".jpg", image);
-			} else {
-				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
-						+ partnerBean.getPcName() + ".jpg");
+				if (!partnerList.contains(partnerBean.getPcName())) {
+					partnerBean.setPcLogoUrl(props
+							.getProperty("partnerimage.view")
+							+ helperClass.getSellerIdfromSession(request)
+							+ partnerBean.getPcName() + ".jpg");
+					saveImage(partnerBean.getPcName() + ".jpg", image);
+				} else {
+					partnerBean.setPcLogoUrl(props
+							.getProperty("partnerimage.view")
+							+ partnerBean.getPcName() + ".jpg");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				result.reject(e.getMessage());
+				return new ModelAndView("redirect:/seller/partners.html");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.reject(e.getMessage());
-			return new ModelAndView("redirect:/seller/partners.html");
-		}*/
+		}
 		try {
 			partnerBean.setPcName("Jabong");
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
-			partnerService.addPartner(partner,helperClass.getSellerIdfromSession(request));
+			partnerService.addPartner(partner,
+					helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
@@ -387,7 +403,7 @@ public class PartnerController {
 		log.info("*** saveJabong exit ***");
 		return new ModelAndView("redirect:/seller/partners.html");
 	}
-	
+
 	@RequestMapping(value = "/seller/saveMyntra", method = RequestMethod.POST)
 	public ModelAndView saveMyntra(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
@@ -395,10 +411,12 @@ public class PartnerController {
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		log.info("*** saveMyntra start ***");
-		System.out.println(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
+		System.out.println(" Nr calculayor value from bean : "
+				+ partnerBean.getNrnReturnConfig().isNrCalculator());
 		Map<String, String[]> parameters = request.getParameterMap();
-				for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
-			System.out.println(" Request Param: " + entry.getKey()+ "  Values  : " + entry.getValue().length);
+		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+			System.out.println(" Request Param: " + entry.getKey()
+					+ "  Values  : " + entry.getValue().length);
 
 			if (entry.getKey() != null && !entry.getKey().isEmpty())
 				System.out.println(" Print : " + entry.getValue()[0]);
@@ -407,54 +425,59 @@ public class PartnerController {
 				if (entry.getKey().contains("nr-")) {
 					String temp = entry.getKey().substring(3);
 					NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-					nrnReturncharge.setChargeAmount(Float.parseFloat(entry.getValue()[0]));
+					nrnReturncharge.setChargeAmount(Float.parseFloat(entry
+							.getValue()[0]));
 					nrnReturncharge.setChargeName(temp);
 					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
-					partnerBean.getNrnReturnConfig().getCharges().add(nrnReturncharge);
+					partnerBean.getNrnReturnConfig().getCharges()
+							.add(nrnReturncharge);
 				}
 			}
 		}
 
-		//partnerBean.getNrnReturnConfig().setCharges(chargeList);
-		
+		// partnerBean.getNrnReturnConfig().setCharges(chargeList);
+
 		if (!partnerBean.isIsshippeddatecalc()) {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
 		}
-		
-		/*if (image != null) {
-			System.out.println(" Not getting any image");
-			if (!image.isEmpty()) {
-				try {
-					validateImage(image);
+		if (image.getSize() != 0) {
+			if (image != null) {
+				System.out.println(" Not getting any image");
+				if (!image.isEmpty()) {
+					try {
+						validateImage(image);
 
-				} catch (RuntimeException re) {
-					result.reject(re.getMessage());
+					} catch (RuntimeException re) {
+						result.reject(re.getMessage());
+					}
 				}
 			}
-		}*/
-		/*try {
-			props = PropertiesLoaderUtils.loadProperties(resource);
+			try {
+				props = PropertiesLoaderUtils.loadProperties(resource);
 
-			if (!partnerList.contains(partnerBean.getPcName())) {
-				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
-						+ helperClass.getSellerIdfromSession(request)
-						+ partnerBean.getPcName() + ".jpg");
-				saveImage(helperClass.getSellerIdfromSession(request)
-						+ partnerBean.getPcName() + ".jpg", image);
-			} else {
-				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
-						+ partnerBean.getPcName() + ".jpg");
+				if (!partnerList.contains(partnerBean.getPcName())) {
+					partnerBean.setPcLogoUrl(props
+							.getProperty("partnerimage.view")
+							+ helperClass.getSellerIdfromSession(request)
+							+ partnerBean.getPcName() + ".jpg");
+					saveImage(partnerBean.getPcName() + ".jpg", image);
+				} else {
+					partnerBean.setPcLogoUrl(props
+							.getProperty("partnerimage.view")
+							+ partnerBean.getPcName() + ".jpg");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				result.reject(e.getMessage());
+				return new ModelAndView("redirect:/seller/partners.html");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.reject(e.getMessage());
-			return new ModelAndView("redirect:/seller/partners.html");
-		}*/
+		}
 		try {
 			partnerBean.setPcName("Myntra");
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
-			partnerService.addPartner(partner,helperClass.getSellerIdfromSession(request));
+			partnerService.addPartner(partner,
+					helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
@@ -463,7 +486,7 @@ public class PartnerController {
 		log.info("*** saveMyntra exit ***");
 		return new ModelAndView("redirect:/seller/partners.html");
 	}
-	
+
 	@RequestMapping(value = "/seller/addJabong", method = RequestMethod.GET)
 	public ModelAndView addJabong(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
@@ -479,17 +502,18 @@ public class PartnerController {
 		datemap.put("false", "Delivery Date");
 		PartnerBean partner = new PartnerBean();
 		try {
-			categoryObjects = categoryService.listCategories(helperClass.getSellerIdfromSession(request));
+			categoryObjects = categoryService.listCategories(helperClass
+					.getSellerIdfromSession(request));
 			for (Category cat : categoryObjects) {
 				categoryList.add(cat.getCatName());
 			}
-		} /*catch (CustomException ce) {
-			log.error("addJabong exception : " + ce.toString());
-			model.put("errorMessage", ce.getLocalMessage());
-			model.put("errorTime", ce.getErrorTime());
-			model.put("errorCode", ce.getErrorCode());
-			return new ModelAndView("globalErorPage", model);
-		}*/ catch (Exception e) {
+		} /*
+		 * catch (CustomException ce) { log.error("addJabong exception : " +
+		 * ce.toString()); model.put("errorMessage", ce.getLocalMessage());
+		 * model.put("errorTime", ce.getErrorTime()); model.put("errorCode",
+		 * ce.getErrorCode()); return new ModelAndView("globalErorPage", model);
+		 * }
+		 */catch (Exception e) {
 			log.error(e);
 		}
 		String partnerName = request.getParameter("partnerName");
@@ -499,15 +523,14 @@ public class PartnerController {
 			}
 			model.put("partner", partner);
 			model.put("categoryList", categoryList);
-			model.put("datemap", datemap);			
+			model.put("datemap", datemap);
 		} catch (Exception e) {
 			log.error(e);
 		}
 		log.info("*** addJabong exit ***");
 		return new ModelAndView("initialsetup/addJabong", model);
 	}
-	
-	
+
 	@RequestMapping(value = "/seller/addMyntra", method = RequestMethod.GET)
 	public ModelAndView addMyntra(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
@@ -528,20 +551,20 @@ public class PartnerController {
 			for (Category cat : categoryObjects) {
 				categoryList.add(cat.getCatName());
 			}
-		} /*catch (CustomException ce) {
-			log.error("addPartner exception : " + ce.toString());
-			model.put("errorMessage", ce.getLocalMessage());
-			model.put("errorTime", ce.getErrorTime());
-			model.put("errorCode", ce.getErrorCode());
-			return new ModelAndView("globalErorPage", model);
-		}*/ catch (Exception e) {
+		} /*
+		 * catch (CustomException ce) { log.error("addPartner exception : " +
+		 * ce.toString()); model.put("errorMessage", ce.getLocalMessage());
+		 * model.put("errorTime", ce.getErrorTime()); model.put("errorCode",
+		 * ce.getErrorCode()); return new ModelAndView("globalErorPage", model);
+		 * }
+		 */catch (Exception e) {
 			log.error(e);
 		}
-		//String partnerName = request.getParameter("partnerName");
+		// String partnerName = request.getParameter("partnerName");
 		try {
-			/*if (partnerName != null) {
-				partner.setPcName(partnerName);
-			}*/
+			/*
+			 * if (partnerName != null) { partner.setPcName(partnerName); }
+			 */
 			model.put("partner", partner);
 			model.put("categoryList", categoryList);
 			model.put("datemap", datemap);
@@ -555,11 +578,9 @@ public class PartnerController {
 		log.info("*** addMyntra exit ***");
 		return new ModelAndView("initialsetup/addMyntra", model);
 	}
-	
-	
-	/*My Code Ranjan Ends*/
-	
-	
+
+	/* My Code Ranjan Ends */
+
 	@RequestMapping(value = "/seller/addPartnertest", method = RequestMethod.GET)
 	public ModelAndView addPartnertest(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
@@ -620,7 +641,7 @@ public class PartnerController {
 		}
 		return new ModelAndView("addPartner", model);
 	}
-	
+
 	@RequestMapping(value = "/seller/viewPartner", method = RequestMethod.GET)
 	public ModelAndView viewPartner(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
@@ -629,34 +650,38 @@ public class PartnerController {
 		log.info("*** viewPartner start ***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
-		PartnerBean pbean=null;
-		Map<String,Float> chargeMap=new HashMap<String, Float>();
-		Map<String,Float> categoryMap=new HashMap<String, Float>();
+		PartnerBean pbean = null;
+		Map<String, Float> chargeMap = new HashMap<String, Float>();
+		Map<String, Float> categoryMap = new HashMap<String, Float>();
 		List<Category> categoryObjects = null;
 		try {
 			datemap.put("true", "Select payment from");
 			datemap.put("true", "Shipping Date");
 			datemap.put("false", "Delivery Date");
 			model.put("datemap", datemap);
-			pbean=ConverterClass
-			.preparePartnerBean(partnerService.getPartner(partnerBean
-					.getPcId()));
-			System.out.println("************** Inside edit partner : config ID :"+pbean.getNrnReturnConfig().getConfigId());
-			for(NRnReturnCharges charge:pbean.getNrnReturnConfig().getCharges())
-			{
+			pbean = ConverterClass.preparePartnerBean(partnerService
+					.getPartner(partnerBean.getPcId()));
+			System.out
+					.println("************** Inside edit partner : config ID :"
+							+ pbean.getNrnReturnConfig().getConfigId());
+			for (NRnReturnCharges charge : pbean.getNrnReturnConfig()
+					.getCharges()) {
 				chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
 			}
-			
-			categoryObjects = categoryService.listCategories(helperClass.getSellerIdfromSession(request));
+
+			categoryObjects = categoryService.listCategories(helperClass
+					.getSellerIdfromSession(request));
 			for (Category cat : categoryObjects) {
-				categoryMap.put(cat.getCatName(), chargeMap.get(cat.getCatName()));
+				categoryMap.put(cat.getCatName(),
+						chargeMap.get(cat.getCatName()));
 			}
 			model.put("categoryMap", categoryMap);
 			model.put("partner", pbean);
 			model.put("chargeMap", chargeMap);
 			model.put("partnerList", ConverterClass
 					.prepareListofPartnerBean(partnerService
-							.listPartners(helperClass.getSellerIdfromSession(request))));
+							.listPartners(helperClass
+									.getSellerIdfromSession(request))));
 		} catch (CustomException ce) {
 			log.error("editPartner exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -667,12 +692,11 @@ public class PartnerController {
 			e.printStackTrace();
 			log.error("editPartner exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());
-			
+
 		}
 		log.info("*** viewPartner exit ***");
 		return new ModelAndView("initialsetup/viewPartner", model);
 	}
-	
 
 	@RequestMapping(value = "/seller/editPartner", method = RequestMethod.GET)
 	public ModelAndView editPartner(HttpServletRequest request,
@@ -681,30 +705,31 @@ public class PartnerController {
 		log.info("*** editPartner start ***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
-		PartnerBean pbean=null;
-		Map<String,Float> chargeMap=new HashMap<String, Float>();
-		Map<String,Float> categoryMap=new HashMap<String, Float>();
+		PartnerBean pbean = null;
+		Map<String, Float> chargeMap = new HashMap<String, Float>();
+		Map<String, Float> categoryMap = new HashMap<String, Float>();
 		List<Category> categoryObjects = null;
-		
-		
+
 		try {
 			datemap.put("true", "Select payment from");
 			datemap.put("true", "Shipping Date");
 			datemap.put("false", "Delivery Date");
 			model.put("datemap", datemap);
-			pbean=ConverterClass
-			.preparePartnerBean(partnerService.getPartner(partnerBean
-					.getPcId()));
-			System.out.println("************** Inside edit partner : config ID :"+pbean.getNrnReturnConfig().getConfigId());
-			for(NRnReturnCharges charge:pbean.getNrnReturnConfig().getCharges())
-			{
+			pbean = ConverterClass.preparePartnerBean(partnerService
+					.getPartner(partnerBean.getPcId()));
+			System.out
+					.println("************** Inside edit partner : config ID :"
+							+ pbean.getNrnReturnConfig().getConfigId());
+			for (NRnReturnCharges charge : pbean.getNrnReturnConfig()
+					.getCharges()) {
 				chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
 			}
-			
+
 			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
 			for (Category cat : categoryObjects) {
-				categoryMap.put(cat.getCatName(), chargeMap.get(cat.getCatName()));
+				categoryMap.put(cat.getCatName(),
+						chargeMap.get(cat.getCatName()));
 			}
 			model.put("categoryMap", categoryMap);
 			model.put("partner", pbean);
@@ -716,11 +741,11 @@ public class PartnerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
-			
+
 			e.printStackTrace();
 			log.error("editPartner exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());
-			
+
 		}
 		log.info("*** editPartner exit ***");
 		return new ModelAndView("initialsetup/addPartner", model);

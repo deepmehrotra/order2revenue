@@ -360,7 +360,7 @@ span .#error {
 																				<input type="text" class="form-control"
 																					name="nr-fixedCommissionPercent"
 																					value="${chargeMap.fixedCommissionPercent}">
-																				<span class="input-group-addon">%</span>
+																				<span class="input-group-addon"></span>
 																			</div>
 																		</div>
 																	</div>
@@ -376,7 +376,7 @@ span .#error {
 																					<div class="input-group m-b col-md-4">
 																						<input type="text" class="form-control"
 																							name='nr-${cat.key}' value='${cat.value}'>
-																						<!--   <span class="input-group-addon">%</span> -->
+																						 <span class="input-group-addon">%</span>
 																					</div>
 																				</div>
 																			</c:forEach>
@@ -410,6 +410,7 @@ span .#error {
 														</div>
 														<div id="collapseTwo1" class="panel-collapse collapse">
 															<div class="panel-body">
+															<div class="col-sm-12"><h3><b>Please select any one type of fixed fee structure</b></h3> </div>
 																<div class="col-sm-4"
 																	style="border-right: 1px dotted #ccc;">
 																	<div class="form-group col-md-12">
@@ -422,7 +423,7 @@ span .#error {
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
-																		<label class="col-md-12 control-label">&gt;250&&&lt;500</label>
+																		<label class="col-md-4 control-label">&gt;250&&&lt;500</label>
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
@@ -452,7 +453,7 @@ span .#error {
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
-																		<label class="col-md-12 control-label">&gt;500&&&lt;1000</label>
+																		<label class="col-md-4 control-label">&gt;500&&&lt;1000</label>
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
@@ -490,7 +491,7 @@ span .#error {
 																		</div>
 																	</div>
 																	<div class="form-group col-md-12">
-																		<label class="col-md-12 control-label">&gt;500</label>
+																		<label class="col-md-4 control-label">&gt;500</label>
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" style="width: 50%;"
@@ -553,8 +554,7 @@ span .#error {
 																				<div class="input-group m-b">
 																					<input type="text" class="form-control"
 																						name="nr-fixedAmtPCC"
-																						value="${chargeMap.fixedAmtPCC}"> <span
-																						class="input-group-addon">%</span>
+																						value="${chargeMap.fixedAmtPCC}">
 																				</div>
 																			</div>
 																		</div>
@@ -922,7 +922,8 @@ span .#error {
 																		<div class="col-md-4 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" name="nr-serviceTax"
-																				value="${chargeMap.serviceTax}">
+																				value="${chargeMap.serviceTax}"> <span
+																						class="input-group-addon">%</span>
 																		</div>
 																	</div>
 																</div>
@@ -934,10 +935,10 @@ span .#error {
 										</div>
 									</div>
 								</div>
-								<div class="ibox float-e-margins">
-									<div class="ibox-title">
-										<h5>Return Calculator</h5>
-									</div>
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>Return Calculator</h5>
+					</div>
 									<div class="ibox-content add-company">
 										<form class="form-horizontal">
 											<div class="panel-body">
@@ -1047,6 +1048,15 @@ span .#error {
 																						path="nrnReturnConfig.retCharSFRevShipFee"
 																						id="retCharSFRevShipFee" /> <i></i> Reverse
 																					Shipping Fee
+																				</label>
+																			</div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.retCharSFPCC"
+																						id="retCharSFPCC" /> <i>
+																						</i> Payment Collection Charges
 																				</label>
 																			</div>
 																		</div>
@@ -1256,6 +1266,15 @@ span .#error {
 																				</label>
 																			</div>
 																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.RTOCharSFPCC"
+																						id="RTOCharSFPCC" /> 
+																						<i></i> Payment Collection Charges
+																				</label>
+																			</div>
+																		</div>
 																	</div>
 																</div>
 																<div class="col-sm-12">
@@ -1461,6 +1480,15 @@ span .#error {
 																				</label>
 																			</div>
 																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.repCharSFPCC"
+																						id="repCharSFPCC" /> 
+																						<i></i> Payment Collection Charges
+																				</label>
+																			</div>
+																		</div>
 																	</div>
 																</div>
 																<div class="col-sm-12">
@@ -1663,6 +1691,15 @@ span .#error {
 																						path="nrnReturnConfig.PDCharSFRevShipFee"
 																						id="PDCharSFRevShipFee" /> <i></i> Reverse
 																					Shipping Fee
+																				</label>
+																			</div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.PDCharSFPCC"
+																						id="PDCharSFPCC" /> 
+																						<i></i> Payment Collection Charges
 																				</label>
 																			</div>
 																		</div>
@@ -1881,6 +1918,16 @@ span .#error {
 																				</label>
 																			</div>
 																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.canCharSFPCC"
+																						id="canCharSFPCC" /> 
+																						<i></i> Payment Collection Charges
+																				</label>
+																			</div>
+																		</div>
+																	</div>
 																	</div>
 																</div>
 																<div class="col-sm-12">
@@ -1984,6 +2031,15 @@ span .#error {
 																						path="nrnReturnConfig.canCharSFARTDRevShipFee"
 																						id="canCharSFARTDRevShipFee" /> <i></i> Reverse
 																					Shipping Fee
+																				</label>
+																			</div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						path="nrnReturnConfig.canCharSFBRTDPCC"
+																						id="canCharSFBRTDPCC" /> 
+																						<i></i> Payment Collection Charges
 																				</label>
 																			</div>
 																		</div>

@@ -265,6 +265,8 @@ public void downloadreport(HttpServletRequest request ,HttpServletResponse respo
 		String selectedPartner;
 		String[] reportheaders;
 		// System.out.println(" Cat :" + partner);
+		System.out.println(request.getParameter("enddate"));
+		System.out.println(request.getParameter("startdate"));
 
 		reportName = request.getParameter("reportName");
 		startDate = new Date(request.getParameter("startdate"));
@@ -276,6 +278,8 @@ public void downloadreport(HttpServletRequest request ,HttpServletResponse respo
 			orderlist = orderService.findOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
 			reportDownloadService.downloadReport(response, orderlist,reportheaders, reportName,	helperClass.getSellerIdfromSession(request));
 		} catch (ClassNotFoundException e) {
+			System.out.println(" Class castexception in download report");
+			e.printStackTrace();
 			log.error(e);
 			/*
 			 * System.out.println(
@@ -283,23 +287,19 @@ public void downloadreport(HttpServletRequest request ,HttpServletResponse respo
 			 * + e.getLocalizedMessage()); e.printStackTrace();
 			 */
 		}catch(CustomException ce){
+		ce.printStackTrace();
 			log.error("downloadReport exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			//return new ModelAndView("globalErorPage", model);
 		}catch(Exception e){
+			e.printStackTrace();
 			log.error(e);
 		}
 		System.out.println(" Got response ttso size in controller: "
 				+ ttso.size());
-		try {
-		//	response.sendRedirect("/seller/getAllReports.html");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//return new ModelAndView("redirect:/seller/orderList.html");
-		//	e.printStackTrace();
-		}
+	
 		/*
 		 * model.put("reportName",reportName);
 		 * model.put("partnerlist",partnerlist);
