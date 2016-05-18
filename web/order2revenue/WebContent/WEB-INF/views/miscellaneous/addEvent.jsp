@@ -175,7 +175,7 @@ function checkOnBlur()
                                 <div class="col-sm-8" id="data_1">                                
                                     <div class="input-group date"> <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                     	<fmt:formatDate value="${eventsBean.startDate}" var="startDate" type="date" pattern="MM/dd/yyyy"/>
-                                        <form:input path="startDate"  value="${startDate}" type="date" class="form-control"></form:input>
+                                        <form:input path="startDate"  value="${startDate}" type="text" class="form-control"></form:input>
                                     </div>
                                 </div>
                             </div> 
@@ -186,7 +186,7 @@ function checkOnBlur()
                                 <div class="col-sm-8" id="data_1">
                                     <div class="input-group date"> <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                     	<fmt:formatDate value="${eventsBean.endDate}" var="endDate" type="date" pattern="MM/dd/yyyy"/>
-                                        <form:input path="endDate"   value="${endDate}" type="date" class="form-control"></form:input>
+                                        <form:input path="endDate"   value="${endDate}" type="text" class="form-control"></form:input>
                                     </div>
                                 </div>
                             </div>  
@@ -824,15 +824,7 @@ function checkOnBlur()
 										</div>
 		</div><!-- -----------------------------id-40----------------------------- -->
                             </div>
-                          </div>
-                          <div class="col-sm-12 radio2" id="blk-nrCalculatorEvent_fixed">
-                            <div class="form-group col-md-12">
-                              <label class="col-sm-2 control-label">Amount</label>
-                              <div class="col-sm-3">
-                                <input type="text" placeholder="" class="form-control">
-                              </div>
-                            </div>
-                          </div>
+                          </div>                          
                         </div>
                  <div class="ibox-content add-company">
               			<div class="col-sm-12 ">

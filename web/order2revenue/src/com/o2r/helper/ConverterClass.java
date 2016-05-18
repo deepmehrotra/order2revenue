@@ -99,6 +99,7 @@ public class ConverterClass {
 			order.setPccAmount(orderBean.getPccAmount());
 			order.setServiceTax(orderBean.getServiceTax());
 			order.setFixedfee(orderBean.getFixedfee());
+			order.setEventName(orderBean.getEventName());
 		}
 		return order;
 	}
@@ -157,6 +158,7 @@ public class ConverterClass {
 				order.setPccAmount(orderBean.getPccAmount());
 				order.setServiceTax(orderBean.getServiceTax());
 				order.setFixedfee(orderBean.getFixedfee());
+				order.setEventName(orderBean.getEventName());
 
 				orders.add(order);
 			}
@@ -218,6 +220,7 @@ public class ConverterClass {
 				bean.setServiceTax(order.getServiceTax());
 				bean.setFixedfee(order.getFixedfee());
 				bean.setEossValue(order.getEossValue());
+				bean.setEventName(order.getEventName());
 				if (order.getProductConfig() != null)
 					bean.setProductConfig(prepareProductConfigBean(order.getProductConfig()));
 				beans.add(bean);
@@ -272,6 +275,7 @@ public class ConverterClass {
 			bean.setrTOLimitCrossed(order.getrTOLimitCrossed());
 			bean.setSealNo(order.getSealNo());
 			bean.setPoPrice(order.getPoPrice());
+			bean.setEventName(order.getEventName());
 		}
 		return bean;
 	}

@@ -214,7 +214,7 @@ public class OrderController {
 				System.out.println(" uploadForm.getSheetValue() : "
 						+ uploadForm.getSheetValue());
 
-				//ValidateUpload.validateOfficeData(files.get(0));
+				ValidateUpload.validateOfficeData(files.get(0));
 
 				Map orderProcessedMap = null;
 				System.out.println(" fileinput " + fileinput.getName());

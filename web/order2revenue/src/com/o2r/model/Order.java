@@ -103,6 +103,8 @@ public class Order {
 	@Column
 	private String  dwShippingString;
 	@Column
+	private String  eventName;
+	@Column
 	private double pccAmount;
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<OrderTimeline> orderTimeline=new ArrayList<>();
@@ -543,6 +545,14 @@ public class Order {
 
 	public void setDwShippingString(String dwShippingString) {
 		this.dwShippingString = dwShippingString;
+	}
+
+	public String getEventName() {
+		return eventName;
+	}
+
+	public void setEventName(String eventName) {
+		this.eventName = eventName;
 	}
 
 	public ProductConfig getProductConfig() {

@@ -136,22 +136,14 @@ public class OrderDaoImpl implements OrderDao {
 								order.getOrderDate(), partner.getPcName(),
 								sellerId);
 						if (event != null) {
+							
+							order.setEventName(event.getEventName());
+							event.setNetSalesQuantity(event.getNetSalesQuantity()+order.getQuantity());							
 
-							event.setNetSalesQuantity(event
-									.getNetSalesQuantity()
-									+ order.getQuantity());
-
-							if (event.getNrnReturnConfig()
-									.getNrCalculatorEvent()
-									.equalsIgnoreCase("variable")) {
-								if (!calculateNR(event.getNrnReturnConfig(),
-										order, product.getCategoryName(),
-										product.getDeadWeight(),
+							if (event.getNrnReturnConfig().getNrCalculatorEvent().equalsIgnoreCase("variable")) {
+								if (!calculateNR(event.getNrnReturnConfig(),order, product.getCategoryName(),product.getDeadWeight(),
 										product.getVolWeight()))
-									throw new Exception();
-								event.setNetSalesAmount(event
-										.getNetSalesAmount()
-										+ order.getNetRate());
+									throw new Exception();								
 							} else if (event.getNrnReturnConfig()
 									.getNrCalculatorEvent()
 									.equalsIgnoreCase("original")) {
@@ -159,11 +151,9 @@ public class OrderDaoImpl implements OrderDao {
 										order, product.getCategoryName(),
 										product.getDeadWeight(),
 										product.getVolWeight()))
-									throw new Exception();
-								event.setNetSalesAmount(event
-										.getNetSalesAmount()
-										+ order.getNetRate());
+									throw new Exception();								
 							}
+							
 						} else if (!calculateNR(seller.getPartners().get(0),
 								order, product.getCategoryName(),
 								product.getDeadWeight(), product.getVolWeight()))
@@ -186,8 +176,11 @@ public class OrderDaoImpl implements OrderDao {
 					}
 					order.setOrderMRP(order.getOrderMRP() * order.getQuantity());
 					order.setOrderSP(order.getOrderSP() * order.getQuantity());
-					order.setNetRate(order.getGrossNetRate()
-							* order.getQuantity());
+					order.setNetRate(order.getGrossNetRate()* order.getQuantity());
+					if(event != null){
+						event.setNetSalesAmount(event.getNetSalesAmount()+ order.getNetRate());
+						eventsService.addEvent(event, sellerId);
+					}
 
 					if ((int) order.getPoPrice() != 0
 							&& order.getPcName().equals("Myntra")) {
@@ -229,8 +222,7 @@ public class OrderDaoImpl implements OrderDao {
 					// populating tax related values of order
 					System.out.println(" Tax before pr:"
 							+ order.getOrderTax().getTax());
-					order.setPr(order.getNetRate()
-							- order.getOrderTax().getTax());
+					order.setPr(order.getNetRate()- order.getOrderTax().getTax());
 					if (seller.getPartners().get(0).isTdsApplicable()) {
 						System.out.println(" PC "
 								+ order.getPartnerCommission());

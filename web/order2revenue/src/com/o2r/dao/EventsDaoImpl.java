@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
@@ -23,7 +22,7 @@ import com.o2r.model.Seller;
 @Repository("eventsDao")
 public class EventsDaoImpl implements EventsDao {	
 	
-	private static final String isEventActive = "select * from events ev where ev.sellerId=:sellerId and ev.channelName=:partner and (:orderDate between ev.startDate and ev.endDate)";
+	//private static final String isEventActive = "select * from events ev where ev.sellerId=:sellerId and ev.channelName=:partner and (:orderDate between ev.startDate and ev.endDate)";
 	
 	@Autowired	
 	private SessionFactory sessionFactory;
@@ -40,41 +39,38 @@ public class EventsDaoImpl implements EventsDao {
 			Seller seller = null;
 			List<Events> event = null;
 					
-			String currentPartnerName = events.getChannelName();			
-			
-			Criteria criterias = session.createCriteria(Events.class).add(Restrictions.eq("sellerId", sellerId));
-			Criterion res1=Restrictions.and(Restrictions.le("startDate",events.getStartDate()),Restrictions.ge("endDate",events.getStartDate()));
-			Criterion res2=Restrictions.and(Restrictions.le("startDate",events.getEndDate()),Restrictions.ge("endDate",events.getEndDate()));
-			Criterion res3=Restrictions.and(Restrictions.ge("startDate",events.getStartDate()),Restrictions.le("endDate",events.getEndDate()));
-
-				criterias.add(Restrictions.eq("channelName", events.getChannelName()));
-				criterias.add(Restrictions.or((Restrictions.or(res1, res2)), res3));
+			String currentPartnerName = events.getChannelName();
+			if(events.getEventId() != 0){
+				session.merge(events);
+			} else {					
 				
-					
-			
-			if (criterias.list() != null && criterias.list().size() != 0) {
-				System.out.println("*******************************You can not create Events during these Dates.....");
-			} else {
-				Criteria criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
-				criteria.createAlias("partners", "partner",	CriteriaSpecification.LEFT_JOIN)
-						.add(Restrictions.eq("partner.pcName",currentPartnerName))
-						.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-
-				if (criteria.list() != null && criteria.list().size() != 0) {
-					seller = (Seller) criteria.list().get(0);
-					partner = seller.getPartners().get(0);
-					partner.getEvents().add(events);
-					session.saveOrUpdate(partner);
+				if (isDatesAllowForEvent(events, sellerId) == false) {
+					System.out.println("*******************************You can not create Events during these Dates.....");
 				} else {
-					events.setSellerId(sellerId);
-					event.add(events);
-					partner.setEvents(event);
-					seller.getPartners().add(partner);
-					session.saveOrUpdate(seller);
+					Criteria criteria = session.createCriteria(Seller.class)
+							.add(Restrictions.eq("id", sellerId));
+					criteria.createAlias("partners", "partner",
+							CriteriaSpecification.LEFT_JOIN)
+							.add(Restrictions.eq("partner.pcName",
+									currentPartnerName))
+							.setResultTransformer(
+									CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+
+					if (criteria.list() != null && criteria.list().size() != 0) {
+						seller = (Seller) criteria.list().get(0);
+						partner = seller.getPartners().get(0);
+						partner.getEvents().add(events);
+						session.saveOrUpdate(partner);
+					} else {
+						events.setSellerId(sellerId);
+						event.add(events);
+						partner.setEvents(event);
+						seller.getPartners().add(partner);
+						session.saveOrUpdate(seller);
+					}
+
 				}
-
 			}
-
 			session.getTransaction().commit();
 			session.flush();
 			session.close();
@@ -186,22 +182,35 @@ public class EventsDaoImpl implements EventsDao {
 	@Override
 	public Events isEventActiive(Date orderDate, String channelName,int sellerId) {
 		log.info("$$$ isEventActive Start $$$");
-		Query getEventId=null;
+		//Query getEventId=null;
+		List eventList=null;
 		try{
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			getEventId = session
+			Criteria criteria = session.createCriteria(Events.class).add(Restrictions.eq("sellerId", sellerId)).add(Restrictions.eq("channelName", channelName))
+								.add(Restrictions.le("startDate",orderDate))
+								.add(Restrictions.ge("endDate", orderDate));
+			
+			/*getEventId = session
 					.createSQLQuery(isEventActive)
 					.setParameter("sellerId", sellerId)
 					.setParameter("partner",channelName)
-					.setParameter("orderDate", orderDate);
+					.setParameter("orderDate", orderDate);*/
+			if(criteria.list() != null && criteria.list().size() !=0){
+				log.info("$$$ isEventActive Exit $$$");
+				if(criteria.list().get(0)!=null)
+				{
+					System.out.println("getEventId.list().get(0) "+criteria.list().get(0));
+					eventList=criteria.list();
+					Events event=(Events)eventList.get(0);
+					System.out.println("Event NAme : "+ event.getEventName());
+					return event;
+				}
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		if(getEventId.list() != null && getEventId.list().size() !=0){
-			log.info("$$$ isEventActive Exit $$$");
-			return (Events)getEventId.list().get(0);
-		}
+		
 		log.info("$$$ isEventActive Exit $$$");
 		return null;
 	}
@@ -210,11 +219,14 @@ public class EventsDaoImpl implements EventsDao {
 	public Events getEvent(String eventName, int sellerID) {
 		Events event=null;
 		Session session=null;
+		List eventList=null;
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Events.class).add(Restrictions.eq("sellerId", sellerID)).add(Restrictions.eq("eventName", eventName));
-			event=(Events)criteria.list().get(0);
+			eventList=criteria.list();
+			if(eventList!=null&&eventList.size()!=0&&eventList.get(0)!=null)
+				event=(Events)eventList.get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -223,6 +235,36 @@ public class EventsDaoImpl implements EventsDao {
 			}			
 		}
 		return event;
+	}
+	
+	public boolean isDatesAllowForEvent(Events events, int sellerId){
+		log.info("*** isDatesAllowForEvent starts ***");
+		Session session=null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();	
+			
+			Criteria criterias = session.createCriteria(Events.class).add(Restrictions.eq("sellerId", sellerId));
+			Criterion res1 = Restrictions.and(Restrictions.le("startDate", events.getStartDate()),Restrictions.ge("endDate", events.getStartDate()));
+			Criterion res2 = Restrictions.and(Restrictions.le("startDate", events.getEndDate()),Restrictions.ge("endDate", events.getEndDate()));
+			Criterion res3 = Restrictions.and(Restrictions.ge("startDate", events.getStartDate()),Restrictions.le("endDate", events.getEndDate()));
+
+			criterias.add(Restrictions.eq("channelName",events.getChannelName()));
+			criterias.add(Restrictions.or((Restrictions.or(res1, res2)),res3));
+			
+			if (criterias.list() != null && criterias.list().size() != 0) {
+				log.info("*** isDatesAllowForEvent ends ***");
+				return false;
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(session != null)
+				session.close();
+		}
+		log.info("*** isDatesAllowForEvent ends ***");
+		return true;
 	}
 
 }

@@ -46,6 +46,7 @@ public class OrderBean {
 	private float serviceTax;
 	private double fixedfee;
 	private double pccAmount;
+	private String  eventName;
 	private List<OrderTimeline> orderTimeline = new ArrayList<>();
 	private CustomerBean customer = new CustomerBean();
 	private OrderPaymentBean orderPayment = new OrderPaymentBean();
@@ -401,6 +402,14 @@ public class OrderBean {
 		this.pccAmount = pccAmount;
 	}
 	
+	public String getEventName() {
+		return eventName;
+	}
+
+	public void setEventName(String eventName) {
+		this.eventName = eventName;
+	}
+
 	public double getEossValue() {
 		return eossValue;
 	}

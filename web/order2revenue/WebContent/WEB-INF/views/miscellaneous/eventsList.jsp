@@ -112,7 +112,7 @@
 	    											</c:otherwise>	
     											</c:choose>																										  
 												<td>${event.netSalesQuantity}</td>
-												<td>${event.netSalesAmount}</td>
+												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${event.netSalesAmount}" /></td>
 												
 											</tr>
 										</c:forEach>
