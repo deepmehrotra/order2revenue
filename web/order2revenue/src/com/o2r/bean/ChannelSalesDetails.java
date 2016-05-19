@@ -49,6 +49,34 @@ public class ChannelSalesDetails {
 	private float tax;
 	private double nrTax;
 	private double returnSP;
+	public double getNetProductPrice() {
+		return netProductPrice;
+	}
+	public void setNetProductPrice(double netProductPrice) {
+		this.netProductPrice = netProductPrice;
+	}
+	public int getNetQuantity() {
+		return netQuantity;
+	}
+	public void setNetQuantity(int netQuantity) {
+		this.netQuantity = netQuantity;
+	}
+	public double getTotalProductPrice() {
+		return totalProductPrice;
+	}
+	public void setTotalProductPrice(double totalProductPrice) {
+		this.totalProductPrice = totalProductPrice;
+	}
+	public double getPercentageGPvsCOP() {
+		return percentageGPvsCOP;
+	}
+	public void setPercentageGPvsCOP(double percentageGPvsCOP) {
+		this.percentageGPvsCOP = percentageGPvsCOP;
+	}
+	private double netProductPrice;
+	private int netQuantity;
+	private double totalProductPrice;
+	private double percentageGPvsCOP;
 	
 	public double getReturnSP() {
 		return returnSP;
