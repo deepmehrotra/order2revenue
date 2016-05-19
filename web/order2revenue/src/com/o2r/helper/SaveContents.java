@@ -683,11 +683,11 @@ public class SaveContents {
 								.getDateCellValue());
 					} else {
 						errorMessage
-								.append(" Order Recieved Date format is wrong ");
+								.append(" Shipped Date format is wrong ");
 						validaterow = false;
 					}
 				} else {
-					errorMessage.append(" Shipped Date format is null ");
+					errorMessage.append(" Shipped Date is null ");
 					validaterow = false;
 				}
 
@@ -1618,16 +1618,16 @@ public class SaveContents {
 		return returnlist;
 	}
 
-	public Map<String, PoPaymentBean> savePoPaymetnDetails(MultipartFile file,
+	public Map<String, PoPaymentBean> savePoPaymentDetails(MultipartFile file,
 			int sellerId, String path) throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		
-		String errorMessage = null;
+		StringBuffer errorMessage = null;
 		boolean validaterow = true;
 		PoPaymentBean popabean = null;
-		Map<String, PoPaymentBean> returnlist = new LinkedHashMap<>();
-		Map<String, PoPaymentBean> acceptPOlist = new HashMap<>();
+		Map<String, PoPaymentBean> returnMap = new LinkedHashMap<>();
+		
 		try {
 			System.out.println("Inside save popayment note data -->");
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -1639,94 +1639,118 @@ public class SaveContents {
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
+				popabean = new PoPaymentBean();
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
 				if (entry.getCell(0) != null
-						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
-					popabean = new PoPaymentBean();
-					popabean.setPoOrderId(entry.getCell(0).toString());
-					if (entry.getCell(1) != null
-							&& StringUtils.isNotBlank(entry.getCell(1)
-									.toString())) {
-						popabean.setInvoiceID(entry.getCell(1).toString());
-					} else {
-						errorMessage = "Error at row " + rowIndex
-								+ " , invoice Id is null";
-						validaterow = false;
-					}
-					if (entry.getCell(2) != null
-							&& StringUtils.isNotBlank(entry.getCell(2)
-									.toString())) {
-						popabean.setPcName(entry.getCell(2).toString());
-					} else {
-						errorMessage = "Error at row " + rowIndex
-								+ " , Partner is null";
-						validaterow = false;
-					}
-					if (entry.getCell(3) != null
-							&& StringUtils.isNotBlank(entry.getCell(3)
-									.toString())) {
-						popabean.setGatePassId(entry.getCell(3).toString());
-					}
-					if (entry.getCell(4) != null
-							&& StringUtils.isNotBlank(entry.getCell(4)
-									.toString())) {
-						popabean.setPositiveAmount(Double.parseDouble(entry
-								.getCell(4).toString()));
-					}
-					if (entry.getCell(5) != null
-							&& StringUtils.isNotBlank(entry.getCell(5)
-									.toString())) {
-						popabean.setNegativeAmount(Double.parseDouble(entry
-								.getCell(5).toString()));
-					}
-					if (entry.getCell(6) != null
-							&& StringUtils.isNotBlank(entry.getCell(6)
-									.toString())) {
-						popabean.setPaymentDate(new Date(entry.getCell(6)
-								.toString()));
-					} else {
-						errorMessage = "Error at row " + rowIndex
-								+ " , date is null";
-						validaterow = false;
-					}
-					if (entry.getCell(7) != null
-							&& StringUtils.isNotBlank(entry.getCell(7)
-									.toString())) {
-						popabean.setQuantity((int) Float.parseFloat(entry
-								.getCell(7).toString()));
-					} else {
-						errorMessage = "Error at row " + rowIndex
-								+ " , Return date is null";
-						validaterow = false;
-					}
+						&& StringUtils.isNotBlank(entry.getCell(0)
+								.toString())) {
+					popabean.setPcName(entry.getCell(0).toString());
+				} else {
+					errorMessage.append(" Channel is null");
+					validaterow = false;
 				}
-				if (acceptPOlist != null
-						&& acceptPOlist.containsKey(popabean.getInvoiceID())) {
-					if ((int) popabean.getPositiveAmount() != 0) {
-						acceptPOlist.get(popabean.getInvoiceID())
-								.setPositiveAmount(
-										(acceptPOlist.get(
-												popabean.getInvoiceID())
-												.getPositiveAmount() + popabean
-												.getPositiveAmount()));
+				
+				if (entry.getCell(1) != null
+						&& StringUtils.isNotBlank(entry.getCell(1)
+								.toString())) {
+					popabean.setInvoiceID(entry.getCell(1).toString());
+				} else {
+					errorMessage.append(" Invoice ID is null");
+					validaterow = false;
+				}
+				
+				Order order =  orderService.findConsolidatedPO(
+						"invoiceID", popabean.getInvoiceID(), sellerId);
+				if (order == null) {					
+					order = orderService.findConsolidatedPO(
+							"channelOrderID", popabean.getInvoiceID(), sellerId);
+					if (order == null) {	
+						errorMessage.append(" PO or GatePass not found");
+						validaterow = false;
 					} else {
-						acceptPOlist.get(popabean.getInvoiceID())
-								.setNegativeAmount(
-										(acceptPOlist.get(
-												popabean.getInvoiceID())
-												.getNegativeAmount() + popabean
-												.getNegativeAmount()));
+						popabean.setGatePassId(order.getChannelOrderID());
 					}
 				} else {
-					acceptPOlist.put(popabean.getInvoiceID(), popabean);
+					popabean.setPoOrderId(order.getChannelOrderID());
+				}
+				
+				if (entry.getCell(2) != null
+						&& StringUtils.isNotBlank(entry.getCell(2).toString())) {
+
+					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(2))) {
+						popabean.setPaymentDate(entry.getCell(2).getDateCellValue());
+					} else {
+						errorMessage
+								.append(" Payment Date format is wrong ");
+						validaterow = false;
+					}
+				} else {
+					errorMessage.append(" Payment Date is null ");
+					validaterow = false;
+				}
+				
+				if (entry.getCell(3) != null
+						&& StringUtils.isNotBlank(entry.getCell(3).toString())) {
+					try {
+						popabean.setPositiveAmount(Double.parseDouble(entry.getCell(3)
+								.toString()));
+					} catch (NumberFormatException e) {
+						errorMessage
+								.append(" Positive Amount should be a number ");
+						validaterow = false;
+					}
+				} else {
+					if (popabean.getPoOrderId() != null) {
+						errorMessage.append(" Positive Amount is null ");
+						validaterow = false;
+					}
+				}
+				
+				if (entry.getCell(4) != null
+						&& StringUtils.isNotBlank(entry.getCell(4).toString())) {
+					try {
+						popabean.setNegativeAmount(Double.parseDouble(entry.getCell(4)
+								.toString()));
+					} catch (NumberFormatException e) {
+						errorMessage
+								.append(" Negative Amount should be a number ");
+						validaterow = false;
+					}
+				} else {
+					if (popabean.getGatePassId() != null) {
+						errorMessage.append(" Negative Amount is null ");
+						validaterow = false;
+					}
+				}
+				
+				if (entry.getCell(5) != null
+						&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
+					try {
+						popabean.setNpr(entry.getCell(5).getNumericCellValue());
+					} catch (NumberFormatException e) {
+						errorMessage
+								.append(" NPR should be a number ");
+						validaterow = false;
+					}
+				} else {
+					errorMessage.append(" NPR is null ");
+					validaterow = false;
+				}
+				
+				if (entry.getCell(6) != null
+						&& StringUtils.isNotBlank(entry.getCell(6)
+								.toString())) {
+					popabean.setSellerNote(entry.getCell(6).toString());
+				}
+				
+				if (validaterow) {
+					orderService.addPOPayment(popabean, sellerId);
+				} else {
+					returnMap.put(errorMessage.toString(), popabean);
 				}
 			}
-			for (Map.Entry<String, PoPaymentBean> mapentry : acceptPOlist
-					.entrySet()) {
-				orderService.addPOPayment(mapentry.getValue(), sellerId);
-				System.out.println("Key = " + mapentry.getKey() + ", Value = "
-						+ mapentry.getValue());
-			}
-			Set<String> errorSet = returnlist.keySet();
+			
+			Set<String> errorSet = returnMap.keySet();
 			downloadUploadReportXLS(offices, "POPaymentSheet", 8, errorSet,
 					path, sellerId);
 		} catch (Exception e) {
@@ -1735,7 +1759,7 @@ public class SaveContents {
 			e.printStackTrace();
 			throw new MultipartException("Constraints Violated");
 		}
-		return returnlist;
+		return returnMap;
 	}
 
 	public Map<String, ExpenseBean> saveExpenseDetails(MultipartFile file,

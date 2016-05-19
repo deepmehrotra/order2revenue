@@ -294,7 +294,7 @@ public class OrderController {
 					break;
 				case "poPaymentSummary":
 					// model.put("poPaymentMap",saveContents.saveInventoryDetails(files.get(0),sellerId));
-					saveContents.savePoPaymetnDetails(files.get(0), sellerId,
+					saveContents.savePoPaymentDetails(files.get(0), sellerId,
 							applicationPath);
 					model.put("mapType", "poPaymentSummary");
 					break;

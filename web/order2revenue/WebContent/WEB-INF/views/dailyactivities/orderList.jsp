@@ -237,11 +237,11 @@
 															<th>Order Date</th>
 															<th>Shipped Date</th>
 															<th>Gross Sale Qty</th>
-															<th>Rate(Gross PO Price)</th>
-															<th>PO MRP/unit</th>
 															<th>Amount(Net PO Price)</th>
+															<th>EOSS Disc Value</th>
 															<th>N/R</th>
-															<th>Payment Difference</th>
+															<th>Tax(PO) Amt</th>
+															<th>Gross PR</th>
 															<th>Status</th>
 														</tr>
 													</thead>
@@ -265,12 +265,13 @@
 																	<td><fmt:formatNumber type="number"
 																			maxFractionDigits="2" value="${poOrder.poPrice}" /></td>
 																	<td><fmt:formatNumber type="number"
-																			maxFractionDigits="2" value="${poOrder.orderMRP}" /></td>
-																	<td><fmt:formatNumber type="number"
-																			maxFractionDigits="2" value="${poOrder.orderSP}" /></td>
+																			maxFractionDigits="2" value="${poOrder.eossValue}" /></td>
 																	<td><fmt:formatNumber type="number"
 																			maxFractionDigits="2" value="${poOrder.netRate}" /></td>
-																	<td>${poOrder.orderPayment.paymentDifference}</td>
+																	<td><fmt:formatNumber type="number"
+																			maxFractionDigits="2" value="${poOrder.orderTax.tax}" /></td>
+																	<td><fmt:formatNumber type="number"
+																			maxFractionDigits="2" value="${poOrder.pr}" /></td>
 																	<td>${poOrder.status}</td>
 																</tr>
 															</c:forEach>

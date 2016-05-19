@@ -37,6 +37,7 @@ import com.o2r.model.OrderRTOorReturn;
 import com.o2r.model.OrderTax;
 import com.o2r.model.OrderTimeline;
 import com.o2r.model.Partner;
+import com.o2r.model.PaymentUpload;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
@@ -136,14 +137,20 @@ public class OrderDaoImpl implements OrderDao {
 								order.getOrderDate(), partner.getPcName(),
 								sellerId);
 						if (event != null) {
-							
-							order.setEventName(event.getEventName());
-							event.setNetSalesQuantity(event.getNetSalesQuantity()+order.getQuantity());							
 
-							if (event.getNrnReturnConfig().getNrCalculatorEvent().equalsIgnoreCase("variable")) {
-								if (!calculateNR(event.getNrnReturnConfig(),order, product.getCategoryName(),product.getDeadWeight(),
+							order.setEventName(event.getEventName());
+							event.setNetSalesQuantity(event
+									.getNetSalesQuantity()
+									+ order.getQuantity());
+
+							if (event.getNrnReturnConfig()
+									.getNrCalculatorEvent()
+									.equalsIgnoreCase("variable")) {
+								if (!calculateNR(event.getNrnReturnConfig(),
+										order, product.getCategoryName(),
+										product.getDeadWeight(),
 										product.getVolWeight()))
-									throw new Exception();								
+									throw new Exception();
 							} else if (event.getNrnReturnConfig()
 									.getNrCalculatorEvent()
 									.equalsIgnoreCase("original")) {
@@ -151,9 +158,9 @@ public class OrderDaoImpl implements OrderDao {
 										order, product.getCategoryName(),
 										product.getDeadWeight(),
 										product.getVolWeight()))
-									throw new Exception();								
+									throw new Exception();
 							}
-							
+
 						} else if (!calculateNR(seller.getPartners().get(0),
 								order, product.getCategoryName(),
 								product.getDeadWeight(), product.getVolWeight()))
@@ -176,9 +183,11 @@ public class OrderDaoImpl implements OrderDao {
 					}
 					order.setOrderMRP(order.getOrderMRP() * order.getQuantity());
 					order.setOrderSP(order.getOrderSP() * order.getQuantity());
-					order.setNetRate(order.getGrossNetRate()* order.getQuantity());
-					if(event != null){
-						event.setNetSalesAmount(event.getNetSalesAmount()+ order.getNetRate());
+					order.setNetRate(order.getGrossNetRate()
+							* order.getQuantity());
+					if (event != null) {
+						event.setNetSalesAmount(event.getNetSalesAmount()
+								+ order.getNetRate());
 						eventsService.addEvent(event, sellerId);
 					}
 
@@ -222,7 +231,8 @@ public class OrderDaoImpl implements OrderDao {
 					// populating tax related values of order
 					System.out.println(" Tax before pr:"
 							+ order.getOrderTax().getTax());
-					order.setPr(order.getNetRate()- order.getOrderTax().getTax());
+					order.setPr(order.getNetRate()
+							- order.getOrderTax().getTax());
 					if (seller.getPartners().get(0).isTdsApplicable()) {
 						System.out.println(" PC "
 								+ order.getPartnerCommission());
@@ -406,8 +416,14 @@ public class OrderDaoImpl implements OrderDao {
 					}
 					/* populating derived values of order */
 					order.setStatus("Shipped");
-					order.setEossValue((order.getPoPrice() * order
-							.getProductConfig().getDiscount()) / 100);
+					if (order.getPcName().equalsIgnoreCase(
+							GlobalConstant.PCMYNTRA)) {
+						order.setEossValue((order.getPoPrice() * order
+								.getProductConfig().getDiscount()) / 100);
+					} else {
+						order.setEossValue(0);
+					}
+
 					order.setGrossNetRate(order.getPoPrice()
 							- order.getEossValue());
 					order.setNetRate(order.getGrossNetRate()
@@ -417,28 +433,29 @@ public class OrderDaoImpl implements OrderDao {
 							.getProductConfig().getTaxPo())));
 
 					order.setOrderMRP(order.getOrderMRP() * order.getQuantity());
-					order.setOrderSP(order.getProductConfig().getSp() * order.getQuantity());
+					order.setOrderSP(order.getProductConfig().getSp()
+							* order.getQuantity());
 					order.setPoPrice(order.getPoPrice() * order.getQuantity());
 
 					order.setDiscount(order.getProductConfig().getDiscount());
 					order.getOrderTax().setTax(taxvalue);
-					
-					TaxDetail taxDetails = new TaxDetail();
-					taxDetails.setBalanceRemaining(order.getOrderTax()
-							.getTax());
-					taxDetails.setUploadDate(order.getOrderDate());
-					taxDetailService.addMonthlyTaxDetail(session,
-							taxDetails, sellerId);
 
-					//order.setTotalAmountRecieved(order.getNetRate());
+					TaxDetail taxDetails = new TaxDetail();
+					taxDetails
+							.setBalanceRemaining(order.getOrderTax().getTax());
+					taxDetails.setUploadDate(order.getOrderDate());
+					taxDetailService.addMonthlyTaxDetail(session, taxDetails,
+							sellerId);
+
+					// order.setTotalAmountRecieved(order.getNetRate());
 					order.setFinalStatus("In Process");
 					// Set Order Timeline
 					OrderTimeline timeline = new OrderTimeline();
 					// populating tax related values of order
 					System.out.println(" Tax before pr:"
 							+ order.getOrderTax().getTax());
-					order.setPr((order.getGrossNetRate()
-							- order.getOrderTax().getTax()) * order.getQuantity());
+					order.setPr((order.getGrossNetRate() - order.getOrderTax()
+							.getTax()) * order.getQuantity());
 
 					// Reducing Product Inventory For Order
 					productService.updateInventory(order.getProductConfig()
@@ -1774,117 +1791,76 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	// Method to add PO payment
-
 	@Override
-	@SuppressWarnings("unchecked")
 	public void addPOPayment(PoPaymentBean popaBean, int sellerId)
 			throws CustomException {
-		System.out.println(" PoPaymentBean note for invoice  id :"
-				+ popaBean.getInvoiceID() + " gp id : "
-				+ popaBean.getGatePassId() + " po id+ "
-				+ popaBean.getPoOrderId());
-		// Seller seller = null;
-		List<Order> orderlist = null;
-		double positiveamount = 0;
-		double returnamount = 0;
-		boolean positiveOK = false;
-		boolean returnOK = false;
-
-		// To add change order status
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			// Criteria
-			// criteria=session.createCriteria(Order.class).add(Restrictions.eq("channelOrderID",
-			// channelOrderId));
-			Criteria criteria = session.createCriteria(Order.class);
-			criteria.createAlias("seller", "seller",
-					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.eq("channelOrderID",
-							popaBean.getPoOrderId()))
-					.add(Restrictions.eq("invoiceID", popaBean.getInvoiceID()))
-					.add(Restrictions.eq("pcName", popaBean.getPcName()));
 
-			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			orderlist = criteria.list();
+			String orderID = null;
+			boolean isGP = false;
+			boolean paymentOK = false;
+			double paymentDiff = 0;
 
-			Criteria amountCriteria = session.createCriteria(Order.class);
-			amountCriteria.createAlias("seller", "seller",
-					CriteriaSpecification.LEFT_JOIN);
-			amountCriteria.createAlias("orderPayment", "orderPayment",
-					CriteriaSpecification.LEFT_JOIN);
-			amountCriteria
-					.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
-							CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.eq("channelOrderID",
-							popaBean.getPoOrderId()))
-					.add(Restrictions.eq("invoiceID", popaBean.getInvoiceID()))
-					.add(Restrictions.eq("pcName", popaBean.getPcName()));
-			amountCriteria
-					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			ProjectionList projList = Projections.projectionList();
-			projList.add(Projections.sum("orderPayment.negativeAmount"));
-			projList.add(Projections.sum("poPrice"));
-			projList.add(Projections
-					.sum("orderReturnOrRTO.returnOrRTOChargestoBeDeducted"));
-			amountCriteria.setProjection(projList);
-			List<Object[]> results = amountCriteria.list();
-			Iterator iterator1 = results.iterator();
-			if (results != null) {
-				while (iterator1.hasNext()) {
-
-					Object[] recordsRow = (Object[]) iterator1.next();
-					// negativeamount=(Double)recordsRow[0];
-					positiveamount = (Double) recordsRow[1];
-					returnamount = (Double) recordsRow[2];
-
-				}
+			if (popaBean.getPoOrderId() != null) {
+				orderID = popaBean.getPoOrderId();
+			} else {
+				orderID = popaBean.getGatePassId();
+				isGP = true;
 			}
 
-			if ((int) positiveamount == (int) popaBean.getPositiveAmount()) {
-				positiveOK = true;
-			}
-			if ((int) returnamount == (int) popaBean.getNegativeAmount()) {
-				returnOK = true;
-			}
-			if (orderlist != null && orderlist.size() != 0) {
-				System.out.println("get order ");
+			Order poOrder = findConsolidatedPO("channelOrderID", orderID,
+					sellerId);
 
-				for (Order order : orderlist) {
-					if (positiveOK && returnOK) {
-						order.setFinalStatus("Settled");
-						order.setStatus("PO payment");
-						order.getOrderPayment().setDateofPayment(
-								popaBean.getPaymentDate());
+			OrderPayment orderPayment = new OrderPayment();
+			orderPayment.setUploadDate(new Date());
+			orderPayment.setDateofPayment(popaBean.getPaymentDate());
 
-					} else {
-						order.setFinalStatus("Actionable");
-						order.setStatus("Inappropriate Payment Recieved");
-					}
-
-					order.getOrderPayment().setDateofPayment(
-							popaBean.getPaymentDate());
-					session.saveOrUpdate(order);
+			if (!isGP) {
+				orderPayment.setPositiveAmount(popaBean.getPositiveAmount());
+				if (popaBean.getPositiveAmount() == poOrder.getNetRate()) {
+					paymentOK = true;
+				} else {
+					paymentDiff = popaBean.getPositiveAmount()
+							- poOrder.getNetRate();
 				}
 			} else {
-				System.out.println(" Null order");
+				orderPayment.setNegativeAmount(popaBean.getNegativeAmount());
+				if (popaBean.getNegativeAmount() == poOrder
+						.getOrderReturnOrRTO()
+						.getReturnOrRTOChargestoBeDeducted()) {
+					paymentOK = true;
+				} else {
+					paymentDiff = poOrder.getOrderReturnOrRTO()
+							.getReturnOrRTOChargestoBeDeducted()
+							- popaBean.getNegativeAmount();
+				}
 			}
 
-			// session.saveOrUpdate(order);
+			orderPayment.setPaymentDifference(paymentDiff);
+			orderPayment.setNetPaymentResult(popaBean.getNpr());
+			orderPayment.setPaymentdesc(popaBean.getSellerNote());
+
+			if (paymentOK) {
+				poOrder.setFinalStatus("Settled");
+				poOrder.setStatus("PO payment");
+			} else {
+				poOrder.setFinalStatus("Actionable");
+				poOrder.setStatus("Inappropriate Payment Recieved");
+			}
+
+			poOrder.setOrderPayment(orderPayment);
+			session.saveOrUpdate(poOrder);
+
 			session.getTransaction().commit();
 			session.close();
-		} catch (Exception e) {
 
+		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.addPOPaymentError,
 					new Date(), 1, GlobalConstant.addPOPaymentErrorCode, e);
-
-			/*
-			 * System.out.println(" Getting exception inadd debit note : "+
-			 * e.getLocalizedMessage()); e.printStackTrace();
-			 */
 		}
 	}
 
@@ -3363,6 +3339,7 @@ public class OrderDaoImpl implements OrderDao {
 			consolidatedOrder.setStatus("Shipped");
 			consolidatedOrder.setQuantity(quantity);
 			consolidatedOrder.setOrderSP(orderSP);
+			consolidatedOrder.setPoPrice(poPrice);
 
 			consolidatedOrder.setEossValue(eossValue);
 
@@ -3523,8 +3500,11 @@ public class OrderDaoImpl implements OrderDao {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 
-			double eossValue = (productConfig.getSuggestedPOPrice() * productConfig
-					.getDiscount()) / 100;
+			double eossValue = 0;
+			if (gatepass.getPcName().equalsIgnoreCase(GlobalConstant.PCMYNTRA)) {
+				eossValue = (productConfig.getSuggestedPOPrice() * productConfig
+						.getDiscount()) / 100;
+			}
 			double grossNR = productConfig.getSuggestedPOPrice() - eossValue;
 
 			gatepass.setNetNR(grossNR * gatepass.getQuantity());
@@ -3535,14 +3515,12 @@ public class OrderDaoImpl implements OrderDao {
 
 			gatepass.setGrossProfit(gatepass.getNetPR()
 					- (productConfig.getProductPrice() * gatepass.getQuantity()));
-			
+
 			TaxDetail taxDetails = new TaxDetail();
-			taxDetails
-					.setBalanceRemaining(-(gatepass.getTaxPOAmt())
-							* gatepass.getQuantity());
+			taxDetails.setBalanceRemaining(-(gatepass.getTaxPOAmt())
+					* gatepass.getQuantity());
 			taxDetails.setUploadDate(gatepass.getReturnDate());
-			taxDetailService.addMonthlyTaxDetail(session, taxDetails,
-					sellerId);
+			taxDetailService.addMonthlyTaxDetail(session, taxDetails, sellerId);
 
 			/*
 			 * OrderTimeline timeline = new OrderTimeline();
@@ -3666,8 +3644,11 @@ public class OrderDaoImpl implements OrderDao {
 				if (productConfig != null) {
 					quantity += gatepass.getQuantity();
 					totalReturnCharges += gatepass.getTotalReturnCharges();
-					eossValue += (productConfig.getSuggestedPOPrice() * productConfig
-							.getDiscount()) / 100;
+					if (gatepass.getPcName().equalsIgnoreCase(
+							GlobalConstant.PCMYNTRA)) {
+						eossValue += (productConfig.getSuggestedPOPrice() * productConfig
+								.getDiscount()) / 100;
+					}
 					netRate += gatepass.getNetNR();
 					taxValue += gatepass.getTaxAmt();
 					grossPR += gatepass.getNetPR();
@@ -3788,4 +3769,59 @@ public class OrderDaoImpl implements OrderDao {
 		}
 
 	}
+
+	@Override
+	public Order findConsolidatedPO(String column, String value, int sellerId)
+			throws CustomException {
+
+		Seller seller = null;
+		List<Order> orderlist = null;
+		Order poOrder = null;
+
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
+			criteria.createAlias("orders", "order",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("order." + column, value).ignoreCase())
+					.add(Restrictions.eq("order.poOrder", true))
+					.add(Restrictions.isNull("order.consolidatedOrder"))
+					.addOrder(
+							org.hibernate.criterion.Order
+									.desc("order.lastActivityOnOrder"))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			if (criteria.list().size() != 0) {
+				seller = (Seller) criteria.list().get(0);
+				if (seller == null)
+					System.out.println("Null seller");
+				orderlist = seller.getOrders();
+				if (orderlist != null && orderlist.size() != 0) {
+					for (Order order : orderlist) {
+						Hibernate.initialize(order.getOrderTimeline());
+					}
+				}
+			}
+			session.getTransaction().commit();
+			session.close();
+			if (orderlist != null && orderlist.size() != 0) {
+				poOrder = orderlist.get(0);
+			}
+			return poOrder;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e);
+			throw new CustomException(GlobalConstant.findOrdersError,
+					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
+
+			/*
+			 * System.out.println(" Exception in find order "+
+			 * e.getLocalizedMessage()); e.printStackTrace();
+			 */
+		}
+	}
+
 }

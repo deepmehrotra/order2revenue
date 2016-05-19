@@ -505,6 +505,9 @@ public class GlobalConstant {
 	public static final String CommPOPrefix = "comm-";
 	public static final String fixedtaxSPPercent = "fixedTaxSpPercent";
 	public static final String fixedtaxPOPercent = "fixedTaxPoPercent";
+	
+	// Channel Name
+	public static final String PCMYNTRA = "Myntra";
 
 	/*
 	 * public static final String

@@ -208,4 +208,10 @@ public class OrderServiceImpl implements OrderService {
 			OrderRTOorReturn consolidatedReturn) throws CustomException {
 		orderDao.updateGatePasses(gatepasslist, consolidatedReturn);
 	}
+
+	@Override
+	public Order findConsolidatedPO(String column, String value, int sellerId)
+			throws CustomException {
+		return orderDao.findConsolidatedPO(column, value, sellerId);
+	}
 }
