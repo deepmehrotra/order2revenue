@@ -375,8 +375,7 @@ span .#error {
 																					<label class="col-md-4 control-label">${cat.key}</label>
 																					<div class="input-group m-b col-md-4">
 																						<input type="text" class="form-control"
-																							name='nr-${cat.key}' value='${cat.value}'>
-																						 <span class="input-group-addon">%</span>
+																							name='nr-${cat.key}' value='${cat.value}'> <span class="input-group-addon">%</span>
 																					</div>
 																				</div>
 																			</c:forEach>

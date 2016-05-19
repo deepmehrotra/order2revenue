@@ -98,4 +98,7 @@ public interface OrderDao {
 
 	public void updateGatePasses(List<GatePass> gatepasslist,
 			OrderRTOorReturn consolidatedReturn) throws CustomException;
+
+	public Order findConsolidatedPO(String column, String value, int sellerId)
+			throws CustomException;
 }

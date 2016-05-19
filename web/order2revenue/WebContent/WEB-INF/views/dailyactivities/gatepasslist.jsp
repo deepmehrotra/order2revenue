@@ -145,18 +145,17 @@
 									<tr>
 										<th></th>
 										<th>#</th>
-										<th>PO ID</th>
+										<th>GP ID</th>
 										<th>Channel</th>
 										<th>SKU</th>
-										<th>Invoice ID</th>
-										<th>Order Date</th>
-										<th>Shipped Date</th>
-										<th>Gross Sale Qty</th>
-										<th>Rate(Gross PO Price)</th>
-										<th>PO MRP/unit</th>
-										<th>Amount(Net PO Price)</th>
+										<th>Return Date</th>
+										<th>Return Qty</th>
+										<th>Total Return Charges</th>
+										<th>EOSS Value</th>
 										<th>N/R</th>
-										<th>Payment Difference</th>
+										<th>Tax(PO) Amount</th>
+										<th>P/R</th>
+										<th>Gross Profit</th>
 										<th>Status</th>
 									</tr>
 								</thead>
@@ -171,21 +170,21 @@
 													onclick="onclickNavigateOrder('viewPOOrder',${gatepass.orderId})">${gatepass.subOrderID}</a></td>
 												<td>${gatepass.pcName}</td>
 												<td>${gatepass.productSkuCode}</td>
-												<td>${gatepass.invoiceID}</td>
 												<td><fmt:formatDate value="${gatepass.orderDate}"
-														pattern="MMM dd ,YY" /></td>
-												<td><fmt:formatDate value="${gatepass.shippedDate}"
 														pattern="MMM dd ,YY" /></td>
 												<td>${gatepass.quantity}</td>
 												<td><fmt:formatNumber type="number"
-														maxFractionDigits="2" value="${gatepass.poPrice}" /></td>
+														maxFractionDigits="2" value="${gatepass.orderReturnOrRTO.returnOrRTOChargestoBeDeducted}" /></td>
 												<td><fmt:formatNumber type="number"
-														maxFractionDigits="2" value="${gatepass.orderMRP}" /></td>
+														maxFractionDigits="2" value="${gatepass.eossValue}" /></td>
 												<td><fmt:formatNumber type="number"
-														maxFractionDigits="2" value="${gatepass.orderSP}" /></td>
+														maxFractionDigits="2" value="${gatepass.orderReturnOrRTO.netNR}" /></td>
 												<td><fmt:formatNumber type="number"
-														maxFractionDigits="2" value="${gatepass.netRate}" /></td>
-												<td>${gatepass.orderPayment.paymentDifference}</td>
+														maxFractionDigits="2" value="${gatepass.orderReturnOrRTO.taxPOAmt}" /></td>
+												<td><fmt:formatNumber type="number"
+														maxFractionDigits="2" value="${gatepass.orderReturnOrRTO.netPR}" /></td>
+												<td><fmt:formatNumber type="number"
+														maxFractionDigits="2" value="${gatepass.orderReturnOrRTO.grossProfit}" /></td>
 												<td>${gatepass.status}</td>
 											</tr>
 										</c:forEach>

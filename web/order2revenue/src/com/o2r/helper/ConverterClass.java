@@ -880,6 +880,11 @@ public class ConverterClass {
 			orderReturn.setType(bean.getType());
 			orderReturn.setCancelType(bean.getCancelType());
 			orderReturn.setReturnCategory(bean.getReturnCategory());
+			
+			orderReturn.setNetNR(bean.getNetNR());
+			orderReturn.setTaxPOAmt(bean.getTaxPOAmt());
+			orderReturn.setNetPR(bean.getNetPR());
+			orderReturn.setGrossProfit(bean.getGrossProfit());
 		}
 		return orderReturn;
 	}
@@ -901,6 +906,11 @@ public class ConverterClass {
 			orderReturn.setType(bean.getType());
 			orderReturn.setCancelType(bean.getCancelType());
 			orderReturn.setReturnCategory(bean.getReturnCategory());
+			
+			orderReturn.setNetNR(bean.getNetNR());
+			orderReturn.setTaxPOAmt(bean.getTaxPOAmt());
+			orderReturn.setNetPR(bean.getNetPR());
+			orderReturn.setGrossProfit(bean.getGrossProfit());
 		}
 		return orderReturn;
 	}
@@ -1359,6 +1369,7 @@ public class ConverterClass {
 		productConfig.setProductId(productConfigBean.getProductId());
 		productConfig.setProductName(productConfigBean.getProductName());
 		productConfig.setProductSkuCode(productConfigBean.getProductSkuCode());
+		productConfig.setChannelName(productConfigBean.getChannelName());
 		productConfig.setChannelSkuRef(productConfigBean.getChannelSkuRef());
 		productConfig.setCommision(productConfigBean.getCommision());
 		productConfig.setTaxSp(productConfigBean.getTaxSp());

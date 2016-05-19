@@ -2,6 +2,8 @@ package com.o2r.bean;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+
 public class OrderRTOorReturnBean {
 	 int returnId;
 	private String returnOrRTOreason;
@@ -16,6 +18,11 @@ public class OrderRTOorReturnBean {
 	private String returnCategory;
 	private String cancelType;
 	private int sellerId;
+	
+	private double netNR;
+	private double taxPOAmt;
+	private double netPR;
+	private double grossProfit;
 
 	public int getReturnId() {
 		return returnId;
@@ -95,6 +102,30 @@ public class OrderRTOorReturnBean {
 	}
 	public void setCancelType(String cancelType) {
 		this.cancelType = cancelType;
+	}
+	public double getNetNR() {
+		return netNR;
+	}
+	public void setNetNR(double netNR) {
+		this.netNR = netNR;
+	}
+	public double getTaxPOAmt() {
+		return taxPOAmt;
+	}
+	public void setTaxPOAmt(double taxPOAmt) {
+		this.taxPOAmt = taxPOAmt;
+	}
+	public double getNetPR() {
+		return netPR;
+	}
+	public void setNetPR(double netPR) {
+		this.netPR = netPR;
+	}
+	public double getGrossProfit() {
+		return grossProfit;
+	}
+	public void setGrossProfit(double grossProfit) {
+		this.grossProfit = grossProfit;
 	}
 
 

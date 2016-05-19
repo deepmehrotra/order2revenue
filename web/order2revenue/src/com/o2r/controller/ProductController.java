@@ -37,11 +37,13 @@ import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
 import com.o2r.helper.ValidateUpload;
 import com.o2r.model.Category;
+import com.o2r.model.Partner;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.service.CategoryService;
 import com.o2r.service.DownloadService;
 import com.o2r.service.OrderService;
+import com.o2r.service.PartnerService;
 import com.o2r.service.ProductService;
 
 /**
@@ -55,6 +57,8 @@ public class ProductController {
 	private ProductService productService;
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private PartnerService partnerService;
 	@Resource(name = "downloadService")
 	private DownloadService downloadService;
 	@Resource(name = "saveContents")
@@ -65,7 +69,7 @@ public class ProductController {
 	private HelperClass helperClass;
 
 	static Logger log = Logger.getLogger(ProductController.class.getName());
-	
+
 	private static final String UPLOAD_DIR = "upload";
 
 	@RequestMapping(value = "/seller/searchProduct", method = RequestMethod.POST)
@@ -119,24 +123,30 @@ public class ProductController {
 			BindingResult result) {
 
 		log.info("*** productList start ***");
-		List<Product> products=null;
+		List<Product> products = null;
 		Map<String, Object> model = new HashMap<String, Object>();
-		List<List<ProductConfig>> productConfigs= new ArrayList<List<ProductConfig>>();
+		List<List<ProductConfig>> productConfigs = new ArrayList<List<ProductConfig>>();
 
 		try {
-			Object obj = request.getSession().getAttribute("productSearchObject");
+			Object obj = request.getSession().getAttribute(
+					"productSearchObject");
 			if (obj != null) {
 				System.out.println(" Getting list from session" + obj);
 				model.put("productList", obj);
 				request.getSession().removeAttribute("productSearchObject");
 			} else {
-				int pageNo = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 0;
-				model.put("productList", ConverterClass.prepareListofProductBean(productService.listProducts(helperClass.getSellerIdfromSession(request),pageNo)));
+				int pageNo = request.getParameter("page") != null ? Integer
+						.parseInt(request.getParameter("page")) : 0;
+				model.put("productList", ConverterClass
+						.prepareListofProductBean(productService.listProducts(
+								helperClass.getSellerIdfromSession(request),
+								pageNo)));
 			}
-			products=productService.listProducts(helperClass.getSellerIdfromSession(request));
-			if(products != null){
-				for(Product product : products){
-					productConfigs.add(product.getProductConfig());					
+			products = productService.listProducts(helperClass
+					.getSellerIdfromSession(request));
+			if (products != null) {
+				for (Product product : products) {
+					productConfigs.add(product.getProductConfig());
 				}
 				model.put("productConfigList", productConfigs);
 			}
@@ -154,32 +164,37 @@ public class ProductController {
 		return new ModelAndView("initialsetup/Product", model);
 
 	}
-	
-	
+
 	@RequestMapping(value = "/seller/ProductMapping", method = RequestMethod.GET)
 	public ModelAndView productConfigList(HttpServletRequest request,
 			@ModelAttribute("command") ProductBean productBean,
 			BindingResult result) {
 
 		log.info("*** productConfigList start ***");
-		List<Product> products=null;
+		List<Product> products = null;
 		Map<String, Object> model = new HashMap<String, Object>();
-		List<List<ProductConfig>> productConfigs= new ArrayList<List<ProductConfig>>();
+		List<ProductConfig> productConfigs = new ArrayList<ProductConfig>();
 
 		try {
-			Object obj = request.getSession().getAttribute("productSearchObject");
+			Object obj = request.getSession().getAttribute(
+					"productSearchObject");
 			if (obj != null) {
 				System.out.println(" Getting list from session" + obj);
 				model.put("productList", obj);
 				request.getSession().removeAttribute("productSearchObject");
 			} else {
-				int pageNo = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 0;
-				model.put("productList", ConverterClass.prepareListofProductBean(productService.listProducts(helperClass.getSellerIdfromSession(request),pageNo)));
+				int pageNo = request.getParameter("page") != null ? Integer
+						.parseInt(request.getParameter("page")) : 0;
+				model.put("productList", ConverterClass
+						.prepareListofProductBean(productService.listProducts(
+								helperClass.getSellerIdfromSession(request),
+								pageNo)));
 			}
-			products=productService.listProducts(helperClass.getSellerIdfromSession(request));
-			if(products != null){
-				for(Product product : products){
-					productConfigs.add(product.getProductConfig());					
+			products = productService.listProducts(helperClass
+					.getSellerIdfromSession(request));
+			if (products != null) {
+				for (Product product : products) {
+					productConfigs.addAll(product.getProductConfig());
 				}
 				model.put("productConfigList", productConfigs);
 			}
@@ -197,42 +212,51 @@ public class ProductController {
 		return new ModelAndView("initialsetup/ProductMapping", model);
 
 	}
-	
-	
-	 @RequestMapping(value = "/seller/saveUpdateInventory", method = RequestMethod.POST)
-	 public ModelAndView saveDeleteProduct(HttpServletRequest request,@ModelAttribute("command")ProductBean productBean,
-	    BindingResult result) {
-		 	System.out.println("Inside Delete  Product");
-		 	/*String var1=request.getParameter("quantityToAdd");
-		 	String var2=request.getParameter("quantityToSubtract");*/
 
-	 	if(productBean.getProductSkuCode()!=null)
-	 	{
-	 	productBean.setProductDate(new Date());
-	 	//Product product = ConverterClass.prepareProductModel(productBean);
-	 	
-	 	int productId=request.getParameter("productId")!=null?Integer.parseInt(request.getParameter("productId")):0;
-	 	String productSkuCode=productBean.getProductSkuCode();
-	//   int currentInventory=request.getParameter("currentInventory")!=null?Integer.parseInt(request.getParameter("currentInventory")):0;
-	   int quantityToAdd=(request.getParameter("quantityToAdd")!=null&&request.getParameter("quantityToAdd").toString().length()!=0)?Integer.parseInt(request.getParameter("quantityToAdd")):0;
-	   int quantityToSubstract=(request.getParameter("quantityToSubtract")!=null&&request.getParameter("quantityToSubtract").toString().length()!=0)?Integer.parseInt(request.getParameter("quantityToSubtract")):0;
-	   int sellerId=0;
-	try {
-		sellerId = helperClass.getSellerIdfromSession(request);
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
+	@RequestMapping(value = "/seller/saveUpdateInventory", method = RequestMethod.POST)
+	public ModelAndView saveDeleteProduct(HttpServletRequest request,
+			@ModelAttribute("command") ProductBean productBean,
+			BindingResult result) {
+		System.out.println("Inside Delete  Product");
+		/*
+		 * String var1=request.getParameter("quantityToAdd"); String
+		 * var2=request.getParameter("quantityToSubtract");
+		 */
 
-		   try {
-			productService.updateInventory(productSkuCode, 0, quantityToAdd, quantityToSubstract,true,sellerId);
-		} catch (CustomException e) {
-			e.printStackTrace();
+		if (productBean.getProductSkuCode() != null) {
+			productBean.setProductDate(new Date());
+			// Product product =
+			// ConverterClass.prepareProductModel(productBean);
+
+			int productId = request.getParameter("productId") != null ? Integer
+					.parseInt(request.getParameter("productId")) : 0;
+			String productSkuCode = productBean.getProductSkuCode();
+			// int
+			// currentInventory=request.getParameter("currentInventory")!=null?Integer.parseInt(request.getParameter("currentInventory")):0;
+			int quantityToAdd = (request.getParameter("quantityToAdd") != null && request
+					.getParameter("quantityToAdd").toString().length() != 0) ? Integer
+					.parseInt(request.getParameter("quantityToAdd")) : 0;
+			int quantityToSubstract = (request
+					.getParameter("quantityToSubtract") != null && request
+					.getParameter("quantityToSubtract").toString().length() != 0) ? Integer
+					.parseInt(request.getParameter("quantityToSubtract")) : 0;
+			int sellerId = 0;
+			try {
+				sellerId = helperClass.getSellerIdfromSession(request);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			try {
+				productService.updateInventory(productSkuCode, 0,
+						quantityToAdd, quantityToSubstract, true, sellerId);
+			} catch (CustomException e) {
+				e.printStackTrace();
+			}
+
 		}
-	 	
-	 	}
-	 	return new ModelAndView("redirect:/seller/Product.html");
-	  }
-
+		return new ModelAndView("redirect:/seller/Product.html");
+	}
 
 	@RequestMapping(value = "/seller/saveProduct", method = RequestMethod.POST)
 	public ModelAndView saveProduct(HttpServletRequest request,
@@ -251,8 +275,8 @@ public class ProductController {
 		try {
 			if (productBean.getProductSkuCode() != null) {
 				productBean.setProductDate(new Date());
-				productBean.setVolume(productBean.getHeight() * productBean.getLength()
-						* productBean.getBreadth());
+				productBean.setVolume(productBean.getHeight()
+						* productBean.getLength() * productBean.getBreadth());
 				productBean.setVolWeight(productBean.getVolume() / 5);
 				Product product = ConverterClass
 						.prepareProductModel(productBean);
@@ -271,26 +295,30 @@ public class ProductController {
 		log.info("*** saveProduct exit ***");
 		return new ModelAndView("redirect:/seller/Product.html");
 	}
-	
-	/*Product Config*/
-	
+
+	/* Product Config */
+
 	@RequestMapping(value = "/seller/saveProductConfig", method = RequestMethod.POST)
 	public ModelAndView saveProductConfig(HttpServletRequest request,
 			@ModelAttribute("command") ProductConfigBean productConfigBean,
 			BindingResult result) {
 
 		log.info("*** saveProductConfig start ***");
-		//Map<String, Object> model = new HashMap<String, Object>();
-		try {	
-				ProductConfig productConfig=ConverterClass.prepareProductConfigModel(productConfigBean);
-				productService.addProductConfig(productConfig, helperClass.getSellerIdfromSession(request));
-			
-		/*} catch (CustomException ce) {
-			log.error("saveProduct exception : " + ce.toString());
-			model.put("errorMessage", ce.getLocalMessage());
-			model.put("errorTime", ce.getErrorTime());
-			model.put("errorCode", ce.getErrorCode());
-			return new ModelAndView("globalErorPage", model);*/
+		// Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			ProductConfig productConfig = ConverterClass
+					.prepareProductConfigModel(productConfigBean);
+			productService.addProductConfig(productConfig,
+					helperClass.getSellerIdfromSession(request));
+
+			/*
+			 * } catch (CustomException ce) {
+			 * log.error("saveProduct exception : " + ce.toString());
+			 * model.put("errorMessage", ce.getLocalMessage());
+			 * model.put("errorTime", ce.getErrorTime()); model.put("errorCode",
+			 * ce.getErrorCode()); return new ModelAndView("globalErorPage",
+			 * model);
+			 */
 		} catch (Throwable e) {
 			log.equals(e);
 			e.printStackTrace();
@@ -298,9 +326,9 @@ public class ProductController {
 		log.info("*** saveProductConfig exit ***");
 		return new ModelAndView("redirect:/seller/ProductMapping.html");
 	}
-	
-	/*Product Config*/
-	
+
+	/* Product Config */
+
 	@RequestMapping(value = "/seller/addProductConfig", method = RequestMethod.GET)
 	public ModelAndView addProductConfig(HttpServletRequest request,
 			@ModelAttribute("command") ProductConfigBean productConfigBean,
@@ -310,29 +338,43 @@ public class ProductController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, String> productSkuCodeMap = new LinkedHashMap<>();
 		try {
-			List<Product> products = productService.listProducts(helperClass.getSellerIdfromSession(request));
-					
+			List<Product> products = productService.listProducts(helperClass
+					.getSellerIdfromSession(request));
+
 			if (products != null && products.size() != 0) {
 				for (Product product : products) {
-					productSkuCodeMap.put(product.getProductSkuCode(), product.getProductSkuCode());
+					productSkuCodeMap.put(product.getProductSkuCode(),
+							product.getProductSkuCode());
 				}
 			}
-			/*} catch (CustomException ce) {
-			log.error("addProduct exception : " + ce.toString());
-			model.put("errorMessage", ce.getLocalMessage());
-			model.put("errorTime", ce.getErrorTime());
-			model.put("errorCode", ce.getErrorCode());
-			return new ModelAndView("globalErorPage", model);*/
+
+			Map<String, String> partnermap = new HashMap<String, String>();
+			List<Partner> partnerlist = partnerService.listPartners(helperClass
+					.getSellerIdfromSession(request));
+			if (partnerlist != null && partnerlist.size() != 0) {
+				for (Partner bean : partnerlist) {
+					partnermap.put(bean.getPcName(), bean.getPcName());
+
+				}
+			}
+			/*
+			 * } catch (CustomException ce) {
+			 * log.error("addProduct exception : " + ce.toString());
+			 * model.put("errorMessage", ce.getLocalMessage());
+			 * model.put("errorTime", ce.getErrorTime()); model.put("errorCode",
+			 * ce.getErrorCode()); return new ModelAndView("globalErorPage",
+			 * model);
+			 */
+			model.put("productSkuMap", productSkuCodeMap);
+			model.put("partnermap", partnermap);
+			log.info("*** addProduct exit ***");
+			return new ModelAndView("initialsetup/addProductConfig", model);
 		} catch (Throwable e) {
 			log.error(e);
 			e.printStackTrace();
 			return new ModelAndView("globalErorPage", model);
 		}
-		model.put("productSkuMap", productSkuCodeMap);
-		log.info("*** addProduct exit ***");
-		return new ModelAndView("initialsetup/addProductConfig", model);
 	}
-	
 
 	@RequestMapping(value = "/seller/addProduct", method = RequestMethod.GET)
 	public ModelAndView addProduct(HttpServletRequest request,
@@ -347,7 +389,8 @@ public class ProductController {
 					.listCategories(helperClass.getSellerIdfromSession(request));
 			if (categoryList != null && categoryList.size() != 0) {
 				for (Category category : categoryList) {
-					categoryMap.put(category.getCatName(), category.getCatName());
+					categoryMap.put(category.getCatName(),
+							category.getCatName());
 
 				}
 			}
@@ -417,12 +460,16 @@ public class ProductController {
 					.parseLong(request.getParameter("quantity")) : 0;
 			long threholdLimit = request.getParameter("threholdLimit") != null ? Long
 					.parseLong(request.getParameter("threholdLimit")) : 0;
-			String channelSKU = request.getParameter("channelSKU") != null ? request.getParameter("channelSKU") : "";
-			float productLength = request.getParameter("length") != null ? Float.valueOf(request.getParameter("length")) : 0;
-			float productBreadth = request.getParameter("breadth") != null ? Float.valueOf(request.getParameter("breadth")) : 0;
-			float productHeight = request.getParameter("height") != null ? Float.valueOf(request.getParameter("height")) : 0;
-			float productDeadweight = request.getParameter("deadWeight") != null ? Float.valueOf(request.getParameter("deadWeight")) : 0;
-					
+			String channelSKU = request.getParameter("channelSKU") != null ? request
+					.getParameter("channelSKU") : "";
+			float productLength = request.getParameter("length") != null ? Float
+					.valueOf(request.getParameter("length")) : 0;
+			float productBreadth = request.getParameter("breadth") != null ? Float
+					.valueOf(request.getParameter("breadth")) : 0;
+			float productHeight = request.getParameter("height") != null ? Float
+					.valueOf(request.getParameter("height")) : 0;
+			float productDeadweight = request.getParameter("deadWeight") != null ? Float
+					.valueOf(request.getParameter("deadWeight")) : 0;
 
 			if (productId != 0) {
 				product.setProductId(productId);
@@ -448,7 +495,7 @@ public class ProductController {
 		} catch (CustomException ce) {
 			log.error("saveProduct exception : " + ce.toString());
 			model.put("error", ce.getLocalMessage());
-			String errors=gson.toJson(model);
+			String errors = gson.toJson(model);
 			return errors;
 		} catch (Throwable e) {
 			log.error(e);
@@ -619,7 +666,8 @@ public class ProductController {
 				System.out.println(" Filename : " + files.get(0).getName());
 				ValidateUpload.validateOfficeData(files.get(0));
 				System.out.println(" fileinput " + fileinput.getName());
-				saveContents.saveProductContents(files.get(0), sellerId, uploadFilePath);
+				saveContents.saveProductContents(files.get(0), sellerId,
+						uploadFilePath);
 
 			}
 			model.put("products", ConverterClass
@@ -649,7 +697,7 @@ public class ProductController {
 		System.out.println("Inside save method");
 		// gets absolute path of the web application
 		String applicationPath = request.getServletContext().getRealPath("");
-				
+
 		List<MultipartFile> files = uploadForm.getFiles();
 
 		List<String> fileNames = new ArrayList<String>();
@@ -668,7 +716,8 @@ public class ProductController {
 				System.out.println(" Filename : " + files.get(0).getName());
 				ValidateUpload.validateOfficeData(files.get(0));
 				System.out.println(" fileinput " + fileinput.getName());
-				saveContents.saveInventoryDetails(files.get(0), sellerId, applicationPath);
+				saveContents.saveInventoryDetails(files.get(0), sellerId,
+						applicationPath);
 
 			}
 			model.put("products", ConverterClass

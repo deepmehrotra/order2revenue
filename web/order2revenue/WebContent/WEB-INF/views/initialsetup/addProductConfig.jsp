@@ -26,79 +26,94 @@
 								<form:form method="POST" action="saveProductConfig.html"
 									id="addProductForm" role="form" class="form-horizontal">
 
-									<div class="col-sm-12">
-										<div class="hr-line-dashed"></div>
-										<div class="col-sm-6">
+									<div class="hr-line-dashed"></div>
+									<div class="col-sm-6">
 
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Product SKU
-													Code</label>
-												<div class="col-sm-7">
-													<form:select path="productSkuCode" items="${productSkuMap}"
+										<div class="mar-btm-20-oh">
+											<label class="col-sm-5 control-label">Product SKU
+												Code</label>
+											<div class="col-sm-7">
+												<form:select path="productSkuCode" class="chosen-select"
+													items="${productSkuMap}" id="productName">
+												</form:select>
+												<%-- <form:select path="productSkuCode" items="${productSkuMap}"
 														class="form-control" id="productName">
-													</form:select>
-												</div>
+													</form:select> --%>
 											</div>
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Channel Name</label>
-												<div class="col-sm-7">
-													<form:input path="channelName"
+										</div>
+										<div class="mar-btm-20-oh">
+											<label class="col-sm-5 control-label">Channel Name</label>
+											<div class="col-sm-7">
+												<%-- <form:input path="channelName"
 														value="${productConfigBean.channelName}"
-														class="form-control" />
-												</div>
+														class="form-control" /> --%>
+												<form:select path="channelName" items="${partnermap}"
+													class="form-control" id="channelName">
+												</form:select>
 											</div>
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Channel SKU
-													Reference</label>
-												<div class="col-sm-7">
-													<form:input path="channelSkuRef"
-														value="${productConfigBean.channelSkuRef}"
-														class="form-control" />
-												</div>
+										</div>
+										<div class="mar-btm-20-oh">
+											<label class="col-sm-5 control-label">Channel SKU
+												Reference</label>
+											<div class="col-sm-7">
+												<form:input path="channelSkuRef"
+													value="${productConfigBean.channelSkuRef}"
+													class="form-control" />
 											</div>
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Discount</label>
-												<div class="col-sm-7">
+										</div>
+										<div class="mar-btm-20-oh">
+											<label class="col-sm-5 control-label">Discount</label>
+											<%-- <div class="col-sm-6">
 													<form:input path="discount"
 														value="${productConfigBean.discount}" class="form-control" />
 												</div>
-											</div>
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">MRP</label>
-												<div class="col-sm-7">
-													<form:input path="mrp" value="${productConfigBean.mrp}"
-														class="form-control" />
-												</div>
-											</div>
-
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Product Price</label>
-												<div class="col-sm-7">
-													<form:input path="productPrice"
-														value="${productConfigBean.productPrice}"
-														class="form-control" />
+												<div class="col-sm-1">
+													<span class="input-group-addon">%</span>
+												</div> --%>
+											<div class="col-sm-7">
+												<div class="input-group m-b">
+													<form:input path="discount"
+														value="${productConfigBean.discount}" class="form-control" />
+													<span class="input-group-addon">%</span>
 												</div>
 											</div>
 										</div>
-
-										<div class="col-sm-12">
-											<div class="hr-line-dashed"></div>
-											<button class="btn btn-primary pull-right" type="button"
-												onclick="submitProduct()">Save</button>
+										<div class="mar-btm-20-oh">
+											<label class="col-sm-5 control-label">MRP</label>
+											<div class="col-sm-7">
+												<form:input path="mrp" value="${productConfigBean.mrp}"
+													class="form-control" />
+											</div>
 										</div>
+
+										<div class="mar-btm-20-oh">
+											<label class="col-sm-5 control-label">Product Price</label>
+											<div class="col-sm-7">
+												<form:input path="productPrice"
+													value="${productConfigBean.productPrice}"
+													class="form-control" />
+											</div>
+										</div>
+									</div>
+
+									<div class="col-sm-12">
+										<div class="hr-line-dashed"></div>
+										<button class="btn btn-primary pull-right" type="button"
+											onclick="submitProduct()">Save</button>
+									</div>
 								</form:form>
 							</div>
 						</div>
 					</div>
 				</div>
-
 			</div>
 			<jsp:include page="../globalfooter.jsp"></jsp:include>
 
 		</div>
 	</div>
-
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
+	<!-- Chosen -->
+	<script src="/O2R/seller/js/plugins/chosen/chosen.jquery.js"></script>
 	<script>
 		var nameAvailability = true;
 
@@ -162,6 +177,21 @@
 				calendarWeeks : true,
 				autoclose : true
 			});
+			var config = {
+				'.chosen-select' : {},
+				'.chosen-select-deselect' : {
+					allow_single_deselect : true
+				},
+				'.chosen-select-no-single' : {
+					disable_search_threshold : 10
+				},
+				'.chosen-select-no-results' : {
+					no_results_text : 'Oops, nothing found!'
+				}
+			}
+			for ( var selector in config) {
+				$(selector).chosen(config[selector]);
+			}
 		});
 	</script>
 </body>
