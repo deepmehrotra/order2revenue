@@ -47,12 +47,18 @@ public class DashboardDaoImpl implements DashboardDao {
                + "as quantity,ps.price as price from ProductStockList ps, Product pr,"
                + "Product_ProductStockList prps where ps.stockId=prps.closingStocks_stockId"
                + " and prps.Product_productId=pr.productId and ps.year=:year and ps.month=:month and pr.seller_Id=:sellerId) as T";
-       private static final String orderNRMonthlyQuery = "Select sum(ot.netRate) as netrate, (ot.quantity)"
+       /*private static final String orderNRMonthlyQuery = "Select sum(ot.netRate) as netrate, (ot.quantity)"
                      + " as quantity,Monthname(ot.orderDate) as month ,YEAR(ot.orderDate) from "
                      + "Order_Table ot ,OrderReturn  ort where "
                      + "ot.orderDate between :startDate AND :endDate and ort.returnDate is NULL "
                      + "and ort.returnOrRTOId is NULL and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId "
-                     + "GROUP BY YEAR(ot.orderDate), MONTH(ot.orderDate) DESC";
+                     + "GROUP BY YEAR(ot.orderDate), MONTH(ot.orderDate) DESC";*/
+       private static final String orderNRMonthlyQuery = "Select sum(ot.netRate) as netrate,"
+       		+ "sum(ot.quantity) as quantity,Monthname(ot.shippedDate) as month ,YEAR(ot.shippedDate)"
+       		+ " as year from Order_Table ot where ot.shippedDate between :startDate AND "
+       		+ ":endDate and (ot.poOrder =0 OR (ot.poOrder =1 and ot.consolidatedOrder_orderId is NULL)) "
+       		+ "and ot.seller_Id=:sellerId GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate) "
+       		+ "order by YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
        private static final String orderCountMonthlyQuery = "Select count(*), month(ot.orderDate) as month ,YEAR(ot.orderDate) as year from Order_Table"
                      + " ot where ot.orderDate between :startDate AND :endDate and ot.seller_Id=:sellerId "
                      + "GROUP BY YEAR(ot.orderDate), MONTH(ot.orderDate) DESC";
@@ -67,18 +73,52 @@ public class DashboardDaoImpl implements DashboardDao {
                      + "where ot.orderDate between :startDate AND :endDate and ot.seller_Id=:sellerId";
        private static final String grossProfitForDurationQuery = "Select sum(grossProfit) from Order_Table ot where "
                      + "ot.orderDate between :startDate AND :endDate and ot.seller_Id=:sellerId";
-       private static final String returnNRMonthlyQuery = "Select sum(ort.estimateddeduction) as returnCharges, (ort.returnorrtoQty)"
+      /* private static final String returnNRMonthlyQuery = "Select sum(ort.estimateddeduction) as returnCharges, (ort.returnorrtoQty)"
                      + " as quantity,Monthname(ort.returnDate) as month ,YEAR(ort.returnDate) from "
                      + "Order_Table ot ,OrderReturn  ort where "
                      + "ort.returnDate between :startDate AND :endDate and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId "
-                     + "GROUP BY YEAR(ort.returnDate), MONTH(ort.returnDate) DESC";
-       private static final String grossProfitMonthlyQuery = "Select sum(ot.grossProfit) as grossProfit,Monthname(ot.orderDate) as month ,"
-                     + "YEAR(ot.orderDate) from Order_Table ot where ot.orderDate "
-                     + "between :startDate AND :endDate and ot.seller_Id=:sellerId "
-                     + "GROUP BY YEAR(ot.orderDate), MONTH(ot.orderDate) DESC";
+                     + "GROUP BY YEAR(ort.returnDate), MONTH(ort.returnDate) DESC";*/
+       private static final String returnNRPOMonthlyQuery = "Select sum(ort.estimateddeduction+ort.netNR) as returnCharges,"
+       		+ " sum(ort.returnorrtoQty) as quantity,Monthname(ort.returnDate) as month ,YEAR(ort.returnDate) from "
+       		+ "Order_Table ot ,OrderReturn  ort where ort.returnDate between :startDate AND :endDate and "
+       		+ "ort.returnId=ot.orderReturnOrRTO_returnId and ot.poOrder =1 and ot.consolidatedOrder_orderId is NULL and "
+       		+ "ot.seller_Id=:sellerId GROUP BY YEAR(ort.returnDate), MONTH(ort.returnDate) order by YEAR(ort.returnDate), MONTH(ort.returnDate)";
+       private static final String returnNRMPMonthlyQuery = "Select sum(ort.estimateddeduction+(ot.grossNetRate*ort.returnorrtoQty)) as returnCharges , "
+       		+ "sum(ort.returnorrtoQty) as quantity,Monthname(ort.returnDate) as month ,YEAR(ort.returnDate) "
+       		+ "from Order_Table ot ,OrderReturn  ort where "
+       		+ "ort.returnDate between :startDate AND :endDate and ort.returnId=ot.orderReturnOrRTO_returnId "
+       		+ "and ot.poOrder =0 and ot.seller_Id=:sellerId GROUP BY YEAR(ort.returnDate), MONTH(ort.returnDate) "
+       		+ "order by YEAR(ort.returnDate), MONTH(ort.returnDate)";
+
+       private static final String grossProfitMPMonthlyQuery = "Select sum((ot.grossProfit/(ot.quantity+ort.returnorrtoQty))*ot.quantity)"
+       		+ " as grossProfit,Monthname(ot.shippedDate) as month ,"
+       		+ "YEAR(ot.shippedDate) as year from Order_Table ot ,OrderReturn  ort where ot.shippedDate "
+       		+ "between  :startDate AND :endDate and ot.poOrder =0 "
+       		+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId "
+       		+ "GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate) ORDER BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
+       private static final String grossProfitMPReturnMonthlyQuery = "Select sum((ot.grossProfit/(ot.quantity+ort.returnorrtoQty))*ot.returnorrtoQty)"
+       		+ " as grossProfit,Monthname(ort.returnDate) as month ,"
+       		+ "YEAR(ort.returnDate) as year from Order_Table ot ,OrderReturn  ort where ort.returnDate "
+       		+ "between :startDate AND :endDate and ot.poOrder =0 "
+       		+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId "
+       		+ "GROUP BY YEAR(ort.returnDate), MONTH(ort.returnDate) ORDER BY YEAR(ort.returnDate), MONTH(ort.returnDate)";
+       private static final String grossProfitPOMonthlyQuery = "Select sum(ot.grossProfit) as grossProfit, "
+       		+ "Monthname(ot.shippedDate) as month ,"
+       		+ "YEAR(ot.shippedDate) as year from Order_Table ot where ot.shippedDate "
+       		+ "between  :startDate AND :endDate and ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL "
+       		+ "and ot.seller_Id=:sellerId GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate) "
+       		+ "ORDER BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
+       private static final String grossProfitGPMonthlyQuery = "Select sum(ot.grossProfit) as grossProfit,"
+       		+ "Monthname(ort.returnDate) as month ,"
+       		+ "YEAR(ort.returnDate) as year from Order_Table ot ,OrderReturn  ort where ort.returnDate "
+       		+ "between  :startDate AND :endDate and ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL"
+       		+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId "
+       		+ "GROUP BY YEAR(ort.returnDate), MONTH(ort.returnDate) "
+       		+ "ORDER BY YEAR(ort.returnDate), MONTH(ort.returnDate);";
        private static final String expenditureMonthlyQuery = "SELECT sum(amount) as amt ,Monthname(t.expenseDate) as month, YEAR(t.expenseDate) as year FROM "
                + "Expenses t where t.expenseDate between :startDate AND :endDate and t.sellerId=:sellerId "
-               + "GROUP BY YEAR(t.expenseDate), MONTH(t.expenseDate) DESC";
+               + "GROUP BY YEAR(t.expenseDate), MONTH(t.expenseDate) "
+               + "ORDER BY YEAR(t.expenseDate), MONTH(t.expenseDate)";
        @SuppressWarnings("deprecation")
        @Override
        public DashboardBean getDashboardDetails(int sellerId)
@@ -629,32 +669,87 @@ public class DashboardDaoImpl implements DashboardDao {
               try
               {
                      session.beginTransaction();
-                     Query query = session.createSQLQuery(grossProfitMonthlyQuery)
+                     Query mpquery = session.createSQLQuery(grossProfitMPMonthlyQuery)
                      .setParameter("startDate", startDate)
                      .setParameter("endDate", endDate)
                      .setParameter("sellerId", sellerId);
-                     results = query.list();
-                     Iterator iterator1 = results.iterator();
+                     Query mpReturnquery = session.createSQLQuery(grossProfitMPReturnMonthlyQuery )
+                             .setParameter("startDate", startDate)
+                             .setParameter("endDate", endDate)
+                             .setParameter("sellerId", sellerId);
+                     Query poquery = session.createSQLQuery(grossProfitPOMonthlyQuery)
+                             .setParameter("startDate", startDate)
+                             .setParameter("endDate", endDate)
+                             .setParameter("sellerId", sellerId);
+                     Query gpquery = session.createSQLQuery(grossProfitGPMonthlyQuery)
+                             .setParameter("startDate", startDate)
+                             .setParameter("endDate", endDate)
+                             .setParameter("sellerId", sellerId);
+                     results = mpquery.list();
+                     Iterator mpiterator1 = results.iterator();
                      if (results != null) {
-                           while (iterator1.hasNext()) {
+                           while (mpiterator1.hasNext()) {
                                   System.out.println("grossp ro : row\n");
-                                  Object[] recordsRow = (Object[]) iterator1.next();
+                                  Object[] recordsRow = (Object[]) mpiterator1.next();
                                   System.out.println(" Inside Gp : recordsRow[0] : "+recordsRow[0]+" recordsRow[1] :"+recordsRow[1]+" recordsRow[2] :"+recordsRow[2]);
                                   if(recordsRow[0]!=null&&recordsRow[1]!=null&&recordsRow[2]!=null)
                                   {
-                                 /* expenseDate = new Date();
-                                  expenseDate
-                                                .setYear(Integer.parseInt(recordsRow[2].toString()) - 1900);
-                                  expenseDate.setMonth(Integer.parseInt(recordsRow[1]
-                                                .toString()) - 1);
-                                  expenseDate.setDate(1);*/
+                                 
                                     String dateString=recordsRow[1].toString().substring(0, 3)+","+recordsRow[2].toString();
                                   gpMonthly.put(dateString,
                                                Double.parseDouble(recordsRow[0].toString()));
-                                  System.out.println(" record length:" + recordsRow.length);
-                                  for (int i = 0; i < recordsRow.length; i++) {
-                                         System.out.print("\t" + recordsRow[i]);
+                                  
                                   }
+                           }
+                     }
+                     results = mpReturnquery.list();
+                     Iterator mpreturniterator1 = results.iterator();
+                     if (results != null) {
+                           while (mpreturniterator1.hasNext()) {
+                                  System.out.println("grossp ro : row\n");
+                                  Object[] recordsRow = (Object[]) mpreturniterator1.next();
+                                  System.out.println(" Inside Gp : recordsRow[0] : "+recordsRow[0]+" recordsRow[1] :"+recordsRow[1]+" recordsRow[2] :"+recordsRow[2]);
+                                  if(recordsRow[0]!=null&&recordsRow[1]!=null&&recordsRow[2]!=null)
+                                  {
+                                 
+                                    String dateString=recordsRow[1].toString().substring(0, 3)+","+recordsRow[2].toString();
+                                  gpMonthly.put(dateString,(gpMonthly.containsKey(dateString)?gpMonthly.get(dateString):0)-
+                                               Double.parseDouble(recordsRow[0].toString()));
+                                  
+                                  }
+                           }
+                     }
+                     results = poquery.list();
+                     Iterator poiterator1 = results.iterator();
+                     if (results != null) {
+                           while (poiterator1.hasNext()) {
+                                  System.out.println("grossp ro : row\n");
+                                  Object[] recordsRow = (Object[]) poiterator1.next();
+                                  System.out.println(" Inside Gp : recordsRow[0] : "+recordsRow[0]+" recordsRow[1] :"+recordsRow[1]+" recordsRow[2] :"+recordsRow[2]);
+                                  if(recordsRow[0]!=null&&recordsRow[1]!=null&&recordsRow[2]!=null)
+                                  {
+                                 
+                                    String dateString=recordsRow[1].toString().substring(0, 3)+","+recordsRow[2].toString();
+                                    gpMonthly.put(dateString,(gpMonthly.containsKey(dateString)?gpMonthly.get(dateString):0)+
+                                            Double.parseDouble(recordsRow[0].toString()));
+                                  
+                                  }
+                           }
+                     }
+                     results = gpquery.list();
+                     Iterator gpiterator1 = results.iterator();
+                     if (results != null) {
+                           while (gpiterator1.hasNext()) {
+                                  System.out.println("grossp ro : row\n");
+                                  Object[] recordsRow = (Object[]) gpiterator1.next();
+                                  System.out.println(" Inside Gp : recordsRow[0] : "+recordsRow[0]+" recordsRow[1] :"+recordsRow[1]+" recordsRow[2] :"+recordsRow[2]);
+                                  if(recordsRow[0]!=null&&recordsRow[1]!=null&&recordsRow[2]!=null)
+                                  {
+                                 
+                                    String dateString=recordsRow[1].toString().substring(0, 3)+","+recordsRow[2].toString();
+                                    gpMonthly.put(dateString,(gpMonthly.containsKey(dateString)?gpMonthly.get(dateString):0)-
+                                            Double.parseDouble(recordsRow[0].toString()));
+                                  
                                   }
                            }
                      }
@@ -729,7 +824,6 @@ public class DashboardDaoImpl implements DashboardDao {
 			taxList = taxDetailService.listTaxDetails(sellerId, "Tax");
 			System.out.println(" Getting tax Lsit");
 		} catch (CustomException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
              /* Seller seller = null;
@@ -803,7 +897,6 @@ public class DashboardDaoImpl implements DashboardDao {
                Iterator iterator1 = results.iterator();
                if (results != null) {
                      while (iterator1.hasNext()) {
-                            System.out.println("Expense : row\n");
                             Object[] recordsRow = (Object[]) iterator1.next();
                             System.out.println("Expense  monhtly : \n "+recordsRow[0]+" recordsRow[1] "+recordsRow[1]+" recordsRow[2] "+recordsRow[2]);
                             if(recordsRow[0]!=null&&recordsRow[1]!=null&&recordsRow[2]!=null)
@@ -1170,12 +1263,7 @@ System.out.println(" Monthly Expense : "+expenseMonthly);
                                   System.out.println(" record length:" + recordsRow.length);
                                   if(recordsRow[0]!=null&&recordsRow[1]!=null&&recordsRow[2]!=null&&recordsRow[3]!=null)
                                   {
-                                 /* orderDate = new Date();
-                                  orderDate.setYear(Integer.parseInt(recordsRow[3].toString()) - 1900);
-                                  orderDate.setMonth(Integer.parseInt(recordsRow[2].toString()) - 1);
-                                  orderDate.setDate(1);
-*/
-                               String dateString=recordsRow[2].toString().substring(0, 3)+","+recordsRow[3].toString();
+                                 String dateString=recordsRow[2].toString().substring(0, 3)+","+recordsRow[3].toString();
                                   nrMAp.put(dateString,
                                                 Double.parseDouble(recordsRow[0].toString()));
                                   quantityMAp.put(dateString,
@@ -1199,7 +1287,8 @@ System.out.println(" Monthly Expense : "+expenseMonthly);
        {
               System.out.println(" Inside for six months ");
               // Seller seller=null;
-              List<Object[]> results = null;
+              List<Object[]> resultsPO = null;
+              List<Object[]> resultsMP = null;
               List<Object> returnList=new ArrayList<Object>();
               Map<String,Double> returnAMountMAp=new LinkedHashMap<String, Double>();
               Map<String,Long> quantityMAp=new LinkedHashMap<String, Long>();
@@ -1209,38 +1298,62 @@ System.out.println(" Monthly Expense : "+expenseMonthly);
               {
                      session = sessionFactory.openSession();
                      session.beginTransaction();
-                     Query query = session.createSQLQuery(returnNRMonthlyQuery)
+                     Query POquery = session.createSQLQuery(returnNRPOMonthlyQuery)
                      .setParameter("startDate", startDate)
                      .setParameter("endDate", endDate)
                      .setParameter("sellerId", sellerId);
-                     results = query.list();
-                     Iterator iterator1 = results.iterator();
-                     if (results != null) {
+                     Query MPquery = session.createSQLQuery(returnNRMPMonthlyQuery)
+                             .setParameter("startDate", startDate)
+                             .setParameter("endDate", endDate)
+                             .setParameter("sellerId", sellerId);
+                     resultsMP = MPquery.list();
+                     resultsPO = POquery.list();
+                     Iterator iterator1 = resultsMP.iterator();
+                     if (resultsMP != null) {
                            while (iterator1.hasNext()) {
-                                  System.out.println("Expense : row\n");
+                     if (resultsMP != null&&resultsMP.size()!=0&&resultsMP.get(0)!=null) {
+                                  System.out.println("Return Maount  : row\n");
                                   Object[] recordsRow = (Object[]) iterator1.next();
                                   if(recordsRow[0]!=null&&recordsRow[1]!=null&&recordsRow[2]!=null&&recordsRow[3]!=null)
                                   {
                                   System.out.println(" record length:" + recordsRow.length);
-                                /*  orderDate.setYear(Integer.parseInt(recordsRow[3].toString()) - 1900);
-                                  orderDate.setMonth(Integer.parseInt(recordsRow[2].toString()) - 1);
-                                  orderDate.setDate(1);*/
                                   String dateString=recordsRow[2].toString().substring(0, 3)+","+recordsRow[3].toString();
                                   returnAMountMAp.put(dateString,
                                                 Double.parseDouble(recordsRow[0].toString()));
                                   quantityMAp.put(dateString,
                                           Long.parseLong(recordsRow[1].toString()));
-                                  for (int i = 0; i < recordsRow.length; i++) {
-                                         System.out.print("\t" + recordsRow[i]);
-                                    }
-                                  }
+                                
                            }
                      }
+                           }
+                     }
+                     Iterator poIterator = resultsPO.iterator();
+                     if (resultsPO != null) {
+                           while (poIterator.hasNext()) {
+                     if (resultsPO != null&&resultsPO.size()!=0&&resultsPO.get(0)!=null) {
+                         System.out.println("resultsPO : row\n");
+                         Object[] recordsRow = (Object[]) poIterator.next();
+                         if(recordsRow[0]!=null&&recordsRow[1]!=null&&recordsRow[2]!=null&&recordsRow[3]!=null)
+                         {
+                         System.out.println(" record length:" + recordsRow.length);
+                         String dateString=recordsRow[2].toString().substring(0, 3)+","+recordsRow[3].toString();
+                         returnAMountMAp.put(dateString,returnAMountMAp.containsKey(dateString)?returnAMountMAp.get(dateString):0+
+                                       Double.parseDouble(recordsRow[0].toString()));
+                         quantityMAp.put(dateString,quantityMAp.containsKey(dateString)?quantityMAp.get(dateString):0+
+                                 Long.parseLong(recordsRow[1].toString()));
+                        
+                  }
+            }
+                           }
+                     }
+                     returnList.add(returnAMountMAp);
+                     returnList.add(quantityMAp);
               }
               catch (Exception e) {
                      System.out.println("Inside exception  " + e.getLocalizedMessage());
                      e.printStackTrace();
               }
+              System.out.println(returnList);
               return returnList;
        }
 }

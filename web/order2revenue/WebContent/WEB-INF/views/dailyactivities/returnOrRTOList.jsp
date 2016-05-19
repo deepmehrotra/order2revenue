@@ -63,8 +63,7 @@ $('#LoadOnSubmit').click(function (e) {
                             <h5>Returns</h5>
                         </div>
                         <div class="ibox-content overflow-h">
-                        <form method="POST" action="searchReturnOrder.html?action=list" id="findOrderForm"
-                        class="form-horizontal">
+                        <form method="POST" action="searchReturnOrder.html?action=list" id="findOrderForm" class="form-horizontal">
                         <div class="col-sm-12">
                             <div class="col-sm-4">
                                 <div class="radio"><label>
@@ -134,8 +133,7 @@ $('#LoadOnSubmit').click(function (e) {
                                 </div>
                         </form>
                         <div class="col-lg-12">
-                                <div class="hr-line-dashed"></div>
-						<div id="RTOTableContainer"></div>
+                                <div class="hr-line-dashed"></div>						
                         </div>
 						</div>
 					</div>

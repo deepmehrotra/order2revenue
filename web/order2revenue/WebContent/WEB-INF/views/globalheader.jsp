@@ -22,7 +22,7 @@
 			<a class="navbar-minimalize minimalize-styl-2 btn btn-primary "
 				href="#"><i class="fa fa-bars"></i> </a>
 			<form role="search" class="navbar-form-new" method="post"
-				action="findGlobalOrders.html" id="findOrderForm"
+				action="findGlobalOrders.html" id="findGlobalOrderForm"
 				class="form-horizontal">
 				<div class="form-group  top-search-180" id="search1">
 					<div class="top-search-30 f-left">
@@ -73,8 +73,7 @@
 						</div>
 					</div>
 
-					<button class="btn btn-white" type="submit">
-						<i class="fa fa-search"></i>
+					<button class="btn btn-white" type="submit"><i class="fa fa-search"></i>
 					</button>
 				</div>
 			</form>
