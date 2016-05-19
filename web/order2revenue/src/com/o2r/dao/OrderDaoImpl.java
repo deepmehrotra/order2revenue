@@ -425,7 +425,7 @@ public class OrderDaoImpl implements OrderDao {
 							.getProductConfig().getTaxPo())));
 
 					order.setOrderMRP(order.getOrderMRP() * order.getQuantity());
-					order.setOrderSP(order.getOrderSP() * order.getQuantity());
+					order.setOrderSP(order.getProductConfig().getSp() * order.getQuantity());
 
 					order.setDiscount(order.getProductConfig().getDiscount());
 					order.getOrderTax().setTax(taxvalue);
@@ -811,7 +811,7 @@ public class OrderDaoImpl implements OrderDao {
 		Seller seller = null;
 		Order order = null;
 		Events event = null;
-		//Product product = null;
+		// Product product = null;
 		TaxDetail taxDetails = null;
 		TaxDetail tdsDetails = null;
 		float returnChargesCalculated = 0;
@@ -856,13 +856,15 @@ public class OrderDaoImpl implements OrderDao {
 				orderReturn
 						.setReturnOrRTOChargestoBeDeducted(returnChargesCalculated);
 				order.setTotalAmountRecieved(order.getGrossNetRate()
-						* (order.getQuantity() - orderReturn.getReturnorrtoQty()));
+						* (order.getQuantity() - orderReturn
+								.getReturnorrtoQty()));
 
-				/*if ((int) order.getOrderReturnOrRTO()
-						.getReturnOrRTOChargestoBeDeducted() == 0) {
-					order.getOrderReturnOrRTO().setReturnUploadDate(
-							orderReturn.getReturnUploadDate());
-				}*/
+				/*
+				 * if ((int) order.getOrderReturnOrRTO()
+				 * .getReturnOrRTOChargestoBeDeducted() == 0) {
+				 * order.getOrderReturnOrRTO().setReturnUploadDate(
+				 * orderReturn.getReturnUploadDate()); }
+				 */
 				order.getOrderReturnOrRTO().setReturnUploadDate(
 						orderReturn.getReturnUploadDate());
 				if (order.getReturnLimitCrossed().compareTo(
@@ -924,19 +926,16 @@ public class OrderDaoImpl implements OrderDao {
 					if (orderReturn.getReturnorrtoQty() == order.getQuantity())
 						order.setGrossProfit(-orderReturn
 								.getReturnOrRTOChargestoBeDeducted());
-/*
-					else {
-						product = productService.getProduct(
-								order.getProductSkuCode(), sellerId);
-						order.setGrossProfit(order.getNetRate()
-								- (order.getNetRate() / order.getQuantity())
-								* orderReturn.getReturnorrtoQty()
-								- orderReturn
-										.getReturnOrRTOChargestoBeDeducted()
-								- (product.getProductPrice() * (order
-										.getQuantity() - orderReturn
-										.getReturnorrtoQty())));
-					}*/
+					/*
+					 * else { product = productService.getProduct(
+					 * order.getProductSkuCode(), sellerId);
+					 * order.setGrossProfit(order.getNetRate() -
+					 * (order.getNetRate() / order.getQuantity())
+					 * orderReturn.getReturnorrtoQty() - orderReturn
+					 * .getReturnOrRTOChargestoBeDeducted() -
+					 * (product.getProductPrice() * (order .getQuantity() -
+					 * orderReturn .getReturnorrtoQty()))); }
+					 */
 
 					OrderTimeline timeline = new OrderTimeline();
 					timeline.setEvent("Return Recieved");
@@ -960,21 +959,21 @@ public class OrderDaoImpl implements OrderDao {
 				// order.setStatus("Return Recieved");
 
 				if (order.getQuantity() != orderReturn.getReturnorrtoQty()) {
-				/*	order.getOrderPayment().setPaymentDifference(
-							order.getOrderPayment().getPaymentDifference()
-									+ order.getGrossNetRate()
-									* orderReturn.getReturnorrtoQty());*/
+					/*
+					 * order.getOrderPayment().setPaymentDifference(
+					 * order.getOrderPayment().getPaymentDifference() +
+					 * order.getGrossNetRate() orderReturn.getReturnorrtoQty());
+					 */
 					order.setGrossProfit(order.getGrossProfit()
 							* orderReturn.getReturnorrtoQty()
 							/ order.getQuantity());
 				}
 
-				order.getOrderPayment()
-				.setPaymentDifference(
-						order.getOrderPayment()
-								.getNetPaymentResult()-order.getTotalAmountRecieved()
-								+order.getOrderReturnOrRTO()
-								.getReturnOrRTOChargestoBeDeducted());
+				order.getOrderPayment().setPaymentDifference(
+						order.getOrderPayment().getNetPaymentResult()
+								- order.getTotalAmountRecieved()
+								+ order.getOrderReturnOrRTO()
+										.getReturnOrRTOChargestoBeDeducted());
 				// Reverting Tax information for Return Order
 				taxDetails = new TaxDetail();
 				taxDetails
@@ -1003,7 +1002,6 @@ public class OrderDaoImpl implements OrderDao {
 						(order.getOrderTax().getTdsToDeduct() / order
 								.getQuantity())
 								* orderReturn.getReturnorrtoQty());
-
 
 				order.setFinalStatus("Actionable");
 				order.setNetSaleQuantity(order.getQuantity()
@@ -1040,34 +1038,43 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public List<Order> findOrders(String column, String value, int sellerId,
 			boolean poOrder) throws CustomException {
-		
+
 		String searchString = "order." + column;
-		
+
 		System.out.println(" Inside Find order dao method searchString :"
 				+ searchString + " value :" + value + "   sellerId :"
 				+ sellerId);
 
 		Seller seller = null;
 		List<Order> orderlist = null;
-		Criteria criteria=null;
-		
+		Criteria criteria = null;
+
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			
-			if(column.equals("returnOrRTOId")){
+
+			if (column.equals("returnOrRTOId")) {
 				criteria = session.createCriteria(Order.class);
-				criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",CriteriaSpecification.LEFT_JOIN)					
-					.add(Restrictions.like("orderReturnOrRTO.returnOrRTOId",value));
-			}else{
-				criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
-				criteria.createAlias("orders", "order",CriteriaSpecification.LEFT_JOIN)
-						.add(Restrictions.like(searchString, value).ignoreCase())
+				criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
+						CriteriaSpecification.LEFT_JOIN).add(
+						Restrictions.like("orderReturnOrRTO.returnOrRTOId",
+								value));
+			} else {
+				criteria = session.createCriteria(Seller.class).add(
+						Restrictions.eq("id", sellerId));
+				criteria.createAlias("orders", "order",
+						CriteriaSpecification.LEFT_JOIN)
+						.add(Restrictions.like(searchString, value)
+								.ignoreCase())
 						.add(Restrictions.like("order.poOrder", poOrder))
-						.addOrder(org.hibernate.criterion.Order.desc("order.lastActivityOnOrder"))
-						.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+						.addOrder(
+								org.hibernate.criterion.Order
+										.desc("order.lastActivityOnOrder"))
+						.setResultTransformer(
+								CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 				if (poOrder)
-					criteria.add(Restrictions.eq("order.consolidatedOrder", null));
+					criteria.add(Restrictions.eq("order.consolidatedOrder",
+							null));
 			}
 			if (criteria.list().size() != 0) {
 				seller = (Seller) criteria.list().get(0);
@@ -1286,12 +1293,12 @@ public class OrderDaoImpl implements OrderDao {
 			orderPayment.setNegativeAmount(Math.abs(orderPayment
 					.getNegativeAmount()));
 			order.setTotalAmountRecieved(order.getGrossNetRate()
-					* (order.getQuantity() - order
-							.getOrderReturnOrRTO().getReturnorrtoQty()));
+					* (order.getQuantity() - order.getOrderReturnOrRTO()
+							.getReturnorrtoQty()));
 			if (order != null && order.getOrderReturnOrRTO() != null
 					&& order.getOrderReturnOrRTO().getReturnDate() != null
 					&& order.getOrderReturnOrRTO().getReturnorrtoQty() != 0) {
-				
+
 				if (((int) orderPayment.getPositiveAmount()) != 0) {
 					if (order.getReturnLimitCrossed().compareTo(
 							order.getOrderReturnOrRTO().getReturnDate()) < 0) {
@@ -1514,31 +1521,27 @@ public class OrderDaoImpl implements OrderDao {
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
 										+ orderPayment.getPositiveAmount());
-						/*if(order.getQuantity()==order.getOrderReturnOrRTO().getReturnorrtoQty())
-						{
+						/*
+						 * if(order.getQuantity()==order.getOrderReturnOrRTO().
+						 * getReturnorrtoQty()) { order.getOrderPayment()
+						 * .setPaymentDifference( order.getOrderPayment()
+						 * .getNetPaymentResult() +order.getOrderReturnOrRTO()
+						 * .getReturnOrRTOChargestoBeDeducted()); } else {
+						 * order.getOrderPayment() .setPaymentDifference(
+						 * order.getOrderPayment() .getNetPaymentResult()
+						 * +order.getOrderReturnOrRTO()
+						 * .getReturnOrRTOChargestoBeDeducted
+						 * ()-(order.getGrossNetRate
+						 * ()*(order.getQuantity()-order.getOrderReturnOrRTO()
+						 * .getReturnorrtoQty()))); }
+						 */
 						order.getOrderPayment()
-						.setPaymentDifference(
-								order.getOrderPayment()
-										.getNetPaymentResult()
-										+order.getOrderReturnOrRTO()
-										.getReturnOrRTOChargestoBeDeducted());
-						}
-						else
-						{
-							order.getOrderPayment()
-							.setPaymentDifference(
-									order.getOrderPayment()
-											.getNetPaymentResult()
-											+order.getOrderReturnOrRTO()
-											.getReturnOrRTOChargestoBeDeducted()-(order.getGrossNetRate()*(order.getQuantity()-order.getOrderReturnOrRTO()
-													.getReturnorrtoQty())));
-						}*/
-						order.getOrderPayment()
-						.setPaymentDifference(
-								order.getOrderPayment()
-										.getNetPaymentResult()-order.getTotalAmountRecieved()
-										+order.getOrderReturnOrRTO()
-										.getReturnOrRTOChargestoBeDeducted());
+								.setPaymentDifference(
+										order.getOrderPayment()
+												.getNetPaymentResult()
+												- order.getTotalAmountRecieved()
+												+ order.getOrderReturnOrRTO()
+														.getReturnOrRTOChargestoBeDeducted());
 						order.setStatus("Payment Recieved");
 						OrderTimeline timeline = new OrderTimeline();
 						timeline.setEvent("Rs "
@@ -1562,39 +1565,35 @@ public class OrderDaoImpl implements OrderDao {
 										- orderPayment.getNegativeAmount());
 						if (order.getReturnLimitCrossed().compareTo(
 								order.getOrderReturnOrRTO().getReturnDate()) < 0) {
-						
+
 							order.setStatus("Return Limit Crossed");
 							OrderTimeline timeline1 = new OrderTimeline();
 							timeline1.setEvent("Return Limit Crossed");
 							timeline1.setEventDate(new Date());
 							order.getOrderTimeline().add(timeline1);
 						}
-						/*if(order.getQuantity()==order.getOrderReturnOrRTO().getReturnorrtoQty())
-						{
+						/*
+						 * if(order.getQuantity()==order.getOrderReturnOrRTO().
+						 * getReturnorrtoQty()) { order.getOrderPayment()
+						 * .setPaymentDifference( order.getOrderPayment()
+						 * .getNetPaymentResult() + order.getOrderReturnOrRTO()
+						 * .getReturnOrRTOChargestoBeDeducted()); } else {
+						 * order.getOrderPayment() .setPaymentDifference(
+						 * order.getOrderPayment() .getNetPaymentResult()
+						 * +order.getOrderReturnOrRTO()
+						 * .getReturnOrRTOChargestoBeDeducted
+						 * ()-(order.getGrossNetRate
+						 * ()*(order.getQuantity()-order.getOrderReturnOrRTO()
+						 * .getReturnorrtoQty()))); }
+						 */
+
 						order.getOrderPayment()
-						.setPaymentDifference(
-								order.getOrderPayment()
-										.getNetPaymentResult()
-										+ order.getOrderReturnOrRTO()
-												.getReturnOrRTOChargestoBeDeducted());
-						}
-						else
-						{
-							order.getOrderPayment()
-							.setPaymentDifference(
-									order.getOrderPayment()
-											.getNetPaymentResult()
-											+order.getOrderReturnOrRTO()
-											.getReturnOrRTOChargestoBeDeducted()-(order.getGrossNetRate()*(order.getQuantity()-order.getOrderReturnOrRTO()
-													.getReturnorrtoQty())));
-						}*/
-						
-						order.getOrderPayment()
-						.setPaymentDifference(
-								order.getOrderPayment()
-										.getNetPaymentResult()
-										+order.getOrderReturnOrRTO()
-										.getReturnOrRTOChargestoBeDeducted()-order.getTotalAmountRecieved());
+								.setPaymentDifference(
+										order.getOrderPayment()
+												.getNetPaymentResult()
+												+ order.getOrderReturnOrRTO()
+														.getReturnOrRTOChargestoBeDeducted()
+												- order.getTotalAmountRecieved());
 					}
 				} else {
 
@@ -1606,11 +1605,12 @@ public class OrderDaoImpl implements OrderDao {
 								order.getOrderPayment().getNetPaymentResult()
 										+ orderPayment.getPositiveAmount());
 						order.getOrderPayment()
-						.setPaymentDifference(
-								order.getOrderPayment()
-										.getNetPaymentResult()
-										+order.getOrderReturnOrRTO()
-										.getReturnOrRTOChargestoBeDeducted()-order.getTotalAmountRecieved());
+								.setPaymentDifference(
+										order.getOrderPayment()
+												.getNetPaymentResult()
+												+ order.getOrderReturnOrRTO()
+														.getReturnOrRTOChargestoBeDeducted()
+												- order.getTotalAmountRecieved());
 						System.out.println("payment difference :"
 								+ order.getOrderPayment()
 										.getPaymentDifference());
@@ -1645,31 +1645,22 @@ public class OrderDaoImpl implements OrderDao {
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
 										- orderPayment.getNegativeAmount());
-						/*if(order.getOrderPayment()
-								.getNetPaymentResult()<0)
-						{
+						/*
+						 * if(order.getOrderPayment() .getNetPaymentResult()<0)
+						 * { order.getOrderPayment() .setPaymentDifference(
+						 * order.getOrderPayment() .getNetPaymentResult() -
+						 * order.getNetRate() ); } else {
+						 * order.getOrderPayment() .setPaymentDifference(
+						 * order.getOrderPayment() .getNetPaymentResult()
+						 * -order.getNetRate() ); }
+						 */
 						order.getOrderPayment()
 								.setPaymentDifference(
 										order.getOrderPayment()
 												.getNetPaymentResult()
-												- order.getNetRate()
-												);
-						}
-						else
-						{
-							order.getOrderPayment()
-							.setPaymentDifference(
-									order.getOrderPayment()
-											.getNetPaymentResult()
-											-order.getNetRate()
-											);
-						}*/
-						order.getOrderPayment()
-						.setPaymentDifference(
-								order.getOrderPayment()
-										.getNetPaymentResult()
-										+order.getOrderReturnOrRTO()
-										.getReturnOrRTOChargestoBeDeducted()-order.getTotalAmountRecieved());
+												+ order.getOrderReturnOrRTO()
+														.getReturnOrRTOChargestoBeDeducted()
+												- order.getTotalAmountRecieved());
 
 					}
 				}
@@ -1680,13 +1671,13 @@ public class OrderDaoImpl implements OrderDao {
 				order.getOrderPayment().setUploadDate(new Date());
 				if (order.getOrderPayment().getPaymentDifference() > 0
 						|| (int) order.getOrderPayment().getPaymentDifference() == 0) {
-				order.setFinalStatus("Settled");
+					order.setFinalStatus("Settled");
 				} else {
-					
+
 					order.setFinalStatus("Actionable");
 				}
 				System.out.println("order in add payment :   **" + order);
-				
+
 				order.setLastActivityOnOrder(new Date());
 				session.saveOrUpdate(order);
 				session.getTransaction().commit();
@@ -2272,7 +2263,7 @@ public class OrderDaoImpl implements OrderDao {
 					/ 100;
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
-			tds = ((comission / 10) + ((fixedfee + pccAmount+shippingCharges) / 50))
+			tds = ((comission / 10) + ((fixedfee + pccAmount + shippingCharges) / 50))
 					* order.getQuantity();
 			order.getOrderTax().setTdsToDeduct(tds);
 			order.setGrossNetRate(nrValue);
@@ -2284,7 +2275,7 @@ public class OrderDaoImpl implements OrderDao {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		System.out.println(" Setting values for Nr in nrcalculator NR: "
 				+ order.getNetRate() + ", commison : "
 				+ order.getPartnerCommission() + " fixedfee : "
@@ -3482,7 +3473,8 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.createAlias("orders", "order",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("order.subOrderID", poID).ignoreCase())
-					.add(Restrictions.eq("order.invoiceID", invoiceID).ignoreCase())
+					.add(Restrictions.eq("order.invoiceID", invoiceID)
+							.ignoreCase())
 					.add(Restrictions.eq("order.productSkuCode", channelSkuRef)
 							.ignoreCase())
 					.add(Restrictions.eq("order.poOrder", true))
@@ -3508,7 +3500,7 @@ public class OrderDaoImpl implements OrderDao {
 				poOrder = orderlist.get(0);
 			}
 			return poOrder;
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e);
@@ -3523,36 +3515,34 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	@Override
-	public GatePass addGatePass(ProductConfig productConfig, GatePass gatepass, int sellerId)
-			throws CustomException {
+	public GatePass addGatePass(ProductConfig productConfig, GatePass gatepass,
+			int sellerId) throws CustomException {
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			
-			double eossValue = (productConfig.getSuggestedPOPrice() * 
-					productConfig.getDiscount()) / 100;
+
+			double eossValue = (productConfig.getSuggestedPOPrice() * productConfig
+					.getDiscount()) / 100;
 			double grossNR = productConfig.getSuggestedPOPrice() - eossValue;
 
 			gatepass.setNetNR(grossNR * gatepass.getQuantity());
 			gatepass.setTaxPOAmt(grossNR
 					- (grossNR * 100 / (100 + productConfig.getTaxPo())));
-			gatepass.setRetutnPR(grossNR
-					- gatepass.getTaxPOAmt());
+			gatepass.setRetutnPR(grossNR - gatepass.getTaxPOAmt());
 			gatepass.setNetPR(gatepass.getRetutnPR() * gatepass.getQuantity());
 
 			gatepass.setGrossProfit(gatepass.getNetPR()
-					- (productConfig.getProductPrice() * gatepass
-							.getQuantity()));
+					- (productConfig.getProductPrice() * gatepass.getQuantity()));
 
-			/*OrderTimeline timeline = new OrderTimeline();
-			timeline.setEvent("Return Recieved");
-			timeline.setEventDate(new Date());
-			order.getOrderTimeline().add(timeline);
-			order.setStatus("Return Recieved");*/
+			/*
+			 * OrderTimeline timeline = new OrderTimeline();
+			 * timeline.setEvent("Return Recieved"); timeline.setEventDate(new
+			 * Date()); order.getOrderTimeline().add(timeline);
+			 * order.setStatus("Return Recieved");
+			 */
 
-			productService.updateInventory(productConfig
-					.getProductSkuCode(), 0, gatepass.getQuantity(), 0, false,
-					sellerId);
+			productService.updateInventory(productConfig.getProductSkuCode(),
+					0, gatepass.getQuantity(), 0, false, sellerId);
 
 			session.saveOrUpdate(gatepass);
 			session.getTransaction().commit();
@@ -3590,7 +3580,7 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.setFirstResult(pageNo * pageSize);
 			criteria.setMaxResults(pageSize);
 			returnlist = criteria.list();
-			for (Order order: returnlist) {
+			for (Order order : returnlist) {
 				Hibernate.initialize(order.getOrderReturnOrRTO());
 				Hibernate.initialize(order.getOrderTax());
 				Hibernate.initialize(order.getOrderPayment());
@@ -3622,17 +3612,17 @@ public class OrderDaoImpl implements OrderDao {
 
 		OrderRTOorReturn consolidateReturn = new OrderRTOorReturn();
 		Order consolidatedOrder = new Order();
-		
+
 		consolidatedOrder.setPoOrder(true);
 		consolidatedOrder.setOrderDate(gatepasslist.get(0).getReturnDate());
 
 		consolidatedOrder.setPcName(gatepasslist.get(0).getPcName());
 		consolidatedOrder.setSubOrderID(gatepasslist.get(0).getGatepassId());
-		consolidatedOrder.setChannelOrderID(gatepasslist.get(0)
-				.getGatepassId());
+		consolidatedOrder
+				.setChannelOrderID(gatepasslist.get(0).getGatepassId());
 		consolidatedOrder.setProductSkuCode(gatepasslist.size() + " SKUs");
 		consolidatedOrder.setInvoiceID(gatepasslist.get(0).getInvoiceID());
-		
+
 		consolidateReturn.setReturnDate(gatepasslist.get(0).getReturnDate());
 
 		Seller seller = null;
@@ -3653,24 +3643,26 @@ public class OrderDaoImpl implements OrderDao {
 			seller = (Seller) criteria.list().get(0);
 
 			for (GatePass gatepass : gatepasslist) {
-				
-				/*Order poOrder = findPOOrder(gatepass.getPoID(),
-						gatepass.getInvoiceID(), gatepass.getChannelSkuRef(),
-						sellerId);*/
-				
-				ProductConfig productConfig = productService
-						.getProductConfig(gatepass.getChannelSkuRef(),
-								gatepass.getPcName(), sellerId);
+
+				/*
+				 * Order poOrder = findPOOrder(gatepass.getPoID(),
+				 * gatepass.getInvoiceID(), gatepass.getChannelSkuRef(),
+				 * sellerId);
+				 */
+
+				ProductConfig productConfig = productService.getProductConfig(
+						gatepass.getChannelSkuRef(), gatepass.getPcName(),
+						sellerId);
 				if (productConfig != null) {
 					quantity += gatepass.getQuantity();
 					totalReturnCharges += gatepass.getTotalReturnCharges();
-					eossValue += (productConfig.getSuggestedPOPrice() *
-							productConfig.getDiscount()) / 100;
+					eossValue += (productConfig.getSuggestedPOPrice() * productConfig
+							.getDiscount()) / 100;
 					netRate += gatepass.getNetNR();
 					taxValue += gatepass.getTaxAmt();
 					grossPR += gatepass.getNetPR();
 					grossProfit += gatepass.getGrossProfit();
-				} 
+				}
 			}
 
 			if (seller.getPartners() != null
@@ -3680,14 +3672,15 @@ public class OrderDaoImpl implements OrderDao {
 
 			/* populating derived values of order */
 			consolidatedOrder.setStatus("Return Recieved");
-			
+
 			consolidateReturn.setReturnorrtoQty(quantity);
-			consolidateReturn.setReturnOrRTOChargestoBeDeducted(totalReturnCharges);
+			consolidateReturn
+					.setReturnOrRTOChargestoBeDeducted(totalReturnCharges);
 			consolidateReturn.setNetNR(netRate);
 			consolidateReturn.setTaxPOAmt(taxValue);
 			consolidateReturn.setNetPR(grossPR);
 			consolidateReturn.setGrossProfit(grossProfit);
-			
+
 			consolidatedOrder.setEossValue(eossValue);
 
 			consolidatedOrder.setNetRate(netRate);
@@ -3744,8 +3737,10 @@ public class OrderDaoImpl implements OrderDao {
 			session.getTransaction().commit();
 			return consolidateReturn;
 		} catch (Exception e) {
-			System.out.println("Inside exception in generateConsolidatedReturn "
-					+ e.getLocalizedMessage() + " message: " + e.getMessage());
+			System.out
+					.println("Inside exception in generateConsolidatedReturn "
+							+ e.getLocalizedMessage() + " message: "
+							+ e.getMessage());
 			e.printStackTrace();
 			log.error(e);
 			log.info("Error : " + GlobalConstant.addOrderError);
@@ -3781,7 +3776,6 @@ public class OrderDaoImpl implements OrderDao {
 		} finally {
 			session.close();
 		}
-
 
 	}
 }
