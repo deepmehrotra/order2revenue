@@ -624,7 +624,7 @@ public class SaveContents {
 				if (entry.getCell(6) != null
 						&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
 					try {
-						order.setOrderSP(entry.getCell(6).getNumericCellValue());
+						order.setPoPrice(entry.getCell(6).getNumericCellValue());
 
 					} catch (NumberFormatException e) {
 						errorMessage.append(" Amount should be a number ");
