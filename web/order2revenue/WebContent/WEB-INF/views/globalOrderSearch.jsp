@@ -79,7 +79,8 @@
 															onclick="setOrderID(${searchOrder.orderId},'${searchOrder.channelOrderID}','return')"
 															style='cursor: pointer;'>Mark Return</label></td>
 													</c:if>
-													<td><label
+													<td><label data-toggle="modal"
+															data-target="#myModal21"
 														onclick="setOrderID(${searchOrder.orderId},'${searchOrder.channelOrderID}','payment')"
 														style='cursor: pointer;'>Mark Paid</label></td>
 												</tr>
@@ -133,8 +134,7 @@
 													<label class="col-sm-4 control-label">Return Date</label>
 													<div class="col-sm-8">
 														<div class="input-group">
-															<form:input path="" type="date" id="datefield"
-																onchange="mydate();" class="form-control" />
+															<form:input path="" type="date" id="datefield" onchange="mydate();" class="form-control" />
 															<form:input path="orderReturnOrRTO.returnDate"
 																id="datevalue" class="form-control" type="hidden" />
 														</div>
@@ -232,24 +232,27 @@
 
 				<!--  -->
 
-				<div id="payment">
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="ibox float-e-margins" style="border: solid">
-								<div class="ibox-title">
-									<h5>Add Order Payment</h5>
-								</div>
-								<div class="ibox-content add-company">
-									<form:form method="POST" action="saveManualPayment.html"
+				<div class="col-sm-3">					
+					<div class="modal inmodal fade" id="myModal21" tabindex="-1"
+						role="dialog" aria-hidden="true">
+						<form:form method="POST" action="saveManualPayment.html"
 										id="saveOrderPaymentForm" role="form" class="form-horizontal">
 
-										<input type="hidden" name="orderId" id="paymentOrderId"
-											value="" />
-										<input type="hidden" name="channelOrderID"
-											id="paymentChannelOrderID" value="" />
-
-										<div class="col-sm-12">
+							<div class="modal-dialog modal-lg">
+								<div class="modal-content animated bounceInRight"
+									style="left: 22%; width: 50%;">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">
+											<span aria-hidden="true">&times;</span>
+										</button>
+										<h4 class="modal-title">Mark Paid</h4>
+									</div>
+									<div class="modal-body" style="padding: 20px 30px 50px 30px;">
+										<div class="row">
+											<div class="col-sm-12">
 											<div class="form-group">
+											<form:input type="hidden" path="orderId" id="paymentOrderId" value="" />
+											<form:input type="hidden" path="channelOrderID" id="paymentChannelOrderID" value="" />
 												<label class="col-sm-5 control-label">Positive
 													Payment</label>
 
@@ -269,30 +272,29 @@
 											</div>
 											<div class="form-group">
 												<label class="col-sm-5 control-label">Payment Date</label>
-												<div class="col-md-7" id="data_1">
-													<div class="input-group date">
-														<span class="input-group-addon"><i
-															class="fa fa-calendar"></i></span>
-														<form:input class="form-control" id="dateofPayment"
-															path="orderPayment.dateofPayment" width='200' />
+												
+												<div class="col-md-7" >
+													<div class="input-group">
+														<span class="input-group-addon"></span>
+														<form:input class="form-control" type="date" id="dateofPayment" path="orderPayment.dateofPayment" onfocus="pickdate(2,0)" width='200' />
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="col-sm-12">
-											<div class="hr-line-dashed"></div>
-											&nbsp; &nbsp; &nbsp;
-											<button class="btn btn-primary pull-right" type="submit"
-												style="padding-left: 10px">Save</button>
-											&nbsp; &nbsp; &nbsp; &nbsp;
-											<button class="btn btn-primary pull-right" type="button"
-												onclick="setVisibility('payment', 'none');">Cancel</button>
-											&nbsp; &nbsp; &nbsp;
+										<div class="col-lg-12">
+												<div class="modal-footer" style="border: none;">													
+													<button type="submit" class="btn btn-primary">Save</button>
+													<button type="button" class="btn btn-primary"
+														data-dismiss="modal">Cancel</button>
+												</div>
 										</div>
-									</form:form>
+										
+
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
+						</form:form>
 					</div>
 				</div>
 
@@ -306,7 +308,7 @@
 	<script type="text/javascript">
 $(document).ready(function(){
     $('#data_1 .input-group.date').datepicker({
-            todayBtn: "linked",
+    	    todayBtn: "linked",
             keyboardNavigation: false,
             forceParse: false,
             calendarWeeks: true,
@@ -338,17 +340,17 @@ $(document).ready(function(){
 });
 
 function setOrderID(orderid,channelorderid,value)
-{
+{	
 	if(value=='return')
 		{
-	setVisibility('payment', 'none');
+	/* setVisibility('payment', 'none'); */
 	document.getElementById("returnorderId").value=orderid;
 	document.getElementById("returnchannelOrderID").value=channelorderid;
 }
 	else
 		{
-		setVisibility('payment', 'inline');
-		document.getElementById("paymentOrderId").value=orderid;
+		/* setVisibility('payment', 'inline'); */		
+		document.getElementById("paymentOrderId").value=orderid;		
 		document.getElementById("paymentChannelOrderID").value=channelorderid;
 		}
 
