@@ -624,7 +624,8 @@ public class SaveContents {
 				if (entry.getCell(6) != null
 						&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
 					try {
-						order.setPoPrice(entry.getCell(6).getNumericCellValue());
+						//order.setPoPrice(entry.getCell(6).getNumericCellValue());
+						order.setTotalAmountRecieved(entry.getCell(6).getNumericCellValue());
 
 					} catch (NumberFormatException e) {
 						errorMessage.append(" Amount should be a number ");
@@ -1303,7 +1304,8 @@ public class SaveContents {
 			downloadUploadReportXLS(offices, "InventoryReport", 5, errorSet,
 					path, sellerId);
 		} catch (Exception e) {
-			System.out.println("Inside save contents exception :"
+			System.out.println("Inside save c"
+					+ "ontents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
 			throw new MultipartException("Constraints Violated");

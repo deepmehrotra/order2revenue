@@ -418,19 +418,27 @@ public class OrderDaoImpl implements OrderDao {
 
 					order.setOrderMRP(order.getOrderMRP() * order.getQuantity());
 					order.setOrderSP(order.getProductConfig().getSp() * order.getQuantity());
+					order.setPoPrice(order.getPoPrice() * order.getQuantity());
 
 					order.setDiscount(order.getProductConfig().getDiscount());
 					order.getOrderTax().setTax(taxvalue);
+					
+					TaxDetail taxDetails = new TaxDetail();
+					taxDetails.setBalanceRemaining(order.getOrderTax()
+							.getTax());
+					taxDetails.setUploadDate(order.getOrderDate());
+					taxDetailService.addMonthlyTaxDetail(session,
+							taxDetails, sellerId);
 
-					order.setTotalAmountRecieved(order.getNetRate());
+					//order.setTotalAmountRecieved(order.getNetRate());
 					order.setFinalStatus("In Process");
 					// Set Order Timeline
 					OrderTimeline timeline = new OrderTimeline();
 					// populating tax related values of order
 					System.out.println(" Tax before pr:"
 							+ order.getOrderTax().getTax());
-					order.setPr(order.getNetRate()
-							- order.getOrderTax().getTax());
+					order.setPr((order.getGrossNetRate()
+							- order.getOrderTax().getTax()) * order.getQuantity());
 
 					// Reducing Product Inventory For Order
 					productService.updateInventory(order.getProductConfig()
@@ -3304,6 +3312,7 @@ public class OrderDaoImpl implements OrderDao {
 		double taxValue = 0;
 		double grossPR = 0;
 		double grossProfit = 0;
+		double poPrice = 0;
 
 		Order consolidatedOrder = new Order();
 		consolidatedOrder.setPoOrder(true);
@@ -3337,6 +3346,7 @@ public class OrderDaoImpl implements OrderDao {
 			for (Order order : orderlist) {
 				quantity += order.getQuantity();
 				orderSP += order.getOrderSP();
+				poPrice += order.getPoPrice();
 				eossValue += order.getEossValue();
 				netRate += order.getNetRate();
 				taxValue += order.getOrderTax().getTax();
@@ -3525,6 +3535,14 @@ public class OrderDaoImpl implements OrderDao {
 
 			gatepass.setGrossProfit(gatepass.getNetPR()
 					- (productConfig.getProductPrice() * gatepass.getQuantity()));
+			
+			TaxDetail taxDetails = new TaxDetail();
+			taxDetails
+					.setBalanceRemaining(-(gatepass.getTaxPOAmt())
+							* gatepass.getQuantity());
+			taxDetails.setUploadDate(gatepass.getReturnDate());
+			taxDetailService.addMonthlyTaxDetail(session, taxDetails,
+					sellerId);
 
 			/*
 			 * OrderTimeline timeline = new OrderTimeline();
