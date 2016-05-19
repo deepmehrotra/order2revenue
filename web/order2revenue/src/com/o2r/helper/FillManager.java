@@ -200,6 +200,10 @@ public class FillManager {
 			
 			
 			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getTax());
+			
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
 			cell.setCellValue(datasource.get(j).getNetRate());
 			
 			 cell = rowHeader.createCell(startColIndex+ i++);
@@ -207,6 +211,9 @@ public class FillManager {
 			
 			 cell = rowHeader.createCell(startColIndex+ i++);
 			cell.setCellValue(datasource.get(j).getReturnorrtoQty());
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getNrTax());
 
 			 cell = rowHeader.createCell(startColIndex+ i++);
 			cell.setCellValue(datasource.get(j).getReturnorrtoQty()*100/datasource.get(j).getQuantity());
@@ -220,6 +227,10 @@ public class FillManager {
 			
 			 cell = rowHeader.createCell(startColIndex+ i++);
 			cell.setCellValue(datasource.get(j).getQuantity()-datasource.get(j).getReturnorrtoQty());
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getTax()-datasource.get(j).getNrTax());			
+			
 
 			 cell = rowHeader.createCell(startColIndex+ i++);
 			cell.setCellValue(datasource.get(j).getTaxCategtory());

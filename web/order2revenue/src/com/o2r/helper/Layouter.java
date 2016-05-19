@@ -998,6 +998,13 @@ public class Layouter {
 		cell = rowHeader.createCell(startColIndex + i++);
 		cell.setCellValue("Quantity");
 		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		cell = rowHeader.createCell(startColIndex + i++);
+		cell.setCellValue("Tax");
+		cell.setCellStyle(headerCellStyle);
 
 		cellz = rowHeadera.createCell(j++);
 		cellz.setCellStyle(headerCellStyle);
@@ -1021,6 +1028,13 @@ public class Layouter {
 		cellz.setCellValue("");
 		cell = rowHeader.createCell(startColIndex + i++);
 		cell.setCellValue("Quantity");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		cell = rowHeader.createCell(startColIndex + i++);
+		cell.setCellValue("Tax");
 		cell.setCellStyle(headerCellStyle);
 
 		cellz = rowHeadera.createCell(j++);
@@ -1051,6 +1065,13 @@ public class Layouter {
 		cellz.setCellValue("");
 		cell = rowHeader.createCell(startColIndex + i++);
 		cell.setCellValue("Quantity");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		cell = rowHeader.createCell(startColIndex + i++);
+		cell.setCellValue("Tax");
 		cell.setCellStyle(headerCellStyle);
 
 		cellz = rowHeadera.createCell(j++);
