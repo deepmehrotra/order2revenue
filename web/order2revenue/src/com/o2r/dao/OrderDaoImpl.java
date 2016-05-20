@@ -19,6 +19,7 @@ import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -41,6 +42,7 @@ import com.o2r.model.PaymentUpload;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
+import com.o2r.model.TaxCategory;
 import com.o2r.model.TaxDetail;
 import com.o2r.service.EventsService;
 import com.o2r.service.PartnerService;
@@ -2619,6 +2621,23 @@ public class OrderDaoImpl implements OrderDao {
 			Date startDate, Date endDate, int sellerIdfromSession) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
+		
+		 Criteria criteriaTax=session.createCriteria(TaxCategory.class);
+		 ProjectionList tList = Projections.projectionList();
+		 HashMap<String,Float> taxMap=new HashMap<String,Float>();
+		 tList.add(Projections.property("taxCatId"));
+		 tList.add(Projections.property("taxCatName"));
+		 tList.add(Projections.property("taxPercent"));
+		 criteriaTax.setProjection(tList);			 
+		 List taxList=criteriaTax.list();
+		 Iterator txItr=taxList.iterator();
+		 
+		 while(txItr.hasNext()){
+			 Object[] recordsRow = (Object[])txItr.next();
+			 taxMap.put(recordsRow[1].toString(),Float.parseFloat(recordsRow[2].toString()));
+		 }
+		
+
 		Criteria criteria1 = session.createCriteria(Order.class);
 		criteria1.createAlias("seller", "seller",
 				CriteriaSpecification.LEFT_JOIN);
@@ -2630,9 +2649,6 @@ public class OrderDaoImpl implements OrderDao {
 				CriteriaSpecification.LEFT_JOIN);
 		criteria1.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
 				CriteriaSpecification.LEFT_JOIN);
-		criteria1.createAlias("orderTimeline", "orderTimeline",
-				CriteriaSpecification.LEFT_JOIN).add(
-				Restrictions.eq("seller.id", sellerIdfromSession));
 		criteria1.add(Restrictions.between("orderDate", startDate, endDate));
 		criteria1.setProjection(getPL("pcName"));
 
@@ -2647,6 +2663,8 @@ public class OrderDaoImpl implements OrderDao {
 			System.out.println("PC NAME " + temp.getPcName() + "  "
 					+ temp.getStartDate() + " " + temp.getOrderId() + "  "
 					+ temp.getInvoiceID());
+			
+			temp.setTaxPercent(taxMap.get(temp.getTaxCategtory()));
 			ttso.add(temp);
 		}
 		System.out.println("THIS IS THE TOTAL LIST OF ORDERS " + ttso.size());
@@ -2693,6 +2711,12 @@ public class OrderDaoImpl implements OrderDao {
 		;
 		temp.setProductSkuCode(recordsRow[27].toString());
 		temp.setTaxCategtory(recordsRow[28].toString());
+		 temp.setTax(Float.parseFloat(recordsRow[29].toString()));
+	 
+		 temp.setNrTax(Double.parseDouble(recordsRow[30].toString()));
+		 temp.setNrReturn(Double.parseDouble(recordsRow[31].toString()));
+		 temp.setReturnSP(Double.parseDouble(recordsRow[32].toString()));
+		
 	}
 
 	public static ProjectionList getPL(String name) {
@@ -2729,6 +2753,11 @@ public class OrderDaoImpl implements OrderDao {
 		projList.add(Projections.property("invoiceID"));
 		projList.add(Projections.property("productSkuCode"));
 		projList.add(Projections.property("orderTax.taxCategtory"));
+		 projList.add(Projections.property("orderTax.tax"));
+		 projList.add(Projections.sqlProjection("( (tax/quantity) * returnorrtoQty ) as test", new String[]{"test"},new Type[]{Hibernate.DOUBLE}));
+		 projList.add(Projections.sqlProjection("( grossNetRate * returnorrtoQty ) as testq", new String[]{"testq"},new Type[]{Hibernate.DOUBLE}));
+		 projList.add(Projections.sqlProjection("( (orderSP/quantity) * returnorrtoQty ) as testR", new String[]{"testR"},new Type[]{Hibernate.DOUBLE}));
+
 
 		return projList;
 	}

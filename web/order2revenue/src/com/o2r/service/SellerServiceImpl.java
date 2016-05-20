@@ -1,6 +1,7 @@
 package com.o2r.service;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -9,11 +10,16 @@ import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.ServletContextAware;
 
 import com.o2r.dao.SellerDao;
 import com.o2r.helper.CustomException;
@@ -29,7 +35,19 @@ import com.sun.mail.smtp.SMTPTransport;
 //GIT Test
 @Service("sellerService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-public class SellerServiceImpl implements SellerService {
+public class SellerServiceImpl implements SellerService,ServletContextAware {
+
+    private ServletContext context;
+    private ServletConfig config;
+
+    @Override
+    public void setServletContext(final ServletContext servletContext) {
+        this.context = servletContext;
+    }
+
+    public ServletContext getServletContext(){
+        return context;
+    } 
 
 	@Autowired
 	private SellerDao sellerDao;
@@ -46,12 +64,23 @@ public class SellerServiceImpl implements SellerService {
 		try {
 			 Properties smtp=new Properties();
 			 Properties mail=new Properties();
+			 
+				org.springframework.core.io.Resource resource1 = new ClassPathResource("smtp.properties");
+				org.springframework.core.io.Resource resource2 = new ClassPathResource("mail.properties");
+				//Properties props = PropertiesLoaderUtils.loadProperties(resource);
 		    
-		    FileInputStream smtpProps=new FileInputStream("d:/mails/gmail/smtp.properties");
-		    FileInputStream mailProps=new FileInputStream("d:/mails/gmail/mail.properties");
+			 
+			// InputStream configStream1 =context.getResourceAsStream("/WEB-INF/smtp.properties");
+			// InputStream configStream2 = context.getResourceAsStream("/WEB-INF/mail.properties");
+			 
+			 smtp=PropertiesLoaderUtils.loadProperties(resource1);
+			 mail=PropertiesLoaderUtils.loadProperties(resource2);
+
+			// FileInputStream smtpProps=new FileInputStream("d:/mails/gmail/smtp.properties");
+		    // FileInputStream mailProps=new FileInputStream("d:/mails/gmail/mail.properties");
 		    
-		    smtp.load(smtpProps);
-		    mail.load(mailProps);
+		    //smtp.load(configStream1);
+		   //mail.load(configStream2);
 
 		    Session session = Session.getInstance(smtp, null);
 
@@ -129,4 +158,7 @@ public class SellerServiceImpl implements SellerService {
 			{
 		sellerDao.addStateDeliveryTime(stateDelTimeList, sellerId);
 			}
+
+	
+
 }

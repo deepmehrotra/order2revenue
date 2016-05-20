@@ -59,23 +59,20 @@
 				                                            </tr>
                                             </thead>
                                             <tbody>
+                                            
+                              
+                                            
+                                            
                                              <c:if test="${!empty ttsolist}">
                                  			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-                                 			 <c:if test="${empty ttso.groupByName}">
-                                            <tr>
-                                                <td>${ttso.pcName}</td>
-                                                <td>${ttso.orderSP}</td>
-                                                <td>${ttso.netRate}</td>
-                                                <td>${ttso.orderSP/2}</td>
-                                            </tr>
-                                            </c:if>
+
                                  			 <c:if test="${ttso.groupByName == 'categoryName'}">
                                             <tr>
                                                 <td>${ttso.pcName}</td>
-                                                <td>${ttso.netRate}</td>
-                                                <td>${ttso.orderSP}</td>
-                                                <td>${ttso.orderSP/2}</td>
-                                            </tr>
+                                                <td>${ttso.grossProfit}</td>
+                                                <td>${ttso.productPrice}</td>
+                                                <td>${((ttso.grossProfit * 100) /ttso.netProductPrice)}</td>
+         </tr>
                                             </c:if>
                                             </c:forEach>
                                             </c:if>
@@ -120,11 +117,11 @@
                                     <th>Selected Period</th>
                                     <th>Partner Name</th>
                                     
-                                    <th style="color:blue">Net Sale Qty</th>
+                                    <th style="color:blue">Quantity</th>
                                     
-                                    <th style="color:blue">Cost Of Product</th>
+                                    <th style="color:blue">Product Price</th>
                                     
-                                    <th style="color:blue">Net Cost Of Product</th>
+                                    <th style="color:blue">Net Poduct Price</th>
                                     
                                     <th>Net P/R</th>
                                     <th>Gross Profit/Loss</th>
@@ -138,7 +135,7 @@
                                  
                                <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
                               
-                              <c:if test="${empty ttso.groupByName}">
+                              <c:if test="${ttso.groupByName == 'categoryName'}">
                                 <tr>
                                     <td>${loop.index+1}</td>
                                     <td>${ttso.startDate} ${ttso.endDate}</td>
@@ -148,11 +145,11 @@
                                    
                                     <td>${ttso.quantity}</td>
 									<td>${ttso.productPrice}</td>
-									<td>${ttso.quantity * ttso.productPrice}</td>
+									<td>${ttso.netProductPrice}</td>
 									
 									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netRate}" /></td>
-									<td></td>
-									<td>${ttso.returnorrtoQty}</td>
+									<td>${ttso.netProductPrice}</td>
+									<td>${(ttso.grossProfit * 100) /ttso.netProductPrice}</td>
 
                                   </tr>
                                 </c:if>
@@ -231,17 +228,11 @@ $(window).load(function() {
 	 	var cdata = [];
  		 	
 	 	<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-	 	<c:if test="${empty ttso.groupByName}">
-			labelsdata.push('${ttso.pcName}');
-	 		adata.push('${ttso.orderSP}');
-	 		bdata.push('${ttso.orderSP - 6000}');
-	 		cdata.push('${ttso.orderSP - 9000}');
-	 	</c:if>
 	 	<c:if test="${ttso.groupByName == 'categoryName'}">
-			labelsdata.push('${ttso.pcName}');
-	 		adata.push('${ttso.orderSP}');
-	 		bdata.push('${ttso.orderSP - 6000}');
-	 		cdata.push('${ttso.orderSP - 9000}');
+	 	labelsdata.push('${ttso.pcName}');
+ 		adata.push('${ttso.grossProfit}');
+ 		bdata.push('${ttso.productPrice}');
+ 		cdata.push('${((ttso.grossProfit * 100) /ttso.netProductPrice)}');
  		</c:if>
 		</c:forEach>
 	 	

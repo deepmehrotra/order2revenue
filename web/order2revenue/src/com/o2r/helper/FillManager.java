@@ -161,6 +161,7 @@ public class FillManager {
 			headerCellStyle.setFont(font);
 			headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
 			
+			
 			// Create the column headers
 			HSSFRow rowHeader = worksheet.createRow(j+4);
 			//rowHeader.setHeight((short) 500);
@@ -200,13 +201,20 @@ public class FillManager {
 			
 			
 			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getTax());
+			
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
 			cell.setCellValue(datasource.get(j).getNetRate());
 			
 			 cell = rowHeader.createCell(startColIndex+ i++);
-			cell.setCellValue(datasource.get(j).getReturnOrRTOCharges());
+			cell.setCellValue(datasource.get(j).getReturnSP());
 			
 			 cell = rowHeader.createCell(startColIndex+ i++);
 			cell.setCellValue(datasource.get(j).getReturnorrtoQty());
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getNrTax());
 
 			 cell = rowHeader.createCell(startColIndex+ i++);
 			cell.setCellValue(datasource.get(j).getReturnorrtoQty()*100/datasource.get(j).getQuantity());
@@ -220,27 +228,35 @@ public class FillManager {
 			
 			 cell = rowHeader.createCell(startColIndex+ i++);
 			cell.setCellValue(datasource.get(j).getQuantity()-datasource.get(j).getReturnorrtoQty());
+			
+			 cell = rowHeader.createCell(startColIndex+ i++);
+			cell.setCellValue(datasource.get(j).getTax()-datasource.get(j).getNrTax());			
+			
 
 			 cell = rowHeader.createCell(startColIndex+ i++);
 			cell.setCellValue(datasource.get(j).getTaxCategtory());
 
+			
+			double d= datasource.get(j).getOrderSP()-datasource.get(j).getReturnSP();
+			d = d -((d*100)/(100+datasource.get(j).getTaxPercent()));
 			 cell = rowHeader.createCell(startColIndex+ i++);
-			cell.setCellValue((datasource.get(j).getOrderSP()-datasource.get(j).getReturnOrRTOCharges())-((datasource.get(j).getOrderSP()-datasource.get(j).getReturnOrRTOCharges())*100/105));			
+			cell.setCellValue(d);			
 
 			 cell = rowHeader.createCell(startColIndex+ i++);
-			cell.setCellValue(" N/R ");
+			cell.setCellValue(datasource.get(j).getNetRate()-datasource.get(j).getNrReturn());
 			
+
 			 cell = rowHeader.createCell(startColIndex+ i++);
-			cell.setCellValue(" SP ");
+			 cell.setCellValue((datasource.get(j).getOrderSP()-datasource.get(j).getReturnOrRTOCharges())-d);
+					
+	cell = rowHeader.createCell(startColIndex+ i++);
+	cell.setCellValue(datasource.get(j).getQuantity()-datasource.get(j).getReturnorrtoQty());
 			
-			 cell = rowHeader.createCell(startColIndex+ i++);
-			cell.setCellValue(" Qty ");
+	cell = rowHeader.createCell(startColIndex+ i++);
+	cell.setCellValue(datasource.get(j).getPositiveAmount()+datasource.get(j).getNegativeAmount());
 			
-			 cell = rowHeader.createCell(startColIndex+ i++);
-			cell.setCellValue("  ");
-			
-			 cell = rowHeader.createCell(startColIndex+ i++);
-			cell.setCellValue("  ");
+	cell = rowHeader.createCell(startColIndex+ i++);
+	cell.setCellValue(datasource.get(j).getPaymentDifference());
 	
 			
 		}

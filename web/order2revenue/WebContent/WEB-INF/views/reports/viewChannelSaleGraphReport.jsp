@@ -48,7 +48,7 @@
                                 <div class="row">
                                 
                                 
-                                                                <div class="col-lg-6">
+                                       <div class="col-lg-6"><h4>Channels Net Payment Details</h4>
                                          <table class="table table-bordered custom-table">
                                             <thead>
 				                                            <tr>
@@ -75,15 +75,14 @@
                                             </c:if>
                                             </tbody>
                                         </table>
-                                </div>
+                                	</div>
                                 
-                                
-                                
+                               <div>
 								                <div class="col-lg-6">
 								                    <div class="ibox float-e-margins">
 								                        <div class="ibox-title">
-								                            <h5>Line Chart
-								                                <small>With custom colors.</small>
+								                            <h5>Order SP / Net Rate
+								                                <small></small>
 								                            </h5>
 								                            <div ibox-tools></div>
 								                        </div>
@@ -93,13 +92,31 @@
 								                            </div>
 								                        </div>
 								                    </div>
+								                </div>								           <div class="col-lg-6">
+
 								                </div>
+								           <div class="col-lg-6">
+								                    <div class="ibox float-e-margins">
+								                        <div class="ibox-title">
+								                            <h5>Net Payment Result (AR)
+								                                <small></small>
+								                            </h5>
+								                            
+								                        </div>
+								                        <div class="ibox-content">
+								                            <div>
+								                                <canvas id="flot-chart-content-one" height="140"></canvas>
+								                            </div>
+								                        </div>
+								                    </div>
+								                </div>
+									</div>
 
                                 
                                 </div>
 
                         <div class="row">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6"><h4>Channels Quantity Details</h4>
                                     <div class="float-e-margins graph-brd">
                                     <div class="ibox-content">
                                          <table class="table table-bordered custom-table">
@@ -130,7 +147,7 @@
 										                <div class="col-lg-6">
 										                    <div class="ibox float-e-margins">
 										                        <div class="ibox-title">
-										                            <h5>Bar Chart</h5>
+										                            <h5>Quantity vs Return Quantity</h5>
 										                            <div ibox-tools></div>
 										                        </div>
 										                        <div class="ibox-content">
@@ -142,7 +159,7 @@
 										                </div>
                                 </div>
                         <div class="row">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6"><h4>Gross Profit (Channels)</h4>
                                     <div class="float-e-margins graph-brd">
                                     <div class="ibox-content">
                                          <table class="table table-bordered custom-table">
@@ -159,15 +176,15 @@
                                  			 <c:if test="${ttso.groupByName == 'channels'}">
                                             <tr>
                                                 <td>${ttso.pcName}</td>
-                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossProfit}" /></td>
-                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossProfit/2}" /></td>
+                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossNetRate}" /></td>
+                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.returnSP}" /></td>
                                             </tr>
                                             </c:if>
                                  			 <c:if test="${ttso.groupByName == 'categoryName'}">
                                             <tr>
                                                 <td>${ttso.pcName}</td>
-                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossProfit}" /></td>
-                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossProfit/2}" /></td>
+                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.grossNetRate}" /></td>
+                                                <td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.returnSP}" /></td>
                                             </tr>
                                             </c:if>
                                             </c:forEach>
@@ -180,8 +197,8 @@
 					                <div class="col-lg-6">
 					                    <div class="ibox float-e-margins">
 					                        <div class="ibox-title">
-					                            <h5>Line Chart
-					                                <small>With custom colors.</small>
+					                            <h5>Gross Sale / Return Amount
+					                                <small></small>
 					                            </h5>
 					                            <div ibox-tools></div>
 					                        </div>
@@ -194,7 +211,7 @@
 					                </div>
                                 </div>
                         <div class="row">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6"><h4>Net Payment Result (Channels)</h4>
                                     <div class="float-e-margins graph-brd">
                                     <div class="ibox-content">
                                          <table class="table table-bordered custom-table">
@@ -226,8 +243,8 @@
 								                <div class="col-lg-6">
 								                    <div class="ibox float-e-margins">
 								                        <div class="ibox-title">
-								                            <h5>Bar Chart
-								                                <small>With custom colors.</small>
+								                            <h5>Net Payment Result
+								                                <small></small>
 								                            </h5>
 								                            <div ibox-tools></div>
 								                        </div>
@@ -263,28 +280,58 @@
                             <div class="col-sm-12"  style="overflow-x: scroll;">
                             <div id="tbdata1">
                             <p id="selectTriggerFilter"><label><b>Filter:</b></label><br></p>
-                                <table id="filterTable" style="width:100%" class="table table-striped table-bordered table-hover dataTables-example" >
+                                <table id="filterTable" style="width:50%" class="table table-striped table-bordered table-hover  dataTables-example" >
                                 <thead>
                                 <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    
+                                    <th colspan="4" style="color:blue">Gross</th>
+                                    
+                                    <th  colspan="4" style="color:red">Return</th>
+
+                                    <th></th>
+                                    
+                                    <th   colspan="4" style="color:green">Net</th>
+                                    <th   colspan="2" style="color:blue"></th>
+                                    <th   colspan="3" style="color:blue">Net Pure</th>
+                                    <th   colspan="2" style="color:blue"></th>
+
+                                   </tr>
+                               <tr>
                                     <th>#</th>
                                     <th>Date Range</th>
                                     <th>Partner Name</th>
                                     
-                                    <th colspan="4" style="color:blue">N/R Amount, Gross SP, Gross Qty, Tax</th>
+                                    <th style="color:blue">N/R</th>
+                                    <th style="color:blue">SP</th>
+                                    <th style="color:blue">Qty</th>
+                                    <th style="color:blue">Tax</th>
                                     
-                                    <th  colspan="4" style="color:blue">N/R Amount,Rtn SP,Rtn Qty, Tax</th>
+                                    <th style="color:red">N/R</th>
+                                    <th style="color:red">SP</th>
+                                    <th style="color:red">Qty</th>
+                                    <th style="color:red">Tax</th>
 
                                     <th>Return Vs Gross</th>
                                     
-                                    <th   colspan="4" style="color:blue">N/R Amount,Net SP,Net Qty, Tax</th>
+                                    <th style="color:green">N/R</th>
+                                    <th style="color:green">SP</th>
+                                    <th style="color:green">Qty</th>
+                                    <th style="color:green">Tax</th>
                                     
                                     <th>Tax Category </th>
                                     <th>Net Tax Liability On SP</th>
                                     
-                                    <th  colspan="3" style="color:blue">N/R Amount,Net Pure Sale,Qty</th>
+                                    <th style="color:blue">N/R</th>
+                                    <th style="color:blue">SP</th>
+                                    <th style="color:blue">Qty</th>
+                                    
                                      <th>Net A/R</th>
                                      <th>Net Due</th>
                                     </tr>
+
                                 </thead>
                                 <tbody>
                                  <c:if test="${!empty ttsolist}">
@@ -430,15 +477,22 @@ $(window).load(function() {
 	                    pointHighlightFill: "#fff",
 	                    pointHighlightStroke: "rgba(26,179,148,1)",
 	                    data: bdata
-	                },
+	                }
+	            ]
+	        };
+	    
+	    var lineData2 = {
+	            labels: labelsdata,
+	            datasets: [
+
 	                {
 	                    label: "Example dataset",
-	                    fillColor: "rgba(220,220,220,0.5)",
-	                    strokeColor: "blue",
-	                    pointColor: "blue",
+	                    fillColor: "rgba(120,120,220,0.5)",
+	                    strokeColor: "green",
+	                    pointColor: "red",
 	                    pointStrokeColor: "#fff",
 	                    pointHighlightFill: "#fff",
-	                    pointHighlightStroke: "rgba(55,100,118,1)",
+	                    pointHighlightStroke: "rgba(26,179,148,1)",
 	                    data: cdata
 	                }
 	            ]
@@ -463,6 +517,9 @@ $(window).load(function() {
 
 	        var ctx = document.getElementById("flot-chart-content").getContext("2d");
 	        var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+	        
+	        var ctx1 = document.getElementById("flot-chart-content-one").getContext("2d");
+	        var myNewChart = new Chart(ctx1).Line(lineData2, lineOptions);	        
 	        
 	
 	var axislabels=[];
@@ -521,133 +578,139 @@ $(window).load(function() {
  		   -->
 			</c:forEach>
         	
-		    var ctx = document.getElementById("barChart").getContext("2d"); 
-		    var myNewChart = new Chart(ctx).Bar(barData, barOptions1);
+		    var ctx2 = document.getElementById("barChart").getContext("2d"); 
+		    var myNewChart2 = new Chart(ctx2).Bar(barData, barOptions1);
 	      //  var ctx = document.getElementById("flot-chart-content_1").getContext("2d");
 	      //  var myNewChart = new Chart(ctx).Line(lineData1, lineOptions);
 	      
-	      var labelsx=[];
-	      var data1x=[];
-	      var data2x=[];
-	      
-	      
-	  var lineDatax = {
-		        labels: labelsx,
-		        datasets: [
-		            {
-		                label: "Gross Profit",
-		                fillColor: "rgba(120,120,120,0.5)",
-		                strokeColor: "black",
-		                pointColor: "rgba(220,220,220,1)",
-		                pointStrokeColor: "#fff",
-		                pointHighlightFill: "#fff",
-		                pointHighlightStroke: "rgba(220,220,220,1)",
-		                data: data1x
-		            },
-		            {
-		                label: "Expense",
-		                fillColor: "rgba(26,179,148,0.5)",
-		                strokeColor: "rgba(26,179,148,0.7)",
-		                pointColor: "rgba(26,179,148,1)",
-		                pointStrokeColor: "#fff",
-		                pointHighlightFill: "#fff",
-		                pointHighlightStroke: "rgba(26,179,148,1)",
-		                data: data2x
-		            }
-		        ]
-		    };
-	  
-	  var lineOptionsx = {
-		        scaleShowGridLines: true,
-		        scaleGridLineColor: "rgba(0,0,0,.05)",
-		        scaleGridLineWidth: 1,
-		        bezierCurve: true,
-		        bezierCurveTension: 0.4,
-		        pointDot: true,
-		        pointDotRadius: 4,
-		        pointDotStrokeWidth: 1,
-		        pointHitDetectionRadius: 20,
-		        datasetStroke: true,
-		        datasetStrokeWidth: 2,
-		        datasetFill: true,
-		        responsive: true,
-		        multiTooltipTemplate: "",
-		    };
-	  
+	 	var labelsdata = [];
+	 	var adata = [];
+	 	var bdata = []; 		 	
+		
 		<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
 		<c:if test="${ttso.groupByName == 'channels'}">
-			labelsx.push('${ttso.pcName}');
-			data1x.push('${ttso.grossProfit}');
-			data2x.push('${ttso.grossProfit/2}');
+			labelsdata.push('${ttso.pcName}');
+			adata.push('${ttso.grossNetRate}');
+			bdata.push('${ttso.returnSP}');
 	 	</c:if>
 
 		</c:forEach>
+		
+		
+		
+	 	
+	    var lineData = {
+	            labels: labelsdata,
+	            datasets: [
+	                {
+	                    label: "Example dataset",
+	                    fillColor: "rgba(220,220,220,0.5)",
+	                    strokeColor: "red",
+	                    pointColor: "green",
+	                    pointStrokeColor: "#fff",
+	                    pointHighlightFill: "#fff",
+	                    pointHighlightStroke: "rgba(220,220,220,1)",
+	                    data: adata
+	                },
+	                {
+	                    label: "Example dataset",
+	                    fillColor: "rgba(120,120,220,0.5)",
+	                    strokeColor: "green",
+	                    pointColor: "red",
+	                    pointStrokeColor: "#fff",
+	                    pointHighlightFill: "#fff",
+	                    pointHighlightStroke: "rgba(26,179,148,1)",
+	                    data: bdata
+	                }
+	            ]
+	        };
+
+	        var lineOptions = {
+	            scaleShowGridLines: true,
+	            scaleGridLineColor: "rgba(0,0,0,.05)",
+	            scaleGridLineWidth: 1,
+	            bezierCurve: true,
+	            bezierCurveTension: 0.4,
+	            pointDot: true,
+	            pointDotRadius: 4,
+	            pointDotStrokeWidth: 1,
+	            pointHitDetectionRadius: 20,
+	            datasetStroke: true,
+	            datasetStrokeWidth: 2,
+	            datasetFill: true,
+	            responsive: true,
+	        };
 
 
-		    var ctx = document.getElementById("lineChart").getContext("2d");
-		    var myNewChart = new Chart(ctx).Line(lineDatax, lineOptionsx);
+	        var ctx = document.getElementById("lineChart").getContext("2d");
+	        var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
 
-		  	var axislabelsx=[];
-			var dataset1x = [];
-			var dataset2x = [];
-	      
-	      
-	  var lineDataxac = {
-		        labels: axislabelsx,
-		        datasets: [
-		            {
-		                label: "GrossProfit",
-		                fillColor: "rgba(120,120,120,0.5)",
-		                strokeColor: "black",
-		                pointColor: "rgba(220,220,220,1)",
-		                pointStrokeColor: "#fff",
-		                pointHighlightFill: "#fff",
-		                pointHighlightStroke: "rgba(220,220,220,1)",
-		                data: dataset1x
-		            },
-		            {
-		                label: "Expensex",
-		                fillColor: "rgba(26,179,148,0.5)",
-		                strokeColor: "rgba(26,179,148,0.7)",
-		                pointColor: "rgba(26,179,148,1)",
-		                pointStrokeColor: "#fff",
-		                pointHighlightFill: "#fff",
-		                pointHighlightStroke: "rgba(26,179,148,1)",
-		                data: dataset2x
-		            }
-		        ]
-		    };
-	  
-	  var lineOptionsxac = {
-		        scaleShowGridLines: true,
-		        scaleGridLineColor: "rgba(0,0,0,.05)",
-		        scaleGridLineWidth: 1,
-		        bezierCurve: true,
-		        bezierCurveTension: 0.4,
-		        pointDot: true,
-		        pointDotRadius: 4,
-		        pointDotStrokeWidth: 1,
-		        pointHitDetectionRadius: 20,
-		        datasetStroke: true,
-		        datasetStrokeWidth: 2,
-		        datasetFill: true,
-		        responsive: true,
-		        multiTooltipTemplate: "",
-		    };
-	  
-		<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-		<c:if test="${ttso.groupByName == 'channels'}">
-			axislabelsx.push('${ttso.pcName}');
-			dataset1x.push('${ttso.netPaymentResult}');
-			dataset2x.push('${ttso.paymentDifference}');
-	 	</c:if>
 
+		 //   var ctx1 = document.getElementById("lineChart").getContext("2d");
+		 //   var myNewChart1 = new Chart(ctx1).Line(lineDatax, lineOptionsx);
+
+	 	var labelsdata = [];
+	 	var adata = [];
+	 	var bdata = []; 		 	
+		
+		<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">	
+			<c:if test="${ttso.groupByName == 'channels'}">
+					labelsdata.push('${ttso.pcName}');
+					adata.push('${ttso.netPaymentResult}');
+					bdata.push('${ttso.paymentDifference}');
+		 	</c:if>
 		</c:forEach>
+		
+		
+		
+	 	
+	    var lineData = {
+	            labels: labelsdata,
+	            datasets: [
+	                {
+	                    label: "Example dataset",
+	                    fillColor: "rgba(220,220,220,0.5)",
+	                    strokeColor: "red",
+	                    pointColor: "green",
+	                    pointStrokeColor: "#fff",
+	                    pointHighlightFill: "#fff",
+	                    pointHighlightStroke: "rgba(220,220,220,1)",
+	                    data: adata
+	                },
+	                {
+	                    label: "Example dataset",
+	                    fillColor: "rgba(120,120,220,0.5)",
+	                    strokeColor: "green",
+	                    pointColor: "red",
+	                    pointStrokeColor: "#fff",
+	                    pointHighlightFill: "#fff",
+	                    pointHighlightStroke: "rgba(26,179,148,1)",
+	                    data: bdata
+	                }
+	            ]
+	        };
 
-		    var ctx = document.getElementById("barSecondChart").getContext("2d");
-		    var myNewChart = new Chart(ctx).Line(lineDataxac, lineOptionsxac);
-				    
-				    
+	        var lineOptions = {
+	            scaleShowGridLines: true,
+	            scaleGridLineColor: "rgba(0,0,0,.05)",
+	            scaleGridLineWidth: 1,
+	            bezierCurve: true,
+	            bezierCurveTension: 0.4,
+	            pointDot: true,
+	            pointDotRadius: 4,
+	            pointDotStrokeWidth: 1,
+	            pointHitDetectionRadius: 20,
+	            datasetStroke: true,
+	            datasetStrokeWidth: 2,
+	            datasetFill: true,
+	            responsive: true,
+	        };
+
+
+	        var ctx = document.getElementById("barSecondChart").getContext("2d");
+	        var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+	  
+			    
 				    $(document).ready(function() {
 				    	   $('#filterTable').DataTable({
 				    	        "lengthMenu": [
@@ -676,9 +739,9 @@ $(window).load(function() {
 
     $('.dataTables-example').dataTable({
 	            responsive: true,
-	            "dom": 'T<"clear">lfrtip',
+	            "dom": 'T<"clear">lfrt',
 	            "tableTools": {
-	                "sSwfPath": "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
+	                
 	            }
 	    });
 	});

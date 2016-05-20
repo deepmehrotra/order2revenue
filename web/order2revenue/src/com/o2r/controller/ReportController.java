@@ -326,9 +326,31 @@ public void downloadOrderReport(HttpServletRequest request ,HttpServletResponse 
 		partner = request.getParameter("toggler");
 		selectedPartner = request.getParameter("selectedPartner");
 		reportheaders = request.getParameterValues("headers");
+		
+		// paymentsReceievedReport
+		// categoryWiseSaleReport
+		// channelWiseSaleReport
+		// orderwiseGPReport
+		
 		try {
-			orderlist = orderService.findChannelOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
-			reportDownloadService.downloadCOReport(response, orderlist,reportheaders, "ChannelSalesReport",	helperClass.getSellerIdfromSession(request));
+			if(reportName.equalsIgnoreCase("channelSaleReport")){
+				orderlist = orderService.findChannelOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
+				reportDownloadService.downloadCOReport(response, orderlist,reportheaders, "ChannelSalesReport",	helperClass.getSellerIdfromSession(request));
+			} else if(reportName.equalsIgnoreCase("categoryWiseSaleReport")){
+				orderlist = orderService.findChannelOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
+				reportDownloadService.downloadCOReport(response, orderlist,reportheaders, "ChannelSalesReport",	helperClass.getSellerIdfromSession(request));
+				
+			} else if(reportName.equalsIgnoreCase("paymentsReceievedReport")){
+				orderlist = orderService.findChannelOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
+				reportDownloadService.downloadCOReport(response, orderlist,reportheaders, "ChannelSalesReport",	helperClass.getSellerIdfromSession(request));
+				
+			} else if(reportName.equalsIgnoreCase("orderwiseGPReport")){
+				orderlist = orderService.findChannelOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
+				reportDownloadService.downloadCOReport(response, orderlist,reportheaders, "ChannelSalesReport",	helperClass.getSellerIdfromSession(request));
+				
+			}
+			
+			
 		} catch (ClassNotFoundException e) {
 			log.error(e);
 			/*
@@ -346,17 +368,7 @@ public void downloadOrderReport(HttpServletRequest request ,HttpServletResponse 
 			log.error(e);
 		}
 		System.out.println("end of download");
-		try {
-		//	response.sendRedirect("/seller/getAllReports.html");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//return new ModelAndView("redirect:/seller/orderList.html");
-		//	e.printStackTrace();
-		}
-		/*
-		 * model.put("reportName",reportName);
-		 * model.put("partnerlist",partnerlist);
-		 */
+
 	}
 
 public List<TotalShippedOrder> getSortedList(List<TotalShippedOrder> ttso)

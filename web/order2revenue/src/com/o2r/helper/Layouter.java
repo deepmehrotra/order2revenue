@@ -923,9 +923,9 @@ public class Layouter {
 		// }
 
 		worksheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 1));
-		worksheet.addMergedRegion(new CellRangeAddress(2, 2, 5, 7));
-		worksheet.addMergedRegion(new CellRangeAddress(2, 2, 8, 10));
-		worksheet.addMergedRegion(new CellRangeAddress(2, 2, 12, 14));
+		worksheet.addMergedRegion(new CellRangeAddress(2, 2, 5, 8));
+		worksheet.addMergedRegion(new CellRangeAddress(2, 2, 9, 12));
+		worksheet.addMergedRegion(new CellRangeAddress(2, 2, 14, 17));
 		worksheet.addMergedRegion(new CellRangeAddress(2, 2, 17, 19));
 		HSSFRow rowHeader = worksheet.createRow(3);
 		rowHeader.setHeight((short) 500);
@@ -998,13 +998,19 @@ public class Layouter {
 		cell = rowHeader.createCell(startColIndex + i++);
 		cell.setCellValue("Quantity");
 		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		cell = rowHeader.createCell(startColIndex + i++);
+		cell.setCellValue("Tax");
+		cell.setCellStyle(headerCellStyle);
 
 		cellz = rowHeadera.createCell(j++);
 		cellz.setCellStyle(headerCellStyle);
 		cellz.setCellValue("Sale Return");
 		cellz.setCellStyle(style);
-		cellz.getCellStyle()
-				.setFillBackgroundColor(HSSFColor.LIGHT_GREEN.index);
+		cellz.getCellStyle().setFillBackgroundColor(HSSFColor.LIGHT_GREEN.index);
 		cell = rowHeader.createCell(startColIndex + i++);
 		cell.setCellValue("N/R Amount");
 		cell.setCellStyle(headerCellStyle);
@@ -1021,6 +1027,13 @@ public class Layouter {
 		cellz.setCellValue("");
 		cell = rowHeader.createCell(startColIndex + i++);
 		cell.setCellValue("Quantity");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		cell = rowHeader.createCell(startColIndex + i++);
+		cell.setCellValue("Tax");
 		cell.setCellStyle(headerCellStyle);
 
 		cellz = rowHeadera.createCell(j++);
@@ -1051,6 +1064,13 @@ public class Layouter {
 		cellz.setCellValue("");
 		cell = rowHeader.createCell(startColIndex + i++);
 		cell.setCellValue("Quantity");
+		cell.setCellStyle(headerCellStyle);
+		
+		cellz = rowHeadera.createCell(j++);
+		cellz.setCellStyle(headerCellStyle);
+		cellz.setCellValue("");
+		cell = rowHeader.createCell(startColIndex + i++);
+		cell.setCellValue("Tax");
 		cell.setCellStyle(headerCellStyle);
 
 		cellz = rowHeadera.createCell(j++);
