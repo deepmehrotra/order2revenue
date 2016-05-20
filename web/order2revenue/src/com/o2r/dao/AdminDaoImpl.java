@@ -34,12 +34,11 @@ public class AdminDaoImpl implements AdminDao {
 	@Override
 	public void addEmployee(Employee employee)throws CustomException {
 
-		log.info("*** addEmployee start***");
-		System.out.println(" Employee age " + employee.getEmpAge());
-		System.out.println("Employee name :" + employee.getEmpName());
+		log.info("*** addEmployee start***");		
 		try {
 			sessionFactory.getCurrentSession().saveOrUpdate(employee);
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.addEmployeeError, new Date(), 1, GlobalConstant.addEmployeeErrorCode, e);
 		}
@@ -52,9 +51,9 @@ public class AdminDaoImpl implements AdminDao {
 		log.info("*** listEmployee Start ***");
 		List<Employee> returnlist=new ArrayList<Employee>();
 		try{
-		returnlist = sessionFactory.getCurrentSession().createCriteria(Employee.class).setMaxResults(LIMITITEMSPERPAGE).setFirstResult(LIMITITEMSPERPAGE * (pageno - 1)).list();
-		//System.out.println(" Getting employee records" + returnlist.size());
+		returnlist = sessionFactory.getCurrentSession().createCriteria(Employee.class).setMaxResults(LIMITITEMSPERPAGE).setFirstResult(LIMITITEMSPERPAGE * (pageno - 1)).list();		
 		}catch(Exception e){
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.listEmployeeError, new Date(), 3, GlobalConstant.listEmployeeErrorCode, e);
 		}
@@ -71,6 +70,7 @@ public class AdminDaoImpl implements AdminDao {
 		try{
 		employeess=sessionFactory.getCurrentSession().createCriteria(Employee.class).list();
 		}catch(Exception e){
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.listEmployeeError, new Date(), 3, GlobalConstant.listEmployeeErrorCode, e);
 		}
@@ -86,6 +86,7 @@ public class AdminDaoImpl implements AdminDao {
 		try{
 		employee=(Employee) sessionFactory.getCurrentSession().get(Employee.class, empid);
 		}catch(Exception e){
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.getEmployeeError, new Date(), 3, GlobalConstant.getEmployeeErrorCode, e);
 		}
@@ -99,6 +100,7 @@ public class AdminDaoImpl implements AdminDao {
 		try{
 		sessionFactory.getCurrentSession().createQuery("DELETE FROM Employee WHERE empid = "+ employee.getEmpId()).executeUpdate();
 		}catch(Exception e){
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.deleteEmployeeError, new Date(), 3, GlobalConstant.deleteEmployeeErrorCode, e);
 		}
@@ -108,21 +110,19 @@ public class AdminDaoImpl implements AdminDao {
 	@Override
 	public void addQuery(GenericQuery query)throws CustomException {
 		
-		log.info("*** addQuery start ***");
-		//System.out.println("Query  " + query.getEmail());
+		log.info("*** addQuery start ***");		
 		try {
 			sessionFactory.getCurrentSession().saveOrUpdate(query);
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.addQueryError, new Date(), 3, GlobalConstant.addQueryErrorCode, e);
-		}
-		
+		}		
 		log.info("*** addQuery exit ***");
 	}
 
 	@Override
-	public List<GenericQuery> listQueries()throws CustomException {
-		// sellerId=4;
+	public List<GenericQuery> listQueries()throws CustomException {		
 		
 		log.info("*** listQueries start ***");
 		List<GenericQuery> returnlist = null;
@@ -132,16 +132,13 @@ public class AdminDaoImpl implements AdminDao {
 			Criteria criteria = session.createCriteria(GenericQuery.class);
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			criteria.addOrder(org.hibernate.criterion.Order.desc("queryTime"));
-			returnlist = criteria.list();
-			System.out.println(" Queries : " + returnlist);
+			returnlist = criteria.list();			
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 			log.error(e);
-			throw new CustomException(GlobalConstant.listQueriesError, new Date(), 3, GlobalConstant.listQueriesErrorCode, e);
-			/*System.out.println(" Exception in getting order list :"
-					+ e.getLocalizedMessage());*/
+			throw new CustomException(GlobalConstant.listQueriesError, new Date(), 3, GlobalConstant.listQueriesErrorCode, e);			
 		}
 		log.info("*** listQueries exit ***");
 		return returnlist;
