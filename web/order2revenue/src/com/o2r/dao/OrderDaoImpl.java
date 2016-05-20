@@ -41,6 +41,7 @@ import com.o2r.model.Partner;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
+import com.o2r.model.TaxCategory;
 import com.o2r.model.TaxDetail;
 import com.o2r.service.EventsService;
 import com.o2r.service.PartnerService;
@@ -2639,6 +2640,23 @@ public class OrderDaoImpl implements OrderDao {
 			Date startDate, Date endDate, int sellerIdfromSession) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
+		
+		 Criteria criteriaTax=session.createCriteria(TaxCategory.class);
+		 ProjectionList tList = Projections.projectionList();
+		 HashMap<String,Float> taxMap=new HashMap<String,Float>();
+		 tList.add(Projections.property("taxCatId"));
+		 tList.add(Projections.property("taxCatName"));
+		 tList.add(Projections.property("taxPercent"));
+		 criteriaTax.setProjection(tList);			 
+		 List taxList=criteriaTax.list();
+		 Iterator txItr=taxList.iterator();
+		 
+		 while(txItr.hasNext()){
+			 Object[] recordsRow = (Object[])txItr.next();
+			 taxMap.put(recordsRow[1].toString(),Float.parseFloat(recordsRow[2].toString()));
+		 }
+		
+
 		Criteria criteria1 = session.createCriteria(Order.class);
 		criteria1.createAlias("seller", "seller",
 				CriteriaSpecification.LEFT_JOIN);
@@ -2664,6 +2682,8 @@ public class OrderDaoImpl implements OrderDao {
 			System.out.println("PC NAME " + temp.getPcName() + "  "
 					+ temp.getStartDate() + " " + temp.getOrderId() + "  "
 					+ temp.getInvoiceID());
+			
+			temp.setTaxPercent(taxMap.get(temp.getTaxCategtory()));
 			ttso.add(temp);
 		}
 		System.out.println("THIS IS THE TOTAL LIST OF ORDERS " + ttso.size());
