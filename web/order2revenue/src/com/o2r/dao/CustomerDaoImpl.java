@@ -2,6 +2,7 @@ package com.o2r.dao;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,6 +10,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.controller.AdminController;
 import com.o2r.model.Category;
 import com.o2r.model.Customer;
 
@@ -23,7 +25,7 @@ public class CustomerDaoImpl implements CustomerDao {
  @Autowired
  private SessionFactory sessionFactory;
  
-
+ static Logger log = Logger.getLogger(CustomerDaoImpl.class.getName());
  /*@Override
 public void addCustomer(Customer customer,int sellerId) {
 	sellerId=4;
@@ -106,29 +108,27 @@ public Customer getCustomer(int customerId) {
 @SuppressWarnings("unchecked")
 @Override
 public Customer getCustomer(String customerEmail,int sellerId,Session session) {
-	Customer returncustomer=null;
-	//Session session=null;
-	System.out.println(" Beore opening connection in customer");
+	
+	log.info("*** getCustomer starts ***");
+	
+	Customer returncustomer=null;		
 	try
 	{
-	//session=sessionFactory.getCurrentSession();
-	  if(! session.getTransaction().isActive())
-		  session.beginTransaction();
-	   System.out.println(" New connection openede in customer");
-	 Criteria criteria=session.createCriteria(Customer.class).add(Restrictions.eq("sellerId", sellerId))
-			   .add(Restrictions.eq("customerEmail", customerEmail));
-	  
-	
-	 if(criteria.list()!=null&&criteria.list().size()!=0)
-	   {
-	List<Customer> customerlist=(List<Customer>)criteria.list(); 
-	System.out.println(" Getting customer list :"+customerlist.size());
-	if(customerlist!=null&&customerlist.size()!=0)
-		returncustomer=customerlist.get(0);
+			if (!session.getTransaction().isActive())
+				session.beginTransaction();
 
-	  
-	   }
-	}
+			Criteria criteria = session.createCriteria(Customer.class)
+					.add(Restrictions.eq("sellerId", sellerId))
+					.add(Restrictions.eq("customerEmail", customerEmail));
+
+			if (criteria.list() != null && criteria.list().size() != 0) {
+				List<Customer> customerlist = (List<Customer>) criteria.list();
+				log.debug(" Getting customer list :"+ customerlist.size());
+				if (customerlist != null && customerlist.size() != 0)
+					returncustomer = customerlist.get(0);
+
+			}
+		}
 	catch(Exception e)
 	{
 		System.out.println(" Exception in getting cutomer list :"+e.getLocalizedMessage());
@@ -140,6 +140,7 @@ public Customer getCustomer(String customerEmail,int sellerId,Session session) {
 		/* session.getTransaction().commit();
 		   session.close();*/
 	}
+	log.info("*** getCustomer ends ***");
 	return returncustomer;
 }
 

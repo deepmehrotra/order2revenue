@@ -34,7 +34,7 @@ public class PaymentUploadDaoImpl implements PaymentUploadDao{
  public void addPaymentUpload(PaymentUpload upload , int sellerId) throws CustomException
  {
 	
-	// sellerId=4;
+	 log.info("*** addPaymentUpload Starts : PaymentUploadDaoImpl ****");
 		Seller seller=null;
 		
 		   try
@@ -46,32 +46,31 @@ public class PaymentUploadDaoImpl implements PaymentUploadDao{
 			   if(upload.getUploadId()==0)
 			   {
 				   upload.setUploadDate(new Date());
-			 seller.getPaymentUploads().add(upload);
-			   System.out.println(" Inside upload add");
-			   session.saveOrUpdate(seller);
+				   seller.getPaymentUploads().add(upload);				  
+				   session.saveOrUpdate(seller);
 			   }
 			   else
 			   {
 				   session.saveOrUpdate(upload);
 			   }
 		    session.getTransaction().commit();
-		   session.close();
+		    session.close();
 		   }
 		   catch (Exception e) {
 			   log.error(e);
 			   e.printStackTrace();
 			   throw new CustomException(GlobalConstant.addPaymentUploadError, new Date(), 1, GlobalConstant.addPaymentUploadErrorCode, e);
-			   //System.out.println("Inside exception  "+e.getLocalizedMessage());
+			   
 		}
 		
-	 
+	log.info("*** addPaymentUpload Ends : PaymentUploadDaoImpl ****");
  }
  
  
 
 public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomException
  {
-	// sellerId=4;
+	log.info("*** listPaymentUploads Starts : PaymentUploadDaoImpl ****");
 		List<PaymentUpload> returnlist=null;
 		Seller seller=null;
 		try
@@ -87,16 +86,18 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomExceptio
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.listPaymentUploadError, new Date(), 1, GlobalConstant.listPaymentUploadErrorCode, e);
-			//System.out.println(" Exception in getting Payment list :"+e.getLocalizedMessage());
 		}
+		log.info("*** listPaymentUploads Ends : PaymentUploadDaoImpl ****");
 		return returnlist;
  }
  
  public PaymentUpload getPaymentUpload(int paymentUploadId)throws CustomException
  {
-	 PaymentUpload  returnObject=null;
+		log.info("*** getPaymentUpload Starts : PaymentUploadDaoImpl ****");
+	 	PaymentUpload  returnObject=null;
 		try
 		{
 		Session session=sessionFactory.openSession();
@@ -109,20 +110,21 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomExceptio
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.getPaymentUploadError, new Date(), 3, GlobalConstant.getPaymentUploadErrorCode, e);
-			
-			//System.out.println(" Exception in getting Expenses list :"+e.getLocalizedMessage());
 		}
+		log.info("*** getPaymentUpload Ends : PaymentUploadDaoImpl ****");
 		return returnObject;
 	
  }
  
  public PaymentUpload getManualPayment(int sellerId)throws CustomException
  {
+	 log.info("*** getManualPayment Starts : PaymentUploadDaoImpl ****");
 	 PaymentUpload  returnObject=null;
 	 Seller seller=null;
-	 //sellerId=4;
+	 
 		try
 		{
 			 Session session=sessionFactory.openSession();
@@ -147,19 +149,18 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomExceptio
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.getManualPaymentError, new Date(), 3, GlobalConstant.getManualPaymentErrorCode, e);
-			
-			//System.out.println(" Exception in getting Payment Upload list :"+e.getLocalizedMessage());
 		}
+		log.info("*** getManualPayment Ends : PaymentUploadDaoImpl ****");
 		return returnObject;
 	
  }
  
  public void deletePaymentUpload(PaymentUpload payupload,int sellerId)
  {
-	// System.out.println(" In Category delete cid "+expense.getExpenseName());
-	// sellerId=4;
+	 log.info("*** deletePaymentUpload starts : PaymentUploadDaoImpl ****");
 	 try
 	 {
 		/* Session session=sessionFactory.openSession();
@@ -175,14 +176,15 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomExceptio
 				System.out.println("  Deleteing category updated:"+updated+" catdelete :"+catdelete);
 		  session.getTransaction().commit();
 		  session.close();
-*/
+		 */
 	 }
 	 catch(Exception e)
 	 {
-		 
-		 System.out.println(" Inside delleting order"+e.getLocalizedMessage());
 		 e.printStackTrace();
+		 log.error(e);
+		 log.debug(" Inside delleting order"+e.getLocalizedMessage());		 
 	 }
+	 log.info("*** deletePaymentUpload Ends : PaymentUploadDaoImpl ****");
  }
 
 

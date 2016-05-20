@@ -34,18 +34,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	static Logger log = Logger.getLogger(ReportsGeneratorDaoImpl.class
-			.getName());
+	static Logger log = Logger.getLogger(ReportsGeneratorDaoImpl.class.getName());
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public TotalShippedOrder getPartnerTSOdetails(String pcName,
 			Date startDate, Date endDate, int sellerId) throws CustomException {
-		log.info("*** getPartnerTSOdetails start ***");
-		// http://howtodoinjava.com/2014/10/28/hibernate-criteria-queries-tutorial-and-examples/#unique_result
-		System.out.println(" getPartnerTSOdetails   : pcName :" + pcName
+		
+		log.info("*** getPartnerTSOdetails Starts : ReportsGeneratorDaoImpl ****");
+		log.debug(" getPartnerTSOdetails   : pcName :" + pcName
 				+ " >>startDate" + startDate + ">>endDate :" + endDate);
-		// List<Order> orderlist=null;
 		TotalShippedOrder ttso = null;
 		try {
 			Session session = sessionFactory.openSession();
@@ -67,7 +65,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				while (iterator1.hasNext()) {
 					System.out.println("\n");
 					Object[] recordsRow = (Object[]) iterator1.next();
-					System.out.println(" record length:" + recordsRow.length);
+					log.debug(" record length:" + recordsRow.length);
 					for (int i = 0; i < recordsRow.length; i++) {
 						System.out.print("\t" + recordsRow[i]);
 
@@ -78,14 +76,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e);
 			log.info("Error :", e);
 			throw new CustomException(GlobalConstant.getPartnerTSOdetailsError,
 					new Date(), 3,
-					GlobalConstant.getPartnerTSOdetailsErrorCode, e);
-			/* System.out.println("Inside exception  "+e.getLocalizedMessage()); */
+					GlobalConstant.getPartnerTSOdetailsErrorCode, e);			
 		}
-		log.info("*** getPartnerTSOdetails exit ***");
+		log.info("*** getPartnerTSOdetails ends : ReportsGeneratorDaoImpl ****");
 		return ttso;
 	}
 
@@ -93,12 +91,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	public List<TotalShippedOrder> getAllPartnerTSOdetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException {
 
-		log.info("*** getAllPartnerTSOdetails start ***");
-		// http://howtodoinjava.com/2014/10/28/hibernate-criteria-queries-tutorial-and-examples/#unique_result
-		/*
-		 * System.out.println(" getAllPartnerTSOdetails   :  >>startDate"+startDate
-		 * +">>endDate :"+endDate);
-		 */
+		log.info("*** getAllPartnerTSOdetails Starts : ReportsGeneratorDaoImpl ****");
 		TotalShippedOrder[] ttso = null;
 
 		int totalQuantity = 0;
@@ -142,10 +135,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			criteria.setProjection(projList);
 			criteria.addOrder(org.hibernate.criterion.Order.asc("pcName"));
 			List<Object[]> results = criteria.list();
-			System.out.println("results.size()  " + results.size());
+			log.debug("results.size()  " + results.size());
 			ttso = new TotalShippedOrder[results.size()];
-			System.out.println(" Array size :" + ttso.length);
-			System.out.println("ttso  Object " + ttso[0]);
+			log.debug(" Array size :" + ttso.length);
+			log.debug("ttso  Object " + ttso[0]);
 			Iterator iterator1 = results.iterator();
 			int iteratorCount = 0;
 			if (results != null) {
@@ -153,17 +146,15 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					System.out.println("\n");
 					ttsoTemp = new TotalShippedOrder();
 					Object[] recordsRow = (Object[]) iterator1.next();
-					System.out.println("recordsRow.length  "
-							+ recordsRow.length);
-					System.out
-							.println(" Quantity  NR ReturnQty  Return Amount SaleAmount  PositiveAmount");
+					log.debug("recordsRow.length  "+ recordsRow.length);
+					log.debug(" Quantity  NR ReturnQty  Return Amount SaleAmount  PositiveAmount");
 					for (int i = 0; i < recordsRow.length; i++) {
 						if (i == 0) {
-							System.out.println(" Setting pc name :"
+							log.debug(" Setting pc name :"
 									+ recordsRow[i].toString());
-							// ttso[iteratorCount].setPcName(recordsRow[i].toString());
+							
 							ttsoTemp.setPcName(recordsRow[i].toString());
-							System.out.println(" After setting pc name = "
+							log.debug(" After setting pc name = "
 									+ ttsoTemp.getPcName());
 						}
 						if (i == 1) {
@@ -198,7 +189,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 											.toString());
 						}
 
-						System.out.print("\t" + recordsRow[i]);
+						log.debug("\t" + recordsRow[i]);
 
 					}
 					ttso[iteratorCount] = ttsoTemp;
@@ -206,11 +197,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				}
 			}
 
-			/*
-			 * Code for caluclating no of deliverred orders
-			 */
-			Criteria criteriaforDeliveredOrder = session
-					.createCriteria(Order.class);
+			Criteria criteriaforDeliveredOrder = session.createCriteria(Order.class);
 			criteriaforDeliveredOrder
 					.createAlias("seller", "seller",
 							CriteriaSpecification.LEFT_JOIN)
@@ -225,15 +212,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			criteriaforDeliveredOrder.setProjection(DOprojList);
 			// Object deliveredOrderCount =
 			// criteriaforDeliveredOrder.list().get(0);
-			List<Object[]> deliveredOrderCount = criteriaforDeliveredOrder
-					.list();
+			List<Object[]> deliveredOrderCount = criteriaforDeliveredOrder.list();
 			Iterator DOiterator = deliveredOrderCount.iterator();
 			if (deliveredOrderCount != null) {
 				iteratorCount = 0;
 				while (DOiterator.hasNext()) {
 					System.out.println("\n");
 					Object[] recordsRow = (Object[]) DOiterator.next();
-					System.out.println(" Delivered order partner :"
+					log.debug(" Delivered order partner :"
 							+ recordsRow[0].toString() + " coumt :"
 							+ recordsRow[1].toString());
 					totalNoofDO = totalNoofDO
@@ -243,9 +229,6 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				}
 			}
 
-			/*
-			 * Code for caluclating no of return orders
-			 */
 			Criteria criteriaforReturnOrder = session
 					.createCriteria(Order.class);
 			criteriaforReturnOrder.createAlias("seller", "seller",
@@ -269,9 +252,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			if (returnOrderCount != null) {
 				iteratorCount = 0;
 				while (ROiterator.hasNext()) {
-					System.out.println("\n");
 					Object[] recordsRow = (Object[]) ROiterator.next();
-					System.out.println(" Return order partner :"
+					log.debug(" Return order partner :"
 							+ recordsRow[0].toString() + " coumt :"
 							+ recordsRow[1].toString());
 
@@ -301,15 +283,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			AOprojList.add(Projections.rowCount());
 			criteriaforActionalbleOrder.setProjection(AOprojList);
 
-			List<Object[]> actionableOrderCount = criteriaforActionalbleOrder
-					.list();
+			List<Object[]> actionableOrderCount = criteriaforActionalbleOrder.list();
 			Iterator AOiterator = actionableOrderCount.iterator();
 			if (actionableOrderCount != null) {
 				iteratorCount = 0;
 				while (AOiterator.hasNext()) {
-					System.out.println("\n");
 					Object[] recordsRow = (Object[]) AOiterator.next();
-					System.out.println(" Actionable order partner :"
+					log.debug(" Actionable order partner :"
 							+ recordsRow[0].toString() + " coumt :"
 							+ recordsRow[1].toString());
 
@@ -344,9 +324,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			if (settledOrderCount != null) {
 				iteratorCount = 0;
 				while (SOiterator.hasNext()) {
-					System.out.println("\n");
 					Object[] recordsRow = (Object[]) SOiterator.next();
-					System.out.println(" Settled order partner :"
+					log.debug(" Settled order partner :"
 							+ recordsRow[0].toString() + " coumt :"
 							+ recordsRow[1].toString());
 					totalNoofSO = totalNoofSO
@@ -377,15 +356,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			RTOprojList.add(Projections.rowCount());
 			criteriaRTOlimitCross.setProjection(RTOprojList);
 
-			List<Object[]> RTOlimitCrossOrderCount = criteriaRTOlimitCross
-					.list();
+			List<Object[]> RTOlimitCrossOrderCount = criteriaRTOlimitCross.list();
 			Iterator rtoOiterator = RTOlimitCrossOrderCount.iterator();
 			if (RTOlimitCrossOrderCount != null) {
 				iteratorCount = 0;
 				while (rtoOiterator.hasNext()) {
-					System.out.println("\n");
 					Object[] recordsRow = (Object[]) rtoOiterator.next();
-					System.out.println(" Rto limit partner :"
+					log.debug(" Rto limit partner :"
 							+ recordsRow[0].toString() + " coumt :"
 							+ recordsRow[1].toString());
 
@@ -416,15 +393,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			returnprojList.add(Projections.groupProperty("pcName"));
 			returnprojList.add(Projections.rowCount());
 			criteriaReturnlimitCross.setProjection(returnprojList);
-			List<Object[]> returnlimitCrossOrderCount = criteriaReturnlimitCross
-					.list();
+			List<Object[]> returnlimitCrossOrderCount = criteriaReturnlimitCross.list();
 			Iterator returniterator = returnlimitCrossOrderCount.iterator();
 			if (returnlimitCrossOrderCount != null) {
 				while (returniterator.hasNext()) {
 					iteratorCount = 0;
-					System.out.println("\n");
 					Object[] recordsRow = (Object[]) returniterator.next();
-					System.out.println(" Return limit partner :"
+					log.debug(" Return limit partner :"
 							+ recordsRow[0].toString() + " coumt :"
 							+ recordsRow[1].toString());
 
@@ -435,10 +410,6 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 
 				}
 			}
-
-			/*
-		  * 
-		  */
 			/*
 			 * Code for caluclating cities wise distribution of orders
 			 */
@@ -463,28 +434,25 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			Iterator cityIterator = cityresults.iterator();
 			if (cityresults != null) {
 				while (cityIterator.hasNext()) {
-					System.out.println("\n");
+					
 					Object[] recordsRow = (Object[]) cityIterator.next();
-
-					System.out.println(" Cities row length "
-							+ recordsRow.length);
+					log.debug(" Cities row length "+ recordsRow.length);
 					if (recordsRow.length > 0) {
 						if (!cityMap.containsKey(recordsRow[0].toString())) {
 							cityMap.put(recordsRow[0].toString(), Double
 									.parseDouble(recordsRow[1].toString()));
 						}
-						System.out.println("city " + recordsRow[0]
-								+ " count : " + recordsRow[1]);
+						log.debug("city " + recordsRow[0]+ " count : " + recordsRow[1]);
 						cityTotalQuantity = cityTotalQuantity
 								+ Integer.parseInt(recordsRow[1].toString());
 					}
 
 				}
 			}
-			System.out.println(" ***cityTotalQuantity " + cityTotalQuantity);
+			log.debug(" ***cityTotalQuantity " + cityTotalQuantity);
 			ttso[0].setCityQuantity(cityMap);
 			for (Map.Entry<String, Double> entry : cityMap.entrySet()) {
-				System.out.println("for city : " + entry.getKey()
+				log.debug("for city : " + entry.getKey()
 						+ " count is :" + entry.getValue() + " percent is :"
 						+ (entry.getValue()) / cityTotalQuantity * 100);
 				cityPercentMap.put(entry.getKey(), (entry.getValue())
@@ -535,18 +503,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-
+			e.printStackTrace();
 			log.error(e);
 			log.info("Error :", e);
 			throw new CustomException(
 					GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3,
 					GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
-			/*
-			 * System.out.println("Inside exception  "+e.getLocalizedMessage());
-			 * e.printStackTrace();
-			 */
+			
 		}
-		log.info("*** getAllPartnerTSOdetails exit ***");
+		
+		log.info("*** getAllPartnerTSOdetails Starts : ReportsGeneratorDaoImpl ****");
 		return Arrays.asList(ttso);
 	}
 

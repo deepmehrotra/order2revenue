@@ -48,6 +48,9 @@ public class SellerDaoImpl implements SellerDao {
 
 
 	public void addSeller(Seller seller)throws CustomException {
+		
+		
+		log.info("*** addSeller Starts : SellerDaoImpl ****");
 		boolean firsttimeflag=true;
 		Seller sellerNew=null;
 		int id =0;
@@ -73,18 +76,14 @@ public class SellerDaoImpl implements SellerDao {
              tanNumber = seller.getTanNumber();
              brandName = seller.getBrandName();
              logoUrl = seller.getLogoUrl();
-		}
-		// sessionFactory.getCurrentSession().saveOrUpdate(seller);
+		}		
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			if(seller!=null&&seller.getId()!=0)
 			{
 				firsttimeflag=false;
-				
-					System.out.println("*****Saving Seller Again : "+seller.getId());
-					/**/
-					 sellerNew = (Seller) session.get(Seller.class, id);
+				sellerNew = (Seller) session.get(Seller.class, id);
 					  if(sellerNew != null){
 		                    sellerNew.setId(id);
 		                    sellerNew.setName(name);
@@ -100,9 +99,6 @@ public class SellerDaoImpl implements SellerDao {
 		                    	sellerNew.setLogoUrl(logoUrl); 
 		                    }
 		                }
-					System.out.println(" Merging seller : "+seller.getId());
-					//session.clear();
-					//session.merge(seller);
 					session.saveOrUpdate(sellerNew);
 					
 				
@@ -119,25 +115,30 @@ public class SellerDaoImpl implements SellerDao {
 			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.addSellerError, new Date(), 1, GlobalConstant.addSellerErrorCode, e);
-			//System.out.println(" Seller DAO IMPL :" + e.getLocalizedMessage());
 		}
-		
+		log.info("*** addSeller Ends : SellerDaoImpl ****");
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Seller> listSeller()throws CustomException {
-		try{
-		return (List<Seller>) sessionFactory.getCurrentSession()
-				.createCriteria(Seller.class).list();
+		
+		log.info("*** listSeller Starts : SellerDaoImpl ****");
+		List<Seller> sellers=null;
+		try{				
+			sellers=(List<Seller>) sessionFactory.getCurrentSession().createCriteria(Seller.class).list();
 		}catch(Exception e){
 			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.listSellerError, new Date(), 3, GlobalConstant.listSellerErrorCode, e);
 			
 		}
+		log.info("*** listSeller Ends : SellerDaoImpl ****");
+		return sellers;
 	}
 
 	public Seller getSeller(int sellerid)throws CustomException {
+		
+		log.info("*** getSeller from sellerId Starts : SellerDaoImpl ****");
 		Seller seller=null;
 		try{
 			Session session = sessionFactory.openSession();
@@ -154,14 +155,15 @@ public class SellerDaoImpl implements SellerDao {
 			throw new CustomException(GlobalConstant.getSellerByIdError, new Date(), 3, GlobalConstant.getSellerByIdErrorCode, e);
 			
 		}
+		log.info("*** getSeller from sellerId Ends : SellerDaoImpl ****");
 		return seller;
 	}
 
 	public Seller getSeller(String email)throws CustomException {
-		// return (Seller) sessionFactory.getCurrentSession().get(Seller.class,
-		// sellerid);
+		
+		log.info("*** getSeller from email Starts : SellerDaoImpl ****");
 		System.out.println(" Getting seelrthrough email : "+email);
-	Seller seller = null;
+		Seller seller = null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -172,21 +174,17 @@ public class SellerDaoImpl implements SellerDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			System.out.println(" Error getting seller  ");
 			e.printStackTrace();
 			log.error(e);
-			throw new CustomException(GlobalConstant.getSellerByEmailError, new Date(), 3, GlobalConstant.getSellerByEmailErrorCode, e);
-			
-//			System.out.println(" Seller  DAO IMPL :" + e.getLocalizedMessage());
-//			e.printStackTrace();
+			throw new CustomException(GlobalConstant.getSellerByEmailError, new Date(), 3, GlobalConstant.getSellerByEmailErrorCode, e);			
 		}
+		log.info("*** getSeller from email Ends : SellerDaoImpl ****");
 		return seller;
 	}
 
 	public void deleteSeller(Seller seller)throws CustomException {
-		// sessionFactory.getCurrentSession().createQuery("DELETE FROM Seller WHERE id = "+seller.getId()).executeUpdate();
-
-		System.out.println(" In seller  delete sellerid " + seller.getId());
+		
+		log.info("*** deleteSeller Starts : SellerDaoImpl ****");
 		Seller seller1 = null;
 		try {
 			Session session = sessionFactory.openSession();
@@ -209,17 +207,15 @@ public class SellerDaoImpl implements SellerDao {
 			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.deleteSellerError, new Date(), 3, GlobalConstant.deleteSellerErrorCode, e);
-			
-//			System.out.println(" Inside delleting partner"+ e.getLocalizedMessage());
-//			e.printStackTrace();
 		}
+		log.info("*** deleteSeller Ends : SellerDaoImpl ****");
 	}
 
 	@Override
 	public void planUpgrade(int pid, double totalAmount, long orderCount, int sellerid)throws CustomException {
-		System.out.println("Inside Plan Upgrade");
-		System.out.println("Dao Pid " + pid);
-		/* System.out.println("Dao price "+plan.getPlanPrice()); */
+		
+
+		log.info("*** planUpgrade Starts : SellerDaoImpl ****");
 		AccountTransaction at = null;
 		Plan plan = null;
 		Seller seller = null;
@@ -227,19 +223,17 @@ public class SellerDaoImpl implements SellerDao {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			plan = (Plan) session.get(Plan.class, pid);
-			seller = (Seller) session.get(Seller.class, sellerid);
-			System.out.println(" Getting ACCOUNT TRANSacttion object");
+			seller = (Seller) session.get(Seller.class, sellerid);			
 			AccountTransaction acct = payementStatus(plan);
-			System.out.println(" AFTER getting  ACCOUNT TRANSacttion object "
+			log.debug(" AFTER getting  ACCOUNT TRANSacttion object "
 					+ acct.getStatus() + " plan order count : "
 					+ plan.getOrderCount());
-			System.out.println(" Current ORDER BUCKET : "
+			log.debug(" Current ORDER BUCKET : "
 					+ seller.getSellerAccount());
 			if (seller.getSellerAccount() == null) {
 				throw new Exception();
 			}
-			System.out.println(" Current ORDER BUCKET : "
-					+ seller.getSellerAccount().getOrderBucket());
+			log.debug(" Current ORDER BUCKET : "+ seller.getSellerAccount().getOrderBucket());
 			if (acct.getStatus().equals("Success")) {
 				seller.getSellerAccount().setOrderBucket(
 						seller.getSellerAccount().getOrderBucket()
@@ -275,7 +269,6 @@ public class SellerDaoImpl implements SellerDao {
 			at.setStatus("Done");
 			at.setInvoiceId(invoiceId);
 			at.setTransactionId("RecivedFrom Third Party");
-			System.out.println(" Setting at object ionto seller");
 			seller.getSellerAccount().getAccountTransactions().add(at);
 			session.saveOrUpdate(seller);
 
@@ -285,20 +278,20 @@ public class SellerDaoImpl implements SellerDao {
 			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.planUpgradeError, new Date(), 1, GlobalConstant.planUpgradeErrorCode, e);
-			
-			/*System.out.println(" Inside exception in plN Dao impl :  "+ e.getLocalizedMessage());
-			e.printStackTrace();*/
 		}
-
+		log.info("*** planUpgrade Ends : SellerDaoImpl ****");
 	}
 
 	public AccountTransaction payementStatus(Plan plan) {
+		
+		log.info("*** payementStatus Starts : SellerDaoImpl ****");
 		AccountTransaction at = new AccountTransaction();
 		at.setTransactionDate(new Date());
 		at.setTransactionAmount(plan.getPlanPrice());
 		at.setStatus("Success");// It has to come from third party
 		at.setInvoiceId("invoice123");
 		at.setTransactionId("transac123"); // It has Recived From Third Party
+		log.info("*** payementStatus Ends : SellerDaoImpl ****");
 		return at;
 	}
 	
@@ -311,34 +304,35 @@ public class SellerDaoImpl implements SellerDao {
 	}
 
 	 public void addToProductStockList(){
-		 System.out.println("THIS IS SPRING BEAN IMPLEMENTATION");
+		
+		log.info("*** addToProductStockList Starts : SellerDaoImpl ****");
 		Session session=sessionFactory.openSession();
 		session.beginTransaction();
-		   Criteria criteria=session.createCriteria(Product.class);
-		   java.util.List<Product> list=criteria.list();
-		   Product stockProduct=null;
-		   ProductStockList stockList=null;
-			for (Product product : list ) {
-				stockList=new ProductStockList();
-				stockList.setCreatedDate(new Date());
-				stockList.setStockAvailable(product.getQuantity());
-				stockList.setUpdatedate(product.getProductDate().getDate());
-				stockList.setMonth(product.getProductDate().getMonth());
-				stockList.setYear(product.getProductDate().getYear());
-				stockList.setPrice(product.getProductPrice());
-				product.getClosingStocks().add(stockList);
-				session.saveOrUpdate(product);
-				session.saveOrUpdate(stockList);
-		System.out.println("PRODUCT ID IS hehehe "+product.getProductId());
-			}
-			session.getTransaction().commit();
-	 }
+		Criteria criteria=session.createCriteria(Product.class);
+		java.util.List<Product> list=criteria.list();
+		Product stockProduct=null;
+		ProductStockList stockList=null;
+		for (Product product : list ) {
+			stockList=new ProductStockList();
+			stockList.setCreatedDate(new Date());
+			stockList.setStockAvailable(product.getQuantity());
+			stockList.setUpdatedate(product.getProductDate().getDate());
+			stockList.setMonth(product.getProductDate().getMonth());
+			stockList.setYear(product.getProductDate().getYear());
+			stockList.setPrice(product.getProductPrice());
+			product.getClosingStocks().add(stockList);
+			session.saveOrUpdate(product);
+			session.saveOrUpdate(stockList);
+		log.debug("PRODUCT ID IS hehehe "+product.getProductId());
+		}
+		session.getTransaction().commit();
+		log.info("*** addToProductStockList Ends : SellerDaoImpl ****");
+	}
 
 	@Override
 	public int getStateDeliveryTime(int sellerId,String statename)throws CustomException {
-		// return (Seller) sessionFactory.getCurrentSession().get(Seller.class,
-		// sellerid);
-		System.out.println(" Getting seelrthrough email : "+statename);
+		
+		log.info("*** getStateDeliveryTime starts : SellerDaoImpl ****");
 		List<StateDeliveryTime> listofstates=null;
 		int returntime=0;
 		try {
@@ -361,10 +355,8 @@ public class SellerDaoImpl implements SellerDao {
 			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.getSellerByEmailError, new Date(), 3, GlobalConstant.getSellerByEmailErrorCode, e);
-			
-//			System.out.println(" Seller  DAO IMPL :" + e.getLocalizedMessage());
-//			e.printStackTrace();
 		}
+		log.info("*** getStateDeliveryTime Ends : SellerDaoImpl ****");
 		return returntime;
 	}
 	
@@ -372,16 +364,24 @@ public class SellerDaoImpl implements SellerDao {
 	 * Method to add Default Categories in new Seller
 	 */
 	private void setExpenseGroupsForSeller(int sellerId) throws CustomException {
-		System.out.println(" Getting setExpenseGroupsForSeller sellerId : "+sellerId);
+		
+		log.info("*** setExpenseGroupsForSeller starts : SellerDaoImpl ****");
+		try{
 		 for(Entry<String, String> e : GlobalConstant.preDefinedExpenseCategoryMap.entrySet()) {
 			 expenseService.addExpenseCategory(new ExpenseCategory(e.getKey(), e.getValue(),new Date()), sellerId);
-		       }
+		 }
+		}catch(Exception e){
+			e.printStackTrace();
+			log.error(e);
+		}
+		log.info("*** setExpenseGroupsForSeller Ends : SellerDaoImpl ****");
 	}
 	
 	@Override
 	public void addStateDeliveryTime(List<StateDeliveryTime> stateDelTimeList, int sellerId)throws CustomException {
-		log.info("*** addStateDeliveryTime start ***");
-		// sellerId=4;
+		
+
+		log.info("*** addStateDeliveryTime starts : SellerDaoImpl ****");
 		Seller seller = null;
 		try {
 			Session session = sessionFactory.openSession();
@@ -407,20 +407,15 @@ public class SellerDaoImpl implements SellerDao {
 			log.error(e);
 			throw new CustomException(GlobalConstant.addStateDeliveryTimeError,
 					new Date(), 1, GlobalConstant.addStateDeliveryTimeErrorCode,
-					e);
-			/* System.out.println("Inside exception  "+e.getLocalizedMessage()); */
+					e);			
 		}
-		log.info("*** addStateDeliveryTime exit ***");
-		/*
-		 * System.out.println(" Saved Expense Group : "+category.getExpcategoryId
-		 * ());
-		 */
+		log.info("*** addStateDeliveryTime Ends : SellerDaoImpl ****");
 	}
 	
 	@Override
 	public State getStateByName(String statename) throws CustomException
 	{
-		log.info("***getStateByName : "+statename);
+		log.info("*** getStateByName starts : SellerDaoImpl ****");
 		List listofstates=null;
 		State returnstate=null;
 		try {
@@ -436,20 +431,19 @@ public class SellerDaoImpl implements SellerDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			System.out.println(" Error getting state elivery time  ");
 			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.getSellerByEmailError, new Date(), 3, GlobalConstant.getSellerByEmailErrorCode, e);
-			
-//			System.out.println(" Seller  DAO IMPL :" + e.getLocalizedMessage());
-//			e.printStackTrace();
 		}
+		log.info("*** getStateByName Ends : SellerDaoImpl ****");
 		return returnstate;
 	}
 
 
 	@Override
 	public void updateProcessedOrdersCount(int sellerId, int processedOrderCount) throws CustomException {
+		
+		log.info("**** updateProcessedOrdersCount starts : SellerDaoImpl ****");
 		try{
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -465,5 +459,6 @@ public class SellerDaoImpl implements SellerDao {
 			log.error(e);
 			throw new CustomException(GlobalConstant.updateProcessedOrdersCountError, new Date(), 1, GlobalConstant.updateProcessedOrdersCountErrorCode, e);
 		}
+		log.info("*** updateProcessedOrdersCount Ends : SellerDaoImpl ****");
 	}
 }

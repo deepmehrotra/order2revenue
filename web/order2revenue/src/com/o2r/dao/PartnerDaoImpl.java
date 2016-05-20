@@ -36,17 +36,16 @@ public class PartnerDaoImpl implements PartnerDao {
 	@Override
 	public void addPartner(Partner partner, int sellerId)
 			throws CustomException {
-		// sellerId=4;
-		// sessionFactory.getCurrentSession().saveOrUpdate(partner);
-		System.out.println("******* Inside PartnerDaoIMpl partner id :"+ partner.getPcId()+"******* ConfigId : "+partner.getNrnReturnConfig().getConfigId());
+		
+
+		log.info("*** AddPArtner Starts : partnerDaoImpl****");
+		log.debug("******* Inside PartnerDaoIMpl partner id :"+ partner.getPcId()+"******* ConfigId : "+partner.getNrnReturnConfig().getConfigId());
 		long id=partner.getPcId();
 		
-		//Partner exisitingObj=null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			if (id != 0) {
-				System.out.println("*************** Inside If : "+id);
+			if (id != 0) {				
 				Query gettingTaxId = session
 						.createSQLQuery(chargesDeleteQuery)
 						.setParameter("configId", partner.getNrnReturnConfig().getConfigId());
@@ -64,74 +63,68 @@ public class PartnerDaoImpl implements PartnerDao {
 			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.addPartnerError,
-					new Date(), 1, GlobalConstant.addPartnerErrorCode, e);
-
-			// System.out.println(" pcId DAO IMPL :" + e.getLocalizedMessage());
+					new Date(), 1, GlobalConstant.addPartnerErrorCode, e);			
 		}
+		log.info("*** AddPArtner Ends : partnerDaoImpl****");
 	}
 
 	@Override
 	public List<Partner> listPartner(int sellerId) throws CustomException {
 
-		// sellerId=4;
+		log.info("*** listPartner Starts : partnerDaoImpl****");
 		List<Partner> returnlist = null;
-		System.out.println(" Inside list partner");
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			Seller seller = (Seller) session.get(Seller.class, sellerId);
-			System.out.println(" getting seller " + seller);
+			log.debug(" getting seller " + seller);
 			if (seller.getPartners() != null
 					&& seller.getPartners().size() != 0)
 				returnlist = seller.getPartners();
-			/*
-			 * System.out.println(" Getting list of partners size"+seller.
-			 * getPartners().size());
-			 * System.out.println(" Getting list of partners size"+returnlist);
-			 */
+			
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.listPartnerError,
 					new Date(), 3, GlobalConstant.listPartnerErrorCode, e);
-			// System.out.println(" Exception in getting partner list :"+
-			// e.getLocalizedMessage());
+			
 		}
+		log.info("*** listPartner Ends : partnerDaoImpl****");
 		return returnlist;
 	}
 
 	@Override
 	public Partner getPartner(long partnerid) throws CustomException {
-		try {
-			
+		
+		log.info("*** getPartner Starts : partnerDaoImpl****");
+		Partner partner=null;
+		try {			
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			Partner partner =(Partner) session.get(Partner.class,
-					partnerid);
+			partner =(Partner) session.get(Partner.class,partnerid);
 			Hibernate.initialize(partner.getNrnReturnConfig().getCharges());
 			session.getTransaction().commit();
 			session.close();
-			return partner;
-			/*return (Partner) sessionFactory.getCurrentSession().get(
-					Partner.class, partnerid);*/
+			
 		} catch (Exception e) {
 			e.printStackTrace();			
 			log.error(e);
 			throw new CustomException(GlobalConstant.getPartnerError,
 					new Date(), 3, GlobalConstant.getPartnerErrorCode, e);
 		}
+		log.info("*** getPartner Ends : partnerDaoImpl****");
+		return partner;
 	}
 
 	@Override
 	public Partner getPartner(String partnername, int sellerId)
 			throws CustomException {
-		// sellerId=4;
+		
+		log.info("*** getPartner by PartnerName Starts : partnerDaoImpl****");
 		Partner returnpartner = null;
 		Seller seller = null;
-
-		System.out.println(" ***Insid get partner ***" + partnername);
 
 		try {
 			Session session = sessionFactory.openSession();
@@ -151,14 +144,13 @@ public class PartnerDaoImpl implements PartnerDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-e.printStackTrace();
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.getPartnerError,
 					new Date(), 3, GlobalConstant.getPartnerErrorCode, e);
-			// System.out.println(" Partner  DAO IMPL :" +
-			// e.getLocalizedMessage());
+			
 		}
-
+		log.info("*** getPartner by partnerName Starts : partnerDaoImpl****");
 		return returnpartner;
 
 	}
@@ -166,9 +158,11 @@ e.printStackTrace();
 	@Override
 	public void deletePartner(Partner partner, int sellerId)
 			throws CustomException {
-		System.out.println(" In partner delete pid " + partner.getPcId()
+		
+		log.info("*** DeletePartner Starts : partnerDaoImpl****");
+		log.debug(" In partner delete pid " + partner.getPcId()
 				+ "   pcname " + partner.getPcName());
-		// sellerId=4;
+		
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -181,36 +175,20 @@ e.printStackTrace();
 			int sellerdelete = session.createQuery(
 					"DELETE FROM Partner WHERE pcId = " + partner.getPcId())
 					.executeUpdate();
-			/*
-			 * Criteria
-			 * criteria=session.createCriteria(Seller.class).add(Restrictions
-			 * .eq("id", sellerId)); criteria.createAlias("partners", "partner",
-			 * CriteriaSpecification.LEFT_JOIN)
-			 * .add(Restrictions.eq("partner.pcId", partner.getPcId()))
-			 * .setResultTransformer
-			 * (CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			 * seller=(Seller)criteria.list().get(0); Partner
-			 * partneris=seller.getPartners().get(0);
-			 * seller.getPartners().remove(partneris);
-			 * session.delete(partneris);
-			 * System.out.println(" List size after deletion :"
-			 * +seller.getPartners().size()); session.saveOrUpdate(seller);
-			 */
-			System.out.println(" update : " + updated + " sellerdelete "
+			
+			log.debug(" update : " + updated + " sellerdelete "
 					+ sellerdelete);
 			session.getTransaction().commit();
 			session.close();
 
 		} catch (Exception e) {
-
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.deletePartnerError,
-					new Date(), 3, GlobalConstant.deletePartnerErrorCode, e);
-			// System.out.println(" Inside delleting partner"+
-			// e.getLocalizedMessage());
+					new Date(), 3, GlobalConstant.deletePartnerErrorCode, e);			
 
 		}
-
+		log.info("*** DeletePartner Ends : partnerDaoImpl****");
 	}
 	
 	/*@Override

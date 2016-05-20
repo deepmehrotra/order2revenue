@@ -44,10 +44,9 @@ public class PlanDaoImpl implements PlanDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 			log.error(e);
-			throw new CustomException(GlobalConstant.addPlanError, new Date(), 1, GlobalConstant.addPlanErrorCode, e);
-			//System.out.println(" Plan Module Dao IMPL :"+ e.getLocalizedMessage());
+			throw new CustomException(GlobalConstant.addPlanError, new Date(), 1, GlobalConstant.addPlanErrorCode, e);			
 		}
 		log.info("*** addPlan exit ***");
 	}
@@ -60,6 +59,7 @@ public class PlanDaoImpl implements PlanDao {
 		try{
 		plans=(List<Plan>) sessionFactory.getCurrentSession().createCriteria(Plan.class).list();
 		}catch(Exception e){
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.listPlansError, new Date(), 3, GlobalConstant.listPlansErrorCode, e);
 		}
@@ -75,6 +75,7 @@ public class PlanDaoImpl implements PlanDao {
 		try{
 		plan=(Plan) sessionFactory.getCurrentSession().get(Plan.class, pid);
 		}catch (Exception e){
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.getPlanError, new Date(), 3, GlobalConstant.getPlanErrorCode, e);
 		}
@@ -98,6 +99,7 @@ public class PlanDaoImpl implements PlanDao {
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.deletePlanError, new Date(), 3, GlobalConstant.deletePlanErrorCode, e);
 			
@@ -105,7 +107,6 @@ public class PlanDaoImpl implements PlanDao {
 			session.close();
 		}
 		log.info("*** deletePlan exit ***");
-
 	}
 
 }

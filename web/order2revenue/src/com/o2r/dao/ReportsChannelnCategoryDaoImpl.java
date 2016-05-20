@@ -46,9 +46,8 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 	
 	@Override
 	public List<ChannelSalesDetails> getChannelSalesDetails(Date startDate,Date endDate, int sellerId) throws CustomException{
-		// TODO Auto-generated method stub
-		System.out.println("GET CHNNEL SALES DETAILS");
-		 log.info("*** getAllPartnerTSOdetails start ***");
+		
+		log.info("*** getChannelSalesDetails Starts : ReportsChannelnCategoryDaoImpl ****");
 		 List<ChannelSalesDetails> ttso=new ArrayList<ChannelSalesDetails>();
 		 
 		 try
@@ -103,18 +102,15 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 				 criteria.createAlias("orderPayment", "orderPayment", CriteriaSpecification.INNER_JOIN);
 				 criteria.createAlias("orderTax", "orderTax", CriteriaSpecification.INNER_JOIN);
 				 criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.INNER_JOIN);
-				// criteria.createAlias("orderTimeline", "orderTimeline", CriteriaSpecification.LEFT_JOIN)
 				 criteria.add(Restrictions.eq("seller.id", sellerId)).add(Restrictions.eq("pcName", arr[x]));
 				 criteria.add(or);
-				 //criteria.add(Restrictions.between("orderDate",startDate, endDate));
-				 //criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-				 System.out.println("CRITERIA LISR SIZE IS "+criteria.list().size()+"  "+  arr[x]);
+				 log.debug("CRITERIA LISR SIZE IS "+criteria.list().size()+"  "+  arr[x]);
 				 carr[x]=criteria;
 				 }
 			 			 
 			 for(int y=0;y<carr.length;y++){
 			 carr[y].setProjection(getPL("orderTax"));
-			 System.out.println("CRITERIA LISR SIZE IS "+carr[y].list().size()+"  "+  arr[y]);
+			 log.debug("CRITERIA LISR SIZE IS "+carr[y].list().size()+"  "+  arr[y]);
 			 }
 			 
 			 		int i=0;
@@ -130,47 +126,46 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 								 temp.setPcName(arr[i]);
 								 temp.setTaxPercent(taxMap.get(temp.getTaxCategtory()));
 								 ttso.add(temp);
-						 }i++;}
+						 }
+							 i++;}
 		
 
-	//		ttsoReturn(startDate,endDate,sellerId,ttso);			
-
-						 Criteria criteria1=getCriteriaPL(startDate,endDate,sellerId);
-						 List pcNameList=criteria1.list();
+			 Criteria criteria1=getCriteriaPL(startDate,endDate,sellerId);
+			 List pcNameList=criteria1.list();
 
 						 
-						 System.out.println("SIZE OF THE LIST IS "+pcNameList.size());
-							Iterator pcNameItr=pcNameList.iterator();
-							
-							while(pcNameItr.hasNext()){
-								 Object[] recordsRow = (Object[])pcNameItr.next();
-								 temp=new ChannelSalesDetails();
-								 populateChannelSalesDetails(temp,recordsRow,startDate,endDate,"pc");
-								 temp.setGroupByName("channels");
-								 ttso.add(temp);
-							}
+			 log.debug("SIZE OF THE LIST IS "+pcNameList.size());
+			 Iterator pcNameItr=pcNameList.iterator();
+			 	
+			 while(pcNameItr.hasNext()){
+				 Object[] recordsRow = (Object[])pcNameItr.next();
+				 temp=new ChannelSalesDetails();
+				 populateChannelSalesDetails(temp,recordsRow,startDate,endDate,"pc");
+				 temp.setGroupByName("channels");
+				 ttso.add(temp);
+			 }
 			 session.getTransaction().commit();
 		     session.close();
 		   }
-		   catch (Exception e) {			   
+		   catch (Exception e) {
+			   e.printStackTrace();
 			   log.error(e);
 			   log.info("Error :",e);
 			   throw new CustomException(GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3, GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
 		}
-		 log.info("*** getAllPartnerTSOdetails exit ***");
-	 
+		 log.info("*** getChannelSalesDetails Ends : ReportsChannelnCategoryDaoImpl ****");	 
 		 return ttso;
 	}
 
 
 	@Override
 	public List<TotalShippedOrder> getProductSalesDetails(Date startDate,Date endDate, int sellerId) throws CustomException {
-		// TODO Auto-generated method stub
-		System.out.println("GET PRODUCTS SALES DETAILS");
 		return null;
 	}
 	
 	public static ProjectionList getPL(String name){
+		
+		log.info("*** getPL of ProjectionList Starts : ReportsChannelnCategoryDaoImpl ****");
 		 ProjectionList projList = Projections.projectionList();
 		 if(name.equals("pcName"))
 			 projList.add(Projections.groupProperty("pcName"));
@@ -208,13 +203,14 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		 projList.add(Projections.sqlProjection("(sum( grossNetRate * returnorrtoQty )) as testq", new String[]{"testq"},new Type[]{Hibernate.DOUBLE}));
 		 projList.add(Projections.sqlProjection("(sum( (orderSP/quantity) * returnorrtoQty )) as testR", new String[]{"testR"},new Type[]{Hibernate.DOUBLE}));
 
-		 
+		 log.info("*** getPL of ProjectionList Ends : ReportsChannelnCategoryDaoImpl ****");
 		 return projList;
 	}
 	
 	
 	public static void populateChannelSalesDetails(ChannelSalesDetails temp,Object[] recordsRow,Date startDate,Date endDate,String nme){
 		
+		log.info("*** populateChannelSalesDetails Starts : ReportsChannelnCategoryDaoImpl ****");
 		 temp.setPcName(recordsRow[0].toString());
 		 temp.setTaxCategtory(recordsRow[0].toString());
 		 temp.setPaymentType(recordsRow[0].toString());
@@ -246,7 +242,6 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		 temp.setRowCount(Integer.parseInt(recordsRow[23].toString()));
 		 temp.setReturnOrRTOChargestoBeDeducted(Double.parseDouble(recordsRow[24].toString()));
 		 temp.setTax(Float.parseFloat(recordsRow[25].toString()));
-		// temp.setTax(Float.parseFloat(recordsRow[26].toString()));
 		 if(!nme.equals("categoryName") && !nme.equals("getPayments")){
 		 temp.setNrTax(Double.parseDouble(recordsRow[26].toString()));
 		 temp.setNrReturn(Double.parseDouble(recordsRow[27].toString()));
@@ -266,15 +261,15 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		 temp.setDateofPayment((Date)recordsRow[32]);
 		 temp.setTax(Float.parseFloat(recordsRow[33].toString()));
 		 }
-		 
-//		 temp.setNetPaymentResult(Double.parseDouble(recordsRow[20].toString()));
-		
+		 log.info("*** populateChannelSalesDetails Ends : ReportsChannelnCategoryDaoImpl ****");
 	}
 
 
 	@Override
 	public List<ChannelSalesDetails> getCategorySalesDetails(Date startDate,Date endDate, int sellerIdfromSession) throws CustomException {
-		// TODO Auto-generated method stub
+
+
+		log.info("*** getCategorySalesDetails Starts : ReportsChannelnCategoryDaoImpl ****");
 		 List<ChannelSalesDetails> ttso=new ArrayList<ChannelSalesDetails>();
 		 ArrayList<ChannelSalesDetails> ttsonew=new ArrayList<ChannelSalesDetails>();
 		 
@@ -298,19 +293,12 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 				 taxMap.put(recordsRow[1].toString(),Float.parseFloat(recordsRow[2].toString()));
 			 }
 			 
-			 
-			 
-			 
-			 
-			 Criteria criteria1=getCriteria(startDate,endDate,sellerIdfromSession);
-			 
-			 List pcNameList=criteria1.list();
-			 
-			 System.out.println("SIZE OF THE LIST IS "+pcNameList.size());
+			 Criteria criteria1=getCriteria(startDate,endDate,sellerIdfromSession);			 
+			 List pcNameList=criteria1.list();			 
+			 log.debug("SIZE OF THE LIST IS "+pcNameList.size());
 			 
 			 Criteria criteria2=session.createCriteria(Product.class);
-			 		  criteria2.setProjection(geProductPL("product"));
-			 		  
+			 		  criteria2.setProjection(geProductPL("product"));			 		  
  		  
 			 List productList = criteria2.list();
 			 
@@ -323,7 +311,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 					 prMap.put(recordsRow[0].toString(), recordsRow[1].toString());
 					 prPriceMap.put(recordsRow[0].toString(), recordsRow[2].toString());
 					 
-					 System.out.println("Product Price Is " +recordsRow[2].toString());
+					 log.debug("Product Price Is " +recordsRow[2].toString());
 				}
 
 			 		
@@ -367,8 +355,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		    		if(!st.contains(name))
 		    			st.add(name);
 		    	}
-		    	System.out.print("SIZE IS CATEGOY SIZE IS "+st.size());
-		    	
+		    	log.debug("SIZE IS CATEGOY SIZE IS "+st.size());		    	
 		    	Iterator stItr=st.iterator();
 		    	
 		    	while(stItr.hasNext()){
@@ -434,13 +421,12 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 			 session.getTransaction().commit();
 		     session.close();
 		   }
-		   catch (Exception e) {			   
+		   catch (Exception e) {
+			   e.printStackTrace();
 			   log.error(e);
-			   log.info("Error :",e);
 			   throw new CustomException(GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3, GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
-		}
-		 log.info("*** getAllPartnerTSOdetails exit ***");
-	 
+		}		 
+		 log.info("*** getCategorySalesDetails Exit : ReportsChannelnCategoryDaoImpl ****");
 		 return ttsonew;
 	}
 	
@@ -500,16 +486,14 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		 criteria1.createAlias("customer", "customer", CriteriaSpecification.LEFT_JOIN);
 		 criteria1.createAlias("orderPayment", "orderPayment", CriteriaSpecification.LEFT_JOIN);
 		 criteria1.createAlias("orderTax", "orderTax", CriteriaSpecification.LEFT_JOIN);
-		 criteria1.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.LEFT_JOIN);
-		// criteria1.createAlias("orderTimeline", "orderTimeline", CriteriaSpecification.LEFT_JOIN);
+		 criteria1.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.LEFT_JOIN);		
 		 criteria1.add(Restrictions.eq("seller.id", sellerId));
 		 criteria1.add(Restrictions.isNotNull("orderReturnOrRTO.returnDate"));
 		 criteria1.add(Restrictions.isNotNull("orderReturnOrRTO.returnOrRTOId"));
 		 criteria1.add(Restrictions.eq("seller.id", sellerId));
 		 criteria1.add(Restrictions.between("orderReturnOrRTO.returnDate",startDate, endDate));
-		 //criteria1.setProjection(Projections.distinct(Projections.property("orderId")));
 		 criteria1.setProjection(getPL("pcName"));
-		 //criteria1.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+		
 		 return criteria1;
 	}
 	
@@ -540,7 +524,6 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		 criteria1.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.INNER_JOIN);
 		 criteria1.add(Restrictions.eq("seller.id", sellerIdfromSession));
 		 criteria1.add(Restrictions.between("orderDate",startDate, endDate));
-		 //criteria1.setProjection(Projections.distinct(Projections.property("orderId")));
 		 criteria1.setProjection(getAllPL("product"));
 		 return criteria1;
 	}
@@ -548,6 +531,8 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 	@Override
 	public List<ChannelSalesDetails> getPaymentsReceievedDetails(Date startDate, Date endDate, int sellerIdfromSession)
 			throws CustomException {
+		
+		log.info("*** getPaymentsReceievedDetails Starts : ReportsChannelnCategoryDaoImpl ****");
 		 List<ChannelSalesDetails> ttso=new ArrayList<ChannelSalesDetails>();
 		 ArrayList<ChannelSalesDetails> ttsonew=new ArrayList<ChannelSalesDetails>();
 		 
@@ -559,7 +544,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 			 
 			 List pcNameList=criteria1.list();
 			 
-			 System.out.println("SIZE OF THE LIST IS "+pcNameList.size());
+			 log.debug("SIZE OF THE LIST IS "+pcNameList.size());
 
 				Iterator pcNameItr=pcNameList.iterator();
 				ChannelSalesDetails temp=null;
@@ -583,24 +568,27 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 					}
 				});
 		         
-		         System.out.println("TTSO NEW SIZE IS "+ttso.size());
+		         log.debug("TTSO NEW SIZE IS "+ttso.size());
 			 session.getTransaction().commit();
 		     session.close();
 		   }
-		   catch (Exception e) {			   
+		   catch (Exception e) {
+			   e.printStackTrace();
 			   log.error(e);
 			   log.info("Error :",e);
 			   throw new CustomException(GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3, GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
 		}
-		 log.info("*** getAllPartnerTSOdetails exit ***");
-		 List aList=getConsolidatedDetails(startDate,endDate,sellerIdfromSession);
-		  ttso.addAll(aList);
-		  return ttso;
+		List aList=getConsolidatedDetails(startDate,endDate,sellerIdfromSession);
+		ttso.addAll(aList);
+		log.info("*** getPaymentsReceievedDetails Ends : ReportsChannelnCategoryDaoImpl ****");
+		return ttso;
 	}
 
 	@Override
 	public List<ChannelSalesDetails> getOrderwiseGPDetails(Date startDate,
 			Date endDate, int sellerIdfromSession) throws CustomException {
+		
+		log.info("*** getOrderwiseGPDetails Starts : ReportsChannelnCategoryDaoImpl ****");
 		 List<ChannelSalesDetails> ttso=new ArrayList<ChannelSalesDetails>();
 		 ArrayList<ChannelSalesDetails> ttsonew=new ArrayList<ChannelSalesDetails>();
 		 
@@ -612,7 +600,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 			 
 			 List pcNameList=criteria1.list();
 			 
-			 System.out.println("SIZE OF THE LIST IS "+pcNameList.size());
+			 log.debug("SIZE OF THE LIST IS "+pcNameList.size());
 			 
 			 Criteria criteria2=session.createCriteria(Product.class);
 			 		  criteria2.setProjection(geProductPL("product"));
@@ -629,7 +617,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 					 prMap.put(recordsRow[0].toString(), recordsRow[1].toString());
 					 prPriceMap.put(recordsRow[0].toString(), recordsRow[2].toString());
 					 
-					 System.out.println("Product Price Is " +recordsRow[2].toString());
+					 log.debug("Product Price Is " +recordsRow[2].toString());
 				}
 
 			 		
@@ -653,7 +641,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 				}
 				
 				
-				System.out.println("SIZE OF THE TTSO IS "+ttso.size());
+				log.debug("SIZE OF THE TTSO IS "+ttso.size());
 				
 				
 		Collections.sort(ttso,new Comparator(){
@@ -675,7 +663,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		    		if(!st.contains(name))
 		    			st.add(name);
 		    	}
-		    	System.out.print("SIZE IS CATEGOY SIZE IS "+st.size());
+		    	log.debug("SIZE IS CATEGOY SIZE IS "+st.size());
 		    	
 		    	Iterator stItr=st.iterator();
 		    	
@@ -733,25 +721,24 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		         ttsonew.add(temp);    }
 		         
 		         
-		         System.out.println("TTSO NEW SIZE IS "+ttsonew.size());
+		     log.debug("TTSO NEW SIZE IS "+ttsonew.size());
 			 session.getTransaction().commit();
 		     session.close();
 		   }
-		   catch (Exception e) {			   
+		   catch (Exception e) {
+			   e.printStackTrace();
 			   log.error(e);
 			   log.info("Error :",e);
 			   throw new CustomException(GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3, GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
 		}
-		 log.info("*** getAllPartnerTSOdetails exit ***");
-	 
+		 log.info("*** getOrderwiseGPDetails Ends : ReportsChannelnCategoryDaoImpl ****");
 		 return ttso;
 
 	}
 
 	public List<ChannelSalesDetails> getConsolidatedDetails(Date startDate,Date endDate, int sellerId) throws CustomException{
-		// TODO Auto-generated method stub
-		System.out.println("GET CHNNEL SALES DETAILS");
-		 log.info("*** getAllPartnerTSOdetails start ***");
+		
+		log.info("*** getConsolidatedDetails Starts : ReportsChannelnCategoryDaoImpl ****");
 		 Session session=sessionFactory.openSession();	
 		 List<ChannelSalesDetails> ttso=new ArrayList<ChannelSalesDetails>();
 		 
@@ -765,13 +752,13 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 				HashMap<String,String> prMap=new HashMap<String,String>();
 				HashMap<String,String> prPriceMap=new HashMap<String,String>();
 	
-	while(prNameItr.hasNext()){
-		 Object[] recordsRow = (Object[])prNameItr.next();
-		 prMap.put(recordsRow[0].toString(), recordsRow[1].toString());
-		 prPriceMap.put(recordsRow[0].toString(), recordsRow[2].toString());
-		 
-		 System.out.println("Product Price Is " +recordsRow[2].toString());
-	}
+			while(prNameItr.hasNext()){
+				 Object[] recordsRow = (Object[])prNameItr.next();
+				 prMap.put(recordsRow[0].toString(), recordsRow[1].toString());
+				 prPriceMap.put(recordsRow[0].toString(), recordsRow[2].toString());
+				 
+				 log.debug("Product Price Is " +recordsRow[2].toString());
+			}
 		 
 		 try
 		 {
@@ -783,16 +770,13 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 			 criteria1.createAlias("orderTax", "orderTax", CriteriaSpecification.LEFT_JOIN);
 			 criteria1.createAlias("paymentUpload", "paymentUpload", CriteriaSpecification.LEFT_JOIN);
 			 criteria1.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.LEFT_JOIN);
-			// criteria1.createAlias("orderTimeline", "orderTimeline", CriteriaSpecification.LEFT_JOIN);
 			 criteria1.add(Restrictions.eq("seller.id", sellerId));
-			 criteria1.add(Restrictions.between("orderDate",startDate, endDate));
-			 //criteria1.setProjection(Projections.distinct(Projections.property("orderId")));
+			 criteria1.add(Restrictions.between("orderDate",startDate, endDate));			 
 			 criteria1.setProjection(getPL("pcName"));
-			 //criteria1.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			 
 			 List pcNameList=criteria1.list();
 		 
-			 System.out.println("SIZE OF THE LIST IS "+pcNameList.size());
+			 log.debug("SIZE OF THE LIST IS "+pcNameList.size());
 			 
 			 Criteria ctr=session.createCriteria(Order.class);
 			 ProjectionList p=Projections.projectionList()	;
@@ -819,17 +803,17 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 				 criteria.createAlias("orderTax", "orderTax", CriteriaSpecification.INNER_JOIN);
 				 criteria1.createAlias("paymentUpload", "paymentUpload", CriteriaSpecification.LEFT_JOIN);
 				 criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.INNER_JOIN);
-				// criteria.createAlias("orderTimeline", "orderTimeline", CriteriaSpecification.LEFT_JOIN)
+				
 				 criteria.add(Restrictions.eq("seller.id", sellerId)).add(Restrictions.eq("pcName", arr[x]));
 				 criteria.add(Restrictions.between("orderDate",startDate, endDate));
-				 //criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-				 System.out.println("CRITERIA LISR SIZE IS "+criteria.list().size()+"  "+  arr[x]);
+				 
+				 log.debug("CRITERIA LISR SIZE IS "+criteria.list().size()+"  "+  arr[x]);
 				 carr[x]=criteria;
 				 }
 			 			 
 			 for(int y=0;y<carr.length;y++){
 			 carr[y].setProjection(getPL("paymentType"));
-			 System.out.println("CRITERIA LISR SIZE IS "+carr[y].list().size()+"  "+  arr[y]);
+			 log.debug("CRITERIA LISR SIZE IS "+carr[y].list().size()+"  "+  arr[y]);
 			 }
 			 
 			 		ChannelSalesDetails temp=null;int i=0000;
@@ -859,89 +843,95 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 			 session.getTransaction().commit();
 		     session.close();
 		   }
-		   catch (Exception e) {			   
+		   catch (Exception e) {
+			   e.printStackTrace();
 			   log.error(e);
 			   log.info("Error :",e);
 			   throw new CustomException(GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3, GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
 		}
-		 log.info("*** getAllPartnerTSOdetails exit ***");
-	 
+		 
+		 log.info("*** getConsolidatedDetails Ends : ReportsChannelnCategoryDaoImpl ****");
 		 return ttso;
 	}
 
 	public void ttsoReturn(Date startDate,Date endDate,int sellerId,List<ChannelSalesDetails> ttso){
 		
+		log.info("*** ttsoReturn Starts : ReportsChannelnCategoryDaoImpl ****");		
 		 Session session=sessionFactory.openSession();	
-		 
-		 Criteria criteriaTax=session.createCriteria(TaxCategory.class);
-		 ProjectionList tList = Projections.projectionList();
-		 HashMap<String,Float> taxMap=new HashMap<String,Float>();
-		 tList.add(Projections.property("taxCatId"));
-		 tList.add(Projections.property("taxCatName"));
-		 tList.add(Projections.property("taxPercent"));
-		 criteriaTax.setProjection(tList);			 
-		 List taxList=criteriaTax.list();
-		 Iterator txItr=taxList.iterator();
-		 while(txItr.hasNext()){
-			 Object[] recordsRow = (Object[])txItr.next();
-			 taxMap.put(recordsRow[1].toString(),Float.parseFloat(recordsRow[2].toString()));
-		 }
-				
-		ChannelSalesDetails temp=null;
-		 Criteria ctr=session.createCriteria(Order.class);
-		 ProjectionList p=Projections.projectionList()	;
-		 p.add(Projections.groupProperty("pcName"));
-		 ctr.setProjection(p);
-		 List lst=ctr.list();
-		 String arr[]=new String[lst.size()];
-		 Iterator itrx=lst.iterator();int a=0;
-		 
-							 while(itrx.hasNext())
-							 {
-								 arr[a]=itrx.next().toString();a++;
-							 }
-							 
-		 Criteria carr[]=new Criteria[lst.size()];
-		 Criteria criteria;
-		 session.beginTransaction();
-		 for(int x=0;x<carr.length;x++){
-			 criteria=null;
-			 criteria=session.createCriteria(Order.class);
-			 criteria.createAlias("seller", "seller", CriteriaSpecification.LEFT_JOIN);
-			 criteria.createAlias("customer", "customer", CriteriaSpecification.LEFT_JOIN);
-			 criteria.createAlias("orderPayment", "orderPayment", CriteriaSpecification.INNER_JOIN);
-			 criteria.createAlias("orderTax", "orderTax", CriteriaSpecification.INNER_JOIN);
-			 criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.INNER_JOIN);
-			// criteria.createAlias("orderTimeline", "orderTimeline", CriteriaSpecification.LEFT_JOIN)
-			 criteria.add(Restrictions.eq("seller.id", sellerId)).add(Restrictions.eq("pcName", arr[x]));
-			 criteria.add(Restrictions.between("orderReturnOrRTO.returnDate",startDate, endDate));
-			 //criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			 System.out.println("CRITERIA LISR SIZE IS "+criteria.list().size()+"  "+  arr[x]);
-			 carr[x]=criteria;
+		 try {
+			 Criteria criteriaTax=session.createCriteria(TaxCategory.class);
+			 ProjectionList tList = Projections.projectionList();
+			 HashMap<String,Float> taxMap=new HashMap<String,Float>();
+			 tList.add(Projections.property("taxCatId"));
+			 tList.add(Projections.property("taxCatName"));
+			 tList.add(Projections.property("taxPercent"));
+			 criteriaTax.setProjection(tList);			 
+			 List taxList=criteriaTax.list();
+			 Iterator txItr=taxList.iterator();
+			 while(txItr.hasNext()){
+				 Object[] recordsRow = (Object[])txItr.next();
+				 taxMap.put(recordsRow[1].toString(),Float.parseFloat(recordsRow[2].toString()));
+			 }
+					
+			ChannelSalesDetails temp=null;
+			 Criteria ctr=session.createCriteria(Order.class);
+			 ProjectionList p=Projections.projectionList()	;
+			 p.add(Projections.groupProperty("pcName"));
+			 ctr.setProjection(p);
+			 List lst=ctr.list();
+			 String arr[]=new String[lst.size()];
+			 Iterator itrx=lst.iterator();int a=0;
+			 
+								 while(itrx.hasNext())
+								 {
+									 arr[a]=itrx.next().toString();a++;
+								 }
+								 
+			 Criteria carr[]=new Criteria[lst.size()];
+			 Criteria criteria;
+			 session.beginTransaction();
+			 for(int x=0;x<carr.length;x++){
+				 criteria=null;
+				 criteria=session.createCriteria(Order.class);
+				 criteria.createAlias("seller", "seller", CriteriaSpecification.LEFT_JOIN);
+				 criteria.createAlias("customer", "customer", CriteriaSpecification.LEFT_JOIN);
+				 criteria.createAlias("orderPayment", "orderPayment", CriteriaSpecification.INNER_JOIN);
+				 criteria.createAlias("orderTax", "orderTax", CriteriaSpecification.INNER_JOIN);
+				 criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.INNER_JOIN);
+				// criteria.createAlias("orderTimeline", "orderTimeline", CriteriaSpecification.LEFT_JOIN)
+				 criteria.add(Restrictions.eq("seller.id", sellerId)).add(Restrictions.eq("pcName", arr[x]));
+				 criteria.add(Restrictions.between("orderReturnOrRTO.returnDate",startDate, endDate));
+				 //criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+				 System.out.println("CRITERIA LISR SIZE IS "+criteria.list().size()+"  "+  arr[x]);
+				 carr[x]=criteria;
+				 }
+				 
+			 for(int y=0;y<carr.length;y++){
+			 carr[y].setProjection(getPL("orderTax"));
+			 log.debug("CRITERIA LISR SIZE IS "+carr[y].list().size()+"  "+  arr[y]);
 			 }
 			 
-		 for(int y=0;y<carr.length;y++){
-		 carr[y].setProjection(getPL("orderTax"));
-		 System.out.println("CRITERIA LISR SIZE IS "+carr[y].list().size()+"  "+  arr[y]);
-		 }
+			 		int i=0;
+						 for(int m=0;m<carr.length;m++){
+							 List<Object[]> results = carr[m].list();
+							               
+							 Iterator channelItr = results.iterator();
+							 while(channelItr.hasNext()){
+								 Object[] recordsRow = (Object[])channelItr.next();
+								 temp=new ChannelSalesDetails();
+								 populateChannelSalesDetails(temp,recordsRow,startDate,endDate,"pc");
+								 temp.setGroupByName("returnGroup");
+								 temp.setPcName(arr[i]);
+								 temp.setTaxPercent(taxMap.get(temp.getTaxCategtory()));
+								 ttso.add(temp);
+						 }
+							 i++;}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e);
+		}
 		 
-		 		int i=0;
-					 for(int m=0;m<carr.length;m++){
-						 List<Object[]> results = carr[m].list();
-						               
-						 Iterator channelItr = results.iterator();
-						 while(channelItr.hasNext()){
-							 Object[] recordsRow = (Object[])channelItr.next();
-							 temp=new ChannelSalesDetails();
-							 populateChannelSalesDetails(temp,recordsRow,startDate,endDate,"pc");
-							 temp.setGroupByName("returnGroup");
-							 temp.setPcName(arr[i]);
-							 temp.setTaxPercent(taxMap.get(temp.getTaxCategtory()));
-							 ttso.add(temp);
-					 }i++;}
-
-	
-
+		log.info("*** ttsoReturn Ends : ReportsChannelnCategoryDaoImpl ****"); 
 	}
 
 }

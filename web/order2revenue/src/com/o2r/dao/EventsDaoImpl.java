@@ -45,16 +45,14 @@ public class EventsDaoImpl implements EventsDao {
 			} else {					
 				
 				if (isDatesAllowForEvent(events, sellerId) == false) {
-					System.out.println("*******************************You can not create Events during these Dates.....");
+					log.debug("*** You can not create Events during these Dates..... !!!");
 				} else {
 					Criteria criteria = session.createCriteria(Seller.class)
 							.add(Restrictions.eq("id", sellerId));
 					criteria.createAlias("partners", "partner",
 							CriteriaSpecification.LEFT_JOIN)
-							.add(Restrictions.eq("partner.pcName",
-									currentPartnerName))
-							.setResultTransformer(
-									CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+							.add(Restrictions.eq("partner.pcName",currentPartnerName))
+							.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
 					if (criteria.list() != null && criteria.list().size() != 0) {
 						seller = (Seller) criteria.list().get(0);
@@ -78,13 +76,13 @@ public class EventsDaoImpl implements EventsDao {
 			log.error(e);
 			e.printStackTrace();
 			//throw new CustomException(GlobalConstant.addPartnerError,new Date(), 1, GlobalConstant.addPartnerErrorCode, e);
-		}
-		
+		}		
 		log.info("$$$ addEvent Exit...");
 	}	
 	
 	@Override
-	public Events getEvent(int eventId) {		
+	public Events getEvent(int eventId) {	
+		log.info("$$$ getEvent with eventId Starts...***");
 		Events event=null;
 		Session session=null;
 		try {			
@@ -102,6 +100,7 @@ public class EventsDaoImpl implements EventsDao {
 				session.close();
 			}			
 		}
+		log.info("$$$ getEvent with eventId Exit...***");
 		return event;
 	}
 	
@@ -111,6 +110,8 @@ public class EventsDaoImpl implements EventsDao {
 	}
 	@Override
 	public List<Events> getEvents(Partner partner, int sellerId) {
+		
+		log.info("*** getEvents Starts...***");
 		List<Events> returnList=null;
 		try {
 			
@@ -125,12 +126,14 @@ public class EventsDaoImpl implements EventsDao {
 			log.error(e);
 			e.printStackTrace();
 		}
+		log.info("*** getEvents ends...***");
 		return returnList;
 	}
 	
 	@Override
 	public List<Events> listEvents(int sellerId) {
 		
+		log.info("*** listEvents Starts...***");		
 		List<Events> returnlist = null;
 				
 		try {
@@ -146,11 +149,14 @@ public class EventsDaoImpl implements EventsDao {
 			log.error(e);
 			e.printStackTrace();
 		}
+		log.info("*** listEvents Ends...***");		
 		return returnlist;
 	}
 	
 	@Override
 	public List<Events> listEvents(Date sDate, Date eDate, int sellerId) {
+		
+		log.info("*** listEvents between dates Starts...***");		
 		List<Events> returnlist = null;
 		Calendar cal=Calendar.getInstance();
 		cal.setTime(sDate);
@@ -166,48 +172,40 @@ public class EventsDaoImpl implements EventsDao {
 			Criteria criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
 			criteria.createAlias("events", "events", CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.between("startdate", startDate, endDate))
-					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);				
 				
-				
-				returnlist = criteria.list();
-
-			
+				returnlist = criteria.list();			
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
 		}
-		
+		log.info("*** listEvents between dates ends...***");
 		return returnlist;
 	}
+	
 	@Override
 	public Events isEventActiive(Date orderDate, String channelName,int sellerId) {
 		log.info("$$$ isEventActive Start $$$");
-		//Query getEventId=null;
+		
 		List eventList=null;
 		try{
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Events.class).add(Restrictions.eq("sellerId", sellerId)).add(Restrictions.eq("channelName", channelName))
 								.add(Restrictions.le("startDate",orderDate))
-								.add(Restrictions.ge("endDate", orderDate));
+								.add(Restrictions.ge("endDate", orderDate));			
 			
-			/*getEventId = session
-					.createSQLQuery(isEventActive)
-					.setParameter("sellerId", sellerId)
-					.setParameter("partner",channelName)
-					.setParameter("orderDate", orderDate);*/
-			if(criteria.list() != null && criteria.list().size() !=0){
-				log.info("$$$ isEventActive Exit $$$");
+			if(criteria.list() != null && criteria.list().size() !=0){				
 				if(criteria.list().get(0)!=null)
 				{
-					System.out.println("getEventId.list().get(0) "+criteria.list().get(0));
 					eventList=criteria.list();
 					Events event=(Events)eventList.get(0);
-					System.out.println("Event NAme : "+ event.getEventName());
+					log.info("$$$ isEventActive Exit $$$");
 					return event;
 				}
 			}
 		}catch(Exception e){
+			log.error(e);
 			e.printStackTrace();
 		}
 		
@@ -217,6 +215,8 @@ public class EventsDaoImpl implements EventsDao {
 	
 	@Override
 	public Events getEvent(String eventName, int sellerID) {
+		
+		log.info("$$$ getEvent Starts $$$");
 		Events event=null;
 		Session session=null;
 		List eventList=null;
@@ -229,15 +229,18 @@ public class EventsDaoImpl implements EventsDao {
 				event=(Events)eventList.get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.error(e);
 		}finally{
 			if(session != null){
 				session.close();
 			}			
 		}
+		log.info("$$$ getEvent ends $$$");
 		return event;
 	}
 	
 	public boolean isDatesAllowForEvent(Events events, int sellerId){
+		
 		log.info("*** isDatesAllowForEvent starts ***");
 		Session session=null;
 		try {
@@ -259,6 +262,7 @@ public class EventsDaoImpl implements EventsDao {
 			
 		}catch(Exception e){
 			e.printStackTrace();
+			log.error(e);
 		}finally{
 			if(session != null)
 				session.close();

@@ -5,6 +5,7 @@ package com.o2r.dao;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,6 +17,8 @@ import com.o2r.model.SellerAccount;
 @Repository("sellerAccountDao")
 public class SellerAccountDaoImpl implements SellerAccountDao {
 	 private SessionFactory sessionFactory;
+	 
+	 static Logger log = Logger.getLogger(SellerAccountDaoImpl.class.getName());
 
 // Method to display all SellerAccounts
 	@SuppressWarnings("unchecked")
@@ -35,6 +38,8 @@ public class SellerAccountDaoImpl implements SellerAccountDao {
 	
 	@Override
 	public void deleteSellerAccount(SellerAccount sellerAccount) {
+		
+		log.info("*** deleteSellerAccount Starts : SellerAccountDaoImpl ****");
 	      Session session = sessionFactory.openSession();
 	      Transaction tx = null;
 	      try{
@@ -48,6 +53,7 @@ public class SellerAccountDaoImpl implements SellerAccountDao {
 	      }finally {
 	         session.close(); 
 	      }
+	      log.info("*** deleteSellerAccount Ends : SellerAccountDaoImpl ****");
 	   }					
 	}
 

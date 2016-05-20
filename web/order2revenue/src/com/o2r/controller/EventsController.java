@@ -158,8 +158,7 @@ public class EventsController {
 				{
 					chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
 				}
-				model.put("chargeMap", chargeMap);
-				System.out.println("Got event object !!!!  yaa......");
+				model.put("chargeMap", chargeMap);				
 			}
 			List<Category> categoryList = categoryService
 					.listCategories(helperClass.getSellerIdfromSession(request));

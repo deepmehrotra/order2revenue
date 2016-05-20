@@ -31,10 +31,8 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 	static Logger log = Logger.getLogger(ManualChargesDaoImpl.class.getName());
 
 	@Override
-	public void addManualCharges(ManualCharges manualCharges, int sellerId)
-			throws CustomException {
+	public void addManualCharges(ManualCharges manualCharges, int sellerId)	throws CustomException {
 		log.info("*** addManualChargees start");
-		// sellerId=4;
 		Seller seller = null;
 		try {
 			Session session = sessionFactory.openSession();
@@ -43,8 +41,7 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 				Criteria criteria = session.createCriteria(Seller.class).add(
 						Restrictions.eq("id", sellerId));
 				seller = (Seller) criteria.list().get(0);
-				manualCharges.setUploadDate(new Date());
-				System.out.println(" Inside manual charges  add");
+				manualCharges.setUploadDate(new Date());				
 				seller.getManualCharges().add(manualCharges);
 				session.saveOrUpdate(seller);
 			} else {
@@ -54,19 +51,17 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			log.error(e);
-			log.info("***addManualCharges exit***");
+			log.error(e);	
+			e.printStackTrace();
 			throw new CustomException(GlobalConstant.addManualChargesError,
-					new Date(), 1, GlobalConstant.addManualChargesErrorCode, e);
-			/* System.out.println("Inside exception  "+e.getLocalizedMessage()); */
+					new Date(), 1, GlobalConstant.addManualChargesErrorCode, e);			
 		}
-
+		log.info("***addManualCharges exit***");
 	}
 
 	public List<ManualCharges> listManualCharges(int sellerId)
 			throws CustomException {
 		log.info("*** listManualCharges start ***");
-		// sellerId=4;
 		List<ManualCharges> returnlist = null;
 		try {
 			Session session = sessionFactory.openSession();
@@ -79,12 +74,9 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 			session.close();
 		} catch (Exception e) {
 			log.error(e);
+			e.printStackTrace();
 			throw new CustomException(GlobalConstant.listManualChargesError,
 					new Date(), 3, GlobalConstant.listManualChargesErrorCode, e);
-			/*
-			 * System.out.println(" Exception in getting Manual Charges list :"+e
-			 * .getLocalizedMessage());
-			 */
 		}
 		log.info("*** listManualCharges exit ***");
 		return returnlist;
@@ -94,7 +86,6 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 	public Double getMCforPaymentID(String paymentId, int sellerId)
 			throws CustomException {
 		log.info("*** getMCforPaymentID start ***");
-		// sellerId=4;
 		Double returnValue = 0.0;
 		Seller seller = null;
 		List<ManualCharges> mc = null;
@@ -125,11 +116,7 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.getMCforPaymentIDError,
-					new Date(), 3, GlobalConstant.getMCforPaymentIDErrorCode, e);
-			/*
-			 * System.out.println(" Exception in getting Manual Charges list :"+e
-			 * .getLocalizedMessage());
-			 */
+					new Date(), 3, GlobalConstant.getMCforPaymentIDErrorCode, e);			
 		}
 		log.info("*** getMCforPaymentID exit ***");
 		return returnValue;
@@ -142,6 +129,7 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 			manualCharges = (ManualCharges) sessionFactory.getCurrentSession()
 					.get(ManualCharges.class, mcId);
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.getManualChargesError,
 					new Date(), 3, GlobalConstant.getManualChargesErrorCode, e);
@@ -153,11 +141,6 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 	public void deleteManualCharges(ManualCharges manualCharges, int sellerId)
 			throws CustomException {
 		log.info("*** deleteManualCharges start ***");
-		/*
-		 * System.out.println(" In Category delete cid "+manualCharges.getMcId())
-		 * ;
-		 */
-		// sellerId=4;
 		try {
 
 			Session session = sessionFactory.openSession();
@@ -173,22 +156,18 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 					"DELETE FROM ManualCharges WHERE mcId = "
 							+ manualCharges.getMcId()).executeUpdate();
 
-			System.out.println("  Deleteing manual charges updated:" + updated
-					+ " catdelete :" + catdelete);
+			log.debug("Deleteing manual charges updated:" + updated + " catdelete :" + catdelete);
 			session.getTransaction().commit();
 			session.close();
 
 		} catch (Exception e) {
 			log.error(e);
-			log.info("*** deleteManualCharges exit ***");
+			e.printStackTrace();
 			throw new CustomException(GlobalConstant.deleteManualChargesError,
 					new Date(), 3, GlobalConstant.deleteManualChargesErrorCode,
 					e);
-			/*
-			 * System.out.println(" Inside delleting expcat"+e.getLocalizedMessage
-			 * ()); e.printStackTrace();
-			 */
 		}
+		log.info("*** deleteManualCharges exit ***");
 	}
 
 }
