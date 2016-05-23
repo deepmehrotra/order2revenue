@@ -25,6 +25,7 @@ import org.springframework.stereotype.Repository;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.DebitNoteBean;
 import com.o2r.bean.PoPaymentBean;
+import com.o2r.bean.PoPaymentDetailsBean;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Events;
@@ -75,6 +76,8 @@ public class OrderDaoImpl implements OrderDao {
 	private final int pageSize = 500;
 
 	static Logger log = Logger.getLogger(SellerDaoImpl.class.getName());
+	
+	
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -438,24 +441,14 @@ public class OrderDaoImpl implements OrderDao {
 					order.setPoPrice(order.getPoPrice() * order.getQuantity());
 
 					order.setDiscount(order.getProductConfig().getDiscount());
-					order.getOrderTax().setTax(taxvalue);
-
-					TaxDetail taxDetails = new TaxDetail();
-					taxDetails
-							.setBalanceRemaining(order.getOrderTax().getTax());
-					taxDetails.setUploadDate(order.getOrderDate());
-					taxDetailService.addMonthlyTaxDetail(session, taxDetails,
-							sellerId);
-
 					// order.setTotalAmountRecieved(order.getNetRate());
 					order.setFinalStatus("In Process");
 					// Set Order Timeline
 					OrderTimeline timeline = new OrderTimeline();
 					// populating tax related values of order
 					System.out.println(" Tax before pr:"
-							+ order.getOrderTax().getTax());
-					order.setPr((order.getGrossNetRate() - order.getOrderTax()
-							.getTax()) * order.getQuantity());
+							+ taxvalue);
+					order.setPr((order.getGrossNetRate() - taxvalue) * order.getQuantity());
 
 					// Reducing Product Inventory For Order
 					productService.updateInventory(order.getProductConfig()
@@ -475,6 +468,10 @@ public class OrderDaoImpl implements OrderDao {
 					order.setGrossProfit((order.getPr() * order.getQuantity())
 							- (order.getProductConfig().getProductPrice() * order
 									.getQuantity()));
+					
+					order.setEossValue(order.getEossValue()
+							* order.getQuantity());
+					order.getOrderTax().setTax(taxvalue * order.getQuantity());
 
 					if (order.getOrderId() != 0) {
 						System.out.println(" Saving edited order");
@@ -499,6 +496,13 @@ public class OrderDaoImpl implements OrderDao {
 						session.saveOrUpdate(seller);
 					}
 					session.getTransaction().commit();
+					
+					TaxDetail taxDetails = new TaxDetail();
+					taxDetails
+							.setBalanceRemaining(order.getOrderTax().getTax());
+					taxDetails.setUploadDate(order.getOrderDate());
+					taxDetailService.addMonthlyTaxDetail(session, taxDetails,
+							sellerId);
 					/*
 					 * session.getTransaction().commit(); session.close();
 					 */
@@ -837,10 +841,14 @@ public class OrderDaoImpl implements OrderDao {
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
-			criteria.createAlias("orders", "order",	CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("order.channelOrderID", channelOrderId))
-					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
+			criteria.createAlias("orders", "order",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions
+							.eq("order.channelOrderID", channelOrderId))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			seller = (Seller) criteria.list().get(0);
 			if (seller.getOrders() != null && seller.getOrders().size() != 0) {
 				order = seller.getOrders().get(0);
@@ -1065,27 +1073,35 @@ public class OrderDaoImpl implements OrderDao {
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			
-			if(column.equals("returnOrRTOId")){
+
+			if (column.equals("returnOrRTOId")) {
 				criteria = session.createCriteria(Order.class);
-				criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",CriteriaSpecification.LEFT_JOIN)					
-				.add(Restrictions.like("orderReturnOrRTO.returnOrRTOId",value+"%"));
+				criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
+						CriteriaSpecification.LEFT_JOIN).add(
+						Restrictions.like("orderReturnOrRTO.returnOrRTOId",
+								value + "%"));
 				if (criteria.list().size() != 0) {
-					orderlist=criteria.list();
+					orderlist = criteria.list();
 					if (orderlist != null && orderlist.size() != 0) {
 						for (Order order : orderlist) {
 							Hibernate.initialize(order.getOrderTimeline());
 						}
 					}
 				}
-				return orderlist;				
-			}else{
-				criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
-				criteria.createAlias("orders", "order",CriteriaSpecification.LEFT_JOIN)
-						.add(Restrictions.like(searchString, value+"%").ignoreCase())
+				return orderlist;
+			} else {
+				criteria = session.createCriteria(Seller.class).add(
+						Restrictions.eq("id", sellerId));
+				criteria.createAlias("orders", "order",
+						CriteriaSpecification.LEFT_JOIN)
+						.add(Restrictions.like(searchString, value + "%")
+								.ignoreCase())
 						.add(Restrictions.eq("order.poOrder", poOrder))
-						.addOrder(org.hibernate.criterion.Order.desc("order.lastActivityOnOrder"))
-						.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+						.addOrder(
+								org.hibernate.criterion.Order
+										.desc("order.lastActivityOnOrder"))
+						.setResultTransformer(
+								CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
 				if (poOrder)
 					criteria.add(Restrictions.eq("order.consolidatedOrder",
@@ -1802,7 +1818,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	// Method to add PO payment
 	@Override
-	public void addPOPayment(PoPaymentBean popaBean, int sellerId)
+	public Order addPOPayment(PoPaymentBean popaBean, int sellerId)
 			throws CustomException {
 		try {
 			Session session = sessionFactory.openSession();
@@ -1848,8 +1864,12 @@ public class OrderDaoImpl implements OrderDao {
 				}
 			}
 
+			orderPayment.setNetPaymentResult(orderPayment.getPositiveAmount()
+					- orderPayment.getNegativeAmount());
+			paymentDiff = Math.round(paymentDiff * 100.0) / 100.0;
+
 			orderPayment.setPaymentDifference(paymentDiff);
-			orderPayment.setNetPaymentResult(popaBean.getNpr());
+			//orderPayment.setNetPaymentResult(popaBean.getNpr());
 			orderPayment.setPaymentdesc(popaBean.getSellerNote());
 
 			if (paymentOK) {
@@ -1865,6 +1885,8 @@ public class OrderDaoImpl implements OrderDao {
 
 			session.getTransaction().commit();
 			session.close();
+			
+			return poOrder;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2245,7 +2267,8 @@ public class OrderDaoImpl implements OrderDao {
 			comission = (float) (comission * SP) / 100;
 			serviceTax = (chargesMap.containsKey("serviceTax") ? chargesMap
 					.get("serviceTax") : 0)
-					* (float) (shippingCharges + pccAmount + fixedfee + comission)/ 100;
+					* (float) (shippingCharges + pccAmount + fixedfee + comission)
+					/ 100;
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
 			tds = ((comission / 10) + ((fixedfee + pccAmount + shippingCharges) / 50))
@@ -3525,12 +3548,6 @@ public class OrderDaoImpl implements OrderDao {
 			gatepass.setGrossProfit(gatepass.getNetPR()
 					- (productConfig.getProductPrice() * gatepass.getQuantity()));
 
-			TaxDetail taxDetails = new TaxDetail();
-			taxDetails.setBalanceRemaining(-(gatepass.getTaxPOAmt())
-					* gatepass.getQuantity());
-			taxDetails.setUploadDate(gatepass.getReturnDate());
-			taxDetailService.addMonthlyTaxDetail(session, taxDetails, sellerId);
-
 			/*
 			 * OrderTimeline timeline = new OrderTimeline();
 			 * timeline.setEvent("Return Recieved"); timeline.setEventDate(new
@@ -3543,6 +3560,13 @@ public class OrderDaoImpl implements OrderDao {
 
 			session.saveOrUpdate(gatepass);
 			session.getTransaction().commit();
+			
+			TaxDetail taxDetails = new TaxDetail();
+			taxDetails.setBalanceRemaining(-(gatepass.getTaxPOAmt())
+					* gatepass.getQuantity());
+			taxDetails.setUploadDate(gatepass.getReturnDate());
+			taxDetailService.addMonthlyTaxDetail(session, taxDetails, sellerId);
+			
 			session.close();
 			return gatepass;
 
@@ -3655,11 +3679,11 @@ public class OrderDaoImpl implements OrderDao {
 					totalReturnCharges += gatepass.getTotalReturnCharges();
 					if (gatepass.getPcName().equalsIgnoreCase(
 							GlobalConstant.PCMYNTRA)) {
-						eossValue += (productConfig.getSuggestedPOPrice() * productConfig
-								.getDiscount()) / 100;
+						eossValue += ((productConfig.getSuggestedPOPrice() * productConfig
+								.getDiscount()) / 100) * gatepass.getQuantity();
 					}
 					netRate += gatepass.getNetNR();
-					taxValue += gatepass.getTaxAmt();
+					taxValue += (gatepass.getTaxAmt() * gatepass.getTaxAmt());
 					grossPR += gatepass.getNetPR();
 					grossProfit += gatepass.getGrossProfit();
 				}
@@ -3682,7 +3706,7 @@ public class OrderDaoImpl implements OrderDao {
 			consolidateReturn.setGrossProfit(grossProfit);
 
 			consolidatedOrder.setEossValue(eossValue);
-
+			consolidatedOrder.setQuantity(quantity);
 			consolidatedOrder.setNetRate(netRate);
 
 			consolidatedOrder.setOrderTax(new OrderTax());
@@ -3831,6 +3855,14 @@ public class OrderDaoImpl implements OrderDao {
 			 * e.getLocalizedMessage()); e.printStackTrace();
 			 */
 		}
+	}
+
+	@Override
+	public List<PoPaymentDetailsBean> getPOPaymentDetails(int sellerId,
+			boolean isMonthly) {
+		List<PoPaymentDetailsBean> poPaymentDetailsList = new ArrayList<PoPaymentDetailsBean>();
+		return poPaymentDetailsList;
+		
 	}
 
 }

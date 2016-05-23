@@ -96,7 +96,7 @@ public class DashboardDaoImpl implements DashboardDao {
        		+ "between  :startDate AND :endDate and ot.poOrder =0 "
        		+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId "
        		+ "GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate) ORDER BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
-       private static final String grossProfitMPReturnMonthlyQuery = "Select sum((ot.grossProfit/(ot.quantity+ort.returnorrtoQty))*ot.returnorrtoQty)"
+       private static final String grossProfitMPReturnMonthlyQuery = "Select sum((ot.grossProfit/(ot.quantity+ort.returnorrtoQty))*ort.returnorrtoQty)"
        		+ " as grossProfit,Monthname(ort.returnDate) as month ,"
        		+ "YEAR(ort.returnDate) as year from Order_Table ot ,OrderReturn  ort where ort.returnDate "
        		+ "between :startDate AND :endDate and ot.poOrder =0 "
@@ -111,7 +111,7 @@ public class DashboardDaoImpl implements DashboardDao {
        private static final String grossProfitGPMonthlyQuery = "Select sum(ot.grossProfit) as grossProfit,"
        		+ "Monthname(ort.returnDate) as month ,"
        		+ "YEAR(ort.returnDate) as year from Order_Table ot ,OrderReturn  ort where ort.returnDate "
-       		+ "between  :startDate AND :endDate and ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL"
+       		+ "between  :startDate AND :endDate and ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL "
        		+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId "
        		+ "GROUP BY YEAR(ort.returnDate), MONTH(ort.returnDate) "
        		+ "ORDER BY YEAR(ort.returnDate), MONTH(ort.returnDate);";

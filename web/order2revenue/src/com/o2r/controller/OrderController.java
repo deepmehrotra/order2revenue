@@ -34,6 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.o2r.bean.OrderBean;
+import com.o2r.bean.PoPaymentDetailsBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.FileUploadForm;
@@ -405,77 +406,25 @@ public class OrderController {
 
 	@RequestMapping(value = "/seller/poorderlist", method = RequestMethod.GET)
 	public ModelAndView poOrderList(HttpServletRequest request,
-			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
+			@RequestParam(value = "period") String period,
+			@ModelAttribute("command") PoPaymentDetailsBean poPaymentDetailsBean, BindingResult result) {
 
 		Map<String, Object> model = new HashMap<String, Object>();
-		String savedOrder = request.getParameter("savedOrder");
-		List<OrderBean> returnlist = new ArrayList<OrderBean>();
-		List<OrderBean> poOrderlist = new ArrayList<OrderBean>();
-		Object obj = request.getSession().getAttribute("orderSearchObject");
 		int sellerId;
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-			if (obj != null) {
-				System.out.println(" Getting list from session" + obj);
-				model.put("orders", obj);
-				request.getSession().removeAttribute("orderSearchObject");
-			} else if (request.getParameter("status") != null) {
-				String status = request.getParameter("status");
-				if (status.equalsIgnoreCase("return")) {
-					returnlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("status", "Return Recieved", sellerId,
-									false));
-					returnlist.addAll(ConverterClass
-							.prepareListofBean(orderService.findOrders(
-									"status", "Return Limit Crossed", sellerId,
-									false)));
-					model.put("orders", returnlist);
-
-					poOrderlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("status", "Return Recieved", sellerId,
-									true));
-					model.put("poOrders", poOrderlist);
-
-				} else if (status.equalsIgnoreCase("payment")) {
-					returnlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("status", "Payment Recieved", sellerId,
-									false));
-					returnlist.addAll(ConverterClass
-							.prepareListofBean(orderService.findOrders(
-									"status", "Payment Deducted", sellerId,
-									false)));
-					model.put("orders", returnlist);
-
-					poOrderlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("status", "Payment Recieved", sellerId,
-									true));
-					model.put("poOrders", poOrderlist);
-				} else if (status.equalsIgnoreCase("actionable")) {
-					returnlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("finalStatus", "Actionable", sellerId,
-									false));
-					model.put("orders", returnlist);
-
-					poOrderlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("finalStatus", "Actionable", sellerId,
-									true));
-					model.put("poOrders", poOrderlist);
-				}
-			} else {
-				int pageNo = request.getParameter("page") != null ? Integer
-						.parseInt(request.getParameter("page")) : 0;
-				model.put("orders", ConverterClass
-						.prepareListofBean(orderService.listOrders(
-								helperClass.getSellerIdfromSession(request),
-								pageNo)));
-
-				model.put("poOrders", ConverterClass
-						.prepareListofBean(orderService.listPOOrders(
-								helperClass.getSellerIdfromSession(request),
-								pageNo)));
+			
+			boolean isMonthly = true;
+			if(period.equalsIgnoreCase("Yearly")) {
+				isMonthly = false;
 			}
+				
+			List<PoPaymentDetailsBean> poPaymentList = orderService.
+					getPOPaymentDetails(sellerId, isMonthly);
+
+			model.put("poPaymentList", poPaymentList);
 		} catch (CustomException ce) {
-			log.error("orderListDailyAct exception : " + ce.toString());
+			log.error("viewOrderDailyAct exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
@@ -483,8 +432,6 @@ public class OrderController {
 		} catch (Throwable e) {
 			log.error(e);
 		}
-		if (savedOrder != null)
-			model.put("savedOrder", savedOrder);
 		return new ModelAndView("dailyactivities/poorderlist", model);
 	}
 
