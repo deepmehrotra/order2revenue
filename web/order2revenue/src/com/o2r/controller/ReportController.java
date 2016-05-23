@@ -64,18 +64,18 @@ public String displayForm() {
 @RequestMapping(value = "/seller/getReportsFilter", method = RequestMethod.GET)
 public ModelAndView addManualPayment(HttpServletRequest request) {
 		
-		log.info("*** addmanualPayment start ***");
+		log.info("$$$ addManualPayment Starts : ReportController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<String> partnerlist = new ArrayList<String>();
 		List<Partner> partners=new ArrayList<Partner>();
 		String reportName = request.getParameter("reportName");
 		try{
-		partners = partnerService.listPartners(helperClass.getSellerIdfromSession(request));
-		for (Partner partner : partners)
-			partnerlist.add(partner.getPcName());
-		
-		model.put("reportName", reportName);
-		model.put("partnerlist", partnerlist);
+			partners = partnerService.listPartners(helperClass.getSellerIdfromSession(request));
+			for (Partner partner : partners)
+				partnerlist.add(partner.getPcName());
+			
+			model.put("reportName", reportName);
+			model.put("partnerlist", partnerlist);
 		}catch(CustomException ce){
 			log.error("addManualPayment exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -83,9 +83,10 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}catch(Exception e){
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		} 
-		log.info("*** addmanualPayment exit ***");
+		log.info("$$$ addManualPayment Ends : ReportController $$$");
 		if(reportName.equals("channelSaleReport") || reportName.equals("categoryWiseSaleReport"))
 			return new ModelAndView("reports/channelSaleReport", model);
 		else if(reportName.equals("paymentsReceievedReport" )|| reportName.equals("orderwiseGPReport"))
@@ -95,83 +96,45 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 }
 
 
-/*@RequestMapping(value = "/seller/getReport", method = RequestMethod.POST)
-public ModelAndView getReport(HttpServletRequest request) {
-	System.out.println(" Inside getReportsFilter");
- Map<String, Object> model = new HashMap<String, Object>();
- List<TotalShippedOrder> ttso=new ArrayList<>();
- String reportName=request.getParameter("reportName");
- Date startDate=new Date(request.getParameter("startdate"));
- Date endDate=new Date(request.getParameter("enddate"));
- String partner=request.getParameter("toggler");
- String selectedPartner=request.getParameter("selectedPartner");
- System.out.println(" Cat :"+partner);
- if(partner!=null&&partner.equals("allPartners"))
- {
-	 ttso= reportGeneratorService.getAllPartnerTSOdetails(startDate, endDate,  helperClass.getSellerIdfromSession(request));
-	 System.out.println(" Got response ttso size in controller: "+ttso.size());
- }
- else
- {
-	 reportGeneratorService.getPartnerTSOdetails(selectedPartner, startDate, endDate, helperClass.getSellerIdfromSession(request));
- }
- model.put("ttsolist",ttso);
- 
- model.put("reportName",reportName);
- model.put("partnerlist",partnerlist);
- return new ModelAndView("reports/viewGraphReport", model);
-}
-*/
-
 @RequestMapping(value = "/seller/getReport", method = RequestMethod.POST)
 public ModelAndView getReport(HttpServletRequest request)throws Exception
 {
-		log.info("*** getReport start ***");
+		log.info("$$$ getReport Starts : ReportController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<TotalShippedOrder> ttso = new ArrayList<>();
 		String reportName=null;
 		Date startDate;
-		Date endDate;
-		String partner;
-		String selectedPartner;
-		//System.out.println(" Cat :" + partner);
+		Date endDate;		
 		try{
-		selectedPartner = request.getParameter("selectedPartner");
-		reportName = request.getParameter("reportName");
-		startDate = new Date(request.getParameter("startdate"));
-		endDate = new Date(request.getParameter("enddate"));
-		partner = request.getParameter("toggler");
-		
-		ttso = reportGeneratorService.getAllPartnerTSOdetails(startDate,
-				endDate, helperClass.getSellerIdfromSession(request));
-		if (ttso != null)
-			System.out.println(" ****Inside controller after gettitng ttso objkect : "+ ttso.size());
-		else
-			System.out.println(" TTSO object is geting null");
-
-		model.put("ttsolist", ttso);
-		if (ttso.size() > 0) {
-			System.out.println(" Citi quantity size : "	+ ttso.get(0).getCityQuantity());
-			System.out.println(" Citi percent size : " + ttso.get(0).getCityPercentage());
-			model.put("citicount", ttso.get(0).getCityQuantity());
-			model.put("citipercent", ttso.get(0).getCityPercentage());
-		}
-		Collections.sort(ttso, new TotalShippedOrder.OrderByNR());
-		model.put("NRsortedttso", getSortedList(ttso));
-		Collections.sort(ttso, new TotalShippedOrder.OrderByReturnamount());
-		model.put("returnAmountsortedttso", getSortedList(ttso));
-		Collections.sort(ttso, new TotalShippedOrder.OrderByReturnQuantity());
-		model.put("returnQsortedttso", getSortedList(ttso));
-		Collections.sort(ttso, new TotalShippedOrder.OrderBySaleQuantity());
-		model.put("saleQsortedttso", getSortedList(ttso));
-		Collections.sort(ttso, new TotalShippedOrder.OrderBySaleamount());
-		model.put("saleAmounrsortedttso", getSortedList(ttso));
-
-		model.put("period",dateFormat.format(startDate) + " to "+ dateFormat.format(endDate));
-		/*
-		 * model.put("reportName",reportName);
-		 * model.put("partnerlist",partnerlist);
-		 */
+			reportName = request.getParameter("reportName");
+			startDate = new Date(request.getParameter("startdate"));
+			endDate = new Date(request.getParameter("enddate"));
+			ttso = reportGeneratorService.getAllPartnerTSOdetails(startDate,
+					endDate, helperClass.getSellerIdfromSession(request));
+			if (ttso != null)
+				System.out.println(" ****Inside controller after gettitng ttso objkect : "+ ttso.size());
+			else
+				System.out.println(" TTSO object is geting null");
+	
+			model.put("ttsolist", ttso);
+			if (ttso.size() > 0) {
+				System.out.println(" Citi quantity size : "	+ ttso.get(0).getCityQuantity());
+				System.out.println(" Citi percent size : " + ttso.get(0).getCityPercentage());
+				model.put("citicount", ttso.get(0).getCityQuantity());
+				model.put("citipercent", ttso.get(0).getCityPercentage());
+			}
+			Collections.sort(ttso, new TotalShippedOrder.OrderByNR());
+			model.put("NRsortedttso", getSortedList(ttso));
+			Collections.sort(ttso, new TotalShippedOrder.OrderByReturnamount());
+			model.put("returnAmountsortedttso", getSortedList(ttso));
+			Collections.sort(ttso, new TotalShippedOrder.OrderByReturnQuantity());
+			model.put("returnQsortedttso", getSortedList(ttso));
+			Collections.sort(ttso, new TotalShippedOrder.OrderBySaleQuantity());
+			model.put("saleQsortedttso", getSortedList(ttso));
+			Collections.sort(ttso, new TotalShippedOrder.OrderBySaleamount());
+			model.put("saleAmounrsortedttso", getSortedList(ttso));
+	
+			model.put("period",dateFormat.format(startDate) + " to "+ dateFormat.format(endDate));
 		}catch(CustomException ce){
 			log.error("getReport exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -180,9 +143,9 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 			return new ModelAndView("globalErorPage", model);
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 		}
-		log.info("*** getReport exit ***");
+		log.info("$$$ getReport Ends : ReportController $$$");
 		if(reportName.equals("channelSaleReport"))
 			return new ModelAndView("reports/viewChannelSaleGraphReport", model);
 		else if(reportName.equals("categoryWiseSaleReport"))
@@ -195,52 +158,48 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 @RequestMapping(value = "/seller/getChannelReport", method = RequestMethod.POST)
 public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 {
-		log.info("*** get  channel Report start ***");
+		log.info("$$$ getChannelReport Starts : ReportController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<ChannelSalesDetails> ttso = new ArrayList<>();
 		String reportName=null;
 		Date startDate;
 		Date endDate;
-		/*String partner;
-		String selectedPartner;*/
-		//System.out.println(" Cat :" + partner);
-		try{
-	//	selectedPartner = request.getParameter("selectedPartner");
-		reportName = request.getParameter("reportName");
-		startDate = new Date(request.getParameter("startdate"));
-		endDate = new Date(request.getParameter("enddate"));
-	//	partner = request.getParameter("toggler");
-		if(reportName.equals("categoryWiseSaleReport"))
-		ttso = reportGeneratorService.getCategorySalesDetails(startDate,endDate, helperClass.getSellerIdfromSession(request));
-		else if(reportName.equals("paymentsReceievedReport"))
-			ttso = reportGeneratorService.getPaymentsReceievedDetails(startDate,endDate, helperClass.getSellerIdfromSession(request));
-		else if(reportName.equals("orderwiseGPReport"))
-			ttso = reportGeneratorService.getOrderwiseGPDetails(startDate,endDate, helperClass.getSellerIdfromSession(request));
-		else
-		ttso = reportGeneratorService.getChannelSalesDetails(startDate,endDate, helperClass.getSellerIdfromSession(request));
-
-		if (ttso != null)
-			System.out.println(" ****Inside controller after gettitng ttso objkect : "+ ttso.size());
-		else
-			System.out.println(" TTSO object is geting null");
-
-		model.put("ttsolist", ttso);
 		
-		model.put("period",dateFormat.format(startDate) + " to "+ dateFormat.format(endDate));
-		/*
-		 * model.put("reportName",reportName);
-		 * model.put("partnerlist",partnerlist);
-		 */
-		}catch(CustomException ce){
+		try {
+
+			reportName = request.getParameter("reportName");
+			startDate = new Date(request.getParameter("startdate"));
+			endDate = new Date(request.getParameter("enddate"));
+			if (reportName.equals("categoryWiseSaleReport"))
+				ttso = reportGeneratorService.getCategorySalesDetails(
+						startDate, endDate,
+						helperClass.getSellerIdfromSession(request));
+			else if (reportName.equals("paymentsReceievedReport"))
+				ttso = reportGeneratorService.getPaymentsReceievedDetails(
+						startDate, endDate,
+						helperClass.getSellerIdfromSession(request));
+			else if (reportName.equals("orderwiseGPReport"))
+				ttso = reportGeneratorService.getOrderwiseGPDetails(startDate,
+						endDate, helperClass.getSellerIdfromSession(request));
+			else
+				ttso = reportGeneratorService.getChannelSalesDetails(startDate,
+						endDate, helperClass.getSellerIdfromSession(request));
+
+			model.put("ttsolist", ttso);
+			model.put("period", dateFormat.format(startDate) + " to "
+					+ dateFormat.format(endDate));
+			
+		} catch (CustomException ce) {
 			log.error("getReport exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
-		}catch(Exception e){
-			log.error(e);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
-		log.info("*** getReport exit ***");
+		log.info("$$$ getChannelReport Ends : ReportController $$$");
 		if(reportName.equals("channelSaleReport"))
 			return new ModelAndView("reports/viewChannelSaleGraphReport", model);
 		else if(reportName.equals("categoryWiseSaleReport"))
@@ -254,25 +213,20 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 @RequestMapping(value = "/seller/downloadreport", method = RequestMethod.POST)
 public void downloadreport(HttpServletRequest request ,HttpServletResponse response){
 		
-		log.info("*** downloadreport start ***");
+		log.info("$$$ downloadreport Starts : ReportController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<TotalShippedOrder> ttso = new ArrayList<>();
 		List<Order> orderlist = new ArrayList<>();
 		String reportName;
 		Date startDate;
 		Date endDate;
-		String partner;
-		String selectedPartner;
 		String[] reportheaders;
-		// System.out.println(" Cat :" + partner);
-		System.out.println(request.getParameter("enddate"));
-		System.out.println(request.getParameter("startdate"));
+		log.debug(request.getParameter("enddate"));
+		log.debug(request.getParameter("startdate"));
 
 		reportName = request.getParameter("reportName");
 		startDate = new Date(request.getParameter("startdate"));
 		endDate = new Date(request.getParameter("enddate"));
-		partner = request.getParameter("toggler");
-		selectedPartner = request.getParameter("selectedPartner");
 		reportheaders = request.getParameterValues("headers");
 		try {
 			orderlist = orderService.findOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
@@ -281,61 +235,40 @@ public void downloadreport(HttpServletRequest request ,HttpServletResponse respo
 			System.out.println(" Class castexception in download report");
 			e.printStackTrace();
 			log.error(e);
-			/*
-			 * System.out.println(
-			 * " Inside report controller exception in calling report download service : "
-			 * + e.getLocalizedMessage()); e.printStackTrace();
-			 */
 		}catch(CustomException ce){
-		ce.printStackTrace();
+			ce.printStackTrace();
 			log.error("downloadReport exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
-			//return new ModelAndView("globalErorPage", model);
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 		}
-		System.out.println(" Got response ttso size in controller: "
-				+ ttso.size());
-	
-		/*
-		 * model.put("reportName",reportName);
-		 * model.put("partnerlist",partnerlist);
-		 */
+		log.debug(" Got response ttso size in controller: "+ ttso.size());
+		log.info("$$$ downloadreport Ends : ReportController $$$");
 	}
+
 @RequestMapping(value = "/seller/downloadOrderReport", method = RequestMethod.POST)
 public void downloadOrderReport(HttpServletRequest request ,HttpServletResponse response){
 		
-		log.info("*** downloadreport start ***");
-		Map<String, Object> model = new HashMap<String, Object>();
-		//List<TotalShippedOrder> ttso = new ArrayList<>();
+		log.info("$$$ downloadOrderReport Starts : ReportController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();		
 		List<ChannelSalesDetails> orderlist = new ArrayList<>();
-		String reportName;
+		
 		Date startDate;
 		Date endDate;
-		String partner;
-		String selectedPartner;
-		String[] reportheaders;
-		// System.out.println(" Cat :" + partner);
+		String[] reportheaders;		
 
-		reportName = request.getParameter("reportName");
 		startDate = new Date(request.getParameter("startdate"));
 		endDate = new Date(request.getParameter("enddate"));
-		partner = request.getParameter("toggler");
-		selectedPartner = request.getParameter("selectedPartner");
 		reportheaders = request.getParameterValues("headers");
 		try {
 			orderlist = orderService.findChannelOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
 			reportDownloadService.downloadCOReport(response, orderlist,reportheaders, "ChannelSalesReport",	helperClass.getSellerIdfromSession(request));
 		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 			log.error(e);
-			/*
-			 * System.out.println(
-			 * " Inside report controller exception in calling report download service : "
-			 * + e.getLocalizedMessage()); e.printStackTrace();
-			 */
 		}catch(CustomException ce){
 			log.error("downloadReport exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -345,23 +278,12 @@ public void downloadOrderReport(HttpServletRequest request ,HttpServletResponse 
 		}catch(Exception e){
 			log.error(e);
 		}
-		System.out.println("end of download");
-		try {
-		//	response.sendRedirect("/seller/getAllReports.html");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//return new ModelAndView("redirect:/seller/orderList.html");
-		//	e.printStackTrace();
-		}
-		/*
-		 * model.put("reportName",reportName);
-		 * model.put("partnerlist",partnerlist);
-		 */
+		log.info("$$$ downloadOrderReport Ends : ReportController $$$");		
 	}
 
 public List<TotalShippedOrder> getSortedList(List<TotalShippedOrder> ttso)
 {
-	log.info("*** getSortedList start ***");
+	log.info("$$$ getSortedList Starts : ReportController $$$");
 	List<TotalShippedOrder> returnlist=new ArrayList<TotalShippedOrder>();
 	TotalShippedOrder fifthreco=null;
 	if(ttso!=null&&ttso.size()>4)
@@ -418,7 +340,7 @@ public List<TotalShippedOrder> getSortedList(List<TotalShippedOrder> ttso)
 		}
 	}
 	
-	log.info("*** getSortedList exit***");
+	log.info("$$$ getSortedList Ends : ReportController $$$");
 	return returnlist;
 	
 }

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.dao.EventsDao;
+import com.o2r.helper.CustomException;
 import com.o2r.model.Events;
 import com.o2r.model.Partner;
 
@@ -20,7 +21,7 @@ public class EventsServiceImpl implements EventsService{
 	private EventsDao eventsDao;
 	
 	@Override
-	public void addEvent(Events event, int eventId) {
+	public void addEvent(Events event, int eventId)throws CustomException {
 		eventsDao.addEvent(event, eventId);		
 	}
 	

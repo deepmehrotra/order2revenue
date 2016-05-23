@@ -35,7 +35,8 @@ public class PlanController {
 	@RequestMapping("/admin/plan.html")
 	public ModelAndView addPlan(@ModelAttribute("command") FormBean formBean,
 			BindingResult result) {
-		log.info("*** addPlan start ***");
+		
+		log.info("$$$ addPlan Starts : PlanController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try{
 		model.put("plans",ConverterClass.prepareListofPlanBean(planService.listPlans()));
@@ -46,7 +47,7 @@ public class PlanController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("*** addPlan exit ***");
+		log.info("$$$ addPlan Ends : PlanController $$$");
 		return new ModelAndView("addPlan", model);
 	}
 
@@ -54,13 +55,10 @@ public class PlanController {
 	@RequestMapping(value = "/admin/savePlan.html", method = RequestMethod.POST)
 	public ModelAndView savePlan(@ModelAttribute("command") PlanBean planBean,
 			BindingResult result) {
-		log.info("*** savePlan start ***");
+		
+		log.info("$$$ savePlan Starts : PlanController $$$");
 		Plan plan;
 		Map<String, Object> model = new HashMap<String, Object>();
-		/*
-		System.out.println("Inside Plan Save");
-		System.out.println(" Plan id :" + planBean.getPid());
-		System.out.println(" Plan id :" + planBean.getPlanName());*/
 		try{
 		plan = ConverterClass.preparePlanModel(planBean);
 		planService.addPlan(plan);
@@ -71,7 +69,7 @@ public class PlanController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("*** savPlan exit ***");
+		log.info("$$$ savePlan Ends : PlanController $$$");
 		return new ModelAndView("redirect:plan.html");
 	}
 
@@ -79,13 +77,13 @@ public class PlanController {
 	@RequestMapping(value = "/admin/drop.html", method = RequestMethod.GET)
 	public ModelAndView drop(@ModelAttribute("command") PlanBean planBean,
 			BindingResult result) {
-		log.info("*** drop start ***");
+		
+		log.info("$$$ drop() Starts : PlanController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		
 		try{
-		planService.deletePlan(ConverterClass.preparePlanModel(planBean));
-		model.put("plans",ConverterClass.prepareListofPlanBean(planService.listPlans()));
-		//System.out.println(planBean.getPid());
+			planService.deletePlan(ConverterClass.preparePlanModel(planBean));
+			model.put("plans",ConverterClass.prepareListofPlanBean(planService.listPlans()));
 		}catch(CustomException ce){
 			log.error("drop exception : "+ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -93,7 +91,7 @@ public class PlanController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("*** drop exit ***");
+		log.info("$$$ drop() Ends : PlanController $$$");
 		return new ModelAndView("addPlan", model);
 
 	}

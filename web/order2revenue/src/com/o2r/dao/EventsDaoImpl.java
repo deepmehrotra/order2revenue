@@ -15,6 +15,8 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.helper.CustomException;
+import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Events;
 import com.o2r.model.Partner;
 import com.o2r.model.Seller;
@@ -29,7 +31,7 @@ public class EventsDaoImpl implements EventsDao {
 	static Logger log = Logger.getLogger(EventsDaoImpl.class.getName());
 	
 	@Override
-	public void addEvent(Events events, int sellerId) {
+	public void addEvent(Events events, int sellerId)throws CustomException  {
 		
 		log.info("$$$ addEvent Starts.... $$$");
 		try {
@@ -46,6 +48,7 @@ public class EventsDaoImpl implements EventsDao {
 				
 				if (isDatesAllowForEvent(events, sellerId) == false) {
 					log.debug("*** You can not create Events during these Dates..... !!!");
+					throw new Exception();
 				} else {
 					Criteria criteria = session.createCriteria(Seller.class)
 							.add(Restrictions.eq("id", sellerId));
@@ -75,7 +78,7 @@ public class EventsDaoImpl implements EventsDao {
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
-			//throw new CustomException(GlobalConstant.addPartnerError,new Date(), 1, GlobalConstant.addPartnerErrorCode, e);
+			throw new CustomException(GlobalConstant.addPartnerError,new Date(), 1, GlobalConstant.addPartnerErrorCode, e);
 		}		
 		log.info("$$$ addEvent Exit...");
 	}	

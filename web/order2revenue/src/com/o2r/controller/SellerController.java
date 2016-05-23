@@ -75,7 +75,8 @@ public class SellerController {
 	public ModelAndView registerSeller(
 			@ModelAttribute("command") SellerBean sellerBean,
 			BindingResult result,HttpServletRequest request) {
-		log.info("*** saveOrder starts ***");
+		
+		log.info("$$$ registerSeller Starts : SellerController $$$");
 		Properties p=new Properties(); 		
 		
 			try {
@@ -83,11 +84,11 @@ public class SellerController {
  		    p.load(input);				   
 		} catch (IOException e) {
 			e.printStackTrace();
+			log.error("Failed!",e);
 		}		
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			Seller seller = ConverterClass.prepareSellerModel(sellerBean);
-
 			sellerService.addSeller(seller,p);
 		} catch (CustomException ce) {
 			log.error("saveOrder exception : " + ce.toString());
@@ -97,14 +98,14 @@ public class SellerController {
 			return new ModelAndView("globalErorPage", model);
 		}
 
-		log.info("*** saveOrder ends ***");
+		log.info("$$$ registerSeller Ends : SellerController $$$");
 		return new ModelAndView("redirect:/login-form.html?registered=true");
 	}
 
 	@RequestMapping(value = "/sellers", method = RequestMethod.GET)
 	public ModelAndView listSellers() {
 
-		log.info("*** listSeller starts ***");
+		log.info("$$$ listSellers Starts : SellerController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			model.put("sellers", ConverterClass
@@ -117,7 +118,7 @@ public class SellerController {
 			return new ModelAndView("globalErorPage", model);
 		}
 
-		log.info("*** listOrder ends ***");
+		log.info("$$$ listSellers Ends : SellerController $$$");
 		return new ModelAndView("sellerList", model);
 	}
 
@@ -126,8 +127,8 @@ public class SellerController {
 			@ModelAttribute("command") SellerBean sellerBean,
 			BindingResult result) {
 
+		log.info("$$$ addOrder Starts : SellerController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		log.info("*** addOrder starts ***");
 		try {
 			model.put("sellers", ConverterClass
 					.prepareListofSellerBean(sellerService.listSellers()));
@@ -138,7 +139,7 @@ public class SellerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("*** addOrder ends ***");
+		log.info("$$$ addOrder Starts : SellerController $$$");
 		return new ModelAndView("addSeller", model);
 	}
 
@@ -147,7 +148,7 @@ public class SellerController {
 			@ModelAttribute("command") SellerBean sellerBean,
 			BindingResult result) {
 
-		log.info("***addSeller Start***");
+		log.info("$$$ addSeller Starts : SellerController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 
@@ -159,72 +160,45 @@ public class SellerController {
 			if (seller.getStateDeliveryTime() == null
 					|| seller.getStateDeliveryTime().size() == 0) {
 				List<State> stateList = sellerService.listStates();
-				//List<StateDeliveryTime> stateDeliveryTimeList = new ArrayList<StateDeliveryTime>();
 				if (stateList != null && stateList.size() != 0) {
 					
 					for (State bean : stateList) {
-					/*	StateDeliveryTime stateDeliveryTime = new StateDeliveryTime();
-						stateDeliveryTime.setState(bean);
-						seller.getStateDeliveryTime().add(stateDeliveryTime);*/
-						stateTimes.put(bean.getStateName(), 0);
-						//stateDeliveryTimeList.add(stateDeliveryTime);
+						stateTimes.put(bean.getStateName(), 0);						
 					}
 				}
-				/*seller.setStateDeliveryTime(ConverterClass
-						.prepareStateDeliveryTimeBean(stateDeliveryTimeList));*/
 			}
 			else
 			{
 				List<StateDeliveryTime> sdtlist = seller.getStateDeliveryTime();
 				for (StateDeliveryTime sdt : sdtlist) {
-					/*	StateDeliveryTime stateDeliveryTime = new StateDeliveryTime();
-						stateDeliveryTime.setState(bean);
-						seller.getStateDeliveryTime().add(stateDeliveryTime);*/
-						stateTimes.put(sdt.getState().getStateName(), sdt.getDeliveryTime());
-						//stateDeliveryTimeList.add(stateDeliveryTime);
-					}
+					stateTimes.put(sdt.getState().getStateName(), sdt.getDeliveryTime());
+				}
 				
 			}
 			model.put("stateTimes", stateTimes);
 			model.put("seller", seller);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 			return new ModelAndView("globalErorPage", model);
 		}
+		
+		log.info("$$$ addSeller Ends : SellerController $$$");
 		return new ModelAndView("selleraccount/addSeller", model);
 
 	}
-/*	@RequestMapping(value = "/seller/saveSeller", method = RequestMethod.POST)
-	public ModelAndView saveSeller(
-			@ModelAttribute("command") SellerBean sellerBean,
-			BindingResult result) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		try {
-			log.info("***saveSeller Start***");
-			Seller seller = ConverterClass.prepareSellerModel(sellerBean);
-			Set<Seller> sellerRoles = new HashSet<Seller>();
-			sellerRoles.add(seller);
-			seller.getRole().setSellerRoles(sellerRoles);
-			sellerService.addSeller(seller,null);
-			model.put("seller", seller);
-		} catch (Throwable e) {
-			log.error(e);
-			return new ModelAndView("globalErorPage", model);
-		}
-		return new ModelAndView("selleraccount/addSeller", model);
-	}*/
-	
+
 	@RequestMapping(value = "/seller/saveSeller",headers=("content-type=multipart/*"), method = RequestMethod.POST)
 	public ModelAndView saveSeller(
 			@ModelAttribute("command") SellerBean sellerBean,HttpServletRequest request,
 			BindingResult result, @RequestParam(value = "image", required = false) MultipartFile image, HttpSession session) {
+		
+		log.info("$$$ saveSeller Starts : SellerController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<StateDeliveryTime> sdtList=new ArrayList<StateDeliveryTime>();
 		try {
-			log.info("***saveSeller Start***");
-			
 			if (image.getSize() != 0) {
-				System.out.println(" Not getting any image");
+				log.debug(" Not getting any image");
 				if (!image.isEmpty()) {
 					try {
 						validateImage(image);
@@ -243,8 +217,9 @@ public class SellerController {
 						saveImage(sellerBean.getName() + ".jpg", image);
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
+					log.error("Failed!",e);
 					result.reject(e.getMessage());
-					//return new ModelAndView("redirect:/seller/partners.html");
 				}
 			}	
 			Map<String, String[]> parameters = request.getParameterMap();
@@ -266,10 +241,9 @@ public class SellerController {
 					}
 				}
 			}
-			//System.out.println(" Seellerbean populating : "+sellerBean.getStateDeliveryTime().size());
 			session.setAttribute("sellerName", sellerBean.getName());
 			Seller seller = ConverterClass.prepareSellerModel(sellerBean);
-			System.out.println("***************** : "+seller.getLogoUrl());
+			log.debug("****** : "+seller.getLogoUrl());
 			Set<Seller> sellerRoles = new HashSet<Seller>();
 			sellerRoles.add(seller);
 			seller.getRole().setSellerRoles(sellerRoles);
@@ -278,10 +252,11 @@ public class SellerController {
 			sellerService.addStateDeliveryTime(sdtList, seller.getId());
 			model.put("seller", seller);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("***saveSeller Exit***");
+		log.info("$$$ saveSeller Ends : SellerController $$$");
 		return new ModelAndView("redirect:/seller/dashboard.html");
 	}
 
@@ -289,7 +264,7 @@ public class SellerController {
 	public ModelAndView register(
 			@ModelAttribute("command") SellerBean sellerBean,
 			BindingResult result) {
-		System.out.println(" Calling register");
+		log.debug(" Calling register");
 		return new ModelAndView("register", model);
 	}
 
@@ -302,7 +277,8 @@ public class SellerController {
 	public ModelAndView deleteOrder(
 			@ModelAttribute("command") SellerBean sellerBean,
 			BindingResult result) {
-		log.info("*** deleteOrder starts ***");
+		
+		log.info("$$$ deleteOrder Starts : SellerController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		try {
@@ -318,7 +294,7 @@ public class SellerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("*** deleteOrder ends ***");
+		log.info("$$$ deleteOrder Ends : SellerController $$$");
 		return new ModelAndView("addSeller", model);
 	}
 
@@ -327,7 +303,7 @@ public class SellerController {
 			@ModelAttribute("command") SellerBean sellerBean,
 			BindingResult result) {
 
-		log.info("*** editOrder starts ***");
+		log.info("$$$ editOrder Starts : SellerController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			model.put("seller", ConverterClass.prepareSellerBean(sellerService
@@ -342,12 +318,14 @@ public class SellerController {
 			return new ModelAndView("globalErorPage", model);
 		}
 
-		log.info("*** editOrder starts ***");
+		log.info("$$$ editOrder Ends : SellerController $$$");
 		return new ModelAndView("addSeller", model);
 	}
 
 	@RequestMapping("/seller/summary.html")
 	public ModelAndView planSummary(HttpServletRequest request) {
+		
+		log.info("$$$ planSummary Starts : SellerController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			int sellerId = helperClass.getSellerIdfromSession(request);
@@ -359,15 +337,19 @@ public class SellerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			log.error("planUpgrade exception : " + ex.toString());
 			return new ModelAndView("globalErorPage", model);
 		}
+		log.info("$$$ planSummary Ends : SellerController $$$");
 		return new ModelAndView("selleraccount/planSummary", model);
 	}
 
 	@RequestMapping("/seller/upgrade.html")
 	public ModelAndView planUpgrade(
 			@ModelAttribute("command") PlanBean planBean, BindingResult result) {
+		
+		log.info("$$$ planUpgrade Starts : SellerController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			model.put("upgrade", ConverterClass
@@ -379,6 +361,7 @@ public class SellerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}
+		log.info("$$$ planUpgrade Ends : SellerController $$$");
 		return new ModelAndView("selleraccount/planUpgrade", model);
 	}
 	
@@ -391,15 +374,10 @@ public class SellerController {
 	@RequestMapping("/seller/thankyou.html")
 	public ModelAndView planUpgrade2(HttpServletRequest request,
 			@ModelAttribute("command") PlanBean planBean, BindingResult result) {
-		// System.out.println("inside upgrade controller");
-		// System.out.println("PPlan id in controller " + planBean.getPid());
-		// System.out.println("Plan id from request in controller "+
+		
+		log.info("$$$ planUpgrade2 Starts : SellerController $$$");
 		Double currTotalAmount = new Double(request.getParameter("totalAmount"));
 		Long currOrderCount = new Long(request.getParameter("orderCount"));
-		// Plan plan=ConverterClass.preparePlanModel(planBean);
-		// System.out.println(" Controller : "+plan.getPid());
-
-		log.info("*** planUpgrade2 starts ***");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			model.put("currTotalAmount", currTotalAmount);
@@ -413,16 +391,18 @@ public class SellerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 
-		log.info("*** planUpgrade2 ends ***");
+		log.info("$$$ planUpgrade2 Ends : SellerController $$$");
 		return new ModelAndView("selleraccount/planUpgrade2", model);
 	}
 
 	@RequestMapping(value = "/checkExistingUser", method = RequestMethod.GET)
 	public @ResponseBody String checkExistingUser(HttpServletRequest request) {
-		log.info("***checkExistingUser Start****");
+		
+		log.info("$$$ checkExistingUser Starts : SellerController $$$");
 		//Map<String, Object> model = new HashMap<String, Object>();
 		log.debug("Registered seller email : " + request.getParameter("email"));
 		try {
@@ -437,14 +417,9 @@ public class SellerController {
 				}
 			} else
 				return "false";
-		}
-		/*
-		 * catch(CustomException ce) {
-		 * log.error("saveTaxCategory exception : "+ce.toString()); return
-		 * "false"; }
-		 */
-		catch (Throwable e) {
-			log.error(e);
+		}catch (Throwable e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
 			return "false";
 		}
 	}
@@ -457,7 +432,9 @@ public class SellerController {
 	
 	private void saveImage(String filename, MultipartFile image)
 			throws RuntimeException, IOException {
-		log.info("*** saveImage for seller start ***");
+		
+
+		log.info("$$$ saveImage Starts : SellerController $$$");
 		try {
 			String catalinabase = System.getProperty("catalina.base");
 
@@ -467,24 +444,20 @@ public class SellerController {
 				log.error(e.getCause());
 
 			}
-			System.out.println("dialect in order controller : "
+			log.debug("dialect in order controller : "
 					+ props.getProperty("sellerimages.path"));
 			File file = new File(catalinabase
 					+ props.getProperty("sellerimages.path") + filename);
-			System.out.println(" context.getRealPath(/) "
+			log.debug(" context.getRealPath(/) "
 					+ context.getRealPath("/"));
-			System.out.println(" Path to save file : " + file.toString());
+			log.debug(" Path to save file : " + file.toString());
 			FileUtils.writeByteArrayToFile(file, image.getBytes());
-			System.out.println("Go to the location:  "+ file.toString()+ " on your computer and verify that the image has been stored.");
+			log.debug("Go to the location:  "+ file.toString()+ " on your computer and verify that the image has been stored.");
 		} catch (IOException e) {
-
+			e.printStackTrace();
 			log.error(e.getCause());
-			/*
-			 * System.out.println(" Error in saving image : "+
-			 * e.getLocalizedMessage()); e.printStackTrace(); throw e;
-			 */
 		}
-		log.info("*** saveImage for seller exit ***");
+		log.info("$$$ saveImage Ends : SellerController $$$");
 	}
 
 }

@@ -69,10 +69,8 @@ public class UploadController {
 	public ModelAndView paymentUploadList(HttpServletRequest request)
 			throws CustomException {
 
-		log.info("***paymentUploadList Start****");
-
+		log.info("$$$ paymentUploadList Starts : UploadController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		System.out.println(" Inside Upload payment list");
 		List<PaymentUploadBean> payuploadbeanlist = null;
 		try {
 			payuploadbeanlist = ConverterClass
@@ -83,7 +81,7 @@ public class UploadController {
 			if (payuploadbeanlist != null) {
 
 				for (PaymentUploadBean bean : payuploadbeanlist) {
-					System.out.println(" Positive paymein in controller : "+bean.getTotalpositivevalue());
+					log.debug(" Positive paymein in controller : "+bean.getTotalpositivevalue());
 					bean.setManualCharges(manualChargesService.getMCforPaymentID(
 							bean.getUploadDesc(),
 							helperClass.getSellerIdfromSession(request)));
@@ -96,6 +94,7 @@ public class UploadController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
+			e.printStackTrace();
 			log.error(e);
 			model.put("errorMessage", e.getCause());
 			return new ModelAndView("globalErorPage", model);
@@ -103,21 +102,16 @@ public class UploadController {
 
 		model.put("payments", payuploadbeanlist);
 
-		log.info("***paymentUploadList Exit****");
+		log.info("$$$ paymentUploadList Ends : UploadController $$$");
 		return new ModelAndView("dailyactivities/paymentUploadList", model);
 	}
 
 	@RequestMapping(value = "/seller/viewPayments", method = RequestMethod.GET)
 	public ModelAndView viewPayments(HttpServletRequest request) {
 
-		log.info("***viewPayments Start****");
-
+		log.info("$$$ viewPayments Starts : UploadController $$$");
 		String uploadId = request.getParameter("uploadId");
 		String manualPay = request.getParameter("manualPay");
-		// System.out.println("Inside Payment orders  viewpayments uploadId"+
-		// uploadId);
-		// System.out.println("Inside Payment orders  viewpayments manualPay"+
-		// manualPay);
 		Map<String, Object> model = new HashMap<String, Object>();
 		String manualpayid = null;
 		int sellerId;
@@ -138,18 +132,19 @@ public class UploadController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
+			model.put("errorMessage", e.getCause());
+			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("***viewPayments Exit****");
+		log.info("$$$ viewPayments Ends : UploadController $$$");
 		return new ModelAndView("dailyactivities/orderPaymentDetails", model);
 	}
 
 	@RequestMapping(value = "/seller/paymentDetails", method = RequestMethod.POST)
 	public @ResponseBody String viewPaymentDetails(HttpServletRequest request) {
 
-		log.info("***viewPaymentDetails Start****");
-
-		System.out.println("****Inside payment details Ssave");
+		log.info("$$$ viewPaymentDetails Starts : UploadController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		PaymentUpload payment = null;
@@ -166,18 +161,15 @@ public class UploadController {
 
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
+			log.error("FAiled!",e);
 		}
-		System.out.println(" Inside find order method controller");
-
 		model.put("Result", "OK");
 		model.put("Records", orderlist);
 
 		// Convert Java Object to Json
 		String jsonArray = gson.toJson(model);
-		// model.put("employees", jsonArray);
-
-		log.info("***viewPaymentDetails Start****");
+		log.info("$$$ viewPaymentDetails Ends : UploadController $$$");
 		return jsonArray;
 	}
 
@@ -210,9 +202,7 @@ public class UploadController {
 	public ModelAndView addManualPayment(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
-		log.info("***addManualPayment Start****");
-
-		System.out.println(" Inside add order payment");
+		log.info("$$$ addManualPayment Starts : UploadController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<Integer, String> orderIdmap = new HashMap<>();
 		Map<String, String> partnermap = new HashMap<>();
@@ -233,10 +223,12 @@ public class UploadController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 		model.put("orderIdmap", orderIdmap);
 		model.put("partnermap", partnermap);
+		log.info("$$$ addManualPayment Ends : UploadController $$$");
 		return new ModelAndView("dailyactivities/addManualPayment", model);
 	}
 
@@ -244,13 +236,13 @@ public class UploadController {
 	public ModelAndView saveManualPayment(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
-		log.info("*** saveManualPayment starts ***");
+		log.info("$$$ saveManualPayment Starts : UploadController $$$");
 		int sellerId;
 		Order order = null;
 		PaymentUpload paymentUpload = null;
 		OrderPayment payment = new OrderPayment();
 		Map<String, Object> model = new HashMap<String, Object>();
-		System.out.println(" channelOrderId " + orderBean.getChannelOrderID());
+		log.debug(" channelOrderId " + orderBean.getChannelOrderID());
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			if ((int) orderBean.getOrderPayment().getNegativeAmount() != 0) {
@@ -266,7 +258,7 @@ public class UploadController {
 			}
 			payment.setDateofPayment(orderBean.getOrderPayment()
 					.getDateofPayment());
-			System.out.println("order id in payment controller : "
+			log.debug("order id in payment controller : "
 					+ orderBean.getOrderId());
 			order = orderService.addOrderPayment(orderBean.getOrderId(),
 					payment, sellerId);
@@ -294,7 +286,6 @@ public class UploadController {
 				paymentUpload.setUploadStatus("Success");
 			}
 			if (order != null) {
-				System.out.println(order);
 				order.setPaymentUpload(paymentUpload);
 				paymentUpload.getOrders().add(order);
 			}
@@ -307,10 +298,11 @@ public class UploadController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 
-		log.info("*** saveManualPayment ***");
+		log.info("$$$ saveManualPayment Ends : UploadController $$$");
 		return new ModelAndView("redirect:/seller/paymentUploadList.html");
 	}
 
@@ -318,7 +310,7 @@ public class UploadController {
 	public ModelAndView save(HttpServletRequest request,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
-		log.info("*** save starts ***");
+		log.info("$$$ save() Starts : UploadController $$$");
 		// gets absolute path of the web application
 		String applicationPath = request.getServletContext().getRealPath("");
 		// System.out.println("Inside save method");
@@ -340,14 +332,14 @@ public class UploadController {
 				saveContents.savePaymentContents(files.get(0), sellerId,
 						applicationPath);
 			} catch (Exception e) {
-				System.out.println("Inside exception , filetype not accepted "
+				e.printStackTrace();
+				log.error("Failed!",e);
+				log.debug("Inside exception , filetype not accepted "
 						+ e.getLocalizedMessage());
 
 			}
-
 		}
-
-		log.info("*** save ends ***");
+		log.info("$$$ save() Ends : UploadController $$$");
 		return new ModelAndView("dailyactivities/dailyactivities");
 
 	}

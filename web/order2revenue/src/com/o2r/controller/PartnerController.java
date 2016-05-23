@@ -85,32 +85,32 @@ public class PartnerController {
 			BindingResult result,
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
-		log.info("*** savePartner start ***");
+		log.info("$$$ savePartner Starts : OrderController $$$");
 		if (partnerBean.getPcId() != 0) {
-			System.out.println("****************************** ConfigId : "
+			log.debug("******** ConfigId : "
 					+ partnerBean.getNrnReturnConfig().getConfigId());
-			System.out.println("****************************** Partner ID : "
+			log.debug("******** Partner ID : "
 					+ partnerBean.getPcId());
 
 		}
 
-		System.out.println(" Nr calculayor value from bean : "
+		log.debug(" Nr calculayor value from bean : "
 				+ partnerBean.getNrnReturnConfig().isNrCalculator());
 		Map<String, String[]> parameters = request.getParameterMap();
 		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
 			if (entry.getKey().contains("nr-")) {
-				System.out.println(" Key with nr: " + entry.getKey()
+				log.debug(" Key with nr: " + entry.getKey()
 						+ " Values is : " + entry.getValue()[0]);
 			}
 		}
 		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
 			if (entry.getKey() != null && !entry.getKey().isEmpty())
-				System.out.println(" Print :entry.getKey()  " + entry.getKey()
+				log.debug(" Print :entry.getKey()  " + entry.getKey()
 						+ " value: " + entry.getValue()[0]);
 
 			if (entry.getValue()[0] != null && !entry.getValue()[0].isEmpty()) {
 				if (entry.getKey().contains("nr-")) {
-					System.out.println(" Key : " + entry.getKey());
+					log.debug(" Key : " + entry.getKey());
 					String temp = entry.getKey().substring(3);
 					NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
 					nrnReturncharge.setChargeAmount(Float.parseFloat(entry
@@ -119,18 +119,17 @@ public class PartnerController {
 					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
 					partnerBean.getNrnReturnConfig().getCharges()
 							.add(nrnReturncharge);
-					// chargeList.add(nrnReturncharge);
 				} else if (entry.getKey().contains("local")) {
 
 					String localstring = Arrays.toString(entry.getValue());
-					System.out.println("localstring " + localstring);
+					log.debug("localstring " + localstring);
 					partnerBean.getNrnReturnConfig().setLocalList(
 							localstring.substring(localstring.toString()
 									.indexOf('[') + 1, localstring.toString()
 									.indexOf(']')));
 				} else if (entry.getKey().contains("zonal")) {
 					String zonalstring = Arrays.toString(entry.getValue());
-					System.out.println("zonalstring " + zonalstring);
+					log.debug("zonalstring " + zonalstring);
 
 					partnerBean.getNrnReturnConfig().setZonalList(
 							zonalstring.substring(zonalstring.toString()
@@ -144,7 +143,7 @@ public class PartnerController {
 									.toString().indexOf(']')));
 				} else if (entry.getKey().contains("metro")) {
 					String metrostring = Arrays.toString(entry.getValue());
-					System.out.println("metrostring " + metrostring);
+					log.debug("metrostring " + metrostring);
 
 					partnerBean.getNrnReturnConfig().setMetroList(
 							metrostring.substring(metrostring.toString()
@@ -154,25 +153,13 @@ public class PartnerController {
 			}
 		}
 
-		/*
-		 * System.out.println("Inside partner Ssave ");
-		 * System.out.println(" partnerBean : **** "+partnerBean);
-		 * System.out.println
-		 * ("inside controller noofdaysfromshipped date : "+partnerBean
-		 * .getNoofdaysfromshippeddate());
-		 * System.out.println(" Seller id :"+partnerBean.getPcId());
-		 */
-		// partnerBean.getNrnReturnConfig().setCharges(chargeList);
-		// configobj.setCharges(chargeList);
-		// partnerBean.setNrnReturnConfig(configobj);
 		if (!partnerBean.isIsshippeddatecalc()) {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
 		}
-		// int sellerId=HelperClass.getSellerIdfromSession(request);
+		
 		if (image.getSize() != 0) {
 			if (image != null) {
-				System.out.println(" Not getting any image");
 				if (!image.isEmpty()) {
 					try {
 						validateImage(image);
@@ -198,6 +185,8 @@ public class PartnerController {
 							+ partnerBean.getPcName() + ".jpg");
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("Failed!",e);
 				result.reject(e.getMessage());
 				return new ModelAndView("redirect:/seller/partners.html");
 			}
@@ -207,31 +196,36 @@ public class PartnerController {
 			partnerService.addPartner(partner,
 					helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 
-		log.info("*** savePartner exit ***");
+		log.info("$$$ savePartner Ends : OrderController $$$");
 		return new ModelAndView("redirect:/seller/partners.html");
 	}
 
 	@RequestMapping(value = "/seller/listPartners", method = RequestMethod.GET)
 	public ModelAndView listAllPartners(HttpServletRequest request) {
+		
+		log.info("$$$ listAllPartners Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<PartnerBean> addedlist = null;
 		try {
 			addedlist = ConverterClass.prepareListofPartnerBean(partnerService
 					.listPartners(helperClass.getSellerIdfromSession(request)));
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e.getCause());
 		}
 		model.put("partners", addedlist);
+		log.info("$$$ listAllPartners Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/partnerDetail", model);
 	}
 
 	@RequestMapping(value = "/seller/partners", method = RequestMethod.GET)
 	public ModelAndView listPartners(HttpServletRequest request) {
 
-		log.info("*** listPartners start ***");
+		log.info("$$$ listPartners Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<PartnerBean> toAddPartner = new ArrayList<PartnerBean>();
 		List<PartnerBean> addedlist = null;
@@ -241,17 +235,12 @@ public class PartnerController {
 
 			props = PropertiesLoaderUtils.loadProperties(resource);
 
-			/*
-			 * System.out.println("dialect in order controller : " +
-			 * props.getProperty("partnerimage.view"));
-			 */
-
 			for (String partner : partnerList) {
 				if (partnerService.getPartner(partner,
 						helperClass.getSellerIdfromSession(request)) == null) {
 					String pcUrl = props.getProperty("partnerimage.view")
 							+ partner + ".jpg";
-					System.out.println(" Pc logourl set to partner baen "
+					log.debug(" Pc logourl set to partner baen "
 							+ pcUrl);
 					toAddPartner.add(new PartnerBean(partner, partner, pcUrl));
 				}
@@ -263,12 +252,13 @@ public class PartnerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 		model.put("partners", addedlist);
 		model.put("partnertoadd", toAddPartner);
 		System.out.println(" toaddpartner size  :" + toAddPartner.size());
-		log.info("*** listPartners exit ***");
+		log.info("$$$ listPartners Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/partnerInfo", model);
 	}
 
@@ -277,7 +267,7 @@ public class PartnerController {
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
 
-		log.info("*** addPartner start ***");
+		log.info("$$$ addPartner Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
@@ -302,7 +292,7 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 		}
 		String partnerName = request.getParameter("partnerName");
 		try {
@@ -317,13 +307,14 @@ public class PartnerController {
 							.listPartners(helperClass
 									.getSellerIdfromSession(request))));
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
-		log.info("*** addPartner exit ***");
+		log.info("$$$ addPartner Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/addPartner", model);
 	}
 
-	/* My Code Ranjan */
+	/* My Code Bishnu */
 
 	@RequestMapping(value = "/seller/saveJabong", method = RequestMethod.POST)
 	public ModelAndView saveJabong(HttpServletRequest request,
@@ -331,12 +322,11 @@ public class PartnerController {
 			BindingResult result,
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
-		log.info("*** saveJabong start ***");
-
-		System.out.println(" Nr calculayor value from bean : "
+		log.info("$$$ saveJabong Starts : OrderController $$$");
+		log.debug(" Nr calculayor value from bean : "
 				+ partnerBean.getNrnReturnConfig().isNrCalculator());
 
-		System.out.println(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
+		log.debug(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
 		partnerBean.setPcName("Jabong");
 
 		Map<String, String[]> parameters = request.getParameterMap();
@@ -360,16 +350,13 @@ public class PartnerController {
 				}
 			}
 		}
-
-		// partnerBean.getNrnReturnConfig().setCharges(chargeList);
-
+		
 		if (!partnerBean.isIsshippeddatecalc()) {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
 		}
 
 		if (image != null) {
-			System.out.println(" Not getting any image");
 			if (!image.isEmpty()) {
 				try {
 					validateImage(image);
@@ -399,6 +386,7 @@ public class PartnerController {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+				log.error("Failed!",e);
 				result.reject(e.getMessage());
 				return new ModelAndView("redirect:/seller/partners.html");
 			}
@@ -409,11 +397,11 @@ public class PartnerController {
 			partnerService.addPartner(partner,
 					helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 		}
 
-		log.info("*** saveJabong exit ***");
+		log.info("$$$ saveJabong Ends : OrderController $$$");
 		return new ModelAndView("redirect:/seller/partners.html");
 	}
 
@@ -423,21 +411,20 @@ public class PartnerController {
 			BindingResult result,
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
-		log.info("*** saveMyntra start ***");
-
-		System.out.println(" Nr calculayor value from bean : "
+		log.info("$$$ saveMyntra Starts : OrderController $$$");
+		log.debug(" Nr calculayor value from bean : "
 				+ partnerBean.getNrnReturnConfig().isNrCalculator());
 
-		System.out.println(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
+		log.debug(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
 		partnerBean.setPcName("Myntra");
 
 		Map<String, String[]> parameters = request.getParameterMap();
 		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
-			System.out.println(" Request Param: " + entry.getKey()
+			log.debug(" Request Param: " + entry.getKey()
 					+ "  Values  : " + entry.getValue().length);
 
 			if (entry.getKey() != null && !entry.getKey().isEmpty())
-				System.out.println(" Print : " + entry.getValue()[0]);
+				log.debug(" Print : " + entry.getValue()[0]);
 
 			if (entry.getValue()[0] != null && !entry.getValue()[0].isEmpty()) {
 				if (entry.getKey().contains("nr-")) {
@@ -452,25 +439,17 @@ public class PartnerController {
 				}
 			}
 		}
-
-		// partnerBean.getNrnReturnConfig().setCharges(chargeList);
-
 		if (!partnerBean.isIsshippeddatecalc()) {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
 		}
-
-		
-			
-
 		if (image != null) {
-			System.out.println(" Not getting any image");
 			if (!image.isEmpty()) {
 				try {
 					validateImage(image);
-
-
 					} catch (RuntimeException re) {
+						re.printStackTrace();
+						log.error("Failed!",re);
 						result.reject(re.getMessage());
 					}
 				}
@@ -492,6 +471,7 @@ public class PartnerController {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+				log.error("Failed!",e);
 				result.reject(e.getMessage());
 				return new ModelAndView("redirect:/seller/partners.html");
 			}
@@ -502,11 +482,11 @@ public class PartnerController {
 			partnerService.addPartner(partner,
 					helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 		}
 
-		log.info("*** saveMyntra exit ***");
+		log.info("$$$ saveMyntra Ends : OrderController $$$");
 		return new ModelAndView("redirect:/seller/partners.html");
 	}
 
@@ -515,7 +495,7 @@ public class PartnerController {
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
 
-		log.info("*** addJabong start ***");
+		log.info("$$$ addJabong Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
@@ -531,7 +511,8 @@ public class PartnerController {
 				categoryList.add(cat.getCatName());
 			}
 		}catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 		String partnerName = request.getParameter("partnerName");
 		try {
@@ -542,9 +523,10 @@ public class PartnerController {
 			model.put("categoryList", categoryList);
 			model.put("datemap", datemap);
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
-		log.info("*** addJabong exit ***");
+		log.info("$$$ addJabong Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/addJabong", model);
 	}
 
@@ -553,7 +535,7 @@ public class PartnerController {
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
 
-		log.info("*** addMyntra start ***");
+		log.info("$$$ addMyntra Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
@@ -575,13 +557,11 @@ public class PartnerController {
 		 * ce.getErrorCode()); return new ModelAndView("globalErorPage", model);
 		 * }
 		 */catch (Exception e) {
-			log.error(e);
+			 e.printStackTrace();
+			log.error("Failed!",e);
 		}
-		// String partnerName = request.getParameter("partnerName");
+		
 		try {
-			/*
-			 * if (partnerName != null) { partner.setPcName(partnerName); }
-			 */
 			model.put("partner", partner);
 			model.put("categoryList", categoryList);
 			model.put("datemap", datemap);
@@ -590,9 +570,10 @@ public class PartnerController {
 							.listPartners(helperClass
 									.getSellerIdfromSession(request))));
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
-		log.info("*** addMyntra exit ***");
+		log.info("$$$ addMyntra Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/addMyntra", model);
 	}
 
@@ -602,11 +583,12 @@ public class PartnerController {
 	public ModelAndView addPartnertest(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
-		log.info("*** addPartnertest start ***");
+		
+		log.info("$$$ addPartnertest Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		PartnerBean partner = new PartnerBean();
 		String id = request.getParameter("pid");
-		System.out.println(" Inside partner controller :" + id);
+		log.debug(" Inside partner controller :" + id);
 
 		try {
 			if (id != null) {
@@ -620,9 +602,10 @@ public class PartnerController {
 							.listPartners(helperClass
 									.getSellerIdfromSession(request))));
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
-		log.info("*** addPartertest exit ***");
+		log.info("$$$ addPartnertest Ends : OrderController $$$");
 		return new ModelAndView("addPartner", model);
 	}
 
@@ -635,13 +618,10 @@ public class PartnerController {
 	public ModelAndView deletePartner(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
+		
+		log.info("$$$ deletePartner Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		/*
-		 * System.out.println(" pcid in controller " + partnerBean.getPcId());
-		 * System.out.println(" pcname in controller " +
-		 * partnerBean.getPcName());
-		 */
 		try {
 			partnerService.deletePartner(
 					ConverterClass.preparePartnerModel(partnerBean),
@@ -654,8 +634,10 @@ public class PartnerController {
 		} catch (CustomException ce) {
 
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
+		log.info("$$$ deletePartner Ends : OrderController $$$");
 		return new ModelAndView("addPartner", model);
 	}
 
@@ -664,7 +646,7 @@ public class PartnerController {
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
 
-		log.info("*** viewPartner start ***");
+		log.info("$$$ viewPartner Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
 		PartnerBean pbean = null;
@@ -678,8 +660,7 @@ public class PartnerController {
 			model.put("datemap", datemap);
 			pbean = ConverterClass.preparePartnerBean(partnerService
 					.getPartner(partnerBean.getPcId()));
-			System.out
-					.println("************** Inside edit partner : config ID :"
+			log.debug("********** Inside edit partner : config ID :"
 							+ pbean.getNrnReturnConfig().getConfigId());
 			for (NRnReturnCharges charge : pbean.getNrnReturnConfig()
 					.getCharges()) {
@@ -707,11 +688,12 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.error("Failed!",e);
 			log.error("editPartner exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());
 
 		}
-		log.info("*** viewPartner exit ***");
+		log.info("$$$ viewPartner Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/viewPartner", model);
 	}
 
@@ -719,7 +701,8 @@ public class PartnerController {
 	public ModelAndView editPartner(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
-		log.info("*** editPartner start ***");
+		
+		log.info("$$$ editPartner Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
 		PartnerBean pbean = null;
@@ -734,8 +717,7 @@ public class PartnerController {
 			model.put("datemap", datemap);
 			pbean = ConverterClass.preparePartnerBean(partnerService
 					.getPartner(partnerBean.getPcId()));
-			System.out
-					.println("************** Inside edit partner : config ID :"
+			log.debug("************** Inside edit partner : config ID :"
 							+ pbean.getNrnReturnConfig().getConfigId());
 			for (NRnReturnCharges charge : pbean.getNrnReturnConfig()
 					.getCharges()) {
@@ -758,25 +740,29 @@ public class PartnerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
-
 			e.printStackTrace();
+			log.error("FAiled!",e);
 			log.error("editPartner exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());
 
 		}
-		log.info("*** editPartner exit ***");
+		log.info("$$$ editPartner Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/addPartner", model);
 	}
 
 	private void validateImage(MultipartFile image) {
+		
+		log.info("$$$ validateImage Starts : OrderController $$$");
 		if (!image.getContentType().equals("image/jpeg")) {
+			log.info("$$$ validateImage Error : OrderController $$$");
 			throw new RuntimeException("Only JPG images are accepted");
 		}
 	}
 
 	private void saveImage(String filename, MultipartFile image)
 			throws RuntimeException, IOException {
-		log.info("*** saveImage start ***");
+		
+		log.info("$$$ saveImage Starts : OrderController $$$");
 		try {
 			String catalinabase = System.getProperty("catalina.base");
 
@@ -786,45 +772,45 @@ public class PartnerController {
 				log.error(e.getCause());
 
 			}
-			System.out.println("dialect in order controller : "
+			log.debug("dialect in order controller : "
 					+ props.getProperty("partnerimage.path"));
 			File file = new File(catalinabase
 					+ props.getProperty("partnerimage.path") + filename);
-			System.out.println(" context.getRealPath(/) "
+			log.debug(" context.getRealPath(/) "
 					+ context.getRealPath("/"));
-			System.out.println(" Path to save file : " + file.toString());
+			log.debug(" Path to save file : " + file.toString());
 			FileUtils.writeByteArrayToFile(file, image.getBytes());
-			System.out
-					.println("Go to the location:  "
+			log.debug("Go to the location:  "
 							+ file.toString()
 							+ " on your computer and verify that the image has been stored.");
 		} catch (IOException e) {
-
+			e.printStackTrace();
 			log.error(e.getCause());
-			/*
-			 * System.out.println(" Error in saving image : "+
-			 * e.getLocalizedMessage()); e.printStackTrace(); throw e;
-			 */
 		}
-		log.info("*** saveImage exit ***");
+		log.info("$$$ saveImage Ends : OrderController $$$");
 	}
 
 	@RequestMapping(value = "/seller/ajaxPartnerCheck.html", method = RequestMethod.GET)
 	public @ResponseBody String getCheckPartner(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result, Model model) {
-		System.out.println(request.getParameter("partner"));
+		
+		log.info("$$$ getCheckPartner Starts : OrderController $$$");
+		log.debug(request.getParameter("partner"));
 		try {
 			Partner parner = partnerService.getPartner(
 					request.getParameter("partner"),
 					helperClass.getSellerIdfromSession(request));
 			if (parner != null) {
+				log.info("$$$ getCheckPartner Ends : OrderController $$$");
 				return "false";
 			} else {
+				log.info("$$$ getCheckPartner Ends : OrderController $$$");
 				return "true";
 			}
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 			return "Error";
 		}
 	}

@@ -81,8 +81,8 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<Order> findOrders(String column, String value, int sellerId,
-			boolean poOrder) throws CustomException {
-		return orderDao.findOrders(column, value, sellerId, poOrder);
+			boolean poOrder, boolean isSearch) throws CustomException {
+		return orderDao.findOrders(column, value, sellerId, poOrder,isSearch);
 	}
 
 	@Override

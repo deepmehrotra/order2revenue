@@ -77,9 +77,8 @@ public class ProductController {
 			@ModelAttribute("command") ProductBean productBean,
 			BindingResult result) {
 
-		log.info("*** serchProduct start ***");
+		log.info("$$$ searchProduct Starts : ProductController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		System.out.println("Inside list products ");
 		List<ProductBean> productList = new ArrayList<>();
 		int sellerId;
 		String skuCode = request.getParameter("skuCode");
@@ -108,11 +107,11 @@ public class ProductController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 		request.getSession().setAttribute("productSearchObject", productList);
-		// model.put("productList", productList);
-		log.info("*** searchProduct exit ***");
+		log.info("$$$ searchProduct Ends : ProductController $$$");
 		return new ModelAndView("redirect:/seller/Product.html");
 
 	}
@@ -122,7 +121,7 @@ public class ProductController {
 			@ModelAttribute("command") ProductBean productBean,
 			BindingResult result) {
 
-		log.info("*** productList start ***");
+		log.info("$$$ productList Starts : ProductController $$$");
 		List<Product> products = null;
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<List<ProductConfig>> productConfigs = new ArrayList<List<ProductConfig>>();
@@ -131,7 +130,7 @@ public class ProductController {
 			Object obj = request.getSession().getAttribute(
 					"productSearchObject");
 			if (obj != null) {
-				System.out.println(" Getting list from session" + obj);
+				log.debug(" Getting list from session" + obj);
 				model.put("productList", obj);
 				request.getSession().removeAttribute("productSearchObject");
 			} else {
@@ -157,10 +156,11 @@ public class ProductController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 
-		log.info("*** productList exit ***");
+		log.info("$$$ productList Ends : ProductController $$$");
 		return new ModelAndView("initialsetup/Product", model);
 
 	}
@@ -170,7 +170,7 @@ public class ProductController {
 			@ModelAttribute("command") ProductBean productBean,
 			BindingResult result) {
 
-		log.info("*** productConfigList start ***");
+		log.info("$$$ productConfigList Starts : ProductController $$$");
 		List<Product> products = null;
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<ProductConfig> productConfigs = new ArrayList<ProductConfig>();
@@ -205,10 +205,11 @@ public class ProductController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 
-		log.info("*** productConfigList exit ***");
+		log.info("$$$ productConfigList Ends : ProductController $$$");
 		return new ModelAndView("initialsetup/ProductMapping", model);
 
 	}
@@ -217,22 +218,13 @@ public class ProductController {
 	public ModelAndView saveDeleteProduct(HttpServletRequest request,
 			@ModelAttribute("command") ProductBean productBean,
 			BindingResult result) {
-		System.out.println("Inside Delete  Product");
-		/*
-		 * String var1=request.getParameter("quantityToAdd"); String
-		 * var2=request.getParameter("quantityToSubtract");
-		 */
-
+		
+		log.info("$$$ productConfigList Starts : ProductController $$$");
 		if (productBean.getProductSkuCode() != null) {
 			productBean.setProductDate(new Date());
-			// Product product =
-			// ConverterClass.prepareProductModel(productBean);
-
 			int productId = request.getParameter("productId") != null ? Integer
 					.parseInt(request.getParameter("productId")) : 0;
 			String productSkuCode = productBean.getProductSkuCode();
-			// int
-			// currentInventory=request.getParameter("currentInventory")!=null?Integer.parseInt(request.getParameter("currentInventory")):0;
 			int quantityToAdd = (request.getParameter("quantityToAdd") != null && request
 					.getParameter("quantityToAdd").toString().length() != 0) ? Integer
 					.parseInt(request.getParameter("quantityToAdd")) : 0;
@@ -245,6 +237,7 @@ public class ProductController {
 				sellerId = helperClass.getSellerIdfromSession(request);
 			} catch (Exception e) {
 				e.printStackTrace();
+				log.error("Failed!", e);
 			}
 
 			try {
@@ -252,9 +245,11 @@ public class ProductController {
 						quantityToAdd, quantityToSubstract, true, sellerId);
 			} catch (CustomException e) {
 				e.printStackTrace();
+				log.error("Failed!",e);
 			}
 
 		}
+		log.info("$$$ productConfigList Ends : ProductController $$$");
 		return new ModelAndView("redirect:/seller/Product.html");
 	}
 
@@ -263,14 +258,12 @@ public class ProductController {
 			@ModelAttribute("command") ProductBean productBean,
 			BindingResult result) {
 
-		log.info("*** saveProduct start ***");
+		log.info("$$$ saveProduct Starts : ProductController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-
-		System.out.println("Inside Product Ssave");
-		System.out.println(" Product Id :" + productBean.getProductId());
-		System.out.println(" Product SKU :" + productBean.getProductSkuCode());
-		System.out.println(" Product category  :"
-				+ productBean.getCategoryName());
+		
+		log.debug(" Product Id :" + productBean.getProductId());
+		log.debug(" Product SKU :" + productBean.getProductSkuCode());
+		log.debug(" Product category  :"+ productBean.getCategoryName());
 
 		try {
 			if (productBean.getProductSkuCode() != null) {
@@ -290,9 +283,11 @@ public class ProductController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
 			log.equals(e);
 		}
-		log.info("*** saveProduct exit ***");
+		log.info("$$$ saveProduct Ends : ProductController $$$");
 		return new ModelAndView("redirect:/seller/Product.html");
 	}
 
@@ -303,8 +298,7 @@ public class ProductController {
 			@ModelAttribute("command") ProductConfigBean productConfigBean,
 			BindingResult result) {
 
-		log.info("*** saveProductConfig start ***");
-		// Map<String, Object> model = new HashMap<String, Object>();
+		log.info("$$$ saveProductConfig Starts : ProductController $$$");
 		try {
 			ProductConfig productConfig = ConverterClass
 					.prepareProductConfigModel(productConfigBean);
@@ -320,10 +314,10 @@ public class ProductController {
 			 * model);
 			 */
 		} catch (Throwable e) {
-			log.equals(e);
 			e.printStackTrace();
+			log.error("Failed!", e);
 		}
-		log.info("*** saveProductConfig exit ***");
+		log.info("$$$ saveProductConfig Ends : ProductController $$$");
 		return new ModelAndView("redirect:/seller/ProductMapping.html");
 	}
 
@@ -334,7 +328,7 @@ public class ProductController {
 			@ModelAttribute("command") ProductConfigBean productConfigBean,
 			BindingResult result) {
 
-		log.info("***addProduct  Start****");
+		log.info("$$$ addProductConfig Starts : ProductController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, String> productSkuCodeMap = new LinkedHashMap<>();
 		try {
@@ -367,10 +361,10 @@ public class ProductController {
 			 */
 			model.put("productSkuMap", productSkuCodeMap);
 			model.put("partnermap", partnermap);
-			log.info("*** addProduct exit ***");
+			log.info("$$$ addProductConfig Ends : ProductController $$$");
 			return new ModelAndView("initialsetup/addProductConfig", model);
 		} catch (Throwable e) {
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 			return new ModelAndView("globalErorPage", model);
 		}
@@ -381,7 +375,7 @@ public class ProductController {
 			@ModelAttribute("command") ProductBean productBean,
 			BindingResult result) {
 
-		log.info("***addProduct  Start****");
+		log.info("$$$ addProduct Starts : ProductController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, String> categoryMap = new LinkedHashMap<>();
 		try {
@@ -401,11 +395,12 @@ public class ProductController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		model.put("categoryMap", categoryMap);
-		log.info("*** addProduct exit ***");
+		log.info("$$$ addProduct Ends : ProductController $$$");
 		return new ModelAndView("initialsetup/addProduct", model);
 	}
 
@@ -413,7 +408,8 @@ public class ProductController {
 	public ModelAndView editProduct(HttpServletRequest request,
 			@ModelAttribute("command") ProductBean productBean,
 			BindingResult result) {
-		log.info("*** editProduct start ***");
+		
+		log.info("$$$ editProduct Starts : ProductController $$$");
 		Product product = null;
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -431,17 +427,18 @@ public class ProductController {
 		}
 		if (product != null)
 			model.put("product", product);
-		log.info("*** editProduct exit ***");
+		log.info("$$$ editProduct Ends : ProductController $$$");
 		return new ModelAndView("initialsetup/addProduct", model);
 	}
 
 	@RequestMapping(value = "/seller/saveProductJson", method = RequestMethod.POST)
 	public @ResponseBody String saveProductJson(HttpServletRequest request) {
-		log.info("*** saveeProductJson  start ***");
+		
+		log.info("$$$ saveProductJson Starts : ProductController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		Product product = new Product();
-		System.out.println("Product id " + request.getParameter("productId"));
+		log.debug("Product id " + request.getParameter("productId"));
 		int productId = 0;
 		try {
 			if (request.getParameter("productId") != null
@@ -498,22 +495,17 @@ public class ProductController {
 			String errors = gson.toJson(model);
 			return errors;
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 
 		model.put("Result", "OK");
 		model.put("Record", ConverterClass.prepareProductBean(product));
 		String jsonArray = gson.toJson(model);
-		log.info("*** saveeProductJson  start ***");
+		log.info("$$$ saveProductJson Ends : ProductController $$$");
 		return jsonArray;
 	}
 
-	/**
-	 * Downloads the report as an Excel format.
-	 * <p>
-	 * Make sure this method doesn't return any model. Otherwise, you'll get an
-	 * "IllegalStateException: getOutputStream() has already been called for this response"
-	 */
 	@RequestMapping(value = "/seller/download/Product/xls", method = RequestMethod.GET)
 	public void getXLS(HttpServletResponse response)
 			throws ClassNotFoundException {
@@ -532,10 +524,7 @@ public class ProductController {
 		downloadService.downloadInventoryXLS(response);
 	}
 
-	/**
-	 * Redirect to upload download page.
-	 * <p>
-	 */
+	
 	@RequestMapping(value = "/seller/Productsheet", method = RequestMethod.GET)
 	public String displayForm() {
 
@@ -557,7 +546,7 @@ public class ProductController {
 	@RequestMapping(value = "/seller/listProductJson", method = RequestMethod.POST)
 	public @ResponseBody String listProductsJSON(HttpServletRequest request) {
 
-		log.info("*** listProductsJSON start ***");
+		log.info("$$$ listProductsJSON Starts : ProductController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
@@ -569,18 +558,19 @@ public class ProductController {
 					.prepareListofProductBean(productService.listProducts(
 							helperClass.getSellerIdfromSession(request), 0)));
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 		model.put("Result", "OK");
 		String jsonArray = gson.toJson(model);
-		log.info("*** listProductsJSON exit ***");
+		log.info("$$$ listProductsJSON Ends : ProductController $$$");
 		return jsonArray;
 	}
 
 	@RequestMapping(value = "/seller/showInventory", method = RequestMethod.POST)
 	public @ResponseBody String inventoryList(HttpServletRequest request) {
 
-		log.info("***inventoryList start***");
+		log.info("$$$ inventoryList Starts : ProductController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String action = request.getParameter("action");
@@ -595,8 +585,7 @@ public class ProductController {
 										.getSellerIdfromSession(request), 0)));
 
 			} else {
-				System.out
-						.println(" Getting inventory update subtract value : : "
+				log.debug(" Getting inventory update subtract value : : "
 								+ request.getParameter("quantityToSubstract"));
 				int productId = request.getParameter("productId") != null ? Integer
 						.parseInt(request.getParameter("productId")) : 0;
@@ -626,12 +615,13 @@ public class ProductController {
 			String error = gson.toJson(model);
 			return error;
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 		model.put("Result", "OK");
 
 		String jsonArray = gson.toJson(model);
-		log.info("*** inventoryList exit ***");
+		log.info("$$$ inventoryList Ends : ProductController $$$");
 		return jsonArray;
 	}
 
@@ -639,20 +629,18 @@ public class ProductController {
 	public ModelAndView save(HttpServletRequest request,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
-		log.info("*** save start ***");
-		System.out.println("Inside save method");
+		log.info("$$$ save() Starts : ProductController $$$");
 		List<MultipartFile> files = uploadForm.getFiles();
 
 		List<String> fileNames = new ArrayList<String>();
 		MultipartFile fileinput = files.get(0);
-		System.out.println(" got file");
 		int sellerId;
 
 		// gets absolute path of the web application
 		String applicationPath = request.getServletContext().getRealPath("");
 		// constructs path of the directory to save uploaded file
 		String uploadFilePath = applicationPath + File.separator + UPLOAD_DIR;
-		System.out.println("***** uploadFilePath path  : " + uploadFilePath);
+		log.debug("***** uploadFilePath path  : " + uploadFilePath);
 
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
@@ -661,11 +649,11 @@ public class ProductController {
 
 				sellerId = helperClass.getSellerIdfromSession(request);
 
-				System.out.println(" Filename : "
+				log.debug(" Filename : "
 						+ files.get(0).getOriginalFilename());
-				System.out.println(" Filename : " + files.get(0).getName());
+				log.debug(" Filename : " + files.get(0).getName());
 				ValidateUpload.validateOfficeData(files.get(0));
-				System.out.println(" fileinput " + fileinput.getName());
+				log.debug(" fileinput " + fileinput.getName());
 				saveContents.saveProductContents(files.get(0), sellerId,
 						uploadFilePath);
 
@@ -680,11 +668,11 @@ public class ProductController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
-
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 
-		log.info("*** save exit ***");
+		log.info("$$$ save() Ends : ProductController $$$");
 		return new ModelAndView("productList", model);
 
 	}
@@ -693,8 +681,7 @@ public class ProductController {
 	public ModelAndView saveInventories(HttpServletRequest request,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
-		log.info("*** saveInventories start ***");
-		System.out.println("Inside save method");
+		log.info("$$$ saveInventories Starts : ProductController $$$");
 		// gets absolute path of the web application
 		String applicationPath = request.getServletContext().getRealPath("");
 
@@ -711,11 +698,11 @@ public class ProductController {
 			if (null != files && files.size() > 0) {
 				fileNames.add(files.get(0).getOriginalFilename());
 
-				System.out.println(" Filename : "
+				log.debug(" Filename : "
 						+ files.get(0).getOriginalFilename());
-				System.out.println(" Filename : " + files.get(0).getName());
+				log.debug(" Filename : " + files.get(0).getName());
 				ValidateUpload.validateOfficeData(files.get(0));
-				System.out.println(" fileinput " + fileinput.getName());
+				log.debug(" fileinput " + fileinput.getName());
 				saveContents.saveInventoryDetails(files.get(0), sellerId,
 						applicationPath);
 
@@ -731,62 +718,31 @@ public class ProductController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
-		log.info("*** saveInventories exit ***");
+		log.info("$$$ saveInventories Ends : ProductController $$$");
 		return new ModelAndView("productList", model);
 
 	}
 
-	// Method to List Categoires for New Product
-	/*
-	 * @RequestMapping(value="/seller/getProductCategories", method =
-	 * RequestMethod.POST) public @ResponseBody String
-	 * getProductCategories(HttpServletRequest request) { int
-	 * sellerId=helperClass.getSellerIdfromSession(request);
-	 * System.out.println("Inside getProductCategories list json"); Map<String,
-	 * Object> model = new HashMap<String, Object>();
-	 * 
-	 * GsonBuilder gsonBuilder = new GsonBuilder();
-	 * gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
-	 * gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer()); Gson
-	 * gson = gsonBuilder.setPrettyPrinting().create();
-	 * 
-	 * 
-	 * JSONArray ja = new JSONArray();
-	 * 
-	 * JSONObject otherjo = new JSONObject();
-	 * 
-	 * Map<String , String> categoryMap=new HashMap<>(); List<Category>
-	 * categoryList=categoryService.listCategories(sellerId);
-	 * if(categoryList!=null&&categoryList.size()!=0) { for(Category
-	 * category:categoryList) {
-	 * System.out.println(" categoryList name : "+category.getCatName());
-	 * JSONObject jo = new JSONObject(); jo.put("DisplayText",
-	 * category.getCatName()); jo.put("Value", category.getCatName());
-	 * ja.add(jo);
-	 * 
-	 * } } model.put("Options",ja); model.put("Result", "OK"); String jsonArray
-	 * = gson.toJson(model); System.out.println(jsonArray); return jsonArray; }
-	 */
-
 	@RequestMapping(value = "/seller/checkSKUAvailability", method = RequestMethod.GET)
 	public @ResponseBody String checkSKUAvailability(HttpServletRequest request) {
 
-		log.info("*** checkSKUAvailability start ***");
+		log.info("$$$ checkSKUAvailability Starts : ProductController $$$");
 		Product product = null;
 		try {
 			product = productService.getProduct(request.getParameter("sku"),
 					helperClass.getSellerIdfromSession(request));
-			// System.out.println(product);
 		} catch (Exception e) {
 			log.error(e);
 		}
-		log.info("*** checkSKUAvailability exit ***");
-
+		
 		if (product != null) {
+			log.info("$$$ checkSKUAvailability Ends : ProductController $$$");
 			return "false";
 		} else {
+			log.info("$$$ checkSKUAvailability Ends : ProductController $$$");
 			return "true";
 		}
 	}

@@ -48,12 +48,11 @@ public class EventsController {
 	@RequestMapping(value = "/seller/saveEvent", method = RequestMethod.POST)
 	public ModelAndView saveEvents(HttpServletRequest request,@ModelAttribute("command") EventsBean eventsBean, BindingResult result){
 		
-		log.info("$$$ saveEvents Starts $$$");		
+		log.info("$$$ saveEvents Starts : EventsController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();		
 		List<NRnReturnCharges> chargeList=new ArrayList<NRnReturnCharges>();
 		Map<String, String[]> parameters = request.getParameterMap();		
 			
-		//System.out.println("Inside Events Controller : "+eventsBean.getChannelName());
-		
 		try {
 			if(eventsBean.getEventId() != 0){
 				eventsBean.setEventId(0);
@@ -87,6 +86,13 @@ public class EventsController {
 				}
 			}
 			
+			Partner partner=partnerService.getPartner(eventsBean.getChannelName(), helperClass.getSellerIdfromSession(request));
+			if(partner != null){
+				eventsBean.getNrnReturnConfig().setLocalList(partner.getNrnReturnConfig().getLocalList());
+				eventsBean.getNrnReturnConfig().setMetroList(partner.getNrnReturnConfig().getMetroList());
+				eventsBean.getNrnReturnConfig().setZonalList(partner.getNrnReturnConfig().getZonalList());
+				eventsBean.getNrnReturnConfig().setNationalList(partner.getNrnReturnConfig().getNationalList());
+			}
 			eventsBean.getNrnReturnConfig().setCharges(chargeList);
 			
 			try{
@@ -94,16 +100,22 @@ public class EventsController {
 				eventsBean.setCreatedDate(new Date());
 				Events events=ConverterClass.prepareEventsModel(eventsBean);
 				eventsService.addEvent(events, helperClass.getSellerIdfromSession(request));
+			}catch(CustomException ce){				
+				model.put("errorMessage", "You can not create Events during these Dates..... !!!");
+				model.put("errorTime", new Date());
+				return new ModelAndView("globalErorPage",model);
 			}catch(Exception e){
-				log.info("*** Exception In EventsDaoImpl ***");
+				log.debug("*** Exception In EventsDaoImpl ***");
 				e.printStackTrace();
+				log.error("Failed !",e);
 			}
 
 		} catch(Exception e){
 			e.printStackTrace();
+			log.error("Failed !",e);
 		}
 		
-		log.info("$$$ saveEvents Exit $$$");
+		log.info("$$$ saveEvents Ends : EventsController $$$");
 		return new ModelAndView("redirect:/seller/eventsList.html");
 		
 	}
@@ -111,7 +123,7 @@ public class EventsController {
 	@RequestMapping(value = "/seller/addEvent", method = RequestMethod.GET)
 	public ModelAndView addEvent(HttpServletRequest request, @ModelAttribute("command") EventsBean eventsBean, BindingResult result) {
 
-		log.info("$$$ addEvent Start $$$");
+		log.info("$$$ addEvents Starts : EventsController $$$");
 		Map<String,Float> chargeMap=new HashMap<String, Float>();
 		Map<String,Float> categoryMap=new HashMap<String, Float>();
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -132,28 +144,29 @@ public class EventsController {
 			model.put("partnerMap", partnerMap);
 			model.put("categoryMap", categoryMap);
 		} catch (Exception e) {
+			log.error("Failed !",e);
 			e.printStackTrace();
 		}		
-		log.info("$$$ addEvent Exit $$$");
+		log.info("$$$ addEvents Ends : EventsController $$$");
 		return new ModelAndView("miscellaneous/addEvent", model);
 	}
 	
 	@RequestMapping(value = "/seller/addDuplicateEvent", method = RequestMethod.GET)
 	public ModelAndView addDuplicateEvent(HttpServletRequest request, @ModelAttribute("command") EventsBean eventsBean, BindingResult result) {
 
-		log.info("$$$ addDuplicateEvent Start $$$");
+		log.info("$$$ addDuplicateEvent Starts : EventsController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String,Float> chargeMap=new HashMap<String, Float>();
 		Events event=null;
 		Map<String,Float> categoryMap=new HashMap<String, Float>();
 		eventsBean.setEventId(Integer.parseInt(request.getParameter("eventId")));
-		System.out.println("****************** Check : "+eventsBean.getEventId());
+		log.debug("***** Check : "+eventsBean.getEventId());
 		try {
 			if (eventsBean.getEventId() != 0) {
 				event = eventsService.getEvent(eventsBean.getEventId());
 				eventsBean=ConverterClass.prepareEventsBean(event);
 				model.put("eventsBean", eventsBean);
-				System.out.println("************ "+(eventsBean.getNrnReturnConfig().getNrCalculatorEvent()).toString());
+				log.debug("************ "+(eventsBean.getNrnReturnConfig().getNrCalculatorEvent()).toString());
 				for(NRnReturnCharges charge:eventsBean.getNrnReturnConfig().getCharges())
 				{
 					chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
@@ -175,9 +188,10 @@ public class EventsController {
 			model.put("categoryMap", categoryMap);
 			model.put("partnerMap", partnerMap);			
 		} catch (Exception e) {
+			log.error("Failed !",e);
 			e.printStackTrace();
 		}
-		log.info("$$$ addDuplicateEvent Exit $$$");
+		log.info("$$$ addDuplicateEvent Ends : EventsController $$$");
 		return new ModelAndView("miscellaneous/addEvent", model);
 	}
 	
@@ -185,8 +199,7 @@ public class EventsController {
 	@RequestMapping(value = "/seller/eventsList", method = RequestMethod.GET)
 	public ModelAndView eventsList(HttpServletRequest request, @ModelAttribute("command") EventsBean eventsBean, BindingResult result) {
 		
-		log.info("$$$ eventsList starts $$$");
-		System.out.println(" Inside eventList method");
+		log.info("$$$ eventsList Starts : EventsController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try { 
 			model.put("eventsList", ConverterClass
@@ -200,10 +213,10 @@ public class EventsController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}*/ catch (Exception e) {
-			log.error(e);
+			log.error("Failed !",e);
 			e.printStackTrace();
 		}
-		log.info("$$$ eventsList Exit $$$");
+		log.info("$$$ eventsList Ends : EventsController $$$");
 		return new ModelAndView("miscellaneous/eventsList", model);
 	}
 	
@@ -211,8 +224,8 @@ public class EventsController {
 	public @ResponseBody String checkEvent(HttpServletRequest request,
 			@ModelAttribute("command") EventsBean eventsBean,
 			BindingResult result) {
-		log.info("***checkEvent Start****");
 		
+		log.info("$$$ checkEvent Starts : EventsController $$$");
 		String eventName = request.getParameter("name");
 		try {
 			if (eventName != null && eventName.length() != 0) {
@@ -222,14 +235,15 @@ public class EventsController {
 				else
 					return "true";
 			}
-		} catch (CustomException ce) {
+		} catch (CustomException ce) {			
 			log.error("CheckEventsException: " + ce.toString());
 			return "false";
 		} catch (Throwable e) {
-			log.error(e);
+			log.error("Failed! ",e);
+			e.printStackTrace();
 			return "false";
 		}
-		log.info("***checkEvent Exit****");
+		log.info("$$$ checkEvent Ends : EventsController $$$");
 		return "false";
 	}
 

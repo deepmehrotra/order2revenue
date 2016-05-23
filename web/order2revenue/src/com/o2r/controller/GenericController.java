@@ -55,7 +55,8 @@ public class GenericController {
 
 	@RequestMapping(value = "/seller/orderindex", method = RequestMethod.GET)
 	public ModelAndView welcome(HttpServletRequest request) {
-		logger.info("nside order index");
+		
+		logger.info("$$$ welcome Starts : GenericController $$$");
 		logger.info("catalina.base : " + System.getProperty("catalina.base"));
 		Map<String, Object> model = new HashMap<String, Object>();
 		Seller seller = null;
@@ -69,18 +70,16 @@ public class GenericController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
-			logger.error(e);
+			e.printStackTrace();
+			logger.error("failed!",e);
 		}
 		if (seller != null) {
 			request.getSession().setAttribute("sellerId", seller.getId());
-
-			System.out.println(" Afterlogin"
-					+ request.getUserPrincipal().getName());
-			// return "landing";
-			logger.info("order index end");
+			logger.debug(" Afterlogin"+ request.getUserPrincipal().getName());
+			logger.info("$$$ welcome Ends : GenericController $$$");
 			return new ModelAndView("redirect:/seller/dashboard.html");
 		} else {
-			logger.info("order index end");
+			logger.info("$$$ welcome Ends : GenericController $$$");
 			return new ModelAndView("redirect:/login-form.html");
 		}
 
@@ -90,7 +89,8 @@ public class GenericController {
 	public ModelAndView displayDashboard(HttpServletRequest request,
 			@ModelAttribute("command") DashboardBean dashboardBean,
 			BindingResult result) {
-		logger.info("*** displayDashboard start ***");
+		
+		logger.info("$$$ displayDashboard Starts : GenericController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		DashboardBean dbean=null;
 		Seller seller=null;
@@ -107,63 +107,48 @@ public class GenericController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}catch(Exception e){
-			logger.error(e);
+			e.printStackTrace();
+			logger.error("Failed!",e);
 		}
-		logger.info("*** displayDashboard exit ***");
+		logger.info("$$$ displayDashboard Ends : GenericController $$$");
 		return new ModelAndView("landing", model);
 	}
 
 	@RequestMapping(value = "/seller/initialsetup", method = RequestMethod.GET)
 	public String initialsetup(HttpServletRequest request) {
-		System.out.println(" Inside initialsetup ");
-		/*
-		 * System.out.println(" Afterlogin"+request.getUserPrincipal().getName())
-		 * ;
-		 */
+		logger.debug(" Inside initialsetup ");
 		return "initialsetup/initialsetup";
 	}
 
 	@RequestMapping(value = "/seller/productInfo", method = RequestMethod.GET)
 	public String productInfo(HttpServletRequest request) {
-		System.out.println(" Inside productInfo ");
-		/*
-		 * System.out.println(" Afterlogin"+request.getUserPrincipal().getName())
-		 * ;
-		 */
+		logger.debug(" Inside productInfo ");
 		return "initialsetup/productInfo";
 	}
 
 	@RequestMapping(value = "/seller/partnerInfo", method = RequestMethod.GET)
 	public String partnerInfo(HttpServletRequest request) {
-		System.out.println(" Inside opartner info ");
-		/*
-		 * System.out.println(" Afterlogin"+request.getUserPrincipal().getName())
-		 * ;
-		 */
+		logger.debug(" Inside opartner info ");
 		return "initialsetup/partnerInfo";
 	}
 
 	@RequestMapping(value = "/seller/dailyactivities", method = RequestMethod.GET)
 	public String dailyactivities(HttpServletRequest request) {
-		System.out.println(" Inside initialsetup ");
-		/*
-		 * System.out.println(" Afterlogin"+request.getUserPrincipal().getName())
-		 * ;
-		 */
+		logger.debug(" Inside initialsetup ");
 		return "dailyactivities/dailyactivities";
 	}
 
 	@RequestMapping(value = "/login-form", method = RequestMethod.GET)
 	public String redirectlogin() {
-		System.out.println(" Inside login-form ");
-		
+		logger.debug(" Inside login-form ");		
 		return "login-form";
 	}
 
 	@RequestMapping(value = "/seller/findGlobalOrders", method = RequestMethod.POST)
 	public ModelAndView findGlobalOrders(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
-		logger.info("** findGlobalOrders Start ***");
+		
+		logger.info("$$$ findGlobalOrders Starts : GenericController $$$");
 		List<OrderBean> orderlist = null;
 		List<Order> temporaryorderlist = null;
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -187,7 +172,7 @@ public class GenericController {
 			orderlist = new ArrayList<OrderBean>();
 		}
 
-		System.out.println(" Values in global search header :searchCriteria : "
+		logger.debug(" Values in global search header :searchCriteria : "
 				+ searchCriteria + "  -->searchString : " + searchString + " "
 				+ "startDate : " + startDate + " endDate  " + endDate);
 
@@ -200,7 +185,7 @@ public class GenericController {
 						.prepareListofBean(orderService.findOrdersbyCustomerDetails(
 								searchCriteria, searchString,sellerId));
 			}else{
-				orderlist = ConverterClass.prepareListofBean(orderService.findOrders(searchCriteria, searchString, sellerId, false));
+				orderlist = ConverterClass.prepareListofBean(orderService.findOrders(searchCriteria, searchString, sellerId, false,true));
 			}
 		}else{	
 			if(searchCriteria.equalsIgnoreCase("dateofPayment") && startDate != null && endDate != null){
@@ -222,17 +207,17 @@ public class GenericController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}catch (Exception e) {
-			logger.error(e);
-			logger.info("Error :",e);
+			e.printStackTrace();
+			logger.error("Failed!",e);
 		}
-		logger.info("*** findGlobalOrders exit ***");
+		logger.info("$$$ findGlobalOrders Ends : GenericController $$$");
 		return new ModelAndView("globalOrderSearch", model);
 	}
 
 	@RequestMapping(value = "/userquery", method = RequestMethod.POST)
 	public @ResponseBody String saveQuery(HttpServletRequest request) {
 
-		logger.info("nside saveQuery");
+		logger.info("$$$ saveQuery Starts : GenericController $$$");
 		String email = request.getParameter("email");
 		String name = request.getParameter("name");
 		String query = request.getParameter("query");
@@ -245,15 +230,14 @@ public class GenericController {
 				if (query != null)
 					gq.setQueryText(query);
 				gq.setQueryTime(new Date());
-
 				adminService.addQuery(gq);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e);
+			logger.error("Failed!",e);
 			return "false";
 		}
-		logger.info("exit saveQuery");
+		logger.info("$$$ saveQuery Ends : GenericController $$$");
 		return "true";
 	}
 }

@@ -913,7 +913,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public List<Order> findOrders(String column, String value, int sellerId,
-			boolean poOrder) throws CustomException {
+			boolean poOrder,boolean isSearch) throws CustomException {
 		
 		log.info("*** findOrders starts : OrderDaoImpl ***");
 		String searchString = "order." + column;
@@ -944,16 +944,23 @@ public class OrderDaoImpl implements OrderDao {
 				}
 				return orderlist;				
 			}else{
+				
 				criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
-				criteria.createAlias("orders", "order",CriteriaSpecification.LEFT_JOIN)
-						.add(Restrictions.like(searchString, value+"%").ignoreCase())
-						.add(Restrictions.eq("order.poOrder", poOrder))
+				criteria.createAlias("orders", "order",CriteriaSpecification.LEFT_JOIN);
+				if(isSearch == true){
+					criteria.add(Restrictions.like(searchString, value+"%").ignoreCase());
+				}else{
+					criteria.add(Restrictions.eq(searchString, value));
+				}
+				criteria.add(Restrictions.eq("order.poOrder", poOrder))
 						.addOrder(org.hibernate.criterion.Order.desc("order.lastActivityOnOrder"))
 						.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-
+				
 				if (poOrder)
 					criteria.add(Restrictions.eq("order.consolidatedOrder",
 							null));
+				
+				
 			}
 			if (criteria.list().size() != 0) {
 				seller = (Seller) criteria.list().get(0);

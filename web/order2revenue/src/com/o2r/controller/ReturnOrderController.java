@@ -61,9 +61,11 @@ public class ReturnOrderController {
 	@RequestMapping(value = "/seller/returnOrderList", method = RequestMethod.GET)
 	public ModelAndView returnOrRTOlist() {
 
+		log.info("$$$ returnOrRTOlist Starts : ReturnOrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		System.out.println(" Inside return or Rto list");
 		model.put("order", new OrderBean());
+		log.info("$$$ returnOrRTOlist Ends : ReturnOrderController $$$");
 		return new ModelAndView("dailyactivities/returnOrRTOList", model);
 	}
 
@@ -71,9 +73,9 @@ public class ReturnOrderController {
 	public ModelAndView saveReturnOrder(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
+		log.info("$$$ saveReturnOrder Starts : ReturnOrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		int sellerId;
-		System.out.println("Inside expense category Ssave");
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			orderService.addReturnOrder(orderBean.getChannelOrderID(),
@@ -86,14 +88,18 @@ public class ReturnOrderController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
+		log.info("$$$ saveReturnOrder Ends : ReturnOrderController $$$");
 		return new ModelAndView("redirect:/seller/returnOrRTOlist.html");
 	}
 
 	@RequestMapping(value = "/seller/searchReturnOrder", method = RequestMethod.POST)
 	public ModelAndView searchReturnOrder(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
+		
+		log.info("$$$ searchReturnOrder Starts : ReturnOrderController $$$");
 		OrderRTOorReturn orderReturn = null;
 		List<OrderBean> orderlist = null;
 		List<Order> temporaryorderlist = null;
@@ -120,11 +126,10 @@ public class ReturnOrderController {
 				}
 
 				else {
-					System.out.println(" Inside search find orders");
 					orderlist = ConverterClass
 							.prepareListofBean(orderService.findOrders(
 									searchColumn, searchString,
-									helperClass.getSellerIdfromSession(request), false));
+									helperClass.getSellerIdfromSession(request), false,true));
 				}
 			} else {
 				orderlist = new ArrayList<OrderBean>();
@@ -154,18 +159,11 @@ public class ReturnOrderController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
-
-		/*
-		 * System.out.println(" Getting value from request :  action  :" +
-		 * action + "  searchColumn :" + searchColumn + "searchString : " +
-		 * searchString + " searchType :" + searchType +
-		 * " searchDateCriteria : " + searchDateCriteria + " startdate :" +
-		 * request.getParameter("startDate") + " enddate :" +
-		 * request.getParameter("endDate"));
-		 */
 		model.put("searchOrderList", orderlist);
+		log.info("$$$ searchReturnOrder Ends : ReturnOrderController $$$");
 		return new ModelAndView("dailyactivities/returnOrderTable", model);
 	}
 
@@ -178,11 +176,12 @@ public class ReturnOrderController {
 	public ModelAndView saveReturnorRTO(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
+		log.info("$$$ saveReturnorRTO Starts : ReturnOrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<OrderBean> orderlist = null;
-		System.out.println("Inside savereturn order : channelordrid : "
+		log.debug("Inside savereturn order : channelordrid : "
 				+ orderBean.getChannelOrderID());
-		System.out.println(" orderid : "
+		log.debug(" orderid : "
 				+ orderBean.getOrderId()
 				+ " return id : "
 				+ orderBean.getOrderReturnOrRTO().getReturnOrRTOId()
@@ -208,11 +207,9 @@ public class ReturnOrderController {
 		} catch (Throwable e) {
 			log.error(e);
 		}
-		System.out.println(" Returnorders list : " + orderlist);
-		// model.put("orders",
-		// ConverterClass.prepareListofBean(orderService.listOrders(helperClass.getSellerIdfromSession(request),0)));
-		return new ModelAndView("redirect:/seller/orderList.html?savedOrder="
-				+ orderBean.getChannelOrderID());
+		log.debug(" Returnorders list : " + orderlist);
+		log.info("$$$ saveReturnorRTO Ends : ReturnOrderController $$$");
+		return new ModelAndView("redirect:/seller/orderList.html?savedOrder="+ orderBean.getChannelOrderID());
 	}
 
 	/*
@@ -222,13 +219,12 @@ public class ReturnOrderController {
 	@RequestMapping(value = "/seller/findOrderDA", method = RequestMethod.POST)
 	public @ResponseBody String findOrderDA(HttpServletRequest request) {
 
+		log.info("$$$ findOrderDA Starts : ReturnOrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		// Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
 		gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer());
 		Gson gson = gsonBuilder.setPrettyPrinting().create();
-		System.out.println(" Inside find order method controller");
 		List<OrderBean> orderlist = null;
 		List<Order> temporaryorderlist = null;
 		Order order = null;
@@ -240,14 +236,14 @@ public class ReturnOrderController {
 		String searchDateCriteria = request.getParameter("searchDateCriteria");
 		String action = request.getParameter("action");
 
-		System.out.println(" Getting value from request :  action  :" + action
+		log.debug(" Getting value from request :  action  :" + action
 				+ "  searchColumn :" + searchColumn + "searchString : "
 				+ searchString + " searchType :" + searchType
 				+ " searchDateCriteria : " + searchDateCriteria
 				+ " startdate :" + request.getParameter("startDate")
 				+ " enddate :" + request.getParameter("endDate"));
 
-		System.out.println("*** Returnid  : "
+		log.debug("*** Returnid  : "
 				+ request.getParameter("returnId"));
 
 		try {
@@ -271,12 +267,11 @@ public class ReturnOrderController {
 					}
 
 					else {
-						System.out.println(" Inside search find orders");
 						orderlist = new ArrayList<OrderBean>();
 						temporaryorderlist = new ArrayList<Order>();
 						temporaryorderlist = orderService.findOrders(
 								searchColumn, searchString,
-								helperClass.getSellerIdfromSession(request), false);
+								helperClass.getSellerIdfromSession(request), false,true);
 						if (temporaryorderlist != null) {
 							for (Order ordertemp : temporaryorderlist) {
 								if (ordertemp.getOrderReturnOrRTO()
@@ -295,7 +290,7 @@ public class ReturnOrderController {
 							}
 						}
 						if (orderlist.size() != 0)
-							System.out.println("  Got order in controller : "
+							log.debug("  Got order in controller : "
 									+ orderlist.size());
 
 					}
@@ -339,7 +334,7 @@ public class ReturnOrderController {
 									.prepareOrderBean(ordertemp));
 						}
 					}
-					System.out.println("  temporaryorderlist  size :"
+					log.debug("  temporaryorderlist  size :"
 							+ temporaryorderlist.size());
 					if (temporaryorderlist != null
 							&& temporaryorderlist.size() != 0)
@@ -369,12 +364,10 @@ public class ReturnOrderController {
 						+ ">>returnOrRTOCharges :" + returnOrRTOCharges
 						+ "returnorrtoQty :" + returnorrtoQty
 						+ " returnOrRTOreason " + returnOrRTOreason);
-				// String returnDate=request.getParameter("returnDate");
 				order = new Order();
 				orderlist = new ArrayList<OrderBean>();
 				orderReturn = new OrderRTOorReturn();
 				if (returnId != null)
-					// orderReturn.setReturnId(Integer.parseInt(returnId));
 					if (orderId != null && StringUtils.isNotEmpty(orderId)) {
 						order.setOrderId(Integer.parseInt(orderId));
 					}
@@ -411,17 +404,16 @@ public class ReturnOrderController {
 					orderReturn.setReturnOrRTOstatus(returnOrRTOstatus);
 				}
 				order.setOrderReturnOrRTO(orderReturn);
-				System.out.println("set order");
+				log.debug("set order");
 				orderService.addReturnOrder(channelOrderID,
 						order.getOrderReturnOrRTO(), sellerId);
 				Order temp = orderService.getOrder(order.getOrderId());
-				System.out.println(" return id :"
+				log.debug(" return id :"
 						+ temp.getOrderReturnOrRTO().getReturnId());
-				System.out.println(" return reason  :"
+				log.debug(" return reason  :"
 						+ temp.getOrderReturnOrRTO().getReturnOrRTOreason());
-				System.out.println(" return user id :"
+				log.debug(" return user id :"
 						+ temp.getOrderReturnOrRTO().getReturnOrRTOId());
-				// orderlist.add(ConverterClass.prepareOrderBean(order));
 				orderlist.add(ConverterClass.prepareOrderBean(orderService
 						.getOrder(order.getOrderId())));
 
@@ -434,26 +426,22 @@ public class ReturnOrderController {
 		} catch (CustomException ce) {
 			log.error("findOrderDA exception : " + ce.toString());
 			model.put("Error", ce.getLocalizedMessage());
-			// return new ModelAndView("globalErorPage", model);
 			String errors = gson.toJson(model);
 			return errors;
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 		model.put("Result", "OK");
 		model.put("Records", orderlist);
 
 		// Convert Java Object to Json
 		String jsonArray = gson.toJson(model);
+		
+		log.info("$$$ findOrderDA Ends : ReturnOrderController $$$");
 		return jsonArray;
 	}
-
-	/**
-	 * Downloads the report as an Excel format.
-	 * <p>
-	 * Make sure this method doesn't return any model. Otherwise, you'll get an
-	 * "IllegalStateException: getOutputStream() has already been called for this response"
-	 */
+	
 	@RequestMapping(value = "/seller/download/Returnxls", method = RequestMethod.GET)
 	public void getXLS(HttpServletResponse response)
 			throws ClassNotFoundException {
@@ -472,34 +460,33 @@ public class ReturnOrderController {
 	@RequestMapping(value = "/seller/saveReturnSheet", method = RequestMethod.POST)
 	public String save(HttpServletRequest request,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
-		System.out.println("Inside save method");
-		// gets absolute path of the web application
+		
+		log.info("$$$ save() Starts : ReturnOrderController $$$");
 		String applicationPath = request.getServletContext().getRealPath("");
 
 		List<MultipartFile> files = uploadForm.getFiles();
 		List<String> fileNames = new ArrayList<String>();
 		MultipartFile fileinput = files.get(0);
 		int sellerId;
-		System.out.println(" got file");
 		if (null != files && files.size() > 0) {
 			fileNames.add(files.get(0).getOriginalFilename());
 			try {
 				sellerId = helperClass.getSellerIdfromSession(request);
-				System.out.println(" Filename : "
+				log.debug(" Filename : "
 						+ files.get(0).getOriginalFilename());
-				System.out.println(" Filename : " + files.get(0).getName());
+				log.debug(" Filename : " + files.get(0).getName());
 				ValidateUpload.validateOfficeData(files.get(0));
-				System.out.println(" fileinput " + fileinput.getName());
+				log.debug(" fileinput " + fileinput.getName());
 				saveContents.saveOrderReturnDetails(files.get(0), sellerId,
 						applicationPath);
 			} catch (Exception e) {
-				System.out.println("Inside exception , filetype not accepted "
+				e.printStackTrace();
+				log.error("Failed!",e);
+				log.debug("Inside exception , filetype not accepted "
 						+ e.getLocalizedMessage());
-
 			}
-
 		}
-
+		log.info("$$$ save() Ends : ReturnOrderController $$$");
 		return "returnUploadSuccess";
 
 	}

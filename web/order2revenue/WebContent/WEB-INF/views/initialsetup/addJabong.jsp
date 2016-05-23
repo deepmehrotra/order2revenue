@@ -389,26 +389,7 @@ span .#error {
                     }	    
     	 }
 
-        /* $(document).ready(function(){
-
-            $("[name=toggler]").click(function(){
-				
-                var x=this.id;
-                if(!(x>=1 &&  x<=10))
-                $('.radio1').hide();
-
-                $("#blk-"+ x).slideDown();
-                 for(var a=0;a<10;a++){
-                    if(a != x){
-                        $("#blk-"+a).slideUp();                    
-                    }else{
-                        $("#blk-"+a).slideDown();
-                    }
-                 }
-                    
-            }); */
-
- </script>
+    </script>
 
 	<script type="text/javascript">
     div = {

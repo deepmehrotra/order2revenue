@@ -35,7 +35,7 @@ public interface OrderDao {
 	public void deleteReturnInfo(String orderId) throws CustomException;
 
 	public List<Order> findOrders(String column, String value, int sellerId,
-			boolean poOrder) throws CustomException;
+			boolean poOrder, boolean isSearch) throws CustomException;
 
 	public List<Order> findOrdersbyDate(String column, Date startDate,
 			Date endDate, int sellerId) throws CustomException;

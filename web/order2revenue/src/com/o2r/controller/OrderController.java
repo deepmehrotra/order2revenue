@@ -91,9 +91,8 @@ public class OrderController {
 			@RequestParam(value = "sheetvalue") String sheetvalue)
 			throws ClassNotFoundException {
 
-		// Delegate to downloadService. Make sure to pass an instance of
-		// HttpServletResponse
-		System.out.println(" Downloading the sheet: " + sheetvalue);
+		log.info("$$$ getXLS Starts : OrderController $$$");
+		log.debug(" Downloading the sheet: " + sheetvalue);
 		if (sheetvalue != null) {
 			if (sheetvalue.equals("ordersummary")) {
 				downloadService.downloadXLS(response);
@@ -119,59 +118,51 @@ public class OrderController {
 				downloadService.downloadExpensesXLS(response);
 			}
 		}
+		log.info("$$$ getXLS Ends : OrderController $$$");
 	}
-
-	/**
-	 * Redirect to upload download page.
-	 * <p>
-	 */
-	/*
-	 * @RequestMapping(value = "/seller/ordersheet", method = RequestMethod.GET)
-	 * public String displayForm() {
-	 * 
-	 * return "file_upload_form"; }
-	 */
 
 	@RequestMapping(value = "/seller/downloadOrderDA", method = RequestMethod.GET)
 	public ModelAndView displayDownloadForm(
 			@RequestParam("value") String value,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
+		
+		log.info("$$$ displayDownloadForm Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		System.out.println("Inside download orders  viewpayments uploadId"
-				+ value);
+		log.debug("Inside download orders  viewpayments uploadId"+ value);
 		model.put("downloadValue", value);
-
+		log.info("$$$ displayDownloadForm Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/order_upload_form", model);
 	}
 
 	@RequestMapping(value = "/seller/uploadOrderDA", method = RequestMethod.GET)
 	public ModelAndView displayUploadForm(@RequestParam("value") String value,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
-
-		Map<String, Object> model = new HashMap<String, Object>();
-		System.out.println("Inside Payment orders  viewpayments uploadId"
-				+ value);
-		model.put("uploadValue", value);
-
+		
+		log.info("$$$ displayUploadForm Starts : OrderController $$$");
+			Map<String, Object> model = new HashMap<String, Object>();
+			System.out.println("Inside Payment orders  viewpayments uploadId"+ value);
+			model.put("uploadValue", value);
+		log.info("$$$ displayUploadForm Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/order_upload_form", model);
 	}
 
 	@RequestMapping(value = "/user-login", method = RequestMethod.GET)
 	public ModelAndView loginForm() {
-
-		System.out.println("catalina.base  "
-				+ System.getProperty("catalina.base"));
+		
+		log.info("$$$ loginForm Starts : OrderController $$$");
+		log.debug("catalina.base  "+ System.getProperty("catalina.base"));
 
 		try {
 			org.springframework.core.io.Resource resource = new ClassPathResource(
 					"database.properties");
 			Properties props = PropertiesLoaderUtils.loadProperties(resource);
-			System.out.println("dialect in order controller : "
+			log.debug("dialect in order controller : "
 					+ props.getProperty("hibernate.dialect"));
 		} catch (IOException e) {
-
 			e.printStackTrace();
+			log.error("Failed!",e);
 		}
+		log.info("$$$ loginForm Ends : OrderController $$$");
 		return new ModelAndView("login-form");
 	}
 
@@ -186,17 +177,14 @@ public class OrderController {
 	@SuppressWarnings("rawtypes")
 	public ModelAndView save(HttpServletRequest request,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
-
+		
+		log.info("$$$ save() Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		System.out.println("Inside save method");
 		double starttime = System.currentTimeMillis();
-		System.out.println(" **StartTime : " + starttime);
+		log.debug(" **StartTime : " + starttime);
 		List<MultipartFile> files = uploadForm.getFiles();
 		InputStream inputStream = null;
-		OutputStream outputStream = null;
-		// Map<String ,Object> errorMap =null;
-		// model.put("orders",
-		// ConverterClass.prepareListofBean(orderService.listOrders(4)));
+		OutputStream outputStream = null;		
 		List<String> fileNames = new ArrayList<String>();
 		MultipartFile fileinput = files.get(0);
 		int sellerId;
@@ -209,15 +197,13 @@ public class OrderController {
 			fileNames.add(files.get(0).getOriginalFilename());
 			try {
 				sellerId = helperClass.getSellerIdfromSession(request);
-				System.out.println(" Filename : "
-						+ files.get(0).getOriginalFilename());
-				System.out.println(" uploadForm.getSheetValue() : "
-						+ uploadForm.getSheetValue());
+				log.debug(" Filename : "+ files.get(0).getOriginalFilename());
+				log.debug(" uploadForm.getSheetValue() : "	+ uploadForm.getSheetValue());
 
-				ValidateUpload.validateOfficeData(files.get(0));
+				//ValidateUpload.validateOfficeData(files.get(0));
 
 				Map orderProcessedMap = null;
-				System.out.println(" fileinput " + fileinput.getName());
+				log.debug("fileinput " + fileinput.getName());
 				switch (uploadForm.getSheetValue()) {
 				case "ordersummary":
 					orderProcessedMap = saveContents.saveOrderContents(
@@ -232,21 +218,16 @@ public class OrderController {
 								.println("No Orders processed, so not updating the totalProcessedOrder");
 					model.put("orderMap", orderProcessedMap);
 					model.put("mapType", "orderMap");
-					// saveContents.saveOrderContents(files.get(0),sellerId);
 					break;
 				case "orderPoSummary":
 					orderProcessedMap = saveContents.saveOrderPOContents(
 							files.get(0), sellerId, applicationPath);
-					if (orderProcessedMap != null
-							&& !orderProcessedMap.isEmpty())
-						serviceService.updateProcessedOrdersCount(sellerId,
-								orderProcessedMap.size());
+					if (orderProcessedMap != null && !orderProcessedMap.isEmpty())
+						serviceService.updateProcessedOrdersCount(sellerId, orderProcessedMap.size());
 					else
-						System.out
-								.println("No Orders processed, so not updating the totalProcessedOrder");
+						log.debug("No Orders processed, so not updating the totalProcessedOrder");
 					model.put("orderPoMap", orderProcessedMap);
 					model.put("mapType", "orderPoMap");
-					// saveContents.saveOrderPOContents(files.get(0),sellerId);
 					break;
 				case "gatepassSummary":
 					model.put("gatepassMap", saveContents.saveGatePassDetails(
@@ -258,7 +239,6 @@ public class OrderController {
 							.savePaymentContents(files.get(0), sellerId,
 									applicationPath));
 					model.put("mapType", "orderPaymentMap");
-					// saveContents.savePaymentContents(files.get(0),sellerId);
 					break;
 				case "returnSummary":
 					model.put("orderReturnMap", saveContents
@@ -270,30 +250,25 @@ public class OrderController {
 					model.put("productMap", saveContents.saveProductContents(
 							files.get(0), sellerId, applicationPath));
 					model.put("mapType", "productMap");
-					// saveContents.saveProductContents(files.get(0),sellerId);
 					break;
 				case "productConfigSummary":
 					model.put("productMap", saveContents
 							.saveProductConfigContents(files.get(0), sellerId,
 									applicationPath));
 					model.put("mapType", "productMap");
-					// saveContents.saveProductContents(files.get(0),sellerId);
 					break;
 				case "inventorySummary":
 					model.put("inventoryMap", saveContents
 							.saveInventoryDetails(files.get(0), sellerId,
 									applicationPath));
 					model.put("mapType", "inventoryMap");
-					// saveContents.saveInventoryDetails(files.get(0),sellerId);
 					break;
 				case "debitNoteSummary":
-					// model.put("debitNotetMap",saveContents.saveInventoryDetails(files.get(0),sellerId));
 					saveContents.saveDebitNoteDetails(files.get(0), sellerId,
 							applicationPath);
 					model.put("mapType", "debitNoteSummary");
 					break;
 				case "poPaymentSummary":
-					// model.put("poPaymentMap",saveContents.saveInventoryDetails(files.get(0),sellerId));
 					saveContents.savePoPaymentDetails(files.get(0), sellerId,
 							applicationPath);
 					model.put("mapType", "poPaymentSummary");
@@ -302,29 +277,20 @@ public class OrderController {
 					model.put("expensesMap", saveContents.saveExpenseDetails(
 							files.get(0), sellerId, applicationPath));
 					model.put("mapType", "expensesMap");
-					// saveContents.saveExpenseDetails(files.get(0),sellerId);
 					break;
 
 				}
 				inputStream = files.get(0).getInputStream();
-
-				/*
-				 * // gets absolute path of the web application String
-				 * applicationPath = request.getServletContext()
-				 * .getRealPath("");
-				 */
-				// constructs path of the directory to save uploaded file
 				String uploadFilePath = applicationPath + File.separator
 						+ UPLOAD_DIR;
-				System.out.println("***** Application path  : "
+				log.debug("***** Application path  : "
 						+ applicationPath + "  file xontent type : "
 						+ files.get(0).getContentType());
-				System.out.println("***** uploadFilePath path  : "
+				log.debug("***** uploadFilePath path  : "
 						+ uploadFilePath);
-				// creates the save directory if it does not exists
 				File fileSaveDir = new File(uploadFilePath);
 				if (!fileSaveDir.exists()) {
-					System.out.println(" Directory doesnnt exist");
+					log.debug(" Directory doesnnt exist");
 					fileSaveDir.mkdirs();
 				}
 				outputStream = new FileOutputStream(fileSaveDir
@@ -345,16 +311,14 @@ public class OrderController {
 				double lapsetime = (endtime - starttime) / 1000;
 				model.put("fileName", files.get(0).getOriginalFilename());
 				model.put("timeTaken", lapsetime);
-				// saveContents.saveOrderContents(files.get(0),sellerId);
 			} catch (Exception e) {
-				System.out.println("Inside exception , filetype not accepted "
-						+ e.getLocalizedMessage());
+				log.debug("Inside exception , filetype not accepted "+ e.getLocalizedMessage());
 				e.printStackTrace();
-
+				log.error("Failed !",e);
 			}
 
 		}
-
+		log.info("$$$ save() Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/uploadResults", model);
 
 	}
@@ -364,11 +328,10 @@ public class OrderController {
 	public ModelAndView searchOrder(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
+		log.info("$$$ searchOrder() Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		System.out.println("Inside list products ");
 		List<OrderBean> orderList = new ArrayList<>();
 		int sellerId;
-		// ProductBean product = null;
 		String channelOrderID = request.getParameter("channelOrderID");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
@@ -380,7 +343,7 @@ public class OrderController {
 					&& channelOrderID != null) {
 				orderList = ConverterClass.prepareListofBean(orderService
 						.findOrders("channelOrderID", channelOrderID, sellerId,
-								false));
+								false,true));
 			} else if (searchOrder != null && startDate != null
 					&& endDate != null) {
 				orderList = ConverterClass.prepareListofBean(orderService
@@ -395,10 +358,11 @@ public class OrderController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed",e);
 		}
 		request.getSession().setAttribute("orderSearchObject", orderList);
-		// model.put("productList", productList);
+		log.info("$$$ searchOrder() Ends : OrderController $$$");
 		return new ModelAndView("redirect:/seller/orderList.html");
 
 	}
@@ -407,6 +371,7 @@ public class OrderController {
 	public ModelAndView poOrderList(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
+		log.info("$$$ poOrderList Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		String savedOrder = request.getParameter("savedOrder");
 		List<OrderBean> returnlist = new ArrayList<OrderBean>();
@@ -424,41 +389,41 @@ public class OrderController {
 				if (status.equalsIgnoreCase("return")) {
 					returnlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Return Recieved", sellerId,
-									false));
+									false,false));
 					returnlist.addAll(ConverterClass
 							.prepareListofBean(orderService.findOrders(
 									"status", "Return Limit Crossed", sellerId,
-									false)));
+									false,false)));
 					model.put("orders", returnlist);
 
 					poOrderlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Return Recieved", sellerId,
-									true));
+									true,false));
 					model.put("poOrders", poOrderlist);
 
 				} else if (status.equalsIgnoreCase("payment")) {
 					returnlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Payment Recieved", sellerId,
-									false));
+									false,false));
 					returnlist.addAll(ConverterClass
 							.prepareListofBean(orderService.findOrders(
 									"status", "Payment Deducted", sellerId,
-									false)));
+									false,false)));
 					model.put("orders", returnlist);
 
 					poOrderlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Payment Recieved", sellerId,
-									true));
+									true,false));
 					model.put("poOrders", poOrderlist);
 				} else if (status.equalsIgnoreCase("actionable")) {
 					returnlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("finalStatus", "Actionable", sellerId,
-									false));
+									false,false));
 					model.put("orders", returnlist);
 
 					poOrderlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("finalStatus", "Actionable", sellerId,
-									true));
+									true,false));
 					model.put("poOrders", poOrderlist);
 				}
 			} else {
@@ -481,10 +446,13 @@ public class OrderController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
+			e.printStackTrace();
 			log.error(e);
 		}
 		if (savedOrder != null)
 			model.put("savedOrder", savedOrder);
+		
+		log.info("$$$ poOrderList Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/poorderlist", model);
 	}
 
@@ -492,6 +460,7 @@ public class OrderController {
 	public ModelAndView orderListDailyAct(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
+		log.info("$$$ orderListDailyAct Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		String savedOrder = request.getParameter("savedOrder");
 		List<OrderBean> returnlist = new ArrayList<OrderBean>();
@@ -501,7 +470,7 @@ public class OrderController {
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			if (obj != null) {
-				System.out.println(" Getting list from session" + obj);
+				log.debug(" Getting list from session" + obj);
 				model.put("orders", obj);
 				request.getSession().removeAttribute("orderSearchObject");
 			} else if (request.getParameter("status") != null) {
@@ -509,41 +478,41 @@ public class OrderController {
 				if (status.equalsIgnoreCase("return")) {
 					returnlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Return Recieved", sellerId,
-									false));
+									false,false));
 					returnlist.addAll(ConverterClass
 							.prepareListofBean(orderService.findOrders(
 									"status", "Return Limit Crossed", sellerId,
-									false)));
+									false,false)));
 					model.put("orders", returnlist);
 
 					poOrderlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Return Recieved", sellerId,
-									true));
+									true,false));
 					model.put("poOrders", poOrderlist);
 
 				} else if (status.equalsIgnoreCase("payment")) {
 					returnlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Payment Recieved", sellerId,
-									false));
+									false,false));
 					returnlist.addAll(ConverterClass
 							.prepareListofBean(orderService.findOrders(
 									"status", "Payment Deducted", sellerId,
-									false)));
+									false,false)));
 					model.put("orders", returnlist);
 
 					poOrderlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Payment Recieved", sellerId,
-									true));
+									true,false));
 					model.put("poOrders", poOrderlist);
 				} else if (status.equalsIgnoreCase("actionable")) {
 					returnlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("finalStatus", "Actionable", sellerId,
-									false));
+									false,false));
 					model.put("orders", returnlist);
 
 					poOrderlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("finalStatus", "Actionable", sellerId,
-									true));
+									true,false));
 					model.put("poOrders", poOrderlist);
 				}
 			} else {
@@ -567,10 +536,13 @@ public class OrderController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 		if (savedOrder != null)
 			model.put("savedOrder", savedOrder);
+		
+		log.info("$$$ orderListDailyAct Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/orderList", model);
 	}
 
@@ -578,6 +550,7 @@ public class OrderController {
 	public ModelAndView viewOrderDailyAct(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
+		log.info("$$$ viewOrderDailyAct Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		int sellerId;
 		Product product = null;
@@ -587,7 +560,7 @@ public class OrderController {
 					sellerId);
 			product = productService.getProduct(order.getProductSkuCode(),
 					sellerId);
-			System.out.println(" Payment difference :"
+			log.debug(" Payment difference :"
 					+ order.getOrderPayment().getPaymentDifference());
 			model.put("order", ConverterClass.prepareOrderBean(order));
 		} catch (CustomException ce) {
@@ -597,10 +570,13 @@ public class OrderController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 		if (product != null)
 			model.put("productCost", product.getProductPrice());
+		
+		log.info("$$$ viewOrderDailyAct Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/viewOrder", model);
 	}
 
@@ -608,6 +584,7 @@ public class OrderController {
 	public ModelAndView viewPOOrderDailyAct(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
+		log.info("$$$ viewPOOrderDailyAct Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		int sellerId;
 		try {
@@ -626,8 +603,10 @@ public class OrderController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
+		log.info("$$$ viewPOOrderDailyAct Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/viewPOOrder", model);
 	}
 
@@ -635,6 +614,7 @@ public class OrderController {
 	public ModelAndView editOrderDA(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
+		log.info("$$$ editOrderDA Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			model.put("order", ConverterClass.prepareOrderBean(orderService
@@ -648,16 +628,19 @@ public class OrderController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
+		log.info("$$$ editOrderDA Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/editOrder", model);
 	}
 
 	@RequestMapping(value = "/seller/deleteOrderDA", method = RequestMethod.GET)
 	public ModelAndView deleteOrderDA(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
-		System.out
-				.println(" Order bean id todelete :" + orderBean.getOrderId());
+		
+		log.info("$$$ deleteOrderDA Starts : OrderController $$$");
+		log.debug(" Order bean id todelete :" + orderBean.getOrderId());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			orderService.deleteOrder(ConverterClass.prepareModel(orderBean),
@@ -672,9 +655,11 @@ public class OrderController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
-
+		
+		log.info("$$$ deleteOrderDA Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/addOrder", model);
 	}
 
@@ -682,11 +667,7 @@ public class OrderController {
 	public ModelAndView saveOrderDA(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
-		log.info("*** saveOrderDA starts ***");
-		/*
-		 * System.out.println("Inside order Ssave");
-		 * System.out.println(" Order id :" + orderBean.getOrderId());
-		 */
+		log.info("$$$ saveOrderDA Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		try {
@@ -700,10 +681,11 @@ public class OrderController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 
-		log.info("*** saveOrderDA exit ***");
+		log.info("$$$ saveOrderDA Ends : OrderController $$$");
 		return new ModelAndView("redirect:/seller/orderList.html?savedOrder="
 				+ orderBean.getChannelOrderID());
 
@@ -713,7 +695,7 @@ public class OrderController {
 	public ModelAndView addOrderDA(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
-		log.info("***addOrderDA Start***");
+		log.info("$$$ addOrderDA Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			List<Partner> partnerlist = partnerService.listPartners(helperClass
@@ -756,12 +738,12 @@ public class OrderController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 			model.put("errorMessage", e.getCause());
 			return new ModelAndView("globalErorPage", model);
 		}
-		// model.put("orders",
-		// ConverterClass.prepareListofBean(orderService.listOrders(4)));
+		log.info("$$$ addOrderDA Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/addOrder", model);
 	}
 
@@ -770,25 +752,28 @@ public class OrderController {
 	public @ResponseBody String getCheckPartner(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean,
 			BindingResult result, Model model) {
+		
+		log.info("$$$ getCheckPartner Starts : OrderController $$$");
 		Map<String, Object> mode = new HashMap<String, Object>();
-		/* System.out.println(request.getParameter("id")); */
 		List parner = new ArrayList();
 		try {
 			parner = orderService.findOrders("channelOrderID",
 					request.getParameter("id"),
-					helperClass.getSellerIdfromSession(request), false);
+					helperClass.getSellerIdfromSession(request), false,false);
 		} catch (CustomException ce) {
 			log.error("addOrderDA exception : " + ce.toString());
 			mode.put("error", ce.getLocalMessage());
 			String errors = gson.toJson(mode);
 			return errors;
-			// return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 		if (parner != null && parner.size() != 0 && parner.get(0) != null) {
+			log.info("$$$ getCheckPartner Ends : OrderController $$$");
 			return "<font color='red'>Order ID Not available</font>";
 		} else {
+			log.info("$$$ getCheckPartner Ends : OrderController $$$");
 			return "<font color='green'>Order ID Available</font>";
 		}
 	}
@@ -797,6 +782,7 @@ public class OrderController {
 	public ModelAndView gatepasslistDA(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
+		log.info("$$$ gatepasslistDA Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			int pageNo = request.getParameter("page") != null ? Integer
@@ -807,15 +793,16 @@ public class OrderController {
 					ConverterClass.prepareListofBean(orderService.listGatePasses(
 							helperClass.getSellerIdfromSession(request), pageNo)));
 		} catch (CustomException ce) {
-			ce.printStackTrace();
 			log.error("orderListDailyAct exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
+		log.info("$$$ gatepasslistDA Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/gatepasslist", model);
 	}
 }

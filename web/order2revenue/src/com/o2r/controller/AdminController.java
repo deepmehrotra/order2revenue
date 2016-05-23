@@ -33,19 +33,15 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 
-	/*
-	 * @RequestMapping public ModelAndView saveEmployeeeee() {
-	 * System.out.println("Inside save"); return new ModelAndView("index"); }
-	 */
 	static Logger log = Logger.getLogger(AdminController.class.getName());
 
 	@RequestMapping(value = "/seller/save", method = RequestMethod.POST)
 	public ModelAndView saveEmployee(
 			@ModelAttribute("command") EmployeeBean employeeBean,
 			BindingResult result) {
-		log.info("*** saveEmployee start ***");
+		
+		log.info("$$$ saveEmployee() Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		//System.out.println("Inside save");
 		try{
 		Employee employee = prepareModel(employeeBean);
 		adminService.addEmployee(employee);
@@ -56,22 +52,14 @@ public class AdminController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("*** saveEmployee exit ***");
+		log.info("$$$ saveEmployee() Ends : AdminController $$$");
 		return new ModelAndView("redirect:/seller/add.html?page=1");
 	}
-
-	/*
-	 * @RequestMapping(value="/seller/employees", method = RequestMethod.GET)
-	 * public ModelAndView listEmployees(@RequestParam(value = "page") int page)
-	 * { Map<String, Object> model = new HashMap<String, Object>();
-	 * model.put("employees",
-	 * prepareListofBean(adminService.listEmployeess(page))); return new
-	 * ModelAndView("employeesList", model); }
-	 */
+	
 	@RequestMapping(value = "/seller/employees", method = RequestMethod.GET)
 	public ModelAndView listEmployees() {
 
-		log.info("*** listEmployee start ***");
+		log.info("$$$ listEmployees Starts : AdminController $$$");
 		Map<String, String> model = new HashMap<String, String>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try{
@@ -83,24 +71,24 @@ public class AdminController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("*** listEmployee exit ***");
+		log.info("$$$ listEmployees Ends : AdminController $$$");
 		return new ModelAndView("employeesList", model);
 	}
 
 	@RequestMapping(value = "/admin/listQueries", method = RequestMethod.GET)
 	public ModelAndView listQueries() {
 
-		log.info("*** listQueries start ***");
+		log.info("$$$ listQueries Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			model.put("queries", adminService.listQueries());
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.error("Failed!",e);
 			return new ModelAndView("admin/queryList", model);
-
 		}
 
-		log.info("*** listQueries exit ***");
+		log.info("$$$ listQueries Ends : AdminController $$$");
 		return new ModelAndView("admin/queryList", model);
 	}
 
@@ -108,7 +96,7 @@ public class AdminController {
 	public @ResponseBody String listEmployeesJtable(
 			@RequestParam(value = "action") String action) {
 
-		log.info("*** listEmployeeJtable start ***");
+		log.info("$$$ listEmployeesJtable Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String jsonArray;
@@ -118,14 +106,13 @@ public class AdminController {
 
 		// Convert Java Object to Json
 		jsonArray = gson.toJson(model);
-		// model.put("employees", jsonArray);
 		}catch(CustomException ce){
 			log.error("listEmployeeJtable exception : " + ce.toString());
 			model.put("error", ce.getLocalMessage());
 			String errors=gson.toJson(model);
 			return errors;
 		}
-		log.info("*** listEmployeeJtable exit ***");
+		log.info("$$$ listEmployeesJtable Ends : AdminController $$$");
 		return jsonArray;
 	}
 
@@ -134,7 +121,7 @@ public class AdminController {
 			@ModelAttribute("command") EmployeeBean employeeBean,
 			BindingResult result) {
 
-		log.info("*** addEmployee start ***");
+		log.info("$$$ addEmployee Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try{		
 		model.put("employees",prepareListofBean(adminService.listEmployeess(page)));
@@ -145,7 +132,7 @@ public class AdminController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("*** addEmployee exit ***");
+		log.info("$$$ addEmployee Ends : AdminController $$$");
 		return new ModelAndView("addEmployee", model);
 	}
 
@@ -159,10 +146,9 @@ public class AdminController {
 	public ModelAndView editEmployee(@RequestParam(value = "page") int page,
 			@ModelAttribute("command") EmployeeBean employeeBean,
 			BindingResult result) {
-		log.info("*** editEmployee start ***");
+		
+		log.info("$$$ editEmployee Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		/*System.out.println(" Inside deleteemployee id" + employeeBean.getId());
-		System.out.println(" Inside deleteemployee name"+ employeeBean.getName());*/
 		try{
 		adminService.deleteEmployee(prepareModel(employeeBean));		
 		model.put("employee", null);
@@ -174,7 +160,7 @@ public class AdminController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("*** editEmployee exit ***");
+		log.info("$$$ editEmployee Ends : AdminController $$$");
 		return new ModelAndView("addEmployee", model);
 	}
 
@@ -182,7 +168,8 @@ public class AdminController {
 	public ModelAndView deleteEmployee(@RequestParam(value = "page") int page,
 			@ModelAttribute("command") EmployeeBean employeeBean,
 			BindingResult result) {
-		log.info("*** deleteEmployee start ***");
+		
+		log.info("$$$ deleteEmployee Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try{
 		model.put("employee", prepareEmployeeBean(adminService.getEmployee(employeeBean.getId())));
@@ -194,7 +181,7 @@ public class AdminController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("*** deleteEmployee exit ***");
+		log.info("$$$ deleteEmployee Ends : AdminController $$$");
 		return new ModelAndView("addEmployee", model);
 	}
 

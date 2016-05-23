@@ -61,9 +61,10 @@ public class CategoryController {
 			@RequestParam("catId") String catId,
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
-		log.info("***changeInventorygroup Start****");
+		
+		log.info("$$$ changeInventorygroup Starts : CategoryController $$$");
 		log.debug(" Category ID in changeInventorygroup: " + catId);
-		System.out.println(" Category ID in changeInventorygroup: " + catId);
+		log.debug(" Category ID in changeInventorygroup: " + catId);
 		List<CategoryBean> categorylist = null;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, String> catageorymap = new HashMap<String, String>();
@@ -87,7 +88,8 @@ public class CategoryController {
 				model.put("errorCode", ce.getErrorCode());
 				return new ModelAndView("globalErorPage", model);
 			} catch (Throwable e) {
-				log.error(e);
+				log.error("Failed ! ",e);
+				e.printStackTrace();
 				return new ModelAndView("globalErorPage", model);
 			}
 			model.put("categorymap", catageorymap);
@@ -95,7 +97,7 @@ public class CategoryController {
 			model.put("subcategory", ConverterClass
 					.prepareListofCategoryBean(category.getSubCategory()));
 		}
-		log.info("***changeInventorygroup Exit****");
+		log.info("$$$ changeInventorygroup Ends : CategoryController $$$");
 		return new ModelAndView("initialsetup/viewInventorygroup", model);
 	}
 
@@ -103,7 +105,8 @@ public class CategoryController {
 	public ModelAndView deleteInventoryGroup(HttpServletRequest request,
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
-		log.info("***deleteInventoryGroup Start****");
+		
+		log.info("$$$ deleteInventoryGroup Starts : CategoryController $$$");
 		log.debug(" Category  to delete :" + categoryBean.getId());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
@@ -139,10 +142,11 @@ public class CategoryController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed !",e);
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("***deleteInventoryGroup Exit****");
+		log.info("$$$ deleteInventoryGroup Ends : CategoryController $$$");
 		return new ModelAndView("initialsetup/inventorygroup", model);
 	}
 
@@ -151,7 +155,8 @@ public class CategoryController {
 			@RequestParam("parentId") String parentCatId,
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
-		log.info("***deleteProductCategory Start****");
+		
+		log.info("$$$ deleteProductCategory Starts : CategoryController $$$");
 		log.debug(" Category  to delete :" + categoryBean.getId());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
@@ -173,8 +178,7 @@ public class CategoryController {
 				Category category = categoryService.getCategory(Integer
 						.parseInt(parentCatId));
 				if (category.getSubCategory() != null)
-					System.out.println("No of subcat :"
-							+ category.getSubCategory().size());
+					log.debug("No of subcat :"	+ category.getSubCategory().size());
 				for (CategoryBean bean : categorylist) {
 					catageorymap.put(String.valueOf(bean.getId()),
 							bean.getCatName());
@@ -193,11 +197,12 @@ public class CategoryController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed !",e);
 			return new ModelAndView("globalErorPage", model);
 		}
 
-		log.info("***deleteProductCategory Exit****");
+		log.info("$$$ deleteProductCategory Ends : CategoryController $$$");
 		return new ModelAndView("initialsetup/viewInventorygroup", model);
 	}
 
@@ -205,9 +210,10 @@ public class CategoryController {
 	public ModelAndView viewsingleInventorygroup(HttpServletRequest request,
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
-		log.info("***viewsingleInventorygroup Start****");
+		
+		log.info("$$$ viewsingleInventorygroup Starts : CategoryController $$$");
 		log.debug(" Category  to view  :" + categoryBean.getId());
-System.out.println(" Category  to view  :" + categoryBean.getId());
+		log.debug(" Category  to view  :" + categoryBean.getId());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			if (categoryBean.getId() != 0) {
@@ -215,12 +221,12 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 						.prepareListofCategoryBean(categoryService
 								.listParentCategories(helperClass
 										.getSellerIdfromSession(request)));
-				System.out.println(" Parent catgeories : "+categorylist.get(0));
+				log.debug(" Parent catgeories : "+categorylist.get(0));
 				Map<String, String> catageorymap = new HashMap<String, String>();
 				Category category = categoryService.getCategory(categoryBean
 						.getId());
 				if (category.getSubCategory() != null)
-					System.out.println("No of subcat :"
+					log.debug("No of subcat :"
 							+ category.getSubCategory().size());
 				for (CategoryBean bean : categorylist) {
 					catageorymap.put(String.valueOf(bean.getId()),
@@ -240,10 +246,11 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed! ",e);
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("***viewsingleInventorygroup Exit****");
+		log.info("$$$ viewsingleInventorygroup Ends : CategoryController $$$");
 		return new ModelAndView("initialsetup/viewInventorygroup", model);
 	}
 
@@ -251,7 +258,8 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 	public ModelAndView inventorygroups(HttpServletRequest request,
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
-		log.info("***inventorygroups Start****");
+		
+		log.info("$$$ inventorygroups Starts : CategoryController $$$");
 		int sellerId;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
@@ -264,7 +272,7 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 				for (CategoryBean bean : categorylist) {
 					List<Long> sum = categoryService.getSKuCount(
 							bean.getCatName(), bean.getId(), sellerId);
-					System.out.println(" Setting sum into bean in controller");
+					log.debug(" Setting sum into bean in controller");
 					if (sum != null && sum.size() != 0) {
 						bean.setSkuCount(sum.get(0));
 						bean.setProductCount(sum.get(1));
@@ -281,10 +289,11 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed !",e);
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("***inventorygroups Exit****");
+		log.info("$$$ inventorygroups Ends : CategoryController $$$");
 		return new ModelAndView("initialsetup/inventorygroup", model);
 	}
 
@@ -292,7 +301,8 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 	public ModelAndView saveInventoryGroup(HttpServletRequest request,
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
-		log.info("***saveInventoryGroup Start****");
+		
+		log.info("$$$ saveInventoryGroup Starts : CategoryController $$$");
 		log.debug(" category id :" + categoryBean.getCatName());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
@@ -311,10 +321,11 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed !",e);
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("***saveInventoryGroup Exit****");
+		log.info("$$$ saveInventoryGroup Ends : CategoryController $$$");
 		return new ModelAndView("redirect:/seller/inventoryGroups.html");
 	}
 
@@ -322,7 +333,8 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 	public ModelAndView saveCatInventory(
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result, HttpServletRequest request) {
-		log.info("***saveCatInventory Start****");
+		
+		log.info("$$$ saveCatInventory Starts : CategoryController $$$");
 		log.debug(" ********* parent category name :"
 				+ categoryBean.getParentCatName());
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -346,12 +358,12 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed !",e);
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("***saveCatInventory Exit****");
-		return new ModelAndView("redirect:/seller/viewInventorygroup.html?id="
-				+ parentcatid);
+		log.info("$$$ saveCatInventory Ends : CategoryController $$$");
+		return new ModelAndView("redirect:/seller/viewInventorygroup.html?id="+ parentcatid);
 	}
 
 	@RequestMapping(value = "/seller/addInventoryGroup", method = RequestMethod.GET)
@@ -365,9 +377,9 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 	public @ResponseBody String checkInventoryGroup(HttpServletRequest request,
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
-		log.info("***checkInventoryGroup Start****");
-		log.debug(" *********checkInventoryGroup name :"
-				+ categoryBean.getParentCatName());
+		
+		log.info("$$$ checkInventoryGroup Starts : CategoryController $$$");
+		log.debug(" *********checkInventoryGroup name :"+ categoryBean.getParentCatName());
 		String name = request.getParameter("name");
 		try {
 			if (name != null && name.length() != 0) {
@@ -379,13 +391,14 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 					return "true";
 			}
 		} catch (CustomException ce) {
-			log.error("saveCatInventory exception : " + ce.toString());
+			log.error("checkInventoryGroup exception : " + ce.toString());
 			return "false";
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed !",e);
 			return "false";
 		}
-		log.info("***checkInventoryGroup Exit****");
+		log.info("$$$ checkInventoryGroup Ends : CategoryController $$$");
 		return "false";
 	}
 
@@ -395,7 +408,8 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 	public ModelAndView saveTaxCategory(HttpServletRequest request,
 			@ModelAttribute("command") TaxCategoryBean taxCategoryBean,
 			BindingResult result) {
-		log.info("***saveTaxCategory Start****");
+		
+		log.info("$$$ saveTaxCategory Starts : CategoryController $$$");
 		log.debug("category id :" + taxCategoryBean.getTaxCatName());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
@@ -410,10 +424,11 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed !",e);
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("***saveTaxCategory Exit****");
+		log.info("$$$ saveTaxCategory Ends : CategoryController $$$");
 		return new ModelAndView("redirect:/seller/listTaxCategories.html");
 	}
 
@@ -421,7 +436,8 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 	public ModelAndView listTaxCategory(HttpServletRequest request,
 			@ModelAttribute("command") TaxCategoryBean taxCategoryBean,
 			BindingResult result) {
-		log.info("***listTaxCategory Start****");
+		
+		log.info("$$$ listTaxCategory Starts : CategoryController $$$");
 		log.debug("category id :" + taxCategoryBean.getTaxCatName());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
@@ -436,10 +452,11 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed !",e);
 			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("***listTaxCategory Exit****");
+		log.info("$$$ listTaxCategory Ends : CategoryController $$$");
 		return new ModelAndView("initialsetup/taxCategoryList", model);
 	}
 
@@ -453,25 +470,29 @@ System.out.println(" Category  to view  :" + categoryBean.getId());
 	@RequestMapping(value = "/seller/checkTaxCategory", method = RequestMethod.GET)
 	public @ResponseBody String checkTaxCategory(HttpServletRequest request,
 			@ModelAttribute("command") FormBean formBean, BindingResult result) {
-		log.info("***checkTaxCategory Start****");
+		
+		log.info("$$$ checkTaxCategory Starts : CategoryController $$$");
 		log.debug("tax category name : " + request.getParameter("name"));
 		try {
 			TaxCategory taxCategory = taxDetailService.getTaxCategory(
 					request.getParameter("name"),
 					helperClass.getSellerIdfromSession(request));
 			if (taxCategory != null) {
+				log.info("$$$ checkTaxCategory Ends : CategoryController $$$");
 				return "false";
 			} else {
+				log.info("$$$ checkTaxCategory Ends : CategoryController $$$");
 				return "true";
 			}
 		} catch (CustomException ce) {
 			log.error("saveTaxCategory exception : " + ce.toString());
 			return "false";
 		} catch (Throwable e) {
-			log.error(e);
+			e.printStackTrace();
+			log.error("Failed !",e);
 			return "false";
 		}
-
+		
 	}
 
 }
