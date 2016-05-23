@@ -357,8 +357,8 @@ span .#error {
 																	<div class="col-sm-12">
 																		<div class="form-group">
 																			<div class="input-group m-b col-md-4">
-																				<input type="text" class="form-control"
-																					name="nr-fixedCommissionPercent"
+																				<input type="text" class="form-control validateNumber"
+																					name="nr-fixedCommissionPercent" id="fixedCommissionPercent"
 																					value="${chargeMap.fixedCommissionPercent}">
 																				<span class="input-group-addon"></span>
 																			</div>
@@ -374,7 +374,7 @@ span .#error {
 																				<div class="form-group col-md-12">
 																					<label class="col-md-4 control-label">${cat.key}</label>
 																					<div class="input-group m-b col-md-4">
-																						<input type="text" class="form-control"
+																						<input type="text" class="form-control validateNumber categoryWiseCommission"
 																							name='nr-${cat.key}' value='${cat.value}'> <span class="input-group-addon">%</span>
 																					</div>
 																				</div>
@@ -386,7 +386,7 @@ span .#error {
 																				<div class="form-group col-md-12">
 																					<label class="col-md-4 control-label">${category}</label>
 																					<div class="input-group m-b col-md-4">
-																						<input type="text" class="form-control"
+																						<input type="text" class="form-control validateNumber"
 																							name='nr-${category}'>
 																						<!--   <span class="input-group-addon">%</span> -->
 																					</div>
@@ -416,8 +416,8 @@ span .#error {
 																		<label class="col-md-4 control-label content-rgt">&lt;250</label>
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
-																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeelt250"
+																				class="form-control validateNumber" style="width: 50%;"
+																				name="nr-fixedfeelt250" id="fixedfeelt250"
 																				value="${chargeMap.fixedfeelt250}">
 																		</div>
 																	</div>
@@ -425,7 +425,7 @@ span .#error {
 																		<label class="col-md-4 control-label">&gt;250&&&lt;500</label>
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
-																				class="form-control" style="width: 50%;"
+																				class="form-control validateNumber" style="width: 50%;"
 																				name="nr-fixedfeegt250lt500"
 																				value="${chargeMap.fixedfeegt250lt500}">
 																		</div>
@@ -446,8 +446,8 @@ span .#error {
 																		<label class="col-md-4 control-label content-rgt">&lt;500</label>
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
-																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeelt500Big"
+																				class="form-control validateNumber" style="width: 50%;"
+																				name="nr-fixedfeelt500Big"  id="fixedfeelt500Big"
 																				value="${chargeMap.fixedfeelt500Big}">
 																		</div>
 																	</div>
@@ -455,8 +455,8 @@ span .#error {
 																		<label class="col-md-4 control-label">&gt;500&&&lt;1000</label>
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
-																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeegt500lt1000"
+																				class="form-control validateNumber" style="width: 50%;"
+																				name="nr-fixedfeegt500lt1000"  id="fixedfeegt500lt1000"
 																				value="${chargeMap.fixedfeegt500lt1000}">
 																		</div>
 																	</div>
@@ -464,7 +464,7 @@ span .#error {
 																		<label class="col-md-4 control-label">&gt;1000&&&lt;10000</label>
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
-																				class="form-control" style="width: 50%;"
+																				class="form-control validateNumber" style="width: 50%;"
 																				name="nr-fixedfeegt1000lt10000"
 																				value="${chargeMap.fixedfeegt1000lt10000}">
 																		</div>
@@ -473,7 +473,7 @@ span .#error {
 																		<label class="col-md-4 control-label">&gt;10000</label>
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
-																				class="form-control" style="width: 50%;"
+																				class="form-control validateNumber" style="width: 50%;"
 																				name="nr-fixedfeegt10000"
 																				value="${chargeMap.fixedfeegt10000}">
 																		</div>
@@ -484,8 +484,8 @@ span .#error {
 																		<label class="col-md-4 control-label content-rgt">&gt;500</label>
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
-																				class="form-control" style="width: 50%;"
-																				name="nr-fixedfeelt500"
+																				class="form-control validateNumber" style="width: 50%;"
+																				name="nr-fixedfeelt500" id="fixedfeelt500"
 																				value="${chargeMap.fixedfeelt500}">
 																		</div>
 																	</div>
@@ -493,7 +493,7 @@ span .#error {
 																		<label class="col-md-4 control-label">&gt;500</label>
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
-																				class="form-control" style="width: 50%;"
+																				class="form-control validateNumber" style="width: 50%;"
 																				name="nr-fixedfeegt500Big"
 																				value="${chargeMap.fixedfeegt500Big}">
 																		</div>
@@ -526,14 +526,14 @@ span .#error {
 																			<div class="col-sm-6">
 																				<div class="checkbox i-checks">
 																					<label> <input type="checkbox" value=""
-																						name="ispercentSPPCC"> <i></i> Percentage
+																						name="ispercentSPPCC" id="ispercentSPPCC"> <i></i> Percentage
 																						of SP
 																					</label>
 																				</div>
 																			</div>
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
-																					<input type="text" class="form-control"
+																					<input type="text" class="form-control validateNumber"
 																						name="nr-percentSPPCC"
 																						value="${chargeMap.percentSPPCC}"> <span
 																						class="input-group-addon">%</span>
@@ -544,14 +544,14 @@ span .#error {
 																			<div class="col-sm-6">
 																				<div class="checkbox i-checks">
 																					<label> <input type="checkbox"
-																						name="isfixedAmountPCC"> <i></i> Fixed
+																						name="isfixedAmountPCC" id="isfixedAmountPCC"> <i></i> Fixed
 																						Amount
 																					</label>
 																				</div>
 																			</div>
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
-																					<input type="text" class="form-control"
+																					<input type="text" class="form-control validateNumber"
 																						name="nr-fixedAmtPCC"
 																						value="${chargeMap.fixedAmtPCC}">
 																				</div>
@@ -617,23 +617,23 @@ span .#error {
 																						<td><div class="form-group ">
 																								<div class=" content-rgt">
 																									<input type="text" placeholder=""
-																										class="form-control" name="nr-localvwlt500"
+																										class="form-control validateNumber" name="nr-localvwlt500"
 																										value="${chargeMap.localvwlt500}">
 																								</div>
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-zonalvwlt500"
+																									class="form-control validateNumber" name="nr-zonalvwlt500"
 																									value="${chargeMap.zonalvwlt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-nationalvwlt500"
+																									class="form-control validateNumber" name="nr-nationalvwlt500"
 																									value="${chargeMap.nationalvwlt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-metrovwlt500"
+																									class="form-control validateNumber" name="nr-metrovwlt500"
 																									value="${chargeMap.metrovwlt500}">
 																							</div></td>
 																					</tr>
@@ -641,25 +641,25 @@ span .#error {
 																						<td><label>500 &gt; 1000</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-localvwgt500lt1000"
 																									value="${chargeMap.localvwgt500lt1000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-zonalvwgt500lt1000"
 																									value="${chargeMap.zonalvwgt500lt1000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-nationalvwgt500lt1000"
 																									value="${chargeMap.nationalvwgt500lt1000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-metrovwgt500lt1000"
 																									value="${chargeMap.metrovwgt500lt1000}">
 																							</div></td>
@@ -668,25 +668,25 @@ span .#error {
 																						<td><label>1000 &gt; 1500</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-localvwgt1000lt1500"
 																									value="${chargeMap.localvwgt1000lt1500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-zonalvwgt1000lt1500"
 																									value="${chargeMap.zonalvwgt1000lt1500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-nationalvwgt1000lt1500"
 																									value="${chargeMap.nationalvwgt1000lt1500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-metrovwgt1000lt1500"
 																									value="${chargeMap.metrovwgt1000lt1500}">
 																							</div></td>
@@ -695,25 +695,25 @@ span .#error {
 																						<td><label>1500 &gt; 5000</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-localvwgt1500lt5000"
 																									value="${chargeMap.localvwgt1500lt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-zonalvwgt1500lt5000"
 																									value="${chargeMap.zonalvwgt1500lt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-nationalvwgt1500lt5000"
 																									value="${chargeMap.nationalvwgt1500lt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-metrovwgt1500lt5000"
 																									value="${chargeMap.metrovwgt1500lt5000}">
 																							</div></td>
@@ -722,22 +722,22 @@ span .#error {
 																						<td><label>add 1 kg</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-localvwgt5000"
+																									class="form-control validateNumber" name="nr-localvwgt5000"
 																									value="${chargeMap.localvwgt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-zonalvwgt5000"
+																									class="form-control validateNumber" name="nr-zonalvwgt5000"
 																									value="${chargeMap.zonalvwgt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-nationalvwgt5000"
+																									class="form-control validateNumber" name="nr-nationalvwgt5000"
 																									value="${chargeMap.nationalvwgt5000}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-metrovwgt5000"
+																									class="form-control validateNumber" name="nr-metrovwgt5000"
 																									value="${chargeMap.metrovwgt5000}">
 																							</div></td>
 																					</tr>
@@ -762,23 +762,23 @@ span .#error {
 																						<td><div class="form-group ">
 																								<div class=" content-rgt">
 																									<input type="text" placeholder=""
-																										class="form-control" name="nr-localdwlt500"
+																										class="form-control validateNumber" name="nr-localdwlt500"
 																										value="${chargeMap.localdwlt500}">
 																								</div>
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-zonaldwlt500"
+																									class="form-control validateNumber" name="nr-zonaldwlt500"
 																									value="${chargeMap.zonaldwlt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-nationaldwlt500"
+																									class="form-control validateNumber" name="nr-nationaldwlt500"
 																									value="${chargeMap.nationaldwlt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-metrodwlt500"
+																									class="form-control validateNumber" name="nr-metrodwlt500"
 																									value="${chargeMap.metrodwlt500}">
 																							</div></td>
 																					</tr>
@@ -786,22 +786,22 @@ span .#error {
 																						<td><label>additional &gt; 500</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-localdwgt500"
+																									class="form-control validateNumber" name="nr-localdwgt500"
 																									value="${chargeMap.localdwgt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-zonaldwgt500"
+																									class="form-control validateNumber" name="nr-zonaldwgt500"
 																									value="${chargeMap.zonaldwgt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-nationaldwgt500"
+																									class="form-control validateNumber" name="nr-nationaldwgt500"
 																									value="${chargeMap.nationaldwgt500}">
 																							</div></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-metrodwgt500"
+																									class="form-control validateNumber" name="nr-metrodwgt500"
 																									value="${chargeMap.metrodwgt500}">
 																							</div></td>
 																					</tr>
@@ -830,7 +830,7 @@ span .#error {
 																						<td><div class="form-group ">
 																								<div class=" content-rgt">
 																									<input type="text" placeholder=""
-																										class="form-control" name="nr-fixeddwlt500"
+																										class="form-control validateNumber" name="nr-fixeddwlt500"
 																										value="${chargeMap.fixeddwlt500}">
 																								</div>
 																							</div></td>
@@ -839,7 +839,7 @@ span .#error {
 																						<td><label>additional &gt; 500</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-fixeddwgt500"
+																									class="form-control validateNumber" name="nr-fixeddwgt500"
 																									value="${chargeMap.fixeddwgt500}">
 																							</div></td>
 																					</tr>
@@ -861,7 +861,7 @@ span .#error {
 																						<td><div class="form-group ">
 																								<div class=" content-rgt">
 																									<input type="text" placeholder=""
-																										class="form-control" name="nr-fixedvwlt500"
+																										class="form-control validateNumber" name="nr-fixedvwlt500"
 																										value="${chargeMap.fixedvwlt500}">
 																								</div>
 																							</div></td>
@@ -870,7 +870,7 @@ span .#error {
 																						<td><label>500 &gt; 1000</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-fixedvwgt500lt1000"
 																									value="${chargeMap.fixedvwgt500lt1000}">
 																							</div></td>
@@ -879,7 +879,7 @@ span .#error {
 																						<td><label>1000 &gt; 1500</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-fixedvwgt1000lt1500"
 																									value="${chargeMap.fixedvwgt1000lt1500}">
 																							</div></td>
@@ -888,7 +888,7 @@ span .#error {
 																						<td><label>1500 &gt; 5000</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-fixedvwgt1500lt5000"
 																									value="${chargeMap.fixedvwgt1500lt5000}">
 																							</div></td>
@@ -897,7 +897,7 @@ span .#error {
 																						<td><label>add 1 kg</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-fixedvwgt5000"
+																									class="form-control validateNumber" name="nr-fixedvwgt5000"
 																									value="${chargeMap.fixedvwgt5000}">
 																							</div></td>
 																					</tr>
@@ -920,9 +920,9 @@ span .#error {
 																	<div class="form-group col-md-12">
 																		<div class="col-md-4 content-rgt">
 																			<input type="text" placeholder=""
-																				class="form-control" name="nr-serviceTax"
-																				value="${chargeMap.serviceTax}"> <span
-																						class="input-group-addon">%</span>
+																				class="form-control validateNumber" name="nr-serviceTax"
+																				value="${chargeMap.serviceTax}" id="serviceTax">
+																				<span class="input-group-addon">%</span> 
 																		</div>
 																	</div>
 																</div>
@@ -994,7 +994,7 @@ span .#error {
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text" class="form-control"
+																					<input type="text" class="form-control validateNumber"
 																						name="nr-retCharSFFixedAmt"
 																						value="${chargeMap.retCharSFFixedAmt}">
 																				</div>
@@ -1009,20 +1009,20 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-retCharSFVarFixedAmt"
+																					class="form-control validateNumber" name="nr-retCharSFVarFixedAmt"
 																					value="${chargeMap.retCharSFVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-retCharSFPercentSP"
+																					class="form-control validateNumber" name="nr-retCharSFPercentSP"
 																					value="${chargeMap.retCharSFPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-retCharSFPercentPCC"
+																					class="form-control validateNumber" name="nr-retCharSFPercentPCC"
 																					value="${chargeMap.retCharSFPercentPCC}">
 																			</div>
 																		</div>
@@ -1107,7 +1107,7 @@ span .#error {
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text" class="form-control"
+																					<input type="text" class="form-control validateNumber"
 																						name="nr-retCharBRFixedAmt"
 																						value="${chargeMap.retCharBRFixedAmt}">
 																				</div>
@@ -1121,20 +1121,20 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-retCharBRVarFixedAmt"
+																					class="form-control validateNumber" name="nr-retCharBRVarFixedAmt"
 																					value="${chargeMap.retCharBRVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-retCharBRPercentSP"
+																					class="form-control validateNumber" name="nr-retCharBRPercentSP"
 																					value="${chargeMap.retCharBRPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-retCharBRPercentPCC"
+																					class="form-control validateNumber" name="nr-retCharBRPercentPCC"
 																					value="${chargeMap.retCharBRPercentPCC}">
 																			</div>
 																		</div>
@@ -1209,7 +1209,7 @@ span .#error {
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text" class="form-control"
+																					<input type="text" class="form-control validateNumber"
 																						name="nr-RTOCharSFFixedAmt"
 																						value="${chargeMap.RTOCharSFFixedAmt}">
 																				</div>
@@ -1223,20 +1223,20 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharSFVarFixedAmt"
+																					class="form-control validateNumber" name="nr-RTOCharSFVarFixedAmt"
 																					value="${chargeMap.RTOCharSFFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharSFPercentSP"
+																					class="form-control validateNumber" name="nr-RTOCharSFPercentSP"
 																					value="${chargeMap.RTOCharSFPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharSFPercentPCC"
+																					class="form-control validateNumber" name="nr-RTOCharSFPercentPCC"
 																					value="${chargeMap.RTOCharSFPercentPCC}">
 																			</div>
 																		</div>
@@ -1321,7 +1321,7 @@ span .#error {
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text" class="form-control"
+																					<input type="text" class="form-control validateNumber"
 																						name="nr-RTOCharBRFixedAmt"
 																						value="${chargeMap.RTOCharBRFixedAmt}">
 																				</div>
@@ -1334,20 +1334,20 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharBRVarFixedAmt"
+																					class="form-control validateNumber" name="nr-RTOCharBRVarFixedAmt"
 																					value="${chargeMap.RTOCharBRVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharBRPercentSP"
+																					class="form-control validateNumber" name="nr-RTOCharBRPercentSP"
 																					value="${chargeMap.RTOCharBRPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-RTOCharBRPercentPCC"
+																					class="form-control validateNumber" name="nr-RTOCharBRPercentPCC"
 																					value="${chargeMap.RTOCharBRPercentPCC}">
 																			</div>
 																		</div>
@@ -1423,7 +1423,7 @@ span .#error {
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text" class="form-control"
+																					<input type="text" class="form-control validateNumber"
 																						name="nr-repCharSFFixedAmt"
 																						value="${chargeMap.repCharSFFixedAmt}">
 																				</div>
@@ -1437,20 +1437,20 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharSFVarFixedAmt"
+																					class="form-control validateNumber" name="nr-repCharSFVarFixedAmt"
 																					value="${chargeMap.repCharSFVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharSFPercentSP"
+																					class="form-control validateNumber" name="nr-repCharSFPercentSP"
 																					value="${chargeMap.repCharSFPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharSFPercentPCC"
+																					class="form-control validateNumber" name="nr-repCharSFPercentPCC"
 																					value="${chargeMap.repCharSFPercentPCC}">
 																			</div>
 																		</div>
@@ -1535,7 +1535,7 @@ span .#error {
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text" class="form-control"
+																					<input type="text" class="form-control validateNumber"
 																						name="nr-repCharBRFixedAmt"
 																						value="${chargeMap.repCharBRFixedAmt}">
 																				</div>
@@ -1548,20 +1548,20 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharBRVarFixedAmt"
+																					class="form-control validateNumber" name="nr-repCharBRVarFixedAmt"
 																					value="${chargeMap.repCharBRFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharBRPercentSP"
+																					class="form-control validateNumber" name="nr-repCharBRPercentSP"
 																					value="${chargeMap.repCharBRPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-repCharBRPercentPCC"
+																					class="form-control validateNumber" name="nr-repCharBRPercentPCC"
 																					value="${chargeMap.repCharBRPercentPCC}">
 																			</div>
 																		</div>
@@ -1637,7 +1637,7 @@ span .#error {
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text" class="form-control"
+																					<input type="text" class="form-control validateNumber"
 																						name="nr-PDCharSFFixedAmt"
 																						value="${chargeMap.PDCharSFFixedAmt}">
 																				</div>
@@ -1651,20 +1651,20 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-PDCharSFVarFixedAmt"
+																					class="form-control validateNumber" name="nr-PDCharSFVarFixedAmt"
 																					value="${chargeMap.PDCharSFVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-PDCharSFPercentSP"
+																					class="form-control validateNumber" name="nr-PDCharSFPercentSP"
 																					value="${chargeMap.PDCharSFPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-PDCharSFPercentPCC"
+																					class="form-control validateNumber" name="nr-PDCharSFPercentPCC"
 																					value="${chargeMap.PDCharSFPercentPCC}">
 																			</div>
 																		</div>
@@ -1749,7 +1749,7 @@ span .#error {
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text" class="form-control"
+																					<input type="text" class="form-control validateNumber"
 																						name="nr-PDCharBRFixedAmt"
 																						value="${chargeMap.PDCharBRFixedAmt}">
 																				</div>
@@ -1762,20 +1762,20 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-PDCharBRVarFixedAmt"
+																					class="form-control validateNumber" name="nr-PDCharBRVarFixedAmt"
 																					value="${chargeMap.PDCharBRVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-PDCharBRPercentSP"
+																					class="form-control validateNumber" name="nr-PDCharBRPercentSP"
 																					value="${chargeMap.PDCharBRPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-PDCharBRPercentPCC"
+																					class="form-control validateNumber" name="nr-PDCharBRPercentPCC"
 																					value="${chargeMap.PDCharBRPercentPCC}">
 																			</div>
 																		</div>
@@ -1857,7 +1857,7 @@ span .#error {
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text" class="form-control"
+																					<input type="text" class="form-control validateNumber"
 																						name="nr-canCharSFBFRTDFixedAmt"
 																						value="${chargeMap.canCharSFBFRTDFixedAmt}">
 																				</div>
@@ -1872,14 +1872,14 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control"
+																					class="form-control validateNumber"
 																					name="nr-canCharSFBFRTDVarFixedAmt"
 																					value="${chargeMap.canCharSFBFRTDVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control"
+																					class="form-control validateNumber"
 																					name="nr-canCharSFBFRTDPercentSP"
 																					value="${chargeMap.canCharSFBFRTDPercentSP}">
 																			</div>
@@ -1887,7 +1887,7 @@ span .#error {
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control"
+																					class="form-control validateNumber"
 																					name="nr-canCharSFBFRTDPercentPCC"
 																					value="${chargeMap.canCharSFBFRTDPercentPCC}">
 																			</div>
@@ -1976,7 +1976,7 @@ span .#error {
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text" class="form-control"
+																					<input type="text" class="form-control validateNumber"
 																						name="nr-canCharSFFixedAmt"
 																						value="${chargeMap.canCharSFFixedAmt}">
 																				</div>
@@ -1997,14 +1997,14 @@ span .#error {
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-canCharSFPercentSP"
+																					class="form-control validateNumber" name="nr-canCharSFPercentSP"
 																					value="${chargeMap.canCharSFPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-canCharSFPercentPCC"
+																					class="form-control validateNumber" name="nr-canCharSFPercentPCC"
 																					value="${chargeMap.canCharSFPercentPCC}">
 																			</div>
 																		</div>
@@ -2089,7 +2089,7 @@ span .#error {
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text" class="form-control"
+																					<input type="text" class="form-control validateNumber"
 																						name="nr-canCharBRFixedAmt"
 																						value="${chargeMap.canCharSFPercentPCC}">
 																				</div>
@@ -2102,20 +2102,20 @@ span .#error {
 																				Amount</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-canCharBRVarFixedAmt"
+																					class="form-control validateNumber" name="nr-canCharBRVarFixedAmt"
 																					value="${chargeMap.canCharBRVarFixedAmt}">
 																			</div>
 																			<label class="col-sm-2 control-label">% of SP</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-canCharBRPercentSP"
+																					class="form-control validateNumber" name="nr-canCharBRPercentSP"
 																					value="${chargeMap.canCharBRPercentSP}">
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-canCharBRPercentPCC"
+																					class="form-control validateNumber" name="nr-canCharBRPercentPCC"
 																					value="${chargeMap.canCharBRPercentPCC}">
 																			</div>
 																		</div>
@@ -2173,7 +2173,7 @@ span .#error {
 																	<div class="col-sm-6">
 																		<div class="input-group m-b">
 																			<input type="text" placeholder=""
-																				class="form-control" name="nr-revShipFeePCC"
+																				class="form-control validateNumber" name="nr-revShipFeePCC"
 																				value="${chargeMap.revShipFeePCC}"> <span
 																				class="input-group-addon">%</span>
 																		</div>
@@ -2209,7 +2209,7 @@ span .#error {
 																		<div class="col-sm-6">
 																			<div class="input-group m-b">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeeFlatAmt"
+																					class="form-control validateNumber" name="nr-revShipFeeFlatAmt"
 																					value="${chargeMap.revShipFeeFlatAmt}">
 																			</div>
 																		</div>
@@ -2225,7 +2225,7 @@ span .#error {
 																		<div class="col-sm-6">
 																			<div class="input-group m-b">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeePCCMF"
+																					class="form-control validateNumber" name="nr-revShipFeePCCMF"
 																					value="${chargeMap.revShipFeePCCMF}"> <span
 																					class="input-group-addon">%</span>
 																			</div>
@@ -2248,7 +2248,7 @@ span .#error {
 																	<div class="col-sm-6">
 																		<div class="input-group m-b" style="width: 96%;">
 																			<input type="text" placeholder=""
-																				class="form-control" name="nr-revShipFeeFF"
+																				class="form-control validateNumber" name="nr-revShipFeeFF"
 																				value="${chargeMap.revShipFeeFF}">
 																		</div>
 																	</div>
@@ -2307,7 +2307,7 @@ span .#error {
 																			</div>
 																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeeDWAmt"
+																					class="form-control validateNumber" name="nr-revShipFeeDWAmt"
 																					value="${chargeMap.revShipFeeDWAmt}">
 																			</div>
 																			<div class="col-md-2">
@@ -2318,7 +2318,7 @@ span .#error {
 																			</div>
 																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeeVWAmt"
+																					class="form-control validateNumber" name="nr-revShipFeeVWAmt"
 																					value="${chargeMap.revShipFeeVWAmt}">
 																			</div>
 																			<div class="col-md-2">
@@ -2333,7 +2333,7 @@ span .#error {
 																			</div>
 																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeeDWPW"
+																					class="form-control validateNumber" name="nr-revShipFeeDWPW"
 																					value="${chargeMap.revShipFeeDWPW}">
 																			</div>
 																			<div class="col-md-2">
@@ -2344,7 +2344,7 @@ span .#error {
 																			</div>
 																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeeVWPW"
+																					class="form-control validateNumber" name="nr-revShipFeeVWPW"
 																					value="${chargeMap.revShipFeeVWPW}">
 																			</div>
 																			<div class="col-md-2">
@@ -2359,7 +2359,7 @@ span .#error {
 																			</div>
 																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeeDWMW"
+																					class="form-control validateNumber" name="nr-revShipFeeDWMW"
 																					value="${chargeMap.revShipFeeDWMW}">
 																			</div>
 																			<div class="col-md-2">
@@ -2370,7 +2370,7 @@ span .#error {
 																			</div>
 																			<div class="col-md-2 content-rgt">
 																				<input type="text" placeholder=""
-																					class="form-control" name="nr-revShipFeeVWMW"
+																					class="form-control validateNumber" name="nr-revShipFeeVWMW"
 																					value="${chargeMap.revShipFeeVWMW}">
 																			</div>
 																			<div class="col-md-2">
@@ -2388,26 +2388,28 @@ span .#error {
 													<input type="hidden" id="hidnationalList" value='${partner.nrnReturnConfig.nationalList}'/>
 												</div>
 											</div>
-										</form>
+										
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="ibox float-e-margins">
+						</form:form>
+						<div class="ibox float-e-margins">
 						<div class="ibox-content add-company">
 							<input class="btn btn-primary pull-right" id="submitButton"
 								type="submit" value="Save">
 						</div>
 					</div>
-
-				</form:form>
+						
+					</div>
+					
+					
+				
 			<jsp:include page="../globalfooter.jsp"></jsp:include>
 			</div>
 
 		</div>
 		
-	</div>
 
 	
 			
@@ -2417,700 +2419,703 @@ span .#error {
 	<!-- Switchery -->
 	<script src="/O2R/seller/js/plugins/switchery/switchery.js"></script>
 	<script src="/O2R/seller/js/pickList.js"></script>
+<script type="text/javascript">
+var validator =null;
+$(document).ready(
+		function() {
+			$('.i-checks').iCheck({
+				checkboxClass : 'icheckbox_square-green',
+				radioClass : 'iradio_square-green',
+			});
+			var elem = document.querySelector('.js-switch');
+			var switchery = new Switchery(elem, {
+				color : '#1AB394'
+			});
 
-	<script type="text/javascript">
-		$(document).ready(
-				function() {
-					$('.i-checks').iCheck({
-						checkboxClass : 'icheckbox_square-green',
-						radioClass : 'iradio_square-green',
-					});
-					var elem = document.querySelector('.js-switch');
-					var switchery = new Switchery(elem, {
-						color : '#1AB394'
-					});
+			var elem_2 = document.querySelector('.js-switch_2');
+			var switchery_2 = new Switchery(elem_2, {
+				color : '#ED5565'
+			});
 
-					var elem_2 = document.querySelector('.js-switch_2');
-					var switchery_2 = new Switchery(elem_2, {
-						color : '#ED5565'
-					});
+			var elem_3 = document.querySelector('.js-switch_3');
+			var switchery_3 = new Switchery(elem_3, {
+				color : '#1AB394'
+			});
 
-					var elem_3 = document.querySelector('.js-switch_3');
-					var switchery_3 = new Switchery(elem_3, {
-						color : '#1AB394'
-					});
+			$("#nr-switch").change(function() {
+				if (this.checked) {
 
-					$("#nr-switch").change(function() {
-						if (this.checked) {
+					$('.radio5').hide();
+					$("#nr-switch-sec").slideDown();
+				} else {
+					$("#nr-switch-sec").slideUp();
 
-							$('.radio5').hide();
-							$("#nr-switch-sec").slideDown();
-						} else {
-							$("#nr-switch-sec").slideUp();
-
-						}
-					});
-
-					$(".commissionType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".shippingFeeType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".retCharSFType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".retCharBRType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".RTOCharSFType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".RTOCharBRType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".repCharSFType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".repCharBRType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".PDCharSFType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".PDCharBRType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".canCharSFBFRTDType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".canCharSFARTDType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".canCharBRType").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-					$(".weight").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).attr('id')).slideDown();
-					});
-
-					$("[name=paymentType]").click(function() {
-						$('.radio1').hide();
-						$("#blk-" + $(this).val()).slideDown();
-					});
-					$('#paymentField').change(function() {
-						$('.payment-box').hide();
-						$('#' + $(this).val()).fadeIn();
-					});
-					$('#paymentField1').change(function() {
-						$('.payment-box').hide();
-						$('#' + $(this).val()).fadeIn();
-					});
-					$('#data_1 .input-group.date').datepicker({
-						todayBtn : "linked",
-						keyboardNavigation : false,
-						forceParse : false,
-						calendarWeeks : true,
-						autoclose : true
-					});
-
-					if ('${partner.paymentType}' == 'paymentcycle')
-						$("#paymentcycle").prop("checked", true).trigger(
-								"click");
-					else if ('${partner.paymentType}' == 'datewisepay') {
-						$("#datewisepay").prop("checked", true)
-								.trigger("click");
-						$('#paymentField1').trigger('change');
-						if ('${partner.isshippeddatecalc}' != true) {
-							$("#noofdaysfromdeliverydate").val(
-									'${partner.noofdaysfromshippeddate}');
-						}
-					} else if ('${partner.paymentType}' == 'monthly')
-						$('#monthly').prop("checked", true).trigger("click");
-
-					if ('${partner.tdsApplicable}' == 'true')
-						$("#tdsApplicable").prop("checked", true);
-					
-
-					$("#submitButton").click(function() {
-						submitForm();
-					});
-					if ('${partner.nrnReturnConfig.nrCalculator}' == 'true')
-						$('input.js-switch_2').click();
-					
-
-					if ('${partner.nrnReturnConfig.commissionType}' == 'fixed')
-						$("#commisionType-fixed").prop("checked", true).trigger(
-								"click");
-					else if ('${partner.nrnReturnConfig.commissionType}' == 'categoryWise')
-						$("#commisionType-categoryWise").prop("checked", true)
-								.trigger("click");
-					
-					if ('${partner.nrnReturnConfig.shippingFeeType}' == 'fixed')
-						$("#shippingfee-fixed").prop("checked", true).trigger(
-								"click");
-					else if ('${partner.nrnReturnConfig.shippingFeeType}' == 'variable')
-						$("#shippingfee-variable").prop("checked", true)
-								.trigger("click");
-					if ('${partner.nrnReturnConfig.retCharSFType}' == 'fixed')
-						{
-						$("#retrun-sf-fix").prop("checked", true).trigger(
-								"click");
-						}
-					else if ('${partner.nrnReturnConfig.retCharSFType}' == 'variable')
-						{
-						$("#retrun-sf-variable").prop("checked", true)
-								.trigger("click");
-						}
-					else if ('${partner.nrnReturnConfig.retCharSFType}' == 'noCharges')
-						$("#retrun-sf-nocharges").prop("checked", true)
-								.trigger("click");
-					
-					if ('${partner.nrnReturnConfig.retCharBRType}' == 'fixed')
-						$("#retrun-br-fix").prop("checked", true).trigger(
-								"click");
-					else if ('${partner.nrnReturnConfig.retCharBRType}' == 'variable')
-						$("#retrun-br-variable").prop("checked", true)																																																								
-								.trigger("click");
-					else if ('${partner.nrnReturnConfig.retCharBRType}' == 'noCharges')
-						$("#retrun-br-nocharges").prop("checked", true)
-								.trigger("click");
-					
-					if ('${partner.nrnReturnConfig.RTOCharSFType}' == 'fixed')
-						$("#RTO-sf-fix").prop("checked", true).trigger(
-								"click");
-					else if ('${partner.nrnReturnConfig.RTOCharSFType}' == 'variable')
-						$("#RTO-sf-variable").prop("checked", true)																																																								
-								.trigger("click");
-					else if ('${partner.nrnReturnConfig.RTOCharSFType}' == 'noCharges')
-						$("#RTO-sf-nocharges").prop("checked", true)
-								.trigger("click");
-					
-					if ('${partner.nrnReturnConfig.RTOCharBRType}' == 'fixed')
-						$("#RTO-br-fix").prop("checked", true).trigger(
-								"click");
-					else if ('${partner.nrnReturnConfig.RTOCharBRType}' == 'variable')
-						$("#RTO-br-variable").prop("checked", true)																																																								
-								.trigger("click");
-					else if ('${partner.nrnReturnConfig.RTOCharBRType}' == 'noCharges')
-						$("#RTO-br-nocharges").prop("checked", true)
-								.trigger("click");
-						
-					if ('${partner.nrnReturnConfig.repCharSFType}' == 'fixed')
-						$("#rep-sf-fix").prop("checked", true).trigger(
-								"click");
-					else if ('${partner.nrnReturnConfig.repCharSFType}' == 'variable')
-						$("#rep-sf-variable").prop("checked", true)																																																								
-								.trigger("click");
-					else if ('${partner.nrnReturnConfig.repCharSFType}' == 'noCharges')
-						$("#rep-sf-nocharges").prop("checked", true)
-								.trigger("click");
-					
-					if ('${partner.nrnReturnConfig.repCharBRType}' == 'fixed')
-						$("#rep-br-fix").prop("checked", true).trigger(
-								"click");
-					else if ('${partner.nrnReturnConfig.repCharBRType}' == 'variable')
-						$("#rep-br-variable").prop("checked", true)																																																								
-								.trigger("click");
-					else if ('${partner.nrnReturnConfig.repCharBRType}' == 'noCharges')
-						$("#rep-br-nocharges").prop("checked", true)
-								.trigger("click");
-					
-					if ('${partner.nrnReturnConfig.PDCharSFType}' == 'fixed')
-						$("#PD-sf-fix").prop("checked", true).trigger(
-								"click");
-					else if ('${partner.nrnReturnConfig.PDCharSFType}' == 'variable')
-						$("#PD-sf-variable").prop("checked", true)																																																								
-								.trigger("click");
-					else if ('${partner.nrnReturnConfig.PDCharSFType}' == 'noCharges')
-						$("#PD-sf-nocharges").prop("checked", true)
-								.trigger("click");
-					
-					if ('${partner.nrnReturnConfig.PDCharBRType}' == 'fixed')
-						$("#PD-br-fix").prop("checked", true).trigger(
-								"click");
-					else if ('${partner.nrnReturnConfig.PDCharBRType}' == 'variable')
-						$("#PD-br-variable").prop("checked", true)																																																								
-								.trigger("click");
-					else if ('${partner.nrnReturnConfig.PDCharBRType}' == 'noCharges')
-						$("#PD-br-nocharges").prop("checked", true)
-								.trigger("click");
-					
-					if ('${partner.nrnReturnConfig.canCharSFBFRTDType}' == 'fixed')
-						$("#can-sfbfrtd-fix").prop("checked", true).trigger(
-								"click");
-					else if ('${partner.nrnReturnConfig.canCharSFBFRTDType}' == 'variable')
-						$("#can-sfbfrtd-variable").prop("checked", true)																																																								
-								.trigger("click");
-					else if ('${partner.nrnReturnConfig.canCharSFBFRTDType}' == 'noCharges')
-						$("#can-sfbfrtd-nocharges").prop("checked", true)
-								.trigger("click");
-					
-					if ('${partner.nrnReturnConfig.canCharSFARTDType}' == 'fixed')
-						$("#can-sfartd-fix").prop("checked", true).trigger(
-								"click");
-					else if ('${partner.nrnReturnConfig.canCharSFARTDType}' == 'variable')
-						$("#can-sfartd-variable").prop("checked", true)																																																								
-								.trigger("click");
-					else if ('${partner.nrnReturnConfig.canCharSFARTDType}' == 'noCharges')
-						$("#can-sfartd-nocharges").prop("checked", true)
-								.trigger("click");
-					
-					if ('${partner.nrnReturnConfig.canCharBRType}' == 'fixed')
-						$("#can-br-fix").prop("checked", true).trigger(
-								"click");
-					else if ('${partner.nrnReturnConfig.canCharBRType}' == 'variable')
-						$("#can-br-variable").prop("checked", true)																																																								
-								.trigger("click");
-					else if ('${partner.nrnReturnConfig.canCharBRType}' == 'noCharges')
-						$("#can-br-nocharges").prop("checked", true)
-								.trigger("click");
-					
-					if ('${partner.nrnReturnConfig.whicheverGreaterPCC}' == 'true')
-					 {		 
-					 $('#whicheverGreaterPCC').iCheck('check');		
-					 }
-				 if ('${partner.nrnReturnConfig.retCharSFRevShipFee}' == 'true')
-					 	$('#retCharSFRevShipFee').iCheck('check');			
-				 if ('${partner.nrnReturnConfig.retCharSFShipFee}' == 'true')
-					 $('#retCharSFShipFee').iCheck('check');
-				 if ('${partner.nrnReturnConfig.retCharBRFF}' == 'true')
-					 $('#retCharBRFF').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.retCharBRShipFee}' == 'true')
-					 $('#retCharBRShipFee').iCheck('check');	
-					 
-				 if ('${partner.nrnReturnConfig.RTOCharSFRevShipFee}' == 'true')
-					 $('#RTOCharSFRevShipFee').iCheck('check');	
-					 	 
-				 if ('${partner.nrnReturnConfig.RTOCharSFFF}' == 'true')
-					 $('#RTOCharSFFF').iCheck('check');	
-						
-				 if ('${partner.nrnReturnConfig.RTOCharSFShipFee}' == 'true')
-					 $('#RTOCharSFShipFee').iCheck('check');	
-						
-				 if ('${partner.nrnReturnConfig.RTOCharSFRevShipFee}' == 'true')
-					 $('#RTOCharSFRevShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.RTOCharBRFF}' == 'true')
-					 $('#RTOCharBRFF').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.RTOCharBRShipFee}' == 'true')
-					 $('#RTOCharBRShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.repCharSFRevShipFee}' == 'true')
-					 $('#repCharSFRevShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.repCharSFFF}' == 'true')
-					 $('#repCharSFFF').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.repCharSFShipFee}' == 'true')
-					 $('#repCharSFShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.repCharSFRevShipFee}' == 'true')
-					 $('#repCharSFRevShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.repCharBRFF}' == 'true')
-					 $('#repCharBRFF').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.repCharBRShipFee}' == 'true')
-					 $('#repCharBRShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.PDCharSFRevShipFee}' == 'true')
-					 $('#PDCharSFRevShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.PDCharSFFF}' == 'true')
-					 $('#PDCharSFFF').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.PDCharSFShipFee}' == 'true')
-					 $('#PDCharSFShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.PDCharSFRevShipFee}' == 'true')
-					 $('#PDCharSFRevShipFee').iCheck('check');
-						
-				 
-				 if ('${partner.nrnReturnConfig.PDCharBRFF}' == 'true')
-					 $('#PDCharBRFF').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.PDCharBRShipFee}' == 'true')
-					 $('#PDCharBRShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.canCharSFBRTDRevShipFee}' == 'true')
-					 $('#canCharSFBRTDRevShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.canCharSFBRTDFF}' == 'true')
-					 $('#canCharSFBRTDFF').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.canCharSFBRTDShipFee}' == 'true')
-					 $('#canCharSFBRTDShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.canCharSFBRTDRevShipFee}' == 'true')
-					 $('#canCharSFBRTDRevShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.canCharSFARTDRevShipFee}' == 'true')
-					 $('#canCharSFARTDRevShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.canCharSFFF}' == 'true')
-					 $('#canCharSFFF').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.canCharSFShipFee}' == 'true')
-					 $('#canCharSFShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.canCharSFARTDRevShipFee}' == 'true')
-					 $('#canCharSFARTDRevShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.canCharBRFF}' == 'true')
-					 $('#canCharBRFF').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.canCharBRFF}' == 'true')
-					 $('#canCharBRFF').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.canCharBRShipFee}' == 'true')
-					 $('#canCharBRShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.canCharBRRevShipFee}' == 'true')
-					 $('#canCharBRRevShipFee').iCheck('check');
-						
-				 if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeVar')
-					 $('#revShippingFeeType_revShipFeeVar').iCheck('check');
-				 if ('${partner.nrnReturnConfig.retCharSFFF}' == 'true')
-                     $('#retCharSFFF').iCheck('check');
-						
-				 else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeShipFee')
-					 $('#revShippingFeeType_revShipFeeShipFee').iCheck('check');			
-				 else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeFF')
-					 $('#revShippingFeeType_revShipFeeFF').iCheck('check');			
-				 else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeGRT')
-					 $('#revShippingFeeType_revShipFeeGRT').iCheck('check');			
-				 else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeePCC')
-					 $('#revShippingFeeType_revShipFeePCC').iCheck('check');
-				 
-					
-					//var radioButtons = $('form#addpartnerform input[type="radio"]');
-					
-					//Code for populating state fields
-					/* var metroList;
-					var nationalList;
-					var zonalList;
-					var localList;
-					if('${partner.nrnReturnConfig.metroList}'!=null)
-						metroList='${partner.nrnReturnConfig.metroList}'.split(",");
-					if('${partner.nrnReturnConfig.nationalList}'!=null)
-						nationalList='${partner.nrnReturnConfig.nationalList}'.split(",");
-					if('${partner.nrnReturnConfig.zonalList}'!=null)
-						zonalList='${partner.nrnReturnConfig.zonalList}'.split(",");
-					if('${partner.nrnReturnConfig.localList}'!=null)
-						localList='${partner.nrnReturnConfig.localList}'.split(","); */
-						
-						/* localList.appendTo("#pickListResult"); */
-						/*  $.fn.pickList = function (options) {
-
-						      var opts = $.extend({}, $.fn.pickList.defaults, options);
-
-						      this.fill = function () {
-						         var localoption = '';
-						         var nationaloption = '';
-						         var zonaloption = '';
-						         var metrooption = '';
-
-						       
-						         for(var temp in localList)
-									{
-									 localoption += '<option id=' +temp + '>' + temp+ '</option>';
-					               	} 
-						         
-						         this.find('#pickListResult').append(localoption);
-						      };
-						}  */
-						
-					/* 	 for(var temp in metroList)
-							{
-							 $('#pickListResult33').append('<option value="' + temp + '">' +temp+ '</option>');
-							// p.clone().appendTo("#pickListResult33");
-			               	} 
-						 for(var temp in nationalList)
-							{
-							 $('#pickListResult22').append('<option value="' + temp + '">' +temp+ '</option>');
-			               	} 
-						 for(var temp in zonalList)
-							{
-							 $('#pickListResult11').append('<option value="' + temp + '">' +temp+ '</option>');
-			               	} 
-						 for(var temp in localList)
-							{
-							 $('#pickListResult').append('<option value="' + temp + '">' +temp+ '</option>');
-			               	} 
-						 */
-						
-
-					var val = {
-						01 : {
-							id : 01,
-							text : 'Andhra Pradesh'
-						},
-						02 : {
-							id : 02,
-							text : 'Andaman and Nicobar Islands'
-						},
-						03 : {
-							id : 03,
-							text : 'Arunachal Pradesh'
-						},
-						04 : {
-							id : 04,
-							text : 'Assam'
-						},
-						05 : {
-							id : 05,
-							text : 'Chhattisgarh'
-						},
-						06 : {
-							id : 06,
-							text : 'Chandigarh'
-						},
-						07 : {
-							id : 07,
-							text : 'Dadra and Nagar Haveli'
-						},
-						08 : {
-							id : 08,
-							text : 'Daman and Diu'
-						},
-						09 : {
-							id : 09,
-							text : 'Delhi'
-						},
-						10 : {
-							id : 10,
-							text : 'Goa'
-						},
-						11 : {
-							id : 11,
-							text : 'Gujarat'
-						},
-						12 : {
-							id : 12,
-							text : 'Haryana'
-						},
-						13 : {
-							id : 13,
-							text : 'Himachal Pradesh'
-						},
-						14 : {
-							id : 14,
-							text : 'Jammu and Kashmir'
-						},
-						15 : {
-							id : 15,
-							text : 'Jharkhand'
-						},
-						16 : {
-							id : 16,
-							text : 'Karnataka'
-						},
-						17 : {
-							id : 17,
-							text : 'Kerala'
-						},
-						18 : {
-							id : 18,
-							text : 'Lakshadweep'
-						},
-						19 : {
-							id : 19,
-							text : 'Madhya Pradesh'
-						},
-						20 : {
-							id : 20,
-							text : 'Maharashtra'
-						},
-						21 : {
-							id : 21,
-							text : 'Manipur'
-						},
-						22 : {
-							id : 22,
-							text : 'Meghalaya'
-						},
-						23 : {
-							id : 23,
-							text : 'Mizoram'
-						},
-						24 : {
-							id : 24,
-							text : 'Nagaland'
-						},
-						25 : {
-							id : 25,
-							text : 'Odisha'
-						},
-						26 : {
-							id : 26,
-							text : 'Punjab'
-						},
-						27 : {
-							id : 27,
-							text : 'Pondicherry'
-						},
-						28 : {
-							id : 28,
-							text : 'Rajasthan'
-						},
-						29 : {
-							id : 29,
-							text : 'Sikkim'
-						},
-						30 : {
-							id : 30,
-							text : 'Tamil Nadu'
-						},
-						31 : {
-							id : 31,
-							text : 'Telangana'
-						},
-						32 : {
-							id : 32,
-							text : 'Tripura'
-						},
-						33 : {
-							id : 33,
-							text : 'Uttar Pradesh'
-						},
-						34 : {
-							id : 34,
-							text : 'Uttarakhand'
-						},
-						35 : {
-							id : 35,
-							text : 'West Bengal'
-						}
-					};
-
-					var pick = $("#pickList").pickList({
-						data : val
-					});
-				});
-
-		var nameAvailability = true;
-
-		function checkOnBlur() {
-			var partner = document.getElementById("partnerName").value;
-			$.ajax({
-				url : "ajaxPartnerCheck.html?partner=" + partner,
-				success : function(res) {
-					if (res == "false") {
-						if('${partner.pcId}'!='0')
-							{
-							nameAvailability = true;
-							$("#partnerNameMessage").html(
-							"Partner Name available");
-							}
-						else
-							{
-						nameAvailability = false;
-						$("#partnerNameMessage").html(
-								"Partner Name  already exist");
-							}
-					} else {
-						nameAvailability = true;
-						$("#partnerNameMessage").html(
-								"Partner Name   available");
-					}
 				}
 			});
-		}
-		function submitForm() {
-			var validator = $("#addpartnerform")
-					.validate(
-							{
-								rules : {
-									pcName : {
-										required : true,
-										number : false,
-									},
-									maxReturnAcceptance : {
-										required : true,
-										min : 1,
-										max : 100,
-										number : true,
-									},
-									maxRTOAcceptance : {
-										required : true,
-										min : 1,
-										max : 100,
-										number : true,
-									},
-									toggler : {
-										required : true
-									},
-									startcycleday : {
-										required : function(element) {
-											return (getRole() == 'paymentcycle');
-										},
-										number : true,
-										min : 1,
-										max : 31,
 
-									},
-									paycycleduration : {
-										required : function(element) {
-											return (getRole() == 'paymentcycle');
-										},
-										number : true,
-										min : 1,
-										max : 31,
+			$(".commissionType").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).attr('id')).slideDown();
+			});
+			$(".shippingFeeType").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).attr('id')).slideDown();
+			});
+			$(".retCharSFType").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).attr('id')).slideDown();
+			});
+			$(".retCharBRType").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).attr('id')).slideDown();
+			});
+			$(".RTOCharSFType").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).attr('id')).slideDown();
+			});
+			$(".RTOCharBRType").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).attr('id')).slideDown();
+			});
+			$(".repCharSFType").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).attr('id')).slideDown();
+			});
+			$(".repCharBRType").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).attr('id')).slideDown();
+			});
+			$(".PDCharSFType").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).attr('id')).slideDown();
+			});
+			$(".PDCharBRType").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).attr('id')).slideDown();
+			});
+			$(".canCharSFBFRTDType").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).attr('id')).slideDown();
+			});
+			$(".canCharSFARTDType").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).attr('id')).slideDown();
+			});
+			$(".canCharBRType").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).attr('id')).slideDown();
+			});
+			$(".weight").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).attr('id')).slideDown();
+			});
 
-									},
-									paydaysfromstartday : {
-										required : function(element) {
-											return (getRole() == 'paymentcycle');
-										},
-										number : true,
-										min : 1,
-										max : 31,
+			$("[name=paymentType]").click(function() {
+				$('.radio1').hide();
+				$("#blk-" + $(this).val()).slideDown();
+			});
+			$('#paymentField').change(function() {
+				$('.payment-box').hide();
+				$('#' + $(this).val()).fadeIn();
+			});
+			$('#paymentField1').change(function() {
+				$('.payment-box').hide();
+				$('#' + $(this).val()).fadeIn();
+			});
+			$('#data_1 .input-group.date').datepicker({
+				todayBtn : "linked",
+				keyboardNavigation : false,
+				forceParse : false,
+				calendarWeeks : true,
+				autoclose : true
+			});
 
-									},
-									monthlypaydate : {
-										required : function(element) {
-											return (getRole() == 'monthly');
-										},
-										number : true,
-										min : 1,
-										max : 31,
+			if ('${partner.paymentType}' == 'paymentcycle')
+				$("#paymentcycle").prop("checked", true).trigger(
+						"click");
+			else if ('${partner.paymentType}' == 'datewisepay') {
+				$("#datewisepay").prop("checked", true)
+						.trigger("click");
+				$('#paymentField1').trigger('change');
+				if ('${partner.isshippeddatecalc}' != true) {
+					$("#noofdaysfromdeliverydate").val(
+							'${partner.noofdaysfromshippeddate}');
+				}
+			} else if ('${partner.paymentType}' == 'monthly')
+				$('#monthly').prop("checked", true).trigger("click");
 
-									}
+			if ('${partner.tdsApplicable}' == 'true')
+				$("#tdsApplicable").prop("checked", true);
+			
+
+			$("#submitButton").click(function() {
+				submitForm();
+			});
+			if ('${partner.nrnReturnConfig.nrCalculator}' == 'true')
+				$('input.js-switch_2').click();
+			
+
+			if ('${partner.nrnReturnConfig.commissionType}' == 'fixed')
+				$("#commisionType-fixed").prop("checked", true).trigger(
+						"click");
+			else if ('${partner.nrnReturnConfig.commissionType}' == 'categoryWise')
+				$("#commisionType-categoryWise").prop("checked", true)
+						.trigger("click");
+			
+			if ('${partner.nrnReturnConfig.shippingFeeType}' == 'fixed')
+				$("#shippingfee-fixed").prop("checked", true).trigger(
+						"click");
+			else if ('${partner.nrnReturnConfig.shippingFeeType}' == 'variable')
+				$("#shippingfee-variable").prop("checked", true)
+						.trigger("click");
+			if ('${partner.nrnReturnConfig.retCharSFType}' == 'fixed')
+				{
+				$("#retrun-sf-fix").prop("checked", true).trigger(
+						"click");
+				}
+			else if ('${partner.nrnReturnConfig.retCharSFType}' == 'variable')
+				{
+				$("#retrun-sf-variable").prop("checked", true)
+						.trigger("click");
+				}
+			else if ('${partner.nrnReturnConfig.retCharSFType}' == 'noCharges')
+				$("#retrun-sf-nocharges").prop("checked", true)
+						.trigger("click");
+			
+			if ('${partner.nrnReturnConfig.retCharBRType}' == 'fixed')
+				$("#retrun-br-fix").prop("checked", true).trigger(
+						"click");
+			else if ('${partner.nrnReturnConfig.retCharBRType}' == 'variable')
+				$("#retrun-br-variable").prop("checked", true)																																																								
+						.trigger("click");
+			else if ('${partner.nrnReturnConfig.retCharBRType}' == 'noCharges')
+				$("#retrun-br-nocharges").prop("checked", true)
+						.trigger("click");
+			
+			if ('${partner.nrnReturnConfig.RTOCharSFType}' == 'fixed')
+				$("#RTO-sf-fix").prop("checked", true).trigger(
+						"click");
+			else if ('${partner.nrnReturnConfig.RTOCharSFType}' == 'variable')
+				$("#RTO-sf-variable").prop("checked", true)																																																								
+						.trigger("click");
+			else if ('${partner.nrnReturnConfig.RTOCharSFType}' == 'noCharges')
+				$("#RTO-sf-nocharges").prop("checked", true)
+						.trigger("click");
+			
+			if ('${partner.nrnReturnConfig.RTOCharBRType}' == 'fixed')
+				$("#RTO-br-fix").prop("checked", true).trigger(
+						"click");
+			else if ('${partner.nrnReturnConfig.RTOCharBRType}' == 'variable')
+				$("#RTO-br-variable").prop("checked", true)																																																								
+						.trigger("click");
+			else if ('${partner.nrnReturnConfig.RTOCharBRType}' == 'noCharges')
+				$("#RTO-br-nocharges").prop("checked", true)
+						.trigger("click");
+				
+			if ('${partner.nrnReturnConfig.repCharSFType}' == 'fixed')
+				$("#rep-sf-fix").prop("checked", true).trigger(
+						"click");
+			else if ('${partner.nrnReturnConfig.repCharSFType}' == 'variable')
+				$("#rep-sf-variable").prop("checked", true)																																																								
+						.trigger("click");
+			else if ('${partner.nrnReturnConfig.repCharSFType}' == 'noCharges')
+				$("#rep-sf-nocharges").prop("checked", true)
+						.trigger("click");
+			
+			if ('${partner.nrnReturnConfig.repCharBRType}' == 'fixed')
+				$("#rep-br-fix").prop("checked", true).trigger(
+						"click");
+			else if ('${partner.nrnReturnConfig.repCharBRType}' == 'variable')
+				$("#rep-br-variable").prop("checked", true)																																																								
+						.trigger("click");
+			else if ('${partner.nrnReturnConfig.repCharBRType}' == 'noCharges')
+				$("#rep-br-nocharges").prop("checked", true)
+						.trigger("click");
+			
+			if ('${partner.nrnReturnConfig.PDCharSFType}' == 'fixed')
+				$("#PD-sf-fix").prop("checked", true).trigger(
+						"click");
+			else if ('${partner.nrnReturnConfig.PDCharSFType}' == 'variable')
+				$("#PD-sf-variable").prop("checked", true)																																																								
+						.trigger("click");
+			else if ('${partner.nrnReturnConfig.PDCharSFType}' == 'noCharges')
+				$("#PD-sf-nocharges").prop("checked", true)
+						.trigger("click");
+			
+			if ('${partner.nrnReturnConfig.PDCharBRType}' == 'fixed')
+				$("#PD-br-fix").prop("checked", true).trigger(
+						"click");
+			else if ('${partner.nrnReturnConfig.PDCharBRType}' == 'variable')
+				$("#PD-br-variable").prop("checked", true)																																																								
+						.trigger("click");
+			else if ('${partner.nrnReturnConfig.PDCharBRType}' == 'noCharges')
+				$("#PD-br-nocharges").prop("checked", true)
+						.trigger("click");
+			
+			if ('${partner.nrnReturnConfig.canCharSFBFRTDType}' == 'fixed')
+				$("#can-sfbfrtd-fix").prop("checked", true).trigger(
+						"click");
+			else if ('${partner.nrnReturnConfig.canCharSFBFRTDType}' == 'variable')
+				$("#can-sfbfrtd-variable").prop("checked", true)																																																								
+						.trigger("click");
+			else if ('${partner.nrnReturnConfig.canCharSFBFRTDType}' == 'noCharges')
+				$("#can-sfbfrtd-nocharges").prop("checked", true)
+						.trigger("click");
+			
+			if ('${partner.nrnReturnConfig.canCharSFARTDType}' == 'fixed')
+				$("#can-sfartd-fix").prop("checked", true).trigger(
+						"click");
+			else if ('${partner.nrnReturnConfig.canCharSFARTDType}' == 'variable')
+				$("#can-sfartd-variable").prop("checked", true)																																																								
+						.trigger("click");
+			else if ('${partner.nrnReturnConfig.canCharSFARTDType}' == 'noCharges')
+				$("#can-sfartd-nocharges").prop("checked", true)
+						.trigger("click");
+			
+			if ('${partner.nrnReturnConfig.canCharBRType}' == 'fixed')
+				$("#can-br-fix").prop("checked", true).trigger(
+						"click");
+			else if ('${partner.nrnReturnConfig.canCharBRType}' == 'variable')
+				$("#can-br-variable").prop("checked", true)																																																								
+						.trigger("click");
+			else if ('${partner.nrnReturnConfig.canCharBRType}' == 'noCharges')
+				$("#can-br-nocharges").prop("checked", true)
+						.trigger("click");
+			
+			if ('${partner.nrnReturnConfig.whicheverGreaterPCC}' == 'true')
+			 {		 
+			 $('#whicheverGreaterPCC').iCheck('check');		
+			 }
+		 if ('${partner.nrnReturnConfig.retCharSFRevShipFee}' == 'true')
+			 	$('#retCharSFRevShipFee').iCheck('check');			
+		 if ('${partner.nrnReturnConfig.retCharSFShipFee}' == 'true')
+			 $('#retCharSFShipFee').iCheck('check');
+		 if ('${partner.nrnReturnConfig.retCharBRFF}' == 'true')
+			 $('#retCharBRFF').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.retCharBRShipFee}' == 'true')
+			 $('#retCharBRShipFee').iCheck('check');	
+			 
+		 if ('${partner.nrnReturnConfig.RTOCharSFRevShipFee}' == 'true')
+			 $('#RTOCharSFRevShipFee').iCheck('check');	
+			 	 
+		 if ('${partner.nrnReturnConfig.RTOCharSFFF}' == 'true')
+			 $('#RTOCharSFFF').iCheck('check');	
+				
+		 if ('${partner.nrnReturnConfig.RTOCharSFShipFee}' == 'true')
+			 $('#RTOCharSFShipFee').iCheck('check');	
+				
+		 if ('${partner.nrnReturnConfig.RTOCharSFRevShipFee}' == 'true')
+			 $('#RTOCharSFRevShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.RTOCharBRFF}' == 'true')
+			 $('#RTOCharBRFF').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.RTOCharBRShipFee}' == 'true')
+			 $('#RTOCharBRShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.repCharSFRevShipFee}' == 'true')
+			 $('#repCharSFRevShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.repCharSFFF}' == 'true')
+			 $('#repCharSFFF').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.repCharSFShipFee}' == 'true')
+			 $('#repCharSFShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.repCharSFRevShipFee}' == 'true')
+			 $('#repCharSFRevShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.repCharBRFF}' == 'true')
+			 $('#repCharBRFF').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.repCharBRShipFee}' == 'true')
+			 $('#repCharBRShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.PDCharSFRevShipFee}' == 'true')
+			 $('#PDCharSFRevShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.PDCharSFFF}' == 'true')
+			 $('#PDCharSFFF').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.PDCharSFShipFee}' == 'true')
+			 $('#PDCharSFShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.PDCharSFRevShipFee}' == 'true')
+			 $('#PDCharSFRevShipFee').iCheck('check');
+				
+		 
+		 if ('${partner.nrnReturnConfig.PDCharBRFF}' == 'true')
+			 $('#PDCharBRFF').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.PDCharBRShipFee}' == 'true')
+			 $('#PDCharBRShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.canCharSFBRTDRevShipFee}' == 'true')
+			 $('#canCharSFBRTDRevShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.canCharSFBRTDFF}' == 'true')
+			 $('#canCharSFBRTDFF').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.canCharSFBRTDShipFee}' == 'true')
+			 $('#canCharSFBRTDShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.canCharSFBRTDRevShipFee}' == 'true')
+			 $('#canCharSFBRTDRevShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.canCharSFARTDRevShipFee}' == 'true')
+			 $('#canCharSFARTDRevShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.canCharSFFF}' == 'true')
+			 $('#canCharSFFF').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.canCharSFShipFee}' == 'true')
+			 $('#canCharSFShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.canCharSFARTDRevShipFee}' == 'true')
+			 $('#canCharSFARTDRevShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.canCharBRFF}' == 'true')
+			 $('#canCharBRFF').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.canCharBRFF}' == 'true')
+			 $('#canCharBRFF').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.canCharBRShipFee}' == 'true')
+			 $('#canCharBRShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.canCharBRRevShipFee}' == 'true')
+			 $('#canCharBRRevShipFee').iCheck('check');
+				
+		 if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeVar')
+			 $('#revShippingFeeType_revShipFeeVar').iCheck('check');
+		 if ('${partner.nrnReturnConfig.retCharSFFF}' == 'true')
+             $('#retCharSFFF').iCheck('check');
+				
+		 else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeShipFee')
+			 $('#revShippingFeeType_revShipFeeShipFee').iCheck('check');			
+		 else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeFF')
+			 $('#revShippingFeeType_revShipFeeFF').iCheck('check');			
+		 else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeGRT')
+			 $('#revShippingFeeType_revShipFeeGRT').iCheck('check');			
+		 else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeePCC')
+			 $('#revShippingFeeType_revShipFeePCC').iCheck('check');
+		 
+		 $('#whicheverGreaterPCC').on("ifChecked" ,function() {
+			 if($(this).is(":checked")) {
+		        	 $('#ispercentSPPCC').iCheck('check');
+		        	 $('#isfixedAmountPCC').iCheck('check');
+		        }    
+		    });
+		/*  $("#shippingfee-variable").click(function() {
+
+			    alert($('#pickListResult :selected').text());
+
+			   }); */
+			   
+			   
+			   
+			   
+			   validator = $("#addpartnerform")
+				.validate(
+						{
+							rules : {
+								pcName : {
+									required : true,
+									number : false,
 								},
-								errorElement : "span",
-								messages : {
-									pcName : " Enter partner name",
-									maxReturnAcceptance : "Max return required between 1 and 100",
-									maxRTOAcceptance : "RTO acceptance required between 1 and 100",
-									toggler : "Please select any Payment Cycle"
+								maxReturnAcceptance : {
+									required : true,
+									min : 1,
+									max : 100,
+									number : true,
+								},
+								maxRTOAcceptance : {
+									required : true,
+									min : 1,
+									max : 100,
+									number : true,
+								},
+								paymentType : {
+									required : true
+								},
+								startcycleday : {
+									required : function(element) {
+										return (getRole('paymentcycleClass') == 'paymentcycle');
+									},
+									number : true,
+									min : 1,
+									max : 31,
+
+								},
+								paycycleduration : {
+									required : function(element) {
+										return (getRole('paymentcycleClass') == 'paymentcycle');
+									},
+									number : true,
+									min : 1,
+									max : 31,
+
+								},
+								paydaysfromstartday : {
+									required : function(element) {
+										return (getRole('paymentcycleClass') == 'paymentcycle');
+									},
+									number : true,
+									min : 1,
+									max : 31,
+
+								},
+								monthlypaydate : {
+									required : function(element) {
+										return (getRole('paymentcycleClass') == 'monthly');
+									},
+									number : true,
+									min : 1,
+									max : 31,
+
 								}
-							});
+							},
+							errorElement : "span",
+							messages : {
+								pcName : " Enter partner name",
+								maxReturnAcceptance : "Max return required between 1 and 100",
+								maxRTOAcceptance : "RTO acceptance required between 1 and 100",
+								toggler : "Please select any Payment Cycle"
+							}
+							
+						});
+		
+			   $(".commissionType").rules("add", { 
+				   required:function(element) {
+				   	  var clickCheckbox = document.querySelector('.js-switch_2');
+				   	 return clickCheckbox.checked;
+				   	}
+				   });
+					
+			   $("#fixedCommissionPercent").rules("add", { 
+					  required:function(element) {
+						if(getRole('commissionType')=='fixed')
+							return true;
+						else 
+							return false;
+						},
+						number : true
+					});
+			   $(".categoryWiseCommission").rules("add", { 
+					  required:function(element) {
+						if(getRole('commissionType')=='categoryWise')
+							return true;
+						else 
+							return false;
+						},
+						number : true
+				});
+			   $("#serviceTax").rules("add", { 
+					  required:function(element) {
+						  var clickCheckbox = document.querySelector('.js-switch_2');
+							 return clickCheckbox.checked;
+							},
+						number : true
+					});
+			   
+			/*    $(".validateNumber").rules("add", { 
+						number : true
+					}); */
+			   
+			   
+			   
+		 
+		 
+			var val = {
+				01 : {
+					id : 01,
+					text : 'Andhra Pradesh'
+				},
+				02 : {
+					id : 02,
+					text : 'Andaman and Nicobar Islands'
+				},
+				03 : {
+					id : 03,
+					text : 'Arunachal Pradesh'
+				},
+				04 : {
+					id : 04,
+					text : 'Assam'
+				},
+				05 : {
+					id : 05,
+					text : 'Chhattisgarh'
+				},
+				06 : {
+					id : 06,
+					text : 'Chandigarh'
+				},
+				07 : {
+					id : 07,
+					text : 'Dadra and Nagar Haveli'
+				},
+				08 : {
+					id : 08,
+					text : 'Daman and Diu'
+				},
+				09 : {
+					id : 09,
+					text : 'Delhi'
+				},
+				10 : {
+					id : 10,
+					text : 'Goa'
+				},
+				11 : {
+					id : 11,
+					text : 'Gujarat'
+				},
+				12 : {
+					id : 12,
+					text : 'Haryana'
+				},
+				13 : {
+					id : 13,
+					text : 'Himachal Pradesh'
+				},
+				14 : {
+					id : 14,
+					text : 'Jammu and Kashmir'
+				},
+				15 : {
+					id : 15,
+					text : 'Jharkhand'
+				},
+				16 : {
+					id : 16,
+					text : 'Karnataka'
+				},
+				17 : {
+					id : 17,
+					text : 'Kerala'
+				},
+				18 : {
+					id : 18,
+					text : 'Lakshadweep'
+				},
+				19 : {
+					id : 19,
+					text : 'Madhya Pradesh'
+				},
+				20 : {
+					id : 20,
+					text : 'Maharashtra'
+				},
+				21 : {
+					id : 21,
+					text : 'Manipur'
+				},
+				22 : {
+					id : 22,
+					text : 'Meghalaya'
+				},
+				23 : {
+					id : 23,
+					text : 'Mizoram'
+				},
+				24 : {
+					id : 24,
+					text : 'Nagaland'
+				},
+				25 : {
+					id : 25,
+					text : 'Odisha'
+				},
+				26 : {
+					id : 26,
+					text : 'Punjab'
+				},
+				27 : {
+					id : 27,
+					text : 'Pondicherry'
+				},
+				28 : {
+					id : 28,
+					text : 'Rajasthan'
+				},
+				29 : {
+					id : 29,
+					text : 'Sikkim'
+				},
+				30 : {
+					id : 30,
+					text : 'Tamil Nadu'
+				},
+				31 : {
+					id : 31,
+					text : 'Telangana'
+				},
+				32 : {
+					id : 32,
+					text : 'Tripura'
+				},
+				33 : {
+					id : 33,
+					text : 'Uttar Pradesh'
+				},
+				34 : {
+					id : 34,
+					text : 'Uttarakhand'
+				},
+				35 : {
+					id : 35,
+					text : 'West Bengal'
+				}
+			};
+
+			var pick = $("#pickList").pickList({
+				data : val
+			});
+			
+		
+		});
+
+var nameAvailability = true;
+
+function checkOnBlur() {
+	var partner = document.getElementById("partnerName").value;
+	$.ajax({
+		url : "ajaxPartnerCheck.html?partner=" + partner,
+		success : function(res) {
+			if (res == "false") {
+				if('${partner.pcId}'!='0')
+					{
+					nameAvailability = true;
+					$("#partnerNameMessage").html(
+					"Partner Name available");
+					}
+				else
+					{
+				nameAvailability = false;
+				$("#partnerNameMessage").html(
+						"Partner Name  already exist");
+					}
+			} else {
+				nameAvailability = true;
+				$("#partnerNameMessage").html(
+						"Partner Name   available");
+			}
+		}
+	});
+}
+		function submitForm() {
+			
+							
 			if (validator.form() && nameAvailability) {
 				$('form#addpartnerform').submit();
 			}
 		}
-		function getRole() {
-			return $("#addpartnerform").find("input[type=radio]:checked").val();
+		function getRole(radioclassname) {
+			return $("#addpartnerform").find("input."+radioclassname+":checked").val();
 		}
-
-		//Code for state selection module
-	</script>
+</script>
+	
 </body>
 </html>
