@@ -234,7 +234,6 @@
 															<th>Channel</th>
 															<th>SKU</th>
 															<th>Invoice ID</th>
-															<th>Order Date</th>
 															<th>Shipped Date</th>
 															<th>Gross Sale Qty</th>
 															<th>Amount(Net PO Price)</th>
@@ -257,8 +256,6 @@
 																	<td>${poOrder.pcName}</td>
 																	<td>${poOrder.productSkuCode}</td>
 																	<td>${poOrder.invoiceID}</td>
-																	<td><fmt:formatDate value="${poOrder.orderDate}"
-																			pattern="MMM dd ,YY" /></td>
 																	<td><fmt:formatDate value="${poOrder.shippedDate}"
 																			pattern="MMM dd ,YY" /></td>
 																	<td>${poOrder.quantity}</td>

@@ -6,6 +6,7 @@ import java.util.List;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.DebitNoteBean;
 import com.o2r.bean.PoPaymentBean;
+import com.o2r.bean.PoPaymentDetailsBean;
 import com.o2r.helper.CustomException;
 import com.o2r.model.GatePass;
 import com.o2r.model.Order;
@@ -58,7 +59,7 @@ public interface OrderDao {
 	public void addDebitNote(DebitNoteBean dnBean, int sellerId)
 			throws CustomException;
 
-	public void addPOPayment(PoPaymentBean popaBean, int sellerId)
+	public Order addPOPayment(PoPaymentBean popaBean, int sellerId)
 			throws CustomException;
 
 	public List<Order> listOrders(int sellerId, int pageNo)
@@ -101,4 +102,7 @@ public interface OrderDao {
 
 	public Order findConsolidatedPO(String column, String value, int sellerId)
 			throws CustomException;
+
+	public List<PoPaymentDetailsBean> getPOPaymentDetails(int sellerId,
+			boolean isMonthly);
 }

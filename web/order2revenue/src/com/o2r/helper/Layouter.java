@@ -805,12 +805,8 @@ public class Layouter {
 		cell5.setCellStyle(headerCellStyle);
 
 		HSSFCell cell6 = rowHeader.createCell(startColIndex + 5);
-		cell6.setCellValue("NPR");
+		cell6.setCellValue("Seller Notes");
 		cell6.setCellStyle(headerCellStyle);
-
-		HSSFCell cell7 = rowHeader.createCell(startColIndex + 6);
-		cell7.setCellValue("Seller Notes");
-		cell7.setCellStyle(headerCellStyle);
 
 	}
 

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.DebitNoteBean;
 import com.o2r.bean.PoPaymentBean;
+import com.o2r.bean.PoPaymentDetailsBean;
 import com.o2r.dao.OrderDao;
 import com.o2r.helper.CustomException;
 import com.o2r.model.GatePass;
@@ -136,9 +137,9 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public void addPOPayment(PoPaymentBean popaBean, int sellerId)
+	public Order addPOPayment(PoPaymentBean popaBean, int sellerId)
 			throws CustomException {
-		orderDao.addPOPayment(popaBean, sellerId);
+		return orderDao.addPOPayment(popaBean, sellerId);
 	}
 
 	@Override
@@ -213,5 +214,11 @@ public class OrderServiceImpl implements OrderService {
 	public Order findConsolidatedPO(String column, String value, int sellerId)
 			throws CustomException {
 		return orderDao.findConsolidatedPO(column, value, sellerId);
+	}
+
+	@Override
+	public List<PoPaymentDetailsBean> getPOPaymentDetails(int sellerId,
+			boolean isMonthly) {
+		return orderDao.getPOPaymentDetails(sellerId, isMonthly);
 	}
 }

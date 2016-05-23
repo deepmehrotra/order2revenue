@@ -1062,7 +1062,7 @@ public class SaveContents {
 	}
 
 	// My Coding Product Config Ends ********
-
+	
 	public Map<String, OrderBean> savePaymentContents(MultipartFile file,
 			int sellerId, String path) throws IOException {
 		PaymentUpload paymentUpload = new PaymentUpload();
@@ -1620,6 +1620,8 @@ public class SaveContents {
 
 	public Map<String, PoPaymentBean> savePoPaymentDetails(MultipartFile file,
 			int sellerId, String path) throws IOException {
+		PaymentUpload paymentUpload = new PaymentUpload();
+		Order poOrder = null;
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		
@@ -1627,6 +1629,8 @@ public class SaveContents {
 		boolean validaterow = true;
 		PoPaymentBean popabean = null;
 		Map<String, PoPaymentBean> returnMap = new LinkedHashMap<>();
+		double totalpositive = 0;
+		double totalnegative = 0;
 		
 		try {
 			System.out.println("Inside save popayment note data -->");
@@ -1640,6 +1644,7 @@ public class SaveContents {
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				popabean = new PoPaymentBean();
+				validaterow = true;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0)
@@ -1694,6 +1699,11 @@ public class SaveContents {
 					try {
 						popabean.setPositiveAmount(Double.parseDouble(entry.getCell(3)
 								.toString()));
+						totalpositive = totalpositive
+								+ Double.parseDouble(entry.getCell(3)
+										.toString());
+						System.out.println(" ******toatal psitive :"
+								+ totalpositive);
 					} catch (NumberFormatException e) {
 						errorMessage
 								.append(" Positive Amount should be a number ");
@@ -1711,6 +1721,9 @@ public class SaveContents {
 					try {
 						popabean.setNegativeAmount(Double.parseDouble(entry.getCell(4)
 								.toString()));
+						totalnegative = totalnegative
+								+ Math.abs(Double.parseDouble(entry.getCell(4)
+										.toString()));
 					} catch (NumberFormatException e) {
 						errorMessage
 								.append(" Negative Amount should be a number ");
@@ -1724,31 +1737,32 @@ public class SaveContents {
 				}
 				
 				if (entry.getCell(5) != null
-						&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
-					try {
-						popabean.setNpr(entry.getCell(5).getNumericCellValue());
-					} catch (NumberFormatException e) {
-						errorMessage
-								.append(" NPR should be a number ");
-						validaterow = false;
-					}
-				} else {
-					errorMessage.append(" NPR is null ");
-					validaterow = false;
-				}
-				
-				if (entry.getCell(6) != null
-						&& StringUtils.isNotBlank(entry.getCell(6)
+						&& StringUtils.isNotBlank(entry.getCell(5)
 								.toString())) {
-					popabean.setSellerNote(entry.getCell(6).toString());
+					popabean.setSellerNote(entry.getCell(5).toString());
 				}
 				
 				if (validaterow) {
-					orderService.addPOPayment(popabean, sellerId);
+					poOrder = orderService.addPOPayment(popabean, sellerId);
 				} else {
 					returnMap.put(errorMessage.toString(), popabean);
 				}
+				
+				if (poOrder != null) {
+					poOrder.setPaymentUpload(paymentUpload);
+					paymentUpload.getOrders().add(poOrder);
+				}
 			}
+			
+			System.out.println(" Total Positive Amount : " + totalpositive);
+			System.out.println(" Total Negative Amount : " + totalnegative);
+			paymentUpload.setTotalpositivevalue(totalpositive);
+			paymentUpload.setTotalnegativevalue(totalnegative);
+			paymentUpload.setNetRecievedAmount(totalpositive - totalnegative);
+			paymentUpload.setUploadDesc("PAYU" + sellerId + ""
+					+ new Date().getTime());
+			paymentUpload.setUploadStatus("Success");
+			paymentUploadService.addPaymentUpload(paymentUpload, sellerId);
 			
 			Set<String> errorSet = returnMap.keySet();
 			downloadUploadReportXLS(offices, "POPaymentSheet", 8, errorSet,
