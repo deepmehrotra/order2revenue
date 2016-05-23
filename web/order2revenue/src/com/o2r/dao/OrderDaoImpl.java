@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,13 +79,83 @@ public class OrderDaoImpl implements OrderDao {
 
 	static Logger log = Logger.getLogger(OrderDaoImpl.class.getName());
 
+	private static final String monthlyPOPaymentQuery = "SELECT concat(monthname(op.dateOfPayment), \", \", year(op.dateofPayment)) as Detail,"
+			+ "SUM(op.positiveAmount) as Debits, "
+			+ "SUM(op.negativeAmount) as Payments, "
+			+ "SUM(op.paymentDifference) as Peyment_Diff, "
+			+ "SUM(op.netPaymentResult) as Closing_Bal "
+			+ "FROM orderpay op INNER JOIN order_table ot "
+			+ "ON ot.orderPayment_paymentId = op.paymentId "
+			+ "AND ot.poOrder = true  "
+			+ "AND ot.consolidatedOrder_orderId IS NULL "
+			+ "AND ot.seller_Id=:sellerId "
+			+ "GROUP BY YEAR(op.dateOfPayment), MONTH(op.dateOfPayment) "
+			+ "order by YEAR(op.dateOfPayment), MONTH(op.dateOfPayment)";
+
+	private static final String yearlyPOPaymentQuery = "SELECT year(op.dateofPayment) as Year, "
+			+ "SUM(op.positiveAmount) as Debits, "
+			+ "SUM(op.negativeAmount) as Payments, "
+			+ "SUM(op.paymentDifference) as Peyment_Diff, "
+			+ "SUM(op.netPaymentResult) as Closing_Bal "
+			+ "FROM orderpay op INNER JOIN order_table ot "
+			+ "ON ot.orderPayment_paymentId = op.paymentId "
+			+ "AND ot.poOrder = true  "
+			+ "AND ot.consolidatedOrder_orderId IS NULL "
+			+ "AND ot.seller_Id=:sellerId "
+			+ "GROUP BY YEAR(op.dateOfPayment) "
+			+ "order by YEAR(op.dateOfPayment)";
+
+	private static final String monthlyEOSSPOQuery = "SELECT concat(monthname(op.dateOfPayment), \", \", year(op.dateofPayment)) as Detail,"
+			+ "SUM(ot.eossValue) as EOSS "
+			+ "FROM orderpay op INNER JOIN order_table ot "
+			+ "ON ot.orderPayment_paymentId = op.paymentId "
+			+ "AND ot.poOrder = true  "
+			+ "AND ot.consolidatedOrder_orderId IS NULL "
+			+ "AND ot.orderReturnOrRTO_returnId IS NULL "
+			+ "AND ot.seller_Id=:sellerId "
+			+ "GROUP BY YEAR(op.dateOfPayment), MONTH(op.dateOfPayment) "
+			+ "order by YEAR(op.dateOfPayment), MONTH(op.dateOfPayment)";
+
+	private static final String monthlyEOSSGPQuery = "SELECT concat(monthname(op.dateOfPayment), \", \", year(op.dateofPayment)) as Detail,"
+			+ "SUM(ot.eossValue) as EOSS "
+			+ "FROM orderpay op INNER JOIN order_table ot "
+			+ "ON ot.orderPayment_paymentId = op.paymentId "
+			+ "AND ot.poOrder = true  "
+			+ "AND ot.consolidatedOrder_orderId IS NULL "
+			+ "AND ot.orderReturnOrRTO_returnId IS NOT NULL "
+			+ "AND ot.seller_Id=:sellerId "
+			+ "GROUP BY YEAR(op.dateOfPayment), MONTH(op.dateOfPayment) "
+			+ "order by YEAR(op.dateOfPayment), MONTH(op.dateOfPayment)";
+
+	private static final String yearlyEOSSPOQuery = "SELECT year(op.dateofPayment) as Year, "
+			+ "SUM(ot.eossValue) as EOSS "
+			+ "FROM orderpay op INNER JOIN order_table ot "
+			+ "ON ot.orderPayment_paymentId = op.paymentId "
+			+ "AND ot.poOrder = true  "
+			+ "AND ot.consolidatedOrder_orderId IS NULL "
+			+ "AND ot.orderReturnOrRTO_returnId IS NULL "
+			+ "AND ot.seller_Id=:sellerId "
+			+ "GROUP BY YEAR(op.dateOfPayment) "
+			+ "order by YEAR(op.dateOfPayment)";
+
+	private static final String yearlyEOSSGPQuery = "SELECT year(op.dateofPayment) as Year, "
+			+ "SUM(ot.eossValue) as EOSS "
+			+ "FROM orderpay op INNER JOIN order_table ot "
+			+ "ON ot.orderPayment_paymentId = op.paymentId "
+			+ "AND ot.poOrder = true  "
+			+ "AND ot.consolidatedOrder_orderId IS NULL "
+			+ "AND ot.orderReturnOrRTO_returnId IS NOT NULL "
+			+ "AND ot.seller_Id=:sellerId "
+			+ "GROUP BY YEAR(op.dateOfPayment) "
+			+ "order by YEAR(op.dateOfPayment)";
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public void addOrder(Order order, int sellerId) throws CustomException {
-		
+
 		log.info("*** AddOrder starts ***");
 		Seller seller = null;
-		Date reconciledate = null;		
+		Date reconciledate = null;
 		Date tempDate = null;
 		Session session = null;
 		TaxDetail taxDetails = null;
@@ -119,7 +190,8 @@ public class OrderDaoImpl implements OrderDao {
 								.getPartners().get(0), order.getOrderDate());
 						if (reconciledate != null)
 							order.setPaymentDueDate(reconciledate);
-						log.debug(" after settinf rec date delivery date :"+ order.getDeliveryDate());
+						log.debug(" after settinf rec date delivery date :"
+								+ order.getDeliveryDate());
 					}
 					order.setStatus("Shipped");
 					if (partner != null && partner.getNrnReturnConfig() != null
@@ -195,14 +267,12 @@ public class OrderDaoImpl implements OrderDao {
 						order.setDiscount((Math.abs(order.getOrderMRP()
 								- order.getOrderSP())));
 						log.debug(" Tax cal SP:"
-										+ order.getOrderSP()
-										+ " >>TAxReate="
-										+ taxpercent
-										+ "  Tax>>"
-										+ (order.getOrderSP() - (order
-												.getOrderSP() * (100 / (100 + seller
-												.getPartners().get(0)
-												.getTaxrate())))));
+								+ order.getOrderSP()
+								+ " >>TAxReate="
+								+ taxpercent
+								+ "  Tax>>"
+								+ (order.getOrderSP() - (order.getOrderSP() * (100 / (100 + seller
+										.getPartners().get(0).getTaxrate())))));
 						order.getOrderTax()
 								.setTax(order.getOrderSP()
 										- (order.getOrderSP() * (100 / (100 + taxpercent))));
@@ -221,8 +291,8 @@ public class OrderDaoImpl implements OrderDao {
 					// Set Order Timeline
 					OrderTimeline timeline = new OrderTimeline();
 					// populating tax related values of order
-				if (seller.getPartners().get(0).isTdsApplicable()) {
-						log.debug(" PC "+ order.getPartnerCommission());
+					if (seller.getPartners().get(0).isTdsApplicable()) {
+						log.debug(" PC " + order.getPartnerCommission());
 						taxDetails = new TaxDetail();
 						taxDetails.setBalanceRemaining(order.getOrderTax()
 								.getTdsToDeduct());
@@ -239,12 +309,12 @@ public class OrderDaoImpl implements OrderDao {
 							+ order.getCustomer().getCustomerEmail());
 					order.getCustomer().setSellerId(sellerId);
 					order.getCustomer().getOrders().add(order);
-					
+
 					// Adding order to the Partner
 					if (partner.getOrders() != null && order.getOrderId() == 0) {
 						partner.getOrders().add(order);
 					}
-					
+
 					// Setting payment difference for old orders
 					if (order.getPaymentDueDate().compareTo(
 							java.util.Calendar.getInstance().getTime()) < 0) {
@@ -267,7 +337,7 @@ public class OrderDaoImpl implements OrderDao {
 					// Setting Pr and Gross Profit for Order
 					order.setPr(order.getNetRate()
 							- order.getOrderTax().getTax());
-					
+
 					order.setGrossProfit(order.getPr()
 							- (product.getProductPrice() * order.getQuantity()));
 
@@ -285,7 +355,8 @@ public class OrderDaoImpl implements OrderDao {
 						order.setLastActivityOnOrder(new Date());
 						session.merge(order);
 					} else {
-						log.debug("******Saving new  order delivery date : "+ order.getDeliveryDate());
+						log.debug("******Saving new  order delivery date : "
+								+ order.getDeliveryDate());
 						// Code for order timeline
 						timeline.setEvent("Order Created");
 						order.setLastActivityOnOrder(new Date());
@@ -297,7 +368,7 @@ public class OrderDaoImpl implements OrderDao {
 						session.saveOrUpdate(seller);
 					}
 					session.getTransaction().commit();
-					
+
 				} catch (Exception e) {
 					log.debug("Inside exception in add order "
 							+ e.getLocalizedMessage() + " message: "
@@ -321,12 +392,12 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public Order addPO(Order order, int sellerId) throws CustomException {
-		
+
 		log.info("*** addPO Starts ***");
 		order.setPoOrder(true);
 		order.setOrderDate(new Date());
 		Seller seller = null;
-		Date reconciledate = null;		
+		Date reconciledate = null;
 		Session session = null;
 		Partner partner = null;
 		Product product = null;
@@ -340,19 +411,22 @@ public class OrderDaoImpl implements OrderDao {
 						productConfig.getProductSkuCode(), sellerId);
 			}
 			if (product != null) {
-				try {					
+				try {
 					session = sessionFactory.openSession();
 					session.beginTransaction();
 					Criteria criteria = session.createCriteria(Seller.class)
 							.add(Restrictions.eq("id", sellerId));
-					criteria.createAlias("partners", "partner",CriteriaSpecification.LEFT_JOIN)
-							.add(Restrictions.eq("partner.pcName",order.getPcName()).ignoreCase())
-							.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+					criteria.createAlias("partners", "partner",
+							CriteriaSpecification.LEFT_JOIN)
+							.add(Restrictions.eq("partner.pcName",
+									order.getPcName()).ignoreCase())
+							.setResultTransformer(
+									CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 					seller = (Seller) criteria.list().get(0);
 					if (seller.getPartners() != null
 							&& seller.getPartners().size() != 0) {
 						partner = seller.getPartners().get(0);
-					}					
+					}
 					order.setStatus("Shipped");
 					if (order.getPcName().equalsIgnoreCase(
 							GlobalConstant.PCMYNTRA)) {
@@ -383,9 +457,9 @@ public class OrderDaoImpl implements OrderDao {
 					OrderTimeline timeline = new OrderTimeline();
 					// populating tax related values of order
 
-					System.out.println(" Tax before pr:"
-							+ taxvalue);
-					order.setPr((order.getGrossNetRate() - taxvalue) * order.getQuantity());
+					System.out.println(" Tax before pr:" + taxvalue);
+					order.setPr((order.getGrossNetRate() - taxvalue)
+							* order.getQuantity());
 
 					// Reducing Product Inventory For Order
 					productService.updateInventory(order.getProductConfig()
@@ -399,7 +473,7 @@ public class OrderDaoImpl implements OrderDao {
 					order.setGrossProfit((order.getPr() * order.getQuantity())
 							- (order.getProductConfig().getProductPrice() * order
 									.getQuantity()));
-					
+
 					order.setEossValue(order.getEossValue()
 							* order.getQuantity());
 					order.getOrderTax().setTax(taxvalue * order.getQuantity());
@@ -413,7 +487,8 @@ public class OrderDaoImpl implements OrderDao {
 						order.setLastActivityOnOrder(new Date());
 						session.merge(order);
 					} else {
-						log.debug("*********Saving new  order delivery date :"+ order.getDeliveryDate());
+						log.debug("*********Saving new  order delivery date :"
+								+ order.getDeliveryDate());
 						// Code for order timeline
 						timeline.setEvent("Order Created");
 						order.setLastActivityOnOrder(new Date());
@@ -425,7 +500,7 @@ public class OrderDaoImpl implements OrderDao {
 						session.saveOrUpdate(seller);
 					}
 					session.getTransaction().commit();
-					
+
 					TaxDetail taxDetails = new TaxDetail();
 					taxDetails
 							.setBalanceRemaining(order.getOrderTax().getTax());
@@ -454,12 +529,12 @@ public class OrderDaoImpl implements OrderDao {
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
 					1, GlobalConstant.addOrderErrorCode, e);
-		}		
+		}
 	}
 
 	@Override
 	public List<Order> listOrders(int sellerId) throws CustomException {
-		
+
 		log.info("*** listOrders Starts ***");
 		List<Order> returnlist = null;
 		try {
@@ -483,7 +558,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public List<Order> listOrders(int sellerId, int pageNo)
-			throws CustomException {		
+			throws CustomException {
 
 		log.info("*** listOrders with sellerId n pageNo Starts ***");
 		List<Order> returnlist = null;
@@ -552,7 +627,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public Order getOrder(int orderId) throws CustomException {
-		
+
 		log.info("*** getOrder Starts ***");
 		Order returnorder = null;
 		try {
@@ -581,7 +656,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public Order getConsolidatedOrder(String poId, String invoiceId)
 			throws CustomException {
-		
+
 		log.info("*** getConsolidatedOrder starts ***");
 		Order order = null;
 		List returnList = null;
@@ -615,7 +690,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		}
 		log.info("*** getConsolidatedOrder ends ***");
-		return order;		
+		return order;
 	}
 
 	@Override
@@ -623,7 +698,7 @@ public class OrderDaoImpl implements OrderDao {
 		Order returnorder = null;
 		List returnList = null;
 		try {
-			
+
 			log.info("*** getOrder by Order & seller ID starts : OrderDaoImpl ***");
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -659,7 +734,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public List<Order> getPOOrdersFromConsolidated(int orderId, int sellerId)
 			throws CustomException {
-		
+
 		log.info("*** getPOOrdersFromConsolidated starts : OrderDaoImpl ***");
 		Seller seller = null;
 		List<Order> orderlist = null;
@@ -705,7 +780,6 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public void deleteOrder(Order order, int sellerId) throws CustomException {
-		
 
 		log.info("*** deleteOrder starts : OrderDaoImpl ***");
 		try {
@@ -720,8 +794,8 @@ public class OrderDaoImpl implements OrderDao {
 			int orderdelete = session.createQuery(
 					"DELETE FROM Order WHERE orderId = " + order.getOrderId())
 					.executeUpdate();
-			log.debug(" Deletion process successful :updated"
-					+ updated + "orderdelete " + orderdelete);
+			log.debug(" Deletion process successful :updated" + updated
+					+ "orderdelete " + orderdelete);
 			session.getTransaction().commit();
 			session.close();
 
@@ -737,7 +811,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public void addReturnOrder(String channelOrderId,
 			OrderRTOorReturn orderReturn, int sellerId) throws CustomException {
-		
+
 		log.info("*** addReturnOrder starts : OrderDaoImpl ***");
 		Seller seller = null;
 		Order order = null;
@@ -789,14 +863,13 @@ public class OrderDaoImpl implements OrderDao {
 						* (order.getQuantity() - orderReturn
 								.getReturnorrtoQty()));
 
-				
 				order.getOrderReturnOrRTO().setReturnUploadDate(
 						orderReturn.getReturnUploadDate());
 				if (order.getReturnLimitCrossed().compareTo(
 						orderReturn.getReturnDate()) < 0) {
 					order.getOrderReturnOrRTO()
 							.setReturnOrRTOChargestoBeDeducted(0);
-					
+
 					// Changing PD return quantity wise
 					order.getOrderPayment().setPaymentDifference(
 							order.getOrderPayment().getNetPaymentResult());
@@ -813,7 +886,7 @@ public class OrderDaoImpl implements OrderDao {
 						orderReturn.getReturnDate()) < 0) {
 					order.getOrderReturnOrRTO()
 							.setReturnOrRTOChargestoBeDeducted(0);
-					
+
 					// Changing PD return quantity wise
 					order.getOrderPayment().setPaymentDifference(
 							order.getOrderPayment().getNetPaymentResult());
@@ -840,23 +913,21 @@ public class OrderDaoImpl implements OrderDao {
 					order.setStatus("Return Recieved");
 
 					// setting gross profit
-				
+
 					OrderTimeline timeline = new OrderTimeline();
 					timeline.setEvent("Return Recieved");
 					timeline.setEventDate(new Date());
 					order.getOrderTimeline().add(timeline);
 
 				}
-			
+
 				if (orderReturn.getReturnorrtoQty() == order.getQuantity())
 					order.setGrossProfit(-orderReturn
 							.getReturnOrRTOChargestoBeDeducted());
-				else 
-				{
-					order.setGrossProfit(((order.getGrossProfit()/ order.getQuantity())
-							* orderReturn.getReturnorrtoQty())- orderReturn
-							.getReturnOrRTOChargestoBeDeducted()
-							);
+				else {
+					order.setGrossProfit(((order.getGrossProfit() / order
+							.getQuantity()) * orderReturn.getReturnorrtoQty())
+							- orderReturn.getReturnOrRTOChargestoBeDeducted());
 				}
 
 				order.getOrderPayment().setPaymentDifference(
@@ -928,14 +999,13 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public List<Order> findOrders(String column, String value, int sellerId,
-			boolean poOrder,boolean isSearch) throws CustomException {
-		
+			boolean poOrder, boolean isSearch) throws CustomException {
+
 		log.info("*** findOrders starts : OrderDaoImpl ***");
 		String searchString = "order." + column;
 
-		log.debug(" Inside Find order dao method searchString :"
-				+ searchString + " value :" + value + "   sellerId :"
-				+ sellerId);
+		log.debug(" Inside Find order dao method searchString :" + searchString
+				+ " value :" + value + "   sellerId :" + sellerId);
 
 		Seller seller = null;
 		List<Order> orderlist = null;
@@ -960,26 +1030,30 @@ public class OrderDaoImpl implements OrderDao {
 					}
 				}
 
-				return orderlist;				
-			}else{
-				
-				criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
-				criteria.createAlias("orders", "order",CriteriaSpecification.LEFT_JOIN);
-				if(isSearch == true){
-					criteria.add(Restrictions.like(searchString, value+"%").ignoreCase());
-				}else{
+				return orderlist;
+			} else {
+
+				criteria = session.createCriteria(Seller.class).add(
+						Restrictions.eq("id", sellerId));
+				criteria.createAlias("orders", "order",
+						CriteriaSpecification.LEFT_JOIN);
+				if (isSearch == true) {
+					criteria.add(Restrictions.like(searchString, value + "%")
+							.ignoreCase());
+				} else {
 					criteria.add(Restrictions.eq(searchString, value));
 				}
 				criteria.add(Restrictions.eq("order.poOrder", poOrder))
-						.addOrder(org.hibernate.criterion.Order.desc("order.lastActivityOnOrder"))
-						.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-				
+						.addOrder(
+								org.hibernate.criterion.Order
+										.desc("order.lastActivityOnOrder"))
+						.setResultTransformer(
+								CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
 				if (poOrder)
 					criteria.add(Restrictions.eq("order.consolidatedOrder",
 							null));
-				
-				
+
 			}
 			if (criteria.list().size() != 0) {
 				seller = (Seller) criteria.list().get(0);
@@ -998,7 +1072,8 @@ public class OrderDaoImpl implements OrderDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e);
-			throw new CustomException(GlobalConstant.findOrdersError,new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
+			throw new CustomException(GlobalConstant.findOrdersError,
+					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 
 		}
 		log.info("*** findOrders ends : OrderDaoImpl ***");
@@ -1008,8 +1083,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public List<Order> findOrdersbyDate(String column, Date startDate,
 			Date endDate, int sellerId) throws CustomException {
-		
-		
+
 		log.info("*** findOrdersbyDate starts : OrderDaoImpl ***");
 		String searchString = null;
 		searchString = "order." + column;
@@ -1042,7 +1116,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.error(e);
 			throw new CustomException(GlobalConstant.findOrdersbyDateError,
 					new Date(), 2, GlobalConstant.findOrdersbyDateErrorCode, e);
-			
+
 		}
 		log.info("*** findOrdersbyDate ends : OrderDaoImpl ***");
 		return orderlist;
@@ -1092,7 +1166,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public List<Order> findOrdersbyReturnDate(String column, Date startDate,
 			Date endDate, int sellerId) throws CustomException {
-		
+
 		log.info("*** findOrdersbyReturnDate starts : OrderDaoImpl ***");
 		Seller seller = null;
 		List<Order> orderlist = new ArrayList<Order>();
@@ -1126,7 +1200,7 @@ public class OrderDaoImpl implements OrderDao {
 			throw new CustomException(
 					GlobalConstant.findOrdersbyReturnDateError, new Date(), 2,
 					GlobalConstant.findOrdersbyReturnDateErrorCode, e);
-			
+
 		}
 		log.info("*** findOrdersbyReturnDate ends : OrderDaoImpl ***");
 		return orderlist;
@@ -1140,7 +1214,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public List<Order> findOrdersbyCustomerDetails(String column, String value,
 			int sellerId) throws CustomException {
-		
+
 		log.info("*** findOrdersbyCustomerDetails starts : OrderDaoImpl ***");
 		Seller seller = null;
 		List<Order> orderlist = new ArrayList<Order>();
@@ -1179,7 +1253,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public Order addOrderPayment(int orderid, OrderPayment orderPayment,
 			int sellerId) throws CustomException {
-		
+
 		log.info("*** addOrderPayment starts : OrderDaoImpl ***");
 		Order order = null;
 		TaxDetail taxDetails = null;
@@ -1208,12 +1282,12 @@ public class OrderDaoImpl implements OrderDao {
 					if (((int) orderPayment.getPositiveAmount()) != 0) {
 
 						order.getOrderPayment().setPositiveAmount(
-								order.getOrderPayment().getPositiveAmount()+
-								orderPayment.getPositiveAmount());
+								order.getOrderPayment().getPositiveAmount()
+										+ orderPayment.getPositiveAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
 										+ orderPayment.getPositiveAmount());
-						
+
 						order.getOrderPayment()
 								.setPaymentDifference(
 										order.getOrderPayment()
@@ -1238,8 +1312,8 @@ public class OrderDaoImpl implements OrderDao {
 						timeline.setEventDate(orderPayment.getDateofPayment());
 						order.getOrderTimeline().add(timeline);
 						order.getOrderPayment().setNegativeAmount(
-								order.getOrderPayment().getNegativeAmount()+
-								orderPayment.getNegativeAmount());
+								order.getOrderPayment().getNegativeAmount()
+										+ orderPayment.getNegativeAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
 										- orderPayment.getNegativeAmount());
@@ -1265,8 +1339,8 @@ public class OrderDaoImpl implements OrderDao {
 					if (((int) orderPayment.getPositiveAmount()) != 0) {
 
 						order.getOrderPayment().setPositiveAmount(
-								order.getOrderPayment().getPositiveAmount()+
-								orderPayment.getPositiveAmount());
+								order.getOrderPayment().getPositiveAmount()
+										+ orderPayment.getPositiveAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
 										+ orderPayment.getPositiveAmount());
@@ -1277,7 +1351,9 @@ public class OrderDaoImpl implements OrderDao {
 												+ order.getOrderReturnOrRTO()
 														.getReturnOrRTOChargestoBeDeducted()
 												- order.getTotalAmountRecieved());
-						log.debug("payment difference :"+ order.getOrderPayment().getPaymentDifference());
+						log.debug("payment difference :"
+								+ order.getOrderPayment()
+										.getPaymentDifference());
 
 						order.setStatus("Payment Recieved");
 						OrderTimeline timeline = new OrderTimeline();
@@ -1305,12 +1381,12 @@ public class OrderDaoImpl implements OrderDao {
 							order.getOrderTimeline().add(timeline1);
 						}
 						order.getOrderPayment().setNegativeAmount(
-								order.getOrderPayment().getNegativeAmount()+
-								orderPayment.getNegativeAmount());
+								order.getOrderPayment().getNegativeAmount()
+										+ orderPayment.getNegativeAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
 										- orderPayment.getNegativeAmount());
-						
+
 						order.getOrderPayment()
 								.setPaymentDifference(
 										order.getOrderPayment()
@@ -1333,7 +1409,7 @@ public class OrderDaoImpl implements OrderDao {
 
 					order.setFinalStatus("Actionable");
 				}
-				
+
 				order.setLastActivityOnOrder(new Date());
 				session.saveOrUpdate(order);
 				session.getTransaction().commit();
@@ -1345,7 +1421,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.error(e);
 			throw new CustomException(GlobalConstant.addOrderPaymentError,
 					new Date(), 1, GlobalConstant.addOrderPaymentErrorCode, e);
-			
+
 		}
 		log.info("*** addOrderPayment ends : OrderDaoImpl ***");
 		return order;
@@ -1354,10 +1430,11 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public Order addOrderPayment(String skucode, String channelOrderId,
 			OrderPayment orderPayment, int sellerId) throws CustomException {
-		
+
 		log.info("*** addOrderPayment with skuCode starts : OrderDaoImpl ***");
 		Order order = null;
-		log.debug(" SKUCODE: " + skucode + "  channedorderid "+ channelOrderId + "sellerId :" + sellerId);
+		log.debug(" SKUCODE: " + skucode + "  channedorderid " + channelOrderId
+				+ "sellerId :" + sellerId);
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -1369,7 +1446,7 @@ public class OrderDaoImpl implements OrderDao {
 					.add(Restrictions.eq("productSkuCode", skucode));
 
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			if (criteria.list() != null && criteria.list().size() != 0) {				
+			if (criteria.list() != null && criteria.list().size() != 0) {
 				order = (Order) criteria.list().get(0);
 			} else {
 				log.debug("Order is Null....");
@@ -1391,12 +1468,12 @@ public class OrderDaoImpl implements OrderDao {
 					if (((int) orderPayment.getPositiveAmount()) != 0) {
 
 						order.getOrderPayment().setPositiveAmount(
-								order.getOrderPayment().getPositiveAmount()+
-								orderPayment.getPositiveAmount());
+								order.getOrderPayment().getPositiveAmount()
+										+ orderPayment.getPositiveAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
 										+ orderPayment.getPositiveAmount());
-						
+
 						order.getOrderPayment()
 								.setPaymentDifference(
 										order.getOrderPayment()
@@ -1421,8 +1498,8 @@ public class OrderDaoImpl implements OrderDao {
 						timeline.setEventDate(orderPayment.getDateofPayment());
 						order.getOrderTimeline().add(timeline);
 						order.getOrderPayment().setNegativeAmount(
-								order.getOrderPayment().getNegativeAmount()+
-								orderPayment.getNegativeAmount());
+								order.getOrderPayment().getNegativeAmount()
+										+ orderPayment.getNegativeAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
 										- orderPayment.getNegativeAmount());
@@ -1435,7 +1512,7 @@ public class OrderDaoImpl implements OrderDao {
 							timeline1.setEventDate(new Date());
 							order.getOrderTimeline().add(timeline1);
 						}
-						
+
 						order.getOrderPayment()
 								.setPaymentDifference(
 										order.getOrderPayment()
@@ -1449,8 +1526,8 @@ public class OrderDaoImpl implements OrderDao {
 					if (((int) orderPayment.getPositiveAmount()) != 0) {
 
 						order.getOrderPayment().setPositiveAmount(
-								order.getOrderPayment().getPositiveAmount()+
-								orderPayment.getPositiveAmount());
+								order.getOrderPayment().getPositiveAmount()
+										+ orderPayment.getPositiveAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
 										+ orderPayment.getPositiveAmount());
@@ -1461,7 +1538,9 @@ public class OrderDaoImpl implements OrderDao {
 												+ order.getOrderReturnOrRTO()
 														.getReturnOrRTOChargestoBeDeducted()
 												- order.getTotalAmountRecieved());
-						log.debug("payment difference :"+ order.getOrderPayment().getPaymentDifference());
+						log.debug("payment difference :"
+								+ order.getOrderPayment()
+										.getPaymentDifference());
 
 						order.setStatus("Payment Recieved");
 						OrderTimeline timeline = new OrderTimeline();
@@ -1489,12 +1568,12 @@ public class OrderDaoImpl implements OrderDao {
 							order.getOrderTimeline().add(timeline1);
 						}
 						order.getOrderPayment().setNegativeAmount(
-								order.getOrderPayment().getNegativeAmount()+
-								orderPayment.getNegativeAmount());
+								order.getOrderPayment().getNegativeAmount()
+										+ orderPayment.getNegativeAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
 										- orderPayment.getNegativeAmount());
-						
+
 						order.getOrderPayment()
 								.setPaymentDifference(
 										order.getOrderPayment()
@@ -1529,7 +1608,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.error(e);
 			throw new CustomException(GlobalConstant.addOrderPaymentError,
 					new Date(), 1, GlobalConstant.addOrderPaymentErrorCode, e);
-			
+
 		}
 		log.info("*** addOrderPayment with skuCode ends : OrderDaoImpl ***");
 		return order;
@@ -1540,7 +1619,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public void addDebitNote(DebitNoteBean dnBean, int sellerId)
 			throws CustomException {
-		
+
 		log.info("*** addDebitNote starts : OrderDaoImpl ***");
 		log.debug("######## debit note for invoice  id :"
 				+ dnBean.getInvoiceId() + " gp id : " + dnBean.getGatePassId()
@@ -1550,7 +1629,7 @@ public class OrderDaoImpl implements OrderDao {
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			
+
 			Criteria criteria = session.createCriteria(Order.class);
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN)
@@ -1600,7 +1679,7 @@ public class OrderDaoImpl implements OrderDao {
 			e.printStackTrace();
 			log.error(e);
 			throw new CustomException(GlobalConstant.addDebitNoteError,
-					new Date(), 1, GlobalConstant.addDebitNoteErrorCode, e);			
+					new Date(), 1, GlobalConstant.addDebitNoteErrorCode, e);
 		}
 		log.info("*** addDebitNote ends : OrderDaoImpl ***");
 	}
@@ -1609,7 +1688,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public Order addPOPayment(PoPaymentBean popaBean, int sellerId)
 			throws CustomException {
-		
+
 		log.info("*** addPOPayment starts : OrderDaoImpl ***");
 		try {
 			Session session = sessionFactory.openSession();
@@ -1660,7 +1739,7 @@ public class OrderDaoImpl implements OrderDao {
 			paymentDiff = Math.round(paymentDiff * 100.0) / 100.0;
 
 			orderPayment.setPaymentDifference(paymentDiff);
-			//orderPayment.setNetPaymentResult(popaBean.getNpr());
+			// orderPayment.setNetPaymentResult(popaBean.getNpr());
 			orderPayment.setPaymentdesc(popaBean.getSellerNote());
 
 			if (paymentOK) {
@@ -1676,7 +1755,7 @@ public class OrderDaoImpl implements OrderDao {
 
 			session.getTransaction().commit();
 			session.close();
-			
+
 			log.info("*** addPOPayment ends : OrderDaoImpl ***");
 			return poOrder;
 
@@ -1686,16 +1765,16 @@ public class OrderDaoImpl implements OrderDao {
 			throw new CustomException(GlobalConstant.addPOPaymentError,
 					new Date(), 1, GlobalConstant.addPOPaymentErrorCode, e);
 		}
-		
+
 	}
 
 	@SuppressWarnings("deprecation")
-	private Date getreconciledate(Order order, Partner partner, Date orderdate) {		
+	private Date getreconciledate(Order order, Partner partner, Date orderdate) {
 
 		log.info("*** getreconciledate starts : OrderDaoImpl ***");
 		log.debug(" Delivery date :" + order.getDeliveryDate());
 		Date reconciledate = new Date();
-		int startdate;		
+		int startdate;
 		int paydate;
 		int currentdate;
 		boolean payfromshippingdate;
@@ -1714,9 +1793,9 @@ public class OrderDaoImpl implements OrderDao {
 		int enddate;
 		Date paymentCycleStartDate = null;
 		Date paymentCycleEndDate = null;
-		
+
 		try {
-			startdate = partner.getStartcycleday();		
+			startdate = partner.getStartcycleday();
 			paydate = partner.getPaydaysfromstartday();
 			currentdate = reconciledate.getDate();
 			payfromshippingdate = partner.isPaycyclefromshipordel();
@@ -1729,9 +1808,9 @@ public class OrderDaoImpl implements OrderDao {
 			orderdeliverydate = deliverydate.getDate();
 			ordershippeddate = shippeddate.getDate();
 			enddate = partner.getPaycycleduration();
-			
-			
-			log.debug(" ORder delivery date in rec 2 : "+ order.getDeliveryDate());
+
+			log.debug(" ORder delivery date in rec 2 : "
+					+ order.getDeliveryDate());
 			if (paymentType.equals("paymentcycle")) {
 				if (payfromshippingdate)
 					currentdate = ordershippeddate;
@@ -1740,14 +1819,15 @@ public class OrderDaoImpl implements OrderDao {
 
 				while (true) {
 					loop++;
-					log.debug("Loop :" + loop + " currentdate :"
-							+ currentdate + ">>startdate : " + startdate
-							+ ">>enddate :" + enddate);
+					log.debug("Loop :" + loop + " currentdate :" + currentdate
+							+ ">>startdate : " + startdate + ">>enddate :"
+							+ enddate);
 					if (currentdate > startdate || currentdate == startdate) {
 						if (currentdate < enddate || currentdate == enddate
 								|| currentdate == startdate) {
 							fsd = paydate;
-							System.out.println(" Cycle Start Day :" + startdate);
+							System.out
+									.println(" Cycle Start Day :" + startdate);
 							System.out.println(" Cycle End Day :" + enddate);
 							break;
 						} else {
@@ -1803,24 +1883,25 @@ public class OrderDaoImpl implements OrderDao {
 				reconciledate.setDate(monthlypaydate);
 
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e);
-		}		
-		log.debug(" ORder delivery date in rec : "+ order.getDeliveryDate());
+		}
+		log.debug(" ORder delivery date in rec : " + order.getDeliveryDate());
 		log.info("*** getreconciledate ends : OrderDaoImpl ***");
 		return reconciledate;
 	}
 
 	// Method to calculate NR
-	private boolean calculateNR(Partner partner, Order order, String prodCat,float deadWeight, float volWeight) {
-		
+	private boolean calculateNR(Partner partner, Order order, String prodCat,
+			float deadWeight, float volWeight) {
+
 		log.info("*** calculateNR starts : OrderDaoImpl ***");
-		log.debug("**Parameters recieved : pcNAme -> "
-				+ partner.getPcName() + " channelorderid - > "
-				+ order.getChannelOrderID() + " prodCat " + prodCat
-				+ "deadWeight " + deadWeight + " volWeight " + volWeight);
+		log.debug("**Parameters recieved : pcNAme -> " + partner.getPcName()
+				+ " channelorderid - > " + order.getChannelOrderID()
+				+ " prodCat " + prodCat + "deadWeight " + deadWeight
+				+ " volWeight " + volWeight);
 		log.debug("**Parameters recieved : pcNAme -> " + partner.getPcName()
 				+ " channelorderid - > " + order.getChannelOrderID()
 				+ " prodCat " + prodCat + "deadWeight " + deadWeight
@@ -1831,16 +1912,16 @@ public class OrderDaoImpl implements OrderDao {
 		double pccAmount = 0;
 		float serviceTax = 0;
 		double tds = 0;
-		
+
 		StringBuffer area = new StringBuffer("");
 		StringBuffer volarea = new StringBuffer("");
-		
+
 		float vwchargetemp = 0;
 		float dwchargetemp = 0;
 		float shippingCharges = 0;
 		String tempStr = null;
 		String state = null;
-		
+
 		if (partner.getNrnReturnConfig() != null
 				&& partner.getNrnReturnConfig().getMetroList() != null
 				&& partner.getNrnReturnConfig().getMetroList().length() != 0) {
@@ -1861,8 +1942,9 @@ public class OrderDaoImpl implements OrderDao {
 		Map<String, Float> chargesMap = new HashMap<String, Float>();
 		/* Map<String, Float> returnMap = new HashMap<String, Float>(); */
 
-		List<NRnReturnCharges> chargesList = partner.getNrnReturnConfig().getCharges();
-		
+		List<NRnReturnCharges> chargesList = partner.getNrnReturnConfig()
+				.getCharges();
+
 		for (NRnReturnCharges charge : chargesList) {
 			chargesMap.put(charge.getChargeName(), charge.getChargeAmount());
 		}
@@ -1959,7 +2041,7 @@ public class OrderDaoImpl implements OrderDao {
 				if (partner.getNrnReturnConfig().getMetroList() != null
 						&& partner.getNrnReturnConfig().getMetroList()
 								.contains(state)) {
-					
+
 					area.append("metro");
 					volarea.append("metro");
 				} else if (partner.getNrnReturnConfig().getNationalList() != null
@@ -1995,13 +2077,14 @@ public class OrderDaoImpl implements OrderDao {
 				log.debug(" Area : " + area + " temp : " + temp);
 				dwchargetemp = chargesMap.containsKey(area.toString()) ? chargesMap
 						.get(area.toString()) : 0;
-				log.debug(" Charges for lesstthan 500 : "+ dwchargetemp);
+				log.debug(" Charges for lesstthan 500 : " + dwchargetemp);
 				float range = (float) Math.ceil((deadWeight - 500) / 500);
 				log.debug(" Range : " + range);
 				dwchargetemp = dwchargetemp
 						+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
 								.get(temp.toString()) : 0));
-				log.debug(" Charges for greater than 500 : "+ chargesMap.get(temp.toString()));
+				log.debug(" Charges for greater than 500 : "
+						+ chargesMap.get(temp.toString()));
 				order.setDwShippingString(temp.toString());
 
 			}
@@ -2011,7 +2094,7 @@ public class OrderDaoImpl implements OrderDao {
 			if (volWeight < 501) {
 				tempStr = volarea.append("vwlt500").toString();
 				log.debug(" tempStr " + tempStr);
-				
+
 				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
 						.get(tempStr) : 0;
 				order.setVolShippingString(tempStr);
@@ -2034,20 +2117,22 @@ public class OrderDaoImpl implements OrderDao {
 			} else if (volWeight > 5000) {
 				temp = new StringBuffer(volarea);
 				volarea.append("vwgt1500lt5000");
-				
+
 				vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap
 						.get(volarea.toString()) : 0;
-				log.debug(" vol Charges for lesstthan 500 : "+ vwchargetemp);
+				log.debug(" vol Charges for lesstthan 500 : " + vwchargetemp);
 				temp.append("vwgt5000");
 				float range = (float) Math.ceil((volWeight - 5000) / 1000);
-				log.debug("volarea  " + volarea + " temp : " + temp + " range invol: " + range);
+				log.debug("volarea  " + volarea + " temp : " + temp
+						+ " range invol: " + range);
 				vwchargetemp = vwchargetemp
 						+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
 								.get(temp.toString()) : 0));
 				order.setVolShippingString(temp.toString());
 
 			}
-			log.debug(" vwchargetemp : " + vwchargetemp + " dwchargetemp : " + dwchargetemp);
+			log.debug(" vwchargetemp : " + vwchargetemp + " dwchargetemp : "
+					+ dwchargetemp);
 			if (vwchargetemp > dwchargetemp)
 				shippingCharges = vwchargetemp;
 			else
@@ -2087,7 +2172,7 @@ public class OrderDaoImpl implements OrderDao {
 	 */
 	private float calculateReturnCharges(Order order,
 			OrderRTOorReturn ordereturn, int sellerId) throws Exception {
-		
+
 		log.info("*** calculateReturnCharges starts : OrderDaoImpl ***");
 		float totalcharge = 0;
 		float revShippingFee = 0;
@@ -2393,13 +2478,13 @@ public class OrderDaoImpl implements OrderDao {
 		if (serviceTax > 0) {
 			totalcharge = totalcharge + (totalcharge * serviceTax) / 100;
 		}
-		
+
 		log.info("*** calculateReturnCharges ends : OrderDaoImpl ***");
 		return totalcharge;
 	}
 
 	private boolean calculateDeliveryDate(Order order, int sellerId) {
-		
+
 		log.info("*** calculateDeliveryDate starts : OrderDaoImpl ***");
 		boolean result = false;
 		String pincode = order.getCustomer().getZipcode();
@@ -2415,7 +2500,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.debug(" Shipped date : " + order.getShippedDate());
 			log.debug(" Delivery date : " + order.getDeliveryDate());
 			result = true;
-		} catch (CustomException e) {			
+		} catch (CustomException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -2427,25 +2512,25 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public List<ChannelSalesDetails> findChannelOrdersbyDate(String string,
 			Date startDate, Date endDate, int sellerIdfromSession) {
-		
+
 		log.info("*** findChannelOrdersbyDate starts : OrderDaoImpl ***");
 		Session session = sessionFactory.getCurrentSession();
-		
-		 Criteria criteriaTax=session.createCriteria(TaxCategory.class);
-		 ProjectionList tList = Projections.projectionList();
-		 HashMap<String,Float> taxMap=new HashMap<String,Float>();
-		 tList.add(Projections.property("taxCatId"));
-		 tList.add(Projections.property("taxCatName"));
-		 tList.add(Projections.property("taxPercent"));
-		 criteriaTax.setProjection(tList);			 
-		 List taxList=criteriaTax.list();
-		 Iterator txItr=taxList.iterator();
-		 
-		 while(txItr.hasNext()){
-			 Object[] recordsRow = (Object[])txItr.next();
-			 taxMap.put(recordsRow[1].toString(),Float.parseFloat(recordsRow[2].toString()));
-		 }
-		
+
+		Criteria criteriaTax = session.createCriteria(TaxCategory.class);
+		ProjectionList tList = Projections.projectionList();
+		HashMap<String, Float> taxMap = new HashMap<String, Float>();
+		tList.add(Projections.property("taxCatId"));
+		tList.add(Projections.property("taxCatName"));
+		tList.add(Projections.property("taxPercent"));
+		criteriaTax.setProjection(tList);
+		List taxList = criteriaTax.list();
+		Iterator txItr = taxList.iterator();
+
+		while (txItr.hasNext()) {
+			Object[] recordsRow = (Object[]) txItr.next();
+			taxMap.put(recordsRow[1].toString(),
+					Float.parseFloat(recordsRow[2].toString()));
+		}
 
 		Criteria criteria1 = session.createCriteria(Order.class);
 		criteria1.createAlias("seller", "seller",
@@ -2472,7 +2557,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.debug("PC NAME " + temp.getPcName() + "  "
 					+ temp.getStartDate() + " " + temp.getOrderId() + "  "
 					+ temp.getInvoiceID());
-			
+
 			temp.setTaxPercent(taxMap.get(temp.getTaxCategtory()));
 			ttso.add(temp);
 		}
@@ -2483,7 +2568,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	public static void populateChannelSalesDetails(ChannelSalesDetails temp,
 			Object[] recordsRow, Date startDate, Date endDate) {
-		
+
 		log.info("*** populateChannelSalesDetails starts : OrderDaoImpl ***");
 		temp.setPcName(recordsRow[0].toString());
 		temp.setTaxCategtory(recordsRow[0].toString());
@@ -2519,21 +2604,21 @@ public class OrderDaoImpl implements OrderDao {
 				.parseDouble(recordsRow[24].toString()));
 		temp.setOrderId(Integer.parseInt(recordsRow[25].toString()));
 		temp.setInvoiceID(recordsRow[26].toString());
-		
+
 		temp.setProductSkuCode(recordsRow[27].toString());
 		temp.setTaxCategtory(recordsRow[28].toString());
-	 temp.setTax(Float.parseFloat(recordsRow[29].toString()));
-	 
-		 temp.setNrTax(Double.parseDouble(recordsRow[30].toString()));
-		 temp.setNrReturn(Double.parseDouble(recordsRow[31].toString()));
-		 temp.setReturnSP(Double.parseDouble(recordsRow[32].toString()));
-		
-		 log.info("*** populateChannelSalesDetails ends : OrderDaoImpl ***");
+		temp.setTax(Float.parseFloat(recordsRow[29].toString()));
+
+		temp.setNrTax(Double.parseDouble(recordsRow[30].toString()));
+		temp.setNrReturn(Double.parseDouble(recordsRow[31].toString()));
+		temp.setReturnSP(Double.parseDouble(recordsRow[32].toString()));
+
+		log.info("*** populateChannelSalesDetails ends : OrderDaoImpl ***");
 	}
 
 	public static ProjectionList getPL(String name) {
 		ProjectionList projList = Projections.projectionList();
-		
+
 		log.info("*** getPL Starts : OrderDaoImpl ***");
 		projList.add(Projections.property("pcName"));
 		projList.add(Projections.property("quantity"));
@@ -2567,11 +2652,17 @@ public class OrderDaoImpl implements OrderDao {
 		projList.add(Projections.property("productSkuCode"));
 		projList.add(Projections.property("orderTax.taxCategtory"));
 
-		 projList.add(Projections.property("orderTax.tax"));
-		 projList.add(Projections.sqlProjection("( (tax/quantity) * returnorrtoQty ) as test", new String[]{"test"},new Type[]{Hibernate.DOUBLE}));
-		 projList.add(Projections.sqlProjection("( grossNetRate * returnorrtoQty ) as testq", new String[]{"testq"},new Type[]{Hibernate.DOUBLE}));
-		 projList.add(Projections.sqlProjection("( (orderSP/quantity) * returnorrtoQty ) as testR", new String[]{"testR"},new Type[]{Hibernate.DOUBLE}));
-		 log.info("*** getPL ends : OrderDaoImpl ***");
+		projList.add(Projections.property("orderTax.tax"));
+		projList.add(Projections.sqlProjection(
+				"( (tax/quantity) * returnorrtoQty ) as test",
+				new String[] { "test" }, new Type[] { Hibernate.DOUBLE }));
+		projList.add(Projections.sqlProjection(
+				"( grossNetRate * returnorrtoQty ) as testq",
+				new String[] { "testq" }, new Type[] { Hibernate.DOUBLE }));
+		projList.add(Projections.sqlProjection(
+				"( (orderSP/quantity) * returnorrtoQty ) as testR",
+				new String[] { "testR" }, new Type[] { Hibernate.DOUBLE }));
+		log.info("*** getPL ends : OrderDaoImpl ***");
 		return projList;
 	}
 
@@ -2586,10 +2677,10 @@ public class OrderDaoImpl implements OrderDao {
 		double pccAmount = 0;
 		float serviceTax = 0;
 		double tds = 0;
-		
+
 		StringBuffer area = new StringBuffer("");
 		StringBuffer volarea = new StringBuffer("");
-		
+
 		float vwchargetemp = 0;
 		float dwchargetemp = 0;
 		float shippingCharges = 0;
@@ -2598,9 +2689,9 @@ public class OrderDaoImpl implements OrderDao {
 		double SP = order.getOrderSP();
 		StringBuffer temp = new StringBuffer("");
 		Map<String, Float> chargesMap = new HashMap<String, Float>();
-		
+
 		List<NRnReturnCharges> chargesList = nrnReturnConfig.getCharges();
-		
+
 		for (NRnReturnCharges charge : chargesList) {
 			System.out.println(" Charge : " + charge.getChargeName());
 			chargesMap.put(charge.getChargeName(), charge.getChargeAmount());
@@ -2680,11 +2771,10 @@ public class OrderDaoImpl implements OrderDao {
 						.get(GlobalConstant.percentSPPCC) * SP / 100
 						: 0;
 
-			log.debug(" States : MetroLsit : "
-					+ nrnReturnConfig.getMetroList() + " national list : "
-					+ nrnReturnConfig.getNationalList() + " LocalList : "
-					+ nrnReturnConfig.getLocalList() + " zonallist: "
-					+ nrnReturnConfig.getZonalList());
+			log.debug(" States : MetroLsit : " + nrnReturnConfig.getMetroList()
+					+ " national list : " + nrnReturnConfig.getNationalList()
+					+ " LocalList : " + nrnReturnConfig.getLocalList()
+					+ " zonallist: " + nrnReturnConfig.getZonalList());
 			log.debug(" State we are geting ofrom excel : " + state);
 
 			// ****Shipping charges
@@ -2725,18 +2815,17 @@ public class OrderDaoImpl implements OrderDao {
 				log.debug(" Area : " + area + " temp : " + temp);
 				dwchargetemp = chargesMap.containsKey(area.toString()) ? chargesMap
 						.get(area.toString()) : 0;
-				log.debug(" Charges for lesstthan 500 : "
-						+ dwchargetemp);
+				log.debug(" Charges for lesstthan 500 : " + dwchargetemp);
 				float range = (float) Math.ceil((deadWeight - 500) / 500);
 				log.debug(" Range : " + range);
 				dwchargetemp = dwchargetemp
 						+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
 								.get(temp.toString()) : 0));
-				log.debug(" Charges for greater than 500 : "+ chargesMap.get(temp.toString()));
+				log.debug(" Charges for greater than 500 : "
+						+ chargesMap.get(temp.toString()));
 				order.setDwShippingString(temp.toString());
 
 			}
-
 
 			if (volWeight < 501) {
 				tempStr = volarea.append("vwlt500").toString();
@@ -2765,8 +2854,7 @@ public class OrderDaoImpl implements OrderDao {
 
 				vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap
 						.get(volarea.toString()) : 0;
-				log.debug(" vol Charges for lesstthan 500 : "
-						+ vwchargetemp);
+				log.debug(" vol Charges for lesstthan 500 : " + vwchargetemp);
 				temp.append("vwgt5000");
 				float range = (float) Math.ceil((volWeight - 5000) / 1000);
 				log.debug("volarea  " + volarea + " temp : " + temp
@@ -2777,8 +2865,8 @@ public class OrderDaoImpl implements OrderDao {
 				order.setVolShippingString(temp.toString());
 
 			}
-			log.debug(" vwchargetemp : " + vwchargetemp
-					+ " dwchargetemp : " + dwchargetemp);
+			log.debug(" vwchargetemp : " + vwchargetemp + " dwchargetemp : "
+					+ dwchargetemp);
 			if (vwchargetemp > dwchargetemp)
 				shippingCharges = vwchargetemp;
 			else
@@ -2802,7 +2890,7 @@ public class OrderDaoImpl implements OrderDao {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		log.debug(" Setting values for Nr in nrcalculator NR: "
 				+ order.getNetRate() + ", commison : "
 				+ order.getPartnerCommission() + " fixedfee : "
@@ -3114,7 +3202,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public Order generateConsolidatedOrder(List<Order> orderlist, int sellerId)
 			throws CustomException {
-		
+
 		log.info("$$$ generateConsolidatedOrder Start $$$");
 		int quantity = 0;
 		double orderSP = 0;
@@ -3141,7 +3229,7 @@ public class OrderDaoImpl implements OrderDao {
 		Session session = null;
 		Partner partner = null;
 		try {
-			
+
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Seller.class).add(
@@ -3202,7 +3290,7 @@ public class OrderDaoImpl implements OrderDao {
 			consolidatedOrder.setGrossProfit(grossProfit);
 
 			if (consolidatedOrder.getOrderId() != 0) {
-				
+
 				// Code for order timeline
 				timeline.setEventDate(new Date());
 				timeline.setEvent(" Order Edited");
@@ -3211,7 +3299,7 @@ public class OrderDaoImpl implements OrderDao {
 				session.merge(consolidatedOrder);
 			} else {
 				log.debug(" ****************Saving new  order delivery date :"
-								+ consolidatedOrder.getDeliveryDate());
+						+ consolidatedOrder.getDeliveryDate());
 				// Code for order timeline
 				timeline.setEvent("Order Created");
 				consolidatedOrder.setLastActivityOnOrder(new Date());
@@ -3221,7 +3309,7 @@ public class OrderDaoImpl implements OrderDao {
 				seller.getOrders().add(consolidatedOrder);
 				session.saveOrUpdate(partner);
 				session.saveOrUpdate(seller);
-				
+
 			}
 			session.getTransaction().commit();
 			log.info("$$$ generateConsolidatedOrder ends $$$");
@@ -3238,13 +3326,13 @@ public class OrderDaoImpl implements OrderDao {
 		} finally {
 			session.close();
 		}
-		
+
 	}
 
 	@Override
 	public void updatePOOrders(List<Order> orderlist, Order consolidatedOrder)
 			throws CustomException {
-		
+
 		log.info("$$$ updatePOOrders Starts : OrderDaoImpl $$$");
 		Session session = null;
 		try {
@@ -3274,7 +3362,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public Order findPOOrder(String poID, String invoiceID,
 			String channelSkuRef, int sellerId) throws CustomException {
-		
+
 		log.info("$$$ findPOOrder Starts : OrderDaoImpl $$$");
 		Seller seller = null;
 		List<Order> orderlist = null;
@@ -3329,7 +3417,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public GatePass addGatePass(ProductConfig productConfig, GatePass gatepass,
 			int sellerId) throws CustomException {
-		
+
 		log.info("$$$ addGatePass Starts : OrderDaoImpl $$$");
 		try {
 			Session session = sessionFactory.openSession();
@@ -3356,15 +3444,15 @@ public class OrderDaoImpl implements OrderDao {
 
 			session.saveOrUpdate(gatepass);
 			session.getTransaction().commit();
-			
+
 			TaxDetail taxDetails = new TaxDetail();
 			taxDetails.setBalanceRemaining(-(gatepass.getTaxPOAmt())
 					* gatepass.getQuantity());
 			taxDetails.setUploadDate(gatepass.getReturnDate());
 			taxDetailService.addMonthlyTaxDetail(session, taxDetails, sellerId);
-			
+
 			session.close();
-			
+
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -3379,7 +3467,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public List<Order> listGatePasses(int sellerId, int pageNo)
 			throws CustomException {
-		
+
 		log.info("$$$ listGatePasses Starts : OrderDaoImpl $$$");
 		List<Order> returnlist = null;
 		try {
@@ -3421,7 +3509,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public OrderRTOorReturn generateConsolidatedReturn(
 			List<GatePass> gatepasslist, int sellerId) throws CustomException {
-		
+
 		log.info("$$$ generateConsolidatedReturn Starts : OrderDaoImpl $$$");
 		int quantity = 0;
 		double totalReturnCharges = 0;
@@ -3531,7 +3619,8 @@ public class OrderDaoImpl implements OrderDao {
 				consolidatedOrder.setLastActivityOnOrder(new Date());
 				session.merge(consolidatedOrder);
 			} else {
-				log.debug(" ****************Saving new  order delivery date :"+ consolidatedOrder.getDeliveryDate());
+				log.debug(" ****************Saving new  order delivery date :"
+						+ consolidatedOrder.getDeliveryDate());
 				// Code for order timeline
 				timeline.setEvent("Return Recieved");
 				consolidatedOrder.setLastActivityOnOrder(new Date());
@@ -3542,14 +3631,13 @@ public class OrderDaoImpl implements OrderDao {
 				seller.getOrders().add(consolidatedOrder);
 				session.saveOrUpdate(partner);
 				session.saveOrUpdate(seller);
-				
+
 			}
 			session.getTransaction().commit();
-			
+
 		} catch (Exception e) {
 			log.debug("Inside exception in generateConsolidatedReturn "
-							+ e.getLocalizedMessage() + " message: "
-							+ e.getMessage());
+					+ e.getLocalizedMessage() + " message: " + e.getMessage());
 			e.printStackTrace();
 			log.error(e);
 			log.info("Error : " + GlobalConstant.addOrderError);
@@ -3566,8 +3654,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public void updateGatePasses(List<GatePass> gatepasslist,
 			OrderRTOorReturn consolidatedReturn) throws CustomException {
-		
-		
+
 		log.info("$$$ updateGatePasses Starts : OrderDaoImpl $$$");
 		Session session = null;
 		try {
@@ -3595,7 +3682,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public Order findConsolidatedPO(String column, String value, int sellerId)
 			throws CustomException {
-		
+
 		log.info("$$$ findConsolidatedPO Starts : OrderDaoImpl $$$");
 		Seller seller = null;
 		List<Order> orderlist = null;
@@ -3631,7 +3718,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 			if (orderlist != null && orderlist.size() != 0) {
 				poOrder = orderlist.get(0);
-			}			
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -3640,17 +3727,99 @@ public class OrderDaoImpl implements OrderDao {
 					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 
 		}
-		
+
 		log.info("$$$ findConsolidatedPO Ends : OrderDaoImpl $$$");
 		return poOrder;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<PoPaymentDetailsBean> getPOPaymentDetails(int sellerId,
 			boolean isMonthly) {
 		List<PoPaymentDetailsBean> poPaymentDetailsList = new ArrayList<PoPaymentDetailsBean>();
+
+		log.info("***getPOPaymentDetails starts***");
+		List<Object[]> results = null;
+
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			Query query;
+			Query eossPOQuery;
+			Query eossGPQuery;
+
+			if (isMonthly) {
+				query = session.createSQLQuery(monthlyPOPaymentQuery)
+						.setParameter("sellerId", sellerId);
+				eossPOQuery = session.createSQLQuery(monthlyEOSSPOQuery)
+						.setParameter("sellerId", sellerId);
+				eossGPQuery = session.createSQLQuery(monthlyEOSSGPQuery)
+						.setParameter("sellerId", sellerId);
+			} else {
+				query = session.createSQLQuery(yearlyPOPaymentQuery)
+						.setParameter("sellerId", sellerId);
+				eossPOQuery = session.createSQLQuery(yearlyEOSSPOQuery)
+						.setParameter("sellerId", sellerId);
+				eossGPQuery = session.createSQLQuery(yearlyEOSSGPQuery)
+						.setParameter("sellerId", sellerId);
+			}
+			results = query.list();
+			Iterator iterator1 = results.iterator();
+			if (results != null) {
+				while (iterator1.hasNext()) {
+					System.out.println("PO Payment : row\n");
+					Object[] recordsRow = (Object[]) iterator1.next();
+					if (recordsRow[0] != null && recordsRow[1] != null
+							&& recordsRow[2] != null && recordsRow[3] != null
+							&& recordsRow[4] != null) {
+						
+						PoPaymentDetailsBean poPaymentBean = new PoPaymentDetailsBean();
+						poPaymentBean.setPaymentDetail(recordsRow[0].toString());
+						poPaymentBean.setDebits(Double.parseDouble(recordsRow[1].toString()));
+						poPaymentBean.setPayments(Double.parseDouble(recordsRow[2].toString()));
+						poPaymentBean.setPaymentDiff(Double.parseDouble(recordsRow[3].toString()));
+						poPaymentBean.setClosingBal(Double.parseDouble(recordsRow[4].toString()));
+						poPaymentDetailsList.add(poPaymentBean);
+					}
+				}
+			}
+			List<Double> eossValueList = new ArrayList<Double>();
+			results = eossPOQuery.list();
+			iterator1 = results.iterator();
+			if (results != null) {
+				while (iterator1.hasNext()) {
+					System.out.println("PO EOSS : row\n");
+					Object[] recordsRow = (Object[]) iterator1.next();
+					if (recordsRow[0] != null && recordsRow[1] != null) {
+						
+						eossValueList.add(Double.parseDouble(recordsRow[1].toString()));
+					}
+				}
+			}
+			results = eossGPQuery.list();
+			iterator1 = results.iterator();
+			int i = 0;
+			if (results != null) {
+				while (iterator1.hasNext()) {
+					System.out.println("GP EOSS : row\n");
+					Object[] recordsRow = (Object[]) iterator1.next();
+					if (recordsRow[0] != null && recordsRow[1] != null) {
+						eossValueList.set(0, eossValueList.get(i) - Double.parseDouble(recordsRow[1].toString()));
+						i++;
+					}
+				}
+			}
+			for(i=0; i<poPaymentDetailsList.size(); i++) {
+				poPaymentDetailsList.get(i).setEoss(eossValueList.get(i).doubleValue());
+			}
+		} catch (Exception e) {
+			log.debug("Inside exception  " + e.getLocalizedMessage());
+			e.printStackTrace();
+		}
+		log.info("***getPOPaymentDetails ends***");
 		return poPaymentDetailsList;
-		
+
 	}
 
 }

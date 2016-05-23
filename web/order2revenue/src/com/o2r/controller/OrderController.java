@@ -370,7 +370,7 @@ public class OrderController {
 
 	@RequestMapping(value = "/seller/poorderlist", method = RequestMethod.GET)
 	public ModelAndView poOrderList(HttpServletRequest request,
-			@RequestParam(value = "period") String period,
+			@RequestParam(value = "value") String value,
 			@ModelAttribute("command") PoPaymentDetailsBean poPaymentDetailsBean, BindingResult result) {
 
 		log.info("$$$ poOrderList Starts : OrderController $$$");
@@ -380,7 +380,7 @@ public class OrderController {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			
 			boolean isMonthly = true;
-			if(period.equalsIgnoreCase("Yearly")) {
+			if(value.equalsIgnoreCase("Yearly")) {
 				isMonthly = false;
 			}
 				

@@ -51,7 +51,7 @@
     	break;
     	
     	case "viewPOOrderList" :
-    		targeturl="poorderlist.html";
+    		targeturl="poorderlist.html?value=monthly";
     	break;
     	case "viewGatePassList" :
     		targeturl="gatepasslist.html";

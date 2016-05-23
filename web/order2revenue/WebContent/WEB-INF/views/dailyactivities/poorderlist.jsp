@@ -1,3 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <div class="wrapper wrapper-content animated fadeInRight">
 	<div class="row">
 		<div class="bs-example">
@@ -15,7 +20,7 @@
 								class="table table-striped table-bordered table-hover dataTables-example">
 								<thead>
 									<tr>
-										<th rowspan="2">PERIOD(FY 2016-17)</th>
+										<th rowspan="2">PERIOD</th>
 										<th rowspan="2">DEBITS</th>
 										<th colspan="3" style="text-align: center;">CREDITS</th>
 										<th rowspan="2">PAYMENT DIFF</th>
@@ -28,114 +33,26 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>April</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>May</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>June</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>July</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>August</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>September</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>October</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>November</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>December</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>January</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>February</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>March</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
+									<c:if test="${!empty poPaymentList}">
+										<c:forEach items="${poPaymentList}" var="poPayment" varStatus="loop">
+											<tr>
+												<td><a href="#"
+													onclick="onclickNavigateOrder('viewPOOrder',${poPayment.paymentDetail})">${poPayment.paymentDetail}</a></td>
+												<td><fmt:formatNumber type="number"
+														maxFractionDigits="2" value="${poPayment.debits}" /></td>
+												<td><fmt:formatNumber type="number"
+														maxFractionDigits="2" value="${poPayment.payments}" /></td>
+												<td><fmt:formatNumber type="number"
+														maxFractionDigits="2" value="${poPayment.manualCharges}" /></td>
+												<td><fmt:formatNumber type="number"
+														maxFractionDigits="2" value="${poPayment.eoss}" /></td>
+												<td><fmt:formatNumber type="number"
+														maxFractionDigits="2" value="${poPayment.paymentDiff}" /></td>
+												<td><fmt:formatNumber type="number"
+														maxFractionDigits="2" value="${poPayment.closingBal}" /></td>
+											</tr>
+										</c:forEach>
+									</c:if>
 								</tbody>
 							</table>
 						</div>
