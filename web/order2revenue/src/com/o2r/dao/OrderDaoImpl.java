@@ -38,7 +38,6 @@ import com.o2r.model.OrderRTOorReturn;
 import com.o2r.model.OrderTax;
 import com.o2r.model.OrderTimeline;
 import com.o2r.model.Partner;
-import com.o2r.model.PaymentUpload;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
@@ -221,10 +220,7 @@ public class OrderDaoImpl implements OrderDao {
 					// Set Order Timeline
 					OrderTimeline timeline = new OrderTimeline();
 					// populating tax related values of order
-					log.debug(" Tax before pr:"	+ order.getOrderTax().getTax());
-					order.setPr(order.getNetRate()
-							- order.getOrderTax().getTax());
-					if (seller.getPartners().get(0).isTdsApplicable()) {
+				if (seller.getPartners().get(0).isTdsApplicable()) {
 						log.debug(" PC "+ order.getPartnerCommission());
 						taxDetails = new TaxDetail();
 						taxDetails.setBalanceRemaining(order.getOrderTax()
@@ -267,8 +263,11 @@ public class OrderDaoImpl implements OrderDao {
 					tempDate.setDate(tempDate.getDate()
 							+ partner.getMaxRTOAcceptance());
 					order.setrTOLimitCrossed(tempDate);
-					// Setting Gross Profit for Order
-					order.setGrossProfit(order.getNetRate()
+					// Setting Pr and Gross Profit for Order
+					order.setPr(order.getNetRate()
+							- order.getOrderTax().getTax());
+					
+					order.setGrossProfit(order.getPr()
 							- (product.getProductPrice() * order.getQuantity()));
 
 					// Setting order status if return limit is crossed
@@ -827,23 +826,23 @@ public class OrderDaoImpl implements OrderDao {
 					order.setStatus("Return Recieved");
 
 					// setting gross profit
-					if (orderReturn.getReturnorrtoQty() == order.getQuantity())
-						order.setGrossProfit(-orderReturn
-								.getReturnOrRTOChargestoBeDeducted());
-					
-
+				
 					OrderTimeline timeline = new OrderTimeline();
 					timeline.setEvent("Return Recieved");
 					timeline.setEventDate(new Date());
 					order.getOrderTimeline().add(timeline);
 
 				}
-				
-				if (order.getQuantity() != orderReturn.getReturnorrtoQty()) {
-					
-					order.setGrossProfit(order.getGrossProfit()
-							* orderReturn.getReturnorrtoQty()
-							/ order.getQuantity());
+			
+				if (orderReturn.getReturnorrtoQty() == order.getQuantity())
+					order.setGrossProfit(-orderReturn
+							.getReturnOrRTOChargestoBeDeducted());
+				else 
+				{
+					order.setGrossProfit(((order.getGrossProfit()/ order.getQuantity())
+							* orderReturn.getReturnorrtoQty())- orderReturn
+							.getReturnOrRTOChargestoBeDeducted()
+							);
 				}
 
 				order.getOrderPayment().setPaymentDifference(
@@ -1191,6 +1190,7 @@ public class OrderDaoImpl implements OrderDao {
 					if (((int) orderPayment.getPositiveAmount()) != 0) {
 
 						order.getOrderPayment().setPositiveAmount(
+								order.getOrderPayment().getPositiveAmount()+
 								orderPayment.getPositiveAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
@@ -1220,6 +1220,7 @@ public class OrderDaoImpl implements OrderDao {
 						timeline.setEventDate(orderPayment.getDateofPayment());
 						order.getOrderTimeline().add(timeline);
 						order.getOrderPayment().setNegativeAmount(
+								order.getOrderPayment().getNegativeAmount()+
 								orderPayment.getNegativeAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
@@ -1246,6 +1247,7 @@ public class OrderDaoImpl implements OrderDao {
 					if (((int) orderPayment.getPositiveAmount()) != 0) {
 
 						order.getOrderPayment().setPositiveAmount(
+								order.getOrderPayment().getPositiveAmount()+
 								orderPayment.getPositiveAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
@@ -1285,6 +1287,7 @@ public class OrderDaoImpl implements OrderDao {
 							order.getOrderTimeline().add(timeline1);
 						}
 						order.getOrderPayment().setNegativeAmount(
+								order.getOrderPayment().getNegativeAmount()+
 								orderPayment.getNegativeAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
@@ -1370,6 +1373,7 @@ public class OrderDaoImpl implements OrderDao {
 					if (((int) orderPayment.getPositiveAmount()) != 0) {
 
 						order.getOrderPayment().setPositiveAmount(
+								order.getOrderPayment().getPositiveAmount()+
 								orderPayment.getPositiveAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
@@ -1399,6 +1403,7 @@ public class OrderDaoImpl implements OrderDao {
 						timeline.setEventDate(orderPayment.getDateofPayment());
 						order.getOrderTimeline().add(timeline);
 						order.getOrderPayment().setNegativeAmount(
+								order.getOrderPayment().getNegativeAmount()+
 								orderPayment.getNegativeAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
@@ -1426,6 +1431,7 @@ public class OrderDaoImpl implements OrderDao {
 					if (((int) orderPayment.getPositiveAmount()) != 0) {
 
 						order.getOrderPayment().setPositiveAmount(
+								order.getOrderPayment().getPositiveAmount()+
 								orderPayment.getPositiveAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()
@@ -1465,6 +1471,7 @@ public class OrderDaoImpl implements OrderDao {
 							order.getOrderTimeline().add(timeline1);
 						}
 						order.getOrderPayment().setNegativeAmount(
+								order.getOrderPayment().getNegativeAmount()+
 								orderPayment.getNegativeAmount());
 						order.getOrderPayment().setNetPaymentResult(
 								order.getOrderPayment().getNetPaymentResult()

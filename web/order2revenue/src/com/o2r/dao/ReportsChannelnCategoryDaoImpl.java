@@ -118,7 +118,10 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 							 while(channelItr.hasNext()){
 								 Object[] recordsRow = (Object[])channelItr.next();
 								 temp=new ChannelSalesDetails();
+								 if(recordsRow!=null)
+								 {
 								 populateChannelSalesDetails(temp,recordsRow,startDate,endDate,"pc");
+								 }
 								 temp.setGroupByName("orderTax");
 								 temp.setPcName(arr[i]);
 								 temp.setTaxPercent(taxMap.get(temp.getTaxCategtory()));
@@ -208,6 +211,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 	public static void populateChannelSalesDetails(ChannelSalesDetails temp,Object[] recordsRow,Date startDate,Date endDate,String nme){
 		
 		log.info("*** populateChannelSalesDetails Starts : ReportsChannelnCategoryDaoImpl ****");
+		
 		 temp.setPcName(recordsRow[0].toString());
 		 temp.setTaxCategtory(recordsRow[0].toString());
 		 temp.setPaymentType(recordsRow[0].toString());
