@@ -1,7 +1,7 @@
 package com.o2r.dao;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -21,7 +20,6 @@ import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.SQLProjection;
 import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -33,7 +31,6 @@ import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Order;
 import com.o2r.model.Product;
 import com.o2r.model.TaxCategory;
-import com.sun.xml.bind.v2.runtime.Name;
 
 
 @Repository("reportGeneratorDao2")
@@ -596,7 +593,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		 {
 			 Session session=sessionFactory.openSession();
 			 session.getTransaction().begin();
-			 Criteria criteria1=getCriteria(startDate,endDate,sellerIdfromSession);
+			 Criteria criteria1=getCriteriaGP(startDate,endDate,sellerIdfromSession,session);
 			 
 			 List pcNameList=criteria1.list();
 			 
@@ -629,11 +626,11 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 					 Object[] recordsRow = (Object[])pcNameItr.next();
 					 temp=new ChannelSalesDetails();
 					
-					 populateChannelSalesDetails(temp,recordsRow,startDate,endDate,"categoryName");
+					 populateChannelSalesDetailsGP(temp,recordsRow,startDate,endDate,"GP");
 					 
 					 temp.setGroupByName(null);
 					 temp.setProductCategory(prMap.get(temp.getProductSkuCode()));
-					 //temp.setPcName(prMap.get(temp.getProductSkuCode()));
+					// temp.setPcName(prMap.get(temp.getProductSkuCode()));
 					 temp.setProductPrice(Float.parseFloat(prPriceMap.get(temp.getProductSkuCode())));
 					 if(!orderId.contains(new Integer(temp.getOrderId())))
 					 ttso.add(temp);
@@ -698,6 +695,8 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		        		 temp.setPccAmount(temp.getPccAmount()+temp1.getPccAmount());
 		        		 temp.setPoPrice(temp.getPoPrice()+temp1.getPoPrice());
 		        		 temp.setPr(temp.getPr()+temp1.getPr());
+		        		 
+
 		        		 temp.setQuantity(temp.getQuantity()+temp1.getQuantity());
 		        		 temp.setReturnOrRTOCharges(temp.getReturnOrRTOCharges()+temp1.getReturnOrRTOCharges());
 		        		 temp.setTotalAmountRecieved(temp.getTotalAmountRecieved()+temp1.getTotalAmountRecieved());
@@ -710,14 +709,22 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		        		 temp.setOrderId(temp1.getOrderId());
 		        		 temp.setDateofPayment(temp1.getDateofPayment());
 		        		 temp.setUploadDate(temp1.getUploadDate());
-		        		 temp.setProductPrice(temp1.getProductPrice());
-		        		 //temp.setGroupByName("pcName");
-		        		 
+		        		 temp.setPaymentCycle(temp1.getPaymentCycle());
+		        		 temp.setNetProductPrice(temp.getProductPrice()+(temp1.getQuantity()*temp1.getProductPrice()));
+		        		 temp.setNetQuantity((int)temp.getNetQuantity()+(int)temp1.getNetQuantity());
+		        		 temp.setTotalProductPrice(temp.getTotalProductPrice()+(temp1.getQuantity()*temp1.getProductPrice()));
+		        		 temp.setProductPrice(temp.getProductPrice()+temp1.getProductPrice());
+		        		 //temp.setGroupByName("pcName"); 
 		        	 }
-	       	 
 		         }  
-		         temp.setStartDate(startDate.toString());
-		         temp.setEndDate(endDate.toString());
+				    Calendar cal = Calendar.getInstance();
+				    cal.setTime(startDate);
+				 temp.setStartDate(cal.get(Calendar.DAY_OF_MONTH)+"|"+cal.get(Calendar.MONTH)+"|"+cal.get(Calendar.YEAR));
+				    cal.setTime(endDate);
+				 temp.setEndDate(cal.get(Calendar.DAY_OF_MONTH)+"|"+cal.get(Calendar.MONTH)+"|"+cal.get(Calendar.YEAR));
+
+		         temp.setPercentageGPvsCOP((temp.getGrossProfit()*100)/temp.getProductPrice());
+		         System.out.println(startDate.toString()+" Money "+endDate.toString());
 		         ttsonew.add(temp);    }
 		         
 		         
@@ -731,11 +738,103 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 			   log.info("Error :",e);
 			   throw new CustomException(GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3, GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
 		}
+		 ttso.addAll(ttsonew);
 		 log.info("*** getOrderwiseGPDetails Ends : ReportsChannelnCategoryDaoImpl ****");
+		 log.info("*** getAllPartnerTSOdetails exit ***");
+		
 		 return ttso;
 
 	}
+	
+	public Criteria getCriteriaGP(Date startDate,Date endDate,int sellerIdfromSession,Session session) {
+		// Session session=sessionFactory.openSession();
+		 Criteria criteria1=session.createCriteria(Order.class);
+		 criteria1.createAlias("seller", "seller", CriteriaSpecification.LEFT_JOIN);
+		 criteria1.createAlias("customer", "customer", CriteriaSpecification.LEFT_JOIN);
+		 criteria1.createAlias("orderPayment", "orderPayment", CriteriaSpecification.LEFT_JOIN);
+		 criteria1.createAlias("orderTax", "orderTax", CriteriaSpecification.INNER_JOIN);
+		 criteria1.createAlias("paymentUpload", "paymentUpload", CriteriaSpecification.LEFT_JOIN);
+		 criteria1.createAlias("orderReturnOrRTO", "orderReturnOrRTO", CriteriaSpecification.INNER_JOIN);
+		 criteria1.add(Restrictions.eq("seller.id", sellerIdfromSession));
+		 criteria1.add(Restrictions.between("orderDate",startDate, endDate));
+		 //criteria1.setProjection(Projections.distinct(Projections.property("orderId")));
+		 criteria1.setProjection(getAllPL("GP"));
+		 return criteria1;
+	}
+	
+	public static void populateChannelSalesDetailsGP(ChannelSalesDetails temp,Object[] recordsRow,Date startDate,Date endDate,String nme){
+		
+		 temp.setPcName(recordsRow[0].toString());
+		 temp.setTaxCategtory(recordsRow[0].toString());
+		 temp.setPaymentType(recordsRow[0].toString());
+		 temp.setQuantity(Integer.parseInt(recordsRow[1].toString()));
+		 temp.setDiscount(Double.parseDouble(recordsRow[2].toString()));
+		 temp.setOrderMRP(Double.parseDouble(recordsRow[3].toString()));
+		 temp.setOrderSP(Double.parseDouble(recordsRow[4].toString()));
+		 temp.setShippingCharges(Double.parseDouble(recordsRow[5].toString()));
+		 temp.setNetSaleQuantity(Integer.parseInt(recordsRow[6].toString()));
+		 temp.setNetRate(Double.parseDouble(recordsRow[7].toString()));
+		 temp.setGrossNetRate(Double.parseDouble(recordsRow[8].toString()));
+		 temp.setPartnerCommission(Double.parseDouble(recordsRow[9].toString()));
+		 temp.setPr(Double.parseDouble(recordsRow[10].toString()));
+		 temp.setTotalAmountRecieved(Double.parseDouble(recordsRow[11].toString()));
+		 temp.setPoPrice(Double.parseDouble(recordsRow[12].toString()));
+		 temp.setGrossProfit(Double.parseDouble(recordsRow[13].toString()));
+		 temp.setServiceTax(Float.parseFloat(recordsRow[14].toString()));
+		 temp.setFixedfee(Double.parseDouble(recordsRow[15].toString()));
+		 temp.setPccAmount(Double.parseDouble(recordsRow[16].toString()));
+		 temp.setNegativeAmount(Double.parseDouble(recordsRow[17].toString()));
+		 temp.setPositiveAmount(Double.parseDouble(recordsRow[18].toString()));
+		 temp.setActualrecived2(Double.parseDouble(recordsRow[19].toString()));
+		 temp.setNetPaymentResult(Double.parseDouble(recordsRow[20].toString()));
+		 temp.setPaymentDifference(Double.parseDouble(recordsRow[21].toString()));
+		 if(nme.equals("GP")){
+		 temp.setOrderId(Integer.parseInt(recordsRow[25].toString()));
+		 temp.setInvoiceID(recordsRow[26].toString());
+		 temp.setProductSkuCode(recordsRow[27].toString());;
+		 temp.setGroupByName("categoryDetails");
+		 temp.setTaxCategtory(recordsRow[28].toString());
+		 temp.setPaymentType(recordsRow[29].toString());
+		 if(recordsRow[30]!=null)
+		 temp.setPaymentCycle(recordsRow[30].toString());
+		// temp.setUploadDate((Date)recordsRow[31]);
+		// temp.setDateofPayment((Date)recordsRow[32]);
+		// temp.setTax(Float.parseFloat(recordsRow[33].toString()));
+		 return;
+		 }
+		 temp.setReturnOrRTOCharges(Double.parseDouble(recordsRow[22].toString()));
+		 temp.setReturnorrtoQty(Integer.parseInt(recordsRow[23].toString()));
+		    Calendar cal = Calendar.getInstance();
+		    cal.setTime(startDate);
+		 temp.setStartDate(cal.get(Calendar.DAY_OF_MONTH)+"|"+cal.get(Calendar.MONTH)+"|"+cal.get(Calendar.YEAR));
+		    cal.setTime(endDate);
+		 temp.setEndDate(cal.get(Calendar.DAY_OF_MONTH)+"|"+cal.get(Calendar.MONTH)+"|"+cal.get(Calendar.YEAR));
 
+		 temp.setRowCount(Integer.parseInt(recordsRow[23].toString()));
+		 temp.setReturnOrRTOChargestoBeDeducted(Double.parseDouble(recordsRow[24].toString()));
+		 temp.setTax(Float.parseFloat(recordsRow[25].toString()));
+		// temp.setTax(Float.parseFloat(recordsRow[26].toString()));
+		 if(!nme.equals("categoryName") && !nme.equals("getPayments")){
+		 temp.setNrTax(Double.parseDouble(recordsRow[26].toString()));
+		 temp.setNrReturn(Double.parseDouble(recordsRow[27].toString()));
+		 temp.setReturnSP(Double.parseDouble(recordsRow[28].toString()));
+
+		 }
+		 if(nme.equals("categoryName") || nme.equals("getPayments")){
+		 temp.setOrderId(Integer.parseInt(recordsRow[25].toString()));
+		 temp.setInvoiceID(recordsRow[26].toString());
+		 temp.setProductSkuCode(recordsRow[27].toString());;
+		 temp.setGroupByName("categoryDetails");
+		 temp.setTaxCategtory(recordsRow[28].toString());
+		 temp.setPaymentType(recordsRow[29].toString());
+		 if(recordsRow[30]!=null)
+		 temp.setPaymentCycle(recordsRow[30].toString());
+		 temp.setUploadDate((Date)recordsRow[31]);
+		 temp.setDateofPayment((Date)recordsRow[32]);
+		 temp.setTax(Float.parseFloat(recordsRow[33].toString()));
+		 }}
+
+	
 	public List<ChannelSalesDetails> getConsolidatedDetails(Date startDate,Date endDate, int sellerId) throws CustomException{
 		
 		log.info("*** getConsolidatedDetails Starts : ReportsChannelnCategoryDaoImpl ****");

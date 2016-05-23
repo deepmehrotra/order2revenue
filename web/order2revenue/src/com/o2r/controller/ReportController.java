@@ -255,17 +255,39 @@ public void downloadOrderReport(HttpServletRequest request ,HttpServletResponse 
 		log.info("$$$ downloadOrderReport Starts : ReportController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();		
 		List<ChannelSalesDetails> orderlist = new ArrayList<>();
-		
+		String reportName;
 		Date startDate;
 		Date endDate;
-		String[] reportheaders;		
+		String partner;
+		String selectedPartner;
+		String[] reportheaders;
+		// System.out.println(" Cat :" + partner);
 
+		reportName = request.getParameter("reportName");
 		startDate = new Date(request.getParameter("startdate"));
 		endDate = new Date(request.getParameter("enddate"));
+		partner = request.getParameter("toggler");
+		selectedPartner = request.getParameter("selectedPartner");
 		reportheaders = request.getParameterValues("headers");
 		try {
-			orderlist = orderService.findChannelOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
-			reportDownloadService.downloadCOReport(response, orderlist,reportheaders, "ChannelSalesReport",	helperClass.getSellerIdfromSession(request));
+			if(reportName.equalsIgnoreCase("channelSaleReport")){
+				orderlist = orderService.findChannelOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
+				reportDownloadService.downloadCOReport(response, orderlist,reportheaders, "ChannelSalesReport",	helperClass.getSellerIdfromSession(request));
+			} else if(reportName.equalsIgnoreCase("categoryWiseSaleReport")){
+				orderlist = orderService.findChannelOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
+				reportDownloadService.downloadCOReport(response, orderlist,reportheaders, "ChannelSalesReport",	helperClass.getSellerIdfromSession(request));
+				
+			} else if(reportName.equalsIgnoreCase("paymentsReceievedReport")){
+				orderlist = orderService.findChannelOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
+				reportDownloadService.downloadCOReport(response, orderlist,reportheaders, "ChannelSalesReport",	helperClass.getSellerIdfromSession(request));
+				
+			} else if(reportName.equalsIgnoreCase("orderwiseGPReport")){
+				orderlist = orderService.findChannelOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
+				reportDownloadService.downloadCOReport(response, orderlist,reportheaders, "ChannelSalesReport",	helperClass.getSellerIdfromSession(request));
+				
+			}
+			
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			log.error(e);
@@ -279,6 +301,8 @@ public void downloadOrderReport(HttpServletRequest request ,HttpServletResponse 
 			log.error(e);
 		}
 		log.info("$$$ downloadOrderReport Ends : ReportController $$$");		
+
+
 	}
 
 public List<TotalShippedOrder> getSortedList(List<TotalShippedOrder> ttso)

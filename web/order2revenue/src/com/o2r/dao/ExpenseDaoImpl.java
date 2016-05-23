@@ -394,7 +394,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
 			Criteria criteria = session
 					.createCriteria(Expenses.class)
 					.add(Restrictions.eq("sellerId", sellerId))
-					.add(Restrictions.like("expenseName", expname).ignoreCase())
+					.add(Restrictions.like("expenseName", expname+"%").ignoreCase())
 					.addOrder(org.hibernate.criterion.Order.desc("expenseDate"))
 					.setResultTransformer(
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
