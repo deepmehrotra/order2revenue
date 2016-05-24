@@ -32,6 +32,13 @@ span .#error {
 .pickList1Select {
 	height: 200px !important;
 }
+
+    .labelfix
+    {
+        font-size: 12px;
+    }
+
+
 </style>
 
 	<link href="/O2R/seller/css/bootstrap.min.css" rel="stylesheet">
@@ -119,73 +126,69 @@ span .#error {
 																style="border-spacing: 0 5px;">
 																<tbody>
 																	<tr>
-																		<td><label>ALIAS NAME </label></td>
-																		<td><label class="labelfix">:
-																				${partner.pcDesc}</label></td>
+																		<td style="width : 50%;"><label>ALIAS NAME </label></td>
+																		<td><font color="green" size="2"><input type="text" class="form-control" placeholder="${partner.pcDesc}" disabled></font></td>
 																	</tr>
 																	<tr>
-																		<td><label>TDS APPLICABLE</label></td>
-																		<td><label class="labelfix">:
-																				${partner.tdsApplicable}</label></td>
+																		<td style="width : 50%;"><label>TDS APPLICABLE</label></td>
+																		<td><font color="green" size="2"><input type="text" class="form-control" placeholder="${partner.tdsApplicable}" disabled></font></td>
 																	</tr>
 																	<tr>
-																		<td><label>RETURN LIMIT</label></td>
-																		<td><label class="labelfix">:
-																				${partner.maxReturnAcceptance}</label></td>
+																		<td style="width : 50%;"><label>RETURN LIMIT</label></td>
+																		<td><font color="green" size="2"><input type="text" class="form-control" placeholder="${partner.maxReturnAcceptance}" disabled></font></td>
 																		<%-- <input type="text" value="${partner.maxReturnAcceptance}" class="form-control" disabled> --%>
 																	</tr>
 																	<tr>
-																		<td><label>PAYMENT TYPE</label></td>
-																		<td><c:choose>
-																				<c:when
-																					test="${partner.paymentType == 'paymentcycle'}">
-																					<label class="labelfix">: Payment Cycle</label>
-																				</c:when>
-																				<c:when
-																					test="${partner.paymentType == 'datewisepay'}">
-																					<label class="labelfix">: Day Wise</label>
-																				</c:when>
-																				<c:otherwise>
-																					<label class="labelfix">: Monthly</label>
-																				</c:otherwise>
-																			</c:choose></td>
+																		<td style="width : 50%;"><label>PARTNER NAME	</label></td>
+																		<td><font color="green" size="2"><input type="text" class="form-control" placeholder="${partner.pcName}" disabled></font></td>
 																	</tr>
-																	<tr>
-																		<td><label>PAYMENT CYCLE</label></td>
-																		<td><c:choose>
-																				<c:when
-																					test="${partner.paymentType == 'paymentcycle'}">
-																					<label class="labelfix">:
-																						${partner.startcycleday} to
-																						${partner.paycycleduration} ,payment on
-																						${partner.paydaysfromstartday}</label>
+																</tbody>
+															</table>
+																	<div>
+																		<h4 style="text-align: center;">PAYMENT TYPE </h4>
+																	</div>
+																	<div class="col-lg-12" style="text-align:center;">
+																		<div class="input-group1">
+																			<c:choose>
+																					<c:when
+																						test="${partner.paymentType == 'paymentcycle'}">
+																						<font color="green" size="2"><input type="text" class="form-control" placeholder="Payment Cycle" style="text-align: center;" disabled></font>																						
+																					</c:when>
+																					<c:when
+																						test="${partner.paymentType == 'datewisepay'}">
+																						<font color="green" size="2"><input type="text" class="form-control" placeholder="Day Wise" style="text-align: center;" disabled></font>
+																					</c:when>
+																					<c:otherwise>
+																						<font color="green" size="2"><input type="text" class="form-control" placeholder="Monthly" style="text-align: center;" disabled></font>																					
+																					</c:otherwise>
+																			</c:choose>
+																		</div>	
+																	</div>
+																	<div><br><br>
+																		<h4 style="text-align: center;">PAYMENT CYCLE </h4>
+																	</div>
+																	<div class="col-lg-12" style="text-align:center;">
+																		<c:choose>
+																				<c:when	test="${partner.paymentType == 'paymentcycle'}">
+																					<font color="green" size="2"><input  type="text" class="form-control" placeholder="${partner.startcycleday} to ${partner.paycycleduration} ,Payment on ${partner.paydaysfromstartday}" style="text-align: center;" disabled></font>
 																				</c:when>
 																				<c:when
 																					test="${partner.paymentType == 'datewisepay'}">
 																					<c:choose>
 																						<c:when test="${partner.isshippeddatecalc}">
-																							<label class="labelfix">:
-																								${partner.noofdaysfromshippeddate} days from
-																								shipped date</label>
-																							<%-- <input type="text" value="${partner.noofdaysfromshippeddate} days from shipped date" class="form-control" disabled> --%>
+																							<font color="green" size="2"><input type="text" class="form-control" placeholder="${partner.noofdaysfromshippeddate} Days From Shipped Date" style="text-align: center;" disabled></font>
 																						</c:when>
 																						<c:otherwise>
-																							<label class="labelfix">:
-																								${partner.noofdaysfromshippeddate} days from
-																								delivery date</label>
-																							<%-- <input type="text" value="${partner.noofdaysfromshippeddate} days from delivery date" class="form-control" disabled> --%>
+																							<font color="green" size="2"><input type="text" class="form-control" placeholder="${partner.noofdaysfromshippeddate} Days From Delivery Date" style="text-align: center;" disabled></font>
 																						</c:otherwise>
 																					</c:choose>
 																				</c:when>
 																				<c:otherwise>
-																					<input type="text"
-																						value="${partner.monthlypaydate} of every month"
-																						class="form-control" disabled>
+																					<font color="green" size="2"><input type="text" class="form-control" placeholder="${partner.monthlypaydate} of Every Month" style="text-align: center;" disabled></font>																					
 																				</c:otherwise>
-																			</c:choose></td>
-																	</tr>
-																</tbody>
-															</table>
+																			</c:choose>
+																	</div>
+																	<br><br><br>
 															<h4 style="text-align: center;">STATE DISTRIBUTION</h4>
 															<div class="row">
 																<div class="col-lg-12">
@@ -193,23 +196,19 @@ span .#error {
 																		style="border-spacing: 0 5px;">
 																		<tbody>
 																			<tr>
-																				<td style="width: 50%;"><label>Local
-																						List :</label></td>
+																				<td style="width: 50%;"><label>Local</label></td>
 																				<td><textarea disabled>${partner.nrnReturnConfig.localList}</textarea></td>
 																			</tr>
 																			<tr>
-																				<td style="width: 50%;"><label>Zonal
-																						List :</label></td>
+																				<td style="width: 50%;"><label>Zonal</label></td>
 																				<td><textarea disabled>${partner.nrnReturnConfig.zonalList}</textarea></td>
 																			</tr>
 																			<tr>
-																				<td style="width: 50%;"><label>Metro
-																						List :</label></td>
+																				<td style="width: 50%;"><label>Metro</label></td>
 																				<td><textarea disabled>${partner.nrnReturnConfig.metroList}</textarea></td>
 																			</tr>
 																			<tr>
-																				<td style="width: 50%;"><label>National
-																						List :</label></td>
+																				<td style="width: 50%;"><label>National</label></td>
 																				<td><textarea disabled>${partner.nrnReturnConfig.nationalList}</textarea></td>
 																			</tr>
 																		</tbody>
@@ -251,12 +250,11 @@ span .#error {
 																			<div>
 																				<c:if
 																					test="${partner.nrnReturnConfig.commissionType == 'fixed' }">
-																					<button class="btn btn-grey" id="button1">Fixed</button>
+																					<button class="btn btn-grey" id="button1" style="width:100%;"><font size="2" color="green" >Fixed</font><span class="caret"></span></button>																					
 																				</c:if>
 																				<c:if
 																					test="${partner.nrnReturnConfig.commissionType == 'categoryWise' }">
-																					<button class="btn btn-grey" id="button1">Category
-																						Wise</button>
+																					<button class="btn btn-grey" id="button1" style="width:100%;"><font size="2" color="green">Category Wise</font><span class="caret"></span></button>																					
 																				</c:if>
 																			</div>
 																		</td>
@@ -292,41 +290,41 @@ span .#error {
 																		<td><c:if
 																				test="${chargeMap.fixedfeelt250 != null }">
 																				<div>
-																					<label class="labelfix">&lt;250 :
+																					<label class="labelfix" style="text-align: left;">&lt;250 :
 																						${chargeMap.fixedfeelt250}</label>
 																				</div>
 																				<div>
-																					<label class="labelfix">&gt;250&&&lt;500 :
+																					<label class="labelfix" style="text-align: left;">&gt;250&&&lt;500 :
 																						${chargeMap.fixedfeegt250lt500}</label>
 																				</div>
 																				<div>
-																					<label class="labelfix">&gt;500 :
+																					<label class="labelfix" style="text-align: left;">&gt;500 :
 																						${chargeMap.fixedfeegt500}</label>
 																				</div>
 																			</c:if> <c:if test="${chargeMap.fixedfeelt500Big != null }">
 																				<div>
-																					<label class="labelfix">&lt;500 :
+																					<label class="labelfix" style="text-align: left;">&lt;500 :
 																						${chargeMap.fixedfeelt500Big}</label>
 																				</div>
 																				<div>
-																					<label class="labelfix">&gt;500 && &lt;1000
+																					<label class="labelfix" style="text-align: left;">&gt;500 && &lt;1000
 																						: ${chargeMap.fixedfeegt500lt1000}</label>
 																				</div>
 																				<div>
-																					<label class="labelfix">&gt;1000 &&
+																					<label class="labelfix" style="text-align: left;">&gt;1000 &&
 																						&lt;10000 : ${chargeMap.fixedfeegt1000lt10000}</label>
 																				</div>
 																				<div>
-																					<label class="labelfix">&gt;10000 :
+																					<label class="labelfix" style="text-align: left;">&gt;10000 :
 																						${chargeMap.fixedfeegt10000}</label>
 																				</div>
 																			</c:if> <c:if test="${chargeMap.fixedfeelt500 != null }">
 																				<div>
-																					<label class="labelfix">&lt;500 :
+																					<label class="labelfix" style="text-align: left;">&lt;500 :
 																						${chargeMap.fixedfeelt500}</label>
 																				</div>
 																				<div>
-																					<label class="labelfix">&gt;500 :
+																					<label class="labelfix" style="text-align: left;">&gt;500 :
 																						${chargeMap.fixedfeegt500Big}</label>
 																				</div>
 																			</c:if></td>
@@ -336,18 +334,15 @@ span .#error {
 																		<td><c:if
 																				test="${partner.nrnReturnConfig.whicheverGreaterPCC == 'true'}">
 																				<div>
-																					<label class="labelfix">Which Ever Is
-																						Greater</label>
+																					<label class="labelfix" style="text-align: left;">Which Ever Is Greater</label>
 																				</div>
 																			</c:if> <c:if test="${chargeMap.percentSPPCC != null}">
 																				<div>
-																					<label class="labelfix">% of SP :
-																						${chargeMap.percentSPPCC}</label>
+																					<label class="labelfix" style="text-align: left;">% of SP :${chargeMap.percentSPPCC}</label>
 																				</div>
 																			</c:if> <c:if test="${chargeMap.fixedAmtPCC != null}">
 																				<div>
-																					<label class="labelfix">Fixed AMT :
-																						${chargeMap.fixedAmtPCC}</label>
+																					<label class="labelfix" style="text-align: left;">Fixed AMT :${chargeMap.fixedAmtPCC}</label>
 																				</div>
 																			</c:if></td>
 																	</tr>
@@ -357,12 +352,10 @@ span .#error {
 																				Fee</label></td>
 																		<td><c:if
 																				test="${partner.nrnReturnConfig.shippingFeeType == 'fixed'}">
-																				<button class="btn btn-grey" id="button3">Fixed
-																					Shipping Charges</button>
+																				<button class="btn btn-grey" id="button1" style="width:100%;"><font size="2" color="green">Fixed</font><span class="caret"></span></button>
 																			</c:if> <c:if
 																				test="${partner.nrnReturnConfig.shippingFeeType == 'variable'}">
-																				<button class="btn btn-grey" id="button3">Variable
-																					Shipping Charges</button>
+																				<button class="btn btn-grey " id="button1" style="width:100%;"><font size="2" color="green">Variable</font><span class="caret"></span></button>
 																			</c:if></td>
 																	</tr>
 																	<tr>
@@ -372,7 +365,7 @@ span .#error {
 																					test="${partner.nrnReturnConfig.shippingFeeType == 'variable'}">
 																					<h5>Volume calculation= (lxbxh)(cm)/5</h5>
 																					<table class="table-bordered"
-																						style="border-spacing: 0 5px;">
+																						style="border-spacing: 0 5px;width: 86%;">
 																						<thead>
 																							<tr>
 																								<th>Volume Weight Slab(gms)</th>
@@ -423,7 +416,7 @@ span .#error {
 																					<br>
 																					<h5>Weight calculation</h5>
 																					<table class="table-bordered"
-																						style="border-spacing: 0 5px;">
+																						style="border-spacing: 0 5px;width: 86%;">
 																						<thead>
 																							<tr>
 																								<th>Dead Weight Slab(gms)</th>
@@ -552,56 +545,62 @@ span .#error {
 																</div>
 															</div>
 
-															<div class="col-sm-12">
-																<div class="col-sm-4">
+															<div class="col-lg-12">
+																<div class="col-sm-2">
 																	<div class="radio">
-																		<label><strong>RETURN</strong></label>
+																		<strong style="position: relative;right: 30px;top: 7px;">RETURN</strong>
 																	</div>
 																</div>
-																<div class="col-sm-4">
+																<div class="col-sm-5" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.retCharSFType == 'fixed'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="1" name="toggler">Fixed</label>
+									                                            <button type="button" id="1" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Fixed</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:when
 																			test="${partner.nrnReturnConfig.retCharSFType == 'variable'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="2" name="toggler">Variable</label>
+									                                            <button type="button" id="2" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Variable</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:otherwise>
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="3" name="toggler">No-Charges </label>
+									                                            <button type="button" id="3" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">No-Charges</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:otherwise>
 																	</c:choose>
 																</div>
-																<div class="col-sm-4">
+																<div class="col-sm-5" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.retCharBRType == 'fixed'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="5" name="toggler">Fixed</label>
+									                                            <button type="button" id="5" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Fixed</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:when
 																			test="${partner.nrnReturnConfig.retCharBRType == 'variable'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="6" name="toggler">Variable</label>
+									                                            <button type="button" id="6" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Variable</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:otherwise>
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="4" name="toggler">No-Charges </label>
+									                                            <button type="button" id="4" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">No-Charges</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:otherwise>
 																	</c:choose>
@@ -609,9 +608,8 @@ span .#error {
 																<div class="col-sm-12 radio1" id="blk-1">
 																	<div class="row">
 																		<div class="col-md-12">
-																			<input type="text"
-																				value="${chargeMap.retCharSFFixedAmt} %"
-																				class="form-control" disabled>
+																			<label class="labelfix">Fixed Amount :
+																					${chargeMap.retCharSFFixedAmt} %</label>
 																		</div>
 																	</div>
 																</div>
@@ -655,9 +653,8 @@ span .#error {
 																<div class="col-sm-12 radio1" id="blk-5">
 																	<div class="row">
 																		<div class="col-md-12">
-																			<input type="text"
-																				value="${chargeMap.retCharBRFixedAmt} %"
-																				class="form-control" disabled>
+																			<label class="labelfix">Fixed Amount :
+																					${chargeMap.retCharBRFixedAmt} %</label>
 																		</div>
 																	</div>
 																</div>
@@ -694,58 +691,63 @@ span .#error {
 																	</div>
 																</div>
 															</div>
-															<div class="col-sm-12">
+															<div class="col-lg-12">
 																<div class="hr-line-dashed"></div>
-																<div class="col-sm-4">
+																<div class="col-sm-2">
 																	<div class="radio">
-																		<label><strong>RTO</strong></label>
+																		<strong style="position: relative;right: 30px;top: 7px;">RTO</strong>
 																	</div>
 																</div>
-																<div class="col-sm-4">
+																<div class="col-sm-5" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.RTOCharSFType == 'fixed'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="7" name="toggler">Fixed</label>
+									                                            <button type="button" id="7" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Fixed</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:when
 																			test="${partner.nrnReturnConfig.RTOCharSFType == 'variable'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="8" name="toggler">Variable</label>
+									                                            <button type="button" id="8" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Variable</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:otherwise>
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="9" name="toggler">No-Charges </label>
+									                                            <button type="button" id="9" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">No-Charges</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:otherwise>
 																	</c:choose>
 																</div>
-																<div class="col-sm-4">
+																<div class="col-sm-5" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.RTOCharBRType == 'fixed'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="11" name="toggler">Fixed</label>
+									                                            <button type="button" id="11" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Fixed</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:when
 																			test="${partner.nrnReturnConfig.RTOCharBRType == 'variable'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="12" name="toggler">Variable</label>
+									                                            <button type="button" id="12" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Variable</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:otherwise>
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="10" name="toggler">No-Charges
-																				</label>
+									                                            <button type="button" id="10" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">No-Charges</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:otherwise>
 																	</c:choose>
@@ -753,9 +755,8 @@ span .#error {
 																<div class="col-sm-12 radio1" id="blk-7">
 																	<div class="form-group col-md-12">
 																		<div class="col-sm-12">
-																			<input type="text"
-																				value="${chargeMap.RTOCharSFFixedAmt} %"
-																				class="form-control" disabled>
+																			<label class="labelfix">Fixed Amount :
+																					${chargeMap.RTOCharSFFixedAmt} %</label>
 																		</div>
 																	</div>
 																</div>
@@ -798,9 +799,9 @@ span .#error {
 																<div class="col-sm-12 radio1" id="blk-11">
 																	<div class="row">
 																		<div class="col-md-12">
-																			<input type="text"
-																				value="${chargeMap.RTOCharBRFixedAmt} %"
-																				class="form-control" disabled>
+																			<label class="labelfix">Fixed Amount :
+																					chargeMap.RTOCharBRFixedAmt} %</label>
+																			
 																		</div>
 																	</div>
 																</div>
@@ -837,60 +838,63 @@ span .#error {
 																	</div>
 																</div>
 															</div>
-															<div class="col-sm-12">
+															<div class="col-lg-12">
 																<div class="hr-line-dashed"></div>
-																<div class="col-sm-4">
+																<div class="col-sm-2">
 																	<div class="radio">
-																		<label><strong>REPLACE <br>MENT
-																		</strong></label>
+																		<strong style="position: relative;right: 30px;top: 7px;">REPLACE<br>MENT</strong>
 																	</div>
 																</div>
-																<div class="col-sm-4">
+																<div class="col-sm-5" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.repCharSFType == 'fixed'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="15" name="toggler">Fixed</label>
+									                                            <button type="button" id="15" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Fixed</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:when
 																			test="${partner.nrnReturnConfig.repCharSFType == 'variable'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="14" name="toggler">Variable</label>
+									                                            <button type="button" id="14" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Variable</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:otherwise>
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="13" name="toggler">No-Charges
-																				</label>
+									                                            <button type="button" id="13" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">No-Charges</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:otherwise>
 																	</c:choose>
 																</div>
-																<div class="col-sm-4">
+																<div class="col-sm-5" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.repCharBRType == 'fixed'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="18" name="toggler">Fixed</label>
+									                                            <button type="button" id="18" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Fixed</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:when
 																			test="${partner.nrnReturnConfig.repCharBRType == 'variable'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="17" name="toggler">Variable</label>
+									                                            <button type="button" id="17" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Variable</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:otherwise>
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="16" name="toggler">No-Charges
-																				</label>
+									                                            <button type="button" id="16" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">No-Charges</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:otherwise>
 																	</c:choose>
@@ -934,9 +938,8 @@ span .#error {
 																<div class="col-sm-12 radio1" id="blk-15">
 																	<div class="row">
 																		<div class="col-md-12">
-																			<input type="text"
-																				value="${chargeMap.repCharSFFixedAmt} %"
-																				class="form-control" disabled>
+																			<label class="labelfix">Fixed Amount :
+																					${chargeMap.repCharSFFixedAmt} %</label>
 																		</div>
 																	</div>
 																</div>
@@ -982,59 +985,63 @@ span .#error {
 																	</div>
 																</div>
 															</div>
-															<div class="col-sm-12">
+															<div class="col-lg-12">
 																<div class="hr-line-dashed"></div>
-																<div class="col-sm-4">
+																<div class="col-sm-2">
 																	<div class="radio">
-																		<label><strong>PARTIAL DELIVERY</strong></label>
+																		<strong style="position: relative;right: 30px;top: 7px;">PARTIAL DELIVERY</strong>
 																	</div>
 																</div>
-																<div class="col-sm-4">
+																<div class="col-sm-5" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.PDCharSFType == 'fixed'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="20" name="toggler">Fixed</label>
+									                                            <button type="button" id="20" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Fixed</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:when
 																			test="${partner.nrnReturnConfig.PDCharSFType == 'variable'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="19" name="toggler">Variable</label>
+									                                            <button type="button" id="19" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Variable</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:otherwise>
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="21" name="toggler">No-Charges
-																				</label>
+									                                            <button type="button" id="21" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">No-Charges</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:otherwise>
 																	</c:choose>
 																</div>
-																<div class="col-sm-4">
+																<div class="col-sm-5" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.PDCharBRType == 'fixed'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="23" name="toggler">Fixed</label>
+									                                            <button type="button" id="23" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Fixed</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:when
 																			test="${partner.nrnReturnConfig.PDCharBRType == 'variable'}">
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="22" name="toggler">Variable</label>
+									                                            <button type="button" id="22" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Variable</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:when>
 																		<c:otherwise>
 																			<div class="radio">
-																				<label class="labelfix"><input type="radio"
-																					value="" id="24" name="toggler">No-Charges
-																				</label>
+									                                            <button type="button" id="24" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">No-Charges</font><span class="caret"></span>
+																				</button>																				
 																			</div>
 																		</c:otherwise>
 																	</c:choose>
@@ -1077,9 +1084,9 @@ span .#error {
 																<div class="col-sm-12 radio1" id="blk-20">
 																	<div class="row">
 																		<div class="col-md-12">
-																			<input type="text"
-																				value="${chargeMap.PDCharSFFixedAmt} %"
-																				class="form-control" disabled>
+																			<label class="labelfix">Fixed Amount :
+																					${chargeMap.PDCharSFFixedAmt} %</label>
+																			
 																		</div>
 																	</div>
 																</div>
@@ -1126,279 +1133,277 @@ span .#error {
 																</div>
 
 															</div>
+															
 
-
-
-															<div class="col-sm-12">
+															<div class="col-lg-12">
 																<div class="hr-line-dashed"></div>
-																<div class="col-sm-4">
+																	<div class="col-sm-12">
+																		<div class="radio" style="text-align: center;">
+																			<label><strong>CANCELLATION	</strong></label>
+																		</div>
+																	</div>
+															</div>
+															
+															<div class="col-lg-12">
+																<div class="col-sm-4" style="padding: 2px;">
 																	<div class="radio">
-																		<label><strong>CANCELLA<br>TION
-																		</strong></label>
+									                                    <button type="button" id="40" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;padding: 0px 0px 0px 7px;">
+																			<font  color="green">Before RTD</font><span class="caret"></span>
+																		</button>																				
 																	</div>
 																</div>
-																<div class="col-sm-4">
-																	<div class="col-md-12">
-																		<div class="radio">
-																			<label class="labelfix"> <input type="radio"
-																				value="" id="25" name="toggler">BEFORE RTD
-																			</label>
-																		</div>
-																	</div>
-																	<div class="col-md-12">
-																		<div class="radio">
-																			<label class="labelfix"> <input type="radio"
-																				value="" id="26" name="toggler">AFTER RTD
-																			</label>
-																		</div>
+																<div class="col-sm-4" style="padding: 2px;">
+																	<div class="radio">
+									                                    <button type="button" id="41" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">After RTD</font><span class="caret"></span>
+																		</button>																				
 																	</div>
 																</div>
-																<div class="col-sm-4">
-																	<div class="col-md-12">
-																		<div class="radio">
-																			<label class="labelfix"> <input type="radio"
-																				value="" id="27" name="toggler">BEFORE RTD
-																			</label>
-																		</div>
-																	</div>
-																	<div class="col-md-12">
-																		<div class="radio">
-																			<label class="labelfix"> <input type="radio"
-																				value="" id="28" name="toggler">AFTER RTD
-																			</label>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-sm-12 radio1" id="blk-25">
-																	<div class="col-sm-12">
-																		<div class="radio">
-																			<label> <input type="radio" value="" id="29"
-																				name="toggler"> Fixed Amount
-																			</label>
-																		</div>
-																	</div>
-																	<div class="col-sm-12" style="display: none;">
-																		<div class="radio">
-																			<label> <input type="radio" value="" id="30"
-																				name="toggler"> Variable
-																			</label>
-																		</div>
-																	</div>
-																	<div class="col-sm-12" style="display: none;">
-																		<div class="radio">
-																			<label> <input type="radio" value="" id="31"
-																				name="toggler"> No Charges
-																			</label>
-																		</div>
-																	</div>
-
-																	<div class="col-sm-12 radio1" id="blk-29">
-																		<div class="col-sm-12">
-																			<div class="form-group">
-																				<div class="col-md-2 content-rgt">
-																					<label>Lable</label>
-																				</div>
-																				<div class="col-md-3 content-rgt">
-																					<input type="text" placeholder=""
-																						class="form-control">
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-sm-12 radio1" id="blk-30">
-																		<div class="col-sm-12">
-																			<div class="form-group">
-																				<div class="col-md-2 content-rgt">
-																					<label>Lable</label>
-																				</div>
-																				<div class="col-md-3 content-rgt">
-																					<input type="text" placeholder=""
-																						class="form-control">
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-sm-12 radio1" id="blk-31">
-																		<div class="col-sm-12">
-																			<div class="form-group">
-																				<div class="col-md-2 content-rgt">
-																					<label>Lable</label>
-																				</div>
-																				<div class="col-md-3 content-rgt">
-																					<input type="text" placeholder=""
-																						class="form-control">
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-sm-12 radio1" id="blk-26">
-																	<div class="col-sm-12">
-																		<div class="radio">
-																			<label> <input type="radio" value="" id="32"
-																				name="toggler"> Fixed Amount
-																			</label>
-																		</div>
-																	</div>
-																	<div class="col-sm-12" style="display: none;">
-																		<div class="radio">
-																			<label> <input type="radio" value="" id="33"
-																				name="toggler"> Variable
-																			</label>
-																		</div>
-																	</div>
-																	<div class="col-sm-12" style="display: none;">
-																		<div class="radio">
-																			<label> <input type="radio" value="" id="34"
-																				name="toggler"> No Charges
-																			</label>
-																		</div>
-																	</div>
-																	<div class="col-sm-12 radio1" id="blk-32">
-																		<div class="form-group">
-																			<div class="col-md-2 content-rgt">
-																				<label>Lable</label>
-																			</div>
-																			<div class="col-md-3 content-rgt">
-																				<input type="text" placeholder=""
-																					class="form-control">
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-sm-12 radio1" id="blk-33">
-																		<div class="form-group">
-																			<div class="col-md-2 content-rgt">
-																				<label>Lable</label>
-																			</div>
-																			<div class="col-md-3 content-rgt">
-																				<input type="text" placeholder=""
-																					class="form-control">
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-sm-12 radio1" id="blk-34">
-																		<div class="form-group">
-																			<div class="col-md-2 content-rgt">
-																				<label>Lable</label>
-																			</div>
-																			<div class="col-md-3 content-rgt">
-																				<input type="text" placeholder=""
-																					class="form-control">
-																			</div>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-sm-12 radio1" id="blk-27">
-																	<div class="col-sm-12">
-																		<div class="radio">
-																			<label> <input type="radio" value="" id="35"
-																				name="toggler"> Fixed Amount
-																			</label>
-																		</div>
-																	</div>
-																	<div class="col-sm-12" style="display: none;">
-																		<div class="radio">
-																			<label> <input type="radio" value="" id="36"
-																				name="toggler"> Variable
-																			</label>
-																		</div>
-																	</div>
-																	<div class="col-sm-12" style="display: none;">
-																		<div class="radio">
-																			<label> <input type="radio" value="" id="37"
-																				name="toggler"> No Charges
-																			</label>
-																		</div>
-																	</div>
-																	<div class="col-sm-12 radio1" id="blk-35">
-																		<div class="form-group">
-																			<div class="col-md-2 content-rgt">
-																				<label>Lable</label>
-																			</div>
-																			<div class="col-md-3 content-rgt">
-																				<input type="text" placeholder=""
-																					class="form-control">
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-sm-12 radio1" id="blk-36">
-																		<div class="form-group">
-																			<div class="col-md-2 content-rgt">
-																				<label>Lable</label>
-																			</div>
-																			<div class="col-md-3 content-rgt">
-																				<input type="text" placeholder=""
-																					class="form-control">
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-sm-12 radio1" id="blk-37">
-																		<div class="form-group">
-																			<div class="col-md-2 content-rgt">
-																				<label>Lable</label>
-																			</div>
-																			<div class="col-md-3 content-rgt">
-																				<input type="text" placeholder=""
-																					class="form-control">
-																			</div>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-sm-12 radio1" id="blk-28">
-																	<div class="col-sm-12">
-																		<div class="radio">
-																			<label> <input type="radio" value="" id="38"
-																				name="toggler"> Fixed Amount
-																			</label>
-																		</div>
-																	</div>
-																	<div class="col-sm-12" style="display: none;">
-																		<div class="radio">
-																			<label> <input type="radio" value="" id="39"
-																				name="toggler"> Variable
-																			</label>
-																		</div>
-																	</div>
-																	<div class="col-sm-12" style="display: none;">
-																		<div class="radio">
-																			<label> <input type="radio" value="" id="40"
-																				name="toggler"> No Charges
-																			</label>
-																		</div>
-																	</div>
-																	<div class="col-sm-12 radio1" id="blk-38">
-																		<div class="form-group">
-																			<div class="col-md-2 content-rgt"></div>
-																			<div class="col-md-3 content-rgt">
-																				<input type="text" placeholder=""
-																					class="form-control">
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-sm-12 radio1" id="blk-39">
-																		<div class="form-group">
-																			<div class="col-md-2 content-rgt">
-																				<label>Lable</label>
-																			</div>
-																			<div class="col-md-3 content-rgt">
-																				<input type="text" placeholder=""
-																					class="form-control">
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-sm-12 radio1" id="blk-40">
-																		<div class="form-group">
-																			<div class="col-md-2 content-rgt">
-																				<label>Lable</label>
-																			</div>
-																			<div class="col-md-3 content-rgt">
-																				<input type="text" placeholder=""
-																					class="form-control">
-																			</div>
-																		</div>
+																<div class="col-sm-4" style="padding: 2px;">
+																	<div class="radio">
+									                       	            <button type="button" id="42" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;padding: 0px;">
+																			<font  color="green">Buyer Return</font><span class="caret"></span>
+																		</button>																				
 																	</div>
 																</div>
 															</div>
+															<div class="col-lg-12 radio1" id="blk-40">
+																<div class="col-sm-12" style="padding: 2px;">
+																	<c:choose>
+																		<c:when
+																			test="${partner.nrnReturnConfig.canCharSFBFRTDType == 'fixed'}">
+																			<div class="radio">
+									                                            <button type="button" id="45" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Fixed</font><span class="caret"></span>
+																				</button>																				
+																			</div>
+																		</c:when>
+																		<c:when
+																			test="${partner.nrnReturnConfig.canCharSFBFRTDType == 'variable'}">
+																			<div class="radio">
+									                                            <button type="button" id="46" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Variable</font><span class="caret"></span>
+																				</button>																				
+																			</div>
+																		</c:when>
+																		<c:otherwise>
+																			<div class="radio">
+									                                            <button type="button" id="47" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">No-Charges</font><span class="caret"></span>
+																				</button>																				
+																			</div>
+																		</c:otherwise>
+																	</c:choose>
+																</div>
+															</div>
+															<div class="col-sm-12 radio1" id="blk-45">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<label class="labelfix">Fixed Amount :
+																					${chargeMap.canCharSFBFRTDFixedAmt} %</label>
+																		</div>
+																	</div>
+															</div>
+															<div class="col-sm-12 radio1" id="blk-46">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<c:if
+																				test="${chargeMap.canCharSFBFRTDVarFixedAmt != null}">
+																				<label class="labelfix">Fixed Amount :
+																					${chargeMap.canCharSFBFRTDVarFixedAmt}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.canCharSFBFRTDPercentSP != null}">
+																				<label class="labelfix">% of SP :
+																					${chargeMap.canCharSFBFRTDPercentSP}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.canCharSFBFRTDPercentPCC != null}">
+																				<label class="labelfix">% of Commision :
+																					${chargeMap.canCharSFBFRTDPercentPCC}</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.canCharSFBRTDFF == 'true'}">
+																				<label class="labelfix">Fixed Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.canCharSFBRTDShipFee == 'true'}">
+																				<label class="labelfix">Shipping Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.canCharSFBRTDRevShipFee == 'true'}">
+																				<label class="labelfix">Reverse Shipping Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.canCharSFPCC == 'true'}">
+																				<label class="labelfix">Payment Collection Charges</label>
+																			</c:if>
+																		</div>
+																	</div>
+																</div>
+																
+																<div class="col-lg-12 radio1" id="blk-41">
+																<div class="col-sm-12" style="padding: 2px;">
+																	<c:choose>
+																		<c:when
+																			test="${partner.nrnReturnConfig.canCharSFARTDType == 'fixed'}">
+																			<div class="radio">
+									                                            <button type="button" id="48" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Fixed</font><span class="caret"></span>
+																				</button>																				
+																			</div>
+																		</c:when>
+																		<c:when
+																			test="${partner.nrnReturnConfig.canCharSFARTDType == 'variable'}">
+																			<div class="radio">
+									                                            <button type="button" id="49" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Variable</font><span class="caret"></span>
+																				</button>																				
+																			</div>
+																		</c:when>
+																		<c:otherwise>
+																			<div class="radio">
+									                                            <button type="button" id="50" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">No-Charges</font><span class="caret"></span>
+																				</button>																				
+																			</div>
+																		</c:otherwise>
+																	</c:choose>
+																</div>
+															</div>
+															
+															<div class="col-sm-12 radio1" id="blk-48">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<label class="labelfix">Fixed Amount :
+																					${chargeMap.canCharSFFixedAmt} %</label>
+																		</div>
+																	</div>
+															</div>
+															<div class="col-sm-12 radio1" id="blk-49">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<c:if
+																				test="${chargeMap.canCharSFVarFixedAmt != null}">
+																				<label class="labelfix">Fixed Amount :
+																					${chargeMap.canCharSFVarFixedAmt}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.canCharSFPercentSP != null}">
+																				<label class="labelfix">% of SP :
+																					${chargeMap.canCharSFPercentSP}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.canCharSFPercentPCC != null}">
+																				<label class="labelfix">% of Commision :
+																					${chargeMap.canCharSFPercentPCC}</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.canCharSFFF == 'true'}">
+																				<label class="labelfix">Fixed Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.canCharSFShipFee == 'true'}">
+																				<label class="labelfix">Shipping Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.canCharSFARTDRevShipFee == 'true'}">
+																				<label class="labelfix">Reverse Shipping Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.canCharSFBRTDPCC == 'true'}">
+																				<label class="labelfix">Payment Collection Charges</label>
+																			</c:if>
+																		</div>
+																	</div>
+																</div>
+																
+																<div class="col-lg-12 radio1" id="blk-42">
+																<div class="col-sm-12" style="padding: 2px;">
+																	<c:choose>
+																		<c:when
+																			test="${partner.nrnReturnConfig.canCharBRType == 'fixed'}">
+																			<div class="radio">
+									                                            <button type="button" id="51" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Fixed</font><span class="caret"></span>
+																				</button>																				
+																			</div>
+																		</c:when>
+																		<c:when
+																			test="${partner.nrnReturnConfig.canCharBRType == 'variable'}">
+																			<div class="radio">
+									                                            <button type="button" id="52" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">Variable</font><span class="caret"></span>
+																				</button>																				
+																			</div>
+																		</c:when>
+																		<c:otherwise>
+																			<div class="radio">
+									                                            <button type="button" id="53" name="toggler" class="form-control" value="" style="background:#eee;font-size: 12px;">
+																				<font  color="green">No-Charges</font><span class="caret"></span>
+																				</button>																				
+																			</div>
+																		</c:otherwise>
+																	</c:choose>
+																</div>
+															</div>
+															<div class="col-sm-12 radio1" id="blk-51">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<label class="labelfix">Fixed Amount :
+																					${chargeMap.canCharSFPercentPCC} %</label>
+																		</div>
+																	</div>
+															</div>
+															<div class="col-sm-12 radio1" id="blk-52">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<c:if
+																				test="${chargeMap.canCharBRVarFixedAmt != null}">
+																				<label class="labelfix">Fixed Amount :
+																					${chargeMap.canCharBRVarFixedAmt}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.canCharBRPercentSP != null}">
+																				<label class="labelfix">% of SP :
+																					${chargeMap.canCharBRPercentSP}</label>
+																				<br>
+																			</c:if>
+																			<c:if test="${chargeMap.canCharBRPercentPCC != null}">
+																				<label class="labelfix">% of Commision :
+																					${chargeMap.canCharBRPercentPCC}</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.canCharBRFF == 'true'}">
+																				<label class="labelfix">Fixed Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.canCharBRShipFee == 'true'}">
+																				<label class="labelfix">Shipping Fee</label>
+																				<br>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.canCharBRRevShipFee == 'true'}">
+																				<label class="labelfix">Reverse Shipping Fee</label>
+																			</c:if>
+																			
+																		</div>
+																	</div>
+																</div>
+																
+																
+																
+															
 														</div>
 													</div>
 												</div>
