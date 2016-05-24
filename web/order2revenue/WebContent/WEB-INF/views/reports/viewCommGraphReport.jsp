@@ -208,6 +208,8 @@
 												</div>
 											</div>
 										</div>
+									</div>
+									<div id="tab-2" class="tab-pane col-sm-12">		
 										<div class="row">
 											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">

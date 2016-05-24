@@ -103,7 +103,105 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			return new ModelAndView("reports/filterReports", model);
 }
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	@RequestMapping(value = "/seller/getPartnerReport", method = RequestMethod.POST)
+	public ModelAndView getPartnerReport(HttpServletRequest request)
+			throws Exception {
+		log.info("$$$ getReport Starts : ReportController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
 
+		try {
+			String reportName = request.getParameter("reportName");
+			Date startDate = new Date(request.getParameter("startdate"));
+			Date endDate = new Date(request.getParameter("enddate"));
+			int sellerId = helperClass.getSellerIdfromSession(request);
+
+			List<PartnerBusiness> partnerBusinessList = reportGeneratorService
+					.getPartnerBusinessReport(startDate, endDate, sellerId);
+			if ("partnerBusinessReport".equalsIgnoreCase(reportName)) {
+				List<PartnerBusinessGraph> partnerBusinessGraphList = ConverterClass
+						.transformPartnerBusinessGraph(partnerBusinessList);
+				log.info("PartnerList: " + partnerBusinessGraphList.size());
+				model.put("shortTablePartner", partnerBusinessGraphList);
+				List<CategoryBusinessGraph> categoryBusinessGraphList = ConverterClass
+						.transformCategoryBusinessGraph(partnerBusinessList);
+				log.info("CategoryList: " + categoryBusinessGraphList.size());
+				model.put("shortTableCategory", categoryBusinessGraphList);
+
+				Collections.sort(partnerBusinessGraphList,
+						new BusinessGraph.OrderByNetPartnerCommission());
+				model.put("partnerByNetCommission", partnerBusinessGraphList);
+				Collections.sort(partnerBusinessGraphList,
+						new BusinessGraph.OrderByNetTax());
+				model.put("partnerByNetTax", partnerBusinessGraphList);
+				Collections.sort(partnerBusinessGraphList,
+						new BusinessGraph.OrderByNetTDS());
+				model.put("partnerByNetTDS", partnerBusinessGraphList);
+				Collections.sort(partnerBusinessGraphList,
+						new BusinessGraph.OrderByNetNPR());
+				model.put("partnerByNetNPR", partnerBusinessGraphList);
+				Collections.sort(partnerBusinessGraphList,
+						new BusinessGraph.OrderByNetTaxable());
+				model.put("partnerByNetTaxable", partnerBusinessGraphList);
+
+				Collections.sort(categoryBusinessGraphList,
+						new BusinessGraph.OrderByNetPartnerCommission());
+				model.put("categoryByNetCommission", categoryBusinessGraphList);
+				Collections.sort(categoryBusinessGraphList,
+						new BusinessGraph.OrderByNetTax());
+				model.put("categoryByNetTax", categoryBusinessGraphList);
+				Collections.sort(categoryBusinessGraphList,
+						new BusinessGraph.OrderByNetTDS());
+				model.put("categoryByNetTDS", categoryBusinessGraphList);
+				Collections.sort(categoryBusinessGraphList,
+						new BusinessGraph.OrderByNetNPR());
+				model.put("categoryByNetNPR", categoryBusinessGraphList);
+				Collections.sort(categoryBusinessGraphList,
+						new BusinessGraph.OrderByNetTaxable());
+				model.put("categoryByNetTaxable", categoryBusinessGraphList);
+
+				model.put("partnerBusiness", partnerBusinessList);
+				return new ModelAndView("reports/viewBRGraphReport", model);
+			}
+
+			if ("partnerCommissionReport".equalsIgnoreCase(reportName)) {
+				List<PartnerCommissionPaidGraph> partnerCommissionGraphList = ConverterClass
+						.transformPartnerCommissionPaid(partnerBusinessList);
+				log.info("PartnerList: " + partnerCommissionGraphList.size());
+				model.put("shortTablePartner", partnerCommissionGraphList);
+				List<CategoryCommissionGraph> categoryCommissionGraphList = ConverterClass
+						.transformCategoryCommissionPaid(partnerBusinessList);
+				log.info("CategoryList: " + categoryCommissionGraphList.size());
+				model.put("shortTableCategory", categoryCommissionGraphList);
+
+				Collections.sort(partnerCommissionGraphList,
+						new CommissionPaidGraph.OrderByGrossCommission());
+				model.put("partnerByGrossComm", partnerCommissionGraphList);
+				Collections.sort(partnerCommissionGraphList,
+						new CommissionPaidGraph.OrderByNetChannelCommission());
+				model.put("partnerByNetChann", partnerCommissionGraphList);
+
+				Collections.sort(categoryCommissionGraphList,
+						new CommissionPaidGraph.OrderByGrossCommission());
+				model.put("categoryByGrossComm", categoryCommissionGraphList);
+				Collections.sort(categoryCommissionGraphList,
+						new CommissionPaidGraph.OrderByNetChannelCommission());
+				model.put("categoryByNetChann", categoryCommissionGraphList);
+
+				return new ModelAndView("reports/viewCommGraphReport", model);
+			}
+		} catch (CustomException ce) {
+			log.error("getReport exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			log.error("Failed!", ex);
+			model.put("errorMessage", ex.getMessage());
+		}
+		return new ModelAndView("globalErorPage", model);
+	}
 @RequestMapping(value = "/seller/getReport", method = RequestMethod.POST)
 public ModelAndView getReport(HttpServletRequest request)throws Exception
 {
@@ -117,94 +215,7 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 			reportName = request.getParameter("reportName");
 			startDate = new Date(request.getParameter("startdate"));
 			endDate = new Date(request.getParameter("enddate"));
-		
-		if("partnerBusinessReport".equalsIgnoreCase(reportName)){
-			List<PartnerBusiness> partnerBusinessList = reportGeneratorService.getPartnerBusinessReport(startDate,
-					endDate, helperClass.getSellerIdfromSession(request));
 
-
-			List<PartnerBusinessGraph> partnerBusinessGraphList = ConverterClass.transformPartnerBusinessGraph(partnerBusinessList);
-			log.info("PartnerList: " + partnerBusinessGraphList.size());
-			model.put("shortTablePartner", partnerBusinessGraphList);
-			List<CategoryBusinessGraph> categoryBusinessGraphList = ConverterClass.transformCategoryBusinessGraph(partnerBusinessList);
-			log.info("CategoryList: " + categoryBusinessGraphList.size());
-			model.put("shortTableCategory", categoryBusinessGraphList);
-			
-			Collections.sort(partnerBusinessGraphList, new BusinessGraph.OrderByNetPartnerCommission());
-			System.out.println("OrderByNetPartnerCommission");
-			for(PartnerBusinessGraph currGraph: partnerBusinessGraphList){
-				System.out.println(currGraph.getNetPartnerCommissionPaid());
-			}
-			model.put("partnerByNetCommission", partnerBusinessGraphList);
-			Collections.sort(partnerBusinessGraphList, new BusinessGraph.OrderByNetTax());
-			System.out.println("OrderByNetTax");
-			for(PartnerBusinessGraph currGraph: partnerBusinessGraphList){
-				System.out.println(currGraph.getNetTaxToBePaid());
-			}
-			model.put("partnerByNetTax", partnerBusinessGraphList);
-			Collections.sort(partnerBusinessGraphList, new BusinessGraph.OrderByNetTDS());
-			System.out.println("OrderByNetTDS");
-			for(PartnerBusinessGraph currGraph: partnerBusinessGraphList){
-				System.out.println(currGraph.getNetTDSToBeDeposited());
-			}
-			model.put("partnerByNetTDS", partnerBusinessGraphList);
-			Collections.sort(partnerBusinessGraphList, new BusinessGraph.OrderByNetNPR());
-			model.put("partnerByNetNPR", partnerBusinessGraphList);
-			Collections.sort(partnerBusinessGraphList, new BusinessGraph.OrderByNetTaxable());
-			model.put("partnerByNetTaxable", partnerBusinessGraphList);
-			
-			Collections.sort(categoryBusinessGraphList, new BusinessGraph.OrderByNetPartnerCommission());
-			System.out.println("CategoryByNetTDS");
-			for(CategoryBusinessGraph currGraph: categoryBusinessGraphList){
-				System.out.println(currGraph.getNetPartnerCommissionPaid());
-			}
-			model.put("categoryByNetCommission", categoryBusinessGraphList);
-			Collections.sort(categoryBusinessGraphList, new BusinessGraph.OrderByNetTax());
-			System.out.println("CategoryByNetTax");
-			for(CategoryBusinessGraph currGraph: categoryBusinessGraphList){
-				System.out.println(currGraph.getNetTaxToBePaid());
-			}
-			model.put("categoryByNetTax", categoryBusinessGraphList);
-			Collections.sort(categoryBusinessGraphList, new BusinessGraph.OrderByNetTDS());
-			System.out.println("CategoryByNetTDS");
-			for(CategoryBusinessGraph currGraph: categoryBusinessGraphList){
-				System.out.println(currGraph.getNetTDSToBeDeposited());
-			}
-			model.put("categoryByNetTDS", categoryBusinessGraphList);
-			Collections.sort(categoryBusinessGraphList, new BusinessGraph.OrderByNetNPR());
-			model.put("categoryByNetNPR", categoryBusinessGraphList);
-			Collections.sort(categoryBusinessGraphList, new BusinessGraph.OrderByNetTaxable());
-			model.put("categoryByNetTaxable", categoryBusinessGraphList);
-
-			model.put("partnerBusiness", partnerBusinessList);
-			return new ModelAndView("reports/viewBRGraphReport", model);
-		}
-
-		if("partnerCommissionReport".equalsIgnoreCase(reportName)){
-			List<PartnerBusiness> partnerBusinessList = reportGeneratorService.getPartnerBusinessReport(startDate,
-					endDate, helperClass.getSellerIdfromSession(request));
-
-
-			List<PartnerCommissionPaidGraph> partnerCommissionGraphList = ConverterClass.transformPartnerCommissionPaid(partnerBusinessList);
-			log.info("PartnerList: " + partnerCommissionGraphList.size());
-			model.put("shortTablePartner", partnerCommissionGraphList);
-			List<CategoryCommissionGraph> categoryCommissionGraphList = ConverterClass.transformCategoryCommissionPaid(partnerBusinessList);
-			log.info("CategoryList: " + categoryCommissionGraphList.size());
-			model.put("shortTableCategory", categoryCommissionGraphList);
-			
-			Collections.sort(partnerCommissionGraphList, new CommissionPaidGraph.OrderByGrossCommission());
-			model.put("partnerByGrossComm", partnerCommissionGraphList);
-			Collections.sort(partnerCommissionGraphList, new CommissionPaidGraph.OrderByNetChannelCommission());
-			model.put("partnerByNetChann", partnerCommissionGraphList);
-			
-			Collections.sort(categoryCommissionGraphList, new CommissionPaidGraph.OrderByGrossCommission());
-			model.put("categoryByGrossComm", categoryCommissionGraphList);
-			Collections.sort(categoryCommissionGraphList, new CommissionPaidGraph.OrderByNetChannelCommission());
-			model.put("categoryByNetChann", categoryCommissionGraphList);
-			
-			return new ModelAndView("reports/viewCommGraphReport", model);
-		}
-			
 		ttso = reportGeneratorService.getAllPartnerTSOdetails(startDate,
 				endDate, helperClass.getSellerIdfromSession(request));
 		if (ttso != null)
