@@ -99,6 +99,8 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			return new ModelAndView("reports/channelSaleReport", model);
 		else if(reportName.equals("paymentsReceievedReport" )|| reportName.equals("orderwiseGPReport"))
 			return new ModelAndView("reports/channelSaleReport", model);
+		else if(reportName.equals("partnerBusinessReport") || reportName.equals("partnerCommissionReport"))
+			return new ModelAndView("reports/partnerReport", model);
 		else
 			return new ModelAndView("reports/filterReports", model);
 }
