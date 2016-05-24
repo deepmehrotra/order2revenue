@@ -28,20 +28,22 @@
     }
  
 </script>
+<style type="text/css">
+	.column
+	{
+		background-color: #f2f2f2;
+		height: 400px;
+		width: 100%;
+		margin-top: 20px;
+	}
+</style>
  </head>
  <body>
   <div id="wrapper">
 <jsp:include page="../sidenavigation.jsp"></jsp:include>
     <div id="page-wrapper" class="gray-bg">
      <jsp:include page="../globalheader.jsp"></jsp:include>  
-		<div class="wrapper wrapper-content animated fadeInRight" id="centerpane"> 
-			<div class="row">
-                <div class="col-lg-12 text-center">
-					<div class ="navy-line" style="border:1px solid #1ab395;width: 6%;margin-left: 47%;">
-					</div>
-					<h1>Upgrade Plan </h1>
-				</div>
-            </div>
+		<div class="wrapper wrapper-content animated fadeInRight" id="centerpane" style="background: #fff;"> 
 			<div class="row">
                 <div class="col-lg-12">
 					<div class="col-lg-6 text-center" style="margin-top: 50px;">

@@ -86,6 +86,52 @@
 		}			
 	}
 </script>
+<style type="text/css">
+    .column
+    {
+        background-color: #f2f2f2;
+        height: 400px;
+        width: 100%;
+        margin-top: 20px;
+    }
+    #box
+    {
+        width: 81%;
+        height: 100px;
+        background-color: #232728;
+        color: #fff;
+        padding: 5px 0px 11px 6px;
+        text-align: left;
+        margin: 8px 0px 0px -47px;
+    }
+    #box1
+    {
+        width: 81%;
+        height: 100px;
+        background-color: #232728;
+        color: #fff;
+        padding: 5px 0px 11px 6px;
+        text-align: left;
+        margin: 8px 0px 0px -47px;
+    }
+    .heading
+    {
+        color: #00a1f1;
+        font-weight: 500;
+    }
+	.table th{
+	border:1px solid #ccc;
+	}
+
+    .para
+    {
+        position: relative;
+    top: -87px;
+    left: -2px;
+    font-size: 14px;
+    font-weight: 800;
+    }
+</style>
  </head>
  <body>
   <div id="wrapper">

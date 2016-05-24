@@ -1,10 +1,16 @@
 package com.o2r.helper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.o2r.bean.AccountTransactionBean;
 import com.o2r.bean.CategoryBean;
+import com.o2r.bean.CategoryBusinessGraph;
+import com.o2r.bean.CategoryCommissionGraph;
 import com.o2r.bean.CustomerBean;
 import com.o2r.bean.EventsBean;
 import com.o2r.bean.ExpenseBean;
@@ -15,6 +21,9 @@ import com.o2r.bean.OrderPaymentBean;
 import com.o2r.bean.OrderRTOorReturnBean;
 import com.o2r.bean.OrderTaxBean;
 import com.o2r.bean.PartnerBean;
+import com.o2r.bean.PartnerBusiness;
+import com.o2r.bean.PartnerBusinessGraph;
+import com.o2r.bean.PartnerCommissionPaidGraph;
 import com.o2r.bean.PaymentUploadBean;
 import com.o2r.bean.PlanBean;
 import com.o2r.bean.ProductBean;
@@ -1411,6 +1420,270 @@ public class ConverterClass {
 			}
 		}		
 		return beans;
+	}
+
+	/**
+	 * Transform to List of PartnerBusinessGraph objects
+	 * 
+	 * @param partnerBusinessList
+	 * @return
+	 */
+	public static List<PartnerBusinessGraph> transformPartnerBusinessGraph(
+			List<PartnerBusiness> partnerBusinessList) {
+		Map<String, PartnerBusinessGraph> partnerBusinessGraphMap = new HashMap<String, PartnerBusinessGraph>();
+		for (PartnerBusiness partnerBusiness : partnerBusinessList) {
+			String partner = partnerBusiness.getPcName();
+			PartnerBusinessGraph partnerBusinessGraph = partnerBusinessGraphMap
+					.get(partner);
+			double netPartnerCommissionPaid = partnerBusiness
+					.getNetPartnerCommissionPaid();
+			int netSaleQty = partnerBusiness.getNetSaleQuantity();
+			double netTDSToBeDeposited = partnerBusiness.getTdsToBeDeposited();
+			double netPaymentResult = partnerBusiness.getNetPaymentResult();
+			double paymentDifference = partnerBusiness.getPaymentDifference();
+			double netTaxableSale = partnerBusiness.getOrderSP();
+			double netActualSale = partnerBusiness.getNetRate() - partnerBusiness.getGrossNetRate()*partnerBusiness.getReturnQuantity();
+			double netPrSale = partnerBusiness.getNetPr() - partnerBusiness.getNetPr()*(partnerBusiness.getReturnQuantity()/partnerBusiness.getGrossSaleQuantity());
+			double netTaxToBePaid = partnerBusiness.getNetTaxToBePaid();
+			double netEossDiscountPaid = 0;
+			double netRate = partnerBusiness.getNetRate();
+			double netProductCost = partnerBusiness.getProductPrice();
+			double grossProfit = partnerBusiness.getGrossProfit();
+			if (partnerBusinessGraph == null) {
+				partnerBusinessGraph = new PartnerBusinessGraph();
+			} else {
+				netPartnerCommissionPaid += partnerBusinessGraph
+						.getNetPartnerCommissionPaid();
+				netSaleQty += partnerBusinessGraph.getNetSaleQty();
+				netTDSToBeDeposited += partnerBusinessGraph
+						.getNetTDSToBeDeposited();
+				netPaymentResult += partnerBusinessGraph.getNetPaymentResult();
+				paymentDifference += partnerBusinessGraph
+						.getPaymentDifference();
+				netTaxableSale += partnerBusinessGraph.getNetTaxableSale();
+				netActualSale += partnerBusinessGraph.getNetActualSale();
+				netPrSale += partnerBusinessGraph.getNetPrSale();
+				netTaxToBePaid += partnerBusinessGraph.getNetTaxToBePaid();
+				netEossDiscountPaid += partnerBusinessGraph
+						.getNetEossDiscountPaid();
+				netRate += partnerBusinessGraph.getNetNetRate();
+				netProductCost += partnerBusinessGraph.getNetProductCost();
+				grossProfit += partnerBusinessGraph.getGrossProfit();
+			}
+			partnerBusinessGraph.setPartner(partner);
+			partnerBusinessGraph
+					.setNetPartnerCommissionPaid(netPartnerCommissionPaid);
+			partnerBusinessGraph.setNetSaleQty(netSaleQty);
+			partnerBusinessGraph.setNetTDSToBeDeposited(netTDSToBeDeposited);
+			partnerBusinessGraph.setNetPaymentResult(netPaymentResult);
+			partnerBusinessGraph.setPaymentDifference(paymentDifference);
+			partnerBusinessGraph.setNetTaxableSale(netTaxableSale);
+			partnerBusinessGraph.setNetActualSale(netActualSale);
+			partnerBusinessGraph.setNetPrSale(netPrSale);
+			partnerBusinessGraph.setNetTaxToBePaid(netTaxToBePaid);
+			partnerBusinessGraph.setNetEossDiscountPaid(netEossDiscountPaid);
+			partnerBusinessGraph.setNetProductCost(netProductCost);
+			partnerBusinessGraph.setNetNetRate(netRate);
+			partnerBusinessGraph.setGrossProfit(grossProfit);
+			partnerBusinessGraphMap.put(partner, partnerBusinessGraph);
+		}
+
+		List<PartnerBusinessGraph> partnerBusinessGraphList = new ArrayList<PartnerBusinessGraph>();
+		Iterator entries = partnerBusinessGraphMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, PartnerBusinessGraph> thisEntry = (Entry<String, PartnerBusinessGraph>) entries
+					.next();
+			PartnerBusinessGraph value = thisEntry.getValue();
+			partnerBusinessGraphList.add(value);
+		}
+
+		return partnerBusinessGraphList;
+	}
+
+	/**
+	 * Transform to List of CategoryBusinessGraph objects
+	 * 
+	 * @param partnerBusinessList
+	 * @return
+	 */
+	public static List<CategoryBusinessGraph> transformCategoryBusinessGraph(
+			List<PartnerBusiness> partnerBusinessList) {
+		Map<String, CategoryBusinessGraph> categoryBusinessGraphMap = new HashMap<String, CategoryBusinessGraph>();
+		for (PartnerBusiness partnerBusiness : partnerBusinessList) {
+			String category = partnerBusiness.getProductCategory();
+			CategoryBusinessGraph categoryBusinessGraph = categoryBusinessGraphMap
+					.get(category);
+			double netPartnerCommissionPaid = partnerBusiness
+					.getNetPartnerCommissionPaid();
+			int netSaleQty = partnerBusiness.getNetSaleQuantity();
+			double netTDSToBeDeposited = partnerBusiness.getTdsToBeDeposited();
+			double netPaymentResult = partnerBusiness.getNetPaymentResult();
+			double paymentDifference = partnerBusiness.getPaymentDifference();
+			double netTaxableSale = partnerBusiness.getOrderSP();
+			double netActualSale = partnerBusiness.getNetRate() - partnerBusiness.getGrossNetRate()*partnerBusiness.getReturnQuantity();
+			double netPrSale = partnerBusiness.getNetPr() - partnerBusiness.getNetPr()*(partnerBusiness.getReturnQuantity()/partnerBusiness.getGrossSaleQuantity());
+			double netTaxToBePaid = partnerBusiness.getNetTaxToBePaid();
+			double netEossDiscountPaid = 0;
+			double netRate = partnerBusiness.getNetRate();
+			double netProductCost = partnerBusiness.getProductPrice();
+			double grossProfit = partnerBusiness.getGrossProfit();
+			if (categoryBusinessGraph == null) {
+				categoryBusinessGraph = new CategoryBusinessGraph();
+			} else {
+				netPartnerCommissionPaid += categoryBusinessGraph
+						.getNetPartnerCommissionPaid();
+				netSaleQty += categoryBusinessGraph.getNetSaleQty();
+				netTDSToBeDeposited += categoryBusinessGraph
+						.getNetTDSToBeDeposited();
+				netPaymentResult += categoryBusinessGraph.getNetPaymentResult();
+				paymentDifference += categoryBusinessGraph
+						.getPaymentDifference();
+				netTaxableSale += categoryBusinessGraph.getNetTaxableSale();
+				netActualSale += categoryBusinessGraph.getNetActualSale();
+				netPrSale += categoryBusinessGraph.getNetPrSale();
+				netTaxToBePaid += categoryBusinessGraph.getNetTaxToBePaid();
+				netEossDiscountPaid += categoryBusinessGraph
+						.getNetEossDiscountPaid();
+				netRate += categoryBusinessGraph.getNetNetRate();
+				netProductCost += categoryBusinessGraph.getNetProductCost();
+				grossProfit += categoryBusinessGraph.getGrossProfit();
+			}
+			categoryBusinessGraph.setCategoryName(category);
+			categoryBusinessGraph
+					.setNetPartnerCommissionPaid(netPartnerCommissionPaid);
+			categoryBusinessGraph.setNetSaleQty(netSaleQty);
+			categoryBusinessGraph.setNetTDSToBeDeposited(netTDSToBeDeposited);
+			categoryBusinessGraph.setNetPaymentResult(netPaymentResult);
+			categoryBusinessGraph.setPaymentDifference(paymentDifference);
+			categoryBusinessGraph.setNetTaxableSale(netTaxableSale);
+			categoryBusinessGraph.setNetActualSale(netActualSale);
+			categoryBusinessGraph.setNetPrSale(netPrSale);
+			categoryBusinessGraph.setNetTaxToBePaid(netTaxToBePaid);
+			categoryBusinessGraph.setNetEossDiscountPaid(netEossDiscountPaid);
+			categoryBusinessGraph.setNetProductCost(netProductCost);
+			categoryBusinessGraph.setNetNetRate(netRate);
+			categoryBusinessGraph.setGrossProfit(grossProfit);
+			categoryBusinessGraphMap.put(category, categoryBusinessGraph);
+		}
+
+		List<CategoryBusinessGraph> categoryBusinessGraphList = new ArrayList<CategoryBusinessGraph>();
+		Iterator entries = categoryBusinessGraphMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, CategoryBusinessGraph> thisEntry = (Entry<String, CategoryBusinessGraph>) entries
+					.next();
+			CategoryBusinessGraph value = thisEntry.getValue();
+			categoryBusinessGraphList.add(value);
+		}
+
+		return categoryBusinessGraphList;
+	}
+
+	public static List<PartnerCommissionPaidGraph> transformPartnerCommissionPaid(
+			List<PartnerBusiness> partnerBusinessList) {
+		Map<String, PartnerCommissionPaidGraph> partnerCommissionGraphMap = new HashMap<String, PartnerCommissionPaidGraph>();
+		for (PartnerBusiness partnerBusiness : partnerBusinessList) {
+			String partner = partnerBusiness.getPcName();
+			PartnerCommissionPaidGraph partnerCommissionGraph = partnerCommissionGraphMap
+					.get(partner);
+			double netPartnerCommissionPaid = partnerBusiness
+					.getNetPartnerCommissionPaid();
+			double grossPartnerCommissionPaid = partnerBusiness
+					.getGrossCommission();
+			double additionalReturnCharges = partnerBusiness.getAdditionalReturnCharges();
+			int netSaleQty = partnerBusiness.getNetSaleQuantity();
+			double netReturnCommission = partnerBusiness.getReturnCommision();
+			double netTDSToBeDeposited = partnerBusiness.getTdsToBeDeposited();
+			double netSrCommission = netReturnCommission - additionalReturnCharges;
+			double netChannelCommissionToBePaid = grossPartnerCommissionPaid - netReturnCommission + additionalReturnCharges;
+			if (partnerCommissionGraph == null) {
+				partnerCommissionGraph = new PartnerCommissionPaidGraph();
+			} else {
+				netPartnerCommissionPaid += partnerCommissionGraph
+						.getNetPartnerCommissionPaid();
+				netSaleQty += partnerCommissionGraph.getNetSaleQty();
+				netTDSToBeDeposited += partnerCommissionGraph
+						.getNetTDSToBeDeposited();
+				grossPartnerCommissionPaid += partnerCommissionGraph.getGrossPartnerCommissionPaid();
+				netReturnCommission += partnerCommissionGraph.getNetReturnCommission();
+				netSrCommission += partnerCommissionGraph.getNetSrCommisison();
+				netChannelCommissionToBePaid += partnerCommissionGraph.getNetChannelCommissionToBePaid();
+			}
+			partnerCommissionGraph.setPartner(partner);
+			partnerCommissionGraph.setNetPartnerCommissionPaid(netPartnerCommissionPaid);
+			partnerCommissionGraph.setNetSaleQty(netSaleQty);
+			partnerCommissionGraph.setNetTDSToBeDeposited(netTDSToBeDeposited);
+			partnerCommissionGraph.setGrossPartnerCommissionPaid(grossPartnerCommissionPaid);
+			partnerCommissionGraph.setAdditionalReturnCharges(additionalReturnCharges);
+			partnerCommissionGraph.setNetReturnCommission(netReturnCommission);
+			partnerCommissionGraph.setNetSrCommisison(netSrCommission);
+			partnerCommissionGraph.setNetChannelCommissionToBePaid(netChannelCommissionToBePaid);
+			partnerCommissionGraphMap.put(partner, partnerCommissionGraph);
+		}
+
+		List<PartnerCommissionPaidGraph> partnerCommissionGraphList = new ArrayList<PartnerCommissionPaidGraph>();
+		Iterator entries = partnerCommissionGraphMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, PartnerCommissionPaidGraph> thisEntry = (Entry<String, PartnerCommissionPaidGraph>) entries
+					.next();
+			PartnerCommissionPaidGraph value = thisEntry.getValue();
+			partnerCommissionGraphList.add(value);
+		}
+
+		return partnerCommissionGraphList;
+	}
+
+	public static List<CategoryCommissionGraph> transformCategoryCommissionPaid(
+			List<PartnerBusiness> partnerBusinessList) {
+		Map<String, CategoryCommissionGraph> categoryCommissionGraphMap = new HashMap<String, CategoryCommissionGraph>();
+		for (PartnerBusiness partnerBusiness : partnerBusinessList) {
+			String category = partnerBusiness.getProductCategory();
+			CategoryCommissionGraph categoryCommissionGraph = categoryCommissionGraphMap
+					.get(category);
+			double netPartnerCommissionPaid = partnerBusiness
+					.getNetPartnerCommissionPaid();
+			double grossPartnerCommissionPaid = partnerBusiness
+					.getGrossCommission();
+			double additionalReturnCharges = partnerBusiness.getAdditionalReturnCharges();
+			int netSaleQty = partnerBusiness.getNetSaleQuantity();
+			double netReturnCommission = partnerBusiness.getReturnCommision();
+			double netTDSToBeDeposited = partnerBusiness.getTdsToBeDeposited();
+			double netSrCommission = netReturnCommission - additionalReturnCharges;
+			double netChannelCommissionToBePaid = grossPartnerCommissionPaid - netReturnCommission + additionalReturnCharges;
+			if (categoryCommissionGraph == null) {
+				categoryCommissionGraph = new CategoryCommissionGraph();
+			} else {
+				netPartnerCommissionPaid += categoryCommissionGraph
+						.getNetPartnerCommissionPaid();
+				netSaleQty += categoryCommissionGraph.getNetSaleQty();
+				netTDSToBeDeposited += categoryCommissionGraph
+						.getNetTDSToBeDeposited();
+				grossPartnerCommissionPaid += categoryCommissionGraph.getGrossPartnerCommissionPaid();
+				netReturnCommission += categoryCommissionGraph.getNetReturnCommission();
+				netSrCommission += categoryCommissionGraph.getNetSrCommisison();
+				netChannelCommissionToBePaid += categoryCommissionGraph.getNetChannelCommissionToBePaid();
+			}
+			categoryCommissionGraph.setCategoryName(category);
+			categoryCommissionGraph.setNetPartnerCommissionPaid(netPartnerCommissionPaid);
+			categoryCommissionGraph.setNetSaleQty(netSaleQty);
+			categoryCommissionGraph.setNetTDSToBeDeposited(netTDSToBeDeposited);
+			categoryCommissionGraph.setGrossPartnerCommissionPaid(grossPartnerCommissionPaid);
+			categoryCommissionGraph.setAdditionalReturnCharges(additionalReturnCharges);
+			categoryCommissionGraph.setNetReturnCommission(netReturnCommission);
+			categoryCommissionGraph.setNetSrCommisison(netSrCommission);
+			categoryCommissionGraph.setNetChannelCommissionToBePaid(netChannelCommissionToBePaid);
+			categoryCommissionGraphMap.put(category, categoryCommissionGraph);
+		}
+
+		List<CategoryCommissionGraph> categoryCommissionGraphList = new ArrayList<CategoryCommissionGraph>();
+		Iterator entries = categoryCommissionGraphMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, CategoryCommissionGraph> thisEntry = (Entry<String, CategoryCommissionGraph>) entries
+					.next();
+			CategoryCommissionGraph value = thisEntry.getValue();
+			categoryCommissionGraphList.add(value);
+		}
+
+		return categoryCommissionGraphList;
 	}
 
 }

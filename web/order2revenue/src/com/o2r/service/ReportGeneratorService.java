@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.o2r.bean.ChannelSalesDetails;
+import com.o2r.bean.PartnerBusiness;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.CustomException;
 import com.o2r.model.UploadReport;
@@ -18,6 +19,9 @@ public interface ReportGeneratorService {
 			Date startDate, Date endDate, int sellerId) throws CustomException;
 
 	public List<TotalShippedOrder> getAllPartnerTSOdetails(Date startDate,
+			Date endDate, int sellerId) throws CustomException;
+	
+	public List getPartnerBusinessReport(Date startDate,
 			Date endDate, int sellerId) throws CustomException;
 
 	/*public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)

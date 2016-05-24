@@ -19,8 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.o2r.bean.BusinessGraph;
+import com.o2r.bean.CategoryBusinessGraph;
+import com.o2r.bean.CategoryCommissionGraph;
 import com.o2r.bean.ChannelSalesDetails;
+import com.o2r.bean.CommissionPaidGraph;
+import com.o2r.bean.PartnerBusiness;
+import com.o2r.bean.PartnerBusinessGraph;
+import com.o2r.bean.PartnerCommissionPaidGraph;
 import com.o2r.bean.TotalShippedOrder;
+import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.HelperClass;
 import com.o2r.model.Order;
@@ -109,32 +117,120 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 			reportName = request.getParameter("reportName");
 			startDate = new Date(request.getParameter("startdate"));
 			endDate = new Date(request.getParameter("enddate"));
-			ttso = reportGeneratorService.getAllPartnerTSOdetails(startDate,
+		
+		if("partnerBusinessReport".equalsIgnoreCase(reportName)){
+			List<PartnerBusiness> partnerBusinessList = reportGeneratorService.getPartnerBusinessReport(startDate,
 					endDate, helperClass.getSellerIdfromSession(request));
-			if (ttso != null)
-				System.out.println(" ****Inside controller after gettitng ttso objkect : "+ ttso.size());
-			else
-				System.out.println(" TTSO object is geting null");
-	
-			model.put("ttsolist", ttso);
-			if (ttso.size() > 0) {
-				System.out.println(" Citi quantity size : "	+ ttso.get(0).getCityQuantity());
-				System.out.println(" Citi percent size : " + ttso.get(0).getCityPercentage());
-				model.put("citicount", ttso.get(0).getCityQuantity());
-				model.put("citipercent", ttso.get(0).getCityPercentage());
+
+
+			List<PartnerBusinessGraph> partnerBusinessGraphList = ConverterClass.transformPartnerBusinessGraph(partnerBusinessList);
+			log.info("PartnerList: " + partnerBusinessGraphList.size());
+			model.put("shortTablePartner", partnerBusinessGraphList);
+			List<CategoryBusinessGraph> categoryBusinessGraphList = ConverterClass.transformCategoryBusinessGraph(partnerBusinessList);
+			log.info("CategoryList: " + categoryBusinessGraphList.size());
+			model.put("shortTableCategory", categoryBusinessGraphList);
+			
+			Collections.sort(partnerBusinessGraphList, new BusinessGraph.OrderByNetPartnerCommission());
+			System.out.println("OrderByNetPartnerCommission");
+			for(PartnerBusinessGraph currGraph: partnerBusinessGraphList){
+				System.out.println(currGraph.getNetPartnerCommissionPaid());
 			}
-			Collections.sort(ttso, new TotalShippedOrder.OrderByNR());
-			model.put("NRsortedttso", getSortedList(ttso));
-			Collections.sort(ttso, new TotalShippedOrder.OrderByReturnamount());
-			model.put("returnAmountsortedttso", getSortedList(ttso));
-			Collections.sort(ttso, new TotalShippedOrder.OrderByReturnQuantity());
-			model.put("returnQsortedttso", getSortedList(ttso));
-			Collections.sort(ttso, new TotalShippedOrder.OrderBySaleQuantity());
-			model.put("saleQsortedttso", getSortedList(ttso));
-			Collections.sort(ttso, new TotalShippedOrder.OrderBySaleamount());
-			model.put("saleAmounrsortedttso", getSortedList(ttso));
-	
-			model.put("period",dateFormat.format(startDate) + " to "+ dateFormat.format(endDate));
+			model.put("partnerByNetCommission", partnerBusinessGraphList);
+			Collections.sort(partnerBusinessGraphList, new BusinessGraph.OrderByNetTax());
+			System.out.println("OrderByNetTax");
+			for(PartnerBusinessGraph currGraph: partnerBusinessGraphList){
+				System.out.println(currGraph.getNetTaxToBePaid());
+			}
+			model.put("partnerByNetTax", partnerBusinessGraphList);
+			Collections.sort(partnerBusinessGraphList, new BusinessGraph.OrderByNetTDS());
+			System.out.println("OrderByNetTDS");
+			for(PartnerBusinessGraph currGraph: partnerBusinessGraphList){
+				System.out.println(currGraph.getNetTDSToBeDeposited());
+			}
+			model.put("partnerByNetTDS", partnerBusinessGraphList);
+			Collections.sort(partnerBusinessGraphList, new BusinessGraph.OrderByNetNPR());
+			model.put("partnerByNetNPR", partnerBusinessGraphList);
+			Collections.sort(partnerBusinessGraphList, new BusinessGraph.OrderByNetTaxable());
+			model.put("partnerByNetTaxable", partnerBusinessGraphList);
+			
+			Collections.sort(categoryBusinessGraphList, new BusinessGraph.OrderByNetPartnerCommission());
+			System.out.println("CategoryByNetTDS");
+			for(CategoryBusinessGraph currGraph: categoryBusinessGraphList){
+				System.out.println(currGraph.getNetPartnerCommissionPaid());
+			}
+			model.put("categoryByNetCommission", categoryBusinessGraphList);
+			Collections.sort(categoryBusinessGraphList, new BusinessGraph.OrderByNetTax());
+			System.out.println("CategoryByNetTax");
+			for(CategoryBusinessGraph currGraph: categoryBusinessGraphList){
+				System.out.println(currGraph.getNetTaxToBePaid());
+			}
+			model.put("categoryByNetTax", categoryBusinessGraphList);
+			Collections.sort(categoryBusinessGraphList, new BusinessGraph.OrderByNetTDS());
+			System.out.println("CategoryByNetTDS");
+			for(CategoryBusinessGraph currGraph: categoryBusinessGraphList){
+				System.out.println(currGraph.getNetTDSToBeDeposited());
+			}
+			model.put("categoryByNetTDS", categoryBusinessGraphList);
+			Collections.sort(categoryBusinessGraphList, new BusinessGraph.OrderByNetNPR());
+			model.put("categoryByNetNPR", categoryBusinessGraphList);
+			Collections.sort(categoryBusinessGraphList, new BusinessGraph.OrderByNetTaxable());
+			model.put("categoryByNetTaxable", categoryBusinessGraphList);
+
+			model.put("partnerBusiness", partnerBusinessList);
+			return new ModelAndView("reports/viewBRGraphReport", model);
+		}
+
+		if("partnerCommissionReport".equalsIgnoreCase(reportName)){
+			List<PartnerBusiness> partnerBusinessList = reportGeneratorService.getPartnerBusinessReport(startDate,
+					endDate, helperClass.getSellerIdfromSession(request));
+
+
+			List<PartnerCommissionPaidGraph> partnerCommissionGraphList = ConverterClass.transformPartnerCommissionPaid(partnerBusinessList);
+			log.info("PartnerList: " + partnerCommissionGraphList.size());
+			model.put("shortTablePartner", partnerCommissionGraphList);
+			List<CategoryCommissionGraph> categoryCommissionGraphList = ConverterClass.transformCategoryCommissionPaid(partnerBusinessList);
+			log.info("CategoryList: " + categoryCommissionGraphList.size());
+			model.put("shortTableCategory", categoryCommissionGraphList);
+			
+			Collections.sort(partnerCommissionGraphList, new CommissionPaidGraph.OrderByGrossCommission());
+			model.put("partnerByGrossComm", partnerCommissionGraphList);
+			Collections.sort(partnerCommissionGraphList, new CommissionPaidGraph.OrderByNetChannelCommission());
+			model.put("partnerByNetChann", partnerCommissionGraphList);
+			
+			Collections.sort(categoryCommissionGraphList, new CommissionPaidGraph.OrderByGrossCommission());
+			model.put("categoryByGrossComm", categoryCommissionGraphList);
+			Collections.sort(categoryCommissionGraphList, new CommissionPaidGraph.OrderByNetChannelCommission());
+			model.put("categoryByNetChann", categoryCommissionGraphList);
+			
+			return new ModelAndView("reports/viewCommGraphReport", model);
+		}
+			
+		ttso = reportGeneratorService.getAllPartnerTSOdetails(startDate,
+				endDate, helperClass.getSellerIdfromSession(request));
+		if (ttso != null)
+			System.out.println(" ****Inside controller after gettitng ttso objkect : "+ ttso.size());
+		else
+			System.out.println(" TTSO object is geting null");
+
+		model.put("ttsolist", ttso);
+		if (ttso.size() > 0) {
+			System.out.println(" Citi quantity size : "	+ ttso.get(0).getCityQuantity());
+			System.out.println(" Citi percent size : " + ttso.get(0).getCityPercentage());
+			model.put("citicount", ttso.get(0).getCityQuantity());
+			model.put("citipercent", ttso.get(0).getCityPercentage());
+		}
+		Collections.sort(ttso, new TotalShippedOrder.OrderByNR());
+		model.put("NRsortedttso", getSortedList(ttso));
+		Collections.sort(ttso, new TotalShippedOrder.OrderByReturnamount());
+		model.put("returnAmountsortedttso", getSortedList(ttso));
+		Collections.sort(ttso, new TotalShippedOrder.OrderByReturnQuantity());
+		model.put("returnQsortedttso", getSortedList(ttso));
+		Collections.sort(ttso, new TotalShippedOrder.OrderBySaleQuantity());
+		model.put("saleQsortedttso", getSortedList(ttso));
+		Collections.sort(ttso, new TotalShippedOrder.OrderBySaleamount());
+		model.put("saleAmounrsortedttso", getSortedList(ttso));
+
+		model.put("period",dateFormat.format(startDate) + " to "+ dateFormat.format(endDate));
 		}catch(CustomException ce){
 			log.error("getReport exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());

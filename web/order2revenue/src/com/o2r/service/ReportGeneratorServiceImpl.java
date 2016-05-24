@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.bean.ChannelSalesDetails;
+import com.o2r.bean.PartnerBusiness;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.dao.ReportsGeneratorDao;
 import com.o2r.dao.ReportsChannelnCategoryDao;
@@ -96,6 +97,14 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 		// TODO Auto-generated method stub
 		return reportGeneratorDao2.getOrderwiseGPDetails(startDate, endDate,
 				sellerIdfromSession);
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public List getPartnerBusinessReport(Date startDate,
+			Date endDate, int sellerId) throws CustomException {
+		return reportGeneratorDao.getPartnerBusinessReport(startDate, endDate,
+				sellerId);
 	}
 
 	/*

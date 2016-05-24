@@ -1,11 +1,13 @@
 package com.o2r.dao;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -18,10 +20,18 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.bean.CategoryBusinessGraph;
+import com.o2r.bean.PartnerBusiness;
+import com.o2r.bean.PartnerBusinessGraph;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Order;
+import com.o2r.model.OrderPayment;
+import com.o2r.model.OrderRTOorReturn;
+import com.o2r.model.OrderTax;
+import com.o2r.model.Product;
+import com.o2r.model.ProductConfig;
 
 /**
  * @author Deep Mehrotra
@@ -514,6 +524,149 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		
 		log.info("*** getAllPartnerTSOdetails Starts : ReportsGeneratorDaoImpl ****");
 		return Arrays.asList(ttso);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PartnerBusiness> getPartnerBusinessReport(Date startDate,
+			Date endDate, int sellerId) throws CustomException {
+		List<PartnerBusiness> partnerBusinessList = new ArrayList<PartnerBusiness>();
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();			
+			List<Order> results = fetchOrders(session, sellerId, startDate, endDate);
+			for (Order currOrder : results) {
+				OrderRTOorReturn currOrderReturnOrRTO = currOrder
+						.getOrderReturnOrRTO();
+				OrderPayment currOrderPayment = currOrder.getOrderPayment();
+				OrderTax currOrderTax = currOrder.getOrderTax();
+				PartnerBusiness partnerBusiness = new PartnerBusiness();
+				double taxSP = 0;
+				int grossSaleQty = currOrder.getQuantity();
+				Criteria prodcriteria = session.createCriteria(Product.class);
+				prodcriteria.add(Restrictions.eq("productSkuCode",
+						currOrder.getProductSkuCode()));
+				List<Product> productList = prodcriteria.list();
+				if (productList.size() > 0) {
+					Product currProduct = productList.get(0);
+					partnerBusiness.setProductCategory(currProduct
+							.getCategoryName());
+					partnerBusiness.setProductPrice(currProduct.getProductPrice()*grossSaleQty);
+				}
+				partnerBusiness.setTaxSP(taxSP); // Only for PO Orders
+				int returnQty = 0;
+				double netReturnCharges = 0;
+				if (currOrderReturnOrRTO != null) {
+					Date returnDate = currOrderReturnOrRTO.getReturnDate();
+					if(returnDate!=null && startDate.before(returnDate) && endDate.after(returnDate)){
+						partnerBusiness.setReturnDate(currOrderReturnOrRTO
+								.getReturnDate());
+						returnQty = currOrderReturnOrRTO.getReturnorrtoQty();
+						partnerBusiness.setReturnQuantity(returnQty);
+						netReturnCharges = currOrderReturnOrRTO
+								.getReturnOrRTOChargestoBeDeducted();
+						partnerBusiness.setNetReturnCharges(netReturnCharges);	
+					}
+				}
+				if (currOrderPayment != null) {
+					partnerBusiness.setDateofPayment(currOrderPayment
+							.getDateofPayment());
+					double netPaymentResult = currOrderPayment
+							.getNetPaymentResult();
+					partnerBusiness.setNetPaymentResult(netPaymentResult);
+					double paymentDifference = currOrderPayment
+							.getPaymentDifference();
+					partnerBusiness.setPaymentDifference(paymentDifference);
+				}
+				partnerBusiness.setInvoiceID(currOrder.getInvoiceID());
+				partnerBusiness
+						.setChannelOrderID(currOrder.getChannelOrderID());
+				partnerBusiness.setPcName(currOrder.getPcName());
+				partnerBusiness.setOrderDate(currOrder.getOrderDate());
+				partnerBusiness.setShippedDate(currOrder.getShippedDate());
+				partnerBusiness
+						.setPaymentDueDate(currOrder.getPaymentDueDate());
+				partnerBusiness.setGrossSaleQuantity(grossSaleQty);
+				partnerBusiness.setNetSaleQuantity(grossSaleQty - returnQty);
+				partnerBusiness.setOrderSP(currOrder.getOrderSP());
+				double grossCommission = currOrder.getPartnerCommission()
+						* grossSaleQty;
+				partnerBusiness.setGrossPartnerCommission(grossCommission);
+				double pccAmount = currOrder.getPccAmount() * grossSaleQty;
+				partnerBusiness.setPccAmount(pccAmount);
+				double fixedFee = currOrder.getFixedfee() * grossSaleQty;
+				partnerBusiness.setFixedfee(fixedFee);
+				double shippingCharges = currOrder.getShippingCharges()
+						* grossSaleQty;
+				partnerBusiness.setShippingCharges(shippingCharges);
+				partnerBusiness.setServiceTax(14.5 / 100 * grossCommission
+						* pccAmount * fixedFee * shippingCharges);
+				double taxPOPrice = 0; // Only for PO Orders
+				partnerBusiness.setTaxPOPrice(taxPOPrice);
+				double grossCommissionToBePaid = grossCommission + taxSP
+						- taxPOPrice;
+				partnerBusiness.setGrossCommission(grossCommissionToBePaid);
+				double returnCommision = grossCommissionToBePaid * returnQty;
+				partnerBusiness.setReturnCommision(returnCommision);
+				double additionalReturnCharges = netReturnCharges * returnQty; // For Non-PO Orders
+				partnerBusiness
+						.setAdditionalReturnCharges(additionalReturnCharges);
+				double netPartnerCommissionPaid = grossCommissionToBePaid
+						- returnCommision + additionalReturnCharges;
+				partnerBusiness
+						.setNetPartnerCommissionPaid(netPartnerCommissionPaid);
+				partnerBusiness.setTdsToBeDeducted10(0.1 * taxPOPrice);
+				partnerBusiness
+						.setTdsToBeDeducted2(0.02 * netPartnerCommissionPaid);
+				double tdsToBeDeposited = 0;
+				double taxToBePaid = 0;
+				if(currOrderTax != null){
+					tdsToBeDeposited = currOrderTax.getTdsToDeduct();
+					taxToBePaid = currOrderTax.getTax();
+					if(currOrderReturnOrRTO != null){
+						tdsToBeDeposited -= currOrderTax.getTdsToReturn();
+						taxToBePaid -= currOrderTax.getToxToReturn();
+					}
+				}
+				partnerBusiness.setTdsToBeDeposited(tdsToBeDeposited);
+				partnerBusiness.setNetTaxToBePaid(taxToBePaid);
+				double netEossValue = 0; // Only for Consolidated PO
+				partnerBusiness.setNetEossValue(netEossValue);
+				partnerBusiness.setNetPr(currOrder.getPr());
+				partnerBusiness.setGrossNetRate(currOrder.getGrossNetRate());
+				partnerBusiness.setNetRate(currOrder.getNetRate());
+				partnerBusiness.setFinalStatus(currOrder.getFinalStatus());
+				partnerBusiness.setGrossProfit(currOrder.getGrossProfit());
+				partnerBusinessList.add(partnerBusiness);
+			}			
+			log.info("Total Orders" + partnerBusinessList.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e);
+			log.info("Error :", e);
+			throw new CustomException(
+					GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3,
+					GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
+
+		}
+		return partnerBusinessList;
+	}
+
+	private List<Order> fetchOrders(Session session, int sellerId, Date startDate, Date endDate) {
+		Criteria criteria = session.createCriteria(Order.class);
+		criteria.add(Restrictions.eq("poOrder", false));
+		criteria.createAlias("seller", "seller",
+				CriteriaSpecification.LEFT_JOIN)
+				.add(Restrictions.eq("seller.id", sellerId))
+				.add(Restrictions
+						.between("shippedDate", startDate, endDate));
+		criteria.createAlias("orderPayment", "orderPayment",
+				CriteriaSpecification.LEFT_JOIN);
+		criteria.createAlias("orderTax", "orderTax",
+				CriteriaSpecification.LEFT_JOIN);
+		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+		criteria.addOrder(org.hibernate.criterion.Order.asc("shippedDate"));
+		return criteria.list();
 	}
 
 	/*@Override

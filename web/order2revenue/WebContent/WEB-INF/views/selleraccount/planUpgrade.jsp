@@ -86,13 +86,84 @@
 		}			
 	}
 </script>
+<style type="text/css">
+    .box{
+        
+        display: none;
+		}
+	.table ,th,td{
+		font-weight: 800;
+		border:none !important;
+	}
+	.tabltd
+	{
+		border-top: 2px solid #ccc !important;
+	}
+	
+	table td + td{
+	font-weight:800;
+
+	}
+	.column
+	{
+		background-color: #ededed;
+		height: 570px;
+		width: 100%;
+	}
+	.column p
+	{
+		font-size: 14px;
+	}
+	.column h3
+	{
+		padding-top: 32px;
+		color: #55c2ac;
+	}
+	.column button
+	{
+		margin:61px 0px 3px 26px;
+    	width: 80%;
+    	background-color: #1ab394;
+    	color:#fff;
+	}
+	.column1
+	{
+		background-color: #ededed;
+		height: 200px;
+		width: 100%;
+		margin-top: 20px;
+	}
+	.column1 p
+	{
+		font-size: 14px;
+	}
+	.column1 h3
+	{
+		padding-top: 32px;
+		color: #55c2ac;
+	}
+	.column1 button
+	{
+		margin:0px 0px 3px 26px;
+    	width: 80%;
+    	background-color: #1ab394;
+    	color:#fff;
+	}
+	.span
+	{
+		color: #1ab394;
+	}
+
+
+       
+    </style>
  </head>
  <body>
   <div id="wrapper">
 <jsp:include page="../sidenavigation.jsp"></jsp:include>
     <div id="page-wrapper" class="gray-bg">
      <jsp:include page="../globalheader.jsp"></jsp:include>  
-		<div class="wrapper wrapper-content animated fadeInRight" id="centerpane"> 
+		<div class="wrapper wrapper-content animated fadeInRight" id="centerpane" style="background: #fff;"> 
 			<div class="row">
                 <div class="col-lg-12 text-center">
 					<div class ="navy-line" style="border:1px solid #1ab395;width: 6%;margin-left: 47%;">
@@ -103,20 +174,38 @@
 			<div class="row">
                 <div class="col-lg-12">
 					<div class="col-lg-9">
-						<c:forEach items="${upgrade}" var="up">
 						<div class="col-md-4">
 							<div class="column text-center">
+								<h3>Current Plan</h3>
+								<button class="btn btn-block"><c:out value="${myAccount.plan.planName}"/></button>
+								<br>
+								<div align="center">
+									<p>								
+										<img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${myAccount.plan.planPrice}"/> per Order
+									</p>
+									<p>
+										MIN AMOUNT = <span><img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${myAccount.plan.orderCount}"/>/-</span>
+									</p>
+									<p>
+										ORDER COUNT = <c:out value="${myAccount.plan.orderCount/myAccount.plan.planPrice}"/> 
+									</p>
+								</div>
+							</div>
+						</div>
+						<c:forEach items="${upgrade}" var="up">
+						<div class="col-md-4">
+							<div class="column1 text-center">
 								<button class="btn btn-block"><c:out value="${up.planName}"/></button>
 								<br>
 								<div align="center">
 									<p>								
-										&#8377; <c:out value="${up.planPrice}"/> per Order
+										<img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${up.planPrice}"/> per Order
 									</p>
 									<p>
-										MIN AMOUNT = <span>&#8377; <c:out value="${up.orderCount}"/>/-</span>
+										MIN AMOUNT = <span><img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${up.orderCount}"/>/-</span>
 									</p>
 									<p>
-										MIN ORDER COUNT = <c:out value="${up.orderCount/up.planPrice}"/> 
+										ORDER COUNT = <c:out value="${up.orderCount/up.planPrice}"/> 
 									</p>
 								</div>
 							</div>
@@ -163,7 +252,7 @@
 											<small>As Per Current Plan</small>
 										</td>
 										<td>
-											&#8377; <span class="currPlanPriceTxt"></span> per Order
+											<img src="/O2R/seller/img/rupee.png" alt="rupee"> <span class="currPlanPriceTxt"></span> per Order
 										</td>
 									</tr>
 									<tr>
