@@ -96,19 +96,21 @@
 										<form role="search" class="form-inline" method="post"
 											action="searchOrder.html">
 											<div class="form-group">
-												<select class="form-control" name="searchOrder"
-													id="searchOrder">
-													<option value="searchchannelOrderID">Channel
-														OrderId</option>
-													<option value="SearchorderDate">Order Date</option>
+												<select class="form-control" name="searchOrder"	id="searchOrders">
+													<option id="1" value="channelOrderID">Channel OrderId/PO ID</option>
+													<option id="2" value="invoiceID">Invoice ID</option>
+													<option id="3" value="subOrderID">Sub Order ID</option>
+													<option id="4" value="pcName">Partner</option>
+													<option id="5" value="status">Order Status</option>
+													<option id="6" value="orderDate">Order Date</option>
+													<option id="7" value="shippedDate">Order Shipped Date</option>
 												</select>
 											</div>
-											<div class="form-group OrderSearch-box"
-												id="searchchannelOrderID">
+											<div class="form-group TopSearch-box001 OrderSearch-box " id="searchchannelOrderID">
 												<input type="text" placeholder="Enter Channel OrderID"
 													class="form-control" name="channelOrderID">
 											</div>
-											<div class="form-group OrderSearch-box" id="SearchorderDate"
+											<div class="form-group TopSearch-box002 OrderSearch-box" id="SearchorderDate"
 												style="display: none">
 												<div class="input-group date5">
 													<span class="input-group-addon"><i
@@ -319,6 +321,22 @@
                     "sSwfPath": "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
                 }
         });
+        
+        $('#searchOrders').change(function () {     
+   	     
+	        var thisValue = $(this).children(":selected").attr("id");
+	       	
+	         if(thisValue == 1 || thisValue == 2 || thisValue == 3 || thisValue == 4 ||thisValue == 5 ){
+	        	$('.TopSearch-box001').show();
+	        	$('.TopSearch-box002').hide();
+	        }
+	        else{
+	        	 $('.TopSearch-box001').hide();
+	        	 $('.TopSearch-box002').show();
+	        } 
+	    });
+        
+        
         
         $('#searchOrder').change(function () {
             $('.OrderSearch-box').hide();
