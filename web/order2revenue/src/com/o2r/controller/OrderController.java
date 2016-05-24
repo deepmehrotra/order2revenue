@@ -337,13 +337,14 @@ public class OrderController {
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
 		String searchOrder = request.getParameter("searchOrder");
+		System.out.println(channelOrderID+"**********"+searchOrder);
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			if (searchOrder != null
-					&& searchOrder.equals("searchchannelOrderID")
+					&& searchOrder.equals("channelOrderID") || searchOrder.equals("invoiceID") || searchOrder.equals("subOrderID") || searchOrder.equals("pcName") || searchOrder.equals("status")
 					&& channelOrderID != null) {
 				orderList = ConverterClass.prepareListofBean(orderService
-						.findOrders("channelOrderID", channelOrderID, sellerId,
+						.findOrders(searchOrder, channelOrderID, sellerId,
 								false,true));
 			} else if (searchOrder != null && startDate != null
 					&& endDate != null) {
