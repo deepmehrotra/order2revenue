@@ -346,7 +346,7 @@ public class SellerController {
 	}
 
 	@RequestMapping("/seller/upgrade.html")
-	public ModelAndView planUpgrade(
+	public ModelAndView planUpgrade(HttpServletRequest request, 
 			@ModelAttribute("command") PlanBean planBean, BindingResult result) {
 		
 		log.info("$$$ planUpgrade Starts : SellerController $$$");
@@ -354,12 +354,17 @@ public class SellerController {
 		try {
 			model.put("upgrade", ConverterClass
 					.prepareListofPlanBean(planService.listPlans()));
+			int sellerId = helperClass.getSellerIdfromSession(request);
+			model.put("myAccount", sellerService.getSeller(sellerId));
 		} catch (CustomException ce) {
 			log.error("planUpgrade exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
 		}
 		log.info("$$$ planUpgrade Ends : SellerController $$$");
 		return new ModelAndView("selleraccount/planUpgrade", model);
