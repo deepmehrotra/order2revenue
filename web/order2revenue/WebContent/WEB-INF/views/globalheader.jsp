@@ -125,6 +125,10 @@
 						<div class="spinner" role="spinner">
 							<div class="spinner-icon"></div>
 						</div>
+						<div>
+							<br/>
+							<br/>
+						</div>
 				</ul></li>
 			<li class="dropdown"><a class="dropdown-toggle count-info"
 				data-toggle="dropdown"> <i class="fa fa-info"></i>

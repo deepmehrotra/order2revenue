@@ -18,79 +18,53 @@
 		else
 			$("#downloadreporttype").val(downloadValue);
 
-		$('#fileupload1').fileupload({
-			dataType : 'json',
-
-			start : function(e, data) {
-
-				$('#dropdown').dropdown("toggle");
-				NProgress.configure({
-					parent : "#bar1"
-				});
-				NProgress.start();
-			},
-
-			done : function(e, data) {
-
-				NProgress.done();
-				NProgress.configure({
-					parent : "#bar1"
-				});
-				NProgress.start();
-				setTimeout('checkStatus()', 1000);
-				alert("set");
-			},
-
-			progressall : function(e, data) {
-				var progress = parseInt(data.loaded / data.total * 100, 10);
-				NProgress.set(progress / 100);
-			}
-		});
 	});
 
-	$.ajax({
-		xhr : function() {
-			var xhr = new window.XMLHttpRequest();
-			//Upload progress
-			xhr.upload.addEventListener("progress", function(evt) {
-				if (evt.lengthComputable) {
-					var percentComplete = evt.loaded / evt.total;
-					//Do something with upload progress
-					console.log(percentComplete);
-				}
-			}, false);
-			//Download progress
-			xhr.addEventListener("progress", function(evt) {
-				if (evt.lengthComputable) {
-					var percentComplete = evt.loaded / evt.total;
-					//Do something with download progress
-					console.log(percentComplete);
-				}
-			}, false);
-			return xhr;
-		},
-		type : 'POST',
-		url : "/",
-		data : {},
-		success : function(data) {
-			//Do something success-ish
-		}
-	});
-
-	function checkStatus() {
-		alert("Check");
-		$.ajax({
-			url : $("#fileupload1").attr("action"),
-			context : document.body,
-			type : 'post',
-			data : $("#fileupload1").serialize(),
-			success : function(data) {
-				var statusPercent = data.statusPercent;
-				NProgress.set(statusPercent / 100);
-			}
-		});
-
-	};
+	$("#fileupload1").submit(
+			function() {
+				$.ajax({
+					xhr : function() {
+						$('#dropdown').dropdown("toggle");
+						NProgress.configure({
+							parent : "#bar1"
+						});
+						NProgress.start();
+						var xhr = new window.XMLHttpRequest();
+						
+						//Upload progress
+						xhr.upload.addEventListener("progress", function(evt) {
+							//alert("event");
+							if (evt.lengthComputable) {
+								var percentComplete = evt.loaded / evt.total;
+								var progress = parseInt(evt.loaded / evt.total
+										* 100, 10);
+								NProgress.set(progress / 100);
+							}
+						}, false);
+						
+						//Download progress
+						xhr.addEventListener("progress", function(evt) {
+							NProgress.start();
+							if (evt.lengthComputable) {
+								var percentComplete = evt.loaded / evt.total;
+								var progress = parseInt(evt.loaded / evt.total
+										* 100, 10);
+								NProgress.set(progress / 100);
+								alert(progress);
+							}
+						}, false);
+						return xhr;
+					},
+					url : 'saveSheet.html',
+					data : $("#fileupload1").serialize(),
+					processData : false,
+					contentType : false,
+					type : 'POST',
+					success : function(data) {
+						alert(done);
+					}
+				});
+			});
 </script>
 <script>
 	$(document).ready(function() {
