@@ -311,6 +311,21 @@ public class GlobalConstant {
 	public static final String deletePartnerErrorCode = "#00044";
 
 	/** Partner Area **/
+	
+	/** Event Area **/
+
+	// Constants for Error messages
+	public static String addEventError = "Error while Adding the Event. Either try again with correct data or contact admin with the error details.";
+	public static final String listEventError = "Error while Getting Events. Either try again with correct data or contact admin with the error details.";
+	public static final String getEventError = "Error while retriving Events. Either try again with correct (ID/Name) or contact admin with the error details.";
+	
+	// Error codes
+	public static final String addEventErrorCode = "#00111";
+	public static final String listEventErrorCode = "#00112";
+	public static final String getEventErrorCode = "#00113";
+	
+	/** Event Area **/
+	
 
 	/** Plan Area **/
 
