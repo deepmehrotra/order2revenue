@@ -57,6 +57,7 @@ public class OrderBean {
 	private double eossValue;
 	private ProductConfigBean productConfig;
 	private OrderBean consolidatedOrder;
+	private double grossProfit;
 
 	public CustomerBean getCustomer() {
 		return customer;
@@ -440,5 +441,13 @@ public class OrderBean {
 
 	public void setPoOrder(boolean poOrder) {
 		this.poOrder = poOrder;
+	}
+
+	public double getGrossProfit() {
+		return grossProfit;
+	}
+
+	public void setGrossProfit(double grossProfit) {
+		this.grossProfit = grossProfit;
 	}
 }

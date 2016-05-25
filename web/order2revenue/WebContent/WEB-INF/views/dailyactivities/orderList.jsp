@@ -288,10 +288,9 @@
 								</div>
 							</div>
 						</div>
-						<jsp:include page="../globalfooter.jsp"></jsp:include>
-
 					</div>
 				</div>
+				<jsp:include page="../globalfooter.jsp"></jsp:include>
 			</div>
 		</div>
 	</div>
