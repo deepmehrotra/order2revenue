@@ -100,9 +100,11 @@ public class EventsController {
 				eventsBean.setCreatedDate(new Date());
 				Events events=ConverterClass.prepareEventsModel(eventsBean);
 				eventsService.addEvent(events, helperClass.getSellerIdfromSession(request));
-			}catch(CustomException ce){				
-				model.put("errorMessage", "You can not create Events during these Dates..... !!!");
-				model.put("errorTime", new Date());
+			}catch(CustomException ce){		
+				log.error("saveEvent exception : " + ce.toString());
+				model.put("errorMessage", ce.getLocalMessage());
+				model.put("errorTime", ce.getErrorTime());
+				model.put("errorCode", ce.getErrorCode());
 				return new ModelAndView("globalErorPage",model);
 			}catch(Exception e){
 				log.debug("*** Exception In EventsDaoImpl ***");
@@ -143,6 +145,12 @@ public class EventsController {
 			}
 			model.put("partnerMap", partnerMap);
 			model.put("categoryMap", categoryMap);
+		}catch(CustomException ce){		
+			log.error("addEvent exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage",model);
 		} catch (Exception e) {
 			log.error("Failed !",e);
 			e.printStackTrace();
@@ -187,6 +195,12 @@ public class EventsController {
 			}
 			model.put("categoryMap", categoryMap);
 			model.put("partnerMap", partnerMap);			
+		}catch(CustomException ce){		
+			log.error("addDuplicateEvent exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage",model);
 		} catch (Exception e) {
 			log.error("Failed !",e);
 			e.printStackTrace();
@@ -206,13 +220,13 @@ public class EventsController {
 					.prepareListOfEventsBean(eventsService
 							.listEvents(helperClass
 									.getSellerIdfromSession(request))));			
-		} /*catch (CustomException ce) {
-			log.error("productList exception : " + ce.toString());
+		} catch (CustomException ce) {
+			log.error("eventList exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
-		}*/ catch (Exception e) {
+		}catch (Exception e) {
 			log.error("Failed !",e);
 			e.printStackTrace();
 		}
@@ -235,10 +249,7 @@ public class EventsController {
 				else
 					return "true";
 			}
-		} catch (CustomException ce) {			
-			log.error("CheckEventsException: " + ce.toString());
-			return "false";
-		} catch (Throwable e) {
+		}catch (Exception e) {
 			log.error("Failed! ",e);
 			e.printStackTrace();
 			return "false";

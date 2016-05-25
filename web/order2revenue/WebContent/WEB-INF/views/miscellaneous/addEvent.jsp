@@ -219,7 +219,7 @@ function checkOnBlur()
                         </div>
                         <div class="row">
                           <div class="col-sm-12 radio2 m-b" id="blk-nrCalculatorEvent_variable">
-                            <div class="col-sm-12">
+                            
 								<div class="col-sm-12 radio5" id="nr-switch-sec" style="display: block;">
 												<div class="panel-body">
 												<div class="panel-group" id="accordion">
@@ -391,6 +391,7 @@ function checkOnBlur()
 																	</div>
 																</div>
 															</div>
+														</div>
 														</div>
 														<div class="panel panel-default">
 															<div class="panel-heading">
@@ -818,11 +819,11 @@ function checkOnBlur()
 																</div>
 															</div>
 														</div>
-													</div>
+													
 												</div>
 											</div>
 										</div>
-		</div><!-- -----------------------------id-40----------------------------- -->
+		<!-- -----------------------------id-40----------------------------- -->
                             </div>
                           </div>                          
                         </div>
@@ -855,14 +856,15 @@ function checkOnBlur()
                                 
                             </div>
                           </div>
+                          <div class="col-sm-12">
                           <div class="col-sm-12 radio3" id="blk-returnCalculatorEvent_newTerms">
-                                <div class="ibox-content add-company">
+                                <div class="add-company">
 											<div class="panel-body">
-												<div class="panel-group" id="accordion">
+												<div class="panel-group" id="accordion1">
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h5 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
+																<a data-toggle="collapse" data-parent="#accordion1"
 																	href="#collapseOne">Return Charges</a>
 															</h5>
 														</div>
@@ -1068,7 +1070,7 @@ function checkOnBlur()
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
+																<a data-toggle="collapse" data-parent="#accordion1"
 																	href="#collapseTwo">RTO Charges</a>
 															</h4>
 														</div>
@@ -1272,7 +1274,7 @@ function checkOnBlur()
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
+																<a data-toggle="collapse" data-parent="#accordion1"
 																	href="#collapseThree">Replacement Charges</a>
 															</h4>
 														</div>
@@ -1476,7 +1478,7 @@ function checkOnBlur()
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
+																<a data-toggle="collapse" data-parent="#accordion1"
 																	href="#collapsefive">Partial Delivery Charges</a>
 															</h4>
 														</div>
@@ -1680,7 +1682,7 @@ function checkOnBlur()
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
+																<a data-toggle="collapse" data-parent="#accordion1"
 																	href="#collapsesix">Cancellation Charges</a>
 															</h4>
 														</div>
@@ -2008,7 +2010,7 @@ function checkOnBlur()
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
-																<a data-toggle="collapse" data-parent="#accordion"
+																<a data-toggle="collapse" data-parent="#accordion1"
 																	href="#collapseseven">Reverse Shipping Fee</a>
 															</h4>
 														</div>
@@ -2236,6 +2238,7 @@ function checkOnBlur()
 											</div>
                           </div>
                         </div>
+                       </div>
                     </div>
                 
 				<div class="ibox-content add-company">

@@ -836,18 +836,13 @@ public class OrderDaoImpl implements OrderDao {
 			if (seller.getOrders() != null && seller.getOrders().size() != 0) {
 				order = seller.getOrders().get(0);
 
-				// Check condition here
-				event = eventsService.isEventActiive(order.getOrderDate(),
-						order.getPcName(), sellerId);
+				// Check condition 4 Events here
+				event = eventsService.isEventActiive(order.getOrderDate(), order.getPcName(), sellerId);
 				if (event != null) {
-					if (event.getNrnReturnConfig().getReturnCalculatorEvent()
-							.equalsIgnoreCase("newTerms")) {
-						returnChargesCalculated = calculateReturnCharges(order,
-								orderReturn, sellerId,
-								event.getNrnReturnConfig());
+					if (event.getNrnReturnConfig().getReturnCalculatorEvent().equalsIgnoreCase("newTerms")) {
+						returnChargesCalculated = calculateReturnCharges(order,	orderReturn, sellerId, event.getNrnReturnConfig());
 					} else {
-						returnChargesCalculated = calculateReturnCharges(order,
-								orderReturn, sellerId);
+						returnChargesCalculated = calculateReturnCharges(order,	orderReturn, sellerId);
 					}
 				} else {
 					returnChargesCalculated = calculateReturnCharges(order,
@@ -1089,6 +1084,7 @@ public class OrderDaoImpl implements OrderDao {
 		searchString = "order." + column;
 		Seller seller = null;
 		List<Order> orderlist = null;
+		List temp=null;
 
 		try {
 			Session session = sessionFactory.openSession();
@@ -1100,8 +1096,11 @@ public class OrderDaoImpl implements OrderDao {
 					.add(Restrictions.between(searchString, startDate, endDate))
 					.setResultTransformer(
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			seller = (Seller) criteria.list().get(0);
-			orderlist = seller.getOrders();
+			temp=criteria.list();
+			if(temp != null && temp.size()!=0){
+				seller = (Seller) temp.get(0);
+				orderlist = seller.getOrders();
+			}
 			if (orderlist != null && orderlist.size() != 0) {
 				for (Order order : orderlist) {
 					Hibernate.initialize(order.getOrderTimeline());

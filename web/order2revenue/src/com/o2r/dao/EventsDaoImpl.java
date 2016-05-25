@@ -40,6 +40,7 @@ public class EventsDaoImpl implements EventsDao {
 			Partner partner = null;
 			Seller seller = null;
 			List<Events> event = null;
+			
 					
 			String currentPartnerName = events.getChannelName();
 			if(events.getEventId() != 0){
@@ -48,6 +49,7 @@ public class EventsDaoImpl implements EventsDao {
 				
 				if (isDatesAllowForEvent(events, sellerId) == false) {
 					log.debug("*** You can not create Events during these Dates..... !!!");
+					GlobalConstant.addEventError="You can not create Events during these Dates !!!";
 					throw new Exception();
 				} else {
 					Criteria criteria = session.createCriteria(Seller.class)
@@ -78,13 +80,13 @@ public class EventsDaoImpl implements EventsDao {
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
-			throw new CustomException(GlobalConstant.addPartnerError,new Date(), 1, GlobalConstant.addPartnerErrorCode, e);
+			throw new CustomException(GlobalConstant.addEventError,new Date(), 1, GlobalConstant.addEventErrorCode, e);
 		}		
 		log.info("$$$ addEvent Exit...");
 	}	
 	
 	@Override
-	public Events getEvent(int eventId) {	
+	public Events getEvent(int eventId)throws CustomException {	
 		log.info("$$$ getEvent with eventId Starts...***");
 		Events event=null;
 		Session session=null;
@@ -98,6 +100,7 @@ public class EventsDaoImpl implements EventsDao {
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
+			throw new CustomException(GlobalConstant.getEventError,new Date(), 3, GlobalConstant.getEventErrorCode, e);
 		}finally{
 			if(session != null){
 				session.close();
@@ -108,11 +111,11 @@ public class EventsDaoImpl implements EventsDao {
 	}
 	
 	@Override
-	public Events getEvent(int partnerId, int sellerId) {
+	public Events getEvent(int partnerId, int sellerId)throws CustomException {
 		return null;
 	}
 	@Override
-	public List<Events> getEvents(Partner partner, int sellerId) {
+	public List<Events> getEvents(Partner partner, int sellerId)throws CustomException {
 		
 		log.info("*** getEvents Starts...***");
 		List<Events> returnList=null;
@@ -128,13 +131,14 @@ public class EventsDaoImpl implements EventsDao {
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
+			throw new CustomException(GlobalConstant.getEventError,new Date(), 3, GlobalConstant.getEventErrorCode, e);
 		}
 		log.info("*** getEvents ends...***");
 		return returnList;
 	}
 	
 	@Override
-	public List<Events> listEvents(int sellerId) {
+	public List<Events> listEvents(int sellerId)throws CustomException {
 		
 		log.info("*** listEvents Starts...***");		
 		List<Events> returnlist = null;
@@ -151,13 +155,14 @@ public class EventsDaoImpl implements EventsDao {
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
+			throw new CustomException(GlobalConstant.listEventError,new Date(), 3, GlobalConstant.listEventErrorCode, e);
 		}
 		log.info("*** listEvents Ends...***");		
 		return returnlist;
 	}
 	
 	@Override
-	public List<Events> listEvents(Date sDate, Date eDate, int sellerId) {
+	public List<Events> listEvents(Date sDate, Date eDate, int sellerId)throws CustomException {
 		
 		log.info("*** listEvents between dates Starts...***");		
 		List<Events> returnlist = null;
@@ -181,13 +186,14 @@ public class EventsDaoImpl implements EventsDao {
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
+			throw new CustomException(GlobalConstant.listEventError,new Date(), 3, GlobalConstant.listEventErrorCode, e);
 		}
 		log.info("*** listEvents between dates ends...***");
 		return returnlist;
 	}
 	
 	@Override
-	public Events isEventActiive(Date orderDate, String channelName,int sellerId) {
+	public Events isEventActiive(Date orderDate, String channelName,int sellerId)throws CustomException {
 		log.info("$$$ isEventActive Start $$$");
 		
 		List eventList=null;
@@ -217,7 +223,7 @@ public class EventsDaoImpl implements EventsDao {
 	}
 	
 	@Override
-	public Events getEvent(String eventName, int sellerID) {
+	public Events getEvent(String eventName, int sellerID)throws CustomException {
 		
 		log.info("$$$ getEvent Starts $$$");
 		Events event=null;
@@ -233,6 +239,7 @@ public class EventsDaoImpl implements EventsDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e);
+			throw new CustomException(GlobalConstant.getEventError,new Date(), 3, GlobalConstant.getEventErrorCode, e);
 		}finally{
 			if(session != null){
 				session.close();
