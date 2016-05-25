@@ -76,6 +76,7 @@ public class ConverterClass {
 			order.setPIreferenceNo(orderBean.getPIreferenceNo());
 			order.setLogisticPartner(orderBean.getLogisticPartner());
 			order.setOrderMRP(orderBean.getOrderMRP());
+			order.setGrossProfit(orderBean.getGrossProfit());
 			order.setOrderSP(orderBean.getOrderSP());
 			order.setShippingCharges(orderBean.getShippingCharges());
 			order.setShippedDate(orderBean.getShippedDate());
@@ -139,6 +140,7 @@ public class ConverterClass {
 				order.setShippingCharges(orderBean.getShippingCharges());
 				order.setShippedDate(orderBean.getShippedDate());
 				order.setDeliveryDate(orderBean.getDeliveryDate());
+				order.setGrossProfit(orderBean.getGrossProfit());
 				order.setLastActivityOnOrder(orderBean.getLastActivityOnOrder());
 				order.setNetRate(orderBean.getNetRate());
 				order.setCustomer(prepareCustomerModel((orderBean.getCustomer() != null) ? orderBean
@@ -196,6 +198,7 @@ public class ConverterClass {
 				bean.setPIreferenceNo(order.getPIreferenceNo());
 				bean.setLogisticPartner(order.getLogisticPartner());
 				bean.setOrderMRP(order.getOrderMRP());
+				bean.setGrossProfit(order.getGrossProfit());
 				bean.setOrderSP(order.getOrderSP());
 				bean.setShippingCharges(order.getShippingCharges());
 				bean.setShippedDate(order.getShippedDate());
@@ -256,6 +259,7 @@ public class ConverterClass {
 			bean.setLogisticPartner(order.getLogisticPartner());
 			bean.setOrderMRP(order.getOrderMRP());
 			bean.setOrderSP(order.getOrderSP());
+			bean.setGrossProfit(order.getGrossProfit());
 			bean.setShippingCharges(order.getShippingCharges());
 			bean.setShippedDate(order.getShippedDate());
 			bean.setDeliveryDate(order.getDeliveryDate());

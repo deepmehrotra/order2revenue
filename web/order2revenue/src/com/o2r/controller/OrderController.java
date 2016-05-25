@@ -41,11 +41,13 @@ import com.o2r.helper.FileUploadForm;
 import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
 import com.o2r.helper.ValidateUpload;
+import com.o2r.model.Events;
 import com.o2r.model.Order;
 import com.o2r.model.Partner;
 import com.o2r.model.Product;
 import com.o2r.model.TaxCategory;
 import com.o2r.service.DownloadService;
+import com.o2r.service.EventsService;
 import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.ProductService;
@@ -75,6 +77,8 @@ public class OrderController {
 	private TaxDetailService taxDetailService;
 	@Autowired
 	private HelperClass helperClass;
+	@Autowired
+	EventsService eventsService;
 
 	private static final String UPLOAD_DIR = "upload";
 
@@ -502,6 +506,7 @@ public class OrderController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		int sellerId;
 		Product product = null;
+		Events event=null;
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			Order order = orderService.getOrder(orderBean.getOrderId(),
@@ -510,7 +515,9 @@ public class OrderController {
 					sellerId);
 			log.debug(" Payment difference :"
 					+ order.getOrderPayment().getPaymentDifference());
+			event=eventsService.getEvent(order.getEventName(), sellerId);
 			model.put("order", ConverterClass.prepareOrderBean(order));
+			model.put("event", ConverterClass.prepareEventsBean(event));
 		} catch (CustomException ce) {
 			log.error("viewOrderDailyAct exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
