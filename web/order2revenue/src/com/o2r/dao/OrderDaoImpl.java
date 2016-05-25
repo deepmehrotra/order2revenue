@@ -79,7 +79,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	static Logger log = Logger.getLogger(OrderDaoImpl.class.getName());
 
-	private static final String monthlyPOPaymentQuery = "SELECT concat(monthname(op.dateOfPayment), \", \", year(op.dateofPayment)) as Detail,"
+	private static final String monthlyPOPaymentQuery = "SELECT concat(monthname(op.dateOfPayment), \" \", year(op.dateofPayment)) as Detail,"
 			+ "SUM(op.positiveAmount) as Debits, "
 			+ "SUM(op.negativeAmount) as Payments, "
 			+ "SUM(op.paymentDifference) as Peyment_Diff, "
@@ -105,7 +105,7 @@ public class OrderDaoImpl implements OrderDao {
 			+ "GROUP BY YEAR(op.dateOfPayment) "
 			+ "order by YEAR(op.dateOfPayment)";
 
-	private static final String monthlyEOSSPOQuery = "SELECT concat(monthname(op.dateOfPayment), \", \", year(op.dateofPayment)) as Detail,"
+	private static final String monthlyEOSSPOQuery = "SELECT concat(monthname(op.dateOfPayment), \" \", year(op.dateofPayment)) as Detail,"
 			+ "SUM(ot.eossValue) as EOSS "
 			+ "FROM orderpay op INNER JOIN order_table ot "
 			+ "ON ot.orderPayment_paymentId = op.paymentId "
@@ -116,7 +116,7 @@ public class OrderDaoImpl implements OrderDao {
 			+ "GROUP BY YEAR(op.dateOfPayment), MONTH(op.dateOfPayment) "
 			+ "order by YEAR(op.dateOfPayment), MONTH(op.dateOfPayment)";
 
-	private static final String monthlyEOSSGPQuery = "SELECT concat(monthname(op.dateOfPayment), \", \", year(op.dateofPayment)) as Detail,"
+	private static final String monthlyEOSSGPQuery = "SELECT concat(monthname(op.dateOfPayment), \" \", year(op.dateofPayment)) as Detail,"
 			+ "SUM(ot.eossValue) as EOSS "
 			+ "FROM orderpay op INNER JOIN order_table ot "
 			+ "ON ot.orderPayment_paymentId = op.paymentId "
@@ -1082,7 +1082,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public List<Order> findOrdersbyDate(String column, Date startDate,
-			Date endDate, int sellerId) throws CustomException {
+			Date endDate, int sellerId, boolean poOrder) throws CustomException {
 
 		log.info("*** findOrdersbyDate starts : OrderDaoImpl ***");
 		String searchString = null;
@@ -1098,8 +1098,12 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.createAlias("orders", "order",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.between(searchString, startDate, endDate))
+					.add(Restrictions.eq("order.poOrder", poOrder))
 					.setResultTransformer(
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			if (poOrder)
+				criteria.add(Restrictions.eq("order.consolidatedOrder",
+						null));
 			seller = (Seller) criteria.list().get(0);
 			orderlist = seller.getOrders();
 			if (orderlist != null && orderlist.size() != 0) {
@@ -3564,7 +3568,7 @@ public class OrderDaoImpl implements OrderDao {
 								.getDiscount()) / 100) * gatepass.getQuantity();
 					}
 					netRate += gatepass.getNetNR();
-					taxValue += (gatepass.getTaxAmt() * gatepass.getTaxAmt());
+					taxValue += (gatepass.getTaxAmt() * gatepass.getQuantity());
 					grossPR += gatepass.getNetPR();
 					grossProfit += gatepass.getGrossProfit();
 				}
@@ -3703,6 +3707,8 @@ public class OrderDaoImpl implements OrderDao {
 									.desc("order.lastActivityOnOrder"))
 					.setResultTransformer(
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			if (column.equalsIgnoreCase("invoiceID"))
+				criteria.add(Restrictions.isNull("order.orderReturnOrRTO"));
 			if (criteria.list().size() != 0) {
 				seller = (Seller) criteria.list().get(0);
 				if (seller == null)

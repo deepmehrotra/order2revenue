@@ -5,10 +5,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -350,7 +354,7 @@ public class OrderController {
 					&& endDate != null) {
 				orderList = ConverterClass.prepareListofBean(orderService
 						.findOrdersbyDate("orderDate", new Date(startDate),
-								new Date(endDate), sellerId));
+								new Date(endDate), sellerId, false));
 
 			}
 		} catch (CustomException ce) {
@@ -369,26 +373,24 @@ public class OrderController {
 
 	}
 
-	@RequestMapping(value = "/seller/poorderlist", method = RequestMethod.GET)
-	public ModelAndView poOrderList(HttpServletRequest request,
-			@RequestParam(value = "value") String value,
+	@RequestMapping(value = "/seller/poOrderDetails", method = RequestMethod.GET)
+	public ModelAndView poOrderDetails(HttpServletRequest request,
 			@ModelAttribute("command") PoPaymentDetailsBean poPaymentDetailsBean, BindingResult result) {
 
-		log.info("$$$ poOrderList Starts : OrderController $$$");
+		log.info("$$$ poOrderDetails Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		int sellerId;
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-			
-			boolean isMonthly = true;
-			if(value.equalsIgnoreCase("Yearly")) {
-				isMonthly = false;
-			}
 				
 			List<PoPaymentDetailsBean> poPaymentList = orderService.
-					getPOPaymentDetails(sellerId, isMonthly);
-
-			model.put("poPaymentList", poPaymentList);
+					getPOPaymentDetails(sellerId, true);
+			model.put("poPaymentListMonthly", poPaymentList);
+			
+			poPaymentList = orderService.
+					getPOPaymentDetails(sellerId, false);
+			model.put("poPaymentListYearly", poPaymentList);
+			
 		} catch (CustomException ce) {
 			log.error("viewOrderDailyAct exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -400,8 +402,8 @@ public class OrderController {
 			log.error(e);
 		}
 		
-		log.info("$$$ poOrderList Ends : OrderController $$$");
-		return new ModelAndView("dailyactivities/poorderlist", model);
+		log.info("$$$ poOrderDetails Ends : OrderController $$$");
+		return new ModelAndView("dailyactivities/poOrderDetails", model);
 	}
 
 	@RequestMapping(value = "/seller/orderList", method = RequestMethod.GET)
@@ -752,5 +754,57 @@ public class OrderController {
 		}
 		log.info("$$$ gatepasslistDA Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/gatepasslist", model);
+	}
+	
+	@RequestMapping(value = "/seller/poOrderList", method = RequestMethod.GET)
+	public ModelAndView poOrderListDailyAct(HttpServletRequest request,
+			@RequestParam("value") String value,
+			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
+
+		log.info("$$$ poOrderListDailyAct Starts : OrderController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		List<OrderBean> poOrderlist = new ArrayList<OrderBean>();
+		int sellerId;
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			
+			String dateString;
+			DateFormat format = new SimpleDateFormat("d MMMM, yyyy", Locale.ENGLISH);
+			Date startDate;
+			Date endDate;
+			if (value.contains(" ")){
+				dateString = "1 " + value;
+				startDate = format.parse(dateString);
+				
+				Calendar c = Calendar.getInstance();
+				c.setTime(startDate);
+				c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+				endDate = c.getTime();
+			} else {
+				dateString = "1 January," + value;
+				startDate = format.parse(dateString);
+				
+				dateString = "31 December," + value;
+				endDate = format.parse(dateString);
+			}
+		
+			poOrderlist = ConverterClass.prepareListofBean(orderService
+					.findOrdersbyDate("shippedDate", startDate, endDate, sellerId, true));
+			model.put("poOrders", poOrderlist);
+
+		} catch (CustomException ce) {
+			ce.printStackTrace();
+			log.error("orderListDailyAct exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
+		}
+		
+		log.info("$$$ poOrderListDailyAct Ends : OrderController $$$");
+		return new ModelAndView("dailyactivities/poOrderList", model);
 	}
 }

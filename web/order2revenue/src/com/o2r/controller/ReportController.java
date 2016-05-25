@@ -338,7 +338,7 @@ public void downloadreport(HttpServletRequest request ,HttpServletResponse respo
 		endDate = new Date(request.getParameter("enddate"));
 		reportheaders = request.getParameterValues("headers");
 		try {
-			orderlist = orderService.findOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request));
+			orderlist = orderService.findOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request), false);
 			reportDownloadService.downloadReport(response, orderlist,reportheaders, reportName,	helperClass.getSellerIdfromSession(request));
 		} catch (ClassNotFoundException e) {
 			System.out.println(" Class castexception in download report");

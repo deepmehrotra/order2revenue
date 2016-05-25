@@ -50,8 +50,8 @@
     		targeturl="downloadOrderDA.html?value=orderPoSummary";
     	break;
     	
-    	case "viewPOOrderList" :
-    		targeturl="poorderlist.html?value=monthly";
+    	case "viewPOOrderDetails" :
+    		targeturl="poOrderDetails.html";
     	break;
     	case "viewGatePassList" :
     		targeturl="gatepasslist.html";
@@ -81,7 +81,7 @@
 								<h5>Orders(${orders.size()})</h5>
 								<div class="table-menu-links">
 									<a href="#" id="POOrders"
-										onclick="onclickNavigateOrder('viewPOOrderList','0')">PO
+										onclick="onclickNavigateOrder('viewPOOrderDetails','0')">PO
 										Orders</a> <a href="#" id="returnOrders">Return</a> <a href="#"
 										id="gatepass"
 										onclick="onclickNavigateOrder('viewGatePassList','0')">GatePass</a>
