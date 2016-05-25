@@ -39,7 +39,7 @@ public interface OrderDao {
 			boolean poOrder, boolean isSearch) throws CustomException;
 
 	public List<Order> findOrdersbyDate(String column, Date startDate,
-			Date endDate, int sellerId) throws CustomException;
+			Date endDate, int sellerId, boolean poOrder) throws CustomException;
 
 	public List<Order> findOrdersbyReturnDate(String column, Date startDate,
 			Date endDate, int sellerId) throws CustomException;

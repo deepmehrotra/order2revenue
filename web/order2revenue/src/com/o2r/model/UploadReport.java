@@ -2,10 +2,8 @@ package com.o2r.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -16,18 +14,20 @@ public class UploadReport {
 	@GeneratedValue
 	@Column
 	private Integer id;
-
 	@Column
 	private String fileType;
-
 	@Column
 	private String desc;
-
 	@Column
 	private String Status;
-
 	@Column
 	private String path;
+	@Column 
+	private int sellerId;
+	@Column
+	private String sellerName;
+	@Column
+	private double timeTaken;
 
 	public Integer getId() {
 		return id;
@@ -67,5 +67,29 @@ public class UploadReport {
 
 	public void setPath(String path) {
 		this.path = path;
+	}
+
+	public int getSellerId() {
+		return sellerId;
+	}
+
+	public void setSellerId(int sellerId) {
+		this.sellerId = sellerId;
+	}
+
+	public String getSellerName() {
+		return sellerName;
+	}
+
+	public void setSellerName(String sellerName) {
+		this.sellerName = sellerName;
+	}
+
+	public double getTimeTaken() {
+		return timeTaken;
+	}
+
+	public void setTimeTaken(double timeTaken) {
+		this.timeTaken = timeTaken;
 	}
 }

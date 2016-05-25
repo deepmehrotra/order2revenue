@@ -50,12 +50,16 @@
     		targeturl="downloadOrderDA.html?value=orderPoSummary";
     	break;
     	
-    	case "viewPOOrderList" :
-    		targeturl="poorderlist.html?value=monthly";
+    	case "viewPOOrderDetails" :
+    		targeturl="poOrderDetails.html";
     	break;
     	case "viewGatePassList" :
     		targeturl="gatepasslist.html";
     	break;
+    	case "poOrderList" :
+    		targeturl="poOrderList.html?value="+id;
+    	break;
+    	
     	
     	}
         $.ajax({
@@ -81,7 +85,7 @@
 								<h5>Orders(${orders.size()})</h5>
 								<div class="table-menu-links">
 									<a href="#" id="POOrders"
-										onclick="onclickNavigateOrder('viewPOOrderList','0')">PO
+										onclick="onclickNavigateOrder('viewPOOrderDetails','0')">PO
 										Orders</a> <a href="#" id="returnOrders">Return</a> <a href="#"
 										id="gatepass"
 										onclick="onclickNavigateOrder('viewGatePassList','0')">GatePass</a>
@@ -96,30 +100,36 @@
 										<form role="search" class="form-inline" method="post"
 											action="searchOrder.html">
 											<div class="form-group">
-												<select class="form-control" name="searchOrder"	id="searchOrders">
-													<option id="1" value="channelOrderID">Channel OrderId/PO ID</option>
+												<select class="form-control" name="searchOrder"
+													id="searchOrders">
+													<option id="1" value="channelOrderID">Channel
+														OrderId/PO ID</option>
 													<option id="2" value="invoiceID">Invoice ID</option>
 													<option id="3" value="subOrderID">Sub Order ID</option>
 													<option id="4" value="pcName">Partner</option>
 													<option id="5" value="status">Order Status</option>
 													<option id="6" value="orderDate">Order Date</option>
-													<option id="7" value="shippedDate">Order Shipped Date</option>
+													<option id="7" value="shippedDate">Order Shipped
+														Date</option>
 												</select>
 											</div>
-											<div class="form-group TopSearch-box001 OrderSearch-box " id="searchchannelOrderID">
+											<div class="form-group TopSearch-box001 OrderSearch-box "
+												id="searchchannelOrderID">
 												<input type="text" placeholder="Enter Channel OrderID"
 													class="form-control" name="channelOrderID">
 											</div>
-											<div class="form-group TopSearch-box002 OrderSearch-box" id="SearchorderDate"
-												style="display: none">
+											<div class="form-group TopSearch-box002 OrderSearch-box"
+												id="SearchorderDate" style="display: none">
 												<div class="input-group date">
-                                                	<span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control"  placeholder=""
-                                                		name="startDate">
-                                            	</div>
-	                                            <div class="input-group date">
-	                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" placeholder=""
-	                                                 name="endDate">
-	                                            </div>
+													<span class="input-group-addon"><i
+														class="fa fa-calendar"></i></span><input type="text"
+														class="form-control" placeholder="" name="startDate">
+												</div>
+												<div class="input-group date">
+													<span class="input-group-addon"><i
+														class="fa fa-calendar"></i></span><input type="text"
+														class="form-control" placeholder="" name="endDate">
+												</div>
 											</div>
 											<div class="form-group">
 												<button class="btn btn-primary btn-block" type="submit">Search</button>
@@ -137,162 +147,86 @@
 								</div>
 							</div>
 							<div class="bs-example">
-								<ul class="nav nav-tabs">
-									<li class="active"><a data-toggle="tab" href="#sectionA">Orders</a></li>
-									<li><a data-toggle="tab" href="#sectionB">PO Orders</a></li>
-								</ul>
-								<div class="tab-content">
-									<div id="sectionA" class="tab-pane fade in active">
-										<div class="ibox-content overflow-h cus-table-filters">
-											<div class="scroll-y">
-												<c:if test="${!empty savedOrder}">
-													<h2 style="font-weight: bold">Your order ${savedOrder}
-														is saved successfully.</h2>
-												</c:if>
-												<table
-													class="table table-striped table-bordered table-hover dataTables-example">
-													<thead>
+								<div class="ibox-content overflow-h cus-table-filters">
+									<div class="scroll-y">
+										<c:if test="${!empty savedOrder}">
+											<h2 style="font-weight: bold">Your order ${savedOrder}
+												is saved successfully.</h2>
+										</c:if>
+										<table
+											class="table table-striped table-bordered table-hover dataTables-example">
+											<thead>
+												<tr>
+													<th></th>
+													<th>#</th>
+													<th>Order ID</th>
+													<th>Partner</th>
+													<th>SKU</th>
+													<th>Invoice ID</th>
+													<th>Order Recieved Date</th>
+													<th>Shipped Date</th>
+													<th>Estimated Delivery Date</th>
+													<th>Estimated Payment Date</th>
+													<th>Quantity</th>
+													<th>N/R</th>
+													<th>Payment Difference</th>
+													<th>Status</th>
+													<th>Action</th>
+												</tr>
+											</thead>
+											<tbody>
+												<c:if test="${!empty orders}">
+													<c:forEach items="${orders}" var="order" varStatus="loop">
 														<tr>
-															<th></th>
-															<th>#</th>
-															<th>Order ID</th>
-															<th>Partner</th>
-															<th>SKU</th>
-															<th>Invoice ID</th>
-															<th>Order Recieved Date</th>
-															<th>Shipped Date</th>
-															<th>Estimated Delivery Date</th>
-															<th>Estimated Payment Date</th>
-															<th>Quantity</th>
-															<th>N/R</th>
-															<th>Payment Difference</th>
-															<th>Status</th>
-															<th>Action</th>
+															<td><input type="checkbox"></td>
+															<td>${loop.index+1}</td>
+															<td><a href="#"
+																onclick="onclickNavigateOrder('viewOrder',${order.orderId})">${order.channelOrderID}</a></td>
+															<td>${order.pcName}</td>
+															<td>${order.productSkuCode}</td>
+															<td>${order.invoiceID}</td>
+															<td><fmt:formatDate value="${order.orderDate}"
+																	pattern="MMM dd ,YY" /></td>
+															<td><fmt:formatDate value="${order.shippedDate}"
+																	pattern="MMM dd ,YY" /></td>
+															<td><fmt:formatDate value="${order.deliveryDate}"
+																	pattern="MMM dd ,YY" /></td>
+															<td><fmt:formatDate value="${order.paymentDueDate}"
+																	pattern="MMM dd ,YY" /></td>
+															<td>${order.quantity}</td>
+															<td><fmt:formatNumber type="number"
+																	maxFractionDigits="2" value="${order.netRate}" /></td>
+															<td><fmt:formatNumber type="number"
+																	maxFractionDigits="2"
+																	value="${order.orderPayment.paymentDifference}" /></td>
+															<td>${order.status}</td>
+															<td class="tooltip-demo"><a href="#"
+																onclick="onclickNavigateOrder('editOrder',${order.orderId})"><i
+																	class="fa fa-edit text-navy" data-toggle="tooltip"
+																	data-placement="top" data-original-title="Edit"></i></a></td>
 														</tr>
-													</thead>
-													<tbody>
-														<c:if test="${!empty orders}">
-															<c:forEach items="${orders}" var="order" varStatus="loop">
-																<tr>
-																	<td><input type="checkbox"></td>
-																	<td>${loop.index+1}</td>
-																	<td><a href="#"
-																		onclick="onclickNavigateOrder('viewOrder',${order.orderId})">${order.channelOrderID}</a></td>
-																	<td>${order.pcName}</td>
-																	<td>${order.productSkuCode}</td>
-																	<td>${order.invoiceID}</td>
-																	<td><fmt:formatDate value="${order.orderDate}"
-																			pattern="MMM dd ,YY" /></td>
-																	<td><fmt:formatDate value="${order.shippedDate}"
-																			pattern="MMM dd ,YY" /></td>
-																	<td><fmt:formatDate value="${order.deliveryDate}"
-																			pattern="MMM dd ,YY" /></td>
-																	<td><fmt:formatDate
-																			value="${order.paymentDueDate}" pattern="MMM dd ,YY" /></td>
-																	<td>${order.quantity}</td>
-																	<td><fmt:formatNumber type="number"
-																			maxFractionDigits="2" value="${order.netRate}" /></td>
-																	<td><fmt:formatNumber type="number"
-																			maxFractionDigits="2"
-																			value="${order.orderPayment.paymentDifference}" /></td>
-																	<td>${order.status}</td>
-																	<td class="tooltip-demo"><a href="#"
-																		onclick="onclickNavigateOrder('editOrder',${order.orderId})"><i
-																			class="fa fa-edit text-navy" data-toggle="tooltip"
-																			data-placement="top" data-original-title="Edit"></i></a></td>
-																</tr>
-															</c:forEach>
-														</c:if>
-													</tbody>
-												</table>
-											</div>
-											<div class="col-sm-12">
-												<div class="hr-line-dashed"></div>
-												<a href="#" onclick="onclickNavigateOrder('upload',0)"
-													class="btn btn-success btn-xs">Bulk Upload Order</a>&nbsp;&nbsp;
-												<a href="#" onclick="onclickNavigateOrder('download',0)"
-													class="btn btn-success btn-xs">Download Order Format</a>
-											</div>
-
-										</div>
-									</div>
-									<div id="sectionB" class="tab-pane fade">
-										<div class="ibox-content overflow-h cus-table-filters">
-											<div class="scroll-y">
-												<c:if test="${!empty savedPOOrder}">
-													<h2 style="font-weight: bold">Your order
-														${savedPOOrder} is saved successfully.</h2>
+													</c:forEach>
 												</c:if>
-												<table
-													class="table table-striped table-bordered table-hover dataTables-example">
-													<thead>
-														<tr>
-															<th></th>
-															<th>#</th>
-															<th>PO ID</th>
-															<th>Channel</th>
-															<th>SKU</th>
-															<th>Invoice ID</th>
-															<th>Shipped Date</th>
-															<th>Gross Sale Qty</th>
-															<th>Amount(Net PO Price)</th>
-															<th>EOSS Disc Value</th>
-															<th>N/R</th>
-															<th>Tax(PO) Amt</th>
-															<th>Gross PR</th>
-															<th>Status</th>
-														</tr>
-													</thead>
-													<tbody>
-														<c:if test="${!empty poOrders}">
-															<c:forEach items="${poOrders}" var="poOrder"
-																varStatus="loop">
-																<tr>
-																	<td><input type="checkbox"></td>
-																	<td>${loop.index+1}</td>
-																	<td><a href="#"
-																		onclick="onclickNavigateOrder('viewPOOrder',${poOrder.orderId})">${poOrder.subOrderID}</a></td>
-																	<td>${poOrder.pcName}</td>
-																	<td>${poOrder.productSkuCode}</td>
-																	<td>${poOrder.invoiceID}</td>
-																	<td><fmt:formatDate value="${poOrder.shippedDate}"
-																			pattern="MMM dd ,YY" /></td>
-																	<td>${poOrder.quantity}</td>
-																	<td><fmt:formatNumber type="number"
-																			maxFractionDigits="2" value="${poOrder.poPrice}" /></td>
-																	<td><fmt:formatNumber type="number"
-																			maxFractionDigits="2" value="${poOrder.eossValue}" /></td>
-																	<td><fmt:formatNumber type="number"
-																			maxFractionDigits="2" value="${poOrder.netRate}" /></td>
-																	<td><fmt:formatNumber type="number"
-																			maxFractionDigits="2" value="${poOrder.orderTax.tax}" /></td>
-																	<td><fmt:formatNumber type="number"
-																			maxFractionDigits="2" value="${poOrder.pr}" /></td>
-																	<td>${poOrder.status}</td>
-																</tr>
-															</c:forEach>
-														</c:if>
-													</tbody>
-												</table>
-											</div>
-											<div class="col-sm-12">
-												<div class="hr-line-dashed"></div>
-												<a href="#" onclick="onclickNavigateOrder('uploadPO',0)"
-													class="btn btn-success btn-xs">Bulk Upload PO</a>&nbsp;&nbsp;
-												<a href="#" onclick="onclickNavigateOrder('downloadPO',0)"
-													class="btn btn-success btn-xs">Download PO Format</a>
-											</div>
-
-										</div>
+											</tbody>
+										</table>
 									</div>
+									<div class="col-sm-12">
+										<div class="hr-line-dashed"></div>
+										<a href="#" onclick="onclickNavigateOrder('upload',0)"
+											class="btn btn-success btn-xs">Bulk Upload Order</a>&nbsp;&nbsp;
+										<a href="#" onclick="onclickNavigateOrder('download',0)"
+											class="btn btn-success btn-xs">Download Order Format</a>
+									</div>
+
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<jsp:include page="../globalfooter.jsp"></jsp:include>
 			</div>
+			<jsp:include page="../globalfooter.jsp"></jsp:include>
 		</div>
+	</div>
 	</div>
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
 

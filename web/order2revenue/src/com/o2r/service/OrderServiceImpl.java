@@ -88,8 +88,8 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<Order> findOrdersbyDate(String column, Date startDate,
-			Date endDate, int sellerId) throws CustomException {
-		return orderDao.findOrdersbyDate(column, startDate, endDate, sellerId);
+			Date endDate, int sellerId,  boolean poOrder) throws CustomException {
+		return orderDao.findOrdersbyDate(column, startDate, endDate, sellerId, poOrder);
 	}
 
 	@Override

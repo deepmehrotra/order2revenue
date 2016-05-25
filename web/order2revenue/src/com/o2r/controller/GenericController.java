@@ -193,7 +193,7 @@ public class GenericController {
 						searchCriteria, startDate, endDate,sellerId);			
 					
 			}else {
-				temporaryorderlist = orderService.findOrdersbyDate(searchCriteria,startDate, endDate, sellerId);
+				temporaryorderlist = orderService.findOrdersbyDate(searchCriteria,startDate, endDate, sellerId, false);
 			}
 			
 			if (temporaryorderlist != null && temporaryorderlist.size() != 0)

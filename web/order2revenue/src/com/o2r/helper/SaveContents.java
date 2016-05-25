@@ -1664,19 +1664,21 @@ public class SaveContents {
 					validaterow = false;
 				}
 				
-				Order order =  orderService.findConsolidatedPO(
-						"invoiceID", popabean.getInvoiceID(), sellerId);
-				if (order == null) {					
-					order = orderService.findConsolidatedPO(
-							"channelOrderID", popabean.getInvoiceID(), sellerId);
-					if (order == null) {	
-						errorMessage.append(" PO or GatePass not found");
-						validaterow = false;
+				if (validaterow) {
+					Order order =  orderService.findConsolidatedPO(
+							"invoiceID", popabean.getInvoiceID(), sellerId);
+					if (order == null) {					
+						order = orderService.findConsolidatedPO(
+								"channelOrderID", popabean.getInvoiceID(), sellerId);
+						if (order == null) {	
+							errorMessage.append(" PO or GatePass not found");
+							validaterow = false;
+						} else {
+							popabean.setGatePassId(order.getChannelOrderID());
+						}
 					} else {
-						popabean.setGatePassId(order.getChannelOrderID());
+						popabean.setPoOrderId(order.getChannelOrderID());
 					}
-				} else {
-					popabean.setPoOrderId(order.getChannelOrderID());
 				}
 				
 				if (entry.getCell(2) != null
