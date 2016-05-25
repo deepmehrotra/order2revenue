@@ -536,6 +536,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			session.beginTransaction();			
 			List<Order> results = fetchOrders(session, sellerId, startDate, endDate);
 			for (Order currOrder : results) {
+				boolean isPoOrder = currOrder.isPoOrder();
+				Order consolidatedOrder = currOrder.getConsolidatedOrder();
+				
 				OrderRTOorReturn currOrderReturnOrRTO = currOrder
 						.getOrderReturnOrRTO();
 				OrderPayment currOrderPayment = currOrder.getOrderPayment();
@@ -553,7 +556,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 							.getCategoryName());
 					partnerBusiness.setProductPrice(currProduct.getProductPrice()*grossSaleQty);
 				}
-				partnerBusiness.setTaxSP(taxSP); // Only for PO Orders
+				ProductConfig productConfig = currOrder.getProductConfig();
+				if(productConfig !=null){
+					 // Only for PO Orders
+					if(isPoOrder && consolidatedOrder!=null){
+						taxSP = productConfig.getTaxSp();
+					}
+				}
+				partnerBusiness.setTaxSP(taxSP);
 				int returnQty = 0;
 				double netReturnCharges = 0;
 				if (currOrderReturnOrRTO != null) {
@@ -601,14 +611,26 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				partnerBusiness.setShippingCharges(shippingCharges);
 				partnerBusiness.setServiceTax(14.5 / 100 * grossCommission
 						* pccAmount * fixedFee * shippingCharges);
-				double taxPOPrice = 0; // Only for PO Orders
+				double taxPOPrice = 0;
+				// Only for PO Orders
+				if(isPoOrder && consolidatedOrder!=null){
+					taxPOPrice = currOrder.getPoPrice();
+				}
 				partnerBusiness.setTaxPOPrice(taxPOPrice);
 				double grossCommissionToBePaid = grossCommission + taxSP
 						- taxPOPrice;
 				partnerBusiness.setGrossCommission(grossCommissionToBePaid);
 				double returnCommision = grossCommissionToBePaid * returnQty;
 				partnerBusiness.setReturnCommision(returnCommision);
-				double additionalReturnCharges = netReturnCharges * returnQty; // For Non-PO Orders
+				double additionalReturnCharges = 0; 
+				// For Non-PO Orders
+				if(!isPoOrder){
+					additionalReturnCharges = netReturnCharges * returnQty;
+				}
+				// Only for PO Orders
+				if(isPoOrder && consolidatedOrder!=null){
+					additionalReturnCharges = netReturnCharges;
+				}				
 				partnerBusiness
 						.setAdditionalReturnCharges(additionalReturnCharges);
 				double netPartnerCommissionPaid = grossCommissionToBePaid
@@ -653,6 +675,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	}
 
 	private List<Order> fetchOrders(Session session, int sellerId, Date startDate, Date endDate) {
+		List<Order> orderList = new ArrayList<>();
 		Criteria criteria = session.createCriteria(Order.class);
 		criteria.add(Restrictions.eq("poOrder", false));
 		criteria.createAlias("seller", "seller",
@@ -666,7 +689,25 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				CriteriaSpecification.LEFT_JOIN);
 		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 		criteria.addOrder(org.hibernate.criterion.Order.asc("shippedDate"));
-		return criteria.list();
+		orderList.addAll(criteria.list());
+
+		criteria = session.createCriteria(Order.class);
+		criteria.add(Restrictions.eq("poOrder", true));
+		criteria.add(Restrictions.isNotNull("consolidatedOrder"));
+		criteria.createAlias("seller", "seller",
+				CriteriaSpecification.LEFT_JOIN)
+				.add(Restrictions.eq("seller.id", sellerId))
+				.add(Restrictions
+						.between("shippedDate", startDate, endDate));
+		criteria.createAlias("orderPayment", "orderPayment",
+				CriteriaSpecification.LEFT_JOIN);
+		criteria.createAlias("orderTax", "orderTax",
+				CriteriaSpecification.LEFT_JOIN);
+		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+		criteria.addOrder(org.hibernate.criterion.Order.asc("shippedDate"));
+		orderList.addAll(criteria.list());
+
+		return orderList;
 	}
 
 	/*@Override
