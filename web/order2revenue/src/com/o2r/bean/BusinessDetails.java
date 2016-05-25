@@ -2,7 +2,7 @@ package com.o2r.bean;
 
 import java.util.Comparator;
 
-public class BusinessGraph {
+public class BusinessDetails {
 	private double netPartnerCommissionPaid;
 	private double netSaleQty;
 	private double netTDSToBeDeposited;
@@ -122,49 +122,49 @@ public class BusinessGraph {
 	}
 
 	public static class OrderByNetPartnerCommission implements
-			Comparator<BusinessGraph> {
+			Comparator<BusinessDetails> {
 
 		@Override
-		public int compare(BusinessGraph graph1, BusinessGraph graph2) {
+		public int compare(BusinessDetails graph1, BusinessDetails graph2) {
 			return graph1.netPartnerCommissionPaid < graph2.netPartnerCommissionPaid ? 1
 					: (graph1.netPartnerCommissionPaid > graph2.netPartnerCommissionPaid ? -1
 							: 0);
 		}
 	}
 
-	public static class OrderByNetTDS implements Comparator<BusinessGraph> {
+	public static class OrderByNetTDS implements Comparator<BusinessDetails> {
 
 		@Override
-		public int compare(BusinessGraph graph1, BusinessGraph graph2) {
+		public int compare(BusinessDetails graph1, BusinessDetails graph2) {
 			return graph1.netTDSToBeDeposited < graph2.netTDSToBeDeposited ? 1
 					: (graph1.netTDSToBeDeposited > graph2.netTDSToBeDeposited ? -1
 							: 0);
 		}
 	}
 
-	public static class OrderByNetTax implements Comparator<BusinessGraph> {
+	public static class OrderByNetTax implements Comparator<BusinessDetails> {
 
 		@Override
-		public int compare(BusinessGraph graph1, BusinessGraph graph2) {
+		public int compare(BusinessDetails graph1, BusinessDetails graph2) {
 			return graph1.netTaxToBePaid < graph2.netTaxToBePaid ? 1
 					: (graph1.netTaxToBePaid > graph2.netTaxToBePaid ? -1 : 0);
 		}
 	}
 
-	public static class OrderByNetNPR implements Comparator<BusinessGraph> {
+	public static class OrderByNetNPR implements Comparator<BusinessDetails> {
 
 		@Override
-		public int compare(BusinessGraph graph1, BusinessGraph graph2) {
+		public int compare(BusinessDetails graph1, BusinessDetails graph2) {
 			return graph1.netPaymentResult < graph2.netPaymentResult ? 1
 					: (graph1.netPaymentResult > graph2.netPaymentResult ? -1
 							: 0);
 		}
 	}
 
-	public static class OrderByNetTaxable implements Comparator<BusinessGraph> {
+	public static class OrderByNetTaxable implements Comparator<BusinessDetails> {
 
 		@Override
-		public int compare(BusinessGraph graph1, BusinessGraph graph2) {
+		public int compare(BusinessDetails graph1, BusinessDetails graph2) {
 			return graph1.netTaxableSale < graph2.netTaxableSale ? 1
 					: (graph1.netTaxableSale > graph2.netTaxableSale ? -1 : 0);
 		}

@@ -1,6 +1,6 @@
 package com.o2r.bean;
 
-public class CategoryBusinessGraph extends BusinessGraph {
+public class CategoryBusinessDetails extends BusinessDetails {
 	private String categoryName;
 
 	public String getCategoryName() {

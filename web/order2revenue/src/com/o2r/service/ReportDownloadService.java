@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.bean.ChannelSalesDetails;
-import com.o2r.bean.PartnerBusiness;
+import com.o2r.bean.PartnerReportDetails;
 import com.o2r.helper.FillManager;
 import com.o2r.helper.Layouter;
 import com.o2r.helper.Writer;
@@ -108,7 +108,7 @@ public class ReportDownloadService {
 	
 	}
 	
-	public void downloadPartnerReport(HttpServletResponse response , List<PartnerBusiness> partnerlist, String[] headers,String reportname ,int sellerId) throws ClassNotFoundException {
+	public void downloadPartnerReport(HttpServletResponse response , List<PartnerReportDetails> partnerlist, String[] headers,String reportname ,int sellerId) throws ClassNotFoundException {
 		
 		
 		// 1. Create new workbook
@@ -130,6 +130,11 @@ public class ReportDownloadService {
 		
 		// 6. Set the response properties
 		String fileName = "Partner_Report.xls";
+		switch(reportname){
+			case "partnerBusinessReport": fileName = "Partner_Business_Report.xls";break;
+			case "partnerCommissionReport": fileName = "Partner_Commission_Report.xls";break;
+			default: break;
+		}
 		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
 		// Make sure to set the correct content type
 		response.setContentType("application/vnd.ms-excel");

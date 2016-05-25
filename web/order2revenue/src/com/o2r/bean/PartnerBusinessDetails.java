@@ -1,6 +1,6 @@
 package com.o2r.bean;
 
-public class PartnerCommissionPaidGraph extends CommissionPaidGraph {
+public class PartnerBusinessDetails extends BusinessDetails {
 	private String partner;
 
 	public String getPartner() {

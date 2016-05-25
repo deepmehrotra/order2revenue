@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.o2r.bean.ChannelSalesDetails;
-import com.o2r.bean.PartnerBusiness;
+import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.CustomException;
 import com.o2r.model.UploadReport;

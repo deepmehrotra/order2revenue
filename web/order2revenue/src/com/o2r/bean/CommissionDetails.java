@@ -2,7 +2,7 @@ package com.o2r.bean;
 
 import java.util.Comparator;
 
-public class CommissionPaidGraph {
+public class CommissionDetails {
 	private double netPartnerCommissionPaid;
 	private double grossPartnerCommissionPaid;
 	private double netSaleQty;
@@ -78,10 +78,10 @@ public class CommissionPaidGraph {
 	}
 
 	public static class OrderByGrossCommission implements
-			Comparator<CommissionPaidGraph> {
+			Comparator<CommissionDetails> {
 		@Override
-		public int compare(CommissionPaidGraph graph1,
-				CommissionPaidGraph graph2) {
+		public int compare(CommissionDetails graph1,
+				CommissionDetails graph2) {
 			return graph1.grossPartnerCommissionPaid < graph2.grossPartnerCommissionPaid ? 1
 					: (graph1.grossPartnerCommissionPaid > graph2.grossPartnerCommissionPaid ? -1
 							: 0);
@@ -89,10 +89,10 @@ public class CommissionPaidGraph {
 	}
 
 	public static class OrderByNetChannelCommission implements
-			Comparator<CommissionPaidGraph> {
+			Comparator<CommissionDetails> {
 		@Override
-		public int compare(CommissionPaidGraph graph1,
-				CommissionPaidGraph graph2) {
+		public int compare(CommissionDetails graph1,
+				CommissionDetails graph2) {
 			return graph1.netChannelCommissionToBePaid < graph2.netChannelCommissionToBePaid ? 1
 					: (graph1.netChannelCommissionToBePaid > graph2.netChannelCommissionToBePaid ? -1
 							: 0);

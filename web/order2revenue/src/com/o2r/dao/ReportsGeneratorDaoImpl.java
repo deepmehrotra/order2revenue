@@ -20,7 +20,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.o2r.bean.PartnerBusiness;
+import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
@@ -526,9 +526,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<PartnerBusiness> getPartnerBusinessReport(Date startDate,
+	public List<PartnerReportDetails> getPartnerBusinessReport(Date startDate,
 			Date endDate, int sellerId) throws CustomException {
-		List<PartnerBusiness> partnerBusinessList = new ArrayList<PartnerBusiness>();
+		List<PartnerReportDetails> partnerBusinessList = new ArrayList<PartnerReportDetails>();
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();			
@@ -541,7 +541,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 						.getOrderReturnOrRTO();
 				OrderPayment currOrderPayment = currOrder.getOrderPayment();
 				OrderTax currOrderTax = currOrder.getOrderTax();
-				PartnerBusiness partnerBusiness = new PartnerBusiness();
+				PartnerReportDetails partnerBusiness = new PartnerReportDetails();
 				double taxSP = 0;
 				int grossSaleQty = currOrder.getQuantity();
 				Criteria prodcriteria = session.createCriteria(Product.class);

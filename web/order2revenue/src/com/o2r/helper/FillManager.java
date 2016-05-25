@@ -13,7 +13,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 
 import com.o2r.bean.ChannelSalesDetails;
-import com.o2r.bean.PartnerBusiness;
+import com.o2r.bean.PartnerReportDetails;
 import com.o2r.model.Order;
 
 public class FillManager {
@@ -266,7 +266,7 @@ public class FillManager {
 	}
 
 	public static void fillPartnerReport(HSSFSheet worksheet, int startRowIndex,
-			int startColIndex, List<PartnerBusiness> partnerList,
+			int startColIndex, List<PartnerReportDetails> partnerList,
 			String[] headers) {
 		// Row offset
 		startRowIndex += 2;
@@ -282,7 +282,7 @@ public class FillManager {
 		System.out.println(" header length  : "+headers.length);
 		System.out.println(" headers  : "+headers);
 		// Create body
-		for (PartnerBusiness partner: partnerList) {
+		for (PartnerReportDetails partner: partnerList) {
 			// Create a new row
 			startColIndex=0;
 			HSSFRow row = worksheet.createRow((short) ++startRowIndex);

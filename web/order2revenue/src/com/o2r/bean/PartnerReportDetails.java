@@ -1,8 +1,9 @@
 package com.o2r.bean;
 
+import java.util.Comparator;
 import java.util.Date;
 
-public class PartnerBusiness {
+public class PartnerReportDetails {
 	private int orderId;
 	private String invoiceID;
 	private String channelOrderID;
@@ -12,7 +13,7 @@ public class PartnerBusiness {
 	private Date paymentDueDate;
 	private Date dateofPayment;
 	private Date returnDate;
-	
+
 	private String returnId;
 
 	private String productCategory;
@@ -54,9 +55,9 @@ public class PartnerBusiness {
 
 	private double netPr;
 	private String finalStatus;
-	
+
 	private String returnChargesDesciption;
-	
+
 	private double grossProfit;
 
 	public int getOrderId() {
@@ -385,5 +386,14 @@ public class PartnerBusiness {
 
 	public void setGrossProfit(double grossProfit) {
 		this.grossProfit = grossProfit;
+	}
+
+	public static class OrderByShippedDate implements
+			Comparator<PartnerReportDetails> {
+		@Override
+		public int compare(PartnerReportDetails graph1, PartnerReportDetails graph2) {
+			return graph1.shippedDate.after(graph2.shippedDate) ? 1
+					: (graph1.shippedDate.before(graph2.shippedDate) ? -1 : 0);
+		}
 	}
 }
