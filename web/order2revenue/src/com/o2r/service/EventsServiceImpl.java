@@ -26,37 +26,37 @@ public class EventsServiceImpl implements EventsService{
 	}
 	
 	@Override
-	public Events getEvent(int eventId) {		
+	public Events getEvent(int eventId)throws CustomException {		
 		return eventsDao.getEvent(eventId);
 	}
 	
 	@Override
-	public Events getEvent(int partnerId, int sellerId) {
+	public Events getEvent(int partnerId, int sellerId)throws CustomException {
 		return eventsDao.getEvent(partnerId, sellerId);
 	}
 	
 	@Override
-	public List<Events> getEvents(Partner partner, int sellerId) {
+	public List<Events> getEvents(Partner partner, int sellerId)throws CustomException {
 		return eventsDao.getEvents(partner, sellerId);
 	}
 	
 	@Override
-	public List<Events> listEvents(int sellerId) {
+	public List<Events> listEvents(int sellerId)throws CustomException {
 		return eventsDao.listEvents(sellerId);
 	}
 	
 	@Override
-	public List<Events> listEvents(Date sDate, Date eDate, int sellerId) {
+	public List<Events> listEvents(Date sDate, Date eDate, int sellerId)throws CustomException {
 		return eventsDao.listEvents(sDate, eDate, sellerId);
 	}
 	
 	@Override
-	public Events isEventActiive(Date orderDate, String channelName,int sellerId) {
+	public Events isEventActiive(Date orderDate, String channelName,int sellerId)throws CustomException {
 		return eventsDao.isEventActiive(orderDate, channelName, sellerId);
 	}
 	
 	@Override
-	public Events getEvent(String eventName, int sellerID) {
+	public Events getEvent(String eventName, int sellerID)throws CustomException {
 		return eventsDao.getEvent(eventName, sellerID);
 	}
 
