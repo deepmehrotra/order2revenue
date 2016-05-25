@@ -108,7 +108,11 @@ public class Layouter {
 
 			if (!headervalue.equals("SelectAll")) {
 				HSSFCell cell = rowHeader.createCell(startColIndex + i++);
-				cell.setCellValue(headervalue);
+				String headerStr = GlobalConstant.headerMap.get(headervalue);
+				if(headerStr != null)
+					cell.setCellValue(headerStr);
+				else
+					cell.setCellValue(headervalue);
 				cell.setCellStyle(headerCellStyle);
 			}
 

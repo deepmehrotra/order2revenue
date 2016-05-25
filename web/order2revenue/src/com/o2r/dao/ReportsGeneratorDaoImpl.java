@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -20,9 +20,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.o2r.bean.CategoryBusinessGraph;
 import com.o2r.bean.PartnerBusiness;
-import com.o2r.bean.PartnerBusinessGraph;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
@@ -575,7 +573,25 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 						partnerBusiness.setReturnQuantity(returnQty);
 						netReturnCharges = currOrderReturnOrRTO
 								.getReturnOrRTOChargestoBeDeducted();
-						partnerBusiness.setNetReturnCharges(netReturnCharges);	
+						partnerBusiness.setNetReturnCharges(netReturnCharges);
+						partnerBusiness.setReturnId(currOrderReturnOrRTO.getReturnOrRTOId());
+						
+						String type = currOrderReturnOrRTO.getType();
+						String returnCategory = currOrderReturnOrRTO.getReturnCategory();
+						String cancelType = currOrderReturnOrRTO.getCancelType();
+						StringBuilder builder = new StringBuilder();
+						if(StringUtils.isNotBlank(type)){
+							builder.append(type);
+							builder.append(" >> ");
+						}
+						if(StringUtils.isNotBlank(returnCategory)){
+							builder.append(returnCategory);
+							builder.append(" >> ");
+						}
+						if(StringUtils.isNotBlank(cancelType)){
+							builder.append(type);
+						}
+						partnerBusiness.setReturnChargesDesciption(builder.toString());
 					}
 				}
 				if (currOrderPayment != null) {
@@ -588,6 +604,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 							.getPaymentDifference();
 					partnerBusiness.setPaymentDifference(paymentDifference);
 				}
+				partnerBusiness.setOrderId(currOrder.getOrderId());
 				partnerBusiness.setInvoiceID(currOrder.getInvoiceID());
 				partnerBusiness
 						.setChannelOrderID(currOrder.getChannelOrderID());

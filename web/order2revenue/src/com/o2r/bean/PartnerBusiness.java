@@ -3,6 +3,7 @@ package com.o2r.bean;
 import java.util.Date;
 
 public class PartnerBusiness {
+	private int orderId;
 	private String invoiceID;
 	private String channelOrderID;
 	private String pcName;
@@ -11,6 +12,8 @@ public class PartnerBusiness {
 	private Date paymentDueDate;
 	private Date dateofPayment;
 	private Date returnDate;
+	
+	private String returnId;
 
 	private String productCategory;
 	private double productPrice;
@@ -52,7 +55,17 @@ public class PartnerBusiness {
 	private double netPr;
 	private String finalStatus;
 	
+	private String returnChargesDesciption;
+	
 	private double grossProfit;
+
+	public int getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
+	}
 
 	public String getInvoiceID() {
 		return invoiceID;
@@ -116,6 +129,14 @@ public class PartnerBusiness {
 
 	public void setReturnDate(Date returnDate) {
 		this.returnDate = returnDate;
+	}
+
+	public String getReturnId() {
+		return returnId;
+	}
+
+	public void setReturnId(String returnId) {
+		this.returnId = returnId;
 	}
 
 	public String getProductCategory() {
@@ -348,6 +369,14 @@ public class PartnerBusiness {
 
 	public void setProductPrice(double productPrice) {
 		this.productPrice = productPrice;
+	}
+
+	public String getReturnChargesDesciption() {
+		return returnChargesDesciption;
+	}
+
+	public void setReturnChargesDesciption(String returnChargesDesciption) {
+		this.returnChargesDesciption = returnChargesDesciption;
 	}
 
 	public double getGrossProfit() {

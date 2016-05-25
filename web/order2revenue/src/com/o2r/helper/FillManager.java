@@ -1,5 +1,7 @@
 package com.o2r.helper;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -11,6 +13,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 
 import com.o2r.bean.ChannelSalesDetails;
+import com.o2r.bean.PartnerBusiness;
 import com.o2r.model.Order;
 
 public class FillManager {
@@ -260,8 +263,60 @@ public class FillManager {
 	
 			
 		}
-	}		
 	}
+
+	public static void fillPartnerReport(HSSFSheet worksheet, int startRowIndex,
+			int startColIndex, List<PartnerBusiness> partnerList,
+			String[] headers) {
+		// Row offset
+		startRowIndex += 2;
+		int startCol=0;
+		
+		// Create cell style for the body
+		HSSFCellStyle bodyCellStyle = worksheet.getWorkbook().createCellStyle();
+		bodyCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		bodyCellStyle.setWrapText(true);
+				
+		System.out.println(" Insidee fill manage : PartnerList size : "+partnerList.size());
+		System.out.println(" Start ro index : "+startRowIndex);
+		System.out.println(" header length  : "+headers.length);
+		System.out.println(" headers  : "+headers);
+		// Create body
+		for (PartnerBusiness partner: partnerList) {
+			// Create a new row
+			startColIndex=0;
+			HSSFRow row = worksheet.createRow((short) ++startRowIndex);
+			// Retrieve the id value
+		
+			for(int j=0;j<headers.length;j++) {
+				if(headers[j].equals("SelectAll"))
+					startColIndex--;
+				
+				Class partnerClass = partner.getClass();
+				Method method;
+				try {
+					method = partnerClass.getDeclaredMethod(headers[j]);					
+					HSSFCell cell = row.createCell(startColIndex+j);
+					Object retObj = method.invoke(partner, null);
+					if(retObj!=null){
+						cell.setCellValue(retObj.toString());
+					}
+					cell.setCellStyle(bodyCellStyle);
+				} catch (NoSuchMethodException e) {
+					e.getMessage();
+				} catch (SecurityException e) {
+					e.getMessage();
+				} catch (IllegalAccessException e) {
+					e.getMessage();
+				} catch (IllegalArgumentException e) {
+					e.getMessage();
+				} catch (InvocationTargetException e) {
+					e.getMessage();
+				}
+			}
+		}		
+	}		
+}
 
 
 

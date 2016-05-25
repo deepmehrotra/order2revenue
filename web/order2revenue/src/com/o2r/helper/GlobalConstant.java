@@ -2,6 +2,7 @@ package com.o2r.helper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class GlobalConstant {
 
@@ -517,4 +518,48 @@ public class GlobalConstant {
 	 * fixedfeelt500Big="fixedfeelt500Big";
 	 */
 
+	public static final Map<String, String> headerMap = new HashMap<String, String>() {
+		private static final long serialVersionUID = 1L;
+
+		{
+			put("getInvoiceID", "Invoice Id");
+			put("getChannelOrderID", "Order ID/PO No");
+			put("getPcName", "Partner");
+			put("getOrderDate", "Received Date");
+			put("getShippedDate", "Shipped Date");
+			put("getPaymentDueDate", "Expected Date of Payment");
+			put("getDateofPayment", "Actual Date of Payment");
+			put("getReturnDate", "Date of Return/RTO");
+			put("getProductCategory", "Product Category");
+			put("getGrossSaleQuantity", "Gross Sale Qty");
+			put("getReturnQuantity", "Return/RTO Qty");
+			put("getNetSaleQuantity", "Net Sale Qty");
+			put("getOrderSP", "Total SP");
+			put("getNetRate", "Net N/R");
+			put("getNetReturnCharges", "Net Return Charges");
+			put("getNetPaymentResult", "Net Payment Result");
+			put("getPaymentDifference", "Net Payment Difference");
+			put("getGrossPartnerCommission", "Gross Commission (Selling Fee)");
+			put("getPccAmount", "PCC");
+			put("getFixedfee", "Fixed Fee");
+			put("getShippingCharges", "Shipping Charges");
+			put("getServiceTax", "Service Tax");
+			put("getTaxSP", "Tax (SP)");
+			put("getTaxPOPrice", "Tax (PO Price)");
+			put("getGrossCommission", "Gross Commission to be Paid");
+			put("getReturnCommision", "Return Commission");
+			put("getAdditionalReturnCharges", "Additional Return Charges");
+			put("getNetPartnerCommissionPaid", "Net Partner Commisssion Paid");
+			put("getTdsToBeDeducted10", "TDS to be deducted @ 10%");
+			put("getTdsToBeDeducted2", "TDS to be deducted @ 2%");
+			put("getNetTaxToBePaid", "Net Tax to be Paid");
+			put("getNetEossValue", "Net EOSS Value");
+			put("getNetPr", "Net P/R");
+			put("getFinalStatus", "Final  Status");
+			put("getReturnId", "Return Id/ GP ID");
+			put("getReturnChargesDesciption", "Return Charges Description");
+			put("getTdsToBeDeposited", "TDS to be deducted");
+
+		}
+	};
 }

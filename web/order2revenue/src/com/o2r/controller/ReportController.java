@@ -319,6 +319,39 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			return new ModelAndView("reports/paymentsReceievedReport", model);		
 }
 
+	@RequestMapping(value = "/seller/downloadPartnerReport", method = RequestMethod.POST)
+	public void downloadPartnerReport(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		log.info("$$$ downloadPartnerReport Starts : ReportController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			String reportName = request.getParameter("reportName");
+			Date startDate = new Date(request.getParameter("startdate"));
+			Date endDate = new Date(request.getParameter("enddate"));
+			String[] reportheaders = request.getParameterValues("headers");
+			int sellerId = helperClass.getSellerIdfromSession(request);
+
+			List<PartnerBusiness> partnerBusinessList = reportGeneratorService
+					.getPartnerBusinessReport(startDate, endDate, sellerId);
+			reportDownloadService.downloadPartnerReport(response,
+					partnerBusinessList, reportheaders, reportName, sellerId);
+		} catch (ClassNotFoundException e) {
+			System.out.println(" Class castexception in download report");
+			e.printStackTrace();
+			log.error(e);
+		} catch (CustomException ce) {
+			ce.printStackTrace();
+			log.error("downloadReport exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+		}
+		log.info("$$$ downloadreport Ends : ReportController $$$");
+	}
 @RequestMapping(value = "/seller/downloadreport", method = RequestMethod.POST)
 public void downloadreport(HttpServletRequest request ,HttpServletResponse response){
 		

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.bean.ChannelSalesDetails;
+import com.o2r.bean.PartnerBusiness;
 import com.o2r.helper.FillManager;
 import com.o2r.helper.Layouter;
 import com.o2r.helper.Writer;
@@ -107,5 +108,33 @@ public class ReportDownloadService {
 	
 	}
 	
+	public void downloadPartnerReport(HttpServletResponse response , List<PartnerBusiness> partnerlist, String[] headers,String reportname ,int sellerId) throws ClassNotFoundException {
+		
+		
+		// 1. Create new workbook
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		
+		// 2. Create new worksheet
+		HSSFSheet worksheet = workbook.createSheet(reportname);
+		
+		// 3. Define starting indices for rows and columns
+		int startRowIndex = 0;
+		int startColIndex = 0;
+		
+		// 4. Build layout 
+		// Build title, date, and column headers
+		Layouter.buildOrderReport(worksheet, startRowIndex, startColIndex,reportname,headers);
 
+		// 5. Fill report
+		FillManager.fillPartnerReport(worksheet, startRowIndex, startColIndex, partnerlist , headers);
+		
+		// 6. Set the response properties
+		String fileName = "Partner_Report.xls";
+		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
+		// Make sure to set the correct content type
+		response.setContentType("application/vnd.ms-excel");
+		
+		//7. Write to the output stream
+		Writer.write(response, worksheet,fileName);
+	}
 }
