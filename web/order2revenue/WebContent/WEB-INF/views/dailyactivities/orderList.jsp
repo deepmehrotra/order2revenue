@@ -112,17 +112,14 @@
 											</div>
 											<div class="form-group TopSearch-box002 OrderSearch-box" id="SearchorderDate"
 												style="display: none">
-												<div class="input-group date5">
-													<span class="input-group-addon"><i
-														class="fa fa-calendar"></i></span><input type="text"
-														class="form-control" placeholder="Start Date"
-														name="startDate">
-												</div>
-												<div class="input-group date5">
-													<span class="input-group-addon"><i
-														class="fa fa-calendar"></i></span><input type="text"
-														class="form-control" placeholder="End Date" name="endDate">
-												</div>
+												<div class="input-group date">
+                                                	<span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control"  placeholder=""
+                                                		name="startDate">
+                                            	</div>
+	                                            <div class="input-group date">
+	                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" placeholder=""
+	                                                 name="endDate">
+	                                            </div>
 											</div>
 											<div class="form-group">
 												<button class="btn btn-primary btn-block" type="submit">Search</button>

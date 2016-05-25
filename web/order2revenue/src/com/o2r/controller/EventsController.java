@@ -104,7 +104,7 @@ public class EventsController {
 				log.error("saveEvent exception : " + ce.toString());
 				model.put("errorMessage", ce.getLocalMessage());
 				model.put("errorTime", ce.getErrorTime());
-				model.put("errorTime", ce.getErrorCode());
+				model.put("errorCode", ce.getErrorCode());
 				return new ModelAndView("globalErorPage",model);
 			}catch(Exception e){
 				log.debug("*** Exception In EventsDaoImpl ***");
@@ -149,7 +149,7 @@ public class EventsController {
 			log.error("addEvent exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
-			model.put("errorTime", ce.getErrorCode());
+			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage",model);
 		} catch (Exception e) {
 			log.error("Failed !",e);
@@ -199,7 +199,7 @@ public class EventsController {
 			log.error("addDuplicateEvent exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
-			model.put("errorTime", ce.getErrorCode());
+			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage",model);
 		} catch (Exception e) {
 			log.error("Failed !",e);
@@ -249,10 +249,7 @@ public class EventsController {
 				else
 					return "true";
 			}
-		} catch (CustomException ce) {			
-			log.error("CheckEventsException: " + ce.toString());
-			return "false";
-		} catch (Throwable e) {
+		}catch (Exception e) {
 			log.error("Failed! ",e);
 			e.printStackTrace();
 			return "false";

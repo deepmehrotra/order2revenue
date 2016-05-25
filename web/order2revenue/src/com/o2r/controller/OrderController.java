@@ -349,7 +349,7 @@ public class OrderController {
 			} else if (searchOrder != null && startDate != null
 					&& endDate != null) {
 				orderList = ConverterClass.prepareListofBean(orderService
-						.findOrdersbyDate("orderDate", new Date(startDate),
+						.findOrdersbyDate(searchOrder, new Date(startDate),
 								new Date(endDate), sellerId));
 
 			}
