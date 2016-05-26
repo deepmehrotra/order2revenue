@@ -812,7 +812,7 @@ public class ConverterClass {
 			orderTax.setTdsToDeduct(bean.getTdsToDeduct());
 			orderTax.setTdsToReturn(bean.getTdsToReturn());
 			orderTax.setTotalpositivevalue(bean.getTotalpositivevalue());
-			orderTax.setToxToReturn(bean.getToxToReturn());
+			orderTax.setTaxToReturn(bean.getTaxToReturn());
 		}
 		return orderTax;
 	}
@@ -833,7 +833,7 @@ public class ConverterClass {
 			orderTax.setTdsToDeduct(bean.getTdsToDeduct());
 			orderTax.setTdsToReturn(bean.getTdsToReturn());
 			orderTax.setTotalpositivevalue(bean.getTotalpositivevalue());
-			orderTax.setToxToReturn(bean.getToxToReturn());
+			orderTax.setTaxToReturn(bean.getTaxToReturn());
 		}
 		return orderTax;
 	}

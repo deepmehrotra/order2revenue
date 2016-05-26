@@ -564,11 +564,11 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					taxToBePaid = currOrderTax.getTax();
 					if(currOrderReturnOrRTO != null){
 						tdsToBeDeposited -= currOrderTax.getTdsToReturn();
-						taxToBePaid -= currOrderTax.getToxToReturn();
+						taxToBePaid -= currOrderTax.getTaxToReturn();
 					}
 					// Only for PO
 					if(isPoOrder && consolidatedOrder!=null){
-						taxSP = currOrderTax.getToxToReturn();
+						taxSP = currOrderTax.getTaxToReturn();
 						taxPOPrice = currOrderTax.getTax();
 					}
 				}
@@ -890,33 +890,27 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	/*@Override
 	public void addUploadReport(UploadReport uploadReport)
 			throws CustomException {
-
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-
 			session.saveOrUpdate(uploadReport);
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-
 			log.error(e.getStackTrace());
 			throw new CustomException(GlobalConstant.addReportError,
 					new Date(), 1, GlobalConstant.addReportErrorCode, e);
 		}
-
 	}*/
 
 	/*@Override
 	public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
 			throws CustomException {
-
 		log.info("***addUploadReport Start****");
 		Seller seller = null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-
 			Criteria criteria = session.createCriteria(Seller.class).add(
 					Restrictions.eq("id", sellerId));
 			seller = (Seller) criteria.list().get(0);
@@ -932,18 +926,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			throw new CustomException(GlobalConstant.addReportError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.addReportErrorCode, e);
-
 		}
-
 		log.info("***addUploadReport Exit****");
 		return uploadReport;
-
 	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<UploadReport> listUploadReport() throws CustomException {
-
 		try {
 			return (List<UploadReport>) sessionFactory.getCurrentSession()
 					.createCriteria(UploadReport.class).list();
@@ -951,7 +940,6 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.error(e);
 			throw new CustomException(GlobalConstant.listReportError,
 					new Date(), 3, GlobalConstant.listReportsErrorCode, e);
-
 		}
 	}*/
 }

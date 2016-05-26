@@ -40,7 +40,7 @@ public class OrderTax {
 	@Column
 	private double tax;
 	@Column
-	private double toxToReturn;
+	private double taxToReturn;
 	@Column
 	private double netTax;
 
@@ -132,12 +132,12 @@ public class OrderTax {
 		this.tax = tax;
 	}
 
-	public double getToxToReturn() {
-		return toxToReturn;
+	public double getTaxToReturn() {
+		return taxToReturn;
 	}
 
-	public void setToxToReturn(double toxToReturn) {
-		this.toxToReturn = toxToReturn;
+	public void setTaxToReturn(double taxToReturn) {
+		this.taxToReturn = taxToReturn;
 	}
 
 	public double getNetTax() {
@@ -165,7 +165,7 @@ public class OrderTax {
 				+ ", tdsToDeduct=" + tdsToDeduct + ", tdsToReturn="
 				+ tdsToReturn + ", netTds=" + netTds + ", taxCategtory="
 				+ taxCategtory + ", taxRate=" + taxRate + ", tax=" + tax
-				+ ", toxToReturn=" + toxToReturn + ", netTax=" + netTax + "]";
+				+ ", taxToReturn=" + taxToReturn + ", netTax=" + netTax + "]";
 	}
 
 }

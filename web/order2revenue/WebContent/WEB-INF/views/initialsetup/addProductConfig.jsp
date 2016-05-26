@@ -6,6 +6,7 @@
 <html>
 <head>
 <jsp:include page="../globalcsslinks.jsp"></jsp:include>
+<link href="/O2R/seller/css/plugins/chosen/chosen.css" rel="stylesheet">
 
 </head>
 <body>
@@ -25,77 +26,95 @@
 							<div class="ibox-content overflow-h">
 								<form:form method="POST" action="saveProductConfig.html"
 									id="addProductForm" role="form" class="form-horizontal">
-
-									<div class="hr-line-dashed"></div>
-									<div class="col-sm-6">
-
-										<div class="mar-btm-20-oh">
-											<label class="col-sm-5 control-label">Product SKU
-												Code</label>
-											<div class="col-sm-7">
-												<form:select path="productSkuCode" class="chosen-select"
-													items="${productSkuMap}" id="productName">
-												</form:select>
-												<%-- <form:select path="productSkuCode" items="${productSkuMap}"
-														class="form-control" id="productName">
-													</form:select> --%>
+									<div class="col-sm-12">
+										<div class="col-sm-6">
+											<div class="mar-btm-20-dt">
+												<label class="col-sm-5 control-label">Product SKU
+													Code</label>
+												<div class="col-sm-7 input-group pad-lr">
+													<form:select data-placeholder="Choose a Country..."
+														path="productSkuCode" items="${productSkuMap}"
+														id="productName" class="chosen-select"
+														style="width: 100%;" tabindex="2">
+													</form:select>
+												</div>
 											</div>
 										</div>
-										<div class="mar-btm-20-oh">
-											<label class="col-sm-5 control-label">Channel Name</label>
-											<div class="col-sm-7">
-												<%-- <form:input path="channelName"
+										<div class="col-sm-6"></div>
+									</div>
+									<div class="col-sm-12">
+										<div class="col-sm-6">
+											<div class="mar-btm-20-oh">
+												<label class="col-sm-5 control-label">Channel Name</label>
+												<div class="col-sm-7">
+													<%-- <form:input path="channelName"
 														value="${productConfigBean.channelName}"
 														class="form-control" /> --%>
-												<form:select path="channelName" items="${partnermap}"
-													class="form-control" id="channelName">
-												</form:select>
+													<form:select path="channelName" items="${partnermap}"
+														class="form-control" id="channelName">
+													</form:select>
+												</div>
 											</div>
 										</div>
-										<div class="mar-btm-20-oh">
-											<label class="col-sm-5 control-label">Channel SKU
-												Reference</label>
-											<div class="col-sm-7">
-												<form:input path="channelSkuRef"
-													value="${productConfigBean.channelSkuRef}"
-													class="form-control" />
+									</div>
+									<div class="col-sm-12">
+										<div class="col-sm-6">
+											<div class="mar-btm-20-oh">
+												<label class="col-sm-5 control-label">Channel SKU
+													Reference</label>
+												<div class="col-sm-7">
+													<form:input path="channelSkuRef"
+														value="${productConfigBean.channelSkuRef}"
+														class="form-control" />
+												</div>
 											</div>
 										</div>
-										<div class="mar-btm-20-oh">
-											<label class="col-sm-5 control-label">Discount</label>
-											<%-- <div class="col-sm-6">
+									</div>
+									<div class="col-sm-12">
+										<div class="col-sm-6">
+											<div class="mar-btm-20-oh">
+												<label class="col-sm-5 control-label">Discount</label>
+												<%-- <div class="col-sm-6">
 													<form:input path="discount"
 														value="${productConfigBean.discount}" class="form-control" />
 												</div>
 												<div class="col-sm-1">
 													<span class="input-group-addon">%</span>
 												</div> --%>
-											<div class="col-sm-7">
-												<div class="input-group m-b">
-													<form:input path="discount"
-														value="${productConfigBean.discount}" class="form-control" />
-													<span class="input-group-addon">%</span>
+												<div class="col-sm-7">
+													<div class="input-group m-b">
+														<form:input path="discount"
+															value="${productConfigBean.discount}"
+															class="form-control" />
+														<span class="input-group-addon">%</span>
+													</div>
 												</div>
 											</div>
 										</div>
-										<div class="mar-btm-20-oh">
-											<label class="col-sm-5 control-label">MRP</label>
-											<div class="col-sm-7">
-												<form:input path="mrp" value="${productConfigBean.mrp}"
-													class="form-control" />
-											</div>
-										</div>
-
-										<div class="mar-btm-20-oh">
-											<label class="col-sm-5 control-label">Product Price</label>
-											<div class="col-sm-7">
-												<form:input path="productPrice"
-													value="${productConfigBean.productPrice}"
-													class="form-control" />
+									</div>
+									<div class="col-sm-12">
+										<div class="col-sm-6">
+											<div class="mar-btm-20-oh">
+												<label class="col-sm-5 control-label">MRP</label>
+												<div class="col-sm-7">
+													<form:input path="mrp" value="${productConfigBean.mrp}"
+														class="form-control" />
+												</div>
 											</div>
 										</div>
 									</div>
-
+									<div class="col-sm-12">
+										<div class="col-sm-6">
+											<div class="mar-btm-20-oh">
+												<label class="col-sm-5 control-label">Product Price</label>
+												<div class="col-sm-7">
+													<form:input path="productPrice"
+														value="${productConfigBean.productPrice}"
+														class="form-control" />
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="col-sm-12">
 										<div class="hr-line-dashed"></div>
 										<button class="btn btn-primary pull-right" type="button"
@@ -108,9 +127,10 @@
 				</div>
 			</div>
 			<jsp:include page="../globalfooter.jsp"></jsp:include>
-
 		</div>
+
 	</div>
+
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
 	<!-- Chosen -->
 	<script src="/O2R/seller/js/plugins/chosen/chosen.jquery.js"></script>
@@ -187,7 +207,11 @@
 				},
 				'.chosen-select-no-results' : {
 					no_results_text : 'Oops, nothing found!'
+				},
+				'.chosen-select-width' : {
+					width : "95%"
 				}
+
 			}
 			for ( var selector in config) {
 				$(selector).chosen(config[selector]);
