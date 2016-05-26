@@ -543,8 +543,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				OrderPayment currOrderPayment = currOrder.getOrderPayment();
 				OrderTax currOrderTax = currOrder.getOrderTax();
 				PartnerReportDetails partnerBusiness = new PartnerReportDetails();
-				double taxSP = 0;
-				int grossSaleQty = currOrder.getQuantity();
+				int quantity = currOrder.getQuantity();
 				Criteria prodcriteria = session.createCriteria(Product.class);
 				prodcriteria.add(Restrictions.eq("productSkuCode",
 						currOrder.getProductSkuCode()));
@@ -553,16 +552,29 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					Product currProduct = productList.get(0);
 					partnerBusiness.setProductCategory(currProduct
 							.getCategoryName());
-					partnerBusiness.setProductPrice(currProduct.getProductPrice()*grossSaleQty);
+					partnerBusiness.setProductPrice(currProduct.getProductPrice()*quantity);
 				}
-				ProductConfig productConfig = currOrder.getProductConfig();
-				if(productConfig !=null){
-					 // Only for PO Orders
+				
+				double tdsToBeDeposited = 0;
+				double taxToBePaid = 0;
+				double taxSP = 0;
+				double taxPOPrice = 0;				
+				if(currOrderTax != null){
+					tdsToBeDeposited = currOrderTax.getTdsToDeduct();
+					taxToBePaid = currOrderTax.getTax();
+					if(currOrderReturnOrRTO != null){
+						tdsToBeDeposited -= currOrderTax.getTdsToReturn();
+						taxToBePaid -= currOrderTax.getToxToReturn();
+					}
+					// Only for PO
 					if(isPoOrder && consolidatedOrder!=null){
-						taxSP = productConfig.getTaxSp();
+						taxSP = currOrderTax.getToxToReturn();
+						taxPOPrice = currOrderTax.getTax();
 					}
 				}
 				partnerBusiness.setTaxSP(taxSP);
+				partnerBusiness.setTaxPOPrice(taxPOPrice);				
+				
 				int returnQty = 0;
 				double netReturnCharges = 0;
 				if (currOrderReturnOrRTO != null) {
@@ -614,41 +626,42 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				partnerBusiness.setShippedDate(currOrder.getShippedDate());
 				partnerBusiness
 						.setPaymentDueDate(currOrder.getPaymentDueDate());
-				partnerBusiness.setGrossSaleQuantity(grossSaleQty);
-				partnerBusiness.setNetSaleQuantity(grossSaleQty - returnQty);
+				partnerBusiness.setGrossSaleQuantity(quantity);
+				int netSaleQty = quantity - returnQty;
+				partnerBusiness.setNetSaleQuantity(netSaleQty);
 				partnerBusiness.setOrderSP(currOrder.getOrderSP());
-				double grossCommission = currOrder.getPartnerCommission()
-						* grossSaleQty;
-				partnerBusiness.setGrossPartnerCommission(grossCommission);
-				double pccAmount = currOrder.getPccAmount() * grossSaleQty;
-				partnerBusiness.setPccAmount(pccAmount);
-				double fixedFee = currOrder.getFixedfee() * grossSaleQty;
-				partnerBusiness.setFixedfee(fixedFee);
-				double shippingCharges = currOrder.getShippingCharges()
-						* grossSaleQty;
-				partnerBusiness.setShippingCharges(shippingCharges);
-				partnerBusiness.setServiceTax(14.5 / 100 * grossCommission
-						* pccAmount * fixedFee * shippingCharges);
-				double taxPOPrice = 0;
-				// Only for PO Orders
+				double grossCommission = 0;
+				// MP & PO Conditions
 				if(isPoOrder && consolidatedOrder!=null){
-					taxPOPrice = currOrder.getPoPrice();
+					grossCommission = currOrder.getPartnerCommission();
+				} else{
+					grossCommission = currOrder.getPartnerCommission() * netSaleQty;
 				}
-				partnerBusiness.setTaxPOPrice(taxPOPrice);
-				double grossCommissionToBePaid = grossCommission + taxSP
-						- taxPOPrice;
+				partnerBusiness.setGrossPartnerCommission(grossCommission);
+				double pccAmount = 0;
+				double fixedFee = 0;
+				double shippingCharges = 0;
+				if(!isPoOrder){
+					pccAmount = currOrder.getPccAmount() * netSaleQty;
+					fixedFee = currOrder.getFixedfee() * netSaleQty; 
+					shippingCharges = currOrder.getShippingCharges() * netSaleQty;
+				}					
+				partnerBusiness.setPccAmount(pccAmount);				
+				partnerBusiness.setFixedfee(fixedFee);
+				partnerBusiness.setShippingCharges(shippingCharges);
+				double serviceTax = grossCommission + pccAmount + fixedFee + shippingCharges;
+				partnerBusiness.setServiceTax(14.5 / 100 * serviceTax);
+				double grossCommissionToBePaid = grossCommission + taxSP - taxPOPrice;
 				partnerBusiness.setGrossCommission(grossCommissionToBePaid);
-				double returnCommision = grossCommissionToBePaid * returnQty;
+				double returnCommision = grossCommissionToBePaid * returnQty / quantity;
 				partnerBusiness.setReturnCommision(returnCommision);
 				double additionalReturnCharges = 0; 
-				// For Non-PO Orders
-				if(!isPoOrder){
-					additionalReturnCharges = netReturnCharges * returnQty;
-				}
 				// Only for PO Orders
 				if(isPoOrder && consolidatedOrder!=null){
 					additionalReturnCharges = netReturnCharges;
-				}				
+				} else{				
+					additionalReturnCharges = netReturnCharges;
+				}
 				partnerBusiness
 						.setAdditionalReturnCharges(additionalReturnCharges);
 				double netPartnerCommissionPaid = grossCommissionToBePaid
@@ -658,16 +671,6 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				partnerBusiness.setTdsToBeDeducted10(0.1 * taxPOPrice);
 				partnerBusiness
 						.setTdsToBeDeducted2(0.02 * netPartnerCommissionPaid);
-				double tdsToBeDeposited = 0;
-				double taxToBePaid = 0;
-				if(currOrderTax != null){
-					tdsToBeDeposited = currOrderTax.getTdsToDeduct();
-					taxToBePaid = currOrderTax.getTax();
-					if(currOrderReturnOrRTO != null){
-						tdsToBeDeposited -= currOrderTax.getTdsToReturn();
-						taxToBePaid -= currOrderTax.getToxToReturn();
-					}
-				}
 				partnerBusiness.setTdsToBeDeposited(tdsToBeDeposited);
 				partnerBusiness.setNetTaxToBePaid(taxToBePaid);
 				double netEossValue = 0; // Only for Consolidated PO
