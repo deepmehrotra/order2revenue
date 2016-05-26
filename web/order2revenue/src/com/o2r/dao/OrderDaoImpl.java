@@ -3811,7 +3811,7 @@ public class OrderDaoImpl implements OrderDao {
 					System.out.println("GP EOSS : row\n");
 					Object[] recordsRow = (Object[]) iterator1.next();
 					if (recordsRow[0] != null && recordsRow[1] != null) {
-						eossValueList.set(0, eossValueList.get(i) - Double.parseDouble(recordsRow[1].toString()));
+						eossValueList.set(i, eossValueList.get(i) - Double.parseDouble(recordsRow[1].toString()));
 						i++;
 					}
 				}
