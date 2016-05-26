@@ -354,7 +354,11 @@ public class OrderController {
 				orderList = ConverterClass.prepareListofBean(orderService
 						.findOrders(searchOrder, channelOrderID, sellerId,
 								false,true));
-			} else if (searchOrder != null && startDate != null
+			} else if(searchOrder != null && searchOrder.equals("customerName") && channelOrderID != null){				
+				orderList = ConverterClass
+						.prepareListofBean(orderService.findOrdersbyCustomerDetails(
+								searchOrder,channelOrderID,sellerId));
+			}else if (searchOrder != null && startDate != null
 					&& endDate != null) {
 				orderList = ConverterClass.prepareListofBean(orderService
 						.findOrdersbyDate("orderDate", new Date(startDate),

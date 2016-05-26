@@ -102,14 +102,14 @@
 											<div class="form-group">
 												<select class="form-control" name="searchOrder"
 													id="searchOrders">
-													<option id="1" value="channelOrderID">Channel
-														OrderId/PO ID</option>
+													<option id="1" value="channelOrderID">Channel OrderId/PO ID</option>
 													<option id="2" value="invoiceID">Invoice ID</option>
 													<option id="3" value="subOrderID">Sub Order ID</option>
 													<option id="4" value="pcName">Partner</option>
-													<option id="5" value="status">Order Status</option>
-													<option id="6" value="orderDate">Order Date</option>
-													<option id="7" value="shippedDate">Order Shipped
+													<option id="5" value="customerName">Customer Name</option>
+													<option id="6" value="status">Order Status</option>
+													<option id="7" value="orderDate">Order Date</option>
+													<option id="8" value="shippedDate">Order Shipped
 														Date</option>
 												</select>
 											</div>
@@ -180,8 +180,7 @@
 														<tr>
 															<td><input type="checkbox"></td>
 															<td>${loop.index+1}</td>
-															<td><a href="#"
-																onclick="onclickNavigateOrder('viewOrder',${order.orderId})">${order.channelOrderID}</a></td>
+															<td><a href="#"	onclick="onclickNavigateOrder('viewOrder',${order.orderId})">${order.channelOrderID}</a></td>
 															<td>${order.pcName}</td>
 															<td>${order.productSkuCode}</td>
 															<td>${order.invoiceID}</td>
@@ -200,8 +199,7 @@
 																	maxFractionDigits="2"
 																	value="${order.orderPayment.paymentDifference}" /></td>
 															<td>${order.status}</td>
-															<td class="tooltip-demo"><a href="#"
-																onclick="onclickNavigateOrder('editOrder',${order.orderId})"><i
+															<td class="tooltip-demo"><a href="#" onclick="onclickNavigateOrder('editOrder',${order.orderId})"><i
 																	class="fa fa-edit text-navy" data-toggle="tooltip"
 																	data-placement="top" data-original-title="Edit"></i></a></td>
 														</tr>
@@ -256,7 +254,7 @@
    	     
 	        var thisValue = $(this).children(":selected").attr("id");
 	       	
-	         if(thisValue == 1 || thisValue == 2 || thisValue == 3 || thisValue == 4 ||thisValue == 5 ){
+	         if(thisValue == 1 || thisValue == 2 || thisValue == 3 || thisValue == 4 ||thisValue == 5 ||thisValue == 6 ){
 	        	$('.TopSearch-box001').show();
 	        	$('.TopSearch-box002').hide();
 	        }
