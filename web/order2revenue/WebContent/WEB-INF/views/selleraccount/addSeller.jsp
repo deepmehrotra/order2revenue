@@ -11,6 +11,14 @@ span .#error {
 	color: red;
 	font-weight: bold;
 }
+#sellerImage img {
+        height: 80px;
+        width: 80px;
+        object-fit: contain;
+        position: relative;
+    	top: -25px;
+    	left: 50px;
+    }
 </style>
 <script type="text/javascript">
 	function submitSeller() {
@@ -131,8 +139,8 @@ span .#error {
 
 									<h4 align="center">Seller Brand</h4>
 									<br>
-									<div>
-										<div class="col-md-6">
+									<div class="col-sm-12">
+										<div class="col-md-2" id="sellerImage">
 											<c:choose>
 												<c:when test="${seller.logoUrl != null}">
 	        											<img alt="image" class="img-circle" src="${seller.logoUrl}" />
@@ -142,7 +150,8 @@ span .#error {
 	    										</c:otherwise>	
     										</c:choose>
 										</div>
-										
+										<div class="col-md-4">
+										</div>
 										<div class="col-md-6" >
 											<label title="Upload image file" for="image"
 													class="btn btn-white btn-block"> <i
@@ -154,11 +163,9 @@ span .#error {
 										</div>	
 																
 									</div>
-									
-									
-									
+								
 
-									<h4>Expected Delivery Time</h4>
+									<h4 style="text-align: center;">Expected Delivery Time</h4>
 									<p>
 										Plz Note: <br> <span class="span1">The time
 											defined here will derive here the expected delivery time of

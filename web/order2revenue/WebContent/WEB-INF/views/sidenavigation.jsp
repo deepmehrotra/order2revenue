@@ -25,7 +25,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<style type="text/css">
+#topSellerImg img {
 
+        height: 80px;
+        width: 80px;
+        object-fit: contain;
+    }
+
+</style>
 </head>
 <body>
 
@@ -33,7 +41,7 @@
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">
                 <li class="nav-header">
-                	     <div class="dropdown profile-element" align="center" > <span>
+                	     <div class="dropdown profile-element" align="center"  id="topSellerImg"> <span>
                         		<c:choose>
 									<c:when test='<%= session.getAttribute("logoUrl") != null %>'>
 	        								<img alt="image" class="img-circle" src='<%= session.getAttribute("logoUrl") %>' />
