@@ -631,37 +631,49 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				partnerBusiness.setNetSaleQuantity(netSaleQty);
 				partnerBusiness.setOrderSP(currOrder.getOrderSP());
 				double grossCommission = 0;
+				double grossCommissionNoQty = 0;
 				// MP & PO Conditions
 				if(isPoOrder && consolidatedOrder!=null){
 					grossCommission = currOrder.getPartnerCommission();
+					grossCommissionNoQty = grossCommission;
 				} else{
 					grossCommission = currOrder.getPartnerCommission() * netSaleQty;
+					grossCommissionNoQty = currOrder.getPartnerCommission() * returnQty;
 				}
 				partnerBusiness.setGrossPartnerCommission(grossCommission);
 				double pccAmount = 0;
 				double fixedFee = 0;
 				double shippingCharges = 0;
-				if(!isPoOrder){
+				double pccAmountNoQty = 0;
+				double fixedFeeNoQty = 0;
+				double shippingChargesNoQty = 0;
+				// Only for MP
+				if(isPoOrder && consolidatedOrder!=null){
 					pccAmount = currOrder.getPccAmount() * netSaleQty;
 					fixedFee = currOrder.getFixedfee() * netSaleQty; 
 					shippingCharges = currOrder.getShippingCharges() * netSaleQty;
-				}					
+					pccAmountNoQty = currOrder.getPccAmount() * returnQty;
+					fixedFeeNoQty = currOrder.getFixedfee() * returnQty; 
+					shippingChargesNoQty = currOrder.getShippingCharges() * returnQty;
+				}
 				partnerBusiness.setPccAmount(pccAmount);				
 				partnerBusiness.setFixedfee(fixedFee);
 				partnerBusiness.setShippingCharges(shippingCharges);
-				double serviceTax = grossCommission + pccAmount + fixedFee + shippingCharges;
-				partnerBusiness.setServiceTax(14.5 / 100 * serviceTax);
+				double serviceTax = (grossCommission + pccAmount + fixedFee + shippingCharges)*14.5/100;
+				double serviceTaxNoQty = (grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty)*14.5/100;
+				partnerBusiness.setServiceTax(serviceTax);
 				double grossCommissionToBePaid = grossCommission + taxSP - taxPOPrice;
+				double grossCommissionToBePaidNoQty = grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty + serviceTaxNoQty;
 				partnerBusiness.setGrossCommission(grossCommissionToBePaid);
-				double returnCommision = grossCommissionToBePaid * returnQty / quantity;
-				partnerBusiness.setReturnCommision(returnCommision);
-				double additionalReturnCharges = 0; 
-				// Only for PO Orders
+				double returnCommision = 0;
+				// MP & PO Conditions
 				if(isPoOrder && consolidatedOrder!=null){
-					additionalReturnCharges = netReturnCharges;
-				} else{				
-					additionalReturnCharges = netReturnCharges;
+					returnCommision = grossCommissionToBePaidNoQty * returnQty;
+				} else{
+					returnCommision = grossCommissionToBePaid;
 				}
+				partnerBusiness.setReturnCommision(returnCommision);
+				double additionalReturnCharges = netReturnCharges; 
 				partnerBusiness
 						.setAdditionalReturnCharges(additionalReturnCharges);
 				double netPartnerCommissionPaid = grossCommissionToBePaid
