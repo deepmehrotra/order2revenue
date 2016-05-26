@@ -115,14 +115,14 @@ span .#error {
 										<div class="radio">
 											<label><form:radiobutton path="paymentType"
 													value="paymentcycle" id="paymentcycle" name="toggler"
-													class="paymentcycleClass" />Payment Cycle</label>
+													class="paymentcycleClass" />Sub Divided monthly</label>
 										</div>
 									</div>
 									<div class="col-sm-4">
 										<div class="radio">
 											<label><form:radiobutton path="paymentType"
 													value="datewisepay" id="datewisepay" name="toggler"
-													class="paymentcycleClass" />Payment From Delivery</label>
+													class="paymentcycleClass" />Payment From Shipped/Delivery</label>
 										</div>
 									</div>
 									<div class="col-sm-4">
@@ -177,7 +177,7 @@ span .#error {
 											</div>
 										</div>
 										<small class="help-block">(For ex: If your first
-											payment cycle of month is staring from 5th May to 10th May
+											payment cycle of month is starting from 5th May to 10th May
 											and Payment date for that cycel is 15th May , then you Start
 											Date will have 5 End day will have 10 and Payment day will
 											have 15)</small>
@@ -190,14 +190,14 @@ span .#error {
 												</form:select>
 											</div>
 
-											<div class="col-md-6 payment-box" id="true">
+											<div class="col-md-6 payment-box-2" id="true" style="display:none;">
 												<form:input path="noofdaysfromshippeddate"
 													id="noofdaysfromshippeddate"
 													value="${partner.noofdaysfromshippeddate}"
 													placeholder="Payment Days From Shipped Date"
 													class="form-control" />
 											</div>
-											<div class="col-md-6 payment-box" id="false">
+											<div class="col-md-6 payment-box-2" id="false">
 												<form:input path="noofdaysfromdeliverydate"
 													id="noofdaysfromdeliverydate"
 													value="${partner.noofdaysfromdeliverydate}"
@@ -600,7 +600,7 @@ span .#error {
 																			<h4 class="text-info">Which Ever is Higher</h4>
 																		</div>
 																		<div class="col-sm-6">
-																			<h4>Volume calculation= (lxbxh)(cm)/5</h4>
+																			<h4>Volumetric Weight(lxbxh)(cm)/5</h4>
 																			<table class="table table-bordered">
 																				<thead>
 																					<tr>
@@ -745,7 +745,7 @@ span .#error {
 																			</table>
 																		</div>
 																		<div class="col-sm-6">
-																			<h4>Weight calculation</h4>
+																			<h4>Dead Weight</h4>
 																			<table class="table table-bordered">
 																				<thead>
 																					<tr>
@@ -816,7 +816,7 @@ span .#error {
 																			<h4 class="text-info">Which Ever is Higher</h4>
 																		</div>
 																		<div class="col-sm-6">
-																			<h4>Weight calculation</h4>
+																			<h4>Dead Weight</h4>
 																			<table class="table table-bordered">
 																				<thead>
 																					<tr>
@@ -847,7 +847,7 @@ span .#error {
 																			</table>
 																		</div>
 																		<div class="col-sm-6">
-																			<h4>Volume calculation= (lxbxh)(cm)/5000</h4>
+																			<h4>Volumetric Weight(lxbxh)(cm)/5000</h4>
 																			<table class="table table-bordered">
 																				<thead>
 																					<tr>
@@ -939,17 +939,16 @@ span .#error {
 					<h5>Return Calculator</h5>
 					</div>
 									<div class="ibox-content add-company">
-										<form class="form-horizontal">
-											<div class="panel-body">
+										<div class="panel-body">
 												<div class="panel-group" id="accordion">
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h5 class="panel-title">
 																<a data-toggle="collapse" data-parent="#accordion"
-																	href="#collapseOne">Return Charges</a>
+																	href="#collapseOne" >Return Charges</a>
 															</h5>
 														</div>
-														<div id="collapseOne" class="panel-collapse collapse in">
+														<div id="collapseOne" class="panel-collapse collapse">
 															<div class="panel-body">
 																<h4>Seller Fault</h4>
 																<div class="col-sm-12">
@@ -2197,13 +2196,13 @@ span .#error {
 																		<div class="col-sm-6">
 																			<div class="checkbox i-checks">
 																				<label> Flat Amount </label>
-																				<div id="sub">
+																				<!-- <div id="sub">
 																					<img src="/O2R/seller/img/about.png" alt="about"
 																						style="float: right; position: relative; top: -31px; left: 18px;">
-																				</div>
+																				</div> 
 																				<div id="welcome" style="display: none;">
 																					<p>Lorem ipsum dolor sit amet, consectetur quis</p>
-																				</div>
+																				</div>-->
 																			</div>
 																		</div>
 																		<div class="col-sm-6">
@@ -2388,27 +2387,26 @@ span .#error {
 													<input type="hidden" id="hidnationalList" value='${partner.nrnReturnConfig.nationalList}'/>
 												</div>
 											</div>
-										</form>
+										
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="ibox float-e-margins">
+						<div class="ibox float-e-margins">
 						<div class="ibox-content add-company">
 							<input class="btn btn-primary pull-right" id="submitButton"
 								type="submit" value="Save">
 						</div>
 					</div>
+					</form:form>
+					</div>
+					
 
-				</form:form>
+				
 			<jsp:include page="../globalfooter.jsp"></jsp:include>
 			</div>
 
 		</div>
-		
-	</div>
-
 	
 			
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
@@ -2517,7 +2515,7 @@ span .#error {
 						$('#' + $(this).val()).fadeIn();
 					});
 					$('#paymentField1').change(function() {
-						$('.payment-box').hide();
+						$('.payment-box-2').hide();
 						$('#' + $(this).val()).fadeIn();
 					});
 					$('#data_1 .input-group.date').datepicker({

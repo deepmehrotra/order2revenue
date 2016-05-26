@@ -63,7 +63,7 @@
 			<div class="col-lg-12">
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
-						<h5>Total Events (${eventsList.size()})</h5>
+						<h5>Events (${eventsList.size()})</h5>
 						<div class="ibox-tools">
 							<a href = "javascript:getURI()" onclick="checkOne()"  class="btn btn-primary btn-xs">Create New Duplicate Event</a>
 							<a href="addEvent.html"	class="btn btn-primary btn-xs">Create New Event</a>

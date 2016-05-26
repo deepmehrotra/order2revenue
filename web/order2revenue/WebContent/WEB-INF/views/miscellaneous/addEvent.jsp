@@ -218,9 +218,8 @@ function checkOnBlur()
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-sm-12 radio2 m-b" id="blk-nrCalculatorEvent_variable">
+                          <div class="col-sm-12 radio2 m-b" id="blk-nrCalculatorEvent_variable" style="display:none;">
                             
-								<div class="col-sm-12 radio5" id="nr-switch-sec" style="display: block;">
 												<div class="panel-body">
 												<div class="panel-group" id="accordion">
 													<div class="panel panel-default">
@@ -822,7 +821,7 @@ function checkOnBlur()
 													
 												</div>
 											</div>
-										</div>
+										<!-- </div> -->
 		<!-- -----------------------------id-40----------------------------- -->
                             </div>
                           </div>                          
@@ -857,7 +856,7 @@ function checkOnBlur()
                             </div>
                           </div>
                           <div class="col-sm-12">
-                          <div class="col-sm-12 radio3" id="blk-returnCalculatorEvent_newTerms">
+                          <div class="col-sm-12 radio3" id="blk-returnCalculatorEvent_newTerms" style="display:none;">
                                 <div class="add-company">
 											<div class="panel-body">
 												<div class="panel-group" id="accordion1">
@@ -2645,7 +2644,7 @@ Custom and plugin javascript
             
             
 
- $("#nr-switch").change(function() {
+/*  $("#nr-switch").change(function() {
      if(this.checked) {
              $('.radio5').hide();
              $("#nr-switch-sec").slideDown();
@@ -2655,7 +2654,7 @@ Custom and plugin javascript
    
              $("#nr-switch-sec").slideUp();
   }
-  });
+  }); */
             	
             	
             	
