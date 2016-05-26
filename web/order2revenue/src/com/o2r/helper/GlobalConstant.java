@@ -537,15 +537,19 @@ public class GlobalConstant {
 		private static final long serialVersionUID = 1L;
 
 		{
+			// For Partner Report
 			put("getInvoiceID", "Invoice Id");
+			put("getInvoiceId", "Invoice Id");
+			put("getOrderId", "Order ID/PO No");
 			put("getChannelOrderID", "Order ID/PO No");
+			put("getPartner", "Partner");
 			put("getPcName", "Partner");
 			put("getOrderDate", "Received Date");
 			put("getShippedDate", "Shipped Date");
 			put("getPaymentDueDate", "Expected Date of Payment");
 			put("getDateofPayment", "Actual Date of Payment");
 			put("getReturnDate", "Date of Return/RTO");
-			put("getProductCategory", "Product Category");
+			put("getProductCategory", "Product Category");			
 			put("getGrossSaleQuantity", "Gross Sale Qty");
 			put("getReturnQuantity", "Return/RTO Qty");
 			put("getNetSaleQuantity", "Net Sale Qty");
@@ -575,6 +579,32 @@ public class GlobalConstant {
 			put("getReturnChargesDesciption", "Return Charges Description");
 			put("getTdsToBeDeposited", "TDS to be deducted");
 
+			// For Channel Report
+			put("getCategory", "Product Category");
+			put("getProductSku", "Product SKU");
+			put("getGrossQty", "Gross Qty");
+			put("getGrossNrAmount", "Gross N/R Amount");
+			put("getGrossSpAmount", "Gross SP Amount");
+			put("getSaleRetQty", "Sale Return Qty");
+			put("getSaleRetNrAmount", "Sale Return N/R Amount");
+			put("getSaleRetSpAmount", "Sale Return SP Amount");
+			put("getNetQty", "Net Sale Qty");
+			put("getNetNrAmount", "Net Sale N/R Amount");
+			put("getNetSpAmount", "Net Sale SP Amount");
+			put("getNetPureSaleQty", "Net Pure Sale Qty");
+			put("getNetPureSaleNrAmount", "Net Pure Sale N/R Amount");
+			put("getNetPureSaleSpAmount", "Net Pure Sale AP Amount");
+			put("getSaleRetVsGrossSale", "Sale Return vs Gross Sale");
+			put("getTaxCategory", "Tax Category");
+			put("getNetTaxLiability", "Net Tax Liability");
+			put("getNetAr", "Net A/R");
+			put("getNetToBeReceived", "Net to be Received");
+			put("getProductCost", "Cost of Product");
+			put("getPr", "P/R");
+			put("getNetReturnCharges", "Return Charges");
+			put("getNetPaymentResult", "Net Payment Result");
+			put("getGrossProfit", "Gross Profit");
+			put("getGpVsProductCost", "%GP vs Product Cost");
 		}
 	};
 }

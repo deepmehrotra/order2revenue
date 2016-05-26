@@ -20,6 +20,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.CustomException;
@@ -526,7 +527,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<PartnerReportDetails> getPartnerBusinessReport(Date startDate,
+	public List<PartnerReportDetails> getPartnerReportDetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException {
 		List<PartnerReportDetails> partnerBusinessList = new ArrayList<PartnerReportDetails>();
 		try {
@@ -690,7 +691,151 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		}
 		return partnerBusinessList;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChannelReportDetails> getChannelReportDetails(Date startDate,
+			Date endDate, int sellerId) throws CustomException {
+		
+		log.info("*** getChannelReportDetails Starts : ReportsGeneratorDaoImpl ****");
+		List<ChannelReportDetails> channelReportDetailsList = new ArrayList<ChannelReportDetails>();
+		 
+		 try
+		 {
+			 Session session=sessionFactory.openSession();
+			 session.getTransaction().begin();
+			 
+			 List<Order> orders = fetchOrders(session, sellerId, startDate, endDate);
+			 for (Order currOrder : orders) {
+					boolean isPoOrder = currOrder.isPoOrder();
+					Order consolidateOrder = currOrder.getConsolidatedOrder();
+					ChannelReportDetails channelReport = new ChannelReportDetails();
+					channelReport.setPartner(currOrder.getPcName());
+					channelReport.setOrderId(currOrder.getChannelOrderID());
+					channelReport.setInvoiceId(currOrder.getInvoiceID());
+					channelReport.setShippedDate(currOrder.getShippedDate());
+					channelReport.setProductSku(currOrder.getProductSkuCode());
 
+					double orderPr = currOrder.getPr();
+					double grossProfit = currOrder.getGrossProfit();
+					double grossSaleQty = currOrder.getQuantity();
+					double grossNrAmount = currOrder.getGrossNetRate();
+					double grossSpAmount = currOrder.getOrderSP();
+					double saleRetQty = 0;
+					double saleRetNrAmount = 0;
+					double saleRetSpAmount = 0;
+					channelReport.setGrossProfit(grossProfit);
+					channelReport.setGrossQty(grossSaleQty);
+					channelReport.setGrossNrAmount(grossNrAmount);
+					channelReport.setGrossSpAmount(grossSpAmount);
+
+					OrderRTOorReturn currOrderReturn = currOrder.getOrderReturnOrRTO();
+					if(currOrderReturn != null){
+						channelReport.setNetReturnCharges(currOrderReturn.getReturnOrRTOChargestoBeDeducted());
+						saleRetQty = currOrderReturn.getReturnorrtoQty();
+						// Only for PO Order
+						if(isPoOrder && consolidateOrder!=null){
+							saleRetNrAmount = currOrderReturn.getNetNR();
+						}
+					}
+					if(!isPoOrder)
+						
+					// MP/PO Order conditions
+					if(!isPoOrder){
+						saleRetNrAmount = grossNrAmount*saleRetQty;
+						if(grossSaleQty != 0)
+							saleRetSpAmount = grossSpAmount*(saleRetQty/grossSaleQty);
+						channelReport.setPr(orderPr);
+					} else if(isPoOrder && consolidateOrder!=null){
+						saleRetSpAmount = grossSpAmount;
+						if(grossSaleQty != 0)
+							channelReport.setPr(orderPr * saleRetQty/grossSaleQty);
+					}
+					channelReport.setSaleRetQty(saleRetQty);
+					channelReport.setSaleRetNrAmount(saleRetNrAmount);
+					channelReport.setSaleRetSpAmount(saleRetSpAmount);
+					
+					double saleRetVsGrossSale = 0;
+					if(grossSaleQty != 0)
+						saleRetVsGrossSale = saleRetQty/grossSaleQty*100;
+					double netQty = grossSaleQty - saleRetQty;
+					double netNrAmount = grossNrAmount - saleRetNrAmount;
+					double netSpAmount = grossSpAmount - saleRetSpAmount;
+					channelReport.setSaleRetVsGrossSale(saleRetVsGrossSale);
+					channelReport.setNetQty(netQty);
+					channelReport.setNetNrAmount(netNrAmount);
+					channelReport.setNetSpAmount(netSpAmount);
+					
+					double taxCatPercent = 0;
+					OrderTax currOrderTax = currOrder.getOrderTax();
+					if(currOrderTax != null){
+						String taxCategory = currOrderTax.getTaxCategtory();
+						channelReport.setTaxCategory(taxCategory);
+						if(StringUtils.isNotBlank(taxCategory)){
+							String[] taxCategoryArr = taxCategory.split("@");
+							if(taxCategoryArr.length==2){
+								taxCatPercent = Double.parseDouble(taxCategoryArr[1]);
+							}
+						}
+					}
+					double netTaxLiability = 0;
+					if(taxCatPercent != 0)
+						netTaxLiability = netSpAmount - netSpAmount*(100/(100 + taxCatPercent));
+					channelReport.setNetTaxLiability(netTaxLiability);
+					channelReport.setNetPureSaleQty(netQty);
+					channelReport.setNetPureSaleNrAmount(netNrAmount);
+					channelReport.setNetPureSaleSpAmount(netSpAmount - netTaxLiability);
+					
+					OrderPayment currOrderPayment = currOrder.getOrderPayment();
+					if(currOrderPayment != null){
+						channelReport.setNetToBeReceived(currOrderPayment.getPaymentDifference());
+						double netPaymentResult = currOrderPayment.getNetPaymentResult();
+						channelReport.setNetPaymentResult(netPaymentResult);
+						channelReport.setNetAr(netPaymentResult);
+					}
+					
+					double productCost = 0;
+					double gpVsProductCost = 0;
+					Criteria prodcriteria = session.createCriteria(Product.class);
+					prodcriteria.add(Restrictions.eq("productSkuCode",
+							currOrder.getProductSkuCode()));
+					List<Product> productList = prodcriteria.list();
+					if (productList.size() > 0) {
+						Product currProduct = productList.get(0);
+						if(!isPoOrder){
+							productCost = currProduct.getProductPrice();
+						}
+						channelReport.setCategory(currProduct.getCategoryName());
+					}
+					if(productCost != 0)
+						gpVsProductCost = grossProfit/productCost*100;
+					channelReport.setProductCost(productCost);
+					channelReport.setGpVsProductCost(gpVsProductCost);
+					
+					channelReportDetailsList.add(channelReport);
+			 }
+		 } catch (Exception e) {
+			log.error(e);
+			log.info("Error :", e);
+			throw new CustomException(
+					GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3,
+					GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
+
+		}
+			 
+		return channelReportDetailsList;	 
+	}
+
+	/**
+	 * Generic method to fetch list of Order objects (MP + PO)
+	 * 
+	 * @param session
+	 * @param sellerId
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
 	private List<Order> fetchOrders(Session session, int sellerId, Date startDate, Date endDate) {
 		List<Order> orderList = new ArrayList<>();
 		Criteria criteria = session.createCriteria(Order.class);

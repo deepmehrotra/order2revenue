@@ -3,6 +3,7 @@ package com.o2r.service;
 import java.util.Date;
 import java.util.List;
 
+import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
@@ -21,7 +22,10 @@ public interface ReportGeneratorService {
 	public List<TotalShippedOrder> getAllPartnerTSOdetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException;
 	
-	public List getPartnerBusinessReport(Date startDate,
+	public List<PartnerReportDetails> getPartnerReportDetails(Date startDate,
+			Date endDate, int sellerId) throws CustomException;
+	
+	public List<ChannelReportDetails> getChannelReportDetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException;
 
 	/*public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)

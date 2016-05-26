@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.helper.FillManager;
@@ -108,8 +109,8 @@ public class ReportDownloadService {
 	
 	}
 	
-	public void downloadPartnerReport(HttpServletResponse response , List<PartnerReportDetails> partnerlist, String[] headers,String reportname ,int sellerId) throws ClassNotFoundException {
-		
+	public void downloadPartnerReport(HttpServletResponse response , List<PartnerReportDetails> partnerlist, 
+			String[] headers,String reportname ,int sellerId) throws ClassNotFoundException {	
 		
 		// 1. Create new workbook
 		HSSFWorkbook workbook = new HSSFWorkbook();
@@ -133,6 +134,42 @@ public class ReportDownloadService {
 		switch(reportname){
 			case "partnerBusinessReport": fileName = "Partner_Business_Report.xls";break;
 			case "partnerCommissionReport": fileName = "Partner_Commission_Report.xls";break;
+			default: break;
+		}
+		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
+		// Make sure to set the correct content type
+		response.setContentType("application/vnd.ms-excel");
+		
+		//7. Write to the output stream
+		Writer.write(response, worksheet,fileName);
+	}
+	
+	public void downloadChannelReport(HttpServletResponse response , List<ChannelReportDetails> partnerlist, 
+			String[] headers,String reportName ,int sellerId) throws ClassNotFoundException {	
+		
+		// 1. Create new workbook
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		
+		// 2. Create new worksheet
+		HSSFSheet worksheet = workbook.createSheet(reportName);
+		
+		// 3. Define starting indices for rows and columns
+		int startRowIndex = 0;
+		int startColIndex = 0;
+		
+		// 4. Build layout 
+		// Build title, date, and column headers
+		Layouter.buildOrderReport(worksheet, startRowIndex, startColIndex, reportName, headers);
+
+		// 5. Fill report
+		FillManager.fillChannelReport(worksheet, startRowIndex, startColIndex, partnerlist , headers);
+		
+		// 6. Set the response properties
+		String fileName = "Partner_Report.xls";
+		switch(reportName){
+			case "channelSaleReport": fileName = "Channel_Sale_Report.xls";break;
+			case "categoryWiseSaleReport": fileName = "Category_Wise_Sale_Report.xls";break;
+			case "orderwiseGPReport": fileName = "Orderwise_GP_Report.xls";break;
 			default: break;
 		}
 		response.setHeader("Content-Disposition", "inline; filename=" + fileName);

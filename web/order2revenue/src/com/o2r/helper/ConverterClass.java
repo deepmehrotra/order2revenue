@@ -12,6 +12,7 @@ import com.o2r.bean.BusinessDetails;
 import com.o2r.bean.CategoryBean;
 import com.o2r.bean.CategoryBusinessDetails;
 import com.o2r.bean.CategoryCommissionDetails;
+import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.CustomerBean;
 import com.o2r.bean.EventsBean;
@@ -1708,6 +1709,59 @@ public class ConverterClass {
 		return categoryCommissionGraphList;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List<ChannelReportDetails> transformChannelReport(
+			List<ChannelReportDetails> channelReportDetailsList, String criteria) {
+		Map<String, ChannelReportDetails> categoryReportMap = new HashMap<String, ChannelReportDetails>();
+		for(ChannelReportDetails currChannelReport: channelReportDetailsList){
+			String key = "";
+			switch(criteria){
+				case "partner":key = currChannelReport.getPartner();break;
+				case "category":key = currChannelReport.getCategory();break;
+				default: break;
+			}
+			ChannelReportDetails channelReport = categoryReportMap.get(key);
+			if(channelReport == null){
+				channelReport = currChannelReport;
+			} else{
+				channelReport.setGpVsProductCost(channelReport.getGpVsProductCost() + currChannelReport.getGpVsProductCost());
+				channelReport.setGrossNrAmount(channelReport.getGrossNrAmount() + currChannelReport.getGrossNrAmount());
+				channelReport.setGrossProfit(channelReport.getGrossProfit() + currChannelReport.getGrossProfit());
+				channelReport.setGrossQty(channelReport.getGrossQty() + currChannelReport.getGrossQty());
+				channelReport.setGrossSpAmount(channelReport.getGrossSpAmount() + currChannelReport.getGrossSpAmount());
+				channelReport.setNetAr(channelReport.getNetAr() + currChannelReport.getNetAr());
+				channelReport.setNetNrAmount(channelReport.getNetNrAmount() + currChannelReport.getNetNrAmount());
+				channelReport.setNetPaymentResult(channelReport.getNetPaymentResult() + currChannelReport.getNetPaymentResult());
+				channelReport.setNetPureSaleNrAmount(channelReport.getNetPureSaleNrAmount() + currChannelReport.getNetPureSaleNrAmount());
+				channelReport.setNetPureSaleQty(channelReport.getNetPureSaleQty() + currChannelReport.getNetPureSaleQty());
+				channelReport.setNetPureSaleSpAmount(channelReport.getNetPureSaleSpAmount() + currChannelReport.getNetPureSaleSpAmount());
+				channelReport.setNetQty(channelReport.getNetQty() + currChannelReport.getNetQty());
+				channelReport.setNetReturnCharges(channelReport.getNetReturnCharges() + currChannelReport.getNetReturnCharges());
+				channelReport.setNetSpAmount(channelReport.getNetSpAmount() + currChannelReport.getNetSpAmount());
+				channelReport.setNetTaxLiability(channelReport.getNetTaxLiability() + currChannelReport.getNetTaxLiability());
+				channelReport.setNetToBeReceived(channelReport.getNetToBeReceived() + currChannelReport.getNetToBeReceived());
+				channelReport.setPr(channelReport.getPr() + currChannelReport.getPr());
+				channelReport.setProductCost(channelReport.getProductCost() + currChannelReport.getProductCost());
+				channelReport.setSaleRetNrAmount(channelReport.getSaleRetNrAmount() + currChannelReport.getSaleRetNrAmount());
+				channelReport.setSaleRetQty(channelReport.getSaleRetQty() + currChannelReport.getSaleRetQty());
+				channelReport.setSaleRetSpAmount(channelReport.getSaleRetSpAmount() + currChannelReport.getSaleRetSpAmount());
+				channelReport.setSaleRetVsGrossSale(channelReport.getSaleRetVsGrossSale() + currChannelReport.getSaleRetVsGrossSale());
+			}
+			categoryReportMap.put(key, channelReport);
+		}
+		
+		List<ChannelReportDetails> categoryReportList = new ArrayList<ChannelReportDetails>();
+		Iterator entries = categoryReportMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, ChannelReportDetails> thisEntry = (Entry<String, ChannelReportDetails>) entries
+					.next();
+			ChannelReportDetails value = thisEntry.getValue();
+			categoryReportList.add(value);
+		}
+		
+		return categoryReportList;
+	}
+	
 	/**
 	 * Merge BusinessGraph objects after 5th Iteration
 	 * 
@@ -1880,5 +1934,77 @@ public class ConverterClass {
 		else
 			newCommissionGraphList.add(catConsolidated);
 		return newCommissionGraphList;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List getChannelSortedList(
+			List<ChannelReportDetails> channelGraphList, String criteria) {
+		int maxLength = 5;
+		if(channelGraphList.size()<=maxLength)
+			return channelGraphList;
+		List<ChannelReportDetails> newChannelReportList = new ArrayList<>();
+		int index = 1;
+		boolean initialize = false;
+		ChannelReportDetails consolidated = new ChannelReportDetails();
+		for(ChannelReportDetails channelGraph: channelGraphList){
+			if(index++ >= 5){
+				if(!initialize){
+					initialize = true;
+					consolidated.setGrossProfit(channelGraph.getGrossProfit());
+					consolidated.setGpVsProductCost(channelGraph.getGpVsProductCost());
+					consolidated.setPr(channelGraph.getPr());
+					consolidated.setProductCost(channelGraph.getProductCost());
+					consolidated.setNetNrAmount(channelGraph.getNetNrAmount());
+					consolidated.setGrossSpAmount(channelGraph.getGrossSpAmount());
+					consolidated.setSaleRetSpAmount(channelGraph.getSaleRetSpAmount());
+					consolidated.setNetSpAmount(channelGraph.getNetSpAmount());
+					consolidated.setNetAr(channelGraph.getNetAr());
+					consolidated.setNetToBeReceived(channelGraph.getNetToBeReceived());
+					consolidated.setGrossQty(channelGraph.getGrossQty());
+					consolidated.setSaleRetQty(channelGraph.getSaleRetQty());
+					consolidated.setCategory("Others");
+					consolidated.setPartner("Others");
+				} else{
+					switch(criteria){
+						case "NetSaleSP":
+							consolidated.setNetSpAmount(consolidated.getNetSpAmount() + channelGraph.getNetSpAmount());
+							consolidated.setNetNrAmount(consolidated.getNetNrAmount() + channelGraph.getNetNrAmount());
+							consolidated.setNetAr(consolidated.getNetAr() + channelGraph.getNetAr());
+							break;
+						case "NetAR":
+							consolidated.setNetToBeReceived(consolidated.getNetToBeReceived() + channelGraph.getNetToBeReceived());
+							consolidated.setNetAr(consolidated.getNetAr() + channelGraph.getNetAr());
+							break;
+						case "GSvSR":
+							consolidated.setGrossQty(consolidated.getGrossQty() + channelGraph.getGrossQty());
+							consolidated.setSaleRetQty(consolidated.getSaleRetQty() + channelGraph.getSaleRetQty());
+							break;
+						case "GSAvRA":
+							consolidated.setGrossSpAmount(consolidated.getGrossSpAmount() + channelGraph.getGrossSpAmount());
+							consolidated.setSaleRetSpAmount(consolidated.getSaleRetSpAmount() + channelGraph.getSaleRetSpAmount());
+							break;
+						case "GrossProfit":
+							consolidated.setGrossProfit(consolidated.getGrossProfit() + channelGraph.getGrossProfit());
+							break;
+						case "GPCP": 
+							consolidated.setGpVsProductCost(consolidated.getGpVsProductCost() + channelGraph.getGpVsProductCost());
+							break;
+						case "PR": 
+							consolidated.setPr(consolidated.getPr() + channelGraph.getPr());
+							consolidated.setProductCost(consolidated.getProductCost() + channelGraph.getProductCost());
+							break;
+						case "NR": 
+							consolidated.setGrossProfit(consolidated.getGrossProfit() + channelGraph.getGrossProfit());
+							consolidated.setNetNrAmount(consolidated.getNetNrAmount() + channelGraph.getNetNrAmount());
+							break;
+						default: break;
+					}
+				}
+			} else{
+				newChannelReportList.add(channelGraph);
+			}
+		}
+		newChannelReportList.add(consolidated);
+		return newChannelReportList;
 	}
 }

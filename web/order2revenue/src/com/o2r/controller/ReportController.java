@@ -22,11 +22,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.o2r.bean.BusinessDetails;
 import com.o2r.bean.CategoryBusinessDetails;
 import com.o2r.bean.CategoryCommissionDetails;
+import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionDetails;
-import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.PartnerBusinessDetails;
 import com.o2r.bean.PartnerCommissionDetails;
+import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
@@ -119,7 +120,7 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			int sellerId = helperClass.getSellerIdfromSession(request);
 
 			List<PartnerReportDetails> partnerBusinessList = reportGeneratorService
-					.getPartnerBusinessReport(startDate, endDate, sellerId);
+					.getPartnerReportDetails(startDate, endDate, sellerId);
 			if ("partnerBusinessReport".equalsIgnoreCase(reportName)) {
 				List<PartnerBusinessDetails> partnerBusinessGraphList = ConverterClass
 						.transformPartnerBusinessGraph(partnerBusinessList);
@@ -269,7 +270,6 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 {
 		log.info("$$$ getChannelReport Starts : ReportController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		List<ChannelSalesDetails> ttso = new ArrayList<>();
 		String reportName=null;
 		Date startDate;
 		Date endDate;
@@ -279,22 +279,57 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			reportName = request.getParameter("reportName");
 			startDate = new Date(request.getParameter("startdate"));
 			endDate = new Date(request.getParameter("enddate"));
-			if (reportName.equals("categoryWiseSaleReport"))
-				ttso = reportGeneratorService.getCategorySalesDetails(
-						startDate, endDate,
-						helperClass.getSellerIdfromSession(request));
-			else if (reportName.equals("paymentsReceievedReport"))
-				ttso = reportGeneratorService.getPaymentsReceievedDetails(
-						startDate, endDate,
-						helperClass.getSellerIdfromSession(request));
-			else if (reportName.equals("orderwiseGPReport"))
-				ttso = reportGeneratorService.getOrderwiseGPDetails(startDate,
-						endDate, helperClass.getSellerIdfromSession(request));
-			else
-				ttso = reportGeneratorService.getChannelSalesDetails(startDate,
-						endDate, helperClass.getSellerIdfromSession(request));
-
-			model.put("ttsolist", ttso);
+			int sellerId = helperClass.getSellerIdfromSession(request);
+			
+			List<ChannelReportDetails> channelReportDetailsList =  reportGeneratorService.getChannelReportDetails(startDate, endDate, sellerId);
+			List<ChannelReportDetails> partnerList = ConverterClass.transformChannelReport(channelReportDetailsList, "partner");
+			model.put("shortTablePartner", partnerList);
+			List<ChannelReportDetails> categoryList = ConverterClass.transformChannelReport(channelReportDetailsList, "category");
+			model.put("shortTableCategory", categoryList);
+			
+			switch(reportName){
+				case "channelSaleReport":
+					Collections.sort(partnerList, new ChannelReportDetails.OrderByNetSaleSP());
+					model.put("partnerByNetSaleSP", ConverterClass.getChannelSortedList(partnerList, "NetSaleSP"));
+					Collections.sort(partnerList, new ChannelReportDetails.OrderByNetAR());
+					model.put("partnerByNetAR", ConverterClass.getChannelSortedList(partnerList, "NetAR"));
+					Collections.sort(partnerList, new ChannelReportDetails.OrderByGSvSR());
+					model.put("partnerByGSvSR", ConverterClass.getChannelSortedList(partnerList, "GSvSR"));
+					Collections.sort(partnerList, new ChannelReportDetails.OrderByGSAvRA());
+					model.put("partnerByGSAvRA", ConverterClass.getChannelSortedList(partnerList, "GSAvRA"));
+					break;
+				case "categoryWiseSaleReport":
+					Collections.sort(categoryList, new ChannelReportDetails.OrderByNetSaleSP());
+					model.put("categoryByNetSaleSP", ConverterClass.getChannelSortedList(categoryList, "NetSaleSP"));
+					Collections.sort(categoryList, new ChannelReportDetails.OrderByNetAR());
+					model.put("categoryByNetAR", ConverterClass.getChannelSortedList(categoryList, "NetAR"));
+					Collections.sort(categoryList, new ChannelReportDetails.OrderByGSvSR());
+					model.put("categoryByGSvSR", ConverterClass.getChannelSortedList(categoryList, "GSvSR"));
+					Collections.sort(categoryList, new ChannelReportDetails.OrderByGSAvRA());
+					model.put("categoryByGSAvRA", ConverterClass.getChannelSortedList(categoryList, "GSAvRA"));
+					break;
+				case "orderwiseGPReport": 
+					Collections.sort(partnerList, new ChannelReportDetails.OrderByGrossProfit());
+					model.put("partnerByGrossProfit", ConverterClass.getChannelSortedList(partnerList, "GrossProfit"));
+					Collections.sort(partnerList, new ChannelReportDetails.OrderByGPCP());
+					model.put("partnerByGPCP", ConverterClass.getChannelSortedList(partnerList, "GPCP"));
+					Collections.sort(partnerList, new ChannelReportDetails.OrderByNR());
+					model.put("partnerByPR", ConverterClass.getChannelSortedList(partnerList, "PR"));
+					Collections.sort(partnerList, new ChannelReportDetails.OrderByNR());
+					model.put("partnerByNR", ConverterClass.getChannelSortedList(partnerList, "NR"));
+					Collections.sort(categoryList, new ChannelReportDetails.OrderByGrossProfit());
+					model.put("categoryByGrossProfit", ConverterClass.getChannelSortedList(categoryList, "GrossProfit"));
+					Collections.sort(categoryList, new ChannelReportDetails.OrderByGPCP());
+					model.put("categoryByGPCP", ConverterClass.getChannelSortedList(categoryList, "GPCP"));
+					Collections.sort(categoryList, new ChannelReportDetails.OrderByNR());
+					model.put("categoryByPR", ConverterClass.getChannelSortedList(categoryList, "PR"));
+					Collections.sort(categoryList, new ChannelReportDetails.OrderByNR());
+					model.put("categoryByNR", ConverterClass.getChannelSortedList(categoryList, "NR"));
+					break; 
+				default: break;
+			}
+			
+			model.put("channelReportDetails", channelReportDetailsList);
 			model.put("period", dateFormat.format(startDate) + " to "
 					+ dateFormat.format(endDate));
 			
@@ -334,11 +369,48 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			int sellerId = helperClass.getSellerIdfromSession(request);
 
 			List<PartnerReportDetails> partnerBusinessList = reportGeneratorService
-					.getPartnerBusinessReport(startDate, endDate, sellerId);
+					.getPartnerReportDetails(startDate, endDate, sellerId);
 			Collections.sort(partnerBusinessList,
 					new PartnerReportDetails.OrderByShippedDate());
 			reportDownloadService.downloadPartnerReport(response,
 					partnerBusinessList, reportheaders, reportName, sellerId);
+		} catch (ClassNotFoundException e) {
+			System.out.println(" Class castexception in download report");
+			e.printStackTrace();
+			log.error(e);
+		} catch (CustomException ce) {
+			ce.printStackTrace();
+			log.error("downloadReport exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+		}
+		log.info("$$$ downloadreport Ends : ReportController $$$");
+	}
+	
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	@RequestMapping(value = "/seller/downloadChannelReport", method = RequestMethod.POST)
+	public void downloadChannelReport(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		log.info("$$$ downloadPartnerReport Starts : ReportController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			String reportName = request.getParameter("reportName");
+			Date startDate = new Date(request.getParameter("startdate"));
+			Date endDate = new Date(request.getParameter("enddate"));
+			String[] reportheaders = request.getParameterValues("headers");
+			int sellerId = helperClass.getSellerIdfromSession(request);
+
+			List<ChannelReportDetails> channelReportList = reportGeneratorService
+					.getChannelReportDetails(startDate, endDate, sellerId);
+			Collections.sort(channelReportList,
+					new ChannelReportDetails.OrderByShippedDate());
+			reportDownloadService.downloadChannelReport(response,
+					channelReportList, reportheaders, reportName, sellerId);
 		} catch (ClassNotFoundException e) {
 			System.out.println(" Class castexception in download report");
 			e.printStackTrace();

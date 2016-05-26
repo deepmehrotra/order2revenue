@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
@@ -101,9 +102,16 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public List getPartnerBusinessReport(Date startDate,
+	public List<PartnerReportDetails> getPartnerReportDetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException {
-		return reportGeneratorDao.getPartnerBusinessReport(startDate, endDate,
+		return reportGeneratorDao.getPartnerReportDetails(startDate, endDate,
+				sellerId);
+	}
+
+	@Override
+	public List<ChannelReportDetails> getChannelReportDetails(Date startDate,
+			Date endDate, int sellerId) throws CustomException {
+		return reportGeneratorDao.getChannelReportDetails(startDate, endDate,
 				sellerId);
 	}
 
