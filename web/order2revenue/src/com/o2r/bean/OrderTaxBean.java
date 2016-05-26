@@ -17,7 +17,7 @@ public class OrderTaxBean {
 	private String taxCategtory;
 	private double taxRate;
 	private double tax;
-	private double toxToReturn;
+	private double taxToReturn;
 	private double netTax;
 	private int sellerId;
 	
@@ -95,11 +95,11 @@ public class OrderTaxBean {
 	public void setTax(double tax) {
 		this.tax = tax;
 	}
-	public double getToxToReturn() {
-		return toxToReturn;
+	public double getTaxToReturn() {
+		return taxToReturn;
 	}
-	public void setToxToReturn(double toxToReturn) {
-		this.toxToReturn = toxToReturn;
+	public void setTaxToReturn(double taxToReturn) {
+		this.taxToReturn = taxToReturn;
 	}
 	public double getNetTax() {
 		return netTax;

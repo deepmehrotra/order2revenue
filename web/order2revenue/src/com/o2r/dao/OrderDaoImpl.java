@@ -449,7 +449,10 @@ public class OrderDaoImpl implements OrderDao {
 							* order.getQuantity());
 					order.setPoPrice(order.getPoPrice() * order.getQuantity());
 
-					order.setDiscount(order.getProductConfig().getDiscount());
+					order.setPartnerCommission(order.getProductConfig().getCommisionAmt()
+							* order.getQuantity());
+					order.setDiscount(((order.getPoPrice() *order
+							.getProductConfig().getDiscount()) / 100) * order.getQuantity());
 
 					// order.setTotalAmountRecieved(order.getNetRate());
 					order.setFinalStatus("In Process");
@@ -477,7 +480,10 @@ public class OrderDaoImpl implements OrderDao {
 					order.setEossValue(order.getEossValue()
 							* order.getQuantity());
 					order.getOrderTax().setTax(taxvalue * order.getQuantity());
-
+					
+					order.getOrderTax().setTaxToReturn(order.getProductConfig().getTaxSpAmt()
+							* order.getQuantity());
+					
 					if (order.getOrderId() != 0) {
 						System.out.println(" Saving edited order");
 						// Code for order timeline
@@ -951,7 +957,7 @@ public class OrderDaoImpl implements OrderDao {
 				taxDetailService.addMonthlyTDSDetail(session, tdsDetails,
 						sellerId);
 
-				order.getOrderTax().setToxToReturn(
+				order.getOrderTax().setTaxToReturn(
 						(order.getOrderTax().getTax() / order.getQuantity())
 								* orderReturn.getReturnorrtoQty());
 				order.getOrderTax().setTdsToReturn(
@@ -3216,6 +3222,9 @@ public class OrderDaoImpl implements OrderDao {
 		double grossPR = 0;
 		double grossProfit = 0;
 		double poPrice = 0;
+		double discount = 0;
+		double taxSP = 0;
+		double partnerCommission = 0;
 
 		Order consolidatedOrder = new Order();
 		consolidatedOrder.setPoOrder(true);
@@ -3255,6 +3264,9 @@ public class OrderDaoImpl implements OrderDao {
 				taxValue += order.getOrderTax().getTax();
 				grossPR += order.getPr();
 				grossProfit += order.getGrossProfit();
+				discount += order.getDiscount();
+				taxSP += order.getOrderTax().getTaxToReturn();
+				partnerCommission += order.getPartnerCommission();
 			}
 
 			if (seller.getPartners() != null
@@ -3277,6 +3289,11 @@ public class OrderDaoImpl implements OrderDao {
 
 			consolidatedOrder.setTotalAmountRecieved(consolidatedOrder
 					.getNetRate());
+			
+			consolidatedOrder.setPartnerCommission(partnerCommission);
+			consolidatedOrder.setDiscount(discount);
+			consolidatedOrder.getOrderTax().setTaxToReturn(taxSP);
+			
 			consolidatedOrder.setFinalStatus("In Process");
 			// Set Order Timeline
 			OrderTimeline timeline = new OrderTimeline();
@@ -3522,6 +3539,9 @@ public class OrderDaoImpl implements OrderDao {
 		double taxValue = 0;
 		double grossPR = 0;
 		double grossProfit = 0;
+		double discount = 0;
+		double taxSP = 0;
+		double partnerCommission = 0;
 
 		OrderRTOorReturn consolidateReturn = new OrderRTOorReturn();
 		Order consolidatedOrder = new Order();
@@ -3571,6 +3591,11 @@ public class OrderDaoImpl implements OrderDao {
 					taxValue += (gatepass.getTaxAmt() * gatepass.getQuantity());
 					grossPR += gatepass.getNetPR();
 					grossProfit += gatepass.getGrossProfit();
+					partnerCommission += productConfig.getCommisionAmt()
+							* gatepass.getQuantity();
+					discount += ((productConfig.getSuggestedPOPrice() *
+							productConfig.getDiscount()) / 100) * gatepass.getQuantity();
+					taxSP += productConfig.getTaxSpAmt() * gatepass.getQuantity();
 				}
 			}
 
@@ -3599,6 +3624,9 @@ public class OrderDaoImpl implements OrderDao {
 
 			consolidatedOrder.setTotalAmountRecieved(consolidatedOrder
 					.getNetRate());
+			consolidatedOrder.setPartnerCommission(partnerCommission);
+			consolidatedOrder.setDiscount(discount);
+			consolidatedOrder.getOrderTax().setTaxToReturn(taxSP);
 			consolidatedOrder.setFinalStatus("In Process");
 			// Set Order Timeline
 			OrderTimeline timeline = new OrderTimeline();
