@@ -589,6 +589,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		OrderPayment currOrderPayment = currOrder.getOrderPayment();
 		OrderTax currOrderTax = currOrder.getOrderTax();
 		int quantity = currOrder.getQuantity();
+		partnerBusiness.setDeliveryDate(currOrder.getDeliveryDate());
 		partnerBusiness.setAwb(currOrder.getAwbNum());
 		partnerBusiness.setPiRefNumber(currOrder.getPIreferenceNo());
 		partnerBusiness.setSubOrderId(currOrder.getSubOrderID());
@@ -641,6 +642,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		double netReturnCharges = 0;
 		double returnSP = 0;
 		double orderSP = currOrder.getOrderSP();
+		double netRate = currOrder.getNetRate();
+		double grossReturnChargesReversed = 0; 
 		if (currOrderReturnOrRTO != null) {
 			Date returnDate = currOrderReturnOrRTO.getReturnDate();
 			boolean dateCriteria = returnDate!=null;
@@ -673,6 +676,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				partnerBusiness.setReturnChargesDesciption(builder.toString());
 			}
 		}
+		if(quantity > 0)
+			grossReturnChargesReversed = netRate/quantity*returnQty;
+		partnerBusiness.setGrossReturnChargesReversed(grossReturnChargesReversed);
+		partnerBusiness.setTotalReturnCharges(grossReturnChargesReversed + netReturnCharges);
 		partnerBusiness.setOrderSP(orderSP);
 		partnerBusiness.setReturnSP(returnSP);
 		partnerBusiness.setNetSP(orderSP - returnSP);

@@ -69,13 +69,10 @@ public class Layouter {
 	public static void buildOrderReport(HSSFSheet worksheet, int startRowIndex,
 			int startColIndex, String sheetName, String[] headers) {
 		// Set column widths
-		worksheet.setColumnWidth(0, 5000);
-		worksheet.setColumnWidth(1, 5000);
-		worksheet.setColumnWidth(2, 5000);
-		worksheet.setColumnWidth(3, 5000);
-		worksheet.setColumnWidth(4, 5000);
-		worksheet.setColumnWidth(5, 5000);
-
+		int index = 0;
+		for(String header: headers){
+			worksheet.setColumnWidth(index++, 5000);
+		}
 		// Build the title and date headers
 		buildTitle(worksheet, startRowIndex, startColIndex, sheetName);
 		// Build the column headers

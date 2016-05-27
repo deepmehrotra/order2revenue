@@ -134,6 +134,7 @@ public class ReportDownloadService {
 		switch(reportname){
 			case "partnerBusinessReport": fileName = "Partner_Business_Report.xls";break;
 			case "partnerCommissionReport": fileName = "Partner_Commission_Report.xls";break;
+			case "debtorsReport": fileName = "Debtors_Report.xls";break;
 			default: break;
 		}
 		response.setHeader("Content-Disposition", "inline; filename=" + fileName);

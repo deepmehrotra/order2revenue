@@ -14,6 +14,7 @@ public class PartnerReportDetails {
 	private String pcName;
 	private Date orderDate;
 	private Date shippedDate;
+	private Date deliveryDate;
 	private Date paymentDueDate;
 	private Date dateofPayment;
 	private Date returnDate;
@@ -40,6 +41,8 @@ public class PartnerReportDetails {
 	private double grossNetRate;
 
 	private double netReturnCharges;
+	private double grossReturnChargesReversed;
+	private double totalReturnCharges;
 	private double netPaymentResult;
 
 	private double paymentDifference;
@@ -152,6 +155,14 @@ public class PartnerReportDetails {
 
 	public void setShippedDate(Date shippedDate) {
 		this.shippedDate = shippedDate;
+	}
+
+	public Date getDeliveryDate() {
+		return deliveryDate;
+	}
+
+	public void setDeliveryDate(Date deliveryDate) {
+		this.deliveryDate = deliveryDate;
 	}
 
 	public Date getPaymentDueDate() {
@@ -304,6 +315,22 @@ public class PartnerReportDetails {
 
 	public void setNetReturnCharges(double netReturnCharges) {
 		this.netReturnCharges = netReturnCharges;
+	}
+
+	public double getGrossReturnChargesReversed() {
+		return grossReturnChargesReversed;
+	}
+
+	public void setGrossReturnChargesReversed(double grossReturnChargesReversed) {
+		this.grossReturnChargesReversed = grossReturnChargesReversed;
+	}
+
+	public double getTotalReturnCharges() {
+		return totalReturnCharges;
+	}
+
+	public void setTotalReturnCharges(double totalReturnCharges) {
+		this.totalReturnCharges = totalReturnCharges;
 	}
 
 	public double getNetPaymentResult() {

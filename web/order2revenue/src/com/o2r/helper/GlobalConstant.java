@@ -553,7 +553,7 @@ public class GlobalConstant {
 			put("getGrossSaleQuantity", "Gross Sale Qty");
 			put("getReturnQuantity", "Return/RTO Qty");
 			put("getNetSaleQuantity", "Net Sale Qty");
-			put("getOrderSP", "Total SP");
+			put("getOrderSP", "Gross SP");
 			put("getNetRate", "Net N/R");
 			put("getNetReturnCharges", "Net Return Charges");
 			put("getNetPaymentResult", "Net Payment Result");
@@ -605,6 +605,25 @@ public class GlobalConstant {
 			put("getNetPaymentResult", "Net Payment Result");
 			put("getGrossProfit", "Gross Profit");
 			put("getGpVsProductCost", "%GP vs Product Cost");
+			
+			// For Debtors Report
+			put("getAwb", "AWB");
+			put("getSubOrderId", "Sub Order Id");
+			put("getPiRefNumber", "PI Reference No");
+			put("getLogisticPartner", "Logistic Partner");
+			put("getDeliveryDate", "Expected Date of Delivery");
+			put("getCustomerName", "Customer Name");
+			put("getCustomerEmail", "Customer Email");
+			put("getCustomerPhone", "Customer Phone");
+			put("getCustomerZip", "Customer Zip Code");
+			put("getCustomerCity", "Customer City");
+			put("getReturnSP", "Return SP");
+			put("getNetSP", "Net SP");
+			put("getGrossReturnChargesReversed", "Gross Return Charges Reversed");
+			put("getTotalReturnCharges", "Total Return Charges");
+			put("getGrossTds", "Total Gross TDS");
+			put("getReturnTds", "Total Return TDS");
+			
 		}
 	};
 }
