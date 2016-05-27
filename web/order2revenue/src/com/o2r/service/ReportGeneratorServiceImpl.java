@@ -107,6 +107,14 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 		return reportGeneratorDao.getPartnerReportDetails(startDate, endDate,
 				sellerId);
 	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public List<PartnerReportDetails> getDebtorsReportDetails(Date startDate,
+			Date endDate, int sellerId) throws CustomException {
+		return reportGeneratorDao.getDebtorsReportDetails(startDate, endDate,
+				sellerId);
+	}
 
 	@Override
 	public List<ChannelReportDetails> getChannelReportDetails(Date startDate,

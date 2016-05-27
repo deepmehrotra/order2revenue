@@ -187,7 +187,8 @@ var ProductRelatedReport = [
                   {display: "Settled Orders", value: "productSaleReport" }];                  
 var PartnerRelated = [
                   {display: "Partner Commission Paid Report", value: "partnerCommissionReport" }, 
-                  {display: "Partner Business Report", value: "partnerBusinessReport" }];                  
+                  {display: "Partner Business Report", value: "partnerBusinessReport" },
+                  {display: "Debtors Report", value: "debtorsReport" }];                  
 var ExpenseReports = [
                   {display: "Expenditure Report", value: "expenditureReport" }
                   ];

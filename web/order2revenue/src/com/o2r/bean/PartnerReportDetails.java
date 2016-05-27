@@ -6,6 +6,10 @@ import java.util.Date;
 public class PartnerReportDetails {
 	private int orderId;
 	private String invoiceID;
+	private String awb;
+	private String subOrderId;
+	private String piRefNumber;
+	private String logisticPartner;
 	private String channelOrderID;
 	private String pcName;
 	private Date orderDate;
@@ -15,7 +19,13 @@ public class PartnerReportDetails {
 	private Date returnDate;
 
 	private String returnId;
-
+	
+	private String customerName;
+	private String customerEmail;
+	private String customerPhone;
+	private String customerZip;
+	private String customerCity;
+	
 	private String productCategory;
 	private double productPrice;
 
@@ -24,6 +34,8 @@ public class PartnerReportDetails {
 	private int netSaleQuantity;
 
 	private double orderSP;
+	private double returnSP;
+	private double netSP;
 	private double netRate;
 	private double grossNetRate;
 
@@ -49,6 +61,8 @@ public class PartnerReportDetails {
 
 	private double tdsToBeDeducted10;
 	private double tdsToBeDeducted2;
+	private double grossTds;
+	private double returnTds;
 	private double tdsToBeDeposited;
 	private double netTaxToBePaid;
 	private double netEossValue;
@@ -74,6 +88,38 @@ public class PartnerReportDetails {
 
 	public void setInvoiceID(String invoiceID) {
 		this.invoiceID = invoiceID;
+	}
+
+	public String getAwb() {
+		return awb;
+	}
+
+	public void setAwb(String awb) {
+		this.awb = awb;
+	}
+
+	public String getSubOrderId() {
+		return subOrderId;
+	}
+
+	public void setSubOrderId(String subOrderId) {
+		this.subOrderId = subOrderId;
+	}
+
+	public String getPiRefNumber() {
+		return piRefNumber;
+	}
+
+	public void setPiRefNumber(String piRefNumber) {
+		this.piRefNumber = piRefNumber;
+	}
+
+	public String getLogisticPartner() {
+		return logisticPartner;
+	}
+
+	public void setLogisticPartner(String logisticPartner) {
+		this.logisticPartner = logisticPartner;
 	}
 
 	public String getChannelOrderID() {
@@ -140,6 +186,46 @@ public class PartnerReportDetails {
 		this.returnId = returnId;
 	}
 
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public String getCustomerEmail() {
+		return customerEmail;
+	}
+
+	public void setCustomerEmail(String customerEmail) {
+		this.customerEmail = customerEmail;
+	}
+
+	public String getCustomerPhone() {
+		return customerPhone;
+	}
+
+	public void setCustomerPhone(String customerPhone) {
+		this.customerPhone = customerPhone;
+	}
+
+	public String getCustomerZip() {
+		return customerZip;
+	}
+
+	public void setCustomerZip(String customerZip) {
+		this.customerZip = customerZip;
+	}
+
+	public String getCustomerCity() {
+		return customerCity;
+	}
+
+	public void setCustomerCity(String customerCity) {
+		this.customerCity = customerCity;
+	}
+
 	public String getProductCategory() {
 		return productCategory;
 	}
@@ -178,6 +264,22 @@ public class PartnerReportDetails {
 
 	public void setOrderSP(double orderSP) {
 		this.orderSP = orderSP;
+	}
+
+	public double getReturnSP() {
+		return returnSP;
+	}
+
+	public void setReturnSP(double returnSP) {
+		this.returnSP = returnSP;
+	}
+
+	public double getNetSP() {
+		return netSP;
+	}
+
+	public void setNetSP(double netSP) {
+		this.netSP = netSP;
 	}
 
 	public double getNetRate() {
@@ -322,6 +424,22 @@ public class PartnerReportDetails {
 
 	public void setTdsToBeDeducted2(double tdsToBeDeducted2) {
 		this.tdsToBeDeducted2 = tdsToBeDeducted2;
+	}
+
+	public double getGrossTds() {
+		return grossTds;
+	}
+
+	public void setGrossTds(double grossTds) {
+		this.grossTds = grossTds;
+	}
+
+	public double getReturnTds() {
+		return returnTds;
+	}
+
+	public void setReturnTds(double returnTds) {
+		this.returnTds = returnTds;
 	}
 
 	public double getTdsToBeDeposited() {

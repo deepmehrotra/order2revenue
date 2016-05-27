@@ -44,4 +44,7 @@ public interface ReportGeneratorService {
 
 	public List<ChannelSalesDetails> getOrderwiseGPDetails(Date startDate,Date endDate, int sellerIdfromSession)  throws CustomException;
 
+	List<PartnerReportDetails> getDebtorsReportDetails(Date startDate,
+			Date endDate, int sellerId) throws CustomException;
+
 }

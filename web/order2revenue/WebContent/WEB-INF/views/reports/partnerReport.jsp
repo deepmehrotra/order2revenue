@@ -33,44 +33,27 @@
                         class="form-horizontal" name="selectReportForm">
 
                         <input type="hidden" name="reportName" id="reportName" value="${reportName}"/>
-
-                        <div class="col-sm-12 mar-btm-20-oh">
-
-                             <div class="form-group">
-
-                             <label class="col-sm-4 control-label label-text-mrg">Select Period</label>
-
-                                    <div class="col-sm-8">
-
-                                        <div class="row">
-
-                                            <div class="col-md-4" id="data_1">
-
-                                            <div class="input-group date">
-
-                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" name="startdate" class="form-control" value="Start Date">
-
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-md-4" id="data_2">
-
-                                            <div class="input-group date">
-
-                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input  type="text" name="enddate" class="form-control" value="End Date">
-
-                                            </div>
-
-                                        </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                        </div>
+						<c:if test="${reportName ne 'debtorsReport'}">
+	                        <div class="col-sm-12 mar-btm-20-oh">
+	                             <div class="form-group">
+	                             	<label class="col-sm-4 control-label label-text-mrg">Select Period</label>
+	                                <div class="col-sm-8">
+	                                    <div class="row">
+	                                        <div class="col-md-4" id="data_1">
+	                                        <div class="input-group date">
+	                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" name="startdate" class="form-control" value="Start Date">
+	                                        </div>
+	                                    </div>
+	                                    <div class="col-md-4" id="data_2">
+	                                        <div class="input-group date">
+	                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input  type="text" name="enddate" class="form-control" value="End Date">
+	                                        </div>
+	                                    </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+                        </c:if>
 
           
 

@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -100,7 +101,8 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			return new ModelAndView("reports/channelSaleReport", model);
 		else if(reportName.equals("paymentsReceievedReport" )|| reportName.equals("orderwiseGPReport"))
 			return new ModelAndView("reports/channelSaleReport", model);
-		else if(reportName.equals("partnerBusinessReport") || reportName.equals("partnerCommissionReport"))
+		else if(reportName.equals("partnerBusinessReport") || reportName.equals("partnerCommissionReport")
+				 || reportName.equals("debtorsReport"))
 			return new ModelAndView("reports/partnerReport", model);
 		else
 			return new ModelAndView("reports/filterReports", model);
@@ -110,15 +112,29 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 	@RequestMapping(value = "/seller/getPartnerReport", method = RequestMethod.POST)
 	public ModelAndView getPartnerReport(HttpServletRequest request)
 			throws Exception {
-		log.info("$$$ getReport Starts : ReportController $$$");
+		log.info("$$$ getPartnerReport Starts : ReportController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		try {
 			String reportName = request.getParameter("reportName");
-			Date startDate = new Date(request.getParameter("startdate"));
-			Date endDate = new Date(request.getParameter("enddate"));
+			String startDateStr = request.getParameter("startdate");
+			String endDateStr = request.getParameter("enddate");
+			Date startDate = null;
+			if(StringUtils.isNotBlank(startDateStr))
+				startDate = new Date(startDateStr);
+			Date endDate = null;
+			if(StringUtils.isNotBlank(endDateStr))
+				endDate = new Date(endDateStr);
 			int sellerId = helperClass.getSellerIdfromSession(request);
-
+			
+			List<PartnerReportDetails> debtorsList = reportGeneratorService
+					.getDebtorsReportDetails(startDate, endDate, sellerId);
+			if ("debtorsReport".equalsIgnoreCase(reportName)) {
+				Collections.sort(debtorsList,
+						new PartnerReportDetails.OrderByShippedDate());
+				model.put("shortTablePartner", debtorsList);
+				return new ModelAndView("reports/viewDebtorsGraphReport", model);
+			}
 			List<PartnerReportDetails> partnerBusinessList = reportGeneratorService
 					.getPartnerReportDetails(startDate, endDate, sellerId);
 			if ("partnerBusinessReport".equalsIgnoreCase(reportName)) {
@@ -363,13 +379,25 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			String reportName = request.getParameter("reportName");
-			Date startDate = new Date(request.getParameter("startdate"));
-			Date endDate = new Date(request.getParameter("enddate"));
+			String startDateStr = request.getParameter("startdate");
+			String endDateStr = request.getParameter("enddate");
+			Date startDate = null;
+			if(StringUtils.isNotBlank(startDateStr))
+				startDate = new Date(startDateStr);
+			Date endDate = null;
+			if(StringUtils.isNotBlank(endDateStr))
+				endDate = new Date(endDateStr);
 			String[] reportheaders = request.getParameterValues("headers");
 			int sellerId = helperClass.getSellerIdfromSession(request);
-
-			List<PartnerReportDetails> partnerBusinessList = reportGeneratorService
-					.getPartnerReportDetails(startDate, endDate, sellerId);
+			
+			List<PartnerReportDetails> partnerBusinessList = new ArrayList<PartnerReportDetails>();
+			if ("debtorsReport".equalsIgnoreCase(reportName)) {
+				partnerBusinessList = reportGeneratorService
+						.getDebtorsReportDetails(startDate, endDate, sellerId);
+			} else{
+				partnerBusinessList = reportGeneratorService
+						.getPartnerReportDetails(startDate, endDate, sellerId);				
+			}
 			Collections.sort(partnerBusinessList,
 					new PartnerReportDetails.OrderByShippedDate());
 			reportDownloadService.downloadPartnerReport(response,

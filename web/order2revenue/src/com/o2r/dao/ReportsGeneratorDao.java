@@ -27,6 +27,9 @@ public interface ReportsGeneratorDao {
 	List<ChannelReportDetails> getChannelReportDetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException;
 
+	List<PartnerReportDetails> getDebtorsReportDetails(Date startDate,
+			Date endDate, int sellerId) throws CustomException;
+
 	//public void addUploadReport(UploadReport uploadReport) throws CustomException;
 
 	/*public List<UploadReport> listUploadReport() throws CustomException;
