@@ -643,8 +643,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		double orderSP = currOrder.getOrderSP();
 		if (currOrderReturnOrRTO != null) {
 			Date returnDate = currOrderReturnOrRTO.getReturnDate();
-			boolean dateCriteria = startDate == null || endDate == null || (startDate.before(returnDate) && endDate.after(returnDate));
-			if(returnDate!=null && dateCriteria){
+			boolean dateCriteria = returnDate!=null;
+			if(dateCriteria){
 				partnerBusiness.setReturnDate(currOrderReturnOrRTO
 						.getReturnDate());
 				returnQty = currOrderReturnOrRTO.getReturnorrtoQty();
@@ -912,11 +912,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		criteria.add(Restrictions.eq("poOrder", false));
 		criteria.createAlias("seller", "seller",
 				CriteriaSpecification.LEFT_JOIN)
-				.add(Restrictions.eq("seller.id", sellerId))
-				.add(Restrictions
-						.between("shippedDate", startDate, endDate));
+				.add(Restrictions.eq("seller.id", sellerId));
 		criteria.createAlias("orderPayment", "orderPayment",
 				CriteriaSpecification.LEFT_JOIN);
+		criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
+				CriteriaSpecification.LEFT_JOIN)
+				.add(Restrictions.or(
+						Restrictions.between("shippedDate", startDate, endDate),
+						Restrictions.between("orderReturnOrRTO.returnDate", startDate, endDate)));
 		criteria.createAlias("orderTax", "orderTax",
 				CriteriaSpecification.LEFT_JOIN);
 		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
@@ -928,11 +931,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		criteria.add(Restrictions.isNotNull("consolidatedOrder"));
 		criteria.createAlias("seller", "seller",
 				CriteriaSpecification.LEFT_JOIN)
-				.add(Restrictions.eq("seller.id", sellerId))
-				.add(Restrictions
-						.between("shippedDate", startDate, endDate));
+				.add(Restrictions.eq("seller.id", sellerId));
 		criteria.createAlias("orderPayment", "orderPayment",
 				CriteriaSpecification.LEFT_JOIN);
+		criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
+				CriteriaSpecification.LEFT_JOIN)
+				.add(Restrictions.or(
+						Restrictions.between("shippedDate", startDate, endDate),
+						Restrictions.between("orderReturnOrRTO.returnDate", startDate, endDate)));
 		criteria.createAlias("orderTax", "orderTax",
 				CriteriaSpecification.LEFT_JOIN);
 		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
