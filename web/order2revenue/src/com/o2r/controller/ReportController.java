@@ -26,6 +26,7 @@ import com.o2r.bean.CategoryCommissionDetails;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionDetails;
+import com.o2r.bean.DebtorsGraph1;
 import com.o2r.bean.PartnerBusinessDetails;
 import com.o2r.bean.PartnerCommissionDetails;
 import com.o2r.bean.PartnerReportDetails;
@@ -130,9 +131,25 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			List<PartnerReportDetails> debtorsList = reportGeneratorService
 					.getDebtorsReportDetails(startDate, endDate, sellerId);
 			if ("debtorsReport".equalsIgnoreCase(reportName)) {
-				Collections.sort(debtorsList,
-						new PartnerReportDetails.OrderByShippedDate());
-				model.put("shortTablePartner", debtorsList);
+				List<DebtorsGraph1> debtorsGraph1PartnerList = ConverterClass.transformDebtorsGraph1Graph(debtorsList, "partner");
+				List<DebtorsGraph1> debtorsGraph1CategoryList = ConverterClass.transformDebtorsGraph1Graph(debtorsList, "category");
+				
+				Collections.sort(debtorsGraph1PartnerList, new DebtorsGraph1.OrderByNPR());
+				model.put("partnerByNPR", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1PartnerList, "NPR"));
+				Collections.sort(debtorsGraph1PartnerList, new DebtorsGraph1.OrderByNPDQY());
+				model.put("partnerByNPDQY", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1PartnerList, "NPDQY"));
+				Collections.sort(debtorsGraph1PartnerList, new DebtorsGraph1.OrderByUPNR());
+				model.put("shortTablePartner", debtorsGraph1PartnerList);
+				model.put("partnerByUPNR", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1PartnerList, "UPNR"));
+				
+				Collections.sort(debtorsGraph1CategoryList, new DebtorsGraph1.OrderByNPR());
+				model.put("categoryByNPR", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1CategoryList, "NPR"));
+				Collections.sort(debtorsGraph1CategoryList, new DebtorsGraph1.OrderByNPDQY());
+				model.put("categoryByNPDQY", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1CategoryList, "NPDQY"));
+				Collections.sort(debtorsGraph1CategoryList, new DebtorsGraph1.OrderByUPNR());
+				model.put("shortTableCategory", debtorsGraph1PartnerList);
+				model.put("categoryByUPNR", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1CategoryList, "UPNR"));
+				
 				return new ModelAndView("reports/viewDebtorsGraphReport", model);
 			}
 			List<PartnerReportDetails> partnerBusinessList = reportGeneratorService

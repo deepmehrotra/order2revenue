@@ -1,6 +1,7 @@
 package com.o2r.helper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.o2r.bean.CategoryCommissionDetails;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.CustomerBean;
+import com.o2r.bean.DebtorsGraph1;
 import com.o2r.bean.EventsBean;
 import com.o2r.bean.ExpenseBean;
 import com.o2r.bean.ExpenseCategoryBean;
@@ -24,9 +26,9 @@ import com.o2r.bean.OrderPaymentBean;
 import com.o2r.bean.OrderRTOorReturnBean;
 import com.o2r.bean.OrderTaxBean;
 import com.o2r.bean.PartnerBean;
-import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.PartnerBusinessDetails;
 import com.o2r.bean.PartnerCommissionDetails;
+import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.PaymentUploadBean;
 import com.o2r.bean.PlanBean;
 import com.o2r.bean.ProductBean;
@@ -2008,5 +2010,88 @@ public class ConverterClass {
 		}
 		newChannelReportList.add(consolidated);
 		return newChannelReportList;
+	}
+
+	public static List<DebtorsGraph1> transformDebtorsGraph1Graph(
+			List<PartnerReportDetails> debtorsList, String criteria) {
+		Map<String, DebtorsGraph1> debtorsGraph1Map = new HashMap<String, DebtorsGraph1>();
+		for (PartnerReportDetails partnerBusiness : debtorsList) {
+			String key = "";
+			switch(criteria){
+				case "partner":key = partnerBusiness.getPcName();break;
+				case "category":key = partnerBusiness.getProductCategory();break;
+				default: break;
+			}
+			DebtorsGraph1 debtorsGraph1 = debtorsGraph1Map.get(key);
+			double netPaymentResult = partnerBusiness.getNetPaymentResult();
+			double netPaymentDifference = partnerBusiness.getPaymentDifference();
+			int orderTotal = 0;
+			if(partnerBusiness.getPaymentDifference() >= -5 && partnerBusiness.getPaymentDifference() <= 5)
+				orderTotal = 1;
+			double netRate = 0;
+			Date paymentDueDate = partnerBusiness.getPaymentDueDate();
+			if(paymentDueDate!=null && paymentDueDate.after(new Date()))
+				netRate = partnerBusiness.getNetRate();
+			if (debtorsGraph1 == null) {
+				debtorsGraph1 = new DebtorsGraph1();
+			} else {
+				netPaymentResult += debtorsGraph1.getNetPaymentResult();
+				netPaymentDifference += debtorsGraph1.getPaymentDifference();
+				orderTotal += debtorsGraph1.getNetPayDiffOrderQty();
+				netRate += debtorsGraph1.getUpcomingPaymentNR();
+			}
+			debtorsGraph1.setNetPaymentResult(netPaymentResult);
+			debtorsGraph1.setPaymentDifference(netPaymentDifference);
+			debtorsGraph1.setNetPayDiffOrderQty(orderTotal);
+			debtorsGraph1.setUpcomingPaymentNR(netRate);
+			debtorsGraph1.setPartner(key);
+			debtorsGraph1.setCategory(key);
+					
+			debtorsGraph1Map.put(key, debtorsGraph1);
+		}
+
+		List<DebtorsGraph1> debtorsGraph1List = new ArrayList<DebtorsGraph1>();
+		Iterator entries = debtorsGraph1Map.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, DebtorsGraph1> thisEntry = (Entry<String, DebtorsGraph1>) entries
+					.next();
+			DebtorsGraph1 value = thisEntry.getValue();
+			debtorsGraph1List.add(value);
+		}
+		return debtorsGraph1List;
+	}
+
+	public static Object getDebtorsGraph1SortedList(
+			List<DebtorsGraph1> debtorsGraph1List, String criteria) {
+		int maxLength = 5;
+		if(debtorsGraph1List.size()<=maxLength)
+			return debtorsGraph1List;
+		List<DebtorsGraph1> newdDebtorsGraph1List = new ArrayList<>();
+		int index = 1;
+		boolean initialize = false;
+		DebtorsGraph1 consolidated = new DebtorsGraph1();
+		for(DebtorsGraph1 debtorsGraph1: debtorsGraph1List){
+			if(index++ >= 5){
+				if(!initialize){
+					initialize = true;
+					consolidated.setNetPaymentResult(debtorsGraph1.getNetPaymentResult());
+					consolidated.setPaymentDifference(debtorsGraph1.getPaymentDifference());
+					consolidated.setNetPayDiffOrderQty(debtorsGraph1.getNetPayDiffOrderQty());
+					consolidated.setUpcomingPaymentNR(debtorsGraph1.getUpcomingPaymentNR());
+					consolidated.setCategory("Others");
+					consolidated.setPartner("Others");
+				} else{
+					consolidated.setNetPaymentResult(consolidated.getNetPaymentResult() + debtorsGraph1.getNetPaymentResult());
+					consolidated.setPaymentDifference(consolidated.getPaymentDifference() + debtorsGraph1.getPaymentDifference());
+					consolidated.setNetPayDiffOrderQty(consolidated.getNetPayDiffOrderQty() + debtorsGraph1.getNetPayDiffOrderQty());
+					consolidated.setUpcomingPaymentNR(consolidated.getUpcomingPaymentNR() + debtorsGraph1.getUpcomingPaymentNR());
+					consolidated.setPaymentDifference(consolidated.getPaymentDifference() + debtorsGraph1.getPaymentDifference());
+				}
+			} else{
+				newdDebtorsGraph1List.add(debtorsGraph1);
+			}
+		}
+		newdDebtorsGraph1List.add(consolidated);
+		return newdDebtorsGraph1List;
 	}
 }

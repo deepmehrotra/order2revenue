@@ -51,17 +51,303 @@
 									</ul>
 								</div>
 								<div class="tab-content">
-									<div id="tab-1" class="tab-pane active col-sm-12 chart-even">
+									<div id="tab-1" class="tab-pane active col-sm-12 chart-even">										
 										<div class="row">
-											<div class="col-lg-12">
-												Debtors Table
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Partner</th>
+																	<th>Net NPR</th>
+																	<th>Net Payment Difference</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty partnerByNPR}">
+																	<c:forEach items="${partnerByNPR}" var="partnerDto"
+																		varStatus="loop">
+																		<tr>
+																			<td>${partnerDto.partner}</td>
+																			<td>${partnerDto.netPaymentResult}</td>
+																			<td>${partnerDto.paymentDifference}</td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div class="flot-chart">
+															<div class="flot-chart-content"
+																id="line-chart-partner-npr"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Partner</th>
+																	<th>Net Payment Difference Order Qty</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty partnerByNPDQY}">
+																	<c:forEach items="${partnerByNPDQY}" var="partnerDto"
+																		varStatus="loop">
+																		<tr>
+																			<td>${partnerDto.partner}</td>
+																			<td>${partnerDto.netPayDiffOrderQty}</td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div class="flot-chart">
+															<div class="flot-chart-content"
+																id="bar-chart-partner-npdqy"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Partner</th>
+																	<th>Upcoming Payments N/R</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty partnerByUPNR}">
+																	<c:forEach items="${partnerByUPNR}" var="partnerDto"
+																		varStatus="loop">
+																		<tr>
+																			<td>${partnerDto.partner}</td>
+																			<td>${partnerDto.upcomingPaymentNR}</td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div class="flot-chart">
+															<div class="flot-chart-content"
+																id="bar-chart-partner-upnr"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Category</th>
+																	<th>Net NPR</th>
+																	<th>Net Payment Difference</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty categoryByNPR}">
+																	<c:forEach items="${categoryByNPR}" var="categoryDto"
+																		varStatus="loop">
+																		<tr>
+																			<td>${categoryDto.category}</td>
+																			<td>${categoryDto.netPaymentResult}</td>
+																			<td>${categoryDto.paymentDifference}</td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div class="flot-chart">
+															<div class="flot-chart-content"
+																id="line-chart-category-npr"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Category</th>
+																	<th>Net Payment Difference Order Qty</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty categoryByNPDQY}">
+																	<c:forEach items="${categoryByNPDQY}" var="categoryDto"
+																		varStatus="loop">
+																		<tr>
+																			<td>${categoryDto.category}</td>
+																			<td>${categoryDto.netPayDiffOrderQty}</td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div class="flot-chart">
+															<div class="flot-chart-content"
+																id="bar-chart-category-npdqy"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Category</th>
+																	<th>Upcoming Payments N/R</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty categoryByUPNR}">
+																	<c:forEach items="${categoryByUPNR}" var="categoryDto"
+																		varStatus="loop">
+																		<tr>
+																			<td>${categoryDto.category}</td>
+																			<td>${categoryDto.upcomingPaymentNR}</td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div class="flot-chart">
+															<div class="flot-chart-content"
+																id="bar-chart-category-upnr"></div>
+														</div>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
 									<div id="tab-2" class="tab-pane col-sm-12">	
 										<div class="row">
 											<div class="col-lg-12">
-												Debtors Graph
+												<div class="float-e-margins graph-brd">
+													<div>
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Partner</th>
+																	<th>Upcoming Payments N/R</th>
+																	<th>Net NPR</th>
+																	<th>Net Payment Difference</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty shortTablePartner}">
+																	<c:forEach items="${shortTablePartner}" var="partner"
+																		varStatus="loop">
+																		<tr>
+																			<td>${partner.partner}</td>
+																			<td>${partner.upcomingPaymentNR}</td>
+																			<td>${partner.netPaymentResult}</td>
+																			<td>${partner.paymentDifference}</td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+
+													<div class="ibox-content">
+														<div id="morris-line-chart"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-12">
+												<div class="float-e-margins graph-brd">
+													<div>
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Category</th>
+																	<th>Upcoming Payments N/R</th>
+																	<th>Net NPR</th>
+																	<th>Net Payment Difference</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty shortTableCategory}">
+																	<c:forEach items="${shortTableCategory}" var="category"
+																		varStatus="loop">
+																		<tr>
+																			<td>${category.category}</td>
+																			<td>${category.upcomingPaymentNR}</td>
+																			<td>${category.netPaymentResult}</td>
+																			<td>${category.paymentDifference}</td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+
+													<div class="ibox-content">
+														<div id="morris-line-chart"></div>
+													</div>
+												</div>
 											</div>
 										</div>
 
@@ -118,133 +404,86 @@
 		//Script for Bar Chart
 
 		var temp1 = [];
-		var partnerByNetCommissionArr = [];
+		var partnerByNPR = [];
 		var i = 1;
-		<c:forEach items="${partnerByNetCommission}" var="partnerDto" varStatus="loop">
-		var arr1 = [ i, '${partnerDto.netPartnerCommissionPaid}' ];
-		var arr2 = [ i++, '${partnerDto.partner}' ];
-		temp1.push(arr1);
-		partnerByNetCommissionArr.push(arr2);
-		</c:forEach>
-
-		var temp2 = [];
-		var partnerByNetTDSArr = [];
-		var i = 1;
-		<c:forEach items="${partnerByNetTDS}" var="partnerDto" varStatus="loop">
-		var arr1 = [ i, '${partnerDto.netTDSToBeDeposited}' ];
-		var arr2 = [ i++, '${partnerDto.partner}' ];
-		temp2.push(arr1);
-		partnerByNetTDSArr.push(arr2);
-		</c:forEach>
-
-		var temp3 = [];
-		var partnerByNetTaxArr = [];
-		var i = 1;
-		<c:forEach items="${partnerByNetTax}" var="partnerDto" varStatus="loop">
-		var arr1 = [ i, '${partnerDto.netTaxToBePaid}' ];
-		var arr2 = [ i++, '${partnerDto.partner}' ];
-		temp3.push(arr1);
-		partnerByNetTaxArr.push(arr2);
-		</c:forEach>
-
-		var temp7 = [];
-		var partnerByNetNPR = [];
-		var i = 1;
-		<c:forEach items="${partnerByNetNPR}" var="partnerDto" varStatus="loop">
+		<c:forEach items="${partnerByNPR}" var="partnerDto" varStatus="loop">
 		var arr1 = [ i, '${partnerDto.netPaymentResult}' ];
 		var arr2 = [ i, '${partnerDto.partner}' ];
 		i++;
-		temp7.push(arr1);
-		partnerByNetNPR.push(arr2);
+		temp1.push(arr1);
+		partnerByNPR.push(arr2);
 		</c:forEach>
 
-		var temp8 = [];
-		var partnerByNetTaxable = [];
+		var temp2 = [];
+		var categoryByNPR = [];
 		var i = 1;
-		<c:forEach items="${partnerByNetTaxable}" var="partnerDto" varStatus="loop">
-		var arr1 = [ i, '${partnerDto.netTaxableSale}' ];
+		<c:forEach items="${categoryByNPR}" var="categoryDto" varStatus="loop">
+		var arr1 = [ i, '${categoryDto.netPaymentResult}' ];
+		var arr2 = [ i, '${categoryDto.category}' ];
+		i++;
+		temp2.push(arr1);
+		categoryByNPR.push(arr2);
+		</c:forEach>
+		
+		var temp3 = [];
+		var partnerByNPDQY = [];
+		var i = 1;
+		<c:forEach items="${partnerByNPDQY}" var="partnerDto" varStatus="loop">
+		var arr1 = [ i, '${partnerDto.netPayDiffOrderQty}' ];
 		var arr2 = [ i, '${partnerDto.partner}' ];
 		i++;
-		temp8.push(arr1);
-		partnerByNetTaxable.push(arr2);
+		temp3.push(arr1);
+		partnerByNPDQY.push(arr2);
 		</c:forEach>
 
 		var temp4 = [];
-		var categoryByNetCommissionArr = [];
+		var categoryByNPDQY = [];
 		var i = 1;
-		<c:forEach items="${categoryByNetCommission}" var="categoryDto" varStatus="loop">
-		var arr1 = [ i, '${categoryDto.netPartnerCommissionPaid}' ];
-		var arr2 = [ i++, '${categoryDto.categoryName}' ];
+		<c:forEach items="${categoryByNPDQY}" var="categoryDto" varStatus="loop">
+		var arr1 = [ i, '${categoryDto.netPayDiffOrderQty}' ];
+		var arr2 = [ i, '${categoryDto.category}' ];
+		i++;
 		temp4.push(arr1);
-		categoryByNetCommissionArr.push(arr2);
+		categoryByNPDQY.push(arr2);
 		</c:forEach>
-
+		
 		var temp5 = [];
-		var categoryByNetTDSArr = [];
+		var partnerByUPNR = [];
 		var i = 1;
-		<c:forEach items="${categoryByNetTDS}" var="categoryDto" varStatus="loop">
-		var arr1 = [ i, '${categoryDto.netTDSToBeDeposited}' ];
-		var arr2 = [ i++, '${categoryDto.categoryName}' ];
+		<c:forEach items="${partnerByUPNR}" var="partnerDto" varStatus="loop">
+		var arr1 = [ i, '${partnerDto.upcomingPaymentNR}' ];
+		var arr2 = [ i, '${partnerDto.partner}' ];
+		i++;
 		temp5.push(arr1);
-		categoryByNetTDSArr.push(arr2);
+		partnerByUPNR.push(arr2);
 		</c:forEach>
 
 		var temp6 = [];
-		var categoryByNetTaxArr = [];
+		var categoryByUPNR = [];
 		var i = 1;
-		<c:forEach items="${categoryByNetTax}" var="categoryDto" varStatus="loop">
-		var arr1 = [ i, '${categoryDto.netTaxToBePaid}' ];
-		var arr2 = [ i++, '${categoryDto.categoryName}' ];
+		<c:forEach items="${categoryByUPNR}" var="categoryDto" varStatus="loop">
+		var arr1 = [ i, '${categoryDto.upcomingPaymentNR}' ];
+		var arr2 = [ i, '${categoryDto.category}' ];
+		i++;
 		temp6.push(arr1);
-		categoryByNetTaxArr.push(arr2);
-		</c:forEach>
-
-		var temp9 = [];
-		var categoryByNetNPR = [];
-		var i = 1;
-		<c:forEach items="${categoryByNetNPR}" var="categoryDto" varStatus="loop">
-		var arr1 = [ i, '${categoryDto.netPaymentResult}' ];
-		var arr2 = [ i, '${categoryDto.categoryName}' ];
-		i++;
-		temp9.push(arr1);
-		categoryByNetNPR.push(arr2);
-		</c:forEach>
-
-		var temp10 = [];
-		var categoryByNetTaxable = [];
-		var i = 1;
-		<c:forEach items="${categoryByNetTaxable}" var="categoryDto" varStatus="loop">
-		var arr1 = [ i, '${categoryDto.netTaxableSale}' ];
-		var arr2 = [ i, '${categoryDto.categoryName}' ];
-		i++;
-		temp10.push(arr1);
-		categoryByNetTaxable.push(arr2);
+		categoryByUPNR.push(arr2);
 		</c:forEach>
 
 		$(window)
 				.load(
 						function() {
-
-							flotbar(temp1, partnerByNetCommissionArr,
-									"#bar-chart-partner-net-commission");
-							flotbar(temp2, partnerByNetTDSArr,
-									"#bar-chart-partner-net-tds");
-							flotbar(temp3, partnerByNetTaxArr,
-									"#bar-chart-partner-net-tax");
-							flotbar(temp4, categoryByNetCommissionArr,
-									"#bar-chart-category-net-commission");
-							flotbar(temp5, categoryByNetTDSArr,
-									"#bar-chart-category-net-tds");
-							flotbar(temp6, categoryByNetTaxArr,
-									"#bar-chart-category-net-tax");
-							flotline(temp7, partnerByNetNPR,
-									"#line-chart-partner-net-npr");
-							flotline(temp8, partnerByNetTaxable,
-									"#line-chart-partner-net-taxable");
-							flotline(temp9, categoryByNetNPR,
-									"#line-chart-category-net-npr");
-							flotline(temp10, categoryByNetTaxable,
-									"#line-chart-category-net-taxable");
+							flotline(temp1, partnerByNPR,
+									"#line-chart-partner-npr");
+							flotline(temp2, categoryByNPR,
+									"#line-chart-category-npr");
+							flotbar(temp3, partnerByNPDQY,
+									"#bar-chart-partner-npdqy");
+							flotbar(temp4, categoryByNPDQY,
+									"#bar-chart-category-npdqy");
+							flotbar(temp5, partnerByUPNR,
+									"#bar-chart-partner-upnr");
+							flotbar(temp6, categoryByUPNR,
+									"#bar-chart-category-upnr");
 
 							$('.dataTables-example')
 									.dataTable(
