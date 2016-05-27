@@ -3,7 +3,16 @@ package com.o2r.dao;
 import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Random;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -461,4 +470,50 @@ public class SellerDaoImpl implements SellerDao {
 		}
 		log.info("*** updateProcessedOrdersCount Ends : SellerDaoImpl ****");
 	}
+	
+	@Override
+	public void sendMail(String email)throws CustomException{
+		
+		String code=null;
+		final String from="2mailbishnu@gmail.com";
+		if(code != null){
+			Seller seller=getSeller(2);
+			/*if(seller != null){
+				if(seller.getVerCode().equals(code)){
+					seller.setVerCode("Verified");
+				}
+			}*/
+		} else {
+			String varificationCode = "saveSeller.html?code=O2RUSER10" + "";
+			Properties prop = new Properties();
+			prop.put("mail.smtp.starttls.enable", "true");
+			prop.put("mail.smtp.auth", "true");
+			prop.put("mail.smtp.host", "smtp.gmail.com");
+			prop.put("mail.smtp.port", "587");
+
+			javax.mail.Session session = javax.mail.Session.getInstance(prop,
+					new javax.mail.Authenticator() {
+						protected PasswordAuthentication getPasswordAuthentication() {
+							return new PasswordAuthentication(from, "DeadmaN^^");
+						}
+					});
+
+			try {
+				MimeMessage message = new MimeMessage(session);
+				message.setFrom(new InternetAddress(from));
+				message.addRecipient(Message.RecipientType.TO,
+						new InternetAddress(email));
+				message.setSubject("Registration Conformation");
+				// message.setText("click on the below link for complete Registration ");
+				message.setText(varificationCode);
+				Transport.send(message);
+				System.out.println("Mail send Successfully....");
+			} catch (AddressException e) {
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
+		}
+	    
+	  }
 }

@@ -1024,30 +1024,21 @@ public class OrderDaoImpl implements OrderDao {
 						}
 					}
 				}
-
 				return orderlist;
 			} else {
-
-				criteria = session.createCriteria(Seller.class).add(
-						Restrictions.eq("id", sellerId));
-				criteria.createAlias("orders", "order",
-						CriteriaSpecification.LEFT_JOIN);
+				criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
+				criteria.createAlias("orders", "order",CriteriaSpecification.LEFT_JOIN);
 				if (isSearch == true) {
-					criteria.add(Restrictions.like(searchString, value + "%")
-							.ignoreCase());
+					criteria.add(Restrictions.like(searchString, value + "%").ignoreCase());
 				} else {
 					criteria.add(Restrictions.eq(searchString, value));
 				}
 				criteria.add(Restrictions.eq("order.poOrder", poOrder))
-						.addOrder(
-								org.hibernate.criterion.Order
-										.desc("order.lastActivityOnOrder"))
-						.setResultTransformer(
-								CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+						.addOrder(org.hibernate.criterion.Order.desc("order.lastActivityOnOrder"))
+						.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
 				if (poOrder)
-					criteria.add(Restrictions.eq("order.consolidatedOrder",
-							null));
+					criteria.add(Restrictions.eq("order.consolidatedOrder",null));
 
 			}
 			if (criteria.list().size() != 0) {

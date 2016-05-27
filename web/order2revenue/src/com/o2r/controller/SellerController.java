@@ -77,19 +77,12 @@ public class SellerController {
 			BindingResult result,HttpServletRequest request) {
 		
 		log.info("$$$ registerSeller Starts : SellerController $$$");
-		Properties p=new Properties(); 		
-		
-			try {
-			InputStream input = request.getServletContext().getResourceAsStream("/WEB-INF/mail.properties");
- 		    p.load(input);				   
-		} catch (IOException e) {
-			e.printStackTrace();
-			log.error("Failed!",e);
-		}		
+		Properties prop=new Properties(); 			
+				
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			Seller seller = ConverterClass.prepareSellerModel(sellerBean);
-			sellerService.addSeller(seller,p);
+			sellerService.addSeller(seller);
 		} catch (CustomException ce) {
 			log.error("saveOrder exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -248,7 +241,7 @@ public class SellerController {
 			sellerRoles.add(seller);
 			seller.getRole().setSellerRoles(sellerRoles);
 			
-			sellerService.addSeller(seller, null);
+			sellerService.addSeller(seller);
 			sellerService.addStateDeliveryTime(sdtList, seller.getId());
 			model.put("seller", seller);
 		} catch (Throwable e) {
