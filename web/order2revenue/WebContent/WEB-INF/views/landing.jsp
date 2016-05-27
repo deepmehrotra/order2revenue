@@ -44,7 +44,7 @@
                                 <h1 class="no-margins">${dashboardValue.saleQuantityThisYear}</h1>
                                 <div class="stat-percent font-bold text-info">
                                  <fmt:formatNumber type="number"  maxFractionDigits="2"  value="${dashboardValue.percentChangeInSQ}" />% <i class="fa fa-level-up"></i></div>
-                                <small><%= new Date().getYear()+1900%></small>
+                                <small>Till <fmt:formatDate value="<%= new Date()%>" pattern="MMM dd ,YYYY"/></small>
                             </div>
                         </div>
                     </div>
