@@ -1002,27 +1002,37 @@ public class OrderDaoImpl implements OrderDao {
 			boolean poOrder, boolean isSearch) throws CustomException {
 
 		log.info("*** findOrders starts : OrderDaoImpl ***");
-		String searchString = "order." + column;
+		/*String searchString = "order." + column;*/
+		String searchString = column;
+		System.out.println(" Inside Find order dao method searchString :" + searchString
+				+ " value :" + value + "   sellerId :" + sellerId);
 
 		log.debug(" Inside Find order dao method searchString :" + searchString
 				+ " value :" + value + "   sellerId :" + sellerId);
 
-		Seller seller = null;
 		List<Order> orderlist = null;
 		Criteria criteria = null;
+		List tempList=null;
+		Session session =null;
 
 		try {
-			Session session = sessionFactory.openSession();
+			 session=sessionFactory.openSession();
 			session.beginTransaction();
+			criteria = session.createCriteria(Order.class);
+			criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
+					CriteriaSpecification.LEFT_JOIN);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN);
+			criteria.add(
+					Restrictions.eq("seller.id", sellerId));
 
 			if (column.equals("returnOrRTOId")) {
-				criteria = session.createCriteria(Order.class);
-				criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
-						CriteriaSpecification.LEFT_JOIN).add(
+				criteria.add(
 						Restrictions.like("orderReturnOrRTO.returnOrRTOId",
 								value + "%"));
-				if (criteria.list().size() != 0) {
-					orderlist = criteria.list();
+				tempList=criteria.list();
+				if (tempList!=null&&tempList.size() != 0) {
+					orderlist = tempList;
 					if (orderlist != null && orderlist.size() != 0) {
 						for (Order order : orderlist) {
 							Hibernate.initialize(order.getOrderTimeline());
@@ -1033,33 +1043,28 @@ public class OrderDaoImpl implements OrderDao {
 				return orderlist;
 			} else {
 
-				criteria = session.createCriteria(Seller.class).add(
-						Restrictions.eq("id", sellerId));
-				criteria.createAlias("orders", "order",
-						CriteriaSpecification.LEFT_JOIN);
 				if (isSearch == true) {
 					criteria.add(Restrictions.like(searchString, value + "%")
 							.ignoreCase());
 				} else {
 					criteria.add(Restrictions.eq(searchString, value));
 				}
-				criteria.add(Restrictions.eq("order.poOrder", poOrder))
+				if (poOrder)
+					criteria.add(Restrictions.eq("consolidatedOrder",
+							null));
+				criteria.add(Restrictions.eq("poOrder", poOrder))
 						.addOrder(
 								org.hibernate.criterion.Order
-										.desc("order.lastActivityOnOrder"))
+										.desc("lastActivityOnOrder"))
 						.setResultTransformer(
 								CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
-				if (poOrder)
-					criteria.add(Restrictions.eq("order.consolidatedOrder",
-							null));
+			
 
 			}
-			if (criteria.list().size() != 0) {
-				seller = (Seller) criteria.list().get(0);
-				if (seller == null)
-					System.out.println("Null seller");
-				orderlist = seller.getOrders();
+			tempList=criteria.list();
+			if (tempList!=null&&tempList.size() != 0&&tempList.get(0)!=null) {
+				orderlist = tempList;
 				if (orderlist != null && orderlist.size() != 0) {
 					for (Order order : orderlist) {
 						Hibernate.initialize(order.getOrderTimeline());

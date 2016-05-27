@@ -1093,9 +1093,9 @@ public class SaveContents {
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
-				System.out.println("Payment 1" + entry.getCell(1).toString());
+				/*System.out.println("Payment 1" + entry.getCell(1).toString());
 				System.out.println("Payment  2" + entry.getCell(2).toString());
-				/*
+				*//*
 				 * System.out.println(entry.getCell(3).toString());
 				 * System.out.println(entry.getCell(4).toString());
 				 */
