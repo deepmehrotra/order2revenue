@@ -1620,6 +1620,7 @@ public class ConverterClass {
 				netTDSToBeDeposited += partnerCommissionGraph
 						.getNetTDSToBeDeposited();
 				grossPartnerCommissionPaid += partnerCommissionGraph.getGrossPartnerCommissionPaid();
+				additionalReturnCharges += partnerCommissionGraph.getAdditionalReturnCharges();
 				netReturnCommission += partnerCommissionGraph.getNetReturnCommission();
 				netSrCommission += partnerCommissionGraph.getNetSrCommisison();
 				netChannelCommissionToBePaid += partnerCommissionGraph.getNetChannelCommissionToBePaid();
@@ -1681,6 +1682,7 @@ public class ConverterClass {
 				netTDSToBeDeposited += categoryCommissionGraph
 						.getNetTDSToBeDeposited();
 				grossPartnerCommissionPaid += categoryCommissionGraph.getGrossPartnerCommissionPaid();
+				additionalReturnCharges += categoryCommissionGraph.getAdditionalReturnCharges();
 				netReturnCommission += categoryCommissionGraph.getNetReturnCommission();
 				netSrCommission += categoryCommissionGraph.getNetSrCommisison();
 				netChannelCommissionToBePaid += categoryCommissionGraph.getNetChannelCommissionToBePaid();

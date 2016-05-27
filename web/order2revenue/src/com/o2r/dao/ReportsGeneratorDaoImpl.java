@@ -734,10 +734,15 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		partnerBusiness.setPccAmount(pccAmount);				
 		partnerBusiness.setFixedfee(fixedFee);
 		partnerBusiness.setShippingCharges(shippingCharges);
-		double serviceTax = (grossCommission + pccAmount + fixedFee + shippingCharges)*14.5/100;
+		double totalAmount = grossCommission + pccAmount + fixedFee + shippingCharges;
+		double serviceTax = (totalAmount)*14.5/100;
 		double serviceTaxNoQty = (grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty)*14.5/100;
 		partnerBusiness.setServiceTax(serviceTax);
-		double grossCommissionToBePaid = grossCommission + taxSP - taxPOPrice;
+		double grossCommissionToBePaid = 0;
+		if(isPoOrder && consolidatedOrder!=null)
+			grossCommissionToBePaid = grossCommission + taxSP - taxPOPrice;
+		else
+			grossCommissionToBePaid = totalAmount + serviceTax;
 		double grossCommissionToBePaidNoQty = grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty + serviceTaxNoQty;
 		partnerBusiness.setGrossCommission(grossCommissionToBePaid);
 		double returnCommision = 0;
