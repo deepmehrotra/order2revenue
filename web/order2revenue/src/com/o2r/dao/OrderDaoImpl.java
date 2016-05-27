@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -1019,17 +1020,12 @@ public class OrderDaoImpl implements OrderDao {
 			 session=sessionFactory.openSession();
 			session.beginTransaction();
 			criteria = session.createCriteria(Order.class);
-			criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
-					CriteriaSpecification.LEFT_JOIN);
-			criteria.createAlias("seller", "seller",
-					CriteriaSpecification.LEFT_JOIN);
-			criteria.add(
-					Restrictions.eq("seller.id", sellerId));
+			criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",CriteriaSpecification.LEFT_JOIN);
+			criteria.createAlias("seller", "seller",CriteriaSpecification.LEFT_JOIN);
+			criteria.add(Restrictions.eq("seller.id", sellerId));
 
 			if (column.equals("returnOrRTOId")) {
-				criteria.add(
-						Restrictions.like("orderReturnOrRTO.returnOrRTOId",
-								value + "%"));
+				criteria.add(Restrictions.like("orderReturnOrRTO.returnOrRTOId",value + "%"));
 				tempList=criteria.list();
 				if (tempList!=null&&tempList.size() != 0) {
 					orderlist = tempList;
@@ -1039,16 +1035,16 @@ public class OrderDaoImpl implements OrderDao {
 						}
 					}
 				}
-
 				return orderlist;
 			} else {
-
+				criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
+				criteria.createAlias("orders", "order",CriteriaSpecification.LEFT_JOIN);
 				if (isSearch == true) {
-					criteria.add(Restrictions.like(searchString, value + "%")
-							.ignoreCase());
+					criteria.add(Restrictions.like(searchString, value + "%").ignoreCase());
 				} else {
 					criteria.add(Restrictions.eq(searchString, value));
 				}
+
 				if (poOrder)
 					criteria.add(Restrictions.eq("consolidatedOrder",
 							null));
@@ -1059,7 +1055,12 @@ public class OrderDaoImpl implements OrderDao {
 						.setResultTransformer(
 								CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
-			
+				criteria.add(Restrictions.eq("order.poOrder", poOrder))
+						.addOrder(org.hibernate.criterion.Order.desc("order.lastActivityOnOrder"))
+						.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);		
+
+				if (poOrder)
+					criteria.add(Restrictions.eq("order.consolidatedOrder",null));
 
 			}
 			tempList=criteria.list();
