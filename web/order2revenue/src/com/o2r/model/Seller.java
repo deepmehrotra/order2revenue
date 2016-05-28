@@ -46,6 +46,8 @@ public class Seller {
 	private String brandName;
 	@Column
 	private String logoUrl;
+	@Column
+	private String verCode;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "seller_roles", joinColumns = { @JoinColumn(name = "seller_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "role_id", referencedColumnName = "id") })
@@ -275,6 +277,14 @@ public class Seller {
 
 	public void setLogoUrl(String logoUrl) {
 		this.logoUrl = logoUrl;
+	}
+
+	public String getVerCode() {
+		return verCode;
+	}
+
+	public void setVerCode(String verCode) {
+		this.verCode = verCode;
 	}
 
 	public List<TaxCategory> getTaxCategories() {

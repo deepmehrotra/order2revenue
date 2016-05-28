@@ -2,7 +2,6 @@ package com.o2r.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -71,15 +70,39 @@ public class SellerController {
 	static Logger log = Logger.getLogger(SellerController.class.getName());
 	Map<String, Object> model = new HashMap<String, Object>();
 
+	@RequestMapping(value = "/verify", method = RequestMethod.GET)
+	public ModelAndView verifySeller(HttpServletRequest request){
+		try{
+			String verifyCode = request.getParameter("code");
+			Seller seller = sellerService.getSeller(verifyCode);
+			if (seller.getVerCode() != null && seller.getVerCode().equals(verifyCode)) {
+				seller.setVerCode("Verified");
+				sellerService.addSeller(seller);
+				return new ModelAndView("redirect:/login-form.html?registered=true");
+			}else{
+				return new ModelAndView("redirect:/login-form.html?registered=true");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return new ModelAndView("redirect:/login-form.html?registered=true");
+	}
+	
+	
 	@RequestMapping(value = "/saveSeller", method = RequestMethod.POST)
 	public ModelAndView registerSeller(
 			@ModelAttribute("command") SellerBean sellerBean,
 			BindingResult result,HttpServletRequest request) {
 		
 		log.info("$$$ registerSeller Starts : SellerController $$$");
-		Properties prop=new Properties(); 			
-				
 		Map<String, Object> model = new HashMap<String, Object>();
+		
+		String name=request.getParameter("name");
+		String email=request.getParameter("email");
+		String password=request.getParameter("password");
+		sellerBean.setName(name);
+		sellerBean.setEmail(email);
+		sellerBean.setPassword(password);				
 		try {
 			Seller seller = ConverterClass.prepareSellerModel(sellerBean);
 			sellerService.addSeller(seller);
@@ -258,7 +281,7 @@ public class SellerController {
 			@ModelAttribute("command") SellerBean sellerBean,
 			BindingResult result) {
 		log.debug(" Calling register");
-		return new ModelAndView("register", model);
+		return new ModelAndView("login_register", model);
 	}
 
 	@RequestMapping(value = "/sellerindex", method = RequestMethod.GET)

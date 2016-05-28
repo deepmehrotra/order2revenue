@@ -999,92 +999,92 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	@Override
-	public List<Order> findOrders(String column, String value, int sellerId,
-			boolean poOrder, boolean isSearch) throws CustomException {
+	 public List<Order> findOrders(String column, String value, int sellerId,
+	            boolean poOrder, boolean isSearch) throws CustomException {
 
-		log.info("*** findOrders starts : OrderDaoImpl ***");
-		/*String searchString = "order." + column;*/
-		String searchString = column;
-		System.out.println(" Inside Find order dao method searchString :" + searchString
-				+ " value :" + value + "   sellerId :" + sellerId);
+	        log.info("*** findOrders starts : OrderDaoImpl ***");
+	        /*String searchString = "order." + column;*/
+	        String searchString = column;
+	        System.out.println(" Inside Find order dao method searchString :" + searchString
+	                + " value :" + value + "   sellerId :" + sellerId);
 
-		log.debug(" Inside Find order dao method searchString :" + searchString
-				+ " value :" + value + "   sellerId :" + sellerId);
+	        log.debug(" Inside Find order dao method searchString :" + searchString
+	                + " value :" + value + "   sellerId :" + sellerId);
 
-		List<Order> orderlist = null;
-		Criteria criteria = null;
-		List tempList=null;
-		Session session =null;
+	        List<Order> orderlist = null;
+	        Criteria criteria = null;
+	        List tempList=null;
+	        Session session =null;
 
-		try {
-			 session=sessionFactory.openSession();
-			session.beginTransaction();
-			criteria = session.createCriteria(Order.class);
-			criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",CriteriaSpecification.LEFT_JOIN);
-			criteria.createAlias("seller", "seller",CriteriaSpecification.LEFT_JOIN);
-			criteria.add(Restrictions.eq("seller.id", sellerId));
+	        try {
+	             session=sessionFactory.openSession();
+	            session.beginTransaction();
+	            criteria = session.createCriteria(Order.class);
+	            criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
+	                    CriteriaSpecification.LEFT_JOIN);
+	            criteria.createAlias("seller", "seller",
+	                    CriteriaSpecification.LEFT_JOIN);
+	            criteria.add(
+	                    Restrictions.eq("seller.id", sellerId));
 
-			if (column.equals("returnOrRTOId")) {
-				criteria.add(Restrictions.like("orderReturnOrRTO.returnOrRTOId",value + "%"));
-				tempList=criteria.list();
-				if (tempList!=null&&tempList.size() != 0) {
-					orderlist = tempList;
-					if (orderlist != null && orderlist.size() != 0) {
-						for (Order order : orderlist) {
-							Hibernate.initialize(order.getOrderTimeline());
-						}
-					}
-				}
-				return orderlist;
-			} else {
-				criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
-				criteria.createAlias("orders", "order",CriteriaSpecification.LEFT_JOIN);
-				if (isSearch == true) {
-					criteria.add(Restrictions.like(searchString, value + "%").ignoreCase());
-				} else {
-					criteria.add(Restrictions.eq(searchString, value));
-				}
+	            if (column.equals("returnOrRTOId")) {
+	                criteria.add(
+	                        Restrictions.like("orderReturnOrRTO.returnOrRTOId",
+	                                value + "%"));
+	                tempList=criteria.list();
+	                if (tempList!=null&&tempList.size() != 0) {
+	                    orderlist = tempList;
+	                    if (orderlist != null && orderlist.size() != 0) {
+	                        for (Order order : orderlist) {
+	                            Hibernate.initialize(order.getOrderTimeline());
+	                        }
+	                    }
+	                }
 
-				if (poOrder)
-					criteria.add(Restrictions.eq("consolidatedOrder",
-							null));
-				criteria.add(Restrictions.eq("poOrder", poOrder))
-						.addOrder(
-								org.hibernate.criterion.Order
-										.desc("lastActivityOnOrder"))
-						.setResultTransformer(
-								CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+	                return orderlist;
+	            } else {
 
-				criteria.add(Restrictions.eq("order.poOrder", poOrder))
-						.addOrder(org.hibernate.criterion.Order.desc("order.lastActivityOnOrder"))
-						.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);		
+	                if (isSearch == true) {
+	                    criteria.add(Restrictions.like(searchString, value + "%")
+	                            .ignoreCase());
+	                } else {
+	                    criteria.add(Restrictions.eq(searchString, value));
+	                }
+	                if (poOrder)
+	                    criteria.add(Restrictions.eq("consolidatedOrder",
+	                            null));
+	                criteria.add(Restrictions.eq("poOrder", poOrder))
+	                        .addOrder(
+	                                org.hibernate.criterion.Order
+	                                        .desc("lastActivityOnOrder"))
+	                        .setResultTransformer(
+	                                CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
-				if (poOrder)
-					criteria.add(Restrictions.eq("order.consolidatedOrder",null));
+	            
 
-			}
-			tempList=criteria.list();
-			if (tempList!=null&&tempList.size() != 0&&tempList.get(0)!=null) {
-				orderlist = tempList;
-				if (orderlist != null && orderlist.size() != 0) {
-					for (Order order : orderlist) {
-						Hibernate.initialize(order.getOrderTimeline());
-					}
-				}
-			}
-			session.getTransaction().commit();
-			session.close();
+	            }
+	            tempList=criteria.list();
+	            if (tempList!=null&&tempList.size() != 0&&tempList.get(0)!=null) {
+	                orderlist = tempList;
+	                if (orderlist != null && orderlist.size() != 0) {
+	                    for (Order order : orderlist) {
+	                        Hibernate.initialize(order.getOrderTimeline());
+	                    }
+	                }
+	            }
+	            session.getTransaction().commit();
+	            session.close();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error(e);
-			throw new CustomException(GlobalConstant.findOrdersError,
-					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            log.error(e);
+	            throw new CustomException(GlobalConstant.findOrdersError,
+	                    new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 
-		}
-		log.info("*** findOrders ends : OrderDaoImpl ***");
-		return orderlist;
-	}
+	        }
+	        log.info("*** findOrders ends : OrderDaoImpl ***");
+	        return orderlist;
+	    }
 
 	@Override
 	public List<Order> findOrdersbyDate(String column, Date startDate,

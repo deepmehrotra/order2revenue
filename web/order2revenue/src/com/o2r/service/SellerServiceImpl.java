@@ -1,17 +1,7 @@
 package com.o2r.service;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Properties;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
@@ -53,10 +43,7 @@ public class SellerServiceImpl implements SellerService,ServletContextAware {
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void addSeller(Seller seller) throws CustomException {
-		//sellerDao.addSeller(seller);
-		if(seller.getEmail() != null){
-			sellerDao.sendMail(seller.getEmail());
-		}				
+		sellerDao.addSeller(seller);					
 	}	
 	
 	public List<Seller> listSellers() throws CustomException {

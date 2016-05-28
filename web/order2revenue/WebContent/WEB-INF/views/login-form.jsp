@@ -8,19 +8,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
- <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-   <link rel="icon" href="O2R/landing/img/favicon.ico">
-    <title>O2R-Sign In</title>
-    <link href="/O2R/seller/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="/O2R/seller/font-awesome/css/font-awesome.css" rel="stylesheet"/>
-
-    <link href="/O2R/seller/css/animate.css" rel="stylesheet"/>
-    <link href="/O2R/seller/css/style.css" rel="stylesheet"/>
 <style>
 .error {
 	color: red;
 }
 </style>
+ 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+ 	<link href="/O2R/seller/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/O2R/seller/font-awesome/css/font-awesome.css" rel="stylesheet"/>
+
+    <link href="/O2R/seller/css/animate.css" rel="stylesheet"/>
+    <link href="/O2R/seller/css/style.css" rel="stylesheet"/>   	
+   	<link rel="icon" href="O2R/landing/img/favicon.ico"/>
+    
+    
+    <title>O2R-Sign In</title>
+    
+
 </head>
 
 <body class="gray-bg">
@@ -32,20 +36,19 @@
                 <img src="/O2R/seller/img/o2r-register-logo.jpg" alt="" class="login-logo"/>
 
             </div>
-            <form method="post" action="<c:url value='j_spring_security_check'/>"
-            class="m-t" role="form" action="index.html"  id="loginForm">
+            <form method="post" action="<c:url value='j_spring_security_check'/>"  class="m-t" role="form" action="index.html"  id="loginForm">
                  <div class="ibox-content">
                         <div class="row">
                             <div class="col-sm-6 b-r"><h3 class="m-t-none m-b">Sign in</h3>
                             <p></p>
                                 <p>Sign in today for more experience.</p>
-                             <c:choose>
-                            <c:when test="${error == true}">
-								<b class="error">Invalid login or password.</b>
+                             	<c:choose>
+                            		<c:when test="${error == true}">
+										<b class="error">Invalid login or password.</b>
 									</c:when>
-								<c:when test="${!empty param.registered }">
-										<b class="error">Your account has been created. We will reach you soon with login details .</b>
-                         		</c:when>
+									<c:when test="${!empty param.registered }">
+										<b class="error"><font color="green" size="2">Your account has been created.Check Your E-Mail for Verification</font></b>
+                         			</c:when>
                          		</c:choose>
 									</p>
                                

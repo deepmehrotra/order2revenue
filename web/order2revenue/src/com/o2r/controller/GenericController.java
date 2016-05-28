@@ -80,7 +80,7 @@ public class GenericController {
 			return new ModelAndView("redirect:/seller/dashboard.html");
 		} else {
 			logger.info("$$$ welcome Ends : GenericController $$$");
-			return new ModelAndView("redirect:/login-form.html");
+			return new ModelAndView("redirect:/login_register.html");
 		}
 
 	}
@@ -141,7 +141,7 @@ public class GenericController {
 	@RequestMapping(value = "/login-form", method = RequestMethod.GET)
 	public String redirectlogin() {
 		logger.debug(" Inside login-form ");		
-		return "login-form";
+		return "login_register";
 	}
 
 	@RequestMapping(value = "/seller/findGlobalOrders", method = RequestMethod.POST)

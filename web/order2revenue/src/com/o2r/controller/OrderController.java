@@ -44,7 +44,6 @@ import com.o2r.helper.CustomException;
 import com.o2r.helper.FileUploadForm;
 import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
-import com.o2r.helper.ValidateUpload;
 import com.o2r.model.Events;
 import com.o2r.model.Order;
 import com.o2r.model.Partner;
@@ -172,12 +171,12 @@ public class OrderController {
 			log.error("Failed!",e);
 		}
 		log.info("$$$ loginForm Ends : OrderController $$$");
-		return new ModelAndView("login-form");
+		return new ModelAndView("login_register");
 	}
 
 	@RequestMapping(value = "/error-login", method = RequestMethod.GET)
 	public ModelAndView invalidLogin() {
-		ModelAndView modelAndView = new ModelAndView("login-form");
+		ModelAndView modelAndView = new ModelAndView("login_register");
 		modelAndView.addObject("error", true);
 		return modelAndView;
 	}
