@@ -107,7 +107,8 @@ public class SaveContents {
 	private static final String UPLOAD_DIR = "UploadReport";
 
 	public Map<String, OrderBean> saveOrderContents(MultipartFile file,
-			int sellerId, String path) throws IOException {
+			int sellerId, String path, UploadReport uploadReport) 
+					throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		boolean validaterow = true;
@@ -485,7 +486,7 @@ public class SaveContents {
 			}
 			Set<String> errorSet = returnOrderMap.keySet();
 			downloadUploadReportXLS(offices, "Order Report", 24, errorSet,
-					path, sellerId);
+					path, sellerId, uploadReport);
 
 		} catch (Exception e) {
 			System.out.println("Inside save contents exception :"
@@ -497,7 +498,8 @@ public class SaveContents {
 	}
 
 	public Map<String, OrderBean> saveOrderPOContents(MultipartFile file,
-			int sellerId, String path) throws IOException {
+			int sellerId, String path, UploadReport uploadReport)
+					throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		boolean validaterow = true;
@@ -720,7 +722,7 @@ public class SaveContents {
 			
 			Set<String> errorSet = returnOrderMap.keySet();
 			downloadUploadReportXLS(offices, "OrderPOSheet", 11, errorSet,
-					path, sellerId);
+					path, sellerId, uploadReport);
 
 		} catch (Exception e) {
 			System.out.println("Inside save contents exception :"
@@ -732,7 +734,8 @@ public class SaveContents {
 	}
 
 	public Map<String, ProductBean> saveProductContents(MultipartFile file,
-			int sellerId, String path) throws IOException {
+			int sellerId, String path, UploadReport uploadReport)
+					throws IOException {
 		boolean validaterow = true;
 		Map<String, ProductBean> returnProductMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
@@ -917,7 +920,7 @@ public class SaveContents {
 			}
 			Set<String> errorSet = returnProductMap.keySet();
 			downloadUploadReportXLS(offices, "ProductReport", 11, errorSet,
-					path, sellerId);
+					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			System.out.println("Inside save contents exception :"
 					+ e.getLocalizedMessage());
@@ -931,7 +934,8 @@ public class SaveContents {
 	// My coding Product Config *********
 
 	public Map<String, ProductConfigBean> saveProductConfigContents(
-			MultipartFile file, int sellerId, String path) throws IOException {
+			MultipartFile file, int sellerId, String path, UploadReport uploadReport)
+					throws IOException {
 		boolean validaterow = true;
 		Map<String, ProductConfigBean> returnProductConfigMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
@@ -1050,7 +1054,7 @@ public class SaveContents {
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
 			downloadUploadReportXLS(offices, "ProductConfigReport", 11,
-					errorSet, path, sellerId);
+					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			System.out.println("Inside save contents exception :"
 					+ e.getLocalizedMessage());
@@ -1064,7 +1068,7 @@ public class SaveContents {
 	// My Coding Product Config Ends ********
 	
 	public Map<String, OrderBean> savePaymentContents(MultipartFile file,
-			int sellerId, String path) throws IOException {
+			int sellerId, String path, UploadReport uploadReport) throws IOException {
 		PaymentUpload paymentUpload = new PaymentUpload();
 		double totalpositive = 0;
 		double totalnegative = 0;
@@ -1215,7 +1219,7 @@ public class SaveContents {
 
 			Set<String> errorSet = returnPaymentMap.keySet();
 			downloadUploadReportXLS(offices, "PaymentReport", 6, errorSet,
-					path, sellerId);
+					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			System.out.println("Inside save contents exception :"
 					+ e.getLocalizedMessage());
@@ -1226,7 +1230,7 @@ public class SaveContents {
 	}
 
 	public Map<String, String> saveInventoryDetails(MultipartFile file,
-			int sellerId, String path) throws IOException {
+			int sellerId, String path, UploadReport uploadReport) throws IOException {
 		Map<String, String> returnInventoryMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
 		boolean validaterow = true;
@@ -1302,7 +1306,7 @@ public class SaveContents {
 			}
 			Set<String> errorSet = returnInventoryMap.keySet();
 			downloadUploadReportXLS(offices, "InventoryReport", 5, errorSet,
-					path, sellerId);
+					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			System.out.println("Inside save c"
 					+ "ontents exception :"
@@ -1314,7 +1318,7 @@ public class SaveContents {
 	}
 
 	public Map<String, Order> saveOrderReturnDetails(MultipartFile file,
-			int sellerId, String path) throws IOException {
+			int sellerId, String path, UploadReport uploadReport) throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		// sellerId=4;
@@ -1477,7 +1481,7 @@ public class SaveContents {
 			}
 			Set<String> errorSet = returnlist.keySet();
 			downloadUploadReportXLS(offices, "OrderReturnReport", 9, errorSet,
-					path, sellerId);
+					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			System.out.println("Inside save contents exception :"
 					+ e.getLocalizedMessage());
@@ -1488,7 +1492,8 @@ public class SaveContents {
 	}
 
 	public Map<String, DebitNoteBean> saveDebitNoteDetails(MultipartFile file,
-			int sellerId, String path) throws IOException {
+			int sellerId, String path, UploadReport uploadReport)
+					throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		// sellerId=4;
@@ -1608,7 +1613,7 @@ public class SaveContents {
 			}
 			Set<String> errorSet = returnlist.keySet();
 			downloadUploadReportXLS(offices, "DebitNoteSheet", 9, errorSet,
-					path, sellerId);
+					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			System.out.println("Inside save debit note exception :"
 					+ e.getLocalizedMessage());
@@ -1619,7 +1624,8 @@ public class SaveContents {
 	}
 
 	public Map<String, PoPaymentBean> savePoPaymentDetails(MultipartFile file,
-			int sellerId, String path) throws IOException {
+			int sellerId, String path, UploadReport uploadReport) 
+					throws IOException {
 		PaymentUpload paymentUpload = new PaymentUpload();
 		Order poOrder = null;
 		HSSFRow entry;
@@ -1768,7 +1774,7 @@ public class SaveContents {
 			
 			Set<String> errorSet = returnMap.keySet();
 			downloadUploadReportXLS(offices, "POPaymentSheet", 8, errorSet,
-					path, sellerId);
+					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			System.out.println("Inside save debit note exception :"
 					+ e.getLocalizedMessage());
@@ -1779,7 +1785,7 @@ public class SaveContents {
 	}
 
 	public Map<String, ExpenseBean> saveExpenseDetails(MultipartFile file,
-			int sellerId, String path) throws IOException {
+			int sellerId, String path, UploadReport uploadReport) throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		// sellerId=4;
@@ -1891,7 +1897,7 @@ public class SaveContents {
 			}
 			Set<String> errorSet = returnlist.keySet();
 			downloadUploadReportXLS(offices, "ExpenseSheet", 7, errorSet, path,
-					sellerId);
+					sellerId, uploadReport);
 		} catch (Exception e) {
 			System.out.println("Inside save expense exception :"
 					+ e.getLocalizedMessage());
@@ -1913,9 +1919,12 @@ public class SaveContents {
 
 	public void downloadUploadReportXLS(HSSFWorkbook workbook,
 			String worksheetName, int colNumber, Set<String> errorSet,
-			String path, int sellerId) throws ClassNotFoundException {
+			String path, int sellerId, UploadReport uploadReport)
+					throws ClassNotFoundException, CustomException {
 
 		HSSFSheet worksheet = workbook.getSheetAt(0);
+		String errorMessage;
+		boolean isError = false;
 
 		worksheet.setColumnWidth(colNumber, 15000);
 		int startRowIndex = 0;
@@ -1962,7 +1971,11 @@ public class SaveContents {
 		for (String key : errorSet) {
 			row = worksheet.getRow(rowIndex);
 			cell = row.createCell(colNumber);
-			cell.setCellValue(key.substring(7));
+			errorMessage = key.substring(7);
+			if (errorMessage.length() > 5) {
+				isError = true;
+			}
+			cell.setCellValue(errorMessage);
 			cell.setCellStyle(errorCellStyle);
 			rowIndex++;
 		}
@@ -1984,13 +1997,18 @@ public class SaveContents {
 			workbook.write(out);
 			out.close();
 			System.out.println("Excel written successfully..");
-
-			UploadReport uploadReport = new UploadReport();
+			
 			uploadReport.setFileType(worksheetName);
 			uploadReport.setPath(uploadFilePath);
-			// uploadReport.setStatus(status);
-
-			// reportGeneratorService.addUploadReport(uploadReport, sellerId);
+			uploadReport.setDesc("Imported");
+			uploadReport.setSellerId(sellerId);
+			uploadReport.setSellerName(sellerService.getSeller(sellerId).getName());
+			if (isError) {
+				uploadReport.setStatus("Error");
+			} else {
+				uploadReport.setStatus("Success");
+			}
+			reportGeneratorService.addUploadReport(uploadReport, sellerId);
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -2000,7 +2018,8 @@ public class SaveContents {
 	}
 
 	public Map<String, GatePass> saveGatePassDetails(MultipartFile file,
-			int sellerId, String path) throws IOException {
+			int sellerId, String path, UploadReport uploadReport)
+					throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 
@@ -2180,7 +2199,7 @@ public class SaveContents {
 			
 			Set<String> errorSet = returnlist.keySet();
 			downloadUploadReportXLS(offices, "GatePassReport", 13, errorSet,
-					path, sellerId);
+					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			System.out.println("Inside save contents exception :"
 					+ e.getLocalizedMessage());

@@ -50,6 +50,7 @@ import com.o2r.model.Order;
 import com.o2r.model.Partner;
 import com.o2r.model.Product;
 import com.o2r.model.TaxCategory;
+import com.o2r.model.UploadReport;
 import com.o2r.service.DownloadService;
 import com.o2r.service.EventsService;
 import com.o2r.service.OrderService;
@@ -196,6 +197,7 @@ public class OrderController {
 		OutputStream outputStream = null;		
 		List<String> fileNames = new ArrayList<String>();
 		MultipartFile fileinput = files.get(0);
+		UploadReport uploadReport = new UploadReport();
 		int sellerId;
 		System.out.println(" got file");
 
@@ -216,7 +218,7 @@ public class OrderController {
 				switch (uploadForm.getSheetValue()) {
 				case "ordersummary":
 					orderProcessedMap = saveContents.saveOrderContents(
-							files.get(0), sellerId, applicationPath);
+							files.get(0), sellerId, applicationPath, uploadReport);
 
 					if (orderProcessedMap != null
 							&& !orderProcessedMap.isEmpty())
@@ -230,7 +232,7 @@ public class OrderController {
 					break;
 				case "orderPoSummary":
 					orderProcessedMap = saveContents.saveOrderPOContents(
-							files.get(0), sellerId, applicationPath);
+							files.get(0), sellerId, applicationPath, uploadReport);
 					if (orderProcessedMap != null && !orderProcessedMap.isEmpty())
 						serviceService.updateProcessedOrdersCount(sellerId, orderProcessedMap.size());
 					else
@@ -240,51 +242,51 @@ public class OrderController {
 					break;
 				case "gatepassSummary":
 					model.put("gatepassMap", saveContents.saveGatePassDetails(
-							files.get(0), sellerId, applicationPath));
+							files.get(0), sellerId, applicationPath, uploadReport));
 					model.put("mapType", "gatepassMap");
 					break;
 				case "paymentSummary":
 					model.put("orderPaymentMap", saveContents
 							.savePaymentContents(files.get(0), sellerId,
-									applicationPath));
+									applicationPath, uploadReport));
 					model.put("mapType", "orderPaymentMap");
 					break;
 				case "returnSummary":
 					model.put("orderReturnMap", saveContents
 							.saveOrderReturnDetails(files.get(0), sellerId,
-									applicationPath));
+									applicationPath, uploadReport));
 					model.put("mapType", "orderReturnMap");
 					break;
 				case "productSummary":
 					model.put("productMap", saveContents.saveProductContents(
-							files.get(0), sellerId, applicationPath));
+							files.get(0), sellerId, applicationPath, uploadReport));
 					model.put("mapType", "productMap");
 					break;
 				case "productConfigSummary":
 					model.put("productMap", saveContents
 							.saveProductConfigContents(files.get(0), sellerId,
-									applicationPath));
+									applicationPath, uploadReport));
 					model.put("mapType", "productMap");
 					break;
 				case "inventorySummary":
 					model.put("inventoryMap", saveContents
 							.saveInventoryDetails(files.get(0), sellerId,
-									applicationPath));
+									applicationPath, uploadReport));
 					model.put("mapType", "inventoryMap");
 					break;
 				case "debitNoteSummary":
 					saveContents.saveDebitNoteDetails(files.get(0), sellerId,
-							applicationPath);
+							applicationPath, uploadReport);
 					model.put("mapType", "debitNoteSummary");
 					break;
 				case "poPaymentSummary":
 					saveContents.savePoPaymentDetails(files.get(0), sellerId,
-							applicationPath);
+							applicationPath, uploadReport);
 					model.put("mapType", "poPaymentSummary");
 					break;
 				case "expenseSummary":
 					model.put("expensesMap", saveContents.saveExpenseDetails(
-							files.get(0), sellerId, applicationPath));
+							files.get(0), sellerId, applicationPath, uploadReport));
 					model.put("mapType", "expensesMap");
 					break;
 
@@ -318,8 +320,11 @@ public class OrderController {
 				double endtime = System.currentTimeMillis();
 				System.out.println(" **endtime : " + endtime);
 				double lapsetime = (endtime - starttime) / 1000;
+				
+				//update uploadReport with time
 				model.put("fileName", files.get(0).getOriginalFilename());
 				model.put("timeTaken", lapsetime);
+				model.put("uploadReport", uploadReport);
 			} catch (Exception e) {
 				log.debug("Inside exception , filetype not accepted "+ e.getLocalizedMessage());
 				e.printStackTrace();
