@@ -131,7 +131,7 @@ span .#error {
 
 											<div class="col-sm-8">
 												<form:input type="email" class="form-control"
-													value="${seller.email}" path="email" required="true" />
+													value="${seller.email}" path="email" required="true" readonly="true"/>
 											</div>
 										</div>
 										<div class="hr-line-dashed"></div>

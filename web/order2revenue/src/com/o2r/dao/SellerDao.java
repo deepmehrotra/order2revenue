@@ -1,6 +1,7 @@
 package com.o2r.dao;
 
 import java.util.List;
+import java.util.Properties;
 
 import com.o2r.helper.CustomException;
 import com.o2r.model.Seller;
@@ -36,7 +37,8 @@ public State getStateByName(String statename) throws CustomException;
 
 public void updateProcessedOrdersCount(int pid, int processedOrderCount) throws CustomException;
 
-public void addStateDeliveryTime(List<StateDeliveryTime> stateDelTimeList, int sellerId)
-		throws CustomException;
+public void addStateDeliveryTime(List<StateDeliveryTime> stateDelTimeList, int sellerId)throws CustomException;
+
+//public void sendMail(String email, String code)throws CustomException;
 
 }

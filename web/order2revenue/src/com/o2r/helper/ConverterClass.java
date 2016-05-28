@@ -314,6 +314,7 @@ public class ConverterClass {
 			seller.setTinNumber(sellerBean.getTinNumber());
 			seller.setTanNumber(sellerBean.getTanNumber());
 			seller.setRole(sellerBean.getRole());
+			seller.setVerCode(sellerBean.getVerCode());
 			seller.setStateDeliveryTime(sellerBean.getStateDeliveryTime());
 		}
 		return seller;
@@ -361,6 +362,7 @@ public class ConverterClass {
 				bean.setContactNo(seller.getContactNo());
 				bean.setBrandName(seller.getBrandName());
 				bean.setLogoUrl(seller.getLogoUrl());
+				bean.setVerCode(seller.getVerCode());
 				bean.setTinNumber(seller.getTinNumber());
 				bean.setTanNumber(seller.getTanNumber());
 				beans.add(bean);
@@ -386,6 +388,7 @@ public class ConverterClass {
 			bean.setTinNumber(seller.getTinNumber());
 			bean.setTanNumber(seller.getTanNumber());
 			bean.setRole(seller.getRole());
+			bean.setVerCode(seller.getVerCode());
 			bean.setStateDeliveryTime(seller.getStateDeliveryTime());
 		}
 		return bean;

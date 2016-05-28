@@ -25,6 +25,7 @@ public class SellerBean {
 	private String brandName;
 	private String logoUrl;
 	private Role role;
+	private String verCode;
 	private List<OrderBean> orders = new ArrayList<OrderBean>();
 	private List<CategoryBean> categories = new ArrayList<CategoryBean>();
 	private List<ProductBean> products = new ArrayList<ProductBean>();
@@ -185,6 +186,14 @@ public class SellerBean {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public String getVerCode() {
+		return verCode;
+	}
+
+	public void setVerCode(String verCode) {
+		this.verCode = verCode;
 	}
 
 }

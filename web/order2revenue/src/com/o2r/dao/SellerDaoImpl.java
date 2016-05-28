@@ -3,7 +3,16 @@ package com.o2r.dao;
 import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Random;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -64,6 +73,9 @@ public class SellerDaoImpl implements SellerDao {
 		String tanNumber = null;
 		String brandName = null;
 		String logoUrl = null;
+		String verCode=null;
+		String verificationLink=null;
+		Random random=new Random();	
 		if (seller != null && seller.getId() != 0) {
              id = seller.getId();
              name = seller.getName();
@@ -76,6 +88,7 @@ public class SellerDaoImpl implements SellerDao {
              tanNumber = seller.getTanNumber();
              brandName = seller.getBrandName();
              logoUrl = seller.getLogoUrl();
+             verCode = seller.getVerCode();
 		}		
 		try {
 			Session session = sessionFactory.openSession();
@@ -98,14 +111,21 @@ public class SellerDaoImpl implements SellerDao {
 		                    if(logoUrl != null){
 		                    	sellerNew.setLogoUrl(logoUrl); 
 		                    }
+		                    if(verCode.equals("Verified")){
+		                    	sellerNew.setVerCode(verCode);
+		                    }
 		                }
 					session.saveOrUpdate(sellerNew);
 					
 				
-			}
-			else
-			{
-			session.saveOrUpdate(seller);
+			}else{
+				int r1=random.nextInt((999 - 111) + 1) + 111;
+				int r2=random.nextInt((999 - 111) + 1) + 111;
+				verCode="O2R"+r1+"USER"+r2;
+				verificationLink = "http://localhost:8080/verify.html?code="+verCode;
+				seller.setVerCode(verCode);
+				session.saveOrUpdate(seller);
+				sendMail(seller.getEmail(),verificationLink);
 			}
 			session.getTransaction().commit();
 			session.close();
@@ -460,5 +480,48 @@ public class SellerDaoImpl implements SellerDao {
 			throw new CustomException(GlobalConstant.updateProcessedOrdersCountError, new Date(), 1, GlobalConstant.updateProcessedOrdersCountErrorCode, e);
 		}
 		log.info("*** updateProcessedOrdersCount Ends : SellerDaoImpl ****");
-	}
+	}	
+	
+	public void sendMail(String email, String verificationLink)throws CustomException{
+		
+			
+		final String from="2mailbishnu@gmail.com";
+		
+			
+			Properties prop = new Properties();
+			prop.put("mail.smtp.starttls.enable", "true");
+			prop.put("mail.smtp.auth", "true");
+			prop.put("mail.smtp.host", "smtp.gmail.com");
+			prop.put("mail.smtp.port", "587");
+
+			javax.mail.Session session = javax.mail.Session.getInstance(prop,
+					new javax.mail.Authenticator() {
+						protected PasswordAuthentication getPasswordAuthentication() {
+							return new PasswordAuthentication(from, "DeadmaN^^");
+						}
+					});
+
+			try {
+				Message message = new MimeMessage(session);
+				message.setFrom(new InternetAddress(from));
+				message.addRecipient(Message.RecipientType.TO,
+						new InternetAddress(email));
+				message.setSubject("Registration Confirmation");
+				message.setContent("<html>\n" +
+	                    "<body>\n" +
+	                    "\n" +
+	                    "<a href="+verificationLink+">\n" + "Click here to Complete Your Registration</a>\n" +
+	                    "\n" +
+	                    "</body>\n" +
+	                    "</html>", "text/html");
+				Transport.send(message);
+				System.out.println("Mail send Successfully....");
+			} catch (AddressException e) {
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
+		
+	    
+	  }
 }

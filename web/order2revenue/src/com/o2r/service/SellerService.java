@@ -15,7 +15,7 @@ import com.o2r.model.StateDeliveryTime;
 //GIT Test
 public interface SellerService {
  
- public void addSeller(Seller seller, Properties p)throws CustomException;
+ public void addSeller(Seller seller)throws CustomException;
 
  public List<Seller> listSellers()throws CustomException;
  
