@@ -84,12 +84,12 @@ function checkOnBlur()
         	   if(res=="false")
                 	{
                 	nameAvailability=false;
-                	 $("#eventNameMessage").html("Inventory Group already exist");
+                	 $("#eventNameMessage").html("Invalid Event Name !");
                 	}
                 else
                 	{
                 	nameAvailability=true;
-                	$("#eventNameMessage").html("Inventory Group name available");
+                	$("#eventNameMessage").html("Valid Event Name !");
                 	}
             
        
@@ -104,7 +104,7 @@ function checkOnBlur()
 	    			            }
 	    			  },
 	    	     messages: {
-	    	    	 catName: "Inventory group name required"
+	    	    	 catName: "Event Name Required !"
 	    	    	
 	    	     }
 	    	 });
@@ -194,25 +194,25 @@ function checkOnBlur()
                         <div class="col-sm-12">
                           <h4>NR Calculator</h4>
                         </div>
-                        <div class="col-sm-12">
+                       	<div class="col-sm-12">
 							<div class="col-sm-4">
                             <div class="radio">
                               <label>
-                                <form:radiobutton  value="original" id="nrCalculatorEvent_original" path="nrnReturnConfig.nrCalculatorEvent" class="nrCalculatorEvent" />
+                                <form:radiobutton name="nr" value="original" id="nrCalculatorEvent_original" path="nrnReturnConfig.nrCalculatorEvent" class="nrCalculatorEvent" />
                                 Original </label>
                             </div>
                           </div>
                           <div class="col-sm-4">
                             <div class="radio">
                               <label>
-                                <form:radiobutton  value="variable" id="nrCalculatorEvent_variable" path="nrnReturnConfig.nrCalculatorEvent"  class="nrCalculatorEvent"  />
+                                <form:radiobutton name="nr" value="variable" id="nrCalculatorEvent_variable" path="nrnReturnConfig.nrCalculatorEvent"  class="nrCalculatorEvent"  />
                                 Variable NR</label>
                             </div>
                           </div>
                           <div class="col-sm-4">
                             <div class="radio">
                               <label>
-                                <form:radiobutton  value="fixed" id="nrCalculatorEvent_fixed" path="nrnReturnConfig.nrCalculatorEvent" class="nrCalculatorEvent"  />
+                                <form:radiobutton name="nr" value="fixed" id="nrCalculatorEvent_fixed" path="nrnReturnConfig.nrCalculatorEvent" class="nrCalculatorEvent"  />
                                 Fixed TP </label>
                             </div>
                           </div>
@@ -261,7 +261,7 @@ function checkOnBlur()
 																			<div class="input-group m-b col-md-4">
 																				<input type="text" class="form-control"
 																					name="nr-fixedCommissionPercent"
-																					value="${chargeMap.fixedCommissionPercent}">
+																					value="${chargeMap.fixedCommissionPercent}" id="fixedCommissionPercent">
 																				<span class="input-group-addon">%</span>
 																			</div>
 																		</div>
@@ -812,7 +812,7 @@ function checkOnBlur()
 																		<div class="col-md-4 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control" name="nr-serviceTax"
-																				value="${chargeMap.serviceTax}">
+																				value="${chargeMap.serviceTax}" id="serviceTax">
 																		</div>
 																	</div>
 																</div>
@@ -2241,8 +2241,7 @@ function checkOnBlur()
                     </div>
                 
 				<div class="ibox-content add-company">
-					<button class="btn btn-primary pull-right" type="submit"
-								onclick="submitOrder();">Save</button>
+					<button class="btn btn-primary pull-right" type="submit" id="EveSubmit"	onclick="submitOrder()">Save</button>
 				</div>
 				
 				
@@ -2294,6 +2293,20 @@ Custom and plugin javascript
 
 <script type="text/javascript">
   $(document).ready(function () {
+	  
+	  	
+	  /* $('.nrCalculatorEvent').click(function(){
+
+          var gender=$('.nrCalculatorEvent').val();
+          if ($(".nrCalculatorEvent:checked").length == 0){
+              $('.nrCalculatorEvent').text("Type is required !");
+              return false;
+          }
+      }); */	
+	  
+	  
+	  
+	  		
             	
         /* Retrive Radio Buttons Starts */
         	$(".commissionType").click(function() {
@@ -2644,21 +2657,7 @@ Custom and plugin javascript
             
             
 
-/*  $("#nr-switch").change(function() {
-     if(this.checked) {
-             $('.radio5').hide();
-             $("#nr-switch-sec").slideDown();
-     }
-  else
-  {
-   
-             $("#nr-switch-sec").slideUp();
-  }
-  }); */
-            	
-            	
-            	
-            	
+	
                 $('.i-checks').iCheck({
                     checkboxClass: 'icheckbox_square-green',
                     radioClass: 'iradio_square-green',
@@ -2677,7 +2676,7 @@ Custom and plugin javascript
       
 
 		function submitOrder() {
-			var validator = $("#addEvent").validate({
+			var validator = $("#addEvent").validate({				
 				rules : {
 					eventName : {
 						required : true,
@@ -2692,14 +2691,52 @@ Custom and plugin javascript
 					endDate : {
 						required : true,
 					},
-					
+										
 				},
 				messages : {
-					eventName : "Event Name Should Be Entered !",
-					channelName : "Channel Name Should be Selected !",
+					eventName : "Event Name Required !",
+					channelName : "Channel Name Should Be Selected !",
 					startDate : "Select a Starting Date !",
-					endDate : "select an Ending Date !"
+					endDate : "Select an Ending Date !"
+						
 				}
+			});
+			$(".nrCalculatorEvent").rules("add", { 
+				  required:function(element) {
+					  if ($(".nrCalculatorEvent:checked").length == 0){
+			             return true;
+			          }
+				 }				
+			});
+			$(".commissionType").rules("add", { 
+				  	required:function(element) {
+					 	if($(".nrCalculatorEvent:checked").val() == "variable"){ 
+						  	if ($(".commissionType:checked").length == 0){
+				            	return true;
+				          	}
+					 	}
+				 	}					
+			});
+			$("#fixedCommissionPercent").rules("add", { 
+				required:function(element) {
+					if ($(".commissionType:checked").val() == "fixed"){
+						number : true
+		          	}
+				}			
+			});
+			$("#serviceTax").rules("add", { 
+				required:function(element) {
+					if ($(".nrCalculatorEvent:checked").val() == "variable"){
+						number : true
+		          	}
+				}			
+			});
+			$(".returnCalculatorEvent").rules("add", { 
+				  required:function(element) {
+					  if ($(".returnCalculatorEvent").length == 0){
+			             return true;
+			          }
+				 }				
 			});
 		}
 

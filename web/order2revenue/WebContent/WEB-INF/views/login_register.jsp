@@ -37,6 +37,7 @@
 	              		<input type="email" name="j_username" id="j_username" required placeholder="Email id" />
 	              	</div>	
 	          	</div>
+	          	<br><br>
 	          <div class="field-wrap">
 	            <div class="icon">
 	            	<img src="/O2R/landing/img/icons/password.png" alt="user">
@@ -88,7 +89,7 @@
 	          	</div>
 	          	<div class="field-wrap" style="display:flex;">
 	          		<div class="check">
-	          			<input type="checkbox" style="width: 10%;height: 15px;margin-top: 9px;">
+	          			<input type="checkbox" style="width: 10%;height: 15px;margin-top: 9px; float: right;">
 	          		</div> 
 	          		<div class="accept">
 	          			<p style="color: #a0b3b0;font-weight: 600;margin-top: 6px;">

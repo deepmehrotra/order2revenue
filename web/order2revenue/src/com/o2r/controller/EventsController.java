@@ -99,7 +99,7 @@ public class EventsController {
 				eventsBean.setSellerId(helperClass.getSellerIdfromSession(request));
 				eventsBean.setCreatedDate(new Date());
 				Events events=ConverterClass.prepareEventsModel(eventsBean);
-				eventsService.addEvent(events, helperClass.getSellerIdfromSession(request));
+				//eventsService.addEvent(events, helperClass.getSellerIdfromSession(request));
 			}catch(CustomException ce){		
 				log.error("saveEvent exception : " + ce.toString());
 				model.put("errorMessage", ce.getLocalMessage());

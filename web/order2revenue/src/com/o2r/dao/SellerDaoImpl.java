@@ -68,7 +68,6 @@ public class SellerDaoImpl implements SellerDao {
 		String companyName = null; 
 		String contactNo = null;
 		String password = null;
-		String email=null;
 		String tinNumber = null;
 		String tanNumber = null;
 		String brandName = null;
@@ -80,7 +79,6 @@ public class SellerDaoImpl implements SellerDao {
              id = seller.getId();
              name = seller.getName();
              address = seller.getAddress();
-             email = seller.getEmail();
              companyName = seller.getCompanyName();
              contactNo = seller.getContactNo();
              password = seller.getPassword();
@@ -101,7 +99,6 @@ public class SellerDaoImpl implements SellerDao {
 		                    sellerNew.setId(id);
 		                    sellerNew.setName(name);
 		                    sellerNew.setAddress(address);
-		                    sellerNew.setEmail(email);
 		                    sellerNew.setCompanyName(companyName);
 		                    sellerNew.setContactNo(contactNo);
 		                    sellerNew.setPassword(password);
@@ -122,7 +119,7 @@ public class SellerDaoImpl implements SellerDao {
 				int r1=random.nextInt((999 - 111) + 1) + 111;
 				int r2=random.nextInt((999 - 111) + 1) + 111;
 				verCode="O2R"+r1+"USER"+r2;
-				verificationLink = "http://localhost:8080/verify.html?code="+verCode;
+				verificationLink = "http://www.order2revenue.com/";
 				seller.setVerCode(verCode);
 				session.saveOrUpdate(seller);
 				sendMail(seller.getEmail(),verificationLink);

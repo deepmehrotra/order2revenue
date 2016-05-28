@@ -115,7 +115,7 @@ public class SellerController {
 		}
 
 		log.info("$$$ registerSeller Ends : SellerController $$$");
-		return new ModelAndView("redirect:/login-form.html?registered=true");
+		return new ModelAndView("redirect:/login_register.html?registered=true");
 	}
 
 	@RequestMapping(value = "/sellers", method = RequestMethod.GET)
