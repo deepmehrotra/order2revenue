@@ -123,6 +123,12 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 				sellerId);
 	}
 
+	@Override
+	public void addUploadReport(UploadReport uploadReport, int sellerId) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	/*
 	 * 
 	 * @Override

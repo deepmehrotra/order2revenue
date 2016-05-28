@@ -47,4 +47,6 @@ public interface ReportGeneratorService {
 	List<PartnerReportDetails> getDebtorsReportDetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException;
 
+	public void addUploadReport(UploadReport uploadReport, int sellerId);
+
 }
