@@ -44,7 +44,7 @@
                                 <h1 class="no-margins">${dashboardValue.saleQuantityThisYear}</h1>
                                 <div class="stat-percent font-bold text-info">
                                  <fmt:formatNumber type="number"  maxFractionDigits="2"  value="${dashboardValue.percentChangeInSQ}" />% <i class="fa fa-level-up"></i></div>
-                                <small><%= new Date().getYear()+1900%></small>
+                                <small>Till <fmt:formatDate value="<%= new Date()%>" pattern="MMM dd ,YYYY"/></small>
                             </div>
                         </div>
                     </div>
@@ -227,7 +227,7 @@
                     <div class="col-lg-3">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <h5>Top Selling Regions</h5>
+                                <h5>Top Selling Regions(6 months)</h5>
                             </div>
                             <div class="ibox-content">
                              <div class="slim-scroll-bar">
@@ -235,7 +235,7 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>SKU</th>
+                                <th>City</th>
                                 <th>Sold Qty</th>
                             </tr>
                             </thead>
@@ -541,113 +541,7 @@ var expenseColor=[];
              			  </c:forEach>
                            </c:if>
                          
-      //Plotting Chart for order and payment from last 31 days
-         /* var order30Count=[];
-            <c:if test="${!empty dashboardValue.last30daysOrderCount}">
-            <c:forEach items="${dashboardValue.last30daysOrderCount}" var="last30daysOrderCount" varStatus="loop">
-            var arr1 = ["${last30daysOrderCount.key.getTime()}","${last30daysOrderCount.value}"];
-            order30Count.push(arr1);
-            </c:forEach>
-            </c:if>
-            var payment30count=[];
-            
-            <c:choose>
-                            <c:when test="${!empty dashboardValue.last30DaysPaymentCount}">
-           <c:forEach items="${dashboardValue.last30DaysPaymentCount}" var="last30DaysPaymentCount" varStatus="loop">
-            var arr1 = ["${last30DaysPaymentCount.key.getTime()}","${last30DaysPaymentCount.value} "];
-            payment30count.push(arr1);
-            </c:forEach>
-            </c:when>
-            <c:otherwise>
-            <c:if test="${!empty dashboardValue.last30daysOrderCount}">
-            <c:forEach items="${dashboardValue.last30daysOrderCount}" var="last30daysOrderCount" varStatus="loop">
-            var arr1 = ["${last30daysOrderCount.key.getTime()}",0];
-            payment30count.push(arr1);
-            </c:forEach>
-            </c:if>
-            </c:otherwise>
-            </c:choose> */
- 
-          
-     /*        var dataset = [
-                {
-                    label: "Number of orders",
-                    data: order30Count,
-                    color: "#1ab394",
-                    bars: {
-                        show: true,
-                        align: "center",
-                        barWidth: 24 * 60 * 60 * 600,
-                        lineWidth:0
-                    }
-                }, {
-                    label: "Payments",
-                    data: payment30count,
-                    yaxis: 2,
-                    color: "#464f88",
-                    lines: {
-                        lineWidth:1,
-                            show: true,
-                            fill: true,
-                        fillColor: {
-                            colors: [{
-                                opacity: 0.2
-                            }, {
-                                opacity: 0.2
-                            }]
-                        }
-                    },
-                    splines: {
-                        show: false,
-                        tension: 0.6,
-                        lineWidth: 1,
-                        fill: 0.1
-                    },
-                }
-            ];
-            var options = {
-                xaxis: {
-                    mode: "time",
-                    tickSize: [1, "day"],
-                    tickLength: 0,
-                    axisLabel: "Date",
-                    axisLabelUseCanvas: true,
-                    axisLabelFontSizePixels: 12,
-                    axisLabelFontFamily: 'Arial',
-                    axisLabelPadding: 10,
-                    color: "#d5d5d5"
-                },
-                yaxes: [{
-                    position: "left",
-                   // max: 500,
-                    color: "#d5d5d5",
-                    axisLabelUseCanvas: true,
-                    axisLabelFontSizePixels: 12,
-                    axisLabelFontFamily: 'Arial',
-                    axisLabelPadding: 3
-                }, {
-                    position: "right",
-                    clolor: "#d5d5d5",
-                    axisLabelUseCanvas: true,
-                    axisLabelFontSizePixels: 12,
-                    axisLabelFontFamily: ' Arial',
-                    axisLabelPadding: 67
-                }
-                ],
-                legend: {
-                    noColumns: 1,
-                    labelBoxBorderColor: "#000000",
-                    position: "nw"
-                },
-                grid: {
-                    hoverable: false,
-                    borderWidth: 0
-                }
-            }; */
-         /*    function gd(year, month, day) {
-                return new Date(year, month - 1, day).getTime();
-            }
-       */
+     
             
         //Plotting order vs payment for last 12 months
           function plotOrderPaymentMonthly()

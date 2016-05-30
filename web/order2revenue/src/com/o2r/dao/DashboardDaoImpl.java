@@ -1,5 +1,6 @@
 package com.o2r.dao;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.o2r.bean.DashboardBean;
-import com.o2r.controller.AdminController;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.model.Customer;
@@ -59,20 +59,41 @@ public class DashboardDaoImpl implements DashboardDao {
 			+ ":endDate and (ot.poOrder =0 OR (ot.poOrder =1 and ot.consolidatedOrder_orderId is NULL)) "
 			+ "and ot.seller_Id=:sellerId GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate) "
 			+ "order by YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
-	private static final String orderCountMonthlyQuery = "Select count(*), month(ot.orderDate) as month ,YEAR(ot.orderDate) as year from Order_Table"
-			+ " ot where ot.orderDate between :startDate AND :endDate and ot.seller_Id=:sellerId "
-			+ "GROUP BY YEAR(ot.orderDate), MONTH(ot.orderDate) DESC";
+	private static final String orderCountMonthlyQuery = "Select count(*), month(ot.shippedDate) as month ,YEAR(ot.shippedDate) as "
+			+ "year from Order_Table ot where ot.shippedDate between :startDate AND :endDate and "
+			+ "(ot.poOrder =0 OR (ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL ))and ot.seller_Id=:sellerId "
+			+ "GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate) "
+			+ "ORDER BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
 	private static final String paymentCountMonthlyQuery = "Select count(*), month(op.dateOfPayment) as month ,YEAR(op.dateOfPayment) "
-			+ "as year from Order_Table ot ,OrderPay op where op.dateOfPayment between :startDate AND :endDate "
-			+ "and op.dateOfPayment is NOT NULL and op.paymentId=ot.orderPayment_paymentId and ot.seller_Id=:sellerId "
-			+ "GROUP BY YEAR(op.dateOfPayment), MONTH(op.dateOfPayment) DESC";
-	private static final String paymentCountForDurationQuery = "Select count(*) from Order_Table ot ,"
-			+ "OrderPay op where op.dateOfPayment between :startDate AND :endDate and op.dateOfPayment "
-			+ "is NOT NULL and op.paymentId=ot.orderPayment_paymentId and ot.seller_Id=:sellerId";
-	private static final String orderCountForDurationQuery = "Select count(*) from Order_Table ot "
-			+ "where ot.orderDate between :startDate AND :endDate and ot.seller_Id=:sellerId";
-	private static final String grossProfitForDurationQuery = "Select sum(grossProfit) from Order_Table ot where "
+			+ "as year from Order_Table ot,OrderPay op where op.dateOfPayment between :startDate AND :endDate "
+			+ "and (ot.poOrder =0 OR (ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL ))and "
+			+ "op.dateOfPayment is NOT NULL and op.paymentId=ot.orderPayment_paymentId and ot.seller_Id=:sellerId "
+			+ "GROUP BY YEAR(op.dateOfPayment), MONTH(op.dateOfPayment) ORDER BY YEAR(op.dateOfPayment), MONTH(op.dateOfPayment)";
+	private static final String paymentCountForDurationQuery = "Select count(*)from Order_Table ot,OrderPay op "
+			+ "where op.dateOfPayment between :startDate AND :endDate "
+			+ "and (ot.poOrder =0 OR (ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL ))and "
+			+ "op.dateOfPayment is NOT NULL and op.paymentId=ot.orderPayment_paymentId and ot.seller_Id=:sellerId";
+	private static final String orderCountForDurationQuery = "Select count(*) "
+			+ "from Order_Table ot where ot.shippedDate between :startDate AND :endDate and "
+			+ "(ot.poOrder =0 OR (ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL ))and ot.seller_Id=:sellerId";
+	/*private static final String grossProfitForDurationQuery = "Select sum(grossProfit) from Order_Table ot where "
 			+ "ot.orderDate between :startDate AND :endDate and ot.seller_Id=:sellerId";
+	*/private static final String grossProfitForMPDurationQuery = "select sum((ot.pr-(prd.productPrice*ot.quantity))) "
+			+ "from order_table ot , Product prd where ot.productSkuCode=prd.productSkuCode and ot.shippedDate "
+			+ "between :startDate AND :endDate and ot.poOrder =0 and ot.seller_Id=:sellerId";
+	private static final String grossProfitForMPReturnDurationQuery = "select sum(((ot.pr-(prd.productPrice*ot.quantity))/ot.quantity)"
+			+ "*orr.returnorrtoQty + orr.estimateddeduction) "
+			+ "from order_table ot , Product prd , orderreturn orr where ot.productSkuCode=prd.productSkuCode "
+			+ "and ot.orderReturnOrRTO_returnId=orr.returnId and orr.returnDate between :startDate AND :endDate "
+			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId";
+	private static final String grossProfitPODurationQuery = "Select sum(ot.grossProfit) as grossProfit"
+			+ " from Order_Table ot where ot.shippedDate "
+			+ "between  :startDate AND :endDate and ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL "
+			+ "and ot.seller_Id=:sellerId";
+	private static final String grossProfitGPDurationQuery = "Select sum(ot.grossProfit) as grossProfit "
+			+ "from Order_Table ot ,OrderReturn  ort where ort.returnDate "
+			+ "between  :startDate AND :endDate and ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL "
+			+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId";
 	
 	private static final String returnNRPOMonthlyQuery = "Select sum(ort.estimateddeduction+ort.netNR) as returnCharges,"
 			+ " sum(ort.returnorrtoQty) as quantity,Monthname(ort.returnDate) as month ,YEAR(ort.returnDate) from "
@@ -85,18 +106,19 @@ public class DashboardDaoImpl implements DashboardDao {
 			+ "ort.returnDate between :startDate AND :endDate and ort.returnId=ot.orderReturnOrRTO_returnId "
 			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId GROUP BY YEAR(ort.returnDate), MONTH(ort.returnDate) "
 			+ "order by YEAR(ort.returnDate), MONTH(ort.returnDate)";
-	private static final String grossProfitMPMonthlyQuery = "Select sum((ot.grossProfit/(ot.quantity+ort.returnorrtoQty))*ot.quantity)"
-			+ " as grossProfit,Monthname(ot.shippedDate) as month ,"
-			+ "YEAR(ot.shippedDate) as year from Order_Table ot ,OrderReturn  ort where ot.shippedDate "
-			+ "between  :startDate AND :endDate and ot.poOrder =0 "
-			+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId "
-			+ "GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate) ORDER BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
-	private static final String grossProfitMPReturnMonthlyQuery = "Select sum((ot.grossProfit/(ot.quantity+ort.returnorrtoQty))*ort.returnorrtoQty)"
-			+ " as grossProfit,Monthname(ort.returnDate) as month ,"
-			+ "YEAR(ort.returnDate) as year from Order_Table ot ,OrderReturn  ort where ort.returnDate "
-			+ "between :startDate AND :endDate and ot.poOrder =0 "
-			+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId "
-			+ "GROUP BY YEAR(ort.returnDate), MONTH(ort.returnDate) ORDER BY YEAR(ort.returnDate), MONTH(ort.returnDate)";
+	private static final String grossProfitMPMonthlyQuery = "Select sum(ot.pr-(prd.productPrice*ot.quantity)) as grossProfit,"
+			+ "Monthname(ot.shippedDate) as month ,YEAR(ot.shippedDate) as year from Order_Table ot ,Product prd"
+			+ " where ot.shippedDate between  :startDate AND :endDate and ot.productSkuCode=prd.productSkuCode "
+			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)"
+			+ " ORDER BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
+
+	private static final String grossProfitMPReturnMonthlyQuery = "Select pcName ,sum(((ot.pr-(prd.productPrice*ot.quantity))/ot.quantity)"
+			+ "*orr.returnorrtoQty + orr.estimateddeduction) as grossProfit,Monthname(orr.returnDate) as month ,"
+			+ "YEAR(orr.returnDate) as year from Order_Table ot,orderreturn orr,Product prd where orr.returnDate between "
+			+ ":startDate AND :endDate and ot.productSkuCode=prd.productSkuCode "
+			+ "and ot.orderReturnOrRTO_returnId=orr.returnId and ot.poOrder =0 and ot.seller_Id=:sellerId "
+			+ "GROUP BY YEAR(orr.returnDate), MONTH(orr.returnDate) "
+			+ "ORDER BY YEAR(orr.returnDate), MONTH(orr.returnDate)";
 	private static final String grossProfitPOMonthlyQuery = "Select sum(ot.grossProfit) as grossProfit, "
 			+ "Monthname(ot.shippedDate) as month ,"
 			+ "YEAR(ot.shippedDate) as year from Order_Table ot where ot.shippedDate "
@@ -109,11 +131,19 @@ public class DashboardDaoImpl implements DashboardDao {
 			+ "between  :startDate AND :endDate and ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL "
 			+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId "
 			+ "GROUP BY YEAR(ort.returnDate), MONTH(ort.returnDate) "
-			+ "ORDER BY YEAR(ort.returnDate), MONTH(ort.returnDate);";
+			+ "ORDER BY YEAR(ort.returnDate), MONTH(ort.returnDate)";
 	private static final String expenditureMonthlyQuery = "SELECT sum(amount) as amt ,Monthname(t.expenseDate) as month, YEAR(t.expenseDate) as year FROM "
 			+ "Expenses t where t.expenseDate between :startDate AND :endDate and t.sellerId=:sellerId "
 			+ "GROUP BY YEAR(t.expenseDate), MONTH(t.expenseDate) "
 			+ "ORDER BY YEAR(t.expenseDate), MONTH(t.expenseDate)";
+	private static final String orderQtyinTimeQuery = "Select sum(ot.quantity) as quantity from "
+			+ "Order_Table ot where ot.shippedDate between :startDate AND :endDate "
+			+ "and (ot.poOrder =0 OR (ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL ))and "
+			+ "ot.seller_Id=:sellerId";
+	private static final String returnQtyinTimeQuery = "Select sum(ort.returnorrtoQty) as returnquantity from Order_Table ot"
+			+ " ,OrderReturn  ort where ort.returnDate between :startDate AND :endDate and "
+			+ "(ot.poOrder =0 OR (ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL )) and "
+			+ "ort.returnId=ot.orderReturnOrRTO_returnId and ot.poOrder =0 and ot.seller_Id=:sellerId";
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -123,17 +153,20 @@ public class DashboardDaoImpl implements DashboardDao {
 		long startTime = System.currentTimeMillis();
 		DashboardBean dashboardBean = null;
 		Date todayDate = new Date();
+		Date tommorrowDate = new Date();
 		Date yeasterdayDate = new Date();
 		Date lastYearEnd = new Date();
 		Date thisYearSatrt = new Date();
 		Date lastYearSatrt = new Date();
 		Date oneMonthBack = new Date();
+		Date thismonthstart = new Date();
 		Date sixMonthsBack = new Date();
 		Date after10days = new Date();
 		List<Object> orderNRQuantityMonthly = null;
 		List<Object> returnNRQuantityMonthly = null;
-		todayDate.setDate(todayDate.getDate() + 1);
-		todayDate.setMonth(todayDate.getMonth());
+		/*todayDate.setDate(todayDate.getDate() + 1);
+		todayDate.setMonth(todayDate.getMonth());*/
+		tommorrowDate.setDate(todayDate.getDate() + 1);
 		yeasterdayDate.setDate(yeasterdayDate.getDate() - 1);
 		lastYearEnd.setDate(31);
 		lastYearEnd.setMonth(11);
@@ -144,14 +177,16 @@ public class DashboardDaoImpl implements DashboardDao {
 		lastYearSatrt.setMonth(0);
 		lastYearSatrt.setYear(lastYearSatrt.getYear() - 1);
 		after10days.setDate(after10days.getDate() + 10);
-		oneMonthBack.setDate(oneMonthBack.getDate() - 31);
+		oneMonthBack.setDate(1);
+		oneMonthBack.setDate(oneMonthBack.getDate()-1);
+		thismonthstart.setDate(1);
 		sixMonthsBack.setDate(1);
 		sixMonthsBack.setMonth(sixMonthsBack.getMonth() - 5);
 		try {
 			dashboardBean = new DashboardBean();
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();			
-			dashboardBean.setProfitThisYear(netProfitForTime(session,lastYearEnd, todayDate, sellerId));
+			dashboardBean.setProfitThisYear(netProfitForTime(session,lastYearEnd, tommorrowDate, sellerId));
 			dashboardBean.setProfitLastYear(netProfitForTime(session,lastYearSatrt, thisYearSatrt, sellerId));
 			if ((int) dashboardBean.getProfitLastYear() != 0) {
 				if (dashboardBean.getProfitThisYear() > dashboardBean
@@ -187,9 +222,9 @@ public class DashboardDaoImpl implements DashboardDao {
 					.setTotalCustomers(getTotalCustomer(session, sellerId));
 			dashboardBean.setTotalStock(getTotalSKUCount(session, sellerId));
 			dashboardBean.setLast30daysOrderCount(orderCountforTimeDaily(
-					session, oneMonthBack, todayDate, sellerId));
+					session, oneMonthBack, tommorrowDate, sellerId));
 			dashboardBean.setLast30DaysPaymentCount(paymentCountforTimeDaily(
-					session, oneMonthBack, todayDate, sellerId));
+					session, oneMonthBack, tommorrowDate, sellerId));
 			dashboardBean.setLast12MonthsOrderCount(orderCountMonthly(session,
 					lastYearEnd, todayDate, sellerId));
 			dashboardBean.setLast12MonthsPaymentCount(paymentCountMonthly(
@@ -198,7 +233,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					yeasterdayDate, todayDate, sellerId,
 					orderCountForDurationQuery));
 			dashboardBean.setThisMonthOrderCount(countForDuration(session,
-					oneMonthBack, todayDate, sellerId,
+					thismonthstart, todayDate, sellerId,
 					orderCountForDurationQuery));
 			dashboardBean.setThisYearOrderCount(countForDuration(session,
 					lastYearEnd, todayDate, sellerId,
@@ -207,20 +242,17 @@ public class DashboardDaoImpl implements DashboardDao {
 					yeasterdayDate, todayDate, sellerId,
 					paymentCountForDurationQuery)); // todays
 			dashboardBean.setThisMonthPaymentCount(countForDuration(session,
-					oneMonthBack, todayDate, sellerId,
+					thismonthstart, todayDate, sellerId,
 					paymentCountForDurationQuery)); // this month
 			dashboardBean.setThisYearPaymentCount(countForDuration(session,
 					lastYearEnd, todayDate, sellerId,
 					paymentCountForDurationQuery));
-			dashboardBean.setTodaysGrossProfit(amountForDuration(session,
-					yeasterdayDate, todayDate, sellerId,
-					grossProfitForDurationQuery));
-			dashboardBean.setThisMonthGrossProfit(amountForDuration(session,
-					oneMonthBack, todayDate, sellerId,
-					grossProfitForDurationQuery));
-			dashboardBean.setThisYearGrossProfit(amountForDuration(session,
-					lastYearEnd, todayDate, sellerId,
-					grossProfitForDurationQuery));
+			dashboardBean.setTodaysGrossProfit(grossProfitForDuration(session,
+					yeasterdayDate, todayDate, sellerId));
+			dashboardBean.setThisMonthGrossProfit(grossProfitForDuration(session,
+					thismonthstart, todayDate, sellerId));
+			dashboardBean.setThisYearGrossProfit(grossProfitForDuration(session,
+					thisYearSatrt, todayDate, sellerId));
 			// testing purpose startdate as one monthback
 			dashboardBean.setTotalUpcomingPayments(listOfUpcomingPayment(
 					session, oneMonthBack, after10days, sellerId));
@@ -277,49 +309,44 @@ public class DashboardDaoImpl implements DashboardDao {
 	public long netSaleQtyforTime(Session session, Date startDate,Date endDate, int sellerId) {
 		
 		log.info("***netSaleQtyforTime starts***");
-		List<Object[]> results = null;
+		//List<Object[]> results = null;
 		long netSaleQty = 0;
-		long quantity = 0;
-		long returnQty = 0;
+		BigDecimal quantity = BigDecimal.ZERO;
+		BigDecimal returnQty=BigDecimal.ZERO;
+		List<BigDecimal> tempDblist=null;
 		try {			
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Order.class);
-			criteria.createAlias("seller", "seller",
-					CriteriaSpecification.LEFT_JOIN);
-			criteria.createAlias("consolidatedOrder", "consolidatedOrder",
-					CriteriaSpecification.LEFT_JOIN);
-			criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
-					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.between("orderDate", startDate, endDate));
-			Criterion rest1 = Restrictions.eq("poOrder", false);
-			Criterion rest2 = Restrictions.and(
-					Restrictions.eq("poOrder", true),
-					Restrictions.isNull("consolidatedOrder.orderId"));
-			criteria.add(Restrictions.or(rest1, rest2));
-			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			ProjectionList projList = Projections.projectionList();
-			projList.add(Projections.sum("quantity"));
-			projList.add(Projections.sum("orderReturnOrRTO.returnorrtoQty"));
-			criteria.setProjection(projList);
-			results = criteria.list();
-			Iterator iterator1 = results.iterator();
-			if (results != null) {
-				while (iterator1.hasNext()) {					
-					Object[] recordsRow = (Object[]) iterator1.next();
-					System.out.println(" record length:" + recordsRow.length);
-					if (recordsRow[0] != null && recordsRow[1] != null) {
-						quantity = Long.parseLong(recordsRow[0].toString());
-						returnQty = Long.parseLong(recordsRow[1].toString());
-						netSaleQty = quantity - returnQty;
-						for (int i = 0; i < recordsRow.length; i++) {
-							log.debug("\t" + recordsRow[i]);
-						}
-					}
-				}
-			}			
+			
+			Query orderQtythisyear = session
+					.createSQLQuery(orderQtyinTimeQuery)
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			tempDblist = orderQtythisyear.list();
+			if (tempDblist != null && tempDblist.size() != 0
+					&& tempDblist.get(0) != null)
+				quantity = tempDblist.get(0);
+			
+			tempDblist=null;
+			Query returnQtyThisYear = session
+					.createSQLQuery(returnQtyinTimeQuery)
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			tempDblist = returnQtyThisYear.list();
+			
+			if (tempDblist != null && tempDblist.size() != 0
+					&& tempDblist.get(0) != null)
+				returnQty = tempDblist.get(0);
+			
+				
+			
+			netSaleQty=quantity.longValue()-returnQty.longValue();
+			log.debug("Final Net sale Qty : quantity "+quantity+" returnQty "+returnQty);
+			System.out.println("Final Net sale Qty : quantity "+quantity+" returnQty "+returnQty);
 		} catch (Exception e) {
-			log.debug("Inside exception netsaleQauntity "+ e.getLocalizedMessage());
+			log.error("Inside exception netsaleQauntity "+ e.getLocalizedMessage());
+			log.error("Error in Getting sale quanittyt : ",e);
 			e.printStackTrace();
 		}
 		log.info("***netSaleQtyforTime ends***");
@@ -346,7 +373,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			criteriaForNR.createAlias("orderReturnOrRTO", "orderReturnOrRTO",CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
 					.add(Restrictions.eq("poOrder", false))
-					.add(Restrictions.between("orderDate", startDate, endDate));
+					.add(Restrictions.between("shippedDate", startDate, endDate));
 
 			criteriaForNR.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
@@ -360,7 +387,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					.add(Restrictions.eq("seller.id", sellerId))
 					.add(Restrictions.eq("poOrder", true))
 					.add(Restrictions.isNull("consolidatedOrder.orderId"))
-					.add(Restrictions.between("orderDate", startDate, endDate));
+					.add(Restrictions.between("shippedDate", startDate, endDate));
 
 			criteriaForPOprice.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
@@ -450,6 +477,11 @@ public class DashboardDaoImpl implements DashboardDao {
 					.add(Restrictions.isNotNull("orderPayment.dateofPayment"))
 					.add(Restrictions.between("orderPayment.dateofPayment",
 							startDate, endDate));
+			Criterion rest1 = Restrictions.eq("poOrder", false);
+			Criterion rest2 = Restrictions.and(	
+					Restrictions.eq("poOrder", true),
+					Restrictions.isNull("consolidatedOrder"));
+			criteria.add(Restrictions.or(rest1, rest2));
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			ProjectionList projList = Projections.projectionList();
 			projList.add(Projections.rowCount());
@@ -495,13 +527,18 @@ public class DashboardDaoImpl implements DashboardDao {
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.between("orderDate", startDate, endDate));
+					.add(Restrictions.between("shippedDate", startDate, endDate));
+			Criterion rest1 = Restrictions.eq("poOrder", false);
+			Criterion rest2 = Restrictions.and(	
+					Restrictions.eq("poOrder", true),
+					Restrictions.isNull("consolidatedOrder"));
+			criteria.add(Restrictions.or(rest1, rest2));
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			ProjectionList projList = Projections.projectionList();
 			projList.add(Projections.rowCount());
-			projList.add(Projections.groupProperty("orderDate"));
+			projList.add(Projections.groupProperty("shippedDate"));
 			criteria.setProjection(projList);
-			criteria.addOrder(org.hibernate.criterion.Order.asc("orderDate"));
+			criteria.addOrder(org.hibernate.criterion.Order.asc("shippedDate"));
 			results = criteria.list();
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
@@ -594,8 +631,14 @@ public class DashboardDaoImpl implements DashboardDao {
 			criteria.createAlias("orderPayment", "orderPayment",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.lt("orderPayment.paymentDifference", 0.0));
+					.add(Restrictions.ne("orderPayment.paymentDifference", 0.0));
+		
+			Criterion rest1 = Restrictions.eq("poOrder", false);
+			Criterion rest2 = Restrictions.and(	
+					Restrictions.eq("poOrder", true),
+					Restrictions.isNull("consolidatedOrder"));
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			criteria.add(Restrictions.or(rest1, rest2));
 			ProjectionList projList = Projections.projectionList();
 			projList.add(Projections.sum("orderPayment.paymentDifference"));
 			projList.add(Projections.groupProperty("pcName"));
@@ -911,7 +954,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					.add(Restrictions.eq("seller.id", sellerId))
 					.add(Restrictions.isNotNull("customer.customerCity"))
 					.add(Restrictions.ne("customer.customerCity", ""))
-					.add(Restrictions.between("orderDate", startDate, endDate));
+					.add(Restrictions.between("shippedDate", startDate, endDate));
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			ProjectionList projList = Projections.projectionList();
 			projList.add(Projections.rowCount(), "count");
@@ -952,14 +995,24 @@ public class DashboardDaoImpl implements DashboardDao {
 			Criteria criteria = session.createCriteria(Order.class);
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.between("orderDate", startDate, endDate));
+			.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId));
+					//.add(Restrictions.between("shippedDate", startDate, endDate));
+			Criterion rest1 = Restrictions.eq("poOrder", false);
+			Criterion rest2 = Restrictions.and(	
+					Restrictions.eq("poOrder", true),
+					Restrictions.isNotNull("consolidatedOrder"));
+			criteria.add(Restrictions.or(rest1, rest2));
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			ProjectionList projList = Projections.projectionList();
 			projList.add(Projections.groupProperty("productSkuCode"));
-			projList.add(Projections.sum("quantity"), "sum");
+			projList.add(Projections.sqlProjection("(sum(quantity-returnorrtoQty)) as grossQty",new String[] { "grossQty" },
+					new Type[] { Hibernate.INTEGER }),"grossQty");
+			/*projList.add(Projections.sum("quantity"), "sum");
+			projList.add(Projections.sum("orderReturnOrRTO.returnorrtoQty"), "return");*/
 			criteria.setProjection(projList);
-			criteria.addOrder(org.hibernate.criterion.Order.desc("sum"));
+			criteria.addOrder(org.hibernate.criterion.Order.desc("grossQty"));
 			results = criteria.list();
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
@@ -1186,6 +1239,69 @@ public class DashboardDaoImpl implements DashboardDao {
 			if (results != null && results.size() != 0
 					&& results.get(0) != null) {
 				sum = results.get(0);
+				log.debug(results.get(0));
+				log.debug("Double" + sum);
+			}
+		} catch (Exception e) {
+			log.debug("Inside pcount exception  "+ e.getLocalizedMessage());
+			e.printStackTrace();
+		}
+		log.info("***amountForDuration ends***");
+		return sum;
+	}
+	
+	public double grossProfitForDuration(Session session, Date startDate,Date endDate, int sellerId) {
+
+		log.info("***amountForDuration starts***");
+		List<Double> results = null;
+		double gpforMP = 0;
+		double gpforMPReturn = 0;
+		double gpforPO = 0;
+		double gpforGP = 0;
+		double sum = 0;
+		try {
+			session.beginTransaction();
+			Query gpquerryforMP = session.createSQLQuery(grossProfitForMPDurationQuery)
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = gpquerryforMP.list();
+			if (results != null && results.size() != 0
+					&& results.get(0) != null) {
+				gpforMP = results.get(0);
+				
+			Query gpquerryforMPReturn = session.createSQLQuery(grossProfitForMPReturnDurationQuery)
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = gpquerryforMPReturn.list();
+			if (results != null && results.size() != 0
+					&& results.get(0) != null) 
+				gpforMPReturn = results.get(0);
+				
+			Query gpquerryforPO = session.createSQLQuery(grossProfitPODurationQuery)
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = gpquerryforPO.list();
+			if (results != null && results.size() != 0
+					&& results.get(0) != null) 
+				gpforPO = results.get(0);
+			
+			Query gpquerryforGP = session.createSQLQuery(grossProfitGPDurationQuery)
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = gpquerryforGP.list();
+			if (results != null && results.size() != 0
+					&& results.get(0) != null) 
+				gpforGP = results.get(0);
+			
+			sum=gpforMP-gpforMPReturn+gpforPO-gpforGP;
+			
+			System.out.println(" Calculating gp for duration : startdate "+startDate+" endDate : "+endDate);
+			System.out.println(" Calculating gp MP : gpforMP "+gpforMP+" gpforMPReturn : "+gpforMPReturn);
+			System.out.println(" Calculating gp PO : gpforPO "+gpforPO+" gpforGP : "+gpforGP);
 				log.debug(results.get(0));
 				log.debug("Double" + sum);
 			}

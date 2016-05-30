@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -2165,6 +2164,7 @@ public class OrderDaoImpl implements OrderDao {
 			order.setGrossNetRate(nrValue);
 			order.setPartnerCommission(comission);
 			order.setFixedfee(fixedfee);
+			order.setServiceTax(serviceTax);
 			order.setPccAmount(pccAmount);
 			order.setShippingCharges(shippingCharges);
 		} catch (Exception e) {
@@ -2900,6 +2900,7 @@ public class OrderDaoImpl implements OrderDao {
 			order.setPartnerCommission(comission);
 			order.setFixedfee(fixedfee);
 			order.setPccAmount(pccAmount);
+			order.setServiceTax(serviceTax);
 			order.setShippingCharges(shippingCharges);
 		} catch (Exception e) {
 			e.printStackTrace();
