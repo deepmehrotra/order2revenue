@@ -35,6 +35,7 @@ import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
 import com.o2r.model.Partner;
 import com.o2r.model.PaymentUpload;
+import com.o2r.model.UploadReport;
 import com.o2r.service.DownloadService;
 import com.o2r.service.ManualChargesService;
 import com.o2r.service.OrderService;
@@ -315,6 +316,7 @@ public class UploadController {
 		String applicationPath = request.getServletContext().getRealPath("");
 		// System.out.println("Inside save method");
 		List<MultipartFile> files = uploadForm.getFiles();
+		UploadReport uploadReport = new UploadReport();
 
 		List<String> fileNames = new ArrayList<String>();
 		MultipartFile fileinput = files.get(0);
@@ -330,7 +332,7 @@ public class UploadController {
 				ValidateUpload.validateOfficeData(files.get(0));
 				System.out.println(" fileinput " + fileinput.getName());
 				saveContents.savePaymentContents(files.get(0), sellerId,
-						applicationPath);
+						applicationPath, uploadReport);
 			} catch (Exception e) {
 				e.printStackTrace();
 				log.error("Failed!",e);

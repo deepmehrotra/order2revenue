@@ -125,7 +125,7 @@
 			</div>
 		</div>
 	</div>
-	
+	<jsp:include page="../globalfooter.jsp"></jsp:include>
 
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
 

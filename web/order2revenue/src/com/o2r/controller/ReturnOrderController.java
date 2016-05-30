@@ -36,6 +36,7 @@ import com.o2r.helper.SaveContents;
 import com.o2r.helper.ValidateUpload;
 import com.o2r.model.Order;
 import com.o2r.model.OrderRTOorReturn;
+import com.o2r.model.UploadReport;
 import com.o2r.service.DownloadService;
 import com.o2r.service.OrderService;
 
@@ -463,6 +464,7 @@ public class ReturnOrderController {
 		
 		log.info("$$$ save() Starts : ReturnOrderController $$$");
 		String applicationPath = request.getServletContext().getRealPath("");
+		UploadReport uploadReport = new UploadReport();
 
 		List<MultipartFile> files = uploadForm.getFiles();
 		List<String> fileNames = new ArrayList<String>();
@@ -478,7 +480,7 @@ public class ReturnOrderController {
 				ValidateUpload.validateOfficeData(files.get(0));
 				log.debug(" fileinput " + fileinput.getName());
 				saveContents.saveOrderReturnDetails(files.get(0), sellerId,
-						applicationPath);
+						applicationPath, uploadReport);
 			} catch (Exception e) {
 				e.printStackTrace();
 				log.error("Failed!",e);

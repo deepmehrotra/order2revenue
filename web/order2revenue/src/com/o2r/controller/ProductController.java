@@ -40,6 +40,7 @@ import com.o2r.model.Category;
 import com.o2r.model.Partner;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
+import com.o2r.model.UploadReport;
 import com.o2r.service.CategoryService;
 import com.o2r.service.DownloadService;
 import com.o2r.service.OrderService;
@@ -635,6 +636,7 @@ public class ProductController {
 		List<String> fileNames = new ArrayList<String>();
 		MultipartFile fileinput = files.get(0);
 		int sellerId;
+		UploadReport uploadReport = new UploadReport();
 
 		// gets absolute path of the web application
 		String applicationPath = request.getServletContext().getRealPath("");
@@ -655,12 +657,13 @@ public class ProductController {
 				ValidateUpload.validateOfficeData(files.get(0));
 				log.debug(" fileinput " + fileinput.getName());
 				saveContents.saveProductContents(files.get(0), sellerId,
-						uploadFilePath);
+						uploadFilePath, uploadReport);
 
 			}
 			model.put("products", ConverterClass
 					.prepareListofProductBean(productService.listProducts(
 							helperClass.getSellerIdfromSession(request), 0)));
+			model.put("uploadReport", uploadReport);
 		} catch (CustomException ce) {
 			log.error("save exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -684,6 +687,7 @@ public class ProductController {
 		log.info("$$$ saveInventories Starts : ProductController $$$");
 		// gets absolute path of the web application
 		String applicationPath = request.getServletContext().getRealPath("");
+		UploadReport uploadReport = new UploadReport();
 
 		List<MultipartFile> files = uploadForm.getFiles();
 
@@ -704,12 +708,13 @@ public class ProductController {
 				ValidateUpload.validateOfficeData(files.get(0));
 				log.debug(" fileinput " + fileinput.getName());
 				saveContents.saveInventoryDetails(files.get(0), sellerId,
-						applicationPath);
+						applicationPath, uploadReport);
 
 			}
 			model.put("products", ConverterClass
 					.prepareListofProductBean(productService.listProducts(
 							helperClass.getSellerIdfromSession(request), 0)));
+			model.put("uploadReport", uploadReport);
 
 		} catch (CustomException ce) {
 			log.error("saveInventories exception : " + ce.toString());

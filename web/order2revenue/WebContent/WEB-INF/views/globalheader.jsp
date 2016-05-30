@@ -90,7 +90,7 @@
 							</a>
 							<div class="media-body">
 								<small class="pull-right">46h ago</small> <strong>Exported</strong>
-								by John Deo.<br> <small class="text-muted">3 days
+								by ${uploadReport.sellerName}<br> <small class="text-muted">3 days
 									ago at 7:58 pm - 10.06.2014</small>
 							</div>
 						</div>
