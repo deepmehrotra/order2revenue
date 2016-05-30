@@ -594,6 +594,11 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		partnerBusiness.setPiRefNumber(currOrder.getPIreferenceNo());
 		partnerBusiness.setSubOrderId(currOrder.getSubOrderID());
 		partnerBusiness.setLogisticPartner(currOrder.getLogisticPartner());
+		partnerBusiness.setPaymentType(currOrder.getPaymentType());
+		if(isPoOrder && consolidatedOrder!=null)
+			partnerBusiness.setPoOrder(true);
+		else
+			partnerBusiness.setPoOrder(false);
 		if(currCustomer != null){
 			partnerBusiness.setCustomerName(currCustomer.getCustomerName());
 			partnerBusiness.setCustomerEmail(currCustomer.getCustomerEmail());
@@ -692,6 +697,11 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			double paymentDifference = currOrderPayment
 					.getPaymentDifference();
 			partnerBusiness.setPaymentDifference(paymentDifference);
+			partnerBusiness.setPaymentCycle(currOrderPayment.getPaymentCycle());
+			partnerBusiness.setNegativeAmount(currOrderPayment.getNegativeAmount());
+			partnerBusiness.setPositiveAmount(currOrderPayment.getPositiveAmount());
+			partnerBusiness.setPaymentId(currOrderPayment.getPaymentId());			
+			partnerBusiness.setPaymentUploadedDate(currOrderPayment.getUploadDate());
 		}
 		partnerBusiness.setOrderId(currOrder.getOrderId());
 		partnerBusiness.setInvoiceID(currOrder.getInvoiceID());
@@ -707,13 +717,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		partnerBusiness.setNetSaleQuantity(netSaleQty);
 		double grossCommission = 0;
 		double grossCommissionNoQty = 0;
+		double grossCommissionQty = 0;
 		// MP & PO Conditions
 		if(isPoOrder && consolidatedOrder!=null){
 			grossCommission = currOrder.getPartnerCommission();
 			grossCommissionNoQty = grossCommission;
+			grossCommissionQty = grossCommission;
 		} else{
 			grossCommission = currOrder.getPartnerCommission() * netSaleQty;
 			grossCommissionNoQty = currOrder.getPartnerCommission() * returnQty;
+			grossCommissionQty = currOrder.getPartnerCommission() * quantity;
 		}
 		partnerBusiness.setGrossPartnerCommission(grossCommission);
 		double pccAmount = 0;
@@ -722,6 +735,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		double pccAmountNoQty = 0;
 		double fixedFeeNoQty = 0;
 		double shippingChargesNoQty = 0;
+		double pccAmountQty = 0;
+		double fixedFeeQty = 0;
+		double shippingChargesQty = 0;
 		// Only for MP
 		if(!isPoOrder){
 			pccAmount = currOrder.getPccAmount() * netSaleQty;
@@ -730,6 +746,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			pccAmountNoQty = currOrder.getPccAmount() * returnQty;
 			fixedFeeNoQty = currOrder.getFixedfee() * returnQty; 
 			shippingChargesNoQty = currOrder.getShippingCharges() * returnQty;
+			pccAmountQty = currOrder.getPccAmount() * quantity;
+			fixedFeeQty = currOrder.getFixedfee() * quantity; 
+			shippingChargesQty = currOrder.getShippingCharges() * quantity;
 		}
 		partnerBusiness.setPccAmount(pccAmount);				
 		partnerBusiness.setFixedfee(fixedFee);
@@ -737,6 +756,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		double totalAmount = grossCommission + pccAmount + fixedFee + shippingCharges;
 		double serviceTax = (totalAmount)*14.5/100;
 		double serviceTaxNoQty = (grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty)*14.5/100;
+		double serviceTaxQty = (grossCommissionQty + pccAmountQty + fixedFeeQty + shippingChargesQty)*14.5/100;
 		partnerBusiness.setServiceTax(serviceTax);
 		double grossCommissionToBePaid = 0;
 		if(isPoOrder && consolidatedOrder!=null)
@@ -744,6 +764,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		else
 			grossCommissionToBePaid = totalAmount + serviceTax;
 		double grossCommissionToBePaidNoQty = grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty + serviceTaxNoQty;
+		double grossCommissionToBePaidQty = grossCommissionQty + pccAmountQty + fixedFeeQty + shippingChargesQty + serviceTaxQty;
+		partnerBusiness.setGrossCommissionQty(grossCommissionToBePaidQty);
 		partnerBusiness.setGrossCommission(grossCommissionToBePaid);
 		double returnCommision = 0;
 		// MP & PO Conditions

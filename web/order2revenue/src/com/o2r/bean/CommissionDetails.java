@@ -3,6 +3,8 @@ package com.o2r.bean;
 import java.util.Comparator;
 
 public class CommissionDetails {
+	private String partner;
+	private String categoryName;
 	private double netPartnerCommissionPaid;
 	private double grossPartnerCommissionPaid;
 	private double netSaleQty;
@@ -11,6 +13,22 @@ public class CommissionDetails {
 	private double netReturnCommission;
 	private double netChannelCommissionToBePaid;
 	private double netSrCommisison;
+
+	public String getPartner() {
+		return partner;
+	}
+
+	public void setPartner(String partner) {
+		this.partner = partner;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
 
 	public double getNetPartnerCommissionPaid() {
 		return netPartnerCommissionPaid;

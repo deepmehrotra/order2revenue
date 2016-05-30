@@ -18,6 +18,8 @@ public class PartnerReportDetails {
 	private Date paymentDueDate;
 	private Date dateofPayment;
 	private Date returnDate;
+	
+	private boolean isPoOrder;
 
 	private String returnId;
 	
@@ -46,6 +48,13 @@ public class PartnerReportDetails {
 	private double netPaymentResult;
 
 	private double paymentDifference;
+	
+	private int paymentId;
+	private String paymentType;
+	private String paymentCycle;
+	private double negativeAmount;
+	private double positiveAmount;
+	private Date paymentUploadedDate;
 
 	private double grossPartnerCommission;
 
@@ -57,6 +66,7 @@ public class PartnerReportDetails {
 	private double taxSP;
 	private double taxPOPrice;
 	private double grossCommission;
+	private double grossCommissionQty;
 	private double returnCommision;
 
 	private double additionalReturnCharges;
@@ -187,6 +197,14 @@ public class PartnerReportDetails {
 
 	public void setReturnDate(Date returnDate) {
 		this.returnDate = returnDate;
+	}
+
+	public boolean isPoOrder() {
+		return isPoOrder;
+	}
+
+	public void setPoOrder(boolean isPoOrder) {
+		this.isPoOrder = isPoOrder;
 	}
 
 	public String getReturnId() {
@@ -349,6 +367,54 @@ public class PartnerReportDetails {
 		this.paymentDifference = paymentDifference;
 	}
 
+	public int getPaymentId() {
+		return paymentId;
+	}
+
+	public void setPaymentId(int paymentId) {
+		this.paymentId = paymentId;
+	}
+
+	public String getPaymentType() {
+		return paymentType;
+	}
+
+	public void setPaymentType(String paymentType) {
+		this.paymentType = paymentType;
+	}
+
+	public String getPaymentCycle() {
+		return paymentCycle;
+	}
+
+	public void setPaymentCycle(String paymentCycle) {
+		this.paymentCycle = paymentCycle;
+	}
+
+	public double getNegativeAmount() {
+		return negativeAmount;
+	}
+
+	public void setNegativeAmount(double negativeAmount) {
+		this.negativeAmount = negativeAmount;
+	}
+
+	public double getPositiveAmount() {
+		return positiveAmount;
+	}
+
+	public void setPositiveAmount(double positiveAmount) {
+		this.positiveAmount = positiveAmount;
+	}
+
+	public Date getPaymentUploadedDate() {
+		return paymentUploadedDate;
+	}
+
+	public void setPaymentUploadedDate(Date paymentUploadedDate) {
+		this.paymentUploadedDate = paymentUploadedDate;
+	}
+
 	public double getGrossPartnerCommission() {
 		return grossPartnerCommission;
 	}
@@ -411,6 +477,14 @@ public class PartnerReportDetails {
 
 	public void setGrossCommission(double grossCommission) {
 		this.grossCommission = grossCommission;
+	}
+
+	public double getGrossCommissionQty() {
+		return grossCommissionQty;
+	}
+
+	public void setGrossCommissionQty(double grossCommissionQty) {
+		this.grossCommissionQty = grossCommissionQty;
 	}
 
 	public double getReturnCommision() {

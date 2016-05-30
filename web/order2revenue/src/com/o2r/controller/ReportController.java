@@ -21,14 +21,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.o2r.bean.BusinessDetails;
-import com.o2r.bean.CategoryBusinessDetails;
-import com.o2r.bean.CategoryCommissionDetails;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.DebtorsGraph1;
-import com.o2r.bean.PartnerBusinessDetails;
-import com.o2r.bean.PartnerCommissionDetails;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.ConverterClass;
@@ -155,12 +151,10 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			List<PartnerReportDetails> partnerBusinessList = reportGeneratorService
 					.getPartnerReportDetails(startDate, endDate, sellerId);
 			if ("partnerBusinessReport".equalsIgnoreCase(reportName)) {
-				List<PartnerBusinessDetails> partnerBusinessGraphList = ConverterClass
-						.transformPartnerBusinessGraph(partnerBusinessList);
+				List<BusinessDetails> partnerBusinessGraphList = ConverterClass.transformBusinessGraph(partnerBusinessList, "partner");
 				log.info("PartnerList: " + partnerBusinessGraphList.size());
 				model.put("shortTablePartner", partnerBusinessGraphList);
-				List<CategoryBusinessDetails> categoryBusinessGraphList = ConverterClass
-						.transformCategoryBusinessGraph(partnerBusinessList);
+				List<BusinessDetails> categoryBusinessGraphList = ConverterClass.transformBusinessGraph(partnerBusinessList, "category");
 				log.info("CategoryList: " + categoryBusinessGraphList.size());
 				model.put("shortTableCategory", categoryBusinessGraphList);
 
@@ -201,12 +195,13 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			}
 
 			if ("partnerCommissionReport".equalsIgnoreCase(reportName)) {
-				List<PartnerCommissionDetails> partnerCommissionGraphList = ConverterClass
-						.transformPartnerCommissionPaid(partnerBusinessList);
+//				List<PCShortTableDetails> pcShortTable = reportGeneratorService.getPCShortTable(startDate, endDate, sellerId);
+				List<CommissionDetails> partnerCommissionGraphList = ConverterClass
+						.transformCommissionPaid(partnerBusinessList, startDate, endDate, "partner");
 				log.info("PartnerList: " + partnerCommissionGraphList.size());
 				model.put("shortTablePartner", partnerCommissionGraphList);
-				List<CategoryCommissionDetails> categoryCommissionGraphList = ConverterClass
-						.transformCategoryCommissionPaid(partnerBusinessList);
+				List<CommissionDetails> categoryCommissionGraphList = ConverterClass
+						.transformCommissionPaid(partnerBusinessList, startDate, endDate, "category");
 				log.info("CategoryList: " + categoryCommissionGraphList.size());
 				model.put("shortTableCategory", categoryCommissionGraphList);
 

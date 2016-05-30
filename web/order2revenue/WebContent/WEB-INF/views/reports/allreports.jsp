@@ -239,11 +239,6 @@ $("#reportGroup").change(function() {
            break; 
         case 'RevenueReports':
             list(RevenueReports);
-        case 'ChannelRelatedReport':
-            list(ChannelRelatedReport);
-        case 'ProductRelatedReport':
-            list(ProductRelatedReport);
-           break; 
         default: //default child option is blank
             $("#reportName").html('');  
             break;
