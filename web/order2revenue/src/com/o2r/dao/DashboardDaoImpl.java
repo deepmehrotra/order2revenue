@@ -78,14 +78,14 @@ public class DashboardDaoImpl implements DashboardDao {
 			+ "(ot.poOrder =0 OR (ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL ))and ot.seller_Id=:sellerId";
 	/*private static final String grossProfitForDurationQuery = "Select sum(grossProfit) from Order_Table ot where "
 			+ "ot.orderDate between :startDate AND :endDate and ot.seller_Id=:sellerId";
-	*/private static final String grossProfitForMPDurationQuery = "Select sum((ot.grossProfit/(ot.quantity+ort.returnorrtoQty))*ot.quantity)"
-			+ " as grossProfit from Order_Table ot ,OrderReturn  ort where ot.shippedDate "
-			+ "between  :startDate AND :endDate and ot.poOrder =0 "
-			+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId";
-	private static final String grossProfitForMPReturnDurationQuery = "Select sum((ot.grossProfit/(ot.quantity+ort.returnorrtoQty))*ort.returnorrtoQty)"
-			+ " as grossProfit from Order_Table ot ,OrderReturn  ort where ort.returnDate "
-			+ "between :startDate AND :endDate and ot.poOrder =0 "
-			+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId";
+	*/private static final String grossProfitForMPDurationQuery = "select sum((ot.pr-(prd.productPrice*ot.quantity))) "
+			+ "from order_table ot , Product prd where ot.productSkuCode=prd.productSkuCode and ot.shippedDate "
+			+ "between :startDate AND :endDate and ot.poOrder =0 and ot.seller_Id=:sellerId";
+	private static final String grossProfitForMPReturnDurationQuery = "select sum(((ot.pr-(prd.productPrice*ot.quantity))/ot.quantity)"
+			+ "*orr.returnorrtoQty + orr.estimateddeduction) "
+			+ "from order_table ot , Product prd , orderreturn orr where ot.productSkuCode=prd.productSkuCode "
+			+ "and ot.orderReturnOrRTO_returnId=orr.returnId and orr.returnDate between :startDate AND :endDate "
+			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId";
 	private static final String grossProfitPODurationQuery = "Select sum(ot.grossProfit) as grossProfit"
 			+ " from Order_Table ot where ot.shippedDate "
 			+ "between  :startDate AND :endDate and ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL "
@@ -106,18 +106,19 @@ public class DashboardDaoImpl implements DashboardDao {
 			+ "ort.returnDate between :startDate AND :endDate and ort.returnId=ot.orderReturnOrRTO_returnId "
 			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId GROUP BY YEAR(ort.returnDate), MONTH(ort.returnDate) "
 			+ "order by YEAR(ort.returnDate), MONTH(ort.returnDate)";
-	private static final String grossProfitMPMonthlyQuery = "Select sum((ot.grossProfit/(ot.quantity+ort.returnorrtoQty))*ot.quantity)"
-			+ " as grossProfit,Monthname(ot.shippedDate) as month ,"
-			+ "YEAR(ot.shippedDate) as year from Order_Table ot ,OrderReturn  ort where ot.shippedDate "
-			+ "between  :startDate AND :endDate and ot.poOrder =0 "
-			+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId "
-			+ "GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate) ORDER BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
-	private static final String grossProfitMPReturnMonthlyQuery = "Select sum((ot.grossProfit/(ot.quantity+ort.returnorrtoQty))*ort.returnorrtoQty)"
-			+ " as grossProfit,Monthname(ort.returnDate) as month ,"
-			+ "YEAR(ort.returnDate) as year from Order_Table ot ,OrderReturn  ort where ort.returnDate "
-			+ "between :startDate AND :endDate and ot.poOrder =0 "
-			+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId "
-			+ "GROUP BY YEAR(ort.returnDate), MONTH(ort.returnDate) ORDER BY YEAR(ort.returnDate), MONTH(ort.returnDate)";
+	private static final String grossProfitMPMonthlyQuery = "Select sum(ot.pr-(prd.productPrice*ot.quantity)) as grossProfit,"
+			+ "Monthname(ot.shippedDate) as month ,YEAR(ot.shippedDate) as year from Order_Table ot ,Product prd"
+			+ " where ot.shippedDate between  :startDate AND :endDate and ot.productSkuCode=prd.productSkuCode "
+			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)"
+			+ " ORDER BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
+
+	private static final String grossProfitMPReturnMonthlyQuery = "Select pcName ,sum(((ot.pr-(prd.productPrice*ot.quantity))/ot.quantity)"
+			+ "*orr.returnorrtoQty + orr.estimateddeduction) as grossProfit,Monthname(orr.returnDate) as month ,"
+			+ "YEAR(orr.returnDate) as year from Order_Table ot,orderreturn orr,Product prd where orr.returnDate between "
+			+ ":startDate AND :endDate and ot.productSkuCode=prd.productSkuCode "
+			+ "and ot.orderReturnOrRTO_returnId=orr.returnId and ot.poOrder =0 and ot.seller_Id=:sellerId "
+			+ "GROUP BY YEAR(orr.returnDate), MONTH(orr.returnDate) "
+			+ "ORDER BY YEAR(orr.returnDate), MONTH(orr.returnDate)";
 	private static final String grossProfitPOMonthlyQuery = "Select sum(ot.grossProfit) as grossProfit, "
 			+ "Monthname(ot.shippedDate) as month ,"
 			+ "YEAR(ot.shippedDate) as year from Order_Table ot where ot.shippedDate "
