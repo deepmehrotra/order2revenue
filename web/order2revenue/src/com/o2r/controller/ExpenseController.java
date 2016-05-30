@@ -276,7 +276,6 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
 
  }
 
-
 @RequestMapping(value = "/seller/deleteExpenseCategory", method = RequestMethod.GET)
 public ModelAndView deleteExpenseCategory(HttpServletRequest request,@ModelAttribute("command")ExpenseCategoryBean categoryBean,
 		   BindingResult result) {

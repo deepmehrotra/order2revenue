@@ -84,8 +84,7 @@
                                 <button type="button" class="btn btn-xs btn-white active">500</button>
                                 <button type="button" class="btn btn-xs btn-white">1000</button>
                                 <button type="button" class="btn btn-xs btn-white">More</button>
-                                <a href="addExpense.html"  class="btn btn-primary btn-xs" >Add Expenses</a>
-                                <a href="addExpense.html"  class="btn btn-primary btn-xs" >Edit Expenses</a>
+                                <a href="addExpense.html"  class="btn btn-primary btn-xs" >Add Expenses</a>                                
                              </div>
                         </div>
                         <div class="ibox-content overflow-h cus-table-filters">
@@ -117,8 +116,8 @@
                                      <td>${expense.paidTo}</td>
                                       <td>${expense.expenditureByperson}</td>
                                     <td class="tooltip-demo">
-                                  <%--   <a href="editExpense.html?expenseId=${expense.expenseId}"><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a>
-                                   --%>  <a href="deleteExpense.html?expenseId=${expense.expenseId}"><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Delete"></i></a></td>
+                                  <%-- <a href="editExpense.html?expenseId=${expense.expenseId}"><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a> --%>
+                                  <a href="deleteExpense.html?expenseId=${expense.expenseId}"><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Delete"></i></a></td>
                                 
                                 </tr>
                                 </c:forEach>

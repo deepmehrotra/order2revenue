@@ -54,7 +54,7 @@ public class SellerDaoImpl implements SellerDao {
 	static Logger log = Logger.getLogger(SellerDaoImpl.class.getName());
 	
 	private static final String deliveryTimeDeleteQuery = "delete from seller_state_deliverytime  where seller_id=:sellerId";
-
+	private static final String assignRole="INSERT INTO seller_roles (`role_id`, `seller_id`) VALUES ('2', :sellerId)";
 
 	public void addSeller(Seller seller)throws CustomException {
 		
@@ -110,16 +110,16 @@ public class SellerDaoImpl implements SellerDao {
 		                    }
 		                    if(verCode.equals("Verified")){
 		                    	sellerNew.setVerCode(verCode);
+		                    	assignRole(sellerNew.getId());
 		                    }
 		                }
-					session.saveOrUpdate(sellerNew);
-					
+					session.saveOrUpdate(sellerNew);				
 				
 			}else{
 				int r1=random.nextInt((999 - 111) + 1) + 111;
 				int r2=random.nextInt((999 - 111) + 1) + 111;
 				verCode="O2R"+r1+"USER"+r2;
-				verificationLink = "http://www.order2revenue.com/";
+				verificationLink = "http://localhost:8080/verify.html?code="+verCode;
 				seller.setVerCode(verCode);
 				session.saveOrUpdate(seller);
 				sendMail(seller.getEmail(),verificationLink);
@@ -482,7 +482,7 @@ public class SellerDaoImpl implements SellerDao {
 	public void sendMail(String email, String verificationLink)throws CustomException{
 		
 			
-		final String from="2mailbishnu@gmail.com";
+		final String from="order2revenue@gmail.com";
 		
 			
 			Properties prop = new Properties();
@@ -494,7 +494,7 @@ public class SellerDaoImpl implements SellerDao {
 			javax.mail.Session session = javax.mail.Session.getInstance(prop,
 					new javax.mail.Authenticator() {
 						protected PasswordAuthentication getPasswordAuthentication() {
-							return new PasswordAuthentication(from, "DeadmaN^^");
+							return new PasswordAuthentication(from, "O2R!098_");
 						}
 					});
 
@@ -521,4 +521,45 @@ public class SellerDaoImpl implements SellerDao {
 		
 	    
 	  }
+	
+	@Override
+	public Seller getSellerVerCode(String verCode) {
+		log.info("*** getSeller by verCode  : SellerDaoImpl ****");
+		System.out.println(" getting by this : "+verCode);
+		Seller seller = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("verCode", verCode));
+			if (criteria.list() != null && criteria.list().size() != 0)
+				seller = (Seller) criteria.list().get(0);
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e);
+			//throw new CustomException(GlobalConstant.getSellerByEmailError, new Date(), 3, GlobalConstant.getSellerByEmailErrorCode, e);			
+		}
+		log.info("*** getSeller from verfyCode : SellerDaoImpl ****");
+		return seller;		
+	}
+	
+	public void assignRole(int sellerId){
+		Session session=null;
+		try{
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query assignRoles = session
+					.createSQLQuery(assignRole)
+					.setParameter("sellerId",sellerId);
+			assignRoles.executeUpdate();
+			session.getTransaction().commit();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(session != null)
+				session.close();
+		}
+	}
 }

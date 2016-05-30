@@ -39,6 +39,6 @@ public void updateProcessedOrdersCount(int pid, int processedOrderCount) throws 
 
 public void addStateDeliveryTime(List<StateDeliveryTime> stateDelTimeList, int sellerId)throws CustomException;
 
-//public void sendMail(String email, String code)throws CustomException;
+public Seller getSellerVerCode(String verCode);
 
 }
