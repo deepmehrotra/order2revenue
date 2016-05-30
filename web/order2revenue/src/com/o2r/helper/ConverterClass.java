@@ -1312,6 +1312,8 @@ public class ConverterClass {
 	public static EventsBean prepareEventsBean(Events events){
 		
 		EventsBean eventsBean=new EventsBean();
+		if(events!=null)
+		{
 		eventsBean.setEventId(events.getEventId());
 		eventsBean.setSellerId(events.getSellerId());
 		eventsBean.setEventName(events.getEventName());
@@ -1326,6 +1328,7 @@ public class ConverterClass {
 		eventsBean.setCreatedDate(events.getCreatedDate());
 		eventsBean.setNetSalesQuantity(events.getNetSalesQuantity());
 		eventsBean.setNetSalesAmount(events.getNetSalesAmount());
+		}
 		return eventsBean;
 	}
 	public static List<EventsBean> prepareListOfEventsBean(List<Events> events){

@@ -2164,6 +2164,7 @@ public class OrderDaoImpl implements OrderDao {
 			order.setGrossNetRate(nrValue);
 			order.setPartnerCommission(comission);
 			order.setFixedfee(fixedfee);
+			order.setServiceTax(serviceTax);
 			order.setPccAmount(pccAmount);
 			order.setShippingCharges(shippingCharges);
 		} catch (Exception e) {
@@ -2899,6 +2900,7 @@ public class OrderDaoImpl implements OrderDao {
 			order.setPartnerCommission(comission);
 			order.setFixedfee(fixedfee);
 			order.setPccAmount(pccAmount);
+			order.setServiceTax(serviceTax);
 			order.setShippingCharges(shippingCharges);
 		} catch (Exception e) {
 			e.printStackTrace();

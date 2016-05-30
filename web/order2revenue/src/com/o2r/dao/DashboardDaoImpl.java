@@ -158,6 +158,7 @@ public class DashboardDaoImpl implements DashboardDao {
 		Date thisYearSatrt = new Date();
 		Date lastYearSatrt = new Date();
 		Date oneMonthBack = new Date();
+		Date thismonthstart = new Date();
 		Date sixMonthsBack = new Date();
 		Date after10days = new Date();
 		List<Object> orderNRQuantityMonthly = null;
@@ -175,7 +176,9 @@ public class DashboardDaoImpl implements DashboardDao {
 		lastYearSatrt.setMonth(0);
 		lastYearSatrt.setYear(lastYearSatrt.getYear() - 1);
 		after10days.setDate(after10days.getDate() + 10);
-		oneMonthBack.setDate(oneMonthBack.getDate() - 30);
+		oneMonthBack.setDate(1);
+		oneMonthBack.setDate(oneMonthBack.getDate()-1);
+		thismonthstart.setDate(1);
 		sixMonthsBack.setDate(1);
 		sixMonthsBack.setMonth(sixMonthsBack.getMonth() - 5);
 		try {
@@ -229,7 +232,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					yeasterdayDate, todayDate, sellerId,
 					orderCountForDurationQuery));
 			dashboardBean.setThisMonthOrderCount(countForDuration(session,
-					oneMonthBack, todayDate, sellerId,
+					thismonthstart, todayDate, sellerId,
 					orderCountForDurationQuery));
 			dashboardBean.setThisYearOrderCount(countForDuration(session,
 					lastYearEnd, todayDate, sellerId,
@@ -238,7 +241,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					yeasterdayDate, todayDate, sellerId,
 					paymentCountForDurationQuery)); // todays
 			dashboardBean.setThisMonthPaymentCount(countForDuration(session,
-					oneMonthBack, todayDate, sellerId,
+					thismonthstart, todayDate, sellerId,
 					paymentCountForDurationQuery)); // this month
 			dashboardBean.setThisYearPaymentCount(countForDuration(session,
 					lastYearEnd, todayDate, sellerId,
@@ -246,9 +249,9 @@ public class DashboardDaoImpl implements DashboardDao {
 			dashboardBean.setTodaysGrossProfit(grossProfitForDuration(session,
 					yeasterdayDate, todayDate, sellerId));
 			dashboardBean.setThisMonthGrossProfit(grossProfitForDuration(session,
-					oneMonthBack, todayDate, sellerId));
+					thismonthstart, todayDate, sellerId));
 			dashboardBean.setThisYearGrossProfit(grossProfitForDuration(session,
-					lastYearEnd, todayDate, sellerId));
+					thisYearSatrt, todayDate, sellerId));
 			// testing purpose startdate as one monthback
 			dashboardBean.setTotalUpcomingPayments(listOfUpcomingPayment(
 					session, oneMonthBack, after10days, sellerId));
@@ -307,46 +310,11 @@ public class DashboardDaoImpl implements DashboardDao {
 		log.info("***netSaleQtyforTime starts***");
 		//List<Object[]> results = null;
 		long netSaleQty = 0;
-		BigDecimal quantity = null;
-		BigDecimal returnQty=null;
+		BigDecimal quantity = BigDecimal.ZERO;
+		BigDecimal returnQty=BigDecimal.ZERO;
 		List<BigDecimal> tempDblist=null;
 		try {			
 			session.beginTransaction();
-			/*Criteria criteria = session.createCriteria(Order.class);
-			criteria.createAlias("seller", "seller",
-					CriteriaSpecification.LEFT_JOIN);
-			criteria.createAlias("consolidatedOrder", "consolidatedOrder",
-					CriteriaSpecification.LEFT_JOIN);
-			criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
-					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.between("shippedDate", startDate, endDate));
-			Criterion rest1 = Restrictions.eq("poOrder", false);
-			Criterion rest2 = Restrictions.and(	
-					Restrictions.eq("poOrder", true),
-					Restrictions.isNull("consolidatedOrder.orderId"));
-			criteria.add(Restrictions.or(rest1, rest2));
-			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			ProjectionList projList = Projections.projectionList();
-			projList.add(Projections.sum("quantity"));
-			projList.add(Projections.sum("orderReturnOrRTO.returnorrtoQty"));
-			criteria.setProjection(projList);
-			results = criteria.list();
-			Iterator iterator1 = results.iterator();
-			if (results != null) {
-				while (iterator1.hasNext()) {					
-					Object[] recordsRow = (Object[]) iterator1.next();
-					System.out.println(" record length:" + recordsRow.length);
-					if (recordsRow[0] != null && recordsRow[1] != null) {
-						quantity = Long.parseLong(recordsRow[0].toString());
-						returnQty = Long.parseLong(recordsRow[1].toString());
-						netSaleQty = quantity - returnQty;
-						for (int i = 0; i < recordsRow.length; i++) {
-							log.debug("\t" + recordsRow[i]);
-						}
-					}
-				}
-			}	*/	
 			
 			Query orderQtythisyear = session
 					.createSQLQuery(orderQtyinTimeQuery)
@@ -369,6 +337,8 @@ public class DashboardDaoImpl implements DashboardDao {
 			if (tempDblist != null && tempDblist.size() != 0
 					&& tempDblist.get(0) != null)
 				returnQty = tempDblist.get(0);
+			
+				
 			
 			netSaleQty=quantity.longValue()-returnQty.longValue();
 			log.debug("Final Net sale Qty : quantity "+quantity+" returnQty "+returnQty);
@@ -660,8 +630,14 @@ public class DashboardDaoImpl implements DashboardDao {
 			criteria.createAlias("orderPayment", "orderPayment",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.lt("orderPayment.paymentDifference", 0.0));
+					.add(Restrictions.ne("orderPayment.paymentDifference", 0.0));
+		
+			Criterion rest1 = Restrictions.eq("poOrder", false);
+			Criterion rest2 = Restrictions.and(	
+					Restrictions.eq("poOrder", true),
+					Restrictions.isNull("consolidatedOrder"));
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			criteria.add(Restrictions.or(rest1, rest2));
 			ProjectionList projList = Projections.projectionList();
 			projList.add(Projections.sum("orderPayment.paymentDifference"));
 			projList.add(Projections.groupProperty("pcName"));
@@ -1018,14 +994,24 @@ public class DashboardDaoImpl implements DashboardDao {
 			Criteria criteria = session.createCriteria(Order.class);
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.between("shippedDate", startDate, endDate));
+			.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId));
+					//.add(Restrictions.between("shippedDate", startDate, endDate));
+			Criterion rest1 = Restrictions.eq("poOrder", false);
+			Criterion rest2 = Restrictions.and(	
+					Restrictions.eq("poOrder", true),
+					Restrictions.isNotNull("consolidatedOrder"));
+			criteria.add(Restrictions.or(rest1, rest2));
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			ProjectionList projList = Projections.projectionList();
 			projList.add(Projections.groupProperty("productSkuCode"));
-			projList.add(Projections.sum("quantity"), "sum");
+			projList.add(Projections.sqlProjection("(sum(quantity-returnorrtoQty)) as grossQty",new String[] { "grossQty" },
+					new Type[] { Hibernate.INTEGER }),"grossQty");
+			/*projList.add(Projections.sum("quantity"), "sum");
+			projList.add(Projections.sum("orderReturnOrRTO.returnorrtoQty"), "return");*/
 			criteria.setProjection(projList);
-			criteria.addOrder(org.hibernate.criterion.Order.desc("sum"));
+			criteria.addOrder(org.hibernate.criterion.Order.desc("grossQty"));
 			results = criteria.list();
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
