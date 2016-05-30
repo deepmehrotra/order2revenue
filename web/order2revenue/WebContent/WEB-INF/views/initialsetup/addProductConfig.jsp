@@ -74,13 +74,6 @@
 										<div class="col-sm-6">
 											<div class="mar-btm-20-oh">
 												<label class="col-sm-5 control-label">Discount</label>
-												<%-- <div class="col-sm-6">
-													<form:input path="discount"
-														value="${productConfigBean.discount}" class="form-control" />
-												</div>
-												<div class="col-sm-1">
-													<span class="input-group-addon">%</span>
-												</div> --%>
 												<div class="col-sm-7">
 													<div class="input-group m-b">
 														<form:input path="discount"
@@ -155,32 +148,12 @@
 		function submitProduct() {
 			var validator = $("#addProductForm").validate({
 				rules : {
-					productName : {
-						required : true,
-					},
-					productSkuCode : {
+					channelSkuRef : {
 						required : true
 					},
-					categoryName : {
-						required : true
-					},
-					quantity : {
-						required : true,
-						min : 1,
-						number : true,
-					},
-					productPrice : {
-						required : true,
-						min : 1,
-						number : true,
-					}
 				},
 				messages : {
-					productName : "Product Title Required",
-					productSkuCode : "SKU ismandatory",
-					categoryName : "Product Title Required",
-					productPrice : "Product Price  is mandatory",
-					quantity : "Quantity  is required"
+					channelSkuRef : "Channel SKU Required !",
 				}
 			});
 			if (validator.form() && nameAvailability) { // validation perform

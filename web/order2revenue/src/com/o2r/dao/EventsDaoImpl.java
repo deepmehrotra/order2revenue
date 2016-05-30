@@ -47,7 +47,7 @@ public class EventsDaoImpl implements EventsDao {
 				session.merge(events);
 			} else {					
 				
-				if (isDatesAllowForEvent(events, sellerId) == false) {
+				if (isDatesAllowForEvent(events.getStartDate(), events.getEndDate(), events.getChannelName(), sellerId) == false) {
 					log.debug("*** You can not create Events during these Dates..... !!!");
 					GlobalConstant.addEventError="You can not create Events during these Dates !!!";
 					throw new Exception();
@@ -249,7 +249,8 @@ public class EventsDaoImpl implements EventsDao {
 		return event;
 	}
 	
-	public boolean isDatesAllowForEvent(Events events, int sellerId){
+	@Override
+	public boolean isDatesAllowForEvent(Date startDate, Date endDate, String channelName, int sellerId){
 		
 		log.info("*** isDatesAllowForEvent starts ***");
 		Session session=null;
@@ -258,11 +259,11 @@ public class EventsDaoImpl implements EventsDao {
 			session.beginTransaction();	
 			
 			Criteria criterias = session.createCriteria(Events.class).add(Restrictions.eq("sellerId", sellerId));
-			Criterion res1 = Restrictions.and(Restrictions.le("startDate", events.getStartDate()),Restrictions.ge("endDate", events.getStartDate()));
-			Criterion res2 = Restrictions.and(Restrictions.le("startDate", events.getEndDate()),Restrictions.ge("endDate", events.getEndDate()));
-			Criterion res3 = Restrictions.and(Restrictions.ge("startDate", events.getStartDate()),Restrictions.le("endDate", events.getEndDate()));
+			Criterion res1 = Restrictions.and(Restrictions.le("startDate", startDate),Restrictions.ge("endDate", startDate));
+			Criterion res2 = Restrictions.and(Restrictions.le("startDate", endDate),Restrictions.ge("endDate", endDate));
+			Criterion res3 = Restrictions.and(Restrictions.ge("startDate", startDate),Restrictions.le("endDate", endDate));
 
-			criterias.add(Restrictions.eq("channelName",events.getChannelName()));
+			criterias.add(Restrictions.eq("channelName",channelName));
 			criterias.add(Restrictions.or((Restrictions.or(res1, res2)),res3));
 			
 			if (criterias.list() != null && criterias.list().size() != 0) {

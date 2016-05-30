@@ -65,7 +65,8 @@
 					<div class="ibox-title">
 						<h5>Events (${eventsList.size()})</h5>
 						<div class="ibox-tools">
-							<a href = "javascript:getURI()" onclick="checkOne()"  class="btn btn-primary btn-xs">Create New Duplicate Event</a>
+							<a href = "javascript:getURI()" onclick="checkOne()"  class="btn btn-primary btn-xs" id="new">Create New Duplicate Event</a>
+							<a href = "javascript:getEditURI()" onclick="checkOne()"  class="btn btn-primary btn-xs" id="edit">Edit Event</a>
 							<a href="addEvent.html"	class="btn btn-primary btn-xs">Create New Event</a>
 						</div>
 					</div>
@@ -174,8 +175,10 @@
 		current.checked=true;
 		checkedValue = current.value;		
 		getURI = function() {
-			location.href = "addDuplicateEvent.html?eventId="+checkedValue;
-					
+			location.href = "addDuplicateEvent.html?eventId="+checkedValue;			
+		}
+		getEditURI = function() {
+			location.href = "editEvent.html?eventId="+checkedValue;			
 		}
 	}
 	

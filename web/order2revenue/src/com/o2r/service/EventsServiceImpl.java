@@ -59,5 +59,11 @@ public class EventsServiceImpl implements EventsService{
 	public Events getEvent(String eventName, int sellerID)throws CustomException {
 		return eventsDao.getEvent(eventName, sellerID);
 	}
+	
+	@Override
+	public boolean isDatesAllowForEvent(Date startDate, Date endDate,
+			String channelName, int sellerId) {
+		return eventsDao.isDatesAllowForEvent(startDate, endDate, channelName, sellerId);
+	}
 
 }

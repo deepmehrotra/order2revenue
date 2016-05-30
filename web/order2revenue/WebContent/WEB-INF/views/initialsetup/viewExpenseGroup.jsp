@@ -85,6 +85,7 @@
                                 <button type="button" class="btn btn-xs btn-white">1000</button>
                                 <button type="button" class="btn btn-xs btn-white">More</button>
                                 <a href="addExpense.html"  class="btn btn-primary btn-xs" >Add Expenses</a>
+                                <a href="addExpense.html"  class="btn btn-primary btn-xs" >Edit Expenses</a>
                              </div>
                         </div>
                         <div class="ibox-content overflow-h cus-table-filters">
