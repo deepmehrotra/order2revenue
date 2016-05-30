@@ -7,10 +7,7 @@
 <html>
  <head>
  <jsp:include page="../globalcsslinks.jsp"></jsp:include>
- <script src="/O2R/seller/js/plugins/dataTables/jquery.dataTables.js"></script>
-<script src="/O2R/seller/js/plugins/dataTables/dataTables.bootstrap.js"></script>
-<script src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
-<script src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
+
   <!-- Data Tables -->
     <link href="/O2R/seller/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
     <link href="/O2R/seller/css/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet">
@@ -28,7 +25,7 @@
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>All SKUs(${productList.size()})</h5>
+                            <h5>SKUs(${productList.size()})</h5>
                             <div class="ibox-tools">
                              <button class="btn btn-white table-menu-search search-dd">
                                 <i class="fa fa-search"></i>
@@ -125,13 +122,14 @@
 <div class="modal inmodal fade" id="myModal" tabindex="-1" role="dialog"  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content animated bounceInRight">
+    <form:form method="POST" action="saveUpdateInventory.html" id="addProductForm" role="form" class="form-horizontal"> 
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span> </button>
         <h4 class="modal-title">Update Inventory </h4>
     </div>
     <div class="modal-body">
         <div class="row">
-<form:form method="POST" action="saveUpdateInventory.html" id="addProductForm" role="form" class="form-horizontal">    
+   
 
 							 <c:if test="${!empty product.productId}">
                         <input  name="productId" id="productId" value="${product.productId}"/>
@@ -172,11 +170,12 @@
 
     </div>
 </div>
-<div class="modal-footer">
-   <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
-<button class="btn btn-primary" type="button" onclick="updateInventory()">Update</button>
-   
-</div>
+			<div class="modal-footer">
+			   <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+			<button class="btn btn-primary" type="button" onclick="updateInventory()">Update</button>
+			   
+			</div>
+  </form:form>
 </div>
 </div>
 </div>
@@ -187,7 +186,10 @@
 
 
 <!-- Data Tables -->
-
+ <script src="/O2R/seller/js/plugins/dataTables/jquery.dataTables.js"></script>
+<script src="/O2R/seller/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+<script src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
+<script src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
 
 <script>
  var globalValue="Mahesh kOLLIPAR";
@@ -291,25 +293,12 @@
     	function updateInventory(){
     		var sx=document.getElementById("oneone").value;
     		var xxx = $('form#addProductForm').submit();
-    	  //  $.ajax({url: "demo_test.txt", success: function(result){
-    	 //       $("#div1").html(result);
-    	  //  }});
-    		//alert('delete producrt goes here');
-    		//$('form#addProductForm').submit();
-    		//opener.location.reload();
-    		//window.close();
+    	 
     	}	
-    	function onclickNavigatePayment(value,value1) {
-    		
-    		  //alert(value2);
-    	 // window.open("updateInventory.html?id="+value, 'liveMatches', 'width=720,height=800,toolbar=0,location=0, directories=0, status=0,location=no,menubar=0');
-    		 //window.open("updateInventory.html?id="+value,null, "location=no,height=400,width=1200,top=100,left=50,status=yes,resizable=no,titlebar=no,toolbar=no,menubar=no,scrollbars=no,location=no");
-    		}     
-      
+    	
 
 
-
-</script>     </form:form>
+</script>   
 <style>
     body.DTTT_Print {
         background: #fff;
@@ -341,17 +330,5 @@
     }
 </style>
 
-<script type="text/javascript">
-
-
-
-</script>
-
-
-
-
-
- </body>
-</html>
 </body>
 </html>

@@ -54,15 +54,16 @@
                                     <form role="search" class="form-inline" method="post" action="searchExpense.html">
                                         <div class="form-group">
                                             <select class="form-control" name="searchExpense"  id="searchExpense">
+                                            <option value="expName">Expense Name</option>
                                                 <option value="expenseCategory">Expense Group</option>
                                                 <option value="expenseDate">Expense Date</option>
-                                                <option value="expName">Expense Name</option>
+                                                
                                             </select>
                                         </div>
                                       	<div class="form-group ProductSearch-box" id="expName">
                                            <input type="text" placeholder="Expense Name" class="form-control" name="expName">
                                         </div>
-                                        <div class="form-group ProductSearch-box" id="expenseCategory">
+                                        <div class="form-group ProductSearch-box" id="expenseCategory" style="display:none">
                                            <input type="text" placeholder="Expense Group" class="form-control" name="expenseCategory">
                                         </div>
                                         <div class="form-group ProductSearch-box" id="expenseDate" style="display:none">
@@ -180,7 +181,6 @@
         
         
         $('#bulkupload').click(function(){
-    		alert(" Bulk upload expense");
     		 $.ajax({
     	            url : 'downloadOrderDA.html?value=expenseSummary',
     	            success : function(data) {
