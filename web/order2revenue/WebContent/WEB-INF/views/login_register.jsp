@@ -11,6 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="/O2R/seller/css/registration.css">	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
 	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js"></script>
 	<script src="http://jquery.bassistance.de/validate/additional-methods.js"></script>
 	
@@ -103,7 +104,7 @@
 	          	</div>
 	          </div>
 	          <br>
-	          <button type="button" class="button button-block" onclick="onSubmit()">Register</button> 
+	          <button type="submit" class="button button-block" onclick="return onSubmit();">Register</button> 
 	          </form>
 	        </div>
 	        
@@ -204,6 +205,7 @@ function onSubmit()
 					}
 			  },
 	  }); */ 
+	alert(valid+" : "+nameAvailability+" : "+passCon)
 	if(valid && nameAvailability && passCon)
 	 {
 		 	alert(" Validation confirm ");
