@@ -1991,18 +1991,18 @@ public class SaveContents {
 				System.out.println(" Directory doesnnt exist");
 				fileSaveDir.mkdirs();
 			}
-			FileOutputStream out = new FileOutputStream(new File(uploadFilePath
+			String filePath = uploadFilePath
 					+ File.separator + worksheetName + "UploadStatus"
-					+ new Date().getTime() + ".xls"));
+					+ new Date().getTime() + ".xls";
+			FileOutputStream out = new FileOutputStream(new File(filePath));
 			workbook.write(out);
 			out.close();
 			System.out.println("Excel written successfully..");
 			
 			uploadReport.setFileType(worksheetName);
-			uploadReport.setPath(uploadFilePath);
-			uploadReport.setDesc("Imported");
-			uploadReport.setSellerId(sellerId);
-			uploadReport.setSellerName(sellerService.getSeller(sellerId).getName());
+			uploadReport.setFilePath(filePath);
+			uploadReport.setDescription("Imported");
+			uploadReport.setSeller(sellerService.getSeller(sellerId));
 			if (isError) {
 				uploadReport.setStatus("Error");
 			} else {

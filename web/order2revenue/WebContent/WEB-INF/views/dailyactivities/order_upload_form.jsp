@@ -33,7 +33,7 @@
 						
 						//Upload progress
 						xhr.upload.addEventListener("progress", function(evt) {
-							//alert("event");
+							$("#bar1").show();
 							if (evt.lengthComputable) {
 								var percentComplete = evt.loaded / evt.total;
 								var progress = parseInt(evt.loaded / evt.total
@@ -61,7 +61,7 @@
 					contentType : false,
 					type : 'POST',
 					success : function(data) {
-						alert(done);
+						$("#bar1").hide();
 					}
 				});
 			});

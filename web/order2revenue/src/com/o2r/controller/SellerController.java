@@ -80,7 +80,7 @@ public class SellerController {
 				sellerService.addSeller(seller);
 				return "login_register";				
 			}else{
-				return "confirmation";
+				return "login_register";
 			}
 		}catch(Exception e){
 			e.printStackTrace();

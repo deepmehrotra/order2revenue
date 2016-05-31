@@ -8,14 +8,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Registration O2R</title>
 	<link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="/O2R/seller/css/registration.css">
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="/O2R/seller/js/jquery-2.1.1.js"></script>
-	<script src="/O2R/seller/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/O2R/seller/css/registration.css">	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js"></script>
+	<script src="http://jquery.bassistance.de/validate/additional-methods.js"></script>
+	
+	
 </head>
 	<body>
 		<div class="col-lg-12">
-        	<a href="home.html">
+        	<a href="landing/home.html">
         	<img src="/O2R/landing/img/logo02r.png" alt="logo" class="img-responsive" style="float:right;margin:20px 80px 0px 0px;">
         	</a>
     	</div>
@@ -53,7 +56,7 @@
 	        </div> 
 	        <div id="signup">   
 	          <h1>Sign Up for Free</h1>
-	          <form method="POST" action="saveSeller.html" id="registerForm">
+	          <form method="POST" action="saveSeller.html" id="registerForm" >
 	          <div class="top-row">
 	            <div class="field-wrap">
 	            	<div class="icon">
@@ -68,7 +71,8 @@
 	              		<img src="/O2R/landing/img/icons/email.png" alt="user">
 	              	</div>
 	              	<div class="inputtext">
-	              		<input type="email" id="email" required autocomplete="off"/ placeholder="Email id" onblur="checkOnBlur();">
+	              		<input type="email" id="email" name="email" required autocomplete="off"/ placeholder="Email id" onblur="onBlur()">
+	              		<span id="emailMessage" style="color:red"></span>
 	              	</div>
 	            </div>
 	            <div class="field-wrap">
@@ -76,7 +80,7 @@
 	            		<img src="/O2R/landing/img/icons/password.png" alt="user">
 	            	</div>
 	            	<div class="inputtext">
-	            		<input type="password" name="password" required autocomplete="off"/ placeholder="Password">
+	            		<input type="password" id="password" name="password" required autocomplete="off"/ placeholder="Password">
 	            	</div>
 	          	</div>
 	          	<div class="field-wrap">
@@ -84,12 +88,13 @@
 	          			<img src="/O2R/landing/img/icons/password.png" alt="user">
 	          		</div>
 	          		<div class="inputtext">
-	           	 		<input type="password" required autocomplete="off"/ placeholder="Confirm Password">
+	           	 		<input type="password" name="ConfirmPassword" id="cpass" required autocomplete="off"/ placeholder="Confirm Password" onblur="Cpass();" />
+	           	 		<span id="cpassMessage" style="color:red"></span>
 	           	 	</div>
 	          	</div>
 	          	<div class="field-wrap" style="display:flex;">
 	          		<div class="check">
-	          			<input type="checkbox" style="width: 10%;height: 15px;margin-top: 9px; float: right;">
+	          			<input type="checkbox" name="terms" style="width: 10%;height: 15px;margin-top: 9px; float: right;">
 	          		</div> 
 	          		<div class="accept">
 	          			<p style="color: #a0b3b0;font-weight: 600;margin-top: 6px;">
@@ -98,14 +103,15 @@
 	          	</div>
 	          </div>
 	          <br>
-	          <button type="submit" class="button button-block">Register</button> 
+	          <button type="button" class="button button-block" onclick="onSubmit()">Register</button> 
 	          </form>
 	        </div>
 	        
 	      </div>
 	</div>
-	<script type="text/javascript">
-		$('.form').find('input, textarea').on('keyup blur focus', function (e) {
+<script>
+
+$('.form').find('input, textarea').on('keyup blur focus', function (e) {
   
   var $this = $(this),
       label = $this.prev('label');
@@ -141,29 +147,75 @@ $('.tab a').on('click', function (e) {
 });
 
 
+var passCon=true;
 var nameAvailability=true;
-
-function checkOnBlur()
-{
-	alert("Inside onblur");
-	var email=document.getElementById("email").value;
+function onBlur(){
 	
-	$.ajax({
-        url: "checkExistingUser.html?email="+email,
-       success : function(res) {
-    	 	   if(res=="false")
-                	{
-        	nameAvailability=false;
-                	 $("#emailMessage").html("Email id already exist. Choose another");
-                	}
-                else
-                	{
-                	nameAvailability=true;
-                	$("#emailMessage").html("Email id available");
-                	}
-      }
-	 });
+	var email=document.getElementById("email").value;
+	$.ajax({		
+	    url: "checkExistingUser.html?email="+email,
+	   success : function(res) 
+				{
+
+					if (res == "false") {
+						nameAvailability = false;
+						$("#emailMessage").html(
+								"Email id already exist. Choose another !").show();
+					}else{
+						nameAvailability = true;
+						$("#emailMessage").html(
+						"Email id already exist. Choose another !").hide();
+					}
+				}
+
+			});
+		}
+
+function Cpass(){
+	
+	var password=document.getElementById("password").value;
+	var confirm=document.getElementById("cpass").value;
+		if (password != confirm) {
+						passCon = false;
+						$("#cpassMessage").html(
+								"Password Not Matching !").show();
+					}else{
+						passCon = true;
+						$("#cpassMessage").html(
+						"Password Not Matching !").hide();
+					}
+	}	
+
+function onSubmit()
+{	
+	valid = true;
+	if($('input[type=checkbox]:checked').length == 0)
+	{
+	    alert ( "ERROR! Please select at least one checkbox" );
+	    valid = false;
+	}else{
+		valid = true;
 	}
+	
+	/* var validator = $("#registerForm").validate({
+		  rules: {
+			 terms:	{
+						required: true
+					}
+			  },
+	  }); */ 
+	if(valid && nameAvailability && passCon)
+	 {
+		 	alert(" Validation confirm ");
+			$('#registerForm').submit();
+	 }else{
+		 	alert("Validation Rejected !");
+		 	return false;
+	 }
+	 
+}
+
+
 	</script>
 	</body>
 </html>

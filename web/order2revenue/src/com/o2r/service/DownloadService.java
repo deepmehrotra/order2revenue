@@ -1,5 +1,10 @@
 package com.o2r.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
@@ -223,4 +228,17 @@ public class DownloadService {
 		Writer.write(response, worksheet, fileName);
 	}
 
+	public void getUploadLog(HttpServletResponse response, String pathvalue)
+			throws IOException {
+		
+		FileInputStream file = new FileInputStream(new File(pathvalue));
+		HSSFWorkbook workbook = new HSSFWorkbook(file);
+		HSSFSheet worksheet = workbook.createSheet("UploadReport");
+		String fileName = "UploadReport.xls";
+		response.setHeader("Content-Disposition", "inline; filename="
+				+ fileName);
+		response.setContentType("application/vnd.ms-excel");
+		Writer.write(response, worksheet, fileName);
+		
+	}
 }

@@ -59,8 +59,7 @@
     	case "poOrderList" :
     		targeturl="poOrderList.html?value="+id;
     	break;
-    	
-    	
+
     	}
         $.ajax({
             url : targeturl,
