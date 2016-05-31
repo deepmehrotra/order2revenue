@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.o2r.bean.DashboardBean;
 import com.o2r.bean.OrderBean;
 import com.o2r.bean.SellerBean;
+import com.o2r.bean.UploadReportBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.HelperClass;
@@ -30,6 +31,7 @@ import com.o2r.model.Seller;
 import com.o2r.service.AdminService;
 import com.o2r.service.DashboardService;
 import com.o2r.service.OrderService;
+import com.o2r.service.ReportGeneratorService;
 import com.o2r.service.SellerService;
 
 /**
@@ -44,6 +46,8 @@ public class GenericController {
 
 	@Autowired
 	private DashboardService dashboardService;
+	@Autowired
+	private ReportGeneratorService reportGeneratorService;
 	@Autowired
 	private OrderService orderService;
 	@Autowired
@@ -114,6 +118,13 @@ public class GenericController {
 		dbean = dashboardService.getDashboardDetails(helperClass.getSellerIdfromSession(request));
 		model.put("sellerBean", sellerBean);
 		model.put("dashboardValue", dbean);
+		List<UploadReportBean> uploadReports = ConverterClass.prepareUploadReportListBean(
+				reportGeneratorService.listUploadReport(helperClass.getSellerIdfromSession(request)));
+		if (uploadReports != null && uploadReports.size() > 3) {
+			uploadReports = uploadReports.subList(uploadReports.size() - 3, uploadReports.size());
+		}
+		model.put("uploadReportList", uploadReports);
+		
 		}catch(CustomException ce){
 			logger.error("displayDashboard exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
