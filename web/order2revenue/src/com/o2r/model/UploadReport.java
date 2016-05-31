@@ -1,9 +1,14 @@
 package com.o2r.model;
 
+import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -13,21 +18,21 @@ public class UploadReport {
 	@Id
 	@GeneratedValue
 	@Column
-	private Integer id;
+	private int id;
 	@Column
 	private String fileType;
 	@Column
-	private String desc;
+	private String description;
 	@Column
 	private String Status;
 	@Column
-	private String path;
-	@Column 
-	private int sellerId;
+	private String filePath;
 	@Column
-	private String sellerName;
+	private float timeTaken;
 	@Column
-	private double timeTaken;
+	private Date uploadDate;
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Seller seller;
 
 	public Integer getId() {
 		return id;
@@ -45,14 +50,6 @@ public class UploadReport {
 		this.fileType = fileType;
 	}
 
-	public String getDesc() {
-		return desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
-
 	public String getStatus() {
 		return Status;
 	}
@@ -61,35 +58,43 @@ public class UploadReport {
 		Status = status;
 	}
 
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public int getSellerId() {
-		return sellerId;
-	}
-
-	public void setSellerId(int sellerId) {
-		this.sellerId = sellerId;
-	}
-
-	public String getSellerName() {
-		return sellerName;
-	}
-
-	public void setSellerName(String sellerName) {
-		this.sellerName = sellerName;
-	}
-
-	public double getTimeTaken() {
+	public float getTimeTaken() {
 		return timeTaken;
 	}
 
-	public void setTimeTaken(double timeTaken) {
+	public void setTimeTaken(float timeTaken) {
 		this.timeTaken = timeTaken;
+	}
+
+	public Date getUploadDate() {
+		return uploadDate;
+	}
+
+	public void setUploadDate(Date uploadDate) {
+		this.uploadDate = uploadDate;
+	}
+
+	public Seller getSeller() {
+		return seller;
+	}
+
+	public void setSeller(Seller seller) {
+		this.seller = seller;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

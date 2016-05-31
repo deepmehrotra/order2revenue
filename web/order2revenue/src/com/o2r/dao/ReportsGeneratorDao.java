@@ -8,6 +8,7 @@ import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.CustomException;
+import com.o2r.model.UploadReport;
 
 /**
  * @author Deep Mehrotra
@@ -31,6 +32,13 @@ public interface ReportsGeneratorDao {
 			Date endDate, int sellerId) throws CustomException;
 
 	List<CommissionDetails> fetchPC(int sellerId, Date startDate, Date endDate, String criteria);
+
+	public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
+			throws CustomException;
+
+	public List<UploadReport> listUploadReport(int sellerId) throws CustomException;
+
+	public UploadReport getUploadLog(int id, int sellerId) throws CustomException;
 
 	//public void addUploadReport(UploadReport uploadReport) throws CustomException;
 

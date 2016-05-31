@@ -53,14 +53,19 @@
     		urltogo='addJabong.html?partnerName='+value;
     	}    	
     	location.href=urltogo;
-    	
-       /*  $.ajax({
-        	
-            url : urltogo,
-            success : function(data) {
-            $('#centerpane').html(data);
-            }
-        }); */
+    }
+    function onclickEditpartner(id, name) {
+    	var urltogo="";
+    	if(name.localeCompare("Jabong") != 0){
+    		if(name.localeCompare("Myntra") != 0){
+    			urltogo='editPartner.html?pcId='+id;
+    		}else{
+    			urltogo='editMyntra.html?pcId='+id;
+    		}
+    	}else{
+    		urltogo='editJabong.html?pcId='+id;
+    	}    	
+    	location.href=urltogo;
     }
 </script>
 </head>
@@ -95,7 +100,9 @@
                             			<img alt="image"  src="/O2R/partnerimages/5Yamaha.jpg"  title="${partner.pcName}">
                             		</c:otherwise>                            	
                             	</c:choose>                            	
-                                <div><a href="editPartner.html?pcId=${partner.pcId}"  style="width:49%;z-index: 9999;" onclick=""><i class="fa fa-pencil"></i></a>
+                                <div><a href="#"
+                                	 style="width:49%;z-index: 9999;"
+                                	 onclick="onclickEditpartner('${partner.pcId}','${partner.pcName}')"><i class="fa fa-pencil"></i></a>
 								<a href="viewPartner.html?pcId=${partner.pcId}"><i class="fa fa-eye" style="position: relative;left: 54px;"></i></a></div>	
                             </div>
                         </div>

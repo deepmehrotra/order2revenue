@@ -35,6 +35,7 @@ import com.o2r.bean.StateBean;
 import com.o2r.bean.StateDeliveryTimeBean;
 import com.o2r.bean.TaxCategoryBean;
 import com.o2r.bean.TaxDetailBean;
+import com.o2r.bean.UploadReportBean;
 import com.o2r.model.AccountTransaction;
 import com.o2r.model.Category;
 import com.o2r.model.Customer;
@@ -57,6 +58,7 @@ import com.o2r.model.State;
 import com.o2r.model.StateDeliveryTime;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.TaxDetail;
+import com.o2r.model.UploadReport;
 
 public class ConverterClass {
 
@@ -1942,5 +1944,32 @@ public class ConverterClass {
 		}
 		newdDebtorsGraph1List.add(consolidated);
 		return newdDebtorsGraph1List;
+	}
+
+	public static List<UploadReportBean> prepareUploadReportListBean(
+			List<UploadReport> uploadReportList) {
+
+		List<UploadReportBean> uploadReportBeans = null;
+		if (uploadReportList != null && !uploadReportList.isEmpty()) {
+			uploadReportBeans = new ArrayList<UploadReportBean>();
+			UploadReportBean bean = null;
+			for (UploadReport uploadReport : uploadReportList) {
+				bean = new UploadReportBean();
+				bean.setId(uploadReport.getId());
+				bean.setDescription(uploadReport.getDescription());
+				bean.setFileType(uploadReport.getFileType());
+				bean.setFilePath(uploadReport.getFilePath());
+				bean.setSellerId(uploadReport.getSeller().getId());
+				bean.setSellerName(uploadReport.getSeller().getName());
+				bean.setStatus(uploadReport.getStatus());
+				bean.setTimeTaken(uploadReport.getTimeTaken());
+				bean.setUploadDate(uploadReport.getUploadDate());
+				bean.setUploadedAt(GlobalConstant.toDuration(new Date()
+						.getTime() - uploadReport.getUploadDate().getTime()));
+				uploadReportBeans.add(bean);
+			}
+		}
+
+		return uploadReportBeans;
 	}
 }

@@ -7,31 +7,30 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 //GIT Test
 @Entity
-@Table(name="seller_state_deliverytime")
+@Table(name = "seller_state_deliverytime")
 public class StateDeliveryTime {
 
 	@Id
 	@GeneratedValue
 	@Column
 	private Integer id;
-	
+
 	@Column
 	private int deliveryTime;
-	
+
 	@ManyToOne
-	//@JoinTable(name="states",
-	//	joinColumns = {@JoinColumn(name="id", referencedColumnName="id")}
-	//)
+	// @JoinTable(name="states",
+	// joinColumns = {@JoinColumn(name="id", referencedColumnName="id")}
+	// )
 	private State state;
-	
-	@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
+
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Seller seller;
-	
+
 	public int getId() {
 		return id;
 	}
@@ -39,7 +38,7 @@ public class StateDeliveryTime {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public int getDeliveryTime() {
 		return deliveryTime;
 	}
@@ -47,7 +46,7 @@ public class StateDeliveryTime {
 	public void setDeliveryTime(int deliveryTime) {
 		this.deliveryTime = deliveryTime;
 	}
-	
+
 	public State getState() {
 		return state;
 	}
@@ -55,7 +54,7 @@ public class StateDeliveryTime {
 	public void setState(State state) {
 		this.state = state;
 	}
-	
+
 	public Seller getSeller() {
 		return seller;
 	}
