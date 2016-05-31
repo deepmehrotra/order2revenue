@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,7 +17,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 
-//GIT Test
 @Entity
 @Table(name = "Seller")
 public class Seller {
@@ -52,7 +50,7 @@ public class Seller {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "seller_roles", joinColumns = { @JoinColumn(name = "seller_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "role_id", referencedColumnName = "id") })
 	private Role role;
-	
+
 	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<Order> orders = new ArrayList<Order>();
@@ -66,7 +64,7 @@ public class Seller {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "Seller_ExpCat", joinColumns = @JoinColumn(name = "ID"), inverseJoinColumns = @JoinColumn(name = "EXPCATID"))
 	private List<ExpenseCategory> expensecategories = new ArrayList<ExpenseCategory>();
-	
+
 	@OneToMany(cascade = CascadeType.ALL)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<Partner> partners = new ArrayList<Partner>();
@@ -99,10 +97,10 @@ public class Seller {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Plan plan;
 
-	/*@OneToMany(cascade = CascadeType.ALL)
-	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-	private List<UploadReport> uploadReportList = new ArrayList<UploadReport>();*/
-	
+	// Seller to upload Report OneToMany
+	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+	private List<UploadReport> uploadReportList = new ArrayList<UploadReport>();
+
 	public SellerAccount getSellerAccount() {
 		return sellerAccount;
 	}
@@ -302,12 +300,12 @@ public class Seller {
 	public void setStateDeliveryTime(List<StateDeliveryTime> stateDeliveryTime) {
 		this.stateDeliveryTime = stateDeliveryTime;
 	}
-	
-	/*public List<UploadReport> getUploadReportList() {
+
+	public List<UploadReport> getUploadReportList() {
 		return uploadReportList;
 	}
 
 	public void setUploadReportList(List<UploadReport> uploadReportList) {
 		this.uploadReportList = uploadReportList;
-	}*/
+	}
 }

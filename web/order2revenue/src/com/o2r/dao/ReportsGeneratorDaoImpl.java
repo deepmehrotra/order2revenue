@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
@@ -32,6 +33,8 @@ import com.o2r.model.OrderPayment;
 import com.o2r.model.OrderRTOorReturn;
 import com.o2r.model.OrderTax;
 import com.o2r.model.Product;
+import com.o2r.model.Seller;
+import com.o2r.model.UploadReport;
 
 /**
  * @author Deep Mehrotra
@@ -1011,23 +1014,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		return orderList;
 	}
 
-	/*@Override
-	public void addUploadReport(UploadReport uploadReport)
-			throws CustomException {
-		try {
-			Session session = sessionFactory.openSession();
-			session.beginTransaction();
-			session.saveOrUpdate(uploadReport);
-			session.getTransaction().commit();
-			session.close();
-		} catch (Exception e) {
-			log.error(e.getStackTrace());
-			throw new CustomException(GlobalConstant.addReportError,
-					new Date(), 1, GlobalConstant.addReportErrorCode, e);
-		}
-	}*/
-
-	/*@Override
+	@Override
 	public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
 			throws CustomException {
 		log.info("***addUploadReport Start****");
@@ -1038,8 +1025,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			Criteria criteria = session.createCriteria(Seller.class).add(
 					Restrictions.eq("id", sellerId));
 			seller = (Seller) criteria.list().get(0);
-			if (seller.getUploadReportList() != null)
+			uploadReport.setSeller(seller);
+			if (seller.getUploadReportList() != null) {
 				seller.getUploadReportList().add(uploadReport);
+			}
 			session.saveOrUpdate(seller);
 			session.getTransaction().commit();
 			session.close();
@@ -1054,16 +1043,54 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		log.info("***addUploadReport Exit****");
 		return uploadReport;
 	}
-	@SuppressWarnings("unchecked")
+	
 	@Override
-	public List<UploadReport> listUploadReport() throws CustomException {
+	public List<UploadReport> listUploadReport(int sellerId) throws CustomException {
+		List<UploadReport> returnlist = null;
 		try {
-			return (List<UploadReport>) sessionFactory.getCurrentSession()
-					.createCriteria(UploadReport.class).list();
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Seller seller = (Seller) session.get(Seller.class, sellerId);
+			if (seller.getUploadReportList() != null && seller.getUploadReportList().size() != 0) {
+				returnlist = seller.getUploadReportList();
+			}
+			session.getTransaction().commit();
+			session.close();
+			return returnlist;
 		} catch (Exception e) {
 			log.error(e);
 			throw new CustomException(GlobalConstant.listReportError,
 					new Date(), 3, GlobalConstant.listReportsErrorCode, e);
 		}
-	}*/
+	}
+
+	@Override
+	public UploadReport getUploadLog(int id, int sellerId) throws CustomException {
+		List<UploadReport> returnlist = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
+			criteria.createAlias("uploadReportList", "uploadReport",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("uploadReport.id",
+							id))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			if (criteria.list().size() != 0) {
+				Seller seller = (Seller) criteria.list().get(0);
+				if (seller == null)
+					System.out.println("Null seller");
+				returnlist = seller.getUploadReportList();		
+			}
+			session.getTransaction().commit();
+			session.close();
+			return returnlist.get(0);
+		} catch (Exception e) {
+			log.error(e);
+			throw new CustomException(GlobalConstant.listReportError,
+					new Date(), 3, GlobalConstant.listReportsErrorCode, e);
+		}
+	}
 }

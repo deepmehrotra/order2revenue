@@ -28,10 +28,10 @@ public interface ReportGeneratorService {
 	public List<ChannelReportDetails> getChannelReportDetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException;
 
-	/*public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
+	public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
 			throws CustomException;
 
-	public List<UploadReport> listUploadReport() throws CustomException;*/
+	/*public List<UploadReport> listUploadReport() throws CustomException;*/
 	
 	 public List<ChannelSalesDetails> getChannelSalesDetails(Date startDate ,Date endDate, int sellerId)throws CustomException;
 
@@ -46,7 +46,9 @@ public interface ReportGeneratorService {
 
 	List<PartnerReportDetails> getDebtorsReportDetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException;
+	
+	public List<UploadReport> listUploadReport(int sellerId) throws CustomException;
 
-	public void addUploadReport(UploadReport uploadReport, int sellerId);
+	public UploadReport getUploadLog(int id, int sellerId) throws CustomException;
 
 }

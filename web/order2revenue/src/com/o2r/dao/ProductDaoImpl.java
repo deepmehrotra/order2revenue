@@ -26,7 +26,9 @@ import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.ProductStockList;
 import com.o2r.model.Seller;
+import com.o2r.model.TaxCategory;
 import com.o2r.service.PartnerService;
+import com.o2r.service.TaxDetailService;
 
 /**
  * @author Deep Mehrotra
@@ -39,6 +41,8 @@ public class ProductDaoImpl implements ProductDao {
 	private SessionFactory sessionFactory;
 	@Autowired
 	private PartnerService partnerService;
+	@Autowired
+	private TaxDetailService taxDetailService;
 
 	private final int pageSize = 500;
 
@@ -160,32 +164,66 @@ public class ProductDaoImpl implements ProductDao {
 				productConfig
 						.setCommisionAmt((productConfig.getSp() * commision) / 100);
 
-				float taxsp = 0;
-				if (partner.getNrnReturnConfig().getTaxSpType().equals("fixed")) {
-					taxsp = chargesMap.get(GlobalConstant.fixedtaxSPPercent);
-				} else {
-					taxsp = chargesMap.get(GlobalConstant.TaxSPPrefix
-							+ category);
-				}
-				productConfig.setTaxSp(taxsp);
-				productConfig.setTaxSpAmt(productConfig.getSp()
-						- (productConfig.getSp() * 100 / (100 + taxsp)));
+				List<TaxCategory> taxCategoryList = taxDetailService.listTaxCategories(sellerId);
+				for (TaxCategory taxCategory : taxCategoryList) {
+					
+					if (partner.getNrnReturnConfig().getTaxSpType().equals("fixed")) {
+						
+						String mapKey = GlobalConstant.fixedtaxSPPercent +
+								GlobalConstant.TaxCategoryPrefix +
+								taxCategory.getTaxCatName();
+						if (chargesMap.containsKey(mapKey)) {
+							productConfig.setTaxSpCategory(taxCategory.getTaxCatName());
+							productConfig.setTaxSp(taxCategory.getTaxPercent());
+							productConfig.setTaxSpAmt(productConfig.getSp()
+									- (productConfig.getSp() * 100 / (100 + 
+											productConfig.getTaxSp())));
+						}
+					} else {
+						
+						String mapKey = GlobalConstant.TaxSPPrefix +
+								category +
+								GlobalConstant.TaxCategoryPrefix +
+								taxCategory.getTaxCatName();
+						if (chargesMap.containsKey(mapKey)) {
+							productConfig.setTaxSpCategory(taxCategory.getTaxCatName());
+							productConfig.setTaxSp(taxCategory.getTaxPercent());
+							productConfig.setTaxSpAmt(productConfig.getSp()
+									- (productConfig.getSp() * 100 / (100 + 
+											productConfig.getTaxSp())));
+						}
+					}
 
+					if (partner.getNrnReturnConfig().getTaxPoType().equals("fixed")) {
+						
+						String mapKey = GlobalConstant.fixedtaxPOPercent +
+								GlobalConstant.TaxCategoryPrefix +
+								taxCategory.getTaxCatName();
+						if (chargesMap.containsKey(mapKey)) {
+							productConfig.setTaxPoCategory(taxCategory.getTaxCatName());
+							productConfig.setTaxPo(taxCategory.getTaxPercent());
+						}
+						
+					} else {
+						
+						String mapKey = GlobalConstant.TaxPOPrefix +
+								category +
+								GlobalConstant.TaxCategoryPrefix +
+								taxCategory.getTaxCatName();
+						if (chargesMap.containsKey(mapKey)) {
+							productConfig.setTaxPoCategory(taxCategory.getTaxCatName());
+							productConfig.setTaxPo(taxCategory.getTaxPercent());
+						}
+					}					
+				}
+					
 				productConfig.setPr(productConfig.getSp()
 						- productConfig.getCommisionAmt()
 						- productConfig.getTaxSpAmt());
 
-				float taxpo = 0;
-				if (partner.getNrnReturnConfig().getTaxSpType().equals("fixed")) {
-					taxpo = chargesMap.get(GlobalConstant.fixedtaxPOPercent);
-				} else {
-					taxpo = chargesMap.get(GlobalConstant.TaxPOPrefix
-							+ category);
-				}
-				productConfig.setTaxPo(taxpo);
-				productConfig
-						.setTaxPoAmt((productConfig.getPr() * taxpo) / 100);
-
+				productConfig.setTaxPoAmt(
+						(productConfig.getPr() * productConfig.getTaxPo()) / 100);
+				
 				productConfig.setSuggestedPOPrice(productConfig
 						.getPr() + productConfig.getTaxPoAmt());
 

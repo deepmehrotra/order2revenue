@@ -27,6 +27,10 @@ public class ProductConfig {
 	@Column
 	private String channelSkuRef;
 	@Column
+	private String taxSpCategory;
+	@Column
+	private String taxPoCategory;
+	@Column
 	private float commision;
 	@Column
 	private float taxSp;
@@ -234,5 +238,21 @@ public class ProductConfig {
 
 	public void setPr(double pr) {
 		this.pr = pr;
+	}
+
+	public String getTaxSpCategory() {
+		return taxSpCategory;
+	}
+
+	public void setTaxSpCategory(String taxSpCategory) {
+		this.taxSpCategory = taxSpCategory;
+	}
+
+	public String getTaxPoCategory() {
+		return taxPoCategory;
+	}
+
+	public void setTaxPoCategory(String taxPoCategory) {
+		this.taxPoCategory = taxPoCategory;
 	}
 }

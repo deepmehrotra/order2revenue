@@ -32,7 +32,7 @@
 												<label class="col-sm-5 control-label">Product SKU
 													Code</label>
 												<div class="col-sm-7 input-group pad-lr">
-													<form:select data-placeholder="Choose a Country..."
+													<form:select data-placeholder="Choose a Product SKU..."
 														path="productSkuCode" items="${productSkuMap}"
 														id="productName" class="chosen-select"
 														style="width: 100%;" tabindex="2">

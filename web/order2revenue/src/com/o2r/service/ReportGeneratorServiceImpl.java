@@ -124,9 +124,20 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 	}
 
 	@Override
-	public void addUploadReport(UploadReport uploadReport, int sellerId) {
-		// TODO Auto-generated method stub
-		
+	public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
+			throws CustomException {
+		return reportGeneratorDao.addUploadReport(uploadReport, sellerId);
+	}
+
+	@Override
+	public List<UploadReport> listUploadReport(int sellerId)
+			throws CustomException {
+		return reportGeneratorDao.listUploadReport(sellerId);
+	}
+
+	@Override
+	public UploadReport getUploadLog(int id, int sellerId) throws CustomException {
+		return reportGeneratorDao.getUploadLog(id, sellerId);
 	}
 
 	/*

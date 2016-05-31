@@ -46,341 +46,399 @@ span .#error {
 		<jsp:include page="../sidenavigation.jsp"></jsp:include>
 		<div id="page-wrapper" class="gray-bg">
 			<jsp:include page="../globalheader.jsp"></jsp:include>
-			<div class="wrapper wrapper-content animated fadeInRight" id="centerpane">
+			<div class="wrapper wrapper-content animated fadeInRight"
+				id="centerpane">
 				<div class="ibox-title">
-                           <img src="/O2R/partnerimages/Myntra.jpg" alt="logo">
-                </div>
+					<img src="/O2R/partnerimages/Myntra.jpg" alt="logo">
+				</div>
 				<div class="ibox-content add-company">
-                    <form:form method="POST" action="saveMyntra.html"
-					id="addpartnerform" name="addpartnerform" role="form"
-					class="form-horizontal" enctype="multipart/form-data">
-                                <div class="col-sm-4">
-                                    <div class="radio"><label> <form:radiobutton path="paymentType"
-													value="paymentcycle" id="1" name="toggler" onChange="handleRadioEvent(this);" />Subdivided Monthly</label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="radio"><label> <form:radiobutton path="paymentType"
-													value="datewisepay" id="2" name="toggler" onChange="handleRadioEvent(this);" />Delivery/ Shipped Date </label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="radio"><label> <form:radiobutton path="paymentType"
-													value="monthly" id="3" name="toggler" onChange="handleRadioEvent(this);" /> Monthly</label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 radio1" id="blk-1">
-                                <div class="col-sm-6">
-                                    <div class="mar-btm-20-oh"><label class="col-sm-4 control-label">Start Date</label>
-                                    	<div class="col-sm-8" >
-                                            <form:input path="startcycleday"
-														value="${partner.startcycleday}"
-														placeholder="Duration of Payment from Start Date"
-														class="form-control" />
-                                     	</div>
-                                    </div>
-                                    <div class="mar-btm-20-oh"><label class="col-sm-4 control-label">End Date</label>
-                                    	<div class="col-sm-8">
-                                    		<form:input path="paycycleduration"
-															value="${partner.paycycleduration}"
-															placeholder="Duration of Payment from Start Date"
-															class="form-control" />
+					<form:form method="POST" action="saveMyntra.html"
+						id="addpartnerform" name="addpartnerform" role="form"
+						class="form-horizontal" enctype="multipart/form-data">
+						<div class="col-sm-4">
+							<div class="radio">
+								<label> <form:radiobutton path="paymentType"
+										value="paymentcycle" id="1" name="toggler"
+										onChange="handleRadioEvent(this);" />Subdivided Monthly
+								</label>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="radio">
+								<label> <form:radiobutton path="paymentType"
+										value="datewisepay" id="2" name="toggler"
+										onChange="handleRadioEvent(this);" />Delivery/ Shipped Date
+								</label>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="radio">
+								<label> <form:radiobutton path="paymentType"
+										value="monthly" id="3" name="toggler"
+										onChange="handleRadioEvent(this);" /> Monthly
+								</label>
+							</div>
+						</div>
+						<div class="col-sm-12 radio1" id="blk-1">
+							<div class="col-sm-6">
+								<div class="mar-btm-20-oh">
+									<label class="col-sm-4 control-label">Start Date</label>
+									<div class="col-sm-8">
+										<form:input path="startcycleday"
+											value="${partner.startcycleday}"
+											placeholder="Duration of Payment from Start Date"
+											class="form-control" />
+									</div>
+								</div>
+								<div class="mar-btm-20-oh">
+									<label class="col-sm-4 control-label">End Date</label>
+									<div class="col-sm-8">
+										<form:input path="paycycleduration"
+											value="${partner.paycycleduration}"
+											placeholder="Duration of Payment from Start Date"
+											class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="mar-btm-20-oh">
+									<label class="col-sm-4 control-label">Payment Date</label>
+									<div class="col-sm-8">
+										<form:input path="paydaysfromstartday"
+											value="${partner.paydaysfromstartday}"
+											placeholder="Duration of Payment from Start Date"
+											class="form-control" />
+									</div>
+								</div>
+								<div class="mar-btm-20-oh">
+									<label class="col-sm-4 control-label">Payment From</label>
+									<div class="col-sm-8">
+										<form:select path="paycyclefromshipordel" items="${datemap}"
+											class="form-control" name="account" id="paymentField">
+										</form:select>
+									</div>
+								</div>
+							</div>
+							<div>
+								<small class="help-block">(For ex: If your Payment cycle
+									is staring from 5th May to 10th May and Payment date for that
+									cycel is 15th May , then you Start Date will have 5 Duration
+									will have 5 and Payment from SD will have 10)</small>
+							</div>
+						</div>
+
+						<div class="col-sm-12 radio1" id="blk-2">
+							<div class="row">
+								<div class="col-md-6">
+									<form:select path="isshippeddatecalc" items="${datemap}"
+										class="form-control" id="paymentField1">
+									</form:select>
+								</div>
+								<div class="col-md-6 payment-box" id="true">
+									<form:input path="noofdaysfromshippeddate"
+										id="noofdaysfromshippeddate"
+										value="${partner.noofdaysfromshippeddate}"
+										placeholder="Payment Days From Shipped Date"
+										class="form-control" />
+								</div>
+								<div class="col-md-6 payment-box" id="false">
+									<form:input path="noofdaysfromdeliverydate"
+										id="noofdaysfromdeliverydate"
+										value="${partner.noofdaysfromdeliverydate}"
+										placeholder="Payment Days From Delivery Date"
+										class="form-control" />
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 radio1" id="blk-3">
+							<div class="row">
+								<div class="col-md-4">
+									<form:input path="monthlypaydate"
+										value="${partner.monthlypaydate}" placeholder="Enter Day"
+										class="form-control" />
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="hr-line-dashed"></div>
+							<label> ALIAS NAME &nbsp; &nbsp; &nbsp; <form:input
+									path="pcDesc" value="${partner.pcDesc}" class="form-control" />
+							</label>
+						</div>
+						<div class="col-sm-12">
+							<div class="hr-line-dashed"></div>
+							<div class="col-sm-6" style="border-right: 1px solid #ccc;">
+								<h5 style="text-align: center;">TOI SETTINGS</h5>
+								<table
+									style="width: 80%; margin-left: 20px; border-spacing: 0 5px;">
+
+									<tbody>
+										<tr>
+											<td style="width: 25%;">0.5 CR -1 CR</td>
+											<td>
+												<div class="input-group">
+													<input type="text" class="form-control"> <span
+														class="input-group-addon">%</span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td style="width: 25%;">1 CR -1.99 CR</td>
+											<td>
+												<div class="input-group">
+													<input type="text" class="form-control"> <span
+														class="input-group-addon">%</span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td style="width: 25%;">> 2 CR</td>
+											<td>
+												<div class="input-group">
+													<input type="text" class="form-control"> <span
+														class="input-group-addon">%</span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>BASIS OF TOI</td>
+											<td>
+												<div class="input-group" style="width: 100%;">
+													<select class="form-control">
+														<option value="MRP">MRP</option>
+														<option value="SP">SP</option>
+													</select>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>TOI FREQUENCY</td>
+											<td>
+												<div class="input-group" style="width: 100%;">
+													<select class="form-control">
+														<option value="ANNUAL">ANNUAL</option>
+														<option value="QUARTERLY">QUARTERLY</option>
+														<option value="MONTHLY">MONTHLY</option>
+
+													</select>
+												</div>
+											</td>
+										</tr>
+
+
+									</tbody>
+								</table>
+							</div>
+							<div class="col-sm-6">
+								<div class="col-sm-12">
+									<div class="col-sm-4">
+										<div class="radio">
+											<label>NET COMMISSION</label>
 										</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="mar-btm-20-oh"><label class="col-sm-4 control-label">Payment Date</label>
-                                    	<div class="col-sm-8">
-		                                    <form:input path="paydaysfromstartday"
-															value="${partner.paydaysfromstartday}"
-															placeholder="Duration of Payment from Start Date"
-															class="form-control" />
-                                    	</div>
-                                    </div>
-                                    <div class="mar-btm-20-oh"><label class="col-sm-4 control-label">Payment From</label>
-                                    	<div class="col-sm-8">
-	                                    	<form:select path="paycyclefromshipordel"
-															items="${datemap}" class="form-control" name="account"
-															id="paymentField">
-														</form:select>
-                                    	</div>
-                                    </div>                                    
-                                   </div>
-                                   <div>
-                                    	<small class="help-block">(For ex: If your Payment cycle is staring from 5th May to 10th May and Payment date for that cycel is 15th May , then you Start Date will have 5 Duration will have 5 and Payment from SD will have 10)</small>
-		                           </div>                                   
-                                </div>
-                                
-                                <div class="col-sm-12 radio1" id="blk-2">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <form:select path="isshippeddatecalc" items="${datemap}"
-													class="form-control" id="paymentField1">
-												</form:select>
-                                        </div>
-                                        <div class="col-md-6 payment-box" id="true">
-												<form:input path="noofdaysfromshippeddate"
-													id="noofdaysfromshippeddate"
-													value="${partner.noofdaysfromshippeddate}"
-													placeholder="Payment Days From Shipped Date"
-													class="form-control" />
-											</div>
-											<div class="col-md-6 payment-box" id="false">
-												<form:input path="noofdaysfromdeliverydate"
-													id="noofdaysfromdeliverydate"
-													value="${partner.noofdaysfromdeliverydate}"
-													placeholder="Payment Days From Delivery Date"
-													class="form-control" />
-											</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 radio1" id="blk-3">
-                                     <div class="row">
-                                        <div class="col-md-4">
-                                            <form:input path="monthlypaydate"
-													value="${partner.monthlypaydate}" placeholder="Enter Day"
-													class="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="hr-line-dashed"></div>
-                                        <label> 
-                                            ALIAS NAME &nbsp; &nbsp; &nbsp; <form:input path="pcDesc" value="${partner.pcDesc}"	class="form-control" />
-                                        </label>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="col-sm-6" style="border-right:1px solid #ccc;">
-                                        <h5 style="text-align: center;">TOI SETTINGS</h5>
-                                        <table style="width: 80%;margin-left: 20px;border-spacing: 0 5px;" >
-                                            
-                                            <tbody>
-                                                <tr>
-                                                    <td style="width: 25%;">0.5 CR -1 CR</td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control">
-                                                            <span class="input-group-addon">%</span>
-                                                        </div>
-                                                    </td>
-                                                </tr> 
-                                                <tr>
-                                                    <td style="width: 25%;">1 CR -1.99 CR</td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control">
-                                                            <span class="input-group-addon">%</span>
-                                                        </div>
-                                                    </td>
-                                                </tr> 
-                                                <tr>
-                                                    <td style="width: 25%;"> > 2 CR</td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control">
-                                                            <span class="input-group-addon">%</span>
-                                                        </div>
-                                                    </td>
-                                                </tr> 
-                                                <tr>
-                                                    <td>
-                                                        BASIS OF TOI
-                                                    </td>
-                                                    <td>
-                                                        <div class="input-group" style="width: 100%;">
-                                                            <select class="form-control">
-                                                                <option value="MRP">
-                                                                    MRP
-                                                                </option>
-                                                                <option value="SP">
-                                                                    SP
-                                                                </option>
-                                                            </select>  
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        TOI FREQUENCY
-                                                    </td>
-                                                    <td>
-                                                        <div class="input-group" style="width: 100%;">
-                                                            <select class="form-control">
-                                                                <option value="ANNUAL">
-                                                                    ANNUAL
-                                                                </option>
-                                                                <option value="QUARTERLY">
-                                                                    QUARTERLY
-                                                                </option>
-                                                                <option value="MONTHLY">
-                                                                    MONTHLY
-                                                                </option>
-
-                                                            </select>  
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            
-
-                                            </tbody>
-                                        </table>                               
-                                    </div>
-                                <div class="col-sm-6">
-                                    <div class="col-sm-12">
-                                        <div class="col-sm-4">
-                                            <div class="radio"><label>NET COMMISSION</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="radio"><label> <form:radiobutton path="nrnReturnConfig.commissionType" value="fixed"
-															id="4" name="toggler" onChange="handleRadioEvent(this);"
-															class="commissionType" />FIXED </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="radio"><label> <form:radiobutton path="nrnReturnConfig.commissionType"	value="categoryWise"
-															id="5" class="commissionType" name="toggler" onChange="handleRadioEvent(this);"/> CATEGORY WISE</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 radio1" id="blk-4">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="input-group m-b col-md-4">
-														<input type="text" class="form-control"
-														name="nr-fixedCommissionPercent" value="${fixedCommissionPercent}">
-														<span class="input-group-addon" >%</span>
-													</div> 
-                                                </div>                                                
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 radio1" id="blk-5">
-                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <c:if test="${!empty categoryList}">
-														<c:forEach items="${categoryList}" var="category"
-															varStatus="loop">
-																<div class="form-group col-md-12">
-																	<label class="col-md-4 control-label">${category}</label>
-																		<div class="input-group m-b col-md-4">
-																			<input type="text" class="form-control"	name='nr-comm-${category}'>																					
-																		</div>
-																</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="radio">
+											<label> <form:radiobutton
+													path="nrnReturnConfig.commissionType" value="fixed" id="4"
+													name="toggler" onChange="handleRadioEvent(this);"
+													class="commissionType" />FIXED
+											</label>
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="radio">
+											<label> <form:radiobutton
+													path="nrnReturnConfig.commissionType" value="categoryWise"
+													id="5" class="commissionType" name="toggler"
+													onChange="handleRadioEvent(this);" /> CATEGORY WISE
+											</label>
+										</div>
+									</div>
+									<div class="col-sm-12 radio1" id="blk-4">
+										<div class="row">
+											<div class="col-md-12">
+												<div class="input-group m-b col-md-4">
+													<select name="nr-fixedCommissionPercent">
+														<option></option>
+														<c:forEach items="${taxCategoryList}" var="taxCategory">
+															<option>
+																${taxCategory}</option>
 														</c:forEach>
-													</c:if>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="hr-line-dashed"></div>
-                                                                        <div class="col-sm-4">
-                                    <div class="radio"><label>TAX (ON SP)</label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="radio"><label> <form:radiobutton path="nrnReturnConfig.taxSpType" value="fixed"
-															id="6" name="toggler" onChange="handleRadioEvent(this);"
-															class="taxSpType" />FIXED </label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="radio"><label> <form:radiobutton path="nrnReturnConfig.taxSpType"	value="categoryWise"
-															id="7" class="taxSpType" name="toggler" onChange="handleRadioEvent(this);"/>CATEGORY WISE</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-sm-12 radio1" id="blk-6">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                        	<div class="input-group m-b col-md-4">
-	                                            <input type="text" class="form-control"
-														name="nr-fixedTaxSpPercent" value="${fixedCommissionPercent}">
-														<span class="input-group-addon" >%</span>
+													</select>
+												</div>
 											</div>
-                                        </div>                                        
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 radio1" id="blk-7">
-                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <c:if test="${!empty categoryList}">
-														<c:forEach items="${categoryList}" var="category"
-															varStatus="loop">
-																<div class="form-group col-md-12">
-																	<label class="col-md-4 control-label">${category}</label>
-																		<div class="input-group m-b col-md-4">
-																			<input type="text" class="form-control"	name='nr-taxSp-${category}'>																					
-																		</div>
-																</div>
-														</c:forEach>
-													</c:if>
-                                        </div>
-                                    </div>
-                                </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="col-sm-4">
-                                    <div class="radio"><label>TAX (ON PO PRICE)</label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="radio"><label> <form:radiobutton path="nrnReturnConfig.taxPoType" value="fixed"
-															id="8" name="toggler" onChange="handleRadioEvent(this);"
-															class="taxPoType" />FIXED </label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="radio"><label> <form:radiobutton path="nrnReturnConfig.taxPoType"	value="categoryWise"
-															id="9" class="taxPoType" name="toggler" onChange="handleRadioEvent(this);"/> CATEGORY WISE</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-sm-12 radio1" id="blk-8">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                        	<div class="input-group m-b col-md-4">
-	                                            <input type="text" class="form-control"
-														name="nr-fixedTaxPoPercent" value="${fixedCommissionPercent}">
-														<span class="input-group-addon" >%</span>
+										</div>
+									</div>
+									<div class="col-sm-12 radio1" id="blk-5">
+										<div class="row">
+											<div class="col-md-12">
+												<c:if test="${!empty categoryList}">
+													<c:forEach items="${categoryList}" var="category"
+														varStatus="loop">
+														<div class="form-group col-md-12">
+															<label class="col-md-4 control-label">${category}</label>
+															<div class="input-group m-b col-md-4">
+																<select name='nr-comm-${category}'>
+																	<option></option>
+																	<c:forEach items="${taxCategoryList}" var="taxCategory">
+																		<option>
+																			${taxCategory}</option>
+																	</c:forEach>
+																</select>
+															</div>
+														</div>
+													</c:forEach>
+												</c:if>
 											</div>
-                                        </div>                                        
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 radio1" id="blk-9">
-                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <c:if test="${!empty categoryList}">
-														<c:forEach items="${categoryList}" var="category"
-															varStatus="loop">
-																<div class="form-group col-md-12">
-																	<label class="col-md-4 control-label">${category}</label>
-																		<div class="input-group m-b col-md-4">
-																			<input type="text" class="form-control"	name='nr-taxPo-${category}'>																					
-																		</div>
-																</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<div class="hr-line-dashed"></div>
+									<div class="col-sm-4">
+										<div class="radio">
+											<label>TAX (ON SP)</label>
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="radio">
+											<label> <form:radiobutton
+													path="nrnReturnConfig.taxSpType" value="fixed" id="6"
+													name="toggler" onChange="handleRadioEvent(this);"
+													class="taxSpType" />FIXED
+											</label>
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="radio">
+											<label> <form:radiobutton
+													path="nrnReturnConfig.taxSpType" value="categoryWise"
+													id="7" class="taxSpType" name="toggler"
+													onChange="handleRadioEvent(this);" />CATEGORY WISE
+											</label>
+										</div>
+									</div>
+
+									<div class="col-sm-12 radio1" id="blk-6">
+										<div class="row">
+											<div class="col-md-12">
+												<div class="input-group m-b col-md-4">
+													<select name="nr-fixedTaxSpPercent">
+														<option></option>
+														<c:forEach items="${taxCategoryList}" var="taxCategory">
+															<option>
+																${taxCategory}</option>
 														</c:forEach>
-											</c:if>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-12 radio1" id="blk-7">
+										<div class="row">
+											<div class="col-md-12">
+												<c:if test="${!empty categoryList}">
+													<c:forEach items="${categoryList}" var="category"
+														varStatus="loop">
+														<div class="form-group col-md-12">
+															<label class="col-md-4 control-label">${category}</label>
+															<div class="input-group m-b col-md-4">
+																<select name='nr-taxSp-${category}'>
+																	<option></option>
+																	<c:forEach items="${taxCategoryList}" var="taxCategory">
+																		<option>
+																			${taxCategory}</option>
+																	</c:forEach>
+																</select>
+															</div>
+														</div>
+													</c:forEach>
+												</c:if>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<div class="hr-line-dashed"></div>
+									<div class="col-sm-4">
+										<div class="radio">
+											<label>TAX (ON PO PRICE)</label>
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="radio">
+											<label> <form:radiobutton
+													path="nrnReturnConfig.taxPoType" value="fixed" id="8"
+													name="toggler" onChange="handleRadioEvent(this);"
+													class="taxPoType" />FIXED
+											</label>
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="radio">
+											<label> <form:radiobutton
+													path="nrnReturnConfig.taxPoType" value="categoryWise"
+													id="9" class="taxPoType" name="toggler"
+													onChange="handleRadioEvent(this);" /> CATEGORY WISE
+											</label>
+										</div>
+									</div>
 
-                                </div>
-                                
-                                <div class="ibox-content add-company">                                 	
-                                    <input class="btn btn-primary pull-right" id="submitButton"	type="submit" value="Save">
-                                </div>
-                                </div>
-                            </form:form>
+									<div class="col-sm-12 radio1" id="blk-8">
+										<div class="row">
+											<div class="col-md-12">
+												<div class="input-group m-b col-md-4">
+													<select name="nr-fixedTaxPoPercent">
+														<option></option>
+														<c:forEach items="${taxCategoryList}" var="taxCategory">
+															<option>
+																${taxCategory}</option>
+														</c:forEach>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-12 radio1" id="blk-9">
+										<div class="row">
+											<div class="col-md-12">
+												<c:if test="${!empty categoryList}">
+													<c:forEach items="${categoryList}" var="category"
+														varStatus="loop">
+														<div class="form-group col-md-12">
+															<label class="col-md-4 control-label">${category}</label>
+															<div class="input-group m-b col-md-4">
+																<select name='nr-taxPo-${category}'>
+																	<option></option>
+																	<c:forEach items="${taxCategoryList}" var="taxCategory">
+																		<option>
+																			${taxCategory}</option>
+																	</c:forEach>
+																</select>
+															</div>
+														</div>
+													</c:forEach>
+												</c:if>
+											</div>
+										</div>
+									</div>
+								</div>
 
-                        </div>
+							</div>
+
+							<div class="ibox-content add-company">
+								<input class="btn btn-primary pull-right" id="submitButton"
+									type="submit" value="Save">
+							</div>
+						</div>
+					</form:form>
+
+				</div>
 			</div>
 			<jsp:include page="../globalfooter.jsp"></jsp:include>
 		</div>
-		
-		
+
+
 	</div>
 
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
@@ -407,9 +465,9 @@ span .#error {
 
 
             });
-        </script> 
+        </script>
 
-        <script type="text/javascript">
+	<script type="text/javascript">
         
         function handleRadioEvent(thiss){
      	   var x=thiss.id;
@@ -449,7 +507,7 @@ span .#error {
 
  </script>
 
- <script type="text/javascript">
+	<script type="text/javascript">
     div = {
         show: function(elem) {
             document.getElementById(elem).style.visibility = 'visible';

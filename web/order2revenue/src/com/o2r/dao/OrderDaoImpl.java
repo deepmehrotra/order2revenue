@@ -480,6 +480,7 @@ public class OrderDaoImpl implements OrderDao {
 					order.setEossValue(order.getEossValue()
 							* order.getQuantity());
 					order.getOrderTax().setTax(taxvalue * order.getQuantity());
+					order.getOrderTax().setTaxCategtory(productConfig.getTaxPoCategory());
 					
 					order.getOrderTax().setTaxToReturn(order.getProductConfig().getTaxSpAmt()
 							* order.getQuantity());
@@ -508,11 +509,13 @@ public class OrderDaoImpl implements OrderDao {
 					session.getTransaction().commit();
 
 					TaxDetail taxDetails = new TaxDetail();
-					taxDetails
-							.setBalanceRemaining(order.getOrderTax().getTax());
+					taxDetails.setBalanceRemaining(order.getOrderTax()
+							.getTax());
+					taxDetails.setParticular(order.getOrderTax()
+							.getTaxCategtory());
 					taxDetails.setUploadDate(order.getOrderDate());
-					taxDetailService.addMonthlyTaxDetail(session, taxDetails,
-							sellerId);
+					taxDetailService.addMonthlyTaxDetail(session,
+							taxDetails, sellerId);
 					/*
 					 * session.getTransaction().commit(); session.close();
 					 */
@@ -3474,6 +3477,7 @@ public class OrderDaoImpl implements OrderDao {
 			TaxDetail taxDetails = new TaxDetail();
 			taxDetails.setBalanceRemaining(-(gatepass.getTaxPOAmt())
 					* gatepass.getQuantity());
+			taxDetails.setParticular(productConfig.getTaxPoCategory());
 			taxDetails.setUploadDate(gatepass.getReturnDate());
 			taxDetailService.addMonthlyTaxDetail(session, taxDetails, sellerId);
 

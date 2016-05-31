@@ -30,6 +30,13 @@ public interface ReportsGeneratorDao {
 	List<PartnerReportDetails> getDebtorsReportDetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException;
 
+	public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
+			throws CustomException;
+
+	public List<UploadReport> listUploadReport(int sellerId) throws CustomException;
+
+	public UploadReport getUploadLog(int id, int sellerId) throws CustomException;
+
 	//public void addUploadReport(UploadReport uploadReport) throws CustomException;
 
 	/*public List<UploadReport> listUploadReport() throws CustomException;
