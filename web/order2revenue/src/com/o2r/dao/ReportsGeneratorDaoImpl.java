@@ -1066,8 +1066,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				"orderreturn orr, ordertax otx where ot.orderTax_taxId = otx.taxId and ot.orderReturnOrRTO_returnId = orr.returnId and poOrder = 0 " +
 				"and ot.seller_Id=:sellerId and orr.returnDate between :startDate AND :endDate group by ot.pcName";
 		if("category".equalsIgnoreCase(criteria))
-			mpReturnQueryStr = "select pr.categoryName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty * 1.145), " +
-					"sum(estimateddeduction) as returnComm, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn) as tdsToReturn from order_table ot, " +
+			mpReturnQueryStr = "select pr.categoryName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty * 1.145) as returnComm, " +
+					"sum(estimateddeduction) as addRetCharges, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn) as tdsToReturn from order_table ot, " +
 					"orderreturn orr, ordertax otx, product pr where ot.productSkuCode = pr.productSkuCode and ot.orderTax_taxId = otx.taxId and " +
 					"ot.orderReturnOrRTO_returnId = orr.returnId and poOrder = 0 and ot.seller_Id=:sellerId and " +
 					"orr.returnDate between :startDate AND :endDate group by pr.categoryName";
