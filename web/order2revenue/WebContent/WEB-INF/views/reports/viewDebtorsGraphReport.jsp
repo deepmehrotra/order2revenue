@@ -283,8 +283,8 @@
 										<div class="row">
 											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
-													<div>
-														<table class="table table-bordered custom-table">
+													<div style="overflow-y: hidden;overflow-x: scroll;">
+														<table class="table table-bordered custom-table" style="margin-bottom: auto;">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -308,18 +308,14 @@
 															</tbody>
 														</table>
 													</div>
-
-													<div class="ibox-content">
-														<div id="morris-line-chart"></div>
-													</div>
 												</div>
 											</div>
 										</div>
-										<div class="row">
+										<div class="row" style="margin-top: 20px;">
 											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
-													<div>
-														<table class="table table-bordered custom-table">
+													<div style="overflow-y: hidden;overflow-x: scroll;">
+														<table class="table table-bordered custom-table" style="margin-bottom: auto;">
 															<thead>
 																<tr>
 																	<th>Category</th>
@@ -342,10 +338,6 @@
 																</c:if>
 															</tbody>
 														</table>
-													</div>
-
-													<div class="ibox-content">
-														<div id="morris-line-chart"></div>
 													</div>
 												</div>
 											</div>

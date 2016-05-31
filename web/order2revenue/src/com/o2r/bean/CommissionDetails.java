@@ -7,7 +7,7 @@ public class CommissionDetails {
 	private String categoryName;
 	private double netPartnerCommissionPaid;
 	private double grossPartnerCommissionPaid;
-	private double netSaleQty;
+	private int netSaleQty;
 	private double netTDSToBeDeposited;
 	private double additionalReturnCharges;
 	private double netReturnCommission;
@@ -46,11 +46,11 @@ public class CommissionDetails {
 		this.grossPartnerCommissionPaid = grossPartnerCommissionPaid;
 	}
 
-	public double getNetSaleQty() {
+	public int getNetSaleQty() {
 		return netSaleQty;
 	}
 
-	public void setNetSaleQty(double netSaleQty) {
+	public void setNetSaleQty(int netSaleQty) {
 		this.netSaleQty = netSaleQty;
 	}
 

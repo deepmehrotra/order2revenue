@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
+import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.CustomException;
@@ -49,4 +50,5 @@ public interface ReportGeneratorService {
 
 	public void addUploadReport(UploadReport uploadReport, int sellerId);
 
+	List<CommissionDetails> fetchPC(int sellerId, Date startDate, Date endDate, String criteria);
 }

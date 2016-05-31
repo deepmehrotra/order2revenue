@@ -195,28 +195,21 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			}
 
 			if ("partnerCommissionReport".equalsIgnoreCase(reportName)) {
-//				List<PCShortTableDetails> pcShortTable = reportGeneratorService.getPCShortTable(startDate, endDate, sellerId);
-				List<CommissionDetails> partnerCommissionGraphList = ConverterClass
-						.transformCommissionPaid(partnerBusinessList, startDate, endDate, "partner");
+				List<CommissionDetails> partnerCommissionGraphList = reportGeneratorService.fetchPC(sellerId, startDate, endDate, "partner");
 				log.info("PartnerList: " + partnerCommissionGraphList.size());
 				model.put("shortTablePartner", partnerCommissionGraphList);
-				List<CommissionDetails> categoryCommissionGraphList = ConverterClass
-						.transformCommissionPaid(partnerBusinessList, startDate, endDate, "category");
+				List<CommissionDetails> categoryCommissionGraphList = reportGeneratorService.fetchPC(sellerId, startDate, endDate, "category");
 				log.info("CategoryList: " + categoryCommissionGraphList.size());
 				model.put("shortTableCategory", categoryCommissionGraphList);
 
-				Collections.sort(partnerCommissionGraphList,
-						new CommissionDetails.OrderByGrossCommission());
+				Collections.sort(partnerCommissionGraphList, new CommissionDetails.OrderByGrossCommission());
 				model.put("partnerByGrossComm", ConverterClass.getCommissionSortedList(partnerCommissionGraphList, "GrossComm"));
-				Collections.sort(partnerCommissionGraphList,
-						new CommissionDetails.OrderByNetChannelCommission());
+				Collections.sort(partnerCommissionGraphList, new CommissionDetails.OrderByNetChannelCommission());
 				model.put("partnerByNetChann", ConverterClass.getCommissionSortedList(partnerCommissionGraphList, "NetChann"));
 
-				Collections.sort(categoryCommissionGraphList,
-						new CommissionDetails.OrderByGrossCommission());
+				Collections.sort(categoryCommissionGraphList, new CommissionDetails.OrderByGrossCommission());
 				model.put("categoryByGrossComm", ConverterClass.getCommissionSortedList(categoryCommissionGraphList, "GrossComm"));
-				Collections.sort(categoryCommissionGraphList,
-						new CommissionDetails.OrderByNetChannelCommission());
+				Collections.sort(categoryCommissionGraphList, new CommissionDetails.OrderByNetChannelCommission());
 				model.put("categoryByNetChann", ConverterClass.getCommissionSortedList(categoryCommissionGraphList, "NetChann"));
 
 				return new ModelAndView("reports/viewCommGraphReport", model);

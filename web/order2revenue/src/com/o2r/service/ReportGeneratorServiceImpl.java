@@ -10,10 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
+import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
-import com.o2r.dao.ReportsGeneratorDao;
 import com.o2r.dao.ReportsChannelnCategoryDao;
+import com.o2r.dao.ReportsGeneratorDao;
 import com.o2r.helper.CustomException;
 import com.o2r.model.UploadReport;
 
@@ -127,6 +128,11 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 	public void addUploadReport(UploadReport uploadReport, int sellerId) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<CommissionDetails> fetchPC(int sellerId, Date startDate, Date endDate, String criteria) {
+		return reportGeneratorDao.fetchPC(sellerId, startDate, endDate, criteria);
 	}
 
 	/*

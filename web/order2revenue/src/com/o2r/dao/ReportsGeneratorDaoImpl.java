@@ -7,10 +7,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
@@ -22,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.o2r.bean.ChannelReportDetails;
+import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.CustomException;
@@ -982,6 +985,185 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		return orderList;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CommissionDetails> fetchPC(int sellerId, Date startDate, Date endDate, String criteria) {
+		Map<String, CommissionDetails> commDetailsMap = new HashMap<String, CommissionDetails>(); 
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		String mpOrderQueryStr = "select ot.pcName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * ot.quantity) " +
+				"as grossComm, sum(ot.netSaleQuantity) as netSaleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx " +
+				"where ot.orderTax_taxId = otx.taxId and ot.poOrder = 0  and ot.seller_Id=:sellerId and ot.shippedDate " +
+				"between :startDate AND :endDate group by ot.pcName";
+		if("category".equalsIgnoreCase(criteria))
+			mpOrderQueryStr = "select pr.categoryName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * ot.quantity) " +
+				"as grossComm, sum(ot.netSaleQuantity) as netSaleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx " +
+				", product pr where ot.productSkuCode = pr.productSkuCode and ot.orderTax_taxId = otx.taxId and ot.poOrder = 0  and " +
+				"ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by pr.categoryName";
+		Query mpOrderQuery = session.createSQLQuery(mpOrderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		List<Object[]> orderList2 = mpOrderQuery.list();
+		for(Object[] order: orderList2){
+			CommissionDetails commDetails = new CommissionDetails();
+			String key = order[0].toString();
+			if("category".equalsIgnoreCase(criteria))
+				commDetails.setCategoryName(key);
+			else
+				commDetails.setPartner(key);
+			double grossCommissionPaid = Double.parseDouble(order[1].toString());
+			int netSaleQty = Integer.parseInt(order[2].toString());
+			double tdsToDeduct = Double.parseDouble(order[3].toString());
+			commDetails.setGrossPartnerCommissionPaid(grossCommissionPaid * 1.145);
+			commDetails.setNetSaleQty(netSaleQty);
+			commDetails.setNetTDSToBeDeposited(tdsToDeduct);
+			commDetailsMap.put(key, commDetails);
+		}
+		
+		String poOrderQueryStr = "select ot.pcName, sum( ot.partnerCommission+otx.taxToReturn-otx.tax ) as grossComm, " +
+				"sum(ot.quantity) as saleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx " +
+				"where ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is not null " +
+				"and ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by ot.pcName";
+		if("category".equalsIgnoreCase(criteria))
+			poOrderQueryStr = "select pr.categoryName, sum( ot.partnerCommission+otx.taxToReturn-otx.tax ) as grossComm, " +
+					"sum(ot.quantity) as saleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx, product pr " +
+					"where ot.productSkuCode = pr.productSkuCode and ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and " +
+					"ot.consolidatedOrder_orderId is not null and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pr.categoryName";
+		Query poOrderQuery = session.createSQLQuery(poOrderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList2 = poOrderQuery.list();
+		for(Object[] order: orderList2){
+			String key = order[0].toString();
+			CommissionDetails commDetails = commDetailsMap.get(key);
+			double existGC = 0;
+			int existSQ = 0;
+			double existTDS = 0;
+			if(commDetails!=null){
+				existGC = commDetails.getGrossPartnerCommissionPaid();
+				existSQ = commDetails.getNetSaleQty();
+				existTDS = commDetails.getNetTDSToBeDeposited();
+			}
+			else
+				commDetails = new CommissionDetails();
+			if("category".equalsIgnoreCase(criteria))
+				commDetails.setCategoryName(key);
+			else
+				commDetails.setPartner(key);
+			int netSaleQty = Integer.parseInt(order[2].toString());
+			double grossCommissionPaid = Double.parseDouble(order[1].toString());
+			double tdsToDeduct = Double.parseDouble(order[3].toString());
+			commDetails.setNetSaleQty(existSQ + netSaleQty);
+			commDetails.setGrossPartnerCommissionPaid(existGC + grossCommissionPaid);
+			commDetails.setNetTDSToBeDeposited(existTDS + tdsToDeduct);
+			commDetailsMap.put(key, commDetails);
+		}
+		String mpReturnQueryStr = "select ot.pcName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty), " +
+				"sum(estimateddeduction) as returnComm, sum(otx.tdsToReturn) as tdsToReturn from order_table ot, orderreturn orr, ordertax otx where " +
+				"ot.orderTax_taxId = otx.taxId and ot.orderReturnOrRTO_returnId = orr.returnId and poOrder = 0 and ot.seller_Id=:sellerId and " +
+				"orr.returnDate between :startDate AND :endDate group by ot.pcName";
+		if("category".equalsIgnoreCase(criteria))
+			mpReturnQueryStr = "select pr.categoryName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty), " +
+					"sum(estimateddeduction) as returnComm, sum(otx.tdsToReturn) as tdsToReturn from order_table ot, orderreturn orr, ordertax otx, product pr " +
+					"where ot.productSkuCode = pr.productSkuCode and ot.orderTax_taxId = otx.taxId and ot.orderReturnOrRTO_returnId = orr.returnId and poOrder = 0 " +
+					"and ot.seller_Id=:sellerId and orr.returnDate between :startDate AND :endDate group by pr.categoryName";
+		Query mpReturnQuery = session.createSQLQuery(mpReturnQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList2 = mpReturnQuery.list();
+		for(Object[] order: orderList2){
+			String key = order[0].toString();
+			CommissionDetails commDetails = commDetailsMap.get(key);
+			double existTDS = 0;
+			double existGC = 0;
+			if(commDetails != null){
+				existTDS = commDetails.getNetTDSToBeDeposited(); 
+				existGC = commDetails.getGrossPartnerCommissionPaid();
+			}
+			else
+				commDetails = new CommissionDetails();
+			if("category".equalsIgnoreCase(criteria))
+				commDetails.setCategoryName(key);
+			else
+				commDetails.setPartner(key);
+			double returnCommission = Double.parseDouble(order[1].toString());
+			double additionalRetCharges = Double.parseDouble(order[2].toString());
+			double tdsToReturn = Double.parseDouble(order[3].toString());
+			commDetails.setNetReturnCommission(returnCommission);
+			commDetails.setAdditionalReturnCharges(additionalRetCharges);
+			commDetails.setNetSrCommisison(returnCommission - additionalRetCharges);
+			commDetails.setNetTDSToBeDeposited(existTDS - tdsToReturn);
+			commDetails.setNetChannelCommissionToBePaid(existGC - returnCommission + additionalRetCharges);
+			commDetails.setNetPartnerCommissionPaid(existGC - returnCommission + additionalRetCharges);
+			commDetailsMap.put(key, commDetails);
+		}
+
+		String poReturnQueryStr = "select ot.pcName, sum( (ot.partnerCommission+otx.taxToReturn-otx.tax) * orr.returnorrtoQty ), " +
+				"sum(estimateddeduction) as returnComm, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn) as tdsToReturn  " +
+				"from order_table ot, ordertax otx, orderreturn orr where ot.orderReturnOrRTO_returnId = orr.returnId and " +
+				"ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is not null and ot.seller_Id=:sellerId " +
+				"and orr.returnDate between :startDate AND :endDate group by ot.pcName";
+		if("category".equalsIgnoreCase(criteria))
+			poReturnQueryStr = "select pr.categoryName, sum( (ot.partnerCommission+otx.taxToReturn-otx.tax) * orr.returnorrtoQty ), " +
+					"sum(estimateddeduction) as returnComm, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn) as tdsToReturn  " +
+					"from order_table ot, ordertax otx, orderreturn orr, product pr where ot.productSkuCode = pr.productSkuCode and " +
+					"ot.orderReturnOrRTO_returnId = orr.returnId and ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and " +
+					"ot.consolidatedOrder_orderId is not null and ot.seller_Id=:sellerId " +
+					"and orr.returnDate between :startDate AND :endDate group by pr.categoryName";
+		Query poReturnQuery = session.createSQLQuery(poReturnQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList2 = poReturnQuery.list();
+		for(Object[] order: orderList2){
+			String key = order[0].toString();
+			CommissionDetails commDetails = commDetailsMap.get(key);
+			double existRC = 0;
+			double existARC = 0;
+			int existRQ = 0;
+			double existTDS = 0;
+			double existGC = 0;
+			if(commDetails!=null){
+				existRC = commDetails.getNetReturnCommission();
+				existARC = commDetails.getAdditionalReturnCharges();
+				existRQ = commDetails.getNetSaleQty();
+				existTDS = commDetails.getNetTDSToBeDeposited(); 
+				existGC = commDetails.getGrossPartnerCommissionPaid();
+			}				
+			else
+				commDetails = new CommissionDetails();
+			if("category".equalsIgnoreCase(criteria))
+				commDetails.setCategoryName(key);
+			else
+				commDetails.setPartner(key);
+			double returnCommission = Double.parseDouble(order[1].toString());
+			double additionalRetCharges = Double.parseDouble(order[2].toString());
+			int returnQty = Integer.parseInt(order[3].toString());
+			double tdsToReturn = Double.parseDouble(order[4].toString());
+			commDetails.setNetSaleQty(existRQ + returnQty);
+			commDetails.setGrossPartnerCommissionPaid(existRC + returnCommission);
+			commDetails.setAdditionalReturnCharges(existARC + additionalRetCharges);
+			commDetails.setNetSrCommisison(returnCommission - additionalRetCharges);
+			commDetails.setNetTDSToBeDeposited(existTDS - tdsToReturn);
+			commDetails.setNetChannelCommissionToBePaid(existGC - returnCommission + additionalRetCharges);
+			commDetails.setNetPartnerCommissionPaid(existGC - returnCommission + additionalRetCharges);
+			commDetailsMap.put(key, commDetails);
+		}
+		List<CommissionDetails> commDetails = new ArrayList<CommissionDetails>();
+		Iterator entries = commDetailsMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, CommissionDetails> thisEntry = (Entry<String, CommissionDetails>) entries
+					.next();
+			CommissionDetails value = thisEntry.getValue();
+			commDetails.add(value);
+		}
+		return commDetails;
+	}
+	
 	/**
 	 * Generic method to fetch list of Order objects (MP + PO)
 	 * 
@@ -1029,7 +1211,6 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 		criteria.addOrder(org.hibernate.criterion.Order.asc("shippedDate"));
 		orderList.addAll(criteria.list());
-		System.out.println(orderList);
 		return orderList;
 	}
 
