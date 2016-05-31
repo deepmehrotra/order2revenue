@@ -555,6 +555,7 @@ public class GlobalConstant {
 			put("getNetSaleQuantity", "Net Sale Qty");
 			put("getOrderSP", "Gross SP");
 			put("getNetRate", "Net N/R");
+			put("getGrossNetRate", "Net N/R");			
 			put("getNetReturnCharges", "Net Return Charges");
 			put("getNetPaymentResult", "Net Payment Result");
 			put("getPaymentDifference", "Net Payment Difference");
@@ -566,6 +567,7 @@ public class GlobalConstant {
 			put("getTaxSP", "Tax (SP)");
 			put("getTaxPOPrice", "Tax (PO Price)");
 			put("getGrossCommission", "Gross Commission to be Paid");
+			put("getGrossCommissionQty", "Gross Commission to be Paid");
 			put("getReturnCommision", "Return Commission");
 			put("getAdditionalReturnCharges", "Additional Return Charges");
 			put("getNetPartnerCommissionPaid", "Net Partner Commisssion Paid");

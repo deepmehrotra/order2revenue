@@ -81,8 +81,8 @@
 			                            <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossSaleQuantity" name="headers"> Gross Sale Qty </label></div>
 		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getReturnQuantity" name="headers"> Return/RTO Qty </label></div>
 		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetSaleQuantity" name="headers"> Net Sale Qty </label></div>
-		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getOrderSP" name="headers"> Total SP </label></div>
-		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetRate" name="headers"> Net N/R </label></div>
+		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetSP" name="headers"> Total SP </label></div>
+		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossNetRate" name="headers"> Net N/R </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetReturnCharges" name="headers"> Net Return Charges </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetPaymentResult" name="headers"> Net Payment Result </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getPaymentDifference" name="headers"> Payment Diff Amt </label></div>
@@ -96,7 +96,7 @@
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getServiceTax" name="headers"> Service Tax </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getTaxSP" name="headers"> Tax(SP) </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getTaxPOPrice" name="headers"> Tax(PO Price) </label></div>
-		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossCommission" name="headers"> Gross Commission to be paid </label></div>
+		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossCommissionQty" name="headers"> Gross Commission to be paid </label></div>
 		                            </div>
 		                            
 		                            <div class="col-md-3">

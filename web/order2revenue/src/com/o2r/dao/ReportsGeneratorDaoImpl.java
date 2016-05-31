@@ -648,21 +648,23 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		
 		int returnQty = 0;
 		double netReturnCharges = 0;
+		double grossNetRate = currOrder.getGrossNetRate();
 		double returnSP = 0;
-		double orderSP = currOrder.getOrderSP();
+		double grossSP = currOrder.getOrderSP();
+		double orderSP =  grossSP * quantity;
 		double netRate = currOrder.getNetRate();
 		double grossReturnChargesReversed = 0; 
+		double additionalReturnCharges = 0; 
 		if (currOrderReturnOrRTO != null) {
 			Date returnDate = currOrderReturnOrRTO.getReturnDate();
 			boolean dateCriteria = returnDate!=null;
 			if(dateCriteria){
-				partnerBusiness.setReturnDate(currOrderReturnOrRTO
-						.getReturnDate());
+				partnerBusiness.setReturnDate(currOrderReturnOrRTO.getReturnDate());
 				returnQty = currOrderReturnOrRTO.getReturnorrtoQty();
-				returnSP = orderSP*(quantity/returnQty);
+				returnSP = grossSP*returnQty;
 				partnerBusiness.setReturnQuantity(returnQty);
-				netReturnCharges = currOrderReturnOrRTO
-						.getReturnOrRTOChargestoBeDeducted();
+				netReturnCharges = grossNetRate * returnQty;
+				additionalReturnCharges = currOrderReturnOrRTO.getReturnOrRTOChargestoBeDeducted();
 				partnerBusiness.setNetReturnCharges(netReturnCharges);
 				partnerBusiness.setReturnId(currOrderReturnOrRTO.getReturnOrRTOId());
 				
@@ -690,7 +692,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		partnerBusiness.setTotalReturnCharges(grossReturnChargesReversed + netReturnCharges);
 		partnerBusiness.setOrderSP(orderSP);
 		partnerBusiness.setReturnSP(returnSP);
-		partnerBusiness.setNetSP(orderSP - returnSP);
+		partnerBusiness.setNetSP(grossSP/quantity*(quantity-returnQty));
 		if (currOrderPayment != null) {
 			partnerBusiness.setDateofPayment(currOrderPayment
 					.getDateofPayment());
@@ -775,24 +777,19 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		if(isPoOrder && consolidatedOrder!=null){
 			returnCommision = grossCommissionToBePaid;
 		} else{
-			returnCommision = grossCommissionToBePaidNoQty * returnQty;
+			returnCommision = grossCommissionToBePaidNoQty;
 		}
 		partnerBusiness.setReturnCommision(returnCommision);
-		double additionalReturnCharges = netReturnCharges; 
-		partnerBusiness
-				.setAdditionalReturnCharges(additionalReturnCharges);
-		double netPartnerCommissionPaid = grossCommissionToBePaid
-				- returnCommision + additionalReturnCharges;
-		partnerBusiness
-				.setNetPartnerCommissionPaid(netPartnerCommissionPaid);
-		partnerBusiness.setTdsToBeDeducted10(0.1 * taxPOPrice);
-		partnerBusiness
-				.setTdsToBeDeducted2(0.02 * netPartnerCommissionPaid);
+		partnerBusiness.setAdditionalReturnCharges(additionalReturnCharges);
+		double netPartnerCommissionPaid = grossCommissionToBePaidQty - returnCommision + additionalReturnCharges;
+		partnerBusiness.setNetPartnerCommissionPaid(netPartnerCommissionPaid);
+		partnerBusiness.setTdsToBeDeducted10(0.1 * grossCommission);
+		partnerBusiness.setTdsToBeDeducted2(0.02 * (pccAmount + fixedFee + shippingCharges));
 		partnerBusiness.setNetTaxToBePaid(taxToBePaid);
 		double netEossValue = 0; // Only for Consolidated PO
 		partnerBusiness.setNetEossValue(netEossValue);
-		partnerBusiness.setNetPr(currOrder.getPr());
-		partnerBusiness.setGrossNetRate(currOrder.getGrossNetRate());
+		partnerBusiness.setNetPr(currOrder.getPr()/quantity*(quantity-returnQty));
+		partnerBusiness.setGrossNetRate(grossNetRate*quantity);
 		partnerBusiness.setNetRate(currOrder.getNetRate());
 		partnerBusiness.setFinalStatus(currOrder.getFinalStatus());
 		partnerBusiness.setGrossProfit(currOrder.getGrossProfit());
