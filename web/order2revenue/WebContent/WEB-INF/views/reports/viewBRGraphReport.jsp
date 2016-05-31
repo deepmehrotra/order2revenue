@@ -460,7 +460,7 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${partner.partner}</td>
-																			<td>${partner.netSaleQty}</td>
+																			<td>${partner.netSP}</td>
 																			<td>${partner.netPartnerCommissionPaid}</td>
 																			<td>${partner.netNetRate}</td>
 																			<td>${partner.netTaxToBePaid}</td>
@@ -502,7 +502,7 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${category.categoryName}</td>
-																			<td>${category.netSaleQty}</td>
+																			<td>${category.netSP}</td>
 																			<td>${category.netPartnerCommissionPaid}</td>
 																			<td>${category.netNetRate}</td>
 																			<td>${category.netTaxToBePaid}</td>

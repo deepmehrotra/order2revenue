@@ -7,6 +7,7 @@ public class BusinessDetails {
 	private String categoryName;
 	private double netPartnerCommissionPaid;
 	private double netSaleQty;
+	private double netSP;
 	private double netTDSToBeDeposited;
 	private double netPaymentResult;
 	private double paymentDifference;
@@ -49,6 +50,14 @@ public class BusinessDetails {
 
 	public void setNetSaleQty(double netSaleQty) {
 		this.netSaleQty = netSaleQty;
+	}
+
+	public double getNetSP() {
+		return netSP;
+	}
+
+	public void setNetSP(double netSP) {
+		this.netSP = netSP;
 	}
 
 	public double getNetTDSToBeDeposited() {

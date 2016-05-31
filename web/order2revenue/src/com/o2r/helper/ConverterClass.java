@@ -1453,6 +1453,7 @@ public class ConverterClass {
 			BusinessDetails partnerBusinessGraph = partnerBusinessGraphMap.get(key);
 			double netPartnerCommissionPaid = partnerBusiness.getNetPartnerCommissionPaid();
 			int netSaleQty = partnerBusiness.getNetSaleQuantity();
+			double netSP = partnerBusiness.getNetSP();
 			double netTDSToBeDeposited = partnerBusiness.getTdsToBeDeposited();
 			double netPaymentResult = partnerBusiness.getNetPaymentResult();
 			double paymentDifference = partnerBusiness.getPaymentDifference();
@@ -1467,29 +1468,26 @@ public class ConverterClass {
 			if (partnerBusinessGraph == null) {
 				partnerBusinessGraph = new BusinessDetails();
 			} else {
-				netPartnerCommissionPaid += partnerBusinessGraph
-						.getNetPartnerCommissionPaid();
+				netPartnerCommissionPaid += partnerBusinessGraph.getNetPartnerCommissionPaid();
+				netSP += partnerBusinessGraph.getNetSP(); 
 				netSaleQty += partnerBusinessGraph.getNetSaleQty();
-				netTDSToBeDeposited += partnerBusinessGraph
-						.getNetTDSToBeDeposited();
+				netTDSToBeDeposited += partnerBusinessGraph.getNetTDSToBeDeposited();
 				netPaymentResult += partnerBusinessGraph.getNetPaymentResult();
-				paymentDifference += partnerBusinessGraph
-						.getPaymentDifference();
+				paymentDifference += partnerBusinessGraph.getPaymentDifference();
 				netTaxableSale += partnerBusinessGraph.getNetTaxableSale();
 				netActualSale += partnerBusinessGraph.getNetActualSale();
 				netPrSale += partnerBusinessGraph.getNetPrSale();
 				netTaxToBePaid += partnerBusinessGraph.getNetTaxToBePaid();
-				netEossDiscountPaid += partnerBusinessGraph
-						.getNetEossDiscountPaid();
+				netEossDiscountPaid += partnerBusinessGraph.getNetEossDiscountPaid();
 				netRate += partnerBusinessGraph.getNetNetRate();
 				netProductCost += partnerBusinessGraph.getNetProductCost();
 				grossProfit += partnerBusinessGraph.getGrossProfit();
 			}
 			partnerBusinessGraph.setPartner(key);
 			partnerBusinessGraph.setCategoryName(key);
-			partnerBusinessGraph
-					.setNetPartnerCommissionPaid(netPartnerCommissionPaid);
+			partnerBusinessGraph.setNetPartnerCommissionPaid(netPartnerCommissionPaid);
 			partnerBusinessGraph.setNetSaleQty(netSaleQty);
+			partnerBusinessGraph.setNetSP(netSP);
 			partnerBusinessGraph.setNetTDSToBeDeposited(netTDSToBeDeposited);
 			partnerBusinessGraph.setNetPaymentResult(netPaymentResult);
 			partnerBusinessGraph.setPaymentDifference(paymentDifference);
