@@ -68,7 +68,7 @@
 	              		<img src="/O2R/landing/img/icons/email.png" alt="user">
 	              	</div>
 	              	<div class="inputtext">
-	              		<input type="email" name="email" required autocomplete="off"/ placeholder="Email id">
+	              		<input type="email" id="email" required autocomplete="off"/ placeholder="Email id" onblur="checkOnBlur();">
 	              	</div>
 	            </div>
 	            <div class="field-wrap">
@@ -139,6 +139,31 @@ $('.tab a').on('click', function (e) {
   $('.tab-content > div').not(target).hide();
   $(target).fadeIn(600);
 });
+
+
+var nameAvailability=true;
+
+function checkOnBlur()
+{
+	alert("Inside onblur");
+	var email=document.getElementById("email").value;
+	
+	$.ajax({
+        url: "checkExistingUser.html?email="+email,
+       success : function(res) {
+    	 	   if(res=="false")
+                	{
+        	nameAvailability=false;
+                	 $("#emailMessage").html("Email id already exist. Choose another");
+                	}
+                else
+                	{
+                	nameAvailability=true;
+                	$("#emailMessage").html("Email id available");
+                	}
+      }
+	 });
+	}
 	</script>
 	</body>
 </html>

@@ -54,15 +54,16 @@
                                     <form role="search" class="form-inline" method="post" action="searchExpense.html">
                                         <div class="form-group">
                                             <select class="form-control" name="searchExpense"  id="searchExpense">
+                                            <option value="expName">Expense Name</option>
                                                 <option value="expenseCategory">Expense Group</option>
                                                 <option value="expenseDate">Expense Date</option>
-                                                <option value="expName">Expense Name</option>
+                                                
                                             </select>
                                         </div>
                                       	<div class="form-group ProductSearch-box" id="expName">
                                            <input type="text" placeholder="Expense Name" class="form-control" name="expName">
                                         </div>
-                                        <div class="form-group ProductSearch-box" id="expenseCategory">
+                                        <div class="form-group ProductSearch-box" id="expenseCategory" style="display:none">
                                            <input type="text" placeholder="Expense Group" class="form-control" name="expenseCategory">
                                         </div>
                                         <div class="form-group ProductSearch-box" id="expenseDate" style="display:none">
@@ -84,7 +85,7 @@
                                 <button type="button" class="btn btn-xs btn-white active">500</button>
                                 <button type="button" class="btn btn-xs btn-white">1000</button>
                                 <button type="button" class="btn btn-xs btn-white">More</button>
-                                <a href="addExpense.html"  class="btn btn-primary btn-xs" >Add Expenses</a>
+                                <a href="addExpense.html"  class="btn btn-primary btn-xs" >Add Expenses</a>                                
                              </div>
                         </div>
                         <div class="ibox-content overflow-h cus-table-filters">
@@ -116,8 +117,8 @@
                                      <td>${expense.paidTo}</td>
                                       <td>${expense.expenditureByperson}</td>
                                     <td class="tooltip-demo">
-                                  <%--   <a href="editExpense.html?expenseId=${expense.expenseId}"><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a>
-                                   --%>  <a href="deleteExpense.html?expenseId=${expense.expenseId}"><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Delete"></i></a></td>
+                                  <%-- <a href="editExpense.html?expenseId=${expense.expenseId}"><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a> --%>
+                                  <a href="deleteExpense.html?expenseId=${expense.expenseId}"><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Delete"></i></a></td>
                                 
                                 </tr>
                                 </c:forEach>
@@ -180,7 +181,6 @@
         
         
         $('#bulkupload').click(function(){
-    		alert(" Bulk upload expense");
     		 $.ajax({
     	            url : 'downloadOrderDA.html?value=expenseSummary',
     	            success : function(data) {

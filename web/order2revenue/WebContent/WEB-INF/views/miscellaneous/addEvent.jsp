@@ -72,56 +72,35 @@ span .#error {
 <link href="/O2R/seller/css/plugins/iCheck/custom.css" rel="stylesheet">
 
 <script type="text/javascript">
-var nameAvailability=true;
+
+var nameAvailability = true;
 
 function checkOnBlur()
 {
 	var name=document.getElementById("eventName").value;
-	
 	$.ajax({
         url: "checkEvent.html?name="+name,
        success : function(res) {
         	   if(res=="false")
-                	{
-                	nameAvailability=false;
-                	 $("#eventNameMessage").html("Invalid Event Name !");
+                	{	
+        		   		nameAvailability = false;
+                	 	$("#eventNameMessageR").html("Invalid Event Name !").show();   
+                	 	$("#eventNameMessageG").html("Valid Event Name !").hide();
                 	}
                 else
                 	{
-                	nameAvailability=true;
-                	$("#eventNameMessage").html("Valid Event Name !");
+                		nameAvailability = true;
+                		$("#eventNameMessageG").html("Valid Event Name !").show();
+                		$("#eventNameMessageR").html("Invalid Event Name !").hide(); 
+                		
                 	}
             
        
  	   }
 	 });
 	}
-    function submitInventoryGroup(){
-    	 	 var validator = $("#eventName").validate({
-	    		  rules: {
-	    			  catName: {
-	    			        required: true,
-	    			            }
-	    			  },
-	    	     messages: {
-	    	    	 catName: "Event Name Required !"
-	    	    	
-	    	     }
-	    	 });
-	    	 if(validator.form()&&nameAvailability){ // validation perform
-	    		     $.ajax({
-                    url: $("#eventName").attr("action"),
-                    context: document.body,
-                    type: 'post',
-                    data:$("#eventName").serialize(),
-                    success : function(res) {
-                                  
-                        $("#centerpane").html(res);
-                   
-             	   }
-            	 });
-	    	 }
- 	   };
+
+
 
 
 
@@ -151,9 +130,21 @@ function checkOnBlur()
                         <div class="col-sm-6">
                           <div class="form-group">
                             <label class="col-sm-4 control-label">Event Name</label>
+                            <form:input type="hidden" path="eventId" id="eventId"
+											value="${eventsBean.eventId}" />
                             <div class="col-sm-8">
-                              <form:input path="eventName" value="${eventsBean.eventName}"	class="form-control" id="eventName" onblur="checkOnBlur()"/>
-                              <span id="eventNameMessage"  style="color:red;font-weight:bold"></span>
+                            	<c:choose>
+									<c:when test="${eventsBean.eventId != 0}">
+	        							<form:input path="eventName" value="${eventsBean.eventName}"	class="form-control" id="eventName" readonly="true"/>
+	    							</c:when>
+	    							<c:otherwise>
+	        							<form:input path="eventName" value="${eventsBean.eventName}"	class="form-control" id="eventName" onblur="checkOnBlur()"/>
+                              			<span id="eventNameMessageR"  style="color:red;font-weight:bold"></span>
+                              			<span id="eventNameMessageG"  style="color:green;font-weight:bold"></span>
+	    							</c:otherwise>	
+    							</c:choose>
+                            	
+                              
                             </div>
                           </div>
                         </div>
@@ -161,21 +152,23 @@ function checkOnBlur()
                           <div class="form-group">
                             <label class="col-sm-4 control-label">Select Channel</label>
                             <div class="col-sm-8">
-                              <form:select path="channelName" items="${partnerMap}" class="form-control"></form:select>
+                              <form:select path="channelName" items="${partnerMap}" id="channelName" class="form-control"></form:select>
                             </div>
                           </div>
                         </div>
                         <div class="col-lg-12">
                             <h4>Event Period</h4>
                         </div>
-                        
+                        <div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Start Date</label>
                                 <div class="col-sm-8" id="data_1">                                
                                     <div class="input-group date"> <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                     	<fmt:formatDate value="${eventsBean.startDate}" var="startDate" type="date" pattern="MM/dd/yyyy"/>
-                                        <form:input path="startDate"  value="${startDate}" type="text" class="form-control"></form:input>
+                                        <form:input path="startDate"  value="${startDate}" type="text" class="StartDate  form-control" id="StartDate" ></form:input>
+                                    	<span id="startDateMessageG"  style="color:green;font-weight:bold"></span>
+                                    	<span id="startDateMessageR"  style="color:red;font-weight:bold"></span>
                                     </div>
                                 </div>
                             </div> 
@@ -186,7 +179,9 @@ function checkOnBlur()
                                 <div class="col-sm-8" id="data_1">
                                     <div class="input-group date"> <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                     	<fmt:formatDate value="${eventsBean.endDate}" var="endDate" type="date" pattern="MM/dd/yyyy"/>
-                                        <form:input path="endDate"   value="${endDate}" type="text" class="form-control"></form:input>
+                                        <form:input path="endDate"   value="${endDate}" type="text" class="EndDate  form-control" id="EndDate" ></form:input>
+                                   		<span id="endDateMessageR"  style="color:red;font-weight:bold"></span>
+                                   		<span id="endDateMessageG"  style="color:green;font-weight:bold"></span>
                                     </div>
                                 </div>
                             </div>  
@@ -194,29 +189,30 @@ function checkOnBlur()
                         <div class="col-sm-12">
                           <h4>NR Calculator</h4>
                         </div>
-                       	<div class="col-sm-12">
-							<div class="col-sm-4">
-                            <div class="radio">
-                              <label>
-                                <form:radiobutton name="nr" value="original" id="nrCalculatorEvent_original" path="nrnReturnConfig.nrCalculatorEvent" class="nrCalculatorEvent" />
-                                Original </label>
-                            </div>
-                          </div>
-                          <div class="col-sm-4">
-                            <div class="radio">
-                              <label>
-                                <form:radiobutton name="nr" value="variable" id="nrCalculatorEvent_variable" path="nrnReturnConfig.nrCalculatorEvent"  class="nrCalculatorEvent"  />
-                                Variable NR</label>
-                            </div>
-                          </div>
-                          <div class="col-sm-4">
-                            <div class="radio">
-                              <label>
-                                <form:radiobutton name="nr" value="fixed" id="nrCalculatorEvent_fixed" path="nrnReturnConfig.nrCalculatorEvent" class="nrCalculatorEvent"  />
-                                Fixed TP </label>
-                            </div>
-                          </div>
-                        </div>
+                        <div class="col-sm-12">
+	                       	<div class="col-sm-12">
+								<div class="col-sm-4">
+	                            <div class="radio">
+	                              <label>
+	                                <form:radiobutton name="nr" value="original" id="nrCalculatorEvent_original" path="nrnReturnConfig.nrCalculatorEvent" class="nrCalculatorEvent" />
+	                                Original </label>
+	                            </div>
+	                          </div>
+	                          <div class="col-sm-4">
+	                            <div class="radio">
+	                              <label>
+	                                <form:radiobutton name="nr" value="variable" id="nrCalculatorEvent_variable" path="nrnReturnConfig.nrCalculatorEvent"  class="nrCalculatorEvent"  />
+	                                Variable NR</label>
+	                            </div>
+	                          </div>
+	                          <div class="col-sm-4">
+	                            <div class="radio">
+	                              <label>
+	                                <form:radiobutton name="nr" value="fixed" id="nrCalculatorEvent_fixed" path="nrnReturnConfig.nrCalculatorEvent" class="nrCalculatorEvent"  />
+	                                Fixed TP </label>
+	                            </div>
+	                          </div>
+	                        </div>
                         <div class="row">
                           <div class="col-sm-12 radio2 m-b" id="blk-nrCalculatorEvent_variable" style="display:none;">
                             
@@ -821,16 +817,14 @@ function checkOnBlur()
 													
 												</div>
 											</div>
-										<!-- </div> -->
-		<!-- -----------------------------id-40----------------------------- -->
+								</div>
                             </div>
                           </div>                          
                         </div>
-                 <div class="ibox-content add-company">
+                 <div class="ibox-content ">
               			<div class="col-sm-12 ">
-                  			<h4>Return Calculator/Charges</h4>
+                  			<h4>Return Calculator/Charges</h4>                    
                         
-                        <div class="col-sm-12">
                           <div class="col-sm-6">
                             <div class="radio">
                               <label>
@@ -847,17 +841,12 @@ function checkOnBlur()
                                 New Terms </label>
                             </div>
                           </div>
-                        </div>
+                      
                         </div>
                         <div class="row">
-                          <div class="col-sm-12 radio3 m-b" id="blk-returnCalculatorEvent_original">
-                            <div class="col-sm-12">
-                                
-                            </div>
-                          </div>
-                          <div class="col-sm-12">
+                                                  
                           <div class="col-sm-12 radio3" id="blk-returnCalculatorEvent_newTerms" style="display:none;">
-                                <div class="add-company">
+                                
 											<div class="panel-body">
 												<div class="panel-group" id="accordion1">
 													<div class="panel panel-default">
@@ -2235,9 +2224,9 @@ function checkOnBlur()
 													</div>
 												</div>
 											</div>
-                          </div>
+                         
                         </div>
-                       </div>
+                      
                     </div>
                 
 				<div class="ibox-content add-company">
@@ -2245,8 +2234,8 @@ function checkOnBlur()
 				</div>
 				
 				
-              </div>
-                
+              		</div>
+                </div>
              </form:form>
 			</div>	
             </div>
@@ -2258,7 +2247,7 @@ function checkOnBlur()
 		</div>
 		
 	</div>
-
+	
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
 	
 	<!-- Switchery -->
@@ -2295,14 +2284,15 @@ Custom and plugin javascript
   $(document).ready(function () {
 	  
 	  	
-	  /* $('.nrCalculatorEvent').click(function(){
-
-          var gender=$('.nrCalculatorEvent').val();
-          if ($(".nrCalculatorEvent:checked").length == 0){
-              $('.nrCalculatorEvent').text("Type is required !");
-              return false;
-          }
-      }); */	
+	  $("#EndDate").change(function () {
+		    var startDate = document.getElementById("StartDate").value;
+		    var endDate = document.getElementById("EndDate").value;
+		 	
+		    if ((Date.parse(startDate) > Date.parse(endDate))) {
+		        alert("End Date Should Be Greater Than Start Date !");
+		        document.getElementById("EndDate").value = "";
+		    }
+		});	
 	  
 	  
 	  
@@ -2738,6 +2728,40 @@ Custom and plugin javascript
 			          }
 				 }				
 			});
+			
+			var startDate=document.getElementById("StartDate").value;
+			var endDate=document.getElementById("EndDate").value;
+			var channelName=document.getElementById("channelName").value;
+			alert(startDate+" "+endDate);
+			$.ajax({
+		        url: "checkDates.html?start="+startDate+"&end="+endDate+"&channel="+channelName,
+		       success : function(res) {
+		        	   if(res=="false")
+		                	{
+		                	 	$("#startDateMessageR").html("Invalid Start Date !").show();
+		                	 	$("#endDateMessageR").html("Invalid End Date !").show();
+		                	 	$("#startDateMessageG").html("Valid Start Date !").hide();
+		                		$("#endDateMessageG").html("Valid End Date !").hide();
+		                	}
+		                else
+		                	{
+		                		$("#startDateMessageG").html("Valid Start Date !").show();
+		                		$("#endDateMessageG").html("Valid End Date !").show();
+		                		$("#startDateMessageR").html("Invalid Start Date !").hide();
+		                		$("#endDateMessageR").html("Invalid End Date !").hide();
+		                		
+		                	}
+		            
+		       
+		 	   }
+			 });
+			
+			if (validator.form() && nameAvailability) {
+				$('form#addEvent').submit();
+			}
+			
+			
+			
 		}
 
 	div = {

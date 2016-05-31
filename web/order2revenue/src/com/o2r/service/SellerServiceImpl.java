@@ -88,10 +88,14 @@ public class SellerServiceImpl implements SellerService,ServletContextAware {
 	@Override
 	public void addStateDeliveryTime(List<StateDeliveryTime> stateDelTimeList, int sellerId)
 			throws CustomException
-			{
+	{
 		sellerDao.addStateDeliveryTime(stateDelTimeList, sellerId);
-			}
-
+	}
+	
+	@Override
+	public Seller getSellerVerCode(String verCode) {		
+		return sellerDao.getSellerVerCode(verCode);
+	}
 	
 
 }

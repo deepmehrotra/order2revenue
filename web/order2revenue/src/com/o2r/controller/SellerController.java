@@ -71,21 +71,21 @@ public class SellerController {
 	Map<String, Object> model = new HashMap<String, Object>();
 
 	@RequestMapping(value = "/verify", method = RequestMethod.GET)
-	public ModelAndView verifySeller(HttpServletRequest request){
+	public String verifySeller(HttpServletRequest request){
 		try{
 			String verifyCode = request.getParameter("code");
-			Seller seller = sellerService.getSeller(verifyCode);
+			Seller seller = sellerService.getSellerVerCode(verifyCode);
 			if (seller.getVerCode() != null && seller.getVerCode().equals(verifyCode)) {
 				seller.setVerCode("Verified");
 				sellerService.addSeller(seller);
-				return new ModelAndView("redirect:/login-form.html?registered=true");
+				return "login_register";				
 			}else{
-				return new ModelAndView("redirect:/login-form.html?registered=true");
+				return "confirmation";
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return new ModelAndView("redirect:/login-form.html?registered=true");
+		return "confirmation";
 	}
 	
 	
@@ -115,7 +115,7 @@ public class SellerController {
 		}
 
 		log.info("$$$ registerSeller Ends : SellerController $$$");
-		return new ModelAndView("redirect:/login_register.html?registered=true");
+		return new ModelAndView("confirmation");
 	}
 
 	@RequestMapping(value = "/sellers", method = RequestMethod.GET)

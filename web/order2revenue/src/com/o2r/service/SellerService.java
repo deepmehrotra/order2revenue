@@ -31,6 +31,7 @@ public interface SellerService {
  public State getStateByName(String statename) throws CustomException;
  public void addToProductStockList();
  public void updateProcessedOrdersCount(int sellerId, int processedOrderCount) throws CustomException;
- public void addStateDeliveryTime(List<StateDeliveryTime> stateDelTimeList, int sellerId)
-			throws CustomException;
+ public void addStateDeliveryTime(List<StateDeliveryTime> stateDelTimeList, int sellerId)throws CustomException;
+ 
+ public Seller getSellerVerCode(String verCode);
 }
