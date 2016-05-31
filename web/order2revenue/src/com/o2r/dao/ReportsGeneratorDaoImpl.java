@@ -992,12 +992,12 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		Session session=sessionFactory.openSession();
 		session.getTransaction().begin();
 		String mpOrderQueryStr = "select ot.pcName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * ot.quantity * 1.145) " +
-				"as grossComm, sum(ot.netSaleQuantity) as netSaleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx " +
+				"as grossComm, sum(ot.quantity) as netSaleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx " +
 				"where ot.orderTax_taxId = otx.taxId and ot.poOrder = 0  and ot.seller_Id=:sellerId and ot.shippedDate " +
 				"between :startDate AND :endDate group by ot.pcName";
 		if("category".equalsIgnoreCase(criteria))
 			mpOrderQueryStr = "select pr.categoryName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * ot.quantity * 1.145) " +
-				"as grossComm, sum(ot.netSaleQuantity) as netSaleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx " +
+				"as grossComm, sum(ot.quantity) as netSaleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx " +
 				", product pr where ot.productSkuCode = pr.productSkuCode and ot.orderTax_taxId = otx.taxId and ot.poOrder = 0  and " +
 				"ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by pr.categoryName";
 		Query mpOrderQuery = session.createSQLQuery(mpOrderQueryStr)
