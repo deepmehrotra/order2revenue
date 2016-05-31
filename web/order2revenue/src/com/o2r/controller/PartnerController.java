@@ -550,6 +550,7 @@ public class PartnerController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
+		Map<String, Float> commissionMap = new HashMap<String, Float>();
 		List<String> taxCategoryList = new ArrayList<String>();
 		List<Category> categoryObjects = null;
 		List<TaxCategory> taxCategoryObjects = null;
@@ -563,6 +564,7 @@ public class PartnerController {
 			if (categoryObjects != null && categoryObjects.size() > 0) {
 				for (Category cat : categoryObjects) {
 					categoryList.add(cat.getCatName());
+					commissionMap.put(cat.getCatName(), 0.0F);
 				}
 			}
 			taxCategoryObjects = taxDetailService.listTaxCategories(helperClass
@@ -586,6 +588,7 @@ public class PartnerController {
 		try {
 			model.put("partner", partner);
 			model.put("categoryList", categoryList);
+			model.put("commissionMap", commissionMap);
 			model.put("taxCategoryList", taxCategoryList);
 			model.put("datemap", datemap);
 			model.put("partners", ConverterClass
@@ -789,9 +792,14 @@ public class PartnerController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
 		PartnerBean pbean = null;
-		Map<String, Float> chargeMap = new HashMap<String, Float>();
-		Map<String, Float> categoryMap = new HashMap<String, Float>();
+		Map<String, Float> chargesMap = new HashMap<String, Float>();
+		Map<String, Float> commissionMap = new HashMap<String, Float>();
+		Map<String, String> taxSpMap = new HashMap<String, String>();
+		Map<String, String> taxPoMap = new HashMap<String, String>();
+		List<String> categoryList = new ArrayList<String>();
+		List<String> taxCategoryList = new ArrayList<String>();
 		List<Category> categoryObjects = null;
+		List<TaxCategory> taxCategoryObjects = null;
 
 		try {
 			datemap.put("true", "Select payment from");
@@ -804,18 +812,48 @@ public class PartnerController {
 							+ pbean.getNrnReturnConfig().getConfigId());
 			for (NRnReturnCharges charge : pbean.getNrnReturnConfig()
 					.getCharges()) {
-				chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
+				if (charge.getChargeName().contains(GlobalConstant.TaxCategoryPrefix)) {
+					String[] split = charge.getChargeName().split(GlobalConstant.TaxCategoryPrefix);
+					String firstSubString = split[0];
+					String secondSubString = split[1];
+					if (firstSubString.contains(GlobalConstant.TaxSPPrefix)) {
+						String key = firstSubString.substring(GlobalConstant.TaxSPPrefix.length());
+						taxSpMap.put(key,secondSubString);
+					} else {
+						String key = firstSubString.substring(GlobalConstant.TaxPOPrefix.length());
+						taxPoMap.put(key,secondSubString);
+					}
+				} else {
+					if (charge.getChargeName().contains(GlobalConstant.CommPOPrefix)) {
+						String key = charge.getChargeName().substring(GlobalConstant.CommPOPrefix.length());
+						commissionMap.put(key,charge.getChargeAmount());
+					} else {
+						chargesMap.put(charge.getChargeName(), charge.getChargeAmount());
+					}
+				}
 			}
 
 			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
-			for (Category cat : categoryObjects) {
-				categoryMap.put(cat.getCatName(),
-						chargeMap.get(cat.getCatName()));
+			if (categoryObjects != null && categoryObjects.size() > 0) {
+				for (Category cat : categoryObjects) {
+					categoryList.add(cat.getCatName());
+				}
 			}
-			model.put("categoryMap", categoryMap);
+			taxCategoryObjects = taxDetailService.listTaxCategories(helperClass
+					.getSellerIdfromSession(request));
+			if (taxCategoryObjects != null && taxCategoryObjects.size() > 0) {
+				for (TaxCategory taxCat : taxCategoryObjects) {
+					taxCategoryList.add(taxCat.getTaxCatName());
+				}
+			}
+			model.put("categoryList", categoryList);
+			model.put("taxCategoryList", taxCategoryList);
 			model.put("partner", pbean);
-			model.put("chargeMap", chargeMap);
+			model.put("chargeMap", chargesMap);
+			model.put("commissionMap", commissionMap);
+			model.put("taxSpMap", taxSpMap);
+			model.put("taxPoMap", taxPoMap);
 		} catch (CustomException ce) {
 			log.error("editPartner exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());

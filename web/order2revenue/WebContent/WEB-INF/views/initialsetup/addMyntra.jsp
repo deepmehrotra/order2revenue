@@ -4,6 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+
 <head>
 <jsp:include page="../globalcsslinks.jsp"></jsp:include>
 <style>
@@ -36,11 +37,11 @@ span .#error {
 <link href="/O2R/seller/css/plugins/switchery/switchery.css"
 	rel="stylesheet">
 <link href="/O2R/seller/css/plugins/iCheck/custom.css" rel="stylesheet">
-
 <script type="text/javascript">
 	
 </script>
 </head>
+
 <body>
 	<div id="wrapper">
 		<jsp:include page="../sidenavigation.jsp"></jsp:include>
@@ -58,28 +59,28 @@ span .#error {
 						<div class="col-sm-4">
 							<div class="radio">
 								<label> <form:radiobutton path="paymentType"
-										value="paymentcycle" id="1" name="toggler"
-										onChange="handleRadioEvent(this);" />Subdivided Monthly
+										id="paymentcycle" value="paymentcycle" name="toggler"
+										onChange="handleRadioEvent(this);" />Payment Cycle
 								</label>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="radio">
 								<label> <form:radiobutton path="paymentType"
-										value="datewisepay" id="2" name="toggler"
-										onChange="handleRadioEvent(this);" />Delivery/ Shipped Date
+										value="datewisepay" id="datewisepay" name="toggler"
+										onChange="handleRadioEvent(this);" />Payment From Delivery
 								</label>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="radio">
 								<label> <form:radiobutton path="paymentType"
-										value="monthly" id="3" name="toggler"
+										value="monthly" id="monthly" name="toggler"
 										onChange="handleRadioEvent(this);" /> Monthly
 								</label>
 							</div>
 						</div>
-						<div class="col-sm-12 radio1" id="blk-1">
+						<div class="col-sm-12 radio1" id="blk-paymentcycle">
 							<div class="col-sm-6">
 								<div class="mar-btm-20-oh">
 									<label class="col-sm-4 control-label">Start Date</label>
@@ -126,8 +127,7 @@ span .#error {
 									will have 5 and Payment from SD will have 10)</small>
 							</div>
 						</div>
-
-						<div class="col-sm-12 radio1" id="blk-2">
+						<div class="col-sm-12 radio1" id="blk-datewisepay">
 							<div class="row">
 								<div class="col-md-6">
 									<form:select path="isshippeddatecalc" items="${datemap}"
@@ -150,7 +150,7 @@ span .#error {
 								</div>
 							</div>
 						</div>
-						<div class="col-sm-12 radio1" id="blk-3">
+						<div class="col-sm-12 radio1" id="blk-monthly">
 							<div class="row">
 								<div class="col-md-4">
 									<form:input path="monthlypaydate"
@@ -171,7 +171,6 @@ span .#error {
 								<h5 style="text-align: center;">TOI SETTINGS</h5>
 								<table
 									style="width: 80%; margin-left: 20px; border-spacing: 0 5px;">
-
 									<tbody>
 										<tr>
 											<td style="width: 25%;">0.5 CR -1 CR</td>
@@ -219,13 +218,10 @@ span .#error {
 														<option value="ANNUAL">ANNUAL</option>
 														<option value="QUARTERLY">QUARTERLY</option>
 														<option value="MONTHLY">MONTHLY</option>
-
 													</select>
 												</div>
 											</td>
 										</tr>
-
-
 									</tbody>
 								</table>
 							</div>
@@ -239,9 +235,9 @@ span .#error {
 									<div class="col-sm-4">
 										<div class="radio">
 											<label> <form:radiobutton
-													path="nrnReturnConfig.commissionType" value="fixed" id="4"
-													name="toggler" onChange="handleRadioEvent(this);"
-													class="commissionType" />FIXED
+													path="nrnReturnConfig.commissionType" value="fixed"
+													id="commissionType-fixed" name="toggler"
+													onChange="handleRadioEvent(this);" class="commissionType" />FIXED
 											</label>
 										</div>
 									</div>
@@ -249,46 +245,69 @@ span .#error {
 										<div class="radio">
 											<label> <form:radiobutton
 													path="nrnReturnConfig.commissionType" value="categoryWise"
-													id="5" class="commissionType" name="toggler"
-													onChange="handleRadioEvent(this);" /> CATEGORY WISE
+													id="commissionType-categoryWise" class="commissionType"
+													name="toggler" onChange="handleRadioEvent(this);" />
+												CATEGORY WISE
 											</label>
 										</div>
 									</div>
-									<div class="col-sm-12 radio1" id="blk-4">
+									<div class="col-sm-12 radio1" id="blk-commissionType-fixed">
 										<div class="row">
 											<div class="col-md-12">
 												<div class="input-group m-b col-md-4">
-													<select name="nr-fixedCommissionPercent">
-														<option></option>
-														<c:forEach items="${taxCategoryList}" var="taxCategory">
-															<option>
-																${taxCategory}</option>
-														</c:forEach>
-													</select>
+													<input type="text" class="form-control"
+														name="nr-fixedCommissionPercent"
+														value="${chargeMap.fixedCommissionPercent}"> <span
+														class="input-group-addon">%</span>
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="col-sm-12 radio1" id="blk-5">
+									<div class="col-sm-12 radio1"
+										id="blk-commissionType-categoryWise">
 										<div class="row">
 											<div class="col-md-12">
-												<c:if test="${!empty categoryList}">
+												<c:choose>
+													<c:when test="${!empty commissionMap}">
+														<c:forEach items="${commissionMap}" var="cat"
+															varStatus="loop">
+															<div class="form-group col-md-12">
+																<label class="col-md-4 control-label">${cat.key}</label>
+																<div class="input-group m-b col-md-4">
+																	<input type="text" class="form-control validateNumber "
+																		name='nr-comm-${cat.key}' value='${cat.value}'
+																		id='categoryWiseCommission'> <span
+																		class="input-group-addon">%</span>
+																</div>
+															</div>
+														</c:forEach>
+													</c:when>
+													<c:when test="${!empty commissionMap}">
+														<c:forEach items="${commissionMap}" var="category"
+															varStatus="loop">
+															<div class="form-group col-md-12">
+																<label class="col-md-4 control-label">${category}</label>
+																<div class="input-group m-b col-md-4">
+																	<input type="text" class="form-control validateNumber"
+																		name='nr-comm-${category}'>
+																	<!--   <span class="input-group-addon">%</span> -->
+																</div>
+															</div>
+														</c:forEach>
+													</c:when>
+												</c:choose>
+												<%-- <c:if test="${!empty categoryList}">
 													<c:forEach items="${categoryList}" var="category"
 														varStatus="loop">
 														<div class="form-group col-md-12">
 															<label class="col-md-4 control-label">${category}</label>
 															<div class="input-group m-b col-md-4">
-																<select name='nr-comm-${category}'>
-																	<option></option>
-																	<c:forEach items="${taxCategoryList}" var="taxCategory">
-																		<option>
-																			${taxCategory}</option>
-																	</c:forEach>
-																</select>
+																<input type="text" class="form-control"
+																	name='nr-comm-${category}' value="${commissionMap.${category}}">
 															</div>
 														</div>
 													</c:forEach>
-												</c:if>
+												</c:if> --%>
 											</div>
 										</div>
 									</div>
@@ -303,9 +322,9 @@ span .#error {
 									<div class="col-sm-4">
 										<div class="radio">
 											<label> <form:radiobutton
-													path="nrnReturnConfig.taxSpType" value="fixed" id="6"
-													name="toggler" onChange="handleRadioEvent(this);"
-													class="taxSpType" />FIXED
+													path="nrnReturnConfig.taxSpType" value="fixed"
+													id="taxSpType-fixed" name="toggler"
+													onChange="handleRadioEvent(this);" class="taxSpType" />FIXED
 											</label>
 										</div>
 									</div>
@@ -313,28 +332,31 @@ span .#error {
 										<div class="radio">
 											<label> <form:radiobutton
 													path="nrnReturnConfig.taxSpType" value="categoryWise"
-													id="7" class="taxSpType" name="toggler"
-													onChange="handleRadioEvent(this);" />CATEGORY WISE
+													id="taxSpType-categoryWise" class="taxSpType"
+													name="toggler" onChange="handleRadioEvent(this);" />CATEGORY
+												WISE
 											</label>
 										</div>
 									</div>
-
-									<div class="col-sm-12 radio1" id="blk-6">
+									<div class="col-sm-12 radio1" id="blk-taxSpType-fixed">
 										<div class="row">
 											<div class="col-md-12">
 												<div class="input-group m-b col-md-4">
 													<select name="nr-fixedTaxSpPercent">
 														<option></option>
 														<c:forEach items="${taxCategoryList}" var="taxCategory">
-															<option>
-																${taxCategory}</option>
+															<c:set var="taxSpMapCategory"
+																value="taxSpMap.${taxCategory}" />
+															<option value="${taxCategory}"
+																${taxCategory == map[taxSpMapCategory] ? 'selected="selected"' : ''}>${taxCategory}</option>
+															<%-- <option>${taxCategory}</option> --%>
 														</c:forEach>
 													</select>
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="col-sm-12 radio1" id="blk-7">
+									<div class="col-sm-12 radio1" id="blk-taxSpType-categoryWise">
 										<div class="row">
 											<div class="col-md-12">
 												<c:if test="${!empty categoryList}">
@@ -346,8 +368,11 @@ span .#error {
 																<select name='nr-taxSp-${category}'>
 																	<option></option>
 																	<c:forEach items="${taxCategoryList}" var="taxCategory">
-																		<option>
-																			${taxCategory}</option>
+																		<c:set var="taxSpMapCategory"
+																			value="taxSpMap.${taxCategory}" />
+																		<option value="${taxCategory}"
+																			${taxCategory == map[taxSpMapCategory] ? 'selected="selected"' : ''}>${taxCategory}</option>
+																		<%-- <option>${taxCategory}</option> --%>
 																	</c:forEach>
 																</select>
 															</div>
@@ -368,9 +393,9 @@ span .#error {
 									<div class="col-sm-4">
 										<div class="radio">
 											<label> <form:radiobutton
-													path="nrnReturnConfig.taxPoType" value="fixed" id="8"
-													name="toggler" onChange="handleRadioEvent(this);"
-													class="taxPoType" />FIXED
+													path="nrnReturnConfig.taxPoType" value="fixed"
+													id="taxPoType-fixed" name="toggler"
+													onChange="handleRadioEvent(this);" class="taxPoType" />FIXED
 											</label>
 										</div>
 									</div>
@@ -378,28 +403,31 @@ span .#error {
 										<div class="radio">
 											<label> <form:radiobutton
 													path="nrnReturnConfig.taxPoType" value="categoryWise"
-													id="9" class="taxPoType" name="toggler"
-													onChange="handleRadioEvent(this);" /> CATEGORY WISE
+													id="taxPoType-categoryWise" class="taxPoType"
+													name="toggler" onChange="handleRadioEvent(this);" />
+												CATEGORY WISE
 											</label>
 										</div>
 									</div>
-
-									<div class="col-sm-12 radio1" id="blk-8">
+									<div class="col-sm-12 radio1" id="blk-taxPoType-fixed">
 										<div class="row">
 											<div class="col-md-12">
 												<div class="input-group m-b col-md-4">
 													<select name="nr-fixedTaxPoPercent">
 														<option></option>
 														<c:forEach items="${taxCategoryList}" var="taxCategory">
-															<option>
-																${taxCategory}</option>
+															<c:set var="taxPoMapCategory"
+																value="taxPoMap.${taxCategory}" />
+															<option value="${taxCategory}"
+																${taxCategory == map[taxPoMapCategory] ? 'selected="selected"' : ''}>${taxCategory}</option>
+															<%-- <option>${taxCategory}</option> --%>
 														</c:forEach>
 													</select>
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="col-sm-12 radio1" id="blk-9">
+									<div class="col-sm-12 radio1" id="blk-taxPoType-categoryWise">
 										<div class="row">
 											<div class="col-md-12">
 												<c:if test="${!empty categoryList}">
@@ -411,8 +439,11 @@ span .#error {
 																<select name='nr-taxPo-${category}'>
 																	<option></option>
 																	<c:forEach items="${taxCategoryList}" var="taxCategory">
-																		<option>
-																			${taxCategory}</option>
+																		<c:set var="taxPoMapCategory"
+																			value="taxPoMap.${taxCategory}" />
+																		<option value="${taxCategory}"
+																			${taxCategory == map[taxPoMapCategory] ? 'selected="selected"' : ''}>${taxCategory}</option>
+																		<%-- <option>${taxCategory}</option> --%>
 																	</c:forEach>
 																</select>
 															</div>
@@ -423,99 +454,307 @@ span .#error {
 										</div>
 									</div>
 								</div>
-
 							</div>
-
 							<div class="ibox-content add-company">
 								<input class="btn btn-primary pull-right" id="submitButton"
 									type="submit" value="Save">
 							</div>
 						</div>
 					</form:form>
-
 				</div>
 			</div>
 			<jsp:include page="../globalfooter.jsp"></jsp:include>
 		</div>
-
-
 	</div>
-
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
 	<!-- iCheck -->
 	<script src="/O2R/seller/js/plugins/iCheck/icheck.min.js"></script>
 	<!-- Switchery -->
 	<script src="/O2R/seller/js/plugins/switchery/switchery.js"></script>
 	<script src="/O2R/seller/js/pickList.js"></script>
-
-	<script>
-            $(document).ready(function () {
-                $('.i-checks').iCheck({
-                    checkboxClass: 'icheckbox_square-green',
-                    radioClass: 'iradio_square-green',
-                });
-                var elem = document.querySelector('.js-switch');
-            var switchery = new Switchery(elem, { color: '#1AB394' });
-
-            var elem_2 = document.querySelector('.js-switch_2');
-            var switchery_2 = new Switchery(elem_2, { color: '#ED5565' });
-
-            var elem_3 = document.querySelector('.js-switch_3');
-            var switchery_3 = new Switchery(elem_3, { color: '#1AB394' });
-
-
-            });
-        </script>
-
 	<script type="text/javascript">
-        
-        function handleRadioEvent(thiss){
-     	   var x=thiss.id;
+		function handleRadioEvent(thiss) {
+			var x = thiss.id;
 
-     	   if(!(x>=1 &&  x<=10))
-     	            $('.radio1').hide();
+			if (!(x >= 1 && x <= 10))
+				$('.radio1').hide();
 
-     	            $("#blk-"+ x).slideDown();
+			$("#blk-" + x).slideDown();
 
-     	           for(var a=0;a<10;a++){
-                       if(a != x){
-                           $("#blk-"+a).slideUp();                    
-                       }else{
-                           $("#blk-"+a).slideDown();
-                       }
-                    }	    
-    	 }
-
-        /* $(document).ready(function(){
-
-            $("[name=toggler]").click(function(){
-				
-                var x=this.id;
-                if(!(x>=1 &&  x<=10))
-                $('.radio1').hide();
-
-                $("#blk-"+ x).slideDown();
-                 for(var a=0;a<10;a++){
-                    if(a != x){
-                        $("#blk-"+a).slideUp();                    
-                    }else{
-                        $("#blk-"+a).slideDown();
-                    }
-                 }
-                    
-            }); */
-
- </script>
-
+			for (var a = 0; a < 10; a++) {
+				if (a != x) {
+					$("#blk-" + a).slideUp();
+				} else {
+					$("#blk-" + a).slideDown();
+				}
+			}
+		}
+	</script>
 	<script type="text/javascript">
-    div = {
-        show: function(elem) {
-            document.getElementById(elem).style.visibility = 'visible';
-        },
-        hide: function(elem) {
-            document.getElementById(elem).style.visibility = 'hidden';
-        }
-    }
-</script>
+		div = {
+			show : function(elem) {
+				document.getElementById(elem).style.visibility = 'visible';
+			},
+			hide : function(elem) {
+				document.getElementById(elem).style.visibility = 'hidden';
+			}
+		}
+	</script>
+	<script type="text/javascript">
+		$(document)
+				.ready(
+						function() {
+							$('.i-checks').iCheck({
+								checkboxClass : 'icheckbox_square-green',
+								radioClass : 'iradio_square-green',
+							});
+							var elem = document.querySelector('.js-switch');
+							var switchery = new Switchery(elem, {
+								color : '#1AB394'
+							});
+
+							var elem_2 = document.querySelector('.js-switch_2');
+							var switchery_2 = new Switchery(elem_2, {
+								color : '#ED5565'
+							});
+
+							var elem_3 = document.querySelector('.js-switch_3');
+							var switchery_3 = new Switchery(elem_3, {
+								color : '#1AB394'
+							});
+
+							$(".commissionType").click(function() {
+								$('.radio1').hide();
+								$("#blk-" + $(this).attr('id')).slideDown();
+							});
+							$(".taxSpType").click(function() {
+								$('.radio1').hide();
+								$("#blk-" + $(this).attr('id')).slideDown();
+							});
+							$(".taxPoType").click(function() {
+								$('.radio1').hide();
+								$("#blk-" + $(this).attr('id')).slideDown();
+							});
+
+							$("[name=paymentType]").click(function() {
+								$('.radio1').hide();
+								$("#blk-" + $(this).val()).slideDown();
+							});
+							$('#paymentField').change(function() {
+								$('.payment-box').hide();
+								$('#' + $(this).val()).fadeIn();
+							});
+							$('#paymentField1').change(function() {
+								$('.payment-box').hide();
+								$('#' + $(this).val()).fadeIn();
+							});
+							$('#data_1 .input-group.date').datepicker({
+								todayBtn : "linked",
+								keyboardNavigation : false,
+								forceParse : false,
+								calendarWeeks : true,
+								autoclose : true
+							});
+
+							if ('${partner.paymentType}' == 'paymentcycle')
+								$("#paymentcycle").prop("checked", true)
+										.trigger("click");
+							else if ('${partner.paymentType}' == 'datewisepay') {
+								$("#datewisepay").prop("checked", true)
+										.trigger("click");
+								$('#paymentField1').trigger('change');
+								if ('${partner.isshippeddatecalc}' != true) {
+									$("#noofdaysfromdeliverydate")
+											.val(
+													'${partner.noofdaysfromshippeddate}');
+								}
+							} else if ('${partner.paymentType}' == 'monthly')
+								$('#monthly').prop("checked", true).trigger(
+										"click");
+
+							$("#submitButton").click(function() {
+								submitForm();
+							});
+
+							if ('${partner.nrnReturnConfig.commissionType}' == 'fixed')
+								$("#commissionType-fixed")
+										.prop("checked", true).trigger("click");
+							else if ('${partner.nrnReturnConfig.commissionType}' == 'categoryWise')
+								$("#commissionType-categoryWise").prop(
+										"checked", true).trigger("click");
+
+							if ('${partner.nrnReturnConfig.taxSpType}' == 'fixed')
+								$("#taxSpType-fixed").prop("checked", true)
+										.trigger("click");
+							else if ('${partner.nrnReturnConfig.taxSpType}' == 'categoryWise')
+								$("#taxSpType-categoryWise").prop("checked",
+										true).trigger("click");
+
+							if ('${partner.nrnReturnConfig.taxPoType}' == 'fixed')
+								$("#taxPoType-fixed").prop("checked", true)
+										.trigger("click");
+							else if ('${partner.nrnReturnConfig.taxPoType}' == 'categoryWise')
+								$("#taxPoType-categoryWise").prop("checked",
+										true).trigger("click");
+
+							<c:forEach items="${taxPoMap}" var="cat">
+
+							$('select[name="nr-taxPo-${cat.key}"]').val(
+									'${cat.value}');
+							</c:forEach>
+
+							<c:forEach items="${taxSpMap}" var="cat">
+
+							$('select[name="nr-taxSp-${cat.key}"]').val(
+									'${cat.value}');
+							</c:forEach>
+
+						});
+
+		var nameAvailability = true;
+
+		function checkOnBlur() {
+			var partner = document.getElementById("partnerName").value;
+			$.ajax({
+				url : "ajaxPartnerCheck.html?partner=" + partner,
+				success : function(res) {
+					if (res == "false") {
+						if ('${partner.pcId}' != '0') {
+							nameAvailability = true;
+							$("#partnerNameMessage").html(
+									"Partner Name available");
+						} else {
+							nameAvailability = false;
+							$("#partnerNameMessage").html(
+									"Partner Name  already exist");
+						}
+					} else {
+						nameAvailability = true;
+						$("#partnerNameMessage").html(
+								"Partner Name   available");
+					}
+				}
+			});
+		}
+
+		function submitForm() {
+
+			var validator = $("#addpartnerform")
+					.validate(
+							{
+								rules : {
+									pcName : {
+										required : true,
+										number : false,
+									},
+									maxReturnAcceptance : {
+										required : true,
+										min : 1,
+										max : 100,
+										number : true,
+									},
+									maxRTOAcceptance : {
+										required : true,
+										min : 1,
+										max : 100,
+										number : true,
+									},
+									paymentType : {
+										required : true
+									},
+									startcycleday : {
+										required : function(element) {
+											return (getRole('paymentcycleClass') == 'paymentcycle');
+										},
+										number : true,
+										min : 1,
+										max : 31,
+
+									},
+									paycycleduration : {
+										required : function(element) {
+											return (getRole('paymentcycleClass') == 'paymentcycle');
+										},
+										number : true,
+										min : 1,
+										max : 31,
+
+									},
+									paydaysfromstartday : {
+										required : function(element) {
+											return (getRole('paymentcycleClass') == 'paymentcycle');
+										},
+										number : true,
+										min : 1,
+										max : 31,
+
+									},
+									monthlypaydate : {
+										required : function(element) {
+											return (getRole('paymentcycleClass') == 'monthly');
+										},
+										number : true,
+										min : 1,
+										max : 31,
+
+									}
+								},
+								errorElement : "span",
+								messages : {
+									pcName : " Enter partner name",
+									maxReturnAcceptance : "Max return required between 1 and 100",
+									maxRTOAcceptance : "RTO acceptance required between 1 and 100",
+									toggler : "Please select any Payment Cycle"
+								}
+
+							});
+
+			$(".commissionType").rules("add", {
+				required : function(element) {
+					var clickCheckbox = document.querySelector('.js-switch_2');
+					return clickCheckbox.checked;
+				}
+			});
+
+			$("#fixedCommissionPercent").rules("add", {
+				required : function(element) {
+					if (getRole('commissionType') == 'fixed')
+						return true;
+					else
+						return false;
+				},
+				number : true
+			});
+			/*  $("#categoryWiseCommission").rules("add", { 
+			
+			  required:function(element) {
+				  a=getRole('commissionType')
+					alert("hi there "+a);
+				if(getRole('commissionType')=='categoryWise')
+					
+					return true;
+				else 
+					return false;
+				},
+				number : true
+			}); */
+			$("#serviceTax").rules("add", {
+				required : function(element) {
+					var clickCheckbox = document.querySelector('.js-switch_2');
+					return clickCheckbox.checked;
+				},
+				number : true
+			});
+
+			if (validator.form() && nameAvailability) {
+				$('form#addpartnerform').submit();
+			}
+		}
+
+		function getRole(radioclassname) {
+			return $("#addpartnerform").find(
+					"input." + radioclassname + ":checked").val();
+		}
+	</script>
 </body>
 </html>
