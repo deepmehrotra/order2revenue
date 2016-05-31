@@ -291,17 +291,17 @@
                                 <table class="table table table-striped">
                                     <tbody>
                                     <tr>
-                                        <td>Name</td>
+                                        <td>Event Name</td>
                                         <td>${event.eventName}</td>
                                         
                                     </tr>
                                     <tr>
-                                        <td>Start Date</td>
+                                        <td>Event Start Date</td>
                                         <td><fmt:formatDate	value="${event.startDate}" pattern="MMM dd,YY" /></td>
                                        
                                     </tr>
                                     <tr>
-                                        <td>End Date</td>
+                                        <td>Event End Date</td>
                                         <td><fmt:formatDate	value="${event.endDate}" pattern="MMM dd,YY" /></td>  
                                     </tr>
                                     </tbody>

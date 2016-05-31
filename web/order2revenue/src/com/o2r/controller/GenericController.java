@@ -52,7 +52,21 @@ public class GenericController {
 	 private HelperClass helperClass;
 
 	private Logger logger = Logger.getLogger(GenericController.class);
+	
+	
+	@RequestMapping(value = "/seller/support", method = RequestMethod.GET)
+	public ModelAndView support(HttpServletRequest request) {
+		
+		System.out.println("Inside support ..... ");		
+		Map<String, Object> model = new HashMap<String, Object>();
+		String section=request.getParameter("set");
+		System.out.println(section);
+		model.put("setSection", section);
+		return new ModelAndView("support", model);
 
+	}
+	
+	
 	@RequestMapping(value = "/seller/orderindex", method = RequestMethod.GET)
 	public ModelAndView welcome(HttpServletRequest request) {
 		

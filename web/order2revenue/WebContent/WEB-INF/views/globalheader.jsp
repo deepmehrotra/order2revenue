@@ -134,8 +134,14 @@
 				data-toggle="dropdown"> <i class="fa fa-info"></i>
 			</a>
 				<ul class="dropdown-menu animated fadeInRight m-t-xs">
-					<li><a href="#">Lorem Ipsum</a></li>
-					<li><a href="#">Lorem Ipsum</a></li>
+					<li><a href="support.html">Support</a></li>
+					<li><a href="support.html?set=section1">Common Terms</a></li>
+					<li><a href="support.html?set=section2">FAQ'S</a></li>
+					<li><a href="support.html?set=section3">Guidelines</a></li>
+					<li><a href="support.html?set=section41">Initial Setup</a></li>
+					<li><a href="support.html?set=section42">Daily Activities</a></li>
+					<li><a href="support.html?set=section43">Reports</a></li>
+					<li><a href="support.html?set=section44">Miscellaneous</a></li>					
 				</ul></li>
 			<li class="dropdown"><a class="dropdown-toggle count-info"
 				data-toggle="dropdown"> <i class="fa fa-gear"></i>
