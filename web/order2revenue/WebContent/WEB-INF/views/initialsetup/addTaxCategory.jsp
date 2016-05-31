@@ -18,12 +18,14 @@ function checkOnBlur()
     	 	   if(res=="false")
                 	{
         	nameAvailability=false;
-                	 $("#catNameMessage").html("Tax category already exist");
+                	 $("#catNameMessageR").html("Tax category already exist").show();
+                	 $("#catNameMessageG").html("Tax category available").hide();
                 	}
                 else
                 	{
                 	nameAvailability=true;
-                	$("#catNameMessage").html("Tax category  available");
+                	$("#catNameMessageG").html("Tax category available").show();
+                	$("#catNameMessageR").html("Tax category already exist").hide();
                 	}
       }
 	 });
@@ -71,7 +73,8 @@ function submitForm(){
                                     <div class="form-group"><label class="col-sm-5 control-label">Tax Category Name</label>
 
                                     <div class="col-sm-7"><form:input path="taxCatName" value="${taxCategory.taxCatName}"
-                                    class="form-control"  id="categoryName" onblur="checkOnBlur()"/><span id="catNameMessage" style="color:red"></span>
+                                    class="form-control"  id="categoryName" onblur="checkOnBlur()"/><span id="catNameMessageR" style="color:red"></span>
+                                    <span id="catNameMessageG" style="color:green"></span>
                                   </div>
                                     </div>
                                      <div class="form-group"><label class="col-sm-5 control-label">Description</label>
