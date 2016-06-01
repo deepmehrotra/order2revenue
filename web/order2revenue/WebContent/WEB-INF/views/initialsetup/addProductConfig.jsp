@@ -31,7 +31,7 @@
 											<div class="mar-btm-20-dt">
 												<label class="col-sm-5 control-label">Product SKU
 													Code</label>
-												<div class="col-sm-7 input-group pad-lr">
+												<div class="col-sm-6 input-group pad-lr">
 													<form:select data-placeholder="Choose a Product SKU..."
 														path="productSkuCode" items="${productSkuMap}"
 														id="productName" class="chosen-select"
@@ -40,7 +40,6 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-sm-6"></div>
 									</div>
 									<div class="col-sm-12">
 										<div class="col-sm-6">

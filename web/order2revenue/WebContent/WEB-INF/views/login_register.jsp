@@ -95,7 +95,7 @@
 	          	</div>
 	          	<div class="field-wrap" style="display:flex;">
 	          		<div class="check">
-	          			<input type="checkbox" name="terms" style="width: 10%;height: 15px;margin-top: 9px; float: right;">
+	          			<input type="checkbox" name="terms" required autocomplete="off"/ style="width: 10%;height: 15px;margin-top: 9px; float: right;">
 	          		</div> 
 	          		<div class="accept">
 	          			<p style="color: #a0b3b0;font-weight: 600;margin-top: 6px;">
@@ -189,29 +189,13 @@ function Cpass(){
 
 function onSubmit()
 {	
-	valid = true;
-	if($('input[type=checkbox]:checked').length == 0)
-	{
-	    alert ( "ERROR! Please select at least one checkbox" );
-	    valid = false;
-	}else{
-		valid = true;
-	}
-	
-	/* var validator = $("#registerForm").validate({
-		  rules: {
-			 terms:	{
-						required: true
-					}
-			  },
-	  }); */ 
-	alert(valid+" : "+nameAvailability+" : "+passCon)
-	if(valid && nameAvailability && passCon)
+	if(nameAvailability && passCon)
 	 {
-		 	alert(" Validation confirm ");
-			$('#registerForm').submit();
+		 	
+			//$('#registerForm').submit();
+			return true;
 	 }else{
-		 	alert("Validation Rejected !");
+		 	
 		 	return false;
 	 }
 	 

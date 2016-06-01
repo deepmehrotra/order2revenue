@@ -112,7 +112,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)"
 			+ " ORDER BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
 
-	private static final String grossProfitMPReturnMonthlyQuery = "Select pcName ,sum(((ot.pr-(prd.productPrice*ot.quantity))/ot.quantity)"
+	private static final String grossProfitMPReturnMonthlyQuery = "Select sum(((ot.pr-(prd.productPrice*ot.quantity))/ot.quantity)"
 			+ "*orr.returnorrtoQty + orr.estimateddeduction) as grossProfit,Monthname(orr.returnDate) as month ,"
 			+ "YEAR(orr.returnDate) as year from Order_Table ot,orderreturn orr,Product prd where orr.returnDate between "
 			+ ":startDate AND :endDate and ot.productSkuCode=prd.productSkuCode "
