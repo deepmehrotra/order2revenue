@@ -30,9 +30,12 @@ public class ChannelReportDetails {
 	private double productCost;
 	private double pr;
 	private double netReturnCharges;
+	private double netPr;
 	private double netPaymentResult;
+	private double paymentDifference;
 	private double grossProfit;
 	private double gpVsProductCost;
+	private String finalStatus;
 
 	public String getOrderId() {
 		return orderId;
@@ -250,6 +253,22 @@ public class ChannelReportDetails {
 		this.netPaymentResult = netPaymentResult;
 	}
 
+	public double getNetPr() {
+		return netPr;
+	}
+
+	public void setNetPr(double netPr) {
+		this.netPr = netPr;
+	}
+
+	public double getPaymentDifference() {
+		return paymentDifference;
+	}
+
+	public void setPaymentDifference(double paymentDifference) {
+		this.paymentDifference = paymentDifference;
+	}
+
 	public double getGrossProfit() {
 		return grossProfit;
 	}
@@ -266,6 +285,14 @@ public class ChannelReportDetails {
 		this.gpVsProductCost = gpVsProductCost;
 	}
 	
+	public String getFinalStatus() {
+		return finalStatus;
+	}
+
+	public void setFinalStatus(String finalStatus) {
+		this.finalStatus = finalStatus;
+	}
+
 	public static class OrderByShippedDate implements
 		Comparator<ChannelReportDetails> {
 		@Override

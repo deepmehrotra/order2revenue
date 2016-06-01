@@ -833,7 +833,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					double saleRetSpAmount = 0;
 					channelReport.setGrossProfit(grossProfit);
 					channelReport.setGrossQty(grossSaleQty);
-					channelReport.setGrossNrAmount(grossNrAmount);
+					channelReport.setGrossNrAmount(grossNrAmount*grossSaleQty);
 					channelReport.setGrossSpAmount(grossSpAmount);
 
 					OrderRTOorReturn currOrderReturn = currOrder.getOrderReturnOrRTO();
@@ -845,8 +845,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 							saleRetNrAmount = currOrderReturn.getNetNR();
 						}
 					}
-					if(!isPoOrder)
-						
+					double netPr = currOrder.getPr()/grossSaleQty*(grossSaleQty-saleRetQty);
+					channelReport.setNetPr(netPr);	
 					// MP/PO Order conditions
 					if(!isPoOrder){
 						saleRetNrAmount = grossNrAmount*saleRetQty;
@@ -866,7 +866,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					if(grossSaleQty != 0)
 						saleRetVsGrossSale = saleRetQty/grossSaleQty*100;
 					double netQty = grossSaleQty - saleRetQty;
-					double netNrAmount = grossNrAmount - saleRetNrAmount;
+					double netNrAmount = grossNrAmount*grossSaleQty - saleRetNrAmount;
 					double netSpAmount = grossSpAmount - saleRetSpAmount;
 					channelReport.setSaleRetVsGrossSale(saleRetVsGrossSale);
 					channelReport.setNetQty(netQty);
@@ -897,7 +897,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					if(currOrderPayment != null){
 						channelReport.setNetToBeReceived(currOrderPayment.getPaymentDifference());
 						double netPaymentResult = currOrderPayment.getNetPaymentResult();
+						double paymentDifference = currOrderPayment.getPaymentDifference();
 						channelReport.setNetPaymentResult(netPaymentResult);
+						channelReport.setPaymentDifference(paymentDifference);
 						channelReport.setNetAr(netPaymentResult);
 					}
 					
@@ -918,6 +920,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 						gpVsProductCost = grossProfit/productCost*100;
 					channelReport.setProductCost(productCost);
 					channelReport.setGpVsProductCost(gpVsProductCost);
+					channelReport.setFinalStatus(currOrder.getFinalStatus());
 					
 					channelReportDetailsList.add(channelReport);
 			 }
