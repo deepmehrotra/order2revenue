@@ -56,6 +56,16 @@ span .#error {
 					<form:form method="POST" action="saveMyntra.html"
 						id="addpartnerform" name="addpartnerform" role="form"
 						class="form-horizontal" enctype="multipart/form-data">
+
+						<c:if test="${!empty partner.pcId}">
+							<%--  <form:hidden path="pcId" value="${partner.pcId}"/> --%>
+							<input type="hidden" name="pcId" id="pcId"
+								value="${partner.pcId}" />
+							<input type="hidden" name="nrnReturnConfig.configId"
+								id="nrnReturnConfig.configId"
+								value="${partner.nrnReturnConfig.configId}" />
+						</c:if>
+
 						<div class="col-sm-4">
 							<div class="radio">
 								<label> <form:radiobutton path="paymentType"
@@ -282,8 +292,8 @@ span .#error {
 															</div>
 														</c:forEach>
 													</c:when>
-													<c:when test="${!empty commissionMap}">
-														<c:forEach items="${commissionMap}" var="category"
+													<c:when test="${!empty categoryList}">
+														<c:forEach items="${categoryList}" var="category"
 															varStatus="loop">
 															<div class="form-group col-md-12">
 																<label class="col-md-4 control-label">${category}</label>
@@ -296,18 +306,6 @@ span .#error {
 														</c:forEach>
 													</c:when>
 												</c:choose>
-												<%-- <c:if test="${!empty categoryList}">
-													<c:forEach items="${categoryList}" var="category"
-														varStatus="loop">
-														<div class="form-group col-md-12">
-															<label class="col-md-4 control-label">${category}</label>
-															<div class="input-group m-b col-md-4">
-																<input type="text" class="form-control"
-																	name='nr-comm-${category}' value="${commissionMap.${category}}">
-															</div>
-														</div>
-													</c:forEach>
-												</c:if> --%>
 											</div>
 										</div>
 									</div>
@@ -342,14 +340,10 @@ span .#error {
 										<div class="row">
 											<div class="col-md-12">
 												<div class="input-group m-b col-md-4">
-													<select name="nr-fixedTaxSpPercent">
+													<select name="nr-fixedTaxSpPercent" class="form-control">
 														<option></option>
 														<c:forEach items="${taxCategoryList}" var="taxCategory">
-															<c:set var="taxSpMapCategory"
-																value="taxSpMap.${taxCategory}" />
-															<option value="${taxCategory}"
-																${taxCategory == map[taxSpMapCategory] ? 'selected="selected"' : ''}>${taxCategory}</option>
-															<%-- <option>${taxCategory}</option> --%>
+															<option>${taxCategory}</option>
 														</c:forEach>
 													</select>
 												</div>
@@ -365,14 +359,10 @@ span .#error {
 														<div class="form-group col-md-12">
 															<label class="col-md-4 control-label">${category}</label>
 															<div class="input-group m-b col-md-4">
-																<select name='nr-taxSp-${category}'>
+																<select name='nr-taxSp-${category}' class="form-control">
 																	<option></option>
 																	<c:forEach items="${taxCategoryList}" var="taxCategory">
-																		<c:set var="taxSpMapCategory"
-																			value="taxSpMap.${taxCategory}" />
-																		<option value="${taxCategory}"
-																			${taxCategory == map[taxSpMapCategory] ? 'selected="selected"' : ''}>${taxCategory}</option>
-																		<%-- <option>${taxCategory}</option> --%>
+																		<option>${taxCategory}</option>
 																	</c:forEach>
 																</select>
 															</div>
@@ -413,14 +403,10 @@ span .#error {
 										<div class="row">
 											<div class="col-md-12">
 												<div class="input-group m-b col-md-4">
-													<select name="nr-fixedTaxPoPercent">
+													<select name="nr-fixedTaxPoPercent" class="form-control">
 														<option></option>
 														<c:forEach items="${taxCategoryList}" var="taxCategory">
-															<c:set var="taxPoMapCategory"
-																value="taxPoMap.${taxCategory}" />
-															<option value="${taxCategory}"
-																${taxCategory == map[taxPoMapCategory] ? 'selected="selected"' : ''}>${taxCategory}</option>
-															<%-- <option>${taxCategory}</option> --%>
+															<option>${taxCategory}</option>
 														</c:forEach>
 													</select>
 												</div>
@@ -436,14 +422,10 @@ span .#error {
 														<div class="form-group col-md-12">
 															<label class="col-md-4 control-label">${category}</label>
 															<div class="input-group m-b col-md-4">
-																<select name='nr-taxPo-${category}'>
+																<select name='nr-taxPo-${category}' class="form-control">
 																	<option></option>
 																	<c:forEach items="${taxCategoryList}" var="taxCategory">
-																		<c:set var="taxPoMapCategory"
-																			value="taxPoMap.${taxCategory}" />
-																		<option value="${taxCategory}"
-																			${taxCategory == map[taxPoMapCategory] ? 'selected="selected"' : ''}>${taxCategory}</option>
-																		<%-- <option>${taxCategory}</option> --%>
+																		<option>${taxCategory}</option>
 																	</c:forEach>
 																</select>
 															</div>
@@ -597,18 +579,25 @@ span .#error {
 								$("#taxPoType-categoryWise").prop("checked",
 										true).trigger("click");
 
-							<c:forEach items="${taxPoMap}" var="cat">
+							<c:forEach items = "${taxPoMap}"
+                            var = "cat">
 
 							$('select[name="nr-taxPo-${cat.key}"]').val(
 									'${cat.value}');
 							</c:forEach>
 
-							<c:forEach items="${taxSpMap}" var="cat">
+							<c:forEach items = "${taxSpMap}"
+                            var = "cat">
 
 							$('select[name="nr-taxSp-${cat.key}"]').val(
 									'${cat.value}');
 							</c:forEach>
 
+							$('select[name="nr-fixedTaxSpPercent"]').val(
+									'${chargeMap.fixedTaxSpPercent}');
+
+							$('select[name="nr-fixedTaxPoPercent"]').val(
+									'${chargeMap.fixedTaxPoPercent}');
 						});
 
 		var nameAvailability = true;

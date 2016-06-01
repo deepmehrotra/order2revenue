@@ -341,12 +341,13 @@ public class OrderController {
 				uploadReport.setTimeTaken((float) lapsetime);
 				uploadReport = reportGeneratorService.addUploadReport(
 						uploadReport, sellerId);
-
-				List<UploadReportBean> uploadReports = ConverterClass
-						.prepareUploadReportListBean(reportGeneratorService
-								.listUploadReport(sellerId));
-				model.put("uploadReportList", uploadReports.subList(
-						uploadReports.size() - 3, uploadReports.size()));
+				
+				List<UploadReportBean> uploadReports = ConverterClass.prepareUploadReportListBean(
+						reportGeneratorService.listUploadReport(helperClass.getSellerIdfromSession(request)));
+				if (uploadReports != null && uploadReports.size() > 3) {
+					uploadReports = uploadReports.subList(uploadReports.size() - 3, uploadReports.size());
+				}
+				model.put("uploadReportList", uploadReports);
 			} catch (Exception e) {
 				log.debug("Inside exception , filetype not accepted "
 						+ e.getLocalizedMessage());

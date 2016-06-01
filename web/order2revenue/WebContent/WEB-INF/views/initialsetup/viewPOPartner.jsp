@@ -51,8 +51,8 @@ span .#error {
 <!-- <script src="/O2R/seller/js/inspinia.js"></script> -->
 <script type="text/javascript">
 	function relodPage(id) {
-	    window.location.href = 'viewPartner.html?pcId=' + id;
-	    //location.reload();	
+		window.location.href = 'viewPartner.html?pcId=' + id;
+		//location.reload();	
 	}
 </script>
 </head>
@@ -228,8 +228,8 @@ span .#error {
 															<table class="table table hover"
 																style="border-spacing: 0 5px;">
 																<tbody>
-																	<tr data-toggle="collapse" data-target="#accordion"
-																		class="clickable">
+																	<tr data-toggle="collapse" data-parent="#accordion"
+																		href="#collapsecomm" class="clickable">
 																		<td style="width: 50%;"><label>COMMISSION</label>
 																		</td>
 																		<td>
@@ -255,21 +255,21 @@ span .#error {
 																	</tr>
 																	<tr>
 																		<td colspan="10">
-																			<div id="accordion" class="collapse">
+																			<div id="collapsecomm" class="collapse">
 																				<c:if
 																					test="${partner.nrnReturnConfig.commissionType == 'fixed' }">
 																					<label class="labelfix">Fixed Amount :
-																						${chargeMap.fixedCommissionPercent} %</label>
+																						${chargesMap.fixedCommissionPercent} %</label>
 																				</c:if>
 																				<c:if
 																					test="${partner.nrnReturnConfig.commissionType == 'categoryWise' }">
 																					<c:choose>
-																						<c:when test="${!empty categoryMap}">
-																							<c:forEach items="${categoryMap}" var="cat"
+																						<c:when test="${!empty commissionMap}">
+																							<c:forEach items="${commissionMap}" var="cat"
 																								varStatus="loop">
 																								<div class="form-group col-md-12">
 																									<label class="labelfix">${cat.key} :
-																										${cat.value} </label>
+																										${cat.value} %</label>
 																								</div>
 																							</c:forEach>
 																						</c:when>
@@ -278,13 +278,13 @@ span .#error {
 																			</div>
 																		</td>
 																	</tr>
-																	<tr data-toggle="collapse" data-target="#accordion"
-																		class="clickable">
+																	<tr data-toggle="collapse" data-parent="#accordion"
+																		href="#collapsetaxsp" class="clickable">
 																		<td style="width: 50%;"><label>Tax SP</label></td>
 																		<td>
 																			<div>
 																				<c:if
-																					test="${partner.nrnReturnConfig.commissionType == 'fixed' }">
+																					test="${partner.nrnReturnConfig.taxSpType == 'fixed' }">
 																					<button class="btn btn-grey" id="button1"
 																						style="width: 100%;">
 																						<font size="2" color="green">Fixed</font><span
@@ -292,7 +292,7 @@ span .#error {
 																					</button>
 																				</c:if>
 																				<c:if
-																					test="${partner.nrnReturnConfig.commissionType == 'categoryWise' }">
+																					test="${partner.nrnReturnConfig.taxSpType == 'categoryWise' }">
 																					<button class="btn btn-grey" id="button1"
 																						style="width: 100%;">
 																						<font size="2" color="green">Category Wise</font><span
@@ -304,17 +304,17 @@ span .#error {
 																	</tr>
 																	<tr>
 																		<td colspan="10">
-																			<div id="accordion" class="collapse">
+																			<div id="collapsetaxsp" class="collapse">
 																				<c:if
-																					test="${partner.nrnReturnConfig.commissionType == 'fixed' }">
+																					test="${partner.nrnReturnConfig.taxSpType == 'fixed' }">
 																					<label class="labelfix">Fixed Amount :
-																						${chargeMap.fixedCommissionPercent} %</label>
+																						${chargesMap.fixedTaxSpPercent}</label>
 																				</c:if>
 																				<c:if
-																					test="${partner.nrnReturnConfig.commissionType == 'categoryWise' }">
+																					test="${partner.nrnReturnConfig.taxSpType == 'categoryWise' }">
 																					<c:choose>
-																						<c:when test="${!empty categoryMap}">
-																							<c:forEach items="${categoryMap}" var="cat"
+																						<c:when test="${!empty taxSpMap}">
+																							<c:forEach items="${taxSpMap}" var="cat"
 																								varStatus="loop">
 																								<div class="form-group col-md-12">
 																									<label class="labelfix">${cat.key} :
@@ -327,13 +327,13 @@ span .#error {
 																			</div>
 																		</td>
 																	</tr>
-																	<tr data-toggle="collapse" data-target="#accordion"
-																		class="clickable">
+																	<tr data-toggle="collapse" data-parent="#accordion"
+																		href="#collapsetaxpo" class="clickable">
 																		<td style="width: 50%;"><label>Tax PO</label></td>
 																		<td>
 																			<div>
 																				<c:if
-																					test="${partner.nrnReturnConfig.commissionType == 'fixed' }">
+																					test="${partner.nrnReturnConfig.taxPoType == 'fixed' }">
 																					<button class="btn btn-grey" id="button1"
 																						style="width: 100%;">
 																						<font size="2" color="green">Fixed</font><span
@@ -341,7 +341,7 @@ span .#error {
 																					</button>
 																				</c:if>
 																				<c:if
-																					test="${partner.nrnReturnConfig.commissionType == 'categoryWise' }">
+																					test="${partner.nrnReturnConfig.taxPoType == 'categoryWise' }">
 																					<button class="btn btn-grey" id="button1"
 																						style="width: 100%;">
 																						<font size="2" color="green">Category Wise</font><span
@@ -353,17 +353,17 @@ span .#error {
 																	</tr>
 																	<tr>
 																		<td colspan="10">
-																			<div id="accordion" class="collapse">
+																			<div id="collapsetaxpo" class="collapse">
 																				<c:if
-																					test="${partner.nrnReturnConfig.commissionType == 'fixed' }">
+																					test="${partner.nrnReturnConfig.taxPoType == 'fixed' }">
 																					<label class="labelfix">Fixed Amount :
-																						${chargeMap.fixedCommissionPercent} %</label>
+																						${chargesMap.fixedTaxPoPercent}</label>
 																				</c:if>
 																				<c:if
-																					test="${partner.nrnReturnConfig.commissionType == 'categoryWise' }">
+																					test="${partner.nrnReturnConfig.taxPoType == 'categoryWise' }">
 																					<c:choose>
-																						<c:when test="${!empty categoryMap}">
-																							<c:forEach items="${categoryMap}" var="cat"
+																						<c:when test="${!empty taxPoMap}">
+																							<c:forEach items="${taxPoMap}" var="cat"
 																								varStatus="loop">
 																								<div class="form-group col-md-12">
 																									<label class="labelfix">${cat.key} :
@@ -405,236 +405,233 @@ span .#error {
 	<script src="/O2R/seller/js/pickList1.js"></script>
 	<!-- <script src="/O2R/seller/js/pickList.js"></script> -->
 	<script type="text/javascript">
-                $(document).ready(function() {
+		$(document).ready(function() {
 
+			$('.carousel').carousel({
+				pause : true,
+				interval : false
+			});
 
-                    $('.carousel').carousel({
-                        pause: true,
-                        interval: false
-                    });
+			var clickEvent = false;
+			$('#myCarousel').on('click', '.nav a', function() {
+				clickEvent = true;
+				$('.nav li').removeClass('active');
+				$(this).parent().addClass('active');
+			}).on('slid.bs.carousel', function(e) {
+				if (!clickEvent) {
+					var count = $('.nav').children().length - 1;
+					var current = $('.nav li.active');
+					current.removeClass('active').next().addClass('active');
+					var id = parseInt(current.data('slide-to'));
+					if (count == id) {
+						$('.nav li').first().addClass('active');
+					}
+				}
+				clickEvent = false;
 
-                    var clickEvent = false;
-                    $('#myCarousel').on('click', '.nav a', function() {
-                        clickEvent = true;
-                        $('.nav li').removeClass('active');
-                        $(this).parent().addClass('active');
-                    }).on('slid.bs.carousel', function(e) {
-                        if (!clickEvent) {
-                            var count = $('.nav').children().length - 1;
-                            var current = $('.nav li.active');
-                            current.removeClass('active').next().addClass('active');
-                            var id = parseInt(current.data('slide-to'));
-                            if (count == id) {
-                                $('.nav li').first().addClass('active');
-                            }
-                        }
-                        clickEvent = false;
+			});
 
-                    });
+			$('.i-checks').iCheck({
+				checkboxClass : 'icheckbox_square-green',
+				radioClass : 'iradio_square-green',
+			});
+			var elem = document.querySelector('.js-switch');
+			var switchery = new Switchery(elem, {
+				color : '#1AB394'
+			});
 
+			var elem_2 = document.querySelector('.js-switch_2');
+			var switchery_2 = new Switchery(elem_2, {
+				color : '#ED5565'
+			});
 
-                    $('.i-checks').iCheck({
-                        checkboxClass: 'icheckbox_square-green',
-                        radioClass: 'iradio_square-green',
-                    });
-                    var elem = document.querySelector('.js-switch');
-                    var switchery = new Switchery(elem, {
-                        color: '#1AB394'
-                    });
+			var elem_3 = document.querySelector('.js-switch_3');
+			var switchery_3 = new Switchery(elem_3, {
+				color : '#1AB394'
+			});
 
-                    var elem_2 = document.querySelector('.js-switch_2');
-                    var switchery_2 = new Switchery(elem_2, {
-                        color: '#ED5565'
-                    });
-
-                    var elem_3 = document.querySelector('.js-switch_3');
-                    var switchery_3 = new Switchery(elem_3, {
-                        color: '#1AB394'
-                    });
-
-
-                });
-                </script>
+		});
+	</script>
 	<script type="text/javascript">
-                function handleRadioEvent(thiss) {
-                    var x = thiss.id;
+		function handleRadioEvent(thiss) {
+			var x = thiss.id;
 
-                    if (!(x >= 1 && x <= 10))
-                        $('.radio1').hide();
+			if (!(x >= 1 && x <= 10))
+				$('.radio1').hide();
 
-                    $("#blk-" + x).slideDown();
+			$("#blk-" + x).slideDown();
 
-                    for (var a = 0; a < 10; a++) {
-                        if (a != x) {
-                            $("#blk-" + a).slideUp();
-                        } else {
-                            $("#blk-" + a).slideDown();
-                        }
-                    }
-                }
+			for (var a = 0; a < 10; a++) {
+				if (a != x) {
+					$("#blk-" + a).slideUp();
+				} else {
+					$("#blk-" + a).slideDown();
+				}
+			}
+		}
 
-                $("[name=toggler]").click(function() {
-                    var x = this.id;
-                    if (!(x >= 1 && x <= 29))
-                        $('.radio1').hide();
+		$("[name=toggler]").click(function() {
+			var x = this.id;
+			if (!(x >= 1 && x <= 29))
+				$('.radio1').hide();
 
-                    $("#blk-" + x).slideDown();
-                    for (var a = 0; a < 29; a++) {
-                        if (a != x) {
-                            $("#blk-" + a).slideUp();
-                        } else {
-                            $("#blk-" + a).slideDown();
-                        }
-                    }
+			$("#blk-" + x).slideDown();
+			for (var a = 0; a < 29; a++) {
+				if (a != x) {
+					$("#blk-" + a).slideUp();
+				} else {
+					$("#blk-" + a).slideDown();
+				}
+			}
 
-                });
-                </script>
+		});
+	</script>
 	<script>
-                var val = {
-                    01: {
-                        id: 01,
-                        text: 'Andhra Pradesh'
-                    },
-                    02: {
-                        id: 02,
-                        text: 'Andaman and Nicobar Islands'
-                    },
-                    03: {
-                        id: 03,
-                        text: 'Arunachal Pradesh'
-                    },
-                    04: {
-                        id: 04,
-                        text: 'Assam'
-                    },
-                    05: {
-                        id: 05,
-                        text: 'Chhattisgarh'
-                    },
-                    06: {
-                        id: 06,
-                        text: 'Chandigarh'
-                    },
-                    07: {
-                        id: 07,
-                        text: 'Dadra and Nagar Haveli'
-                    },
-                    08: {
-                        id: 08,
-                        text: 'Daman and Diu'
-                    },
-                    09: {
-                        id: 09,
-                        text: 'Delhi'
-                    },
-                    10: {
-                        id: 10,
-                        text: 'Goa'
-                    },
-                    11: {
-                        id: 11,
-                        text: 'Gujarat'
-                    },
-                    12: {
-                        id: 12,
-                        text: 'Haryana'
-                    },
-                    13: {
-                        id: 13,
-                        text: 'Himachal Pradesh'
-                    },
-                    14: {
-                        id: 14,
-                        text: 'Jammu and Kashmir'
-                    },
-                    15: {
-                        id: 15,
-                        text: 'Jharkhand'
-                    },
-                    16: {
-                        id: 16,
-                        text: 'Karnataka'
-                    },
-                    17: {
-                        id: 17,
-                        text: 'Kerala'
-                    },
-                    18: {
-                        id: 18,
-                        text: 'Lakshadweep'
-                    },
-                    19: {
-                        id: 19,
-                        text: 'Madhya Pradesh'
-                    },
-                    20: {
-                        id: 20,
-                        text: 'Maharashtra'
-                    },
-                    21: {
-                        id: 21,
-                        text: 'Manipur'
-                    },
-                    22: {
-                        id: 22,
-                        text: 'Meghalaya'
-                    },
-                    23: {
-                        id: 23,
-                        text: 'Mizoram'
-                    },
-                    24: {
-                        id: 24,
-                        text: 'Nagaland'
-                    },
-                    25: {
-                        id: 25,
-                        text: 'Odisha'
-                    },
-                    26: {
-                        id: 26,
-                        text: 'Punjab'
-                    },
-                    27: {
-                        id: 27,
-                        text: 'Pondicherry'
-                    },
-                    28: {
-                        id: 28,
-                        text: 'Rajasthan'
-                    },
-                    29: {
-                        id: 29,
-                        text: 'Sikkim'
-                    },
-                    30: {
-                        id: 30,
-                        text: 'Tamil Nadu'
-                    },
-                    31: {
-                        id: 31,
-                        text: 'Telangana'
-                    },
-                    32: {
-                        id: 32,
-                        text: 'Tripura'
-                    },
-                    33: {
-                        id: 33,
-                        text: 'Uttar Pradesh'
-                    },
-                    34: {
-                        id: 34,
-                        text: 'Uttarakhand'
-                    },
-                    35: {
-                        id: 35,
-                        text: 'West Bengal'
-                    }
-                };
-                var pick = $("#pickList").pickList({
-                    data: val
-                });
-                </script>
+		var val = {
+			01 : {
+				id : 01,
+				text : 'Andhra Pradesh'
+			},
+			02 : {
+				id : 02,
+				text : 'Andaman and Nicobar Islands'
+			},
+			03 : {
+				id : 03,
+				text : 'Arunachal Pradesh'
+			},
+			04 : {
+				id : 04,
+				text : 'Assam'
+			},
+			05 : {
+				id : 05,
+				text : 'Chhattisgarh'
+			},
+			06 : {
+				id : 06,
+				text : 'Chandigarh'
+			},
+			07 : {
+				id : 07,
+				text : 'Dadra and Nagar Haveli'
+			},
+			08 : {
+				id : 08,
+				text : 'Daman and Diu'
+			},
+			09 : {
+				id : 09,
+				text : 'Delhi'
+			},
+			10 : {
+				id : 10,
+				text : 'Goa'
+			},
+			11 : {
+				id : 11,
+				text : 'Gujarat'
+			},
+			12 : {
+				id : 12,
+				text : 'Haryana'
+			},
+			13 : {
+				id : 13,
+				text : 'Himachal Pradesh'
+			},
+			14 : {
+				id : 14,
+				text : 'Jammu and Kashmir'
+			},
+			15 : {
+				id : 15,
+				text : 'Jharkhand'
+			},
+			16 : {
+				id : 16,
+				text : 'Karnataka'
+			},
+			17 : {
+				id : 17,
+				text : 'Kerala'
+			},
+			18 : {
+				id : 18,
+				text : 'Lakshadweep'
+			},
+			19 : {
+				id : 19,
+				text : 'Madhya Pradesh'
+			},
+			20 : {
+				id : 20,
+				text : 'Maharashtra'
+			},
+			21 : {
+				id : 21,
+				text : 'Manipur'
+			},
+			22 : {
+				id : 22,
+				text : 'Meghalaya'
+			},
+			23 : {
+				id : 23,
+				text : 'Mizoram'
+			},
+			24 : {
+				id : 24,
+				text : 'Nagaland'
+			},
+			25 : {
+				id : 25,
+				text : 'Odisha'
+			},
+			26 : {
+				id : 26,
+				text : 'Punjab'
+			},
+			27 : {
+				id : 27,
+				text : 'Pondicherry'
+			},
+			28 : {
+				id : 28,
+				text : 'Rajasthan'
+			},
+			29 : {
+				id : 29,
+				text : 'Sikkim'
+			},
+			30 : {
+				id : 30,
+				text : 'Tamil Nadu'
+			},
+			31 : {
+				id : 31,
+				text : 'Telangana'
+			},
+			32 : {
+				id : 32,
+				text : 'Tripura'
+			},
+			33 : {
+				id : 33,
+				text : 'Uttar Pradesh'
+			},
+			34 : {
+				id : 34,
+				text : 'Uttarakhand'
+			},
+			35 : {
+				id : 35,
+				text : 'West Bengal'
+			}
+		};
+		var pick = $("#pickList").pickList({
+			data : val
+		});
+	</script>
 </body>
 </html>
