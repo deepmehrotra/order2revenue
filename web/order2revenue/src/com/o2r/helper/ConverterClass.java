@@ -1459,12 +1459,12 @@ public class ConverterClass {
 			double netTDSToBeDeposited = partnerBusiness.getTdsToBeDeposited();
 			double netPaymentResult = partnerBusiness.getNetPaymentResult();
 			double paymentDifference = partnerBusiness.getPaymentDifference();
-			double netTaxableSale = partnerBusiness.getOrderSP();
-			double netActualSale = partnerBusiness.getNetRate() - partnerBusiness.getGrossNetRate()*partnerBusiness.getReturnQuantity();
+			double netTaxableSale = partnerBusiness.getNetSP();
+			double netActualSale = partnerBusiness.getNetPaymentResult() - partnerBusiness.getPaymentDifference();
 			double netPrSale = partnerBusiness.getNetPr() - partnerBusiness.getNetPr()*(partnerBusiness.getReturnQuantity()/partnerBusiness.getGrossSaleQuantity());
 			double netTaxToBePaid = partnerBusiness.getNetTaxToBePaid();
 			double netEossDiscountPaid = 0;
-			double netRate = partnerBusiness.getNetRate();
+			double netRate = partnerBusiness.getGrossNetRate();
 			double netProductCost = partnerBusiness.getProductPrice();
 			double grossProfit = partnerBusiness.getGrossProfit();
 			if (partnerBusinessGraph == null) {

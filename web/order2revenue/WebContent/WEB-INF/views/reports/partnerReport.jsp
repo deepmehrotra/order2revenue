@@ -138,7 +138,7 @@
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getServiceTax" name="headers"> Service Tax </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getTaxSP" name="headers"> Tax(SP) </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getTaxPOPrice" name="headers"> Tax(PO Price) </label></div>
-		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossCommission" name="headers"> Gross Commission to be paid </label></div>
+		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossCommissionQty" name="headers"> Gross Commission to be paid </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getReturnCommision" name="headers"> Return Commision </label></div>
 		                            </div>
 		                            
@@ -197,7 +197,7 @@
 		                            <div class="col-md-3">
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getTaxSP" name="headers"> Tax(SP) </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getTaxPOPrice" name="headers"> Tax(PO Price) </label></div>
-		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossCommission" name="headers"> Gross Commission to be paid </label></div>
+		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossCommissionQty" name="headers"> Gross Commission to be paid </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getReturnCommision" name="headers"> Return Commision </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getAdditionalReturnCharges" name="headers"> Additional return Charges </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetPartnerCommissionPaid" name="headers"> Net Parnet Commission paid </label></div>

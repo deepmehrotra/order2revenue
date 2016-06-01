@@ -615,11 +615,11 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		prodcriteria.add(Restrictions.eq("productSkuCode",
 				currOrder.getProductSkuCode()));
 		List<Product> productList = prodcriteria.list();
+		double productCost = 0;
 		if (productList.size() > 0) {
 			Product currProduct = productList.get(0);
-			partnerBusiness.setProductCategory(currProduct
-					.getCategoryName());
-			partnerBusiness.setProductPrice(currProduct.getProductPrice()*quantity);
+			partnerBusiness.setProductCategory(currProduct.getCategoryName());
+			productCost = currProduct.getProductPrice();
 		}
 		
 		double tdsToBeDeposited = 0;
@@ -690,6 +690,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		}
 		if(quantity > 0)
 			grossReturnChargesReversed = netRate/quantity*returnQty;
+		partnerBusiness.setProductPrice(productCost*(quantity - returnQty));
 		partnerBusiness.setGrossReturnChargesReversed(grossReturnChargesReversed);
 		partnerBusiness.setTotalReturnCharges(grossReturnChargesReversed + netReturnCharges);
 		partnerBusiness.setOrderSP(orderSP);

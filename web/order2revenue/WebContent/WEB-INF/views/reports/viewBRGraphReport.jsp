@@ -462,7 +462,7 @@
 																			<td>${partner.partner}</td>
 																			<td>${partner.netSP}</td>
 																			<td>${partner.netPartnerCommissionPaid}</td>
-																			<td>${partner.netNetRate}</td>
+																			<td>${partner.netActualSale}</td>
 																			<td>${partner.netTaxToBePaid}</td>
 																			<td>${partner.netPrSale}</td>
 																			<td>${partner.netTDSToBeDeposited}</td>
@@ -504,7 +504,7 @@
 																			<td>${category.categoryName}</td>
 																			<td>${category.netSP}</td>
 																			<td>${category.netPartnerCommissionPaid}</td>
-																			<td>${category.netNetRate}</td>
+																			<td>${category.netActualSale}</td>
 																			<td>${category.netTaxToBePaid}</td>
 																			<td>${category.netPrSale}</td>
 																			<td>${category.netTDSToBeDeposited}</td>
