@@ -94,8 +94,7 @@ public class PartnerController {
 		if (partnerBean.getPcId() != 0) {
 			log.debug("******** ConfigId : "
 					+ partnerBean.getNrnReturnConfig().getConfigId());
-			log.debug("******** Partner ID : "
-					+ partnerBean.getPcId());
+			log.debug("******** Partner ID : " + partnerBean.getPcId());
 
 		}
 
@@ -104,8 +103,8 @@ public class PartnerController {
 		Map<String, String[]> parameters = request.getParameterMap();
 		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
 			if (entry.getKey().contains("nr-")) {
-				log.debug(" Key with nr: " + entry.getKey()
-						+ " Values is : " + entry.getValue()[0]);
+				log.debug(" Key with nr: " + entry.getKey() + " Values is : "
+						+ entry.getValue()[0]);
 			}
 		}
 		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
@@ -162,7 +161,7 @@ public class PartnerController {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
 		}
-		
+
 		if (image.getSize() != 0) {
 			if (image != null) {
 				if (!image.isEmpty()) {
@@ -191,7 +190,7 @@ public class PartnerController {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				log.error("Failed!",e);
+				log.error("Failed!", e);
 				result.reject(e.getMessage());
 				return new ModelAndView("redirect:/seller/partners.html");
 			}
@@ -202,7 +201,7 @@ public class PartnerController {
 					helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 
 		log.info("$$$ savePartner Ends : OrderController $$$");
@@ -211,7 +210,7 @@ public class PartnerController {
 
 	@RequestMapping(value = "/seller/listPartners", method = RequestMethod.GET)
 	public ModelAndView listAllPartners(HttpServletRequest request) {
-		
+
 		log.info("$$$ listAllPartners Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<PartnerBean> addedlist = null;
@@ -245,8 +244,7 @@ public class PartnerController {
 						helperClass.getSellerIdfromSession(request)) == null) {
 					String pcUrl = props.getProperty("partnerimage.view")
 							+ partner + ".jpg";
-					log.debug(" Pc logourl set to partner baen "
-							+ pcUrl);
+					log.debug(" Pc logourl set to partner baen " + pcUrl);
 					toAddPartner.add(new PartnerBean(partner, partner, pcUrl));
 				}
 			}
@@ -258,7 +256,7 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 		model.put("partners", addedlist);
 		model.put("partnertoadd", toAddPartner);
@@ -297,7 +295,7 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 		String partnerName = request.getParameter("partnerName");
 		try {
@@ -313,7 +311,7 @@ public class PartnerController {
 									.getSellerIdfromSession(request))));
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 		log.info("$$$ addPartner Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/addPartner", model);
@@ -331,7 +329,8 @@ public class PartnerController {
 		log.debug(" Nr calculayor value from bean : "
 				+ partnerBean.getNrnReturnConfig().isNrCalculator());
 
-		log.debug(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
+		log.debug(" Nr calculayor value from bean : "
+				+ partnerBean.getNrnReturnConfig().isNrCalculator());
 		partnerBean.setPcName("Jabong");
 
 		Map<String, String[]> parameters = request.getParameterMap();
@@ -355,7 +354,7 @@ public class PartnerController {
 				}
 			}
 		}
-		
+
 		if (!partnerBean.isIsshippeddatecalc()) {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
@@ -366,43 +365,38 @@ public class PartnerController {
 				try {
 					validateImage(image);
 
-
-					} catch (RuntimeException re) {
-						result.reject(re.getMessage());
-					}
+				} catch (RuntimeException re) {
+					result.reject(re.getMessage());
 				}
-			}		
+			}
+		}
 
 		try {
 			props = PropertiesLoaderUtils.loadProperties(resource);
 
-
-
-				if (!partnerList.contains(partnerBean.getPcName())) {
-					partnerBean.setPcLogoUrl(props
-							.getProperty("partnerimage.view")
-							+ helperClass.getSellerIdfromSession(request)
-							+ partnerBean.getPcName() + ".jpg");
-					saveImage(partnerBean.getPcName() + ".jpg", image);
-				} else {
-					partnerBean.setPcLogoUrl(props
-							.getProperty("partnerimage.view")
-							+ partnerBean.getPcName() + ".jpg");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				log.error("Failed!",e);
-				result.reject(e.getMessage());
-				return new ModelAndView("redirect:/seller/partners.html");
+			if (!partnerList.contains(partnerBean.getPcName())) {
+				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
+						+ helperClass.getSellerIdfromSession(request)
+						+ partnerBean.getPcName() + ".jpg");
+				saveImage(partnerBean.getPcName() + ".jpg", image);
+			} else {
+				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
+						+ partnerBean.getPcName() + ".jpg");
 			}
-					
-		try {			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+			result.reject(e.getMessage());
+			return new ModelAndView("redirect:/seller/partners.html");
+		}
+
+		try {
 
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
 			partnerService.addPartner(partner,
 					helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			e.printStackTrace();
 		}
 
@@ -420,13 +414,14 @@ public class PartnerController {
 		log.debug(" Nr calculayor value from bean : "
 				+ partnerBean.getNrnReturnConfig().isNrCalculator());
 
-		log.debug(" Nr calculayor value from bean : "+partnerBean.getNrnReturnConfig().isNrCalculator());
+		log.debug(" Nr calculayor value from bean : "
+				+ partnerBean.getNrnReturnConfig().isNrCalculator());
 		partnerBean.setPcName("Myntra");
 
 		Map<String, String[]> parameters = request.getParameterMap();
 		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
-			log.debug(" Request Param: " + entry.getKey()
-					+ "  Values  : " + entry.getValue().length);
+			log.debug(" Request Param: " + entry.getKey() + "  Values  : "
+					+ entry.getValue().length);
 
 			if (entry.getKey() != null && !entry.getKey().isEmpty())
 				log.debug(" Print : " + entry.getValue()[0]);
@@ -441,7 +436,8 @@ public class PartnerController {
 						nrnReturncharge.setChargeName(temp);
 					} catch (NumberFormatException e) {
 						nrnReturncharge.setChargeAmount(1);
-						nrnReturncharge.setChargeName(temp + GlobalConstant.TaxCategoryPrefix
+						nrnReturncharge.setChargeName(temp
+								+ GlobalConstant.TaxCategoryPrefix
 								+ entry.getValue()[0]);
 					}
 					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
@@ -458,42 +454,39 @@ public class PartnerController {
 			if (!image.isEmpty()) {
 				try {
 					validateImage(image);
-					} catch (RuntimeException re) {
-						re.printStackTrace();
-						log.error("Failed!",re);
-						result.reject(re.getMessage());
-					}
+				} catch (RuntimeException re) {
+					re.printStackTrace();
+					log.error("Failed!", re);
+					result.reject(re.getMessage());
 				}
 			}
+		}
 		try {
 			props = PropertiesLoaderUtils.loadProperties(resource);
 
-
-				if (!partnerList.contains(partnerBean.getPcName())) {
-					partnerBean.setPcLogoUrl(props
-							.getProperty("partnerimage.view")
-							+ helperClass.getSellerIdfromSession(request)
-							+ partnerBean.getPcName() + ".jpg");
-					saveImage(partnerBean.getPcName() + ".jpg", image);
-				} else {
-					partnerBean.setPcLogoUrl(props
-							.getProperty("partnerimage.view")
-							+ partnerBean.getPcName() + ".jpg");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				log.error("Failed!",e);
-				result.reject(e.getMessage());
-				return new ModelAndView("redirect:/seller/partners.html");
+			if (!partnerList.contains(partnerBean.getPcName())) {
+				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
+						+ helperClass.getSellerIdfromSession(request)
+						+ partnerBean.getPcName() + ".jpg");
+				saveImage(partnerBean.getPcName() + ".jpg", image);
+			} else {
+				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
+						+ partnerBean.getPcName() + ".jpg");
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+			result.reject(e.getMessage());
+			return new ModelAndView("redirect:/seller/partners.html");
+		}
 
-		try {			
+		try {
 
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
 			partnerService.addPartner(partner,
 					helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			e.printStackTrace();
 		}
 
@@ -521,9 +514,9 @@ public class PartnerController {
 			for (Category cat : categoryObjects) {
 				categoryList.add(cat.getCatName());
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 		String partnerName = request.getParameter("partnerName");
 		try {
@@ -535,7 +528,7 @@ public class PartnerController {
 			model.put("datemap", datemap);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 		log.info("$$$ addJabong Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/addJabong", model);
@@ -550,7 +543,6 @@ public class PartnerController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
-		Map<String, Float> commissionMap = new HashMap<String, Float>();
 		List<String> taxCategoryList = new ArrayList<String>();
 		List<Category> categoryObjects = null;
 		List<TaxCategory> taxCategoryObjects = null;
@@ -564,7 +556,6 @@ public class PartnerController {
 			if (categoryObjects != null && categoryObjects.size() > 0) {
 				for (Category cat : categoryObjects) {
 					categoryList.add(cat.getCatName());
-					commissionMap.put(cat.getCatName(), 0.0F);
 				}
 			}
 			taxCategoryObjects = taxDetailService.listTaxCategories(helperClass
@@ -581,14 +572,13 @@ public class PartnerController {
 		 * ce.getErrorCode()); return new ModelAndView("globalErorPage", model);
 		 * }
 		 */catch (Exception e) {
-			 e.printStackTrace();
-			log.error("Failed!",e);
+			e.printStackTrace();
+			log.error("Failed!", e);
 		}
-		
+
 		try {
 			model.put("partner", partner);
 			model.put("categoryList", categoryList);
-			model.put("commissionMap", commissionMap);
 			model.put("taxCategoryList", taxCategoryList);
 			model.put("datemap", datemap);
 			model.put("partners", ConverterClass
@@ -597,7 +587,7 @@ public class PartnerController {
 									.getSellerIdfromSession(request))));
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 		log.info("$$$ addMyntra Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/addMyntra", model);
@@ -609,7 +599,7 @@ public class PartnerController {
 	public ModelAndView addPartnertest(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ addPartnertest Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		PartnerBean partner = new PartnerBean();
@@ -629,7 +619,7 @@ public class PartnerController {
 									.getSellerIdfromSession(request))));
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 		log.info("$$$ addPartnertest Ends : OrderController $$$");
 		return new ModelAndView("addPartner", model);
@@ -644,7 +634,7 @@ public class PartnerController {
 	public ModelAndView deletePartner(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ deletePartner Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -661,7 +651,7 @@ public class PartnerController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 		log.info("$$$ deletePartner Ends : OrderController $$$");
 		return new ModelAndView("addPartner", model);
@@ -678,6 +668,12 @@ public class PartnerController {
 		PartnerBean pbean = null;
 		Map<String, Float> chargeMap = new HashMap<String, Float>();
 		Map<String, Float> categoryMap = new HashMap<String, Float>();
+		
+		Map<String, String> chargesMap = new HashMap<String, String>();
+		Map<String, Float> commissionMap = new HashMap<String, Float>();
+		Map<String, String> taxSpMap = new HashMap<String, String>();
+		Map<String, String> taxPoMap = new HashMap<String, String>();
+		
 		List<Category> categoryObjects = null;
 		try {
 			datemap.put("true", "Select payment from");
@@ -687,10 +683,49 @@ public class PartnerController {
 			pbean = ConverterClass.preparePartnerBean(partnerService
 					.getPartner(partnerBean.getPcId()));
 			log.debug("********** Inside edit partner : config ID :"
-							+ pbean.getNrnReturnConfig().getConfigId());
+					+ pbean.getNrnReturnConfig().getConfigId());
 			for (NRnReturnCharges charge : pbean.getNrnReturnConfig()
 					.getCharges()) {
-				chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
+
+				if (pbean.getPcName().equalsIgnoreCase(GlobalConstant.PCMYNTRA)
+						|| pbean.getPcName().equalsIgnoreCase(
+								GlobalConstant.PCJABONG)) {
+					if (charge.getChargeName().contains(
+							GlobalConstant.TaxCategoryPrefix)) {
+						String[] split = charge.getChargeName().split(
+								GlobalConstant.TaxCategoryPrefix);
+						String firstSubString = split[0];
+						String secondSubString = split[1];
+						if (firstSubString.contains(GlobalConstant.TaxSPPrefix)) {
+							String key = firstSubString
+									.substring(GlobalConstant.TaxSPPrefix
+											.length());
+							taxSpMap.put(key, secondSubString);
+						} else if (firstSubString
+								.contains(GlobalConstant.TaxPOPrefix)) {
+							String key = firstSubString
+									.substring(GlobalConstant.TaxPOPrefix
+											.length());
+							taxPoMap.put(key, secondSubString);
+						} else {
+							chargesMap.put(firstSubString, secondSubString);
+						}
+					} else {
+						if (charge.getChargeName().contains(
+								GlobalConstant.CommPOPrefix)) {
+							String key = charge.getChargeName().substring(
+									GlobalConstant.CommPOPrefix.length());
+							commissionMap.put(key, charge.getChargeAmount());
+						} else {
+							chargesMap.put(charge.getChargeName(),
+									String.valueOf(charge.getChargeAmount()));
+						}
+					}
+
+				} else {
+					chargeMap.put(charge.getChargeName(),
+							charge.getChargeAmount());
+				}
 			}
 
 			categoryObjects = categoryService.listCategories(helperClass
@@ -716,14 +751,20 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			log.error("editPartner exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());
 
 		}
-		log.info("$$$ viewPartner Ends : OrderController $$$");
-		if (pbean.getPcName().equalsIgnoreCase(GlobalConstant.PCMYNTRA) ||
-				pbean.getPcName().equalsIgnoreCase(GlobalConstant.PCJABONG)) {
+
+		if (pbean.getPcName().equalsIgnoreCase(GlobalConstant.PCMYNTRA)
+				|| pbean.getPcName().equalsIgnoreCase(GlobalConstant.PCJABONG)) {
+
+			model.put("chargesMap", chargesMap);
+			model.put("commissionMap", commissionMap);
+			model.put("taxSpMap", taxSpMap);
+			model.put("taxPoMap", taxPoMap);
+
 			return new ModelAndView("initialsetup/viewPOPartner", model);
 		} else {
 			return new ModelAndView("initialsetup/viewPartner", model);
@@ -734,7 +775,7 @@ public class PartnerController {
 	public ModelAndView editPartner(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ editPartner Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
@@ -751,7 +792,7 @@ public class PartnerController {
 			pbean = ConverterClass.preparePartnerBean(partnerService
 					.getPartner(partnerBean.getPcId()));
 			log.debug("************** Inside edit partner : config ID :"
-							+ pbean.getNrnReturnConfig().getConfigId());
+					+ pbean.getNrnReturnConfig().getConfigId());
 			for (NRnReturnCharges charge : pbean.getNrnReturnConfig()
 					.getCharges()) {
 				chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
@@ -774,7 +815,7 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("FAiled!",e);
+			log.error("FAiled!", e);
 			log.error("editPartner exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());
 
@@ -787,12 +828,12 @@ public class PartnerController {
 	public ModelAndView editMyntra(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ editPartner Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
 		PartnerBean pbean = null;
-		Map<String, Float> chargesMap = new HashMap<String, Float>();
+		Map<String, String> chargesMap = new HashMap<String, String>();
 		Map<String, Float> commissionMap = new HashMap<String, Float>();
 		Map<String, String> taxSpMap = new HashMap<String, String>();
 		Map<String, String> taxPoMap = new HashMap<String, String>();
@@ -809,26 +850,36 @@ public class PartnerController {
 			pbean = ConverterClass.preparePartnerBean(partnerService
 					.getPartner(partnerBean.getPcId()));
 			log.debug("************** Inside edit partner : config ID :"
-							+ pbean.getNrnReturnConfig().getConfigId());
+					+ pbean.getNrnReturnConfig().getConfigId());
 			for (NRnReturnCharges charge : pbean.getNrnReturnConfig()
 					.getCharges()) {
-				if (charge.getChargeName().contains(GlobalConstant.TaxCategoryPrefix)) {
-					String[] split = charge.getChargeName().split(GlobalConstant.TaxCategoryPrefix);
+				if (charge.getChargeName().contains(
+						GlobalConstant.TaxCategoryPrefix)) {
+					String[] split = charge.getChargeName().split(
+							GlobalConstant.TaxCategoryPrefix);
 					String firstSubString = split[0];
 					String secondSubString = split[1];
 					if (firstSubString.contains(GlobalConstant.TaxSPPrefix)) {
-						String key = firstSubString.substring(GlobalConstant.TaxSPPrefix.length());
-						taxSpMap.put(key,secondSubString);
+						String key = firstSubString
+								.substring(GlobalConstant.TaxSPPrefix.length());
+						taxSpMap.put(key, secondSubString);
+					} else if (firstSubString
+							.contains(GlobalConstant.TaxPOPrefix)) {
+						String key = firstSubString
+								.substring(GlobalConstant.TaxPOPrefix.length());
+						taxPoMap.put(key, secondSubString);
 					} else {
-						String key = firstSubString.substring(GlobalConstant.TaxPOPrefix.length());
-						taxPoMap.put(key,secondSubString);
+						chargesMap.put(firstSubString, secondSubString);
 					}
 				} else {
-					if (charge.getChargeName().contains(GlobalConstant.CommPOPrefix)) {
-						String key = charge.getChargeName().substring(GlobalConstant.CommPOPrefix.length());
-						commissionMap.put(key,charge.getChargeAmount());
+					if (charge.getChargeName().contains(
+							GlobalConstant.CommPOPrefix)) {
+						String key = charge.getChargeName().substring(
+								GlobalConstant.CommPOPrefix.length());
+						commissionMap.put(key, charge.getChargeAmount());
 					} else {
-						chargesMap.put(charge.getChargeName(), charge.getChargeAmount());
+						chargesMap.put(charge.getChargeName(),
+								String.valueOf(charge.getChargeAmount()));
 					}
 				}
 			}
@@ -862,7 +913,7 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("FAiled!",e);
+			log.error("FAiled!", e);
 			log.error("editPartner exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());
 
@@ -870,12 +921,12 @@ public class PartnerController {
 		log.info("$$$ editPartner Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/addMyntra", model);
 	}
-	
+
 	@RequestMapping(value = "/seller/editJabong", method = RequestMethod.GET)
 	public ModelAndView editJabong(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ editPartner Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
@@ -892,7 +943,7 @@ public class PartnerController {
 			pbean = ConverterClass.preparePartnerBean(partnerService
 					.getPartner(partnerBean.getPcId()));
 			log.debug("************** Inside edit partner : config ID :"
-							+ pbean.getNrnReturnConfig().getConfigId());
+					+ pbean.getNrnReturnConfig().getConfigId());
 			for (NRnReturnCharges charge : pbean.getNrnReturnConfig()
 					.getCharges()) {
 				chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
@@ -915,7 +966,7 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("FAiled!",e);
+			log.error("FAiled!", e);
 			log.error("editPartner exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());
 
@@ -923,9 +974,9 @@ public class PartnerController {
 		log.info("$$$ editPartner Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/addJabong", model);
 	}
-	
+
 	private void validateImage(MultipartFile image) {
-		
+
 		log.info("$$$ validateImage Starts : OrderController $$$");
 		if (!image.getContentType().equals("image/jpeg")) {
 			log.info("$$$ validateImage Error : OrderController $$$");
@@ -935,7 +986,7 @@ public class PartnerController {
 
 	private void saveImage(String filename, MultipartFile image)
 			throws RuntimeException, IOException {
-		
+
 		log.info("$$$ saveImage Starts : OrderController $$$");
 		try {
 			String catalinabase = System.getProperty("catalina.base");
@@ -950,13 +1001,12 @@ public class PartnerController {
 					+ props.getProperty("partnerimage.path"));
 			File file = new File(catalinabase
 					+ props.getProperty("partnerimage.path") + filename);
-			log.debug(" context.getRealPath(/) "
-					+ context.getRealPath("/"));
+			log.debug(" context.getRealPath(/) " + context.getRealPath("/"));
 			log.debug(" Path to save file : " + file.toString());
 			FileUtils.writeByteArrayToFile(file, image.getBytes());
 			log.debug("Go to the location:  "
-							+ file.toString()
-							+ " on your computer and verify that the image has been stored.");
+					+ file.toString()
+					+ " on your computer and verify that the image has been stored.");
 		} catch (IOException e) {
 			e.printStackTrace();
 			log.error(e.getCause());
@@ -968,7 +1018,7 @@ public class PartnerController {
 	public @ResponseBody String getCheckPartner(HttpServletRequest request,
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result, Model model) {
-		
+
 		log.info("$$$ getCheckPartner Starts : OrderController $$$");
 		log.debug(request.getParameter("partner"));
 		try {
@@ -984,7 +1034,7 @@ public class PartnerController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			return "Error";
 		}
 	}

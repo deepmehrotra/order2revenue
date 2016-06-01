@@ -14,6 +14,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.o2r.helper.GlobalConstant;
 import com.o2r.helper.Layouter;
 import com.o2r.helper.Writer;
 
@@ -234,7 +235,7 @@ public class DownloadService {
 		FileInputStream file = new FileInputStream(new File(pathvalue));
 		HSSFWorkbook workbook = new HSSFWorkbook(file);
 		HSSFSheet worksheet = workbook.createSheet("UploadReport");
-		String fileName = "UploadReport.xls";
+		String fileName = pathvalue.substring(pathvalue.lastIndexOf(File.separator) + File.separator.length());
 		response.setHeader("Content-Disposition", "inline; filename="
 				+ fileName);
 		response.setContentType("application/vnd.ms-excel");
