@@ -264,7 +264,7 @@
 	<script src="/O2R/seller/js/plugins/morris/raphael-2.1.0.min.js"></script>
 	<script src="/O2R/seller/js/plugins/morris/morris.js"></script>
 
-	<!-- Morris demo data-->
+	<!-- Highchart Custom -->
 	<script src="/O2R/seller/js/demo/highchart-demo.js"></script>
 
 	<!-- ChartJS-->
@@ -279,9 +279,7 @@
 	<script
 		src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
 	<script>
-		//Script for Bar Chart
-		
-		
+		//Script for Bar Chart	
 		
 		var dataArr = [];
 		var yAxisText = 'Net Sale SP vs N/R vs P/R Graph';
