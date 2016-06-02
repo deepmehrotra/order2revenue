@@ -118,7 +118,7 @@ public class ManualChargesController {
 			return errors;
 		}catch(Exception e){
 			log.error(e);
-			log.info("Error :",e);
+			log.error("Failed!",e);
 		}
 		String jsonArray = gson.toJson(model);
 		log.info("$$$ saveManualChargesJson Ends : ManualChargesController $$$");

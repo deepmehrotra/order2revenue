@@ -78,7 +78,7 @@ public class EventsDaoImpl implements EventsDao {
 			session.flush();
 			session.close();
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.addEventError,new Date(), 1, GlobalConstant.addEventErrorCode, e);
 		}		
@@ -98,7 +98,7 @@ public class EventsDaoImpl implements EventsDao {
 			if(event.getNrnReturnConfig()!=null)
 				Hibernate.initialize(event.getNrnReturnConfig().getCharges());
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.getEventError,new Date(), 3, GlobalConstant.getEventErrorCode, e);
 		}finally{
@@ -129,7 +129,7 @@ public class EventsDaoImpl implements EventsDao {
 					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			returnList=criteria.list();
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.getEventError,new Date(), 3, GlobalConstant.getEventErrorCode, e);
 		}
@@ -153,7 +153,7 @@ public class EventsDaoImpl implements EventsDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.listEventError,new Date(), 3, GlobalConstant.listEventErrorCode, e);
 		}
@@ -184,7 +184,7 @@ public class EventsDaoImpl implements EventsDao {
 				
 				returnlist = criteria.list();			
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.listEventError,new Date(), 3, GlobalConstant.listEventErrorCode, e);
 		}
@@ -214,7 +214,7 @@ public class EventsDaoImpl implements EventsDao {
 				}
 			}
 		}catch(Exception e){
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 		}
 		
@@ -238,7 +238,7 @@ public class EventsDaoImpl implements EventsDao {
 				event=(Events)eventList.get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getEventError,new Date(), 3, GlobalConstant.getEventErrorCode, e);
 		}finally{
 			if(session != null){
@@ -273,7 +273,7 @@ public class EventsDaoImpl implements EventsDao {
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 		}finally{
 			if(session != null)
 				session.close();

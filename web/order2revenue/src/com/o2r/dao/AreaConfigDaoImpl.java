@@ -47,7 +47,7 @@ public class AreaConfigDaoImpl implements AreaConfigDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 		}
 		log.info("*** listCountryStates ends***");
 		return stateNames;
@@ -74,7 +74,7 @@ public class AreaConfigDaoImpl implements AreaConfigDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 		}
 		log.info("*** getStateFromZipCode ends***");
 		return returnState;
@@ -98,7 +98,7 @@ public class AreaConfigDaoImpl implements AreaConfigDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 		}
 		log.info("*** getCityFromZipCode starts***");
 		return returnCity;
@@ -120,7 +120,7 @@ public class AreaConfigDaoImpl implements AreaConfigDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 		}
 		log.info("***getStateFromCity ends*** ");
 		return returnCity;

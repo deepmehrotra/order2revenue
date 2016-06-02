@@ -57,7 +57,7 @@ public class PaymentUploadDaoImpl implements PaymentUploadDao{
 		    session.close();
 		   }
 		   catch (Exception e) {
-			   log.error(e);
+			   log.error("Failed!",e);
 			   e.printStackTrace();
 			   throw new CustomException(GlobalConstant.addPaymentUploadError, new Date(), 1, GlobalConstant.addPaymentUploadErrorCode, e);
 			   
@@ -87,7 +87,7 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomExceptio
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.listPaymentUploadError, new Date(), 1, GlobalConstant.listPaymentUploadErrorCode, e);
 		}
 		log.info("*** listPaymentUploads Ends : PaymentUploadDaoImpl ****");
@@ -110,8 +110,8 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomExceptio
 		}
 		catch(Exception e)
 		{
+			log.error("Failed!",e);
 			e.printStackTrace();
-			log.error(e);
 			throw new CustomException(GlobalConstant.getPaymentUploadError, new Date(), 3, GlobalConstant.getPaymentUploadErrorCode, e);
 		}
 		log.info("*** getPaymentUpload Ends : PaymentUploadDaoImpl ****");
@@ -149,8 +149,8 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomExceptio
 		}
 		catch(Exception e)
 		{
+			log.error("Failed!",e);
 			e.printStackTrace();
-			log.error(e);
 			throw new CustomException(GlobalConstant.getManualPaymentError, new Date(), 3, GlobalConstant.getManualPaymentErrorCode, e);
 		}
 		log.info("*** getManualPayment Ends : PaymentUploadDaoImpl ****");
@@ -181,7 +181,7 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomExceptio
 	 catch(Exception e)
 	 {
 		 e.printStackTrace();
-		 log.error(e);
+		 log.error("Failed!",e);
 		 log.debug(" Inside delleting order"+e.getLocalizedMessage());		 
 	 }
 	 log.info("*** deletePaymentUpload Ends : PaymentUploadDaoImpl ****");

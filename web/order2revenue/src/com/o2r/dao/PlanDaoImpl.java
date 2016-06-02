@@ -45,7 +45,7 @@ public class PlanDaoImpl implements PlanDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.addPlanError, new Date(), 1, GlobalConstant.addPlanErrorCode, e);			
 		}
 		log.info("*** addPlan exit ***");
@@ -60,7 +60,7 @@ public class PlanDaoImpl implements PlanDao {
 		plans=(List<Plan>) sessionFactory.getCurrentSession().createCriteria(Plan.class).list();
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.listPlansError, new Date(), 3, GlobalConstant.listPlansErrorCode, e);
 		}
 		log.info("*** listPlans exit ***");
@@ -76,7 +76,7 @@ public class PlanDaoImpl implements PlanDao {
 		plan=(Plan) sessionFactory.getCurrentSession().get(Plan.class, pid);
 		}catch (Exception e){
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getPlanError, new Date(), 3, GlobalConstant.getPlanErrorCode, e);
 		}
 		log.info("*** getPlan exit ***");
@@ -100,7 +100,7 @@ public class PlanDaoImpl implements PlanDao {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.deletePlanError, new Date(), 3, GlobalConstant.deletePlanErrorCode, e);
 			
 		} finally {

@@ -297,6 +297,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			System.out.println("Inside exception  " + e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -345,8 +346,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			log.debug("Final Net sale Qty : quantity "+quantity+" returnQty "+returnQty);
 			System.out.println("Final Net sale Qty : quantity "+quantity+" returnQty "+returnQty);
 		} catch (Exception e) {
-			log.error("Inside exception netsaleQauntity "+ e.getLocalizedMessage());
-			log.error("Error in Getting sale quanittyt : ",e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 		}
 		log.info("***netSaleQtyforTime ends***");
@@ -454,6 +454,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					+ totalExpenses);
 			
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside exception  " + e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -509,6 +510,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside payment count exception  "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -558,6 +560,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside exception orderCountforTimeDaily "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -609,6 +612,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}			
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside upcomingpayment exception  "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -659,6 +663,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside upcomingpayment exception  "	+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -793,6 +798,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside exception  " + e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -820,6 +826,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				totalCustomer = results.get(0);				
 			}			
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside exception getTotalCustomer "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -849,6 +856,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			}
 			
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside exception totalSkuCount "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -863,6 +871,7 @@ public class DashboardDaoImpl implements DashboardDao {
 		try {
 			taxList = taxDetailService.listTaxDetails(sellerId, "Tax");			
 		} catch (CustomException e) {
+			log.error("Failed!",e);
 			e.printStackTrace();
 		}
 		log.info("***getTaxAlert ends***");
@@ -891,6 +900,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				taxList = seller.getTaxDetails();
 			}
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside exception  getTDSAlert "	+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -930,6 +940,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside expeses mnthly exception  "
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
@@ -977,6 +988,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}			
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside exception  topSellingRegion "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -1034,6 +1046,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}			
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside exception  " + e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -1076,6 +1089,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside exception expenseGroupByCatForTime  "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -1106,6 +1120,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				totalExpenses = Double.parseDouble(results.get(0).toString());
 			log.debug(" totalExpenses : " + totalExpenses);
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside exception totalExpenseForTime "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -1149,6 +1164,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside exception  " + e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -1190,6 +1206,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside paymentCount exception  "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -1217,6 +1234,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				count = countBigInt.longValue();				
 			}
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside pcount exception  "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -1243,6 +1261,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				log.debug("Double" + sum);
 			}
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside pcount exception  "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -1306,6 +1325,7 @@ public class DashboardDaoImpl implements DashboardDao {
 				log.debug("Double" + sum);
 			}
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside pcount exception  "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -1350,6 +1370,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			returnList.add(nrMAp);
 			returnList.add(quantityMAp);
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside exception  " + e.getLocalizedMessage());
 			e.printStackTrace();
 		}
@@ -1439,6 +1460,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			returnList.add(returnAMountMAp);
 			returnList.add(quantityMAp);
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			log.debug("Inside exception  " + e.getLocalizedMessage());
 			e.printStackTrace();
 		}

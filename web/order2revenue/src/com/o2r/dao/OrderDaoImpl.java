@@ -373,14 +373,14 @@ public class OrderDaoImpl implements OrderDao {
 							+ e.getLocalizedMessage() + " message: "
 							+ e.getMessage());
 					e.printStackTrace();
-					log.error(e);
+					log.error("Failed!",e);
 				} finally {
 					session.close();
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
@@ -519,7 +519,7 @@ public class OrderDaoImpl implements OrderDao {
 					 * session.getTransaction().commit(); session.close();
 					 */
 				} catch (Exception e) {
-					log.error(e);
+					log.error("Failed!",e);
 					log.debug("Inside exception in add order "
 							+ e.getLocalizedMessage() + " message: "
 							+ e.getMessage());
@@ -532,7 +532,7 @@ public class OrderDaoImpl implements OrderDao {
 			return order;
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
@@ -556,7 +556,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.listOrderError,
 					new Date(), 3, GlobalConstant.listOrderErrorCode, e);
 		}
@@ -589,7 +589,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.listOrdersError,
 					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
 
@@ -625,7 +625,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.listOrdersError,
 					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
 		}
@@ -652,7 +652,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getOrderError, new Date(),
 					3, GlobalConstant.getOrderErrorCode, e);
 
@@ -692,7 +692,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getOrderError, new Date(),
 					3, GlobalConstant.getOrderErrorCode, e);
 
@@ -731,7 +731,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getOrderError, new Date(),
 					3, GlobalConstant.getOrderErrorCode, e);
 		}
@@ -778,7 +778,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.findOrdersError,
 					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 		}
@@ -809,7 +809,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.deleteOrderError,
 					new Date(), 3, GlobalConstant.deleteOrderErrorCode, e);
 		}
@@ -992,7 +992,7 @@ public class OrderDaoImpl implements OrderDao {
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.addReturnOrderError,
 					new Date(), 1, GlobalConstant.addReturnOrderErrorCode, e);
 
@@ -1079,7 +1079,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	        } catch (Exception e) {
 	            e.printStackTrace();
-	            log.error(e);
+	            log.error("Failed!",e);
 	            throw new CustomException(GlobalConstant.findOrdersError,
 	                    new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 
@@ -1130,7 +1130,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.findOrdersbyDateError,
 					new Date(), 2, GlobalConstant.findOrdersbyDateErrorCode, e);
 
@@ -1170,7 +1170,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(
 					GlobalConstant.findOrdersbyPaymentDateError, new Date(), 2,
 					GlobalConstant.findOrdersbyPaymentDateErrorCode, e);
@@ -1212,7 +1212,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 			throw new CustomException(
 					GlobalConstant.findOrdersbyReturnDateError, new Date(), 2,
@@ -1257,7 +1257,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(
 					GlobalConstant.findOrdersbyCustomerDetailsError,
 					new Date(), 2,
@@ -1435,7 +1435,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.addOrderPaymentError,
 					new Date(), 1, GlobalConstant.addOrderPaymentErrorCode, e);
 
@@ -1622,7 +1622,7 @@ public class OrderDaoImpl implements OrderDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.addOrderPaymentError,
 					new Date(), 1, GlobalConstant.addOrderPaymentErrorCode, e);
 
@@ -1694,7 +1694,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.addDebitNoteError,
 					new Date(), 1, GlobalConstant.addDebitNoteErrorCode, e);
 		}
@@ -1778,7 +1778,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.addPOPaymentError,
 					new Date(), 1, GlobalConstant.addPOPaymentErrorCode, e);
 		}
@@ -1903,7 +1903,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 		}
 		log.debug(" ORder delivery date in rec : " + order.getDeliveryDate());
 		log.info("*** getreconciledate ends : OrderDaoImpl ***");
@@ -3348,7 +3348,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.debug("Inside exception in add order "
 					+ e.getLocalizedMessage() + " message: " + e.getMessage());
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
@@ -3378,7 +3378,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.debug("Inside exception in add order "
 					+ e.getLocalizedMessage() + " message: " + e.getMessage());
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
@@ -3437,7 +3437,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.findOrdersError,
 					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 
@@ -3487,7 +3487,7 @@ public class OrderDaoImpl implements OrderDao {
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.addReturnOrderError,
 					new Date(), 1, GlobalConstant.addReturnOrderErrorCode, e);
 		}
@@ -3529,7 +3529,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.listOrdersError,
 					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
 		}
@@ -3681,7 +3681,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.debug("Inside exception in generateConsolidatedReturn "
 					+ e.getLocalizedMessage() + " message: " + e.getMessage());
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
@@ -3712,7 +3712,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.debug("Inside exception in update gatepass "
 					+ e.getLocalizedMessage() + " message: " + e.getMessage());
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
 					1, GlobalConstant.addOrderErrorCode, e);
 		} finally {
@@ -3766,7 +3766,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.findOrdersError,
 					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 

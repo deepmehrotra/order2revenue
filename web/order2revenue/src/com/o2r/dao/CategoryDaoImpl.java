@@ -74,7 +74,7 @@ public void addCategory(Category category,int sellerId) throws CustomException {
 	   catch (Exception e) {
 		   e.printStackTrace();
 		   log.equals("**Error Code : "+(sellerId+"-"+GlobalConstant.addCategoryErrorCode));
-		   log.error(e);
+		   log.error("Failed!",e);
 		   throw new CustomException(GlobalConstant.addCategoryError, new Date(),1,sellerId+"-"+GlobalConstant.addCategoryErrorCode, e);
 
 	   }
@@ -110,7 +110,7 @@ public List<Category> listCategories(int sellerId) throws CustomException {
 	{
 		e.printStackTrace();
 		log.equals("**Error Code : "+(sellerId+"-"+GlobalConstant.listCategoryErrorCode));
-		log.error(e);
+		log.error("Failed!",e);
 		throw new CustomException(GlobalConstant.listCategoryError, new Date(),3,(sellerId+"-"+GlobalConstant.listCategoryErrorCode), e);
 	}
 	log.info("***listCategories Exit****");
@@ -146,7 +146,7 @@ public List<Category> listParentCategories(int sellerId) throws CustomException 
 	{
 		e.printStackTrace();
 		log.equals("**Error Code : "+(sellerId+"-"+GlobalConstant.listInventoryGroupErrorCode));
-		log.error(e);
+		log.error("Failed!",e);
 		throw new CustomException(GlobalConstant.listInventoryGroupError, new Date(),3, (sellerId+"-"+GlobalConstant.listInventoryGroupErrorCode),e);
 	}
 	log.info("***listParentCategories End****");
@@ -197,7 +197,7 @@ public List<Long> getSKuCount(String catname ,int catId ,int sellerId) throws Cu
 	{
 		e.printStackTrace();
 		log.equals("**Error Code : "+(sellerId+"-"+GlobalConstant.getSKUCountErrorCode));
-		log.error(e);
+		log.error("Failed!",e);
 		throw new CustomException(GlobalConstant.getSKUCountError, new Date(),3,(sellerId+"-"+GlobalConstant.getSKUCountErrorCode), e);
 	}
 	finally
@@ -244,7 +244,7 @@ public Category getCategory(String catname ,int sellerId) throws CustomException
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.getCategorywithNameErrorCode));
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getCategorywithNameError,new Date(),3,(sellerId + "-" + GlobalConstant.getCategorywithNameErrorCode),e);
 		}
 		log.info("***getCategory Exit****");
@@ -281,7 +281,7 @@ public Category getSubCategory(String catname ,int sellerId) throws CustomExcept
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.getCategorywithNameErrorCode));
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getCategorywithNameError,new Date(),3,(sellerId + "-" + GlobalConstant.getCategorywithNameErrorCode),e);
 		}
 		log.info("***getCategory Exit****");
@@ -329,7 +329,7 @@ public int deleteCategory(Category category,int sellerId) throws CustomException
 	 {
 		 e.printStackTrace();
 		 log.equals("**Error Code : "+(sellerId+"-"+GlobalConstant.deleteCategoryErrorCode));
-		 log.error(e);
+		 log.error("Failed!",e);
 		 throw new CustomException(GlobalConstant.deleteCategoryError, new Date(),2,(sellerId+"-"+GlobalConstant.deleteCategoryErrorCode), e);
 	 }
 	 finally

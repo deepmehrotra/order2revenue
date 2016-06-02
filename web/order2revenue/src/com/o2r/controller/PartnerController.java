@@ -169,6 +169,7 @@ public class PartnerController {
 						validateImage(image);
 
 					} catch (RuntimeException re) {
+						log.error("Failed!",re);
 						result.reject(re.getMessage());
 					}
 				}
@@ -218,6 +219,7 @@ public class PartnerController {
 			addedlist = ConverterClass.prepareListofPartnerBean(partnerService
 					.listPartners(helperClass.getSellerIdfromSession(request)));
 		} catch (Exception e) {
+			log.error("Failed!",e);
 			e.printStackTrace();
 			log.error(e.getCause());
 		}
@@ -366,6 +368,7 @@ public class PartnerController {
 					validateImage(image);
 
 				} catch (RuntimeException re) {
+					log.error("Failed!",re);
 					result.reject(re.getMessage());
 				}
 			}
@@ -648,7 +651,7 @@ public class PartnerController {
 							.listPartners(helperClass
 									.getSellerIdfromSession(request))));
 		} catch (CustomException ce) {
-
+			log.error("Failed!",ce);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed!", e);
@@ -913,7 +916,7 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("FAiled!", e);
+			log.error("Failed!", e);
 			log.error("editPartner exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());
 

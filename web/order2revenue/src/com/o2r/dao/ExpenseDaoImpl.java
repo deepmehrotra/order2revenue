@@ -66,7 +66,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
 			
 		} catch (Exception e) {
 			session.getTransaction().rollback();
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();			
 			throw new CustomException(GlobalConstant.addExpenseError,new Date(), 1, GlobalConstant.addExpenseErrorCode, e);
 		} finally {
@@ -112,7 +112,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
 			}
 
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.getMonthlyAmountError,	new Date(), 3, GlobalConstant.getMonthlyAmountErrorCode, e);
 		} finally {
@@ -144,7 +144,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.addExpenseCategoryError,
 					new Date(), 1, GlobalConstant.addExpenseCategoryErrorCode,
 					e);		
@@ -167,7 +167,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.listExpensesError,
 					new Date(), 3, GlobalConstant.listExpensesErrorCode, e);
@@ -191,7 +191,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.listExpensesCategoriesError, new Date(), 1,GlobalConstant.listExpensesCategoriesErrorCode, e);
 		}
@@ -207,7 +207,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
 		try{
 			expenses=(Expenses) sessionFactory.getCurrentSession().get(Expenses.class, expenseId);
 		}catch(Exception e){
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.getExpenseError, new Date(), 3,GlobalConstant.getExpenseErrorCode, e);
 		}
@@ -224,7 +224,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
 		expenseCategory=(ExpenseCategory) sessionFactory.getCurrentSession().get(ExpenseCategory.class, expensecatId);
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getExpenseCategoryError, new Date(), 3,GlobalConstant.getExpenseCategoryErrorCode, e);
 		}
 		log.info("*** getExpenseCategory exit");
@@ -253,7 +253,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
 		} catch (Exception e) {				
 			session.getTransaction().rollback();
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.deleteExpenseError, new Date(), 3,GlobalConstant.deleteExpenseErrorCode, e);
 		} finally {
 			session.getTransaction().commit();
@@ -305,7 +305,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.deleteExpenseCategoryError, new Date(), 3,GlobalConstant.deleteExpenseCategoryErrorCode, e);			
 		} finally {
 			session.getTransaction().commit();
@@ -340,7 +340,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getExpenseByDateError, new Date(), 3,GlobalConstant.getExpenseByDateErrorCode, e);
 		}
 		log.info("*** getExpenseByDate exit ***");
@@ -374,7 +374,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.getExpenseByCategoryError, new Date(), 3,GlobalConstant.getExpenseByCategoryErrorCode, e);			
 		}
@@ -410,7 +410,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getExpenseByCategoryError, new Date(), 3,GlobalConstant.getExpenseByCategoryErrorCode, e);			
 		}
 		log.info("*** geetExpenseByCategory exit***");

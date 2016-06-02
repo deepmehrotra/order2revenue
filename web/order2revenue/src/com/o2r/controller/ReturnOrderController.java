@@ -206,6 +206,7 @@ public class ReturnOrderController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
+			log.error("Failed!",e);
 			log.error(e);
 		}
 		log.debug(" Returnorders list : " + orderlist);

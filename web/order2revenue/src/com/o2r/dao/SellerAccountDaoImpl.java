@@ -49,6 +49,7 @@ public class SellerAccountDaoImpl implements SellerAccountDao {
 	         tx.commit();
 	      }catch (HibernateException e) {
 	         if (tx!=null) tx.rollback();
+	         log.error("Failed!",e);
 	         e.printStackTrace(); 
 	      }finally {
 	         session.close(); 

@@ -107,8 +107,8 @@ public class AdminController {
 		// Convert Java Object to Json
 		jsonArray = gson.toJson(model);
 		}catch(CustomException ce){
-			log.error("listEmployeeJtable exception : " + ce.toString());
-			model.put("error", ce.getLocalMessage());
+			log.error("Failed!",ce);
+			model.put("error", ce.getMessage());
 			String errors=gson.toJson(model);
 			return errors;
 		}

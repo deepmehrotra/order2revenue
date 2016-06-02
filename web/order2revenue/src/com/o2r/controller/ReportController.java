@@ -548,6 +548,7 @@ public void downloadOrderReport(HttpServletRequest request ,HttpServletResponse 
 			model.put("errorCode", ce.getErrorCode());
 			//return new ModelAndView("globalErorPage", model);
 		}catch(Exception e){
+			log.error("Failed!",e);
 			log.error(e);
 		}
 		log.info("$$$ downloadOrderReport Ends : ReportController $$$");		

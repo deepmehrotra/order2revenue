@@ -352,7 +352,7 @@ public class OrderController {
 				log.debug("Inside exception , filetype not accepted "
 						+ e.getLocalizedMessage());
 				e.printStackTrace();
-				log.error("Failed !", e);
+				log.error("Failed!", e);
 			}
 
 		}
@@ -407,7 +407,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed", e);
+			log.error("Failed!", e);
 		}
 		request.getSession().setAttribute("orderSearchObject", orderList);
 		log.info("$$$ searchOrder() Ends : OrderController $$$");
@@ -442,7 +442,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 		}
 
 		log.info("$$$ poOrderDetails Ends : OrderController $$$");

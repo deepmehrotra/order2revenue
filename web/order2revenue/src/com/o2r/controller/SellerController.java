@@ -3,6 +3,7 @@ package com.o2r.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -83,6 +84,7 @@ public class SellerController {
 				return "login_register";
 			}
 		}catch(Exception e){
+			log.error("Failed!",e);
 			e.printStackTrace();
 		}
 		return "confirmation";
@@ -230,7 +232,7 @@ public class SellerController {
 					if (sellerBean.getName() != null) {
 						sellerBean.setLogoUrl(props.getProperty("sellerimages.view")
 								+ sellerBean.getName() + ".jpg");
-						saveImage(sellerBean.getName() + ".jpg", image);
+						saveImage(sellerBean.getName() +sellerBean.getId() +".jpg", image);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -353,8 +355,10 @@ public class SellerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception ex) {
+			log.error("Failed!",ex);
 			ex.printStackTrace();
-			log.error("planUpgrade exception : " + ex.toString());
+			model.put("errorMessage", ex.getMessage());
+			model.put("errorTime", new Date());
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ planSummary Ends : SellerController $$$");
@@ -476,7 +480,7 @@ public class SellerController {
 			log.debug("Go to the location:  "+ file.toString()+ " on your computer and verify that the image has been stored.");
 		} catch (IOException e) {
 			e.printStackTrace();
-			log.error(e.getCause());
+			log.error("Failed!",e);
 		}
 		log.info("$$$ saveImage Ends : SellerController $$$");
 	}

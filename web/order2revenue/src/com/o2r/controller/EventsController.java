@@ -115,7 +115,7 @@ public class EventsController {
 
 		} catch(Exception e){
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed!",e);
 		}
 		
 		log.info("$$$ saveEvents Ends : EventsController $$$");
@@ -153,7 +153,7 @@ public class EventsController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage",model);
 		} catch (Exception e) {
-			log.error("Failed !",e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 		}		
 		log.info("$$$ addEvents Ends : EventsController $$$");
@@ -204,7 +204,7 @@ public class EventsController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage",model);
 		} catch (Exception e) {
-			log.error("Failed !",e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 		}
 		log.info("$$$ addDuplicateEvent Ends : EventsController $$$");
@@ -255,7 +255,7 @@ public class EventsController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage",model);
 		} catch (Exception e) {
-			log.error("Failed !",e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 		}
 		log.info("$$$ addDuplicateEvent Ends : EventsController $$$");
@@ -280,7 +280,7 @@ public class EventsController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}catch (Exception e) {
-			log.error("Failed !",e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 		}
 		log.info("$$$ eventsList Ends : EventsController $$$");

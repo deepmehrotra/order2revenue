@@ -130,7 +130,7 @@ public class SellerDaoImpl implements SellerDao {
 			setExpenseGroupsForSeller(seller.getId());
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.addSellerError, new Date(), 1, GlobalConstant.addSellerErrorCode, e);
 		}
 		log.info("*** addSeller Ends : SellerDaoImpl ****");
@@ -145,7 +145,7 @@ public class SellerDaoImpl implements SellerDao {
 			sellers=(List<Seller>) sessionFactory.getCurrentSession().createCriteria(Seller.class).list();
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.listSellerError, new Date(), 3, GlobalConstant.listSellerErrorCode, e);
 			
 		}
@@ -168,7 +168,7 @@ public class SellerDaoImpl implements SellerDao {
 		
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getSellerByIdError, new Date(), 3, GlobalConstant.getSellerByIdErrorCode, e);
 			
 		}
@@ -192,7 +192,7 @@ public class SellerDaoImpl implements SellerDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getSellerByEmailError, new Date(), 3, GlobalConstant.getSellerByEmailErrorCode, e);			
 		}
 		log.info("*** getSeller from email Ends : SellerDaoImpl ****");
@@ -222,7 +222,7 @@ public class SellerDaoImpl implements SellerDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.deleteSellerError, new Date(), 3, GlobalConstant.deleteSellerErrorCode, e);
 		}
 		log.info("*** deleteSeller Ends : SellerDaoImpl ****");
@@ -293,7 +293,7 @@ public class SellerDaoImpl implements SellerDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.planUpgradeError, new Date(), 1, GlobalConstant.planUpgradeErrorCode, e);
 		}
 		log.info("*** planUpgrade Ends : SellerDaoImpl ****");
@@ -370,7 +370,7 @@ public class SellerDaoImpl implements SellerDao {
 		} catch (Exception e) {
 			System.out.println(" Error getting state elivery time  ");
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getSellerByEmailError, new Date(), 3, GlobalConstant.getSellerByEmailErrorCode, e);
 		}
 		log.info("*** getStateDeliveryTime Ends : SellerDaoImpl ****");
@@ -389,7 +389,7 @@ public class SellerDaoImpl implements SellerDao {
 		 }
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 		}
 		log.info("*** setExpenseGroupsForSeller Ends : SellerDaoImpl ****");
 	}
@@ -421,7 +421,7 @@ public class SellerDaoImpl implements SellerDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.addStateDeliveryTimeError,
 					new Date(), 1, GlobalConstant.addStateDeliveryTimeErrorCode,
 					e);			
@@ -449,7 +449,7 @@ public class SellerDaoImpl implements SellerDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getSellerByEmailError, new Date(), 3, GlobalConstant.getSellerByEmailErrorCode, e);
 		}
 		log.info("*** getStateByName Ends : SellerDaoImpl ****");
@@ -473,7 +473,7 @@ public class SellerDaoImpl implements SellerDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.updateProcessedOrdersCountError, new Date(), 1, GlobalConstant.updateProcessedOrdersCountErrorCode, e);
 		}
 		log.info("*** updateProcessedOrdersCount Ends : SellerDaoImpl ****");
@@ -512,13 +512,17 @@ public class SellerDaoImpl implements SellerDao {
 	                    "</body>\n" +
 	                    "</html>", "text/html");
 				Transport.send(message);
+				log.info("Mail has been Send....");
 				System.out.println("Mail send Successfully....");
 			} catch (AddressException e) {
+				log.error("Mail fail to send Cause : "+e.getMessage());
+				log.error("Failed!",e);
 				e.printStackTrace();
 			} catch (MessagingException e) {
+				log.error("Mail fail to send Cause : "+e.getMessage());
+				log.error("Failed!",e);
 				e.printStackTrace();
 			}
-		
 	    
 	  }
 	
@@ -537,8 +541,8 @@ public class SellerDaoImpl implements SellerDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
+			e.printStackTrace();			
 			//throw new CustomException(GlobalConstant.getSellerByEmailError, new Date(), 3, GlobalConstant.getSellerByEmailErrorCode, e);			
 		}
 		log.info("*** getSeller from verfyCode : SellerDaoImpl ****");
@@ -556,6 +560,7 @@ public class SellerDaoImpl implements SellerDao {
 			assignRoles.executeUpdate();
 			session.getTransaction().commit();
 		}catch(Exception e){
+			log.error("Failed!",e);
 			e.printStackTrace();
 		}finally{
 			if(session != null)

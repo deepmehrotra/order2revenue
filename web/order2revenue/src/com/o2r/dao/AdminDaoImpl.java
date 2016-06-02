@@ -39,7 +39,7 @@ public class AdminDaoImpl implements AdminDao {
 			sessionFactory.getCurrentSession().saveOrUpdate(employee);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.addEmployeeError, new Date(), 1, GlobalConstant.addEmployeeErrorCode, e);
 		}
 		log.info("*** addEmployee exit***");
@@ -54,7 +54,7 @@ public class AdminDaoImpl implements AdminDao {
 		returnlist = sessionFactory.getCurrentSession().createCriteria(Employee.class).setMaxResults(LIMITITEMSPERPAGE).setFirstResult(LIMITITEMSPERPAGE * (pageno - 1)).list();		
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.listEmployeeError, new Date(), 3, GlobalConstant.listEmployeeErrorCode, e);
 		}
 		log.info("*** listEmployee exit ***");
@@ -71,7 +71,7 @@ public class AdminDaoImpl implements AdminDao {
 		employeess=sessionFactory.getCurrentSession().createCriteria(Employee.class).list();
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.listEmployeeError, new Date(), 3, GlobalConstant.listEmployeeErrorCode, e);
 		}
 		log.info("*** listEmployeess exit ***");
@@ -87,7 +87,7 @@ public class AdminDaoImpl implements AdminDao {
 		employee=(Employee) sessionFactory.getCurrentSession().get(Employee.class, empid);
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getEmployeeError, new Date(), 3, GlobalConstant.getEmployeeErrorCode, e);
 		}
 		log.info("*** getEmployee exit ***");
@@ -101,7 +101,7 @@ public class AdminDaoImpl implements AdminDao {
 		sessionFactory.getCurrentSession().createQuery("DELETE FROM Employee WHERE empid = "+ employee.getEmpId()).executeUpdate();
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.deleteEmployeeError, new Date(), 3, GlobalConstant.deleteEmployeeErrorCode, e);
 		}
 		log.info("*** deleteEmployee exit ***");
@@ -115,7 +115,7 @@ public class AdminDaoImpl implements AdminDao {
 			sessionFactory.getCurrentSession().saveOrUpdate(query);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.addQueryError, new Date(), 3, GlobalConstant.addQueryErrorCode, e);
 		}		
 		log.info("*** addQuery exit ***");
@@ -137,7 +137,7 @@ public class AdminDaoImpl implements AdminDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.listQueriesError, new Date(), 3, GlobalConstant.listQueriesErrorCode, e);			
 		}
 		log.info("*** listQueries exit ***");

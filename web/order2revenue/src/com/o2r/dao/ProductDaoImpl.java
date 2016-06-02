@@ -107,7 +107,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.addProductError,
 					new Date(), 1, GlobalConstant.addProductErrorCode, e);			
 		}
@@ -254,7 +254,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Failed!",e);
 			e.printStackTrace();
 		}
 		log.info("*** addProductConfig Ends : ProductDaoImpl ****");
@@ -284,7 +284,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.listProductsError,
 					new Date(), 3, GlobalConstant.listProductsErrorCode, e);
 			
@@ -316,7 +316,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.listProductsError,
 					new Date(), 3, GlobalConstant.listProductsErrorCode, e);
 			
@@ -340,7 +340,7 @@ public class ProductDaoImpl implements ProductDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			// throw new CustomException(GlobalConstant.getSellerByIdError, new Date(), 3, GlobalConstant.getSellerByIdErrorCode, e);
 
 		}
@@ -381,7 +381,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getProductError,
 					new Date(), 3, GlobalConstant.getProductErrorCode, e);
 
@@ -429,7 +429,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.getProductError,
 					new Date(), 3, GlobalConstant.getProductErrorCode, e);
 
@@ -464,7 +464,7 @@ public class ProductDaoImpl implements ProductDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.deleteProductError,
 					new Date(), 3, GlobalConstant.deleteProductErrorCode, e);
 		}
@@ -494,7 +494,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(
 					GlobalConstant.getProductwithCreatedDateError, new Date(),
 					3, GlobalConstant.getProductwithCreatedDateErrorCode, e);
@@ -601,7 +601,7 @@ public class ProductDaoImpl implements ProductDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed!",e);
 			throw new CustomException(GlobalConstant.updateInventoryError,
 					new Date(), 3, GlobalConstant.updateInventoryErrorCode, e);
 			

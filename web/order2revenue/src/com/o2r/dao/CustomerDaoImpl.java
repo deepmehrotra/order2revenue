@@ -44,7 +44,6 @@ public void addCustomer(Customer customer,int sellerId) {
 	   }
 	   catch (Exception e) {
 		   System.out.println("Inside exception  "+e.getLocalizedMessage());
-		// TODO: handle exception
 	}
 	
 	
@@ -131,6 +130,7 @@ public Customer getCustomer(String customerEmail,int sellerId,Session session) {
 		}
 	catch(Exception e)
 	{
+		log.error("Failed!",e);
 		System.out.println(" Exception in getting cutomer list :"+e.getLocalizedMessage());
 		e.printStackTrace();
 	}

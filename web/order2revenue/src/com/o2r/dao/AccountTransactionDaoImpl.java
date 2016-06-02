@@ -43,6 +43,7 @@ public class AccountTransactionDaoImpl implements AccountTransactionDao {
 	      }catch (HibernateException e) {
 	         if (tx!=null) tx.rollback();
 	         e.printStackTrace(); 
+	         
 	      }finally {
 	         session.close(); 
 	      }		
