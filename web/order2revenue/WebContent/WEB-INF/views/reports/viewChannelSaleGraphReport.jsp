@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -60,20 +61,20 @@
 															<thead>
 																<tr>
 																	<th>Partner</th>
-																	<th>Net Sale SP</th>
 																	<th>Net Sale N/R</th>
-																	<th>Net Sale A/R</th>
+																	<th>Net Sale SP</th>
+																	<th>Net Sale P/R</th>
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty partnerByNetSaleSP}">
-																	<c:forEach items="${partnerByNetSaleSP}"
+																<c:if test="${!empty partnerByNR}">
+																	<c:forEach items="${partnerByNR}"
 																		var="partnerDto" varStatus="loop">
 																		<tr>
 																			<td>${partnerDto.partner}</td>
-																			<td>${partnerDto.netSpAmount}</td>
-																			<td>${partnerDto.netNrAmount}</td>
-																			<td>${partnerDto.netAr}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netNrAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netSpAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPr}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -85,49 +86,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<div class="flot-chart">
-															<div class="flot-chart-content"
-																id="line-chart-partner-saleSP"></div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6">
-												<div class="float-e-margins graph-brd">
-													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
-															<thead>
-																<tr>
-																	<th>Partner</th>
-																	<th>Net A/R</th>
-																	<th>Net Due to be Received</th>
-																</tr>
-															</thead>
-															<tbody>
-																<c:if test="${!empty partnerByNetAR}">
-																	<c:forEach items="${partnerByNetAR}" var="partnerDto"
-																		varStatus="loop">
-																		<tr>
-																			<td>${partnerDto.partner}</td>
-																			<td>${partnerDto.netAr}</td>
-																			<td>${partnerDto.netToBeReceived}</td>
-																		</tr>
-																	</c:forEach>
-																</c:if>
-															</tbody>
-														</table>
-													</div>
-												</div>
-											</div>
-											<div class="col-lg-6">
-												<div class="float-e-margins graph-brd">
-													<div class="ibox-content">
-														<div class="flot-chart">
-															<div class="flot-chart-content"
-																id="line-chart-partner-ar"></div>
-														</div>
+														<div id="stacked-chart-1"></div>
 													</div>
 												</div>
 											</div>
@@ -141,7 +100,7 @@
 																<tr>
 																	<th>Partner</th>
 																	<th>Gross Sale Qty</th>
-																	<th>Return Qty</th>
+																	<th>Sale Return Qty</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -150,8 +109,8 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${partnerDto.partner}</td>
-																			<td>${partnerDto.grossQty}</td>
-																			<td>${partnerDto.saleRetQty}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${partnerDto.grossQty}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${partnerDto.saleRetQty}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -163,10 +122,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<div class="flot-chart">
-															<div class="flot-chart-content"
-																id="bar-chart-partner-gross-qty"></div>
-														</div>
+														<div id="stacked-chart-2"></div>
 													</div>
 												</div>
 											</div>
@@ -179,18 +135,18 @@
 															<thead>
 																<tr>
 																	<th>Partner</th>
-																	<th>Gross Sale Amount</th>
-																	<th>Return Amount</th>
+																	<th>Total NPR</th>
+																	<th>Net Due to be received</th>
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty partnerByGSAvRA}">
-																	<c:forEach items="${partnerByGSAvRA}" var="partnerDto"
+																<c:if test="${!empty partnerByNPR}">
+																	<c:forEach items="${partnerByNPR}" var="partnerDto"
 																		varStatus="loop">
 																		<tr>
 																			<td>${partnerDto.partner}</td>
-																			<td>${partnerDto.grossSpAmount}</td>
-																			<td>${partnerDto.saleRetSpAmount}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPaymentResult}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netToBeReceived}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -202,10 +158,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<div class="flot-chart">
-															<div class="flot-chart-content"
-																id="bar-chart-partner-gross-amount"></div>
-														</div>
+														<div id="stacked-chart-3"></div>
 													</div>
 												</div>
 											</div>
@@ -224,16 +177,12 @@
 																	<th colspan="3" style="text-align: center;">Sale Return</th>
 																	<th rowspan="2">Sale Return vs Gross Sale</th>
 																	<th colspan="3" style="text-align: center;">Net Sale</th>
-																	<th rowspan="2">Tax Category</th>
 																	<th rowspan="2">Net Tax Liability</th>
-																	<th colspan="3" style="text-align: center;">Net Pure Sale</th>
-																	<th rowspan="2">Net A/R</th>
-																	<th rowspan="2">Net Due to be Received</th>
+																	<th rowspan="2">Sum of Net P/R</th>
+																	<th rowspan="2">Sum of NPR</th>
+																	<th rowspan="2">Sum of Net Payment Difference</th>
 																</tr>
 																<tr>
-																	<th>N/R Amount</th>
-																	<th>SP Amount</th>
-																	<th>Qty</th>
 																	<th>N/R Amount</th>
 																	<th>SP Amount</th>
 																	<th>Qty</th>
@@ -247,27 +196,29 @@
 															</thead>
 															<tbody>
 																<c:if test="${!empty shortTablePartner}">
-																	<c:forEach items="${shortTablePartner}" var="partner"
-																		varStatus="loop">
+																	<c:set var="initialTC" value=""/>
+																	<c:forEach items="${shortTablePartner}" var="partnerDto" varStatus="loop">
+																		<c:set var="currTC" value="${partnerDto.taxCategory}"/>
+																	  	<c:if test="${!(currTC eq initialTC)}">
+																	  		<c:set var="initialTC" value="${currTC}"/>
+																	   		<tr><td colspan="16" style="background-color: #F5F5CF;"><c:out value="${partnerDto.taxCategory}"/></td></tr>
+																	  	</c:if>
 																		<tr>
-																			<td>${partner.partner}</td>
-																			<td>${partner.grossNrAmount}</td>
-																			<td>${partner.grossSpAmount}</td>
-																			<td>${partner.grossQty}</td>
-																			<td>${partner.saleRetNrAmount}</td>
-																			<td>${partner.saleRetSpAmount}</td>
-																			<td>${partner.saleRetQty}</td>
-																			<td>${partner.saleRetVsGrossSale}</td>
-																			<td>${partner.netNrAmount}</td>
-																			<td>${partner.netSpAmount}</td>
-																			<td>${partner.netQty}</td>
-																			<td>${partner.taxCategory}</td>
-																			<td>${partner.netTaxLiability}</td>
-																			<td>${partner.netPureSaleNrAmount}</td>
-																			<td>${partner.netPureSaleSpAmount}</td>
-																			<td>${partner.netPureSaleQty}</td>
-																			<td>${partner.netAr}</td>
-																			<td>${partner.netToBeReceived}</td>
+																			<td>${partnerDto.partner}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.grossNrAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.grossSpAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.grossQty}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.saleRetNrAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.saleRetSpAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.saleRetQty}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.saleRetVsGrossSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.saleRetSpAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netSpAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${partnerDto.netQty}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netTaxLiability}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPr}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPaymentResult}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netToBeReceived}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -307,17 +258,17 @@
 	<script src="/O2R/seller/js/plugins/flot/jquery.flot.symbol.js"></script>
 	<script src="/O2R/seller/js/plugins/flot/jquery.flot.spline.js"></script>
 	<script src="/O2R/seller/js/plugins/flot/jquery.flot.resize.js"></script>
+	<script src="/O2R/seller/js/plugins/highchart/highcharts.js"></script>
 
 	<!-- Morris -->
 	<script src="/O2R/seller/js/plugins/morris/raphael-2.1.0.min.js"></script>
 	<script src="/O2R/seller/js/plugins/morris/morris.js"></script>
 
 	<!-- Morris demo data-->
-	<script src="/O2R/seller/js/demo/morris-demo.js"></script>
+	<script src="/O2R/seller/js/demo/highchart-demo.js"></script>
 
 	<!-- ChartJS-->
 	<script src="/O2R/seller/js/plugins/chartJs/Chart.min.js"></script>
-	<script src="/O2R/seller/js/demo/flot-demo-1.js"></script>
 
 
 	<!-- Data Tables -->
@@ -329,60 +280,48 @@
 		src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
 	<script>
 		//Script for Bar Chart
-
-		var temp1 = [];
-		var partnerByNetSaleSP = [];
-		var i = 1;
-		<c:forEach items="${partnerByNetSaleSP}" var="partnerDto" varStatus="loop">
-		var arr1 = [ i, '${partnerDto.netSpAmount}' ];
-		var arr2 = [ i++, '${partnerDto.partner}' ];
-		temp1.push(arr1);
-		partnerByNetSaleSP.push(arr2);
+		
+		
+		
+		var dataArr = [];
+		var yAxisText = 'Net Sale SP vs N/R vs P/R Graph';
+		var divId = "#stacked-chart-1";
+		var xAxisCategories = ['Net Nr Amount', 'Net SP Amount', 'Net Pr'];
+		<c:forEach items="${partnerByNR}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.partner}';
+			data.data = [parseFloat(parseFloat('${partnerDto.netNrAmount}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netSpAmount}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netPr}').toFixed(2))];
+			dataArr.push(data);
 		</c:forEach>
-
-		var temp2 = [];
-		var partnerByNetAR = [];
-		var i = 1;
-		<c:forEach items="${partnerByNetAR}" var="partnerDto" varStatus="loop">
-		var arr1 = [ i, '${partnerDto.netAr}' ];
-		var arr2 = [ i++, '${partnerDto.partner}' ];
-		temp2.push(arr1);
-		partnerByNetAR.push(arr2);
-		</c:forEach>
-
-		var temp3 = [];
-		var partnerByGSvSR = [];
-		var i = 1;
+		stackChart(divId, yAxisText, dataArr);
+		
+		var dataArr = [];
+		var yAxisText = 'Gross Sale vs Return Qty Graph';
+		var divId = "#stacked-chart-2";
+		var xAxisCategories = ['Gross Sale Qty', 'Return Sale Qty'];
 		<c:forEach items="${partnerByGSvSR}" var="partnerDto" varStatus="loop">
-		var arr1 = [ i, '${partnerDto.grossQty}' ];
-		var arr2 = [ i++, '${partnerDto.category}' ];
-		temp3.push(arr1);
-		partnerByGSvSR.push(arr2);
+			var data = {};
+			data.name = '${partnerDto.partner}';
+			data.data = [parseInt('${partnerDto.grossQty}'), parseInt('${partnerDto.saleRetQty}')];
+			dataArr.push(data);
 		</c:forEach>
-
-		var temp4 = [];
-		var partnerByGSAvRA = [];
-		var i = 1;
-		<c:forEach items="${partnerByGSAvRA}" var="partnerDto" varStatus="loop">
-		var arr1 = [ i, '${partnerDto.grossSpAmount}' ];
-		var arr2 = [ i++, '${partnerDto.category}' ];
-		temp4.push(arr1);
-		partnerByGSAvRA.push(arr2);
+		stackChart(divId, yAxisText, dataArr);
+		
+		var dataArr = [];
+		var yAxisText = 'NPR vs Net Payment Difference graph';
+		var divId = "#stacked-chart-3";
+		var xAxisCategories = ['Net Payment Result', 'Net Due To Be Received'];
+		<c:forEach items="${partnerByNPR}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.partner}';
+			data.data = [parseFloat(parseFloat('${partnerDto.netPaymentResult}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netToBeReceived}').toFixed(2))];
+			dataArr.push(data);
 		</c:forEach>
+		stackChart(divId, yAxisText, dataArr);
 		
 		$(window)
 				.load(
-						function() {
-
-							flotline(temp1, partnerByNetSaleSP,
-								"#line-chart-partner-saleSP");
-							flotbar(temp2, partnerByNetAR,
-								"#line-chart-partner-ar");
-							flotbar(temp3, partnerByGSvSR,
-								"#bar-chart-partner-gross-qty");
-							flotbar(temp4, partnerByGSAvRA,
-								"#bar-chart-partner-gross-amount");
-							
+						function() {							
 							$('.dataTables-example')
 									.dataTable(
 											{

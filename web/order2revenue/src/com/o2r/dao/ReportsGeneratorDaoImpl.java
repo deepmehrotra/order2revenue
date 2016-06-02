@@ -833,8 +833,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					channelReport.setGrossSpAmount(grossSpAmount);
 
 					OrderRTOorReturn currOrderReturn = currOrder.getOrderReturnOrRTO();
+					double additionalCharges = currOrderReturn.getReturnOrRTOChargestoBeDeducted(); 
 					if(currOrderReturn != null){
-						channelReport.setNetReturnCharges(currOrderReturn.getReturnOrRTOChargestoBeDeducted());
+						channelReport.setNetReturnCharges(additionalCharges);
 						saleRetQty = currOrderReturn.getReturnorrtoQty();
 						// Only for PO Order
 						if(isPoOrder && consolidateOrder!=null){
@@ -855,14 +856,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 							channelReport.setPr(orderPr * saleRetQty/grossSaleQty);
 					}
 					channelReport.setSaleRetQty(saleRetQty);
-					channelReport.setSaleRetNrAmount(saleRetNrAmount);
+					channelReport.setSaleRetNrAmount(saleRetNrAmount + additionalCharges);
 					channelReport.setSaleRetSpAmount(saleRetSpAmount);
 					
 					double saleRetVsGrossSale = 0;
 					if(grossSaleQty != 0)
 						saleRetVsGrossSale = saleRetQty/grossSaleQty*100;
 					double netQty = grossSaleQty - saleRetQty;
-					double netNrAmount = grossNrAmount*grossSaleQty - saleRetNrAmount;
+					double netNrAmount = grossNrAmount*grossSaleQty - saleRetNrAmount - additionalCharges;
 					double netSpAmount = grossSpAmount - saleRetSpAmount;
 					channelReport.setSaleRetVsGrossSale(saleRetVsGrossSale);
 					channelReport.setNetQty(netQty);
@@ -885,9 +886,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					if(taxCatPercent != 0)
 						netTaxLiability = netSpAmount - netSpAmount*(100/(100 + taxCatPercent));
 					channelReport.setNetTaxLiability(netTaxLiability);
-					channelReport.setNetPureSaleQty(netQty);
-					channelReport.setNetPureSaleNrAmount(netNrAmount);
-					channelReport.setNetPureSaleSpAmount(netSpAmount - netTaxLiability);
+//					channelReport.setNetPureSaleQty(netQty);
+//					channelReport.setNetPureSaleNrAmount(netNrAmount);
+//					channelReport.setNetPureSaleSpAmount(netSpAmount - netTaxLiability);
 					
 					OrderPayment currOrderPayment = currOrder.getOrderPayment();
 					if(currOrderPayment != null){

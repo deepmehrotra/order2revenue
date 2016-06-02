@@ -303,27 +303,31 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			int sellerId = helperClass.getSellerIdfromSession(request);
 			
 			List<ChannelReportDetails> channelReportDetailsList =  reportGeneratorService.getChannelReportDetails(startDate, endDate, sellerId);
+			List<ChannelReportDetails> partnerListST = ConverterClass.transformChannelReportST(channelReportDetailsList, "partner");
+			Collections.sort(partnerListST, new ChannelReportDetails.OrderByTC());
+			List<ChannelReportDetails> categoryListST = ConverterClass.transformChannelReportST(channelReportDetailsList, "category");
+			Collections.sort(categoryListST, new ChannelReportDetails.OrderByTC());
+			model.put("shortTablePartner", partnerListST);
+			model.put("shortTableCategory", categoryListST);
 			List<ChannelReportDetails> partnerList = ConverterClass.transformChannelReport(channelReportDetailsList, "partner");
-			model.put("shortTablePartner", partnerList);
 			List<ChannelReportDetails> categoryList = ConverterClass.transformChannelReport(channelReportDetailsList, "category");
-			model.put("shortTableCategory", categoryList);
 			
 			switch(reportName){
 				case "channelSaleReport":
-					Collections.sort(partnerList, new ChannelReportDetails.OrderByNetSaleSP());
-					model.put("partnerByNetSaleSP", ConverterClass.getChannelSortedList(partnerList, "NetSaleSP"));
-					Collections.sort(partnerList, new ChannelReportDetails.OrderByNetAR());
-					model.put("partnerByNetAR", ConverterClass.getChannelSortedList(partnerList, "NetAR"));
+					Collections.sort(partnerList, new ChannelReportDetails.OrderByNR());
+					model.put("partnerByNR", ConverterClass.getChannelSortedList(partnerList, "NetSaleSP"));
+					Collections.sort(partnerList, new ChannelReportDetails.OrderByNPR());
+					model.put("partnerByNPR", ConverterClass.getChannelSortedList(partnerList, "NPR"));
 					Collections.sort(partnerList, new ChannelReportDetails.OrderByGSvSR());
 					model.put("partnerByGSvSR", ConverterClass.getChannelSortedList(partnerList, "GSvSR"));
 					Collections.sort(partnerList, new ChannelReportDetails.OrderByGSAvRA());
 					model.put("partnerByGSAvRA", ConverterClass.getChannelSortedList(partnerList, "GSAvRA"));
 					break;
 				case "categoryWiseSaleReport":
-					Collections.sort(categoryList, new ChannelReportDetails.OrderByNetSaleSP());
-					model.put("categoryByNetSaleSP", ConverterClass.getChannelSortedList(categoryList, "NetSaleSP"));
-					Collections.sort(categoryList, new ChannelReportDetails.OrderByNetAR());
-					model.put("categoryByNetAR", ConverterClass.getChannelSortedList(categoryList, "NetAR"));
+					Collections.sort(categoryList, new ChannelReportDetails.OrderByNR());
+					model.put("categoryByNR", ConverterClass.getChannelSortedList(categoryList, "NetSaleSP"));
+					Collections.sort(categoryList, new ChannelReportDetails.OrderByNPR());
+					model.put("categoryByNPR", ConverterClass.getChannelSortedList(categoryList, "NetAR"));
 					Collections.sort(categoryList, new ChannelReportDetails.OrderByGSvSR());
 					model.put("categoryByGSvSR", ConverterClass.getChannelSortedList(categoryList, "GSvSR"));
 					Collections.sort(categoryList, new ChannelReportDetails.OrderByGSAvRA());

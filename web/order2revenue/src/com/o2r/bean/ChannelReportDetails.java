@@ -311,12 +311,23 @@ public class ChannelReportDetails {
 		}
 	}
 	
-	public static class OrderByNetAR implements
+	public static class OrderByTC implements
 	Comparator<ChannelReportDetails> {
 		@Override
 		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
-			return graph1.netAr < graph2.netAr ? 1
-					: (graph1.netAr > graph2.netAr ? -1 : 0);
+			int tcPer1 = Integer.parseInt(graph1.taxCategory.split("@")[1]);
+			int tcPer2 = Integer.parseInt(graph2.taxCategory.split("@")[1]);
+			return tcPer1 < tcPer2 ? -1
+					: (tcPer1 > tcPer2 ? 1 : 0);
+		}
+	}
+	
+	public static class OrderByNPR implements
+	Comparator<ChannelReportDetails> {
+		@Override
+		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
+			return graph1.netPaymentResult < graph2.netPaymentResult ? 1
+					: (graph1.netPaymentResult > graph2.netPaymentResult ? -1 : 0);
 		}
 	}
 	

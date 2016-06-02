@@ -1612,33 +1612,150 @@ public class ConverterClass {
 				default: break;
 			}
 			ChannelReportDetails channelReport = categoryReportMap.get(key);
+			double gpVsProductCost = currChannelReport.getGpVsProductCost();
+			double grossNrAmount = currChannelReport.getGrossNrAmount();
+			double grossProfit = currChannelReport.getGrossProfit();
+			double grossQty = currChannelReport.getGrossQty();
+			double grossSpAmount = currChannelReport.getGrossSpAmount();
+			double netNrAmount = currChannelReport.getNetNrAmount();
+			double netPaymentResult = currChannelReport.getNetPaymentResult();
+			double netQty = currChannelReport.getNetQty();
+			double netReturnCharges = currChannelReport.getNetReturnCharges();
+			double netSpAmount = currChannelReport.getNetSpAmount();
+			double netTaxLiability = currChannelReport.getNetTaxLiability();
+			double netToBeReceived = currChannelReport.getNetToBeReceived();
+			double netPr = currChannelReport.getNetPr();
+			double saleRetNrAmount = currChannelReport.getSaleRetNrAmount();
+			double saleRetQty = currChannelReport.getSaleRetQty();
+			double saleRetSpAmount = currChannelReport.getSaleRetSpAmount();
+			double saleRetVsGrossSale = currChannelReport.getSaleRetVsGrossSale();
 			if(channelReport == null){
-				channelReport = currChannelReport;
+				channelReport = new ChannelReportDetails();
 			} else{
-				channelReport.setGpVsProductCost(channelReport.getGpVsProductCost() + currChannelReport.getGpVsProductCost());
-				channelReport.setGrossNrAmount(channelReport.getGrossNrAmount() + currChannelReport.getGrossNrAmount());
-				channelReport.setGrossProfit(channelReport.getGrossProfit() + currChannelReport.getGrossProfit());
-				channelReport.setGrossQty(channelReport.getGrossQty() + currChannelReport.getGrossQty());
-				channelReport.setGrossSpAmount(channelReport.getGrossSpAmount() + currChannelReport.getGrossSpAmount());
-				channelReport.setNetAr(channelReport.getNetAr() + currChannelReport.getNetAr());
-				channelReport.setNetNrAmount(channelReport.getNetNrAmount() + currChannelReport.getNetNrAmount());
-				channelReport.setNetPaymentResult(channelReport.getNetPaymentResult() + currChannelReport.getNetPaymentResult());
-				channelReport.setNetPureSaleNrAmount(channelReport.getNetPureSaleNrAmount() + currChannelReport.getNetPureSaleNrAmount());
-				channelReport.setNetPureSaleQty(channelReport.getNetPureSaleQty() + currChannelReport.getNetPureSaleQty());
-				channelReport.setNetPureSaleSpAmount(channelReport.getNetPureSaleSpAmount() + currChannelReport.getNetPureSaleSpAmount());
-				channelReport.setNetQty(channelReport.getNetQty() + currChannelReport.getNetQty());
-				channelReport.setNetReturnCharges(channelReport.getNetReturnCharges() + currChannelReport.getNetReturnCharges());
-				channelReport.setNetSpAmount(channelReport.getNetSpAmount() + currChannelReport.getNetSpAmount());
-				channelReport.setNetTaxLiability(channelReport.getNetTaxLiability() + currChannelReport.getNetTaxLiability());
-				channelReport.setNetToBeReceived(channelReport.getNetToBeReceived() + currChannelReport.getNetToBeReceived());
-				channelReport.setPr(channelReport.getPr() + currChannelReport.getPr());
-				channelReport.setProductCost(channelReport.getProductCost() + currChannelReport.getProductCost());
-				channelReport.setSaleRetNrAmount(channelReport.getSaleRetNrAmount() + currChannelReport.getSaleRetNrAmount());
-				channelReport.setSaleRetQty(channelReport.getSaleRetQty() + currChannelReport.getSaleRetQty());
-				channelReport.setSaleRetSpAmount(channelReport.getSaleRetSpAmount() + currChannelReport.getSaleRetSpAmount());
-				channelReport.setSaleRetVsGrossSale(channelReport.getSaleRetVsGrossSale() + currChannelReport.getSaleRetVsGrossSale());
+				gpVsProductCost += channelReport.getGpVsProductCost();
+				grossNrAmount += channelReport.getGrossNrAmount();
+				grossProfit += channelReport.getGrossProfit();
+				grossQty += channelReport.getGrossQty();
+				grossSpAmount += channelReport.getGrossSpAmount();
+				netNrAmount += channelReport.getNetNrAmount();
+				netPaymentResult += channelReport.getNetPaymentResult();
+				netQty += channelReport.getNetQty();
+				netReturnCharges += channelReport.getNetReturnCharges();
+				netSpAmount += channelReport.getNetSpAmount();
+				netTaxLiability = channelReport.getNetTaxLiability();
+				netToBeReceived += channelReport.getNetToBeReceived();
+				netPr += channelReport.getNetPr();
+				saleRetNrAmount += channelReport.getSaleRetNrAmount();
+				saleRetQty += channelReport.getSaleRetQty();
+				saleRetSpAmount += channelReport.getSaleRetSpAmount();
+				saleRetVsGrossSale += channelReport.getSaleRetVsGrossSale();
 			}
+			channelReport.setGpVsProductCost(gpVsProductCost);
+			channelReport.setGrossNrAmount(grossNrAmount);
+			channelReport.setGrossProfit(grossProfit);
+			channelReport.setGrossQty(grossQty);
+			channelReport.setGrossSpAmount(grossSpAmount);
+			channelReport.setNetNrAmount(netNrAmount);
+			channelReport.setNetPaymentResult(netPaymentResult);
+			channelReport.setNetQty(netQty);
+			channelReport.setNetReturnCharges(netReturnCharges);
+			channelReport.setNetSpAmount(netSpAmount);
+			channelReport.setNetTaxLiability(netTaxLiability);
+			channelReport.setNetToBeReceived(netToBeReceived);
+			channelReport.setNetPr(netPr);
+			channelReport.setSaleRetNrAmount(saleRetNrAmount);
+			channelReport.setSaleRetQty(saleRetQty);
+			channelReport.setSaleRetSpAmount(saleRetSpAmount);
+			channelReport.setSaleRetVsGrossSale(saleRetVsGrossSale);
+			channelReport.setCategory(key);
+			channelReport.setPartner(key);
 			categoryReportMap.put(key, channelReport);
+		}
+		
+		List<ChannelReportDetails> categoryReportList = new ArrayList<ChannelReportDetails>();
+		Iterator entries = categoryReportMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, ChannelReportDetails> thisEntry = (Entry<String, ChannelReportDetails>) entries
+					.next();
+			ChannelReportDetails value = thisEntry.getValue();
+			categoryReportList.add(value);
+		}
+		
+		return categoryReportList;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List<ChannelReportDetails> transformChannelReportST(
+			List<ChannelReportDetails> channelReportDetailsList, String criteria) {
+		Map<String, ChannelReportDetails> categoryReportMap = new HashMap<String, ChannelReportDetails>();
+		for(ChannelReportDetails currChannelReport: channelReportDetailsList){
+			String key = "";
+			switch(criteria){
+				case "partner":key = currChannelReport.getPartner();break;
+				case "category":key = currChannelReport.getCategory();break;
+				default: break;
+			}
+			String taxCategory = currChannelReport.getTaxCategory();
+			ChannelReportDetails channelReport = categoryReportMap.get(key + taxCategory);
+			double gpVsProductCost = currChannelReport.getGpVsProductCost();
+			double grossNrAmount = currChannelReport.getGrossNrAmount();
+			double grossProfit = currChannelReport.getGrossProfit();
+			double grossQty = currChannelReport.getGrossQty();
+			double grossSpAmount = currChannelReport.getGrossSpAmount();
+			double netNrAmount = currChannelReport.getNetNrAmount();
+			double netPaymentResult = currChannelReport.getNetPaymentResult();
+			double netQty = currChannelReport.getNetQty();
+			double netReturnCharges = currChannelReport.getNetReturnCharges();
+			double netSpAmount = currChannelReport.getNetSpAmount();
+			double netTaxLiability = currChannelReport.getNetTaxLiability();
+			double netToBeReceived = currChannelReport.getNetToBeReceived();
+			double netPr = currChannelReport.getNetPr();
+			double saleRetNrAmount = currChannelReport.getSaleRetNrAmount();
+			double saleRetQty = currChannelReport.getSaleRetQty();
+			double saleRetSpAmount = currChannelReport.getSaleRetSpAmount();
+			double saleRetVsGrossSale = currChannelReport.getSaleRetVsGrossSale();
+			if(channelReport == null){
+				channelReport = new ChannelReportDetails();
+			} else{
+				gpVsProductCost += channelReport.getGpVsProductCost();
+				grossNrAmount += channelReport.getGrossNrAmount();
+				grossProfit += channelReport.getGrossProfit();
+				grossQty += channelReport.getGrossQty();
+				grossSpAmount += channelReport.getGrossSpAmount();
+				netNrAmount += channelReport.getNetNrAmount();
+				netPaymentResult += channelReport.getNetPaymentResult();
+				netQty += channelReport.getNetQty();
+				netReturnCharges += channelReport.getNetReturnCharges();
+				netSpAmount += channelReport.getNetSpAmount();
+				netTaxLiability = channelReport.getNetTaxLiability();
+				netToBeReceived += channelReport.getNetToBeReceived();
+				netPr += channelReport.getNetPr();
+				saleRetNrAmount += channelReport.getSaleRetNrAmount();
+				saleRetQty += channelReport.getSaleRetQty();
+				saleRetSpAmount += channelReport.getSaleRetSpAmount();
+				saleRetVsGrossSale += channelReport.getSaleRetVsGrossSale();
+			}
+			channelReport.setGpVsProductCost(gpVsProductCost);
+			channelReport.setGrossNrAmount(grossNrAmount);
+			channelReport.setGrossProfit(grossProfit);
+			channelReport.setGrossQty(grossQty);
+			channelReport.setGrossSpAmount(grossSpAmount);
+			channelReport.setNetNrAmount(netNrAmount);
+			channelReport.setNetPaymentResult(netPaymentResult);
+			channelReport.setNetQty(netQty);
+			channelReport.setNetReturnCharges(netReturnCharges);
+			channelReport.setNetSpAmount(netSpAmount);
+			channelReport.setNetTaxLiability(netTaxLiability);
+			channelReport.setNetToBeReceived(netToBeReceived);
+			channelReport.setNetPr(netPr);
+			channelReport.setSaleRetNrAmount(saleRetNrAmount);
+			channelReport.setSaleRetQty(saleRetQty);
+			channelReport.setSaleRetSpAmount(saleRetSpAmount);
+			channelReport.setSaleRetVsGrossSale(saleRetVsGrossSale);
+			channelReport.setCategory(key);
+			channelReport.setPartner(key);
+			channelReport.setTaxCategory(taxCategory);
+			categoryReportMap.put(key + taxCategory, channelReport);
 		}
 		
 		List<ChannelReportDetails> categoryReportList = new ArrayList<ChannelReportDetails>();
