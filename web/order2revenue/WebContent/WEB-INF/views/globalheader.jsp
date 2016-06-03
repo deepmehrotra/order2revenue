@@ -18,6 +18,9 @@
 	transition: width .3s;
 }
 </style>
+
+<link rel="stylesheet" type="text/css" href="/O2R/landing/css/sticky.css">
+
 </head>
 
 <body>
@@ -164,8 +167,38 @@
 		</ul>
 		</nav>
 	</div>
+	<aside id="sticky-social">
+		<ul>
+			<li><a href="#" onclick="onclickNavigateOrder('upload',0)" class="entypo-links" ><span><img src="/O2R/landing/img/export.png"></span></a></li>
+			<li><a href="#" onclick="onclickNavigateOrder('upload',0)" class="entypo-links2" ><span><img src="/O2R/landing/img/import.png"></span></a></li>
+			<li><a href="orderList.html" class="entypo-links3" ><span><img src="/O2R/landing/img/orderlist.png"></span></a></li>
+			<li><a href="#" onclick="onclickSideNavigation('RTO/Return')"  class="entypo-links4" ><span><img src="/O2R/landing/img/return1.png"></span></a></li>
+			<li><a href="paymentUploadList.html" class="entypo-links5" ><span><img src="/O2R/landing/img/payment.png"></span></a></li>
+		</ul>
+	</aside>	
+	
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script type="text/javascript">
+	
+	function onclickNavigateOrder(value,id) {
+    	var targeturl="";
+    	switch(value)
+    	{
+    	case "upload" :
+    		targeturl="uploadOrderDA.html?value=ordersummary";
+    	break;
+    	case "download" :
+    		targeturl="downloadOrderDA.html?value=ordersummary";
+    	break;
+    	}
+    	$.ajax({
+            url : targeturl,
+            success : function(data) {
+                $('#centerpane').html(data);
+            }
+        });
+    	}
+	
 		$(document).ready(
 				function() {
 					$('#searchCriteria').change(
