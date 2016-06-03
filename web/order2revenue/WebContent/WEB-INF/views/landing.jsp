@@ -452,7 +452,9 @@
         </div>
       <jsp:include page="globalfooter.jsp"></jsp:include>
     </div>
-</div>
+</div>	
+
+
 <jsp:include page="globaljslinks.jsp"></jsp:include>
 <!-- Flot -->
 <script src="/O2R/seller/js/plugins/flot/jquery.flot.js"></script>

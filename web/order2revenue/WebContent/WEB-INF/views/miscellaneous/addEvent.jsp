@@ -134,7 +134,7 @@ function checkOnBlur()
 											value="${eventsBean.eventId}" />
                             <div class="col-sm-8">
                             	<c:choose>
-									<c:when test="${eventsBean.eventId != 0}">
+									<c:when test="${eventsBean.eventId > 0}">
 	        							<form:input path="eventName" value="${eventsBean.eventName}"	class="form-control" id="eventName" readonly="true"/>
 	    							</c:when>
 	    							<c:otherwise>
@@ -192,7 +192,7 @@ function checkOnBlur()
                         <div class="col-sm-12">
 	                       	<div class="col-sm-12">
 								<div class="col-sm-4">
-	                            <div class="radio">
+								<div class="radio">
 	                              <label>
 	                                <form:radiobutton name="nr" value="original" id="nrCalculatorEvent_original" path="nrnReturnConfig.nrCalculatorEvent" class="nrCalculatorEvent" />
 	                                Original </label>
@@ -2666,6 +2666,7 @@ Custom and plugin javascript
       
 
 		function submitOrder() {
+			/* var result = $('#errordiv'); */
 			var validator = $("#addEvent").validate({				
 				rules : {
 					eventName : {
@@ -2681,6 +2682,10 @@ Custom and plugin javascript
 					endDate : {
 						required : true,
 					},
+					/* errorPlacement: function(error, element) {
+						result.empty();
+						result.append(error);
+					} */
 										
 				},
 				messages : {
@@ -2696,7 +2701,10 @@ Custom and plugin javascript
 					  if ($(".nrCalculatorEvent:checked").length == 0){
 			             return true;
 			          }
-				 }				
+				 },
+				 messages: {
+			            required: "Select One NR Type."
+			     }
 			});
 			$(".commissionType").rules("add", { 
 				  	required:function(element) {
@@ -2705,14 +2713,18 @@ Custom and plugin javascript
 				            	return true;
 				          	}
 					 	}
-				 	}					
+				 	},
+				 	messages: {
+			            required: "Select One Commission Type."
+			     	}
+			
 			});
 			$("#fixedCommissionPercent").rules("add", { 
 				required:function(element) {
 					if ($(".commissionType:checked").val() == "fixed"){
 						number : true
 		          	}
-				}			
+				}
 			});
 			$("#serviceTax").rules("add", { 
 				required:function(element) {
@@ -2726,13 +2738,16 @@ Custom and plugin javascript
 					  if ($(".returnCalculatorEvent").length == 0){
 			             return true;
 			          }
-				 }				
+				  },
+				  messages: {
+			            required: "Select One Return Type."
+			      }
 			});
 			
 			var startDate=document.getElementById("StartDate").value;
 			var endDate=document.getElementById("EndDate").value;
 			var channelName=document.getElementById("channelName").value;
-			alert(startDate+" "+endDate);
+			/* alert(startDate+" "+endDate); */
 			$.ajax({
 		        url: "checkDates.html?start="+startDate+"&end="+endDate+"&channel="+channelName,
 		       success : function(res) {

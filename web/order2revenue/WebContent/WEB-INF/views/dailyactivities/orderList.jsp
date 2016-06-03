@@ -11,8 +11,7 @@
 <link href="/O2R/seller/css/plugins/dataTables/dataTables.bootstrap.css"
 	rel="stylesheet">
 <link
-	href="/O2R/seller/css/plugins/dataTables/dataTables.responsive.css"
-	rel="stylesheet">
+	href="/O2R/seller/css/plugins/dataTables/dataTables.responsive.css"	rel="stylesheet">
 <link
 	href="/O2R/seller/css/plugins/dataTables/dataTables.tableTools.min.css"
 	rel="stylesheet">

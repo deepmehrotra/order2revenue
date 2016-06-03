@@ -20,7 +20,7 @@
 	<body>
 		<div class="col-lg-12">
         	<a href="landing/home.html">
-        	<img src="/O2R/landing/img/logo02r.png" alt="logo" class="img-responsive" style="float:right;margin:20px 80px 0px 0px;">
+        	<img src="/O2R/landing/img/logoo2r.png" alt="logo" class="img-responsive" style="float:right;margin:20px 80px 0px 0px;">
         	</a>
     	</div>
 		<div class="form">
