@@ -1619,6 +1619,7 @@ public class ConverterClass {
 			double grossSpAmount = currChannelReport.getGrossSpAmount();
 			double netNrAmount = currChannelReport.getNetNrAmount();
 			double netPaymentResult = currChannelReport.getNetPaymentResult();
+			double paymentDifference = currChannelReport.getPaymentDifference();
 			double netQty = currChannelReport.getNetQty();
 			double netReturnCharges = currChannelReport.getNetReturnCharges();
 			double netSpAmount = currChannelReport.getNetSpAmount();
@@ -1629,6 +1630,7 @@ public class ConverterClass {
 			double saleRetQty = currChannelReport.getSaleRetQty();
 			double saleRetSpAmount = currChannelReport.getSaleRetSpAmount();
 			double saleRetVsGrossSale = currChannelReport.getSaleRetVsGrossSale();
+			double netProductCost = currChannelReport.getNetProductCost();
 			if(channelReport == null){
 				channelReport = new ChannelReportDetails();
 			} else{
@@ -1639,6 +1641,7 @@ public class ConverterClass {
 				grossSpAmount += channelReport.getGrossSpAmount();
 				netNrAmount += channelReport.getNetNrAmount();
 				netPaymentResult += channelReport.getNetPaymentResult();
+				paymentDifference += channelReport.getPaymentDifference();
 				netQty += channelReport.getNetQty();
 				netReturnCharges += channelReport.getNetReturnCharges();
 				netSpAmount += channelReport.getNetSpAmount();
@@ -1649,6 +1652,7 @@ public class ConverterClass {
 				saleRetQty += channelReport.getSaleRetQty();
 				saleRetSpAmount += channelReport.getSaleRetSpAmount();
 				saleRetVsGrossSale += channelReport.getSaleRetVsGrossSale();
+				netProductCost += channelReport.getNetProductCost();
 			}
 			channelReport.setGpVsProductCost(gpVsProductCost);
 			channelReport.setGrossNrAmount(grossNrAmount);
@@ -1657,6 +1661,7 @@ public class ConverterClass {
 			channelReport.setGrossSpAmount(grossSpAmount);
 			channelReport.setNetNrAmount(netNrAmount);
 			channelReport.setNetPaymentResult(netPaymentResult);
+			channelReport.setPaymentDifference(paymentDifference);
 			channelReport.setNetQty(netQty);
 			channelReport.setNetReturnCharges(netReturnCharges);
 			channelReport.setNetSpAmount(netSpAmount);
@@ -1667,6 +1672,7 @@ public class ConverterClass {
 			channelReport.setSaleRetQty(saleRetQty);
 			channelReport.setSaleRetSpAmount(saleRetSpAmount);
 			channelReport.setSaleRetVsGrossSale(saleRetVsGrossSale);
+			channelReport.setNetProductCost(netProductCost);
 			channelReport.setCategory(key);
 			channelReport.setPartner(key);
 			categoryReportMap.put(key, channelReport);
@@ -1922,8 +1928,8 @@ public class ConverterClass {
 					initialize = true;
 					consolidated.setGrossProfit(channelGraph.getGrossProfit());
 					consolidated.setGpVsProductCost(channelGraph.getGpVsProductCost());
-					consolidated.setPr(channelGraph.getPr());
-					consolidated.setProductCost(channelGraph.getProductCost());
+					consolidated.setNetPr(channelGraph.getNetPr());
+					consolidated.setNetProductCost(channelGraph.getNetProductCost());
 					consolidated.setNetNrAmount(channelGraph.getNetNrAmount());
 					consolidated.setGrossSpAmount(channelGraph.getGrossSpAmount());
 					consolidated.setSaleRetSpAmount(channelGraph.getSaleRetSpAmount());
@@ -1932,6 +1938,7 @@ public class ConverterClass {
 					consolidated.setNetToBeReceived(channelGraph.getNetToBeReceived());
 					consolidated.setGrossQty(channelGraph.getGrossQty());
 					consolidated.setSaleRetQty(channelGraph.getSaleRetQty());
+					consolidated.setGrossNrAmount(channelGraph.getGrossNrAmount());
 					consolidated.setCategory("Others");
 					consolidated.setPartner("Others");
 				} else{
@@ -1960,12 +1967,16 @@ public class ConverterClass {
 							consolidated.setGpVsProductCost(consolidated.getGpVsProductCost() + channelGraph.getGpVsProductCost());
 							break;
 						case "PR": 
-							consolidated.setPr(consolidated.getPr() + channelGraph.getPr());
-							consolidated.setProductCost(consolidated.getProductCost() + channelGraph.getProductCost());
+							consolidated.setPr(consolidated.getNetPr() + channelGraph.getNetPr());
+							consolidated.setNetProductCost(consolidated.getNetProductCost() + channelGraph.getNetProductCost());
 							break;
 						case "NR": 
 							consolidated.setGrossProfit(consolidated.getGrossProfit() + channelGraph.getGrossProfit());
 							consolidated.setNetNrAmount(consolidated.getNetNrAmount() + channelGraph.getNetNrAmount());
+							break;
+						case "GNR": 
+							consolidated.setGrossProfit(consolidated.getGrossProfit() + channelGraph.getGrossProfit());
+							consolidated.setNetNrAmount(consolidated.getGrossNrAmount() + channelGraph.getGrossNrAmount());
 							break;
 						default: break;
 					}

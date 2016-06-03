@@ -913,9 +913,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 						}
 						channelReport.setCategory(currProduct.getCategoryName());
 					}
-					if(productCost != 0)
-						gpVsProductCost = grossProfit/productCost*100;
-					channelReport.setProductCost(productCost);
+					if(productCost != 0){
+						double grossProductCost = productCost*grossSaleQty;
+						double returnProductCost = productCost*saleRetQty;
+						double netProductCost = grossProductCost - returnProductCost;
+						channelReport.setProductCost(grossProductCost);
+						channelReport.setReturnProductCost(returnProductCost);
+						channelReport.setNetProductCost(netProductCost);
+						if(netProductCost != 0)
+							gpVsProductCost = grossProfit/netProductCost*100;
+					}
 					channelReport.setGpVsProductCost(gpVsProductCost);
 					channelReport.setFinalStatus(currOrder.getFinalStatus());
 					

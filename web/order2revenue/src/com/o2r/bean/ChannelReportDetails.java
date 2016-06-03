@@ -28,6 +28,8 @@ public class ChannelReportDetails {
 	private double netAr;
 	private double netToBeReceived;
 	private double productCost;
+	private double returnProductCost;
+	private double netProductCost;
 	private double pr;
 	private double netReturnCharges;
 	private double netPr;
@@ -229,6 +231,22 @@ public class ChannelReportDetails {
 		this.productCost = productCost;
 	}
 
+	public double getReturnProductCost() {
+		return returnProductCost;
+	}
+
+	public void setReturnProductCost(double returnProductCost) {
+		this.returnProductCost = returnProductCost;
+	}
+
+	public double getNetProductCost() {
+		return netProductCost;
+	}
+
+	public void setNetProductCost(double netProductCost) {
+		this.netProductCost = netProductCost;
+	}
+
 	public double getPr() {
 		return pr;
 	}
@@ -371,8 +389,8 @@ public class ChannelReportDetails {
 	Comparator<ChannelReportDetails> {
 		@Override
 		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
-			return graph1.pr < graph2.pr ? 1
-					: (graph1.pr > graph2.pr ? -1 : 0);
+			return graph1.netPr < graph2.netPr ? 1
+					: (graph1.netPr > graph2.netPr ? -1 : 0);
 		}
 	}
 	
@@ -382,6 +400,15 @@ public class ChannelReportDetails {
 		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
 			return graph1.netNrAmount < graph2.netNrAmount ? 1
 					: (graph1.netNrAmount > graph2.netNrAmount ? -1 : 0);
+		}
+	}
+	
+	public static class OrderByGNR implements
+	Comparator<ChannelReportDetails> {
+		@Override
+		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
+			return graph1.grossNrAmount < graph2.grossNrAmount ? 1
+					: (graph1.grossNrAmount > graph2.grossNrAmount ? -1 : 0);
 		}
 	}
 }

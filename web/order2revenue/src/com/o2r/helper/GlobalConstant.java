@@ -607,7 +607,9 @@ public class GlobalConstant {
 			put("getNetTaxLiability", "Net Tax Liability");
 			put("getNetAr", "Net A/R");
 			put("getNetToBeReceived", "Net to be Received");
-			put("getProductCost", "Cost of Product");
+			put("getProductCost", "Gross Product Cost");
+			put("getReturnProductCost", "Return Product Cost");
+			put("getNetProductCost", "Net Product Cost");
 			put("getPr", "P/R");
 			put("getNetReturnCharges", "Return Charges");
 			put("getGrossProfit", "Gross Profit");

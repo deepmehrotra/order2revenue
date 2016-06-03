@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -69,7 +70,7 @@
 																		var="partnerDto" varStatus="loop">
 																		<tr>
 																			<td>${partnerDto.partner}</td>
-																			<td>${partnerDto.grossProfit}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.grossProfit}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -83,7 +84,7 @@
 													<div class="ibox-content">
 														<div class="flot-chart">
 															<div class="flot-chart-content"
-																id="line-chart-partner-gross-profit"></div>
+																id="bar-chart-partner-gross-profit"></div>
 														</div>
 													</div>
 												</div>
@@ -106,7 +107,7 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${partnerDto.partner}</td>
-																			<td>${partnerDto.gpVsProductCost}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.gpVsProductCost}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -144,8 +145,8 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${partnerDto.partner}</td>
-																			<td>${partnerDto.pr}</td>
-																			<td>${partnerDto.productCost}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPr}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netProductCost}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -157,10 +158,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<div class="flot-chart">
-															<div class="flot-chart-content"
-																id="bar-chart-partner-pr"></div>
-														</div>
+														<div id="stacked-chart-1"></div>
 													</div>
 												</div>
 											</div>
@@ -178,13 +176,13 @@
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty partnerByNR}">
-																	<c:forEach items="${partnerByNR}" var="partnerDto"
+																<c:if test="${!empty partnerByGNR}">
+																	<c:forEach items="${partnerByGNR}" var="partnerDto"
 																		varStatus="loop">
 																		<tr>
 																			<td>${partnerDto.partner}</td>
-																			<td>${partnerDto.netNrAmount}</td>
-																			<td>${partnerDto.grossProfit}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.grossNrAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.grossProfit}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -196,10 +194,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<div class="flot-chart">
-															<div class="flot-chart-content"
-																id="bar-chart-partner-nr"></div>
-														</div>
+														<div id="stacked-chart-2"></div>
 													</div>
 												</div>
 											</div>
@@ -221,7 +216,7 @@
 																		var="categoryDto" varStatus="loop">
 																		<tr>
 																			<td>${categoryDto.category}</td>
-																			<td>${categoryDto.grossProfit}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.grossProfit}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -235,7 +230,7 @@
 													<div class="ibox-content">
 														<div class="flot-chart">
 															<div class="flot-chart-content"
-																id="line-chart-category-gross-profit"></div>
+																id="bar-chart-category-gross-profit"></div>
 														</div>
 													</div>
 												</div>
@@ -258,7 +253,7 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${categoryDto.category}</td>
-																			<td>${categoryDto.gpVsProductCost}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.gpVsProductCost}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -296,8 +291,8 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${categoryDto.category}</td>
-																			<td>${categoryDto.pr}</td>
-																			<td>${categoryDto.productCost}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netPr}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netProductCost}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -309,10 +304,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<div class="flot-chart">
-															<div class="flot-chart-content"
-																id="bar-chart-category-pr"></div>
-														</div>
+														<div id="stacked-chart-3"></div>
 													</div>
 												</div>
 											</div>
@@ -330,13 +322,13 @@
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty categoryByGPCP}">
-																	<c:forEach items="${categoryByGPCP}" var="categoryDto"
+																<c:if test="${!empty categoryByGNR}">
+																	<c:forEach items="${categoryByGNR}" var="categoryDto"
 																		varStatus="loop">
 																		<tr>
 																			<td>${categoryDto.category}</td>
-																			<td>${categoryDto.netNrAmount}</td>
-																			<td>${categoryDto.grossProfit}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.grossNrAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.grossProfit}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -348,10 +340,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<div class="flot-chart">
-															<div class="flot-chart-content"
-																id="bar-chart-category-nr"></div>
-														</div>
+														<div id="stacked-chart-4"></div>
 													</div>
 												</div>
 											</div>
@@ -367,11 +356,15 @@
 																<tr>
 																	<th>Partner</th>
 																	<th>Net Sale Qty</th>
-																	<th>Cost of Product</th>
+																	<th>Total Net N/R</th>
+																	<th>Total Return Charges to be reversed</th>
 																	<th>Net Cost of Product</th>
 																	<th>Net P/R</th>
+																	<th>Total Additional Charges</th>
 																	<th>Gross Profit/Loss</th>
 																	<th>% GP Vs Cost of Profit</th>
+																	<th>Net Payment Result</th>
+																	<th>Net Payment Difference</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -380,12 +373,16 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${partner.partner}</td>
-																			<td>${partner.netQty}</td>
-																			<td>${partner.productCost}</td>
-																			<td>${partner.netQty * partner.productCost}</td>
-																			<td>${partner.pr}</td>
-																			<td>${partner.grossProfit}</td>
-																			<td>${partner.gpVsProductCost}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${partner.netQty}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.grossNrAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.saleRetNrAmount - partner.netReturnCharges}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netProductCost}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPr}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netReturnCharges}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.grossProfit}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.gpVsProductCost}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPaymentResult}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.paymentDifference}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -409,11 +406,15 @@
 																<tr>
 																	<th>Category</th>
 																	<th>Net Sale Qty</th>
-																	<th>Cost of Product</th>
+																	<th>Total Net N/R</th>
+																	<th>Total Return Charges to be reversed</th>
 																	<th>Net Cost of Product</th>
 																	<th>Net P/R</th>
+																	<th>Total Addtional Charges</th>
 																	<th>Gross Profit/Loss</th>
 																	<th>% GP Vs Cost of Profit</th>
+																	<th>Net Payment Result</th>
+																	<th>Net Payment Difference</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -422,12 +423,16 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${category.category}</td>
-																			<td>${category.netQty}</td>
-																			<td>${category.productCost}</td>
-																			<td>${category.netQty * partner.productCost}</td>
-																			<td>${category.pr}</td>
-																			<td>${category.grossProfit}</td>
-																			<td>${category.gpVsProductCost}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${category.netQty}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netNrAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.saleRetNrAmount - partner.netReturnCharges}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netProductCost}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPr}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netReturnCharges}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.grossProfit}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.gpVsProductCost}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPaymentResult}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.paymentDifference}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -471,13 +476,14 @@
 	<script src="/O2R/seller/js/plugins/flot/jquery.flot.symbol.js"></script>
 	<script src="/O2R/seller/js/plugins/flot/jquery.flot.spline.js"></script>
 	<script src="/O2R/seller/js/plugins/flot/jquery.flot.resize.js"></script>
+	<script src="/O2R/seller/js/plugins/highchart/highcharts.js"></script>
 
 	<!-- Morris -->
 	<script src="/O2R/seller/js/plugins/morris/raphael-2.1.0.min.js"></script>
 	<script src="/O2R/seller/js/plugins/morris/morris.js"></script>
 
-	<!-- Morris demo data-->
-	<script src="/O2R/seller/js/demo/morris-demo.js"></script>
+	<!-- Highchart Custom -->
+	<script src="/O2R/seller/js/demo/highchart-demo.js"></script>
 
 	<!-- ChartJS-->
 	<script src="/O2R/seller/js/plugins/chartJs/Chart.min.js"></script>
@@ -514,25 +520,29 @@
 		partnerByGPCP.push(arr2);
 		</c:forEach>
 		
-		var temp5 = [];
-		var partnerByPR = [];
-		var i = 1;
+		var dataArr = [];
+		var yAxisText = 'Net P/R vs Net Product Cost';
+		var divId = "#stacked-chart-1";
+		var xAxisCategories = ['Net P/R', 'Net Product Cost'];
 		<c:forEach items="${partnerByPR}" var="partnerDto" varStatus="loop">
-		var arr1 = [ i, '${partnerDto.pr}' ];
-		var arr2 = [ i++, '${partnerDto.partner}' ];
-		temp5.push(arr1);
-		partnerByPR.push(arr2);
+			var data = {};
+			data.name = '${partnerDto.partner}';
+			data.data = [parseFloat(parseFloat('${partnerDto.netPr}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netProductCost}').toFixed(2))];
+			dataArr.push(data);
 		</c:forEach>
+		stackChart(divId, yAxisText, dataArr);	
 		
-		var temp6 = [];
-		var partnerByNR = [];
-		var i = 1;
-		<c:forEach items="${partnerByNR}" var="partnerDto" varStatus="loop">
-		var arr1 = [ i, '${partnerDto.netNrAmount}' ];
-		var arr2 = [ i++, '${partnerDto.partner}' ];
-		temp6.push(arr1);
-		partnerByNR.push(arr2);
+		var dataArr = [];
+		var yAxisText = 'Net N/R vs Gross Profit';
+		var divId = "#stacked-chart-2";
+		var xAxisCategories = ['Net N/R', 'Gross Profit'];
+		<c:forEach items="${partnerByGNR}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.partner}';
+			data.data = [parseFloat(parseFloat('${partnerDto.grossNrAmount}').toFixed(2)), parseFloat(parseFloat('${partnerDto.grossProfit}').toFixed(2))];
+			dataArr.push(data);
 		</c:forEach>
+		stackChart(divId, yAxisText, dataArr);
 
 		var temp3 = [];
 		var categoryByGrossProfit = [];
@@ -554,46 +564,42 @@
 		categoryByGPCP.push(arr2);
 		</c:forEach>
 		
-		var temp7 = [];
-		var categoryByPR = [];
-		var i = 1;
-		<c:forEach items="${categoryByPR}" var="categoryDto" varStatus="loop">
-		var arr1 = [ i, '${categoryDto.pr}' ];
-		var arr2 = [ i++, '${categoryDto.category}' ];
-		temp7.push(arr1);
-		categoryByPR.push(arr2);
+		var dataArr = [];
+		var yAxisText = 'Net P/R vs Net Product Cost';
+		var divId = "#stacked-chart-3";
+		var xAxisCategories = ['Net P/R', 'Net Product Cost'];
+		<c:forEach items="${categoryByPR}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.partner}';
+			data.data = [parseFloat(parseFloat('${partnerDto.netPr}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netProductCost}').toFixed(2))];
+			dataArr.push(data);
 		</c:forEach>
-
-		var temp8 = [];
-		var categoryByNR = [];
-		var i = 1;
-		<c:forEach items="${categoryByNR}" var="categoryDto" varStatus="loop">
-		var arr1 = [ i, '${categoryDto.netNrAmount}' ];
-		var arr2 = [ i++, '${categoryDto.category}' ];
-		temp8.push(arr1);
-		categoryByNR.push(arr2);
+		stackChart(divId, yAxisText, dataArr);	
+		
+		var dataArr = [];
+		var yAxisText = 'Net N/R vs Gross Profit';
+		var divId = "#stacked-chart-4";
+		var xAxisCategories = ['Net N/R', 'Gross Profit'];
+		<c:forEach items="${categoryByGNR}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.partner}';
+			data.data = [parseFloat(parseFloat('${partnerDto.grossNrAmount}').toFixed(2)), parseFloat(parseFloat('${partnerDto.grossProfit}').toFixed(2))];
+			dataArr.push(data);
 		</c:forEach>
+		stackChart(divId, yAxisText, dataArr);
 
 		$(window)
 				.load(
 						function() {
 
-							flotline(temp1, partnerByGrossProfit,
-									"#line-chart-partner-gross-profit");
+							flotbar(temp1, partnerByGrossProfit,
+									"#bar-chart-partner-gross-profit");
 							flotbar(temp2, partnerByGPCP,
 									"#bar-chart-partner-gpcp");
-							flotbar(temp5, partnerByPR,
-								"#bar-chart-partner-pr");
-							flotbar(temp6, partnerByNR,
-								"#bar-chart-partner-nr");
-							flotline(temp3, categoryByGrossProfit,
-									"#line-chart-category-gross-profit");
+							flotbar(temp3, categoryByGrossProfit,
+									"#bar-chart-category-gross-profit");
 							flotbar(temp4, categoryByGPCP,
 									"#bar-chart-category-gpcp");
-							flotbar(temp7, categoryByPR,
-									"#bar-chart-category-pr");
-							flotbar(temp8, categoryByNR,
-									"#bar-chart-category-nr");
 
 							$('.dataTables-example')
 									.dataTable(
