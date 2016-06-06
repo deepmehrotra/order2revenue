@@ -4,7 +4,11 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-    <%@page import="java.util.Date"%>
+<%@page import="java.util.Date"%>
+<%@ page language="java" import="java.util.*" %> 
+<%@ page import = "org.springframework.core.io.*" %>
+<%@ page import = "org.springframework.core.io.support.PropertiesLoaderUtils" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -386,64 +390,54 @@
                         <div class="ibox-title">
                             <h5>Notifications</h5>
                         </div>
+                        
+                        <% 
+                        	org.springframework.core.io.Resource resource = new ClassPathResource("Notifications.properties");
+                        	Properties props = PropertiesLoaderUtils.loadProperties(resource);	                        
+	                    %>               
+                       
                         <div class="ibox-content" style="height:465px;overflow-y:auto;">
                                 <div class="feed-activity-list" >
                                     <div class="feed-element">
                                         <div>
-                                            <small class="pull-right text-navy">1m ago</small>
-                                            <strong>Monica Smith</strong>
-                                            <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum</div>
-                                            <small class="text-muted">Today 5:60 pm - 12.06.2014</small>
+                                            <small class="pull-right text-navy"><%=props.getProperty("timesAgo_one") %></small>
+                                            <strong><%=props.getProperty("subject_one") %></strong>
+                                            <div><%=props.getProperty("body_one") %></div>
+                                            <small class="text-muted"><%=props.getProperty("time&Date_one") %></small>
                                         </div>
                                     </div>
                                     <div class="feed-element">
                                         <div>
-                                            <small class="pull-right">2m ago</small>
-                                            <strong>Jogn Angel</strong>
-                                            <div>There are many variations of passages of Lorem Ipsum available</div>
-                                            <small class="text-muted">Today 2:23 pm - 11.06.2014</small>
+                                            <small class="pull-right text-navy"><%=props.getProperty("timesAgo_two") %></small>
+                                            <strong><%=props.getProperty("subject_two") %></strong>
+                                            <div><%=props.getProperty("body_two") %></div>
+                                            <small class="text-muted"><%=props.getProperty("time&Date_two") %></small>
                                         </div>
                                     </div>
                                     <div class="feed-element">
                                         <div>
-                                            <small class="pull-right">5m ago</small>
-                                            <strong>Jesica Ocean</strong>
-                                            <div>Contrary to popular belief, Lorem Ipsum</div>
-                                            <small class="text-muted">Today 1:00 pm - 08.06.2014</small>
+                                            <small class="pull-right text-navy"><%=props.getProperty("timesAgo_three") %></small>
+                                            <strong><%=props.getProperty("subject_three") %></strong>
+                                            <div><%=props.getProperty("body_three") %></div>
+                                            <small class="text-muted"><%=props.getProperty("time&Date_three") %></small>
                                         </div>
                                     </div>
                                     <div class="feed-element">
                                         <div>
-                                            <small class="pull-right">5m ago</small>
-                                            <strong>Monica Jackson</strong>
-                                            <div>The generated Lorem Ipsum is therefore </div>
-                                            <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
+                                            <small class="pull-right text-navy"><%=props.getProperty("timesAgo_four") %></small>
+                                            <strong><%=props.getProperty("subject_four") %></strong>
+                                            <div><%=props.getProperty("body_four") %></div>
+                                            <small class="text-muted"><%=props.getProperty("time&Date_four") %></small>
                                         </div>
                                     </div>
                                     <div class="feed-element">
                                         <div>
-                                            <small class="pull-right">5m ago</small>
-                                            <strong>Anna Legend</strong>
-                                            <div>All the Lorem Ipsum generators on the Internet tend to repeat </div>
-                                            <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
+                                            <small class="pull-right text-navy"><%=props.getProperty("timesAgo_five") %></small>
+                                            <strong><%=props.getProperty("subject_five") %></strong>
+                                            <div><%=props.getProperty("body_five") %></div>
+                                            <small class="text-muted"><%=props.getProperty("time&Date_five") %></small>
                                         </div>
-                                    </div>
-                                    <div class="feed-element">
-                                        <div>
-                                            <small class="pull-right">5m ago</small>
-                                            <strong>Damian Nowak</strong>
-                                            <div>The standard chunk of Lorem Ipsum used </div>
-                                            <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
-                                        </div>
-                                    </div>
-                                    <div class="feed-element">
-                                        <div>
-                                            <small class="pull-right">5m ago</small>
-                                            <strong>Gary Smith</strong>
-                                            <div>200 Latin words, combined with a handful</div>
-                                            <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
-                                        </div>
-                                   </div>
+                                    </div>                                    
                                 </div>
                             </div>
                     </div>
@@ -558,20 +552,20 @@ var expenseColor=[];
            var paymentMonthlycount=[];
            
            <c:choose>
-                           <c:when test="${!empty dashboardValue.last12MonthsPaymentCount}">
-          <c:forEach items="${dashboardValue.last12MonthsPaymentCount}" var="last12MonthsPaymentCount" varStatus="loop">
-           var arr1 = ["${last12MonthsPaymentCount.key.getTime()}","${last12MonthsPaymentCount.value} "];
-           paymentMonthlycount.push(arr1);
-           </c:forEach>
-           </c:when>
-           <c:otherwise>
-           <c:if test="${!empty dashboardValue.last12MonthsOrderCount}">
-           <c:forEach items="${dashboardValue.last12MonthsOrderCount}" var="last12MonthsOrderCount" varStatus="loop">
-           var arr1 = ["${last12MonthsOrderCount.key.getTime()}",0];
-           paymentMonthlycount.push(arr1);
-           </c:forEach>
-           </c:if>
-           </c:otherwise>
+               	<c:when test="${!empty dashboardValue.last12MonthsPaymentCount}">
+          			<c:forEach items="${dashboardValue.last12MonthsPaymentCount}" var="last12MonthsPaymentCount" varStatus="loop">
+           				var arr1 = ["${last12MonthsPaymentCount.key.getTime()}","${last12MonthsPaymentCount.value} "];
+           				paymentMonthlycount.push(arr1);
+           			</c:forEach>
+           		</c:when>
+           		<c:otherwise>
+           			<c:if test="${!empty dashboardValue.last12MonthsOrderCount}">
+           				<c:forEach items="${dashboardValue.last12MonthsOrderCount}" var="last12MonthsOrderCount" varStatus="loop">
+	           				var arr1 = ["${last12MonthsOrderCount.key.getTime()}",0];
+	           				paymentMonthlycount.push(arr1);
+           				</c:forEach>
+           			</c:if>
+           		</c:otherwise>
            </c:choose>
            
            plotOrderPayment(orderMonthlyCount,paymentMonthlycount, "month",24*60*60*1000);

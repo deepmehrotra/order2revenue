@@ -29,7 +29,6 @@ public class CStartEventHandler implements
 	@Override
 	public void setApplicationContext(ApplicationContext arg0)
 			throws BeansException {
-		// TODO Auto-generated method stubS
 		this.arg0 = arg0;
 		try {
 			Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();

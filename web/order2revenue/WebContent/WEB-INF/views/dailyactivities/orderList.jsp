@@ -140,8 +140,7 @@
 									<button type="button" class="btn btn-xs btn-white">1000</button>
 									<button type="button" id="LoadMoreOrder"
 										class="btn btn-xs btn-white">More</button>
-									<a href="#" onclick="onclickNavigateOrder('addOrder','0')"
-										class="btn btn-primary btn-xs">Create New Order</a>
+									<a href="#" onclick="onclickNavigateOrder('addOrder','0')" class="btn btn-primary btn-xs">Create New Order</a>
 								</div>
 							</div>
 							<div class="bs-example">

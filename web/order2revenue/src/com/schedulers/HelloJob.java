@@ -21,7 +21,6 @@ public class HelloJob implements Job{
 	 private SessionFactory sessionFactory;
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		// TODO Auto-generated method stub
 		System.out.println("THIS IS JUST A QUARTZ TEST");
 	}
 	

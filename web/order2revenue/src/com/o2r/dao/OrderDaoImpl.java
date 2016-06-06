@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -21,6 +22,8 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Repository;
 
 import com.o2r.bean.ChannelSalesDetails;
@@ -71,6 +74,9 @@ public class OrderDaoImpl implements OrderDao {
 	private AreaConfigDao areaConfigDao;
 	@Autowired
 	private SellerDao sellerDao;
+	
+	org.springframework.core.io.Resource resource = new ClassPathResource("database.properties");
+	Properties props = null;
 
 	private final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
 
@@ -236,12 +242,13 @@ public class OrderDaoImpl implements OrderDao {
 								+ order.getGrossNetRate() + " delivery date :"
 								+ order.getDeliveryDate());
 					} else {
-
+						
+						props = PropertiesLoaderUtils.loadProperties(resource);
 						order.setPartnerCommission((order.getOrderSP() - order
 								.getGrossNetRate()) * order.getQuantity());
 						order.getOrderTax().setTdsToDeduct(
 								(order.getPartnerCommission() - (order
-										.getPartnerCommission() * 100 / 114.5))
+										.getPartnerCommission() * 100 /(100 + Double.parseDouble(props.getProperty("serviceTax")))))
 										* (.1) * order.getQuantity());
 
 					}
