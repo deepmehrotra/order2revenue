@@ -580,8 +580,9 @@ public class ConverterClass {
 	}
 
 	public static ProductBean prepareProductBean(Product product) {
-		ProductBean bean = new ProductBean();
+		ProductBean bean = null;
 		if (product != null) {
+			bean =new ProductBean();
 			bean.setCategoryName(product.getCategoryName());
 			bean.setProductDate(product.getProductDate());
 			bean.setProductId(product.getProductId());

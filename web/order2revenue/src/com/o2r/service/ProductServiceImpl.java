@@ -81,4 +81,16 @@ public List<Product> getProductwithCreatedDate(Date startDate,Date endDate, int 
 {
 	return productDao.getProductwithCreatedDate(startDate,endDate,sellerId);
 }
+
+@Override
+public void addSKUMapping(ProductConfig productConfig, int sellerId)
+{
+	productDao.addSKUMapping(productConfig,sellerId);
+}
+
+@Override
+public boolean getProductwithProductConfig(int sellerId) throws CustomException
+{
+	return productDao.getProductwithProductConfig(sellerId);
+}
 }

@@ -8,7 +8,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -932,6 +931,90 @@ public class SaveContents {
 	}
 
 	// My coding Product Config *********
+	
+	
+	public Map<String, ProductConfigBean> saveSKUMappingContents(
+			MultipartFile file, int sellerId, String path, UploadReport uploadReport)
+					throws IOException {
+		boolean validaterow = true;
+		Map<String, ProductConfigBean> returnProductConfigMap = new LinkedHashMap<>();
+		StringBuffer errorMessage = null;
+		try {
+			System.out.println("Inside saveSKUMappingContent -->");
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			HSSFRow entry;
+			Integer noOfEntries = 1;
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			logger.info(noOfEntries.toString());
+			System.out.println("After getting no of rows" + noOfEntries);
+			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
+				System.out.println("Product 1" + entry.getCell(1));
+				System.out.println("Product  2" + entry.getCell(2));
+				ProductConfig productConfig = new ProductConfig();
+				if (entry.getCell(0) != null
+						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					Product product=productService.getProduct(entry.getCell(0).toString(), sellerId);
+					if(product!=null)
+					{
+						productConfig
+						.setProductSkuCode(entry.getCell(0).toString());
+						if (entry.getCell(1) != null
+								&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							productConfig.setChannelSkuRef(entry.getCell(1).toString());
+						} else {
+							errorMessage.append(" Channel Name is null ");
+							validaterow = false;
+						}
+						if (entry.getCell(2) != null
+								&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							productConfig.setChannelName(entry.getCell(2).toString());
+						} else {
+							errorMessage.append(" Channel Name is null ");
+							validaterow = false;
+						}
+					
+					}
+				} else {
+					errorMessage.append(" Product SKU is null ");
+					validaterow = false;
+				}
+				
+			
+
+				// product.setVolume(product.getHeight() * product.getLength() *
+				// product.getBreadth());
+				// product.setVolWeight(product.getVolume() / 5);
+				if (validaterow) {
+					productService.addSKUMapping(productConfig, sellerId);
+				} else {
+					returnProductConfigMap.put(errorMessage.toString(),
+							ConverterClass
+									.prepareProductConfigBean(productConfig));
+				}
+				System.out
+						.println("Sheet values :1 :" + entry.getCell(1)
+								+ " 2 :" + entry.getCell(2) + " 3 :"
+								+ entry.getCell(3));
+				// Pre save to generate id for use in hierarchy
+			}
+			Set<String> errorSet = returnProductConfigMap.keySet();
+			downloadUploadReportXLS(offices, "SKUMappingReport", 4,
+					errorSet, path, sellerId, uploadReport);
+		} catch (Exception e) {
+			System.out.println("Inside save contents exception :"
+					+ e.getLocalizedMessage());
+			e.printStackTrace();
+			throw new MultipartException("Constraints Violated");
+		}
+
+		return returnProductConfigMap;
+	}
 
 	public Map<String, ProductConfigBean> saveProductConfigContents(
 			MultipartFile file, int sellerId, String path, UploadReport uploadReport)

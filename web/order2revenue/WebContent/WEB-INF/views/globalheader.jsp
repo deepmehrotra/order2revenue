@@ -18,6 +18,32 @@
 	background: red;
 	transition: width .3s;
 }
+ .para
+        {
+        	padding: 10px;
+        	color: #fff;
+        	line-height: 12px;
+    		padding: 14px 0px 4px 10px;
+        }
+        .para a
+        {
+        	color: #fff;
+        }
+        .para a:hover
+        {
+        	color: #1e6ec1;
+        }
+        .sp
+        {
+        	position: relative;
+        	top: -3px;
+        }
+        .prog
+        {
+        	overflow: hidden;
+    		width: 60%;
+    		margin-left: 20%;
+        }
 </style>
 
 <!--Start of Zopim Live Chat Script-->
@@ -109,6 +135,73 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 			</form>
 		</div>
 		<ul class="nav navbar-top-links navbar-right">
+		<!-- //Code for Getting started dropdown -->
+		<li class="dropdown">
+                    	<a class="dropdown-toggle count-info" data-toggle="dropdown">
+                        	<img src="img/notification.png" alt="notification">
+                    	</a>
+                        <ol class="dropdown-menu animated fadeInRight m-t-xs" style="background:#333;border-left: none !important;border: 2px solid #fff;width:300%;padding-bottom: 14px;">
+                         <h3 style="color:#fff;padding: 11px 0px 0px 17px;">Getting Started</h3>
+                            <hr class="line-dashed">
+                            <div class="prog">
+	                         
+                              <div class="progress-bar progress-bar-success" role="progressbar" style="width:10%;background-color:#1e6ec1;height: 100%;padding-top: 7px;border-radius: 7px 0px 0px 7px;">
+	                                  <span id="completed" class="sp">10%</span>
+	                            </div>
+	                            <div class="progress-bar progress-bar-warning" role="progressbar" style="width:90%;background-color:#474747;height: 100%;padding-top: 7px;border-radius: 0px 7px 7px 0px;">
+	                            	 <span class="sp" id="left">90%</span>
+	                            </div>
+	                           </div>
+                            <br/>
+                            <li>
+                            	<p class="para">
+                            	1. Configure Seller Details and Delivery Time.
+                            	<a href="support.html" class="pull-right">More Info</a>
+                            	</p>
+
+                            </li>
+                            <li>
+                            	<p class="para">
+                            	2. Make Inventory Groups and Product Categories.
+                            	<a href="support.html" class="pull-right white">More Info</a>
+                            	</p>
+                            </li>
+                            <li>
+                            	<p class="para">
+                            	3. Upload all product in SKUs.
+                            	<a href="support.html" class="pull-right">More Info</a>
+                            	</p>
+                            </li>
+                            <li>
+                            <p class="para">
+                            	4. Make Tax Categories.
+                            	<a href="support.html" class="pull-right">More Info</a>
+                            	</p>
+                            	
+                            </li>
+                            <li>
+                            	<p class="para">
+                            	5. Make Sales Channels.
+                            	<a href="support.html" class="pull-right">More Info</a>
+                            	</p>
+                            </li>
+                            <li>
+                            	
+                            	<p class="para">
+                            	6. Make Product Config for PO channels.
+                            	<a href="support.html" class="pull-right">More Info</i></a>
+                            	</p>
+                            </li>
+                            <li>
+                            	<p class="para">
+                            	7. Make Expense Categries.(If required)
+                            	<a href="support.html" class="pull-right">
+                            	More Info</a>
+                            	</p>
+                            </li>
+                        </ol>
+                	</li>
+		
 			<li class="dropdown"><a class="dropdown-toggle count-info"
 				id="dropdown" data-toggle="dropdown" href="#"> <i
 					class="fa fa-exchange"></i>

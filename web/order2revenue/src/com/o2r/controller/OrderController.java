@@ -56,7 +56,6 @@ import com.o2r.service.EventsService;
 import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.ProductService;
-import com.o2r.service.ReportDownloadService;
 import com.o2r.service.ReportGeneratorService;
 import com.o2r.service.SellerService;
 import com.o2r.service.TaxDetailService;
@@ -130,6 +129,8 @@ public class OrderController {
 				downloadService.downloadPOPaymentXLS(response);
 			} else if (sheetvalue.equals("expenseSummary")) {
 				downloadService.downloadExpensesXLS(response);
+			}else if (sheetvalue.equals("skuMapping")) {
+				downloadService.downloadSKUMappingXLS(response);
 			}
 		}
 		log.info("$$$ getXLS Ends : OrderController $$$");
@@ -198,6 +199,8 @@ public class OrderController {
 		double starttime = System.currentTimeMillis();
 		log.debug(" **StartTime : " + starttime);
 		List<MultipartFile> files = uploadForm.getFiles();
+		System.out.println(" filse : "+files);
+		System.out.println(" filse size : "+files.size());
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
 		List<String> fileNames = new ArrayList<String>();

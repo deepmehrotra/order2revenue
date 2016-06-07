@@ -92,6 +92,8 @@ public class ProductController {
 					&& skuCode != null) {
 				productBean = ConverterClass.prepareProductBean(productService
 						.getProduct(skuCode, sellerId));
+				System.out.println(" Product bean in search product: "+productBean);
+				if(productBean!=null)
 				productList.add(productBean);
 			} else if (searchProduct != null && startDate != null
 					&& endDate != null) {
@@ -130,6 +132,7 @@ public class ProductController {
 		try {
 			Object obj = request.getSession().getAttribute(
 					"productSearchObject");
+			System.out.println(" Getting null value of search object : "+obj);
 			if (obj != null) {
 				log.debug(" Getting list from session" + obj);
 				model.put("productList", obj);
