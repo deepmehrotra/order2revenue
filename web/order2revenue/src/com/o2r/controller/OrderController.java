@@ -306,6 +306,12 @@ public class OrderController {
 							uploadReport));
 					model.put("mapType", "expensesMap");
 					break;
+				case "skuMapping":
+					model.put("skuMapping", saveContents.saveSKUMappingContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport));
+					model.put("mapType", "skuMappingMap");
+					break;
 
 				}
 				inputStream = files.get(0).getInputStream();
