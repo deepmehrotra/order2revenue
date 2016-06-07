@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -190,14 +191,14 @@ public class OrderController {
 
 	@RequestMapping(value = "/seller/saveSheet", method = RequestMethod.POST)
 	@SuppressWarnings("rawtypes")
-	public ModelAndView save(HttpServletRequest request,
+	public ModelAndView save(MultipartHttpServletRequest request,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
 		log.info("$$$ save() Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		double starttime = System.currentTimeMillis();
 		log.debug(" **StartTime : " + starttime);
-		List<MultipartFile> files = uploadForm.getFiles();
+		List<MultipartFile> files = request.getFiles("0");
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
 		List<String> fileNames = new ArrayList<String>();

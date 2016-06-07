@@ -101,7 +101,7 @@
 										<label> Change Period: </label>
 										<button class="btn btn-grey">Monthly</button>
 										<button class="btn btn-grey"
-											onclick="onclickNavigateOrder('viewGatePassList','0')">Annually</button>
+											onclick="onclickNavigateOrder('viewPOOrderDetails','0')">Annually</button>
 									</div>
 								</div>
 								<div class="col-sm-12">
