@@ -103,6 +103,8 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
      <bean id="helperClass" class="com.o2r.helper.HelperClass">
     </bean>
     
-    <!-- <bean id="cStartEventHandler" class="com.schedulers.CStartEventHandler"/> -->
+    <bean id="triggerHandlerJob" class="com.o2r.schedulers.SetTriggerJob" />
+    
+    <!-- <bean id="cStartEventHandler" class="com.o2r.schedulers.CStartEventHandler"/> -->
    
 </beans>
