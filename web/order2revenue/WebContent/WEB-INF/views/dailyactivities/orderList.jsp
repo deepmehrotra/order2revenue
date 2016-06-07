@@ -82,8 +82,7 @@
 							<div class="ibox-title">
 								<h5>Orders(${orders.size()})</h5>
 								<div class="table-menu-links">
-									<a href="#" id="POOrders"
-										onclick="onclickNavigateOrder('viewPOOrderDetails','0')">PO
+									<a href="poOrderList.html?value=''" id="POOrders">PO
 										Orders</a> <a href="#" id="returnOrders">Return</a> <a href="#"
 										id="gatepass"
 										onclick="onclickNavigateOrder('viewGatePassList','0')">GatePass</a>

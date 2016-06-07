@@ -819,7 +819,16 @@ public class OrderController {
 					Locale.ENGLISH);
 			Date startDate;
 			Date endDate;
-			if (value.contains(" ")) {
+			if ("".equals(value.trim())) {
+				Calendar c = Calendar.getInstance();
+				c.setTime(new Date());
+				c.set(Calendar.DAY_OF_MONTH, 1);
+				startDate = c.getTime();
+				c.set(Calendar.DAY_OF_MONTH,
+						c.getActualMaximum(Calendar.DAY_OF_MONTH));
+				endDate = c.getTime();
+				
+			} else if (value.contains(" ")) {
 				dateString = "1 " + value;
 				startDate = format.parse(dateString);
 

@@ -75,9 +75,10 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 							<tr>
 								<th>Partner</th>
 								<th>Invoice Id</th>
-								<th>PI Reference No</th>
-								<th>Sub Order Id</th>
-								<th>Order Date</th>
+								<th>PO ID</th>
+								<th>Seal No.</th>
+								<th>Order Shipped Date</th>
+								<th>Expected Payment Date</th>
 								<th>Status</th>
 								<th>Action</th>
 							</tr>
@@ -86,9 +87,11 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 							<tr>
 								<td>${order.pcName}</td>
 								<td>${order.invoiceID}</td>
-								<td>${order.PIreferenceNo}</td>
-								<td>${order.subOrderID}</td>
+								<td>${order.channelOrderID}</td>
+								<td>${order.sealNo}</td>
 								<td><fmt:formatDate value="${order.orderDate}"
+										pattern="MMM-dd-YYYY" /></td>
+								<td><fmt:formatDate value="${order.paymentDueDate}"
 										pattern="MMM-dd-YYYY" /></td>
 								<td>${order.status}</td>
 								<td>${order.finalStatus}</td>
