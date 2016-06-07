@@ -228,6 +228,21 @@ public class DownloadService {
 		response.setContentType("application/vnd.ms-excel");
 		Writer.write(response, worksheet, fileName);
 	}
+	
+	public void downloadSKUMappingXLS(HttpServletResponse response)
+			throws ClassNotFoundException {
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet worksheet = workbook.createSheet("SKU Mapping");
+		int startRowIndex = 0;
+		int startColIndex = 0;
+		Layouter.buildReport(worksheet, startRowIndex, startColIndex,
+				"SKU Mapping");
+		String fileName = "SKUMapping.xls";
+		response.setHeader("Content-Disposition", "inline; filename="
+				+ fileName);
+		response.setContentType("application/vnd.ms-excel");
+		Writer.write(response, worksheet, fileName);
+	}
 
 	public void getUploadLog(HttpServletResponse response, String pathvalue)
 			throws IOException {

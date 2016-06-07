@@ -13,6 +13,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -261,6 +262,35 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
+	public void addSKUMapping(ProductConfig productConfig, int sellerId) {
+
+		log.info("*** addProductConfig Starts : ProductDaoImpl ****");
+		Product product = null;
+		List<ProductConfig> productConfigs = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Product.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN).add(
+					Restrictions.eq("seller.id", sellerId));
+			criteria.add(Restrictions.eq("productSkuCode",
+					productConfig.getProductSkuCode()));
+			product = (Product) criteria.list().get(0);
+			if (product != null) {
+				productConfig.setProduct(product);
+				product.getProductConfig().add(productConfig);
+				session.saveOrUpdate(product);
+			}
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			log.error("Failed!",e);
+			e.printStackTrace();
+		}
+		log.info("*** addProductConfig Ends : ProductDaoImpl ****");
+		}
+	@Override
 	public List<Product> listProducts(int sellerId, int pageNo)
 			throws CustomException {
 
@@ -361,10 +391,13 @@ public class ProductDaoImpl implements ProductDao {
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Product.class);
 			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN);
+			criteria.createAlias("productConfig", "productConfig",
 					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.eq("productSkuCode", skuCode)
-							.ignoreCase())
+					.add(Restrictions.eq("seller.id", sellerId));
+			Criterion rest1 = Restrictions.eq("productSkuCode", skuCode);
+			Criterion rest2 = Restrictions.eq("productConfig.channelSkuRef", skuCode);
+			criteria.add(Restrictions.or(rest1, rest2))
 					.setResultTransformer(
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
@@ -501,6 +534,41 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		log.info("*** getProductwithCreatedDate Ends : ProductDaoImpl ****");
 		return productlist;
+	}
+	
+	@Override
+	public boolean getProductwithProductConfig(int sellerId) throws CustomException {
+		
+		log.info("*** getProductwithProductConfig Starts : ProductDaoImpl ****");
+		List<Product> productlist = null;
+		boolean result=false;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Product.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions
+							.isNotNull("productConfig"))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			productlist = criteria.list();
+			if(productlist!=null)
+				result=true;
+			
+
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
+			throw new CustomException(
+					GlobalConstant.getProductwithCreatedDateError, new Date(),
+					3, GlobalConstant.getProductwithCreatedDateErrorCode, e);
+		}
+		log.info("*** getProductwithCreatedDate Ends : ProductDaoImpl ****");
+		return result;
 	}
 
 	@Override

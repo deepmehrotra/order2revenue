@@ -41,4 +41,7 @@ public interface ProductService {
 	public ProductConfig getProductConfig(String skuCode, String channel,
 			int sellerId) throws CustomException;
 
+	public void addSKUMapping(ProductConfig productConfig, int sellerId);
+	
+	public boolean getProductwithProductConfig(int sellerId) throws CustomException;
 }
