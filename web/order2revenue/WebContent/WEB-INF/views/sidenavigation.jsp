@@ -59,7 +59,7 @@
 					</span>
 					</a>
 					<ul class="dropdown-menu animated fadeInRight m-t-xs">
-						<li><a href="profile.html">Profile</a></li>
+						<li><a href="addSeller.html">Profile</a></li>
 						<li><a href="partners.html">Partners</a></li>
 						<li class="divider"></li>
 						<li><a href="/j_spring_security_logout">Logout</a></li>

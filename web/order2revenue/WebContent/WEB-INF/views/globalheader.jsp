@@ -264,7 +264,6 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 			</a>
 				<ul class="dropdown-menu animated fadeInRight m-t-xs">
 					<li><a href="addSeller.html">Seller Info</a></li>
-					<li><a href="#">Goeasy Account</a></li>
 					<li><a href="upgrade.html">Plan Upgrade</a></li>
 					<li><a href="summary.html">Summary</a></li>
 				</ul></li>
