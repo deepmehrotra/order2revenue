@@ -108,7 +108,7 @@ public class SellerDaoImpl implements SellerDao {
 		                    if(logoUrl != null){
 		                    	sellerNew.setLogoUrl(logoUrl); 
 		                    }
-		                    if(verCode.equals("Verified")){
+		                    if(verCode!=null&&verCode.equals("Verified")){
 		                    	sellerNew.setVerCode(verCode);
 		                    	assignRole(sellerNew.getId());
 		                    }
