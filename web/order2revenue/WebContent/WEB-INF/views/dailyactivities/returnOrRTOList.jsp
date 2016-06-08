@@ -133,7 +133,8 @@ $('#LoadOnSubmit').click(function (e) {
                                 </div>
                         </form>
                         <div class="col-lg-12">
-                                <div class="hr-line-dashed"></div>						
+                                <div class="hr-line-dashed"></div>	
+                                <div id="RTOTableContainer"></div>					
                         </div>
 						</div>
 					</div>

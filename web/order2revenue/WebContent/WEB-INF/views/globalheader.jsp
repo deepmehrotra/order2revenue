@@ -128,7 +128,7 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 							</div>
 						</div>
 					</div>
-					<button class="btn btn-white" type="submit">
+					<button class="btn btn-white" type="submit" style="height: 34px;margin-left: 5px;">
 						<i class="fa fa-search"></i>
 					</button>
 				</div>
@@ -138,7 +138,7 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 		<!-- //Code for Getting started dropdown -->
 		<li class="dropdown">
                     	<a class="dropdown-toggle count-info" data-toggle="dropdown">
-                        	<img src="img/notification.png" alt="notification">
+                        	<img src="/O2R/landing/img/notification.png" alt="notification">
                     	</a>
                         <ol class="dropdown-menu animated fadeInRight m-t-xs" style="background:#333;border-left: none !important;border: 2px solid #fff;width:300%;padding-bottom: 14px;">
                          <h3 style="color:#fff;padding: 11px 0px 0px 17px;">Getting Started</h3>
