@@ -12,8 +12,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd
 http://www.springframework.org/schema/tx
 http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 http://www.springframework.org/schema/mvc
-http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
-">
+http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 
 <!-- <bean id="mailProperties"
     class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -91,8 +90,8 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>				
 			</props>
 		</property>
-	</bean>
-
+	</bean>	
+	
 	<bean id="hibernateTransactionManager"
 		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
@@ -100,11 +99,44 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
 	 <bean id="customUserDetailsService" class="com.o2r.service.CustomUserDetailsService"></bean>
     <bean id="sellerDao" class="com.o2r.dao.SellerDaoImpl"></bean>
      <bean id="sellerService" class="com.o2r.service.SellerServiceImpl"></bean>
-     <bean id="helperClass" class="com.o2r.helper.HelperClass">
-    </bean>
-    
-    <bean id="triggerHandlerJob" class="com.o2r.schedulers.SetTriggerJob" />
-    
+     <bean id="helperClass" class="com.o2r.helper.HelperClass"></bean>
+     
+     <!-- schedular mapping START -->
+     
+     	<bean id="sampleJob" class="com.o2r.schedulers.SampleJob"></bean>     
+	    <bean name="setTriggerJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+			<property name="jobClass" value="com.o2r.schedulers.SetTriggerJob" />		
+			<property name="jobDataAsMap">
+				<map>
+					<entry key="sampleJob" value-ref="sampleJob" />
+				</map>
+			</property>		
+		</bean>
+		<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">		
+			<property name="jobDetail" ref="setTriggerJob" />
+			<property name="repeatInterval" value="50000" />
+			<!-- <property name="startDelay" value="5000" /> -->			
+		</bean>	
+		<!-- <bean id="cronTrigger" 
+                class="org.springframework.scheduling.quartz.CronTriggerBean">
+
+			<property name="jobDetail" ref="setTriggerJob" />
+			<property name="cronExpression" value="0/25 * * * * ?" />
+	
+		</bean> -->
+			
+		<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+			<property name="triggers">
+				<list>
+					<ref bean="simpleTrigger" />
+				</list>
+			</property>
+		</bean>
+		
+     <!-- Schedular mapping END -->
+     
+     
+     
     <!-- <bean id="cStartEventHandler" class="com.o2r.schedulers.CStartEventHandler"/> -->
    
 </beans>
