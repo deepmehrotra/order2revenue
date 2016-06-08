@@ -1,4 +1,4 @@
-package com.o2r.schedulers;
+/*package com.o2r.schedulers;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -49,4 +49,4 @@ public class CStartEventHandler implements
 			se.printStackTrace();
 		}
 	}
-}
+}*/
