@@ -1367,29 +1367,8 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
-																	<div class="col-sm-12 radio1" id="blk-RTO-br-variable">
-<<<<<<< HEAD
-																		<div class="form-group col-md-12">
-																			<label class="col-sm-2 control-label">Fix
-																				Amount</label>
-																			<div class="col-sm-2">
-																				<input type="text" placeholder=""
-																					class="form-control validateNumber" name="nr-RTOCharBRVarFixedAmt"
-																					value="${chargeMap.RTOCharBRVarFixedAmt}">
-																			</div>
-																			<label class="col-sm-2 control-label">% of SP</label>
-																			<div class="col-sm-2">
-																				<input type="text" placeholder=""
-																					class="form-control validateNumber" name="nr-RTOCharBRPercentSP"
-																					value="${chargeMap.RTOCharBRPercentSP}"><span class="input-group-addon">%</span>
-																			</div>
-																			<label class="col-sm-2 control-label"> % of
-																				Commision</label>
-																			<div class="col-sm-2">
-																				<input type="text" placeholder=""
-																					class="form-control validateNumber" name="nr-RTOCharBRPercentPCC"
-																					value="${chargeMap.RTOCharBRPercentPCC}">
-=======
+																	<div class="col-sm-12 radio1" id="blk-RTO-br-variable">					
+
 																		<div class="form-group col-lg-12">																			
 																			<div class="col-sm-4">
 																				<div class="col-md-5">
@@ -1422,7 +1401,7 @@ span .#error {
 																						value="${chargeMap.RTOCharBRPercentPCC}">
 																					<span class="input-group-addon">%</span>
 																				</div>
->>>>>>> refs/heads/Release_14_May_8thJune
+
 																			</div>
 																		</div>
 																		<div class="col-md-12">
@@ -1446,6 +1425,7 @@ span .#error {
 															</div>
 														</div>
 													</div>
+													
 													<div class="panel panel-default">
 														<div class="panel-heading">
 															<h4 class="panel-title">
