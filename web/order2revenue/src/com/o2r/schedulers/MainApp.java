@@ -1,4 +1,4 @@
-package com.schedulers;
+package com.o2r.schedulers;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

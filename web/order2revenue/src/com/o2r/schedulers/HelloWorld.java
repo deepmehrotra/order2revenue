@@ -1,4 +1,4 @@
-package com.schedulers;
+package com.o2r.schedulers;
 
 public class HelloWorld {
    private String message;
