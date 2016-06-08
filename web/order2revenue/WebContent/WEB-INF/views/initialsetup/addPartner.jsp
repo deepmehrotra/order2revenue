@@ -190,14 +190,14 @@ span .#error {
 												</form:select>
 											</div>
 
-											<div class="col-md-6 payment-box" id="true">
+											<div class="col-md-6 payment-box" id="true" >
 												<form:input path="noofdaysfromshippeddate"
 													id="noofdaysfromshippeddate"
 													value="${partner.noofdaysfromshippeddate}"
 													placeholder="Payment Days From Shipped Date"
 													class="form-control" />
 											</div>
-											<div class="col-md-6 payment-box" id="false">
+											<div class="col-md-6 payment-box" id="false" style="display: block;">
 												<form:input path="noofdaysfromdeliverydate"
 													id="noofdaysfromdeliverydate"
 													value="${partner.noofdaysfromdeliverydate}"
@@ -1341,7 +1341,7 @@ span .#error {
 																			<div class="col-sm-2">
 																				<input type="text" placeholder=""
 																					class="form-control validateNumber" name="nr-RTOCharBRPercentSP"
-																					value="${chargeMap.RTOCharBRPercentSP}">
+																					value="${chargeMap.RTOCharBRPercentSP}"><span class="input-group-addon">%</span>
 																			</div>
 																			<label class="col-sm-2 control-label"> % of
 																				Commision</label>
@@ -2514,10 +2514,10 @@ $(document).ready(
 				$('.radio1').hide();
 				$("#blk-" + $(this).val()).slideDown();
 			});
-			$('#paymentField').change(function() {
+			/* $('#paymentField').change(function() {
 				$('.payment-box').hide();
 				$('#' + $(this).val()).fadeIn();
-			});
+			}); */
 			$('#paymentField1').change(function() {
 				$('.payment-box').hide();
 				$('#' + $(this).val()).fadeIn();
