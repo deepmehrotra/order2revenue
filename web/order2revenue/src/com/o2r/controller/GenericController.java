@@ -18,12 +18,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.o2r.bean.DashboardBean;
 import com.o2r.bean.OrderBean;
 import com.o2r.bean.SellerBean;
 import com.o2r.bean.UploadReportBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
+import com.o2r.helper.DateDeserializer;
+import com.o2r.helper.DateSerializer;
 import com.o2r.helper.HelperClass;
 import com.o2r.model.GenericQuery;
 import com.o2r.model.Order;
@@ -152,6 +156,32 @@ public class GenericController {
 		}
 		logger.info("$$$ displayDashboard Ends : GenericController $$$");
 		return new ModelAndView("landing", model);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/seller/getUploadReports", method = RequestMethod.GET)
+	public String getUploadReports(HttpServletRequest request) {
+		
+		logger.info("$$$ getUploadReports Starts : GenericController $$$");
+		List<UploadReportBean> uploadReports = null;
+		Gson gson = null;
+		try{
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
+			gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer());
+			gson = gsonBuilder.setPrettyPrinting().create();
+			
+			uploadReports = ConverterClass.prepareUploadReportListBean(
+					reportGeneratorService.listUploadReport(helperClass.getSellerIdfromSession(request)));
+			if (uploadReports != null && uploadReports.size() > 3) {
+				uploadReports = uploadReports.subList(uploadReports.size() - 3, uploadReports.size());
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("Failed!",e);
+		}
+		logger.info("$$$ getUploadReports Ends : GenericController $$$");
+		return gson.toJson(uploadReports);
 	}
 
 	@RequestMapping(value = "/seller/initialsetup", method = RequestMethod.GET)

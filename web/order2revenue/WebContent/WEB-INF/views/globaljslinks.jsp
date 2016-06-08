@@ -1,7 +1,6 @@
 <!-- Mainly scripts -->
 
 <script src="/O2R/seller/js/jquery-2.1.1.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="/O2R/seller/js/bootstrap.min.js"></script>
 <script src="/O2R/seller/js/custom.js"></script>
 <script src="/O2R/seller/js/plugins/metisMenu/jquery.metisMenu.js"></script>

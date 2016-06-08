@@ -3,7 +3,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <jsp:include page="../globalcsslinks.jsp"></jsp:include>
@@ -16,6 +16,13 @@
 <link
 	href="/O2R/seller/css/plugins/dataTables/dataTables.tableTools.min.css"
 	rel="stylesheet">
+
+<script src="/O2R/seller/js/jquery-2.1.1.js"></script>
+<link href="/O2R/seller/css/jquery-ui.css" rel="stylesheet">
+<script src="/O2R/seller/js/jquery-ui-1.10.4.min.js"
+	type="text/javascript"></script>
+<script src="/O2R/seller/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+
 <script type="text/javascript">
     function onclickNavigateOrder(value,id) {
     	var targeturl="";
@@ -58,9 +65,7 @@
     	break;
     	case "poOrderList" :
     		targeturl="poOrderList.html?value="+id;
-    	break;
-    	
-    	
+    	break;	
     	}
         $.ajax({
             url : targeturl,
@@ -81,7 +86,7 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="ibox float-e-margins">
-							<div class="ibox-title" style='min-height: 130px;'>
+							<div class="ibox-title" style='min-height: 90px;'>
 								<div>
 									<h5>PO Orders(${poOrders.size()})</h5>
 									<div class="table-menu-links">
@@ -93,23 +98,23 @@
 									</div>
 								</div>
 								<div class="col-sm-12">
-									<hr style='margin: 0.4em auto;' />
+									<hr style='margin-top: 0.4em; margin-bottom: 0.7em;' />
 								</div>
-								<div>
-									<div class="col-sm-1"></div>
-									<div class="col-sm-11">
+								<div class="col-sm-12">
+									<div class="col-sm-5">
+										<label>Period:</label>
+										<%-- &nbsp;&nbsp;&nbsp;<label> ${period} </label> --%>
+										<input name="startDate" id="monthYearPicker" />
+										<%-- <input value="${period}" id="ChromeMonthPicker" type="month" 
+											class="form-control input-sm" style="width:70%;"/>  --%>
+									</div>
+									<div class="col-sm-3">
 										<label> Change Period: </label>
-										<button class="btn btn-grey">Monthly</button>
-										<button class="btn btn-grey"
+										<button class="btn btn-xs btn-grey active">Monthly</button>
+										<button class="btn btn-xs btn-grey"
 											onclick="onclickNavigateOrder('viewPOOrderDetails','0')">Annually</button>
 									</div>
-								</div>
-								<div class="col-sm-12">
-									<hr style='margin-top: 0.1em; margin-bottom: 0.7em;' />
-								</div>
-								<div class="col-sm-12">
-									<label> Period: </label>
-									<div class="ibox-tools">
+									<div class="ibox-tools col-sm-4">
 										<button class="btn btn-white table-menu-search search-dd">
 											<i class="fa fa-search"></i>
 										</button>
@@ -266,6 +271,22 @@
 
 	<script>
     $(document).ready(function(){
+    	    	
+    	$('#monthYearPicker').datepicker({
+    			changeMonth: true,
+    			changeYear: true,
+    			showButtonPanel: true,
+    			dateFormat: 'MM yy'
+    		}).focus(function() {
+    			var thisCalendar = $(this);
+    			$('.ui-datepicker-calendar').detach();
+    			$('.ui-datepicker-close').click(function() {
+				   	var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+				   	var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+				   	thisCalendar.datepicker('setDate', new Date(year, month, 1));
+    			});
+    		});
+    	
         $('.dataTables-example').dataTable({
                 responsive: true,
                 "dom": 'T<"clear">lfrtip',
@@ -371,6 +392,10 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 
 .dataTables_filter label {
 	margin-right: 5px;
+}
+
+.ui-datepicker-calendar {
+	display: none;
 }
 </style>
 </body>
