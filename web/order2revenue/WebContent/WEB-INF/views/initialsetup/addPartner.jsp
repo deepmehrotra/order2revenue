@@ -104,6 +104,7 @@ span .#error {
 													accept="image/*" name="image" id="image" class="hide">
 													Upload Logo
 												</label>
+												<input type="hidden" name="pcLogoUrl" id="pcLogoUrl"	value="${partner.pcLogoUrl}" />
 											</div>
 
 										</div>
@@ -2196,14 +2197,7 @@ span .#error {
 																	<div class="col-sm-12">
 																		<div class="col-sm-6">
 																			<div class="checkbox i-checks">
-																				<label> Flat Amount </label>
-																				<div id="sub">
-																					<img src="/O2R/seller/img/about.png" alt="about"
-																						style="float: right; position: relative; top: -31px; left: 18px;">
-																				</div>
-																				<div id="welcome" style="display: none;">
-																					<p>Lorem ipsum dolor sit amet, consectetur quis</p>
-																				</div>
+																				<label> Flat Amount </label>																				
 																			</div>
 																		</div>
 																		<div class="col-sm-6">
