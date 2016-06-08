@@ -199,7 +199,8 @@ public class OrderController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		double starttime = System.currentTimeMillis();
 		log.debug(" **StartTime : " + starttime);
-		List<MultipartFile> files = request.getFiles("0");
+		//List<MultipartFile> files = request.getFiles("0");
+		List<MultipartFile> files = uploadForm.getFiles();
 
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
@@ -826,9 +827,13 @@ public class OrderController {
 			String dateString;
 			DateFormat format = new SimpleDateFormat("d MMMM yyyy",
 					Locale.ENGLISH);
+			DateFormat monthFormat = new SimpleDateFormat("yyyy-MM",
+					Locale.ENGLISH);
 			Date startDate;
 			Date endDate;
-			if ("".equals(value.trim())) {
+			String period = "";
+			
+			if ("".equals(value.trim()) || value.equals("0")) {
 				Calendar c = Calendar.getInstance();
 				c.setTime(new Date());
 				c.set(Calendar.DAY_OF_MONTH, 1);
@@ -836,6 +841,8 @@ public class OrderController {
 				c.set(Calendar.DAY_OF_MONTH,
 						c.getActualMaximum(Calendar.DAY_OF_MONTH));
 				endDate = c.getTime();
+				period = monthFormat.format(startDate);
+				//period = period.substring(period.indexOf(' '));
 				
 			} else if (value.contains(" ")) {
 				dateString = "1 " + value;
@@ -858,6 +865,7 @@ public class OrderController {
 					.findOrdersbyDate("shippedDate", startDate, endDate,
 							sellerId, true));
 			model.put("poOrders", poOrderlist);
+			model.put("period", period);
 
 		} catch (CustomException ce) {
 			ce.printStackTrace();

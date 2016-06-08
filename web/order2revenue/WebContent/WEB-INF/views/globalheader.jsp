@@ -3,7 +3,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -18,32 +18,32 @@
 	background: red;
 	transition: width .3s;
 }
- .para
-        {
-        	padding: 10px;
-        	color: #fff;
-        	line-height: 12px;
-    		padding: 14px 0px 4px 10px;
-        }
-        .para a
-        {
-        	color: #fff;
-        }
-        .para a:hover
-        {
-        	color: #1e6ec1;
-        }
-        .sp
-        {
-        	position: relative;
-        	top: -3px;
-        }
-        .prog
-        {
-        	overflow: hidden;
-    		width: 60%;
-    		margin-left: 20%;
-        }
+
+.para {
+	padding: 10px;
+	color: #fff;
+	line-height: 12px;
+	padding: 14px 0px 4px 10px;
+}
+
+.para a {
+	color: #fff;
+}
+
+.para a:hover {
+	color: #1e6ec1;
+}
+
+.sp {
+	position: relative;
+	top: -3px;
+}
+
+.prog {
+	overflow: hidden;
+	width: 60%;
+	margin-left: 20%;
+}
 </style>
 
 <!--Start of Zopim Live Chat Script-->
@@ -59,7 +59,8 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 
 
 
-<link rel="stylesheet" type="text/css" href="/O2R/landing/css/sticky.css">
+<link rel="stylesheet" type="text/css"
+	href="/O2R/landing/css/sticky.css">
 
 </head>
 
@@ -135,103 +136,159 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 			</form>
 		</div>
 		<ul class="nav navbar-top-links navbar-right">
-		<!-- //Code for Getting started dropdown -->
-		<li class="dropdown">
-                    	<a class="dropdown-toggle count-info" data-toggle="dropdown">
-                        	<img src="img/notification.png" alt="notification">
-                    	</a>
-                        <ol class="dropdown-menu animated fadeInRight m-t-xs" style="background:#333;border-left: none !important;border: 2px solid #fff;width:300%;padding-bottom: 14px;">
-                         <h3 style="color:#fff;padding: 11px 0px 0px 17px;">Getting Started</h3>
-                            <hr class="line-dashed">
-                            <div class="prog">
-	                         
-                              <div class="progress-bar progress-bar-success" role="progressbar" style="width:10%;background-color:#1e6ec1;height: 100%;padding-top: 7px;border-radius: 7px 0px 0px 7px;">
-	                                  <span id="completed" class="sp">10%</span>
-	                            </div>
-	                            <div class="progress-bar progress-bar-warning" role="progressbar" style="width:90%;background-color:#474747;height: 100%;padding-top: 7px;border-radius: 0px 7px 7px 0px;">
-	                            	 <span class="sp" id="left">90%</span>
-	                            </div>
-	                           </div>
-                            <br/>
-                            <li>
-                            	<p class="para">
-                            	1. Configure Seller Details and Delivery Time.
-                            	<a href="support.html" class="pull-right">More Info</a>
-                            	</p>
+			<!-- //Code for Getting started dropdown -->
+			<li class="dropdown"><a class="dropdown-toggle count-info"
+				data-toggle="dropdown"> <img src="img/notification.png"
+					alt="notification">
+			</a>
+				<ol class="dropdown-menu animated fadeInRight m-t-xs"
+					style="background: #333; border-left: none !important; border: 2px solid #fff; width: 300%; padding-bottom: 14px;">
+					<h3 style="color: #fff; padding: 11px 0px 0px 17px;">Getting
+						Started</h3>
+					<hr class="line-dashed">
+					<div class="prog">
 
-                            </li>
-                            <li>
-                            	<p class="para">
-                            	2. Make Inventory Groups and Product Categories.
-                            	<a href="support.html" class="pull-right white">More Info</a>
-                            	</p>
-                            </li>
-                            <li>
-                            	<p class="para">
-                            	3. Upload all product in SKUs.
-                            	<a href="support.html" class="pull-right">More Info</a>
-                            	</p>
-                            </li>
-                            <li>
-                            <p class="para">
-                            	4. Make Tax Categories.
-                            	<a href="support.html" class="pull-right">More Info</a>
-                            	</p>
-                            	
-                            </li>
-                            <li>
-                            	<p class="para">
-                            	5. Make Sales Channels.
-                            	<a href="support.html" class="pull-right">More Info</a>
-                            	</p>
-                            </li>
-                            <li>
-                            	
-                            	<p class="para">
-                            	6. Make Product Config for PO channels.
-                            	<a href="support.html" class="pull-right">More Info</i></a>
-                            	</p>
-                            </li>
-                            <li>
-                            	<p class="para">
-                            	7. Make Expense Categries.(If required)
-                            	<a href="support.html" class="pull-right">
-                            	More Info</a>
-                            	</p>
-                            </li>
-                        </ol>
-                	</li>
-		
+						<div class="progress-bar progress-bar-success" role="progressbar"
+							style="width: 10%; background-color: #1e6ec1; height: 100%; padding-top: 7px; border-radius: 7px 0px 0px 7px;">
+							<span id="completed" class="sp">10%</span>
+						</div>
+						<div class="progress-bar progress-bar-warning" role="progressbar"
+							style="width: 90%; background-color: #474747; height: 100%; padding-top: 7px; border-radius: 0px 7px 7px 0px;">
+							<span class="sp" id="left">90%</span>
+						</div>
+					</div>
+					<br />
+					<li>
+						<p class="para">
+							1. Configure Seller Details and Delivery Time. <a
+								href="support.html" class="pull-right">More Info</a>
+						</p>
+
+					</li>
+					<li>
+						<p class="para">
+							2. Make Inventory Groups and Product Categories. <a
+								href="support.html" class="pull-right white">More Info</a>
+						</p>
+					</li>
+					<li>
+						<p class="para">
+							3. Upload all product in SKUs. <a href="support.html"
+								class="pull-right">More Info</a>
+						</p>
+					</li>
+					<li>
+						<p class="para">
+							4. Make Tax Categories. <a href="support.html" class="pull-right">More
+								Info</a>
+						</p>
+
+					</li>
+					<li>
+						<p class="para">
+							5. Make Sales Channels. <a href="support.html" class="pull-right">More
+								Info</a>
+						</p>
+					</li>
+					<li>
+
+						<p class="para">
+							6. Make Product Config for PO channels. <a href="support.html"
+								class="pull-right">More Info</i></a>
+						</p>
+					</li>
+					<li>
+						<p class="para">
+							7. Make Expense Categries.(If required) <a href="support.html"
+								class="pull-right"> More Info</a>
+						</p>
+					</li>
+				</ol></li>
+
 			<li class="dropdown"><a class="dropdown-toggle count-info"
 				id="dropdown" data-toggle="dropdown" href="#"> <i
 					class="fa fa-exchange"></i>
 			</a>
 				<ul class="dropdown-menu dropdown-messages animated fadeInRight">
-					<c:if test="${!empty uploadReportList}">
+					<%--<c:if test="${!empty uploadReportList}">
 						<c:forEach items="${uploadReportList}" var="uploadReport"
 							varStatus="loop">
 							<li>
 								<div class="dropdown-messages-box">
 									<a href="javascript:onclickDownload('${uploadReport.id}');"
-										class="pull-left">
-									<c:if test="${fn:containsIgnoreCase(uploadReport.description, 'Exported')}">
-										<c:set value="fa-level-up" var="cssClass"></c:set>
-									</c:if>
-									<c:if test="${fn:containsIgnoreCase(uploadReport.description, 'Imported')}">
-										<c:set value="fa-level-down" var="cssClass"></c:set>
-									</c:if>
-										<i class="fa ${cssClass}"></i>
+										class="pull-left"> <c:if
+											test="${fn:containsIgnoreCase(uploadReport.description, 'Exported')}">
+											<c:set value="fa-level-up" var="cssClass"></c:set>
+										</c:if> <c:if
+											test="${fn:containsIgnoreCase(uploadReport.description, 'Imported')}">
+											<c:set value="fa-level-down" var="cssClass"></c:set>
+										</c:if> <i class="fa ${cssClass}"></i>
 									</a>
 									<div class="media-body">
 										<small class="pull-right">${uploadReport.uploadedAt}</small> <strong>${uploadReport.description}</strong>
 										by ${uploadReport.sellerName} <br> <small
-											class="text-muted">${uploadReport.fileType} - ${uploadReport.uploadDate}</small>
+											class="text-muted">${uploadReport.fileType} -
+											${uploadReport.uploadDate}</small>
 									</div>
 								</div>
 							</li>
 							<li class="divider"></li>
 						</c:forEach>
-					</c:if>
+					</c:if> --%>
+					<li>
+						<div id="uploadReport-div-1" class="dropdown-messages-box"
+							style="display: none;">
+							<a class="pull-left" id="uploadReport-a-1"> <i
+								id="uploadReport-i-1"></i>
+							</a>
+							<div class="media-body">
+								<small class="pull-right"> <label
+									id="uploadReport-uploadedAt-1"></label>
+								</small> <strong> <label id="uploadReport-description-1"></label>
+								</strong> by <label id="uploadReport-sellerName-1"></label><br> <small
+									class="text-muted"> <label id="uploadReport-fileType-1"></label>
+									- <label id="uploadReport-uploadDate-1"></label>
+								</small>
+							</div>
+						</div>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<div id="uploadReport-div-2" class="dropdown-messages-box"
+							style="display: none;">
+							<a class="pull-left" id="uploadReport-a-2"> <i
+								id="uploadReport-i-2"></i>
+							</a>
+							<div class="media-body">
+								<small class="pull-right"> <label
+									id="uploadReport-uploadedAt-2"></label>
+								</small> <strong> <label id="uploadReport-description-2"></label>
+								</strong> by <label id="uploadReport-sellerName-2"></label><br> <small
+									class="text-muted"> <label id="uploadReport-fileType-2"></label>
+									- <label id="uploadReport-uploadDate-2"></label>
+								</small>
+							</div>
+						</div>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<div id="uploadReport-div-3" class="dropdown-messages-box"
+							style="display: none;">
+							<a class="pull-left" id="uploadReport-a-3"> <i
+								id="uploadReport-i-3"></i>
+							</a>
+							<div class="media-body">
+								<small class="pull-right"> <label
+									id="uploadReport-uploadedAt-3"></label>
+								</small> <strong> <label id="uploadReport-description-3"></label>
+								</strong> by <label id="uploadReport-sellerName-3"></label><br> <small
+									class="text-muted"> <label id="uploadReport-fileType-3"></label>
+									- <label id="uploadReport-uploadDate-3"></label>
+								</small>
+							</div>
+						</div>
+					</li>
+					<li class="divider"></li>
 					<li>
 						<div class="text-center link-block">
 							<a href="mailbox.html"> <i class="fa fa-envelope"></i> <strong>Read
@@ -242,7 +299,7 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 					<li class="divider"></li>
 					<li>
 						<div class="progress"></div>
-						<div class="bar" role="bar" id="bar1" style="display:none;">
+						<div class="bar" role="bar" id="bar1" style="display: none;">
 							<div class="peg">Uploading...</div>
 						</div>
 				</ul></li>
@@ -257,7 +314,7 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 					<li><a href="support.html?set=section41">Initial Setup</a></li>
 					<li><a href="support.html?set=section42">Daily Activities</a></li>
 					<li><a href="support.html?set=section43">Reports</a></li>
-					<li><a href="support.html?set=section44">Miscellaneous</a></li>					
+					<li><a href="support.html?set=section44">Miscellaneous</a></li>
 				</ul></li>
 			<li class="dropdown"><a class="dropdown-toggle count-info"
 				data-toggle="dropdown"> <i class="fa fa-gear"></i>
@@ -275,16 +332,24 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 		</nav>
 	</div>
 	<aside id="sticky-social">
-		<ul>
-			<li><a href="#" onclick="onclickNavigate('upload',0)" class="entypo-links" ><span><img src="/O2R/landing/img/export.png"></span></a></li>
-			<li><a href="#" onclick="onclickNavigate('upload',0)" class="entypo-links2" ><span><img src="/O2R/landing/img/import.png"></span></a></li>
-			<li><a href="orderList.html" class="entypo-links3" ><span><img src="/O2R/landing/img/orderlist.png"></span></a></li>
-			<li><a href="#" onclick="onclickSideNavigation('RTO/Return')"  class="entypo-links4" ><span><img src="/O2R/landing/img/return1.png"></span></a></li>
-			<li><a href="paymentUploadList.html" class="entypo-links5" ><span><img src="/O2R/landing/img/payment.png"></span></a></li>
-		</ul>
-	</aside>	
-	
-	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<ul>
+		<li><a href="#" onclick="onclickNavigate('upload',0)"
+			class="entypo-links"><span><img
+					src="/O2R/landing/img/export.png"></span></a></li>
+		<li><a href="#" onclick="onclickNavigate('upload',0)"
+			class="entypo-links2"><span><img
+					src="/O2R/landing/img/import.png"></span></a></li>
+		<li><a href="orderList.html" class="entypo-links3"><span><img
+					src="/O2R/landing/img/orderlist.png"></span></a></li>
+		<li><a href="#" onclick="onclickSideNavigation('RTO/Return')"
+			class="entypo-links4"><span><img
+					src="/O2R/landing/img/return1.png"></span></a></li>
+		<li><a href="paymentUploadList.html" class="entypo-links5"><span><img
+					src="/O2R/landing/img/payment.png"></span></a></li>
+	</ul>
+	</aside>
+
+	<script src="/O2R/seller/js/jquery-2.1.1.js"></script>
 	<script type="text/javascript">
 	
 	function onclickNavigate(value,id) {
@@ -308,6 +373,34 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 	
 		$(document).ready(
 				function() {
+					
+					 $.ajax({
+					        url: "getUploadReports.html",
+					        dataType: "json"
+					    }).success(function(data){
+					        var i = 1;
+					        data.forEach( function (arrayItem)
+			        		{			        		    
+			        		    var cssClass;
+			        		    if (arrayItem.description == "Exported") {
+			        		    	cssClass = "fa-level-up";
+			        		    } else {
+			        		    	cssClass = "fa-level-down";
+			        		    }
+			        		    
+			        		    document.getElementById("uploadReport-div-"+i).style.display = "inherit";
+			        		    document.getElementById("uploadReport-a-"+i).href = "javascript:onclickDownload('" + arrayItem.id + "');";
+			        		    document.getElementById("uploadReport-i-"+i).className = "fa " + cssClass;
+			        		    document.getElementById("uploadReport-uploadedAt-"+i).innerHTML = arrayItem.uploadedAt;
+			        		    document.getElementById("uploadReport-description-"+i).innerHTML = arrayItem.description;
+			        		    document.getElementById("uploadReport-sellerName-"+i).innerHTML = arrayItem.sellerName;
+			        		    document.getElementById("uploadReport-fileType-"+i).innerHTML = arrayItem.fileType;
+			        		    document.getElementById("uploadReport-uploadDate-"+i).innerHTML = arrayItem.uploadDate;
+			    				
+			        		    i++;
+			        		});
+					    });
+					
 					$('#searchCriteria').change(
 							function() {
 

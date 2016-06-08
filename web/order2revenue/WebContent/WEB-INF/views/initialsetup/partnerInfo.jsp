@@ -94,10 +94,12 @@
                             <div class="panel-body text-center" style="height: 100px; width: 200px;">
                             	<c:choose>
                             		<c:when test="${partner.pcLogoUrl != null}">
-                            			<img alt="image"  src="${partner.pcLogoUrl}"  title="${partner.pcName}">
+                            			<img alt="image"  src="${partner.pcLogoUrl}"  title="${partner.pcName}"
+                            				style="width:100%;">>
                             		</c:when>
                             		<c:otherwise>
-                            			<img alt="image"  src="/O2R/partnerimages/5Yamaha.jpg"  title="${partner.pcName}">
+                            			<img alt="image"  src="/O2R/partnerimages/5Yamaha.jpg"  title="${partner.pcName}"
+                            				style="width:100%;">>
                             		</c:otherwise>                            	
                             	</c:choose>                            	
                                 <div><a href="#"
@@ -125,7 +127,8 @@
                     <div class="col-lg-3">
                         <div class="panel panel-default add-logo-page">
                             <div class="panel-body text-center">
-                                <img alt="image"  src="${addpartner.pcLogoUrl}"  title="${addpartner.pcName}">
+                                <img alt="image"  src="${addpartner.pcLogoUrl}"  title="${addpartner.pcName}"
+                                	style="width:100%;">
                                 <a href="#"  onclick="onclickConfigurepartner('${addpartner.pcName}')"><i class="fa fa-plus"></i></a>
                             </div>
                         </div>

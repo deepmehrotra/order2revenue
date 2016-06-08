@@ -10,38 +10,16 @@
 <script src="/O2R/seller/js/jquery.iframe-transport.js"></script>
 <script src="/O2R/seller/js/jquery.fileupload.js"></script>
 <script type="text/javascript">
-	var files;
-	
-	$(document).ready(function() {
-		
-		$('input[type=file]').on('change', prepareUpload);
-		function prepareUpload(event)
-		{
-		  files = event.target.files;
-		}
-
+	$(function() {
 		var downloadValue = '${downloadValue}';
 		var uploadValue = '${uploadValue}';
 		if (uploadValue != null && uploadValue.length != 0)
 			$("#sheetValue").val(uploadValue);
 		else
 			$("#downloadreporttype").val(downloadValue);
-
 	});
-	
-	/* $("#fileupload1").submit(
-			function(e) { */
-	function formSubmit()
-	{
-
-				//e.preventDefault();
-				var data = new FormData();
-				data.append("sheetValue", document.getElementById('sheetValue').value);
-			    $.each(files, function(key, value)
-			    {
-			        data.append(key, value);
-			    });
-			    
+	$("#fileupload1").submit(
+			function() {
 				$.ajax({
 					xhr : function() {
 						$('#dropdown').dropdown("toggle");
@@ -75,17 +53,26 @@
 						}, false);
 						return xhr;
 					},
-					url: 'saveSheet.html',
-					data: data,
-					processData: false,
-					contentType: false,
-					type: 'POST',
-					success: function(data) {
+					url : 'saveSheet.html',
+					data : $("#fileupload1").serialize(),
+					processData : false,
+					contentType : false,
+					type : 'POST',
+					success : function(data) {
 						$("#bar1").hide();
 					}
 				});
-			}
-
+			});
+</script>
+<script>
+	$(document).ready(function() {
+		var downloadValue = '${downloadValue}';
+		var uploadValue = '${uploadValue}';
+		if (uploadValue != null && uploadValue.length != 0)
+			$("#sheetValue").val(uploadValue);
+		else
+			$("#downloadreporttype").val(downloadValue);
+	});
 	$('#download').click(function() {
 		var value = $('#downloadreporttype').val();
 		window.location = 'download/xls.html?sheetvalue=' + value;
@@ -115,7 +102,6 @@
 								<option value="gatepassSummary">GatePass Summary</option>
 								<option value="debitNoteSummary">Debit Note</option>
 								<option value="productSummary">Product Summary</option>
-								<option value="skuMapping">SKU Mapping</option>
 								<option value="productConfigSummary">Product Config
 									Summary</option>
 								<option value="inventorySummary">Inventory Summary</option>
@@ -127,48 +113,50 @@
 								<i class="fa fa-download"></i>&nbsp;&nbsp;<span class="bold">Download</span>
 							</button>
 						</div>
-						<div class="col-md-2"></div>
-					</div>
-
-
-					<div class="col-lg-12">
-						<div class="form-group">
-
-							<form id="fileupload1" class="form-horizontal"
-								onsubmit="return formSubmit()">
-
-								<div class="col-md-4">
-									<select class="form-control" id="sheetValue" name="sheetValue">
-										<option value="">Select file to download</option>
-										<option value="ordersummary">Order Summary</option>
-										<option value="orderPoSummary">Order PO Summary</option>
-										<option value="paymentSummary">Payment Summary</option>
-										<option value="returnSummary">Return Summary</option>
-										<option value="gatepassSummary">GatePass Summary</option>
-										<option value="debitNoteSummary">Debit Note</option>
-										<option value="productSummary">Product Summary</option>
-										<option value="productConfigSummary">Product Config
-											Summary</option>
-										<option value="skuMapping">SKU Mapping</option>
-										<option value="inventorySummary">Inventory Summary</option>
-										<option value="poPaymentSummary">PO Payment Summary</option>
-										<option value="expenseSummary">Expense Summary</option>
-									</select>
-
-								</div>
-								<div class="col-md-4">
-									<input name="files[0]" type="file" class="form-control" />
-								</div>
-								<div class="col-md-2">
-									<!-- <input type="submit" value="Upload" class="form-control" /> -->
-									<button class="btn btn-success " type="submit">
-										<i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Upload</span>
-									</button>
-								</div>
-							</form>
+						<div class="col-md-2">
 						</div>
-					</div>
+						</div>
+						
 
+						<div class="col-lg-12">
+							<div class="form-group">
+
+								<form:form id="fileupload1" method="post"
+									action="saveSheet.html" modelAttribute="uploadForm"
+									enctype="multipart/form-data" class="form-horizontal">
+
+									<!-- 	<input id="addFile" type="button" value="Add File" /> -->
+									<div class="col-md-4">
+										<select class="form-control" id="sheetValue" name="sheetValue">
+											<option value="">Select file to download</option>
+											<option value="ordersummary">Order Summary</option>
+											<option value="orderPoSummary">Order PO Summary</option>
+											<option value="paymentSummary">Payment Summary</option>
+											<option value="returnSummary">Return Summary</option>
+											<option value="gatepassSummary">GatePass Summary</option>
+											<option value="debitNoteSummary">Debit Note</option>
+											<option value="productSummary">Product Summary</option>
+											<option value="productConfigSummary">Product Config
+												Summary</option>
+											<option value="inventorySummary">Inventory Summary</option>
+											<option value="poPaymentSummary">PO Payment Summary</option>
+											<option value="expenseSummary">Expense Summary</option>
+										</select>
+
+									</div>
+									<div class="col-md-4">															
+										<input name="files[0]" type="file"	class="form-control" />											
+									</div>
+									<div class="col-md-2">
+										<!-- <input type="submit" value="Upload" class="form-control" /> -->
+										<button class="btn btn-success " type="submit" id="upload">
+											<i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Upload</span>
+										</button>
+									</div>
+								</form:form>
+							</div>
+						</div>
+					
 				</div>
 			</div>
 		</div>

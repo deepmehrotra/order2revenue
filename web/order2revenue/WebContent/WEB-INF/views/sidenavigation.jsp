@@ -91,7 +91,7 @@
 					class="nav-label">Daily Activities</span> <span class="fa arrow"></span></a>
 				<ul class="nav nav-second-level">
 					<li class="active"><a href="orderList.html">Order</a></li>
-					<li><a href="poOrderList.html?value=''">PO Orders</a></li>
+					<li><a href="poOrderList.html?value=">PO Orders</a></li>
 					<li><a href="#" onclick="onclickSideNavigation('RTO/Return')">RTO/Return</a></li>
 					<li><a href="gatepasslist.html">Gatepasses</a></li>
 					<li><a href="paymentUploadList.html">Payment</a></li>

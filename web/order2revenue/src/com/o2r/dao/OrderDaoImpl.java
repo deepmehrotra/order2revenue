@@ -682,7 +682,7 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.add(Restrictions.eq("subOrderID", poId));
 			criteria.add(Restrictions.eq("invoiceID", invoiceId));
 			criteria.add(Restrictions.eq("poOrder", true));
-			criteria.add(Restrictions.eq("consolidatedOrder.orderId", 0));
+			criteria.add(Restrictions.isNull("consolidatedOrder.orderId"));
 
 			returnList = criteria.list();
 			if (returnList != null && returnList.size() != 0
