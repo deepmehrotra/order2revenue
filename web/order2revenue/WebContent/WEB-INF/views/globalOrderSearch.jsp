@@ -98,10 +98,11 @@
 				<div class="col-sm-3">
 					<!-- <button type="button" class="btn btn-primary" data-toggle="modal"
 						data-target="#myModal22">View</button> -->
-					<div class="modal inmodal fade" id="myModal22" tabindex="-1"
-						role="dialog" aria-hidden="true">
 						<form:form method="POST" action="saveReturnorRTO.html"
 							id="saveReturnorRTOForm" role="form" class="form-horizontal">
+						<div class="modal inmodal fade" id="myModal22" tabindex="-1"
+							role="dialog" aria-hidden="true">
+						
 
 							<div class="modal-dialog modal-lg">
 								<div class="modal-content animated bounceInRight"
@@ -226,8 +227,9 @@
 									</div>
 								</div>
 							</div>
-						</form:form>
+					
 					</div>
+						</form:form>
 				</div>
 
 				<!--  -->
