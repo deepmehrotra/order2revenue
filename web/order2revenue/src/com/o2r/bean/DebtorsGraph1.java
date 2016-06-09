@@ -10,6 +10,8 @@ public class DebtorsGraph1 {
 	private int actionableNetQty;
 	private double upcomingPD;
 	private int upcomingNetQty;
+	private double netPaymentDifference;
+	private int netSaleQty;
 	
 	public String getPartner() {
 		return partner;
@@ -67,7 +69,21 @@ public class DebtorsGraph1 {
 		this.upcomingNetQty = upcomingNetQty;
 	}
 
+	public double getNetPaymentDifference() {
+		return netPaymentDifference;
+	}
 
+	public void setNetPaymentDifference(double netPaymentDifference) {
+		this.netPaymentDifference = netPaymentDifference;
+	}
+
+	public int getNetSaleQty() {
+		return netSaleQty;
+	}
+
+	public void setNetSaleQty(int netSaleQty) {
+		this.netSaleQty = netSaleQty;
+	}
 
 	public static class OrderByNPR implements Comparator<DebtorsGraph1> {
 
@@ -82,8 +98,8 @@ public class DebtorsGraph1 {
 
 		@Override
 		public int compare(DebtorsGraph1 graph1, DebtorsGraph1 graph2) {
-			return graph1.actionablePD < graph2.actionablePD ? 1
-					: (graph1.actionablePD > graph2.actionablePD ? -1 : 0);
+			return graph1.netPaymentDifference < graph2.netPaymentDifference ? 1
+					: (graph1.netPaymentDifference > graph2.netPaymentDifference ? -1 : 0);
 		}
 	}
 	

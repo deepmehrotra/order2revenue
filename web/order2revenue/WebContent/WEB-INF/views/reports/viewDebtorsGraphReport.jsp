@@ -107,8 +107,8 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${partnerDto.partner}</td>
-																			<td>${partnerDto.actionablePD}</td>
-																			<td>${partnerDto.actionableNetQty}</td>
+																			<td>${partnerDto.netPaymentDifference}</td>
+																			<td>${partnerDto.netSaleQty}</td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -216,8 +216,8 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${categoryDto.category}</td>
-																			<td>${categoryDto.actionablePD}</td>
-																			<td>${categoryDto.actionableNetQty}</td>
+																			<td>${categoryDto.netPaymentDifference}</td>
+																			<td>${categoryDto.netSaleQty}</td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -292,10 +292,10 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${partner.partner}</td>
-																			<td>${partner.upcomingNetQty + partner.actionableNetQty}</td>
+																			<td>${partner.netSaleQty}</td>
 																			<td>${partner.upcomingPD}</td>
 																			<td>${partner.netPaymentResult}</td>
-																			<td>${partner.upcomingPD + partner.actionablePD}</td>
+																			<td>${partner.netPaymentDifference}</td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -325,10 +325,10 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${category.category}</td>
-																			<td>${category.upcomingNetQty + category.actionableNetQty}</td>
+																			<td>${category.netSaleQty}</td>
 																			<td>${category.upcomingPD}</td>
 																			<td>${category.netPaymentResult}</td>
-																			<td>${category.upcomingPD + category.actionablePD}</td>
+																			<td>${category.netPaymentDifference}</td>
 																		</tr>
 																	</c:forEach>
 																</c:if>

@@ -2006,6 +2006,8 @@ public class ConverterClass {
 			int actionableNetQty = 0;
 			double upcomingPD = 0;
 			int upcomingNetQty = 0;
+			double netPaymentDifference = partnerBusiness.getPaymentDifference();
+			int netSaleQty = partnerBusiness.getNetSaleQuantity();
 			
 			double netPaymentResult = partnerBusiness.getNetPaymentResult();
 			if("Actionable".equalsIgnoreCase(partnerBusiness.getFinalStatus())){
@@ -2028,12 +2030,16 @@ public class ConverterClass {
 				actionableNetQty += debtorsGraph1.getActionableNetQty();
 				upcomingPD += debtorsGraph1.getUpcomingPD();
 				upcomingNetQty += debtorsGraph1.getUpcomingNetQty();
+				netPaymentDifference += debtorsGraph1.getNetPaymentDifference();
+				netSaleQty += debtorsGraph1.getNetSaleQty();
 			}
 			debtorsGraph1.setNetPaymentResult(netPaymentResult);
 			debtorsGraph1.setActionablePD(actionablePD);
 			debtorsGraph1.setActionableNetQty(actionableNetQty);
 			debtorsGraph1.setUpcomingPD(upcomingPD);
 			debtorsGraph1.setUpcomingNetQty(upcomingNetQty);
+			debtorsGraph1.setNetPaymentDifference(netPaymentDifference);
+			debtorsGraph1.setNetSaleQty(netSaleQty);
 			debtorsGraph1.setPartner(key);
 			debtorsGraph1.setCategory(key);
 					
@@ -2069,6 +2075,8 @@ public class ConverterClass {
 					consolidated.setActionableNetQty(debtorsGraph1.getActionableNetQty());
 					consolidated.setUpcomingPD(debtorsGraph1.getUpcomingPD());
 					consolidated.setUpcomingNetQty(debtorsGraph1.getUpcomingNetQty());
+					consolidated.setNetPaymentDifference(debtorsGraph1.getNetPaymentDifference());
+					consolidated.setNetSaleQty(debtorsGraph1.getNetSaleQty());
 					consolidated.setCategory("Others");
 					consolidated.setPartner("Others");
 				} else{
@@ -2077,6 +2085,8 @@ public class ConverterClass {
 					consolidated.setActionableNetQty(consolidated.getActionableNetQty() + debtorsGraph1.getActionableNetQty());
 					consolidated.setUpcomingPD(consolidated.getUpcomingPD() + debtorsGraph1.getUpcomingPD());
 					consolidated.setUpcomingNetQty(consolidated.getUpcomingNetQty() + debtorsGraph1.getUpcomingNetQty());
+					consolidated.setNetPaymentDifference(consolidated.getNetPaymentDifference() + debtorsGraph1.getNetPaymentDifference());
+					consolidated.setNetSaleQty(consolidated.getNetSaleQty() + debtorsGraph1.getNetSaleQty());
 				}
 			} else{
 				newdDebtorsGraph1List.add(debtorsGraph1);
