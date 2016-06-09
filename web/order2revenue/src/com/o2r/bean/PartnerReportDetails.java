@@ -86,6 +86,7 @@ public class PartnerReportDetails {
 	private String returnChargesDesciption;
 
 	private double grossProfit;
+	private double netActualSale;
 
 	public int getOrderId() {
 		return orderId;
@@ -605,6 +606,14 @@ public class PartnerReportDetails {
 
 	public void setGrossProfit(double grossProfit) {
 		this.grossProfit = grossProfit;
+	}
+
+	public double getNetActualSale() {
+		return netActualSale;
+	}
+
+	public void setNetActualSale(double netActualSale) {
+		this.netActualSale = netActualSale;
 	}
 
 	public static class OrderByShippedDate implements

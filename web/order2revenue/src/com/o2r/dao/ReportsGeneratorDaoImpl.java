@@ -688,7 +688,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			grossReturnChargesReversed = netRate/quantity*returnQty;
 		partnerBusiness.setProductPrice(productCost*(quantity - returnQty));
 		partnerBusiness.setGrossReturnChargesReversed(grossReturnChargesReversed);
-		partnerBusiness.setTotalReturnCharges(grossReturnChargesReversed + netReturnCharges);
+		partnerBusiness.setTotalReturnCharges(additionalReturnCharges + netReturnCharges);
+		double netActualSale = currOrder.getNetRate() - netReturnCharges - additionalReturnCharges;
+		partnerBusiness.setNetActualSale(netActualSale);
 		partnerBusiness.setOrderSP(orderSP);
 		partnerBusiness.setReturnSP(returnSP);
 		partnerBusiness.setNetSP(grossSP/quantity*(quantity-returnQty));
@@ -1183,8 +1185,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	@SuppressWarnings("unchecked")
 	private List<Order> fetchDebtorsOrders(Session session, int sellerId, Date startDate, Date endDate) {
 		List<Order> orderList = new ArrayList<>();
-		Criterion lhs = Restrictions.and(Restrictions.le("orderPayment.paymentDifference", 5.0), 
-				Restrictions.ge("orderPayment.paymentDifference", -5.0));
+		Criterion lhs = Restrictions.and(Restrictions.ge("orderPayment.paymentDifference", 5.0), 
+				Restrictions.le("orderPayment.paymentDifference", -5.0));
 		Criterion rhs = Restrictions.ge("paymentDueDate", new Date());
 
 		Criteria criteria = session.createCriteria(Order.class);

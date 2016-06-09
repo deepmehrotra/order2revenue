@@ -632,7 +632,9 @@ public class GlobalConstant {
 			put("getTotalReturnCharges", "Total Return Charges");
 			put("getGrossTds", "Total Gross TDS");
 			put("getReturnTds", "Total Return TDS");
-			
+			put("getNetActualSale", "Net Actual Sale");
+			put("getPaymentId", "Payment Id");
+			put("getPaymentType", "Payment Type");
 		}
 	};
 	
