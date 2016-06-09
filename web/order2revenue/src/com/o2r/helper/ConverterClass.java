@@ -2001,11 +2001,21 @@ public class ConverterClass {
 				default: break;
 			}
 			DebtorsGraph1 debtorsGraph1 = debtorsGraph1Map.get(key);
+
+			double actionablePD = 0;
+			int actionableNetQty = 0;
+			double upcomingPD = 0;
+			int upcomingNetQty = 0;
+			
 			double netPaymentResult = partnerBusiness.getNetPaymentResult();
-			double netPaymentDifference = partnerBusiness.getPaymentDifference();
-			int orderTotal = 0;
-			if(partnerBusiness.getPaymentDifference() >= -5 && partnerBusiness.getPaymentDifference() <= 5)
-				orderTotal = 1;
+			if("Actionable".equalsIgnoreCase(partnerBusiness.getFinalStatus())){
+				actionablePD = partnerBusiness.getPaymentDifference();
+				actionableNetQty = 1;
+			}
+			if("In Process".equalsIgnoreCase(partnerBusiness.getFinalStatus())){
+				upcomingPD = partnerBusiness.getPaymentDifference();
+				upcomingNetQty = 1;
+			}
 			double netRate = 0;
 			Date paymentDueDate = partnerBusiness.getPaymentDueDate();
 			if(paymentDueDate!=null && paymentDueDate.after(new Date()))
@@ -2014,14 +2024,16 @@ public class ConverterClass {
 				debtorsGraph1 = new DebtorsGraph1();
 			} else {
 				netPaymentResult += debtorsGraph1.getNetPaymentResult();
-				netPaymentDifference += debtorsGraph1.getPaymentDifference();
-				orderTotal += debtorsGraph1.getNetPayDiffOrderQty();
-				netRate += debtorsGraph1.getUpcomingPaymentNR();
+				actionablePD += debtorsGraph1.getActionablePD();
+				actionableNetQty += debtorsGraph1.getActionableNetQty();
+				upcomingPD += debtorsGraph1.getUpcomingPD();
+				upcomingNetQty += debtorsGraph1.getUpcomingNetQty();
 			}
 			debtorsGraph1.setNetPaymentResult(netPaymentResult);
-			debtorsGraph1.setPaymentDifference(netPaymentDifference);
-			debtorsGraph1.setNetPayDiffOrderQty(orderTotal);
-			debtorsGraph1.setUpcomingPaymentNR(netRate);
+			debtorsGraph1.setActionablePD(actionablePD);
+			debtorsGraph1.setActionableNetQty(actionableNetQty);
+			debtorsGraph1.setUpcomingPD(upcomingPD);
+			debtorsGraph1.setUpcomingNetQty(upcomingNetQty);
 			debtorsGraph1.setPartner(key);
 			debtorsGraph1.setCategory(key);
 					
@@ -2040,7 +2052,7 @@ public class ConverterClass {
 	}
 
 	public static Object getDebtorsGraph1SortedList(
-			List<DebtorsGraph1> debtorsGraph1List, String criteria) {
+			List<DebtorsGraph1> debtorsGraph1List) {
 		int maxLength = 5;
 		if(debtorsGraph1List.size()<=maxLength)
 			return debtorsGraph1List;
@@ -2053,17 +2065,18 @@ public class ConverterClass {
 				if(!initialize){
 					initialize = true;
 					consolidated.setNetPaymentResult(debtorsGraph1.getNetPaymentResult());
-					consolidated.setPaymentDifference(debtorsGraph1.getPaymentDifference());
-					consolidated.setNetPayDiffOrderQty(debtorsGraph1.getNetPayDiffOrderQty());
-					consolidated.setUpcomingPaymentNR(debtorsGraph1.getUpcomingPaymentNR());
+					consolidated.setActionablePD(debtorsGraph1.getActionablePD());
+					consolidated.setActionableNetQty(debtorsGraph1.getActionableNetQty());
+					consolidated.setUpcomingPD(debtorsGraph1.getUpcomingPD());
+					consolidated.setUpcomingNetQty(debtorsGraph1.getUpcomingNetQty());
 					consolidated.setCategory("Others");
 					consolidated.setPartner("Others");
 				} else{
 					consolidated.setNetPaymentResult(consolidated.getNetPaymentResult() + debtorsGraph1.getNetPaymentResult());
-					consolidated.setPaymentDifference(consolidated.getPaymentDifference() + debtorsGraph1.getPaymentDifference());
-					consolidated.setNetPayDiffOrderQty(consolidated.getNetPayDiffOrderQty() + debtorsGraph1.getNetPayDiffOrderQty());
-					consolidated.setUpcomingPaymentNR(consolidated.getUpcomingPaymentNR() + debtorsGraph1.getUpcomingPaymentNR());
-					consolidated.setPaymentDifference(consolidated.getPaymentDifference() + debtorsGraph1.getPaymentDifference());
+					consolidated.setActionablePD(consolidated.getActionablePD() + debtorsGraph1.getActionablePD());
+					consolidated.setActionableNetQty(consolidated.getActionableNetQty() + debtorsGraph1.getActionableNetQty());
+					consolidated.setUpcomingPD(consolidated.getUpcomingPD() + debtorsGraph1.getUpcomingPD());
+					consolidated.setUpcomingNetQty(consolidated.getUpcomingNetQty() + debtorsGraph1.getUpcomingNetQty());
 				}
 			} else{
 				newdDebtorsGraph1List.add(debtorsGraph1);

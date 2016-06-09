@@ -585,7 +585,7 @@ public class GlobalConstant {
 			put("getFinalStatus", "Final  Status");
 			put("getReturnId", "Return Id/ GP ID");
 			put("getReturnChargesDesciption", "Return Charges Description");
-			put("getTdsToBeDeposited", "TDS to be deducted");
+			put("getTdsToBeDeposited", "TDS to be deposited");
 
 			// For Channel Report
 			put("getCategory", "Product Category");

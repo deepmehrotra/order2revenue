@@ -150,6 +150,45 @@
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getCategory" name="headers"> Product Category </label></div>
     	                        </div>
 							</c:if>
+							<c:if test="${reportName eq 'paymentsReceievedReport'}">
+		                            <div class="col-md-3">
+		     	                        <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="SelectAll"  id="selectall" name="headers">Select All</label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getPaymentId" name="headers"> Payment Id </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getInvoiceID" name="headers"> Invoice Id </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getChannelOrderID" name="headers"> Order Id</label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getReturnId" name="headers"> Return Id </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getPcName" name="headers"> Partner </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getPaymentType" name="headers"> Payment Type </label></div>
+		                            </div>
+		
+		                            <div class="col-md-3">
+		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetPaymentResult" name="headers"> Net Payment Result </label></div>
+		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getPaymentDifference" name="headers"> Payment Diff Amt </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getProductCategory" name="headers"> Category </label></div>
+			                            <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossSaleQuantity" name="headers"> Gross Sale Qty </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getReturnQuantity" name="headers"> Return/RTO Qty </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetSaleQuantity" name="headers"> Net Sale Qty </label></div>
+		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetRate" name="headers"> Net N/R </label></div>
+		                            </div>
+		                            
+		                            <div class="col-md-3">
+		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getAdditionalReturnCharges" name="headers"> Additional return Charges </label></div>
+		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getTotalReturnCharges" name="headers"> Total Return Charges </label></div>
+		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetActualSale" name="headers"> Net Actual Sale </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getOrderDate" name="headers"> Received Date </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getShippedDate" name="headers"> Shipped Date </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getDeliveryDate" name="headers"> Expected Date of Delivery </label></div>
+		                            </div>
+		                            
+		                            <div class="col-md-3">
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getPaymentDueDate" name="headers"> Expected Date of Payment </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getReturnDate" name="headers"> Return Date </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getAwb" name="headers"> AWB </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getSubOrderId" name="headers"> Sub Order Id </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getPiRefNumber" name="headers"> PI Reference No </label></div>
+		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getLogisticPartner" name="headers"> Logistics Partner </label></div>
+		                            </div>
+								</c:if>
 							
 						<input type="hidden" name="requestType" id="requestType" value=""/>
 

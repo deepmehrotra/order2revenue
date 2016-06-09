@@ -6,10 +6,11 @@ public class DebtorsGraph1 {
 	private String partner;
 	private String category;
 	private double netPaymentResult;
-	private double paymentDifference;
-	private int netPayDiffOrderQty;
-	private double upcomingPaymentNR;
-
+	private double actionablePD;
+	private int actionableNetQty;
+	private double upcomingPD;
+	private int upcomingNetQty;
+	
 	public String getPartner() {
 		return partner;
 	}
@@ -34,29 +35,39 @@ public class DebtorsGraph1 {
 		this.netPaymentResult = netPaymentResult;
 	}
 
-	public double getPaymentDifference() {
-		return paymentDifference;
+	public double getActionablePD() {
+		return actionablePD;
 	}
 
-	public void setPaymentDifference(double paymentDifference) {
-		this.paymentDifference = paymentDifference;
-	}
-	
-	public int getNetPayDiffOrderQty() {
-		return netPayDiffOrderQty;
+	public void setActionablePD(double actionablePD) {
+		this.actionablePD = actionablePD;
 	}
 
-	public void setNetPayDiffOrderQty(int netPayDiffOrderQty) {
-		this.netPayDiffOrderQty = netPayDiffOrderQty;
+	public int getActionableNetQty() {
+		return actionableNetQty;
 	}
 
-	public double getUpcomingPaymentNR() {
-		return upcomingPaymentNR;
+	public void setActionableNetQty(int actionableNetQty) {
+		this.actionableNetQty = actionableNetQty;
 	}
 
-	public void setUpcomingPaymentNR(double upcomingPaymentNR) {
-		this.upcomingPaymentNR = upcomingPaymentNR;
+	public double getUpcomingPD() {
+		return upcomingPD;
 	}
+
+	public void setUpcomingPD(double upcomingPD) {
+		this.upcomingPD = upcomingPD;
+	}
+
+	public int getUpcomingNetQty() {
+		return upcomingNetQty;
+	}
+
+	public void setUpcomingNetQty(int upcomingNetQty) {
+		this.upcomingNetQty = upcomingNetQty;
+	}
+
+
 
 	public static class OrderByNPR implements Comparator<DebtorsGraph1> {
 
@@ -67,21 +78,21 @@ public class DebtorsGraph1 {
 		}
 	}
 
-	public static class OrderByNPDQY implements Comparator<DebtorsGraph1> {
+	public static class OrderByAC implements Comparator<DebtorsGraph1> {
 
 		@Override
 		public int compare(DebtorsGraph1 graph1, DebtorsGraph1 graph2) {
-			return graph1.netPayDiffOrderQty < graph2.netPayDiffOrderQty ? 1
-					: (graph1.netPayDiffOrderQty > graph2.netPayDiffOrderQty ? -1 : 0);
+			return graph1.actionablePD < graph2.actionablePD ? 1
+					: (graph1.actionablePD > graph2.actionablePD ? -1 : 0);
 		}
 	}
 	
-	public static class OrderByUPNR implements Comparator<DebtorsGraph1> {
+	public static class OrderByUP implements Comparator<DebtorsGraph1> {
 
 		@Override
 		public int compare(DebtorsGraph1 graph1, DebtorsGraph1 graph2) {
-			return graph1.upcomingPaymentNR < graph2.upcomingPaymentNR ? 1
-					: (graph1.upcomingPaymentNR > graph2.upcomingPaymentNR ? -1 : 0);
+			return graph1.upcomingPD < graph2.upcomingPD ? 1
+					: (graph1.upcomingPD > graph2.upcomingPD ? -1 : 0);
 		}
 	}
 }
