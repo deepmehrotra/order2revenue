@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-    
-  
+    <%@ page import = "org.springframework.core.io.*" %>
+	<%@ page import = "org.springframework.core.io.support.PropertiesLoaderUtils" %>
+  	<%@ page language="java" import="java.util.*" %> 
  
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -16,7 +17,7 @@
 	    font-size: 24px;
 	    text-align: center;
 	    z-index: 999999999999;
-	    color: gray;
+	    color: #080e08;
 	    font-weight: 400;	    
 	    font-family: cursive;
 	    font-style: italic;
@@ -115,16 +116,21 @@
                     <div class="col-lg-3">
                         <div class="panel panel-default add-logo-page">
                             <div class="panel-body text-center" style="height: 100px; width: 200px;">
+                            	
+                            	<% 
+		                        	org.springframework.core.io.Resource resource = new ClassPathResource("database.properties");
+		                        	Properties props = PropertiesLoaderUtils.loadProperties(resource);	                        
+	                   			 %>
                             	<c:choose>
                             		<c:when test="${partner.pcLogoUrl != null}">
                             			<img alt="image"  src="${partner.pcLogoUrl}"  title="${partner.pcName}"
                             				style="width:100%;">
                             		</c:when>
                             		<c:otherwise>
-                            			<img alt="image"  src="/O2R/partnerimages/5Yamaha.jpg"  title="${partner.pcName}" style="width:100%;">
+                            			<img alt="image"  src="<%=props.getProperty("defaultpartnerimage.view") %>"  title="${partner.pcName}" style="width:100%;">
                             			<label class="lable">${partner.pcName}</label>
                             		</c:otherwise>                              		                          	
-                            	</c:choose>                            	
+                            	</c:choose>                         	
                                 <div><a href="#"
                                 	 style="width:49%;z-index: 9999;"
                                 	 onclick="onclickEditpartner('${partner.pcId}','${partner.pcName}')"><i class="fa fa-pencil"></i></a>

@@ -104,7 +104,9 @@ span .#error {
 													accept="image/*" name="image" id="image" class="hide">
 													Upload Logo
 												</label>
-												<input type="hidden" name="pcLogoUrl" id="pcLogoUrl"	value="${partner.pcLogoUrl}" />
+												<c:if test="${partner.pcLogoUrl != null}">
+													<input type="hidden" name="pcLogoUrl" id="pcLogoUrl" value="${partner.pcLogoUrl}" />
+												</c:if>
 											</div>
 
 										</div>
