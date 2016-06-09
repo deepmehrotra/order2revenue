@@ -117,15 +117,13 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 						<div class="input-group f-left" style="width: 150px;">
 							<div class="input-group date">
 								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-								<input type="text" name="startDate" id="startDate"
-									class="form-control">
+								<input type="text" name="startDate" id="startDate"  class="form-control">
 							</div>
 						</div>
 						<div class="input-group f-left" style="width: 150px;">
 							<div class="input-group date">
 								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-								<input type="text" name="endDate" id="endDate"
-									class="form-control">
+								<input type="text" name="endDate" id="endDate" 	class="form-control">
 							</div>
 						</div>
 					</div>
