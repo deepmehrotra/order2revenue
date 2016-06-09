@@ -83,7 +83,7 @@
 													<div class="ibox-content">
 														<div class="flot-chart">
 															<div class="flot-chart-content"
-																id="line-chart-partner-npr"></div>
+																id="bar-chart-partner-npr"></div>
 														</div>
 													</div>
 												</div>
@@ -192,7 +192,7 @@
 													<div class="ibox-content">
 														<div class="flot-chart">
 															<div class="flot-chart-content"
-																id="line-chart-category-npr"></div>
+																id="bar-chart-category-npr"></div>
 														</div>
 													</div>
 												</div>
@@ -368,13 +368,14 @@
 	<script src="/O2R/seller/js/plugins/flot/jquery.flot.symbol.js"></script>
 	<script src="/O2R/seller/js/plugins/flot/jquery.flot.spline.js"></script>
 	<script src="/O2R/seller/js/plugins/flot/jquery.flot.resize.js"></script>
+	<script src="/O2R/seller/js/plugins/highchart/highcharts.js"></script>
 
 	<!-- Morris -->
 	<script src="/O2R/seller/js/plugins/morris/raphael-2.1.0.min.js"></script>
 	<script src="/O2R/seller/js/plugins/morris/morris.js"></script>
 
-	<!-- Morris demo data-->
-	<script src="/O2R/seller/js/demo/morris-demo.js"></script>
+	<!-- Highchart Custom -->
+	<script src="/O2R/seller/js/demo/highchart-demo.js"></script>
 
 	<!-- ChartJS-->
 	<script src="/O2R/seller/js/plugins/chartJs/Chart.min.js"></script>
@@ -465,10 +466,10 @@
 		$(window)
 				.load(
 						function() {
-							flotline(temp1, partnerByNPR,
-									"#line-chart-partner-npr");
-							flotline(temp2, categoryByNPR,
-									"#line-chart-category-npr");
+							flotbar(temp1, partnerByNPR,
+									"#bar-chart-partner-npr");
+							flotbar(temp2, categoryByNPR,
+									"#bar-chart-category-npr");
 
 							$('.dataTables-example')
 									.dataTable(

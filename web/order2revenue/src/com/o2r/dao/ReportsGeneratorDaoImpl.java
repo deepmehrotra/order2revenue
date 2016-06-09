@@ -1185,7 +1185,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	@SuppressWarnings("unchecked")
 	private List<Order> fetchDebtorsOrders(Session session, int sellerId, Date startDate, Date endDate) {
 		List<Order> orderList = new ArrayList<>();
-		Criterion lhs = Restrictions.and(Restrictions.ge("orderPayment.paymentDifference", 5.0), 
+		Criterion lhs = Restrictions.or(Restrictions.ge("orderPayment.paymentDifference", 5.0), 
 				Restrictions.le("orderPayment.paymentDifference", -5.0));
 		Criterion rhs = Restrictions.ge("paymentDueDate", new Date());
 

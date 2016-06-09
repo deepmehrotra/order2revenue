@@ -185,8 +185,8 @@
 		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getReturnSP" name="headers"> Return SP </label></div>
 		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetSP" name="headers"> Net SP </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetRate" name="headers"> Net N/R </label></div>
+		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getAdditionalReturnCharges" name="headers"> Additional return Charges </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossReturnChargesReversed" name="headers"> Gross Return Charges Reversed </label></div>
-		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetReturnCharges" name="headers"> Net Return Charges </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getTotalReturnCharges" name="headers"> Total Return Charges </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetActualSale" name="headers"> Net Actual Sale </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossPartnerCommission" name="headers"> Gross Commission(Selling Fee) </label></div>
