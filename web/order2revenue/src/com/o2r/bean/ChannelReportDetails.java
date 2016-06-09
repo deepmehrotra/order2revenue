@@ -6,7 +6,18 @@ import java.util.Date;
 public class ChannelReportDetails {
 	private String orderId;
 	private String invoiceId;
+	private String returnId;
+	private String paymentId;
+	private String paymentType;
 	private Date shippedDate;
+	private Date receivedDate;
+	private Date deliveryDate;
+	private Date paymentDate;
+	private Date returnDate;
+	private String awb;
+	private String subOrderId;
+	private String piRefNo;
+	private String logisticPartner;
 	private String partner;
 	private String category;
 	private String productSku;
@@ -55,12 +66,100 @@ public class ChannelReportDetails {
 		this.invoiceId = invoiceId;
 	}
 
+	public String getReturnId() {
+		return returnId;
+	}
+
+	public void setReturnId(String returnId) {
+		this.returnId = returnId;
+	}
+
+	public String getPaymentId() {
+		return paymentId;
+	}
+
+	public void setPaymentId(String paymentId) {
+		this.paymentId = paymentId;
+	}
+
+	public String getPaymentType() {
+		return paymentType;
+	}
+
+	public void setPaymentType(String paymentType) {
+		this.paymentType = paymentType;
+	}
+
 	public Date getShippedDate() {
 		return shippedDate;
 	}
 
 	public void setShippedDate(Date shippedDate) {
 		this.shippedDate = shippedDate;
+	}
+
+	public Date getReceivedDate() {
+		return receivedDate;
+	}
+
+	public void setReceivedDate(Date receivedDate) {
+		this.receivedDate = receivedDate;
+	}
+
+	public Date getDeliveryDate() {
+		return deliveryDate;
+	}
+
+	public void setDeliveryDate(Date deliveryDate) {
+		this.deliveryDate = deliveryDate;
+	}
+
+	public Date getPaymentDate() {
+		return paymentDate;
+	}
+
+	public void setPaymentDate(Date paymentDate) {
+		this.paymentDate = paymentDate;
+	}
+
+	public Date getReturnDate() {
+		return returnDate;
+	}
+
+	public void setReturnDate(Date returnDate) {
+		this.returnDate = returnDate;
+	}
+
+	public String getAwb() {
+		return awb;
+	}
+
+	public void setAwb(String awb) {
+		this.awb = awb;
+	}
+
+	public String getSubOrderId() {
+		return subOrderId;
+	}
+
+	public void setSubOrderId(String subOrderId) {
+		this.subOrderId = subOrderId;
+	}
+
+	public String getPiRefNo() {
+		return piRefNo;
+	}
+
+	public void setPiRefNo(String piRefNo) {
+		this.piRefNo = piRefNo;
+	}
+
+	public String getLogisticPartner() {
+		return logisticPartner;
+	}
+
+	public void setLogisticPartner(String logisticPartner) {
+		this.logisticPartner = logisticPartner;
 	}
 
 	public String getPartner() {

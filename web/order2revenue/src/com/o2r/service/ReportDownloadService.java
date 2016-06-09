@@ -146,7 +146,7 @@ public class ReportDownloadService {
 	}
 	
 	public void downloadChannelReport(HttpServletResponse response , List<ChannelReportDetails> partnerlist, 
-			String[] headers,String reportName ,int sellerId) throws ClassNotFoundException {	
+			String[] headers, String reportName ,int sellerId) throws ClassNotFoundException {	
 		
 		// 1. Create new workbook
 		HSSFWorkbook workbook = new HSSFWorkbook();
@@ -160,7 +160,21 @@ public class ReportDownloadService {
 		
 		// 4. Build layout 
 		// Build title, date, and column headers
-		Layouter.buildOrderReport(worksheet, startRowIndex, startColIndex, reportName, headers);
+		if("paymentsReceievedReport".equalsIgnoreCase(reportName)){
+			String[] headers2 = new String[headers.length];
+			for(int index=0; index<headers2.length; index++){
+				switch(headers[index]){
+					case "getGrossNrAmount": headers2[index] =  "Net N/R"; break;
+					case "getNetReturnCharges": headers2[index] =  "Additional Return Charges"; break;
+					case "getSaleRetNrAmount": headers2[index] =  "Total Return Charges"; break;
+					case "getNetNrAmount": headers2[index] =  "Net Actual Sale"; break;
+					default: headers2[index] = headers[index]; break;
+				}					
+			}
+			Layouter.buildOrderReport(worksheet, startRowIndex, startColIndex, reportName, headers2);
+		} else{
+			Layouter.buildOrderReport(worksheet, startRowIndex, startColIndex, reportName, headers);
+		}
 
 		// 5. Fill report
 		FillManager.fillChannelReport(worksheet, startRowIndex, startColIndex, partnerlist , headers);

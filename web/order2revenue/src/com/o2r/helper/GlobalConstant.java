@@ -550,8 +550,8 @@ public class GlobalConstant {
 			put("getChannelOrderID", "Order ID/PO No");
 			put("getPartner", "Partner");
 			put("getPcName", "Partner");
-			put("getOrderDate", "Received Date");
-			put("getShippedDate", "Shipped Date");
+			put("getOrderDate", "Order Received Date");
+			put("getShippedDate", "Order Shipped Date");
 			put("getPaymentDueDate", "Expected Date of Payment");
 			put("getDateofPayment", "Actual Date of Payment");
 			put("getReturnDate", "Date of Return/RTO");
@@ -635,6 +635,10 @@ public class GlobalConstant {
 			put("getNetActualSale", "Net Actual Sale");
 			put("getPaymentId", "Payment Id");
 			put("getPaymentType", "Payment Type");
+			
+			// For Total Payments Received
+			put("getPaymentDate", "Expected Date of Payment");
+			put("getReceivedDate", "Order Received Date");
 		}
 	};
 	

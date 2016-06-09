@@ -819,8 +819,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					channelReport.setOrderId(currOrder.getChannelOrderID());
 					channelReport.setInvoiceId(currOrder.getInvoiceID());
 					channelReport.setShippedDate(currOrder.getShippedDate());
+					channelReport.setReceivedDate(currOrder.getOrderDate());
+					channelReport.setDeliveryDate(currOrder.getDeliveryDate());
+					channelReport.setPaymentDate(currOrder.getPaymentDueDate());
 					channelReport.setProductSku(currOrder.getProductSkuCode());
-
+					channelReport.setPaymentType(currOrder.getPaymentType());
+					channelReport.setAwb(currOrder.getAwbNum());
+					channelReport.setPiRefNo(currOrder.getPIreferenceNo());
+					channelReport.setSubOrderId(currOrder.getSubOrderID());
+					channelReport.setLogisticPartner(currOrder.getLogisticPartner());
+					
 					double orderPr = currOrder.getPr();
 					double grossProfit = currOrder.getGrossProfit();
 					double grossSaleQty = currOrder.getQuantity();
@@ -839,9 +847,12 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					if(currOrderReturn != null){
 						channelReport.setNetReturnCharges(additionalCharges);
 						saleRetQty = currOrderReturn.getReturnorrtoQty();
+						channelReport.setReturnDate(currOrderReturn.getReturnDate());
+						channelReport.setReturnId(currOrderReturn.getReturnOrRTOId());
 						// Only for PO Order
 						if(isPoOrder && consolidateOrder!=null){
 							saleRetNrAmount = currOrderReturn.getNetNR();
+							channelReport.setReturnId(currOrderReturn.getReturnOrRTOId());
 						}
 					}
 					double netPr = currOrder.getPr()/grossSaleQty*(grossSaleQty-saleRetQty);
@@ -900,6 +911,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 						channelReport.setNetPaymentResult(netPaymentResult);
 						channelReport.setPaymentDifference(paymentDifference);
 						channelReport.setNetAr(netPaymentResult);
+						channelReport.setPaymentId(currOrderPayment.getPaymentId() + "");						
 					}
 					
 					double productCost = 0;
