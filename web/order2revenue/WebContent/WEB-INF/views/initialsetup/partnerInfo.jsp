@@ -115,7 +115,8 @@
                     <div class="col-lg-3">
                         <div class="panel panel-default add-logo-page">
                             <div class="panel-body text-center" style="height: 100px; width: 200px;">
-                            	<c:choose>
+                            	<img alt="image"  src="${partner.pcLogoUrl}"  title="${partner.pcName}"	style="width:100%;">
+                            	<%-- <c:choose>
                             		<c:when test="${partner.pcLogoUrl != null}">
                             			<img alt="image"  src="${partner.pcLogoUrl}"  title="${partner.pcName}"
                             				style="width:100%;">
@@ -124,7 +125,7 @@
                             			<img alt="image"  src="/O2R/partnerimages/5Yamaha.jpg"  title="${partner.pcName}" style="width:100%;">
                             			<label class="lable">${partner.pcName}</label>
                             		</c:otherwise>                              		                          	
-                            	</c:choose>                            	
+                            	</c:choose> --%>                            	
                                 <div><a href="#"
                                 	 style="width:49%;z-index: 9999;"
                                 	 onclick="onclickEditpartner('${partner.pcId}','${partner.pcName}')"><i class="fa fa-pencil"></i></a>
