@@ -7,6 +7,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<style type="text/css">
+.lable
+       {
+        position: absolute;
+	    margin-left: -16%;
+	    margin-top: -143px;
+	    font-size: 24px;
+	    text-align: center;
+	    z-index: 999999999999;
+	    color: gray;
+	    font-weight: 400;	    
+	    font-family: cursive;
+	    font-style: italic;
+	    border-radius: 10px;
+       }
+
+</style>
+
+
+
+
+
+
 <jsp:include page="../globalcsslinks.jsp"></jsp:include>
 <script type="text/javascript">
     function onclickaddpartner(value,id) {
@@ -95,12 +118,12 @@
                             	<c:choose>
                             		<c:when test="${partner.pcLogoUrl != null}">
                             			<img alt="image"  src="${partner.pcLogoUrl}"  title="${partner.pcName}"
-                            				style="width:100%;">>
+                            				style="width:100%;">
                             		</c:when>
                             		<c:otherwise>
-                            			<img alt="image"  src="/O2R/partnerimages/5Yamaha.jpg"  title="${partner.pcName}"
-                            				style="width:100%;">>
-                            		</c:otherwise>                            	
+                            			<img alt="image"  src="/O2R/partnerimages/5Yamaha.jpg"  title="${partner.pcName}" style="width:100%;">
+                            			<label class="lable">${partner.pcName}</label>
+                            		</c:otherwise>                              		                          	
                             	</c:choose>                            	
                                 <div><a href="#"
                                 	 style="width:49%;z-index: 9999;"
