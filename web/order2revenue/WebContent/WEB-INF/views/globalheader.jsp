@@ -48,11 +48,22 @@
 
 <!--Start of Zopim Live Chat Script-->
 <script type="text/javascript">
-window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
-d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
-_.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
-$.src="//v2.zopim.com/?3yCaZbGw7gkuPsT5ErEN0bOIHILoA2kp";z.t=+new Date;$.
-type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+	window.$zopim || (function(d, s) {
+		var z = $zopim = function(c) {
+			z._.push(c)
+		}, $ = z.s = d.createElement(s), e = d.getElementsByTagName(s)[0];
+		z.set = function(o) {
+			z.set._.push(o)
+		};
+		z._ = [];
+		z.set._ = [];
+		$.async = !0;
+		$.setAttribute("charset", "utf-8");
+		$.src = "//v2.zopim.com/?3yCaZbGw7gkuPsT5ErEN0bOIHILoA2kp";
+		z.t = +new Date;
+		$.type = "text/javascript";
+		e.parentNode.insertBefore($, e)
+	})(document, "script");
 </script>
 <!--End of Zopim Live Chat Script-->
 
@@ -243,13 +254,19 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 								id="uploadReport-i-1"></i>
 							</a>
 							<div class="media-body">
-								<small class="pull-right"> <label
-									id="uploadReport-uploadedAt-1"></label>
-								</small> <strong> <label id="uploadReport-description-1"></label>
-								</strong> by <label id="uploadReport-sellerName-1"></label><br> <small
-									class="text-muted"> <label id="uploadReport-fileType-1"></label>
-									- <label id="uploadReport-uploadDate-1"></label>
-								</small>
+								<label id="uploadReport-uploadedAt-1"
+									style="font-size: smaller; font-weight: normal !important;"
+									class="pull-right"></label> <label
+									id="uploadReport-description-1" style="font-weight: bold;"></label>
+								by <label id="uploadReport-sellerName-1"
+									style="font-weight: normal !important;"></label><br> <label
+									id="uploadReport-fileType-1"
+									style="font-size: smaller; font-weight: normal !important;"
+									class="text-muted"></label> - <label
+									id="uploadReport-uploadDate-1"
+									style="font-size: smaller; font-weight: normal !important;"
+									class="text-muted"></label> <label id="uploadReport-status-1"
+									class="pull-right"></label>
 							</div>
 						</div>
 					</li>
@@ -261,13 +278,19 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 								id="uploadReport-i-2"></i>
 							</a>
 							<div class="media-body">
-								<small class="pull-right"> <label
-									id="uploadReport-uploadedAt-2"></label>
-								</small> <strong> <label id="uploadReport-description-2"></label>
-								</strong> by <label id="uploadReport-sellerName-2"></label><br> <small
-									class="text-muted"> <label id="uploadReport-fileType-2"></label>
-									- <label id="uploadReport-uploadDate-2"></label>
-								</small>
+								<label id="uploadReport-uploadedAt-2"
+									style="font-size: smaller; font-weight: normal !important;"
+									class="pull-right"></label> <label
+									id="uploadReport-description-2" style="font-weight: bold;"></label>
+								by <label id="uploadReport-sellerName-2"
+									style="font-weight: normal !important;"></label><br> <label
+									id="uploadReport-fileType-2"
+									style="font-size: smaller; font-weight: normal !important;"
+									class="text-muted"></label> - <label
+									id="uploadReport-uploadDate-2"
+									style="font-size: smaller; font-weight: normal !important;"
+									class="text-muted"></label> <label id="uploadReport-status-2"
+									class="pull-right"></label>
 							</div>
 						</div>
 					</li>
@@ -279,13 +302,19 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 								id="uploadReport-i-3"></i>
 							</a>
 							<div class="media-body">
-								<small class="pull-right"> <label
-									id="uploadReport-uploadedAt-3"></label>
-								</small> <strong> <label id="uploadReport-description-3"></label>
-								</strong> by <label id="uploadReport-sellerName-3"></label><br> <small
-									class="text-muted"> <label id="uploadReport-fileType-3"></label>
-									- <label id="uploadReport-uploadDate-3"></label>
-								</small>
+								<label id="uploadReport-uploadedAt-3"
+									style="font-size: smaller; font-weight: normal !important;"
+									class="pull-right"></label> <label
+									id="uploadReport-description-3" style="font-weight: bold;"></label>
+								by <label id="uploadReport-sellerName-3"
+									style="font-weight: normal !important;"></label><br> <label
+									id="uploadReport-fileType-3"
+									style="font-size: smaller; font-weight: normal !important;"
+									class="text-muted"></label> - <label
+									id="uploadReport-uploadDate-3"
+									style="font-size: smaller; font-weight: normal !important;"
+									class="text-muted"></label> <label id="uploadReport-status-3"
+									class="pull-right"></label>
 							</div>
 						</div>
 					</li>
@@ -351,76 +380,120 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script type="text/javascript">
-	
-	function onclickNavigate(value,id) {
-    	var targeturl="";
-    	switch(value)
-    	{
-    	case "upload" :
-    		targeturl="uploadOrderDA.html?value=ordersummary";
-    	break;
-    	case "download" :
-    		targeturl="downloadOrderDA.html?value=ordersummary";
-    	break;
-    	}
-    	$.ajax({
-            url : targeturl,
-            success : function(data) {
-                $('#centerpane').html(data);
-            }
-        });
-    	}
-	
-		$(document).ready(
-				function() {
-					
-					$.ajax({
-				        url: "getUploadReports.html",
-				        dataType: "json"
-				    }).success(function(data){
-				        var i = 1;
-				        data.forEach( function (arrayItem)
-		        		{			        		    
-		        		    var cssClass;
-		        		    if (arrayItem.description == "Exported") {
-		        		    	cssClass = "fa-level-up";
-		        		    } else {
-		        		    	cssClass = "fa-level-down";
-		        		    }
-		        		    
-		        		    document.getElementById("uploadReport-div-"+i).style.display = "inherit";
-		        		    document.getElementById("uploadReport-a-"+i).href = "javascript:onclickDownload('" + arrayItem.id + "');";
-		        		    document.getElementById("uploadReport-i-"+i).className = "fa " + cssClass;
-		        		    document.getElementById("uploadReport-uploadedAt-"+i).innerHTML = arrayItem.uploadedAt;
-		        		    document.getElementById("uploadReport-description-"+i).innerHTML = arrayItem.description;
-		        		    document.getElementById("uploadReport-sellerName-"+i).innerHTML = arrayItem.sellerName;
-		        		    document.getElementById("uploadReport-fileType-"+i).innerHTML = arrayItem.fileType;
-		        		    document.getElementById("uploadReport-uploadDate-"+i).innerHTML = arrayItem.uploadDate;
-		    				
-		        		    i++;
-		        		});
-				    });
-					
-					$('#searchCriteria').change(
-							function() {
-								var thisValue = $(this).children(":selected")
-										.attr("id");
-								if (thisValue == 1 || thisValue == 2
-										|| thisValue == 3 || thisValue == 4
-										|| thisValue == 5 || thisValue == 6
-										|| thisValue == 7 || thisValue == 8
-										|| thisValue == 9 || thisValue == 10
-										|| thisValue == 11 || thisValue == 12
-										|| thisValue == 13 || thisValue == 14
-										|| thisValue == 15) {
-									$('.TopSearch-box1').show();
-									$('.TopSearch-box2').hide();
-								} else {
-									$('.TopSearch-box1').hide();
-									$('.TopSearch-box2').show();
-								}
-							});
-				});
+		function onclickNavigate(value, id) {
+			var targeturl = "";
+			switch (value) {
+			case "upload":
+				targeturl = "uploadOrderDA.html?value=ordersummary";
+				break;
+			case "download":
+				targeturl = "downloadOrderDA.html?value=ordersummary";
+				break;
+			}
+			$.ajax({
+				url : targeturl,
+				success : function(data) {
+					$('#centerpane').html(data);
+				}
+			});
+		}
+
+		$(document)
+				.ready(
+						function() {
+
+							$
+									.ajax({
+										url : "getUploadReports.html",
+										dataType : "json"
+									})
+									.success(
+											function(data) {
+												var i = 1;
+												data
+														.forEach(function(
+																arrayItem) {
+															var cssClass;
+															if (arrayItem.description == "Exported") {
+																cssClass = "fa-level-up";
+															} else {
+																cssClass = "fa-level-down";
+															}
+
+															if (arrayItem.status == "Error") {
+																document
+																		.getElementById("uploadReport-i-"
+																				+ i).style = "color: red !important;";
+																document
+																.getElementById("uploadReport-status-"
+																		+ i).style = "font-size: smaller; font-weight: normal !important; color: red !important;";
+															} else {
+																document
+																.getElementById("uploadReport-status-"
+																		+ i).style = "font-size: smaller; font-weight: normal !important; color: green !important;";
+															}
+
+															document
+																	.getElementById("uploadReport-div-"
+																			+ i).style.display = "inherit";
+															document
+																	.getElementById("uploadReport-a-"
+																			+ i).href = "javascript:onclickDownload('"
+																	+ arrayItem.id
+																	+ "');";
+															document
+																	.getElementById("uploadReport-i-"
+																			+ i).className = "fa "
+																	+ cssClass;
+															document
+																	.getElementById("uploadReport-uploadedAt-"
+																			+ i).innerHTML = arrayItem.uploadedAt;
+															document
+																	.getElementById("uploadReport-description-"
+																			+ i).innerHTML = arrayItem.description;
+															document
+																	.getElementById("uploadReport-sellerName-"
+																			+ i).innerHTML = arrayItem.sellerName;
+															document
+																	.getElementById("uploadReport-fileType-"
+																			+ i).innerHTML = arrayItem.fileType;
+															document
+																	.getElementById("uploadReport-uploadDate-"
+																			+ i).innerHTML = arrayItem.uploadDate;
+															document
+															.getElementById("uploadReport-status-"
+																	+ i).innerHTML = arrayItem.status;
+
+															i++;
+														});
+											});
+
+							$('#searchCriteria').change(
+									function() {
+										var thisValue = $(this).children(
+												":selected").attr("id");
+										if (thisValue == 1 || thisValue == 2
+												|| thisValue == 3
+												|| thisValue == 4
+												|| thisValue == 5
+												|| thisValue == 6
+												|| thisValue == 7
+												|| thisValue == 8
+												|| thisValue == 9
+												|| thisValue == 10
+												|| thisValue == 11
+												|| thisValue == 12
+												|| thisValue == 13
+												|| thisValue == 14
+												|| thisValue == 15) {
+											$('.TopSearch-box1').show();
+											$('.TopSearch-box2').hide();
+										} else {
+											$('.TopSearch-box1').hide();
+											$('.TopSearch-box2').show();
+										}
+									});
+						});
 	</script>
 </body>
 

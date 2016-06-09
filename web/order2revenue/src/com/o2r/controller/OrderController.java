@@ -827,11 +827,12 @@ public class OrderController {
 			String dateString;
 			DateFormat format = new SimpleDateFormat("d MMMM yyyy",
 					Locale.ENGLISH);
-			DateFormat monthFormat = new SimpleDateFormat("yyyy-MM",
+			DateFormat monthFormat = new SimpleDateFormat("MMM yyyy",
 					Locale.ENGLISH);
-			Date startDate;
-			Date endDate;
+			Date startDate = null;
+			Date endDate = null;
 			String period = "";
+			boolean dateRange = true;
 			
 			if ("".equals(value.trim()) || value.equals("0")) {
 				Calendar c = Calendar.getInstance();
@@ -843,6 +844,9 @@ public class OrderController {
 				endDate = c.getTime();
 				period = monthFormat.format(startDate);
 				//period = period.substring(period.indexOf(' '));
+				
+			} else if ("All".equalsIgnoreCase(value.trim())) {
+				dateRange = false;
 				
 			} else if (value.contains(" ")) {
 				dateString = "1 " + value;
@@ -861,9 +865,17 @@ public class OrderController {
 				endDate = format.parse(dateString);
 			}
 
-			poOrderlist = ConverterClass.prepareListofBean(orderService
-					.findOrdersbyDate("shippedDate", startDate, endDate,
-							sellerId, true));
+			if (dateRange) {
+				poOrderlist = ConverterClass.prepareListofBean(orderService
+						.findOrdersbyDate("shippedDate", startDate, endDate,
+								sellerId, true));
+			} else {
+				int pageNo = request.getParameter("page") != null ? Integer
+						.parseInt(request.getParameter("page")) : 0;
+				poOrderlist = ConverterClass.prepareListofBean(orderService
+						.listPOOrders(sellerId, pageNo));
+			}
+			
 			model.put("poOrders", poOrderlist);
 			model.put("period", period);
 

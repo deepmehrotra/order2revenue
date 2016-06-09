@@ -91,9 +91,9 @@
 									<h5>PO Orders(${poOrders.size()})</h5>
 									<div class="table-menu-links">
 										<a href="orderList.html" id="Orders">MP Orders</a> <a href="#"
-											id="returnOrders">Return</a> <a href="#" id="gatepass"
-											onclick="onclickNavigateOrder('viewPOOrderDetails','0')">GatePass</a>
-										<a href="#" id="paymentOrders">Payment</a> <a href="#"
+											id="returnOrders">Return</a> <a href="gatepasslist.html"
+											id="gatepass">GatePass</a> <a href="#"
+											id="paymentOrders">Payment</a> <a href="#"
 											id="actionableOrders">Actionable</a>
 									</div>
 								</div>
@@ -102,9 +102,12 @@
 								</div>
 								<div class="col-sm-12">
 									<div class="col-sm-5">
-										<label>Period:</label>
-										<%-- &nbsp;&nbsp;&nbsp;<label> ${period} </label> --%>
-										<input name="startDate" id="monthYearPicker" />
+										<label>Period:</label> &nbsp;&nbsp;&nbsp;<label>
+											${period} </label>
+										<button class="btn btn-xs btn-grey"
+											onclick="location.href = 'poOrderList.html?value=All';">View
+											All</button>
+										<!-- <input name="startDate" id="monthYearPicker" /> -->
 										<%-- <input value="${period}" id="ChromeMonthPicker" type="month" 
 											class="form-control input-sm" style="width:70%;"/>  --%>
 									</div>
@@ -114,7 +117,7 @@
 										<button class="btn btn-xs btn-grey"
 											onclick="onclickNavigateOrder('viewPOOrderDetails','0')">Annually</button>
 									</div>
-									<div class="ibox-tools col-sm-4">
+									<div class="ibox-tools">
 										<button class="btn btn-white table-menu-search search-dd">
 											<i class="fa fa-search"></i>
 										</button>
@@ -165,8 +168,6 @@
 										<button type="button" class="btn btn-xs btn-white">1000</button>
 										<button type="button" id="LoadMoreOrder"
 											class="btn btn-xs btn-white">More</button>
-										<a href="#" onclick="onclickNavigateOrder('addOrder','0')"
-											class="btn btn-primary btn-xs">Create New Order</a>
 									</div>
 								</div>
 							</div>
