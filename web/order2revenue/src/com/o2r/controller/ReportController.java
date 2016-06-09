@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.o2r.bean.BusinessDetails;
+import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionDetails;
@@ -363,6 +364,11 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 					Collections.sort(categoryList, new ChannelReportDetails.OrderByGNR());
 					model.put("categoryByGNR", ConverterClass.getChannelSortedList(categoryList, "GNR"));
 					break; 
+				case "paymentsReceievedReport": 
+					List<ChannelNPR> partnerChannelNprList = reportGeneratorService.fetchChannelNPR(sellerId, startDate, endDate, "partner");
+					model.put("partnerByNPR", partnerChannelNprList);
+					List<ChannelNPR> categoryChannelNprList = reportGeneratorService.fetchChannelNPR(sellerId, startDate, endDate, "category");
+					model.put("categoryByNPR", categoryChannelNprList);
 				default: break;
 			}
 			

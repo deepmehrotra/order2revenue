@@ -1,554 +1,440 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
 <head>
 
-  <jsp:include page="../globalcsslinks.jsp"></jsp:include>
+<jsp:include page="../globalcsslinks.jsp"></jsp:include>
 
-    <!-- orris -->
-    <link href="/O2R/seller/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+<!-- orris -->
+<link href="/O2R/seller/css/plugins/morris/morris-0.4.3.min.css"
+	rel="stylesheet">
 
-    <!-- Data Tables -->
-    <link href="/O2R/seller/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
-    <link href="/O2R/seller/css/plugins/dataTables/dataTables.responsive.css" rel="stylesheet">
-    <link href="/O2R/seller/css/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet">
+<!-- Data Tables -->
+<link href="/O2R/seller/css/plugins/dataTables/dataTables.bootstrap.css"
+	rel="stylesheet">
+<link
+	href="/O2R/seller/css/plugins/dataTables/dataTables.responsive.css"
+	rel="stylesheet">
+<link
+	href="/O2R/seller/css/plugins/dataTables/dataTables.tableTools.min.css"
+	rel="stylesheet">
 
 </head>
 
 <body>
 
- <div id="wrapper">
-<jsp:include page="../sidenavigation.jsp"></jsp:include>
-    <div id="page-wrapper" class="gray-bg">
-     <jsp:include page="../globalheader.jsp"></jsp:include>  
-      <div class="wrapper wrapper-content animated fadeInRight" id="centerpane"> 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Total Payments Receieved</h5>
-                        </div>
-                        <div class="ibox-content overflow-h">
-                            
-                            <div class="panel-options">
+	<div id="wrapper">
+		<jsp:include page="../sidenavigation.jsp"></jsp:include>
+		<div id="page-wrapper" class="gray-bg">
+			<jsp:include page="../globalheader.jsp"></jsp:include>
+			<div class="wrapper wrapper-content animated fadeInRight"
+				id="centerpane">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>Reports</h5>
+							</div>
+							<div class="ibox-content overflow-h">
 
-                                <ul class="nav nav-tabs">
-                                    <li class="active"><a data-toggle="tab" href="#tab-1">View Graph</a></li>
-                                    <li class=""><a data-toggle="tab" href="#tab-2">View Report</a></li>
-                                </ul>
-                            </div>
-                            <div class="tab-content">
-                            <div id="tab-1" class="tab-pane active col-sm-12 chart-even">
-							
-                                <div class="row">
-                                
-                                
-                                                                <div class="col-lg-6">
-                                <table id="filterTableX" style="width:50%" class="table table-striped table-bordered table-hover dataTables-example" >
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Partner</th>
-                                    <th>Payment Type</th>
-                                    <th>Total +Ve</th>                                   
-                                    <th>Total -ve</th>
-                                    <th>Net Pay</th>
+								<div class="panel-options">
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                 <c:set var="numberOfRows" value="0"/>
-                                 
-                               <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-                               <c:if test="${ttso.groupByName == 'paymentTypeOne'}">
-                               <c:set var="numberOfRows" value="${numberOfRows+1}"/>
-                                <tr>
-                                    <td><c:out value="${numberOfRows}"/></td>
-                                    <td>${ttso.pcName}</td>
-									<td>${ttso.paymentType}</td>
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.positiveAmount}"/></td>									
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.negativeAmount}"/></td>
-									<td><fmt:formatNumber type="number"  maxFractionDigits="2"  value="${ttso.netPaymentResult}"/></td>
-                                  </tr>
-								</c:if>
-                                </c:forEach>
-									     
-                                </tbody>
-                                </table>
-                                </div>    
-                                                      
-								                <div class="col-lg-6">
-								                    <div class="ibox float-e-margins">
-								                        <div class="ibox-title">
-								                            <h5>Line Chart
-								                                <small>With custom colors.</small>
-								                            </h5>
-								                            <div ibox-tools></div>
-								                        </div>
-								                        <div class="ibox-content">
-								                            <div>
-								                                <canvas id="flot-chart-content" height="240"></canvas>
-								                            </div>
-								                        </div>
-								                    </div>
-								                </div> 
-								                                
-                                </div>
-								<div class="row">
-								
-								
-								
-								
+									<ul class="nav nav-tabs">
+										<li class="active"><a data-toggle="tab" href="#tab-1">View
+												Graph</a></li>
+										<li class=""><a data-toggle="tab" href="#tab-2">View
+												Report</a></li>
+									</ul>
 								</div>
+								<div class="tab-content">
+									<div id="tab-1" class="tab-pane active col-sm-12 chart-even">
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Partner</th>
+																	<th>Prepaid NPR</th>
+																	<th>COD NPR</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty partnerByNPR}">
+																	<c:forEach items="${partnerByNPR}" var="partnerDto"
+																		varStatus="loop">
+																		<tr>
+																			<td>${partnerDto.partner}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.prepaidNPR}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.codNPR}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div id="stacked-chart-1"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Partner</th>
+																	<th>NPR</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty partnerByNPR}">
+																	<c:forEach items="${partnerByNPR}"
+																		var="partnerDto" varStatus="loop">
+																		<tr>
+																			<td>${partnerDto.partner}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netNPR}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div class="flot-chart">
+															<div class="flot-chart-content"
+																id="bar-chart-partner-net-npr"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Category</th>
+																	<th>Prepaid NPR</th>
+																	<th>COD NPR</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty categoryByNPR}">
+																	<c:forEach items="${categoryByNPR}"
+																		var="categoryDto" varStatus="loop">
+																		<tr>
+																			<td>${categoryDto.category}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.prepaidNPR}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.codNPR}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div id="stacked-chart-2"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Category</th>
+																	<th>NPR</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty categoryByNPR}">
+																	<c:forEach items="${categoryByNPR}"
+																		var="categoryDto" varStatus="loop">
+																		<tr>
+																			<td>${categoryDto.category}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netNPR}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div class="flot-chart">
+															<div class="flot-chart-content"
+																id="bar-chart-category-net-npr"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div id="tab-2" class="tab-pane col-sm-12">	
+										<div class="row">
+											<div class="col-lg-12">
+												<div class="float-e-margins graph-brd">
+													<div style="overflow-y: hidden;overflow-x: scroll;">
+														<table class="table table-bordered custom-table" style="margin-bottom: auto;">
+															<thead>
+																<tr>
+																	<th>Partner</th>
+																	<th>Net SP</th>
+																	<th>Net Commission Paid</th>
+																	<th>Net N/R</th>
+																	<th>Net Tax Paid</th>
+																	<th>Net P/R</th>
+																	<th>Net TDS to be deposited</th>
+																	<th>Net Cost of Product</th>
+																	<th>Gross Profit</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty shortTablePartner}">
+																	<c:forEach items="${shortTablePartner}" var="partner"
+																		varStatus="loop">
+																		<tr>
+																			<td>${partner.partner}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netSP}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPartnerCommissionPaid}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netActualSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netTaxToBePaid}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPrSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netTDSToBeDeposited}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netProductCost}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.grossProfit}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="row" style="margin-top: 20px;">
+											<div class="col-lg-12">
+												<div class="float-e-margins graph-brd">
+													<div style="overflow-y: hidden;overflow-x: scroll;">
+														<table class="table table-bordered custom-table" style="margin-bottom: auto;">
+															<thead>
+																<tr>
+																	<th>Category</th>
+																	<th>Net SP</th>
+																	<th>Net Commission Paid</th>
+																	<th>Net N/R</th>
+																	<th>Net Tax Paid</th>
+																	<th>Net P/R</th>
+																	<th>Net TDS to be deposited</th>
+																	<th>Net Cost of Product</th>
+																	<th>Gross Profit</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty shortTableCategory}">
+																	<c:forEach items="${shortTableCategory}" var="category"
+																		varStatus="loop">
+																		<tr>
+																			<td>${category.categoryName}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netSP}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPartnerCommissionPaid}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netActualSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netTaxToBePaid}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPrSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netTDSToBeDeposited}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netProductCost}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.grossProfit}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-sm-12">
+											<div class="hr-line-dashed"></div>
+											<button class="btn btn-primary pull-right" type="submit">Print</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<jsp:include page="../globalfooter.jsp"></jsp:include>
+
+			</div>
+		</div>
+	</div>
+
+	<jsp:include page="../globaljslinks.jsp"></jsp:include>
+
+	<!-- Flot -->
+	<script src="/O2R/seller/js/plugins/flot/jquery.flot.js"></script>
+	<script src="/O2R/seller/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+	<script src="/O2R/seller/js/plugins/flot/jquery.flot.resize.js"></script>
+	<script src="/O2R/seller/js/plugins/flot/jquery.flot.pie.js"></script>
+	<script src="/O2R/seller/js/plugins/flot/jquery.flot.time.js"></script>
+	<script src="/O2R/seller/js/plugins/flot/jquery.flot.axislabels.js"></script>
+	<script src="/O2R/seller/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+	<script src="/O2R/seller/js/plugins/flot/jquery.flot.symbol.js"></script>
+	<script src="/O2R/seller/js/plugins/flot/jquery.flot.spline.js"></script>
+	<script src="/O2R/seller/js/plugins/flot/jquery.flot.resize.js"></script>
+	<script src="/O2R/seller/js/plugins/highchart/highcharts.js"></script>
+
+	<!-- Morris -->
+	<script src="/O2R/seller/js/plugins/morris/raphael-2.1.0.min.js"></script>
+	<script src="/O2R/seller/js/plugins/morris/morris.js"></script>
+
+	<!-- Highchart Custom -->
+	<script src="/O2R/seller/js/demo/highchart-demo.js"></script>
+
+	<!-- ChartJS-->
+	<script src="/O2R/seller/js/plugins/chartJs/Chart.min.js"></script>
+	<script src="/O2R/seller/js/demo/flot-demo-1.js"></script>
 
 
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="float-e-margins graph-brd">
-                                        <div >
-                                      </div>
-                                            
-                                            <div class="ibox-content">
-                                                <div id="morris-line-chart"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                <div class="hr-line-dashed"></div>
-                                    <button class="btn btn-primary pull-right" type="submit">Print</button>
-                                </div>
-                            </div>
-                            
-                            <div id="tab-2" class="tab-pane col-sm-12">
-                            <form role="form" class="form-horizontal">
-                            <div class="col-sm-12"  style="overflow-x: scroll;">
-                            <div id="tbdata1">
-                            <p id="selectTriggerFilter"><label><b>Filter:</b></label><br></p>
-                        <table id="filterOneTable" style="width:50%" class="table table-striped table-bordered table-hover dataTables-example" >
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Date Of Payment</th>
-                                    <th>Uploaded On Date</th>
-                                   
-                                    <th>Payment Type</th>
-                                    <th>Payment Cycle</th>
-                                    <th>Channel</th>
-                                    
-                                    <th>Positive Amount Receieved</th>
-                                    <th>Negetive Amount Receieved</th>
-                                    
-                                     <th>Net Amount Receieved</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                 
-                                 
-                               <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-                               <c:if test="${ttso.groupByName == 'getPayments'}">
-                              
-                                <tr>
-                                    <td>${loop.index+1}</td>
-									<td>${ttso.dateofPayment}</td>
-									<td>${ttso.uploadDate}</td>
-									<td>${ttso.paymentType}</td>
-									<td>${ttso.paymentCycle}</td>
-									<td>${ttso.pcName}</td>
-									<td>${ttso.positiveAmount}</td>									
-									<td>${ttso.negativeAmount}</td>
-									<td>${ttso.netPaymentResult}</td>
-                                  </tr>
-								</c:if>
-                                </c:forEach>
-									     
-                                </tbody>
-                                </table></div>
-                            </div>
-                                <div class="col-sm-12">
-                                <div class="hr-line-dashed"></div>
-                                    <button class="btn btn-primary pull-right" type="submit">Save</button>
-                                </div>
-
-                            </form>
-                            </div>
-                            </div>
-                        </div>
-                </div>
-            </div>
-        </div>
-         <jsp:include page="../globalfooter.jsp"></jsp:include>
-
-    </div>
-</div>
-</div>
-
-<jsp:include page="../globaljslinks.jsp"></jsp:include>
-
-<!-- Flot -->
-<script src="/O2R/seller/js/plugins/flot/jquery.flot.js"></script>
-<script src="/O2R/seller/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-<script src="/O2R/seller/js/plugins/flot/jquery.flot.resize.js"></script>
-<script src="/O2R/seller/js/plugins/flot/jquery.flot.pie.js"></script>
-<script src="/O2R/seller/js/plugins/flot/jquery.flot.time.js"></script>
-<script src="/O2R/seller/js/plugins/flot/jquery.flot.axislabels.js"></script>
-<script src="/O2R/seller/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-<script src="/O2R/seller/js/plugins/flot/jquery.flot.symbol.js"></script>
-<script src="/O2R/seller/js/plugins/flot/jquery.flot.spline.js"></script>
-<script src="/O2R/seller/js/plugins/flot/jquery.flot.resize.js"></script>
-
-<!-- Morris -->
-<script src="/O2R/seller/js/plugins/morris/raphael-2.1.0.min.js"></script>
-<script src="/O2R/seller/js/plugins/morris/morris.js"></script>
-
-<!-- Morris demo data-->
-<script src="/O2R/seller/js/demo/morris-demo.js"></script>
-
-<!-- ChartJS-->
-<script src="/O2R/seller/js/plugins/chartJs/Chart.min.js"></script>
-<script src="/O2R/seller/js/demo/flot-demo-1.js"></script>
-<script   language="javascript">
-   function changeTable(svalue){
-	   document.getElementById("tbdata1").innerHTML="";
-   }
-</script>
-
-<!-- Data Tables -->
-<script src="/O2R/seller/js/plugins/dataTables/jquery.dataTables.js"></script>
-<script src="/O2R/seller/js/plugins/dataTables/dataTables.bootstrap.js"></script>
-<script src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
-<script src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
-<script>
-
-$(window).load(function() {
-	 	
-	 	var labelsdata = [];
-	 	var adata = [];
-	 	var bdata = [];
-	 	var cdata = [];
- 		 	
-	 	<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-	 	<c:if test="${ttso.groupByName == 'paymentTypeOne'}">
-			labelsdata.push('${ttso.pcName}/${ttso.paymentType}');
-	 		adata.push('${ttso.positiveAmount}');
-	 		bdata.push('${ttso.negativeAmount}');
-	 		cdata.push('${ttso.netPaymentResult}');
- 		</c:if>
+	<!-- Data Tables -->
+	<script src="/O2R/seller/js/plugins/dataTables/jquery.dataTables.js"></script>
+	<script src="/O2R/seller/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+	<script
+		src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
+	<script
+		src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
+	<script>
+		//Script for Bar Chart
+		
+		var dataArr = [];
+		var yAxisText = 'Prepaid NPR vs COD NPR';
+		var divId = "#stacked-chart-1";
+		var xAxisCategories = ['Prepaid NPR', 'COD NPR'];
+		<c:forEach items="${partnerByNPR}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.category}';
+			data.data = [parseFloat(parseFloat('${partnerDto.prepaidNPR}').toFixed(2)), parseFloat(parseFloat('${partnerDto.codNPR}').toFixed(2))];
+			dataArr.push(data);
 		</c:forEach>
-	 	
-	    var lineData = {
-	            labels: labelsdata,
-	            datasets: [
-	                {
-	                    label: "Example dataset",
-	                    fillColor: "rgba(220,220,220,0.5)",
-	                    strokeColor: "red",
-	                    pointColor: "green",
-	                    pointStrokeColor: "#fff",
-	                    pointHighlightFill: "#fff",
-	                    pointHighlightStroke: "rgba(220,220,220,1)",
-	                    data: adata
-	                },
-	                {
-	                    label: "Example dataset",
-	                    fillColor: "rgba(120,120,220,0.5)",
-	                    strokeColor: "green",
-	                    pointColor: "red",
-	                    pointStrokeColor: "#fff",
-	                    pointHighlightFill: "#fff",
-	                    pointHighlightStroke: "rgba(26,179,148,1)",
-	                    data: bdata
-	                },
-	                {
-	                    label: "Example dataset",
-	                    fillColor: "rgba(220,220,220,0.5)",
-	                    strokeColor: "blue",
-	                    pointColor: "blue",
-	                    pointStrokeColor: "#fff",
-	                    pointHighlightFill: "#fff",
-	                    pointHighlightStroke: "rgba(55,100,118,1)",
-	                    data: cdata
-	                }
-	            ]
-	        };
-
-	        var lineOptions = {
-	            scaleShowGridLines: true,
-	            scaleGridLineColor: "rgba(0,0,0,.05)",
-	            scaleGridLineWidth: 1,
-	            bezierCurve: true,
-	            bezierCurveTension: 0.4,
-	            pointDot: true,
-	            pointDotRadius: 4,
-	            pointDotStrokeWidth: 1,
-	            pointHitDetectionRadius: 20,
-	            datasetStroke: true,
-	            datasetStrokeWidth: 2,
-	            datasetFill: true,
-	            responsive: true,
-	        };
-
-
-	        var ctx = document.getElementById("flot-chart-content").getContext("2d");
-	        var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
-	        
-	
-	var axislabels=[];
-	var dataset1 = [];
-	var dataset2 = [];
-	
-	
-	 var barData = {
-		       
-			 labels:axislabels,
-		        datasets: [
-		            {
-		                label: "label1",
-		                fillColor: "rgba(26,179,148,1)",
-		                strokeColor: "rgba(220,220,220,0.8)",
-		                highlightFill: "rgba(220,220,220,0.75)",
-		                highlightStroke: "rgba(220,220,220,1)",
-		                data: dataset1
-		            },
-		            {
-		                label: "label2",
-		                fillColor: "rgba(226,109,148,1)",
-		                strokeColor: "rgba(26,179,148,0.8)",
-		                highlightFill: "rgba(26,179,148,0.75)",
-		                highlightStroke: "rgba(26,179,148,1)",
-		                data:dataset2
-		            }
-		        ]
-		    };
-
-		    var barOptions1 = {
-		        scaleBeginAtZero: true,
-		        scaleShowGridLines: true,
-		        scaleGridLineColor: "rgba(0,0,0,.05)",
-		        scaleGridLineWidth: 1,
-		        barShowStroke: true,
-		        barStrokeWidth: 2,
-		        barValueSpacing: 5,
-		        showTooltips : true,
-		        barDatasetSpacing: 1,
-		        responsive: true,
-		        multiTooltipTemplate: ""
-		    }
-		 	<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-		 	<c:if test="${empty ttso.groupByName}">
-		 	axislabels.push('${ttso.pcName}');
-		 		dataset1.push('${ttso.quantity}');
-		 		dataset2.push('${ttso.quantity/2}');
-		 	</c:if>
-		 	<c:if test="${ttso.groupByName == 'categoryName'}">
-		 	axislabels.push('${ttso.pcName}');
-	 		dataset1.push('${ttso.quantity}');
-	 		dataset2.push('${ttso.quantity/2}');
- 		   </c:if>
-			</c:forEach>
-        	
-		    var ctx = document.getElementById("barChart").getContext("2d"); 
-		    var myNewChart = new Chart(ctx).Bar(barData, barOptions1);
-	      //  var ctx = document.getElementById("flot-chart-content_1").getContext("2d");
-	      //  var myNewChart = new Chart(ctx).Line(lineData1, lineOptions);
-	      
-	      var labelsx=[];
-	      var data1x=[];
-	      var data2x=[];
-	      
-	      
-	  var lineDatax = {
-		        labels: labelsx,
-		        datasets: [
-		            {
-		                label: "Gross Profit",
-		                fillColor: "rgba(120,120,120,0.5)",
-		                strokeColor: "black",
-		                pointColor: "rgba(220,220,220,1)",
-		                pointStrokeColor: "#fff",
-		                pointHighlightFill: "#fff",
-		                pointHighlightStroke: "rgba(220,220,220,1)",
-		                data: data1x
-		            },
-		            {
-		                label: "Expense",
-		                fillColor: "rgba(26,179,148,0.5)",
-		                strokeColor: "rgba(26,179,148,0.7)",
-		                pointColor: "rgba(26,179,148,1)",
-		                pointStrokeColor: "#fff",
-		                pointHighlightFill: "#fff",
-		                pointHighlightStroke: "rgba(26,179,148,1)",
-		                data: data2x
-		            }
-		        ]
-		    };
-	  
-	  var lineOptionsx = {
-		        scaleShowGridLines: true,
-		        scaleGridLineColor: "rgba(0,0,0,.05)",
-		        scaleGridLineWidth: 1,
-		        bezierCurve: true,
-		        bezierCurveTension: 0.4,
-		        pointDot: true,
-		        pointDotRadius: 4,
-		        pointDotStrokeWidth: 1,
-		        pointHitDetectionRadius: 20,
-		        datasetStroke: true,
-		        datasetStrokeWidth: 2,
-		        datasetFill: true,
-		        responsive: true,
-		        multiTooltipTemplate: "",
-		    };
-	  
-		<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-	 	<c:if test="${empty ttso.groupByName}">
-			labelsx.push('${ttso.pcName}');
-			data1x.push('${ttso.grossProfit}');
-			data2x.push('${ttso.grossProfit/2}');
-	 	</c:if>
-	 	<c:if test="${ttso.groupByName == 'categoryName'}">
-		labelsx.push('${ttso.pcName}');
-		data1x.push('${ttso.grossProfit}');
-		data2x.push('${ttso.grossProfit/2}');
-		   </c:if>
+		stackChart(divId, yAxisText, dataArr);
+		
+		var dataArr = [];
+		var yAxisText = 'Prepaid NPR vs COD NPR';
+		var divId = "#stacked-chart-2";
+		var xAxisCategories = ['Prepaid NPR', 'COD NPR'];
+		<c:forEach items="${categoryByNPR}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.category}';
+			data.data = [parseFloat(parseFloat('${partnerDto.prepaidNPR}').toFixed(2)), parseFloat(parseFloat('${partnerDto.codNPR}').toFixed(2))];
+			dataArr.push(data);
+		</c:forEach>
+		stackChart(divId, yAxisText, dataArr);
+		
+		var temp1 = [];
+		var partnerByNPR = [];
+		var i = 1;
+		<c:forEach items="${partnerByNPR}" var="partnerDto" varStatus="loop">
+		var arr1 = [ i, '${partnerDto.netNPR}' ];
+		var arr2 = [ i++, '${partnerDto.partner}' ];
+		temp1.push(arr1);
+		partnerByNPR.push(arr2);
 		</c:forEach>
 
+		var temp2 = [];
+		var categoryByNPR = [];
+		var i = 1;
+		<c:forEach items="${categoryByNPR}" var="partnerDto" varStatus="loop">
+		var arr1 = [ i, '${partnerDto.netNPR}' ];
+		var arr2 = [ i++, '${partnerDto.category}' ];
+		temp2.push(arr1);
+		categoryByNPR.push(arr2);
+		</c:forEach>
 
-		    var ctx = document.getElementById("lineChart").getContext("2d");
-		    var myNewChart = new Chart(ctx).Line(lineDatax, lineOptionsx);
+		$(window)
+				.load(
+						function() {
+							
+							flotbar(temp1, partnerByNPR,
+								"#bar-chart-partner-net-npr");
+							flotbar(temp2, categoryByNPR,
+								"#bar-chart-category-net-npr");
 
+							$('.dataTables-example')
+									.dataTable(
+											{
+												responsive : true,
+												"dom" : 'T<"clear">lfrtip',
+												"tableTools" : {
+													"sSwfPath" : "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
+												}
+											});
+						});
+	</script>
+	<style>
+body.DTTT_Print {
+	background: #fff;
+}
 
-			var axislabelsx=[];
-			var dataset1x = [];
-			var dataset2x = [];
-			
-			
-			 var barDatax = {
-				       
-					 labels:axislabelsx,
-				        datasets: [
-				            {
-				                label: "label1",
-				                fillColor: "rgba(220,220,220,0.8)",
-				                strokeColor: "rgba(220,220,220,0.8)",
-				                highlightFill: "rgba(220,220,220,0.75)",
-				                highlightStroke: "rgba(220,220,220,1)",
-				                data: dataset1x
-				            },
-				            {
-				                label: "label2",
-				                fillColor: "rgba(26,179,148,0.8)",
-				                strokeColor: "rgba(26,179,148,0.8)",
-				                highlightFill: "rgba(26,179,148,0.75)",
-				                highlightStroke: "rgba(26,179,148,1)",
-				                data:dataset2x
-				            }
-				        ]
-				    };
+.DTTT_Print #page-wrapper {
+	margin: 0;
+	background: #fff;
+}
 
-				    var barOptions1x = {
-				        scaleBeginAtZero: true,
-				        scaleShowGridLines: true,
-				        scaleGridLineColor: "rgba(0,0,0,.05)",
-				        scaleGridLineWidth: 1,
-				        barShowStroke: true,
-				        barStrokeWidth: 2,
-				        barValueSpacing: 5,
-				        showTooltips : true,
-				        barDatasetSpacing: 1,
-				        responsive: true,
-				        multiTooltipTemplate: ""
-				    }
-				 	<c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
-				 	<c:if test="${empty ttso.groupByName}">
-				 	axislabelsx.push('${ttso.pcName}');
-				 		dataset1x.push('${ttso.quantity}');
-				 		dataset2x.push('${ttso.quantity/2}');
-				 	</c:if>
-				 	<c:if test="${ttso.groupByName == 'categoryName'}">
-				 	axislabelsx.push('${ttso.pcName}');
-			 		dataset1x.push('${ttso.quantity}');
-			 		dataset2x.push('${ttso.quantity/2}');
-					   </c:if>
-					</c:forEach>
-		        	
-				    var ctx = document.getElementById("barSecondChart").getContext("2d"); 
-				    var myNewChart = new Chart(ctx).Bar(barDatax, barOptions1x);
-				    
-				    
-				    $(document).ready(function() {
-				    	   $('#filterOneTable').DataTable({
-				    	        "lengthMenu": [
-				    	            [10, 25, 50, 100, -1],
-				    	            [10, 25, 50, 100, "All"]
-				    	        ],
-				    	        "scrollY": "200px",
-				    	        "dom": 'rtipS',
-				    	        // searching: false,
-				    	        "deferRender": true,
-				    	        initComplete: function () {
-				    	           var column = this.api().column(0);
-				    	           var select = $('<select class="filter"><option value=""></option></select>')
-				    	               .appendTo('#selectTriggerFilter')
-				    	               .on('change', function () {
-				    	                  var val = $(this).val();
-				    	                  column.search(val ? '^' + $(this).val() + '$' : val, true, false).draw();
-				    	               });
+button.DTTT_button,div.DTTT_button,a.DTTT_button {
+	border: 1px solid #e7eaec;
+	background: #fff;
+	color: #676a6c;
+	box-shadow: none;
+	padding: 6px 8px;
+}
 
-				    	           column.data().unique().sort().each(function (d, j) {
-				    	               select.append('<option value="' + d + '">' + d + '</option>');
-				    	           });
-				    	        }
-				    	    });
-				    	});
+button.DTTT_button:hover,div.DTTT_button:hover,a.DTTT_button:hover {
+	border: 1px solid #d2d2d2;
+	background: #fff;
+	color: #676a6c;
+	box-shadow: none;
+	padding: 6px 8px;
+}
 
-    $('.dataTables-example').dataTable({
-	            responsive: true,
-	            "dom": 'T<"clear">lfrtip',
-	            "tableTools": {
-	                "sSwfPath": "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
-	            }
-	    });
-	});
-	
- 	
-</script>
-<style>
-    body.DTTT_Print {
-        background: #fff;
+.dataTables_filter label {
+	margin-right: 5px;
+}
 
-    }
-    .DTTT_Print #page-wrapper {
-        margin: 0;
-        background:#fff;
-    }
-
-    button.DTTT_button, div.DTTT_button, a.DTTT_button {
-        border: 1px solid #e7eaec;
-        background: #fff;
-        color: #676a6c;
-        box-shadow: none;
-        padding: 6px 8px;
-    }
-    button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
-        border: 1px solid #d2d2d2;
-        background: #fff;
-        color: #676a6c;
-        box-shadow: none;
-        padding: 6px 8px;
-    }
-
-    .dataTables_filter label {
-        margin-right: 5px;
-    }
-    div.dataTables_length select{
-        padding: 0 10px;
-    }
+div.dataTables_length select {
+	padding: 0 10px;
+}
 </style>
 </body>
 

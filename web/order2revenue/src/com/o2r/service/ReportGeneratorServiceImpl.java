@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionDetails;
@@ -144,6 +145,12 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 	@Override
 	public List<CommissionDetails> fetchPC(int sellerId, Date startDate, Date endDate, String criteria) {
 		return reportGeneratorDao.fetchPC(sellerId, startDate, endDate, criteria);
+	}
+
+	@Override
+	public List<ChannelNPR> fetchChannelNPR(int sellerId, Date startDate,
+			Date endDate, String criteria) {
+		return reportGeneratorDao.fetchChannelNPR(sellerId, startDate, endDate, criteria);
 	}
 
 	/*

@@ -23,6 +23,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.PartnerReportDetails;
@@ -1183,6 +1184,89 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			commDetailsList.add(commDetails);
 		}
 		return commDetailsList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChannelNPR> fetchChannelNPR(int sellerId, Date startDate, Date endDate, String criteria) {
+		List<ChannelNPR> channelNPRList = new ArrayList<ChannelNPR>();
+		Map<String, ChannelNPR> channelNprMap = new HashMap<String, ChannelNPR>(); 
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		String mpOrderQueryStr = "SELECT ot.pcName, sum(op.netPaymentResult) as 'Prepaid NPR' FROM order_table ot, orderpay op where " +
+				"ot.orderPayment_paymentId = op.paymentId and ot.paymentType = 'Prepaid' and ot.poOrder = 0 " +
+				"and ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by ot.pcName";
+		if("category".equalsIgnoreCase(criteria))
+			mpOrderQueryStr = "select pr.categoryName, sum(op.netPaymentResult) as 'Prepaid NPR' from order_table ot, orderpay op " +
+				", product pr where ot.productSkuCode = pr.productSkuCode and ot.orderPayment_paymentId = op.paymentId and ot.paymentType = 'Prepaid' " +
+				"and ot.poOrder = 0 and ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by pr.categoryName";
+		Query mpOrderQuery = session.createSQLQuery(mpOrderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		List<Object[]> orderList = mpOrderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelNPR channelNPR = new ChannelNPR();
+			channelNPR.setCategory(key);
+			channelNPR.setPartner(key);
+			channelNPR.setPrepaidNPR(Double.parseDouble(order[1].toString()));
+			channelNprMap.put(key, channelNPR);
+		}
+		mpOrderQueryStr = "SELECT ot.pcName, sum(op.netPaymentResult) as 'COD NPR' FROM order_table ot, orderpay op where " +
+				"ot.orderPayment_paymentId = op.paymentId and ot.paymentType = 'COD' and ot.poOrder = 0 " +
+				"and ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by ot.pcName";
+		if("category".equalsIgnoreCase(criteria))
+			mpOrderQueryStr = "select pr.categoryName, sum(op.netPaymentResult) as 'COD NPR' from order_table ot, orderpay op " +
+				", product pr where ot.productSkuCode = pr.productSkuCode and ot.orderPayment_paymentId = op.paymentId and ot.paymentType = 'COD' " +
+				"and ot.poOrder = 0 and ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by pr.categoryName";
+		mpOrderQuery = session.createSQLQuery(mpOrderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = mpOrderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelNPR channelNPR = channelNprMap.get(key);
+			if(channelNPR == null){
+				channelNPR = new ChannelNPR();
+			}
+			channelNPR.setCategory(key);
+			channelNPR.setPartner(key);
+			channelNPR.setCodNPR(Double.parseDouble(order[1].toString()));
+			channelNprMap.put(key, channelNPR);
+		}
+		mpOrderQueryStr = "SELECT ot.pcName, sum(op.netPaymentResult) as 'Net NPR' FROM order_table ot, orderpay op where " +
+				"ot.orderPayment_paymentId = op.paymentId and ot.poOrder = 0 " +
+				"and ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by ot.pcName";
+		if("category".equalsIgnoreCase(criteria))
+			mpOrderQueryStr = "select pr.categoryName, sum(op.netPaymentResult) as 'Net NPR' from order_table ot, orderpay op " +
+				", product pr where ot.productSkuCode = pr.productSkuCode and ot.orderPayment_paymentId = op.paymentId " +
+				"and ot.poOrder = 0 and ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by pr.categoryName";
+		mpOrderQuery = session.createSQLQuery(mpOrderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = mpOrderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelNPR channelNPR = channelNprMap.get(key);
+			if(channelNPR == null){
+				channelNPR = new ChannelNPR();
+			}
+			channelNPR.setCategory(key);
+			channelNPR.setPartner(key);
+			channelNPR.setNetNPR(Double.parseDouble(order[1].toString()));
+			channelNprMap.put(key, channelNPR);
+		}
+		Iterator entries = channelNprMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, ChannelNPR> thisEntry = (Entry<String, ChannelNPR>) entries
+					.next();
+			ChannelNPR channelNPR = thisEntry.getValue();
+			channelNPRList.add(channelNPR);
+		}
+		return channelNPRList;
 	}
 	
 	/**

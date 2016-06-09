@@ -3,6 +3,7 @@ package com.o2r.service;
 import java.util.Date;
 import java.util.List;
 
+import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionDetails;
@@ -53,4 +54,6 @@ public interface ReportGeneratorService {
 	public UploadReport getUploadLog(int id, int sellerId) throws CustomException;
 
 	List<CommissionDetails> fetchPC(int sellerId, Date startDate, Date endDate, String criteria);
+
+	public List<ChannelNPR> fetchChannelNPR(int sellerId, Date startDate, Date endDate, String criteria);
 }
