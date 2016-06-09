@@ -17,9 +17,7 @@
 			$("#sheetValue").val(uploadValue);
 		else
 			$("#downloadreporttype").val(downloadValue);
-
 	});
-
 	$("#fileupload1").submit(
 			function() {
 				$.ajax({
@@ -68,21 +66,19 @@
 </script>
 <script>
 	$(document).ready(function() {
-
 		var downloadValue = '${downloadValue}';
 		var uploadValue = '${uploadValue}';
 		if (uploadValue != null && uploadValue.length != 0)
 			$("#sheetValue").val(uploadValue);
 		else
 			$("#downloadreporttype").val(downloadValue);
-
 	});
-
 	$('#download').click(function() {
 		var value = $('#downloadreporttype').val();
 		window.location = 'download/xls.html?sheetvalue=' + value;
 	});
 </script>
+
 </head>
 <body>
 	<div class="row">
@@ -112,13 +108,17 @@
 								<option value="expenseSummary">Expense Summary</option>
 							</select>
 						</div>
-						<div class="col-md-2">
+						<div class="col-md-4">
 							<button class="btn btn-success " type="button" id="download">
-								<i class="fa fa-search"></i>&nbsp;&nbsp;<span class="bold">Download</span>
+								<i class="fa fa-download"></i>&nbsp;&nbsp;<span class="bold">Download</span>
 							</button>
 						</div>
+						<div class="col-md-2">
+						</div>
+						</div>
+						
 
-						<div class="col-sm-12">
+						<div class="col-lg-12">
 							<div class="form-group">
 
 								<form:form id="fileupload1" method="post"
@@ -144,23 +144,19 @@
 										</select>
 
 									</div>
-									<div class="col-md-4">
-										<table id="fileTable">
-											<tr>
-												<td><input name="files[0]" type="file"
-													class="form-control" /></td>
-											</tr>
-
-										</table>
+									<div class="col-md-4">															
+										<input name="files[0]" type="file"	class="form-control" />											
 									</div>
-									<br />
 									<div class="col-md-2">
-										<input type="submit" value="Upload" class="form-control" />
+										<!-- <input type="submit" value="Upload" class="form-control" /> -->
+										<button class="btn btn-success " type="submit" id="upload">
+											<i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Upload</span>
+										</button>
 									</div>
 								</form:form>
 							</div>
 						</div>
-					</div>
+					
 				</div>
 			</div>
 		</div>

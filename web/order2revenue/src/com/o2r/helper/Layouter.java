@@ -63,6 +63,8 @@ public class Layouter {
 			buildPOPaymentHeaders(worksheet, startRowIndex, startColIndex);
 		} else if (sheetName.equalsIgnoreCase("ExpenseSheet")) {
 			buildPExpenseHeaders(worksheet, startRowIndex, startColIndex);
+		}else if (sheetName.equalsIgnoreCase("SKU Mapping")) {
+			buildSKUMappingHeaders(worksheet, startRowIndex, startColIndex);
 		}
 	}
 
@@ -859,6 +861,43 @@ public class Layouter {
 		HSSFCell cell7 = rowHeader.createCell(startColIndex + 6);
 		cell7.setCellValue("Expense Date");
 		cell7.setCellStyle(headerCellStyle);
+
+	}
+	
+	public static void buildSKUMappingHeaders(HSSFSheet worksheet,
+			int startRowIndex, int startColIndex) {
+		// Create font style for the headers
+		Font font = worksheet.getWorkbook().createFont();
+		font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+
+		// Create cell style for the headers
+		HSSFCellStyle headerCellStyle = worksheet.getWorkbook()
+				.createCellStyle();
+		headerCellStyle.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);
+		headerCellStyle.setFillPattern(CellStyle.FINE_DOTS);
+		headerCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		headerCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		headerCellStyle.setWrapText(true);
+		headerCellStyle.setFont(font);
+		headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
+
+		// Create the column headers
+		HSSFRow rowHeader = worksheet.createRow((short) startRowIndex + 2);
+		rowHeader.setHeight((short) 500);
+
+		HSSFCell cell1 = rowHeader.createCell(startColIndex + 0);
+		cell1.setCellValue("Parent SKU");
+		cell1.setCellStyle(headerCellStyle);
+
+		HSSFCell cell2 = rowHeader.createCell(startColIndex + 1);
+		cell2.setCellValue("Child SKU");
+		cell2.setCellStyle(headerCellStyle);
+
+		HSSFCell cell3 = rowHeader.createCell(startColIndex + 2);
+		cell3.setCellValue("Channel Name");
+		cell3.setCellStyle(headerCellStyle);
+
+		
 
 	}
 

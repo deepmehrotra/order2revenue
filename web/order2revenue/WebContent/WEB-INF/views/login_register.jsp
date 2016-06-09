@@ -10,17 +10,14 @@
 	<link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="/O2R/seller/css/registration.css">	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-	<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
-	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js"></script>
-	<script src="http://jquery.bassistance.de/validate/additional-methods.js"></script>
-	
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>	
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js"></script>	
 	
 </head>
 	<body>
 		<div class="col-lg-12">
         	<a href="landing/home.html">
-        	<img src="/O2R/landing/img/logo02r.png" alt="logo" class="img-responsive" style="float:right;margin:20px 80px 0px 0px;">
+        	<img src="/O2R/landing/img/logoo2r.png" alt="logo" class="img-responsive" style="float:left;position:relative;left: 57px;top: -26px;width: 6%;">
         	</a>
     	</div>
 		<div class="form">

@@ -227,7 +227,7 @@ span .#error {
 									</div>
 									<div class="col-lg-6 m-l-n">
 										<img src="/O2R/seller/img/india_map.jpg" alt="india_map"
-											style="width: 100%;">
+											style="width: 71%;margin-left:100px;">
 									</div>
 
 									<div class="col-sm-12">

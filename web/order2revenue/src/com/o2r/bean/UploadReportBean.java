@@ -7,7 +7,7 @@ public class UploadReportBean {
 	private Integer id;
 	private String fileType;
 	private String description;
-	private String Status;
+	private String status;
 	private String filePath;
 	private int sellerId;
 	private String sellerName;
@@ -28,10 +28,10 @@ public class UploadReportBean {
 		this.fileType = fileType;
 	}
 	public String getStatus() {
-		return Status;
+		return status;
 	}
 	public void setStatus(String status) {
-		Status = status;
+		this.status = status;
 	}
 	public int getSellerId() {
 		return sellerId;

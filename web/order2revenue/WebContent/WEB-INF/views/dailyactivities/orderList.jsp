@@ -83,12 +83,10 @@
 							<div class="ibox-title">
 								<h5>Orders(${orders.size()})</h5>
 								<div class="table-menu-links">
-									<a href="#" id="POOrders"
-										onclick="onclickNavigateOrder('viewPOOrderDetails','0')">PO
-										Orders</a> <a href="#" id="returnOrders">Return</a> <a href="#"
-										id="gatepass"
-										onclick="onclickNavigateOrder('viewGatePassList','0')">GatePass</a>
-									<a href="#" id="paymentOrders">Payment</a> <a href="#"
+									<a href="poOrderList.html?value=" id="POOrders">PO Orders</a> <a
+										href="#" id="returnOrders">Return</a> <a
+										href="gatepasslist.html" id="gatepass">GatePass</a> <a
+										href="#" id="paymentOrders">Payment</a> <a href="#"
 										id="actionableOrders">Actionable</a>
 								</div>
 								<div class="ibox-tools">
@@ -101,7 +99,8 @@
 											<div class="form-group">
 												<select class="form-control" name="searchOrder"
 													id="searchOrders">
-													<option id="1" value="channelOrderID">Channel OrderId/PO ID</option>
+													<option id="1" value="channelOrderID">Channel
+														OrderId/PO ID</option>
 													<option id="2" value="invoiceID">Invoice ID</option>
 													<option id="3" value="subOrderID">Sub Order ID</option>
 													<option id="4" value="pcName">Partner</option>
@@ -179,7 +178,8 @@
 														<tr>
 															<td><input type="checkbox"></td>
 															<td>${loop.index+1}</td>
-															<td><a href="#"	onclick="onclickNavigateOrder('viewOrder',${order.orderId})">${order.channelOrderID}</a></td>
+															<td><a href="#"
+																onclick="onclickNavigateOrder('viewOrder',${order.orderId})">${order.channelOrderID}</a></td>
 															<td>${order.pcName}</td>
 															<td>${order.productSkuCode}</td>
 															<td>${order.invoiceID}</td>
@@ -198,7 +198,8 @@
 																	maxFractionDigits="2"
 																	value="${order.orderPayment.paymentDifference}" /></td>
 															<td>${order.status}</td>
-															<td class="tooltip-demo"><a href="#" onclick="onclickNavigateOrder('editOrder',${order.orderId})"><i
+															<td class="tooltip-demo"><a href="#"
+																onclick="onclickNavigateOrder('editOrder',${order.orderId})"><i
 																	class="fa fa-edit text-navy" data-toggle="tooltip"
 																	data-placement="top" data-original-title="Edit"></i></a></td>
 														</tr>

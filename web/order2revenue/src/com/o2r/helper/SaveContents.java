@@ -8,7 +8,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,8 +106,8 @@ public class SaveContents {
 	private static final String UPLOAD_DIR = "UploadReport";
 
 	public Map<String, OrderBean> saveOrderContents(MultipartFile file,
-			int sellerId, String path, UploadReport uploadReport) 
-					throws IOException {
+			int sellerId, String path, UploadReport uploadReport)
+			throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		boolean validaterow = true;
@@ -146,8 +145,9 @@ public class SaveContents {
 					entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
 					System.out.println(" Getting string value form : "
 							+ entry.getCell(0));
-					List<Order> onj = orderService.findOrders("channelOrderID",
-							entry.getCell(0).toString(), sellerId, false,false);
+					List<Order> onj = orderService
+							.findOrders("channelOrderID", entry.getCell(0)
+									.toString(), sellerId, false, false);
 					if (onj == null || onj.size() == 0) {
 						order.setChannelOrderID(entry.getCell(0).toString());
 					} else {
@@ -275,20 +275,17 @@ public class SaveContents {
 					errorMessage.append(" Order SP is null ");
 					validaterow = false;
 				}
-				/*if (entry.getCell(13) != null
-						&& entry.getCell(13).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					try {
-						order.setShippingCharges(Double.parseDouble(entry
-								.getCell(13).toString()));
-					} catch (NumberFormatException e) {
-						errorMessage
-								.append(" Shipping Charges should be number ");
-						validaterow = false;
-					}
-				} else {
-					errorMessage.append(" Shipping Charges is null ");
-					validaterow = false;
-				}*/
+				/*
+				 * if (entry.getCell(13) != null &&
+				 * entry.getCell(13).getCellType() != HSSFCell.CELL_TYPE_BLANK)
+				 * { try { order.setShippingCharges(Double.parseDouble(entry
+				 * .getCell(13).toString())); } catch (NumberFormatException e)
+				 * { errorMessage
+				 * .append(" Shipping Charges should be number "); validaterow =
+				 * false; } } else {
+				 * errorMessage.append(" Shipping Charges is null ");
+				 * validaterow = false; }
+				 */
 				if (entry.getCell(13) != null
 						&& entry.getCell(13).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					TaxCategory taxcat = taxDetailService.getTaxCategory(entry
@@ -445,21 +442,18 @@ public class SaveContents {
 					errorMessage.append("Customer zipcode is blank ");
 					validaterow = false;
 				}
-				/*if (entry.getCell(22) != null
-						&& entry.getCell(22).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					TaxCategory taxcat = taxDetailService.getTaxCategory(entry
-							.getCell(22).toString(), sellerId);
-					if (taxcat != null)
-						otb.setTaxCategtory(entry.getCell(22).toString());
-					else {
-						otb.setTaxCategtory(entry.getCell(22).toString());
-						errorMessage.append("Tax Category does not exist ");
-						validaterow = false;
-					}
-				} else {
-					errorMessage.append("Tax Category is null ");
-					validaterow = false;
-				}*/
+				/*
+				 * if (entry.getCell(22) != null &&
+				 * entry.getCell(22).getCellType() != HSSFCell.CELL_TYPE_BLANK)
+				 * { TaxCategory taxcat = taxDetailService.getTaxCategory(entry
+				 * .getCell(22).toString(), sellerId); if (taxcat != null)
+				 * otb.setTaxCategtory(entry.getCell(22).toString()); else {
+				 * otb.setTaxCategtory(entry.getCell(22).toString());
+				 * errorMessage.append("Tax Category does not exist ");
+				 * validaterow = false; } } else {
+				 * errorMessage.append("Tax Category is null "); validaterow =
+				 * false; }
+				 */
 				if (entry.getCell(22) != null
 						&& StringUtils.isNotBlank(entry.getCell(22).toString())) {
 					order.setSellerNote(entry.getCell(22).toString());
@@ -499,7 +493,7 @@ public class SaveContents {
 
 	public Map<String, OrderBean> saveOrderPOContents(MultipartFile file,
 			int sellerId, String path, UploadReport uploadReport)
-					throws IOException {
+			throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		boolean validaterow = true;
@@ -626,8 +620,9 @@ public class SaveContents {
 				if (entry.getCell(6) != null
 						&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
 					try {
-						//order.setPoPrice(entry.getCell(6).getNumericCellValue());
-						order.setTotalAmountRecieved(entry.getCell(6).getNumericCellValue());
+						// order.setPoPrice(entry.getCell(6).getNumericCellValue());
+						order.setTotalAmountRecieved(entry.getCell(6)
+								.getNumericCellValue());
 
 					} catch (NumberFormatException e) {
 						errorMessage.append(" Amount should be a number ");
@@ -642,6 +637,17 @@ public class SaveContents {
 						&& StringUtils.isNotBlank(entry.getCell(7).toString())) {
 					order.setInvoiceID(entry.getCell(7).toString());
 
+					String curInvoiceId = entry.getCell(7).toString();
+					if (curInvoiceId != null) {
+						Order consolidateOrder = orderService
+								.getConsolidatedOrder(order.getSubOrderID(),
+										order.getInvoiceID());
+						if (consolidateOrder != null) {
+							errorMessage.append(" PO already uploaded ");
+							validaterow = false;
+						}
+					}
+
 					if (invoiceId != null
 							&& !invoiceId
 									.equalsIgnoreCase(order.getInvoiceID())
@@ -653,8 +659,9 @@ public class SaveContents {
 							errorMessage.append(" PO already uploaded ");
 							validaterow = false;
 						} else {
-							Order consolidatedOrder = orderService.generateConsolidatedOrder(orderlist,
-									sellerId);
+							Order consolidatedOrder = orderService
+									.generateConsolidatedOrder(orderlist,
+											sellerId);
 							orderService.updatePOOrders(orderlist,
 									consolidatedOrder);
 							orderlist.clear();
@@ -684,8 +691,7 @@ public class SaveContents {
 						order.setShippedDate(entry.getCell(9)
 								.getDateCellValue());
 					} else {
-						errorMessage
-								.append(" Shipped Date format is wrong ");
+						errorMessage.append(" Shipped Date format is wrong ");
 						validaterow = false;
 					}
 				} else {
@@ -715,11 +721,10 @@ public class SaveContents {
 			if (!orderlist.isEmpty()) {
 				Order consolidatedOrder = orderService
 						.generateConsolidatedOrder(orderlist, sellerId);
-				orderService.updatePOOrders(orderlist,
-						consolidatedOrder);
+				orderService.updatePOOrders(orderlist, consolidatedOrder);
 				orderlist.clear();
 			}
-			
+
 			Set<String> errorSet = returnOrderMap.keySet();
 			downloadUploadReportXLS(offices, "OrderPOSheet", 11, errorSet,
 					path, sellerId, uploadReport);
@@ -735,7 +740,7 @@ public class SaveContents {
 
 	public Map<String, ProductBean> saveProductContents(MultipartFile file,
 			int sellerId, String path, UploadReport uploadReport)
-					throws IOException {
+			throws IOException {
 		boolean validaterow = true;
 		Map<String, ProductBean> returnProductMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
@@ -933,9 +938,92 @@ public class SaveContents {
 
 	// My coding Product Config *********
 
+	public Map<String, ProductConfigBean> saveSKUMappingContents(
+			MultipartFile file, int sellerId, String path,
+			UploadReport uploadReport) throws IOException {
+		boolean validaterow = true;
+		Map<String, ProductConfigBean> returnProductConfigMap = new LinkedHashMap<>();
+		StringBuffer errorMessage = null;
+		try {
+			System.out.println("Inside saveSKUMappingContent -->");
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			HSSFRow entry;
+			Integer noOfEntries = 1;
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			logger.info(noOfEntries.toString());
+			System.out.println("After getting no of rows" + noOfEntries);
+			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
+				System.out.println("Product 1" + entry.getCell(1));
+				System.out.println("Product  2" + entry.getCell(2));
+				ProductConfig productConfig = new ProductConfig();
+				if (entry.getCell(0) != null
+						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					Product product = productService.getProduct(entry
+							.getCell(0).toString(), sellerId);
+					if (product != null) {
+						productConfig.setProductSkuCode(entry.getCell(0)
+								.toString());
+						if (entry.getCell(1) != null
+								&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							productConfig.setChannelSkuRef(entry.getCell(1)
+									.toString());
+						} else {
+							errorMessage.append(" Channel Name is null ");
+							validaterow = false;
+						}
+						if (entry.getCell(2) != null
+								&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							productConfig.setChannelName(entry.getCell(2)
+									.toString());
+						} else {
+							errorMessage.append(" Channel Name is null ");
+							validaterow = false;
+						}
+
+					}
+				} else {
+					errorMessage.append(" Product SKU is null ");
+					validaterow = false;
+				}
+
+				// product.setVolume(product.getHeight() * product.getLength() *
+				// product.getBreadth());
+				// product.setVolWeight(product.getVolume() / 5);
+				if (validaterow) {
+					productService.addSKUMapping(productConfig, sellerId);
+				} else {
+					returnProductConfigMap.put(errorMessage.toString(),
+							ConverterClass
+									.prepareProductConfigBean(productConfig));
+				}
+				System.out
+						.println("Sheet values :1 :" + entry.getCell(1)
+								+ " 2 :" + entry.getCell(2) + " 3 :"
+								+ entry.getCell(3));
+				// Pre save to generate id for use in hierarchy
+			}
+			Set<String> errorSet = returnProductConfigMap.keySet();
+			downloadUploadReportXLS(offices, "SKUMappingReport", 4, errorSet,
+					path, sellerId, uploadReport);
+		} catch (Exception e) {
+			System.out.println("Inside save contents exception :"
+					+ e.getLocalizedMessage());
+			e.printStackTrace();
+			throw new MultipartException("Constraints Violated");
+		}
+
+		return returnProductConfigMap;
+	}
+
 	public Map<String, ProductConfigBean> saveProductConfigContents(
-			MultipartFile file, int sellerId, String path, UploadReport uploadReport)
-					throws IOException {
+			MultipartFile file, int sellerId, String path,
+			UploadReport uploadReport) throws IOException {
 		boolean validaterow = true;
 		Map<String, ProductConfigBean> returnProductConfigMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
@@ -978,7 +1066,7 @@ public class SaveContents {
 					errorMessage.append(" Channel Name is null ");
 					validaterow = false;
 				}
-				
+
 				ProductConfig productConfigChk = productService
 						.getProductConfig(productConfig.getProductSkuCode(),
 								productConfig.getChannelName(), sellerId);
@@ -986,7 +1074,7 @@ public class SaveContents {
 					errorMessage.append(" Product config already exist ");
 					validaterow = false;
 				}
-				
+
 				if (entry.getCell(2) != null
 						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					productConfig.setChannelSkuRef(entry.getCell(2).toString());
@@ -1066,9 +1154,10 @@ public class SaveContents {
 	}
 
 	// My Coding Product Config Ends ********
-	
+
 	public Map<String, OrderBean> savePaymentContents(MultipartFile file,
-			int sellerId, String path, UploadReport uploadReport) throws IOException {
+			int sellerId, String path, UploadReport uploadReport)
+			throws IOException {
 		PaymentUpload paymentUpload = new PaymentUpload();
 		double totalpositive = 0;
 		double totalnegative = 0;
@@ -1097,20 +1186,23 @@ public class SaveContents {
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
-				/*System.out.println("Payment 1" + entry.getCell(1).toString());
-				System.out.println("Payment  2" + entry.getCell(2).toString());
-				*//*
-				 * System.out.println(entry.getCell(3).toString());
-				 * System.out.println(entry.getCell(4).toString());
-				 */
+				/*
+				 * System.out.println("Payment 1" +
+				 * entry.getCell(1).toString()); System.out.println("Payment  2"
+				 * + entry.getCell(2).toString());
+				 *//*
+					 * System.out.println(entry.getCell(3).toString());
+					 * System.out.println(entry.getCell(4).toString());
+					 */
 				// Product product=new Product();
 				OrderPayment payment = new OrderPayment();
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
 				System.out.println(" channelOrderId " + channelOrderId);
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					List<Order> onj = orderService.findOrders("channelOrderID",
-							entry.getCell(0).toString(), sellerId, false, false);
+					List<Order> onj = orderService
+							.findOrders("channelOrderID", entry.getCell(0)
+									.toString(), sellerId, false, false);
 					if (onj != null && onj.size() != 0) {
 						channelOrderId = entry.getCell(0).toString();
 					} else {
@@ -1230,7 +1322,8 @@ public class SaveContents {
 	}
 
 	public Map<String, String> saveInventoryDetails(MultipartFile file,
-			int sellerId, String path, UploadReport uploadReport) throws IOException {
+			int sellerId, String path, UploadReport uploadReport)
+			throws IOException {
 		Map<String, String> returnInventoryMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
 		boolean validaterow = true;
@@ -1308,8 +1401,7 @@ public class SaveContents {
 			downloadUploadReportXLS(offices, "InventoryReport", 5, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
-			System.out.println("Inside save c"
-					+ "ontents exception :"
+			System.out.println("Inside save c" + "ontents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
 			throw new MultipartException("Constraints Violated");
@@ -1318,7 +1410,8 @@ public class SaveContents {
 	}
 
 	public Map<String, Order> saveOrderReturnDetails(MultipartFile file,
-			int sellerId, String path, UploadReport uploadReport) throws IOException {
+			int sellerId, String path, UploadReport uploadReport)
+			throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		// sellerId=4;
@@ -1493,7 +1586,7 @@ public class SaveContents {
 
 	public Map<String, DebitNoteBean> saveDebitNoteDetails(MultipartFile file,
 			int sellerId, String path, UploadReport uploadReport)
-					throws IOException {
+			throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		// sellerId=4;
@@ -1624,20 +1717,20 @@ public class SaveContents {
 	}
 
 	public Map<String, PoPaymentBean> savePoPaymentDetails(MultipartFile file,
-			int sellerId, String path, UploadReport uploadReport) 
-					throws IOException {
+			int sellerId, String path, UploadReport uploadReport)
+			throws IOException {
 		PaymentUpload paymentUpload = new PaymentUpload();
 		Order poOrder = null;
 		HSSFRow entry;
 		Integer noOfEntries = 1;
-		
+
 		StringBuffer errorMessage = null;
 		boolean validaterow = true;
 		PoPaymentBean popabean = null;
 		Map<String, PoPaymentBean> returnMap = new LinkedHashMap<>();
 		double totalpositive = 0;
 		double totalnegative = 0;
-		
+
 		try {
 			System.out.println("Inside save popayment note data -->");
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -1653,30 +1746,29 @@ public class SaveContents {
 				validaterow = true;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
 				if (entry.getCell(0) != null
-						&& StringUtils.isNotBlank(entry.getCell(0)
-								.toString())) {
+						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					popabean.setPcName(entry.getCell(0).toString());
 				} else {
 					errorMessage.append(" Channel is null");
 					validaterow = false;
 				}
-				
+
 				if (entry.getCell(1) != null
-						&& StringUtils.isNotBlank(entry.getCell(1)
-								.toString())) {
+						&& StringUtils.isNotBlank(entry.getCell(1).toString())) {
 					popabean.setInvoiceID(entry.getCell(1).toString());
 				} else {
 					errorMessage.append(" Invoice ID is null");
 					validaterow = false;
 				}
-				
+
 				if (validaterow) {
-					Order order =  orderService.findConsolidatedPO(
-							"invoiceID", popabean.getInvoiceID(), sellerId);
-					if (order == null) {					
+					Order order = orderService.findConsolidatedPO("invoiceID",
+							popabean.getInvoiceID(), sellerId);
+					if (order == null) {
 						order = orderService.findConsolidatedPO(
-								"channelOrderID", popabean.getInvoiceID(), sellerId);
-						if (order == null) {	
+								"channelOrderID", popabean.getInvoiceID(),
+								sellerId);
+						if (order == null) {
 							errorMessage.append(" PO or GatePass not found");
 							validaterow = false;
 						} else {
@@ -1686,27 +1778,27 @@ public class SaveContents {
 						popabean.setPoOrderId(order.getChannelOrderID());
 					}
 				}
-				
+
 				if (entry.getCell(2) != null
 						&& StringUtils.isNotBlank(entry.getCell(2).toString())) {
 
 					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(2))) {
-						popabean.setPaymentDate(entry.getCell(2).getDateCellValue());
+						popabean.setPaymentDate(entry.getCell(2)
+								.getDateCellValue());
 					} else {
-						errorMessage
-								.append(" Payment Date format is wrong ");
+						errorMessage.append(" Payment Date format is wrong ");
 						validaterow = false;
 					}
 				} else {
 					errorMessage.append(" Payment Date is null ");
 					validaterow = false;
 				}
-				
+
 				if (entry.getCell(3) != null
 						&& StringUtils.isNotBlank(entry.getCell(3).toString())) {
 					try {
-						popabean.setPositiveAmount(Double.parseDouble(entry.getCell(3)
-								.toString()));
+						popabean.setPositiveAmount(Double.parseDouble(entry
+								.getCell(3).toString()));
 						totalpositive = totalpositive
 								+ Double.parseDouble(entry.getCell(3)
 										.toString());
@@ -1723,12 +1815,12 @@ public class SaveContents {
 						validaterow = false;
 					}
 				}
-				
+
 				if (entry.getCell(4) != null
 						&& StringUtils.isNotBlank(entry.getCell(4).toString())) {
 					try {
-						popabean.setNegativeAmount(Double.parseDouble(entry.getCell(4)
-								.toString()));
+						popabean.setNegativeAmount(Double.parseDouble(entry
+								.getCell(4).toString()));
 						totalnegative = totalnegative
 								+ Math.abs(Double.parseDouble(entry.getCell(4)
 										.toString()));
@@ -1743,25 +1835,24 @@ public class SaveContents {
 						validaterow = false;
 					}
 				}
-				
+
 				if (entry.getCell(5) != null
-						&& StringUtils.isNotBlank(entry.getCell(5)
-								.toString())) {
+						&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
 					popabean.setSellerNote(entry.getCell(5).toString());
 				}
-				
+
 				if (validaterow) {
 					poOrder = orderService.addPOPayment(popabean, sellerId);
 				} else {
 					returnMap.put(errorMessage.toString(), popabean);
 				}
-				
+
 				if (poOrder != null) {
 					poOrder.setPaymentUpload(paymentUpload);
 					paymentUpload.getOrders().add(poOrder);
 				}
 			}
-			
+
 			System.out.println(" Total Positive Amount : " + totalpositive);
 			System.out.println(" Total Negative Amount : " + totalnegative);
 			paymentUpload.setTotalpositivevalue(totalpositive);
@@ -1771,7 +1862,7 @@ public class SaveContents {
 					+ new Date().getTime());
 			paymentUpload.setUploadStatus("Success");
 			paymentUploadService.addPaymentUpload(paymentUpload, sellerId);
-			
+
 			Set<String> errorSet = returnMap.keySet();
 			downloadUploadReportXLS(offices, "POPaymentSheet", 8, errorSet,
 					path, sellerId, uploadReport);
@@ -1785,7 +1876,8 @@ public class SaveContents {
 	}
 
 	public Map<String, ExpenseBean> saveExpenseDetails(MultipartFile file,
-			int sellerId, String path, UploadReport uploadReport) throws IOException {
+			int sellerId, String path, UploadReport uploadReport)
+			throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		// sellerId=4;
@@ -1920,7 +2012,7 @@ public class SaveContents {
 	public void downloadUploadReportXLS(HSSFWorkbook workbook,
 			String worksheetName, int colNumber, Set<String> errorSet,
 			String path, int sellerId, UploadReport uploadReport)
-					throws ClassNotFoundException, CustomException {
+			throws ClassNotFoundException, CustomException {
 
 		HSSFSheet worksheet = workbook.getSheetAt(0);
 		String errorMessage;
@@ -1991,14 +2083,13 @@ public class SaveContents {
 				System.out.println(" Directory doesnnt exist");
 				fileSaveDir.mkdirs();
 			}
-			String filePath = uploadFilePath
-					+ File.separator + worksheetName + "UploadStatus"
-					+ new Date().getTime() + ".xls";
+			String filePath = uploadFilePath + File.separator + worksheetName
+					+ "UploadStatus" + new Date().getTime() + ".xls";
 			FileOutputStream out = new FileOutputStream(new File(filePath));
 			workbook.write(out);
 			out.close();
 			System.out.println("Excel written successfully..");
-			
+
 			uploadReport.setFileType(worksheetName);
 			uploadReport.setFilePath(filePath);
 			uploadReport.setDescription("Imported");
@@ -2019,7 +2110,7 @@ public class SaveContents {
 
 	public Map<String, GatePass> saveGatePassDetails(MultipartFile file,
 			int sellerId, String path, UploadReport uploadReport)
-					throws IOException {
+			throws IOException {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 
@@ -2027,11 +2118,11 @@ public class SaveContents {
 		StringBuffer errorMessage = null;
 		boolean validaterow = true;
 		Map<String, GatePass> returnlist = new LinkedHashMap<>();
-		
+
 		String gpId = null;
 		List<GatePass> gatepasslist = new ArrayList<GatePass>();
 		ProductConfig productConfig = null;
-		
+
 		try {
 			System.out.println("Inside save gate pass data -->");
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -2055,7 +2146,8 @@ public class SaveContents {
 							&& !gpId.equalsIgnoreCase(gatepass.getGatepassId())
 							&& !gatepasslist.isEmpty()) {
 						OrderRTOorReturn consolidatedReturn = orderService
-								.generateConsolidatedReturn(gatepasslist, sellerId);
+								.generateConsolidatedReturn(gatepasslist,
+										sellerId);
 						orderService.updateGatePasses(gatepasslist,
 								consolidatedReturn);
 						gatepasslist.clear();
@@ -2069,12 +2161,12 @@ public class SaveContents {
 				if (entry.getCell(1) != null
 						&& StringUtils.isNotBlank(entry.getCell(1).toString())) {
 					gatepass.setPoID(entry.getCell(1).toString());
-				} 
+				}
 
 				if (entry.getCell(2) != null
 						&& StringUtils.isNotBlank(entry.getCell(2).toString())) {
 					gatepass.setInvoiceID(entry.getCell(2).toString());
-				} 
+				}
 
 				if (entry.getCell(3) != null
 						&& StringUtils.isNotBlank(entry.getCell(3).toString())) {
@@ -2084,13 +2176,13 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				/*Order poOrder = orderService.findPOOrder(gatepass.getPoID(),
-						gatepass.getInvoiceID(), gatepass.getChannelSkuRef(),
-						sellerId);
-				if (poOrder == null) {
-					errorMessage.append(" PO Not received ");
-					validaterow = false;
-				}*/
+				/*
+				 * Order poOrder = orderService.findPOOrder(gatepass.getPoID(),
+				 * gatepass.getInvoiceID(), gatepass.getChannelSkuRef(),
+				 * sellerId); if (poOrder == null) {
+				 * errorMessage.append(" PO Not received "); validaterow =
+				 * false; }
+				 */
 
 				if (entry.getCell(4) != null
 						&& StringUtils.isNotBlank(entry.getCell(4).toString())) {
@@ -2130,7 +2222,8 @@ public class SaveContents {
 
 				if (entry.getCell(8) != null
 						&& StringUtils.isNotBlank(entry.getCell(8).toString())) {
-					gatepass.setTotalReturnCharges(entry.getCell(8).getNumericCellValue());
+					gatepass.setTotalReturnCharges(entry.getCell(8)
+							.getNumericCellValue());
 				} else {
 					errorMessage.append(" Total Return Charges is null ");
 					validaterow = false;
@@ -2143,17 +2236,17 @@ public class SaveContents {
 					errorMessage.append(" Seller Note is null ");
 					validaterow = false;
 				}
-				
+
 				if (entry.getCell(10) != null
 						&& StringUtils.isNotBlank(entry.getCell(10).toString())) {
 					gatepass.setPcName(entry.getCell(10).toString());
-					productConfig = productService
-							.getProductConfig(gatepass.getChannelSkuRef(),
-									gatepass.getPcName(), sellerId);
+					productConfig = productService.getProductConfig(
+							gatepass.getChannelSkuRef(), gatepass.getPcName(),
+							sellerId);
 					if (productConfig == null) {
 						errorMessage.append(" Product SKU does not exist ");
 						validaterow = false;
-					} 
+					}
 				} else {
 					errorMessage.append(" Channel is null ");
 					validaterow = false;
@@ -2183,20 +2276,20 @@ public class SaveContents {
 				}
 
 				if (validaterow) {
-					gatepasslist.add(orderService.addGatePass(productConfig, gatepass, sellerId));
+					gatepasslist.add(orderService.addGatePass(productConfig,
+							gatepass, sellerId));
 				} else {
 					returnlist.put(errorMessage.toString(), gatepass);
 				}
 			}
-			
+
 			if (!gatepasslist.isEmpty()) {
 				OrderRTOorReturn consolidatedReturn = orderService
 						.generateConsolidatedReturn(gatepasslist, sellerId);
-				orderService.updateGatePasses(gatepasslist,
-						consolidatedReturn);
+				orderService.updateGatePasses(gatepasslist, consolidatedReturn);
 				gatepasslist.clear();
 			}
-			
+
 			Set<String> errorSet = returnlist.keySet();
 			downloadUploadReportXLS(offices, "GatePassReport", 13, errorSet,
 					path, sellerId, uploadReport);

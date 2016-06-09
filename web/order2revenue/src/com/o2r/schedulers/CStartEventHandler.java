@@ -1,4 +1,4 @@
-package com.schedulers;
+/*package com.o2r.schedulers;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -13,7 +13,7 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
-import com.schedulers.HelloJob;
+import com.o2r.schedulers.HelloJob;
 
 public class CStartEventHandler implements
 		ApplicationListener<ContextStartedEvent>, ApplicationContextAware {
@@ -29,7 +29,6 @@ public class CStartEventHandler implements
 	@Override
 	public void setApplicationContext(ApplicationContext arg0)
 			throws BeansException {
-		// TODO Auto-generated method stubS
 		this.arg0 = arg0;
 		try {
 			Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
@@ -50,4 +49,4 @@ public class CStartEventHandler implements
 			se.printStackTrace();
 		}
 	}
-}
+}*/

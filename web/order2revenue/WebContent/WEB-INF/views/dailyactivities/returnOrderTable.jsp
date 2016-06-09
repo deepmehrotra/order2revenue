@@ -60,8 +60,6 @@
 	{
 		if	(value=='return')
 		{
-			alert(orderid);
-			alert(channelorderid);
 			document.getElementById("returnorderId").value=orderid;
 			document.getElementById("returnchannelOrderID").value=channelorderid;
 		}
@@ -102,7 +100,8 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:if test="${!empty searchOrderList}">
+		
+					<c:if test="${!empty searchOrderList}">
 				<c:forEach items="${searchOrderList}" var="searchOrder"
 					varStatus="loop">
 					<tr>

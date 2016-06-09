@@ -1,4 +1,4 @@
-package com.schedulers;
+package com.o2r.schedulers;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextStoppedEvent;

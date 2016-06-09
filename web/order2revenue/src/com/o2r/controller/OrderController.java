@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -56,7 +57,6 @@ import com.o2r.service.EventsService;
 import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.ProductService;
-import com.o2r.service.ReportDownloadService;
 import com.o2r.service.ReportGeneratorService;
 import com.o2r.service.SellerService;
 import com.o2r.service.TaxDetailService;
@@ -130,6 +130,8 @@ public class OrderController {
 				downloadService.downloadPOPaymentXLS(response);
 			} else if (sheetvalue.equals("expenseSummary")) {
 				downloadService.downloadExpensesXLS(response);
+			}else if (sheetvalue.equals("skuMapping")) {
+				downloadService.downloadSKUMappingXLS(response);
 			}
 		}
 		log.info("$$$ getXLS Ends : OrderController $$$");
@@ -190,14 +192,16 @@ public class OrderController {
 
 	@RequestMapping(value = "/seller/saveSheet", method = RequestMethod.POST)
 	@SuppressWarnings("rawtypes")
-	public ModelAndView save(HttpServletRequest request,
+	public ModelAndView save(MultipartHttpServletRequest request,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
 		log.info("$$$ save() Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		double starttime = System.currentTimeMillis();
 		log.debug(" **StartTime : " + starttime);
+		//List<MultipartFile> files = request.getFiles("0");
 		List<MultipartFile> files = uploadForm.getFiles();
+
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
 		List<String> fileNames = new ArrayList<String>();
@@ -302,6 +306,12 @@ public class OrderController {
 							files.get(0), sellerId, applicationPath,
 							uploadReport));
 					model.put("mapType", "expensesMap");
+					break;
+				case "skuMapping":
+					model.put("skuMapping", saveContents.saveSKUMappingContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport));
+					model.put("mapType", "skuMappingMap");
 					break;
 
 				}
@@ -817,9 +827,28 @@ public class OrderController {
 			String dateString;
 			DateFormat format = new SimpleDateFormat("d MMMM yyyy",
 					Locale.ENGLISH);
-			Date startDate;
-			Date endDate;
-			if (value.contains(" ")) {
+			DateFormat monthFormat = new SimpleDateFormat("MMM yyyy",
+					Locale.ENGLISH);
+			Date startDate = null;
+			Date endDate = null;
+			String period = "";
+			boolean dateRange = true;
+			
+			if ("".equals(value.trim()) || value.equals("0")) {
+				Calendar c = Calendar.getInstance();
+				c.setTime(new Date());
+				c.set(Calendar.DAY_OF_MONTH, 1);
+				startDate = c.getTime();
+				c.set(Calendar.DAY_OF_MONTH,
+						c.getActualMaximum(Calendar.DAY_OF_MONTH));
+				endDate = c.getTime();
+				period = monthFormat.format(startDate);
+				//period = period.substring(period.indexOf(' '));
+				
+			} else if ("All".equalsIgnoreCase(value.trim())) {
+				dateRange = false;
+				
+			} else if (value.contains(" ")) {
 				dateString = "1 " + value;
 				startDate = format.parse(dateString);
 
@@ -836,10 +865,19 @@ public class OrderController {
 				endDate = format.parse(dateString);
 			}
 
-			poOrderlist = ConverterClass.prepareListofBean(orderService
-					.findOrdersbyDate("shippedDate", startDate, endDate,
-							sellerId, true));
+			if (dateRange) {
+				poOrderlist = ConverterClass.prepareListofBean(orderService
+						.findOrdersbyDate("shippedDate", startDate, endDate,
+								sellerId, true));
+			} else {
+				int pageNo = request.getParameter("page") != null ? Integer
+						.parseInt(request.getParameter("page")) : 0;
+				poOrderlist = ConverterClass.prepareListofBean(orderService
+						.listPOOrders(sellerId, pageNo));
+			}
+			
 			model.put("poOrders", poOrderlist);
+			model.put("period", period);
 
 		} catch (CustomException ce) {
 			ce.printStackTrace();
