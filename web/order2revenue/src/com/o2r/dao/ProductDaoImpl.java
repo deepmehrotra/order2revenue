@@ -130,7 +130,11 @@ public class ProductDaoImpl implements ProductDao {
 					Restrictions.eq("seller.id", sellerId));
 			criteria.add(Restrictions.eq("productSkuCode",
 					productConfig.getProductSkuCode()));
-			product = (Product) criteria.list().get(0);
+
+			if (criteria.list() != null && criteria.list().size() != 0) {
+				product = (Product) criteria.list().get(0);
+			}
+			
 			if (product != null) {
 				productConfig.setProduct(product);
 

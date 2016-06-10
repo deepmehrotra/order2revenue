@@ -263,7 +263,9 @@ public class GenericController {
 						searchCriteria, startDate, endDate,sellerId);			
 					
 			}else {
-				temporaryorderlist = orderService.findOrdersbyDate(searchCriteria,startDate, endDate, sellerId, false);
+				if(searchString != null && startDate != null && endDate != null){
+					temporaryorderlist = orderService.findOrdersbyDate(searchCriteria,startDate, endDate, sellerId, false);
+				}
 			}
 			
 			if (temporaryorderlist != null && temporaryorderlist.size() != 0)
@@ -352,7 +354,6 @@ public class GenericController {
 			}
 				
 		}catch (CustomException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			logger.error("Failed!",e);
 			

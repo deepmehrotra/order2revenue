@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -24,9 +25,10 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartException;
@@ -41,6 +43,7 @@ import com.o2r.bean.PoPaymentBean;
 import com.o2r.bean.ProductBean;
 import com.o2r.bean.ProductConfigBean;
 import com.o2r.dao.AreaConfigDao;
+import com.o2r.dao.ProductDaoImpl;
 import com.o2r.model.Category;
 import com.o2r.model.Events;
 import com.o2r.model.ExpenseCategory;
@@ -68,8 +71,7 @@ import com.o2r.service.TaxDetailService;
 @Service("saveContents")
 @Transactional
 public class SaveContents {
-	private static final Logger logger = LoggerFactory
-			.getLogger(SaveContents.class);
+
 	/*
 	 * @Resource(name="sessionFactory") private SessionFactory sessionFactory;
 	 */
@@ -100,6 +102,12 @@ public class SaveContents {
 
 	private static final String UPLOAD_DIR = "UploadReport";
 
+	static Logger log = Logger.getLogger(SaveContents.class.getName());
+
+	Properties properties = null;
+	org.springframework.core.io.Resource resource = new ClassPathResource(
+			"database.properties");
+
 	public Map<String, OrderBean> saveOrderContents(MultipartFile file,
 			int sellerId, String path, UploadReport uploadReport)
 			throws IOException {
@@ -120,7 +128,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			logger.info(noOfEntries.toString());
+			log.info(noOfEntries.toString());
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				validaterow = true;
@@ -509,7 +517,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			logger.info(noOfEntries.toString());
+			log.info(noOfEntries.toString());
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				validaterow = true;
@@ -635,9 +643,9 @@ public class SaveContents {
 
 					String curInvoiceId = entry.getCell(7).toString();
 					if (curInvoiceId != null) {
-						
-						if (orderService.isPOOrderUploaded(order.getSubOrderID(),
-							order.getInvoiceID())) {
+
+						if (orderService.isPOOrderUploaded(
+								order.getSubOrderID(), order.getInvoiceID())) {
 							errorMessage.append(" PO already uploaded ");
 							validaterow = false;
 						}
@@ -752,7 +760,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			logger.info(noOfEntries.toString());
+			log.info(noOfEntries.toString());
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
@@ -948,7 +956,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			logger.info(noOfEntries.toString());
+			log.info(noOfEntries.toString());
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
@@ -1035,7 +1043,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			logger.info(noOfEntries.toString());
+			log.info(noOfEntries.toString());
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
@@ -1136,7 +1144,7 @@ public class SaveContents {
 				// Pre save to generate id for use in hierarchy
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
-			downloadUploadReportXLS(offices, "ProductConfigReport", 11,
+			downloadUploadReportXLS(offices, "ProductConfigReport", 6,
 					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			System.out.println("Inside save contents exception :"
@@ -1176,7 +1184,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			logger.info(noOfEntries.toString());
+			log.info(noOfEntries.toString());
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
@@ -1260,13 +1268,13 @@ public class SaveContents {
 				}
 				if (entry.getCell(5) != null
 						&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
-					
+
 					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(5))) {
 						payment.setDateofPayment(entry.getCell(5)
 								.getDateCellValue());
 					} else {
 						errorMessage
-						.append(" Payment Date format is wrong ,enter mm/dd/yyyy ");
+								.append(" Payment Date format is wrong ,enter mm/dd/yyyy ");
 						validaterow = false;
 					}
 				} else {
@@ -1334,7 +1342,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			logger.info(noOfEntries.toString());
+			log.info(noOfEntries.toString());
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
@@ -1422,7 +1430,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			logger.info(noOfEntries.toString());
+			log.info(noOfEntries.toString());
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
@@ -1594,7 +1602,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			logger.info(noOfEntries.toString());
+			log.info(noOfEntries.toString());
 			System.out.println("After getting no of rows" + noOfEntries);
 			DebitNoteBean dnBean = null;
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -1707,7 +1715,7 @@ public class SaveContents {
 	public Map<String, PoPaymentBean> savePoPaymentDetails(MultipartFile file,
 			int sellerId, String path, UploadReport uploadReport)
 			throws IOException {
- 		PaymentUpload paymentUpload = new PaymentUpload();
+		PaymentUpload paymentUpload = new PaymentUpload();
 		Order poOrder = null;
 		HSSFRow entry;
 		Integer noOfEntries = 1;
@@ -1726,7 +1734,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			logger.info(noOfEntries.toString());
+			log.info(noOfEntries.toString());
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
@@ -1880,7 +1888,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			logger.info(noOfEntries.toString());
+			log.info(noOfEntries.toString());
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
@@ -2046,14 +2054,16 @@ public class SaveContents {
 
 		Row row = null;
 		Cell cell = null;
-		
+
 		try {
 			for (String key : errorSet) {
-				
+
 				errorMessage = key.substring(key.indexOf(':') + 1);
-				int errorRow = Integer.parseInt(errorMessage.substring(0,key.indexOf(':') - 2));
-				errorMessage = errorMessage.substring(errorMessage.indexOf(':') + 1);
-				
+				int errorRow = Integer.parseInt(errorMessage.substring(0,
+						key.indexOf(':') - 2));
+				errorMessage = errorMessage
+						.substring(errorMessage.indexOf(':') + 1);
+
 				if (errorMessage.length() > 5) {
 					isError = true;
 					row = worksheet.getRow(errorRow + 2);
@@ -2067,12 +2077,20 @@ public class SaveContents {
 			String uploadFilePath = path + File.separator + UPLOAD_DIR;
 			System.out
 					.println("***** uploadFilePath path  : " + uploadFilePath);
+
+			properties = PropertiesLoaderUtils.loadProperties(resource);
+			uploadFilePath = properties.getProperty("uploadreport.path");
+
+			System.out
+					.println("***** uploadFilePath path  : " + uploadFilePath);
+
 			// creates the save directory if it does not exists
 			File fileSaveDir = new File(uploadFilePath);
 			if (!fileSaveDir.exists()) {
 				System.out.println(" Directory doesnnt exist");
 				fileSaveDir.mkdirs();
 			}
+
 			String filePath = uploadFilePath + File.separator + worksheetName
 					+ "UploadStatus" + new Date().getTime() + ".xls";
 			FileOutputStream out = new FileOutputStream(new File(filePath));
@@ -2093,8 +2111,10 @@ public class SaveContents {
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			log.error("Failed!", e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			log.error("Failed!", e);
 		}
 	}
 
@@ -2120,7 +2140,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			logger.info(noOfEntries.toString());
+			log.info(noOfEntries.toString());
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
