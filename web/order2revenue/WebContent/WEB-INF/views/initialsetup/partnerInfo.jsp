@@ -13,15 +13,20 @@
        {
         position: absolute;
 	    margin-left: -16%;
-	    margin-top: -143px;
+	    margin-top: -50px;
 	    font-size: 24px;
 	    text-align: center;
 	    z-index: 999999999999;
 	    color: #080e08;
 	    font-weight: 400;	    
-	    font-family: cursive;
-	    font-style: italic;
+	    
+	    font-style: normal;
 	    border-radius: 10px;
+       }
+       .partnerImg
+       {
+       		height: 100px;        	
+        	object-fit: contain;
        }
 
 </style>
@@ -115,8 +120,8 @@
                          <c:forEach items="${partners}" var="partner">
                     <div class="col-lg-3">
                         <div class="panel panel-default add-logo-page">
-                            <div class="panel-body text-center" style="height: 100px; width: 200px;">
-                            	
+                            <div class="panel-body text-center">
+                            	<div class="partnerImg">
                             	<% 
 		                        	org.springframework.core.io.Resource resource = new ClassPathResource("database.properties");
 		                        	Properties props = PropertiesLoaderUtils.loadProperties(resource);	                        
@@ -124,13 +129,14 @@
                             	<c:choose>
                             		<c:when test="${partner.pcLogoUrl != null}">
                             			<img alt="image"  src="${partner.pcLogoUrl}"  title="${partner.pcName}"
-                            				style="width:100%;">
+                            				style="width:100%;height:100%;">
                             		</c:when>
                             		<c:otherwise>
                             			<img alt="image"  src="<%=props.getProperty("defaultpartnerimage.view") %>"  title="${partner.pcName}" style="width:100%;">
                             			<label class="lable">${partner.pcName}</label>
                             		</c:otherwise>                              		                          	
-                            	</c:choose>                         	
+                            	</c:choose>  
+                            	</div>                       	
                                 <div><a href="#"
                                 	 style="width:49%;z-index: 9999;"
                                 	 onclick="onclickEditpartner('${partner.pcId}','${partner.pcName}')"><i class="fa fa-pencil"></i></a>

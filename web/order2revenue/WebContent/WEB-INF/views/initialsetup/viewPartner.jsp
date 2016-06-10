@@ -2,7 +2,9 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ page import = "org.springframework.core.io.*" %>
+<%@ page import = "org.springframework.core.io.support.PropertiesLoaderUtils" %>
+<%@ page language="java" import="java.util.*" %> 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -37,7 +39,12 @@ span .#error {
     {
         font-size: 12px;
     }
-
+    
+.partnerImg
+       {
+       		height: 100px;        	
+        	object-fit: contain;
+       }
 
 </style>
 
@@ -74,35 +81,44 @@ span .#error {
 							<div class="jcarousel-wrapper">
 								<div class="jcarousel">
 									<ul class="nav nav-pills nav-justified">
+										
 										<c:if test="${!empty partnerList }">
 											<c:forEach items="${partnerList}" var="each" varStatus="loop">
+												<% 
+									            	org.springframework.core.io.Resource resource = new ClassPathResource("database.properties");
+									              	Properties props = PropertiesLoaderUtils.loadProperties(resource);	                        
+	                   							%>
+	                   							
 												<c:choose>
-													<c:when test="${each.pcId == partner.pcId}">
-														<li data-target="#myCarousel" data-slide-to="0" class="active">
-														<a href="">														
+													<c:when test="${each.pcId == partner.pcId}">													
+														<li data-target="#myCarousel" data-slide-to="0" class="active">	
+														<div class="partnerImg">													
+														<a href="">																		                   										 												
 															<c:if test="${each.pcLogoUrl == null}">
-																<img src="/O2R/partnerimages/5Yamaha.jpg" id="${each.pcId}" onclick="relodPage(this.id);">
+																<img src="<%=props.getProperty("defaultpartnerimage.view") %>" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
 															</c:if>
 															<c:if test="${each.pcLogoUrl != null}">
-																<img src="${each.pcLogoUrl}" id="${each.pcId}" onclick="relodPage(this.id);">
-															</c:if>															
-														</a></li>
+																<img src="${each.pcLogoUrl}" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
+															</c:if>																														
+														</a></div></li>														
 													</c:when>
 													<c:otherwise>
-														<li data-target="#myCarousel" data-slide-to="0" class="">
+														<li data-target="#myCarousel" data-slide-to="1" class="">
+														<div class="partnerImg">
 															<a href="">
 																<c:if test="${each.pcLogoUrl == null}">
-																	<img src="/O2R/partnerimages/5Yamaha.jpg" id="${each.pcId}" onclick="relodPage(this.id);">
+																	<img src="<%=props.getProperty("defaultpartnerimage.view") %>" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
 																</c:if>
 																<c:if test="${each.pcLogoUrl != null}">
-																	<img src="${each.pcLogoUrl}" id="${each.pcId}" onclick="relodPage(this.id);">
+																	<img src="${each.pcLogoUrl}" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
 																</c:if>
 															</a>
+														</div>	
 														</li>
 													</c:otherwise>
-												</c:choose>
+												</c:choose>												
 											</c:forEach>
-										</c:if>
+										</c:if>										
 									</ul>
 								</div>
 								<a href="#" class="jcarousel-control-prev">&lsaquo;</a> <a

@@ -254,7 +254,7 @@ public class GenericController {
 				orderlist = ConverterClass
 						.prepareListofBean(orderService.findOrdersbyCustomerDetails(
 								searchCriteria, searchString,sellerId));
-			}else{
+			}else{				
 				orderlist = ConverterClass.prepareListofBean(orderService.findOrders(searchCriteria, searchString, sellerId, false,true));
 			}
 		}else{	
