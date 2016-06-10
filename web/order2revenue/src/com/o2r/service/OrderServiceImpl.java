@@ -67,6 +67,12 @@ public class OrderServiceImpl implements OrderService {
 			throws CustomException {
 		return orderDao.getConsolidatedOrder(poId, invoiceId);
 	}
+	
+	@Override
+	public boolean isPOOrderUploaded(String poId, String invoiceId)
+			throws CustomException {
+		return orderDao.isPOOrderUploaded(poId, invoiceId);
+	}
 
 	@Override
 	public void deleteOrder(Order order, int sellerId) throws CustomException {

@@ -105,4 +105,7 @@ public interface OrderDao {
 
 	public List<PoPaymentDetailsBean> getPOPaymentDetails(int sellerId,
 			boolean isMonthly);
+
+	public boolean isPOOrderUploaded(String poId, String invoiceId)
+			throws CustomException;
 }
