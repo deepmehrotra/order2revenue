@@ -162,8 +162,7 @@ public class PartnerController {
 					.getNoofdaysfromdeliverydate());
 		}
 
-		if (image.getSize() != 0) {
-			if (image != null) {
+		if (image.getSize() != 0) {			
 				if (!image.isEmpty()) {
 					try {
 						validateImage(image);
@@ -173,29 +172,33 @@ public class PartnerController {
 						result.reject(re.getMessage());
 					}
 				}
-			}
-			try {
-				props = PropertiesLoaderUtils.loadProperties(resource);
-
-				if (!partnerList.contains(partnerBean.getPcName())) {
+				try {
+					props = PropertiesLoaderUtils.loadProperties(resource);
 					partnerBean.setPcLogoUrl(props
-							.getProperty("partnerimage.view")
-							+ helperClass.getSellerIdfromSession(request)
-							+ partnerBean.getPcName() + ".jpg");
+								.getProperty("partnerimage.view")
+								+ helperClass.getSellerIdfromSession(request)
+								+ partnerBean.getPcName() + ".jpg");
 					saveImage(helperClass.getSellerIdfromSession(request)
-							+ partnerBean.getPcName() + ".jpg", image);
-				} else {
+								+ partnerBean.getPcName() + ".jpg", image);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.error("Failed!", e);
+					result.reject(e.getMessage());
+					return new ModelAndView("redirect:/seller/partners.html");
+				}
+		} else {
+			try{
+				props = PropertiesLoaderUtils.loadProperties(resource);
+				if (partnerList.contains(partnerBean.getPcName())) {
 					partnerBean.setPcLogoUrl(props
 							.getProperty("partnerimage.view")
 							+ partnerBean.getPcName() + ".jpg");
 				}
-			} catch (Exception e) {
+			}catch(Exception e){
 				e.printStackTrace();
-				log.error("Failed!", e);
-				result.reject(e.getMessage());
-				return new ModelAndView("redirect:/seller/partners.html");
-			}
-		}
+			}			
+		}		
 		try {
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
 			partnerService.addPartner(partner,
