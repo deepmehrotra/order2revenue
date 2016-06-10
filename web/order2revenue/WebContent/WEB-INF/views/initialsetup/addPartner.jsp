@@ -1010,10 +1010,10 @@ span .#error {
 																		id="blk-retrun-sf-variable">
 																		<div class="form-group col-lg-12">																			
 																			<div class="col-sm-4">
-																				<div class="col-md-5">
+																				<div class="col-md-6">
 																					<label class="control-label">Fix Amount</label>
 																				</div>
-																				<div class="col-md-7">
+																				<div class="col-md-6">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-retCharSFVarFixedAmt"
 																						value="${chargeMap.retCharSFVarFixedAmt}">
@@ -1021,10 +1021,10 @@ span .#error {
 																			</div>
 																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-6">
 																					<label class="control-label">% of SP</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-6 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-retCharSFPercentSP"
 																						value="${chargeMap.retCharSFPercentSP}">
@@ -1032,10 +1032,10 @@ span .#error {
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-7">
 																					<label class="control-label"> % of	Commision</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-5 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-retCharSFPercentPCC"
 																						value="${chargeMap.retCharSFPercentPCC}">
@@ -1133,23 +1133,22 @@ span .#error {
 																	</div>
 																	<div class="col-sm-12 radio1"
 																		id="blk-retrun-br-variable">
-																		<div class="form-group col-lg-12">
-																			
+																		<div class="form-group col-lg-12">																			
 																			<div class="col-sm-4">
-																				<div class="col-md-5">
+																				<div class="col-md-6">
 																					<label class="control-label">Fix Amount</label>
 																				</div>
-																				<div class="col-md-7">
+																				<div class="col-md-6">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-retCharBRVarFixedAmt"
 																						value="${chargeMap.retCharBRVarFixedAmt}">
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4 ">
-																				<div class="col-md-4">
+																				<div class="col-md-6">
 																					<label class="control-label">% of SP</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-6 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-retCharBRPercentSP"
 																						value="${chargeMap.retCharBRPercentSP}"><span class="input-group-addon">%</span>
@@ -1157,10 +1156,10 @@ span .#error {
 																			</div>
 																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-7">
 																					<label class="control-label"> % of	Commision</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-5 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-retCharBRPercentPCC"
 																						value="${chargeMap.retCharBRPercentPCC}"><span class="input-group-addon">%</span>
@@ -1249,20 +1248,20 @@ span .#error {
 																	<div class="col-sm-12 radio1" id="blk-RTO-sf-variable">
 																		<div class="form-group col-lg-12">																			
 																			<div class="col-sm-4">
-																				<div class="col-md-5">
+																				<div class="col-md-6">
 																					<label class="control-label">Fix Amount</label>
 																				</div>
-																				<div class="col-md-7">
+																				<div class="col-md-6">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-RTOCharSFVarFixedAmt"
 																						value="${chargeMap.RTOCharSFFixedAmt}">
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-6">
 																					<label class="control-label">% of SP</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">																			
+																				<div class="col-md-6 input-group m-b">																			
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-RTOCharSFPercentSP"
 																						value="${chargeMap.RTOCharSFPercentSP}">
@@ -1270,10 +1269,10 @@ span .#error {
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-7">
 																					<label class="control-label"> % of	Commision</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-5 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-RTOCharSFPercentPCC"
 																						value="${chargeMap.RTOCharSFPercentPCC}">
@@ -1373,20 +1372,20 @@ span .#error {
 
 																		<div class="form-group col-lg-12">																			
 																			<div class="col-sm-4">
-																				<div class="col-md-5">
+																				<div class="col-md-6">
 																					<label class="control-label">Fix Amount</label>
 																				</div>
-																				<div class="col-md-7">
+																				<div class="col-md-6">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-RTOCharBRVarFixedAmt"
 																						value="${chargeMap.RTOCharBRVarFixedAmt}">
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-6">
 																					<label class="control-label">% of SP</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-6 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-RTOCharBRPercentSP"
 																						value="${chargeMap.RTOCharBRPercentSP}">
@@ -1394,10 +1393,10 @@ span .#error {
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-7">
 																					<label class="control-label"> % of	Commision</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">																			
+																				<div class="col-md-5 input-group m-b">																			
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-RTOCharBRPercentPCC"
 																						value="${chargeMap.RTOCharBRPercentPCC}">
@@ -1490,20 +1489,20 @@ span .#error {
 																	<div class="col-sm-12 radio1" id="blk-rep-sf-variable">
 																		<div class="form-group col-lg-12">																			
 																			<div class="col-sm-4">
-																				<div class="col-md-5">
+																				<div class="col-md-6">
 																					<label class="control-label">Fix Amount</label>
 																				</div>
-																				<div class="col-md-7">
+																				<div class="col-md-6">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-repCharSFVarFixedAmt"
 																						value="${chargeMap.repCharSFVarFixedAmt}">
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-6">
 																					<label class="control-label">% of SP</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-6 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-repCharSFPercentSP"
 																						value="${chargeMap.repCharSFPercentSP}">
@@ -1511,10 +1510,10 @@ span .#error {
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-7">
 																					<label class="control-label"> % of Commision</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-5 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-repCharSFPercentPCC"
 																						value="${chargeMap.repCharSFPercentPCC}">
@@ -1557,7 +1556,7 @@ span .#error {
 																			</div>
 																		</div>
 																	</div>
-																</div>
+																
 																<div class="col-sm-12">
 																	<div class="hr-line-dashed"></div>
 																</div>
@@ -1613,21 +1612,21 @@ span .#error {
 																	<div class="col-sm-12 radio1" id="blk-rep-br-variable">
 																		<div class="form-group col-lg-12">																			
 																			<div class="col-sm-4">
-																				<div class="col-md-5">
+																				<div class="col-md-6">
 																					<label class="control-label">Fix
 																					Amount</label>
 																				</div>
-																				<div class="col-md-7">
+																				<div class="col-md-6">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-repCharBRVarFixedAmt"
 																						value="${chargeMap.repCharBRFixedAmt}">
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-6">
 																					<label class="control-label">% of SP</label>
 																				</div>																			
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-6 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-repCharBRPercentSP"
 																						value="${chargeMap.repCharBRPercentSP}">
@@ -1635,16 +1634,17 @@ span .#error {
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-7">
 																					<label class="control-label"> % of Commision</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-5 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-repCharBRPercentPCC"
 																						value="${chargeMap.repCharBRPercentPCC}">
 																					<span class="input-group-addon">%</span>
 																				</div>																
 																			</div>
+																		</div>
 																		<div class="col-md-12">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
@@ -1729,20 +1729,20 @@ span .#error {
 																	<div class="col-sm-12 radio1" id="blk-PD-sf-variable">
 																		<div class="form-group col-lg-12">																			
 																			<div class="col-sm-4">
-																				<div class="col-md-5">
+																				<div class="col-md-6">
 																					<label class="control-label">Fix Amount</label>
 																				</div>
-																				<div class="col-md-7">
+																				<div class="col-md-6">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-PDCharSFVarFixedAmt"
 																						value="${chargeMap.PDCharSFVarFixedAmt}">
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-6">
 																					<label class="control-label">% of SP</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-6 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-PDCharSFPercentSP"
 																						value="${chargeMap.PDCharSFPercentSP}">
@@ -1750,10 +1750,10 @@ span .#error {
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-7">
 																					<label class="control-label"> % of	Commision</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-5 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-PDCharSFPercentPCC"
 																						value="${chargeMap.PDCharSFPercentPCC}">
@@ -1852,20 +1852,20 @@ span .#error {
 																	<div class="col-sm-12 radio1" id="blk-PD-br-variable">
 																		<div class="form-group col-lg-12">																			
 																			<div class="col-sm-4">
-																				<div class="col-md-5">
+																				<div class="col-md-6">
 																					<label class="control-label">Fix Amount</label>
 																				</div>
-																				<div class="col-md-7">
+																				<div class="col-md-6">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-PDCharBRVarFixedAmt"
 																						value="${chargeMap.PDCharBRVarFixedAmt}">
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-6">
 																					<label class="control-label">% of SP</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-6 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-PDCharBRPercentSP"
 																						value="${chargeMap.PDCharBRPercentSP}">
@@ -1873,10 +1873,10 @@ span .#error {
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-7">
 																					<label class="control-label"> % of	Commision</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">																			
+																				<div class="col-md-5 input-group m-b">																			
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-PDCharBRPercentPCC"
 																						value="${chargeMap.PDCharBRPercentPCC}">
@@ -1974,10 +1974,10 @@ span .#error {
 																		id="blk-can-sfbfrtd-variable">
 																		<div class="form-group col-lg-12">																			
 																			<div class="col-sm-4">
-																				<div class="col-md-5">
+																				<div class="col-md-6">
 																					<label class="control-label">Fix Amount</label>
 																				</div>
-																				<div class="col-md-7">
+																				<div class="col-md-6">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber"
 																						name="nr-canCharSFBFRTDVarFixedAmt"
@@ -1985,10 +1985,10 @@ span .#error {
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-6">
 																					<label class="control-label">% of SP</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-6 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber"
 																						name="nr-canCharSFBFRTDPercentSP"
@@ -1997,10 +1997,10 @@ span .#error {
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-7">
 																					<label class="control-label"> % of	Commision</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-5 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber"
 																						name="nr-canCharSFBFRTDPercentPCC"
@@ -2105,20 +2105,20 @@ span .#error {
 																		id="blk-can-sfartd-variable">
 																		<div class="form-group col-lg-12">																			
 																			<div class="col-sm-4">
-																				<div class="col-md-5">
+																				<div class="col-md-6">
 																					<label class="control-label">Fix Amount</label>
 																				</div>
-																				<div class="col-md-7">
+																				<div class="col-md-6">
 																					<input type="text" placeholder=""
 																						class="form-control" name="nr-canCharSFVarFixedAmt"
 																						value="${chargeMap.canCharSFVarFixedAmt}">
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-6">
 																					<label class="control-label">% of SP</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-6 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-canCharSFPercentSP"
 																						value="${chargeMap.canCharSFPercentSP}">
@@ -2126,10 +2126,10 @@ span .#error {
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-7">
 																					<label class="control-label"> % of Commision</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-5 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-canCharSFPercentPCC"
 																						value="${chargeMap.canCharSFPercentPCC}">
@@ -2228,20 +2228,20 @@ span .#error {
 																	<div class="col-sm-12 radio1" id="blk-can-br-variable">
 																		<div class="form-group col-lg-12">																			
 																			<div class="col-sm-4">
-																				<div class="col-md-5">
+																				<div class="col-md-6">
 																					<label class="control-label">Fix Amount</label>
 																				</div>
-																				<div class="col-md-7">
+																				<div class="col-md-6">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-canCharBRVarFixedAmt"
 																						value="${chargeMap.canCharBRVarFixedAmt}">
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-6">
 																					<label class="control-label">% of SP</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-6 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-canCharBRPercentSP"
 																						value="${chargeMap.canCharBRPercentSP}">
@@ -2249,10 +2249,10 @@ span .#error {
 																				</div>
 																			</div>																			
 																			<div class="col-sm-4">
-																				<div class="col-md-4">
+																				<div class="col-md-7">
 																					<label class="control-label"> % of	Commision</label>
 																				</div>
-																				<div class="col-md-8 input-group m-b">
+																				<div class="col-md-5 input-group m-b">
 																					<input type="text" placeholder=""
 																						class="form-control validateNumber" name="nr-canCharBRPercentPCC"
 																						value="${chargeMap.canCharBRPercentPCC}">

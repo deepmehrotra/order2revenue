@@ -92,8 +92,7 @@
 				class="form-horizontal">
 				<div class="form-group  top-search-180" id="search1">
 					<div class="top-search-30 f-left">
-						<select class="form-control" name="searchCriteria"
-							id="searchCriteria">
+						<select class="form-control" name="searchCriteria" required autocomplete="off"/ id="searchCriteria">
 							<option value="">Select Criteria</option>
 							<option id="1" value="channelOrderID">Channel Order
 								ID/PO ID</option>
@@ -154,7 +153,7 @@
 					src="/O2R/landing/img/notification.png" alt="notification">
 			</a>
 				<ol class="dropdown-menu animated fadeInRight m-t-xs"
-					style="background: #333; border-left: none !important; border: 2px solid #fff; width: 300%; padding-bottom: 14px;">
+					style="background: #333; border-left: none !important; border: 2px solid #fff; width: 480%; padding-bottom: 14px;">
 					<h3 style="color: #fff; padding: 11px 0px 0px 17px;">Getting
 						Started</h3>
 					<hr class="line-dashed">
