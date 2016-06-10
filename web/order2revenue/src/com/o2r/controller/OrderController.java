@@ -368,7 +368,7 @@ public class OrderController {
 		}
 		log.info("$$$ save() Ends : OrderController $$$");
 		// return new ModelAndView("dailyactivities/orderList", model);
-		return new ModelAndView("landing", model);
+		return new ModelAndView("redirect:/seller/dashboard.html");
 
 	}
 

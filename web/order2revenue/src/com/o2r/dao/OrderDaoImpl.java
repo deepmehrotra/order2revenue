@@ -3873,4 +3873,37 @@ public class OrderDaoImpl implements OrderDao {
 
 	}
 
+	@Override
+	public boolean isPOOrderUploaded(String poId, String invoiceId)
+			throws CustomException {
+		log.info("*** isPOOrderUploaded starts ***");
+		List<Order> returnList = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.add(Restrictions.eq("subOrderID", poId));
+			criteria.add(Restrictions.eq("invoiceID", invoiceId));
+			criteria.add(Restrictions.eq("poOrder", true));
+			criteria.add(Restrictions.isNotNull("consolidatedOrder.orderId"));
+
+			returnList = criteria.list();
+			if (returnList != null && returnList.size() != 0
+					&& returnList.get(0) != null) {
+
+				return true;
+			}
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
+			throw new CustomException(GlobalConstant.getOrderError, new Date(),
+					3, GlobalConstant.getOrderErrorCode, e);
+
+		}
+		log.info("*** isPOOrderUploaded ends ***");
+		return false;
+	}
+
 }

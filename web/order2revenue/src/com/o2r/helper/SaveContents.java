@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -100,9 +98,6 @@ public class SaveContents {
 	@Autowired
 	private AreaConfigDao areaConfigDao;
 
-	private final SimpleDateFormat formatter = new SimpleDateFormat(
-			"mm/dd/yyyy");
-
 	private static final String UPLOAD_DIR = "UploadReport";
 
 	public Map<String, OrderBean> saveOrderContents(MultipartFile file,
@@ -130,7 +125,7 @@ public class SaveContents {
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				validaterow = true;
 				entry = worksheet.getRow(rowIndex);
-				errorMessage = new StringBuffer("Row : " + (rowIndex - 2));
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				System.out.println(" Row index : " + (rowIndex - 2));
 				System.out.println(entry.getCell(0).toString());
 				System.out.println(entry.getCell(1).getDateCellValue());
@@ -517,8 +512,9 @@ public class SaveContents {
 			logger.info(noOfEntries.toString());
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				validaterow = true;
 				entry = worksheet.getRow(rowIndex);
-				errorMessage = new StringBuffer("");
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 
 				order = new OrderBean();
 
@@ -639,10 +635,9 @@ public class SaveContents {
 
 					String curInvoiceId = entry.getCell(7).toString();
 					if (curInvoiceId != null) {
-						Order consolidateOrder = orderService
-								.getConsolidatedOrder(order.getSubOrderID(),
-										order.getInvoiceID());
-						if (consolidateOrder != null) {
+						
+						if (orderService.isPOOrderUploaded(order.getSubOrderID(),
+							order.getInvoiceID())) {
 							errorMessage.append(" PO already uploaded ");
 							validaterow = false;
 						}
@@ -762,7 +757,7 @@ public class SaveContents {
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
-				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				System.out.println("Product 1" + entry.getCell(1).toString());
 				System.out.println("Product  2" + entry.getCell(2).toString());
 				System.out.println(entry.getCell(3).toString());
@@ -958,7 +953,7 @@ public class SaveContents {
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
-				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				System.out.println("Product 1" + entry.getCell(1));
 				System.out.println("Product  2" + entry.getCell(2));
 				ProductConfig productConfig = new ProductConfig();
@@ -1045,7 +1040,7 @@ public class SaveContents {
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
-				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				System.out.println("Product 1" + entry.getCell(1).toString());
 				System.out.println("Product  2" + entry.getCell(2).toString());
 				System.out.println(entry.getCell(3).toString());
@@ -1196,7 +1191,7 @@ public class SaveContents {
 					 */
 				// Product product=new Product();
 				OrderPayment payment = new OrderPayment();
-				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				System.out.println(" channelOrderId " + channelOrderId);
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -1265,15 +1260,13 @@ public class SaveContents {
 				}
 				if (entry.getCell(5) != null
 						&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
-					payment.setDateofPayment(new Date(entry.getCell(5)
-							.toString()));
-					try {
-						Date dateobj = formatter.parse(entry.getCell(5)
-								.toString());
-						payment.setDateofPayment(dateobj);
-					} catch (ParseException e) {
+					
+					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(5))) {
+						payment.setDateofPayment(entry.getCell(5)
+								.getDateCellValue());
+					} else {
 						errorMessage
-								.append(" Payment Date format is wrong ,enter mm/dd/yyyy ");
+						.append(" Payment Date format is wrong ,enter mm/dd/yyyy ");
 						validaterow = false;
 					}
 				} else {
@@ -1344,7 +1337,7 @@ public class SaveContents {
 			logger.info(noOfEntries.toString());
 			System.out.println("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
-				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				validaterow = true;
 				entry = worksheet.getRow(rowIndex);
 				System.out.println("Product 1" + entry.getCell(1).toString());
@@ -1434,7 +1427,7 @@ public class SaveContents {
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
-				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				orderReturn = new OrderRTOorReturn();
 				System.out.println(entry.getCell(0));
 				System.out.println(entry.getCell(1));
@@ -1590,7 +1583,7 @@ public class SaveContents {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		// sellerId=4;
-		String errorMessage = "Default error";
+		StringBuffer errorMessage;
 		boolean validaterow = true;
 		// int returnId =0;
 		Map<String, DebitNoteBean> returnlist = new LinkedHashMap<>();
@@ -1605,7 +1598,9 @@ public class SaveContents {
 			System.out.println("After getting no of rows" + noOfEntries);
 			DebitNoteBean dnBean = null;
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				validaterow = true;
 				entry = worksheet.getRow(rowIndex);
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				System.out.println(entry.getCell(1).toString());
 				System.out.println(entry.getCell(2).toString());
 				System.out.println(entry.getCell(3).toString());
@@ -1619,8 +1614,7 @@ public class SaveContents {
 									.toString())) {
 						dnBean.setGatePassId(entry.getCell(1).toString());
 					} else {
-						errorMessage = "Error at row " + rowIndex
-								+ " , Gate Pass Id is null";
+						errorMessage.append(" Gate Pass Id is null");
 						System.out.println(" *** +" + errorMessage);
 						validaterow = false;
 					}
@@ -1629,8 +1623,7 @@ public class SaveContents {
 									.toString())) {
 						dnBean.setSKU(entry.getCell(2).toString());
 					} else {
-						errorMessage = "Error at row " + rowIndex
-								+ " , SKU is null";
+						errorMessage.append(" SKU is null");
 						System.out.println(" *** +" + errorMessage);
 						validaterow = false;
 					}
@@ -1639,8 +1632,7 @@ public class SaveContents {
 									.toString())) {
 						dnBean.setPcName(entry.getCell(3).toString());
 					} else {
-						errorMessage = "Error at row " + rowIndex
-								+ " , Partner is null";
+						errorMessage.append(" Partner is null");
 						System.out.println(" *** +" + errorMessage);
 						validaterow = false;
 					}
@@ -1649,8 +1641,7 @@ public class SaveContents {
 									.toString())) {
 						dnBean.setInvoiceId(entry.getCell(4).toString());
 					} else {
-						errorMessage = "Error at row " + rowIndex
-								+ " , Invoice is null";
+						errorMessage.append(" Invoice is null");
 						System.out.println(" *** +" + errorMessage);
 						validaterow = false;
 					}
@@ -1660,8 +1651,7 @@ public class SaveContents {
 						dnBean.setAmount(Double.parseDouble(entry.getCell(5)
 								.toString()));
 					} else {
-						errorMessage = "Error at row " + rowIndex
-								+ " , Amount is null";
+						errorMessage.append(" Amount is null");
 						validaterow = false;
 					}
 					if (entry.getCell(6) != null
@@ -1670,8 +1660,7 @@ public class SaveContents {
 						dnBean.setQuantity((int) Float.parseFloat(entry
 								.getCell(6).toString()));
 					} else {
-						errorMessage = "Error at row " + rowIndex
-								+ " , Quantity is null";
+						errorMessage.append(" Quantity is null");
 						System.out.println(" *** +" + errorMessage);
 						validaterow = false;
 					}
@@ -1681,8 +1670,7 @@ public class SaveContents {
 						dnBean.setReturnDate(new Date(entry.getCell(7)
 								.toString()));
 					} else {
-						errorMessage = "Error at row " + rowIndex
-								+ " , Return date is null";
+						errorMessage.append(" Return date is null");
 						System.out.println(" *** +" + errorMessage);
 						validaterow = false;
 					}
@@ -1700,7 +1688,7 @@ public class SaveContents {
 					} else {
 						System.out.println("false validate row :"
 								+ errorMessage);
-						returnlist.put(errorMessage, dnBean);
+						returnlist.put(errorMessage.toString(), dnBean);
 					}
 				}
 			}
@@ -1719,7 +1707,7 @@ public class SaveContents {
 	public Map<String, PoPaymentBean> savePoPaymentDetails(MultipartFile file,
 			int sellerId, String path, UploadReport uploadReport)
 			throws IOException {
-		PaymentUpload paymentUpload = new PaymentUpload();
+ 		PaymentUpload paymentUpload = new PaymentUpload();
 		Order poOrder = null;
 		HSSFRow entry;
 		Integer noOfEntries = 1;
@@ -1744,7 +1732,7 @@ public class SaveContents {
 				entry = worksheet.getRow(rowIndex);
 				popabean = new PoPaymentBean();
 				validaterow = true;
-				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					popabean.setPcName(entry.getCell(0).toString());
@@ -1864,7 +1852,7 @@ public class SaveContents {
 			paymentUploadService.addPaymentUpload(paymentUpload, sellerId);
 
 			Set<String> errorSet = returnMap.keySet();
-			downloadUploadReportXLS(offices, "POPaymentSheet", 8, errorSet,
+			downloadUploadReportXLS(offices, "POPaymentSheet", 6, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			System.out.println("Inside save debit note exception :"
@@ -1899,7 +1887,7 @@ public class SaveContents {
 				validaterow = true;
 				System.out.println(entry.getCell(1).toString());
 				System.out.println(entry.getCell(2).toString());
-				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					expensebean = new ExpenseBean();
@@ -2056,22 +2044,24 @@ public class SaveContents {
 		cell1.setCellValue("Error Message");
 		cell1.setCellStyle(headerCellStyle);
 
-		int rowIndex = 3;
 		Row row = null;
 		Cell cell = null;
-
-		for (String key : errorSet) {
-			row = worksheet.getRow(rowIndex);
-			cell = row.createCell(colNumber);
-			errorMessage = key.substring(7);
-			if (errorMessage.length() > 5) {
-				isError = true;
-			}
-			cell.setCellValue(errorMessage);
-			cell.setCellStyle(errorCellStyle);
-			rowIndex++;
-		}
+		
 		try {
+			for (String key : errorSet) {
+				
+				errorMessage = key.substring(key.indexOf(':') + 1);
+				int errorRow = Integer.parseInt(errorMessage.substring(0,key.indexOf(':') - 2));
+				errorMessage = errorMessage.substring(errorMessage.indexOf(':') + 1);
+				
+				if (errorMessage.length() > 5) {
+					isError = true;
+					row = worksheet.getRow(errorRow + 2);
+					cell = row.createCell(colNumber);
+					cell.setCellValue(errorMessage);
+					cell.setCellStyle(errorCellStyle);
+				}
+			}
 
 			// constructs path of the directory to save uploaded file
 			String uploadFilePath = path + File.separator + UPLOAD_DIR;
@@ -2135,7 +2125,7 @@ public class SaveContents {
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
-				errorMessage = new StringBuffer("Row :" + (rowIndex - 2));
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				// orderReturn = new OrderRTOorReturn();
 				gatepass = new GatePass();
 
