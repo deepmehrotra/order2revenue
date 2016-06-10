@@ -484,7 +484,7 @@ span .#error {
 																</div>
 																<div class="col-sm-4">
 																	<div class="form-group col-md-12">
-																		<label class="col-md-4 control-label content-rgt">&gt;500</label>
+																		<label class="col-md-4 control-label content-rgt">&lt;500</label>
 																		<div class="col-md-12 content-rgt">
 																			<input type="text" placeholder=""
 																				class="form-control validateNumber" style="width: 50%;"

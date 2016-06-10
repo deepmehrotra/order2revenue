@@ -70,13 +70,30 @@ public class PartnerController {
 		private static final long serialVersionUID = 1L;
 
 		{
-			add("Amazon");
-			add("Flipkart");
-			add("Snapdeal");
-			add("ebay");
-			add("ShopClues");
-			add("Jabong");
-			add("Myntra");
+			add("amazon");
+            add("flipkart");
+            add("snapdeal");
+            add("ebay");
+            add("shopclues");
+            add("jabong");
+            add("myntra");
+            add("askmebazaar");
+            add("babyoye");
+            add("craftsvilla");
+            add("fabfurnish");
+            add("firstcry");
+            add("fashionnyou");
+            add("homeshop18");
+            add("indiatimes");
+            add("infibeam");
+            add("limeroad");
+            add("mebelkart");
+            add("naaptol");
+            add("pepperfry");
+            add("rediff");
+            add("tradus");
+            add("voonik");
+            add("zansaar");
 		}
 	};
 
