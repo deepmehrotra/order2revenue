@@ -534,8 +534,10 @@ public class PartnerController {
 		try {
 			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
-			for (Category cat : categoryObjects) {
-				categoryList.add(cat.getCatName());
+			if(categoryObjects != null){
+				for (Category cat : categoryObjects) {
+					categoryList.add(cat.getCatName());
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -823,9 +825,11 @@ public class PartnerController {
 
 			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
-			for (Category cat : categoryObjects) {
-				categoryMap.put(cat.getCatName(),
-						chargeMap.get(cat.getCatName()));
+			if(categoryObjects != null){
+				for (Category cat : categoryObjects) {
+					categoryMap.put(cat.getCatName(),
+							chargeMap.get(cat.getCatName()));
+				}
 			}
 			model.put("categoryMap", categoryMap);
 			model.put("partner", pbean);
