@@ -111,6 +111,7 @@ public class SaveContents {
 	public Map<String, OrderBean> saveOrderContents(MultipartFile file,
 			int sellerId, String path, UploadReport uploadReport)
 			throws IOException {
+		log.info("$$$ saveOrderContents starts : SaveContents $$$");
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		boolean validaterow = true;
@@ -122,32 +123,29 @@ public class SaveContents {
 		Partner partner = null;
 		Events event = null;
 		try {
-			System.out.println("Inside save content -->");
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
 			log.info(noOfEntries.toString());
-			System.out.println("After getting no of rows" + noOfEntries);
+			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				validaterow = true;
 				entry = worksheet.getRow(rowIndex);
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
-				System.out.println(" Row index : " + (rowIndex - 2));
-				System.out.println(entry.getCell(0).toString());
-				System.out.println(entry.getCell(1).getDateCellValue());
-				System.out.println(entry.getCell(2).toString());
-				// System.out.println(entry.getCell(3).toString());
-				// System.out.println(entry.getCell(4).toString());
+				log.debug(" Row index : " + (rowIndex - 2));
+				log.debug(entry.getCell(0).toString());
+				log.debug(entry.getCell(1).getDateCellValue());
+				log.debug(entry.getCell(2).toString());
+				
 				order = new OrderBean();
 				customerBean = new CustomerBean();
 				otb = new OrderTaxBean();
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
-					System.out.println(" Getting string value form : "
-							+ entry.getCell(0));
+					log.debug(" Getting string value form : "+ entry.getCell(0));
 					List<Order> onj = orderService
 							.findOrders("channelOrderID", entry.getCell(0)
 									.toString(), sellerId, false, false);
@@ -278,17 +276,7 @@ public class SaveContents {
 					errorMessage.append(" Order SP is null ");
 					validaterow = false;
 				}
-				/*
-				 * if (entry.getCell(13) != null &&
-				 * entry.getCell(13).getCellType() != HSSFCell.CELL_TYPE_BLANK)
-				 * { try { order.setShippingCharges(Double.parseDouble(entry
-				 * .getCell(13).toString())); } catch (NumberFormatException e)
-				 * { errorMessage
-				 * .append(" Shipping Charges should be number "); validaterow =
-				 * false; } } else {
-				 * errorMessage.append(" Shipping Charges is null ");
-				 * validaterow = false; }
-				 */
+				
 				if (entry.getCell(13) != null
 						&& entry.getCell(13).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					TaxCategory taxcat = taxDetailService.getTaxCategory(entry
@@ -318,17 +306,7 @@ public class SaveContents {
 					errorMessage.append(" Shipping Date is null ");
 					validaterow = false;
 				}
-				/*
-				 * if (entry.getCell(15) != null &&
-				 * entry.getCell(15).getCellType() != HSSFCell.CELL_TYPE_BLANK)
-				 * { if (HSSFDateUtil.isCellDateFormatted(entry.getCell(15))) {
-				 * order.setDeliveryDate(entry.getCell(15) .getDateCellValue());
-				 * } else { errorMessage
-				 * .append(" Delivery Date formate is wrong ,enter mm/dd/yyyy,"
-				 * ); validaterow = false; } } else {
-				 * errorMessage.append(" Delivery Date is null "); validaterow =
-				 * false; }
-				 */
+				
 				if (entry.getCell(15) != null
 						&& entry.getCell(15).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
@@ -348,10 +326,7 @@ public class SaveContents {
 					errorMessage.append(" Quantity can not be null ");
 					validaterow = false;
 				}
-				/*
-				 * if (partner != null && partner.getNrnReturnConfig() != null
-				 * && !partner.getNrnReturnConfig().isNrCalculator()) {
-				 */
+				
 				if (partner != null) {
 					event = eventsService.isEventActiive(order.getOrderDate(),
 							partner.getPcName(), sellerId);
@@ -403,7 +378,7 @@ public class SaveContents {
 				}
 				if (entry.getCell(17) != null
 						&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					System.out.println(" Email from sheet ************ "
+					log.debug(" Email from sheet ************ "
 							+ rowIndex + ":" + entry.getCell(17).toString());
 					customerBean.setCustomerEmail(entry.getCell(17).toString());
 				}
@@ -422,7 +397,7 @@ public class SaveContents {
 				}
 				if (entry.getCell(21) != null
 						&& entry.getCell(21).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					System.out.println(" getting zipcode ");
+					log.debug(" getting zipcode ");
 					if (areaConfigDao.isZipCodeValid(String
 							.valueOf((long) entry.getCell(21)
 									.getNumericCellValue()))) {
@@ -445,25 +420,13 @@ public class SaveContents {
 					errorMessage.append("Customer zipcode is blank ");
 					validaterow = false;
 				}
-				/*
-				 * if (entry.getCell(22) != null &&
-				 * entry.getCell(22).getCellType() != HSSFCell.CELL_TYPE_BLANK)
-				 * { TaxCategory taxcat = taxDetailService.getTaxCategory(entry
-				 * .getCell(22).toString(), sellerId); if (taxcat != null)
-				 * otb.setTaxCategtory(entry.getCell(22).toString()); else {
-				 * otb.setTaxCategtory(entry.getCell(22).toString());
-				 * errorMessage.append("Tax Category does not exist ");
-				 * validaterow = false; } } else {
-				 * errorMessage.append("Tax Category is null "); validaterow =
-				 * false; }
-				 */
+				
 				if (entry.getCell(22) != null
 						&& StringUtils.isNotBlank(entry.getCell(22).toString())) {
 					order.setSellerNote(entry.getCell(22).toString());
 
 				}
-				System.out
-						.println("Sheet values :1 :" + entry.getCell(1)
+				log.debug("Sheet values :1 :" + entry.getCell(1)
 								+ " 2 :" + entry.getCell(2) + " 3 :"
 								+ entry.getCell(3));
 				// Pre save to generate id for use in hierarchy
@@ -475,7 +438,7 @@ public class SaveContents {
 				} else {
 					order.setCustomer(customerBean);
 					order.setOrderTax(otb);
-					System.out.println(" Error while saving order : "
+					log.debug(" Error while saving order : "
 							+ order.getChannelOrderID() + " errorMessage : "
 							+ errorMessage);
 					returnOrderMap.put(errorMessage.toString(), order);
@@ -486,17 +449,19 @@ public class SaveContents {
 					path, sellerId, uploadReport);
 
 		} catch (Exception e) {
-			System.out.println("Inside save contents exception :"
+			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
-			// throw new MultipartException("Constraints Violated");
+			log.error("Failed!",e);
 		}
+		log.info("$$$ saveOrderContents ends : SaveContents $$$");
 		return returnOrderMap;
 	}
 
 	public Map<String, OrderBean> saveOrderPOContents(MultipartFile file,
 			int sellerId, String path, UploadReport uploadReport)
 			throws IOException {
+		log.info("$$$ saveOrderPOContents starts : SaveContents $$$");
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		boolean validaterow = true;
@@ -511,14 +476,13 @@ public class SaveContents {
 		List<Order> orderlist = new ArrayList<Order>();
 
 		try {
-			System.out.println("Inside save content -->");
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
 			log.info(noOfEntries.toString());
-			System.out.println("After getting no of rows" + noOfEntries);
+			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				validaterow = true;
 				entry = worksheet.getRow(rowIndex);
@@ -624,7 +588,6 @@ public class SaveContents {
 				if (entry.getCell(6) != null
 						&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
 					try {
-						// order.setPoPrice(entry.getCell(6).getNumericCellValue());
 						order.setTotalAmountRecieved(entry.getCell(6)
 								.getNumericCellValue());
 
@@ -707,8 +670,7 @@ public class SaveContents {
 					order.setSellerNote(entry.getCell(10).toString());
 				}
 
-				System.out
-						.println("Sheet values :1 :" + entry.getCell(1)
+				log.debug("Sheet values :1 :" + entry.getCell(1)
 								+ " 2 :" + entry.getCell(2) + " 3 :"
 								+ entry.getCell(3));
 				// Pre save to generate id for use in hierarchy
@@ -733,43 +695,43 @@ public class SaveContents {
 					path, sellerId, uploadReport);
 
 		} catch (Exception e) {
-			System.out.println("Inside save contents exception :"
+			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
+			log.error("Failed!",e);
 			throw new MultipartException("Constraints Violated");
 		}
+		log.info("$$$ saveOrderPOContents ends : SaveContents $$$");
 		return returnOrderMap;
 	}
 
 	public Map<String, ProductBean> saveProductContents(MultipartFile file,
 			int sellerId, String path, UploadReport uploadReport)
 			throws IOException {
+		
+		log.info("$$$ saveProductContents starts : SaveContents $$$");
 		boolean validaterow = true;
 		Map<String, ProductBean> returnProductMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
 		try {
-			System.out.println("Inside save content -->");
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
-			// HSSFSheet worksheet = offices.getSheet("OrderReport");
 			HSSFSheet worksheet = offices.getSheetAt(0);
 			HSSFRow entry;
 			Integer noOfEntries = 1;
-			// sellerId=4;
-			// getLastRowNum and getPhysicalNumberOfRows showing false values
-			// sometimes.
+			
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
 			log.info(noOfEntries.toString());
-			System.out.println("After getting no of rows" + noOfEntries);
+			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
-				System.out.println("Product 1" + entry.getCell(1).toString());
-				System.out.println("Product  2" + entry.getCell(2).toString());
-				System.out.println(entry.getCell(3).toString());
-				System.out.println(entry.getCell(4).toString());
+				log.debug("Product 1" + entry.getCell(1).toString());
+				log.debug("Product  2" + entry.getCell(2).toString());
+				log.debug(entry.getCell(3).toString());
+				log.debug(entry.getCell(4).toString());
 				Product product = new Product();
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -930,12 +892,13 @@ public class SaveContents {
 			downloadUploadReportXLS(offices, "ProductReport", 11, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
-			System.out.println("Inside save contents exception :"
+			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
+			log.error("Failed!",e);
 			throw new MultipartException("Constraints Violated");
 		}
-
+		log.info("$$$ saveProductContents ends : SaveContents $$$");
 		return returnProductMap;
 	}
 
@@ -944,11 +907,11 @@ public class SaveContents {
 	public Map<String, ProductConfigBean> saveSKUMappingContents(
 			MultipartFile file, int sellerId, String path,
 			UploadReport uploadReport) throws IOException {
+		log.info("$$$ saveSKUMappingContents starts : SaveContents $$$");
 		boolean validaterow = true;
 		Map<String, ProductConfigBean> returnProductConfigMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
 		try {
-			System.out.println("Inside saveSKUMappingContent -->");
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
 			HSSFRow entry;
@@ -957,13 +920,13 @@ public class SaveContents {
 				noOfEntries++;
 			}
 			log.info(noOfEntries.toString());
-			System.out.println("After getting no of rows" + noOfEntries);
+			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
-				System.out.println("Product 1" + entry.getCell(1));
-				System.out.println("Product  2" + entry.getCell(2));
+				log.debug("Product 1" + entry.getCell(1));
+				log.debug("Product  2" + entry.getCell(2));
 				ProductConfig productConfig = new ProductConfig();
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -994,10 +957,7 @@ public class SaveContents {
 					errorMessage.append(" Product SKU is null ");
 					validaterow = false;
 				}
-
-				// product.setVolume(product.getHeight() * product.getLength() *
-				// product.getBreadth());
-				// product.setVolWeight(product.getVolume() / 5);
+				
 				if (validaterow) {
 					productService.addSKUMapping(productConfig, sellerId);
 				} else {
@@ -1005,8 +965,7 @@ public class SaveContents {
 							ConverterClass
 									.prepareProductConfigBean(productConfig));
 				}
-				System.out
-						.println("Sheet values :1 :" + entry.getCell(1)
+				log.debug("Sheet values :1 :" + entry.getCell(1)
 								+ " 2 :" + entry.getCell(2) + " 3 :"
 								+ entry.getCell(3));
 				// Pre save to generate id for use in hierarchy
@@ -1015,25 +974,25 @@ public class SaveContents {
 			downloadUploadReportXLS(offices, "SKUMappingReport", 4, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
-			System.out.println("Inside save contents exception :"
+			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
+			log.error("Failed!",e);
 			throw new MultipartException("Constraints Violated");
 		}
-
+		log.info("$$$ saveSKUMappingContents ends : SaveContents $$$");
 		return returnProductConfigMap;
 	}
 
 	public Map<String, ProductConfigBean> saveProductConfigContents(
 			MultipartFile file, int sellerId, String path,
 			UploadReport uploadReport) throws IOException {
+		log.info("$$$ saveProductConfigContents starts : SaveContents $$$");
 		boolean validaterow = true;
 		Map<String, ProductConfigBean> returnProductConfigMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
 		try {
-			System.out.println("Inside saveProductConfigContent -->");
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
-			// HSSFSheet worksheet = offices.getSheet("OrderReport");
 			HSSFSheet worksheet = offices.getSheetAt(0);
 			HSSFRow entry;
 			Integer noOfEntries = 1;
