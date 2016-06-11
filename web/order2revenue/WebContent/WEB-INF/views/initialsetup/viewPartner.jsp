@@ -10,6 +10,25 @@
 <html>
 <head>
 <jsp:include page="../globalcsslinks.jsp"></jsp:include>
+<style type="text/css">
+.lable1
+       {       	
+       	margin-top: -55px;
+	    font-size: 17px;
+	    text-align: center;
+	    z-index: 999999999999;
+	    color: #080e08;
+	    font-weight: 800;
+	    font-style: normal;
+	    border-radius: 10px;
+	   }
+       .partnerImg
+       {
+       		height: 91px;        	
+        	object-fit: contain;
+       }
+
+</style>
 <style>
 .error {
 	color: red;
@@ -96,6 +115,7 @@ span .#error {
 														<a href="">																		                   										 												
 															<c:if test="${each.pcLogoUrl == null}">
 																<img src="<%=props.getProperty("defaultpartnerimage.view") %>" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
+																<b><label class="lable1">${partner.pcName}</label></b>
 															</c:if>
 															<c:if test="${each.pcLogoUrl != null}">
 																<img src="${each.pcLogoUrl}" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
@@ -108,6 +128,7 @@ span .#error {
 															<a href="">
 																<c:if test="${each.pcLogoUrl == null}">
 																	<img src="<%=props.getProperty("defaultpartnerimage.view") %>" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
+																	<b><label class="lable1">${partner.pcName}</label></b>
 																</c:if>
 																<c:if test="${each.pcLogoUrl != null}">
 																	<img src="${each.pcLogoUrl}" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">

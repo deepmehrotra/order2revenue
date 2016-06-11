@@ -11,21 +11,18 @@
 <style type="text/css">
 .lable
        {
-        position: absolute;
-	    margin-left: -16%;
-	    margin-top: -50px;
-	    font-size: 24px;
+       	margin-top: -55px;
+	    font-size: 17px;
 	    text-align: center;
 	    z-index: 999999999999;
 	    color: #080e08;
-	    font-weight: 400;	    
-	    
+	    font-weight: 800;
 	    font-style: normal;
 	    border-radius: 10px;
-       }
+	   }
        .partnerImg
        {
-       		height: 100px;        	
+       		height: 91px;        	
         	object-fit: contain;
        }
 
@@ -133,7 +130,7 @@
                             		</c:when>
                             		<c:otherwise>
                             			<img alt="image"  src="<%=props.getProperty("defaultpartnerimage.view") %>"  title="${partner.pcName}" style="width:100%;">
-                            			<label class="lable">${partner.pcName}</label>
+                            			<b><label class="lable">${partner.pcName}</label></b>
                             		</c:otherwise>                              		                          	
                             	</c:choose>  
                             	</div>                       	
