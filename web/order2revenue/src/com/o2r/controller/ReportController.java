@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.o2r.bean.BusinessDetails;
 import com.o2r.bean.ChannelCatNPR;
+import com.o2r.bean.ChannelMC;
 import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
@@ -376,6 +377,8 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 					Set<String> categories = getCategories(categoryChannelNprList); 
 					model.put("categories", categories);
 					model.put("channelCatNPR", channelCatNprList);
+					List<ChannelMC> channelMCList = reportGeneratorService.fetchChannelMC(sellerId, startDate, endDate, "");
+					model.put("channelMC", channelMCList);
 				default: break;
 			}
 			

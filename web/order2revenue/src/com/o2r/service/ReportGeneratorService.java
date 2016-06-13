@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.o2r.bean.ChannelCatNPR;
+import com.o2r.bean.ChannelMC;
 import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
@@ -47,16 +48,17 @@ public interface ReportGeneratorService {
 
 	public List<ChannelSalesDetails> getOrderwiseGPDetails(Date startDate,Date endDate, int sellerIdfromSession)  throws CustomException;
 
-	List<PartnerReportDetails> getDebtorsReportDetails(Date startDate,
-			Date endDate, int sellerId) throws CustomException;
+	public List<PartnerReportDetails> getDebtorsReportDetails(Date startDate, Date endDate, int sellerId) throws CustomException;
 	
 	public List<UploadReport> listUploadReport(int sellerId) throws CustomException;
 
 	public UploadReport getUploadLog(int id, int sellerId) throws CustomException;
 
-	List<CommissionDetails> fetchPC(int sellerId, Date startDate, Date endDate, String criteria);
+	public List<CommissionDetails> fetchPC(int sellerId, Date startDate, Date endDate, String criteria);
 
 	public List<ChannelNPR> fetchChannelNPR(int sellerId, Date startDate, Date endDate, String criteria);
 
-	List<ChannelCatNPR> fetchChannelCatNPR(int sellerId, Date startDate, Date endDate, String criteria);
+	public List<ChannelCatNPR> fetchChannelCatNPR(int sellerId, Date startDate, Date endDate, String criteria);
+	
+	public List<ChannelMC> fetchChannelMC(int sellerId, Date startDate, Date endDate, String criteria);
 }

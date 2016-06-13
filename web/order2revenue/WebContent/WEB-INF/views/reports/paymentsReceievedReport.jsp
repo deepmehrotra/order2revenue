@@ -175,6 +175,43 @@
 														<table class="table table-bordered custom-table">
 															<thead>
 																<tr>
+																	<th>Partner</th>
+																	<th>Manual Charges</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty channelMC}">
+																	<c:forEach items="${channelMC}"
+																		var="partnerDto" varStatus="loop">
+																		<tr>
+																			<td>${partnerDto.partner}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.manualCharges}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div class="flot-chart">
+															<div class="flot-chart-content"
+																id="bar-chart-partner-mc"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
 																	<th>Category</th>
 																	<th>Prepaid NPR</th>
 																	<th>COD NPR</th>
@@ -442,6 +479,16 @@
 		temp2.push(arr1);
 		categoryByNPR.push(arr2);
 		</c:forEach>
+		
+		var temp3 = [];
+		var channelMC = [];
+		var i = 1;
+		<c:forEach items="${channelMC}" var="partnerDto" varStatus="loop">
+		var arr1 = [ i, '${partnerDto.manualCharges}' ];
+		var arr2 = [ i++, '${partnerDto.partner}' ];
+		temp3.push(arr1);
+		channelMC.push(arr2);
+		</c:forEach>
 
 		$(window)
 				.load(
@@ -451,6 +498,8 @@
 								"#bar-chart-partner-net-npr");
 							flotbar(temp2, categoryByNPR,
 								"#bar-chart-category-net-npr");
+							flotbar(temp3, channelMC,
+								"#bar-chart-partner-mc");
 
 							$('.dataTables-example')
 									.dataTable(

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.o2r.bean.ChannelCatNPR;
+import com.o2r.bean.ChannelMC;
 import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
@@ -27,13 +28,11 @@ public interface ReportsGeneratorDao {
 	public List<PartnerReportDetails> getPartnerReportDetails(Date startDate, Date endDate,
 			int sellerId) throws CustomException;
 
-	List<ChannelReportDetails> getChannelReportDetails(Date startDate,
-			Date endDate, int sellerId) throws CustomException;
+	public List<ChannelReportDetails> getChannelReportDetails(Date startDate, Date endDate, int sellerId) throws CustomException;
 
-	List<PartnerReportDetails> getDebtorsReportDetails(Date startDate,
-			Date endDate, int sellerId) throws CustomException;
+	public List<PartnerReportDetails> getDebtorsReportDetails(Date startDate, Date endDate, int sellerId) throws CustomException;
 
-	List<CommissionDetails> fetchPC(int sellerId, Date startDate, Date endDate, String criteria);
+	public List<CommissionDetails> fetchPC(int sellerId, Date startDate, Date endDate, String criteria);
 
 	public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
 			throws CustomException;
@@ -44,7 +43,9 @@ public interface ReportsGeneratorDao {
 
 	public List<ChannelNPR> fetchChannelNPR(int sellerId, Date startDate, Date endDate, String criteria);
 
-	List<ChannelCatNPR> fetchChannelCatNPR(int sellerId, Date startDate, Date endDate, String criteria);
+	public List<ChannelCatNPR> fetchChannelCatNPR(int sellerId, Date startDate, Date endDate, String criteria);
+
+	public List<ChannelMC> fetchChannelMC(int sellerId, Date startDate, Date endDate, String criteria);
 
 	//public void addUploadReport(UploadReport uploadReport) throws CustomException;
 

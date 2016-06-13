@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.bean.ChannelCatNPR;
+import com.o2r.bean.ChannelMC;
 import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
@@ -158,6 +159,12 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 	public List<ChannelCatNPR> fetchChannelCatNPR(int sellerId, Date startDate,
 			Date endDate, String criteria) {
 		return reportGeneratorDao.fetchChannelCatNPR(sellerId, startDate, endDate, criteria);
+	}
+
+	@Override
+	public List<ChannelMC> fetchChannelMC(int sellerId, Date startDate,
+			Date endDate, String criteria) {
+		return reportGeneratorDao.fetchChannelMC(sellerId, startDate, endDate, criteria);
 	}
 
 	/*

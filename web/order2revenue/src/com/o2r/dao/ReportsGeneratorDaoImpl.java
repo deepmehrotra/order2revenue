@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.o2r.bean.ChannelCatNPR;
+import com.o2r.bean.ChannelMC;
 import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
@@ -1187,6 +1188,26 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			commDetailsList.add(commDetails);
 		}
 		return commDetailsList;
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChannelMC> fetchChannelMC(int sellerId, Date startDate, Date endDate, String criteria) {
+		List<ChannelMC> channelMCList = new ArrayList<ChannelMC>();
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		String orderQueryStr = "SELECT mc.partner, sum(mc.paidAmount) as ManualCharges FROM paymentupload pu, manualcharges mc " +
+				"where pu.uploadId = mc.chargesDesc and pu.uploadDate between :startDate AND :endDate group by mc.partner order by ManualCharges desc";
+		Query orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate);
+		List<Object[]> orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			ChannelMC channelMC = new ChannelMC();
+			channelMC.setPartner(order[0].toString());
+			channelMC.setManualCharges(new Double(order[1].toString()));
+			channelMCList.add(channelMC);
+		}
+		return channelMCList;
 	}
 	
 	@SuppressWarnings("unchecked")
