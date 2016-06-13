@@ -288,72 +288,22 @@
 															<thead>
 																<tr>
 																	<th>Partner</th>
-																	<th>Net SP</th>
-																	<th>Net Commission Paid</th>
-																	<th>Net N/R</th>
-																	<th>Net Tax Paid</th>
-																	<th>Net P/R</th>
-																	<th>Net TDS to be deposited</th>
-																	<th>Net Cost of Product</th>
-																	<th>Gross Profit</th>
+																	<th>Payment Type</th>
+																	<th>Total Payment Received</th>
+																	<th>Manual Charges</th>
+																	<th>Net Payment Received</th>
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty shortTablePartner}">
-																	<c:forEach items="${shortTablePartner}" var="partner"
+																<c:if test="${!empty shortTable}">
+																	<c:forEach items="${shortTable}" var="partner"
 																		varStatus="loop">
 																		<tr>
 																			<td>${partner.partner}</td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netSP}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPartnerCommissionPaid}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netActualSale}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netTaxToBePaid}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPrSale}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netTDSToBeDeposited}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netProductCost}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.grossProfit}" /></td>
-																		</tr>
-																	</c:forEach>
-																</c:if>
-															</tbody>
-														</table>
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<div class="row" style="margin-top: 20px;">
-											<div class="col-lg-12">
-												<div class="float-e-margins graph-brd">
-													<div style="overflow-y: hidden;overflow-x: scroll;">
-														<table class="table table-bordered custom-table" style="margin-bottom: auto;">
-															<thead>
-																<tr>
-																	<th>Category</th>
-																	<th>Net SP</th>
-																	<th>Net Commission Paid</th>
-																	<th>Net N/R</th>
-																	<th>Net Tax Paid</th>
-																	<th>Net P/R</th>
-																	<th>Net TDS to be deposited</th>
-																	<th>Net Cost of Product</th>
-																	<th>Gross Profit</th>
-																</tr>
-															</thead>
-															<tbody>
-																<c:if test="${!empty shortTableCategory}">
-																	<c:forEach items="${shortTableCategory}" var="category"
-																		varStatus="loop">
-																		<tr>
-																			<td>${category.categoryName}</td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netSP}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPartnerCommissionPaid}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netActualSale}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netTaxToBePaid}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPrSale}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netTDSToBeDeposited}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netProductCost}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.grossProfit}" /></td>
+																			<td>${partner.paymentType}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.baseNPR}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.manualCharges}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.baseNPR - partner.manualCharges}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>

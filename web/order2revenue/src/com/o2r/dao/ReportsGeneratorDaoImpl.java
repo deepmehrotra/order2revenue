@@ -27,6 +27,7 @@ import org.springframework.stereotype.Repository;
 
 import com.o2r.bean.ChannelCatNPR;
 import com.o2r.bean.ChannelMC;
+import com.o2r.bean.ChannelMCNPR;
 import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
@@ -1341,11 +1342,65 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			channelNPR.setNetNPR(Double.parseDouble(order[1].toString()));
 			channelNprMap.put(key, channelNPR);
 		}
+		
 		Iterator entries = channelNprMap.entrySet().iterator();
 		while (entries.hasNext()) {
 			Entry<String, ChannelNPR> thisEntry = (Entry<String, ChannelNPR>) entries
 					.next();
 			ChannelNPR channelNPR = thisEntry.getValue();
+			channelNPRList.add(channelNPR);
+		}
+		return channelNPRList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChannelMCNPR> fetchChannelMCNPR(int sellerId, Date startDate, Date endDate, String criteria) {
+		List<ChannelMCNPR> channelNPRList = new ArrayList<ChannelMCNPR>();
+		Map<String, ChannelMCNPR> channelNprMap = new HashMap<String, ChannelMCNPR>(); 
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		String mpOrderQueryStr = "SELECT ot.pcName, ot.paymentType, sum(op.netPaymentResult) as 'NPR' FROM order_table ot, orderpay op where " +
+				"ot.orderPayment_paymentId = op.paymentId and ot.poOrder = 0 " +
+				"and ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by ot.pcName, ot.paymentType";
+		Query mpOrderQuery = session.createSQLQuery(mpOrderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		List<Object[]> orderList = mpOrderQuery.list();
+		for(Object[] order: orderList){
+			String key1 = order[0].toString();
+			String key2 = order[1].toString();
+			ChannelMCNPR channelNPR = new ChannelMCNPR();
+			channelNPR.setPartner(key1);
+			channelNPR.setPaymentType(key2);
+			channelNPR.setBaseNPR(Double.parseDouble(order[2].toString()));
+			channelNprMap.put(key1 + key2, channelNPR);
+		}
+		mpOrderQueryStr = "SELECT mc.partner, sum(mc.paidAmount) as ManualCharges FROM paymentupload pu, manualcharges mc " +
+				"where pu.uploadId = mc.chargesDesc and pu.uploadDate between :startDate AND :endDate group by mc.partner";
+		mpOrderQuery = session.createSQLQuery(mpOrderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate);
+		orderList = mpOrderQuery.list();
+		for(Object[] order: orderList){
+			String key1 = order[0].toString();
+			String key2 = "B2B";
+			ChannelMCNPR channelNPR = channelNprMap.get(key1 + key2);
+			if(channelNPR == null){
+				channelNPR = new ChannelMCNPR();
+			}
+			channelNPR.setPartner(key1);
+			channelNPR.setPaymentType(key2);
+			channelNPR.setManualCharges(Double.parseDouble(order[1].toString()));
+			channelNprMap.put(key1 + key2, channelNPR);
+		}
+		
+		Iterator entries = channelNprMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, ChannelMCNPR> thisEntry = (Entry<String, ChannelMCNPR>) entries
+					.next();
+			ChannelMCNPR channelNPR = thisEntry.getValue();
 			channelNPRList.add(channelNPR);
 		}
 		return channelNPRList;

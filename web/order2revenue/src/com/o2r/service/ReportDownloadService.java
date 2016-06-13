@@ -185,6 +185,7 @@ public class ReportDownloadService {
 			case "channelSaleReport": fileName = "Channel_Sale_Report.xls";break;
 			case "categoryWiseSaleReport": fileName = "Category_Wise_Sale_Report.xls";break;
 			case "orderwiseGPReport": fileName = "Orderwise_GP_Report.xls";break;
+			case "paymentsReceievedReport": fileName = "Total_Payments_Received_Report.xls";break;
 			default: break;
 		}
 		response.setHeader("Content-Disposition", "inline; filename=" + fileName);

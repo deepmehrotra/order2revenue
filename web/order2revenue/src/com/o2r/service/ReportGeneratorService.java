@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.o2r.bean.ChannelCatNPR;
 import com.o2r.bean.ChannelMC;
+import com.o2r.bean.ChannelMCNPR;
 import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
@@ -61,4 +62,6 @@ public interface ReportGeneratorService {
 	public List<ChannelCatNPR> fetchChannelCatNPR(int sellerId, Date startDate, Date endDate, String criteria);
 	
 	public List<ChannelMC> fetchChannelMC(int sellerId, Date startDate, Date endDate, String criteria);
+	
+	public List<ChannelMCNPR> fetchChannelMCNPR(int sellerId, Date startDate, Date endDate, String criteria);
 }
