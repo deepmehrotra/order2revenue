@@ -183,7 +183,7 @@ public class SaveContents {
 						errorMessage.append(" Product SKU does not exist;");
 						validaterow = false;
 					} else {
-						order.setProductSkuCode(entry.getCell(2).toString());
+						order.setProductSkuCode(product.getProductSkuCode());
 					}
 				} else {
 					errorMessage.append(" Product SKU is null;");
