@@ -46,7 +46,7 @@ span .#error {
 
 								<div class="mar-btm-20-dt">
 									<label class="col-sm-5 control-label">Select OrderId</label>
-									<div class="col-sm-8 input-group pad-lr">
+									<div class="col-sm-7 input-group pad-lr">
 										<form:select path="orderId" class="chosen-select"
 											style="width:80%;" tabindex="2">
 											<c:forEach var="chorderId" items="${orderIdmap}">
@@ -79,8 +79,8 @@ span .#error {
 									</div>
 								</div>
 								<div class="mar-btm-20-dt">
-									<label class="col-sm-4 control-label">Positive Amount</label>
-									<div class="col-sm-8">
+									<label class="col-sm-5 control-label">Positive Amount</label>
+									<div class="col-sm-7">
 										<form:input path="orderPayment.positiveAmount"
 											value="${order.orderPayment.positiveAmount}"
 											class="form-control" />

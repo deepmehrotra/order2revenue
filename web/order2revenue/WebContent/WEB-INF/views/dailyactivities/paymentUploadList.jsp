@@ -37,7 +37,16 @@
             }
         });
     }
-   
+    function onclickAddPayment() {
+    	var targeturl="addManualPayment.html";
+    	
+        $.ajax({
+            url : targeturl,
+            success : function(data) {
+                $('#centerpane').html(data);
+            }
+        });
+    }   
 </script>
  </head>
  <body>
@@ -53,6 +62,7 @@
                             <h5>Upload Payment Details</h5>
                             <div class="ibox-tools">
                                 <a href="#" onclick="onclickNavigatePayment('viewManualPayments',0)" class="btn btn-primary btn-xs" >View Manual Payments</a>
+                                <a href="#" onclick="onclickAddPayment()" class="btn btn-primary btn-xs" >Add Manual Payments</a>
                             </div>
                         </div>
                         <div class="ibox-content overflow-h">

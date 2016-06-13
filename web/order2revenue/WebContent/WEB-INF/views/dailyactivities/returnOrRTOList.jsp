@@ -54,6 +54,27 @@ $('#LoadOnSubmit').click(function (e) {
 
 
 </script>
+<script type="text/javascript">
+    function onclickReturn(value,id) {
+    	var targeturl="";
+    	switch(value)
+    	{
+    	case "uploadReturn" :
+    		targeturl="uploadOrderDA.html?value=ordersummary";
+    	break;
+    	case "downloadReturn" :
+    		targeturl="downloadOrderDA.html?value=ordersummary";
+    	break;    		
+    	}
+        $.ajax({
+            url : targeturl,
+            success : function(data) {
+                $('#centerpane').html(data);
+            }
+        });
+    }
+  
+</script>
  </head>
  <body>
   <div class="row">
@@ -128,9 +149,17 @@ $('#LoadOnSubmit').click(function (e) {
                                        
                                      </div>
                         </div>
-                         <div class="col-md-2">
-                                    <button class="btn btn-success " type="button"  id="LoadOnSubmit"><i class="fa fa-search"></i>&nbsp;&nbsp;<span class="bold">Search</span></button>
-                                </div>
+	                         <div class="col-md-2">
+	                                    <button class="btn btn-success " type="button"  id="LoadOnSubmit"><i class="fa fa-search"></i>&nbsp;&nbsp;<span class="bold">Search</span></button>
+	                         </div>
+	                         <div class="col-sm-12">
+										<div class="hr-line-dashed"></div>
+										<a href="#" onclick="onclickReturn('uploadReturn',0)"
+											class="btn btn-success btn-xs">Bulk Upload RTO/Return</a>&nbsp;&nbsp;
+										<a href="#"
+											onclick="onclickReturn('downloadReturn',0)"
+											class="btn btn-success btn-xs">Download RTO/Return Format</a>
+							</div>
                         </form>
                         <div class="col-lg-12">
                                 <div class="hr-line-dashed"></div>	
