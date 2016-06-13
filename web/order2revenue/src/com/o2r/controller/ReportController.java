@@ -164,38 +164,31 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 				log.info("CategoryList: " + categoryBusinessGraphList.size());
 				model.put("shortTableCategory", categoryBusinessGraphList);
 
-				Collections.sort(partnerBusinessGraphList,
-						new BusinessDetails.OrderByNetPartnerCommission());
+				Collections.sort(partnerBusinessGraphList, new BusinessDetails.OrderByNetPartnerCommission());
 				model.put("partnerByNetCommission", ConverterClass.getBusinessSortedList(partnerBusinessGraphList, "NetCommission"));
-				Collections.sort(partnerBusinessGraphList,
-						new BusinessDetails.OrderByNetTax());
+				Collections.sort(partnerBusinessGraphList, new BusinessDetails.OrderByNetTax());
 				model.put("partnerByNetTax", ConverterClass.getBusinessSortedList(partnerBusinessGraphList, "NetTax"));
-				Collections.sort(partnerBusinessGraphList,
-						new BusinessDetails.OrderByNetTDS());
+				Collections.sort(partnerBusinessGraphList, new BusinessDetails.OrderByNetTDS());
 				model.put("partnerByNetTDS", ConverterClass.getBusinessSortedList(partnerBusinessGraphList, "NetTDS"));
-				Collections.sort(partnerBusinessGraphList,
-						new BusinessDetails.OrderByNetNPR());
-				model.put("partnerByNetNPR", ConverterClass.getBusinessSortedList(partnerBusinessGraphList, "NetNPR"));
+				Collections.sort(partnerBusinessGraphList, new BusinessDetails.OrderByEOSS());
+				model.put("partnerByEOSS", ConverterClass.getBusinessSortedList(partnerBusinessGraphList, "EOSS"));
 				Collections.sort(partnerBusinessGraphList,
 						new BusinessDetails.OrderByNetTaxable());
 				model.put("partnerByNetTaxable", ConverterClass.getBusinessSortedList(partnerBusinessGraphList, "NetTaxable"));
 
-				Collections.sort(categoryBusinessGraphList,
-						new BusinessDetails.OrderByNetPartnerCommission());
+				Collections.sort(categoryBusinessGraphList, new BusinessDetails.OrderByNetPartnerCommission());
 				model.put("categoryByNetCommission", ConverterClass.getBusinessSortedList(categoryBusinessGraphList, "NetCommission"));
-				Collections.sort(categoryBusinessGraphList,
-						new BusinessDetails.OrderByNetTax());
+				Collections.sort(categoryBusinessGraphList, new BusinessDetails.OrderByNetTax());
 				model.put("categoryByNetTax", ConverterClass.getBusinessSortedList(categoryBusinessGraphList, "NetTax"));
-				Collections.sort(categoryBusinessGraphList,
-						new BusinessDetails.OrderByNetTDS());
+				Collections.sort(categoryBusinessGraphList, new BusinessDetails.OrderByNetTDS());
 				model.put("categoryByNetTDS", ConverterClass.getBusinessSortedList(categoryBusinessGraphList, "NetTDS"));
-				Collections.sort(categoryBusinessGraphList,
-						new BusinessDetails.OrderByNetNPR());
-				model.put("categoryByNetNPR", ConverterClass.getBusinessSortedList(categoryBusinessGraphList, "NetNPR"));
-				Collections.sort(categoryBusinessGraphList,
-						new BusinessDetails.OrderByNetTaxable());
+				Collections.sort(categoryBusinessGraphList, new BusinessDetails.OrderByEOSS());
+				model.put("categoryByEOSS", ConverterClass.getBusinessSortedList(categoryBusinessGraphList, "EOSS"));
+				Collections.sort(categoryBusinessGraphList, new BusinessDetails.OrderByNetTaxable());
 				model.put("categoryByNetTaxable", ConverterClass.getBusinessSortedList(categoryBusinessGraphList, "NetTaxable"));
-
+				List<ChannelMC> channelMCList = reportGeneratorService.fetchChannelMC(sellerId, startDate, endDate, "");
+				model.put("channelMC", channelMCList);
+				
 				model.put("partnerBusiness", partnerBusinessList);
 				return new ModelAndView("reports/viewBRGraphReport", model);
 			}

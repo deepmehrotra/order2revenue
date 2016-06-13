@@ -186,6 +186,16 @@ public class BusinessDetails {
 							: 0);
 		}
 	}
+	
+	public static class OrderByEOSS implements Comparator<BusinessDetails> {
+
+		@Override
+		public int compare(BusinessDetails graph1, BusinessDetails graph2) {
+			return graph1.netEossDiscountPaid < graph2.netEossDiscountPaid ? 1
+					: (graph1.netEossDiscountPaid > graph2.netEossDiscountPaid ? -1
+							: 0);
+		}
+	}
 
 	public static class OrderByNetTax implements Comparator<BusinessDetails> {
 

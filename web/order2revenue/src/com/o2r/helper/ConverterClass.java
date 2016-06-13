@@ -1466,7 +1466,7 @@ public class ConverterClass {
 			double netActualSale = partnerBusiness.getNetPaymentResult() - partnerBusiness.getPaymentDifference();
 			double netPrSale = partnerBusiness.getNetPr() - partnerBusiness.getNetPr()*(partnerBusiness.getReturnQuantity()/partnerBusiness.getGrossSaleQuantity());
 			double netTaxToBePaid = partnerBusiness.getNetTaxToBePaid();
-			double netEossDiscountPaid = 0;
+			double netEossDiscountPaid = partnerBusiness.getNetEossValue();
 			double netRate = partnerBusiness.getGrossNetRate();
 			double netProductCost = partnerBusiness.getProductPrice();
 			double grossProfit = partnerBusiness.getGrossProfit();
@@ -1841,13 +1841,10 @@ public class ConverterClass {
 						double netTDSToBeDepositedTotal = consolidated.getNetTDSToBeDeposited();
 						consolidated.setNetTDSToBeDeposited(netTDSToBeDeposited + netTDSToBeDepositedTotal);
 						break;
-					case "NetNPR": 
-						double netPrSale = businessGraph.getNetPrSale();
-						double netPayDiff = businessGraph.getPaymentDifference();
-						double netPrSaleTotal = consolidated.getNetPrSale();
-						consolidated.setNetPrSale(netPrSale + netPrSaleTotal);
-						double netPayDiffTotal = consolidated.getPaymentDifference();
-						consolidated.setPaymentDifference(netPayDiff + netPayDiffTotal);
+					case "EOSS": 
+						double netEoss = businessGraph.getNetEossDiscountPaid();
+						double netEossTotal = consolidated.getNetEossDiscountPaid();
+						consolidated.setNetEossDiscountPaid(netEoss + netEossTotal);
 						break;
 					case "NetTaxable": 
 						double netTaxableSale = businessGraph.getNetTaxableSale();

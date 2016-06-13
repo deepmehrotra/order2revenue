@@ -793,7 +793,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		partnerBusiness.setTdsToBeDeducted10(0.1 * grossCommission);
 		partnerBusiness.setTdsToBeDeducted2(0.02 * (pccAmount + fixedFee + shippingCharges));
 		partnerBusiness.setNetTaxToBePaid(taxToBePaid);
-		double netEossValue = 0; // Only for Consolidated PO
+		double netEossValue = 0; 
+		// Only for Consolidated PO
+		if(isPoOrder && consolidatedOrder!=null)
+			netEossValue = currOrder.getEossValue();
 		partnerBusiness.setNetEossValue(netEossValue);
 		partnerBusiness.setNetPr(currOrder.getPr()/quantity*(quantity-returnQty));
 		partnerBusiness.setGrossNetRate(grossNetRate*quantity);

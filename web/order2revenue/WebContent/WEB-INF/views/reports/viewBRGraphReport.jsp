@@ -172,6 +172,80 @@
 															<thead>
 																<tr>
 																	<th>Partner</th>
+																	<th>Net EOSS</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty partnerByEOSS}">
+																	<c:forEach items="${partnerByEOSS}"
+																		var="partnerDto" varStatus="loop">
+																		<tr>
+																			<td>${partnerDto.partner}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netEossDiscountPaid}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div class="flot-chart">
+															<div class="flot-chart-content"
+																id="bar-chart-partner-eoss"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Partner</th>
+																	<th>Manual Charges</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty channelMC}">
+																	<c:forEach items="${channelMC}"
+																		var="partnerDto" varStatus="loop">
+																		<tr>
+																			<td>${partnerDto.partner}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.manualCharges}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div class="flot-chart">
+															<div class="flot-chart-content"
+																id="bar-chart-partner-mc"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Partner</th>
 																	<th>Net SP</th>
 																	<th>Net Commission Paid</th>
 																	<th>Net N/R</th>
@@ -356,6 +430,43 @@
 														<div class="flot-chart">
 															<div class="flot-chart-content"
 																id="bar-chart-category-net-tax"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Category</th>
+																	<th>Net EOSS</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty categoryByEOSS}">
+																	<c:forEach items="${categoryByEOSS}"
+																		var="categoryDto" varStatus="loop">
+																		<tr>
+																			<td>${categoryDto.categoryName}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netEossDiscountPaid}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div class="flot-chart">
+															<div class="flot-chart-content"
+																id="bar-chart-category-eoss"></div>
 														</div>
 													</div>
 												</div>
@@ -641,7 +752,7 @@
 		var yAxisText = 'Partner Fields';
 		var divId = "#stacked-chart-1";
 		var xAxisCategories = ['Net SP', 'Net Partner Commission Paid', 'Net Actual Sale', 'Net Tax To Be Paid', 'Net P/R Sale', 'Net TDS To Be Deposited', 'Net Product Cost', 'Gross Profit'];
-		<c:forEach items="${partnerByNetNPR}" var="partnerDto" varStatus="loop">
+		<c:forEach items="${shortTablePartner}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.partner}';
 			data.data = [parseFloat(parseFloat('${partnerDto.netSP}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netPartnerCommissionPaid}').toFixed(2))
@@ -698,7 +809,7 @@
 		var yAxisText = 'Partner Fields';
 		var divId = "#stacked-chart-3";
 		var xAxisCategories = ['Net SP', 'Net Partner Commission Paid', 'Net Actual Sale', 'Net Tax To Be Paid', 'Net P/R Sale', 'Net TDS To Be Deposited', 'Net Product Cost', 'Gross Profit'];
-		<c:forEach items="${categoryByNetNPR}" var="partnerDto" varStatus="loop">
+		<c:forEach items="${shortTableCategory}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.categoryName}';
 			data.data = [parseFloat(parseFloat('${partnerDto.netSP}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netPartnerCommissionPaid}').toFixed(2))
@@ -720,6 +831,36 @@
 			dataArr.push(data);
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);
+		
+		var temp7 = [];
+		var partnerByEOSS = [];
+		var i = 1;
+		<c:forEach items="${partnerByEOSS}" var="partnerDto" varStatus="loop">
+		var arr1 = [ i, '${partnerDto.netEossDiscountPaid}' ];
+		var arr2 = [ i++, '${partnerDto.partner}' ];
+		temp7.push(arr1);
+		partnerByEOSS.push(arr2);
+		</c:forEach>
+		
+		var temp8 = [];
+		var categoryByEOSS = [];
+		var i = 1;
+		<c:forEach items="${categoryByEOSS}" var="partnerDto" varStatus="loop">
+		var arr1 = [ i, '${partnerDto.netEossDiscountPaid}' ];
+		var arr2 = [ i++, '${partnerDto.categoryName}' ];
+		temp8.push(arr1);
+		categoryByEOSS.push(arr2);
+		</c:forEach>
+		
+		var temp9 = [];
+		var channelMC = [];
+		var i = 1;
+		<c:forEach items="${channelMC}" var="partnerDto" varStatus="loop">
+		var arr1 = [ i, '${partnerDto.manualCharges}' ];
+		var arr2 = [ i++, '${partnerDto.partner}' ];
+		temp9.push(arr1);
+		channelMC.push(arr2);
+		</c:forEach>
 
 		$(window)
 				.load(
@@ -737,6 +878,12 @@
 									"#bar-chart-category-net-tds");
 							flotbar(temp6, categoryByNetTaxArr,
 									"#bar-chart-category-net-tax");
+							flotbar(temp7, partnerByEOSS,
+								"#bar-chart-partner-eoss");
+							flotbar(temp8, categoryByEOSS,
+								"#bar-chart-category-eoss");
+							flotbar(temp9, channelMC,
+								"#bar-chart-partner-mc");
 
 							$('.dataTables-example')
 									.dataTable(
