@@ -101,150 +101,161 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-12 order-info-block">
-			<div class="float-e-margins col-lg-12">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h4 class="panel-title ibox-title">
-							<a data-toggle="collapse" data-parent="#accordion"
-								href="#collapsetrans">TRANSACTION SUMMARY</a>
-						</h4>
-					</div>
-					<div id="collapsetrans" class="panel-collapse collapse in">
-						<div class="panel-body">
-							<div class="ibox-content add-company view-order">
-								<div class="table-format-wrapper three-data-width">
-									<table
-										class="table table-striped table-bordered table-hover dataTables-example">
-										<thead>
-											<tr>
-												<th>SKU</th>
-												<th>MRP</th>
-												<th>SP</th>
-												<th>CUSTOMER DISC</th>
-												<th>CHANNEL COMMISSION</th>
-												<th>EOSS DISC</th>
-												<th>N/R</th>
-												<th>TAX</th>
-												<th>P/R</th>
-												<th>SUGGESTED <br>P/O PRICE
-												</th>
-												<th>P/O PRICE</th>
-												<th>QTY</th>
-												<th>SUBBTOTAL</th>
-											</tr>
-										</thead>
-										<tbody>
-											<c:if test="${!empty orderlist}">
-												<c:forEach items="${orderlist}" var="poOrder"
-													varStatus="loop">
+		<div class="panel-group" id="accordion1">
+			<div class="col-lg-12 order-info-block">
+				<div class="float-e-margins col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title ibox-title">
+								<a data-toggle="collapse" data-parent="#accordion1"
+									href="#collapsetrans">TRANSACTION SUMMARY</a>
+							</h4>
+						</div>
+						<div id="collapsetrans" class="panel-collapse collapse in">
+							<div class="panel-body">
+								<div class="bs-example">
+									<div class="ibox-content overflow-h cus-table-filters">
+										<div class="scroll-y">
+											<table
+												class="table table-striped table-bordered table-hover dataTables-example">
+												<thead>
 													<tr>
-														<td>${poOrder.productSkuCode}</td>
-														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2" value="${poOrder.orderMRP / poOrder.quantity}" /></td>
-														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2" value="${((poOrder.orderMRP / poOrder.quantity) * poOrder.productConfig.discount) / 100}" /></td>
-														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2"
-																value="${(poOrder.orderMRP / poOrder.quantity) - (((poOrder.orderMRP / poOrder.quantity) * poOrder.productConfig.discount) / 100)}" /></td>
-														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2"
-																value="${poOrder.productConfig.commisionAmt}" /></td>
-														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2" value="${poOrder.eossValue}" /></td>
-														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2" value="${poOrder.grossNetRate}" /></td>
-														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2" value="${poOrder.orderTax.tax}" /></td>
-														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2" value="${(poOrder.pr  / poOrder.quantity)}" /></td>
-														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2"
-																value="${poOrder.productConfig.suggestedPOPrice}" /></td>
-														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2" value="${poOrder.poPrice}" /></td>
-														<td>${poOrder.quantity}</td>
-														<td><fmt:formatNumber type="number"
-																maxFractionDigits="2"
-																value="${poOrder.totalAmountRecieved}" /></td>
+														<th>SKU</th>
+														<th>MRP</th>
+														<th>SP</th>
+														<th>CUSTOMER DISC</th>
+														<th>CHANNEL COMMISSION</th>
+														<th>EOSS DISC</th>
+														<th>N/R</th>
+														<th>TAX</th>
+														<th>P/R</th>
+														<th>SUGGESTED <br>P/O PRICE
+														</th>
+														<th>P/O PRICE</th>
+														<th>QTY</th>
+														<th>SUBBTOTAL</th>
 													</tr>
-												</c:forEach>
-											</c:if>
-										</tbody>
-									</table>
+												</thead>
+												<tbody>
+													<c:if test="${!empty orderlist}">
+														<c:forEach items="${orderlist}" var="poOrder"
+															varStatus="loop">
+															<tr>
+																<td>${poOrder.productSkuCode}</td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2"
+																		value="${poOrder.orderMRP / poOrder.quantity}" /></td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2"
+																		value="${((poOrder.orderMRP / poOrder.quantity) * poOrder.productConfig.discount) / 100}" /></td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2"
+																		value="${(poOrder.orderMRP / poOrder.quantity) - (((poOrder.orderMRP / poOrder.quantity) * poOrder.productConfig.discount) / 100)}" /></td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2"
+																		value="${poOrder.productConfig.commisionAmt}" /></td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2" value="${poOrder.eossValue}" /></td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2" value="${poOrder.grossNetRate}" /></td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2" value="${poOrder.orderTax.tax}" /></td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2"
+																		value="${(poOrder.pr  / poOrder.quantity)}" /></td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2"
+																		value="${poOrder.productConfig.suggestedPOPrice}" /></td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2" value="${poOrder.poPrice}" /></td>
+																<td>${poOrder.quantity}</td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2"
+																		value="${poOrder.totalAmountRecieved}" /></td>
+															</tr>
+														</c:forEach>
+													</c:if>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-12 order-info-block">
+				<div class="float-e-margins col-lg-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title ibox-title">
+								<a data-toggle="collapse" data-parent="#accordion1"
+									href="#collapsecust">CUSTOMER INFO</a>
+							</h4>
+						</div>
+						<div id="collapsecust" class="panel-collapse collapse">
+							<div class="panel-body">
+								<div class="ibox-content add-company view-order">
+
+									<div class="table-format-wrapper three-data-width">
+										<div>
+											<span>Name</span> <span></span> <span>${order.customer.customerName}</span>
+										</div>
+										<div>
+											<span>Contact</span> <span></span> <span>${order.customer.customerPhnNo}</span>
+										</div>
+										<div>
+											<span>Email</span> <span></span> <span>${order.customer.customerEmail}</span>
+										</div>
+										<div>
+											<span>City</span> <span></span> <span>${order.customer.customerCity}</span>
+										</div>
+										<div>
+											<span>Address</span> <span></span> <span>${order.customer.customerAddress}</span>
+										</div>
+									</div>
+
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="col-lg-12 order-info-block">
-			<div class="float-e-margins col-lg-4">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h4 class="panel-title ibox-title">
-							<a data-toggle="collapse" data-parent="#accordion"
-								href="#collapsecust">CUSTOMER INFO</a>
-						</h4>
-					</div>
-					<div id="collapsemer" class="panel-collapse collapse">
-						<div class="panel-body">
-							<div class="ibox-content add-company view-order">
-
-								<div class="table-format-wrapper three-data-width">
-									<div>
-										<span>Name</span> <span></span> <span>${order.customer.customerName}</span>
-									</div>
-									<div>
-										<span>Contact</span> <span></span> <span>${order.customer.customerPhnNo}</span>
-									</div>
-									<div>
-										<span>Email</span> <span></span> <span>${order.customer.customerEmail}</span>
-									</div>
-									<div>
-										<span>City</span> <span></span> <span>${order.customer.customerCity}</span>
-									</div>
-									<div>
-										<span>Address</span> <span></span> <span>${order.customer.customerAddress}</span>
-									</div>
+				<div class="float-e-margins col-lg-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title ibox-title">
+								<a data-toggle="collapse" data-parent="#accordion1"
+									href="#collapsevents">EVENTS INFO</a>
+							</h4>
+						</div>
+						<div id="collapsevents" class="panel-collapse collapse">
+							<div class="panel-body">
+								<div class="ibox-content add-company view-order">
+									<div class="table-format-wrapper three-data-width"></div>
 								</div>
-
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="float-e-margins col-lg-4">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h4 class="panel-title ibox-title">
-							<a data-toggle="collapse" data-parent="#accordion"
-								href="#collapsevents">EVENTS INFO</a>
-						</h4>
-					</div>
-					<div id="collapsevents" class="panel-collapse collapse">
-						<div class="panel-body">
-							<div class="ibox-content add-company view-order">
-								<div class="table-format-wrapper three-data-width"></div>
+				<div class="float-e-margins col-lg-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title ibox-title">
+								<a data-toggle="collapse" data-parent="#accordion1"
+									href="#collapsenotes">SELLER NOTES</a>
+							</h4>
+						</div>
+						<div id="collapsenotes" class="panel-collapse collapse">
+							<div class="panel-body">
+								<div class="ibox-content add-company view-order">
+									<blockquote>
+										<p>${order.sellerNote}</p>
+									</blockquote>
+								</div>
 							</div>
 						</div>
-					</div>
-				</div>
-			</div>
-			<div class="float-e-margins col-lg-4">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h4 class="panel-title ibox-title">
-							<a data-toggle="collapse" data-parent="#accordion"
-								href="#collapsenotes">SELLER NOTES</a>
-						</h4>
-					</div>
-					<div class="ibox-content add-company view-order">
-
-						<blockquote>
-							<p>${order.sellerNote}</p>
-						</blockquote>
 					</div>
 				</div>
 			</div>

@@ -41,10 +41,10 @@
     		targeturl="addOrderDA.html";
     	break;
     	case "uploadGatePass" :
-    		targeturl="uploadOrderDA.html?value=ordersummary";
+    		targeturl="uploadOrderDA.html?value=gatepassSummary";
     	break;
     	case "downloadGatePass" :
-    		targeturl="downloadOrderDA.html?value=ordersummary";
+    		targeturl="downloadOrderDA.html?value=gatepassSummary";
     	break;
     	
     	case "viewPOOrder" :
