@@ -106,18 +106,18 @@ public class DashboardDaoImpl implements DashboardDao {
 			+ "ort.returnDate between :startDate AND :endDate and ort.returnId=ot.orderReturnOrRTO_returnId "
 			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId GROUP BY YEAR(ort.returnDate), MONTH(ort.returnDate) "
 			+ "order by YEAR(ort.returnDate), MONTH(ort.returnDate)";
-	private static final String grossProfitMPMonthlyQuery = "Select sum(ot.pr-(prd.productPrice*ot.quantity)) as grossProfit,"
-			+ "Monthname(ot.shippedDate) as month ,YEAR(ot.shippedDate) as year from Order_Table ot ,Product prd"
-			+ " where ot.shippedDate between  :startDate AND :endDate and ot.productSkuCode=prd.productSkuCode "
-			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)"
-			+ " ORDER BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
+	private static final String grossProfitMPMonthlyQuery = "Select sum((ot.pr-(prd.productPrice*ot.quantity))) as grossProfit,"
+			+ "Monthname(ot.shippedDate) as month ,YEAR(ot.shippedDate) as year from Order_Table ot,Product prd where ot.shippedDate "
+			+ "between  :startDate AND :endDate and ot.productSkuCode=prd.productSkuCode and ot.poOrder =0 and"
+			+ " ot.seller_Id=:id GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)"
+			+ "ORDER BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
 
-	private static final String grossProfitMPReturnMonthlyQuery = "Select sum(((ot.pr-(prd.productPrice*ot.quantity))/ot.quantity)"
-			+ "*orr.returnorrtoQty + orr.estimateddeduction) as grossProfit,Monthname(orr.returnDate) as month ,"
-			+ "YEAR(orr.returnDate) as year from Order_Table ot,orderreturn orr,Product prd where orr.returnDate between "
-			+ ":startDate AND :endDate and ot.productSkuCode=prd.productSkuCode "
-			+ "and ot.orderReturnOrRTO_returnId=orr.returnId and ot.poOrder =0 and ot.seller_Id=:sellerId "
-			+ "GROUP BY YEAR(orr.returnDate), MONTH(orr.returnDate) "
+	private static final String grossProfitMPReturnMonthlyQuery = "Select sum(((ot.pr-(prd.productPrice*ot.quantity))/ot.quantity)*orr.returnorrtoQty + orr.estimateddeduction)"
+			+ ",Monthname(orr.returnDate) as month,YEAR(orr.returnDate) as year from "
+			+ "Order_Table ot,orderreturn orr,Product prd where orr.returnDate between "
+			+ ":startDate AND :endDate and ot.productSkuCode=prd.productSkuCode and ot.orderReturnOrRTO_returnId=orr.returnId"
+			+ " and ot.poOrder =0 and ot.seller_Id=:rtid "
+			+ "GROUP BY YEAR(orr.returnDate), MONTH(orr.returnDate)"
 			+ "ORDER BY YEAR(orr.returnDate), MONTH(orr.returnDate)";
 	private static final String grossProfitPOMonthlyQuery = "Select sum(ot.grossProfit) as grossProfit, "
 			+ "Monthname(ot.shippedDate) as month ,"
@@ -683,12 +683,12 @@ public class DashboardDaoImpl implements DashboardDao {
 			Query mpquery = session.createSQLQuery(grossProfitMPMonthlyQuery)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
-					.setParameter("sellerId", sellerId);
+					.setParameter("id", sellerId);
 			Query mpReturnquery = session
 					.createSQLQuery(grossProfitMPReturnMonthlyQuery)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
-					.setParameter("sellerId", sellerId);
+					.setParameter("rtid", sellerId);
 			Query poquery = session.createSQLQuery(grossProfitPOMonthlyQuery)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
