@@ -249,7 +249,7 @@ public class OrderDaoImpl implements OrderDao {
 						order.getOrderTax().setTdsToDeduct(
 								(order.getPartnerCommission() - (order
 										.getPartnerCommission() * 100 /(100 + Double.parseDouble(props.getProperty("serviceTax")))))
-										* (.1) * order.getQuantity());
+										* (Double.parseDouble(props.getProperty("TDS"))/100) * order.getQuantity());
 
 					}
 					order.setOrderMRP(order.getOrderMRP() * order.getQuantity());
@@ -2168,7 +2168,7 @@ public class OrderDaoImpl implements OrderDao {
 					/ 100;
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
-			tds = ((comission / 10) + ((fixedfee + pccAmount + shippingCharges) / 50))
+			tds = ((comission / Double.parseDouble(props.getProperty("TDS"))) + ((fixedfee + pccAmount + shippingCharges) / 50))
 					* order.getQuantity();
 			order.getOrderTax().setTdsToDeduct(tds);
 			order.setGrossNetRate(nrValue);
@@ -2903,7 +2903,7 @@ public class OrderDaoImpl implements OrderDao {
 					/ 100;
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
-			tds = ((comission / 10) + ((fixedfee + pccAmount) / 50))
+			tds = ((comission / Double.parseDouble(props.getProperty("TDS"))) + ((fixedfee + pccAmount) / 50))
 					* order.getQuantity();
 			order.getOrderTax().setTdsToDeduct(tds);
 			order.setGrossNetRate(nrValue);

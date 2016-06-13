@@ -24,7 +24,7 @@
 <script src="/O2R/seller/js/plugins/datapicker/bootstrap-datepicker.js"></script>
 
 <script type="text/javascript">
-    function onclickNavigateOrder(value,id) {
+    function onclickGatePass(value,id) {
     	var targeturl="";
     	switch(value)
     	{
@@ -40,10 +40,10 @@
     	case "addOrder" :
     		targeturl="addOrderDA.html";
     	break;
-    	case "upload" :
+    	case "uploadGatePass" :
     		targeturl="uploadOrderDA.html?value=ordersummary";
     	break;
-    	case "download" :
+    	case "downloadGatePass" :
     		targeturl="downloadOrderDA.html?value=ordersummary";
     	break;
     	
@@ -92,7 +92,7 @@
 									<a href="poOrderList.html?value=" id="POOrders">PO Orders</a> <a
 										href="#" id="returnOrders">Return</a> <a href="#"
 										id="gatepass"
-										onclick="onclickNavigateOrder('viewPOOrderDetails','0')">GatePass</a>
+										onclick="onclickGatePass('viewPOOrderDetails','0')">GatePass</a>
 									<a href="#" id="paymentOrders">Payment</a> <a href="#"
 										id="actionableOrders">Actionable</a>
 								</div>
@@ -180,7 +180,7 @@
 															<td><input type="checkbox"></td>
 															<td>${loop.index+1}</td>
 															<td><a href="#"
-																onclick="onclickNavigateOrder('viewPOOrder',${gatepass.orderId})">${gatepass.subOrderID}</a></td>
+																onclick="onclickGatePass('viewPOOrder',${gatepass.orderId})">${gatepass.subOrderID}</a></td>
 															<td>${gatepass.pcName}</td>
 															<td>${gatepass.productSkuCode}</td>
 															<td><fmt:formatDate value="${gatepass.orderDate}"
@@ -212,10 +212,10 @@
 									</div>
 									<div class="col-sm-12">
 										<div class="hr-line-dashed"></div>
-										<a href="#" onclick="onclickNavigateOrder('uploadGatePass',0)"
+										<a href="#" onclick="onclickGatePass('uploadGatePass',0)"
 											class="btn btn-success btn-xs">Bulk Upload GatePass</a>&nbsp;&nbsp;
 										<a href="#"
-											onclick="onclickNavigateOrder('downloadGatePass',0)"
+											onclick="onclickGatePass('downloadGatePass',0)"
 											class="btn btn-success btn-xs">Download GatePass Format</a>
 									</div>
 
