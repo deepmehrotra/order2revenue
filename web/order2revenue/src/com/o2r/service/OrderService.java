@@ -104,8 +104,9 @@ public interface OrderService {
 			throws CustomException;
 
 	public List<PoPaymentDetailsBean> getPOPaymentDetails(int sellerId,
-			boolean isMonthly);
+			String year);
 
 	public boolean isPOOrderUploaded(String poId, String invoiceId)
 			throws CustomException;
+
 }

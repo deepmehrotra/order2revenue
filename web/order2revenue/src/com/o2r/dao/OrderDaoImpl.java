@@ -1,12 +1,15 @@
 package com.o2r.dao;
 
 import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -28,6 +31,7 @@ import org.springframework.stereotype.Repository;
 
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.DebitNoteBean;
+import com.o2r.bean.OrderBean;
 import com.o2r.bean.PoPaymentBean;
 import com.o2r.bean.PoPaymentDetailsBean;
 import com.o2r.helper.CustomException;
@@ -74,8 +78,9 @@ public class OrderDaoImpl implements OrderDao {
 	private AreaConfigDao areaConfigDao;
 	@Autowired
 	private SellerDao sellerDao;
-	
-	org.springframework.core.io.Resource resource = new ClassPathResource("database.properties");
+
+	org.springframework.core.io.Resource resource = new ClassPathResource(
+			"database.properties");
 	Properties props = null;
 
 	private final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
@@ -242,14 +247,18 @@ public class OrderDaoImpl implements OrderDao {
 								+ order.getGrossNetRate() + " delivery date :"
 								+ order.getDeliveryDate());
 					} else {
-						
+
 						props = PropertiesLoaderUtils.loadProperties(resource);
 						order.setPartnerCommission((order.getOrderSP() - order
 								.getGrossNetRate()) * order.getQuantity());
-						order.getOrderTax().setTdsToDeduct(
-								(order.getPartnerCommission() - (order
-										.getPartnerCommission() * 100 /(100 + Double.parseDouble(props.getProperty("serviceTax")))))
-										* (Double.parseDouble(props.getProperty("TDS"))/100) * order.getQuantity());
+						order.getOrderTax()
+								.setTdsToDeduct(
+										(order.getPartnerCommission() - (order
+												.getPartnerCommission() * 100 / (100 + Double.parseDouble(props
+												.getProperty("serviceTax")))))
+												* (Double.parseDouble(props
+														.getProperty("TDS")) / 100)
+												* order.getQuantity());
 
 					}
 					order.setOrderMRP(order.getOrderMRP() * order.getQuantity());
@@ -380,14 +389,14 @@ public class OrderDaoImpl implements OrderDao {
 							+ e.getLocalizedMessage() + " message: "
 							+ e.getMessage());
 					e.printStackTrace();
-					log.error("Failed!",e);
+					log.error("Failed!", e);
 				} finally {
 					session.close();
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
@@ -401,9 +410,11 @@ public class OrderDaoImpl implements OrderDao {
 
 		log.info("*** addPO Starts ***");
 		order.setPoOrder(true);
-		order.setOrderDate(new Date());
+		// order.setOrderDate(new Date());
+		
 		Seller seller = null;
-		//Date reconciledate = null;
+		Date reconciledate = null;
+		
 		Session session = null;
 		Partner partner = null;
 		Product product = null;
@@ -433,6 +444,12 @@ public class OrderDaoImpl implements OrderDao {
 							&& seller.getPartners().size() != 0) {
 						partner = seller.getPartners().get(0);
 					}
+					
+					reconciledate = getreconciledate(order, partner, order.getOrderDate());
+					if (reconciledate != null) {
+						order.setPaymentDueDate(reconciledate);
+					}
+					
 					order.setStatus("Shipped");
 					if (order.getPcName().equalsIgnoreCase(
 							GlobalConstant.PCMYNTRA)) {
@@ -455,10 +472,11 @@ public class OrderDaoImpl implements OrderDao {
 							* order.getQuantity());
 					order.setPoPrice(order.getPoPrice() * order.getQuantity());
 
-					order.setPartnerCommission(order.getProductConfig().getCommisionAmt()
+					order.setPartnerCommission(order.getProductConfig()
+							.getCommisionAmt() * order.getQuantity());
+					order.setDiscount(((order.getPoPrice() * order
+							.getProductConfig().getDiscount()) / 100)
 							* order.getQuantity());
-					order.setDiscount(((order.getPoPrice() *order
-							.getProductConfig().getDiscount()) / 100) * order.getQuantity());
 
 					// order.setTotalAmountRecieved(order.getNetRate());
 					order.setFinalStatus("In Process");
@@ -486,11 +504,13 @@ public class OrderDaoImpl implements OrderDao {
 					order.setEossValue(order.getEossValue()
 							* order.getQuantity());
 					order.getOrderTax().setTax(taxvalue * order.getQuantity());
-					order.getOrderTax().setTaxCategtory(productConfig.getTaxPoCategory());
-					
-					order.getOrderTax().setTaxToReturn(order.getProductConfig().getTaxSpAmt()
-							* order.getQuantity());
-					
+					order.getOrderTax().setTaxCategtory(
+							productConfig.getTaxPoCategory());
+
+					order.getOrderTax().setTaxToReturn(
+							order.getProductConfig().getTaxSpAmt()
+									* order.getQuantity());
+
 					if (order.getOrderId() != 0) {
 						System.out.println(" Saving edited order");
 						// Code for order timeline
@@ -515,18 +535,18 @@ public class OrderDaoImpl implements OrderDao {
 					session.getTransaction().commit();
 
 					TaxDetail taxDetails = new TaxDetail();
-					taxDetails.setBalanceRemaining(order.getOrderTax()
-							.getTax());
+					taxDetails
+							.setBalanceRemaining(order.getOrderTax().getTax());
 					taxDetails.setParticular(order.getOrderTax()
 							.getTaxCategtory());
 					taxDetails.setUploadDate(order.getOrderDate());
-					taxDetailService.addMonthlyTaxDetail(session,
-							taxDetails, sellerId);
+					taxDetailService.addMonthlyTaxDetail(session, taxDetails,
+							sellerId);
 					/*
 					 * session.getTransaction().commit(); session.close();
 					 */
 				} catch (Exception e) {
-					log.error("Failed!",e);
+					log.error("Failed!", e);
 					log.debug("Inside exception in add order "
 							+ e.getLocalizedMessage() + " message: "
 							+ e.getMessage());
@@ -539,7 +559,7 @@ public class OrderDaoImpl implements OrderDao {
 			return order;
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
@@ -563,7 +583,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.listOrderError,
 					new Date(), 3, GlobalConstant.listOrderErrorCode, e);
 		}
@@ -596,7 +616,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.listOrdersError,
 					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
 
@@ -619,8 +639,8 @@ public class OrderDaoImpl implements OrderDao {
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
 					.add(Restrictions.eq("poOrder", true))
-					.add(Restrictions.isNull("consolidatedOrder"))
-					.add(Restrictions.isNull("orderReturnOrRTO"));
+					.add(Restrictions.isNull("consolidatedOrder"));
+			// .add(Restrictions.isNull("orderReturnOrRTO"));
 
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			criteria.addOrder(org.hibernate.criterion.Order
@@ -632,7 +652,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.listOrdersError,
 					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
 		}
@@ -659,7 +679,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.getOrderError, new Date(),
 					3, GlobalConstant.getOrderErrorCode, e);
 
@@ -699,7 +719,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.getOrderError, new Date(),
 					3, GlobalConstant.getOrderErrorCode, e);
 
@@ -738,7 +758,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.getOrderError, new Date(),
 					3, GlobalConstant.getOrderErrorCode, e);
 		}
@@ -785,7 +805,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.findOrdersError,
 					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 		}
@@ -816,7 +836,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.deleteOrderError,
 					new Date(), 3, GlobalConstant.deleteOrderErrorCode, e);
 		}
@@ -852,12 +872,17 @@ public class OrderDaoImpl implements OrderDao {
 				order = seller.getOrders().get(0);
 
 				// Check condition 4 Events here
-				event = eventsService.isEventActiive(order.getOrderDate(), order.getPcName(), sellerId);
+				event = eventsService.isEventActiive(order.getOrderDate(),
+						order.getPcName(), sellerId);
 				if (event != null) {
-					if (event.getNrnReturnConfig().getReturnCalculatorEvent().equalsIgnoreCase("newTerms")) {
-						returnChargesCalculated = calculateReturnCharges(order,	orderReturn, sellerId, event.getNrnReturnConfig());
+					if (event.getNrnReturnConfig().getReturnCalculatorEvent()
+							.equalsIgnoreCase("newTerms")) {
+						returnChargesCalculated = calculateReturnCharges(order,
+								orderReturn, sellerId,
+								event.getNrnReturnConfig());
 					} else {
-						returnChargesCalculated = calculateReturnCharges(order,	orderReturn, sellerId);
+						returnChargesCalculated = calculateReturnCharges(order,
+								orderReturn, sellerId);
 					}
 				} else {
 					returnChargesCalculated = calculateReturnCharges(order,
@@ -999,7 +1024,7 @@ public class OrderDaoImpl implements OrderDao {
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.addReturnOrderError,
 					new Date(), 1, GlobalConstant.addReturnOrderErrorCode, e);
 
@@ -1008,92 +1033,89 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	@Override
-	 public List<Order> findOrders(String column, String value, int sellerId,
-	            boolean poOrder, boolean isSearch) throws CustomException {
+	public List<Order> findOrders(String column, String value, int sellerId,
+			boolean poOrder, boolean isSearch) throws CustomException {
 
-	        log.info("*** findOrders starts : OrderDaoImpl ***");
-	        /*String searchString = "order." + column;*/
-	        String searchString = column;
-	        System.out.println(" Inside Find order dao method searchString :" + searchString
-	                + " value :" + value + "   sellerId :" + sellerId);
+		log.info("*** findOrders starts : OrderDaoImpl ***");
+		/* String searchString = "order." + column; */
+		String searchString = column;
+		System.out.println(" Inside Find order dao method searchString :"
+				+ searchString + " value :" + value + "   sellerId :"
+				+ sellerId);
 
-	        log.debug(" Inside Find order dao method searchString :" + searchString
-	                + " value :" + value + "   sellerId :" + sellerId);
+		log.debug(" Inside Find order dao method searchString :" + searchString
+				+ " value :" + value + "   sellerId :" + sellerId);
 
-	        List<Order> orderlist = null;
-	        Criteria criteria = null;
-	        List tempList=null;
-	        Session session =null;
+		List<Order> orderlist = null;
+		Criteria criteria = null;
+		List tempList = null;
+		Session session = null;
 
-	        try {
-	             session=sessionFactory.openSession();
-	            session.beginTransaction();
-	            criteria = session.createCriteria(Order.class);
-	            criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
-	                    CriteriaSpecification.LEFT_JOIN);
-	            criteria.createAlias("seller", "seller",
-	                    CriteriaSpecification.LEFT_JOIN);
-	            criteria.add(
-	                    Restrictions.eq("seller.id", sellerId));
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			criteria = session.createCriteria(Order.class);
+			criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
+					CriteriaSpecification.LEFT_JOIN);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN);
+			criteria.add(Restrictions.eq("seller.id", sellerId));
 
-	            if (column.equals("returnOrRTOId")) {
-	                criteria.add(
-	                        Restrictions.like("orderReturnOrRTO.returnOrRTOId",
-	                                value + "%"));
-	                tempList=criteria.list();
-	                if (tempList!=null&&tempList.size() != 0) {
-	                    orderlist = tempList;
-	                    if (orderlist != null && orderlist.size() != 0) {
-	                        for (Order order : orderlist) {
-	                            Hibernate.initialize(order.getOrderTimeline());
-	                        }
-	                    }
-	                }
+			if (column.equals("returnOrRTOId")) {
+				criteria.add(Restrictions.like(
+						"orderReturnOrRTO.returnOrRTOId", value + "%"));
+				tempList = criteria.list();
+				if (tempList != null && tempList.size() != 0) {
+					orderlist = tempList;
+					if (orderlist != null && orderlist.size() != 0) {
+						for (Order order : orderlist) {
+							Hibernate.initialize(order.getOrderTimeline());
+						}
+					}
+				}
 
-	                return orderlist;
-	            } else {
+				return orderlist;
+			} else {
 
-	                if (isSearch == true) {
-	                    criteria.add(Restrictions.like(searchString, value + "%")
-	                            .ignoreCase());
-	                } else {
-	                    criteria.add(Restrictions.eq(searchString, value));
-	                }
-	                if (poOrder)
-	                    criteria.add(Restrictions.eq("consolidatedOrder",
-	                            null));
-	                criteria.add(Restrictions.eq("poOrder", poOrder))
-	                        .addOrder(
-	                                org.hibernate.criterion.Order
-	                                        .desc("lastActivityOnOrder"))
-	                        .setResultTransformer(
-	                                CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+				if (isSearch == true) {
+					criteria.add(Restrictions.like(searchString, value + "%")
+							.ignoreCase());
+				} else {
+					criteria.add(Restrictions.eq(searchString, value));
+				}
+				if (poOrder)
+					criteria.add(Restrictions.eq("consolidatedOrder", null));
+				criteria.add(Restrictions.eq("poOrder", poOrder))
+						.addOrder(
+								org.hibernate.criterion.Order
+										.desc("lastActivityOnOrder"))
+						.setResultTransformer(
+								CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
-	            
+			}
+			tempList = criteria.list();
+			if (tempList != null && tempList.size() != 0
+					&& tempList.get(0) != null) {
+				orderlist = tempList;
+				if (orderlist != null && orderlist.size() != 0) {
+					for (Order order : orderlist) {
+						Hibernate.initialize(order.getOrderTimeline());
+					}
+				}
+			}
+			session.getTransaction().commit();
+			session.close();
 
-	            }
-	            tempList=criteria.list();
-	            if (tempList!=null&&tempList.size() != 0&&tempList.get(0)!=null) {
-	                orderlist = tempList;
-	                if (orderlist != null && orderlist.size() != 0) {
-	                    for (Order order : orderlist) {
-	                        Hibernate.initialize(order.getOrderTimeline());
-	                    }
-	                }
-	            }
-	            session.getTransaction().commit();
-	            session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+			throw new CustomException(GlobalConstant.findOrdersError,
+					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            log.error("Failed!",e);
-	            throw new CustomException(GlobalConstant.findOrdersError,
-	                    new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
-
-	        }
-	        log.info("*** findOrders ends : OrderDaoImpl ***");
-	        return orderlist;
-	    }
+		}
+		log.info("*** findOrders ends : OrderDaoImpl ***");
+		return orderlist;
+	}
 
 	@Override
 	public List<Order> findOrdersbyDate(String column, Date startDate,
@@ -1104,7 +1126,7 @@ public class OrderDaoImpl implements OrderDao {
 		searchString = "order." + column;
 		Seller seller = null;
 		List<Order> orderlist = null;
-		List temp=null;
+		List temp = null;
 
 		try {
 			Session session = sessionFactory.openSession();
@@ -1120,8 +1142,8 @@ public class OrderDaoImpl implements OrderDao {
 			if (poOrder)
 				criteria.add(Restrictions.isNull("order.consolidatedOrder"));
 
-			temp=criteria.list();
-			if(temp != null && temp.size()!=0){
+			temp = criteria.list();
+			if (temp != null && temp.size() != 0) {
 				seller = (Seller) temp.get(0);
 				orderlist = seller.getOrders();
 			}
@@ -1137,7 +1159,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.findOrdersbyDateError,
 					new Date(), 2, GlobalConstant.findOrdersbyDateErrorCode, e);
 
@@ -1177,7 +1199,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(
 					GlobalConstant.findOrdersbyPaymentDateError, new Date(), 2,
 					GlobalConstant.findOrdersbyPaymentDateErrorCode, e);
@@ -1219,7 +1241,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			e.printStackTrace();
 			throw new CustomException(
 					GlobalConstant.findOrdersbyReturnDateError, new Date(), 2,
@@ -1264,7 +1286,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(
 					GlobalConstant.findOrdersbyCustomerDetailsError,
 					new Date(), 2,
@@ -1442,7 +1464,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.addOrderPaymentError,
 					new Date(), 1, GlobalConstant.addOrderPaymentErrorCode, e);
 
@@ -1629,7 +1651,7 @@ public class OrderDaoImpl implements OrderDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.addOrderPaymentError,
 					new Date(), 1, GlobalConstant.addOrderPaymentErrorCode, e);
 
@@ -1701,7 +1723,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.addDebitNoteError,
 					new Date(), 1, GlobalConstant.addDebitNoteErrorCode, e);
 		}
@@ -1785,7 +1807,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.addPOPaymentError,
 					new Date(), 1, GlobalConstant.addPOPaymentErrorCode, e);
 		}
@@ -1910,7 +1932,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 		log.debug(" ORder delivery date in rec : " + order.getDeliveryDate());
 		log.info("*** getreconciledate ends : OrderDaoImpl ***");
@@ -2168,7 +2190,8 @@ public class OrderDaoImpl implements OrderDao {
 					/ 100;
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
-			tds = ((comission / Double.parseDouble(props.getProperty("TDS"))) + ((fixedfee + pccAmount + shippingCharges) / 50))
+			tds = ((comission / Double.parseDouble(props.getProperty("TDS"))) + ((fixedfee
+					+ pccAmount + shippingCharges) / 50))
 					* order.getQuantity();
 			order.getOrderTax().setTdsToDeduct(tds);
 			order.setGrossNetRate(nrValue);
@@ -3244,7 +3267,6 @@ public class OrderDaoImpl implements OrderDao {
 
 		Order consolidatedOrder = new Order();
 		consolidatedOrder.setPoOrder(true);
-		consolidatedOrder.setOrderDate(new Date());
 
 		consolidatedOrder.setPcName(orderlist.get(0).getPcName());
 		consolidatedOrder.setSubOrderID(orderlist.get(0).getSubOrderID());
@@ -3253,6 +3275,9 @@ public class OrderDaoImpl implements OrderDao {
 		consolidatedOrder.setProductSkuCode(orderlist.size() + " SKUs");
 		consolidatedOrder.setInvoiceID(orderlist.get(0).getInvoiceID());
 		consolidatedOrder.setShippedDate(orderlist.get(0).getShippedDate());
+		consolidatedOrder.setOrderDate(orderlist.get(0).getOrderDate());
+		consolidatedOrder.setPaymentDueDate(orderlist.get(0).getPaymentDueDate());
+		consolidatedOrder.setSealNo(orderlist.get(0).getSealNo());
 
 		Seller seller = null;
 		Session session = null;
@@ -3305,11 +3330,11 @@ public class OrderDaoImpl implements OrderDao {
 
 			consolidatedOrder.setTotalAmountRecieved(consolidatedOrder
 					.getNetRate());
-			
+
 			consolidatedOrder.setPartnerCommission(partnerCommission);
 			consolidatedOrder.setDiscount(discount);
 			consolidatedOrder.getOrderTax().setTaxToReturn(taxSP);
-			
+
 			consolidatedOrder.setFinalStatus("In Process");
 			// Set Order Timeline
 			OrderTimeline timeline = new OrderTimeline();
@@ -3355,7 +3380,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.debug("Inside exception in add order "
 					+ e.getLocalizedMessage() + " message: " + e.getMessage());
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
@@ -3385,7 +3410,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.debug("Inside exception in add order "
 					+ e.getLocalizedMessage() + " message: " + e.getMessage());
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
@@ -3444,7 +3469,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.findOrdersError,
 					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 
@@ -3494,7 +3519,7 @@ public class OrderDaoImpl implements OrderDao {
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.addReturnOrderError,
 					new Date(), 1, GlobalConstant.addReturnOrderErrorCode, e);
 		}
@@ -3536,7 +3561,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.listOrdersError,
 					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
 		}
@@ -3610,9 +3635,10 @@ public class OrderDaoImpl implements OrderDao {
 					grossProfit += gatepass.getGrossProfit();
 					partnerCommission += productConfig.getCommisionAmt()
 							* gatepass.getQuantity();
-					discount += ((productConfig.getSuggestedPOPrice() *
-							productConfig.getDiscount()) / 100) * gatepass.getQuantity();
-					taxSP += productConfig.getTaxSpAmt() * gatepass.getQuantity();
+					discount += ((productConfig.getSuggestedPOPrice() * productConfig
+							.getDiscount()) / 100) * gatepass.getQuantity();
+					taxSP += productConfig.getTaxSpAmt()
+							* gatepass.getQuantity();
 				}
 			}
 
@@ -3688,7 +3714,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.debug("Inside exception in generateConsolidatedReturn "
 					+ e.getLocalizedMessage() + " message: " + e.getMessage());
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
@@ -3719,7 +3745,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.debug("Inside exception in update gatepass "
 					+ e.getLocalizedMessage() + " message: " + e.getMessage());
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
 					1, GlobalConstant.addOrderErrorCode, e);
 		} finally {
@@ -3773,7 +3799,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.findOrdersError,
 					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 
@@ -3783,24 +3809,155 @@ public class OrderDaoImpl implements OrderDao {
 		return poOrder;
 	}
 
+	@Override
+	public List<Order> findPOOrdersbyDate(String column, Date startDate,
+			Date endDate, int sellerId) throws CustomException {
+
+		log.info("*** findPOOrdersbyDate starts : OrderDaoImpl ***");
+		String searchString = null;
+		searchString = "order." + column;
+		Seller seller = null;
+		List<Order> orderlist = null;
+		List temp = null;
+
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
+			criteria.createAlias("orders", "order",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.between(searchString, startDate, endDate))
+					.add(Restrictions.eq("order.poOrder", true))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+
+			criteria.add(Restrictions.isNull("order.consolidatedOrder"));
+
+			temp = criteria.list();
+			if (temp != null && temp.size() != 0) {
+				seller = (Seller) temp.get(0);
+				orderlist = seller.getOrders();
+			}
+
+			if (orderlist != null && orderlist.size() != 0) {
+				for (Order order : orderlist) {
+					Hibernate.initialize(order.getOrderTimeline());
+				}
+			}
+			if (orderlist == null || orderlist.size() == 0)
+				System.out.println(" orderlist is null");
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+			throw new CustomException(GlobalConstant.findOrdersbyDateError,
+					new Date(), 2, GlobalConstant.findOrdersbyDateErrorCode, e);
+
+		}
+		log.info("*** findOrdersbyDate ends : OrderDaoImpl ***");
+		return orderlist;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PoPaymentDetailsBean> getPOPaymentDetails(int sellerId,
-			boolean isMonthly) {
+			String year) {
 		List<PoPaymentDetailsBean> poPaymentDetailsList = new ArrayList<PoPaymentDetailsBean>();
 
 		log.info("***getPOPaymentDetails starts***");
 		List<Object[]> results = null;
 
 		try {
-			Session session = sessionFactory.openSession();
+
+			DateFormatSymbols dfs = new DateFormatSymbols();
+			String[] months = dfs.getMonths();
+
+			List<Order> poOrderlist = new ArrayList<Order>();
+
+			DateFormat format = new SimpleDateFormat("d MMMM yyyy",
+					Locale.ENGLISH);
+
+			String dateString = "1 January " + year;
+			Date startDate = format.parse(dateString);
+
+			dateString = "31 December " + year;
+			Date endDate = format.parse(dateString);
+
+			poOrderlist = findOrdersbyDate("orderDate", startDate, endDate,
+					sellerId, true);
+
+			for (int month = 0; month < 12; month++) {
+				PoPaymentDetailsBean poPaymentBean = new PoPaymentDetailsBean();
+				poPaymentDetailsList.add(poPaymentBean);
+			}
+			
+			for (Order poOrder : poOrderlist) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(poOrder.getOrderDate());
+				
+				PoPaymentDetailsBean poPaymentBean = poPaymentDetailsList.get(cal.get(Calendar.MONTH) - 1);
+				
+				poPaymentBean.setPaymentDetail(months[cal.get(Calendar.MONTH)] + ", " + year);
+				
+				if (poOrder.getOrderReturnOrRTO() == null) {
+					poPaymentBean.setDebits(
+							poPaymentBean.getDebits() + poOrder.getPoPrice());
+					
+					poPaymentBean.setEoss(
+							poPaymentBean.getEoss() + poOrder.getEossValue());
+					
+					if (poOrder.getOrderPayment() != null) {
+						poPaymentBean.setPayments(
+								poPaymentBean.getPayments() + poOrder.getOrderPayment().getPositiveAmount());
+						
+						poPaymentBean.setPaymentDiff(
+								poPaymentBean.getPaymentDiff() + poOrder.getOrderPayment().getPaymentDifference());
+						
+						poPaymentBean.setClosingBal(
+								poPaymentBean.getClosingBal() + poOrder.getOrderPayment().getPaymentDifference());
+					} else {
+						poPaymentBean.setClosingBal(
+								poPaymentBean.getClosingBal() + poOrder.getPoPrice());
+					}
+				} else {
+					poPaymentBean.setDebits(
+							poPaymentBean.getDebits() - poOrder.getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted());
+					
+					poPaymentBean.setEoss(
+							poPaymentBean.getEoss() - poOrder.getEossValue());
+					
+					if (poOrder.getOrderPayment() != null) {
+						poPaymentBean.setPaymentDiff(
+								poPaymentBean.getPaymentDiff() + poOrder.getOrderPayment().getPaymentDifference());
+						
+						poPaymentBean.setClosingBal(
+								poPaymentBean.getClosingBal() + poOrder.getOrderPayment().getPaymentDifference());
+					} else {
+						poPaymentBean.setClosingBal(
+								poPaymentBean.getClosingBal() - poOrder.getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted());
+					}
+				}				
+			}
+			
+			Iterator<PoPaymentDetailsBean> poIterator = poPaymentDetailsList.iterator();
+			while (poIterator.hasNext()) {
+				PoPaymentDetailsBean poPaymentBean = poIterator.next();
+				if (poPaymentBean.getPaymentDetail() == null || 
+						"".equals(poPaymentBean.getPaymentDetail().trim())) {
+					poIterator.remove();
+				}
+			}
+
+			/*Session session = sessionFactory.openSession();
 			session.beginTransaction();
 
 			Query query;
 			Query eossPOQuery;
 			Query eossGPQuery;
 
-			if (isMonthly) {
+			if (true) {
 				query = session.createSQLQuery(monthlyPOPaymentQuery)
 						.setParameter("sellerId", sellerId);
 				eossPOQuery = session.createSQLQuery(monthlyEOSSPOQuery)
@@ -3824,13 +3981,18 @@ public class OrderDaoImpl implements OrderDao {
 					if (recordsRow[0] != null && recordsRow[1] != null
 							&& recordsRow[2] != null && recordsRow[3] != null
 							&& recordsRow[4] != null) {
-						
+
 						PoPaymentDetailsBean poPaymentBean = new PoPaymentDetailsBean();
-						poPaymentBean.setPaymentDetail(recordsRow[0].toString());
-						poPaymentBean.setDebits(Double.parseDouble(recordsRow[1].toString()));
-						poPaymentBean.setPayments(Double.parseDouble(recordsRow[2].toString()));
-						poPaymentBean.setPaymentDiff(Double.parseDouble(recordsRow[3].toString()));
-						poPaymentBean.setClosingBal(Double.parseDouble(recordsRow[4].toString()));
+						poPaymentBean
+								.setPaymentDetail(recordsRow[0].toString());
+						poPaymentBean.setDebits(Double
+								.parseDouble(recordsRow[1].toString()));
+						poPaymentBean.setPayments(Double
+								.parseDouble(recordsRow[2].toString()));
+						poPaymentBean.setPaymentDiff(Double
+								.parseDouble(recordsRow[3].toString()));
+						poPaymentBean.setClosingBal(Double
+								.parseDouble(recordsRow[4].toString()));
 						poPaymentDetailsList.add(poPaymentBean);
 					}
 				}
@@ -3843,8 +4005,9 @@ public class OrderDaoImpl implements OrderDao {
 					System.out.println("PO EOSS : row\n");
 					Object[] recordsRow = (Object[]) iterator1.next();
 					if (recordsRow[0] != null && recordsRow[1] != null) {
-						
-						eossValueList.add(Double.parseDouble(recordsRow[1].toString()));
+
+						eossValueList.add(Double.parseDouble(recordsRow[1]
+								.toString()));
 					}
 				}
 			}
@@ -3856,14 +4019,19 @@ public class OrderDaoImpl implements OrderDao {
 					System.out.println("GP EOSS : row\n");
 					Object[] recordsRow = (Object[]) iterator1.next();
 					if (recordsRow[0] != null && recordsRow[1] != null) {
-						eossValueList.set(i, eossValueList.get(i) - Double.parseDouble(recordsRow[1].toString()));
+						eossValueList.set(
+								i,
+								eossValueList.get(i)
+										- Double.parseDouble(recordsRow[1]
+												.toString()));
 						i++;
 					}
 				}
 			}
-			for(i=0; i<poPaymentDetailsList.size(); i++) {
-				poPaymentDetailsList.get(i).setEoss(eossValueList.get(i).doubleValue());
-			}
+			for (i = 0; i < poPaymentDetailsList.size(); i++) {
+				poPaymentDetailsList.get(i).setEoss(
+						eossValueList.get(i).doubleValue());
+			}*/
 		} catch (Exception e) {
 			log.debug("Inside exception  " + e.getLocalizedMessage());
 			e.printStackTrace();
@@ -3897,7 +4065,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.getOrderError, new Date(),
 					3, GlobalConstant.getOrderErrorCode, e);
 

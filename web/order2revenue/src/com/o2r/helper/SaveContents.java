@@ -532,7 +532,7 @@ public class SaveContents {
 							.getProductConfig(entry.getCell(2).toString(),
 									order.getPcName(), sellerId);
 					if (productConfig == null) {
-						errorMessage.append(" Product SKU does not exist ");
+						errorMessage.append(" Product configuration does not exist ");
 						validaterow = false;
 					} else {
 						order.setProductSkuCode(entry.getCell(2).toString());
@@ -655,6 +655,8 @@ public class SaveContents {
 					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(9))) {
 						order.setOrderDate(entry.getCell(9).getDateCellValue());
 						order.setShippedDate(entry.getCell(9)
+								.getDateCellValue());
+						order.setDeliveryDate(entry.getCell(9)
 								.getDateCellValue());
 					} else {
 						errorMessage.append(" Shipped Date format is wrong ");
@@ -1999,7 +2001,7 @@ public class SaveContents {
 
 				errorMessage = key.substring(key.indexOf(':') + 1);
 				int errorRow = Integer.parseInt(errorMessage.substring(0,
-						key.indexOf(':') - 2));
+						errorMessage.indexOf(':')));
 				errorMessage = errorMessage
 						.substring(errorMessage.indexOf(':') + 1);
 

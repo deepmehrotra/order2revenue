@@ -224,7 +224,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<PoPaymentDetailsBean> getPOPaymentDetails(int sellerId,
-			boolean isMonthly) {
-		return orderDao.getPOPaymentDetails(sellerId, isMonthly);
+			String year) {
+		return orderDao.getPOPaymentDetails(sellerId, year);
 	}
 }

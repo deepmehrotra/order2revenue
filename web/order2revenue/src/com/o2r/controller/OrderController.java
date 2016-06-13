@@ -429,6 +429,7 @@ public class OrderController {
 	public ModelAndView poOrderDetails(
 			HttpServletRequest request,
 			@ModelAttribute("command") PoPaymentDetailsBean poPaymentDetailsBean,
+			@RequestParam("value") String value,
 			BindingResult result) {
 
 		log.info("$$$ poOrderDetails Starts : OrderController $$$");
@@ -436,13 +437,19 @@ public class OrderController {
 		int sellerId;
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-
+			
+			String year = "";
+			if ("".equals(value.trim()) || value.equals("0")) {
+				Calendar c = Calendar.getInstance();
+				c.setTime(new Date());
+				year = String.valueOf(c.get(Calendar.YEAR));
+			} else {
+				year = value;
+			}
+		
 			List<PoPaymentDetailsBean> poPaymentList = orderService
-					.getPOPaymentDetails(sellerId, true);
+					.getPOPaymentDetails(sellerId, year);
 			model.put("poPaymentListMonthly", poPaymentList);
-
-			poPaymentList = orderService.getPOPaymentDetails(sellerId, false);
-			model.put("poPaymentListYearly", poPaymentList);
 
 		} catch (CustomException ce) {
 			log.error("viewOrderDailyAct exception : " + ce.toString());
@@ -867,7 +874,7 @@ public class OrderController {
 
 			if (dateRange) {
 				poOrderlist = ConverterClass.prepareListofBean(orderService
-						.findOrdersbyDate("shippedDate", startDate, endDate,
+						.findOrdersbyDate("orderDate", startDate, endDate,
 								sellerId, true));
 			} else {
 				int pageNo = request.getParameter("page") != null ? Integer

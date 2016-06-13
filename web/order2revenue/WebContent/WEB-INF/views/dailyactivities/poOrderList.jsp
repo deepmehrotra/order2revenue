@@ -58,7 +58,7 @@
     	break;
     	
     	case "viewPOOrderDetails" :
-    		targeturl="poOrderDetails.html";
+    		targeturl="poOrderDetails.html?value="+id;
     	break;
     	case "viewGatePassList" :
     		targeturl="gatepasslist.html";
@@ -215,7 +215,8 @@
 															<td><fmt:formatDate value="${poOrder.shippedDate}"
 																	pattern="MMM dd ,YY" /></td>
 															<td>${poOrder.invoiceID}</td>
-															<td>${poOrder.paymentDueDate}</td>
+															<td><fmt:formatDate value="${poOrder.paymentDueDate}"
+																	pattern="MMM dd ,YY" /></td>
 															<td><fmt:formatNumber type="number"
 																	maxFractionDigits="2" value="${poOrder.poPrice}" /></td>
 															<%-- <td><fmt:formatNumber type="number" maxFractionDigits="2"
