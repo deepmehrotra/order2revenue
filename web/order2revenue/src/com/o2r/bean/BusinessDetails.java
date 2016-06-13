@@ -9,6 +9,8 @@ public class BusinessDetails {
 	private double netSaleQty;
 	private double netSP;
 	private double netTDSToBeDeposited;
+	private double netTDS2;
+	private double netTDS10;
 	private double netPaymentResult;
 	private double paymentDifference;
 	private double netTaxableSale;
@@ -66,6 +68,22 @@ public class BusinessDetails {
 
 	public void setNetTDSToBeDeposited(double netTDSToBeDeposited) {
 		this.netTDSToBeDeposited = netTDSToBeDeposited;
+	}
+
+	public double getNetTDS2() {
+		return netTDS2;
+	}
+
+	public void setNetTDS2(double netTDS2) {
+		this.netTDS2 = netTDS2;
+	}
+
+	public double getNetTDS10() {
+		return netTDS10;
+	}
+
+	public void setNetTDS10(double netTDS10) {
+		this.netTDS10 = netTDS10;
 	}
 
 	public double getNetPaymentResult() {

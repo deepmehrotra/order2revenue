@@ -1458,6 +1458,8 @@ public class ConverterClass {
 			int netSaleQty = partnerBusiness.getNetSaleQuantity();
 			double netSP = partnerBusiness.getNetSP();
 			double netTDSToBeDeposited = partnerBusiness.getTdsToBeDeposited();
+			double netTDS2 = partnerBusiness.getTdsToBeDeducted2();
+			double netTDS10 = partnerBusiness.getTdsToBeDeducted10();
 			double netPaymentResult = partnerBusiness.getNetPaymentResult();
 			double paymentDifference = partnerBusiness.getPaymentDifference();
 			double netTaxableSale = partnerBusiness.getNetSP();
@@ -1475,6 +1477,8 @@ public class ConverterClass {
 				netSP += partnerBusinessGraph.getNetSP(); 
 				netSaleQty += partnerBusinessGraph.getNetSaleQty();
 				netTDSToBeDeposited += partnerBusinessGraph.getNetTDSToBeDeposited();
+				netTDS2 += partnerBusinessGraph.getNetTDS2();
+				netTDS10 += partnerBusinessGraph.getNetTDS10();
 				netPaymentResult += partnerBusinessGraph.getNetPaymentResult();
 				paymentDifference += partnerBusinessGraph.getPaymentDifference();
 				netTaxableSale += partnerBusinessGraph.getNetTaxableSale();
@@ -1494,6 +1498,8 @@ public class ConverterClass {
 			partnerBusinessGraph.setNetTDSToBeDeposited(netTDSToBeDeposited);
 			partnerBusinessGraph.setNetPaymentResult(netPaymentResult);
 			partnerBusinessGraph.setPaymentDifference(paymentDifference);
+			partnerBusinessGraph.setNetTDS2(netTDS2);
+			partnerBusinessGraph.setNetTDS10(netTDS10);
 			partnerBusinessGraph.setNetTaxableSale(netTaxableSale);
 			partnerBusinessGraph.setNetActualSale(netActualSale);
 			partnerBusinessGraph.setNetPrSale(netPrSale);

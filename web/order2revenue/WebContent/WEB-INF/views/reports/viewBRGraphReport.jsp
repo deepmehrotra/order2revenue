@@ -172,18 +172,30 @@
 															<thead>
 																<tr>
 																	<th>Partner</th>
-																	<th>Net NPR</th>
-																	<th>Net Payment Difference</th>
+																	<th>Net SP</th>
+																	<th>Net Commission Paid</th>
+																	<th>Net N/R</th>
+																	<th>Net Tax Paid</th>
+																	<th>Net P/R</th>
+																	<th>Net TDS to be deposited</th>
+																	<th>Net Cost of Product</th>
+																	<th>Gross Profit</th>
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty partnerByNetNPR}">
-																	<c:forEach items="${partnerByNetNPR}" var="partnerDto"
+																<c:if test="${!empty shortTablePartner}">
+																	<c:forEach items="${shortTablePartner}" var="partner"
 																		varStatus="loop">
 																		<tr>
-																			<td>${partnerDto.partner}</td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPaymentResult}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.paymentDifference}" /></td>
+																			<td>${partner.partner}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netSP}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPartnerCommissionPaid}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netActualSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netTaxToBePaid}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPrSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netTDSToBeDeposited}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netProductCost}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.grossProfit}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -357,18 +369,30 @@
 															<thead>
 																<tr>
 																	<th>Category</th>
-																	<th>Net NPR</th>
-																	<th>Net Payment Difference</th>
+																	<th>Net SP</th>
+																	<th>Net Commission Paid</th>
+																	<th>Net N/R</th>
+																	<th>Net Tax Paid</th>
+																	<th>Net P/R</th>
+																	<th>Net TDS to be deposited</th>
+																	<th>Net Cost of Product</th>
+																	<th>Gross Profit</th>
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty categoryByNetNPR}">
-																	<c:forEach items="${categoryByNetNPR}"
-																		var="categoryDto" varStatus="loop">
+																<c:if test="${!empty shortTableCategory}">
+																	<c:forEach items="${shortTableCategory}" var="category"
+																		varStatus="loop">
 																		<tr>
-																			<td>${categoryDto.categoryName}</td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netPaymentResult}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.paymentDifference}" /></td>
+																			<td>${category.categoryName}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netSP}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPartnerCommissionPaid}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netActualSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netTaxToBePaid}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPrSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netTDSToBeDeposited}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netProductCost}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.grossProfit}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -433,14 +457,19 @@
 															<thead>
 																<tr>
 																	<th>Partner</th>
-																	<th>Net SP</th>
-																	<th>Net Commission Paid</th>
-																	<th>Net N/R</th>
-																	<th>Net Tax Paid</th>
-																	<th>Net P/R</th>
-																	<th>Net TDS to be deposited</th>
-																	<th>Net Cost of Product</th>
+																	<th>Net Sale Qty</th>
 																	<th>Gross Profit</th>
+																	<th>Net P/R</th>
+																	<th>Net TDS to be deducted @ 2%</th>
+																	<th>Net TDS to be deducted @ 10%</th>
+																	<th>Net Payment Difference</th>
+																	<th>Net EOSS</th>
+																	<th>Net Payment Result</th>
+																	<th>Net Total SP</th>
+																	<th>Net Channel Commission Paid</th>
+																	<th>Net Tax to be paid</th>
+																	<th>Net Actual Sale</th>
+																	<th>Net TDS</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -449,14 +478,19 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${partner.partner}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netSaleQty}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.grossProfit}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPrSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netTDS2}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netTDS10}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.paymentDifference}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netEossDiscountPaid}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPaymentResult}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netSP}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPartnerCommissionPaid}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netActualSale}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netTaxToBePaid}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPrSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netActualSale}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netTDSToBeDeposited}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netProductCost}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.grossProfit}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -475,14 +509,19 @@
 															<thead>
 																<tr>
 																	<th>Category</th>
-																	<th>Net SP</th>
-																	<th>Net Commission Paid</th>
-																	<th>Net N/R</th>
-																	<th>Net Tax Paid</th>
-																	<th>Net P/R</th>
-																	<th>Net TDS to be deposited</th>
-																	<th>Net Cost of Product</th>
+																	<th>Net Sale Qty</th>
 																	<th>Gross Profit</th>
+																	<th>Net P/R</th>
+																	<th>Net TDS to be deducted @ 2%</th>
+																	<th>Net TDS to be deducted @ 10%</th>
+																	<th>Net Payment Difference</th>
+																	<th>Net EOSS</th>
+																	<th>Net Payment Result</th>
+																	<th>Net Total SP</th>
+																	<th>Net Channel Commission Paid</th>
+																	<th>Net Tax to be paid</th>
+																	<th>Net Actual Sale</th>
+																	<th>Net TDS</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -491,14 +530,19 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${category.categoryName}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netSaleQty}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.grossProfit}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPrSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netTDS2}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netTDS10}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.paymentDifference}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netEossDiscountPaid}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPaymentResult}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netSP}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPartnerCommissionPaid}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netActualSale}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netTaxToBePaid}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPrSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netActualSale}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netTDSToBeDeposited}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netProductCost}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.grossProfit}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -594,13 +638,16 @@
 		
 		 
 		var dataArr = [];
-		var yAxisText = 'Net Payment Result vs Payment Difference';
+		var yAxisText = 'Partner Fields';
 		var divId = "#stacked-chart-1";
-		var xAxisCategories = ['Net Payment Result', 'Payment Difference'];
+		var xAxisCategories = ['Net SP', 'Net Partner Commission Paid', 'Net Actual Sale', 'Net Tax To Be Paid', 'Net P/R Sale', 'Net TDS To Be Deposited', 'Net Product Cost', 'Gross Profit'];
 		<c:forEach items="${partnerByNetNPR}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.partner}';
-			data.data = [parseFloat(parseFloat('${partnerDto.netPaymentResult}').toFixed(2)), parseFloat(parseFloat('${partnerDto.paymentDifference}').toFixed(2))];
+			data.data = [parseFloat(parseFloat('${partnerDto.netSP}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netPartnerCommissionPaid}').toFixed(2))
+			             , parseFloat(parseFloat('${partnerDto.netActualSale}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netTaxToBePaid}').toFixed(2))
+			             , parseFloat(parseFloat('${partnerDto.netPrSale}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netTDSToBeDeposited}').toFixed(2))
+	            		 , parseFloat(parseFloat('${partnerDto.netProductCost}').toFixed(2)), parseFloat(parseFloat('${partnerDto.grossProfit}').toFixed(2))];
 			dataArr.push(data);
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);		  
@@ -648,20 +695,23 @@
 		</c:forEach>
 
 		var dataArr = [];
-		var yAxisText = 'Net Payment Result vs Payment Difference';
+		var yAxisText = 'Partner Fields';
 		var divId = "#stacked-chart-3";
-		var xAxisCategories = ['Net Payment Result', 'Payment Difference'];
+		var xAxisCategories = ['Net SP', 'Net Partner Commission Paid', 'Net Actual Sale', 'Net Tax To Be Paid', 'Net P/R Sale', 'Net TDS To Be Deposited', 'Net Product Cost', 'Gross Profit'];
 		<c:forEach items="${categoryByNetNPR}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.categoryName}';
-			data.data = [parseFloat(parseFloat('${partnerDto.netPaymentResult}').toFixed(2)), parseFloat(parseFloat('${partnerDto.paymentDifference}').toFixed(2))];
+			data.data = [parseFloat(parseFloat('${partnerDto.netSP}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netPartnerCommissionPaid}').toFixed(2))
+			             , parseFloat(parseFloat('${partnerDto.netActualSale}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netTaxToBePaid}').toFixed(2))
+			             , parseFloat(parseFloat('${partnerDto.netPrSale}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netTDSToBeDeposited}').toFixed(2))
+	            		 , parseFloat(parseFloat('${partnerDto.netProductCost}').toFixed(2)), parseFloat(parseFloat('${partnerDto.grossProfit}').toFixed(2))];
 			dataArr.push(data);
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);		  
 		
 		var dataArr = [];
 		var yAxisText = 'Net Taxable Sale vs Net Actual Sale vs Net P/R';
-		var divId = "#stacked-chart-2";
+		var divId = "#stacked-chart-4";
 		var xAxisCategories = ['Net Taxable Sale', 'Net Actual Sale', 'Net P/R'];
 		<c:forEach items="${categoryByNetTaxable}" var="partnerDto" varStatus="loop">
 			var data = {};
