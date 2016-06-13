@@ -102,6 +102,7 @@
 								<option value="gatepassSummary">GatePass Summary</option>
 								<option value="debitNoteSummary">Debit Note</option>
 								<option value="productSummary">Product Summary</option>
+								<option value="skuMapping">SKU Mapping</option>
 								<option value="productConfigSummary">Product Config
 									Summary</option>
 								<option value="inventorySummary">Inventory Summary</option>
@@ -136,6 +137,7 @@
 											<option value="gatepassSummary">GatePass Summary</option>
 											<option value="debitNoteSummary">Debit Note</option>
 											<option value="productSummary">Product Summary</option>
+											<option value="skuMapping">SKU Mapping</option>
 											<option value="productConfigSummary">Product Config
 												Summary</option>
 											<option value="inventorySummary">Inventory Summary</option>

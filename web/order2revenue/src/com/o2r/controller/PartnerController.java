@@ -439,7 +439,7 @@ public class PartnerController {
 
 		log.debug(" Nr calculayor value from bean : "
 				+ partnerBean.getNrnReturnConfig().isNrCalculator());
-		partnerBean.setPcName("Myntra");
+		partnerBean.setPcName("myntra");
 
 		Map<String, String[]> parameters = request.getParameterMap();
 		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
