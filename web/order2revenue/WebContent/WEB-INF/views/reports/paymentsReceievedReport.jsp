@@ -133,6 +133,48 @@
 														<table class="table table-bordered custom-table">
 															<thead>
 																<tr>
+																	<th>Partner</th>																	
+																	<c:if test="${!empty categories}">
+																		<c:forEach items="${categories}" var="category" varStatus="loop">
+																			<th>${category} NPR</th>
+																		</c:forEach>
+																	</c:if>
+																</tr>
+															</thead>
+															<tbody>
+																<c:set var="currPartner" value="" />
+																<c:if test="${!empty channelCatNPR}">
+																	<c:forEach items="${channelCatNPR}" var="partnerDto" varStatus="loop">
+																		<tr>
+																		<td>${partnerDto.partner}</td>
+																		<c:if test="${!empty partnerDto.netNPR}">
+																			<c:forEach items="${partnerDto.netNPR}" var="npr" varStatus="loop">
+																				<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${npr}" /></td>
+																			</c:forEach>
+																		</c:if>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div id="stacked-chart-3"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
 																	<th>Category</th>
 																	<th>Prepaid NPR</th>
 																	<th>COD NPR</th>
@@ -362,6 +404,25 @@
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);
 		
+		var dataArr = [];
+		var yAxisText = 'Category NPR Comparison';
+		var divId = "#stacked-chart-3";
+		var xAxisCategories = [];
+		<c:forEach items="${categories}" var="category" varStatus="loop">
+			xAxisCategories.push('${category}');
+		</c:forEach>
+		
+		<c:forEach items="${channelCatNPR}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.partner}';
+			data.data = [];
+			<c:forEach items="${partnerDto.netNPR}" var="npr" varStatus="loop">
+				data.data.push(parseFloat(parseFloat('${npr}').toFixed(2)));
+			</c:forEach>
+			dataArr.push(data);
+		</c:forEach>
+		stackChart(divId, yAxisText, dataArr);
+
 		var temp1 = [];
 		var partnerByNPR = [];
 		var i = 1;

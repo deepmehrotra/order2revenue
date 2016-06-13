@@ -3,6 +3,7 @@ package com.o2r.dao;
 import java.util.Date;
 import java.util.List;
 
+import com.o2r.bean.ChannelCatNPR;
 import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
@@ -42,6 +43,8 @@ public interface ReportsGeneratorDao {
 	public UploadReport getUploadLog(int id, int sellerId) throws CustomException;
 
 	public List<ChannelNPR> fetchChannelNPR(int sellerId, Date startDate, Date endDate, String criteria);
+
+	List<ChannelCatNPR> fetchChannelCatNPR(int sellerId, Date startDate, Date endDate, String criteria);
 
 	//public void addUploadReport(UploadReport uploadReport) throws CustomException;
 

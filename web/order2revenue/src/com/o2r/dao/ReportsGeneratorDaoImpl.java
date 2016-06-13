@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -23,6 +25,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.bean.ChannelCatNPR;
 import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
@@ -1184,6 +1187,64 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			commDetailsList.add(commDetails);
 		}
 		return commDetailsList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChannelCatNPR> fetchChannelCatNPR(int sellerId, Date startDate, Date endDate, String criteria) {
+		List<ChannelCatNPR> channelNPRList = new ArrayList<ChannelCatNPR>();
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		String mpOrderQueryStr = "select ot.pcName, pr.categoryName, sum(op.netPaymentResult) as 'NPR' from order_table ot, orderpay op " +
+				", product pr where ot.productSkuCode = pr.productSkuCode and ot.orderPayment_paymentId = op.paymentId and ot.poOrder = 0 " +
+				"and ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by ot.pcName, pr.categoryName order by ot.pcName";
+		Query mpOrderQuery = session.createSQLQuery(mpOrderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		List<Object[]> orderList = mpOrderQuery.list();
+		Set<String> categorySet = new HashSet<String>();
+		for(Object[] order: orderList){
+			categorySet.add(order[1].toString());
+		}
+		List<String> catList = new ArrayList<>();
+		catList.addAll(categorySet);
+		Map<String, ChannelCatNPR> channelCatMap = new HashMap<String, ChannelCatNPR>();
+		for(Object[] order: orderList){
+			String currPartner = order[0].toString();
+			ChannelCatNPR channelCatNPR = channelCatMap.get(currPartner);
+			List<Double> netNPRList;
+			if(channelCatNPR == null){
+				channelCatNPR = new ChannelCatNPR();
+				netNPRList = new ArrayList<Double>();
+				int counter = 0;
+				while(counter++ < catList.size()){
+					netNPRList.add(new Double(0));
+				}
+				channelCatNPR.setPartner(currPartner);
+				channelCatNPR.setNetNPR(netNPRList);
+			}
+			netNPRList = channelCatNPR.getNetNPR();
+			for(int index =0; index<catList.size(); index++){
+				String category = catList.get(index);
+				if(category.equals(order[1].toString())){
+					netNPRList.set(index, new Double(order[2].toString()));
+					break;
+				}
+			}
+			channelCatNPR.setNetNPR(netNPRList);
+			channelCatMap.put(currPartner, channelCatNPR);
+		}
+		
+		Iterator entries = channelCatMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, ChannelCatNPR> thisEntry = (Entry<String, ChannelCatNPR>) entries
+					.next();
+			ChannelCatNPR commDetails = thisEntry.getValue();
+			channelNPRList.add(commDetails);
+		}
+		
+		return channelNPRList;
 	}
 	
 	@SuppressWarnings("unchecked")

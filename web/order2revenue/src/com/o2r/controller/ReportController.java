@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.o2r.bean.BusinessDetails;
+import com.o2r.bean.ChannelCatNPR;
 import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
@@ -369,6 +372,10 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 					model.put("partnerByNPR", partnerChannelNprList);
 					List<ChannelNPR> categoryChannelNprList = reportGeneratorService.fetchChannelNPR(sellerId, startDate, endDate, "category");
 					model.put("categoryByNPR", categoryChannelNprList);
+					List<ChannelCatNPR> channelCatNprList = reportGeneratorService.fetchChannelCatNPR(sellerId, startDate, endDate, "");
+					Set<String> categories = getCategories(categoryChannelNprList); 
+					model.put("categories", categories);
+					model.put("channelCatNPR", channelCatNprList);
 				default: break;
 			}
 			
@@ -396,6 +403,14 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 		else
 			return new ModelAndView("reports/paymentsReceievedReport", model);		
 }
+
+	private Set<String> getCategories(List<ChannelNPR> channelCatNprList) {
+		Set<String> categorySet = new HashSet<String>();
+		for(ChannelNPR channelNPR: channelCatNprList){
+			categorySet.add(channelNPR.getCategory());
+		}
+		return categorySet;
+	}
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@RequestMapping(value = "/seller/downloadPartnerReport", method = RequestMethod.POST)
