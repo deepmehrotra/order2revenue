@@ -81,8 +81,7 @@ span .#error {
 	<!-- <script src="/O2R/seller/js/inspinia.js"></script> -->
  <script type="text/javascript">
  	function relodPage(id) { 		
- 		window.location.href = 'viewPartner.html?pcId='+id;
- 		//location.reload();	
+ 		window.location.href = 'viewPartner.html?pcId='+id; 			
  }
  
  </script>
