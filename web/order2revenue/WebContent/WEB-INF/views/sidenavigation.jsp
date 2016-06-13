@@ -93,9 +93,8 @@
 					<li class="active"><a href="orderList.html">Order</a></li>
 					<li><a href="poOrderList.html?value=">PO Orders</a></li>
 					<li><a href="#" onclick="onclickSideNavigation('RTO/Return')">RTO/Return</a></li>
-					<li><a href="gatepasslist.html">Gatepasses</a></li>
+					<li><a href="gatepasslist.html">Gate-Passes</a></li>
 					<li><a href="paymentUploadList.html">Payment</a></li>
-					<li><a href="#" onclick="onclickSideNavigation('Inventory')">Inventory</a></li>
 					<li><a href="expenselist.html">Expenses</a></li>
 
 				</ul></li>

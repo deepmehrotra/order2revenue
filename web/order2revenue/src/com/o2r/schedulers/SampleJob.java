@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import com.o2r.controller.AdminController;
 import com.o2r.model.Order;
+import com.o2r.model.Product;
+import com.o2r.model.ProductStockList;
 
 
 public class SampleJob {
@@ -88,11 +90,37 @@ public class SampleJob {
             
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.error("Failed!",e);
 		}	
 	}
 	
 	public void executeJobProductStockList(){
-		
+		try {
+			Session session = sessionFactory.openSession();
+			if(session != null)
+				session.beginTransaction();
+			Criteria criteria = session.createCriteria(Product.class);
+			java.util.List<Product> list = criteria.list();
+			ProductStockList stockList = null;
+			if(list != null && list.size() != 0){
+				for (Product product : list) {
+					stockList = new ProductStockList();
+					stockList.setCreatedDate(new Date());
+					stockList.setStockAvailable(product.getQuantity());
+					stockList.setUpdatedate(product.getProductDate().getDate());
+					stockList.setMonth(product.getProductDate().getMonth());
+					stockList.setYear(product.getProductDate().getYear());
+					stockList.setPrice(product.getProductPrice());
+					product.getClosingStocks().add(stockList);
+					session.saveOrUpdate(product);
+					session.saveOrUpdate(stockList);
+					log.info("PRODUCT ID : " + product.getProductId());
+				}
+			}
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			log.error("Failed!",e);
+		}
 	}
 	
 }
