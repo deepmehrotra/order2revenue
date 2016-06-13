@@ -232,7 +232,7 @@ public class ProductDaoImpl implements ProductDao {
 				productConfig.setSuggestedPOPrice(productConfig
 						.getPr() + productConfig.getTaxPoAmt());
 
-				if (productConfig.getChannelName().equalsIgnoreCase("Myntra")) {
+				if (productConfig.getChannelName().equalsIgnoreCase(GlobalConstant.PCMYNTRA)) {
 					productConfig.setEossDiscountValue((productConfig
 							.getSuggestedPOPrice() * productConfig
 							.getDiscount()) / 100);

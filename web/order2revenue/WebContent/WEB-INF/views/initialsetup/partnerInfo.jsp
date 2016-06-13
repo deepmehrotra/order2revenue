@@ -69,8 +69,8 @@
     }
     function onclickConfigurepartner(value) {
     	var urltogo="";
-    	if(value.localeCompare("Jabong") != 0){
-    		if(value.localeCompare("Myntra") != 0){
+    	if(value.localeCompare("jabong") != 0){
+    		if(value.localeCompare("myntra") != 0){
     			urltogo='addPartner.html?partnerName='+value;
     		}else{
     			urltogo='addMyntra.html?partnerName='+value;
@@ -82,8 +82,8 @@
     }
     function onclickEditpartner(id, name) {
     	var urltogo="";
-    	if(name.localeCompare("Jabong") != 0){
-    		if(name.localeCompare("Myntra") != 0){
+    	if(name.localeCompare("jabong") != 0){
+    		if(name.localeCompare("myntra") != 0){
     			urltogo='editPartner.html?pcId='+id;
     		}else{
     			urltogo='editMyntra.html?pcId='+id;

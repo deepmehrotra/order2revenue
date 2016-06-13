@@ -269,7 +269,7 @@ public class OrderDaoImpl implements OrderDao {
 					}
 
 					if ((int) order.getPoPrice() != 0
-							&& order.getPcName().equals("Myntra")) {
+							&& order.getPcName().equals(GlobalConstant.PCMYNTRA)) {
 						double taxvalue = order.getPoPrice()
 								- (order.getPoPrice() * (100 / (100 + taxpercent)));
 						order.setDiscount((Math.abs(order.getPoPrice()
