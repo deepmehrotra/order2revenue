@@ -101,7 +101,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 				</div>
 			</div>
 		</div>
-		<div class="panel-group" id="accordion1">
+		<div class="panel-group accordion" id="accordion1">
 			<div class="col-lg-12 order-info-block">
 				<div class="float-e-margins col-lg-12">
 					<div class="panel panel-default">

@@ -528,8 +528,8 @@ public class GlobalConstant {
 	public static final String TaxCategoryPrefix = "-taxCat-";
 	
 	// Channel Name
-	public static final String PCMYNTRA = "Myntra";
-	public static final String PCJABONG = "Jabong";
+	public static final String PCMYNTRA = "myntra";
+	public static final String PCJABONG = "jabong";
 
 	/*
 	 * public static final String
