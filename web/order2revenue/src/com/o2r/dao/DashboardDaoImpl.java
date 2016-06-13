@@ -78,9 +78,10 @@ public class DashboardDaoImpl implements DashboardDao {
 			+ "(ot.poOrder =0 OR (ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL ))and ot.seller_Id=:sellerId";
 	/*private static final String grossProfitForDurationQuery = "Select sum(grossProfit) from Order_Table ot where "
 			+ "ot.orderDate between :startDate AND :endDate and ot.seller_Id=:sellerId";
-	*/private static final String grossProfitForMPDurationQuery = "select sum((ot.pr-(prd.productPrice*ot.quantity))) "
-			+ "from order_table ot , Product prd where ot.productSkuCode=prd.productSkuCode and ot.shippedDate "
-			+ "between :startDate AND :endDate and ot.poOrder =0 and ot.seller_Id=:sellerId";
+	*/private static final String grossProfitForMPDurationQuery = "select sum((ot.pr-(prd.productPrice*ot.quantity)))"
+			+ " from order_table ot , Product prd where ot.productSkuCode=prd.productSkuCode "
+			+ "and ot.shippedDate between :startDate AND :endDate and "
+			+ "ot.poOrder =0 and ot.seller_Id=:sellerId";
 	private static final String grossProfitForMPReturnDurationQuery = "select sum(((ot.pr-(prd.productPrice*ot.quantity))/ot.quantity)"
 			+ "*orr.returnorrtoQty + orr.estimateddeduction) "
 			+ "from order_table ot , Product prd , orderreturn orr where ot.productSkuCode=prd.productSkuCode "
@@ -173,6 +174,7 @@ public class DashboardDaoImpl implements DashboardDao {
 		lastYearEnd.setYear(lastYearEnd.getYear() - 1);
 		thisYearSatrt.setDate(1);
 		thisYearSatrt.setMonth(0);
+		thisYearSatrt.setHours(0);
 		lastYearSatrt.setDate(1);
 		lastYearSatrt.setMonth(0);
 		lastYearSatrt.setYear(lastYearSatrt.getYear() - 1);
@@ -180,6 +182,7 @@ public class DashboardDaoImpl implements DashboardDao {
 		oneMonthBack.setDate(1);
 		oneMonthBack.setDate(oneMonthBack.getDate()-1);
 		thismonthstart.setDate(1);
+		thismonthstart.setHours(0);
 		sixMonthsBack.setDate(1);
 		sixMonthsBack.setMonth(sixMonthsBack.getMonth() - 5);
 		try {
@@ -202,9 +205,9 @@ public class DashboardDaoImpl implements DashboardDao {
 							.getProfitLastYear()) * 100);
 			}
 			dashboardBean.setSaleQuantityThisYear(netSaleQtyforTime(session,
-					lastYearEnd, todayDate, sellerId));
+					thisYearSatrt, todayDate, sellerId));
 			dashboardBean.setSaleQuantityLastYear(netSaleQtyforTime(session,
-					lastYearEnd, todayDate, sellerId));
+					lastYearSatrt, lastYearEnd, sellerId));
 			if ((int) dashboardBean.getSaleQuantityLastYear() != 0) {
 				if (dashboardBean.getSaleQuantityThisYear() > dashboardBean
 						.getSaleQuantityLastYear())
@@ -1280,6 +1283,7 @@ public class DashboardDaoImpl implements DashboardDao {
 		double sum = 0;
 		try {
 			session.beginTransaction();
+			session.flush();
 			Query gpquerryforMP = session.createSQLQuery(grossProfitForMPDurationQuery)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
@@ -1288,7 +1292,8 @@ public class DashboardDaoImpl implements DashboardDao {
 			if (results != null && results.size() != 0
 					&& results.get(0) != null) {
 				gpforMP = results.get(0);
-				
+				System.out.println("gpforMP "+gpforMP);
+			}
 			Query gpquerryforMPReturn = session.createSQLQuery(grossProfitForMPReturnDurationQuery)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
@@ -1323,7 +1328,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			System.out.println(" Calculating gp PO : gpforPO "+gpforPO+" gpforGP : "+gpforGP);
 				log.debug(results.get(0));
 				log.debug("Double" + sum);
-			}
+			
 		} catch (Exception e) {
 			log.error("Failed!",e);
 			log.debug("Inside pcount exception  "+ e.getLocalizedMessage());

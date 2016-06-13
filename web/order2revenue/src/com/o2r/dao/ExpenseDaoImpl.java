@@ -96,7 +96,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
 					.createAlias("expenseCategory", "expCat",
 							CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("expCat.expcategoryId", catId))
-					.add(Restrictions.between("createdOn", monthStartDate,tommorrowDate));
+					.add(Restrictions.between("expenseDate", monthStartDate,tommorrowDate));
 			criteriaforSkuCount.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			ProjectionList projList = Projections.projectionList();
 			projList.add(Projections.sum("amount"));
