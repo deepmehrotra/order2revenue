@@ -2,6 +2,7 @@ package com.o2r.dao;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -46,7 +47,8 @@ public class DashboardDaoImpl implements DashboardDao {
 	private SessionFactory sessionFactory;
 	@Autowired
 	private TaxDetailService taxDetailService;
-	
+	 String pattern = "yyyy-mm-dd";
+	    SimpleDateFormat format = new SimpleDateFormat(pattern);
 	static Logger log = Logger.getLogger(DashboardDaoImpl.class.getName());
 
 	private static final String stockValuationQuery = "Select sum(quantity*price) as valuation from(select ps.stockAvailable "
@@ -144,7 +146,7 @@ public class DashboardDaoImpl implements DashboardDao {
 	private static final String returnQtyinTimeQuery = "Select sum(ort.returnorrtoQty) as returnquantity from Order_Table ot"
 			+ " ,OrderReturn  ort where ort.returnDate between :startDate AND :endDate and "
 			+ "(ot.poOrder =0 OR (ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL )) and "
-			+ "ort.returnId=ot.orderReturnOrRTO_returnId and ot.poOrder =0 and ot.seller_Id=:sellerId";
+			+ "ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId";
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -1288,6 +1290,9 @@ public class DashboardDaoImpl implements DashboardDao {
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
 					.setParameter("sellerId", sellerId);
+					/*.setParameter("startDate", "2016-")
+					.setParameter("endDate", format.format(endDate))
+					.setParameter("sellerId", sellerId);*/
 			results = gpquerryforMP.list();
 			if (results != null && results.size() != 0
 					&& results.get(0) != null) {
