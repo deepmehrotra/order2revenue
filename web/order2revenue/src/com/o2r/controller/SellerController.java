@@ -449,6 +449,33 @@ public class SellerController {
 		}
 	}
 	
+	
+	@RequestMapping(value = "/seller/getSellerName", method = RequestMethod.GET)
+	public @ResponseBody String getSellerName(HttpServletRequest request) {
+		
+		log.info("$$$ getSellerName Starts : SellerController $$$");
+		//Map<String, Object> model = new HashMap<String, Object>();
+		Seller seller = null;
+		if(request.getSession().getAttribute("logoUrl")==null)
+		{
+			try {
+				seller=sellerService.getSeller(helperClass.getSellerIdfromSession(request));
+		
+			request.getSession().setAttribute("logoUrl", seller.getLogoUrl());
+			request.getSession().setAttribute("sellerName", seller.getName());
+			return "false";
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				log.error("Error getting seller ", e);
+			}
+			
+		}
+		return "true";
+		
+	}
+	
+	
 	private void validateImage(MultipartFile image) {
 		if (!image.getContentType().equals("image/jpeg")) {
 			throw new RuntimeException("Only JPG images are accepted");

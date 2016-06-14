@@ -11,7 +11,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 /**
  * Writes the report to the output stream
  * 
- * @author Krams at {@link http://krams915@blogspot.com}
+ * @author Deep Mehrotra
  */
 public class Writer {
 
