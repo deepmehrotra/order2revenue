@@ -1,0 +1,64 @@
+@import url(http://weloveiconfonts.com/api/?family=entypo);
+
+[class*="entypo-"]:before {
+   font-family: "entypo", sans-serif;
+}
+a { 
+   text-decoration: none;
+}
+ul
+{
+	list-style-type: none;
+}
+
+#sticky-social {
+   right: 0;
+   position: fixed;
+   top: 230px;
+   z-index: 99999;
+}
+
+#sticky-social a {
+   background: #333;
+   color: #fff;
+   display: block;
+   height: 35px;
+   font: 16px "Open Sans", sans-serif;
+   line-height: 35px;
+   position: relative;
+   text-align: center;
+   width: 32px;
+}
+
+#sticky-social a:hover span {
+   right: 100%;
+}
+
+#sticky-social a span {
+   line-height: 13px;
+   right: 0px;
+   position: absolute;
+   text-align:center;
+   width:31px;
+}
+
+#sticky-social a[class*="links"],
+#sticky-social a[class*="links"]:hover,
+#sticky-social a[class*="links"] span { background: #3b5998; }
+
+#sticky-social a[class*="links2"],
+#sticky-social a[class*="links2"]:hover,
+#sticky-social a[class*="links2"] span { background: #00aced; }
+
+#sticky-social a[class*="links3"],
+#sticky-social a[class*="links3"]:hover,
+#sticky-social a[class*="links3"] span { background: #dd4b39; }	
+
+#sticky-social a[class*="links4"],
+#sticky-social a[class*="links4"]:hover,
+#sticky-social a[class*="links4"] span { background: #007bb6; }	
+
+#sticky-social a[class*="links5"],
+#sticky-social a[class*="links5"]:hover,
+#sticky-social a[class*="links5"] span { background: #517fa4; }	
+
