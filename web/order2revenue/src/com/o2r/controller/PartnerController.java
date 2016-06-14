@@ -367,9 +367,16 @@ public class PartnerController {
 				if (entry.getKey().contains("nr-")) {
 					String temp = entry.getKey().substring(3);
 					NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-					nrnReturncharge.setChargeAmount(Float.parseFloat(entry
-							.getValue()[0]));
-					nrnReturncharge.setChargeName(temp);
+					try {
+						nrnReturncharge.setChargeAmount(Float.parseFloat(entry
+								.getValue()[0]));
+						nrnReturncharge.setChargeName(temp);
+					} catch (NumberFormatException e) {
+						nrnReturncharge.setChargeAmount(1);
+						nrnReturncharge.setChargeName(temp
+								+ GlobalConstant.TaxCategoryPrefix
+								+ entry.getValue()[0]);
+					}
 					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
 					partnerBean.getNrnReturnConfig().getCharges()
 							.add(nrnReturncharge);
@@ -527,7 +534,10 @@ public class PartnerController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
+		List<String> taxCategoryList = new ArrayList<String>();
 		List<Category> categoryObjects = null;
+		List<TaxCategory> taxCategoryObjects = null;
+		
 		datemap.put("true", "Select payment from");
 		datemap.put("true", "Shipping Date");
 		datemap.put("false", "Delivery Date");
@@ -538,6 +548,13 @@ public class PartnerController {
 			if(categoryObjects != null){
 				for (Category cat : categoryObjects) {
 					categoryList.add(cat.getCatName());
+				}
+			}
+			taxCategoryObjects = taxDetailService.listTaxCategories(helperClass
+					.getSellerIdfromSession(request));
+			if (taxCategoryObjects != null && taxCategoryObjects.size() > 0) {
+				for (TaxCategory taxCat : taxCategoryObjects) {
+					taxCategoryList.add(taxCat.getTaxCatName());
 				}
 			}
 		} catch (Exception e) {
@@ -551,6 +568,7 @@ public class PartnerController {
 			}
 			model.put("partner", partner);
 			model.put("categoryList", categoryList);
+			model.put("taxCategoryList", taxCategoryList);
 			model.put("datemap", datemap);
 		} catch (Exception e) {
 			e.printStackTrace();

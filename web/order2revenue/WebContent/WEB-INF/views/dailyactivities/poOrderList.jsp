@@ -92,9 +92,8 @@
 									<div class="table-menu-links">
 										<a href="orderList.html" id="Orders">MP Orders</a> <a href="#"
 											id="returnOrders">Return</a> <a href="gatepasslist.html"
-											id="gatepass">GatePass</a> <a href="#"
-											id="paymentOrders">Payment</a> <a href="#"
-											id="actionableOrders">Actionable</a>
+											id="gatepass">GatePass</a> <a href="#" id="paymentOrders">Payment</a>
+										<a href="#" id="actionableOrders">Actionable</a>
 									</div>
 								</div>
 								<div class="col-sm-12">
@@ -212,11 +211,11 @@
 																onclick="onclickNavigateOrder('viewPOOrder',${poOrder.orderId})">${poOrder.channelOrderID}</a></td>
 															<td>${poOrder.pcName}</td>
 															<%-- <td>${poOrder.productSkuCode}</td> --%>
-															<td><fmt:formatDate value="${poOrder.shippedDate}"
+															<td><fmt:formatDate value="${poOrder.orderDate}"
 																	pattern="MMM dd ,YY" /></td>
 															<td>${poOrder.invoiceID}</td>
-															<td><fmt:formatDate value="${poOrder.paymentDueDate}"
-																	pattern="MMM dd ,YY" /></td>
+															<td><fmt:formatDate
+																	value="${poOrder.paymentDueDate}" pattern="MMM dd ,YY" /></td>
 															<td><fmt:formatNumber type="number"
 																	maxFractionDigits="2" value="${poOrder.poPrice}" /></td>
 															<%-- <td><fmt:formatNumber type="number" maxFractionDigits="2"
@@ -293,7 +292,7 @@
                 responsive: true,
                 "dom": 'T<"clear">lfrtip',
                 "tableTools": {
-                    "sSwfPath": "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
+                    "sSwfPath": "/O2R/seller/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
                 }
         });
         

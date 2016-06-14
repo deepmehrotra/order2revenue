@@ -7,7 +7,7 @@ public class PoPaymentDetailsBean {
 	private double payments;
 	private double manualCharges;
 	private double eoss;
-	private double paymentDiff;
+	private double gatepass;
 	private double closingBal;
 	
 	public double getDebits() {
@@ -34,12 +34,6 @@ public class PoPaymentDetailsBean {
 	public void setEoss(double eoss) {
 		this.eoss = eoss;
 	}
-	public double getPaymentDiff() {
-		return paymentDiff;
-	}
-	public void setPaymentDiff(double paymentDiff) {
-		this.paymentDiff = paymentDiff;
-	}
 	public double getClosingBal() {
 		return closingBal;
 	}
@@ -51,6 +45,12 @@ public class PoPaymentDetailsBean {
 	}
 	public void setPaymentDetail(String paymentDetail) {
 		this.paymentDetail = paymentDetail;
+	}
+	public double getGatepass() {
+		return gatepass;
+	}
+	public void setGatepass(double gatepass) {
+		this.gatepass = gatepass;
 	}
 
 }

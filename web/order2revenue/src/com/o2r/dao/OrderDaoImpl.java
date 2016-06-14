@@ -31,7 +31,6 @@ import org.springframework.stereotype.Repository;
 
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.DebitNoteBean;
-import com.o2r.bean.OrderBean;
 import com.o2r.bean.PoPaymentBean;
 import com.o2r.bean.PoPaymentDetailsBean;
 import com.o2r.helper.CustomException;
@@ -88,76 +87,6 @@ public class OrderDaoImpl implements OrderDao {
 	private final int pageSize = 500;
 
 	static Logger log = Logger.getLogger(OrderDaoImpl.class.getName());
-
-	private static final String monthlyPOPaymentQuery = "SELECT concat(monthname(op.dateOfPayment), \" \", year(op.dateofPayment)) as Detail,"
-			+ "SUM(op.positiveAmount) as Debits, "
-			+ "SUM(op.negativeAmount) as Payments, "
-			+ "SUM(op.paymentDifference) as Peyment_Diff, "
-			+ "SUM(op.netPaymentResult) as Closing_Bal "
-			+ "FROM orderpay op INNER JOIN order_table ot "
-			+ "ON ot.orderPayment_paymentId = op.paymentId "
-			+ "AND ot.poOrder = true  "
-			+ "AND ot.consolidatedOrder_orderId IS NULL "
-			+ "AND ot.seller_Id=:sellerId "
-			+ "GROUP BY YEAR(op.dateOfPayment), MONTH(op.dateOfPayment) "
-			+ "order by YEAR(op.dateOfPayment), MONTH(op.dateOfPayment)";
-
-	private static final String yearlyPOPaymentQuery = "SELECT year(op.dateofPayment) as Year, "
-			+ "SUM(op.positiveAmount) as Debits, "
-			+ "SUM(op.negativeAmount) as Payments, "
-			+ "SUM(op.paymentDifference) as Peyment_Diff, "
-			+ "SUM(op.netPaymentResult) as Closing_Bal "
-			+ "FROM orderpay op INNER JOIN order_table ot "
-			+ "ON ot.orderPayment_paymentId = op.paymentId "
-			+ "AND ot.poOrder = true  "
-			+ "AND ot.consolidatedOrder_orderId IS NULL "
-			+ "AND ot.seller_Id=:sellerId "
-			+ "GROUP BY YEAR(op.dateOfPayment) "
-			+ "order by YEAR(op.dateOfPayment)";
-
-	private static final String monthlyEOSSPOQuery = "SELECT concat(monthname(op.dateOfPayment), \" \", year(op.dateofPayment)) as Detail,"
-			+ "SUM(ot.eossValue) as EOSS "
-			+ "FROM orderpay op INNER JOIN order_table ot "
-			+ "ON ot.orderPayment_paymentId = op.paymentId "
-			+ "AND ot.poOrder = true  "
-			+ "AND ot.consolidatedOrder_orderId IS NULL "
-			+ "AND ot.orderReturnOrRTO_returnId IS NULL "
-			+ "AND ot.seller_Id=:sellerId "
-			+ "GROUP BY YEAR(op.dateOfPayment), MONTH(op.dateOfPayment) "
-			+ "order by YEAR(op.dateOfPayment), MONTH(op.dateOfPayment)";
-
-	private static final String monthlyEOSSGPQuery = "SELECT concat(monthname(op.dateOfPayment), \" \", year(op.dateofPayment)) as Detail,"
-			+ "SUM(ot.eossValue) as EOSS "
-			+ "FROM orderpay op INNER JOIN order_table ot "
-			+ "ON ot.orderPayment_paymentId = op.paymentId "
-			+ "AND ot.poOrder = true  "
-			+ "AND ot.consolidatedOrder_orderId IS NULL "
-			+ "AND ot.orderReturnOrRTO_returnId IS NOT NULL "
-			+ "AND ot.seller_Id=:sellerId "
-			+ "GROUP BY YEAR(op.dateOfPayment), MONTH(op.dateOfPayment) "
-			+ "order by YEAR(op.dateOfPayment), MONTH(op.dateOfPayment)";
-
-	private static final String yearlyEOSSPOQuery = "SELECT year(op.dateofPayment) as Year, "
-			+ "SUM(ot.eossValue) as EOSS "
-			+ "FROM orderpay op INNER JOIN order_table ot "
-			+ "ON ot.orderPayment_paymentId = op.paymentId "
-			+ "AND ot.poOrder = true  "
-			+ "AND ot.consolidatedOrder_orderId IS NULL "
-			+ "AND ot.orderReturnOrRTO_returnId IS NULL "
-			+ "AND ot.seller_Id=:sellerId "
-			+ "GROUP BY YEAR(op.dateOfPayment) "
-			+ "order by YEAR(op.dateOfPayment)";
-
-	private static final String yearlyEOSSGPQuery = "SELECT year(op.dateofPayment) as Year, "
-			+ "SUM(ot.eossValue) as EOSS "
-			+ "FROM orderpay op INNER JOIN order_table ot "
-			+ "ON ot.orderPayment_paymentId = op.paymentId "
-			+ "AND ot.poOrder = true  "
-			+ "AND ot.consolidatedOrder_orderId IS NULL "
-			+ "AND ot.orderReturnOrRTO_returnId IS NOT NULL "
-			+ "AND ot.seller_Id=:sellerId "
-			+ "GROUP BY YEAR(op.dateOfPayment) "
-			+ "order by YEAR(op.dateOfPayment)";
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -494,7 +423,7 @@ public class OrderDaoImpl implements OrderDao {
 						partner.getOrders().add(order);
 					}
 					// Setting Gross Profit for Order
-					order.setGrossProfit((order.getPr() * order.getQuantity())
+					order.setGrossProfit(order.getPr()
 							- (order.getProductConfig().getProductPrice() * order
 									.getQuantity()));
 
@@ -3857,15 +3786,12 @@ public class OrderDaoImpl implements OrderDao {
 		return orderlist;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<PoPaymentDetailsBean> getPOPaymentDetails(int sellerId,
 			String year) {
 		List<PoPaymentDetailsBean> poPaymentDetailsList = new ArrayList<PoPaymentDetailsBean>();
 
 		log.info("***getPOPaymentDetails starts***");
-		List<Object[]> results = null;
-
 		try {
 
 			DateFormatSymbols dfs = new DateFormatSymbols();
@@ -3895,6 +3821,7 @@ public class OrderDaoImpl implements OrderDao {
 				cal.setTime(poOrder.getOrderDate());
 				
 				PoPaymentDetailsBean poPaymentBean = poPaymentDetailsList.get(cal.get(Calendar.MONTH) - 1);
+				PoPaymentDetailsBean poPaymentBeanOrderPay;
 				
 				poPaymentBean.setPaymentDetail(months[cal.get(Calendar.MONTH)] + ", " + year);
 				
@@ -3905,130 +3832,49 @@ public class OrderDaoImpl implements OrderDao {
 					poPaymentBean.setEoss(
 							poPaymentBean.getEoss() + poOrder.getEossValue());
 					
-					if (poOrder.getOrderPayment() != null) {
-						poPaymentBean.setPayments(
-								poPaymentBean.getPayments() + poOrder.getOrderPayment().getPositiveAmount());
-						
-						poPaymentBean.setPaymentDiff(
-								poPaymentBean.getPaymentDiff() + poOrder.getOrderPayment().getPaymentDifference());
-						
-						poPaymentBean.setClosingBal(
-								poPaymentBean.getClosingBal() + poOrder.getOrderPayment().getPaymentDifference());
-					} else {
-						poPaymentBean.setClosingBal(
-								poPaymentBean.getClosingBal() + poOrder.getPoPrice());
-					}
 				} else {
-					poPaymentBean.setDebits(
-							poPaymentBean.getDebits() - poOrder.getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted());
+					poPaymentBean.setGatepass(
+							poPaymentBean.getGatepass() + poOrder.getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted());
 					
 					poPaymentBean.setEoss(
 							poPaymentBean.getEoss() - poOrder.getEossValue());
+				}
+				
+				if (poOrder.getOrderPayment() != null) {
 					
-					if (poOrder.getOrderPayment() != null) {
-						poPaymentBean.setPaymentDiff(
-								poPaymentBean.getPaymentDiff() + poOrder.getOrderPayment().getPaymentDifference());
-						
-						poPaymentBean.setClosingBal(
-								poPaymentBean.getClosingBal() + poOrder.getOrderPayment().getPaymentDifference());
-					} else {
-						poPaymentBean.setClosingBal(
-								poPaymentBean.getClosingBal() - poOrder.getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted());
-					}
-				}				
+					Calendar calOrderPay = Calendar.getInstance();
+					calOrderPay.setTime(poOrder.getOrderPayment().getDateofPayment());
+					
+					poPaymentBeanOrderPay = poPaymentDetailsList.get(calOrderPay.get(Calendar.MONTH) - 1);
+					poPaymentBeanOrderPay.setPaymentDetail(months[calOrderPay.get(Calendar.MONTH)] + ", " + year);
+					
+					poPaymentBeanOrderPay.setPayments(
+							poPaymentBeanOrderPay.getPayments() + poOrder.getOrderPayment().getNetPaymentResult());
+				
+				}
 			}
 			
 			Iterator<PoPaymentDetailsBean> poIterator = poPaymentDetailsList.iterator();
+			double prevClosingBal = 0;
+			
 			while (poIterator.hasNext()) {
+					
 				PoPaymentDetailsBean poPaymentBean = poIterator.next();
+				
 				if (poPaymentBean.getPaymentDetail() == null || 
 						"".equals(poPaymentBean.getPaymentDetail().trim())) {
 					poIterator.remove();
+				} else {
+					poPaymentBean.setClosingBal(prevClosingBal
+							+ poPaymentBean.getDebits()
+							- poPaymentBean.getGatepass()
+							- poPaymentBean.getPayments()
+							- poPaymentBean.getManualCharges()
+							- poPaymentBean.getEoss());
+					
+					prevClosingBal = poPaymentBean.getClosingBal();
 				}
 			}
-
-			/*Session session = sessionFactory.openSession();
-			session.beginTransaction();
-
-			Query query;
-			Query eossPOQuery;
-			Query eossGPQuery;
-
-			if (true) {
-				query = session.createSQLQuery(monthlyPOPaymentQuery)
-						.setParameter("sellerId", sellerId);
-				eossPOQuery = session.createSQLQuery(monthlyEOSSPOQuery)
-						.setParameter("sellerId", sellerId);
-				eossGPQuery = session.createSQLQuery(monthlyEOSSGPQuery)
-						.setParameter("sellerId", sellerId);
-			} else {
-				query = session.createSQLQuery(yearlyPOPaymentQuery)
-						.setParameter("sellerId", sellerId);
-				eossPOQuery = session.createSQLQuery(yearlyEOSSPOQuery)
-						.setParameter("sellerId", sellerId);
-				eossGPQuery = session.createSQLQuery(yearlyEOSSGPQuery)
-						.setParameter("sellerId", sellerId);
-			}
-			results = query.list();
-			Iterator iterator1 = results.iterator();
-			if (results != null) {
-				while (iterator1.hasNext()) {
-					System.out.println("PO Payment : row\n");
-					Object[] recordsRow = (Object[]) iterator1.next();
-					if (recordsRow[0] != null && recordsRow[1] != null
-							&& recordsRow[2] != null && recordsRow[3] != null
-							&& recordsRow[4] != null) {
-
-						PoPaymentDetailsBean poPaymentBean = new PoPaymentDetailsBean();
-						poPaymentBean
-								.setPaymentDetail(recordsRow[0].toString());
-						poPaymentBean.setDebits(Double
-								.parseDouble(recordsRow[1].toString()));
-						poPaymentBean.setPayments(Double
-								.parseDouble(recordsRow[2].toString()));
-						poPaymentBean.setPaymentDiff(Double
-								.parseDouble(recordsRow[3].toString()));
-						poPaymentBean.setClosingBal(Double
-								.parseDouble(recordsRow[4].toString()));
-						poPaymentDetailsList.add(poPaymentBean);
-					}
-				}
-			}
-			List<Double> eossValueList = new ArrayList<Double>();
-			results = eossPOQuery.list();
-			iterator1 = results.iterator();
-			if (results != null) {
-				while (iterator1.hasNext()) {
-					System.out.println("PO EOSS : row\n");
-					Object[] recordsRow = (Object[]) iterator1.next();
-					if (recordsRow[0] != null && recordsRow[1] != null) {
-
-						eossValueList.add(Double.parseDouble(recordsRow[1]
-								.toString()));
-					}
-				}
-			}
-			results = eossGPQuery.list();
-			iterator1 = results.iterator();
-			int i = 0;
-			if (results != null) {
-				while (iterator1.hasNext()) {
-					System.out.println("GP EOSS : row\n");
-					Object[] recordsRow = (Object[]) iterator1.next();
-					if (recordsRow[0] != null && recordsRow[1] != null) {
-						eossValueList.set(
-								i,
-								eossValueList.get(i)
-										- Double.parseDouble(recordsRow[1]
-												.toString()));
-						i++;
-					}
-				}
-			}
-			for (i = 0; i < poPaymentDetailsList.size(); i++) {
-				poPaymentDetailsList.get(i).setEoss(
-						eossValueList.get(i).doubleValue());
-			}*/
 		} catch (Exception e) {
 			log.debug("Inside exception  " + e.getLocalizedMessage());
 			e.printStackTrace();

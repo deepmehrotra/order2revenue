@@ -125,6 +125,7 @@ public class GlobalConstant {
 		put("Overheads","Overheads");
 		put("Taxable Purchases","Taxable Purchases");
 	    put("Tax/TDS","Tax/TDS");
+	    put("Manual Charges","Manual Charges");
 	}};
 
 	/* Null Area */
