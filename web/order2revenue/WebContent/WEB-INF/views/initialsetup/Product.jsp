@@ -91,12 +91,14 @@
                                     <td>${product.productPrice}</td>
                                     <td>${product.categoryName}</td>
                                     <td>${product.quantity}</td>
-                                     <td>${product.threholdLimit}</td>
-                                      <td>${product.channelSKU}</td>
-                                        <td class="tooltip-demo">
-                           <a href="editProduct.html?id=${product.productId}"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a>
-   							<a href="javascript:show('${product.productName}','${product.productSkuCode}')"  ><i class="fa fa-edit text-navy" data-toggle="modal" data-target="#myModal" data-placement="top" data-original-title="Update Inventory"></i></a>
- 							</td>
+                                    <td>${product.threholdLimit}</td>
+                                    <td>${product.channelSKU}</td>
+                                    <td class="tooltip-demo">
+			                           	<a href="editProduct.html?id=${product.productId}"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a>
+			   							<a href="javascript:show('${product.productName}','${product.productSkuCode}')"  ><i class="fa fa-recycle text-navy" data-toggle="modal" data-target="#myModal" data-placement="top" data-original-title="Update"></i></a>
+			   							<a href="deleteProduct.html?id=${product.productId}"  ><i class="fa fa-trash text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Delete"></i></a>
+			   							<input type="hidden" value="${status}" name="delStatus"/>
+ 									</td>
 
                                 </tr>
                                 </c:forEach>
@@ -194,6 +196,15 @@
 <script>
  var globalValue="Mahesh kOLLIPAR";
     $(document).ready(function(){
+    	
+    	var status=document.getElementsByName("delStatus");
+    	alert(status);
+    	if(status != false){
+    		alert("Product Deleted Successfully !!!");
+    	}else{
+    		alert("Product Can't Be Deleted !!!");
+    	}
+    	
         $('.dataTables-example').dataTable({
                 responsive: true,
                 "dom": 'T<"clear">lfrtip',

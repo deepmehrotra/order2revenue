@@ -23,6 +23,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Repository;
 
 import com.o2r.helper.CustomException;
@@ -52,6 +54,9 @@ public class SellerDaoImpl implements SellerDao {
 	private ExpenseService expenseService;
 
 	static Logger log = Logger.getLogger(SellerDaoImpl.class.getName());
+	
+	org.springframework.core.io.Resource resource = new ClassPathResource("database.properties");
+	Properties props = null;
 	
 	private static final String deliveryTimeDeleteQuery = "delete from seller_state_deliverytime  where seller_id=:sellerId";
 	private static final String assignRole="INSERT INTO seller_roles (`role_id`, `seller_id`) VALUES ('2', :sellerId)";
@@ -116,10 +121,11 @@ public class SellerDaoImpl implements SellerDao {
 					session.saveOrUpdate(sellerNew);				
 				
 			}else{
+				props = PropertiesLoaderUtils.loadProperties(resource);
 				int r1=random.nextInt((999 - 111) + 1) + 111;
 				int r2=random.nextInt((999 - 111) + 1) + 111;
 				verCode="O2R"+r1+"USER"+r2;
-				verificationLink = "http://localhost:8080/verify.html?code="+verCode;
+				verificationLink = (props.getProperty("mailPathURL"))+verCode;
 				seller.setVerCode(verCode);
 				session.saveOrUpdate(seller);
 				sendMail(seller.getEmail(),verificationLink);
@@ -479,11 +485,15 @@ public class SellerDaoImpl implements SellerDao {
 		log.info("*** updateProcessedOrdersCount Ends : SellerDaoImpl ****");
 	}	
 	
-	public void sendMail(String email, String verificationLink)throws CustomException{
+	public void sendMail(String email, String verificationLink)throws Exception{
 		
 			
-		final String from="order2revenue@gmail.com";
-		
+			try{
+				props = PropertiesLoaderUtils.loadProperties(resource);					
+			}catch(Exception e){
+				log.error("Failed!",e);
+			}
+			final String from=props.getProperty("mailFrom");
 			
 			Properties prop = new Properties();
 			prop.put("mail.smtp.starttls.enable", "true");
@@ -494,7 +504,7 @@ public class SellerDaoImpl implements SellerDao {
 			javax.mail.Session session = javax.mail.Session.getInstance(prop,
 					new javax.mail.Authenticator() {
 						protected PasswordAuthentication getPasswordAuthentication() {
-							return new PasswordAuthentication(from, "O2R!098_");
+							return new PasswordAuthentication(from, props.getProperty("fromMailPassword"));
 						}
 					});
 
