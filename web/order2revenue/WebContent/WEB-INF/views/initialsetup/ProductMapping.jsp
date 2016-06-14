@@ -277,7 +277,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
                 responsive: true,
                 "dom": 'T<"clear">lfrtip',
                 "tableTools": {
-                    "sSwfPath": "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
+                    "sSwfPath": "/O2R/seller/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
                 }
         });
         

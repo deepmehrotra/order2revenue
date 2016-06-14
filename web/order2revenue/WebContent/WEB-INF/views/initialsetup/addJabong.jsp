@@ -164,9 +164,7 @@ span .#error {
 							<label> ALIAS NAME &nbsp; &nbsp; &nbsp; <form:input
 									path="pcDesc" value="${partner.pcDesc}" class="form-control" />
 							</label>
-
 							<div class="col-sm-12">
-								<div class="hr-line-dashed"></div>
 								<div class="col-sm-4">
 									<div class="radio">
 										<label>NET COMMISSION</label>
@@ -175,9 +173,9 @@ span .#error {
 								<div class="col-sm-4">
 									<div class="radio">
 										<label> <form:radiobutton
-												path="nrnReturnConfig.commissionType" value="fixed" id="4"
-												name="toggler" onChange="handleRadioEvent(this);"
-												class="commissionType" />FIXED
+												path="nrnReturnConfig.commissionType" value="fixed"
+												id="commissionType-fixed" name="toggler"
+												onChange="handleRadioEvent(this);" class="commissionType" />FIXED
 										</label>
 									</div>
 								</div>
@@ -185,36 +183,57 @@ span .#error {
 									<div class="radio">
 										<label> <form:radiobutton
 												path="nrnReturnConfig.commissionType" value="categoryWise"
-												id="5" class="commissionType" name="toggler"
-												onChange="handleRadioEvent(this);" /> CATEGORY WISE
+												id="commissionType-categoryWise" class="commissionType"
+												name="toggler" onChange="handleRadioEvent(this);" />
+											CATEGORY WISE
 										</label>
 									</div>
 								</div>
-								<div class="col-sm-12 radio1" id="blk-4">
+								<div class="col-sm-12 radio1" id="blk-commissionType-fixed">
 									<div class="row">
-										<div class="input-group m-b col-md-4">
-											<input type="text" class="form-control"
-												name="nr-fixedCommissionPercent"
-												value="${fixedCommissionPercent}"> <span
-												class="input-group-addon">%</span>
+										<div class="col-md-12">
+											<div class="input-group m-b col-md-4">
+												<input type="text" class="form-control"
+													name="nr-fixedCommissionPercent"
+													value="${chargeMap.fixedCommissionPercent}"> <span
+													class="input-group-addon">%</span>
+											</div>
 										</div>
 									</div>
 								</div>
-								<div class="col-sm-12 radio1" id="blk-5">
+								<div class="col-sm-12 radio1"
+									id="blk-commissionType-categoryWise">
 									<div class="row">
-										<div class="col-md-4">
-											<c:if test="${!empty categoryList}">
-												<c:forEach items="${categoryList}" var="category"
-													varStatus="loop">
-													<div class="form-group col-md-12">
-														<label class="col-md-4 control-label">${category}</label>
-														<div class="input-group m-b col-md-4">
-															<input type="text" class="form-control"
-																name='nr-comm-${category}'>
+										<div class="col-md-12">
+											<c:choose>
+												<c:when test="${!empty commissionMap}">
+													<c:forEach items="${commissionMap}" var="cat"
+														varStatus="loop">
+														<div class="form-group col-md-12">
+															<label class="col-md-4 control-label">${cat.key}</label>
+															<div class="input-group m-b col-md-4">
+																<input type="text" class="form-control validateNumber "
+																	name='nr-comm-${cat.key}' value='${cat.value}'
+																	id='categoryWiseCommission'> <span
+																	class="input-group-addon">%</span>
+															</div>
 														</div>
-													</div>
-												</c:forEach>
-											</c:if>
+													</c:forEach>
+												</c:when>
+												<c:when test="${!empty categoryList}">
+													<c:forEach items="${categoryList}" var="category"
+														varStatus="loop">
+														<div class="form-group col-md-12">
+															<label class="col-md-4 control-label">${category}</label>
+															<div class="input-group m-b col-md-4">
+																<input type="text" class="form-control validateNumber"
+																	name='nr-comm-${category}'>
+																<!--   <span class="input-group-addon">%</span> -->
+															</div>
+														</div>
+													</c:forEach>
+												</c:when>
+											</c:choose>
 										</div>
 									</div>
 								</div>
@@ -229,43 +248,50 @@ span .#error {
 								<div class="col-sm-4">
 									<div class="radio">
 										<label> <form:radiobutton
-												path="nrnReturnConfig.taxSpType" value="fixed" id="6"
-												name="toggler" onChange="handleRadioEvent(this);"
-												class="taxSpType" />FIXED
+												path="nrnReturnConfig.taxSpType" value="fixed"
+												id="taxSpType-fixed" name="toggler"
+												onChange="handleRadioEvent(this);" class="taxSpType" />FIXED
 										</label>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="radio">
 										<label> <form:radiobutton
-												path="nrnReturnConfig.taxSpType" value="categoryWise" id="7"
-												class="taxSpType" name="toggler"
-												onChange="handleRadioEvent(this);" /> CATEGORY WISE
+												path="nrnReturnConfig.taxSpType" value="categoryWise"
+												id="taxSpType-categoryWise" class="taxSpType" name="toggler"
+												onChange="handleRadioEvent(this);" />CATEGORY WISE
 										</label>
 									</div>
 								</div>
-
-								<div class="col-sm-12 radio1" id="blk-6">
+								<div class="col-sm-12 radio1" id="blk-taxSpType-fixed">
 									<div class="row">
-										<div class="input-group m-b col-md-4">
-											<input type="text" class="form-control"
-												name="nr-fixedTaxSpPercent"
-												value="${fixedCommissionPercent}"> <span
-												class="input-group-addon">%</span>
+										<div class="col-md-12">
+											<div class="input-group m-b col-md-4">
+												<select name="nr-fixedTaxSpPercent" class="form-control">
+													<option></option>
+													<c:forEach items="${taxCategoryList}" var="taxCategory">
+														<option>${taxCategory}</option>
+													</c:forEach>
+												</select>
+											</div>
 										</div>
 									</div>
 								</div>
-								<div class="col-sm-12 radio1" id="blk-7">
+								<div class="col-sm-12 radio1" id="blk-taxSpType-categoryWise">
 									<div class="row">
-										<div class="col-md-4">
+										<div class="col-md-12">
 											<c:if test="${!empty categoryList}">
 												<c:forEach items="${categoryList}" var="category"
 													varStatus="loop">
 													<div class="form-group col-md-12">
 														<label class="col-md-4 control-label">${category}</label>
 														<div class="input-group m-b col-md-4">
-															<input type="text" class="form-control"
-																name='nr-taxSp-${category}'>
+															<select name='nr-taxSp-${category}' class="form-control">
+																<option></option>
+																<c:forEach items="${taxCategoryList}" var="taxCategory">
+																	<option>${taxCategory}</option>
+																</c:forEach>
+															</select>
 														</div>
 													</div>
 												</c:forEach>
@@ -284,42 +310,50 @@ span .#error {
 								<div class="col-sm-4">
 									<div class="radio">
 										<label> <form:radiobutton
-												path="nrnReturnConfig.taxPoType" value="fixed" id="8"
-												name="toggler" onChange="handleRadioEvent(this);"
-												class="taxPoType" />FIXED
+												path="nrnReturnConfig.taxPoType" value="fixed"
+												id="taxPoType-fixed" name="toggler"
+												onChange="handleRadioEvent(this);" class="taxPoType" />FIXED
 										</label>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="radio">
-										<label><form:radiobutton
-												path="nrnReturnConfig.taxPoType" value="categoryWise" id="9"
-												class="taxPoType" name="toggler"
-												onChange="handleRadioEvent(this);" /> CATEGORY WISE</label>
+										<label> <form:radiobutton
+												path="nrnReturnConfig.taxPoType" value="categoryWise"
+												id="taxPoType-categoryWise" class="taxPoType" name="toggler"
+												onChange="handleRadioEvent(this);" /> CATEGORY WISE
+										</label>
 									</div>
 								</div>
-
-								<div class="col-sm-12 radio1" id="blk-8">
+								<div class="col-sm-12 radio1" id="blk-taxPoType-fixed">
 									<div class="row">
-										<div class="input-group m-b col-md-4">
-											<input type="text" class="form-control"
-												name="nr-fixedTaxPoPercent"
-												value="${fixedCommissionPercent}"> <span
-												class="input-group-addon">%</span>
+										<div class="col-md-12">
+											<div class="input-group m-b col-md-4">
+												<select name="nr-fixedTaxPoPercent" class="form-control">
+													<option></option>
+													<c:forEach items="${taxCategoryList}" var="taxCategory">
+														<option>${taxCategory}</option>
+													</c:forEach>
+												</select>
+											</div>
 										</div>
 									</div>
 								</div>
-								<div class="col-sm-12 radio1" id="blk-9">
+								<div class="col-sm-12 radio1" id="blk-taxPoType-categoryWise">
 									<div class="row">
-										<div class="col-md-4">
+										<div class="col-md-12">
 											<c:if test="${!empty categoryList}">
 												<c:forEach items="${categoryList}" var="category"
 													varStatus="loop">
 													<div class="form-group col-md-12">
 														<label class="col-md-4 control-label">${category}</label>
 														<div class="input-group m-b col-md-4">
-															<input type="text" class="form-control"
-																name='nr-taxPo-${category}'>
+															<select name='nr-taxPo-${category}' class="form-control">
+																<option></option>
+																<c:forEach items="${taxCategoryList}" var="taxCategory">
+																	<option>${taxCategory}</option>
+																</c:forEach>
+															</select>
 														</div>
 													</div>
 												</c:forEach>
@@ -327,12 +361,10 @@ span .#error {
 										</div>
 									</div>
 								</div>
-								<div class="ibox float-e-margins">
-
-									<input class="btn btn-primary pull-right" id="submitButton"
-										type="submit" value="Save">
-
-								</div>
+							</div>
+							<div class="ibox-content add-company">
+								<input class="btn btn-primary pull-right" id="submitButton"
+									type="submit" value="Save">
 							</div>
 						</div>
 					</form:form>
@@ -352,54 +384,57 @@ span .#error {
 	<script src="/O2R/seller/js/pickList.js"></script>
 
 	<script>
-            $(document).ready(function () {
-                $('.i-checks').iCheck({
-                    checkboxClass: 'icheckbox_square-green',
-                    radioClass: 'iradio_square-green',
-                });
-                var elem = document.querySelector('.js-switch');
-            var switchery = new Switchery(elem, { color: '#1AB394' });
+		$(document).ready(function() {
+			$('.i-checks').iCheck({
+				checkboxClass : 'icheckbox_square-green',
+				radioClass : 'iradio_square-green',
+			});
+			var elem = document.querySelector('.js-switch');
+			var switchery = new Switchery(elem, {
+				color : '#1AB394'
+			});
 
-            var elem_2 = document.querySelector('.js-switch_2');
-            var switchery_2 = new Switchery(elem_2, { color: '#ED5565' });
+			var elem_2 = document.querySelector('.js-switch_2');
+			var switchery_2 = new Switchery(elem_2, {
+				color : '#ED5565'
+			});
 
-            var elem_3 = document.querySelector('.js-switch_3');
-            var switchery_3 = new Switchery(elem_3, { color: '#1AB394' });
+			var elem_3 = document.querySelector('.js-switch_3');
+			var switchery_3 = new Switchery(elem_3, {
+				color : '#1AB394'
+			});
 
-
-            });
-        </script>
-
-	<script type="text/javascript">
-        
-        function handleRadioEvent(thiss){
-     	   var x=thiss.id;
-
-     	   if(!(x>=1 &&  x<=10))
-     	            $('.radio1').hide();
-
-     	            $("#blk-"+ x).slideDown();
-
-     	           for(var a=0;a<10;a++){
-                       if(a != x){
-                           $("#blk-"+a).slideUp();                    
-                       }else{
-                           $("#blk-"+a).slideDown();
-                       }
-                    }	    
-    	 }
-
-    </script>
+		});
+	</script>
 
 	<script type="text/javascript">
-    div = {
-        show: function(elem) {
-            document.getElementById(elem).style.visibility = 'visible';
-        },
-        hide: function(elem) {
-            document.getElementById(elem).style.visibility = 'hidden';
-        }
-    }
-</script>
+		function handleRadioEvent(thiss) {
+			var x = thiss.id;
+
+			if (!(x >= 1 && x <= 10))
+				$('.radio1').hide();
+
+			$("#blk-" + x).slideDown();
+
+			for (var a = 0; a < 10; a++) {
+				if (a != x) {
+					$("#blk-" + a).slideUp();
+				} else {
+					$("#blk-" + a).slideDown();
+				}
+			}
+		}
+	</script>
+
+	<script type="text/javascript">
+		div = {
+			show : function(elem) {
+				document.getElementById(elem).style.visibility = 'visible';
+			},
+			hide : function(elem) {
+				document.getElementById(elem).style.visibility = 'hidden';
+			}
+		}
+	</script>
 </body>
 </html>

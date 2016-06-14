@@ -477,7 +477,7 @@
 												responsive : true,
 												"dom" : 'T<"clear">lfrtip',
 												"tableTools" : {
-													"sSwfPath" : "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
+													"sSwfPath" : "/O2R/seller/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
 												}
 											});
 						});

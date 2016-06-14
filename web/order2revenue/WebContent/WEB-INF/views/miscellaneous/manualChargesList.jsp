@@ -3,7 +3,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <jsp:include page="../globalcsslinks.jsp"></jsp:include>
@@ -16,56 +16,14 @@
 <link
 	href="/O2R/seller/css/plugins/dataTables/dataTables.tableTools.min.css"
 	rel="stylesheet">
-
-<script src="/O2R/seller/js/jquery-2.1.1.js"></script>
-<link href="/O2R/seller/css/jquery-ui.css" rel="stylesheet">
-<script src="/O2R/seller/js/jquery-ui-1.10.4.min.js"
-	type="text/javascript"></script>
-<script src="/O2R/seller/js/plugins/datapicker/bootstrap-datepicker.js"></script>
-
 <script type="text/javascript">
-    function onclickGatePass(value,id) {
+    function onclickNavigateMC(value,id) {
     	var targeturl="";
     	switch(value)
     	{
-    	case "editOrder" :
+    	case "createMC" :
     		targeturl="editOrderDA.html?orderId="+id;
     	break;
-    	case "deleteOrder" :
-    		targeturl="deleteOrderDA.html?orderId="+id;
-    	break;
-    	case "viewOrder" :
-    		targeturl="viewOrderDA.html?orderId="+id;
-    	break;
-    	case "addOrder" :
-    		targeturl="addOrderDA.html";
-    	break;
-    	case "uploadGatePass" :
-    		targeturl="uploadOrderDA.html?value=gatepassSummary";
-    	break;
-    	case "downloadGatePass" :
-    		targeturl="downloadOrderDA.html?value=gatepassSummary";
-    	break;
-    	
-    	case "viewPOOrder" :
-    		targeturl="viewPOOrderDA.html?orderId="+id;
-    	break;
-    	case "uploadPO" :
-    		targeturl="uploadOrderDA.html?value=orderPoSummary";
-    	break;
-    	case "downloadPO" :
-    		targeturl="downloadOrderDA.html?value=orderPoSummary";
-    	break;
-    	
-    	case "viewPOOrderDetails" :
-    		targeturl="poOrderDetails.html";
-    	break;
-    	case "viewGatePassList" :
-    		targeturl="gatepasslist.html";
-    	break;
-    	case "poOrderList" :
-    		targeturl="poOrderList.html?value="+id;
-    	break;	
     	}
         $.ajax({
             url : targeturl,
@@ -87,13 +45,12 @@
 					<div class="col-lg-12">
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
-								<h5>Gatepasses(${gatepasses.size()})</h5>
+								<h5>Manual Charges(${orders.size()})</h5>
 								<div class="table-menu-links">
 									<a href="poOrderList.html?value=" id="POOrders">PO Orders</a> <a
-										href="#" id="returnOrders">Return</a> <a href="#"
-										id="gatepass"
-										onclick="onclickGatePass('viewPOOrderDetails','0')">GatePass</a>
-									<a href="#" id="paymentOrders">Payment</a> <a href="#"
+										href="#" id="returnOrders">Return</a> <a
+										href="gatepasslist.html" id="gatepass">GatePass</a> <a
+										href="#" id="paymentOrders">Payment</a> <a href="#"
 										id="actionableOrders">Actionable</a>
 								</div>
 								<div class="ibox-tools">
@@ -147,63 +104,68 @@
 									<button type="button" class="btn btn-xs btn-white">1000</button>
 									<button type="button" id="LoadMoreOrder"
 										class="btn btn-xs btn-white">More</button>
+									<a href="#" onclick="onclickNavigateOrder('addOrder','0')"
+										class="btn btn-primary btn-xs">Create New Order</a>
 								</div>
 							</div>
 							<div class="bs-example">
 								<div class="ibox-content overflow-h cus-table-filters">
 									<div class="scroll-y">
+										<c:if test="${!empty savedOrder}">
+											<h2 style="font-weight: bold">Your order ${savedOrder}
+												is saved successfully.</h2>
+										</c:if>
 										<table
 											class="table table-striped table-bordered table-hover dataTables-example">
 											<thead>
 												<tr>
 													<th></th>
 													<th>#</th>
-													<th>GP ID</th>
-													<th>Channel</th>
+													<th>Order ID</th>
+													<th>Partner</th>
 													<th>SKU</th>
-													<th>Return Date</th>
-													<th>Return Qty</th>
-													<th>Total Return Charges</th>
-													<th>EOSS Value</th>
+													<th>Invoice ID</th>
+													<th>Order Recieved Date</th>
+													<th>Shipped Date</th>
+													<th>Estimated Delivery Date</th>
+													<th>Estimated Payment Date</th>
+													<th>Quantity</th>
 													<th>N/R</th>
-													<th>Tax(PO) Amount</th>
-													<th>P/R</th>
-													<th>Gross Profit</th>
+													<th>Payment Difference</th>
 													<th>Status</th>
+													<th>Action</th>
 												</tr>
 											</thead>
 											<tbody>
-												<c:if test="${!empty gatepasses}">
-													<c:forEach items="${gatepasses}" var="gatepass"
-														varStatus="loop">
+												<c:if test="${!empty orders}">
+													<c:forEach items="${orders}" var="order" varStatus="loop">
 														<tr>
 															<td><input type="checkbox"></td>
 															<td>${loop.index+1}</td>
 															<td><a href="#"
-																onclick="onclickGatePass('viewPOOrder',${gatepass.orderId})">${gatepass.subOrderID}</a></td>
-															<td>${gatepass.pcName}</td>
-															<td>${gatepass.productSkuCode}</td>
-															<td><fmt:formatDate value="${gatepass.orderDate}"
+																onclick="onclickNavigateOrder('viewOrder',${order.orderId})">${order.channelOrderID}</a></td>
+															<td>${order.pcName}</td>
+															<td>${order.productSkuCode}</td>
+															<td>${order.invoiceID}</td>
+															<td><fmt:formatDate value="${order.orderDate}"
 																	pattern="MMM dd ,YY" /></td>
-															<td>${gatepass.quantity}</td>
+															<td><fmt:formatDate value="${order.shippedDate}"
+																	pattern="MMM dd ,YY" /></td>
+															<td><fmt:formatDate value="${order.deliveryDate}"
+																	pattern="MMM dd ,YY" /></td>
+															<td><fmt:formatDate value="${order.paymentDueDate}"
+																	pattern="MMM dd ,YY" /></td>
+															<td>${order.quantity}</td>
+															<td><fmt:formatNumber type="number"
+																	maxFractionDigits="2" value="${order.netRate}" /></td>
 															<td><fmt:formatNumber type="number"
 																	maxFractionDigits="2"
-																	value="${gatepass.orderReturnOrRTO.returnOrRTOChargestoBeDeducted}" /></td>
-															<td><fmt:formatNumber type="number"
-																	maxFractionDigits="2" value="${gatepass.eossValue}" /></td>
-															<td><fmt:formatNumber type="number"
-																	maxFractionDigits="2"
-																	value="${gatepass.orderReturnOrRTO.netNR}" /></td>
-															<td><fmt:formatNumber type="number"
-																	maxFractionDigits="2"
-																	value="${gatepass.orderReturnOrRTO.taxPOAmt}" /></td>
-															<td><fmt:formatNumber type="number"
-																	maxFractionDigits="2"
-																	value="${gatepass.orderReturnOrRTO.netPR}" /></td>
-															<td><fmt:formatNumber type="number"
-																	maxFractionDigits="2"
-																	value="${gatepass.orderReturnOrRTO.grossProfit}" /></td>
-															<td>${gatepass.status}</td>
+																	value="${order.orderPayment.paymentDifference}" /></td>
+															<td>${order.status}</td>
+															<td class="tooltip-demo"><a href="#"
+																onclick="onclickNavigateOrder('editOrder',${order.orderId})"><i
+																	class="fa fa-edit text-navy" data-toggle="tooltip"
+																	data-placement="top" data-original-title="Edit"></i></a></td>
 														</tr>
 													</c:forEach>
 												</c:if>
@@ -212,11 +174,10 @@
 									</div>
 									<div class="col-sm-12">
 										<div class="hr-line-dashed"></div>
-										<a href="#" onclick="onclickGatePass('uploadGatePass',0)"
-											class="btn btn-success btn-xs">Bulk Upload GatePass</a>&nbsp;&nbsp;
-										<a href="#"
-											onclick="onclickGatePass('downloadGatePass',0)"
-											class="btn btn-success btn-xs">Download GatePass Format</a>
+										<a href="#" onclick="onclickNavigateOrder('upload',0)"
+											class="btn btn-success btn-xs">Bulk Upload Order</a>&nbsp;&nbsp;
+										<a href="#" onclick="onclickNavigateOrder('download',0)"
+											class="btn btn-success btn-xs">Download Order Format</a>
 									</div>
 
 								</div>
@@ -224,12 +185,13 @@
 						</div>
 					</div>
 				</div>
-
 			</div>
 			<jsp:include page="../globalfooter.jsp"></jsp:include>
 		</div>
 	</div>
+	</div>
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
+
 	<!-- Scripts ro Table -->
 
 
@@ -251,6 +213,22 @@
                     "sSwfPath": "/O2R/seller/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
                 }
         });
+        
+        $('#searchOrders').change(function () {     
+   	     
+	        var thisValue = $(this).children(":selected").attr("id");
+	       	
+	         if(thisValue == 1 || thisValue == 2 || thisValue == 3 || thisValue == 4 ||thisValue == 5 ||thisValue == 6 ){
+	        	$('.TopSearch-box001').show();
+	        	$('.TopSearch-box002').hide();
+	        }
+	        else{
+	        	 $('.TopSearch-box001').hide();
+	        	 $('.TopSearch-box002').show();
+	        } 
+	    });
+        
+        
         
         $('#searchOrder').change(function () {
             $('.OrderSearch-box').hide();
