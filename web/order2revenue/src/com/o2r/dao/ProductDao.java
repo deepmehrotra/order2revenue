@@ -44,5 +44,7 @@ public interface ProductDao {
 	public void addSKUMapping(ProductConfig productConfig, int sellerId);
 
 	public boolean getProductwithProductConfig(int sellerId) throws CustomException;
+	
+	public boolean deleteProduct(int productId, int sellerId)throws Exception;
 
 }

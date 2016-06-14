@@ -1,5 +1,6 @@
 package com.o2r.dao;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,12 +23,14 @@ import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Category;
 import com.o2r.model.NRnReturnCharges;
+import com.o2r.model.Order;
 import com.o2r.model.Partner;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.ProductStockList;
 import com.o2r.model.Seller;
 import com.o2r.model.TaxCategory;
+import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.TaxDetailService;
 
@@ -44,6 +47,8 @@ public class ProductDaoImpl implements ProductDao {
 	private PartnerService partnerService;
 	@Autowired
 	private TaxDetailService taxDetailService;
+	@Autowired
+	private OrderService orderService;
 
 	private final int pageSize = 500;
 
@@ -685,6 +690,72 @@ public class ProductDaoImpl implements ProductDao {
 
 		}
 		log.info("*** updateInventory Ends : ProductDaoImpl ****");
+	}
+	
+	@Override
+	public boolean deleteProduct(int productId, int sellerId) throws Exception {
+		log.info("$$$ deleteProduct Starts : ProductDaoImpl $$$");
+		Product product=null;
+		List<ProductConfig> productConfigs=null;
+		List<Order> orders=null;
+		Category category=null;
+		Session session=null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			product=(Product)session.get(Product.class, productId);
+			if(product != null){
+				productConfigs=product.getProductConfig();
+				if(productConfigs != null && productConfigs.size() != 0){
+					return false;
+				}else{
+					orders=orderService.findOrders("productSkuCode", product.getProductSkuCode(), sellerId, false, true);
+					if(orders != null && orders.size() != 0){
+						return false;
+					}else{
+						category=product.getCategory();
+						if(category != null){
+							category.setProductCount(category.getProductCount() - product.getQuantity());
+							category.setSkuCount(category.getSkuCount()-1);
+							session.merge(category);
+							
+							try {								
+								int countCat_Pro=session.createSQLQuery("delete from category_product where products_productId="+productId).executeUpdate();
+								System.out.println(countCat_Pro);
+								Query query=session.createSQLQuery("select closingStocks_stockId from product_productstocklist where Product_productId="+productId);
+								/*query.executeUpdate();*/
+								List<Integer> ids=query.list();
+								System.out.println(ids);
+								
+								
+								int countPro_StockList=session.createSQLQuery("delete from product_productstocklist where Product_productId="+productId).executeUpdate();
+								System.out.println(countPro_StockList);
+								int count=0;
+								for(int id:ids){
+									session.createSQLQuery("delete from productstocklist where stockId="+id).executeUpdate();
+									count++;
+								}
+								System.out.println(count);
+								/*session.createSQLQuery("delete from productstocklist where stockId=:ids")
+										.setParameterList("ids", ids).executeUpdate();*/
+								
+								
+								int countPro=session.createSQLQuery("delete from product where productId="+productId).executeUpdate();
+								System.out.println(countPro);
+								session.getTransaction().commit();
+								return true;
+							} catch (Exception e) {
+								log.error("Failed!",e);
+							}							
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			log.error("Failed!",e);
+		}		
+		log.info("$$$ deleteProduct Ends : ProductDaoImpl $$$");
+		return false;
 	}
 
 }

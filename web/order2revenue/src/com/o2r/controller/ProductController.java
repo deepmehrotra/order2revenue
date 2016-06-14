@@ -434,6 +434,43 @@ public class ProductController {
 		log.info("$$$ editProduct Ends : ProductController $$$");
 		return new ModelAndView("initialsetup/addProduct", model);
 	}
+	
+	@RequestMapping(value = "/seller/deleteProduct", method = RequestMethod.GET)
+	public ModelAndView deleteProduct(HttpServletRequest request,
+			@ModelAttribute("command") ProductBean productBean,
+			BindingResult result) {
+		
+		log.info("$$$ deleteProduct Starts : ProductController $$$");
+		Product product = null;
+		Map<String, Object> model = new HashMap<String, Object>();
+		boolean status=false;
+		try {
+			if (request.getParameter("id") != null) {
+				int productId = Integer.parseInt(request.getParameter("id"));
+				status=productService.deleteProduct(productId,helperClass.getSellerIdfromSession(request));
+				if(status != true){
+					log.info("********* Can't Delete Product !!!!");
+				}else{
+					log.info("********* Delete Product !!!!");
+				}
+			}
+			model.put("status", status);
+		} catch (CustomException ce) {
+			log.error("editProduct exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Exception e){
+			log.error("Failed!",e);
+		}
+		
+		log.info("$$$ deleteProduct Ends : ProductController $$$");
+		return new ModelAndView("redirect:/seller/Product.html",model);
+	}
+	
+	
+	
 
 	@RequestMapping(value = "/seller/saveProductJson", method = RequestMethod.POST)
 	public @ResponseBody String saveProductJson(HttpServletRequest request) {

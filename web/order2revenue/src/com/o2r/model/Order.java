@@ -132,6 +132,8 @@ public class Order {
 	private ProductConfig productConfig;
 	@ManyToOne(cascade=CascadeType.ALL)
 	private Order consolidatedOrder;
+	
+	
 	public PaymentUpload getPaymentUpload() {
 		return paymentUpload;
 	}
