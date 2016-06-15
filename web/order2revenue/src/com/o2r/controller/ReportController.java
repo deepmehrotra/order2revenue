@@ -311,10 +311,7 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 				case "channelSaleReport":
 					partnerListST = ConverterClass.transformChannelReportST(channelReportDetailsList, "partner");
 					Collections.sort(partnerListST, new ChannelReportDetails.OrderByTC());
-					categoryListST = ConverterClass.transformChannelReportST(channelReportDetailsList, "category");
-					Collections.sort(categoryListST, new ChannelReportDetails.OrderByTC());
 					model.put("shortTablePartner", partnerListST);
-					model.put("shortTableCategory", categoryListST);
 					
 					Collections.sort(partnerList, new ChannelReportDetails.OrderByNR());
 					model.put("partnerByNR", ConverterClass.getChannelSortedList(partnerList, "NetSaleSP"));
@@ -326,11 +323,8 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 					model.put("partnerByGSAvRA", ConverterClass.getChannelSortedList(partnerList, "GSAvRA"));
 					break;
 				case "categoryWiseSaleReport":
-					partnerListST = ConverterClass.transformChannelReportST(channelReportDetailsList, "partner");
-					Collections.sort(partnerListST, new ChannelReportDetails.OrderByTC());
 					categoryListST = ConverterClass.transformChannelReportST(channelReportDetailsList, "category");
 					Collections.sort(categoryListST, new ChannelReportDetails.OrderByTC());
-					model.put("shortTablePartner", partnerListST);
 					model.put("shortTableCategory", categoryListST);
 					
 					Collections.sort(categoryList, new ChannelReportDetails.OrderByNR());
