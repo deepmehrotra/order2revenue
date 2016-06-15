@@ -206,6 +206,44 @@
 														<table class="table table-bordered custom-table">
 															<thead>
 																<tr>
+																	<th>Partner</th>
+																	<th>Total  GP Settled Orders</th>
+																	<th>Total  GP Actionable Orders</th>
+																	<th>Total  GP In-Process Orders</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty partnerByNetGP}">
+																	<c:forEach items="${partnerByNetGP}" var="partnerDto"
+																		varStatus="loop">
+																		<tr>
+																			<td>${partnerDto.key}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.settledGP}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.actionableGP}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.inProcessGP}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div id="stacked-chart-5"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
 																	<th>Category</th>
 																	<th>Gross Profit/Loss Amount</th>
 																</tr>
@@ -341,6 +379,44 @@
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
 														<div id="stacked-chart-4"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Partner</th>
+																	<th>Total  GP Settled Orders</th>
+																	<th>Total  GP Actionable Orders</th>
+																	<th>Total  GP In-Process Orders</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty categoryByNetGP}">
+																	<c:forEach items="${categoryByNetGP}" var="partnerDto"
+																		varStatus="loop">
+																		<tr>
+																			<td>${partnerDto.key}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.settledGP}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.actionableGP}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.inProcessGP}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div id="stacked-chart-6"></div>
 													</div>
 												</div>
 											</div>
@@ -584,6 +660,32 @@
 			var data = {};
 			data.name = '${partnerDto.partner}';
 			data.data = [parseFloat(parseFloat('${partnerDto.grossNrAmount}').toFixed(2)), parseFloat(parseFloat('${partnerDto.grossProfit}').toFixed(2))];
+			dataArr.push(data);
+		</c:forEach>
+		stackChart(divId, yAxisText, dataArr);
+		
+		var dataArr = [];
+		var yAxisText = 'Settled vs Actionable vs In-Process GP Graph';
+		var divId = "#stacked-chart-5";
+		var xAxisCategories = ['Settled Qty', 'Actionable Qty', 'In-Process Qty'];
+		<c:forEach items="${partnerByNetGP}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.key}';
+			data.data = [parseFloat(parseFloat('${partnerDto.settledGP}').toFixed(2)), parseFloat(parseFloat('${partnerDto.actionableGP}').toFixed(2))
+			             , parseFloat(parseFloat('${partnerDto.inProcessGP}').toFixed(2))];
+			dataArr.push(data);
+		</c:forEach>
+		stackChart(divId, yAxisText, dataArr);
+
+		var dataArr = [];
+		var yAxisText = 'Settled vs Actionable vs In-Process GP Graph';
+		var divId = "#stacked-chart-6";
+		var xAxisCategories = ['Settled Qty', 'Actionable Qty', 'In-Process Qty'];
+		<c:forEach items="${categoryByNetGP}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.key}';
+			data.data = [parseFloat(parseFloat('${partnerDto.settledGP}').toFixed(2)), parseFloat(parseFloat('${partnerDto.actionableGP}').toFixed(2))
+			             , parseFloat(parseFloat('${partnerDto.inProcessGP}').toFixed(2))];
 			dataArr.push(data);
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);

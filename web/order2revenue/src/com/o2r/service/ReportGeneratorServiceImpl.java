@@ -9,9 +9,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.bean.ChannelCatNPR;
+import com.o2r.bean.ChannelGP;
 import com.o2r.bean.ChannelMC;
 import com.o2r.bean.ChannelMCNPR;
 import com.o2r.bean.ChannelNPR;
+import com.o2r.bean.ChannelNR;
+import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionDetails;
@@ -172,6 +175,24 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 	public List<ChannelMCNPR> fetchChannelMCNPR(int sellerId, Date startDate,
 			Date endDate, String criteria) {
 		return reportGeneratorDao.fetchChannelMCNPR(sellerId, startDate, endDate, criteria);
+	}
+
+	@Override
+	public List<ChannelNR> getChannelNrList(Date startDate, Date endDate,
+			int sellerId, String criteria) {
+		return reportGeneratorDao.fetchChannelNR(sellerId, startDate, endDate, criteria);
+	}
+
+	@Override
+	public List<ChannelNetQty> getChannelNetQtyList(Date startDate,
+			Date endDate, int sellerId, String criteria) {
+		return reportGeneratorDao.fetchChannelNetQty(sellerId, startDate, endDate, criteria);
+	}
+
+	@Override
+	public List<ChannelGP> getChannelNetGPList(Date startDate, Date endDate,
+			int sellerId, String criteria) {
+		return reportGeneratorDao.fetchChannelGP(sellerId, startDate, endDate, criteria);
 	}
 
 	/*

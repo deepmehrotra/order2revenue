@@ -26,12 +26,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.o2r.bean.ChannelCatNPR;
+import com.o2r.bean.ChannelGP;
 import com.o2r.bean.ChannelMC;
 import com.o2r.bean.ChannelMCNPR;
 import com.o2r.bean.ChannelNPR;
+import com.o2r.bean.ChannelNR;
+import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
-import com.o2r.bean.DebtorsGraph1;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.CustomException;
@@ -1317,6 +1319,238 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		}
 		return commDetailsList;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChannelNR> fetchChannelNR(int sellerId, Date startDate, Date endDate, String criteria) {
+		List<ChannelNR> channelNRList = new ArrayList<ChannelNR>();
+		Map<String, ChannelNR> channelNRMap = new HashMap<String, ChannelNR>();
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		String orderQueryStr = "select pcName, sum(netRate) as NetRate from order_table where finalStatus = 'Actionable' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetRate";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.netRate) as NetRate from order_table ot, product pr where ot.finalStatus = 'Actionable' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by NetRate";
+		Query orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		List<Object[]> orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			ChannelNR channelNR = new ChannelNR();
+			String key = order[0].toString();
+			channelNR.setKey(key);
+			channelNR.setActionableNR(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		
+		orderQueryStr = "select pcName, sum(netRate) as NetRate from order_table where finalStatus = 'Settled' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetRate";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.netRate) as NetRate from order_table ot, product pr where ot.finalStatus = 'Settled' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by NetRate";
+		orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelNR channelNR = channelNRMap.get(key);
+			if(channelNR == null){
+				channelNR = new ChannelNR();
+				channelNR.setKey(key);
+			}
+			channelNR.setSettledNR(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		
+		orderQueryStr = "select pcName, sum(netRate) as NetRate from order_table where finalStatus = 'In Process' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetRate";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.netRate) as NetRate from order_table ot, product pr where ot.finalStatus = 'In Process' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by NetRate";
+		orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelNR channelNR = channelNRMap.get(key);
+			if(channelNR == null){
+				channelNR = new ChannelNR();
+				channelNR.setKey(key);
+			}
+			channelNR.setInProcessNR(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		Iterator entries = channelNRMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, ChannelNR> thisEntry = (Entry<String, ChannelNR>) entries.next();
+			channelNRList.add(thisEntry.getValue());
+		}
+		return channelNRList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChannelNetQty> fetchChannelNetQty(int sellerId, Date startDate, Date endDate, String criteria) {
+		List<ChannelNetQty> channelNRList = new ArrayList<ChannelNetQty>();
+		Map<String, ChannelNetQty> channelNRMap = new HashMap<String, ChannelNetQty>();
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		String orderQueryStr = "select pcName, sum(netSaleQuantity) as NetSaleQuantity from order_table where finalStatus = 'Actionable' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.netSaleQuantity) as NetSaleQuantity from order_table ot, product pr where ot.finalStatus = 'Actionable' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		Query orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		List<Object[]> orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			ChannelNetQty channelNR = new ChannelNetQty();
+			String key = order[0].toString();
+			channelNR.setKey(key);
+			channelNR.setActionableQty(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		
+		orderQueryStr = "select pcName, sum(netSaleQuantity) as NetSaleQuantity from order_table where finalStatus = 'Settled' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.netSaleQuantity) as NetSaleQuantity from order_table ot, product pr where ot.finalStatus = 'Settled' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelNetQty channelNR = channelNRMap.get(key);
+			if(channelNR == null){
+				channelNR = new ChannelNetQty();
+				channelNR.setKey(key);
+			}
+			channelNR.setSettledQty(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		
+		orderQueryStr = "select pcName, sum(netSaleQuantity) as NetSaleQuantity from order_table where finalStatus = 'In Process' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.netSaleQuantity) as NetSaleQuantity from order_table ot, product pr where ot.finalStatus = 'In Process' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelNetQty channelNR = channelNRMap.get(key);
+			if(channelNR == null){
+				channelNR = new ChannelNetQty();
+				channelNR.setKey(key);
+			}
+			channelNR.setInProcessQty(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		Iterator entries = channelNRMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, ChannelNetQty> thisEntry = (Entry<String, ChannelNetQty>) entries.next();
+			channelNRList.add(thisEntry.getValue());
+		}
+		return channelNRList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChannelGP> fetchChannelGP(int sellerId, Date startDate, Date endDate, String criteria) {
+		List<ChannelGP> channelNRList = new ArrayList<ChannelGP>();
+		Map<String, ChannelGP> channelNRMap = new HashMap<String, ChannelGP>();
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		String orderQueryStr = "select pcName, sum(grossProfit) as grossProfit from order_table where finalStatus = 'Actionable' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.grossProfit) as grossProfit from order_table ot, product pr where ot.finalStatus = 'Actionable' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by grossProfit";
+		Query orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		List<Object[]> orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			ChannelGP channelNR = new ChannelGP();
+			String key = order[0].toString();
+			channelNR.setKey(key);
+			channelNR.setActionableGP(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		
+		orderQueryStr = "select pcName, sum(grossProfit) as grossProfit from order_table where finalStatus = 'Settled' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by grossProfit";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.grossProfit) as grossProfit from order_table ot, product pr where ot.finalStatus = 'Settled' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by grossProfit";
+		orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelGP channelNR = channelNRMap.get(key);
+			if(channelNR == null){
+				channelNR = new ChannelGP();
+				channelNR.setKey(key);
+			}
+			channelNR.setSettledGP(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		
+		orderQueryStr = "select pcName, sum(grossProfit) as grossProfit from order_table where finalStatus = 'In Process' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by grossProfit";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.grossProfit) as grossProfit from order_table ot, product pr where ot.finalStatus = 'In Process' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by grossProfit";
+		orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelGP channelNR = channelNRMap.get(key);
+			if(channelNR == null){
+				channelNR = new ChannelGP();
+				channelNR.setKey(key);
+			}
+			channelNR.setInProcessGP(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		Iterator entries = channelNRMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, ChannelGP> thisEntry = (Entry<String, ChannelGP>) entries.next();
+			channelNRList.add(thisEntry.getValue());
+		}
+		return channelNRList;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChannelMC> fetchChannelMC(int sellerId, Date startDate, Date endDate, String criteria) {

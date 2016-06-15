@@ -4,9 +4,12 @@ import java.util.Date;
 import java.util.List;
 
 import com.o2r.bean.ChannelCatNPR;
+import com.o2r.bean.ChannelGP;
 import com.o2r.bean.ChannelMC;
 import com.o2r.bean.ChannelMCNPR;
 import com.o2r.bean.ChannelNPR;
+import com.o2r.bean.ChannelNR;
+import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionDetails;
@@ -64,4 +67,10 @@ public interface ReportGeneratorService {
 	public List<ChannelMC> fetchChannelMC(int sellerId, Date startDate, Date endDate, String criteria);
 	
 	public List<ChannelMCNPR> fetchChannelMCNPR(int sellerId, Date startDate, Date endDate, String criteria);
+
+	public List<ChannelNR> getChannelNrList(Date startDate, Date endDate, int sellerId, String criteria);
+
+	public List<ChannelNetQty> getChannelNetQtyList(Date startDate, Date endDate, int sellerId, String criteria);
+
+	public List<ChannelGP> getChannelNetGPList(Date startDate, Date endDate, int sellerId, String criteria);
 }
