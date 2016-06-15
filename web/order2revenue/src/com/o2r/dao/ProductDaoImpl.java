@@ -693,7 +693,7 @@ public class ProductDaoImpl implements ProductDao {
 	}
 	
 	@Override
-	public boolean deleteProduct(int productId, int sellerId) throws Exception {
+	public String deleteProduct(int productId, int sellerId) throws Exception {
 		log.info("$$$ deleteProduct Starts : ProductDaoImpl $$$");
 		Product product=null;
 		List<ProductConfig> productConfigs=null;
@@ -707,11 +707,11 @@ public class ProductDaoImpl implements ProductDao {
 			if(product != null){
 				productConfigs=product.getProductConfig();
 				if(productConfigs != null && productConfigs.size() != 0){
-					return false;
+					return "Please Delete Config Mapping Before Deleteing The Product !";
 				}else{
 					orders=orderService.findOrders("productSkuCode", product.getProductSkuCode(), sellerId, false, true);
 					if(orders != null && orders.size() != 0){
-						return false;
+						return "Due To Order Existence !";
 					}else{
 						category=product.getCategory();
 						if(category != null){
@@ -743,7 +743,7 @@ public class ProductDaoImpl implements ProductDao {
 								int countPro=session.createSQLQuery("delete from product where productId="+productId).executeUpdate();
 								System.out.println(countPro);
 								session.getTransaction().commit();
-								return true;
+								return "Deleted";
 							} catch (Exception e) {
 								log.error("Failed!",e);
 							}							
@@ -755,7 +755,7 @@ public class ProductDaoImpl implements ProductDao {
 			log.error("Failed!",e);
 		}		
 		log.info("$$$ deleteProduct Ends : ProductDaoImpl $$$");
-		return false;
+		return "Server Issue";
 	}
 
 }

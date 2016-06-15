@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%		
-   /*  if(session.getAttribute("logoUrl") == null){
+    if(session.getAttribute("logoUrl") == null){
         if (request.getAttribute("sellerBean") != null) {
             SellerBean bean = (SellerBean) request.getAttribute("sellerBean");
             if (bean.getLogoUrl() != null) {
@@ -17,7 +17,7 @@
             }
             session.setAttribute("sellerName", bean.getName());
         }
-    } */
+    } 
 %>
 
 

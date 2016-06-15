@@ -2852,6 +2852,7 @@ public class OrderDaoImpl implements OrderDao {
 					/ 100;
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
+			props = PropertiesLoaderUtils.loadProperties(resource);
 			tds = (((props.getProperty("TDS")) != null ? Double.parseDouble(props.getProperty("TDS")) :0) + ((fixedfee + pccAmount) / 50))
 					* order.getQuantity();
 			order.getOrderTax().setTdsToDeduct(tds);

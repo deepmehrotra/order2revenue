@@ -45,6 +45,6 @@ public interface ProductDao {
 
 	public boolean getProductwithProductConfig(int sellerId) throws CustomException;
 	
-	public boolean deleteProduct(int productId, int sellerId)throws Exception;
+	public String deleteProduct(int productId, int sellerId)throws Exception;
 
 }

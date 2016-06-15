@@ -130,9 +130,13 @@ public class ProductController {
 		List<List<ProductConfig>> productConfigs = new ArrayList<List<ProductConfig>>();
 
 		try {
-			Object obj = request.getSession().getAttribute(
-					"productSearchObject");
-			System.out.println(" Getting null value of search object : "+obj);
+			Object obj = request.getSession().getAttribute("productSearchObject");
+			Object deleteStatus=request.getSession().getAttribute("deleteStatus");
+			if(deleteStatus != null){
+				model.put("deleteStatus", deleteStatus);
+				request.getSession().removeAttribute("deleteStatus");
+			}
+			log.debug(" Getting null value of search object : "+obj);
 			if (obj != null) {
 				log.debug(" Getting list from session" + obj);
 				model.put("productList", obj);
@@ -223,7 +227,8 @@ public class ProductController {
 			@ModelAttribute("command") ProductBean productBean,
 			BindingResult result) {
 		
-		log.info("$$$ productConfigList Starts : ProductController $$$");
+		log.info("$$$ saveDeleteProduct Starts : ProductController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
 		if (productBean.getProductSkuCode() != null) {
 			productBean.setProductDate(new Date());
 			int productId = request.getParameter("productId") != null ? Integer
@@ -247,13 +252,18 @@ public class ProductController {
 			try {
 				productService.updateInventory(productSkuCode, 0,
 						quantityToAdd, quantityToSubstract, true, sellerId);
-			} catch (CustomException e) {
-				e.printStackTrace();
+			}catch (CustomException ce) {
+				log.error("saveDeleteProduct exception : " + ce.toString());
+				model.put("errorMessage", ce.getLocalMessage());
+				model.put("errorTime", ce.getErrorTime());
+				model.put("errorCode", ce.getErrorCode());
+				return new ModelAndView("globalErorPage", model);
+			}catch(Exception e){
 				log.error("Failed!",e);
 			}
 
 		}
-		log.info("$$$ productConfigList Ends : ProductController $$$");
+		log.info("$$$ saveDeleteProduct Ends : ProductController $$$");
 		return new ModelAndView("redirect:/seller/Product.html");
 	}
 
@@ -303,23 +313,24 @@ public class ProductController {
 			BindingResult result) {
 
 		log.info("$$$ saveProductConfig Starts : ProductController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			ProductConfig productConfig = ConverterClass
 					.prepareProductConfigModel(productConfigBean);
 			productService.addProductConfig(productConfig,
-					helperClass.getSellerIdfromSession(request));
-
-			/*
-			 * } catch (CustomException ce) {
-			 * log.error("saveProduct exception : " + ce.toString());
-			 * model.put("errorMessage", ce.getLocalMessage());
-			 * model.put("errorTime", ce.getErrorTime()); model.put("errorCode",
-			 * ce.getErrorCode()); return new ModelAndView("globalErorPage",
-			 * model);
-			 */
-		} catch (Throwable e) {
-			e.printStackTrace();
+					helperClass.getSellerIdfromSession(request));			
+		}/*catch (CustomException ce) {
+			log.error("saveProductConfig exception : " + ce.toString());
+			model.put("errorMessage", "Error in Saving Product Config");
+			model.put("errorTime", new Date());
+			model.put("errorCode", "#0012");
+			return new ModelAndView("globalErorPage", model);
+		}*/ catch (Exception e) {			
 			log.error("Failed!", e);
+			model.put("errorMessage", "Error in Saving Product Config");
+			model.put("errorTime", new Date());
+			model.put("errorCode", "#0012");
+			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ saveProductConfig Ends : ProductController $$$");
 		return new ModelAndView("redirect:/seller/ProductMapping.html");
@@ -370,6 +381,9 @@ public class ProductController {
 		} catch (Throwable e) {
 			log.error("Failed!",e);
 			e.printStackTrace();
+			model.put("errorMessage", "Error in Adding Product Config");
+			model.put("errorTime", new Date());
+			model.put("errorCode", "#0013");
 			return new ModelAndView("globalErorPage", model);
 		}
 	}
@@ -441,24 +455,23 @@ public class ProductController {
 			BindingResult result) {
 		
 		log.info("$$$ deleteProduct Starts : ProductController $$$");
-		Product product = null;
 		Map<String, Object> model = new HashMap<String, Object>();
-		boolean status=false;
+		String status="";
 		try {
 			if (request.getParameter("id") != null) {
 				int productId = Integer.parseInt(request.getParameter("id"));
 				status=productService.deleteProduct(productId,helperClass.getSellerIdfromSession(request));
-				if(status != true){
-					log.info("********* Can't Delete Product !!!!");
+				if(status.equals("Deleted")){
+					log.info("********* Delete Product !!!!");					
 				}else{
-					log.info("********* Delete Product !!!!");
+					log.info("********* Can't Delete Product !!!!");
 				}
-			}
-			model.put("status", status);
+			}			
+			request.getSession().setAttribute("deleteStatus", status);
 		} catch (CustomException ce) {
-			log.error("editProduct exception : " + ce.toString());
-			model.put("errorMessage", ce.getLocalMessage());
-			model.put("errorTime", ce.getErrorTime());
+			log.error("DeleteProduct exception : " + ce.toString());
+			model.put("errorMessage", "Error in Delete Product");
+			model.put("errorTime", new Date());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e){
@@ -466,7 +479,7 @@ public class ProductController {
 		}
 		
 		log.info("$$$ deleteProduct Ends : ProductController $$$");
-		return new ModelAndView("redirect:/seller/Product.html",model);
+		return new ModelAndView("redirect:/seller/Product.html");
 	}
 	
 	
