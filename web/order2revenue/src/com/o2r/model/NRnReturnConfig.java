@@ -156,13 +156,13 @@ public class NRnReturnConfig {
 	private boolean canCharBRSerTax;
 	@Column
 	private boolean canCharBRPCC;
-	@Column
+	@Column(columnDefinition="TEXT")
 	private String nationalList;
-	@Column
+	@Column(columnDefinition="TEXT")
 	private String zonalList;
-	@Column
+	@Column(columnDefinition="TEXT")
 	private String metroList;
-	@Column
+	@Column(columnDefinition="TEXT")
 	private String localList;
 	@Column
 	private String revShippingFeeType; // - variable or fixed
