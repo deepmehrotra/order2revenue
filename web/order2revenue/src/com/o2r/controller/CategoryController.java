@@ -379,6 +379,7 @@ public class CategoryController {
 			BindingResult result) {
 		
 		log.info("$$$ checkInventoryGroup Starts : CategoryController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
 		log.debug(" *********checkInventoryGroup name :"+ categoryBean.getParentCatName());
 		String name = request.getParameter("name");
 		try {
@@ -390,10 +391,7 @@ public class CategoryController {
 				else
 					return "true";
 			}
-		} catch (CustomException ce) {
-			log.error("checkInventoryGroup exception : " + ce.toString());
-			return "false";
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed !",e);
 			return "false";
@@ -485,7 +483,7 @@ public class CategoryController {
 				return "true";
 			}
 		} catch (CustomException ce) {
-			log.error("saveTaxCategory exception : " + ce.toString());
+			log.error("saveTaxCategory exception : ",ce);
 			return "false";
 		} catch (Throwable e) {
 			e.printStackTrace();
