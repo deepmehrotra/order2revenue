@@ -12,12 +12,17 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.o2r.bean.ManualChargesBean;
+import com.o2r.bean.OrderBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.DateDeserializer;
@@ -26,6 +31,8 @@ import com.o2r.helper.HelperClass;
 import com.o2r.model.ManualCharges;
 import com.o2r.model.Partner;
 import com.o2r.model.PaymentUpload;
+import com.o2r.model.Product;
+import com.o2r.model.TaxCategory;
 import com.o2r.model.TaxDetail;
 import com.o2r.service.ManualChargesService;
 import com.o2r.service.PartnerService;
@@ -267,6 +274,50 @@ public class ManualChargesController {
 	public String manualChargesList() {
 
 		return "miscellaneous/manualcharges";
+	}
+	
+	@RequestMapping(value = "/seller/addManualCharge", method = RequestMethod.GET)
+	public ModelAndView addOrderDA(HttpServletRequest request,
+			@ModelAttribute("command") ManualChargesBean manualChargeBean, BindingResult result) {
+
+		log.info("$$$ addManualCharge Starts : ManualChargeController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			List<Partner> partnerlist = partnerService.listPartners(helperClass
+					.getSellerIdfromSession(request));
+			Map<String, String> partnermap = new HashMap<String, String>();
+			if (partnerlist != null && partnerlist.size() != 0) {
+				for (Partner bean : partnerlist) {
+					partnermap.put(bean.getPcName(), bean.getPcName());
+
+				}
+			}
+			
+			List<PaymentUpload> paymentUploadList = paymentUploadService.listPaymentUploads(
+					helperClass.getSellerIdfromSession(request));
+			Map<String, String> paymentIDMap = new HashMap<String, String>();
+			if (paymentUploadList != null && paymentUploadList.size() != 0) {
+				for (PaymentUpload upload : paymentUploadList) {
+					paymentIDMap.put(upload.getUploadDesc(), upload.getUploadDesc());
+				}
+			}
+
+			model.put("partnermap", partnermap);
+			model.put("paymentIDMap", paymentIDMap);
+		} catch (CustomException ce) {
+			log.error("addManualCharge exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+			model.put("errorMessage", e.getCause());
+			return new ModelAndView("globalErorPage", model);
+		}
+		log.info("$$$ addManualCharge Ends : ManualChragesController $$$");
+		return new ModelAndView("miscellaneous/addManualCharge", model);
 	}
 
 	@RequestMapping(value = "/seller/listManualChargesJson", method = RequestMethod.POST)
