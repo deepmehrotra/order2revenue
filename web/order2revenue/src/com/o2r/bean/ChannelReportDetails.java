@@ -26,6 +26,7 @@ public class ChannelReportDetails {
 	private double grossSpAmount;
 	private double saleRetQty;
 	private double saleRetNrAmount;
+	private double retAmountToBeReversed;
 	private double saleRetSpAmount;
 	private double netQty;
 	private double netNrAmount;
@@ -224,6 +225,14 @@ public class ChannelReportDetails {
 
 	public void setSaleRetNrAmount(double saleRetNrAmount) {
 		this.saleRetNrAmount = saleRetNrAmount;
+	}
+
+	public double getRetAmountToBeReversed() {
+		return retAmountToBeReversed;
+	}
+
+	public void setRetAmountToBeReversed(double retAmountToBeReversed) {
+		this.retAmountToBeReversed = retAmountToBeReversed;
 	}
 
 	public double getSaleRetSpAmount() {

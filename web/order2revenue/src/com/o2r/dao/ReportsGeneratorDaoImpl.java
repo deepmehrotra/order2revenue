@@ -879,6 +879,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					}
 					channelReport.setSaleRetQty(saleRetQty);
 					channelReport.setSaleRetNrAmount(saleRetNrAmount + additionalCharges);
+					channelReport.setRetAmountToBeReversed(saleRetNrAmount);
 					channelReport.setSaleRetSpAmount(saleRetSpAmount);
 					
 					double saleRetVsGrossSale = 0;
