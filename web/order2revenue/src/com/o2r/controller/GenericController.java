@@ -120,8 +120,8 @@ public class GenericController {
 			return new ModelAndView("redirect:/login_register.html");
 		}
 
-	}
-
+	}	
+	
 	@RequestMapping(value = "/seller/dashboard", method = RequestMethod.GET)
 	public ModelAndView displayDashboard(HttpServletRequest request,
 			@ModelAttribute("command") DashboardBean dashboardBean,
