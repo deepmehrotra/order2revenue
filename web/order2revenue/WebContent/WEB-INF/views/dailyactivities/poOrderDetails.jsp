@@ -115,8 +115,7 @@
 									<c:forEach items="${poPaymentListMonthly}" var="poPayment"
 										varStatus="loop">
 										<tr>
-											<td><a href="#"
-												onclick="onclickNavigateOrder('poOrderList','${poPayment.paymentDetail}')">${poPayment.paymentDetail}</a></td>
+											<td><a href="poOrderList.html?value=${poPayment.paymentDetail}">${poPayment.paymentDetail}</a></td>
 											<td><fmt:formatNumber type="number"
 													maxFractionDigits="2" value="${poPayment.debits}" /></td>
 											<td><fmt:formatNumber type="number"

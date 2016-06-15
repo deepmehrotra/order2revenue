@@ -92,7 +92,8 @@
 				class="form-horizontal">
 				<div class="form-group  top-search-180" id="search1">
 					<div class="top-search-30 f-left">
-						<select class="form-control" name="searchCriteria" required autocomplete="off"/ id="searchCriteria">
+						<select class="form-control" name="searchCriteria" required
+							autocomplete="off" / id="searchCriteria">
 							<option value="">Select Criteria</option>
 							<option id="1" value="channelOrderID">Channel Order
 								ID/PO ID</option>
@@ -247,24 +248,24 @@
 						</c:forEach>
 					</c:if> --%>
 					<li>
-						<div id="uploadReport-div-1" class="dropdown-messages-box"
+						<div id="uploadReport-div-3" class="dropdown-messages-box"
 							style="display: none;">
-							<a class="pull-left" id="uploadReport-a-1"> <i
-								id="uploadReport-i-1"></i>
+							<a class="pull-left" id="uploadReport-a-3"> <i
+								id="uploadReport-i-3"></i>
 							</a>
 							<div class="media-body">
-								<label id="uploadReport-uploadedAt-1"
+								<label id="uploadReport-uploadedAt-3"
 									style="font-size: smaller; font-weight: normal !important;"
 									class="pull-right"></label> <label
-									id="uploadReport-description-1" style="font-weight: bold;"></label>
-								by <label id="uploadReport-sellerName-1"
+									id="uploadReport-description-3" style="font-weight: bold;"></label>
+								by <label id="uploadReport-sellerName-3"
 									style="font-weight: normal !important;"></label><br> <label
-									id="uploadReport-fileType-1"
+									id="uploadReport-fileType-3"
 									style="font-size: smaller; font-weight: normal !important;"
 									class="text-muted"></label> - <label
-									id="uploadReport-uploadDate-1"
+									id="uploadReport-uploadDate-3"
 									style="font-size: smaller; font-weight: normal !important;"
-									class="text-muted"></label> <label id="uploadReport-status-1"
+									class="text-muted"></label> <label id="uploadReport-status-3"
 									class="pull-right"></label>
 							</div>
 						</div>
@@ -295,24 +296,24 @@
 					</li>
 					<li class="divider"></li>
 					<li>
-						<div id="uploadReport-div-3" class="dropdown-messages-box"
+						<div id="uploadReport-div-1" class="dropdown-messages-box"
 							style="display: none;">
-							<a class="pull-left" id="uploadReport-a-3"> <i
-								id="uploadReport-i-3"></i>
+							<a class="pull-left" id="uploadReport-a-1"> <i
+								id="uploadReport-i-1"></i>
 							</a>
 							<div class="media-body">
-								<label id="uploadReport-uploadedAt-3"
+								<label id="uploadReport-uploadedAt-1"
 									style="font-size: smaller; font-weight: normal !important;"
 									class="pull-right"></label> <label
-									id="uploadReport-description-3" style="font-weight: bold;"></label>
-								by <label id="uploadReport-sellerName-3"
+									id="uploadReport-description-1" style="font-weight: bold;"></label>
+								by <label id="uploadReport-sellerName-1"
 									style="font-weight: normal !important;"></label><br> <label
-									id="uploadReport-fileType-3"
+									id="uploadReport-fileType-1"
 									style="font-size: smaller; font-weight: normal !important;"
 									class="text-muted"></label> - <label
-									id="uploadReport-uploadDate-3"
+									id="uploadReport-uploadDate-1"
 									style="font-size: smaller; font-weight: normal !important;"
-									class="text-muted"></label> <label id="uploadReport-status-3"
+									class="text-muted"></label> <label id="uploadReport-status-1"
 									class="pull-right"></label>
 							</div>
 						</div>
@@ -419,27 +420,33 @@
 																cssClass = "fa-level-down";
 															}
 
+															if (arrayItem.filePath == null
+																	|| arrayItem.filePath == '') {
+																cssClass = "fa-minus-circle";
+															} else {
+																document
+																		.getElementById("uploadReport-a-"
+																				+ i).href = "javascript:onclickDownload('"
+																		+ arrayItem.id
+																		+ "');";
+															}
+
 															if (arrayItem.status == "Error") {
 																document
 																		.getElementById("uploadReport-i-"
 																				+ i).style = "color: red !important;";
 																document
-																.getElementById("uploadReport-status-"
-																		+ i).style = "font-size: smaller; font-weight: normal !important; color: red !important;";
+																		.getElementById("uploadReport-status-"
+																				+ i).style = "font-size: smaller; font-weight: normal !important; color: red !important;";
 															} else {
 																document
-																.getElementById("uploadReport-status-"
-																		+ i).style = "font-size: smaller; font-weight: normal !important; color: green !important;";
+																		.getElementById("uploadReport-status-"
+																				+ i).style = "font-size: smaller; font-weight: normal !important; color: green !important;";
 															}
 
 															document
 																	.getElementById("uploadReport-div-"
 																			+ i).style.display = "inherit";
-															document
-																	.getElementById("uploadReport-a-"
-																			+ i).href = "javascript:onclickDownload('"
-																	+ arrayItem.id
-																	+ "');";
 															document
 																	.getElementById("uploadReport-i-"
 																			+ i).className = "fa "
@@ -460,8 +467,8 @@
 																	.getElementById("uploadReport-uploadDate-"
 																			+ i).innerHTML = arrayItem.uploadDate;
 															document
-															.getElementById("uploadReport-status-"
-																	+ i).innerHTML = arrayItem.status;
+																	.getElementById("uploadReport-status-"
+																			+ i).innerHTML = arrayItem.status;
 
 															i++;
 														});

@@ -17,22 +17,24 @@
 	href="/O2R/seller/css/plugins/dataTables/dataTables.tableTools.min.css"
 	rel="stylesheet">
 <script type="text/javascript">
-    function onclickNavigateMC(value,id) {
-    	var targeturl="";
-    	switch(value)
-    	{
-    	case "createMC" :
-    		targeturl="editOrderDA.html?orderId="+id;
-    	break;
-    	}
-        $.ajax({
-            url : targeturl,
-            success : function(data) {
-                $('#centerpane').html(data);
-            }
-        });
-    }
-  
+	function onclickNavigateMC(value, id) {
+		var targeturl = "";
+		switch (value) {
+		case "createMC":
+			targeturl = "addManualCharge.html";
+			break;
+
+		case "editMC":
+			targeturl = "editmanualChargeDA.html?manualChargeId=" + id;
+			break;
+		}
+		$.ajax({
+			url : targeturl,
+			success : function(data) {
+				$('#centerpane').html(data);
+			}
+		});
+	}
 </script>
 </head>
 <body>
@@ -45,141 +47,55 @@
 					<div class="col-lg-12">
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
-								<h5>Manual Charges(${orders.size()})</h5>
-								<div class="table-menu-links">
-									<a href="poOrderList.html?value=" id="POOrders">PO Orders</a> <a
-										href="#" id="returnOrders">Return</a> <a
-										href="gatepasslist.html" id="gatepass">GatePass</a> <a
-										href="#" id="paymentOrders">Payment</a> <a href="#"
-										id="actionableOrders">Actionable</a>
-								</div>
+								<h5>Manual Charges(${manualCharges.size()})</h5>
 								<div class="ibox-tools">
-									<button class="btn btn-white table-menu-search search-dd">
-										<i class="fa fa-search"></i>
-									</button>
-									<div class="search-more-wrp">
-										<form role="search" class="form-inline" method="post"
-											action="searchOrder.html">
-											<div class="form-group">
-												<select class="form-control" name="searchOrder"
-													id="searchOrders">
-													<option id="1" value="channelOrderID">Channel
-														OrderId/PO ID</option>
-													<option id="2" value="invoiceID">Invoice ID</option>
-													<option id="3" value="subOrderID">Sub Order ID</option>
-													<option id="4" value="pcName">Partner</option>
-													<option id="5" value="customerName">Customer Name</option>
-													<option id="6" value="status">Order Status</option>
-													<option id="7" value="orderDate">Order Date</option>
-													<option id="8" value="shippedDate">Order Shipped
-														Date</option>
-												</select>
-											</div>
-											<div class="form-group TopSearch-box001 OrderSearch-box "
-												id="searchchannelOrderID">
-												<input type="text" placeholder="Enter Channel OrderID"
-													class="form-control" name="channelOrderID">
-											</div>
-											<div class="form-group TopSearch-box002 OrderSearch-box"
-												id="SearchorderDate" style="display: none">
-												<div class="input-group date">
-													<span class="input-group-addon"><i
-														class="fa fa-calendar"></i></span><input type="text"
-														class="form-control" placeholder="" name="startDate">
-												</div>
-												<div class="input-group date">
-													<span class="input-group-addon"><i
-														class="fa fa-calendar"></i></span><input type="text"
-														class="form-control" placeholder="" name="endDate">
-												</div>
-											</div>
-											<div class="form-group">
-												<button class="btn btn-primary btn-block" type="submit">Search</button>
-											</div>
-										</form>
-									</div>
-									<span>Last</span>
-									<button type="button" id="LoadFirst500"
-										class="btn btn-xs btn-white active">500</button>
-									<button type="button" class="btn btn-xs btn-white">1000</button>
-									<button type="button" id="LoadMoreOrder"
-										class="btn btn-xs btn-white">More</button>
-									<a href="#" onclick="onclickNavigateOrder('addOrder','0')"
-										class="btn btn-primary btn-xs">Create New Order</a>
+									<a href="#" onclick="onclickNavigateMC('createMC','0')"
+										class="btn btn-primary btn-xs">Create New Manual Charge</a>
 								</div>
 							</div>
 							<div class="bs-example">
 								<div class="ibox-content overflow-h cus-table-filters">
 									<div class="scroll-y">
-										<c:if test="${!empty savedOrder}">
-											<h2 style="font-weight: bold">Your order ${savedOrder}
-												is saved successfully.</h2>
-										</c:if>
 										<table
 											class="table table-striped table-bordered table-hover dataTables-example">
 											<thead>
 												<tr>
 													<th></th>
 													<th>#</th>
-													<th>Order ID</th>
 													<th>Partner</th>
-													<th>SKU</th>
-													<th>Invoice ID</th>
-													<th>Order Recieved Date</th>
-													<th>Shipped Date</th>
-													<th>Estimated Delivery Date</th>
-													<th>Estimated Payment Date</th>
-													<th>Quantity</th>
-													<th>N/R</th>
-													<th>Payment Difference</th>
-													<th>Status</th>
-													<th>Action</th>
+													<th>Particular</th>
+													<th>Paid Amount</th>
+													<th>Payment Date</th>
+													<th>Created On</th>
+													<th>Payment ID</th>
+													<th>Payment Cycle</th>
 												</tr>
 											</thead>
 											<tbody>
-												<c:if test="${!empty orders}">
-													<c:forEach items="${orders}" var="order" varStatus="loop">
+												<c:if test="${!empty manualCharges}">
+													<c:forEach items="${manualCharges}" var="manualCharge"
+														varStatus="loop">
 														<tr>
 															<td><input type="checkbox"></td>
 															<td>${loop.index+1}</td>
-															<td><a href="#"
-																onclick="onclickNavigateOrder('viewOrder',${order.orderId})">${order.channelOrderID}</a></td>
-															<td>${order.pcName}</td>
-															<td>${order.productSkuCode}</td>
-															<td>${order.invoiceID}</td>
-															<td><fmt:formatDate value="${order.orderDate}"
-																	pattern="MMM dd ,YY" /></td>
-															<td><fmt:formatDate value="${order.shippedDate}"
-																	pattern="MMM dd ,YY" /></td>
-															<td><fmt:formatDate value="${order.deliveryDate}"
-																	pattern="MMM dd ,YY" /></td>
-															<td><fmt:formatDate value="${order.paymentDueDate}"
-																	pattern="MMM dd ,YY" /></td>
-															<td>${order.quantity}</td>
+															<td>${manualCharge.pcName}</td>
+															<td>${manualCharge.productSkuCode}</td>
 															<td><fmt:formatNumber type="number"
-																	maxFractionDigits="2" value="${order.netRate}" /></td>
-															<td><fmt:formatNumber type="number"
-																	maxFractionDigits="2"
-																	value="${order.orderPayment.paymentDifference}" /></td>
-															<td>${order.status}</td>
-															<td class="tooltip-demo"><a href="#"
-																onclick="onclickNavigateOrder('editOrder',${order.orderId})"><i
-																	class="fa fa-edit text-navy" data-toggle="tooltip"
-																	data-placement="top" data-original-title="Edit"></i></a></td>
+																	maxFractionDigits="2" value="${manualCharge.netRate}" /></td>
+															<td><fmt:formatDate
+																	value="${manualCharge.manualChargeDate}"
+																	pattern="MMM dd ,YY" /></td>
+															<td><fmt:formatDate
+																	value="${manualCharge.shippedDate}"
+																	pattern="MMM dd ,YY" /></td>
+															<td>${manualCharge.quantity}</td>
+															<td>${manualCharge.status}</td>
 														</tr>
 													</c:forEach>
 												</c:if>
 											</tbody>
 										</table>
 									</div>
-									<div class="col-sm-12">
-										<div class="hr-line-dashed"></div>
-										<a href="#" onclick="onclickNavigateOrder('upload',0)"
-											class="btn btn-success btn-xs">Bulk Upload Order</a>&nbsp;&nbsp;
-										<a href="#" onclick="onclickNavigateOrder('download',0)"
-											class="btn btn-success btn-xs">Download Order Format</a>
-									</div>
-
 								</div>
 							</div>
 						</div>
@@ -188,7 +104,6 @@
 			</div>
 			<jsp:include page="../globalfooter.jsp"></jsp:include>
 		</div>
-	</div>
 	</div>
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
 
@@ -205,84 +120,32 @@
 		src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
 
 	<script>
-    $(document).ready(function(){
-        $('.dataTables-example').dataTable({
-                responsive: true,
-                "dom": 'T<"clear">lfrtip',
-                "tableTools": {
-                    "sSwfPath": "/O2R/seller/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
-                }
-        });
-        
-        $('#searchOrders').change(function () {     
-   	     
-	        var thisValue = $(this).children(":selected").attr("id");
-	       	
-	         if(thisValue == 1 || thisValue == 2 || thisValue == 3 || thisValue == 4 ||thisValue == 5 ||thisValue == 6 ){
-	        	$('.TopSearch-box001').show();
-	        	$('.TopSearch-box002').hide();
-	        }
-	        else{
-	        	 $('.TopSearch-box001').hide();
-	        	 $('.TopSearch-box002').show();
-	        } 
-	    });
-        
-        
-        
-        $('#searchOrder').change(function () {
-            $('.OrderSearch-box').hide();
-            $('#'+$(this).val()).fadeIn();
-        });
-        $('.search-dd').on('click', function(e){
-            e.stopPropagation();
-            $('.search-more-wrp').slideToggle();
-        });
-        $('.input-group.date5').datepicker({
-            todayBtn: "linked",
-            keyboardNavigation: false,
-            forceParse: false,
-            calendarWeeks: true,
-            autoclose: true
-        });
-        
-        $('#LoadMoreOrder').click(function (e) {
-            e.preventDefault();
-             pageno=parseInt(getQueryVariable("page"));
-             pageno=pageno+1;
-            window.location="orderList.html?page="+pageno;
-            	
-        });
-        $('#LoadFirst500').click(function (e) {
-           window.location="orderList.html?page="+0;
-            	
-        });
-        $('#returnOrders').click(function (e) {
-            window.location="orderList.html?status=return";
-             	
-         });
-        $('#paymentOrders').click(function (e) {
-            window.location="orderList.html?status=payment";
-             	
-         });
-        $('#actionableOrders').click(function (e) {
-            window.location="orderList.html?status=actionable";
-             	
-         });
-    });
-    
-    function getQueryVariable(variable) {
-    	  var query = window.location.search.substring(1);
-    	  var vars = query.split("&");
-    	  for (var i=0;i<vars.length;i++) {
-    	    var pair = vars[i].split("=");
-    	    if (pair[0] == variable) {
-    	      return pair[1];
-    	    }
-    	  } 
-    	 return 0;
-    	}
-</script>
+		$(document)
+				.ready(
+						function() {
+							$('.dataTables-example')
+									.dataTable(
+											{
+												responsive : true,
+												"dom" : 'T<"clear">lfrtip',
+												"tableTools" : {
+													"sSwfPath" : "/O2R/seller/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
+												}
+											});
+						});
+
+		function getQueryVariable(variable) {
+			var query = window.location.search.substring(1);
+			var vars = query.split("&");
+			for (var i = 0; i < vars.length; i++) {
+				var pair = vars[i].split("=");
+				if (pair[0] == variable) {
+					return pair[1];
+				}
+			}
+			return 0;
+		}
+	</script>
 	<style>
 body.DTTT_Print {
 	background: #fff;

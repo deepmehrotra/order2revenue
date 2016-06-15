@@ -227,4 +227,10 @@ public class OrderServiceImpl implements OrderService {
 			String year) {
 		return orderDao.getPOPaymentDetails(sellerId, year);
 	}
+
+	@Override
+	public List<GatePass> getGatepassesFromConsolidated(int returnId,
+			int sellerId) throws CustomException {
+		return orderDao.getGatepassesFromConsolidated(returnId, sellerId);
+	}
 }

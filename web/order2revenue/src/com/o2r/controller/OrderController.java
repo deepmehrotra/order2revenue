@@ -47,6 +47,7 @@ import com.o2r.helper.FileUploadForm;
 import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
 import com.o2r.model.Events;
+import com.o2r.model.GatePass;
 import com.o2r.model.Order;
 import com.o2r.model.Partner;
 import com.o2r.model.Product;
@@ -606,9 +607,22 @@ public class OrderController {
 					sellerId);
 			List<Order> orderlist = orderService.getPOOrdersFromConsolidated(
 					order.getOrderId(), sellerId);
-
+			
 			model.put("order", ConverterClass.prepareOrderBean(order));
-			model.put("orderlist", ConverterClass.prepareListofBean(orderlist));
+
+			if (orderlist == null) {
+				List<GatePass> gatepassList = orderService.getGatepassesFromConsolidated(
+						order.getOrderReturnOrRTO().getReturnId(), sellerId);
+				model.put("gatepasslist", gatepassList);
+				
+				log.info("$$$ viewPOOrderDailyAct Ends : OrderController $$$");
+				return new ModelAndView("dailyactivities/viewGatePass", model);
+			} else {
+				model.put("orderlist", ConverterClass.prepareListofBean(orderlist));
+				
+				log.info("$$$ viewPOOrderDailyAct Ends : OrderController $$$");
+				return new ModelAndView("dailyactivities/viewPOOrder", model);
+			}
 		} catch (CustomException ce) {
 			log.error("viewOrderDailyAct exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -618,9 +632,8 @@ public class OrderController {
 		} catch (Throwable e) {
 			e.printStackTrace();
 			log.error("Failed!", e);
+			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("$$$ viewPOOrderDailyAct Ends : OrderController $$$");
-		return new ModelAndView("dailyactivities/viewPOOrder", model);
 	}
 
 	@RequestMapping(value = "/seller/editOrderDA", method = RequestMethod.GET)

@@ -119,8 +119,7 @@ window.onload = function() {
 			<li><a href="minor.html"><i class="fa fa-wrench"></i> <span
 					class="nav-label">Miscellaneous</span> <span class="fa arrow"></span></a>
 				<ul class="nav nav-second-level">
-					<li class="active"><a href="#"
-						onclick="onclickSideNavigation('ManualCharges')">Manual
+					<li class="active"><a href="manualCharges.html">Manual
 							Charges</a></li>
 					<li><a href="#" onclick="onclickSideNavigation('Tax')">Tax</a></li>
 					<li><a href="#" onclick="onclickSideNavigation('TDS')">TDS</a></li>
