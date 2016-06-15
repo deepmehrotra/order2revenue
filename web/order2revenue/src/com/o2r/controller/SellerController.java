@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -113,7 +114,8 @@ public class SellerController {
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
-			return new ModelAndView("globalErorPage", model);
+			return new ModelAndView("redirect:/landing/500error.html");
+			//return new ModelAndView("globalErorPage", model);
 		}
 
 		log.info("$$$ registerSeller Ends : SellerController $$$");
@@ -141,11 +143,11 @@ public class SellerController {
 	}
 
 	@RequestMapping(value = "/addSeller", method = RequestMethod.GET)
-	public ModelAndView addOrder(
+	public ModelAndView addNewSeller(
 			@ModelAttribute("command") SellerBean sellerBean,
 			BindingResult result) {
 
-		log.info("$$$ addOrder Starts : SellerController $$$");
+		log.info("$$$ addNewSeller Starts : SellerController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			model.put("sellers", ConverterClass
@@ -155,7 +157,8 @@ public class SellerController {
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
-			return new ModelAndView("globalErorPage", model);
+			return new ModelAndView("redirect:/landing/500error.html");
+			//return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ addOrder Starts : SellerController $$$");
 		return new ModelAndView("addSeller", model);
@@ -456,14 +459,17 @@ public class SellerController {
 		log.info("$$$ getSellerName Starts : SellerController $$$");
 		//Map<String, Object> model = new HashMap<String, Object>();
 		Seller seller = null;
-		if(request.getSession().getAttribute("logoUrl")==null)
+		if(request.getSession().getAttribute("logoUrl")==null||request.getSession().getAttribute("sellerName")==null)
 		{
 			try {
 				seller=sellerService.getSeller(helperClass.getSellerIdfromSession(request));
 		
 			request.getSession().setAttribute("logoUrl", seller.getLogoUrl());
 			request.getSession().setAttribute("sellerName", seller.getName());
-			return "false";
+			if(seller.getLogoUrl()!=null&&StringUtils.isNotBlank(seller.getLogoUrl()))
+			return seller.getLogoUrl()+","+seller.getName();
+			else
+				return "null,"+seller.getName();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
