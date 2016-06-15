@@ -109,4 +109,6 @@ public interface OrderService {
 	public boolean isPOOrderUploaded(String poId, String invoiceId)
 			throws CustomException;
 
+	public List<GatePass> getGatepassesFromConsolidated(int returnId, int sellerId)
+			throws CustomException;
 }

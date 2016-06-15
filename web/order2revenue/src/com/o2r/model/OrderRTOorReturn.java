@@ -196,4 +196,12 @@ public class OrderRTOorReturn {
 		this.grossProfit = grossProfit;
 	}
 
+	public List<GatePass> getGatepasses() {
+		return gatepasses;
+	}
+
+	public void setGatepasses(List<GatePass> gatepasses) {
+		this.gatepasses = gatepasses;
+	}
+
 }

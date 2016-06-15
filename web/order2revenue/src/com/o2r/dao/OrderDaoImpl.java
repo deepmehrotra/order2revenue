@@ -738,6 +738,39 @@ public class OrderDaoImpl implements OrderDao {
 		log.info("*** getPOOrdersFromConsolidated ends : OrderDaoImpl ***");
 		return orderlist;
 	}
+	
+	@Override
+	public List<GatePass> getGatepassesFromConsolidated(int returnId, int sellerId)
+			throws CustomException {
+
+		log.info("*** getGatepassesFromConsolidated starts : OrderDaoImpl ***");
+		Seller seller = null;
+		List<GatePass> gatepassList = null;
+
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(GatePass.class);
+			criteria.add(Restrictions.eq("consolidatedReturn.returnId",
+					returnId));
+
+			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			
+			if (criteria.list().size() != 0) {
+				gatepassList = criteria.list();
+			}
+			session.getTransaction().commit();
+			session.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+			throw new CustomException(GlobalConstant.findOrdersError,
+					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
+		}
+		log.info("*** getGatepassesFromConsolidated ends : OrderDaoImpl ***");
+		return gatepassList;
+	}
 
 	@Override
 	public void deleteOrder(Order order, int sellerId) throws CustomException {
@@ -3812,7 +3845,7 @@ public class OrderDaoImpl implements OrderDao {
 			poOrderlist = findOrdersbyDate("orderDate", startDate, endDate,
 					sellerId, true);
 
-			for (int month = 0; month < 12; month++) {
+			for (int month = 0; month < 13; month++) {
 				PoPaymentDetailsBean poPaymentBean = new PoPaymentDetailsBean();
 				poPaymentDetailsList.add(poPaymentBean);
 			}
@@ -3824,7 +3857,7 @@ public class OrderDaoImpl implements OrderDao {
 				PoPaymentDetailsBean poPaymentBean = poPaymentDetailsList.get(cal.get(Calendar.MONTH) - 1);
 				PoPaymentDetailsBean poPaymentBeanOrderPay;
 				
-				poPaymentBean.setPaymentDetail(months[cal.get(Calendar.MONTH)] + ", " + year);
+				poPaymentBean.setPaymentDetail(months[cal.get(Calendar.MONTH)] + " " + year);
 				
 				if (poOrder.getOrderReturnOrRTO() == null) {
 					poPaymentBean.setDebits(
@@ -3847,7 +3880,7 @@ public class OrderDaoImpl implements OrderDao {
 					calOrderPay.setTime(poOrder.getOrderPayment().getDateofPayment());
 					
 					poPaymentBeanOrderPay = poPaymentDetailsList.get(calOrderPay.get(Calendar.MONTH) - 1);
-					poPaymentBeanOrderPay.setPaymentDetail(months[calOrderPay.get(Calendar.MONTH)] + ", " + year);
+					poPaymentBeanOrderPay.setPaymentDetail(months[calOrderPay.get(Calendar.MONTH)] + " " + year);
 					
 					poPaymentBeanOrderPay.setPayments(
 							poPaymentBeanOrderPay.getPayments() + poOrder.getOrderPayment().getNetPaymentResult());
@@ -3857,6 +3890,8 @@ public class OrderDaoImpl implements OrderDao {
 			
 			Iterator<PoPaymentDetailsBean> poIterator = poPaymentDetailsList.iterator();
 			double prevClosingBal = 0;
+			PoPaymentDetailsBean totalBean = poPaymentDetailsList.get(12);
+			totalBean.setPaymentDetail("Total :");
 			
 			while (poIterator.hasNext()) {
 					
@@ -3866,16 +3901,25 @@ public class OrderDaoImpl implements OrderDao {
 						"".equals(poPaymentBean.getPaymentDetail().trim())) {
 					poIterator.remove();
 				} else {
-					poPaymentBean.setClosingBal(prevClosingBal
-							+ poPaymentBean.getDebits()
-							- poPaymentBean.getGatepass()
-							- poPaymentBean.getPayments()
-							- poPaymentBean.getManualCharges()
-							- poPaymentBean.getEoss());
-					
-					prevClosingBal = poPaymentBean.getClosingBal();
+					if (!"Total :".equals(poPaymentBean.getPaymentDetail().trim())) {
+						poPaymentBean.setClosingBal(prevClosingBal
+								+ poPaymentBean.getDebits()
+								- poPaymentBean.getGatepass()
+								- poPaymentBean.getPayments()
+								- poPaymentBean.getManualCharges()
+								- poPaymentBean.getEoss());
+						
+						prevClosingBal = poPaymentBean.getClosingBal();
+						
+						totalBean.setDebits(totalBean.getDebits() + poPaymentBean.getDebits());
+						totalBean.setGatepass(totalBean.getGatepass() + poPaymentBean.getGatepass());
+						totalBean.setPayments(totalBean.getPayments() + poPaymentBean.getPayments());
+						totalBean.setManualCharges(totalBean.getManualCharges() + poPaymentBean.getManualCharges());
+						totalBean.setEoss(totalBean.getEoss() + poPaymentBean.getEoss());
+					}
 				}
 			}
+			totalBean.setClosingBal(prevClosingBal);
 		} catch (Exception e) {
 			log.debug("Inside exception  " + e.getLocalizedMessage());
 			e.printStackTrace();

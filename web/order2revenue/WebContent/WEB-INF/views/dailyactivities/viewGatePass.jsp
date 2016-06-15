@@ -42,7 +42,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 		<div class="col-lg-12">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
-					<h5>Order : ${order.channelOrderID}</h5>
+					<h5>GatePass : ${order.channelOrderID}</h5>
 				</div>
 				<div class="ibox-content view-order">
 
@@ -66,7 +66,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 		<div class="col-lg-12">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title ">
-					<h5>Order Info</h5>
+					<h5>GatePass Info</h5>
 				</div>
 
 				<div class="ibox-content add-company view-order">
@@ -76,9 +76,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 								<th>Partner</th>
 								<th>Invoice Id</th>
 								<th>PO ID</th>
-								<th>Seal No.</th>
 								<th>Order Shipped Date</th>
-								<th>Expected Payment Date</th>
 								<th>Status</th>
 								<th>Action</th>
 							</tr>
@@ -88,10 +86,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 								<td>${order.pcName}</td>
 								<td>${order.invoiceID}</td>
 								<td>${order.channelOrderID}</td>
-								<td>${order.sealNo}</td>
 								<td><fmt:formatDate value="${order.orderDate}"
-										pattern="MMM-dd-YYYY" /></td>
-								<td><fmt:formatDate value="${order.paymentDueDate}"
 										pattern="MMM-dd-YYYY" /></td>
 								<td>${order.status}</td>
 								<td>${order.finalStatus}</td>
@@ -122,18 +117,12 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 													<tr>
 														<th>#</th>
 														<th>SKU</th>
-														<th>MRP</th>
-														<th>SP</th>
-														<th>CUSTOMER DISC</th>
-														<th>CHANNEL COMMISSION</th>
-														<th>EOSS DISC</th>
+														<th>Return Charge</th>
+														<th>QTY</th>
 														<th>N/R</th>
 														<th>TAX</th>
 														<th>P/R</th>
-														<th>SUGGESTED <br>P/O PRICE
-														</th>
-														<th>P/O PRICE</th>
-														<th>QTY</th>
+														<th>Return Reason</th>
 														<th>SUBBTOTAL</th>
 													</tr>
 												</thead>
@@ -147,50 +136,28 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 														<th></th>
 														<th></th>
 														<th></th>
-														<th></th>
-														<th></th>
-														<th></th>
-														<th></th>
-														<th></th>
 													</tr>
 												</tfoot>
 												<tbody>
-													<c:if test="${!empty orderlist}">
-														<c:forEach items="${orderlist}" var="poOrder"
+													<c:if test="${!empty gatepasslist}">
+														<c:forEach items="${gatepasslist}" var="gatePass"
 															varStatus="loop">
 															<tr>
 																<td>${loop.index+1}</td>
-																<td>${poOrder.productSkuCode}</td>
+																<td>${gatePass.channelSkuRef}</td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2" value="${gatePass.returnRate}" /></td>
+																<td>${gatePass.quantity}</td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2" value="${gatePass.netNR}" /></td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2" value="${gatePass.taxPOAmt}" /></td>
+																<td><fmt:formatNumber type="number"
+																		maxFractionDigits="2" value="${gatePass.netPR}" /></td>
+																<td>${gatePass.returnReason}</td>
 																<td><fmt:formatNumber type="number"
 																		maxFractionDigits="2"
-																		value="${poOrder.orderMRP / poOrder.quantity}" /></td>
-																<td><fmt:formatNumber type="number"
-																		maxFractionDigits="2"
-																		value="${((poOrder.orderMRP / poOrder.quantity) * poOrder.productConfig.discount) / 100}" /></td>
-																<td><fmt:formatNumber type="number"
-																		maxFractionDigits="2"
-																		value="${(poOrder.orderMRP / poOrder.quantity) - (((poOrder.orderMRP / poOrder.quantity) * poOrder.productConfig.discount) / 100)}" /></td>
-																<td><fmt:formatNumber type="number"
-																		maxFractionDigits="2"
-																		value="${poOrder.productConfig.commisionAmt}" /></td>
-																<td><fmt:formatNumber type="number"
-																		maxFractionDigits="2" value="${poOrder.eossValue}" /></td>
-																<td><fmt:formatNumber type="number"
-																		maxFractionDigits="2" value="${poOrder.grossNetRate}" /></td>
-																<td><fmt:formatNumber type="number"
-																		maxFractionDigits="2" value="${poOrder.orderTax.tax}" /></td>
-																<td><fmt:formatNumber type="number"
-																		maxFractionDigits="2"
-																		value="${(poOrder.pr  / poOrder.quantity)}" /></td>
-																<td><fmt:formatNumber type="number"
-																		maxFractionDigits="2"
-																		value="${poOrder.productConfig.suggestedPOPrice}" /></td>
-																<td><fmt:formatNumber type="number"
-																		maxFractionDigits="2" value="${poOrder.poPrice}" /></td>
-																<td>${poOrder.quantity}</td>
-																<td><fmt:formatNumber type="number"
-																		maxFractionDigits="2"
-																		value="${poOrder.totalAmountRecieved}" /></td>
+																		value="${gatePass.totalReturnCharges}" /></td>
 															</tr>
 														</c:forEach>
 													</c:if>
@@ -307,22 +274,6 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 												"tableTools" : {
 													"sSwfPath" : "/O2R/seller/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
 												},
-												"columns": [
-												            { "width": "1%" },
-												            { "width": "10%" },
-												            { "width": "5%" },
-												            { "width": "5%" },
-												            { "width": "8%" },
-												            { "width": "10%" },
-												            { "width": "5%" },
-												            { "width": "8%" },
-												            { "width": "5%" },
-												            { "width": "8%" },
-												            { "width": "10%" },
-												            { "width": "10%" },
-												            { "width": "5%" },
-												            { "width": "10%" }
-												          ],
 												"footerCallback" : function(
 														row, data, start, end,
 														display) {
@@ -339,6 +290,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 													};
 
 													// Total over all pages
+
 													total2 = api
 															.column(2)
 															.data()
@@ -384,15 +336,6 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 																		return intVal(a)
 																				+ intVal(b);
 																	}, 0);
-													total7 = api
-															.column(7)
-															.data()
-															.reduce(
-																	function(a,
-																			b) {
-																		return intVal(a)
-																				+ intVal(b);
-																	}, 0);
 													total8 = api
 															.column(8)
 															.data()
@@ -402,51 +345,6 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 																		return intVal(a)
 																				+ intVal(b);
 																	}, 0);
-													total9 = api
-															.column(9)
-															.data()
-															.reduce(
-																	function(a,
-																			b) {
-																		return intVal(a)
-																				+ intVal(b);
-																	}, 0);
-													total10 = api
-															.column(10)
-															.data()
-															.reduce(
-																	function(a,
-																			b) {
-																		return intVal(a)
-																				+ intVal(b);
-																	}, 0);
-													total11 = api
-															.column(11)
-															.data()
-															.reduce(
-																	function(a,
-																			b) {
-																		return intVal(a)
-																				+ intVal(b);
-																	}, 0);
-													total12 = api
-															.column(12)
-															.data()
-															.reduce(
-																	function(a,
-																			b) {
-																		return intVal(a)
-																				+ intVal(b);
-																	}, 0);
-													total13 = api
-													.column(13)
-													.data()
-													.reduce(
-															function(a,
-																	b) {
-																return intVal(a)
-																		+ intVal(b);
-															}, 0);
 
 													// Total over this page
 													pageTotal2 = api
@@ -514,19 +412,6 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 																		return intVal(a)
 																				+ intVal(b);
 																	}, 0);
-													pageTotal7 = api
-															.column(
-																	7,
-																	{
-																		page : 'current'
-																	})
-															.data()
-															.reduce(
-																	function(a,
-																			b) {
-																		return intVal(a)
-																				+ intVal(b);
-																	}, 0);
 													pageTotal8 = api
 															.column(
 																	8,
@@ -540,169 +425,20 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 																		return intVal(a)
 																				+ intVal(b);
 																	}, 0);
-													pageTotal9 = api
-															.column(
-																	9,
-																	{
-																		page : 'current'
-																	})
-															.data()
-															.reduce(
-																	function(a,
-																			b) {
-																		return intVal(a)
-																				+ intVal(b);
-																	}, 0);
-													pageTotal10 = api
-															.column(
-																	10,
-																	{
-																		page : 'current'
-																	})
-															.data()
-															.reduce(
-																	function(a,
-																			b) {
-																		return intVal(a)
-																				+ intVal(b);
-																	}, 0);
-													pageTotal11 = api
-															.column(
-																	11,
-																	{
-																		page : 'current'
-																	})
-															.data()
-															.reduce(
-																	function(a,
-																			b) {
-																		return intVal(a)
-																				+ intVal(b);
-																	}, 0);
-													pageTotal12 = api
-															.column(
-																	12,
-																	{
-																		page : 'current'
-																	})
-															.data()
-															.reduce(
-																	function(a,
-																			b) {
-																		return intVal(a)
-																				+ intVal(b);
-																	}, 0);
-													pageTotal13 = api
-													.column(
-															13,
-															{
-																page : 'current'
-															})
-													.data()
-													.reduce(
-															function(a,
-																	b) {
-																return intVal(a)
-																		+ intVal(b);
-															}, 0);
 
 													// Update footer
 													$(api.column(2).footer())
-															.html(
-																	pageTotal2
-																			.toFixed(2)
-																			+ "<br>("
-																			+ total2
-																					.toFixed(2)
-																			+ ")");
+															.html(pageTotal2.toFixed(2) + "<br>(" + total2.toFixed(2) + ")");
 													$(api.column(3).footer())
-															.html(
-																	pageTotal3
-																			.toFixed(2)
-																			+ "<br>("
-																			+ total3
-																					.toFixed(2)
-																			+ ")");
+															.html(pageTotal3.toFixed(2) + "<br>(" + total3.toFixed(2) + ")");
 													$(api.column(4).footer())
-															.html(
-																	pageTotal4
-																			.toFixed(2)
-																			+ "<br>("
-																			+ total4
-																					.toFixed(2)
-																			+ ")");
+															.html(pageTotal4.toFixed(2) + "<br>(" + total4.toFixed(2) + ")");
 													$(api.column(5).footer())
-															.html(
-																	pageTotal5
-																			.toFixed(2)
-																			+ "<br>("
-																			+ total5
-																					.toFixed(2)
-																			+ ")");
+															.html(pageTotal5.toFixed(2) + "<br>(" + total5.toFixed(2) + ")");
 													$(api.column(6).footer())
-															.html(
-																	pageTotal6
-																			.toFixed(2)
-																			+ "<br>("
-																			+ total6
-																					.toFixed(2)
-																			+ ")");
-													$(api.column(7).footer())
-															.html(
-																	pageTotal7
-																			.toFixed(2)
-																			+ "<br>("
-																			+ total7
-																					.toFixed(2)
-																			+ ")");
+															.html(pageTotal6.toFixed(2) + "<br>(" + total6.toFixed(2) + ")");
 													$(api.column(8).footer())
-															.html(
-																	pageTotal8
-																			.toFixed(2)
-																			+ "<br>("
-																			+ total8
-																					.toFixed(2)
-																			+ ")");
-													$(api.column(9).footer())
-															.html(
-																	pageTotal9
-																			.toFixed(2)
-																			+ "<br>("
-																			+ total9
-																					.toFixed(2)
-																			+ ")");
-													$(api.column(10).footer())
-															.html(
-																	pageTotal10
-																			.toFixed(2)
-																			+ "<br>("
-																			+ total10
-																					.toFixed(2)
-																			+ ")");
-													$(api.column(11).footer())
-															.html(
-																	pageTotal11
-																			.toFixed(2)
-																			+ "<br>("
-																			+ total11
-																					.toFixed(2)
-																			+ ")");
-													$(api.column(12).footer())
-															.html(
-																	pageTotal12
-																			.toFixed(2)
-																			+ "<br>("
-																			+ total12
-																					.toFixed(2)
-																			+ ")");
-													$(api.column(13).footer())
-													.html(
-															pageTotal13
-																	.toFixed(2)
-																	+ "<br>("
-																	+ total13
-																			.toFixed(2)
-																	+ ")");
+															.html(pageTotal8.toFixed(2) + "<br>(" + total8.toFixed(2) + ")");
 												}
 											});
 

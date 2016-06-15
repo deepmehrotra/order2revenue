@@ -109,6 +109,9 @@ public interface OrderDao {
 	public boolean isPOOrderUploaded(String poId, String invoiceId)
 			throws CustomException;
 
-	List<Order> findPOOrdersbyDate(String column, Date startDate, Date endDate,
+	public List<Order> findPOOrdersbyDate(String column, Date startDate, Date endDate,
 			int sellerId) throws CustomException;
+
+	public List<GatePass> getGatepassesFromConsolidated(int returnId, int sellerId)
+			throws CustomException;
 }
