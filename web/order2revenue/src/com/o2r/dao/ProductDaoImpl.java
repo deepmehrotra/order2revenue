@@ -711,7 +711,7 @@ public class ProductDaoImpl implements ProductDao {
 				}else{
 					orders=orderService.findOrders("productSkuCode", product.getProductSkuCode(), sellerId, false, true);
 					if(orders != null && orders.size() != 0){
-						return "Due To Order Existance !";
+						return "Due To Order Existence !";
 					}else{
 						category=product.getCategory();
 						if(category != null){
