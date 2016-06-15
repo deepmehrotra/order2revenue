@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 
 public class ChannelReportDetails {
 	private String orderId;
+	private boolean isPoOrder;
 	private String invoiceId;
 	private String returnId;
 	private String paymentId;
@@ -33,9 +34,6 @@ public class ChannelReportDetails {
 	private double netQty;
 	private double netNrAmount;
 	private double netSpAmount;
-	private double netPureSaleQty;
-	private double netPureSaleNrAmount;
-	private double netPureSaleSpAmount;
 	private double saleRetVsGrossSale;
 	private String taxCategory;
 	private double netTaxLiability;
@@ -59,6 +57,14 @@ public class ChannelReportDetails {
 
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
+	}
+
+	public boolean isPoOrder() {
+		return isPoOrder;
+	}
+
+	public void setPoOrder(boolean isPoOrder) {
+		this.isPoOrder = isPoOrder;
 	}
 
 	public String getInvoiceId() {
@@ -267,30 +273,6 @@ public class ChannelReportDetails {
 
 	public void setNetSpAmount(double netSpAmount) {
 		this.netSpAmount = netSpAmount;
-	}
-
-	public double getNetPureSaleQty() {
-		return netPureSaleQty;
-	}
-
-	public void setNetPureSaleQty(double netPureSaleQty) {
-		this.netPureSaleQty = netPureSaleQty;
-	}
-
-	public double getNetPureSaleNrAmount() {
-		return netPureSaleNrAmount;
-	}
-
-	public void setNetPureSaleNrAmount(double netPureSaleNrAmount) {
-		this.netPureSaleNrAmount = netPureSaleNrAmount;
-	}
-
-	public double getNetPureSaleSpAmount() {
-		return netPureSaleSpAmount;
-	}
-
-	public void setNetPureSaleSpAmount(double netPureSaleSpAmount) {
-		this.netPureSaleSpAmount = netPureSaleSpAmount;
 	}
 
 	public double getSaleRetVsGrossSale() {
