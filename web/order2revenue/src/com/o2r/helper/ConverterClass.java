@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.o2r.bean.AccountTransactionBean;
 import com.o2r.bean.BusinessDetails;
 import com.o2r.bean.CategoryBean;
@@ -1709,6 +1711,8 @@ public class ConverterClass {
 				default: break;
 			}
 			String taxCategory = currChannelReport.getTaxCategory();
+			if(StringUtils.isBlank(taxCategory))
+				taxCategory = "Mix";
 			ChannelReportDetails channelReport = categoryReportMap.get(key + taxCategory);
 			double gpVsProductCost = currChannelReport.getGpVsProductCost();
 			double grossNrAmount = currChannelReport.getGrossNrAmount();

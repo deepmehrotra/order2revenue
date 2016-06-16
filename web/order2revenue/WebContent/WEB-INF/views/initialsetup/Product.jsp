@@ -65,6 +65,7 @@
                         </div>
                         <div class="ibox-content overflow-h cus-table-filters">
                         <div class="scroll-y">
+                        	<input type="hidden" id="delStatus" value="${deleteStatus}">
                              <table class="table table-striped table-bordered table-hover dataTables-example" >
                                 <thead>
                                 <tr>
@@ -91,12 +92,13 @@
                                     <td>${product.productPrice}</td>
                                     <td>${product.categoryName}</td>
                                     <td>${product.quantity}</td>
-                                     <td>${product.threholdLimit}</td>
-                                      <td>${product.channelSKU}</td>
-                                        <td class="tooltip-demo">
-                           <a href="editProduct.html?id=${product.productId}"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a>
-   							<a href="javascript:show('${product.productName}','${product.productSkuCode}')"  ><i class="fa fa-edit text-navy" data-toggle="modal" data-target="#myModal" data-placement="top" data-original-title="Update Inventory"></i></a>
- 							</td>
+                                    <td>${product.threholdLimit}</td>
+                                    <td>${product.channelSKU}</td>
+                                    <td class="tooltip-demo">
+			                           	<a href="editProduct.html?id=${product.productId}"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a>
+			   							<a href="javascript:show('${product.productName}','${product.productSkuCode}')"  ><i class="fa fa-recycle text-navy" data-toggle="modal" data-target="#myModal" data-placement="top" data-original-title="Update"></i></a>
+			   							<a href="deleteProduct.html?id=${product.productId}"  ><i class="fa fa-trash text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Delete"></i></a>			   										   							
+ 									</td>
 
                                 </tr>
                                 </c:forEach>
@@ -194,11 +196,19 @@
 <script>
  var globalValue="Mahesh kOLLIPAR";
     $(document).ready(function(){
+    	
+    	var status=document.getElementById("delStatus").value;
+    	if(status == 'Deleted'){
+    		alert("Product Deleted Successfully !!!");
+    	}else if(status != 'Deleted' && status != ""){
+    		alert("Product Can't Be Deleted ! "+status);
+    	}
+    	
         $('.dataTables-example').dataTable({
                 responsive: true,
                 "dom": 'T<"clear">lfrtip',
                 "tableTools": {
-                    "sSwfPath": "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
+                    "sSwfPath": "/O2R/seller/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
                 }
         });
         

@@ -100,11 +100,11 @@
 								<tr>
 									<th rowspan="2">PERIOD</th>
 									<th rowspan="2">DEBITS</th>
-									<th colspan="3" style="text-align: center;">CREDITS</th>
-									<th rowspan="2">PAYMENT DIFF</th>
+									<th colspan="4" style="text-align: center;">CREDITS</th>
 									<th rowspan="2">CLOSING BALANCE</th>
 								</tr>
 								<tr>
+									<th>GATEPASS</th>
 									<th>PAYMENTS</th>
 									<th>MANUAL CHARGES</th>
 									<th>EOSS</th>
@@ -115,18 +115,17 @@
 									<c:forEach items="${poPaymentListMonthly}" var="poPayment"
 										varStatus="loop">
 										<tr>
-											<td><a href="#"
-												onclick="onclickNavigateOrder('poOrderList','${poPayment.paymentDetail}')">${poPayment.paymentDetail}</a></td>
+											<td><a href="poOrderList.html?value=${poPayment.paymentDetail}">${poPayment.paymentDetail}</a></td>
 											<td><fmt:formatNumber type="number"
 													maxFractionDigits="2" value="${poPayment.debits}" /></td>
+											<td><fmt:formatNumber type="number"
+													maxFractionDigits="2" value="${poPayment.gatepass}" /></td>
 											<td><fmt:formatNumber type="number"
 													maxFractionDigits="2" value="${poPayment.payments}" /></td>
 											<td><fmt:formatNumber type="number"
 													maxFractionDigits="2" value="${poPayment.manualCharges}" /></td>
 											<td><fmt:formatNumber type="number"
 													maxFractionDigits="2" value="${poPayment.eoss}" /></td>
-											<td><fmt:formatNumber type="number"
-													maxFractionDigits="2" value="${poPayment.paymentDiff}" /></td>
 											<td><fmt:formatNumber type="number"
 													maxFractionDigits="2" value="${poPayment.closingBal}" /></td>
 										</tr>

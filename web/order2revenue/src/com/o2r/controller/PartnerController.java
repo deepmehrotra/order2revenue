@@ -108,6 +108,8 @@ public class PartnerController {
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		log.info("$$$ savePartner Starts : OrderController $$$");
+		
+		Map<String, Object> model = new HashMap<String, Object>();
 		if (partnerBean.getPcId() != 0) {
 			log.debug("******** ConfigId : "
 					+ partnerBean.getNrnReturnConfig().getConfigId());
@@ -220,7 +222,13 @@ public class PartnerController {
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
 			partnerService.addPartner(partner,
 					helperClass.getSellerIdfromSession(request));
-		} catch (Exception e) {
+		} catch (CustomException ce) {
+			log.error("SavePartner exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		}catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed!", e);
 		}
@@ -238,6 +246,12 @@ public class PartnerController {
 		try {
 			addedlist = ConverterClass.prepareListofPartnerBean(partnerService
 					.listPartners(helperClass.getSellerIdfromSession(request)));
+		}catch (CustomException ce) {
+			log.error("ListAllPartner exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			log.error("Failed!",e);
 			e.printStackTrace();
@@ -348,6 +362,8 @@ public class PartnerController {
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		log.info("$$$ saveJabong Starts : OrderController $$$");
+		
+		Map<String, Object> model = new HashMap<String, Object>();
 		log.debug(" Nr calculayor value from bean : "
 				+ partnerBean.getNrnReturnConfig().isNrCalculator());
 
@@ -367,9 +383,16 @@ public class PartnerController {
 				if (entry.getKey().contains("nr-")) {
 					String temp = entry.getKey().substring(3);
 					NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-					nrnReturncharge.setChargeAmount(Float.parseFloat(entry
-							.getValue()[0]));
-					nrnReturncharge.setChargeName(temp);
+					try {
+						nrnReturncharge.setChargeAmount(Float.parseFloat(entry
+								.getValue()[0]));
+						nrnReturncharge.setChargeName(temp);
+					} catch (NumberFormatException e) {
+						nrnReturncharge.setChargeAmount(1);
+						nrnReturncharge.setChargeName(temp
+								+ GlobalConstant.TaxCategoryPrefix
+								+ entry.getValue()[0]);
+					}
 					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
 					partnerBean.getNrnReturnConfig().getCharges()
 							.add(nrnReturncharge);
@@ -418,6 +441,12 @@ public class PartnerController {
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
 			partnerService.addPartner(partner,
 					helperClass.getSellerIdfromSession(request));
+		}catch (CustomException ce) {
+			log.error("SaveJabong exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			log.error("Failed!", e);
 			e.printStackTrace();
@@ -434,6 +463,7 @@ public class PartnerController {
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		log.info("$$$ saveMyntra Starts : OrderController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
 		log.debug(" Nr calculayor value from bean : "
 				+ partnerBean.getNrnReturnConfig().isNrCalculator());
 
@@ -509,7 +539,13 @@ public class PartnerController {
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
 			partnerService.addPartner(partner,
 					helperClass.getSellerIdfromSession(request));
-		} catch (Exception e) {
+		}catch (CustomException ce) {
+			log.error("SaveMyntra exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		}catch (Exception e) {
 			log.error("Failed!", e);
 			e.printStackTrace();
 		}
@@ -527,7 +563,10 @@ public class PartnerController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
+		List<String> taxCategoryList = new ArrayList<String>();
 		List<Category> categoryObjects = null;
+		List<TaxCategory> taxCategoryObjects = null;
+		
 		datemap.put("true", "Select payment from");
 		datemap.put("true", "Shipping Date");
 		datemap.put("false", "Delivery Date");
@@ -538,6 +577,13 @@ public class PartnerController {
 			if(categoryObjects != null){
 				for (Category cat : categoryObjects) {
 					categoryList.add(cat.getCatName());
+				}
+			}
+			taxCategoryObjects = taxDetailService.listTaxCategories(helperClass
+					.getSellerIdfromSession(request));
+			if (taxCategoryObjects != null && taxCategoryObjects.size() > 0) {
+				for (TaxCategory taxCat : taxCategoryObjects) {
+					taxCategoryList.add(taxCat.getTaxCatName());
 				}
 			}
 		} catch (Exception e) {
@@ -551,6 +597,7 @@ public class PartnerController {
 			}
 			model.put("partner", partner);
 			model.put("categoryList", categoryList);
+			model.put("taxCategoryList", taxCategoryList);
 			model.put("datemap", datemap);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -675,6 +722,11 @@ public class PartnerController {
 									.getSellerIdfromSession(request))));
 		} catch (CustomException ce) {
 			log.error("Failed!",ce);
+			log.error("deletePartner exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);			
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed!", e);
@@ -857,7 +909,7 @@ public class PartnerController {
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
 
-		log.info("$$$ editPartner Starts : OrderController $$$");
+		log.info("$$$ editMyntra Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
 		PartnerBean pbean = null;
@@ -877,7 +929,7 @@ public class PartnerController {
 			model.put("datemap", datemap);
 			pbean = ConverterClass.preparePartnerBean(partnerService
 					.getPartner(partnerBean.getPcId()));
-			log.debug("************** Inside edit partner : config ID :"
+			log.debug("************** Inside edit Myntra : config ID :"
 					+ pbean.getNrnReturnConfig().getConfigId());
 			for (NRnReturnCharges charge : pbean.getNrnReturnConfig()
 					.getCharges()) {
@@ -934,7 +986,7 @@ public class PartnerController {
 			model.put("taxSpMap", taxSpMap);
 			model.put("taxPoMap", taxPoMap);
 		} catch (CustomException ce) {
-			log.error("editPartner exception : " + ce.toString());
+			log.error("editMyntra exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
@@ -946,7 +998,7 @@ public class PartnerController {
 			model.put("errorMessage", e.getMessage());
 
 		}
-		log.info("$$$ editPartner Ends : OrderController $$$");
+		log.info("$$$ editMyntra Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/addMyntra", model);
 	}
 
@@ -955,7 +1007,7 @@ public class PartnerController {
 			@ModelAttribute("command") PartnerBean partnerBean,
 			BindingResult result) {
 
-		log.info("$$$ editPartner Starts : OrderController $$$");
+		log.info("$$$ editJabong Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
 		PartnerBean pbean = null;
@@ -970,7 +1022,7 @@ public class PartnerController {
 			model.put("datemap", datemap);
 			pbean = ConverterClass.preparePartnerBean(partnerService
 					.getPartner(partnerBean.getPcId()));
-			log.debug("************** Inside edit partner : config ID :"
+			log.debug("************** Inside edit Jabong : config ID :"
 					+ pbean.getNrnReturnConfig().getConfigId());
 			for (NRnReturnCharges charge : pbean.getNrnReturnConfig()
 					.getCharges()) {
@@ -987,7 +1039,7 @@ public class PartnerController {
 			model.put("partner", pbean);
 			model.put("chargeMap", chargeMap);
 		} catch (CustomException ce) {
-			log.error("editPartner exception : " + ce.toString());
+			log.error("editJabong exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
@@ -995,11 +1047,11 @@ public class PartnerController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("FAiled!", e);
-			log.error("editPartner exception : " + e.getLocalizedMessage());
+			log.error("editJabong exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());
 
 		}
-		log.info("$$$ editPartner Ends : OrderController $$$");
+		log.info("$$$ editJabong Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/addJabong", model);
 	}
 

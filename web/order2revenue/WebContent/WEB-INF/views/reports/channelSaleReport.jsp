@@ -90,8 +90,8 @@
 	                                <c:if test="${reportName eq 'categoryWiseSaleReport'}">
 	                                	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getCategory" name="headers"> Category </label></div>
 	                                	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getProductSku" name="headers"> SKU </label></div>
-	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossNrAmount" name="headers"> Gross N/R Amount </label></div>
 	                                </c:if>
+                                	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossNrAmount" name="headers"> Gross N/R Amount </label></div>
 	                            </div>
 	                            <div class="col-md-3">
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossSpAmount" name="headers"> Gross SP Amount </label></div>
@@ -132,12 +132,11 @@
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getSaleRetQty" name="headers"> Sale Return Qty</label></div>
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetQty" name="headers"> Net Qty</label></div>
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossNrAmount" name="headers"> Net N/R </label></div>
-	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getSaleRetNrAmount" name="headers"> Return charges to be reversed </label></div>
+	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getRetAmountToBeReversed" name="headers"> Return charges to be reversed </label></div>
     	                        </div>
     	                        <div class="col-md-3">
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetPaymentResult" name="headers"> Net Payment Result </label></div>
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getPaymentDifference" name="headers"> Payment Difference </label></div>
-	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetReturnCharges" name="headers"> Return Charges </label></div>
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getProductCost" name="headers"> Gross Product Cost </label></div>
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getReturnProductCost" name="headers"> Return Product Cost</label></div>
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetProductCost" name="headers"> Net Product Cost </label></div>

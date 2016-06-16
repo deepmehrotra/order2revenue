@@ -93,4 +93,8 @@ public boolean getProductwithProductConfig(int sellerId) throws CustomException
 {
 	return productDao.getProductwithProductConfig(sellerId);
 }
+@Override
+	public String deleteProduct(int productId, int sellerId) throws Exception {		
+		return productDao.deleteProduct(productId, sellerId);
+	}
 }

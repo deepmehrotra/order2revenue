@@ -92,9 +92,8 @@
 									<div class="table-menu-links">
 										<a href="orderList.html" id="Orders">MP Orders</a> <a href="#"
 											id="returnOrders">Return</a> <a href="gatepasslist.html"
-											id="gatepass">GatePass</a> <a href="#"
-											id="paymentOrders">Payment</a> <a href="#"
-											id="actionableOrders">Actionable</a>
+											id="gatepass">GatePass</a> <a href="#" id="paymentOrders">Payment</a>
+										<a href="#" id="actionableOrders">Actionable</a>
 									</div>
 								</div>
 								<div class="col-sm-12">
@@ -201,6 +200,23 @@
 													<th>Action</th>
 												</tr>
 											</thead>
+											<tfoot>
+												<tr>
+													<th colspan="3" style="text-align: right">Total:</th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+												</tr>
+											</tfoot>
 											<tbody>
 												<c:if test="${!empty poOrders}">
 													<c:forEach items="${poOrders}" var="poOrder"
@@ -212,11 +228,11 @@
 																onclick="onclickNavigateOrder('viewPOOrder',${poOrder.orderId})">${poOrder.channelOrderID}</a></td>
 															<td>${poOrder.pcName}</td>
 															<%-- <td>${poOrder.productSkuCode}</td> --%>
-															<td><fmt:formatDate value="${poOrder.shippedDate}"
+															<td><fmt:formatDate value="${poOrder.orderDate}"
 																	pattern="MMM dd ,YY" /></td>
 															<td>${poOrder.invoiceID}</td>
-															<td><fmt:formatDate value="${poOrder.paymentDueDate}"
-																	pattern="MMM dd ,YY" /></td>
+															<td><fmt:formatDate
+																	value="${poOrder.paymentDueDate}" pattern="MMM dd ,YY" /></td>
 															<td><fmt:formatNumber type="number"
 																	maxFractionDigits="2" value="${poOrder.poPrice}" /></td>
 															<%-- <td><fmt:formatNumber type="number" maxFractionDigits="2"
@@ -293,8 +309,174 @@
                 responsive: true,
                 "dom": 'T<"clear">lfrtip',
                 "tableTools": {
-                    "sSwfPath": "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
-                }
+                    "sSwfPath": "/O2R/seller/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
+                },
+                "footerCallback" : function(
+						row, data, start, end,
+						display) {
+					var api = this.api(), data;
+
+					// Remove the formatting to get integer data for summation
+					var intVal = function(i) {
+						return typeof i === 'string' ? i
+								.replace(
+										/[\$,]/g,
+										'') * 1
+								: typeof i === 'number' ? i
+										: 0;
+					};
+
+					// Total over all pages
+
+					total7 = api
+							.column(7)
+							.data()
+							.reduce(
+									function(a,
+											b) {
+										return intVal(a)
+												+ intVal(b);
+									}, 0);
+					total8 = api
+							.column(8)
+							.data()
+							.reduce(
+									function(a,
+											b) {
+										return intVal(a)
+												+ intVal(b);
+									}, 0);
+					total9 = api
+							.column(9)
+							.data()
+							.reduce(
+									function(a,
+											b) {
+										return intVal(a)
+												+ intVal(b);
+									}, 0);
+					total10 = api
+							.column(10)
+							.data()
+							.reduce(
+									function(a,
+											b) {
+										return intVal(a)
+												+ intVal(b);
+									}, 0);
+					total11 = api
+							.column(11)
+							.data()
+							.reduce(
+									function(a,
+											b) {
+										return intVal(a)
+												+ intVal(b);
+									}, 0);
+					total12 = api
+							.column(12)
+							.data()
+							.reduce(
+									function(a,
+											b) {
+										return intVal(a)
+												+ intVal(b);
+									}, 0);
+
+					// Total over this page
+					pageTotal7 = api
+							.column(
+									7,
+									{
+										page : 'current'
+									})
+							.data()
+							.reduce(
+									function(a,
+											b) {
+										return intVal(a)
+												+ intVal(b);
+									}, 0);
+					pageTotal8 = api
+							.column(
+									8,
+									{
+										page : 'current'
+									})
+							.data()
+							.reduce(
+									function(a,
+											b) {
+										return intVal(a)
+												+ intVal(b);
+									}, 0);
+					pageTotal9 = api
+							.column(
+									9,
+									{
+										page : 'current'
+									})
+							.data()
+							.reduce(
+									function(a,
+											b) {
+										return intVal(a)
+												+ intVal(b);
+									}, 0);
+					pageTotal10 = api
+							.column(
+									10,
+									{
+										page : 'current'
+									})
+							.data()
+							.reduce(
+									function(a,
+											b) {
+										return intVal(a)
+												+ intVal(b);
+									}, 0);
+					pageTotal11 = api
+							.column(
+									11,
+									{
+										page : 'current'
+									})
+							.data()
+							.reduce(
+									function(a,
+											b) {
+										return intVal(a)
+												+ intVal(b);
+									}, 0);
+					pageTotal12 = api
+							.column(
+									12,
+									{
+										page : 'current'
+									})
+							.data()
+							.reduce(
+									function(a,
+											b) {
+										return intVal(a)
+												+ intVal(b);
+									}, 0);
+
+					// Update footer
+					$(api.column(7).footer())
+							.html(pageTotal7.toFixed(2) + "<br>(" + total7.toFixed(2) + ")");
+					$(api.column(8).footer())
+							.html(pageTotal8.toFixed(2) + "<br>(" + total8.toFixed(2) + ")");
+					$(api.column(9).footer())
+							.html(pageTotal9.toFixed(2) + "<br>(" + total9.toFixed(2) + ")");
+					$(api.column(10).footer())
+							.html(pageTotal10.toFixed(2) + "<br>(" + total10.toFixed(2) + ")");
+					$(api.column(11).footer())
+							.html(pageTotal11.toFixed(2) + "<br>(" + total11.toFixed(2) + ")");
+					$(api.column(12).footer())
+							.html(pageTotal12.toFixed(2) + "<br>(" + total12.toFixed(2) + ")");
+				}
         });
         
         $('#searchOrders').change(function () {     

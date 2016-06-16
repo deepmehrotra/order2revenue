@@ -26,9 +26,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.o2r.bean.ChannelCatNPR;
+import com.o2r.bean.ChannelGP;
 import com.o2r.bean.ChannelMC;
 import com.o2r.bean.ChannelMCNPR;
 import com.o2r.bean.ChannelNPR;
+import com.o2r.bean.ChannelNR;
+import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.PartnerReportDetails;
@@ -544,9 +547,26 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();			
 			List<Order> results = fetchDebtorsOrders(session, sellerId, startDate, endDate);
+			Map<String, PartnerReportDetails> poOrderMap = new HashMap<String, PartnerReportDetails>();
 			for (Order currOrder : results) {
 				PartnerReportDetails partnerBusiness = transformPartnerDetail(currOrder, session, startDate, endDate);
-				partnerBusinessList.add(partnerBusiness);
+				if(partnerBusiness.isPoOrder()){
+					String channelOrderId = partnerBusiness.getChannelOrderID();
+					PartnerReportDetails poPartnerBusiness = poOrderMap.get(channelOrderId);
+					if(poPartnerBusiness!=null){
+						combine(poPartnerBusiness, partnerBusiness);
+					}
+					poOrderMap.put(channelOrderId, partnerBusiness);
+				} else{
+					partnerBusinessList.add(partnerBusiness);
+				}
+			}
+			Iterator entries = poOrderMap.entrySet().iterator();
+			while (entries.hasNext()) {
+				Entry<String, PartnerReportDetails> thisEntry = (Entry<String, PartnerReportDetails>) entries
+						.next();
+				PartnerReportDetails value = thisEntry.getValue();
+				partnerBusinessList.add(value);
 			}
 			log.info("Total Orders" + partnerBusinessList.size());
 		} catch (Exception e) {
@@ -569,10 +589,27 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();			
 			List<Order> results = fetchOrders(session, sellerId, startDate, endDate);
+			Map<String, PartnerReportDetails> poOrderMap = new HashMap<String, PartnerReportDetails>();
 			for (Order currOrder : results) {
 				PartnerReportDetails partnerBusiness = transformPartnerDetail(currOrder, session, startDate, endDate);
-				partnerBusinessList.add(partnerBusiness);
-			}			
+				if(partnerBusiness.isPoOrder()){
+					String channelOrderId = partnerBusiness.getChannelOrderID();
+					PartnerReportDetails poPartnerBusiness = poOrderMap.get(channelOrderId);
+					if(poPartnerBusiness!=null){
+						combine(poPartnerBusiness, partnerBusiness);
+					}
+					poOrderMap.put(channelOrderId, partnerBusiness);
+				} else{
+					partnerBusinessList.add(partnerBusiness);
+				}
+			}
+			Iterator entries = poOrderMap.entrySet().iterator();
+			while (entries.hasNext()) {
+				Entry<String, PartnerReportDetails> thisEntry = (Entry<String, PartnerReportDetails>) entries
+						.next();
+				PartnerReportDetails value = thisEntry.getValue();
+				partnerBusinessList.add(value);
+			}
 			log.info("Total Orders" + partnerBusinessList.size());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -585,6 +622,44 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		return partnerBusinessList;
 	}
 	
+	private void combine(PartnerReportDetails poPartnerBusiness,
+			PartnerReportDetails partnerBusiness) {
+		partnerBusiness.setAdditionalReturnCharges(partnerBusiness.getAdditionalReturnCharges() + poPartnerBusiness.getAdditionalReturnCharges());
+		partnerBusiness.setGrossCommission(partnerBusiness.getGrossCommission() + poPartnerBusiness.getGrossCommission());
+		partnerBusiness.setGrossCommissionQty(partnerBusiness.getGrossCommissionQty() + poPartnerBusiness.getGrossCommissionQty());
+		partnerBusiness.setGrossNetRate(partnerBusiness.getGrossNetRate() + poPartnerBusiness.getGrossNetRate());
+		partnerBusiness.setGrossPartnerCommission(partnerBusiness.getGrossPartnerCommission() + poPartnerBusiness.getGrossPartnerCommission());
+		partnerBusiness.setGrossProfit(partnerBusiness.getGrossNetRate() + poPartnerBusiness.getGrossNetRate());
+		partnerBusiness.setGrossReturnChargesReversed(partnerBusiness.getGrossReturnChargesReversed() + poPartnerBusiness.getGrossReturnChargesReversed());
+		partnerBusiness.setGrossSaleQuantity(partnerBusiness.getGrossSaleQuantity() + poPartnerBusiness.getGrossSaleQuantity());
+		partnerBusiness.setGrossTds(partnerBusiness.getGrossTds() + poPartnerBusiness.getGrossTds());
+		partnerBusiness.setNegativeAmount(partnerBusiness.getNegativeAmount() + poPartnerBusiness.getNegativeAmount());
+		partnerBusiness.setNetActualSale(partnerBusiness.getNetActualSale() + poPartnerBusiness.getNetActualSale());
+		partnerBusiness.setNetEossValue(partnerBusiness.getNetEossValue() + poPartnerBusiness.getNetEossValue());
+		partnerBusiness.setNetPartnerCommissionPaid(partnerBusiness.getNetPartnerCommissionPaid() + poPartnerBusiness.getNetPartnerCommissionPaid());
+		partnerBusiness.setNetPaymentResult(partnerBusiness.getNetPaymentResult() + poPartnerBusiness.getNetPaymentResult());
+		partnerBusiness.setNetPr(partnerBusiness.getNetPr() + poPartnerBusiness.getNetPr());
+		partnerBusiness.setNetRate(partnerBusiness.getNetRate() + poPartnerBusiness.getNetRate());
+		partnerBusiness.setNetReturnCharges(partnerBusiness.getNetReturnCharges() + poPartnerBusiness.getNetReturnCharges());
+		partnerBusiness.setNetSaleQuantity(partnerBusiness.getNetSaleQuantity() + poPartnerBusiness.getNetSaleQuantity());
+		partnerBusiness.setNetSP(partnerBusiness.getNetSP() + poPartnerBusiness.getNetSP());
+		partnerBusiness.setNetTaxToBePaid(partnerBusiness.getNetTaxToBePaid() + poPartnerBusiness.getNetTaxToBePaid());
+		partnerBusiness.setPaymentDifference(partnerBusiness.getPaymentDifference() + poPartnerBusiness.getPaymentDifference());
+		partnerBusiness.setPositiveAmount(partnerBusiness.getPositiveAmount() + poPartnerBusiness.getPositiveAmount());
+		partnerBusiness.setProductPrice(partnerBusiness.getProductPrice() + poPartnerBusiness.getProductPrice());
+		partnerBusiness.setReturnCommision(partnerBusiness.getReturnCommision() + poPartnerBusiness.getReturnCommision());
+		partnerBusiness.setReturnQuantity(partnerBusiness.getReturnQuantity() + poPartnerBusiness.getReturnQuantity());
+		partnerBusiness.setReturnSP(partnerBusiness.getReturnSP() + poPartnerBusiness.getReturnSP());
+		partnerBusiness.setReturnTds(partnerBusiness.getReturnTds() + poPartnerBusiness.getReturnTds());
+		partnerBusiness.setServiceTax(partnerBusiness.getServiceTax() + poPartnerBusiness.getServiceTax());
+		partnerBusiness.setTaxPOPrice(partnerBusiness.getGrossTds() + poPartnerBusiness.getTaxPOPrice());
+		partnerBusiness.setTaxSP(partnerBusiness.getTaxSP() + poPartnerBusiness.getTaxSP());
+		partnerBusiness.setTdsToBeDeducted10(partnerBusiness.getTdsToBeDeducted10() + poPartnerBusiness.getTdsToBeDeducted10());
+		partnerBusiness.setTdsToBeDeducted2(partnerBusiness.getTdsToBeDeducted2() + poPartnerBusiness.getTdsToBeDeducted2());
+		partnerBusiness.setTdsToBeDeposited(partnerBusiness.getTdsToBeDeposited() + poPartnerBusiness.getTdsToBeDeposited());
+		partnerBusiness.setTotalReturnCharges(partnerBusiness.getTotalReturnCharges() + poPartnerBusiness.getTotalReturnCharges());
+	}
+
 	private PartnerReportDetails transformPartnerDetail(Order currOrder, Session session, Date startDate,
 			Date endDate) {
 		PartnerReportDetails partnerBusiness = new PartnerReportDetails();
@@ -820,137 +895,27 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			 session.getTransaction().begin();
 			 
 			 List<Order> orders = fetchOrders(session, sellerId, startDate, endDate);
+			 Map<String, ChannelReportDetails> poOrderMap = new HashMap<String, ChannelReportDetails>();
 			 for (Order currOrder : orders) {
-					boolean isPoOrder = currOrder.isPoOrder();
-					Order consolidateOrder = currOrder.getConsolidatedOrder();
-					ChannelReportDetails channelReport = new ChannelReportDetails();
-					channelReport.setPartner(currOrder.getPcName());
-					channelReport.setOrderId(currOrder.getChannelOrderID());
-					channelReport.setInvoiceId(currOrder.getInvoiceID());
-					channelReport.setShippedDate(currOrder.getShippedDate());
-					channelReport.setReceivedDate(currOrder.getOrderDate());
-					channelReport.setDeliveryDate(currOrder.getDeliveryDate());
-					channelReport.setPaymentDate(currOrder.getPaymentDueDate());
-					channelReport.setProductSku(currOrder.getProductSkuCode());
-					channelReport.setPaymentType(currOrder.getPaymentType());
-					channelReport.setAwb(currOrder.getAwbNum());
-					channelReport.setPiRefNo(currOrder.getPIreferenceNo());
-					channelReport.setSubOrderId(currOrder.getSubOrderID());
-					channelReport.setLogisticPartner(currOrder.getLogisticPartner());
-					
-					double orderPr = currOrder.getPr();
-					double grossProfit = currOrder.getGrossProfit();
-					double grossSaleQty = currOrder.getQuantity();
-					double grossNrAmount = currOrder.getGrossNetRate();
-					double grossSpAmount = currOrder.getOrderSP();
-					double saleRetQty = 0;
-					double saleRetNrAmount = 0;
-					double saleRetSpAmount = 0;
-					channelReport.setGrossProfit(grossProfit);
-					channelReport.setGrossQty(grossSaleQty);
-					channelReport.setGrossNrAmount(grossNrAmount*grossSaleQty);
-					channelReport.setGrossSpAmount(grossSpAmount);
-
-					OrderRTOorReturn currOrderReturn = currOrder.getOrderReturnOrRTO();
-					double additionalCharges = currOrderReturn.getReturnOrRTOChargestoBeDeducted(); 
-					if(currOrderReturn != null){
-						channelReport.setNetReturnCharges(additionalCharges);
-						saleRetQty = currOrderReturn.getReturnorrtoQty();
-						channelReport.setReturnDate(currOrderReturn.getReturnDate());
-						channelReport.setReturnId(currOrderReturn.getReturnOrRTOId());
-						// Only for PO Order
-						if(isPoOrder && consolidateOrder!=null){
-							saleRetNrAmount = currOrderReturn.getNetNR();
-							channelReport.setReturnId(currOrderReturn.getReturnOrRTOId());
-						}
+				 ChannelReportDetails channelReport = transformChannelReport(currOrder, session);
+				 if(channelReport.isPoOrder()){
+					String channelOrderId = channelReport.getOrderId();
+					ChannelReportDetails poChannelReport = poOrderMap.get(channelOrderId);
+					if(poChannelReport!=null){
+						combine(poChannelReport, channelReport);
 					}
-					double netPr = currOrder.getPr()/grossSaleQty*(grossSaleQty-saleRetQty);
-					channelReport.setNetPr(netPr);	
-					// MP/PO Order conditions
-					if(!isPoOrder){
-						saleRetNrAmount = grossNrAmount*saleRetQty;
-						if(grossSaleQty != 0)
-							saleRetSpAmount = grossSpAmount*(saleRetQty/grossSaleQty);
-						channelReport.setPr(orderPr);
-					} else if(isPoOrder && consolidateOrder!=null){
-						saleRetSpAmount = grossSpAmount;
-						if(grossSaleQty != 0)
-							channelReport.setPr(orderPr * saleRetQty/grossSaleQty);
-					}
-					channelReport.setSaleRetQty(saleRetQty);
-					channelReport.setSaleRetNrAmount(saleRetNrAmount + additionalCharges);
-					channelReport.setSaleRetSpAmount(saleRetSpAmount);
-					
-					double saleRetVsGrossSale = 0;
-					if(grossSaleQty != 0)
-						saleRetVsGrossSale = saleRetQty/grossSaleQty*100;
-					double netQty = grossSaleQty - saleRetQty;
-					double netNrAmount = grossNrAmount*grossSaleQty - saleRetNrAmount - additionalCharges;
-					double netSpAmount = grossSpAmount - saleRetSpAmount;
-					channelReport.setSaleRetVsGrossSale(saleRetVsGrossSale);
-					channelReport.setNetQty(netQty);
-					channelReport.setNetNrAmount(netNrAmount);
-					channelReport.setNetSpAmount(netSpAmount);
-					
-					double taxCatPercent = 0;
-					OrderTax currOrderTax = currOrder.getOrderTax();
-					if(currOrderTax != null){
-						String taxCategory = currOrderTax.getTaxCategtory();
-						channelReport.setTaxCategory(taxCategory);
-						if(StringUtils.isNotBlank(taxCategory)){
-							String[] taxCategoryArr = taxCategory.split("@");
-							if(taxCategoryArr.length==2){
-								taxCatPercent = Double.parseDouble(taxCategoryArr[1]);
-							}
-						}
-					}
-					double netTaxLiability = 0;
-					if(taxCatPercent != 0)
-						netTaxLiability = netSpAmount - netSpAmount*(100/(100 + taxCatPercent));
-					channelReport.setNetTaxLiability(netTaxLiability);
-//					channelReport.setNetPureSaleQty(netQty);
-//					channelReport.setNetPureSaleNrAmount(netNrAmount);
-//					channelReport.setNetPureSaleSpAmount(netSpAmount - netTaxLiability);
-					
-					OrderPayment currOrderPayment = currOrder.getOrderPayment();
-					if(currOrderPayment != null){
-						channelReport.setNetToBeReceived(currOrderPayment.getPaymentDifference());
-						double netPaymentResult = currOrderPayment.getNetPaymentResult();
-						double paymentDifference = currOrderPayment.getPaymentDifference();
-						channelReport.setNetPaymentResult(netPaymentResult);
-						channelReport.setPaymentDifference(paymentDifference);
-						channelReport.setNetAr(netPaymentResult);
-						channelReport.setPaymentId(currOrderPayment.getPaymentId() + "");						
-					}
-					
-					double productCost = 0;
-					double gpVsProductCost = 0;
-					Criteria prodcriteria = session.createCriteria(Product.class);
-					prodcriteria.add(Restrictions.eq("productSkuCode",
-							currOrder.getProductSkuCode()));
-					List<Product> productList = prodcriteria.list();
-					if (productList.size() > 0) {
-						Product currProduct = productList.get(0);
-						if(!isPoOrder){
-							productCost = currProduct.getProductPrice();
-						}
-						channelReport.setCategory(currProduct.getCategoryName());
-					}
-					if(productCost != 0){
-						double grossProductCost = productCost*grossSaleQty;
-						double returnProductCost = productCost*saleRetQty;
-						double netProductCost = grossProductCost - returnProductCost;
-						channelReport.setProductCost(grossProductCost);
-						channelReport.setReturnProductCost(returnProductCost);
-						channelReport.setNetProductCost(netProductCost);
-						if(netProductCost != 0)
-							gpVsProductCost = grossProfit/netProductCost*100;
-					}
-					channelReport.setGpVsProductCost(gpVsProductCost);
-					channelReport.setFinalStatus(currOrder.getFinalStatus());
-					
-					channelReportDetailsList.add(channelReport);
+					poOrderMap.put(channelOrderId, channelReport);
+				} else{
+					 channelReportDetailsList.add(channelReport);
+				}
 			 }
+			 Iterator entries = poOrderMap.entrySet().iterator();
+				while (entries.hasNext()) {
+					Entry<String, ChannelReportDetails> thisEntry = (Entry<String, ChannelReportDetails>) entries
+							.next();
+					ChannelReportDetails value = thisEntry.getValue();
+					channelReportDetailsList.add(value);
+				}
 		 } catch (Exception e) {
 			 log.error("Failed!",e);
 			throw new CustomException(
@@ -960,6 +925,167 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		}
 			 
 		return channelReportDetailsList;	 
+	}
+
+	private void combine(ChannelReportDetails poChannelReport,
+			ChannelReportDetails channelReport) {
+		channelReport.setGpVsProductCost(channelReport.getGpVsProductCost() + poChannelReport.getGpVsProductCost());
+		channelReport.setGrossNrAmount(channelReport.getGrossNrAmount() + poChannelReport.getGrossNrAmount());
+		channelReport.setGrossProfit(channelReport.getGrossProfit() + poChannelReport.getGrossProfit());
+		channelReport.setGrossQty(channelReport.getGrossQty() + poChannelReport.getGrossQty());
+		channelReport.setGrossSpAmount(channelReport.getGrossSpAmount() + poChannelReport.getGrossSpAmount());
+		channelReport.setNetAr(channelReport.getNetAr() + poChannelReport.getNetAr());
+		channelReport.setNetNrAmount(channelReport.getNetNrAmount() + poChannelReport.getNetNrAmount());
+		channelReport.setNetPaymentResult(channelReport.getNetPaymentResult() + poChannelReport.getNetPaymentResult());
+		channelReport.setNetPr(channelReport.getNetPr() + poChannelReport.getNetPr());
+		channelReport.setNetProductCost(channelReport.getNetProductCost() + poChannelReport.getNetProductCost());
+		channelReport.setNetQty(channelReport.getNetQty() + poChannelReport.getNetQty());
+		channelReport.setNetReturnCharges(channelReport.getNetReturnCharges() + poChannelReport.getNetReturnCharges());
+		channelReport.setNetSpAmount(channelReport.getNetSpAmount() + poChannelReport.getNetSpAmount());
+		channelReport.setNetTaxLiability(channelReport.getNetTaxLiability() + poChannelReport.getNetTaxLiability());
+		channelReport.setNetToBeReceived(channelReport.getNetToBeReceived() + poChannelReport.getNetToBeReceived());
+		channelReport.setPaymentDifference(channelReport.getPaymentDifference() + poChannelReport.getPaymentDifference());
+		channelReport.setPr(channelReport.getPr() + poChannelReport.getPr());
+		channelReport.setProductCost(channelReport.getProductCost() + poChannelReport.getProductCost());
+		channelReport.setRetAmountToBeReversed(channelReport.getRetAmountToBeReversed() + poChannelReport.getRetAmountToBeReversed());
+		channelReport.setReturnProductCost(channelReport.getReturnProductCost() + poChannelReport.getReturnProductCost());
+		channelReport.setSaleRetNrAmount(channelReport.getSaleRetNrAmount() + poChannelReport.getSaleRetNrAmount());
+		channelReport.setSaleRetQty(channelReport.getSaleRetQty() + poChannelReport.getSaleRetQty());
+		channelReport.setSaleRetSpAmount(channelReport.getSaleRetSpAmount() + poChannelReport.getSaleRetSpAmount());
+		channelReport.setSaleRetVsGrossSale(channelReport.getSaleRetVsGrossSale() + poChannelReport.getSaleRetVsGrossSale());
+	}
+
+	private ChannelReportDetails transformChannelReport(Order currOrder, Session session) {
+		boolean isPoOrder = currOrder.isPoOrder();
+		Order consolidateOrder = currOrder.getConsolidatedOrder();
+		ChannelReportDetails channelReport = new ChannelReportDetails();
+		channelReport.setPartner(currOrder.getPcName());
+		channelReport.setOrderId(currOrder.getChannelOrderID());
+		channelReport.setInvoiceId(currOrder.getInvoiceID());
+		channelReport.setShippedDate(currOrder.getShippedDate());
+		channelReport.setReceivedDate(currOrder.getOrderDate());
+		channelReport.setDeliveryDate(currOrder.getDeliveryDate());
+		channelReport.setPaymentDate(currOrder.getPaymentDueDate());
+		channelReport.setProductSku(currOrder.getProductSkuCode());
+		channelReport.setPaymentType(currOrder.getPaymentType());
+		channelReport.setAwb(currOrder.getAwbNum());
+		channelReport.setPiRefNo(currOrder.getPIreferenceNo());
+		channelReport.setSubOrderId(currOrder.getSubOrderID());
+		channelReport.setLogisticPartner(currOrder.getLogisticPartner());
+		if(isPoOrder && consolidateOrder!=null)
+			channelReport.setPoOrder(true);
+		else
+			channelReport.setPoOrder(false);
+		double orderPr = currOrder.getPr();
+		double grossProfit = currOrder.getGrossProfit();
+		double grossSaleQty = currOrder.getQuantity();
+		double grossNrAmount = currOrder.getGrossNetRate();
+		double grossSpAmount = currOrder.getOrderSP();
+		double saleRetQty = 0;
+		double saleRetNrAmount = 0;
+		double saleRetSpAmount = 0;
+		channelReport.setGrossProfit(grossProfit);
+		channelReport.setGrossQty(grossSaleQty);
+		channelReport.setGrossNrAmount(grossNrAmount*grossSaleQty);
+		channelReport.setGrossSpAmount(grossSpAmount);
+
+		OrderRTOorReturn currOrderReturn = currOrder.getOrderReturnOrRTO();
+		double additionalCharges = currOrderReturn.getReturnOrRTOChargestoBeDeducted(); 
+		if(currOrderReturn != null){
+			channelReport.setNetReturnCharges(additionalCharges);
+			saleRetQty = currOrderReturn.getReturnorrtoQty();
+			channelReport.setReturnDate(currOrderReturn.getReturnDate());
+			channelReport.setReturnId(currOrderReturn.getReturnOrRTOId());
+			// Only for PO Order
+			if(isPoOrder && consolidateOrder!=null){
+				saleRetNrAmount = currOrderReturn.getNetNR();
+				channelReport.setReturnId(currOrderReturn.getReturnOrRTOId());
+			}
+		}
+		double netPr = currOrder.getPr()/grossSaleQty*(grossSaleQty-saleRetQty);
+		channelReport.setNetPr(netPr);	
+		// MP/PO Order conditions
+		if(!isPoOrder){
+			saleRetNrAmount = grossNrAmount*saleRetQty;
+			if(grossSaleQty != 0)
+				saleRetSpAmount = grossSpAmount*(saleRetQty/grossSaleQty);
+			channelReport.setPr(orderPr);
+		} else if(isPoOrder && consolidateOrder!=null){
+			saleRetSpAmount = grossSpAmount;
+			if(grossSaleQty != 0)
+				channelReport.setPr(orderPr * saleRetQty/grossSaleQty);
+		}
+		channelReport.setSaleRetQty(saleRetQty);
+		channelReport.setSaleRetNrAmount(saleRetNrAmount + additionalCharges);
+		channelReport.setRetAmountToBeReversed(saleRetNrAmount);
+		channelReport.setSaleRetSpAmount(saleRetSpAmount);
+		
+		double saleRetVsGrossSale = 0;
+		if(grossSaleQty != 0)
+			saleRetVsGrossSale = saleRetQty/grossSaleQty*100;
+		double netQty = grossSaleQty - saleRetQty;
+		double netNrAmount = grossNrAmount*grossSaleQty - saleRetNrAmount - additionalCharges;
+		double netSpAmount = grossSpAmount - saleRetSpAmount;
+		channelReport.setSaleRetVsGrossSale(saleRetVsGrossSale);
+		channelReport.setNetQty(netQty);
+		channelReport.setNetNrAmount(netNrAmount);
+		channelReport.setNetSpAmount(netSpAmount);
+		
+		double taxCatPercent = 0;
+		OrderTax currOrderTax = currOrder.getOrderTax();
+		if(currOrderTax != null){
+			String taxCategory = currOrderTax.getTaxCategtory();
+			channelReport.setTaxCategory(taxCategory);
+			if(StringUtils.isNotBlank(taxCategory)){
+				String[] taxCategoryArr = taxCategory.split("@");
+				if(taxCategoryArr.length==2){
+					taxCatPercent = Double.parseDouble(taxCategoryArr[1]);
+				}
+			}
+		}
+		double netTaxLiability = 0;
+		if(taxCatPercent != 0)
+			netTaxLiability = netSpAmount - netSpAmount*(100/(100 + taxCatPercent));
+		channelReport.setNetTaxLiability(netTaxLiability);
+		
+		OrderPayment currOrderPayment = currOrder.getOrderPayment();
+		if(currOrderPayment != null){
+			channelReport.setNetToBeReceived(currOrderPayment.getPaymentDifference());
+			double netPaymentResult = currOrderPayment.getNetPaymentResult();
+			double paymentDifference = currOrderPayment.getPaymentDifference();
+			channelReport.setNetPaymentResult(netPaymentResult);
+			channelReport.setPaymentDifference(paymentDifference);
+			channelReport.setNetAr(netPaymentResult);
+			channelReport.setPaymentId(currOrderPayment.getPaymentId() + "");						
+		}
+		
+		double productCost = 0;
+		double gpVsProductCost = 0;
+		Criteria prodcriteria = session.createCriteria(Product.class);
+		prodcriteria.add(Restrictions.eq("productSkuCode",
+				currOrder.getProductSkuCode()));
+		List<Product> productList = prodcriteria.list();
+		if (productList.size() > 0) {
+			Product currProduct = productList.get(0);
+			if(!isPoOrder){
+				productCost = currProduct.getProductPrice();
+			}
+			channelReport.setCategory(currProduct.getCategoryName());
+		}
+		if(productCost != 0){
+			double grossProductCost = productCost*grossSaleQty;
+			double returnProductCost = productCost*saleRetQty;
+			double netProductCost = grossProductCost - returnProductCost;
+			channelReport.setProductCost(grossProductCost);
+			channelReport.setReturnProductCost(returnProductCost);
+			channelReport.setNetProductCost(netProductCost);
+			if(netProductCost != 0)
+				gpVsProductCost = grossProfit/netProductCost*100;
+		}
+		channelReport.setGpVsProductCost(gpVsProductCost);
+		channelReport.setFinalStatus(currOrder.getFinalStatus());
+		
+		return channelReport;
 	}
 
 	/**
@@ -1193,6 +1319,238 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		}
 		return commDetailsList;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChannelNR> fetchChannelNR(int sellerId, Date startDate, Date endDate, String criteria) {
+		List<ChannelNR> channelNRList = new ArrayList<ChannelNR>();
+		Map<String, ChannelNR> channelNRMap = new HashMap<String, ChannelNR>();
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		String orderQueryStr = "select pcName, sum(netRate) as NetRate from order_table where finalStatus = 'Actionable' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetRate";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.netRate) as NetRate from order_table ot, product pr where ot.finalStatus = 'Actionable' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by NetRate";
+		Query orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		List<Object[]> orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			ChannelNR channelNR = new ChannelNR();
+			String key = order[0].toString();
+			channelNR.setKey(key);
+			channelNR.setActionableNR(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		
+		orderQueryStr = "select pcName, sum(netRate) as NetRate from order_table where finalStatus = 'Settled' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetRate";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.netRate) as NetRate from order_table ot, product pr where ot.finalStatus = 'Settled' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by NetRate";
+		orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelNR channelNR = channelNRMap.get(key);
+			if(channelNR == null){
+				channelNR = new ChannelNR();
+				channelNR.setKey(key);
+			}
+			channelNR.setSettledNR(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		
+		orderQueryStr = "select pcName, sum(netRate) as NetRate from order_table where finalStatus = 'In Process' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetRate";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.netRate) as NetRate from order_table ot, product pr where ot.finalStatus = 'In Process' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by NetRate";
+		orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelNR channelNR = channelNRMap.get(key);
+			if(channelNR == null){
+				channelNR = new ChannelNR();
+				channelNR.setKey(key);
+			}
+			channelNR.setInProcessNR(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		Iterator entries = channelNRMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, ChannelNR> thisEntry = (Entry<String, ChannelNR>) entries.next();
+			channelNRList.add(thisEntry.getValue());
+		}
+		return channelNRList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChannelNetQty> fetchChannelNetQty(int sellerId, Date startDate, Date endDate, String criteria) {
+		List<ChannelNetQty> channelNRList = new ArrayList<ChannelNetQty>();
+		Map<String, ChannelNetQty> channelNRMap = new HashMap<String, ChannelNetQty>();
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		String orderQueryStr = "select pcName, sum(netSaleQuantity) as NetSaleQuantity from order_table where finalStatus = 'Actionable' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.netSaleQuantity) as NetSaleQuantity from order_table ot, product pr where ot.finalStatus = 'Actionable' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		Query orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		List<Object[]> orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			ChannelNetQty channelNR = new ChannelNetQty();
+			String key = order[0].toString();
+			channelNR.setKey(key);
+			channelNR.setActionableQty(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		
+		orderQueryStr = "select pcName, sum(netSaleQuantity) as NetSaleQuantity from order_table where finalStatus = 'Settled' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.netSaleQuantity) as NetSaleQuantity from order_table ot, product pr where ot.finalStatus = 'Settled' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelNetQty channelNR = channelNRMap.get(key);
+			if(channelNR == null){
+				channelNR = new ChannelNetQty();
+				channelNR.setKey(key);
+			}
+			channelNR.setSettledQty(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		
+		orderQueryStr = "select pcName, sum(netSaleQuantity) as NetSaleQuantity from order_table where finalStatus = 'In Process' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.netSaleQuantity) as NetSaleQuantity from order_table ot, product pr where ot.finalStatus = 'In Process' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelNetQty channelNR = channelNRMap.get(key);
+			if(channelNR == null){
+				channelNR = new ChannelNetQty();
+				channelNR.setKey(key);
+			}
+			channelNR.setInProcessQty(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		Iterator entries = channelNRMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, ChannelNetQty> thisEntry = (Entry<String, ChannelNetQty>) entries.next();
+			channelNRList.add(thisEntry.getValue());
+		}
+		return channelNRList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChannelGP> fetchChannelGP(int sellerId, Date startDate, Date endDate, String criteria) {
+		List<ChannelGP> channelNRList = new ArrayList<ChannelGP>();
+		Map<String, ChannelGP> channelNRMap = new HashMap<String, ChannelGP>();
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		String orderQueryStr = "select pcName, sum(grossProfit) as grossProfit from order_table where finalStatus = 'Actionable' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.grossProfit) as grossProfit from order_table ot, product pr where ot.finalStatus = 'Actionable' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by grossProfit";
+		Query orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		List<Object[]> orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			ChannelGP channelNR = new ChannelGP();
+			String key = order[0].toString();
+			channelNR.setKey(key);
+			channelNR.setActionableGP(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		
+		orderQueryStr = "select pcName, sum(grossProfit) as grossProfit from order_table where finalStatus = 'Settled' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by grossProfit";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.grossProfit) as grossProfit from order_table ot, product pr where ot.finalStatus = 'Settled' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by grossProfit";
+		orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelGP channelNR = channelNRMap.get(key);
+			if(channelNR == null){
+				channelNR = new ChannelGP();
+				channelNR.setKey(key);
+			}
+			channelNR.setSettledGP(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		
+		orderQueryStr = "select pcName, sum(grossProfit) as grossProfit from order_table where finalStatus = 'In Process' and " +
+				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by grossProfit";
+		if("category".equals(criteria))
+			orderQueryStr = "select pr.categoryName, sum(ot.grossProfit) as grossProfit from order_table ot, product pr where ot.finalStatus = 'In Process' " +
+					"and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate group by pcName order by grossProfit";
+		orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelGP channelNR = channelNRMap.get(key);
+			if(channelNR == null){
+				channelNR = new ChannelGP();
+				channelNR.setKey(key);
+			}
+			channelNR.setInProcessGP(new Double(order[1].toString()));
+			channelNRMap.put(key,channelNR);
+		}
+		Iterator entries = channelNRMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, ChannelGP> thisEntry = (Entry<String, ChannelGP>) entries.next();
+			channelNRList.add(thisEntry.getValue());
+		}
+		return channelNRList;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChannelMC> fetchChannelMC(int sellerId, Date startDate, Date endDate, String criteria) {

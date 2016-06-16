@@ -44,4 +44,6 @@ public interface ProductService {
 	public void addSKUMapping(ProductConfig productConfig, int sellerId);
 	
 	public boolean getProductwithProductConfig(int sellerId) throws CustomException;
+	
+	public String deleteProduct(int productId, int sellerId)throws Exception;
 }

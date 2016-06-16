@@ -4,9 +4,12 @@ import java.util.Date;
 import java.util.List;
 
 import com.o2r.bean.ChannelCatNPR;
+import com.o2r.bean.ChannelGP;
 import com.o2r.bean.ChannelMC;
 import com.o2r.bean.ChannelMCNPR;
 import com.o2r.bean.ChannelNPR;
+import com.o2r.bean.ChannelNR;
+import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.PartnerReportDetails;
@@ -49,6 +52,12 @@ public interface ReportsGeneratorDao {
 	public List<ChannelMC> fetchChannelMC(int sellerId, Date startDate, Date endDate, String criteria);
 
 	public List<ChannelMCNPR> fetchChannelMCNPR(int sellerId, Date startDate, Date endDate, String criteria);
+
+	public List<ChannelNR> fetchChannelNR(int sellerId, Date startDate, Date endDate, String criteria);
+
+	public List<ChannelNetQty> fetchChannelNetQty(int sellerId, Date startDate, Date endDate, String criteria);
+
+	public List<ChannelGP> fetchChannelGP(int sellerId, Date startDate, Date endDate, String criteria);
 
 	//public void addUploadReport(UploadReport uploadReport) throws CustomException;
 

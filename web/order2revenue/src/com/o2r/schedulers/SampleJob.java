@@ -31,9 +31,8 @@ public class SampleJob {
 	
 	public void executeJobPaymentDueDate() {
 
-		System.out.println("Declare Your Job Here...");
-		log.info("Inside Job Assign....");
-		log.debug("Yes, I am executing.....");
+		log.info("$$$ executeJobPaymentDueDate() Starts : SampleJob $$$");
+		
 		List<Order> orders=new ArrayList<Order>();
 		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 		try {
@@ -42,7 +41,7 @@ public class SampleJob {
 			cal.add(Calendar.DATE, -2);
 			Date backDate=cal.getTime();
 			log.info(cal.getTime());
-			log.info(fmt.format(currentDate));
+			log.info("************** Executed At : "+fmt.format(currentDate));
 			log.info(fmt.format(cal.getTime()));
 			Session session=sessionFactory.openSession();			
 			if(session != null)
@@ -83,7 +82,8 @@ public class SampleJob {
 	        				log.error("Failed! inside Schedular", e);    				
 	        			}
     				}
-    			}   			
+    			}
+    			log.info("************************ Schedular Executed At : "+ new Date());
             }else{
             	log.info("No orders....!!!!");
             }
@@ -92,6 +92,7 @@ public class SampleJob {
 			e.printStackTrace();
 			log.error("Failed!",e);
 		}	
+		log.info("$$$ executeJobPaymentDueDate() Exits : SampleJob $$$");
 	}
 	
 	public void executeJobProductStockList(){

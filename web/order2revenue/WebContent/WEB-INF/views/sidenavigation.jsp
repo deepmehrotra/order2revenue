@@ -6,7 +6,7 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<%		
+<%-- <%		
     if(session.getAttribute("logoUrl") == null){
         if (request.getAttribute("sellerBean") != null) {
             SellerBean bean = (SellerBean) request.getAttribute("sellerBean");
@@ -17,8 +17,8 @@
             }
             session.setAttribute("sellerName", bean.getName());
         }
-    }
-%>
+    } 
+%> --%>
 
 
 
@@ -32,6 +32,24 @@
 	object-fit: contain;
 }
 </style>
+<script type="text/javascript">
+
+window.onload = function() {
+			$.ajax({
+				url : "getSellerName.html",
+				success : function(res) {
+					if (res != "true") {
+						var values = res.split(",");
+						/* if(values[0]!="null")
+						document.getElementById("logoUrl").src=values[0]; */
+						document.getElementById("sellerName").textContent=values[1]; 
+					} else {
+						
+					}
+				}
+			});
+		}
+</script>
 </head>
 <body>
 
@@ -43,7 +61,7 @@
 					id="topSellerImg">
 					<span> <c:choose>
 							<c:when test='<%= session.getAttribute("logoUrl") != null %>'>
-								<img alt="image" class="img-circle"
+								<img alt="image" class="img-circle" id="logoUrl"
 									src='<%= session.getAttribute("logoUrl") %>' />
 							</c:when>
 							<c:otherwise>
@@ -53,7 +71,7 @@
 						</c:choose>
 					</span> <a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
 						class="clear"> <span class="block m-t-xs"> <strong
-								class="font-bold"><%= session.getAttribute("sellerName")%></strong>
+								class="font-bold" id="sellerName"><%= session.getAttribute("sellerName")%></strong>
 						</span> <span class="text-muted text-xs block">Seller<b
 								class="caret"></b></span>
 					</span>
@@ -119,5 +137,6 @@
 	</div>
 	</nav>
 
+		
 </body>
 </html>

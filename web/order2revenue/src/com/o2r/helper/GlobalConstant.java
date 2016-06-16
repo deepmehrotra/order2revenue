@@ -125,6 +125,7 @@ public class GlobalConstant {
 		put("Overheads","Overheads");
 		put("Taxable Purchases","Taxable Purchases");
 	    put("Tax/TDS","Tax/TDS");
+	    put("Manual Charges","Manual Charges");
 	}};
 
 	/* Null Area */
@@ -595,6 +596,7 @@ public class GlobalConstant {
 			put("getGrossSpAmount", "Gross SP Amount");
 			put("getSaleRetQty", "Sale Return Qty");
 			put("getSaleRetNrAmount", "Sale Return N/R Amount");
+			put("getRetAmountToBeReversed", "Return Charges to be reversed");			
 			put("getSaleRetSpAmount", "Sale Return SP Amount");
 			put("getNetQty", "Net Sale Qty");
 			put("getNetNrAmount", "Net Sale N/R Amount");

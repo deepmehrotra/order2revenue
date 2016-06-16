@@ -163,6 +163,82 @@
 												</div>
 											</div>
 										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Partner</th>
+																	<th>Total  N/R Settled Orders</th>
+																	<th>Total  N/R Actionable Orders</th>
+																	<th>Total  N/R In-Process Orders</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty partnerByDiffNR}">
+																	<c:forEach items="${partnerByDiffNR}" var="partnerDto"
+																		varStatus="loop">
+																		<tr>
+																			<td>${partnerDto.key}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.settledNR}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.actionableNR}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.inProcessNR}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div id="stacked-chart-4"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Partner</th>
+																	<th>Total  N/R Settled Orders Qty</th>
+																	<th>Total  N/R Actionable Orders Qty</th>
+																	<th>Total  N/R In-Process Orders Qty</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty partnerByNetQty}">
+																	<c:forEach items="${partnerByNetQty}" var="partnerDto"
+																		varStatus="loop">
+																		<tr>
+																			<td>${partnerDto.key}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.settledQty}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.actionableQty}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.inProcessQty}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div id="stacked-chart-5"></div>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 									<div id="tab-2" class="tab-pane col-sm-12">		
 										<div class="row">
@@ -317,6 +393,32 @@
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);
 		
+		var dataArr = [];
+		var yAxisText = 'Settled vs Actionable vs In-Process N/R Graph';
+		var divId = "#stacked-chart-4";
+		var xAxisCategories = ['Settled N/R', 'Actionable N/R', 'In-Process N/R'];
+		<c:forEach items="${partnerByDiffNR}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.key}';
+			data.data = [parseFloat(parseFloat('${partnerDto.settledNR}').toFixed(2)), parseFloat(parseFloat('${partnerDto.actionableNR}').toFixed(2))
+			             , parseFloat(parseFloat('${partnerDto.inProcessNR}').toFixed(2))];
+			dataArr.push(data);
+		</c:forEach>
+		stackChart(divId, yAxisText, dataArr);
+		
+		var dataArr = [];
+		var yAxisText = 'Settled vs Actionable vs In-Process Qty Graph';
+		var divId = "#stacked-chart-5";
+		var xAxisCategories = ['Settled Qty', 'Actionable Qty', 'In-Process Qty'];
+		<c:forEach items="${partnerByNetQty}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.key}';
+			data.data = [parseFloat(parseFloat('${partnerDto.settledQty}').toFixed(2)), parseFloat(parseFloat('${partnerDto.actionableQty}').toFixed(2))
+			             , parseFloat(parseFloat('${partnerDto.inProcessQty}').toFixed(2))];
+			dataArr.push(data);
+		</c:forEach>
+		stackChart(divId, yAxisText, dataArr);
+		
 		$(window)
 				.load(
 						function() {							
@@ -326,7 +428,7 @@
 												responsive : true,
 												"dom" : 'T<"clear">lfrtip',
 												"tableTools" : {
-													"sSwfPath" : "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
+													"sSwfPath" : "/O2R/seller/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
 												}
 											});
 						});
