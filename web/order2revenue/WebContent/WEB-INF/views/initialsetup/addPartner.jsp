@@ -2954,7 +2954,7 @@ $(document).ready(
 						number : true
 					}); */
 			   
-			   
+			  
 			   
 		 
 		 
@@ -3215,6 +3215,7 @@ function checkOnBlur() {
 				   	 return clickCheckbox.checked;
 				   	}
 				   });
+			
 					
 			 $("#fixedCommissionPercent").rules("add", { 
 					  required:function(element) {
