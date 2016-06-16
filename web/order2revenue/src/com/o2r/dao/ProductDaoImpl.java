@@ -1,6 +1,5 @@
 package com.o2r.dao;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -69,7 +68,7 @@ public class ProductDaoImpl implements ProductDao {
 		long quant = product.getQuantity();
 		float price = product.getProductPrice();
 		Date proddate = product.getProductDate();
-		Date todayDate = new Date();
+		//Date todayDate = new Date();
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -275,7 +274,11 @@ public class ProductDaoImpl implements ProductDao {
 
 		log.info("*** addProductConfig Starts : ProductDaoImpl ****");
 		Product product = null;
-		List<ProductConfig> productConfigs = null;
+		boolean status=true;
+		String prodSKU=productConfig.getProductSkuCode();
+		String channelREF=productConfig.getChannelSkuRef();
+		String channel=productConfig.getChannelName();
+		//List<ProductConfig> productConfigs = null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -284,13 +287,23 @@ public class ProductDaoImpl implements ProductDao {
 					CriteriaSpecification.LEFT_JOIN).add(
 					Restrictions.eq("seller.id", sellerId));
 			criteria.add(Restrictions.eq("productSkuCode",
-					productConfig.getProductSkuCode()));
+					prodSKU));
 			product = (Product) criteria.list().get(0);
-			if (product != null) {
+			if(product != null&&product.getProductConfig()!=null)
+				for(ProductConfig procon : product.getProductConfig())
+				{
+					if(procon.getChannelName()!=null&&procon.getChannelName().equals(channel))
+					{
+						procon.setChannelSkuRef(channelREF);
+						status = false;
+					}
+				}
+			if (product != null&&status) {
 				productConfig.setProduct(product);
 				product.getProductConfig().add(productConfig);
-				session.saveOrUpdate(product);
+				
 			}
+			session.saveOrUpdate(product);
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {

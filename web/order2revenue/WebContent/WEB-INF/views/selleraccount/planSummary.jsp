@@ -8,7 +8,7 @@
 <head>
 <jsp:include page="../globalcsslinks.jsp"></jsp:include>
 <script type="text/javascript"
-	src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script type="text/javascript">
 	function onclickviewExpCat(id) {
 		$.ajax({
@@ -134,7 +134,7 @@
 }
 
 @import
-	url(http://fonts.googleapis.com/css?family=Roboto:500,100,300,700,400);
+	url(https://fonts.googleapis.com/css?family=Roboto:500,100,300,700,400);
 
 div.title {
 	font-size: 2em;

@@ -1884,8 +1884,12 @@ public class OrderDaoImpl implements OrderDao {
 						+ reconciledate);
 			} else {
 				reconciledate = deliverydate;
-				reconciledate.setMonth(reconciledate.getMonth() + 1);
-				reconciledate.setDate(monthlypaydate);
+				if (deliverydate.getDate() < monthlypaydate) {
+					reconciledate.setDate(monthlypaydate);
+				} else {
+					reconciledate.setMonth(reconciledate.getMonth() + 1);
+					reconciledate.setDate(monthlypaydate);
+				}
 
 			}
 
