@@ -434,22 +434,22 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public ProductConfig getProductConfig(String skuCode, String channel,
+	public ProductConfig getProductConfig(String channelSKUCode, String channel,
 			int sellerId) throws CustomException {
 		
 		log.info("*** getProductConfig Starts : ProductDaoImpl ****");
 		ProductConfig returnObject = null;
 		List returnlist = null;
 		log.debug(" ***Insid get product config from sku and channel ***"
-						+ skuCode + " - " + channel);
+						+ channelSKUCode + " - " + channel);
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(ProductConfig.class);
 			criteria.createAlias("product", "product",
-					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("productSkuCode", skuCode).ignoreCase())
-					.add(Restrictions.eq("channelName", channel).ignoreCase())
+					CriteriaSpecification.LEFT_JOIN);
+			criteria.add(Restrictions.eq("channelName", channel).ignoreCase())
+					.add(Restrictions.eq("channelSkuRef", channelSKUCode).ignoreCase())
 					.setResultTransformer(
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			criteria.createAlias("product.seller", "seller",
@@ -464,7 +464,7 @@ public class ProductDaoImpl implements ProductDao {
 
 				returnObject = (ProductConfig) returnlist.get(0);
 			} else {
-				log.debug("Product sku " + skuCode + " not found");
+				log.debug("Product sku " + channelSKUCode + " not found");
 			}
 			log.debug(" Return object :#### " + returnObject);
 			session.getTransaction().commit();

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.o2r.bean.EmployeeBean;
+import com.o2r.bean.OrderBean;
 import com.o2r.helper.CustomException;
 import com.o2r.model.Employee;
 import com.o2r.service.AdminService;
@@ -90,6 +91,17 @@ public class AdminController {
 
 		log.info("$$$ listQueries Ends : AdminController $$$");
 		return new ModelAndView("admin/queryList", model);
+	}
+	
+	@RequestMapping(value = "/admin/reverseOrderList", method = RequestMethod.GET)
+	public ModelAndView returnOrRTOlist() {
+
+		log.info("$$$ reverseOrderList Starts : AdminController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		System.out.println(" Inside reverse Order list");
+		model.put("order", new OrderBean());
+		log.info("$$$ reverseOrderList Ends : AdminController $$$");
+		return new ModelAndView("/admin/reverseOrderList", model);
 	}
 
 	@RequestMapping(value = "/seller/controller", method = RequestMethod.POST)

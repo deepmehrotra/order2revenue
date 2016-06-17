@@ -38,7 +38,7 @@ public interface ProductService {
 	public List<Product> getProductwithCreatedDate(Date startDate,
 			Date endDate, int sellerId) throws CustomException;
 
-	public ProductConfig getProductConfig(String skuCode, String channel,
+	public ProductConfig getProductConfig(String channelSKUCode, String channel,
 			int sellerId) throws CustomException;
 
 	public void addSKUMapping(ProductConfig productConfig, int sellerId);

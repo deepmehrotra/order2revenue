@@ -132,6 +132,11 @@ window.onload = function() {
 				</ul></li>
 			<li><a href="#"><i class="fa fa-envelope"></i> <span
 					class="nav-label">Orders</span> </a></li>
+			<li><a href="minor.html"><i class="fa fa-wrench"></i> <span
+					class="nav-label">Manage Orders</span> <span class="fa arrow"></span></a>
+				<ul class="nav nav-second-level">
+					<li class="active"><a href="admin/reverseOrderList">Reverse Order</a></li>
+				</ul></li>
 		</ul>
 
 	</div>

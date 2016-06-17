@@ -116,7 +116,7 @@
 										<button class="btn btn-xs btn-grey"
 											onclick="onclickNavigateOrder('viewPOOrderDetails','0')">Annually</button>
 									</div>
-									<div class="ibox-tools">
+									<div class="col-sm-4 ibox-tools">
 										<button class="btn btn-white table-menu-search search-dd">
 											<i class="fa fa-search"></i>
 										</button>
@@ -171,7 +171,6 @@
 								</div>
 							</div>
 							<div class="bs-example">
-
 								<div class="ibox-content overflow-h cus-table-filters">
 									<div class="scroll-y">
 										<c:if test="${!empty savedPOOrder}">

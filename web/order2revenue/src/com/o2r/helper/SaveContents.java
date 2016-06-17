@@ -610,7 +610,7 @@ public class SaveContents {
 					if (curInvoiceId != null) {
 
 						if (orderService.isPOOrderUploaded(
-								order.getSubOrderID(), order.getInvoiceID())) {
+								order.getSubOrderID(), order.getInvoiceID(), sellerId)) {
 							errorMessage.append(" PO already uploaded ");
 							validaterow = false;
 						}
@@ -1030,15 +1030,6 @@ public class SaveContents {
 					errorMessage.append(" Channel Name is null ");
 					validaterow = false;
 				}
-
-				ProductConfig productConfigChk = productService
-						.getProductConfig(productConfig.getProductSkuCode(),
-								productConfig.getChannelName(), sellerId);
-				if (productConfigChk != null) {
-					errorMessage.append(" Product config already exist ");
-					validaterow = false;
-				}
-
 				if (entry.getCell(2) != null
 						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					productConfig.setChannelSkuRef(entry.getCell(2).toString());
@@ -1046,6 +1037,16 @@ public class SaveContents {
 					errorMessage.append(" Channel SKU is null ");
 					validaterow = false;
 				}
+				
+				ProductConfig productConfigChk = productService
+						.getProductConfig(productConfig.getChannelSkuRef(),
+								productConfig.getChannelName(), sellerId);
+				if (productConfigChk != null) {
+					errorMessage.append(" Product config already exist ");
+					validaterow = false;
+				}
+
+				
 				if (entry.getCell(3) != null
 						&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
@@ -1750,12 +1751,12 @@ public class SaveContents {
 								.append(" Positive Amount should be a number ");
 						validaterow = false;
 					}
-				} else {
+				} /*else {
 					if (popabean.getPoOrderId() != null) {
 						errorMessage.append(" Positive Amount is null ");
 						validaterow = false;
 					}
-				}
+				}*/
 
 				if (entry.getCell(4) != null
 						&& StringUtils.isNotBlank(entry.getCell(4).toString())) {
@@ -1770,12 +1771,12 @@ public class SaveContents {
 								.append(" Negative Amount should be a number ");
 						validaterow = false;
 					}
-				} else {
+				} /*else {
 					if (popabean.getGatePassId() != null) {
 						errorMessage.append(" Negative Amount is null ");
 						validaterow = false;
 					}
-				}
+				}*/
 
 				if (entry.getCell(5) != null
 						&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
