@@ -110,17 +110,18 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 		else if(reportName.equals("partnerBusinessReport") || reportName.equals("partnerCommissionReport")
 				 || reportName.equals("debtorsReport"))
 			return new ModelAndView("reports/partnerReport", model);
-		else
+		else if(reportName.equals("totalShippedOrders"))
 			return new ModelAndView("reports/filterReports", model);
+		else
+			return new ModelAndView("reports/comingSoon", model);
 }
-
+	
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@RequestMapping(value = "/seller/getPartnerReport", method = RequestMethod.POST)
 	public ModelAndView getPartnerReport(HttpServletRequest request)
 			throws Exception {
 		log.info("$$$ getPartnerReport Starts : ReportController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-
 		try {
 			String reportName = request.getParameter("reportName");
 			String startDateStr = request.getParameter("startdate");

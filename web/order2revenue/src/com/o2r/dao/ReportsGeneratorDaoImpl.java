@@ -34,6 +34,7 @@ import com.o2r.bean.ChannelNR;
 import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
+import com.o2r.bean.DataConfig;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.CustomException;
@@ -57,6 +58,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private DataConfig dataConfig;
 
 	static Logger log = Logger.getLogger(ReportsGeneratorDaoImpl.class.getName());
 
@@ -587,7 +591,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		List<PartnerReportDetails> partnerBusinessList = new ArrayList<PartnerReportDetails>();
 		try {
 			Session session = sessionFactory.openSession();
-			session.beginTransaction();			
+			session.beginTransaction();
+			log.info("Service Tax: " + dataConfig.getServiceTax());
 			List<Order> results = fetchOrders(session, sellerId, startDate, endDate);
 			Map<String, PartnerReportDetails> poOrderMap = new HashMap<String, PartnerReportDetails>();
 			for (Order currOrder : results) {
@@ -841,9 +846,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		partnerBusiness.setFixedfee(fixedFee);
 		partnerBusiness.setShippingCharges(shippingCharges);
 		double totalAmount = grossCommission + pccAmount + fixedFee + shippingCharges;
-		double serviceTax = (totalAmount)*14.5/100;
-		double serviceTaxNoQty = (grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty)*14.5/100;
-		double serviceTaxQty = (grossCommissionQty + pccAmountQty + fixedFeeQty + shippingChargesQty)*14.5/100;
+		double serviceTax = (totalAmount)*dataConfig.getServiceTax()/100;
+		double serviceTaxNoQty = (grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty)*dataConfig.getServiceTax()/100;
+		double serviceTaxQty = (grossCommissionQty + pccAmountQty + fixedFeeQty + shippingChargesQty)*dataConfig.getServiceTax()/100;
 		partnerBusiness.setServiceTax(serviceTax);
 		double grossCommissionToBePaid = 0;
 		if(isPoOrder && consolidatedOrder!=null)
