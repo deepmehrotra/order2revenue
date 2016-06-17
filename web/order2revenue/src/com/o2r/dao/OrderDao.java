@@ -106,7 +106,7 @@ public interface OrderDao {
 	public List<PoPaymentDetailsBean> getPOPaymentDetails(int sellerId,
 			String year);
 
-	public boolean isPOOrderUploaded(String poId, String invoiceId)
+	public boolean isPOOrderUploaded(String poId, String invoiceId, int sellerId)
 			throws CustomException;
 
 	public List<Order> findPOOrdersbyDate(String column, Date startDate, Date endDate,

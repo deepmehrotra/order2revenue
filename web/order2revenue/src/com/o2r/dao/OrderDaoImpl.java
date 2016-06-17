@@ -3934,7 +3934,7 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	@Override
-	public boolean isPOOrderUploaded(String poId, String invoiceId)
+	public boolean isPOOrderUploaded(String poId, String invoiceId, int sellerId)
 			throws CustomException {
 		log.info("*** isPOOrderUploaded starts ***");
 		List<Order> returnList = null;
@@ -3946,6 +3946,9 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.add(Restrictions.eq("invoiceID", invoiceId));
 			criteria.add(Restrictions.eq("poOrder", true));
 			criteria.add(Restrictions.isNotNull("consolidatedOrder.orderId"));
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId));
 
 			returnList = criteria.list();
 			if (returnList != null && returnList.size() != 0
