@@ -274,16 +274,17 @@ public class ProductDaoImpl implements ProductDao {
 
 		log.info("*** addProductConfig Starts : ProductDaoImpl ****");
 		Product product = null;
-		boolean status=true;
+		List dbresult=null;
+		/*boolean status=true;
 		String prodSKU=productConfig.getProductSkuCode();
 		String channelREF=productConfig.getChannelSkuRef();
-		String channel=productConfig.getChannelName();
+		String channel=productConfig.getChannelName();*/
 		//List<ProductConfig> productConfigs = null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Product.class);
-			criteria.createAlias("seller", "seller",
+			/*criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN).add(
 					Restrictions.eq("seller.id", sellerId));
 			criteria.add(Restrictions.eq("productSkuCode",
@@ -302,8 +303,23 @@ public class ProductDaoImpl implements ProductDao {
 				productConfig.setProduct(product);
 				product.getProductConfig().add(productConfig);
 				
+			}*/
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN).add(
+					Restrictions.eq("seller.id", sellerId));
+			criteria.add(Restrictions.eq("productSkuCode",
+					productConfig.getProductSkuCode()));
+			dbresult =criteria.list();
+			if(dbresult!=null&&dbresult.size()!=0)
+			{
+			product = (Product) criteria.list().get(0);
+			if (product != null) {
+				productConfig.setProduct(product);
+				product.getProductConfig().add(productConfig);
+				//session.saveOrUpdate(product);
 			}
 			session.saveOrUpdate(product);
+			}
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {

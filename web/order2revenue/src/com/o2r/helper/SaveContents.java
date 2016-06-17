@@ -941,23 +941,44 @@ public class SaveContents {
 						productConfig.setProductSkuCode(entry.getCell(0)
 								.toString());
 						if (entry.getCell(1) != null
-								&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK
+								&&entry.getCell(2) != null
+								&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							ProductConfig procon=productService.getProductConfig(entry.getCell(1)
+									.toString(), entry.getCell(2).toString(), sellerId);
+							if(procon==null)
 							productConfig.setChannelSkuRef(entry.getCell(1)
 									.toString());
+							else
+							{
+								errorMessage.append(" Channel Reference Code already present for that channel ");
+								validaterow = false;
+							}
 						} else {
-							errorMessage.append(" Channel Name is null ");
+							errorMessage.append(" Channel Reference Code is null ");
 							validaterow = false;
 						}
 						if (entry.getCell(2) != null
 								&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							if(!entry.getCell(2)
+									.toString().equalsIgnoreCase("Myntra"))
 							productConfig.setChannelName(entry.getCell(2)
 									.toString());
+							else
+							{
+								errorMessage.append("Enter only Market Place Channels ");
+								validaterow = false;
+							}
 						} else {
 							errorMessage.append(" Channel Name is null ");
 							validaterow = false;
 						}
 
 					}
+					 else {
+							errorMessage.append(" Product with given SKU does not present ");
+							validaterow = false;
+						}
 				} else {
 					errorMessage.append(" Product SKU is null ");
 					validaterow = false;
