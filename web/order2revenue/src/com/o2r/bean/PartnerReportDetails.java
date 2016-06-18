@@ -620,6 +620,8 @@ public class PartnerReportDetails {
 			Comparator<PartnerReportDetails> {
 		@Override
 		public int compare(PartnerReportDetails graph1, PartnerReportDetails graph2) {
+			if(graph1.shippedDate == null || graph2.shippedDate == null)
+				return -1;
 			return graph1.shippedDate.after(graph2.shippedDate) ? 1
 					: (graph1.shippedDate.before(graph2.shippedDate) ? -1 : 0);
 		}
