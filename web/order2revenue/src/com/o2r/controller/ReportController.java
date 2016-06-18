@@ -38,6 +38,7 @@ import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
+import com.o2r.helper.GlobalConstant;
 import com.o2r.helper.HelperClass;
 import com.o2r.model.Order;
 import com.o2r.model.Partner;
@@ -91,6 +92,7 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 				partnerlist.add(partner.getPcName());
 			
 			model.put("reportName", reportName);
+			model.put("reportNameStr", GlobalConstant.reportNameMap.get(reportName));
 			model.put("partnerlist", partnerlist);
 		}catch(CustomException ce){
 			log.error("addManualPayment exception : " + ce.toString());
@@ -133,6 +135,7 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			if(StringUtils.isNotBlank(endDateStr))
 				endDate = new Date(endDateStr);
 			int sellerId = helperClass.getSellerIdfromSession(request);
+			model.put("reportNameStr", GlobalConstant.reportNameMap.get(reportName));
 			
 			List<PartnerReportDetails> debtorsList = reportGeneratorService
 					.getDebtorsReportDetails(startDate, endDate, sellerId);
@@ -249,7 +252,7 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 			System.out.println(" ****Inside controller after gettitng ttso objkect : "+ ttso.size());
 		else
 			System.out.println(" TTSO object is geting null");
-
+		model.put("reportNameStr", GlobalConstant.reportNameMap.get(reportName));
 		model.put("ttsolist", ttso);
 		if (ttso.size() > 0) {
 			System.out.println(" Citi quantity size : "	+ ttso.get(0).getCityQuantity());
@@ -294,17 +297,20 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 {
 		log.info("$$$ getChannelReport Starts : ReportController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		String reportName=null;
-		Date startDate;
-		Date endDate;
-		
+		String reportName = null;
 		try {
-
 			reportName = request.getParameter("reportName");
-			startDate = new Date(request.getParameter("startdate"));
-			endDate = new Date(request.getParameter("enddate"));
+			String startDateStr = request.getParameter("startdate");
+			String endDateStr = request.getParameter("enddate");
+			Date startDate = null;
+			if(StringUtils.isNotBlank(startDateStr))
+				startDate = new Date(startDateStr);
+			Date endDate = null;
+			if(StringUtils.isNotBlank(endDateStr))
+				endDate = new Date(endDateStr);
 			int sellerId = helperClass.getSellerIdfromSession(request);
 			
+			model.put("reportNameStr", GlobalConstant.reportNameMap.get(reportName));
 			List<ChannelReportDetails> channelReportDetailsList =  reportGeneratorService.getChannelReportDetails(startDate, endDate, sellerId);
 			List<ChannelReportDetails> partnerListST = new ArrayList<ChannelReportDetails>();
 			List<ChannelReportDetails> categoryListST = new ArrayList<ChannelReportDetails>();

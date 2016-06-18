@@ -20,7 +20,7 @@
 
                         <div class="ibox-title">
 
-                            <h5>${reportName}</h5>
+                            <h5>${reportNameStr}</h5>
 
                           <!--  <h5>Report</h5> -->
 
