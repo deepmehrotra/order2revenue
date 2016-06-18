@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import com.o2r.bean.AccountTransactionBean;
 import com.o2r.bean.BusinessDetails;
 import com.o2r.bean.CategoryBean;
+import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.CustomerBean;
@@ -1918,6 +1919,37 @@ public class ConverterClass {
 		}
 		newCommissionGraphList.add(consolidated);
 		return newCommissionGraphList;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List getChannelNPRSortedList(List<ChannelNPR> channelGraphList) {
+		int maxLength = 5;
+		if(channelGraphList.size()<=maxLength)
+			return channelGraphList;
+		List<ChannelNPR> newChannelReportList = new ArrayList<>();
+		int index = 1;
+		boolean initialize = false;
+		ChannelNPR consolidated = new ChannelNPR();
+		for(ChannelNPR channelGraph: channelGraphList){
+			if(index++ >= 5){
+				if(!initialize){
+					initialize = true;
+					consolidated.setCategory("Others");
+					consolidated.setPartner("Others");
+					consolidated.setCodNPR(channelGraph.getCodNPR());
+					consolidated.setPrepaidNPR(channelGraph.getPrepaidNPR());
+					consolidated.setNetNPR(channelGraph.getNetNPR());
+				}else{
+					consolidated.setCodNPR(consolidated.getCodNPR() + channelGraph.getCodNPR());
+					consolidated.setPrepaidNPR(consolidated.getPrepaidNPR() + channelGraph.getPrepaidNPR());
+					consolidated.setNetNPR(consolidated.getNetNPR() + channelGraph.getNetNPR());
+				}
+			} else{
+				newChannelReportList.add(channelGraph);
+			}
+		}
+		newChannelReportList.add(consolidated);
+		return newChannelReportList;
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

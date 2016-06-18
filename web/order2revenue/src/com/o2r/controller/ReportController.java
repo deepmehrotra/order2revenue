@@ -376,9 +376,9 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 					break; 
 				case "paymentsReceievedReport": 
 					List<ChannelNPR> partnerChannelNprList = reportGeneratorService.fetchChannelNPR(sellerId, startDate, endDate, "partner");
-					model.put("partnerByNPR", partnerChannelNprList);
+					model.put("partnerByNPR", ConverterClass.getChannelNPRSortedList(partnerChannelNprList));
 					List<ChannelNPR> categoryChannelNprList = reportGeneratorService.fetchChannelNPR(sellerId, startDate, endDate, "category");
-					model.put("categoryByNPR", categoryChannelNprList);
+					model.put("categoryByNPR", ConverterClass.getChannelNPRSortedList(categoryChannelNprList));
 					List<ChannelCatNPR> channelCatNprList = reportGeneratorService.fetchChannelCatNPR(sellerId, startDate, endDate, "");
 					Set<String> categories = getCategories(categoryChannelNprList); 
 					model.put("categories", categories);

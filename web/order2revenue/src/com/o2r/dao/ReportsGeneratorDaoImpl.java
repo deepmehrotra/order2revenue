@@ -1702,7 +1702,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 
 		criteria = session.createCriteria(Order.class);
 		criteria.add(Restrictions.eq("poOrder", true));
-		criteria.add(Restrictions.isNotNull("consolidatedOrder"));
+		criteria.add(Restrictions.isNull("consolidatedOrder"));
 		criteria.add(Restrictions.le("shippedDate", new Date()));
 		criteria.createAlias("seller", "seller",
 				CriteriaSpecification.LEFT_JOIN)
