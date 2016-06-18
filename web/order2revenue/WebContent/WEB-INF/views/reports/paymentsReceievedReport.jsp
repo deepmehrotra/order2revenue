@@ -63,6 +63,7 @@
 																	<th>Partner</th>
 																	<th>Prepaid NPR</th>
 																	<th>COD NPR</th>
+																	<th>Net NPR</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -73,39 +74,6 @@
 																			<td>${partnerDto.partner}</td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.prepaidNPR}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.codNPR}" /></td>
-																		</tr>
-																	</c:forEach>
-																</c:if>
-															</tbody>
-														</table>
-													</div>
-												</div>
-											</div>
-											<div class="col-lg-6">
-												<div class="float-e-margins graph-brd">
-													<div class="ibox-content">
-														<div id="stacked-chart-1"></div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6">
-												<div class="float-e-margins graph-brd">
-													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
-															<thead>
-																<tr>
-																	<th>Partner</th>
-																	<th>NPR</th>
-																</tr>
-															</thead>
-															<tbody>
-																<c:if test="${!empty partnerByNPR}">
-																	<c:forEach items="${partnerByNPR}"
-																		var="partnerDto" varStatus="loop">
-																		<tr>
-																			<td>${partnerDto.partner}</td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netNPR}" /></td>
 																		</tr>
 																	</c:forEach>
@@ -118,10 +86,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<div class="flot-chart">
-															<div class="flot-chart-content"
-																id="bar-chart-partner-net-npr"></div>
-														</div>
+														<div id="stacked-chart-1"></div>
 													</div>
 												</div>
 											</div>
@@ -215,6 +180,7 @@
 																	<th>Category</th>
 																	<th>Prepaid NPR</th>
 																	<th>COD NPR</th>
+																	<th>NPR</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -225,39 +191,6 @@
 																			<td>${categoryDto.category}</td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.prepaidNPR}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.codNPR}" /></td>
-																		</tr>
-																	</c:forEach>
-																</c:if>
-															</tbody>
-														</table>
-													</div>
-												</div>
-											</div>
-											<div class="col-lg-6">
-												<div class="float-e-margins graph-brd">
-													<div class="ibox-content">
-														<div id="stacked-chart-2"></div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-6">
-												<div class="float-e-margins graph-brd">
-													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
-															<thead>
-																<tr>
-																	<th>Category</th>
-																	<th>NPR</th>
-																</tr>
-															</thead>
-															<tbody>
-																<c:if test="${!empty categoryByNPR}">
-																	<c:forEach items="${categoryByNPR}"
-																		var="categoryDto" varStatus="loop">
-																		<tr>
-																			<td>${categoryDto.category}</td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netNPR}" /></td>
 																		</tr>
 																	</c:forEach>
@@ -270,10 +203,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<div class="flot-chart">
-															<div class="flot-chart-content"
-																id="bar-chart-category-net-npr"></div>
-														</div>
+														<div id="stacked-chart-2"></div>
 													</div>
 												</div>
 											</div>
@@ -368,25 +298,29 @@
 		//Script for Bar Chart
 		
 		var dataArr = [];
-		var yAxisText = 'Prepaid NPR vs COD NPR';
+		var yAxisText = 'Prepaid NPR vs COD NPR vs Net NPR';
 		var divId = "#stacked-chart-1";
-		var xAxisCategories = ['Prepaid NPR', 'COD NPR'];
+		var xAxisCategories = ['Prepaid NPR', 'COD NPR', 'Net NPR'];
 		<c:forEach items="${partnerByNPR}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.category}';
-			data.data = [parseFloat(parseFloat('${partnerDto.prepaidNPR}').toFixed(2)), parseFloat(parseFloat('${partnerDto.codNPR}').toFixed(2))];
+			data.data = [parseFloat(parseFloat('${partnerDto.prepaidNPR}').toFixed(2))
+			             , parseFloat(parseFloat('${partnerDto.codNPR}').toFixed(2))
+			             , parseFloat(parseFloat('${partnerDto.netNPR}').toFixed(2))];
 			dataArr.push(data);
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);
 		
 		var dataArr = [];
-		var yAxisText = 'Prepaid NPR vs COD NPR';
+		var yAxisText = 'Prepaid NPR vs COD NPR vs Net NPR';
 		var divId = "#stacked-chart-2";
-		var xAxisCategories = ['Prepaid NPR', 'COD NPR'];
+		var xAxisCategories = ['Prepaid NPR', 'COD NPR', 'Net NPR'];
 		<c:forEach items="${categoryByNPR}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.category}';
-			data.data = [parseFloat(parseFloat('${partnerDto.prepaidNPR}').toFixed(2)), parseFloat(parseFloat('${partnerDto.codNPR}').toFixed(2))];
+			data.data = [parseFloat(parseFloat('${partnerDto.prepaidNPR}').toFixed(2))
+			             , parseFloat(parseFloat('${partnerDto.codNPR}').toFixed(2))
+			             , parseFloat(parseFloat('${partnerDto.netNPR}').toFixed(2))];
 			dataArr.push(data);
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);
@@ -409,26 +343,6 @@
 			dataArr.push(data);
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);
-
-		var temp1 = [];
-		var partnerByNPR = [];
-		var i = 1;
-		<c:forEach items="${partnerByNPR}" var="partnerDto" varStatus="loop">
-		var arr1 = [ i, '${partnerDto.netNPR}' ];
-		var arr2 = [ i++, '${partnerDto.partner}' ];
-		temp1.push(arr1);
-		partnerByNPR.push(arr2);
-		</c:forEach>
-
-		var temp2 = [];
-		var categoryByNPR = [];
-		var i = 1;
-		<c:forEach items="${categoryByNPR}" var="partnerDto" varStatus="loop">
-		var arr1 = [ i, '${partnerDto.netNPR}' ];
-		var arr2 = [ i++, '${partnerDto.category}' ];
-		temp2.push(arr1);
-		categoryByNPR.push(arr2);
-		</c:forEach>
 		
 		var temp3 = [];
 		var channelMC = [];
@@ -443,11 +357,6 @@
 		$(window)
 				.load(
 						function() {
-							
-							flotbar(temp1, partnerByNPR,
-								"#bar-chart-partner-net-npr");
-							flotbar(temp2, categoryByNPR,
-								"#bar-chart-category-net-npr");
 							flotbar(temp3, channelMC,
 								"#bar-chart-partner-mc");
 

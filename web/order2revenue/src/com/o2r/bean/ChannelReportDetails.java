@@ -407,6 +407,8 @@ public class ChannelReportDetails {
 		Comparator<ChannelReportDetails> {
 		@Override
 		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
+			if(graph1.shippedDate == null || graph2.shippedDate == null)
+				return -1;
 			return graph1.shippedDate.after(graph2.shippedDate) ? 1
 					: (graph1.shippedDate.before(graph2.shippedDate) ? -1 : 0);
 		}
