@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -46,7 +48,9 @@ import com.o2r.model.OrderRTOorReturn;
 import com.o2r.model.OrderTax;
 import com.o2r.model.Product;
 import com.o2r.model.Seller;
+import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
+import com.o2r.service.TaxDetailService;
 
 /**
  * @author Deep Mehrotra
@@ -61,6 +65,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	
 	@Autowired
 	private DataConfig dataConfig;
+	
+	@Resource(name="taxDetailService")
+	private TaxDetailService taxDetailService;
 
 	static Logger log = Logger.getLogger(ReportsGeneratorDaoImpl.class.getName());
 
@@ -902,7 +909,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			 List<Order> orders = fetchOrders(session, sellerId, startDate, endDate);
 			 Map<String, ChannelReportDetails> poOrderMap = new HashMap<String, ChannelReportDetails>();
 			 for (Order currOrder : orders) {
-				 ChannelReportDetails channelReport = transformChannelReport(currOrder, session);
+				 ChannelReportDetails channelReport = transformChannelReport(currOrder, session, sellerId);
 				 if(channelReport.isPoOrder()){
 					String channelOrderId = channelReport.getOrderId();
 					ChannelReportDetails poChannelReport = poOrderMap.get(channelOrderId);
@@ -960,7 +967,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		channelReport.setSaleRetVsGrossSale(channelReport.getSaleRetVsGrossSale() + poChannelReport.getSaleRetVsGrossSale());
 	}
 
-	private ChannelReportDetails transformChannelReport(Order currOrder, Session session) {
+	private ChannelReportDetails transformChannelReport(Order currOrder, Session session, int sellerId) {
 		boolean isPoOrder = currOrder.isPoOrder();
 		Order consolidateOrder = currOrder.getConsolidatedOrder();
 		ChannelReportDetails channelReport = new ChannelReportDetails();
@@ -1042,9 +1049,11 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			String taxCategory = currOrderTax.getTaxCategtory();
 			channelReport.setTaxCategory(taxCategory);
 			if(StringUtils.isNotBlank(taxCategory)){
-				String[] taxCategoryArr = taxCategory.split("@");
-				if(taxCategoryArr.length==2){
-					taxCatPercent = Double.parseDouble(taxCategoryArr[1]);
+				try {
+					TaxCategory	taxCategoryDetails = taxDetailService.getTaxCategory(taxCategory, sellerId);
+					taxCatPercent = taxCategoryDetails.getTaxPercent();
+				} catch (CustomException e) {
+					log.error("Tax Category Not found for " + taxCategory);
 				}
 			}
 		}
