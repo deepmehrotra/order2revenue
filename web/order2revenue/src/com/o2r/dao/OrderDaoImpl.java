@@ -2444,7 +2444,7 @@ public class OrderDaoImpl implements OrderDao {
 						order.getProductSkuCode(), sellerId);
 				float deadWeight = (float) (chargesMap
 						.get(GlobalConstant.ReverseShippingFeeDeadWeightMinWeight));
-				if (deadWeight < product.getDeadWeight()) {
+				if (product!=null&&deadWeight < product.getDeadWeight()) {
 					deadWeight = product.getDeadWeight();
 				}
 				float revShippingFeeDW = (float) (Math
