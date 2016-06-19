@@ -1,10 +1,13 @@
 package com.o2r.bean;
 
+import java.util.Comparator;
+
 public class ChannelGP {
 	private String key;
-	private Double settledGP;
-	private Double actionableGP;
-	private Double inProcessGP;
+	private double settledGP;
+	private double actionableGP;
+	private double inProcessGP;
+	private double totalGP;
 
 	public String getKey() {
 		return key;
@@ -14,29 +17,44 @@ public class ChannelGP {
 		this.key = key;
 	}
 
-	public Double getSettledGP() {
+	public double getSettledGP() {
 		return settledGP;
 	}
 
-	public void setSettledGP(Double settledGP) {
+	public void setSettledGP(double settledGP) {
 		this.settledGP = settledGP;
 	}
 
-	public Double getActionableGP() {
+	public double getActionableGP() {
 		return actionableGP;
 	}
 
-	public void setActionableGP(Double actionableGP) {
+	public void setActionableGP(double actionableGP) {
 		this.actionableGP = actionableGP;
 	}
 
-	public Double getInProcessGP() {
+	public double getInProcessGP() {
 		return inProcessGP;
 	}
 
-	public void setInProcessGP(Double inProcessGP) {
+	public void setInProcessGP(double inProcessGP) {
 		this.inProcessGP = inProcessGP;
 	}
 
+	public double getTotalGP() {
+		return totalGP;
+	}
 
+	public void setTotalGP(double totalGP) {
+		this.totalGP = totalGP;
+	}
+
+	public static class OrderByTotalGP implements Comparator<ChannelGP> {
+
+		@Override
+		public int compare(ChannelGP graph1, ChannelGP graph2) {
+			return graph1.totalGP < graph2.totalGP ? 1
+					: (graph1.totalGP > graph2.totalGP ? -1 : 0);
+		}
+	}
 }

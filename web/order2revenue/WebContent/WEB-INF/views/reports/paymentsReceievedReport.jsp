@@ -54,7 +54,7 @@
 								<div class="tab-content">
 									<div id="tab-1" class="tab-pane active col-sm-12 chart-even">
 										<div class="row">
-											<div class="col-lg-6">
+											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
 														<table class="table table-bordered custom-table">
@@ -83,7 +83,9 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-lg-6">
+										</div>	
+										<div class="row">	
+											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
 														<div id="stacked-chart-1"></div>
@@ -92,7 +94,7 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-lg-6">
+											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
 														<table class="table table-bordered custom-table">
@@ -125,10 +127,52 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-lg-6">
+										</div>	
+										<div class="row">	
+											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
 														<div id="stacked-chart-3"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-12">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Category</th>
+																	<th>Prepaid NPR</th>
+																	<th>COD NPR</th>
+																	<th>NPR</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty categoryByNPR}">
+																	<c:forEach items="${categoryByNPR}"
+																		var="categoryDto" varStatus="loop">
+																		<tr>
+																			<td>${categoryDto.category}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.prepaidNPR}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.codNPR}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netNPR}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>	
+										<div class="row">	
+											<div class="col-lg-12">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div id="stacked-chart-2"></div>
 													</div>
 												</div>
 											</div>
@@ -170,44 +214,6 @@
 												</div>
 											</div>
 										</div>
-										<div class="row">
-											<div class="col-lg-6">
-												<div class="float-e-margins graph-brd">
-													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
-															<thead>
-																<tr>
-																	<th>Category</th>
-																	<th>Prepaid NPR</th>
-																	<th>COD NPR</th>
-																	<th>NPR</th>
-																</tr>
-															</thead>
-															<tbody>
-																<c:if test="${!empty categoryByNPR}">
-																	<c:forEach items="${categoryByNPR}"
-																		var="categoryDto" varStatus="loop">
-																		<tr>
-																			<td>${categoryDto.category}</td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.prepaidNPR}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.codNPR}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netNPR}" /></td>
-																		</tr>
-																	</c:forEach>
-																</c:if>
-															</tbody>
-														</table>
-													</div>
-												</div>
-											</div>
-											<div class="col-lg-6">
-												<div class="float-e-margins graph-brd">
-													<div class="ibox-content">
-														<div id="stacked-chart-2"></div>
-													</div>
-												</div>
-											</div>
-										</div>
 									</div>
 									<div id="tab-2" class="tab-pane col-sm-12">	
 										<div class="row">
@@ -220,7 +226,6 @@
 																	<th>Partner</th>
 																	<th>Payment Type</th>
 																	<th>Total Payment Received</th>
-																	<th>Manual Charges</th>
 																	<th>Net Payment Received</th>
 																</tr>
 															</thead>
@@ -232,7 +237,6 @@
 																			<td>${partner.partner}</td>
 																			<td>${partner.paymentType}</td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.baseNPR}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.manualCharges}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.baseNPR - partner.manualCharges}" /></td>
 																		</tr>
 																	</c:forEach>

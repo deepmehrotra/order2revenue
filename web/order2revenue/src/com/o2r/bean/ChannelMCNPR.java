@@ -1,5 +1,7 @@
 package com.o2r.bean;
 
+import java.util.Comparator;
+
 public class ChannelMCNPR {
 	private String partner;
 	private double baseNPR;
@@ -38,4 +40,11 @@ public class ChannelMCNPR {
 		this.manualCharges = manualCharges;
 	}
 
+	public static class OrderByPartner implements Comparator<ChannelMCNPR> {
+
+		@Override
+		public int compare(ChannelMCNPR graph1, ChannelMCNPR graph2) {
+			return graph1.partner.compareTo(graph2.partner);
+		}
+	}
 }

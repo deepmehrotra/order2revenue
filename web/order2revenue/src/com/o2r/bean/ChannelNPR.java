@@ -1,5 +1,7 @@
 package com.o2r.bean;
 
+import java.util.Comparator;
+
 public class ChannelNPR {
 	private String partner;
 	private String category;
@@ -45,6 +47,15 @@ public class ChannelNPR {
 
 	public void setNetNPR(double netNPR) {
 		this.netNPR = netNPR;
+	}
+	
+	public static class OrderByNPR implements Comparator<ChannelNPR> {
+
+		@Override
+		public int compare(ChannelNPR graph1, ChannelNPR graph2) {
+			return graph1.netNPR < graph2.netNPR ? 1
+					: (graph1.netNPR > graph2.netNPR ? -1 : 0);
+		}
 	}
 
 }

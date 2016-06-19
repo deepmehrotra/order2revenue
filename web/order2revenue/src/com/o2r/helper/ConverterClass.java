@@ -13,7 +13,11 @@ import org.apache.commons.lang.StringUtils;
 import com.o2r.bean.AccountTransactionBean;
 import com.o2r.bean.BusinessDetails;
 import com.o2r.bean.CategoryBean;
+import com.o2r.bean.ChannelCatNPR;
+import com.o2r.bean.ChannelGP;
 import com.o2r.bean.ChannelNPR;
+import com.o2r.bean.ChannelNR;
+import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.CustomerBean;
@@ -1453,7 +1457,11 @@ public class ConverterClass {
 			String key = "";
 			switch(criteria){
 				case "partner":key = partnerBusiness.getPcName();break;
-				case "category":key = partnerBusiness.getProductCategory();break;
+				case "category":
+					key = partnerBusiness.getParentCategory();
+					if(StringUtils.isEmpty(key))
+						key = "PO-Consolidated";
+					break;
 				default: break;
 			}
 			BusinessDetails partnerBusinessGraph = partnerBusinessGraphMap.get(key);
@@ -1540,7 +1548,11 @@ public class ConverterClass {
 			String key = "";
 			switch(criteria){
 				case "partner":key = partnerBusiness.getPcName();break;
-				case "category":key = partnerBusiness.getProductCategory();break;
+				case "category":
+					key = partnerBusiness.getParentCategory();
+					if(StringUtils.isEmpty(key))
+						key = "PO-Consolidated";
+					break;
 				default: break;
 			}
 			CommissionDetails partnerCommissionGraph = partnerCommissionGraphMap.get(key);
@@ -1618,7 +1630,11 @@ public class ConverterClass {
 			String key = "";
 			switch(criteria){
 				case "partner":key = currChannelReport.getPartner();break;
-				case "category":key = currChannelReport.getCategory();break;
+				case "category":
+					key = currChannelReport.getParentCategory();
+					if(StringUtils.isEmpty(key))
+						key = "PO-Consolidated";
+					break;
 				default: break;
 			}
 			ChannelReportDetails channelReport = categoryReportMap.get(key);
@@ -1708,7 +1724,11 @@ public class ConverterClass {
 			String key = "";
 			switch(criteria){
 				case "partner":key = currChannelReport.getPartner();break;
-				case "category":key = currChannelReport.getCategory();break;
+				case "category":
+					key = currChannelReport.getParentCategory();
+					if(StringUtils.isEmpty(key))
+						key = "PO-Consolidated";
+					break;
 				default: break;
 			}
 			String taxCategory = currChannelReport.getTaxCategory();
@@ -1953,6 +1973,137 @@ public class ConverterClass {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List getChannelCatNPRSortedList(List<ChannelCatNPR> channelGraphList) {
+		int maxLength = 5;
+		if(channelGraphList.size()<=maxLength)
+			return channelGraphList;
+		List<ChannelCatNPR> newChannelReportList = new ArrayList<>();
+		int index = 1;
+		boolean initialize = false;
+		ChannelCatNPR consolidated = new ChannelCatNPR();
+		for(ChannelCatNPR channelGraph: channelGraphList){
+			if(index++ >= 5){
+				if(!initialize){
+					initialize = true;
+					consolidated.setPartner("Others");
+					consolidated.setTotalNPR(channelGraph.getTotalNPR());
+					consolidated.setNetNPR(channelGraph.getNetNPR());
+				}else{
+					List<Double> existingNPRList = consolidated.getNetNPR();
+					List<Double> newNPRList = channelGraph.getNetNPR();
+					for(int i=0; i<existingNPRList.size(); i++){
+						Double existingNPR = existingNPRList.get(i);
+						Double newNPR = newNPRList.get(i);
+						existingNPRList.set(i, existingNPR + newNPR);
+					}
+					consolidated.setNetNPR(existingNPRList);
+					consolidated.setTotalNPR(consolidated.getTotalNPR() + channelGraph.getTotalNPR());
+				}
+			} else{
+				newChannelReportList.add(channelGraph);
+			}
+		}
+		newChannelReportList.add(consolidated);
+		return newChannelReportList;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List getChannelNetNrSortedList(List<ChannelNR> channelGraphList) {
+		int maxLength = 5;
+		if(channelGraphList.size()<=maxLength)
+			return channelGraphList;
+		List<ChannelNR> newChannelReportList = new ArrayList<>();
+		int index = 1;
+		boolean initialize = false;
+		ChannelNR consolidated = new ChannelNR();
+		for(ChannelNR channelGraph: channelGraphList){
+			if(index++ >= 5){
+				if(!initialize){
+					initialize = true;
+					consolidated.setKey("Others");
+					consolidated.setTotalNR(channelGraph.getTotalNR());
+					consolidated.setActionableNR(channelGraph.getActionableNR());
+					consolidated.setSettledNR(channelGraph.getSettledNR());
+					consolidated.setInProcessNR(channelGraph.getInProcessNR());
+				}else{
+					consolidated.setTotalNR(consolidated.getTotalNR() + channelGraph.getTotalNR());
+					consolidated.setActionableNR(consolidated.getActionableNR() + channelGraph.getActionableNR());
+					consolidated.setSettledNR(consolidated.getSettledNR() + channelGraph.getSettledNR());
+					consolidated.setInProcessNR(consolidated.getInProcessNR() + channelGraph.getInProcessNR());
+				}
+			} else{
+				newChannelReportList.add(channelGraph);
+			}
+		}
+		newChannelReportList.add(consolidated);
+		return newChannelReportList;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List getChannelNetQtySortedList(List<ChannelNetQty> channelGraphList) {
+		int maxLength = 5;
+		if(channelGraphList.size()<=maxLength)
+			return channelGraphList;
+		List<ChannelNetQty> newChannelReportList = new ArrayList<>();
+		int index = 1;
+		boolean initialize = false;
+		ChannelNetQty consolidated = new ChannelNetQty();
+		for(ChannelNetQty channelGraph: channelGraphList){
+			if(index++ >= 5){
+				if(!initialize){
+					initialize = true;
+					consolidated.setKey("Others");
+					consolidated.setTotalQty(channelGraph.getTotalQty());
+					consolidated.setActionableQty(channelGraph.getActionableQty());
+					consolidated.setSettledQty(channelGraph.getSettledQty());
+					consolidated.setInProcessQty(channelGraph.getInProcessQty());
+				}else{
+					consolidated.setTotalQty(consolidated.getTotalQty() + channelGraph.getTotalQty());
+					consolidated.setActionableQty(consolidated.getActionableQty() + channelGraph.getActionableQty());
+					consolidated.setSettledQty(consolidated.getSettledQty() + channelGraph.getSettledQty());
+					consolidated.setInProcessQty(consolidated.getInProcessQty() + channelGraph.getInProcessQty());
+				}
+			} else{
+				newChannelReportList.add(channelGraph);
+			}
+		}
+		newChannelReportList.add(consolidated);
+		return newChannelReportList;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List getChannelNetGPSortedList(List<ChannelGP> channelGraphList) {
+		int maxLength = 5;
+		if(channelGraphList.size()<=maxLength)
+			return channelGraphList;
+		List<ChannelGP> newChannelReportList = new ArrayList<>();
+		int index = 1;
+		boolean initialize = false;
+		ChannelGP consolidated = new ChannelGP();
+		for(ChannelGP channelGraph: channelGraphList){
+			if(index++ >= 5){
+				if(!initialize){
+					initialize = true;
+					consolidated.setKey("Others");
+					consolidated.setTotalGP(channelGraph.getTotalGP());
+					consolidated.setActionableGP(channelGraph.getActionableGP());
+					consolidated.setSettledGP(channelGraph.getSettledGP());
+					consolidated.setInProcessGP(channelGraph.getInProcessGP());
+				}else{
+					consolidated.setTotalGP(consolidated.getTotalGP() + channelGraph.getTotalGP());
+					consolidated.setActionableGP(consolidated.getActionableGP() + channelGraph.getActionableGP());
+					consolidated.setSettledGP(consolidated.getSettledGP() + channelGraph.getSettledGP());
+					consolidated.setInProcessGP(consolidated.getInProcessGP() + channelGraph.getInProcessGP());
+				}
+			} else{
+				newChannelReportList.add(channelGraph);
+			}
+		}
+		newChannelReportList.add(consolidated);
+		return newChannelReportList;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List getChannelSortedList(
 			List<ChannelReportDetails> channelGraphList, String criteria) {
 		int maxLength = 5;
@@ -2036,7 +2187,11 @@ public class ConverterClass {
 			String key = "";
 			switch(criteria){
 				case "partner":key = partnerBusiness.getPcName();break;
-				case "category":key = partnerBusiness.getProductCategory();break;
+				case "category":
+					key = partnerBusiness.getParentCategory();
+					if(StringUtils.isEmpty(key))
+						key = "PO-Consolidated";
+					break;
 				default: break;
 			}
 			DebtorsGraph1 debtorsGraph1 = debtorsGraph1Map.get(key);
