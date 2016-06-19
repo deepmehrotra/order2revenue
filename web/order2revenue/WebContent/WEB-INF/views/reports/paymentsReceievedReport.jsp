@@ -225,8 +225,9 @@
 																<tr>
 																	<th>Partner</th>
 																	<th>Payment Type</th>
-																	<th>Total Payment Received</th>
-																	<th>Net Payment Received</th>
+																	<th>Total Positive Amount</th>
+																	<th>Total Negative Amount</th>
+																	<th>Total Net Payment Received</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -236,8 +237,9 @@
 																		<tr>
 																			<td>${partner.partner}</td>
 																			<td>${partner.paymentType}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.positiveAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.negativeAmount}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.baseNPR}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.baseNPR - partner.manualCharges}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>

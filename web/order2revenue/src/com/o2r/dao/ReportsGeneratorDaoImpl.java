@@ -1701,9 +1701,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		Map<String, ChannelMCNPR> channelNprMap = new HashMap<String, ChannelMCNPR>(); 
 		Session session=sessionFactory.openSession();
 		session.getTransaction().begin();
-		String mpOrderQueryStr = "SELECT ot.pcName, ot.paymentType, sum(op.netPaymentResult) as 'NPR' FROM order_table ot, orderpay op where " +
-				"ot.orderPayment_paymentId = op.paymentId and ot.poOrder = 0 " +
-				"and ot.seller_Id=:sellerId and op.dateOfPayment between :startDate AND :endDate group by ot.pcName, ot.paymentType";
+		String mpOrderQueryStr = "SELECT ot.pcName, ot.paymentType, sum(op.netPaymentResult) as 'NPR', sum(op.positiveAmount) as 'Positive Amount', " +
+				"sum(op.negativeAmount) as 'Negative Amount' FROM order_table ot, orderpay op where ot.orderPayment_paymentId = op.paymentId and " +
+				"(ot.poOrder = 0 or (ot.poOrder = 1 and ot.consolidatedOrder_orderId is null)) and ot.seller_Id=:sellerId and " +
+				"op.dateOfPayment between :startDate AND :endDate group by ot.pcName, ot.paymentType";
 		Query mpOrderQuery = session.createSQLQuery(mpOrderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1711,11 +1712,17 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		List<Object[]> orderList = mpOrderQuery.list();
 		for(Object[] order: orderList){
 			String key1 = order[0].toString();
-			String key2 = order[1].toString();
+			String key2;
+			if(order[1] != null)
+				key2 = order[1].toString();
+			else
+				key2 = "B2B";
 			ChannelMCNPR channelNPR = new ChannelMCNPR();
 			channelNPR.setPartner(key1);
 			channelNPR.setPaymentType(key2);
 			channelNPR.setBaseNPR(Double.parseDouble(order[2].toString()));
+			channelNPR.setPositiveAmount(Double.parseDouble(order[3].toString()));
+			channelNPR.setNegativeAmount(Double.parseDouble(order[4].toString()));
 			channelNprMap.put(key1 + key2, channelNPR);
 		}
 		
