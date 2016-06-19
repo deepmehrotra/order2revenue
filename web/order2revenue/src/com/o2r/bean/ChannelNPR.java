@@ -7,6 +7,7 @@ public class ChannelNPR {
 	private String category;
 	private double prepaidNPR;
 	private double codNPR;
+	private double b2bNPR;
 	private double netNPR;
 
 	public String getPartner() {
@@ -39,6 +40,14 @@ public class ChannelNPR {
 
 	public void setCodNPR(double codNPR) {
 		this.codNPR = codNPR;
+	}
+
+	public double getB2bNPR() {
+		return b2bNPR;
+	}
+
+	public void setB2bNPR(double b2bNPR) {
+		this.b2bNPR = b2bNPR;
 	}
 
 	public double getNetNPR() {

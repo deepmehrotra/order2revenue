@@ -171,7 +171,7 @@
 														<table class="table table-bordered custom-table">
 															<thead>
 																<tr>
-																	<th>Partner</th>
+																	<th>Category</th>
 																	<th>Total  N/R Settled Orders</th>
 																	<th>Total  N/R Actionable Orders</th>
 																	<th>Total  N/R In-Process Orders</th>
@@ -209,7 +209,7 @@
 														<table class="table table-bordered custom-table">
 															<thead>
 																<tr>
-																	<th>Partner</th>
+																	<th>Category</th>
 																	<th>Total  N/R Settled Orders Qty</th>
 																	<th>Total  N/R Actionable Orders Qty</th>
 																	<th>Total  N/R In-Process Orders Qty</th>

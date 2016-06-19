@@ -1751,7 +1751,6 @@ public class ConverterClass {
 			double saleRetNrAmount = currChannelReport.getSaleRetNrAmount();
 			double saleRetQty = currChannelReport.getSaleRetQty();
 			double saleRetSpAmount = currChannelReport.getSaleRetSpAmount();
-			double saleRetVsGrossSale = currChannelReport.getSaleRetVsGrossSale();
 			if(channelReport == null){
 				channelReport = new ChannelReportDetails();
 			} else{
@@ -1771,7 +1770,6 @@ public class ConverterClass {
 				saleRetNrAmount += channelReport.getSaleRetNrAmount();
 				saleRetQty += channelReport.getSaleRetQty();
 				saleRetSpAmount += channelReport.getSaleRetSpAmount();
-				saleRetVsGrossSale += channelReport.getSaleRetVsGrossSale();
 			}
 			channelReport.setGpVsProductCost(gpVsProductCost);
 			channelReport.setGrossNrAmount(grossNrAmount);
@@ -1789,7 +1787,6 @@ public class ConverterClass {
 			channelReport.setSaleRetNrAmount(saleRetNrAmount);
 			channelReport.setSaleRetQty(saleRetQty);
 			channelReport.setSaleRetSpAmount(saleRetSpAmount);
-			channelReport.setSaleRetVsGrossSale(saleRetVsGrossSale);
 			channelReport.setCategory(key);
 			channelReport.setPartner(key);
 			channelReport.setTaxCategory(taxCategory);
@@ -1802,6 +1799,10 @@ public class ConverterClass {
 			Entry<String, ChannelReportDetails> thisEntry = (Entry<String, ChannelReportDetails>) entries
 					.next();
 			ChannelReportDetails value = thisEntry.getValue();
+			double saleRetVsGrossSale = 0;
+			if(value.getGrossQty() != 0)
+				saleRetVsGrossSale = value.getSaleRetQty()/value.getGrossQty()*100;
+			value.setSaleRetVsGrossSale(saleRetVsGrossSale);
 			categoryReportList.add(value);
 		}
 		

@@ -40,8 +40,10 @@ import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.helper.HelperClass;
+import com.o2r.model.ManualCharges;
 import com.o2r.model.Order;
 import com.o2r.model.Partner;
+import com.o2r.service.ManualChargesService;
 import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.ReportDownloadService;
@@ -62,6 +64,9 @@ private ReportDownloadService reportDownloadService;
 
 @Resource(name="partnerService")
 private PartnerService partnerService;
+
+@Resource(name="manualChargesService")
+private ManualChargesService manualChargesService;
 
 @Autowired
 private OrderService orderService;
@@ -393,6 +398,8 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 					List<ChannelMCNPR> shortTableList = reportGeneratorService.fetchChannelMCNPR(sellerId, startDate, endDate, "partner");
 					Collections.sort(shortTableList, new ChannelMCNPR.OrderByPartner());
 					model.put("shortTable", shortTableList);
+					List<ManualCharges> manualChargesList = manualChargesService.listManualCharges(sellerId, startDate, endDate);
+					model.put("shortTableMC", manualChargesList);
 				default: break;
 			}
 			
