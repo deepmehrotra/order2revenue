@@ -289,7 +289,7 @@
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.saleRetSpAmount}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.saleRetQty}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.saleRetVsGrossSale}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.saleRetSpAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netNrAmount}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netSpAmount}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${partnerDto.netQty}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netTaxLiability}" /></td>
