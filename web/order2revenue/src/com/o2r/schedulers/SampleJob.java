@@ -34,15 +34,11 @@ public class SampleJob {
 		log.info("$$$ executeJobPaymentDueDate() Starts : SampleJob $$$");
 		
 		List<Order> orders=new ArrayList<Order>();
-		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			Date currentDate= new Date();
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.DATE, -2);
 			Date backDate=cal.getTime();
-			log.info(cal.getTime());
-			log.info("************** Executed At : "+fmt.format(currentDate));
-			log.info(fmt.format(cal.getTime()));
 			Session session=sessionFactory.openSession();			
 			if(session != null)
 				session.beginTransaction();
@@ -74,12 +70,11 @@ public class SampleJob {
 	    				order.setFinalStatus("Actionable");
 	    				order.getOrderPayment().setPaymentDifference(-(order.getNetRate()));
 	    				try{
-	    					log.info("Order Setted.....");
-	        				session.merge(order);
+	    					session.merge(order);
 	        				session.getTransaction().commit();
 	        				log.info("Order Merged Successfully....");
 	        			}catch(Exception e){
-	        				log.error("Failed! inside Schedular", e);    				
+	        				log.error("Failed! During Merging !", e);    				
 	        			}
     				}
     			}
@@ -99,7 +94,7 @@ public class SampleJob {
 		try {
 			Session session = sessionFactory.openSession();
 			if(session != null)
-				session.beginTransaction();
+				session.beginTransaction(); 
 			Criteria criteria = session.createCriteria(Product.class);
 			java.util.List<Product> list = criteria.list();
 			ProductStockList stockList = null;

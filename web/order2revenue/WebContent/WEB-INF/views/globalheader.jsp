@@ -9,6 +9,10 @@
 
 <head>
 
+<link rel="stylesheet" href="/O2R/landing/css/fixednav.css">
+<script src="/O2R/landing/js/modernizr.js"></script>
+
+
 <style type="text/css">
 .progress {
 	display: block;
@@ -65,14 +69,8 @@
 		e.parentNode.insertBefore($, e)
 	})(document, "script");
 </script>
-<!--End of Zopim Live Chat Script-->
-
-
-
-
-<link rel="stylesheet" type="text/css"
-	href="/O2R/landing/css/sticky.css">
-
+<!--End of Zopim Live Chat Script-->						
+		
 </head>
 
 <body>
@@ -360,23 +358,18 @@
 		</ul>
 		</nav>
 	</div>
-	<aside id="sticky-social">
-	<ul>
-		<li><a href="#" onclick="onclickNavigate('upload',0)"
-			class="entypo-links"><span><img
-					src="/O2R/landing/img/export.png"></span></a></li>
-		<li><a href="#" onclick="onclickNavigate('upload',0)"
-			class="entypo-links2"><span><img
-					src="/O2R/landing/img/import.png"></span></a></li>
-		<li><a href="orderList.html" class="entypo-links3"><span><img
-					src="/O2R/landing/img/orderlist.png"></span></a></li>
-		<li><a href="#" onclick="onclickSideNavigation('RTO/Return')"
-			class="entypo-links4"><span><img
-					src="/O2R/landing/img/return1.png"></span></a></li>
-		<li><a href="paymentUploadList.html" class="entypo-links5"><span><img
-					src="/O2R/landing/img/payment.png"></span></a></li>
-	</ul>
-	</aside>
+	<nav class="cd-vertical-nav">
+                    <ul>
+                        <li><a href="#" onclick="onclickNavigate('upload',0)" ><span class="label">Export</span></a></li>
+                        <li><a href="orderList.html"><span class="label">Order</span></a></li>
+                        <li><a href="paymentUploadList.html"><span class="label">Payment</span></a></li>
+                         <li><a href="poOrderList.html?value="><span class="label">PoList</span></a></li>
+                        <li><a href="#" onclick="onclickSideNavigation('RTO/Return')"><span class="label">Return</span></a></li>
+                    </ul>
+                </nav> 
+	
+	
+	
 
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script type="text/javascript">
@@ -402,16 +395,14 @@
 				.ready(
 						function() {
 
-							$
-									.ajax({
+							$.ajax({
 										url : "getUploadReports.html",
 										dataType : "json"
 									})
 									.success(
 											function(data) {
 												var i = 1;
-												data
-														.forEach(function(
+												data.forEach(function(
 																arrayItem) {
 															var cssClass;
 															if (arrayItem.description == "Exported") {
