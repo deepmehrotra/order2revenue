@@ -715,13 +715,13 @@ function checkOnBlur()
 																				<tbody>
 																					<tr>
 																						<td><label>&lt; 500</label></td>
-																						<td><div class="form-group ">
-																								<div class=" content-rgt">
-																									<input type="text" placeholder=""
-																										class="form-control" name="nr-fixeddwlt500"
-																										value="${chargeMap.fixeddwlt500}">
-																								</div>
-																							</div></td>
+																						<td>
+																							<div class=" content-rgt">
+																								<input type="text" placeholder=""
+																									class="form-control" name="nr-fixeddwlt500"
+																									value="${chargeMap.fixeddwlt500}">
+																							</div>
+																						</td>
 																					</tr>
 																					<tr>
 																						<td><label>additional &gt; 500</label></td>
@@ -746,13 +746,13 @@ function checkOnBlur()
 																				<tbody>
 																					<tr>
 																						<td><label>&lt; 500</label></td>
-																						<td><div class="form-group ">
-																								<div class=" content-rgt">
-																									<input type="text" placeholder=""
-																										class="form-control" name="nr-fixedvwlt500"
-																										value="${chargeMap.fixedvwlt500}">
-																								</div>
-																							</div></td>
+																						<td>
+																							<div class=" content-rgt">
+																								<input type="text" placeholder=""
+																									class="form-control" name="nr-fixedvwlt500"
+																									value="${chargeMap.fixedvwlt500}">
+																							</div>
+																						</td>
 																					</tr>
 																					<tr>
 																						<td><label>&gt; 500 </label></td>
