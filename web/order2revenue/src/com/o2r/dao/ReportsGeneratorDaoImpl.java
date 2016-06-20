@@ -1374,12 +1374,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		Map<String, ChannelNetQty> channelNRMap = new HashMap<String, ChannelNetQty>();
 		Session session=sessionFactory.openSession();
 		session.getTransaction().begin();
-		String orderQueryStr = "select pcName, sum(netSaleQuantity) as NetSaleQuantity from order_table where finalStatus = 'Actionable' and " +
-				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		String orderQueryStr = "select ot.pcName, sum(ot.quantity - orr.returnorrtoQty) as NetSaleQuantity from order_table ot, orderreturn orr " +
+				"where ot.finalStatus = 'Actionable' and ot.orderReturnOrRTO_returnId = orr.returnId and ot.seller_Id=:sellerId and " +
+				"((ot.shippedDate between :startDate AND :endDate) or (orr.returnDate between :startDate AND :endDate)) group by ot.pcName order by NetSaleQuantity";
 		if("category".equals(criteria))
-			orderQueryStr = "select cat.parentCatName, sum(ot.netSaleQuantity) as NetSaleQuantity from order_table ot, product pr, category cat where ot.finalStatus = 'Actionable' " +
+			orderQueryStr = "select cat.parentCatName, sum(ot.quantity - orr.returnorrtoQty) as NetSaleQuantity from order_table ot, product pr, category cat, " +
+					"orderreturn orr where ot.orderReturnOrRTO_returnId = orr.returnId and ot.finalStatus = 'Actionable' " +
 					"and pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
-					"ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by NetSaleQuantity";
+					"((ot.shippedDate between :startDate AND :endDate) or (orr.returnDate between :startDate AND :endDate)) group by cat.parentCatName order by NetSaleQuantity";
 		Query orderQuery = session.createSQLQuery(orderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1395,12 +1397,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			channelNRMap.put(key,channelNR);
 		}
 		
-		orderQueryStr = "select pcName, sum(netSaleQuantity) as NetSaleQuantity from order_table where finalStatus = 'Settled' and " +
-				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		orderQueryStr = "select ot.pcName, sum(ot.quantity - orr.returnorrtoQty) as NetSaleQuantity from order_table ot, orderreturn orr " +
+				"where ot.finalStatus = 'Settled' and ot.orderReturnOrRTO_returnId = orr.returnId and ot.seller_Id=:sellerId and " +
+				"((ot.shippedDate between :startDate AND :endDate) or (orr.returnDate between :startDate AND :endDate)) group by ot.pcName order by NetSaleQuantity";
 		if("category".equals(criteria))
-			orderQueryStr = "select cat.parentCatName, sum(ot.netSaleQuantity) as NetSaleQuantity from order_table ot, product pr, category cat where ot.finalStatus = 'Settled' " +
+			orderQueryStr = "select cat.parentCatName, sum(ot.quantity - orr.returnorrtoQty) as NetSaleQuantity from order_table ot, product pr, category cat, " +
+					"orderreturn orr where ot.orderReturnOrRTO_returnId = orr.returnId and ot.finalStatus = 'Settled' " +
 					"and pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
-					"ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by NetSaleQuantity";
+					"((ot.shippedDate between :startDate AND :endDate) or (orr.returnDate between :startDate AND :endDate)) group by cat.parentCatName order by NetSaleQuantity";
 		orderQuery = session.createSQLQuery(orderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1419,12 +1423,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			channelNRMap.put(key,channelNR);
 		}
 		
-		orderQueryStr = "select pcName, sum(netSaleQuantity) as NetSaleQuantity from order_table where finalStatus = 'In Process' and " +
-				"seller_Id=:sellerId and shippedDate between :startDate AND :endDate group by pcName order by NetSaleQuantity";
+		orderQueryStr = "select ot.pcName, sum(ot.quantity - orr.returnorrtoQty) as NetSaleQuantity from order_table ot, orderreturn orr " +
+				"where ot.finalStatus = 'In Process' and ot.orderReturnOrRTO_returnId = orr.returnId and ot.seller_Id=:sellerId and " +
+				"((ot.shippedDate between :startDate AND :endDate) or (orr.returnDate between :startDate AND :endDate)) group by ot.pcName order by NetSaleQuantity";
 		if("category".equals(criteria))
-			orderQueryStr = "select cat.parentCatName, sum(ot.netSaleQuantity) as NetSaleQuantity from order_table ot, product pr, category cat where ot.finalStatus = 'In Process' " +
+			orderQueryStr = "select cat.parentCatName, sum(ot.quantity - orr.returnorrtoQty) as NetSaleQuantity from order_table ot, product pr, category cat, " +
+					"orderreturn orr where ot.orderReturnOrRTO_returnId = orr.returnId and ot.finalStatus = 'In Process' " +
 					"and pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
-					"ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by NetSaleQuantity";
+					"((ot.shippedDate between :startDate AND :endDate) or (orr.returnDate between :startDate AND :endDate)) group by cat.parentCatName order by NetSaleQuantity";
 		orderQuery = session.createSQLQuery(orderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
