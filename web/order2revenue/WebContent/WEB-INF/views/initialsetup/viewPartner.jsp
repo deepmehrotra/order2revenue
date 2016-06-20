@@ -9,20 +9,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-
-
 <jsp:include page="../globalcsslinks.jsp"></jsp:include>
 <style type="text/css">
 .lable1
        {       	
-       	margin-top: -55px;
-	    font-size: 17px;
+       	margin-top: -35px;
+	    font-size: 16px;
 	    text-align: center;
-	    z-index: 999999999999;
+	    z-index: 99999999;
 	    color: #080e08;
 	    font-weight: 800;
 	    font-style: normal;
 	    border-radius: 10px;
+	    position: absolute;
+	    margin-left: 37%;
 	   }
        .partnerImg
        {
@@ -66,11 +66,12 @@ span .#error {
        		height: 100px;        	
         	object-fit: contain;
        }
+ .nav-pills{
+ 	min-width: 20%;
+ }
 
 </style>
-	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
 	<link href="/O2R/seller/css/bootstrap.min.css" rel="stylesheet">
     <link href="/O2R/seller/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="/O2R/seller/css/animate.css" rel="stylesheet">
@@ -99,8 +100,10 @@ span .#error {
 
 				<div class="row">
 					<div class="col-lg-12">
-						<div class="bs-example">
-									<ul class="nav nav-tabs" id="myTab">
+						<div id="myCarousel" class="carousel slide" data-ride="carousel">
+							<div class="jcarousel-wrapper">
+								<div class="jcarousel">
+									<ul class="nav nav-pills nav-justified">
 										
 										<c:if test="${!empty partnerList }">
 											<c:forEach items="${partnerList}" var="each" varStatus="loop">
@@ -111,12 +114,12 @@ span .#error {
 	                   							
 												<c:choose>
 													<c:when test="${each.pcId == partner.pcId}">													
-														<li  class="active">	
+														<li data-target="#myCarousel" data-slide-to="0" class="active">	
 														<div class="partnerImg">													
 														<a href="">																		                   										 												
 															<c:if test="${each.pcLogoUrl == null}">
 																<img src="<%=props.getProperty("defaultpartnerimage.view") %>" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
-																<b><label class="lable1">${partner.pcName}</label></b>
+																<b><label class="lable1">${each.pcName}</label></b>
 															</c:if>
 															<c:if test="${each.pcLogoUrl != null}">
 																<img src="${each.pcLogoUrl}" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
@@ -124,12 +127,12 @@ span .#error {
 														</a></div></li>														
 													</c:when>
 													<c:otherwise>
-														<li  class="">
+														<li data-target="#myCarousel" data-slide-to="1" class="">
 														<div class="partnerImg">
 															<a href="">
 																<c:if test="${each.pcLogoUrl == null}">
 																	<img src="<%=props.getProperty("defaultpartnerimage.view") %>" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
-																	<b><label class="lable1">${partner.pcName}</label></b>
+																	<b><label class="lable1">${each.pcName}</label></b>
 																</c:if>
 																<c:if test="${each.pcLogoUrl != null}">
 																	<img src="${each.pcLogoUrl}" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
@@ -143,9 +146,11 @@ span .#error {
 										</c:if>										
 									</ul>
 								</div>
-								
+								<a href="#" class="jcarousel-control-prev">&lsaquo;</a> <a
+									href="#" class="jcarousel-control-next">&rsaquo;</a>
 							</div>
-							<div class="item active">
+							<div class="carousel-inner">
+								<div class="item active">
 									<div class="col-lg-12">
 										<div class="float-e-margins col-lg-4">
 											<div class="panel panel-default">
@@ -1446,8 +1451,11 @@ span .#error {
 											</div>
 										</div>
 									</div>
-								</div>							
-					
+								</div>
+
+							</div>
+						</div>
+					</div>
 				</div>
 
 			</div>
@@ -1472,13 +1480,29 @@ span .#error {
 $(document).ready( function() {
 
 
-	$('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
-		localStorage.setItem('activeTab', $(e.target).attr('href'));
+   	 $('.carousel').carousel({
+		pause: true,
+		interval: false
 	});
-	var activeTab = localStorage.getItem('activeTab');
-	if(activeTab){
-		$('#myTab a[href="' + activeTab + '"]').tab('show');
-	}
+
+	var clickEvent = false;
+	$('#myCarousel').on('click', '.nav a', function() {
+        clickEvent = true;
+        $('.nav li').removeClass('active');
+        $(this).parent().addClass('active');        
+	}).on('slid.bs.carousel', function(e) {
+    if(!clickEvent) {
+        var count = $('.nav').children().length -1;
+        var current = $('.nav li.active');
+        current.removeClass('active').next().addClass('active');
+        var id = parseInt(current.data('slide-to'));
+        if(count == id) {
+            $('.nav li').first().addClass('active');    
+        }        
+   	 }
+    	clickEvent = false;
+
+	});
 	
 	
 	 $('.i-checks').iCheck({
