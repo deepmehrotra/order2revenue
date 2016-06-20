@@ -237,7 +237,7 @@
 															<%-- <td><fmt:formatNumber type="number" maxFractionDigits="2"
 											value="${poOrder.orderTax.tax}" /></td> --%>
 															<td><fmt:formatNumber type="number"
-																	maxFractionDigits="2" value="${poOrder.pr}" /></td>
+																	maxFractionDigits="2" value="${poOrder.orderPayment.positiveAmount + poOrder.orderPayment.negativeAmount}" /></td>
 															<td><fmt:formatNumber type="number"
 																	maxFractionDigits="2" value="${poOrder.eossValue}" /></td>
 															<td><fmt:formatNumber type="number"

@@ -1,5 +1,6 @@
 package com.o2r.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -82,6 +83,20 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 		return returnlist;
 	}
 
+	@Override
+	public List<ManualCharges> listManualCharges(int sellerId, Date startDate, Date endDate)
+			throws CustomException {
+		log.info("*** ManualCharges between selected date range");
+		List<ManualCharges> manualCharges = listManualCharges(sellerId);
+		List<ManualCharges> filteredList = new ArrayList<ManualCharges>();
+		for(ManualCharges manualCharge: manualCharges){
+			if(manualCharge.getDateOfPayment().after(startDate) && manualCharge.getDateOfPayment().before(endDate))
+				filteredList.add(manualCharge);
+		}
+		log.info("*** ManualCharges between selected date range");
+		return filteredList;
+	}
+	
 	@Override
 	public Double getMCforPaymentID(String paymentId, int sellerId)
 			throws CustomException {

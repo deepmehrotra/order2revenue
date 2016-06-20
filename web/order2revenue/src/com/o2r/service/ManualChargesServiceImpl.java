@@ -1,5 +1,6 @@
 package com.o2r.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,12 @@ public void deleteManualCharges(ManualCharges manualCharges,int sellerId)throws 
 public Double getMCforPaymentID(String paymentId, int sellerId)throws CustomException
 {
 	return manualChargesDao.getMCforPaymentID(paymentId, sellerId);
+}
+
+@Override
+public List<ManualCharges> listManualCharges(int sellerId, Date startDate,
+		Date endDate) throws CustomException {
+	return manualChargesDao.listManualCharges(sellerId, startDate, endDate);
 }
 
 }

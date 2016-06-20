@@ -23,6 +23,7 @@ public class ChannelReportDetails {
 	private String logisticPartner;
 	private String partner;
 	private String category;
+	private String parentCategory;
 	private String productSku;
 	private double grossQty;
 	private double grossNrAmount;
@@ -185,6 +186,14 @@ public class ChannelReportDetails {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public String getParentCategory() {
+		return parentCategory;
+	}
+
+	public void setParentCategory(String parentCategory) {
+		this.parentCategory = parentCategory;
 	}
 
 	public String getProductSku() {

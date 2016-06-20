@@ -40,8 +40,10 @@ import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.helper.HelperClass;
+import com.o2r.model.ManualCharges;
 import com.o2r.model.Order;
 import com.o2r.model.Partner;
+import com.o2r.service.ManualChargesService;
 import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.ReportDownloadService;
@@ -62,6 +64,9 @@ private ReportDownloadService reportDownloadService;
 
 @Resource(name="partnerService")
 private PartnerService partnerService;
+
+@Resource(name="manualChargesService")
+private ManualChargesService manualChargesService;
 
 @Autowired
 private OrderService orderService;
@@ -311,7 +316,7 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			int sellerId = helperClass.getSellerIdfromSession(request);
 			
 			model.put("reportNameStr", GlobalConstant.reportNameMap.get(reportName));
-			List<ChannelReportDetails> channelReportDetailsList =  reportGeneratorService.getChannelReportDetails(startDate, endDate, sellerId);
+			List<ChannelReportDetails> channelReportDetailsList =  reportGeneratorService.getChannelReportDetails(startDate, endDate, sellerId, reportName);
 			List<ChannelReportDetails> partnerListST = new ArrayList<ChannelReportDetails>();
 			List<ChannelReportDetails> categoryListST = new ArrayList<ChannelReportDetails>();
 			List<ChannelReportDetails> partnerList = ConverterClass.transformChannelReport(channelReportDetailsList, "partner");
@@ -330,9 +335,10 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 					Collections.sort(partnerList, new ChannelReportDetails.OrderByGSvSR());
 					model.put("partnerByGSvSR", ConverterClass.getChannelSortedList(partnerList, "GSvSR"));
 					List<ChannelNR> channelNrList = reportGeneratorService.getChannelNrList(startDate, endDate, sellerId, "partner");
-					model.put("partnerByDiffNR", channelNrList);
+					model.put("partnerByDiffNR", ConverterClass.getChannelNetNrSortedList(channelNrList));
 					List<ChannelNetQty> channelNetQtyList = reportGeneratorService.getChannelNetQtyList(startDate, endDate, sellerId, "partner");
-					model.put("partnerByNetQty", channelNetQtyList);
+					Collections.sort(channelNetQtyList, new ChannelNetQty.OrderByTotalQty());
+					model.put("partnerByNetQty", ConverterClass.getChannelNetQtySortedList(channelNetQtyList));
 					break;
 				case "categoryWiseSaleReport":
 					categoryListST = ConverterClass.transformChannelReportST(channelReportDetailsList, "category");
@@ -346,9 +352,9 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 					Collections.sort(categoryList, new ChannelReportDetails.OrderByGSvSR());
 					model.put("categoryByGSvSR", ConverterClass.getChannelSortedList(categoryList, "GSvSR"));					
 					List<ChannelNR> categoryNrList = reportGeneratorService.getChannelNrList(startDate, endDate, sellerId, "category");
-					model.put("categoryByDiffNR", categoryNrList);
+					model.put("categoryByDiffNR", ConverterClass.getChannelNetNrSortedList(categoryNrList));
 					List<ChannelNetQty> categoryNetQtyList = reportGeneratorService.getChannelNetQtyList(startDate, endDate, sellerId, "category");
-					model.put("categoryByNetQty", categoryNetQtyList);
+					model.put("categoryByNetQty", ConverterClass.getChannelNetQtySortedList(categoryNetQtyList));
 					break;
 				case "orderwiseGPReport": 
 					model.put("shortTablePartner", partnerList);
@@ -362,7 +368,7 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 					Collections.sort(partnerList, new ChannelReportDetails.OrderByNR());
 					model.put("partnerByGNR", ConverterClass.getChannelSortedList(partnerList, "GNR"));
 					List<ChannelGP> partnerGPList = reportGeneratorService.getChannelNetGPList(startDate, endDate, sellerId, "partner");
-					model.put("partnerByNetGP", partnerGPList);
+					model.put("partnerByNetGP", ConverterClass.getChannelNetGPSortedList(partnerGPList));
 					Collections.sort(categoryList, new ChannelReportDetails.OrderByGrossProfit());
 					model.put("categoryByGrossProfit", ConverterClass.getChannelSortedList(categoryList, "GrossProfit"));
 					Collections.sort(categoryList, new ChannelReportDetails.OrderByGPCP());
@@ -372,21 +378,28 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 					Collections.sort(categoryList, new ChannelReportDetails.OrderByGNR());
 					model.put("categoryByGNR", ConverterClass.getChannelSortedList(categoryList, "GNR"));
 					List<ChannelGP> categoryGPList = reportGeneratorService.getChannelNetGPList(startDate, endDate, sellerId, "category");
-					model.put("categoryByNetGP", categoryGPList);
+					Collections.sort(categoryGPList, new ChannelGP.OrderByTotalGP());
+					model.put("categoryByNetGP", ConverterClass.getChannelNetGPSortedList(categoryGPList));
 					break; 
 				case "paymentsReceievedReport": 
 					List<ChannelNPR> partnerChannelNprList = reportGeneratorService.fetchChannelNPR(sellerId, startDate, endDate, "partner");
+					Collections.sort(partnerChannelNprList, new ChannelNPR.OrderByNPR());
 					model.put("partnerByNPR", ConverterClass.getChannelNPRSortedList(partnerChannelNprList));
 					List<ChannelNPR> categoryChannelNprList = reportGeneratorService.fetchChannelNPR(sellerId, startDate, endDate, "category");
+					Collections.sort(categoryChannelNprList, new ChannelNPR.OrderByNPR());
 					model.put("categoryByNPR", ConverterClass.getChannelNPRSortedList(categoryChannelNprList));
 					List<ChannelCatNPR> channelCatNprList = reportGeneratorService.fetchChannelCatNPR(sellerId, startDate, endDate, "");
 					Set<String> categories = getCategories(categoryChannelNprList); 
 					model.put("categories", categories);
-					model.put("channelCatNPR", channelCatNprList);
+					Collections.sort(channelCatNprList, new ChannelCatNPR.OrderByNPR());
+					model.put("channelCatNPR", ConverterClass.getChannelCatNPRSortedList(channelCatNprList));
 					List<ChannelMC> channelMCList = reportGeneratorService.fetchChannelMC(sellerId, startDate, endDate, "");
 					model.put("channelMC", channelMCList);
 					List<ChannelMCNPR> shortTableList = reportGeneratorService.fetchChannelMCNPR(sellerId, startDate, endDate, "partner");
+					Collections.sort(shortTableList, new ChannelMCNPR.OrderByPartner());
 					model.put("shortTable", shortTableList);
+					List<ManualCharges> manualChargesList = manualChargesService.listManualCharges(sellerId, startDate, endDate);
+					model.put("shortTableMC", manualChargesList);
 				default: break;
 			}
 			
@@ -487,7 +500,7 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			int sellerId = helperClass.getSellerIdfromSession(request);
 
 			List<ChannelReportDetails> channelReportList = reportGeneratorService
-					.getChannelReportDetails(startDate, endDate, sellerId);
+					.getChannelReportDetails(startDate, endDate, sellerId, reportName);
 			Collections.sort(channelReportList,
 					new ChannelReportDetails.OrderByShippedDate());
 			reportDownloadService.downloadChannelReport(response,

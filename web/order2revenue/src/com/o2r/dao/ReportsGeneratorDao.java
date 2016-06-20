@@ -32,7 +32,7 @@ public interface ReportsGeneratorDao {
 	public List<PartnerReportDetails> getPartnerReportDetails(Date startDate, Date endDate,
 			int sellerId) throws CustomException;
 
-	public List<ChannelReportDetails> getChannelReportDetails(Date startDate, Date endDate, int sellerId) throws CustomException;
+	public List<ChannelReportDetails> getChannelReportDetails(Date startDate, Date endDate, int sellerId, String reportName) throws CustomException;
 
 	public List<PartnerReportDetails> getDebtorsReportDetails(Date startDate, Date endDate, int sellerId) throws CustomException;
 

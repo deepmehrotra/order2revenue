@@ -127,6 +127,7 @@
 												</div>
 											</div>
 										</div>
+										<!-- 
 										<div class="row">
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
@@ -162,7 +163,7 @@
 													</div>
 												</div>
 											</div>
-										</div>
+										</div>  -->
 										<div class="row">
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
@@ -381,7 +382,7 @@
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);
 		
-		var dataArr = [];
+		/* var dataArr = [];
 		var yAxisText = 'NPR vs Net Payment Difference graph';
 		var divId = "#stacked-chart-3";
 		var xAxisCategories = ['Net Payment Result', 'Net Due To Be Received'];
@@ -391,7 +392,7 @@
 			data.data = [parseFloat(parseFloat('${partnerDto.netPaymentResult}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netToBeReceived}').toFixed(2))];
 			dataArr.push(data);
 		</c:forEach>
-		stackChart(divId, yAxisText, dataArr);
+		stackChart(divId, yAxisText, dataArr); */
 		
 		var dataArr = [];
 		var yAxisText = 'Settled vs Actionable vs In-Process N/R Graph';

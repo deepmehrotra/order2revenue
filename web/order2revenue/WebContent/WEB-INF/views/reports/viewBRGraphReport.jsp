@@ -239,7 +239,7 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-lg-6">
+											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
 														<table class="table table-bordered custom-table">
@@ -278,7 +278,9 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-lg-6">
+										</div>	
+										<div class="row">	
+											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
 														<div id="stacked-chart-1"></div>
@@ -473,7 +475,7 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-lg-6">
+											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
 														<table class="table table-bordered custom-table">
@@ -512,7 +514,9 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-lg-6">
+										</div>	
+										<div class="row">	
+											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
 														<div id="stacked-chart-3"></div>
