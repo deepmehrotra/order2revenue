@@ -9,6 +9,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+
+
 <jsp:include page="../globalcsslinks.jsp"></jsp:include>
 <style type="text/css">
 .lable1
@@ -66,7 +68,9 @@ span .#error {
        }
 
 </style>
-
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<link href="/O2R/seller/css/bootstrap.min.css" rel="stylesheet">
     <link href="/O2R/seller/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="/O2R/seller/css/animate.css" rel="stylesheet">
@@ -95,10 +99,8 @@ span .#error {
 
 				<div class="row">
 					<div class="col-lg-12">
-						<div id="myCarousel" class="carousel slide" data-ride="carousel">
-							<div class="jcarousel-wrapper">
-								<div class="jcarousel">
-									<ul class="nav nav-pills nav-justified">
+						<div class="bs-example">
+									<ul class="nav nav-tabs" id="myTab">
 										
 										<c:if test="${!empty partnerList }">
 											<c:forEach items="${partnerList}" var="each" varStatus="loop">
@@ -109,7 +111,7 @@ span .#error {
 	                   							
 												<c:choose>
 													<c:when test="${each.pcId == partner.pcId}">													
-														<li data-target="#myCarousel" data-slide-to="0" class="active">	
+														<li  class="active">	
 														<div class="partnerImg">													
 														<a href="">																		                   										 												
 															<c:if test="${each.pcLogoUrl == null}">
@@ -122,7 +124,7 @@ span .#error {
 														</a></div></li>														
 													</c:when>
 													<c:otherwise>
-														<li data-target="#myCarousel" data-slide-to="1" class="">
+														<li  class="">
 														<div class="partnerImg">
 															<a href="">
 																<c:if test="${each.pcLogoUrl == null}">
@@ -141,11 +143,9 @@ span .#error {
 										</c:if>										
 									</ul>
 								</div>
-								<a href="#" class="jcarousel-control-prev">&lsaquo;</a> <a
-									href="#" class="jcarousel-control-next">&rsaquo;</a>
+								
 							</div>
-							<div class="carousel-inner">
-								<div class="item active">
+							<div class="item active">
 									<div class="col-lg-12">
 										<div class="float-e-margins col-lg-4">
 											<div class="panel panel-default">
@@ -1446,11 +1446,8 @@ span .#error {
 											</div>
 										</div>
 									</div>
-								</div>
-
-							</div>
-						</div>
-					</div>
+								</div>							
+					
 				</div>
 
 			</div>
@@ -1475,29 +1472,13 @@ span .#error {
 $(document).ready( function() {
 
 
-   	 $('.carousel').carousel({
-		pause: true,
-		interval: false
+	$('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+		localStorage.setItem('activeTab', $(e.target).attr('href'));
 	});
-
-	var clickEvent = false;
-	$('#myCarousel').on('click', '.nav a', function() {
-        clickEvent = true;
-        $('.nav li').removeClass('active');
-        $(this).parent().addClass('active');        
-	}).on('slid.bs.carousel', function(e) {
-    if(!clickEvent) {
-        var count = $('.nav').children().length -1;
-        var current = $('.nav li.active');
-        current.removeClass('active').next().addClass('active');
-        var id = parseInt(current.data('slide-to'));
-        if(count == id) {
-            $('.nav li').first().addClass('active');    
-        }        
-   	 }
-    	clickEvent = false;
-
-	});
+	var activeTab = localStorage.getItem('activeTab');
+	if(activeTab){
+		$('#myTab a[href="' + activeTab + '"]').tab('show');
+	}
 	
 	
 	 $('.i-checks').iCheck({
