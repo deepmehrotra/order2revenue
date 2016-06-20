@@ -1181,7 +1181,7 @@ public class SaveContents {
 					} else {
 						channelOrderId = entry.getCell(0).toString();
 						errorMessage
-								.append(" Channel OrderId is already present ");
+								.append(" Channel OrderId not present ");
 						validaterow = false;
 					}
 				} else {
@@ -1196,7 +1196,7 @@ public class SaveContents {
 						errorMessage.append(" Product SKU does not exist ");
 						validaterow = false;
 					} else {
-						skucode = entry.getCell(2).toString();
+						skucode = product.getProductSkuCode();
 					}
 				} else {
 					errorMessage.append(" Product SKU is null ");
@@ -1252,17 +1252,16 @@ public class SaveContents {
 				}
 				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
 						+ entry.getCell(2) + " 3 :" + entry.getCell(3));
-				order = orderService.addOrderPayment(skucode, channelOrderId,
-						payment, sellerId);
+				/*order = orderService.addOrderPayment(skucode, channelOrderId,
+						payment, sellerId);*/
 				if (validaterow) {
-					orderService.addOrderPayment(skucode, channelOrderId,
+					order =orderService.addOrderPayment(skucode, channelOrderId,
 							payment, sellerId);
 				} else {
 					returnPaymentMap.put(errorMessage.toString(),
 							ConverterClass.prepareOrderBean(order));
 				}
 				if (order != null) {
-					System.out.println(order);
 					order.setPaymentUpload(paymentUpload);
 					paymentUpload.getOrders().add(order);
 				}
