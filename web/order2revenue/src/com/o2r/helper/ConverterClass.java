@@ -1671,7 +1671,7 @@ public class ConverterClass {
 				netQty += channelReport.getNetQty();
 				netReturnCharges += channelReport.getNetReturnCharges();
 				netSpAmount += channelReport.getNetSpAmount();
-				netTaxLiability = channelReport.getNetTaxLiability();
+				netTaxLiability += channelReport.getNetTaxLiability();
 				netToBeReceived += channelReport.getNetToBeReceived();
 				netPr += channelReport.getNetPr();
 				saleRetNrAmount += channelReport.getSaleRetNrAmount();
@@ -1764,7 +1764,7 @@ public class ConverterClass {
 				netQty += channelReport.getNetQty();
 				netReturnCharges += channelReport.getNetReturnCharges();
 				netSpAmount += channelReport.getNetSpAmount();
-				netTaxLiability = channelReport.getNetTaxLiability();
+				netTaxLiability += channelReport.getNetTaxLiability();
 				netToBeReceived += channelReport.getNetToBeReceived();
 				netPr += channelReport.getNetPr();
 				saleRetNrAmount += channelReport.getSaleRetNrAmount();
