@@ -74,11 +74,15 @@ span .#error {
 											<label class="col-sm-4 control-label">Partner Name</label>
 
 											<div class="col-sm-8">
-												<form:input path="pcName" value="${partner.pcName}"
-													class="form-control" id="partnerName"
-													onblur="checkOnBlur()" />
-												<span id="partnerNameMessage"
-													style="font-weight: bold;color=red"></span>
+												<c:choose>
+													<c:when test="${partner.pcId != 0}">
+														<form:input path="pcName" value="${partner.pcName}" class="form-control" id="partnerName" readonly="true"/>
+													</c:when>
+													<c:otherwise>
+														<form:input path="pcName" value="${partner.pcName}" class="form-control" id="partnerName"  onblur="checkOnBlur()" />
+														<span id="partnerNameMessage" style="font-weight: bold;color=red"></span>	
+													</c:otherwise>
+												</c:choose>											
 											</div>
 										</div>
 									</div>

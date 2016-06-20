@@ -176,7 +176,7 @@ public class ProductDaoImpl implements ProductDao {
 				List<TaxCategory> taxCategoryList = taxDetailService.listTaxCategories(sellerId);
 				for (TaxCategory taxCategory : taxCategoryList) {
 					
-					if (partner.getNrnReturnConfig().getTaxSpType().equals("fixed")) {
+					if (partner.getNrnReturnConfig().getTaxSpType() != null && partner.getNrnReturnConfig().getTaxSpType().equals("fixed")) {
 						
 						String mapKey = GlobalConstant.fixedtaxSPPercent +
 								GlobalConstant.TaxCategoryPrefix +
@@ -203,7 +203,7 @@ public class ProductDaoImpl implements ProductDao {
 						}
 					}
 
-					if (partner.getNrnReturnConfig().getTaxPoType().equals("fixed")) {
+					if (partner.getNrnReturnConfig().getTaxPoType() != null && partner.getNrnReturnConfig().getTaxPoType().equals("fixed")) {
 						
 						String mapKey = GlobalConstant.fixedtaxPOPercent +
 								GlobalConstant.TaxCategoryPrefix +

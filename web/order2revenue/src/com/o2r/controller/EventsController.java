@@ -272,7 +272,8 @@ public class EventsController {
 			model.put("eventsList", ConverterClass
 					.prepareListOfEventsBean(eventsService
 							.listEvents(helperClass
-									.getSellerIdfromSession(request))));			
+									.getSellerIdfromSession(request))));
+			
 		} catch (CustomException ce) {
 			log.error("eventList exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
