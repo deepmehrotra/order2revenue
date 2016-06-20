@@ -13,14 +13,16 @@
 <style type="text/css">
 .lable1
        {       	
-       	margin-top: -55px;
-	    font-size: 17px;
+       	margin-top: -35px;
+	    font-size: 16px;
 	    text-align: center;
-	    z-index: 999999999999;
+	    z-index: 99999999;
 	    color: #080e08;
 	    font-weight: 800;
 	    font-style: normal;
 	    border-radius: 10px;
+	    position: absolute;
+	    margin-left: 37%;
 	   }
        .partnerImg
        {
@@ -64,6 +66,9 @@ span .#error {
        		height: 100px;        	
         	object-fit: contain;
        }
+ .nav-pills{
+ 	min-width: 20%;
+ }
 
 </style>
 
@@ -114,7 +119,7 @@ span .#error {
 														<a href="">																		                   										 												
 															<c:if test="${each.pcLogoUrl == null}">
 																<img src="<%=props.getProperty("defaultpartnerimage.view") %>" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
-																<b><label class="lable1">${partner.pcName}</label></b>
+																<b><label class="lable1">${each.pcName}</label></b>
 															</c:if>
 															<c:if test="${each.pcLogoUrl != null}">
 																<img src="${each.pcLogoUrl}" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
@@ -127,7 +132,7 @@ span .#error {
 															<a href="">
 																<c:if test="${each.pcLogoUrl == null}">
 																	<img src="<%=props.getProperty("defaultpartnerimage.view") %>" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
-																	<b><label class="lable1">${partner.pcName}</label></b>
+																	<b><label class="lable1">${each.pcName}</label></b>
 																</c:if>
 																<c:if test="${each.pcLogoUrl != null}">
 																	<img src="${each.pcLogoUrl}" id="${each.pcId}" onclick="relodPage(this.id);" style="width: 100%">
@@ -519,21 +524,9 @@ span .#error {
 																								<td><label class="labelfix">${chargeMap.fixedvwlt500}</label></td>
 																							</tr>
 																							<tr>
-																								<td>500 &gt; 1000</td>
-																								<td><label class="labelfix">${chargeMap.fixedvwgt500lt1000}</label></td>
-																							</tr>
-																							<tr>
-																								<td>1000 &gt; 1500</td>
-																								<td><label class="labelfix">${chargeMap.fixedvwgt1000lt1500}</label></td>
-																							</tr>
-																							<tr>
-																								<td>1500 &gt; 5000</td>
-																								<td><label class="labelfix">${chargeMap.fixedvwgt1500lt5000}</label></td>
-																							</tr>
-																							<tr>
-																								<td>add 1 kg</td>
-																								<td><label class="labelfix">${chargeMap.fixedvwgt5000}</label></td>
-																							</tr>
+																								<td>&gt; 500</td>
+																								<td><label class="labelfix">${chargeMap.fixedvwgt500}</label></td>
+																							</tr>																							
 																						</tbody>
 																					</table>
 																				</c:if>

@@ -27,9 +27,12 @@
 	      </ul>
 	      <div class="tab-content">
 	      	<div id="login">   
-	          <h1>Welcome Back!</h1>
-	          
+	          <h1>Welcome Back!</h1>	          
 	          <form action="<c:url value='j_spring_security_check'/>"  class="m-t" role="form" action="index.html"  id="loginForm" method="post">
+	          	<c:if test="${error == true}">
+	          		<font color="red" size="4" ><b>Invalid Email Id with Password !</b></font>
+	          	</c:if>
+	          
 	            <div class="field-wrap">
 	            	<div class="icon">
 	              		<img src="/O2R/landing/img/icons/email.png" alt="user">
