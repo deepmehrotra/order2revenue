@@ -949,6 +949,18 @@ public class OrderDaoImpl implements OrderDao {
 				tdsDetails.setUploadDate(orderReturn.getReturnDate());
 				taxDetailService.addMonthlyTDSDetail(session, tdsDetails,
 						sellerId);
+				// Adding TDS amount for Return Charges as per 2 % Return Order
+				tdsDetails = new TaxDetail();
+				tdsDetails.setBalanceRemaining(order.
+						getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()/50);
+				tdsDetails.setParticular("TDS");
+				tdsDetails.setUploadDate(orderReturn.getReturnDate());
+				taxDetailService.addMonthlyTDSDetail(session, tdsDetails,
+						sellerId);
+				order.getOrderTax().setTdsToDeduct(
+						order.getOrderTax().getTdsToDeduct()
+								+(order.
+										getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()/50));
 
 				order.getOrderTax().setTaxToReturn(
 						(order.getOrderTax().getTax() / order.getQuantity())
@@ -1231,7 +1243,7 @@ public class OrderDaoImpl implements OrderDao {
 			seller = (Seller) criteria.list().get(0);
 
 			for (Order order : seller.getOrders()) {
-				if (order.getCustomer().getCustomerCity()
+				if (order!=null&&order.getCustomer()!=null&&order.getCustomer().getCustomerCity()
 						.equalsIgnoreCase(value)
 						|| order.getCustomer().getCustomerName()
 								.equalsIgnoreCase(value)
@@ -2406,6 +2418,11 @@ public class OrderDaoImpl implements OrderDao {
 					+ " varPercentPCC : " + varPercentPCC + "shipping fee : "
 					+ shippingfee + " fixedfee  :" + fixedfee
 					+ " paycollcharges " + paycollcharges);
+			System.out.println(" Variable amount in Return : " + varPercentSP
+					+ " varPercentFixAmt :" + varPercentFixAmt
+					+ " varPercentPCC : " + varPercentPCC + "shipping fee : "
+					+ shippingfee + " fixedfee  :" + fixedfee
+					+ " paycollcharges " + paycollcharges);
 			totalcharge = totalcharge
 					+ (float) (chargesMap.containsKey(varPercentSP) ? (chargesMap
 							.get(varPercentSP)
@@ -2429,9 +2446,10 @@ public class OrderDaoImpl implements OrderDao {
 
 		}
 
-		if (isRevShippingFee) {
-			String revShippingType = partner.getNrnReturnConfig()
-					.getRevShippingFeeType();
+		String revShippingType = partner.getNrnReturnConfig()
+				.getRevShippingFeeType();
+		if (isRevShippingFee&& revShippingType !=null) {
+			
 			switch (revShippingType) {
 			case "revShipFeePCC":
 
@@ -2473,28 +2491,34 @@ public class OrderDaoImpl implements OrderDao {
 				Product product = productService.getProduct(
 						order.getProductSkuCode(), sellerId);
 				float deadWeight = (float) (chargesMap
-						.get(GlobalConstant.ReverseShippingFeeDeadWeightMinWeight));
+						.containsKey(GlobalConstant.ReverseShippingFeeDeadWeightMinWeight)?chargesMap
+						.get(GlobalConstant.ReverseShippingFeeDeadWeightMinWeight):0);
 				if (product!=null&&deadWeight < product.getDeadWeight()) {
 					deadWeight = product.getDeadWeight();
 				}
 				float revShippingFeeDW = (float) (Math
 						.ceil(deadWeight
 								/ (chargesMap
-										.get(GlobalConstant.ReverseShippingFeeDeadWeightPerWeight))))
+										.containsKey(GlobalConstant.ReverseShippingFeeDeadWeightPerWeight)?chargesMap
+										.get(GlobalConstant.ReverseShippingFeeDeadWeightPerWeight):1)))
 						* (chargesMap
-								.get(GlobalConstant.ReverseShippingFeeDeadWeightAmt));
+								.containsKey(GlobalConstant.ReverseShippingFeeDeadWeightAmt)?chargesMap
+								.get(GlobalConstant.ReverseShippingFeeDeadWeightAmt):0);
 
 				float volumeWeight = (float) (chargesMap
-						.get(GlobalConstant.ReverseShippingFeeVolumeWeightMinWeight));
+						.containsKey(GlobalConstant.ReverseShippingFeeVolumeWeightMinWeight)?chargesMap
+						.get(GlobalConstant.ReverseShippingFeeVolumeWeightMinWeight):0);
 				if (volumeWeight < product.getVolWeight()) {
 					volumeWeight = product.getVolWeight();
 				}
 				float revShippingFeeVW = (float) (Math
 						.ceil(volumeWeight
 								/ (chargesMap
-										.get(GlobalConstant.ReverseShippingFeeVolumeWeightPerWeight))))
+										.containsKey(GlobalConstant.ReverseShippingFeeVolumeWeightPerWeight)?chargesMap
+										.get(GlobalConstant.ReverseShippingFeeVolumeWeightPerWeight):1)))
 						* (chargesMap
-								.get(GlobalConstant.ReverseShippingFeeVolumeWeightAmt));
+								.containsKey(GlobalConstant.ReverseShippingFeeVolumeWeightAmt)?chargesMap
+								.get(GlobalConstant.ReverseShippingFeeVolumeWeightAmt):0);
 
 				if (revShippingFeeDW > revShippingFeeVW) {
 					revShippingFee = revShippingFeeDW;
