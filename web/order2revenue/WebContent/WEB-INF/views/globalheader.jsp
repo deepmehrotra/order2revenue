@@ -366,10 +366,6 @@
                     </ul>
                 </nav> 
 	
-	
-	
-
-	<script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script type="text/javascript">
 		function onclickNavigate(value, id) {
 			var targeturl = "";
@@ -420,7 +416,7 @@
 																		+ "');";
 															}
 
-															if (arrayItem.status == "Error") {
+															if (arrayItem.status == "Error" || arrayItem.status == "Failed") {
 																document
 																		.getElementById("uploadReport-i-"
 																				+ i).style = "color: red !important;";
