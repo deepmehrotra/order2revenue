@@ -95,15 +95,9 @@
 
 				<!--  Code for Payment and Return Popup boxes -->
 
-				<div class="col-sm-3">
-					<!-- <button type="button" class="btn btn-primary" data-toggle="modal"
-						data-target="#myModal22">View</button> -->
-						<form:form method="POST" action="saveReturnorRTO.html"
-							id="saveReturnorRTOForm" role="form" class="form-horizontal">
-						<div class="modal inmodal fade" id="myModal22" tabindex="-1"
-							role="dialog" aria-hidden="true">
-						
-
+				<div class="col-sm-3">					
+						<div class="modal inmodal fade" id="myModal22" tabindex="-1" role="dialog" aria-hidden="true">
+							<form:form method="POST" action="saveReturnorRTO.html" id="saveReturnorRTOForm" role="form" class="form-horizontal">
 							<div class="modal-dialog modal-lg">
 								<div class="modal-content animated bounceInRight"
 									style="left: 22%; width: 50%;">
@@ -123,9 +117,7 @@
 														class="form-control" type="hidden" />
 													<label class="col-sm-4 control-label">Return Id</label>
 													<div class="col-sm-8">
-														<form:input path="orderReturnOrRTO.returnOrRTOId"
-															placeholder="Return ID" class="form-control"
-															id="returnOrRTOId" />
+														<form:input path="orderReturnOrRTO.returnOrRTOId" class="form-control"	id="returnOrRTOId" />
 													</div>
 												</div>
 											</div>
@@ -134,10 +126,9 @@
 												<div class="mar-btm-20-oh">
 													<label class="col-sm-4 control-label">Return Date</label>
 													<div class="col-sm-8">
-														<div class="input-group">
-															<form:input path="" type="date" id="datefield" onchange="mydate();" class="form-control" />
-															<form:input path="orderReturnOrRTO.returnDate"
-																id="datevalue" class="form-control" type="hidden" />
+														<div class="input-group date"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+															<form:input path="orderReturnOrRTO.returnDate"  type="text" class="form-control" id="returnDate" ></form:input>
+															
 														</div>
 													</div>
 												</div>
@@ -148,8 +139,7 @@
 													<label class="col-sm-4 control-label">Return
 														Quantity</label>
 													<div class="col-sm-8">
-														<form:input path="orderReturnOrRTO.returnorrtoQty"
-															class="form-control" />
+														<form:input path="orderReturnOrRTO.returnorrtoQty" class="form-control" id="quantity"/>
 													</div>
 												</div>
 											</div>
@@ -158,8 +148,7 @@
 												<div class="mar-btm-20-oh">
 													<label class="col-sm-4 control-label">Return Reason</label>
 													<div class="col-sm-8">
-														<form:input path="orderReturnOrRTO.returnOrRTOreason"
-															class="form-control" />
+														<form:input path="orderReturnOrRTO.returnOrRTOreason" class="form-control" id="reason"/>
 													</div>
 												</div>
 											</div>
@@ -168,17 +157,13 @@
 												<div class="form-group">
 													<label class="col-sm-4 control-label">Return Type</label>
 													<div class="col-sm-8">
-														<form:select path="orderReturnOrRTO.type"
-															class="form-control" id="category">
+														<form:select path="orderReturnOrRTO.type" class="form-control" id="category">
 															<form:option value="" disabled="true" selected="true">Return Type</form:option>
 															<form:option value="returnCharges">Return Charges</form:option>
 															<form:option value="RTOCharges">RTO Charges</form:option>
-															<form:option value="replacementCharges">Replacement
-												Charges</form:option>
-															<form:option value="partialDeliveryCharges">Partial
-												Delivery Charges</form:option>
-															<form:option value="cancellationCharges" id="">
-												Cancellation Charges</form:option>
+															<form:option value="replacementCharges">Replacement Charges</form:option>
+															<form:option value="partialDeliveryCharges">Partial	Delivery Charges</form:option>
+															<form:option value="cancellationCharges" id="">Cancellation Charges</form:option>
 														</form:select>
 													</div>
 												</div>
@@ -188,8 +173,7 @@
 												<div class="form-group">
 													<label class="col-sm-4 control-label">Fault Type</label>
 													<div class="col-sm-8">
-														<form:select path="orderReturnOrRTO.returnCategory"
-															class="form-control" onchange="show1()" id="category1">
+														<form:select path="orderReturnOrRTO.returnCategory"	class="form-control" onchange="show1()" id="category1">
 															<form:option value="" disabled="true" selected="true">Fault Type</form:option>
 															<form:option value="buyerReturn">Buyer Return</form:option>
 															<form:option value="sellerFault">Seller Fault</form:option>
@@ -215,24 +199,18 @@
 											</div>
 											<br> <br>
 											<div class="col-lg-12">
-												<div class="modal-footer" style="border: none;">
-													<button type="button" class="btn btn-primary"
-														data-dismiss="modal">Close</button>
-													<button type="submit" class="btn btn-primary">Save
-														changes</button>
+												<div class="modal-footer" style="border: none;">													
+													<button type="submit" class="btn btn-primary">Save</button>
+													<button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
 												</div>
 											</div>
-
 										</div>
 									</div>
 								</div>
-							</div>
-					
-					</div>
-						</form:form>
+							</div>	
+							</form:form>					
+						</div>					
 				</div>
-
-				<!--  -->
 
 				<div class="col-sm-3">					
 					<div class="modal inmodal fade" id="myModal21" tabindex="-1"
@@ -241,7 +219,7 @@
 										id="saveOrderPaymentForm" role="form" class="form-horizontal">
 
 							<div class="modal-dialog modal-lg">
-								<div class="modal-content animated bounceInRight"
+								<div class="modal-content animated bounceInLeft"
 									style="left: 22%; width: 50%;">
 									<div class="modal-header">
 										<button type="button" class="close" data-dismiss="modal">
@@ -255,30 +233,24 @@
 											<div class="form-group">
 											<form:input type="hidden" path="orderId" id="paymentOrderId" value="" />
 											<form:input type="hidden" path="channelOrderID" id="paymentChannelOrderID" value="" />
-												<label class="col-sm-5 control-label">Positive
-													Payment</label>
+												<label class="col-sm-5 control-label">Positive Payment</label>
 
 												<div class="col-sm-7">
-													<form:input path="orderPayment.positiveAmount"
-														class="form-control" id="positiveAmount" width='200' />
-													<span id="positiveAmount" style="color: red"></span>
+													<form:input path="orderPayment.positiveAmount" class="form-control" id="positiveAmount" width='200' />													
 												</div>
 											</div>
 											<div class="form-group">
-												<label class="col-sm-5 control-label">Negative
-													Payment</label>
+												<label class="col-sm-5 control-label">Negative Payment</label>
 												<div class="col-sm-7">
-													<form:input path="orderPayment.negativeAmount"
-														class="form-control" id="negativeAmount" width='200' />
+													<form:input path="orderPayment.negativeAmount"	class="form-control" id="negativeAmount" width='200' />
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-sm-5 control-label">Payment Date</label>
 												
 												<div class="col-md-7" >
-													<div class="input-group">
-														<span class="input-group-addon"></span>
-														<form:input class="form-control" type="date" id="dateofPayment" path="orderPayment.dateofPayment" onfocus="pickdate(2,0)" width='200' />
+													<div class="input-group date"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+														<form:input class="form-control" type="text" id="dateofPayment" path="orderPayment.dateofPayment" width='200' />
 													</div>
 												</div>
 											</div>
@@ -286,8 +258,7 @@
 										<div class="col-lg-12">
 												<div class="modal-footer" style="border: none;">													
 													<button type="submit" class="btn btn-primary">Save</button>
-													<button type="button" class="btn btn-primary"
-														data-dismiss="modal">Cancel</button>
+													<button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
 												</div>
 										</div>
 										
@@ -317,28 +288,68 @@ $(document).ready(function(){
             autoclose: true
         });
     
-     $("#saveReturnorRTOForm").validate();
+    $("#saveReturnorRTOForm").validate();
     $("#returnOrRTOId").rules("add", {
         required:true,
         messages: {
-               required: "Please Enter  Return Id."
+               required: "Please Enter  Return Id !"
         }
      });
     $("#returnDate").rules("add", {
         required:true,
         messages: {
-               required: "Return Date is mandatory"
+               required: "Return Date is mandatory !"
+        }
+     });
+    $("#quantity").rules("add", {
+    	min : 1,
+        required:true,
+        messages: {           		
+               
+        }
+     });
+    $("#reason").rules("add", {
+        required:true,
+        messages: {
+               required: "Enter Return Cause !"
+        }
+     });
+    $("#category").rules("add", {
+        required:true,
+        messages: {
+               required: "Select one Return Type !"
+        }
+     });
+    $("#category1").rules("add", {
+        required:true,
+        messages: {
+               required: "Select one Fault Type !"
         }
      });
     
+    
+    
     $("#saveOrderPaymentForm").validate();
-    $("#returnOrRTOId").rules("add", {
-        required:true,
+    $("#negativeAmount").rules("add", {    	
+    	required:true,
         messages: {
-               required: "Please Enter  Payment Date."
+        	required: "Enter a Amount !"
         }
      });
-  
+    $("#positiveAmount").rules("add", {
+    	required:true,
+        messages: {        		
+        	required: "Enter a Amount !"
+        }
+     });
+    $("#dateofPayment").rules("add", {
+        required:true,
+        messages: {   
+        		required: "Select a Return Date ! "
+        }
+     });
+    
+    
 });
 
 function setOrderID(orderid,channelorderid,value)
