@@ -1154,6 +1154,8 @@ public class SaveContents {
 		Map<String, OrderBean> returnPaymentMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
 		boolean validaterow = true;
+		boolean generatePaymentUpload = false;
+		
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 
@@ -1264,10 +1266,11 @@ public class SaveContents {
 				if (order != null) {
 					order.setPaymentUpload(paymentUpload);
 					paymentUpload.getOrders().add(order);
+					generatePaymentUpload = true;
 				}
 			}
 
-			if (validaterow) {
+			if (generatePaymentUpload) {
 				log.debug(" Total Positive Amount : " + totalpositive);
 				log.debug(" Total Negative Amount : " + totalnegative);
 				paymentUpload.setTotalpositivevalue(totalpositive);
@@ -1693,6 +1696,7 @@ public class SaveContents {
 		Map<String, PoPaymentBean> returnMap = new LinkedHashMap<>();
 		double totalpositive = 0;
 		double totalnegative = 0;
+		boolean generatePaymentUpload = false;
 
 		try {
 
@@ -1812,10 +1816,11 @@ public class SaveContents {
 				if (poOrder != null) {
 					poOrder.setPaymentUpload(paymentUpload);
 					paymentUpload.getOrders().add(poOrder);
+					generatePaymentUpload = true;
 				}
 			}
 
-			if (validaterow) {
+			if (generatePaymentUpload) {
 				log.debug(" Total Positive Amount : " + totalpositive);
 				log.debug(" Total Negative Amount : " + totalnegative);
 				paymentUpload.setTotalpositivevalue(totalpositive);
@@ -2071,7 +2076,7 @@ public class SaveContents {
 			uploadReport.setDescription("Imported");
 			uploadReport.setSeller(sellerService.getSeller(sellerId));
 			if (isError) {
-				uploadReport.setStatus("Error");
+				uploadReport.setStatus("Failed");
 			} else {
 				uploadReport.setStatus("Success");
 			}

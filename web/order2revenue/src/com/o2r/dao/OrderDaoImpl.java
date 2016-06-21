@@ -1755,6 +1755,11 @@ public class OrderDaoImpl implements OrderDao {
 				poOrder.setStatus("Inappropriate Payment Recieved");
 			}
 
+			OrderTimeline timeline = new OrderTimeline();
+			timeline.setEvent("Payment Recieved");
+			timeline.setEventDate(orderPayment.getDateofPayment());
+			poOrder.getOrderTimeline().add(timeline);
+			
 			poOrder.setOrderPayment(orderPayment);
 			session.saveOrUpdate(poOrder);
 

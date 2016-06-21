@@ -877,6 +877,7 @@ public class OrderController {
 				c.set(Calendar.DAY_OF_MONTH,
 						c.getActualMaximum(Calendar.DAY_OF_MONTH));
 				endDate = c.getTime();
+				period = monthFormat.format(startDate);
 			} else {
 				dateString = "1 January " + value;
 				startDate = format.parse(dateString);
