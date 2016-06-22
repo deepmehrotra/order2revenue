@@ -920,7 +920,8 @@ public class OrderDaoImpl implements OrderDao {
 							.getReturnOrRTOChargestoBeDeducted());
 				else {
 					order.setGrossProfit(((order.getGrossProfit() / order
-							.getQuantity()) * orderReturn.getReturnorrtoQty())
+							.getQuantity()) * (order
+									.getQuantity()-orderReturn.getReturnorrtoQty()))
 							- orderReturn.getReturnOrRTOChargestoBeDeducted());
 				}
 
