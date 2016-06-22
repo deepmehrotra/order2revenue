@@ -972,6 +972,8 @@ public class OrderDaoImpl implements OrderDao {
 								* orderReturn.getReturnorrtoQty());
 
 				order.setFinalStatus("Actionable");
+				order.getOrderReturnOrRTO().setReturnorrtoQty(
+						orderReturn.getReturnorrtoQty());
 				order.setNetSaleQuantity(order.getQuantity()
 						- order.getOrderReturnOrRTO().getReturnorrtoQty());
 				orderReturn.setReturnUploadDate(new Date());
@@ -980,8 +982,7 @@ public class OrderDaoImpl implements OrderDao {
 						orderReturn.getReturnDate());
 				order.getOrderReturnOrRTO().setReturnOrRTOId(
 						orderReturn.getReturnOrRTOId());
-				order.getOrderReturnOrRTO().setReturnorrtoQty(
-						orderReturn.getReturnorrtoQty());
+				
 				order.getOrderReturnOrRTO().setReturnOrRTOreason(
 						orderReturn.getReturnOrRTOreason());
 				order.getOrderReturnOrRTO().setReturnOrRTOstatus("Return");
