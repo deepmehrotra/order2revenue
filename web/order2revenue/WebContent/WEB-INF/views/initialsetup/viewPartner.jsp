@@ -524,9 +524,21 @@ span .#error {
 																								<td><label class="labelfix">${chargeMap.fixedvwlt500}</label></td>
 																							</tr>
 																							<tr>
-																								<td>&gt; 500</td>
-																								<td><label class="labelfix">${chargeMap.fixedvwgt500}</label></td>
-																							</tr>																							
+																								<td>500 &gt; 1000</td>
+																								<td><label class="labelfix">${chargeMap.fixedvwgt500lt1000}</label></td>
+																							</tr>
+																							<tr>
+																								<td>1000 &gt; 1500</td>
+																								<td><label class="labelfix">${chargeMap.fixedvwgt1000lt1500}</label></td>
+																							</tr>
+																							<tr>
+																								<td>1500 &gt; 5000</td>
+																								<td><label class="labelfix">${chargeMap.fixedvwgt1500lt5000}</label></td>
+																							</tr>
+																							<tr>
+																								<td>add 1 kg</td>
+																								<td><label class="labelfix">${chargeMap.fixedvwgt5000}</label></td>
+																							</tr>
 																						</tbody>
 																					</table>
 																				</c:if>

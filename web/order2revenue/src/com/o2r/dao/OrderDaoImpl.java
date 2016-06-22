@@ -1768,6 +1768,11 @@ public class OrderDaoImpl implements OrderDao {
 				poOrder.setStatus("Inappropriate Payment Recieved");
 			}
 
+			OrderTimeline timeline = new OrderTimeline();
+			timeline.setEvent("Payment Recieved");
+			timeline.setEventDate(orderPayment.getDateofPayment());
+			poOrder.getOrderTimeline().add(timeline);
+			
 			poOrder.setOrderPayment(orderPayment);
 			session.saveOrUpdate(poOrder);
 
@@ -2114,74 +2119,45 @@ public class OrderDaoImpl implements OrderDao {
 			log.debug("volarea  " + volarea);
 			
 			
-			if(volarea.equals("fixed")){
-				
-				if (volWeight < 501) {
-					tempStr = volarea.append("vwlt500").toString();
-					log.debug(" tempStr " + tempStr);
-	
-					vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
-							.get(tempStr) : 0;
-					order.setVolShippingString(tempStr);
-				} else if (volWeight > 500) {
-					temp = new StringBuffer(volarea);
-					volarea.append("vwlt500");
-	
-					vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap
-							.get(volarea.toString()) : 0;
-					log.debug(" vol Charges for lesstthan 500 : " + vwchargetemp);
-					temp.append("vwgt500");
-					float range = (float) Math.ceil((volWeight - 500) / 500);
-					log.debug("volarea  " + volarea + " temp : " + temp
-							+ " range invol: " + range);
-					vwchargetemp = vwchargetemp
-							+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
-									.get(temp.toString()) : 0));
-					order.setVolShippingString(temp.toString());
-	
-				}
-				
-			}else{
-				if (volWeight < 501) {
-					tempStr = volarea.append("vwlt500").toString();
-					log.debug(" tempStr " + tempStr);
-	
-					vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
-							.get(tempStr) : 0;
-					order.setVolShippingString(tempStr);
-				} else if (volWeight > 500 && volWeight < 1001) {
-					tempStr = volarea.append("vwgt500lt1000").toString();
-					vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
-							.get(tempStr) : 0;
-					order.setVolShippingString(volarea.toString());
-				} else if (volWeight > 1000 && volWeight < 1501) {
-					tempStr = volarea.append("vwgt1000lt1500").toString();
-					vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
-							.get(tempStr) : 0;
-					order.setVolShippingString(volarea.toString());
-				} else if (volWeight > 1500 && volWeight < 5001) {
-					tempStr = volarea.append("vwgt1500lt5000").toString();
-					log.debug(" tempStr " + tempStr);
-					vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
-							.get(tempStr) : 0;
-					order.setVolShippingString(volarea.toString());
-				} else if (volWeight > 5000) {
-					temp = new StringBuffer(volarea);
-					volarea.append("vwgt1500lt5000");
-	
-					vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap
-							.get(volarea.toString()) : 0;
-					log.debug(" vol Charges for lesstthan 500 : " + vwchargetemp);
-					temp.append("vwgt5000");
-					float range = (float) Math.ceil((volWeight - 5000) / 1000);
-					log.debug("volarea  " + volarea + " temp : " + temp
-							+ " range invol: " + range);
-					vwchargetemp = vwchargetemp
-							+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
-									.get(temp.toString()) : 0));
-					order.setVolShippingString(temp.toString());
-	
-				}
+			if (volWeight < 501) {
+				tempStr = volarea.append("vwlt500").toString();
+				log.debug(" tempStr " + tempStr);
+
+				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
+						.get(tempStr) : 0;
+				order.setVolShippingString(tempStr);
+			} else if (volWeight > 500 && volWeight < 1001) {
+				tempStr = volarea.append("vwgt500lt1000").toString();
+				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
+						.get(tempStr) : 0;
+				order.setVolShippingString(volarea.toString());
+			} else if (volWeight > 1000 && volWeight < 1501) {
+				tempStr = volarea.append("vwgt1000lt1500").toString();
+				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
+						.get(tempStr) : 0;
+				order.setVolShippingString(volarea.toString());
+			} else if (volWeight > 1500 && volWeight < 5001) {
+				tempStr = volarea.append("vwgt1500lt5000").toString();
+				log.debug(" tempStr " + tempStr);
+				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
+						.get(tempStr) : 0;
+				order.setVolShippingString(volarea.toString());
+			} else if (volWeight > 5000) {
+				temp = new StringBuffer(volarea);
+				volarea.append("vwgt1500lt5000");
+
+				vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap
+						.get(volarea.toString()) : 0;
+				log.debug(" vol Charges for lesstthan 500 : " + vwchargetemp);
+				temp.append("vwgt5000");
+				float range = (float) Math.ceil((volWeight - 5000) / 1000);
+				log.debug("volarea  " + volarea + " temp : " + temp
+						+ " range invol: " + range);
+				vwchargetemp = vwchargetemp
+						+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
+								.get(temp.toString()) : 0));
+				order.setVolShippingString(temp.toString());
+
 			}
 			log.debug(" vwchargetemp : " + vwchargetemp + " dwchargetemp : "
 					+ dwchargetemp);
@@ -2893,38 +2869,10 @@ public class OrderDaoImpl implements OrderDao {
 
 			}
 
-			if(volarea.equals("fixed")){
-				
-				if (volWeight < 501) {
+			if (volWeight < 501) {
 					tempStr = volarea.append("vwlt500").toString();
 					log.debug(" tempStr " + tempStr);
-	
-					vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
-							.get(tempStr) : 0;
-					order.setVolShippingString(tempStr);
-				} else if (volWeight > 500) {
-					temp = new StringBuffer(volarea);
-					volarea.append("vwlt500");
-	
-					vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap
-							.get(volarea.toString()) : 0;
-					log.debug(" vol Charges for lesstthan 500 : " + vwchargetemp);
-					temp.append("vwgt500");
-					float range = (float) Math.ceil((volWeight - 500) / 500);
-					log.debug("volarea  " + volarea + " temp : " + temp
-							+ " range invol: " + range);
-					vwchargetemp = vwchargetemp
-							+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
-									.get(temp.toString()) : 0));
-					order.setVolShippingString(temp.toString());
-	
-				}
-				
-			}else{
-				if (volWeight < 501) {
-					tempStr = volarea.append("vwlt500").toString();
-					log.debug(" tempStr " + tempStr);
-	
+
 					vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
 							.get(tempStr) : 0;
 					order.setVolShippingString(tempStr);
@@ -2947,7 +2895,7 @@ public class OrderDaoImpl implements OrderDao {
 				} else if (volWeight > 5000) {
 					temp = new StringBuffer(volarea);
 					volarea.append("vwgt1500lt5000");
-	
+
 					vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap
 							.get(volarea.toString()) : 0;
 					log.debug(" vol Charges for lesstthan 500 : " + vwchargetemp);
@@ -2959,9 +2907,8 @@ public class OrderDaoImpl implements OrderDao {
 							+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
 									.get(temp.toString()) : 0));
 					order.setVolShippingString(temp.toString());
-	
+
 				}
-			}
 			log.debug(" vwchargetemp : " + vwchargetemp + " dwchargetemp : "
 					+ dwchargetemp);
 			if (vwchargetemp > dwchargetemp)

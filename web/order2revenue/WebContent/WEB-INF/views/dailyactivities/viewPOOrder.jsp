@@ -199,80 +199,6 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 										</div>
 									</div>
 								</div>
-
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-12 order-info-block">
-				<div class="float-e-margins col-lg-4">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h4 class="panel-title ibox-title">
-								<a data-toggle="collapse" data-parent="#accordion1"
-									href="#collapsecust">CUSTOMER INFO</a>
-							</h4>
-						</div>
-						<div id="collapsecust" class="panel-collapse collapse">
-							<div class="panel-body">
-								<div class="ibox-content add-company view-order">
-
-									<div class="table-format-wrapper three-data-width">
-										<div>
-											<span>Name</span> <span></span> <span>${order.customer.customerName}</span>
-										</div>
-										<div>
-											<span>Contact</span> <span></span> <span>${order.customer.customerPhnNo}</span>
-										</div>
-										<div>
-											<span>Email</span> <span></span> <span>${order.customer.customerEmail}</span>
-										</div>
-										<div>
-											<span>City</span> <span></span> <span>${order.customer.customerCity}</span>
-										</div>
-										<div>
-											<span>Address</span> <span></span> <span>${order.customer.customerAddress}</span>
-										</div>
-									</div>
-
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="float-e-margins col-lg-4">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h4 class="panel-title ibox-title">
-								<a data-toggle="collapse" data-parent="#accordion1"
-									href="#collapsevents">EVENTS INFO</a>
-							</h4>
-						</div>
-						<div id="collapsevents" class="panel-collapse collapse">
-							<div class="panel-body">
-								<div class="ibox-content add-company view-order">
-									<div class="table-format-wrapper three-data-width"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="float-e-margins col-lg-4">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h4 class="panel-title ibox-title">
-								<a data-toggle="collapse" data-parent="#accordion1"
-									href="#collapsenotes">SELLER NOTES</a>
-							</h4>
-						</div>
-						<div id="collapsenotes" class="panel-collapse collapse">
-							<div class="panel-body">
-								<div class="ibox-content add-company view-order">
-									<blockquote>
-										<p>${order.sellerNote}</p>
-									</blockquote>
-								</div>
 							</div>
 						</div>
 					</div>
@@ -307,22 +233,35 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 												"tableTools" : {
 													"sSwfPath" : "/O2R/seller/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
 												},
-												"columns": [
-												            { "width": "1%" },
-												            { "width": "10%" },
-												            { "width": "5%" },
-												            { "width": "5%" },
-												            { "width": "8%" },
-												            { "width": "10%" },
-												            { "width": "5%" },
-												            { "width": "8%" },
-												            { "width": "5%" },
-												            { "width": "8%" },
-												            { "width": "10%" },
-												            { "width": "10%" },
-												            { "width": "5%" },
-												            { "width": "10%" }
-												          ],
+												"columns" : [ {
+													"width" : "1%"
+												}, {
+													"width" : "10%"
+												}, {
+													"width" : "5%"
+												}, {
+													"width" : "5%"
+												}, {
+													"width" : "8%"
+												}, {
+													"width" : "10%"
+												}, {
+													"width" : "5%"
+												}, {
+													"width" : "8%"
+												}, {
+													"width" : "5%"
+												}, {
+													"width" : "8%"
+												}, {
+													"width" : "10%"
+												}, {
+													"width" : "10%"
+												}, {
+													"width" : "5%"
+												}, {
+													"width" : "10%"
+												} ],
 												"footerCallback" : function(
 														row, data, start, end,
 														display) {
@@ -439,14 +378,14 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 																				+ intVal(b);
 																	}, 0);
 													total13 = api
-													.column(13)
-													.data()
-													.reduce(
-															function(a,
-																	b) {
-																return intVal(a)
-																		+ intVal(b);
-															}, 0);
+															.column(13)
+															.data()
+															.reduce(
+																	function(a,
+																			b) {
+																		return intVal(a)
+																				+ intVal(b);
+																	}, 0);
 
 													// Total over this page
 													pageTotal2 = api
@@ -593,18 +532,18 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 																				+ intVal(b);
 																	}, 0);
 													pageTotal13 = api
-													.column(
-															13,
-															{
-																page : 'current'
-															})
-													.data()
-													.reduce(
-															function(a,
-																	b) {
-																return intVal(a)
-																		+ intVal(b);
-															}, 0);
+															.column(
+																	13,
+																	{
+																		page : 'current'
+																	})
+															.data()
+															.reduce(
+																	function(a,
+																			b) {
+																		return intVal(a)
+																				+ intVal(b);
+																	}, 0);
 
 													// Update footer
 													$(api.column(2).footer())
@@ -696,13 +635,13 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 																					.toFixed(2)
 																			+ ")");
 													$(api.column(13).footer())
-													.html(
-															pageTotal13
-																	.toFixed(2)
-																	+ "<br>("
-																	+ total13
+															.html(
+																	pageTotal13
 																			.toFixed(2)
-																	+ ")");
+																			+ "<br>("
+																			+ total13
+																					.toFixed(2)
+																			+ ")");
 												}
 											});
 
