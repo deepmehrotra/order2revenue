@@ -282,8 +282,8 @@
     		return;
     	}
     	
-    	if(startDate < endDate){
-    		alert("'Start Date' cannot be before 'End Date'! Kindly correct the dates to proceed!");
+    	if(startDate > endDate){
+    		alert("'Start Date' cannot be after 'End Date'! Kindly correct the dates to proceed!");
     		return;
     	}
 
