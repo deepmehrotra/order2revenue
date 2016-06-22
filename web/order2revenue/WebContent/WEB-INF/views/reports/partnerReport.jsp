@@ -225,9 +225,9 @@
 
                         <div class="hr-line-dashed"></div>
 
-                        <button class="btn btn-primary pull-right mar-left-20" type="submit" onclick="submitReport('download')" >Download Report</button>
+                        <button class="btn btn-primary pull-right mar-left-20" type="button" onclick="submitReport('download')" >Download Report</button>
 
-                        <button class="btn btn-success pull-right" type="submit" onclick="submitReport('view')">View Complete Report</button>
+                        <button class="btn btn-success pull-right" type="button" onclick="submitReport('view')">View Complete Report</button>
 
                         </div>
 
@@ -303,46 +303,56 @@
     });
 
     function submitReport(value){
+    	
+    	console.log("Partner Report");
+    	
+    	var startDate = new Date($("input[name='startdate']").val());
+    	var endDate = new Date($("input[name='enddate']").val());
+    	if(startDate == "Invalid Date" || endDate == "Invalid Date"){
+    		alert("Please select both the dates to proceed!");
+    		return;
+    	}
 
-       if(value=='download')
+    	if(startDate < endDate){
+    		alert("'Start Date' cannot be before 'End Date'! Kindly correct the dates to proceed!");
+    		return;
+    	}
 
-              {
+    	if(value=='download'){
+    	   	var timeDiff = Math.abs(new Date(startDate).getTime() - new Date(endDate).getTime());
+    	   	var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+    	   	if(diffDays > 90){
+        	   	alert("Download Report cannnot be generated for more than 90 days! Kindly change your date selection!");
+        	   	return;
+    	   	}
+    	   
+    	   	var isCheckboxSelected = false;
+    	   	$('.checkbox1').each(function() {
+   	   			if(this.checked && this.value!="SelectAll"){
+    	   			isCheckboxSelected = true;
+    	   		}               
+           	});
+    	   
+    	   	if(!isCheckboxSelected){
+    		   	alert("Please select atleast one checkbox to proceed");
+    		   	return;
+    	   	}
+			document.getElementById('selectReportForm').action = "downloadPartnerReport.html";
+		} else {
+    	   	document.getElementById('selectReportForm').action = "getPartnerReport.html";
+   	   	}
+       	$("#selectReportForm").submit();
 
-              //document.getElementById("requestType").value = "download";
-
-              document.getElementById('selectReportForm').action = "downloadPartnerReport.html";
-
-              }
-       else
-    	   {
-    	   document.getElementById('selectReportForm').action = "getPartnerReport.html";
-    	   }
-
-         $.ajax({
-
-               url:$("#selectReportForm").attr("action"),
-
-               context: document.body,
-
-               type: 'post',
-
-               data:$("#selectReportForm").serialize(),
-
-               success : function(res) {
-
-                  $("#centerpane").html(res);
-
-             
-
-           }
-
-        });
-
-             
-
- 
-
-}
+        $.ajax({
+			url:$("#selectReportForm").attr("action"),
+            context: document.body,
+            type: 'post',
+			data:$("#selectReportForm").serialize(),
+			success : function(res) {
+				$("#centerpane").html(res);
+           	}
+		});
+	}
 
 </script>
 
