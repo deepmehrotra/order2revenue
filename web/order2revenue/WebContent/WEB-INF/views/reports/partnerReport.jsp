@@ -304,27 +304,31 @@
 
     function submitReport(value){
     	
-    	console.log("Partner Report");
+    	var reportName = "${reportName}";
     	
-    	var startDate = new Date($("input[name='startdate']").val());
-    	var endDate = new Date($("input[name='enddate']").val());
-    	if(startDate == "Invalid Date" || endDate == "Invalid Date"){
-    		alert("Please select both the dates to proceed!");
-    		return;
-    	}
+    	if(!(reportName == "debtorsReport")){
+        	var startDate = new Date($("input[name='startdate']").val());
+        	var endDate = new Date($("input[name='enddate']").val());
+        	if(startDate == "Invalid Date" || endDate == "Invalid Date"){
+        		alert("Please select both the dates to proceed!");
+        		return;
+        	}
 
-    	if(startDate < endDate){
-    		alert("'Start Date' cannot be before 'End Date'! Kindly correct the dates to proceed!");
-    		return;
+        	if(startDate < endDate){
+        		alert("'Start Date' cannot be before 'End Date'! Kindly correct the dates to proceed!");
+        		return;
+        	}
     	}
 
     	if(value=='download'){
-    	   	var timeDiff = Math.abs(new Date(startDate).getTime() - new Date(endDate).getTime());
-    	   	var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-    	   	if(diffDays > 90){
-        	   	alert("Download Report cannnot be generated for more than 90 days! Kindly change your date selection!");
-        	   	return;
-    	   	}
+    		if(!(reportName == "debtorsReport")){
+	    	   	var timeDiff = Math.abs(new Date(startDate).getTime() - new Date(endDate).getTime());
+	    	   	var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+	    	   	if(diffDays > 90){
+	        	   	alert("Download Report cannnot be generated for more than 90 days! Kindly change your date selection!");
+	        	   	return;
+	    	   	}
+    		}
     	   
     	   	var isCheckboxSelected = false;
     	   	$('.checkbox1').each(function() {

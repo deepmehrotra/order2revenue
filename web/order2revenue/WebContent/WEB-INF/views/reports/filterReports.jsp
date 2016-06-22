@@ -211,8 +211,6 @@
 
     function submitReport(value){
     	
-console.log("Partner Report");
-    	
     	var startDate = new Date($("input[name='startdate']").val());
     	var endDate = new Date($("input[name='enddate']").val());
     	if(startDate == "Invalid Date" || endDate == "Invalid Date"){
