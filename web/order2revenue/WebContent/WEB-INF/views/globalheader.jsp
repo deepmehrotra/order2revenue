@@ -11,7 +11,7 @@
 
 <link rel="stylesheet" href="/O2R/landing/css/fixednav.css">
 <script src="/O2R/landing/js/modernizr.js"></script>
-<jsp:include page="globaljslinks.jsp"></jsp:include>
+<script src="/O2R/seller/js/jquery-2.1.1.js"></script>
 
 <style type="text/css">
 .progress {
