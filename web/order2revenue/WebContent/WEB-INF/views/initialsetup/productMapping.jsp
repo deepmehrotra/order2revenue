@@ -67,7 +67,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 					<div class="col-lg-12">
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
-								<h5>Product Mappings(${productMappingList.size()})</h5>
+								<h5>SKU Mappings(${productMappingList.size()})</h5>
 								<div class="ibox-tools">
 									<button class="btn btn-white table-menu-search search-dd">
 										<i class="fa fa-search"></i>
@@ -111,8 +111,6 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 									<button type="button" class="btn btn-xs btn-white">1000</button>
 									<button type="button" id="LoadMoreProduct"
 										class="btn btn-xs btn-white">More</button>
-									<a href="addProductConfig.html" class="btn btn-primary btn-xs">Add
-										Product Mapping</a>
 								</div>
 							</div>
 							<div class="bs-example">
@@ -139,8 +137,8 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 																<td>${productMapping.productSkuCode}</td>
 																<td>${productMapping.channelName}</td>
 																<td>${productMapping.channelSkuRef}</td>
-																<td><a href="#" 
-																	onclick="removeProductMapping('${productMapping.productConfigId}')">
+																<td><a href="#"
+																	onclick="removeSKUMapping('${productMapping.productConfigId}')">
 																	Unlink</a></td>
 															</tr>
 														</c:forEach>
@@ -151,8 +149,8 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 										<div class="col-sm-12">
 											<div class="hr-line-dashed"></div>
 											<a href="#" id="upload1" class="btn btn-success btn-xs">Bulk
-												Upload Product Mappin</a>&nbsp;&nbsp; <a href="#" id="download1"
-												class="btn btn-success btn-xs">Download Product Mapping
+												Upload SKU Mapping</a>&nbsp;&nbsp; <a href="#" id="download1"
+												class="btn btn-success btn-xs">Download SKU Mapping
 												Summary</a>
 										</div>
 									</div>
@@ -218,14 +216,6 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
                                 });
                             });
 
-                    function removeProductMapping(value) {
-                    	
-                        $.post("removeProductMapping.html", {value: value}, function(result){
-                        	window.location.href = "productMapping.html";
-                        });
-
-                	};
-                	
                     function getQueryVariable(variable) {
                         var query = window.location.search.substring(1);
                         var vars = query.split("&");
@@ -238,6 +228,24 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
                         return 0;
                     }
 
+                    function onclickAddProduct() {
+                        $.ajax({
+                            url: 'addProduct.html',
+                            success: function(data) {
+                                $('#centerpane').html(data);
+                            }
+                        });
+                    }
+
+                    function onclickEditProduct(id) {
+                        $.ajax({
+                            url: 'editProduct.html?id=' + id,
+                            success: function(data) {
+                                $('#centerpane').html(data);
+                            }
+                        });
+                    }
+
                     function show(vale, valf) {
                         var valued = document.getElementById('productName');
                         var valuee = document.getElementById('productSkuCode');
@@ -246,6 +254,12 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
                         valuee.value = valf;
                         //editProduct.html?id=${product.productId}
                         var xxx = $('editProduct.html?id' + vale).submit();
+                    }
+                    
+                    function removeSKUMapping(value) {
+                        $.post( "removeProductMapping.html", {value:value}, function(data) {
+                        	window.location.href = "productMapping.html";
+                        });
                     }
 
                     $('#upload1').click(function() {

@@ -100,7 +100,7 @@ window.onload = function() {
 									Groups</a></li>
 							<li><a href="Product.html">SKUs</a></li>
 							<li><a href="productConfig.html">Product Config</a></li>
-							<li><a href="productMapping.html">Product Mapping</a></li>
+							<li><a href="productMapping.html">SKU Mapping</a></li>
 
 						</ul></li>
 					<li><a href="expenseCategories.html">Expense Group</a></li>
