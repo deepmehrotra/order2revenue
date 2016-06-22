@@ -11,7 +11,7 @@
 
 <link rel="stylesheet" href="/O2R/landing/css/fixednav.css">
 <script src="/O2R/landing/js/modernizr.js"></script>
-
+<jsp:include page="globaljslinks.jsp"></jsp:include>
 
 <style type="text/css">
 .progress {
@@ -91,16 +91,14 @@
 				<div class="form-group  top-search-180" id="search1">
 					<div class="top-search-30 f-left">
 						<select class="form-control" name="searchCriteria" required
-							autocomplete="off" / id="searchCriteria">
+							autocomplete="off" / id="searchCriteriaGlobal">
 							<option value="">Select Criteria</option>
-							<option id="1" value="channelOrderID">Channel Order
-								ID/PO ID</option>
+							<option id="1" value="channelOrderID">Channel OrderID/PO ID</option>
 							<option id="2" value="awbNum">AWB</option>
 							<option id="3" value="invoiceID">Invoice ID</option>
 							<option id="4" value="subOrderID">Sub Order ID</option>
 							<option id="5" value="PIreferenceNo">PI Reference No</option>
-							<option id="7" value="returnOrRTOId">Sale Return
-								ID/Debit Note No</option>
+							<option id="7" value="returnOrRTOId">Sale ReturnID/Debit Note No</option>
 							<option id="8" value="pcName">Partner</option>
 							<option id="9" value="productSkuCode">Product SKU</option>
 							<option id="10" value="customerName">Customer Name</option>
@@ -111,11 +109,9 @@
 							<option id="15" value="sellerNote">Seller Notes</option>
 							<option id="17" value="orderDate">Order Received Date</option>
 							<option id="18" value="shippedDate">Order Shipped Date</option>
-							<option id="19" value="deliveryDate">Order Delivery
-								Expected Date</option>
+							<option id="19" value="deliveryDate">Order Delivery	Expected Date</option>
 							<option id="20" value="paymentDueDate">Payment Due Date</option>
-							<option id="21" value="dateofPayment">Actual Date of
-								Payment</option>
+							<option id="21" value="dateofPayment">Actual Date of Payment</option>
 						</select>
 					</div>
 					<div class="top-search-60 f-left TopSearch-box1" id="newdiv">
@@ -459,10 +455,11 @@
 														});
 											});
 
-							$('#searchCriteria').change(
+							$('#searchCriteriaGlobal').change(
 									function() {
 										var thisValue = $(this).children(
 												":selected").attr("id");
+										
 										if (thisValue == 1 || thisValue == 2
 												|| thisValue == 3
 												|| thisValue == 4
@@ -484,7 +481,7 @@
 											$('.TopSearch-box2').show();
 										}
 									});
-						});
+							});
 	</script>
 </body>
 
