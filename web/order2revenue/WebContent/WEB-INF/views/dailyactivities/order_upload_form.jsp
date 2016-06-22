@@ -3,9 +3,8 @@
 <head>
 <link rel='stylesheet' href='/O2R/seller/css/nprogress.css' />
 <script src='/O2R/seller/js/nprogress.js'></script>
-<script src="/O2R/seller/js/jquery-2.1.1.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- <script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
 <script src="/O2R/seller/js/jquery.ui.widget.js"></script>
 <script src="/O2R/seller/js/jquery.iframe-transport.js"></script>
 <script src="/O2R/seller/js/jquery.fileupload.js"></script>
