@@ -11,7 +11,7 @@
 
 <link rel="stylesheet" href="/O2R/landing/css/fixednav.css">
 <script src="/O2R/landing/js/modernizr.js"></script>
-
+<script src="/O2R/seller/js/jquery-2.1.1.js"></script>
 
 <style type="text/css">
 .progress {
@@ -218,31 +218,6 @@
 					class="fa fa-exchange"></i>
 			</a>
 				<ul class="dropdown-menu dropdown-messages animated fadeInRight">
-					<%--<c:if test="${!empty uploadReportList}">
-						<c:forEach items="${uploadReportList}" var="uploadReport"
-							varStatus="loop">
-							<li>
-								<div class="dropdown-messages-box">
-									<a href="javascript:onclickDownload('${uploadReport.id}');"
-										class="pull-left"> <c:if
-											test="${fn:containsIgnoreCase(uploadReport.description, 'Exported')}">
-											<c:set value="fa-level-up" var="cssClass"></c:set>
-										</c:if> <c:if
-											test="${fn:containsIgnoreCase(uploadReport.description, 'Imported')}">
-											<c:set value="fa-level-down" var="cssClass"></c:set>
-										</c:if> <i class="fa ${cssClass}"></i>
-									</a>
-									<div class="media-body">
-										<small class="pull-right">${uploadReport.uploadedAt}</small> <strong>${uploadReport.description}</strong>
-										by ${uploadReport.sellerName} <br> <small
-											class="text-muted">${uploadReport.fileType} -
-											${uploadReport.uploadDate}</small>
-									</div>
-								</div>
-							</li>
-							<li class="divider"></li>
-						</c:forEach>
-					</c:if> --%>
 					<li>
 						<div id="uploadReport-div-3" class="dropdown-messages-box"
 							style="display: none;">

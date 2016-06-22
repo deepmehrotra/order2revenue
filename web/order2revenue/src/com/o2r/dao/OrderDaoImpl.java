@@ -1729,30 +1729,32 @@ public class OrderDaoImpl implements OrderDao {
 			OrderPayment orderPayment = new OrderPayment();
 			orderPayment.setUploadDate(new Date());
 			orderPayment.setDateofPayment(popaBean.getPaymentDate());
+			orderPayment.setPositiveAmount(popaBean.getPositiveAmount());
+			orderPayment.setNegativeAmount(popaBean.getNegativeAmount());
+			orderPayment.setNetPaymentResult(orderPayment.getPositiveAmount()
+					- orderPayment.getNegativeAmount());
 
 			if (!isGP) {
-				orderPayment.setPositiveAmount(popaBean.getPositiveAmount());
-				if (popaBean.getPositiveAmount() == poOrder.getNetRate()) {
+				if (orderPayment.getNetPaymentResult() == poOrder.getNetRate()) {
 					paymentOK = true;
 				} else {
-					paymentDiff = popaBean.getPositiveAmount()
-							- poOrder.getNetRate();
+					paymentDiff = poOrder.getNetRate()
+							- orderPayment.getNetPaymentResult();
 				}
 			} else {
-				orderPayment.setNegativeAmount(popaBean.getNegativeAmount());
-				if (popaBean.getNegativeAmount() == poOrder
+				
+				if (orderPayment.getNetPaymentResult() == poOrder
 						.getOrderReturnOrRTO()
 						.getReturnOrRTOChargestoBeDeducted()) {
 					paymentOK = true;
 				} else {
 					paymentDiff = poOrder.getOrderReturnOrRTO()
 							.getReturnOrRTOChargestoBeDeducted()
-							- popaBean.getNegativeAmount();
+							- orderPayment.getNetPaymentResult();
 				}
 			}
 
-			orderPayment.setNetPaymentResult(orderPayment.getPositiveAmount()
-					- orderPayment.getNegativeAmount());
+			
 			paymentDiff = Math.round(paymentDiff * 100.0) / 100.0;
 
 			orderPayment.setPaymentDifference(paymentDiff);

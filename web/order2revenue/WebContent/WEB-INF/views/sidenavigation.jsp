@@ -99,7 +99,8 @@ window.onload = function() {
 								onclick="onclickSideNavigation('InventoryGroup')">Inventory
 									Groups</a></li>
 							<li><a href="Product.html">SKUs</a></li>
-							<li><a href="ProductMapping.html">Product Mapping</a></li>
+							<li><a href="productConfig.html">Product Config</a></li>
+							<li><a href="productMapping.html">Product Mapping</a></li>
 
 						</ul></li>
 					<li><a href="expenseCategories.html">Expense Group</a></li>
