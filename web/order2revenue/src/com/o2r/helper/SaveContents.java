@@ -1045,7 +1045,7 @@ public class SaveContents {
 				}
 				if (entry.getCell(1) != null
 						&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					productConfig.setChannelName(entry.getCell(1).toString());
+					productConfig.setChannelName(entry.getCell(1).toString().toLowerCase());
 				} else {
 					errorMessage.append(" Channel Name is null ");
 					validaterow = false;
