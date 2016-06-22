@@ -75,6 +75,9 @@
                                     <th>Created On</th>
                                     <th>SKU Price</th>
                                     <th>Category</th>
+                                    <th>Volume(L*B*H)(in cm)</th>
+                                    <th>Vol-Weight(in cm)</th>
+                                    <th>Dead Weight(in cm)</th>
                                     <th>Stock Available</th>
                                     <th>Threshold Limit</th>
                                     <th>Channel SKU(Separated by ;)</th>
@@ -91,6 +94,9 @@
                                     <td><fmt:formatDate value="${product.productDate}" pattern="MMM dd ,YY"/></td>
                                     <td>${product.productPrice}</td>
                                     <td>${product.categoryName}</td>
+                                    <td>${product.length}*${product.breadth}*${product.height}</td>
+                                    <td>${product.volWeight}</td>
+                                    <td>${product.deadWeight}</td>
                                     <td>${product.quantity}</td>
                                     <td>${product.threholdLimit}</td>
                                     <td>${product.channelSKU}</td>
