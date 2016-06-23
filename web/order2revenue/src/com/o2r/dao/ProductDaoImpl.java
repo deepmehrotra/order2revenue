@@ -721,6 +721,8 @@ public class ProductDaoImpl implements ProductDao {
 		Product product = null;
 		Session session = null;
 		Date todayDate = new Date();
+		Date monthopeningdate = new Date();
+		monthopeningdate.setDate(1);
 		long currentValue = 0;
 
 		try {
@@ -772,10 +774,10 @@ public class ProductDaoImpl implements ProductDao {
 				} else {
 					ProductStockList newObj = new ProductStockList();
 					newObj.setStockAvailable(currentValue);
-					newObj.setCreatedDate(todayDate);
-					newObj.setUpdatedate(todayDate.getDate());
-					newObj.setMonth(todayDate.getMonth());
-					newObj.setYear(todayDate.getYear());
+					newObj.setCreatedDate(monthopeningdate);
+					newObj.setUpdatedate(monthopeningdate.getDate());
+					newObj.setMonth(monthopeningdate.getMonth());
+					newObj.setYear(monthopeningdate.getYear());
 					newObj.setPrice(product.getProductPrice());
 					product.getClosingStocks().add(newObj);
 				}

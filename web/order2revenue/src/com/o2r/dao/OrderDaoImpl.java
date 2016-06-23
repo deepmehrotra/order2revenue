@@ -455,10 +455,7 @@ public class OrderDaoImpl implements OrderDao {
 						order.getOrderTimeline().add(timeline);
 						order.setSeller(seller);
 						seller.getOrders().add(order);
-						session.saveOrUpdate(partner);
-						session.saveOrUpdate(seller);
 					}
-					session.getTransaction().commit();
 
 					TaxDetail taxDetails = new TaxDetail();
 					taxDetails
@@ -468,9 +465,11 @@ public class OrderDaoImpl implements OrderDao {
 					taxDetails.setUploadDate(order.getOrderDate());
 					taxDetailService.addMonthlyTaxDetail(session, taxDetails,
 							sellerId);
-					/*
-					 * session.getTransaction().commit(); session.close();
-					 */
+					
+					session.saveOrUpdate(partner);
+					session.saveOrUpdate(seller);
+					session.getTransaction().commit();
+					
 				} catch (Exception e) {
 					log.error("Failed!", e);
 					log.debug("Inside exception in add order "
@@ -2176,7 +2175,7 @@ public class OrderDaoImpl implements OrderDao {
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
 			props = PropertiesLoaderUtils.loadProperties(resource);
-			tds = (((props.getProperty("TDS")) != null ? Double.parseDouble(props.getProperty("TDS")) :0) + ((fixedfee + pccAmount + shippingCharges) / 50))
+			tds = (((props.getProperty("TDS") != null ? Double.parseDouble(props.getProperty("TDS")) :0)*comission/100 + ((fixedfee + pccAmount + shippingCharges) / 50)))
 					* order.getQuantity();
 			order.getOrderTax().setTdsToDeduct(tds);
 			order.setGrossNetRate(nrValue);
@@ -2926,7 +2925,7 @@ public class OrderDaoImpl implements OrderDao {
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
 			props = PropertiesLoaderUtils.loadProperties(resource);
-			tds = (((props.getProperty("TDS")) != null ? Double.parseDouble(props.getProperty("TDS")) :0) + ((fixedfee + pccAmount) / 50))
+			tds = (((props.getProperty("TDS") != null ? Double.parseDouble(props.getProperty("TDS")) :0)*comission/100 + ((fixedfee + pccAmount + shippingCharges) / 50)))
 					* order.getQuantity();
 			order.getOrderTax().setTdsToDeduct(tds);
 			order.setGrossNetRate(nrValue);
@@ -3481,8 +3480,9 @@ public class OrderDaoImpl implements OrderDao {
 			int sellerId) throws CustomException {
 
 		log.info("$$$ addGatePass Starts : OrderDaoImpl $$$");
+		Session session = null;
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			session.beginTransaction();
 
 			double eossValue = 0;
@@ -3504,9 +3504,7 @@ public class OrderDaoImpl implements OrderDao {
 			productService.updateInventory(productConfig.getProductSkuCode(),
 					0, gatepass.getQuantity(), 0, false, sellerId);
 
-			session.saveOrUpdate(gatepass);
-			session.getTransaction().commit();
-
+			
 			TaxDetail taxDetails = new TaxDetail();
 			taxDetails.setBalanceRemaining(-(gatepass.getTaxPOAmt())
 					* gatepass.getQuantity());
@@ -3514,7 +3512,8 @@ public class OrderDaoImpl implements OrderDao {
 			taxDetails.setUploadDate(gatepass.getReturnDate());
 			taxDetailService.addMonthlyTaxDetail(session, taxDetails, sellerId);
 
-			session.close();
+			session.saveOrUpdate(gatepass);
+			session.getTransaction().commit();
 
 		} catch (Exception e) {
 
@@ -3522,6 +3521,8 @@ public class OrderDaoImpl implements OrderDao {
 			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.addReturnOrderError,
 					new Date(), 1, GlobalConstant.addReturnOrderErrorCode, e);
+		} finally {
+			session.close();
 		}
 		log.info("$$$ addGatePass Ends : OrderDaoImpl $$$");
 		return gatepass;
