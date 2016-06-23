@@ -1736,22 +1736,22 @@ public class OrderDaoImpl implements OrderDao {
 					- orderPayment.getNegativeAmount());
 
 			if (!isGP) {
-				if (orderPayment.getNetPaymentResult() == poOrder.getNetRate()) {
+				if (orderPayment.getNetPaymentResult() == poOrder.getPoPrice()) {
 					paymentOK = true;
 				} else {
-					paymentDiff = poOrder.getNetRate()
-							- orderPayment.getNetPaymentResult();
+					paymentDiff = orderPayment.getNetPaymentResult()
+							- poOrder.getPoPrice();
+							
 				}
 			} else {
 				
-				if (orderPayment.getNetPaymentResult() == poOrder
+				if ( - orderPayment.getNetPaymentResult() == poOrder
 						.getOrderReturnOrRTO()
 						.getReturnOrRTOChargestoBeDeducted()) {
 					paymentOK = true;
 				} else {
-					paymentDiff = poOrder.getOrderReturnOrRTO()
-							.getReturnOrRTOChargestoBeDeducted()
-							- orderPayment.getNetPaymentResult();
+					paymentDiff =  poOrder.getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()
+							+ orderPayment.getNetPaymentResult();
 				}
 			}
 
@@ -3662,6 +3662,7 @@ public class OrderDaoImpl implements OrderDao {
 			consolidatedOrder.setEossValue(eossValue);
 			consolidatedOrder.setQuantity(quantity);
 			consolidatedOrder.setNetRate(netRate);
+			consolidatedOrder.setPoPrice(totalReturnCharges);
 
 			consolidatedOrder.setOrderTax(new OrderTax());
 			consolidatedOrder.getOrderTax().setTax(taxValue);
