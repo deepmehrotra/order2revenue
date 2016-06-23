@@ -27,7 +27,9 @@ import com.o2r.model.TaxDetail;
 @Repository("taxDetailDao")
 public class TaxDetailsDaoImpl implements TaxDetailsDao {
 
-	private static final String taxTdRetriveQuery = "Select td.taxId from TaxDetail td,Seller s, Seller_TaxDetail st where s.id=:sellerId and s.id=st.seller_id and st.taxDetails_taxId=td.taxId and MONTH(td.uploadDate)=:month and td.particular=:particular";
+	private static final String taxTdRetriveQuery = "Select td.taxId from TaxDetail td,Seller s, "
+			+ "Seller_TaxDetail st where s.id=:sellerId and s.id=st.seller_id and "
+			+ "st.taxDetails_taxId=td.taxId and MONTH(td.uploadDate)=:month and td.particular=:particular";
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -141,6 +143,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			int sellerId) {
 		
 		log.info("*** addMonthlyTDSDetail Starts : TaxDetailsDaoImpl ****");
+		System.out.println("Add Monthly TDS : cat : " + taxDetail.getParticular()+ " Amoun :" + taxDetail.getBalanceRemaining());
 		log.debug("Add Monthly TDS : cat : " + taxDetail.getParticular()+ " Amoun :" + taxDetail.getBalanceRemaining());
 		Seller seller = null;
 		List<Integer> taxIds = null;
@@ -152,9 +155,9 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 				sessionState = true;
 			} else{
 				session = sessionFactory.getCurrentSession();
-				session.beginTransaction();
+				
 			}
-		
+			session.beginTransaction();
 				Query gettingTaxId = session
 						.createSQLQuery(taxTdRetriveQuery)
 						.setParameter("sellerId", sellerId)

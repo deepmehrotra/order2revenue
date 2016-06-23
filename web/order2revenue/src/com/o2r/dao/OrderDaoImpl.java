@@ -197,14 +197,14 @@ public class OrderDaoImpl implements OrderDao {
 						eventsService.addEvent(event, sellerId);
 					}
 
-					if ((int) order.getPoPrice() != 0
+					/*if ((int) order.getPoPrice() != 0
 							&& order.getPcName().equals(GlobalConstant.PCMYNTRA)) {
 						double taxvalue = order.getPoPrice()
 								- (order.getPoPrice() * (100 / (100 + taxpercent)));
 						order.setDiscount((Math.abs(order.getPoPrice()
 								- order.getNetRate())));
 						order.getOrderTax().setTax(taxvalue);
-					} else {
+					} else {*/
 						order.setDiscount((Math.abs(order.getOrderMRP()
 								- order.getOrderSP())));
 						log.debug(" Tax cal SP:"
@@ -225,7 +225,7 @@ public class OrderDaoImpl implements OrderDao {
 						taxDetails.setUploadDate(order.getOrderDate());
 						taxDetailService.addMonthlyTaxDetail(session,
 								taxDetails, sellerId);
-					}
+					
 
 					order.setTotalAmountRecieved(order.getNetRate());
 					order.setFinalStatus("In Process");
@@ -238,7 +238,7 @@ public class OrderDaoImpl implements OrderDao {
 						taxDetails.setBalanceRemaining(order.getOrderTax()
 								.getTdsToDeduct());
 						taxDetails.setParticular("TDS");
-						taxDetails.setUploadDate(order.getOrderDate());
+						taxDetails.setUploadDate(order.getShippedDate());
 						taxDetailService.addMonthlyTDSDetail(session,
 								taxDetails, sellerId);
 					}
