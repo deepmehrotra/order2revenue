@@ -29,7 +29,7 @@ public interface ProductService {
 			throws CustomException;
 
 	public void updateInventory(String sku, int currentInventory,
-			int quantoAdd, int quantoSub, boolean status, int sellerId)
+			int quantoAdd, int quantoSub, boolean status, int sellerId, Date orderDate)
 			throws CustomException;
 
 	public Product getProduct(String skuCode, int sellerId)
