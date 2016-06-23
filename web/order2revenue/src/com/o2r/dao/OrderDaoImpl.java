@@ -244,7 +244,7 @@ public class OrderDaoImpl implements OrderDao {
 					}
 					// Reducing Product Inventory For Order
 					productService.updateInventory(order.getProductSkuCode(),
-							0, 0, order.getQuantity(), false, sellerId);
+							0, 0, order.getQuantity(), false, sellerId,order.getShippedDate());
 					/* checking if customer is available */
 					log.debug(" Customer Email id in add order :"
 							+ order.getCustomer().getCustomerEmail());
@@ -417,7 +417,7 @@ public class OrderDaoImpl implements OrderDao {
 					// Reducing Product Inventory For Order
 					productService.updateInventory(order.getProductConfig()
 							.getProductSkuCode(), 0, 0, order.getQuantity(),
-							false, sellerId);
+							false, sellerId, order.getShippedDate());
 					// Adding order to the Partner
 					if (partner.getOrders() != null && order.getOrderId() == 0) {
 						partner.getOrders().add(order);
@@ -988,7 +988,7 @@ public class OrderDaoImpl implements OrderDao {
 				order.getOrderReturnOrRTO().setReturnOrRTOstatus("Return");
 				productService.updateInventory(order.getProductSkuCode(), 0,
 						order.getOrderReturnOrRTO().getReturnorrtoQty(), 0,
-						false, sellerId);
+						false, sellerId,order.getOrderReturnOrRTO().getReturnDate());
 
 				order.setOrderReturnOrRTO(orderReturn);
 				session.getTransaction().commit();
@@ -3502,7 +3502,7 @@ public class OrderDaoImpl implements OrderDao {
 					- (productConfig.getProductPrice() * gatepass.getQuantity()));
 
 			productService.updateInventory(productConfig.getProductSkuCode(),
-					0, gatepass.getQuantity(), 0, false, sellerId);
+					0, gatepass.getQuantity(), 0, false, sellerId,gatepass.getReturnDate());
 
 			session.saveOrUpdate(gatepass);
 			session.getTransaction().commit();

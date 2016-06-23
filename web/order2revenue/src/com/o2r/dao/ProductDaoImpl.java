@@ -711,117 +711,113 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public void updateInventory(String sku, int currentInventory,
-			int quantoAdd, int quantoSub, boolean status, int sellerId)
-			throws CustomException {
+    public void updateInventory(String sku, int currentInventory,
+            int quantoAdd, int quantoSub, boolean status, int sellerId, Date orderDates)
+            throws CustomException {
 
-		log.info("*** updateInventory Starts : ProductDaoImpl ****");
-		log.debug(" Inside inventory update method :" + sku + " quantoAdd "
-				+ quantoAdd + "quantoSub " + quantoSub);
-		Product product = null;
-		Session session = null;
-		Date todayDate = new Date();
-		long currentValue = 0;
+        log.info("*** updateInventory Starts : ProductDaoImpl ****");
+        log.debug(" Inside inventory update method :" + sku + " quantoAdd "
+                + quantoAdd + "quantoSub " + quantoSub);
+        Product product = null;
+        Session session = null;
+        Date orderDate = orderDates;
+        Date monthopeningdate = new Date();
+        monthopeningdate.setDate(1);
+        long currentValue = 0;
+        long catproductcount=0; 
 
-		try {
-			if (sku != null)
-				product = getProduct(sku, sellerId);
+        try {
+            if (sku != null)
+                product = getProduct(sku, sellerId);
 
-			log.debug(" sku after getting from : "
-					+ product.getProductSkuCode());
-			log.debug(" Cuurent inventory value : " + product.getQuantity());
-			session = sessionFactory.openSession();
-			session.getTransaction().begin();
+            log.debug(" sku after getting from : "
+                    + product.getProductSkuCode());
+            log.debug(" Cuurent inventory value : " + product.getQuantity());
+            session = sessionFactory.openSession();
+            session.getTransaction().begin();
 
-			if (product != null) {
-				log.debug(" Sku code from procut :"
-						+ product.getProductSkuCode());
-				currentValue = product.getQuantity();
-				if (currentInventory != 0) {
-					product.setQuantity(currentInventory);
-				} else if (quantoAdd != 0) {
-					product.setQuantity(product.getQuantity() + quantoAdd);
-					product.getCategory()
-							.setProductCount(
-									product.getCategory().getProductCount()
-											+ quantoAdd);
-				} else if (quantoSub != 0) {
-					log.debug(" Subtracting quantity from product quantity : "
-							+ quantoSub);
-					product.setQuantity(product.getQuantity() - quantoSub);
-					product.getCategory()
-							.setProductCount(
-									product.getCategory().getProductCount()
-											- quantoSub);
-					log.debug(" Quantity after sub :" + product.getQuantity());
-				}
+            if (product != null) {
+                log.debug(" Sku code from procut :"
+                        + product.getProductSkuCode());
+                currentValue = product.getQuantity();
+                catproductcount=product.getCategory().getProductCount();
+                if (currentInventory != 0) {
+                    product.setQuantity(currentInventory);
+                } else if (quantoAdd != 0) {
+                    product.setQuantity(product.getQuantity() + quantoAdd);
+                    product.getCategory()
+                            .setProductCount(
+                                    product.getCategory().getProductCount()
+                                            + quantoAdd);
+                } else if (quantoSub != 0) {
+                    log.debug(" Subtracting quantity from product quantity : "
+                            + quantoSub);
+                    product.setQuantity(product.getQuantity() - quantoSub);
+                    product.getCategory()
+                            .setProductCount(
+                                    product.getCategory().getProductCount()
+                                            - quantoSub);
+                    log.debug(" Quantity after sub :" + product.getQuantity());
+                }
 
-				// Updating Closing stock for a month for each SKU
-				product = (Product) session.merge(product);
-				log.debug(" Quantity after merging product object : "
-						+ product.getQuantity());
-				Hibernate.initialize(product.getClosingStocks());
-				List<ProductStockList> stocklist = product.getClosingStocks();
-				if (stocklist != null)
-					Collections.sort(stocklist);
-				log.debug(" Size of stocklist: " + stocklist.size());
-				if (stocklist != null && stocklist.size() != 0
-						&& stocklist.get(0).getMonth() == todayDate.getMonth()
-						&& stocklist.get(0).getYear() == todayDate.getYear()) {
-					log.debug("No need to Update The stockList...");
-				} else {
-					ProductStockList newObj = new ProductStockList();
-					newObj.setStockAvailable(currentValue);
-					newObj.setCreatedDate(todayDate);
-					newObj.setUpdatedate(todayDate.getDate());
-					newObj.setMonth(todayDate.getMonth());
-					newObj.setYear(todayDate.getYear());
-					newObj.setPrice(product.getProductPrice());
-					product.getClosingStocks().add(newObj);
-				}
+                // Updating Closing stock for a month for each SKU
+                product = (Product) session.merge(product);
+                log.debug(" Quantity after merging product object : "+ product.getQuantity());
+                Hibernate.initialize(product.getClosingStocks());
+                List<ProductStockList> stocklist = product.getClosingStocks();
+                if (stocklist != null)
+                    Collections.sort(stocklist);
+                log.debug("Incomming Date : "+orderDate);
+                log.debug(" Size of stocklist: " + stocklist.size());
+                log.debug("Updated month of StockList : "+stocklist.get(0).getMonth() +"-"+stocklist.get(0).getYear());
+                log.debug("Created Month : "+(orderDate.getMonth()+1)+"-"+orderDate.getYear());
+                if (stocklist != null && stocklist.size() != 0
+                        && stocklist.get(0).getMonth() == (orderDate.getMonth()+1)
+                        && stocklist.get(0).getYear() == orderDate.getYear()) {
+                    log.debug("No need to Update The stockList...");
+                } else {
+                    ProductStockList newObj = new ProductStockList();
+                    newObj.setStockAvailable(currentValue);
+                    newObj.setCreatedDate(monthopeningdate);
+                    newObj.setUpdatedate(monthopeningdate.getDate());
+                    newObj.setMonth(monthopeningdate.getMonth()+1);
+                    log.debug("Newly Saved One : "+newObj.getMonth());
+                    newObj.setYear(monthopeningdate.getYear());
+                    newObj.setPrice(product.getProductPrice());
+                    product.getClosingStocks().add(newObj);
+                 }
 
-				// Updating Closing stock for a month for each product Category
-				Category productcat = product.getCategory();
-				if (productcat != null) {
+                // Updating Closing stock for a month for each product Category
+                Category productcat = product.getCategory();
+                if (productcat != null) {
 					if (productcat.getOsUpdate() != null) {
-						if (productcat.getOsUpdate().getMonth() < todayDate
-								.getMonth()) {
-							productcat.setOpeningStock(productcat
-									.getProductCount());
-							productcat.setOsUpdate(todayDate);
-						} else if (productcat.getOsUpdate().getMonth() == 12) {
-							if (todayDate.getMonth() == 1) {
-								productcat.setOpeningStock(productcat
-										.getProductCount());
-								productcat.setOsUpdate(todayDate);
-
-							}
+						if ((productcat.getOsUpdate().getMonth() <= orderDate.getMonth() && productcat.getOsUpdate().getYear() <= orderDate.getYear())
+								|| (productcat.getOsUpdate().getMonth() > orderDate.getMonth() && productcat.getOsUpdate().getYear() < orderDate.getYear())) {
+							productcat.setOpeningStock(catproductcount);
+							productcat.setOsUpdate(orderDate);
 						}
+
 					} else {
-						productcat
-								.setOpeningStock(productcat.getProductCount());
-						productcat.setOsUpdate(todayDate);
+						productcat.setOpeningStock(productcat.getProductCount());
+						productcat.setOsUpdate(orderDate);
 					}
-					session.saveOrUpdate(productcat);
-				}
-				session.saveOrUpdate(product);
-			}
+                    session.saveOrUpdate(productcat);
+                }                
+                session.saveOrUpdate(product);
+            }
+         } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Failed!", e);
+            throw new CustomException(GlobalConstant.updateInventoryError,
+                    new Date(), 3, GlobalConstant.updateInventoryErrorCode, e);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error("Failed!", e);
-			throw new CustomException(GlobalConstant.updateInventoryError,
-					new Date(), 3, GlobalConstant.updateInventoryErrorCode, e);
-
-		} finally {
-
-			System.out.println(" Commiting inventory update");
-			session.getTransaction().commit();
-			session.close();
-
-		}
-		log.info("*** updateInventory Ends : ProductDaoImpl ****");
-	}
+        } finally {
+            log.debug(" Commiting inventory update");
+            session.getTransaction().commit();
+            session.close();
+        }
+        log.info("*** updateInventory Ends : ProductDaoImpl ****");
+    }
 
 	@Override
 	public String deleteProduct(int productId, int sellerId) throws Exception {

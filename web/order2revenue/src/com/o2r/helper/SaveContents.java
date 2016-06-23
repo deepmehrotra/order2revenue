@@ -1367,7 +1367,7 @@ public class SaveContents {
 				}
 				if (validaterow) {
 					productService.updateInventory(SkUCode, currentInventory,
-							quantoAdd, quantoSub, true, sellerId);
+							quantoAdd, quantoSub, true, sellerId,new Date());
 				} else {
 					returnInventoryMap.put(errorMessage.toString(), SkUCode);
 				}

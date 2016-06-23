@@ -29,6 +29,7 @@ public class ProductStockList implements Comparable<ProductStockList> {
 	private int month;
 	@Column
 	private double price;
+	
 	public int getStockId() {
 		return stockId;
 	}
