@@ -71,10 +71,10 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void updateInventory(String sku, int currentInventory,
-			int quantoAdd, int quantoSub, boolean status, int sellerId)
+			int quantoAdd, int quantoSub, boolean status, int sellerId, Date orderDate)
 			throws CustomException {
 		productDao.updateInventory(sku, currentInventory, quantoAdd, quantoSub,
-				status, sellerId);
+				status, sellerId, orderDate);
 	}
 
 	@Override

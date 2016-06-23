@@ -3,6 +3,7 @@ package com.o2r.schedulers;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.o2r.controller.AdminController;
+import com.o2r.helper.HelperClass;
 import com.o2r.model.Order;
 import com.o2r.model.Product;
 import com.o2r.model.ProductStockList;
@@ -25,6 +27,8 @@ public class SampleJob {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	@Autowired
+	private HelperClass helperClass;
 	
 	static Logger log = Logger.getLogger(AdminController.class.getName());
 	
@@ -90,6 +94,8 @@ public class SampleJob {
 	}
 	
 	public void executeJobProductStockList(){
+		
+		Date currentDate=new Date();
 		try {
 			Session session = sessionFactory.openSession();
 			if(session != null)
@@ -97,22 +103,34 @@ public class SampleJob {
 			Criteria criteria = session.createCriteria(Product.class);
 			java.util.List<Product> list = criteria.list();
 			ProductStockList stockList = null;
+			int count=0;
 			if(list != null && list.size() != 0){
 				for (Product product : list) {
-					stockList = new ProductStockList();
-					stockList.setCreatedDate(new Date());
-					stockList.setStockAvailable(product.getQuantity());
-					stockList.setUpdatedate(product.getProductDate().getDate());
-					stockList.setMonth(product.getProductDate().getMonth());
-					stockList.setYear(product.getProductDate().getYear());
-					stockList.setPrice(product.getProductPrice());
-					product.getClosingStocks().add(stockList);
-					session.saveOrUpdate(product);
-					session.saveOrUpdate(stockList);
-					log.info("PRODUCT ID : " + product.getProductId());
+					List<ProductStockList> stocklist = product.getClosingStocks();
+	                if (stocklist != null)
+	                    Collections.sort(stocklist);
+	                if (stocklist != null && stocklist.size() != 0
+	                        && stocklist.get(0).getMonth() == (currentDate.getMonth()+1)
+	                        && stocklist.get(0).getYear() == currentDate.getYear()) {
+	                    log.debug("No need to Update The stockList...");
+	                } else {
+						stockList = new ProductStockList();
+						stockList.setCreatedDate(currentDate);
+						stockList.setStockAvailable(product.getQuantity());
+						stockList.setUpdatedate(currentDate.getDate());
+						stockList.setMonth((currentDate.getMonth())+1);
+						stockList.setYear(currentDate.getYear());
+						stockList.setPrice(product.getProductPrice());
+						product.getClosingStocks().add(stockList);
+						session.saveOrUpdate(product);
+						count++;
+						//session.saveOrUpdate(stockList);
+						log.info("PRODUCT ID : " + product.getProductId());
+	                }
 				}
 			}
 			session.getTransaction().commit();
+			log.debug("ProductStockList Updated !!!! No of new Entries : "+count);
 		} catch (Exception e) {
 			log.error("Failed!",e);
 		}

@@ -324,7 +324,7 @@ public class ProductController {
 
 			try {
 				productService.updateInventory(productSkuCode, 0,
-						quantityToAdd, quantityToSubstract, true, sellerId);
+						quantityToAdd, quantityToSubstract, true, sellerId,new Date());
 			}catch (CustomException ce) {
 				log.error("saveDeleteProduct exception : " + ce.toString());
 				model.put("errorMessage", ce.getLocalMessage());
@@ -759,7 +759,7 @@ public class ProductController {
 
 				productService.updateInventory(productSkuCode,
 						currentInventory, quantityToAdd, quantityToSubstract,
-						true, sellerId);
+						true, sellerId,new Date());
 				model.put("Record", ConverterClass
 						.prepareProductBean(productService
 								.getProduct(productId)));
