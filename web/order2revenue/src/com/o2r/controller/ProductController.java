@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -173,7 +175,67 @@ public class ProductController {
 
 	}
 
-	@RequestMapping(value = "/seller/ProductMapping", method = RequestMethod.GET)
+	@RequestMapping(value = "/seller/productMapping", method = RequestMethod.GET)
+	public ModelAndView productMappingList(HttpServletRequest request,
+			@ModelAttribute("command") ProductBean productBean,
+			BindingResult result) {
+
+		log.info("$$$ productMappingList Starts : ProductController $$$");
+		List<Product> products = null;
+		Map<String, Object> model = new HashMap<String, Object>();
+		List<ProductConfig> productMappings = new ArrayList<ProductConfig>();
+
+		try {
+			Object obj = request.getSession().getAttribute(
+					"productSearchObject");
+			if (obj != null) {
+				System.out.println(" Getting list from session" + obj);
+				model.put("productList", obj);
+				request.getSession().removeAttribute("productSearchObject");
+			} else {
+				int pageNo = request.getParameter("page") != null ? Integer
+						.parseInt(request.getParameter("page")) : 0;
+				model.put("productList", ConverterClass
+						.prepareListofProductBean(productService.listProducts(
+								helperClass.getSellerIdfromSession(request),
+								pageNo)));
+			}
+			products = productService.listProducts(helperClass
+					.getSellerIdfromSession(request));
+			if (products != null) {
+				for (Product product : products) {
+					if (product.getProductConfig() != null) {
+						productMappings.addAll(product.getProductConfig());
+					}
+				}
+				if (productMappings != null) {
+					Iterator<ProductConfig> productMappingIterator = productMappings.iterator();
+					while (productMappingIterator.hasNext()) {
+						ProductConfig productMapping = productMappingIterator.next();
+						if (productMapping.getMrp() != 0) {
+							productMappingIterator.remove();
+						}
+					}
+				}
+				model.put("productMappingList", productMappings);
+			}
+		} catch (CustomException ce) {
+			log.error("productList exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
+		}
+
+		log.info("$$$ productConfigList Ends : ProductController $$$");
+		return new ModelAndView("initialsetup/productMapping", model);
+
+	}
+	
+	@RequestMapping(value = "/seller/productConfig", method = RequestMethod.GET)
 	public ModelAndView productConfigList(HttpServletRequest request,
 			@ModelAttribute("command") ProductBean productBean,
 			BindingResult result) {
@@ -202,7 +264,18 @@ public class ProductController {
 					.getSellerIdfromSession(request));
 			if (products != null) {
 				for (Product product : products) {
-					productConfigs.addAll(product.getProductConfig());
+					if (product.getProductConfig() != null) {
+						productConfigs.addAll(product.getProductConfig());
+					}
+				}
+				if (productConfigs != null) {
+					Iterator<ProductConfig> productConfigIterator = productConfigs.iterator();
+					while (productConfigIterator.hasNext()) {
+						ProductConfig productConfig = productConfigIterator.next();
+						if (productConfig.getMrp() == 0) {
+							productConfigIterator.remove();
+						}
+					}
 				}
 				model.put("productConfigList", productConfigs);
 			}
@@ -218,7 +291,7 @@ public class ProductController {
 		}
 
 		log.info("$$$ productConfigList Ends : ProductController $$$");
-		return new ModelAndView("initialsetup/ProductMapping", model);
+		return new ModelAndView("initialsetup/productConfig", model);
 
 	}
 
@@ -305,6 +378,34 @@ public class ProductController {
 		return new ModelAndView("redirect:/seller/Product.html");
 	}
 
+	@RequestMapping(value = "/seller/removeProductMapping", method = RequestMethod.POST)
+	public ModelAndView removeProductMapping(HttpServletRequest request,
+			@RequestParam("value") String value) {
+
+		log.info("$$$ removeProductMapping Starts : ProductController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			int productConfigId = Integer.parseInt(value);
+			ProductConfig productConfig = productService.getProductConfig(productConfigId);
+			productService.removeSKUMapping(productConfig,
+					helperClass.getSellerIdfromSession(request));			
+		} catch (CustomException ce) {
+			log.error("removeProductMapping exception : " + ce.toString());
+			model.put("errorMessage", "Error in removing Product Mapping");
+			model.put("errorTime", new Date());
+			model.put("errorCode", "#0012");
+			return new ModelAndView("globalErorPage", model);
+		} catch (Exception e) {			
+			log.error("Failed!", e);
+			model.put("errorMessage", "Error in Saving Product Config");
+			model.put("errorTime", new Date());
+			model.put("errorCode", "#0012");
+			return new ModelAndView("globalErorPage", model);
+		}
+		log.info("$$$ removeProductMapping Ends : ProductController $$$");
+		return new ModelAndView("redirect:/seller/productMapping.html");
+	}
+	
 	/* Product Config */
 
 	@RequestMapping(value = "/seller/saveProductConfig", method = RequestMethod.POST)
@@ -333,7 +434,7 @@ public class ProductController {
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ saveProductConfig Ends : ProductController $$$");
-		return new ModelAndView("redirect:/seller/ProductMapping.html");
+		return new ModelAndView("redirect:/seller/productConfig.html");
 	}
 
 	/* Product Config */

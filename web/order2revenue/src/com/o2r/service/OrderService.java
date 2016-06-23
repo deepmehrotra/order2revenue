@@ -106,7 +106,7 @@ public interface OrderService {
 	public List<PoPaymentDetailsBean> getPOPaymentDetails(int sellerId,
 			String year);
 
-	public boolean isPOOrderUploaded(String poId, String invoiceId)
+	public boolean isPOOrderUploaded(String poId, String invoiceId, int sellerId)
 			throws CustomException;
 
 	public List<GatePass> getGatepassesFromConsolidated(int returnId, int sellerId)

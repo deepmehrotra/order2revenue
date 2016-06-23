@@ -34,7 +34,7 @@ public interface ReportGeneratorService {
 			Date endDate, int sellerId) throws CustomException;
 	
 	public List<ChannelReportDetails> getChannelReportDetails(Date startDate,
-			Date endDate, int sellerId) throws CustomException;
+			Date endDate, int sellerId, String reportName) throws CustomException;
 
 	public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
 			throws CustomException;

@@ -126,9 +126,9 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 
 	@Override
 	public List<ChannelReportDetails> getChannelReportDetails(Date startDate,
-			Date endDate, int sellerId) throws CustomException {
+			Date endDate, int sellerId, String reportName) throws CustomException {
 		return reportGeneratorDao.getChannelReportDetails(startDate, endDate,
-				sellerId);
+				sellerId, reportName);
 	}
 
 	@Override

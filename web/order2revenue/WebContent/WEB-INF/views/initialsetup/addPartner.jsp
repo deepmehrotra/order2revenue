@@ -74,11 +74,15 @@ span .#error {
 											<label class="col-sm-4 control-label">Partner Name</label>
 
 											<div class="col-sm-8">
-												<form:input path="pcName" value="${partner.pcName}"
-													class="form-control" id="partnerName"
-													onblur="checkOnBlur()" />
-												<span id="partnerNameMessage"
-													style="font-weight: bold;color=red"></span>
+												<c:choose>
+													<c:when test="${partner.pcId != 0}">
+														<form:input path="pcName" value="${partner.pcName}" class="form-control" id="partnerName" readonly="true"/>
+													</c:when>
+													<c:otherwise>
+														<form:input path="pcName" value="${partner.pcName}" class="form-control" id="partnerName"  onblur="checkOnBlur()" />
+														<span id="partnerNameMessage" style="font-weight: bold;color=red"></span>	
+													</c:otherwise>
+												</c:choose>											
 											</div>
 										</div>
 									</div>
@@ -106,6 +110,7 @@ span .#error {
 												</label>
 												<c:if test="${partner.pcLogoUrl != null}">
 													<input type="hidden" name="pcLogoUrl" id="pcLogoUrl" value="${partner.pcLogoUrl}" />
+
 												</c:if>
 											</div>
 
@@ -618,13 +623,12 @@ span .#error {
 																				<tbody>
 																					<tr>
 																						<td><label>&lt; 500</label></td>
-																						<td><div class="form-group ">
-																								<div class=" content-rgt">
+																						<td><div class=" content-rgt">
 																									<input type="text" placeholder=""
 																										class="form-control validateNumber" name="nr-localvwlt500"
 																										value="${chargeMap.localvwlt500}">
 																								</div>
-																							</div></td>
+																						</td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control validateNumber" name="nr-zonalvwlt500"
@@ -763,13 +767,12 @@ span .#error {
 																				<tbody>
 																					<tr>
 																						<td><label>&lt; 500</label></td>
-																						<td><div class="form-group ">
-																								<div class=" content-rgt">
+																						<td><div class=" content-rgt">
 																									<input type="text" placeholder=""
 																										class="form-control validateNumber" name="nr-localdwlt500"
 																										value="${chargeMap.localdwlt500}">
 																								</div>
-																							</div></td>
+																						</td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
 																									class="form-control validateNumber" name="nr-zonaldwlt500"
@@ -831,13 +834,12 @@ span .#error {
 																				<tbody>
 																					<tr>
 																						<td><label>&lt; 500</label></td>
-																						<td><div class="form-group ">
-																								<div class=" content-rgt">
-																									<input type="text" placeholder=""
-																										class="form-control validateNumber" name="nr-fixeddwlt500"
-																										value="${chargeMap.fixeddwlt500}">
-																								</div>
-																							</div></td>
+																						<td><div class=" content-rgt">
+																								<input type="text" placeholder=""
+																									class="form-control validateNumber" name="nr-fixeddwlt500"
+																									value="${chargeMap.fixeddwlt500}">
+																							</div>
+																						</td>
 																					</tr>
 																					<tr>
 																						<td><label>additional &gt; 500</label></td>
@@ -862,13 +864,12 @@ span .#error {
 																				<tbody>
 																					<tr>
 																						<td><label>&lt; 500</label></td>
-																						<td><div class="form-group ">
-																								<div class=" content-rgt">
-																									<input type="text" placeholder=""
-																										class="form-control validateNumber" name="nr-fixedvwlt500"
-																										value="${chargeMap.fixedvwlt500}">
-																								</div>
-																							</div></td>
+																						<td><div class=" content-rgt">
+																								<input type="text" placeholder=""
+																									class="form-control validateNumber" name="nr-fixedvwlt500"
+																									value="${chargeMap.fixedvwlt500}">
+																							</div>
+																						</td>
 																					</tr>
 																					<tr>
 																						<td><label>500 &gt; 1000</label></td>
@@ -904,7 +905,7 @@ span .#error {
 																									class="form-control validateNumber" name="nr-fixedvwgt5000"
 																									value="${chargeMap.fixedvwgt5000}">
 																							</div></td>
-																					</tr>
+																					</tr>																					
 																				</tbody>
 																			</table>
 																		</div>
@@ -2954,7 +2955,7 @@ $(document).ready(
 						number : true
 					}); */
 			   
-			   
+			  
 			   
 		 
 		 
@@ -3215,6 +3216,7 @@ function checkOnBlur() {
 				   	 return clickCheckbox.checked;
 				   	}
 				   });
+			
 					
 			 $("#fixedCommissionPercent").rules("add", { 
 					  required:function(element) {

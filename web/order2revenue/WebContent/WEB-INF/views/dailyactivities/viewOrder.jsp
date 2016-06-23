@@ -355,7 +355,7 @@
                                     </tr>
                                     <tr>
                                         <td>Payment Difference</td>
-                                        <td>6</td>  
+                                        <td>${order.orderPayment.paymentDifference}</td>  
                                     </tr>
 
                                     </tbody>

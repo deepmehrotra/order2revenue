@@ -197,14 +197,14 @@ public class OrderDaoImpl implements OrderDao {
 						eventsService.addEvent(event, sellerId);
 					}
 
-					if ((int) order.getPoPrice() != 0
+					/*if ((int) order.getPoPrice() != 0
 							&& order.getPcName().equals(GlobalConstant.PCMYNTRA)) {
 						double taxvalue = order.getPoPrice()
 								- (order.getPoPrice() * (100 / (100 + taxpercent)));
 						order.setDiscount((Math.abs(order.getPoPrice()
 								- order.getNetRate())));
 						order.getOrderTax().setTax(taxvalue);
-					} else {
+					} else {*/
 						order.setDiscount((Math.abs(order.getOrderMRP()
 								- order.getOrderSP())));
 						log.debug(" Tax cal SP:"
@@ -225,7 +225,7 @@ public class OrderDaoImpl implements OrderDao {
 						taxDetails.setUploadDate(order.getOrderDate());
 						taxDetailService.addMonthlyTaxDetail(session,
 								taxDetails, sellerId);
-					}
+					
 
 					order.setTotalAmountRecieved(order.getNetRate());
 					order.setFinalStatus("In Process");
@@ -238,7 +238,7 @@ public class OrderDaoImpl implements OrderDao {
 						taxDetails.setBalanceRemaining(order.getOrderTax()
 								.getTdsToDeduct());
 						taxDetails.setParticular("TDS");
-						taxDetails.setUploadDate(order.getOrderDate());
+						taxDetails.setUploadDate(order.getShippedDate());
 						taxDetailService.addMonthlyTDSDetail(session,
 								taxDetails, sellerId);
 					}
@@ -455,10 +455,7 @@ public class OrderDaoImpl implements OrderDao {
 						order.getOrderTimeline().add(timeline);
 						order.setSeller(seller);
 						seller.getOrders().add(order);
-						session.saveOrUpdate(partner);
-						session.saveOrUpdate(seller);
 					}
-					session.getTransaction().commit();
 
 					TaxDetail taxDetails = new TaxDetail();
 					taxDetails
@@ -468,9 +465,11 @@ public class OrderDaoImpl implements OrderDao {
 					taxDetails.setUploadDate(order.getOrderDate());
 					taxDetailService.addMonthlyTaxDetail(session, taxDetails,
 							sellerId);
-					/*
-					 * session.getTransaction().commit(); session.close();
-					 */
+					
+					session.saveOrUpdate(partner);
+					session.saveOrUpdate(seller);
+					session.getTransaction().commit();
+					
 				} catch (Exception e) {
 					log.error("Failed!", e);
 					log.debug("Inside exception in add order "
@@ -920,7 +919,8 @@ public class OrderDaoImpl implements OrderDao {
 							.getReturnOrRTOChargestoBeDeducted());
 				else {
 					order.setGrossProfit(((order.getGrossProfit() / order
-							.getQuantity()) * orderReturn.getReturnorrtoQty())
+							.getQuantity()) * (order
+									.getQuantity()-orderReturn.getReturnorrtoQty()))
 							- orderReturn.getReturnOrRTOChargestoBeDeducted());
 				}
 
@@ -949,6 +949,18 @@ public class OrderDaoImpl implements OrderDao {
 				tdsDetails.setUploadDate(orderReturn.getReturnDate());
 				taxDetailService.addMonthlyTDSDetail(session, tdsDetails,
 						sellerId);
+				// Adding TDS amount for Return Charges as per 2 % Return Order
+				tdsDetails = new TaxDetail();
+				tdsDetails.setBalanceRemaining(order.
+						getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()/50);
+				tdsDetails.setParticular("TDS");
+				tdsDetails.setUploadDate(orderReturn.getReturnDate());
+				taxDetailService.addMonthlyTDSDetail(session, tdsDetails,
+						sellerId);
+				order.getOrderTax().setTdsToDeduct(
+						order.getOrderTax().getTdsToDeduct()
+								+(order.
+										getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()/50));
 
 				order.getOrderTax().setTaxToReturn(
 						(order.getOrderTax().getTax() / order.getQuantity())
@@ -959,6 +971,8 @@ public class OrderDaoImpl implements OrderDao {
 								* orderReturn.getReturnorrtoQty());
 
 				order.setFinalStatus("Actionable");
+				order.getOrderReturnOrRTO().setReturnorrtoQty(
+						orderReturn.getReturnorrtoQty());
 				order.setNetSaleQuantity(order.getQuantity()
 						- order.getOrderReturnOrRTO().getReturnorrtoQty());
 				orderReturn.setReturnUploadDate(new Date());
@@ -967,8 +981,7 @@ public class OrderDaoImpl implements OrderDao {
 						orderReturn.getReturnDate());
 				order.getOrderReturnOrRTO().setReturnOrRTOId(
 						orderReturn.getReturnOrRTOId());
-				order.getOrderReturnOrRTO().setReturnorrtoQty(
-						orderReturn.getReturnorrtoQty());
+				
 				order.getOrderReturnOrRTO().setReturnOrRTOreason(
 						orderReturn.getReturnOrRTOreason());
 				order.getOrderReturnOrRTO().setReturnOrRTOstatus("Return");
@@ -1231,7 +1244,7 @@ public class OrderDaoImpl implements OrderDao {
 			seller = (Seller) criteria.list().get(0);
 
 			for (Order order : seller.getOrders()) {
-				if (order.getCustomer().getCustomerCity()
+				if (order!=null&&order.getCustomer()!=null&&order.getCustomer().getCustomerCity()
 						.equalsIgnoreCase(value)
 						|| order.getCustomer().getCustomerName()
 								.equalsIgnoreCase(value)
@@ -1261,7 +1274,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		log.info("*** addOrderPayment starts : OrderDaoImpl ***");
 		Order order = null;
-		TaxDetail taxDetails = null;
+		//TaxDetail taxDetails = null;
 		log.debug("Inside add ordr payment iwtih order id " + orderid);
 		try {
 			Session session = sessionFactory.openSession();
@@ -1717,30 +1730,32 @@ public class OrderDaoImpl implements OrderDao {
 			OrderPayment orderPayment = new OrderPayment();
 			orderPayment.setUploadDate(new Date());
 			orderPayment.setDateofPayment(popaBean.getPaymentDate());
+			orderPayment.setPositiveAmount(popaBean.getPositiveAmount());
+			orderPayment.setNegativeAmount(popaBean.getNegativeAmount());
+			orderPayment.setNetPaymentResult(orderPayment.getPositiveAmount()
+					- orderPayment.getNegativeAmount());
 
 			if (!isGP) {
-				orderPayment.setPositiveAmount(popaBean.getPositiveAmount());
-				if (popaBean.getPositiveAmount() == poOrder.getNetRate()) {
+				if (orderPayment.getNetPaymentResult() == poOrder.getPoPrice()) {
 					paymentOK = true;
 				} else {
-					paymentDiff = popaBean.getPositiveAmount()
-							- poOrder.getNetRate();
+					paymentDiff = orderPayment.getNetPaymentResult()
+							- poOrder.getPoPrice();
+							
 				}
 			} else {
-				orderPayment.setNegativeAmount(popaBean.getNegativeAmount());
-				if (popaBean.getNegativeAmount() == poOrder
+				
+				if ( - orderPayment.getNetPaymentResult() == poOrder
 						.getOrderReturnOrRTO()
 						.getReturnOrRTOChargestoBeDeducted()) {
 					paymentOK = true;
 				} else {
-					paymentDiff = poOrder.getOrderReturnOrRTO()
-							.getReturnOrRTOChargestoBeDeducted()
-							- popaBean.getNegativeAmount();
+					paymentDiff =  poOrder.getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()
+							+ orderPayment.getNetPaymentResult();
 				}
 			}
 
-			orderPayment.setNetPaymentResult(orderPayment.getPositiveAmount()
-					- orderPayment.getNegativeAmount());
+			
 			paymentDiff = Math.round(paymentDiff * 100.0) / 100.0;
 
 			orderPayment.setPaymentDifference(paymentDiff);
@@ -1755,6 +1770,11 @@ public class OrderDaoImpl implements OrderDao {
 				poOrder.setStatus("Inappropriate Payment Recieved");
 			}
 
+			OrderTimeline timeline = new OrderTimeline();
+			timeline.setEvent("Payment Recieved");
+			timeline.setEventDate(orderPayment.getDateofPayment());
+			poOrder.getOrderTimeline().add(timeline);
+			
 			poOrder.setOrderPayment(orderPayment);
 			session.saveOrUpdate(poOrder);
 
@@ -1884,8 +1904,12 @@ public class OrderDaoImpl implements OrderDao {
 						+ reconciledate);
 			} else {
 				reconciledate = deliverydate;
-				reconciledate.setMonth(reconciledate.getMonth() + 1);
-				reconciledate.setDate(monthlypaydate);
+				if (deliverydate.getDate() < monthlypaydate) {
+					reconciledate.setDate(monthlypaydate);
+				} else {
+					reconciledate.setMonth(reconciledate.getMonth() + 1);
+					reconciledate.setDate(monthlypaydate);
+				}
 
 			}
 
@@ -2095,7 +2119,8 @@ public class OrderDaoImpl implements OrderDao {
 			}
 
 			log.debug("volarea  " + volarea);
-
+			
+			
 			if (volWeight < 501) {
 				tempStr = volarea.append("vwlt500").toString();
 				log.debug(" tempStr " + tempStr);
@@ -2150,7 +2175,7 @@ public class OrderDaoImpl implements OrderDao {
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
 			props = PropertiesLoaderUtils.loadProperties(resource);
-			tds = (((props.getProperty("TDS")) != null ? Double.parseDouble(props.getProperty("TDS")) :0) + ((fixedfee + pccAmount + shippingCharges) / 50))
+			tds = (((props.getProperty("TDS") != null ? Double.parseDouble(props.getProperty("TDS")) :0)*comission/100 + ((fixedfee + pccAmount + shippingCharges) / 50)))
 					* order.getQuantity();
 			order.getOrderTax().setTdsToDeduct(tds);
 			order.setGrossNetRate(nrValue);
@@ -2372,6 +2397,11 @@ public class OrderDaoImpl implements OrderDao {
 					+ " varPercentPCC : " + varPercentPCC + "shipping fee : "
 					+ shippingfee + " fixedfee  :" + fixedfee
 					+ " paycollcharges " + paycollcharges);
+			System.out.println(" Variable amount in Return : " + varPercentSP
+					+ " varPercentFixAmt :" + varPercentFixAmt
+					+ " varPercentPCC : " + varPercentPCC + "shipping fee : "
+					+ shippingfee + " fixedfee  :" + fixedfee
+					+ " paycollcharges " + paycollcharges);
 			totalcharge = totalcharge
 					+ (float) (chargesMap.containsKey(varPercentSP) ? (chargesMap
 							.get(varPercentSP)
@@ -2395,9 +2425,10 @@ public class OrderDaoImpl implements OrderDao {
 
 		}
 
-		if (isRevShippingFee) {
-			String revShippingType = partner.getNrnReturnConfig()
-					.getRevShippingFeeType();
+		String revShippingType = partner.getNrnReturnConfig()
+				.getRevShippingFeeType();
+		if (isRevShippingFee&& revShippingType !=null) {
+			
 			switch (revShippingType) {
 			case "revShipFeePCC":
 
@@ -2439,28 +2470,34 @@ public class OrderDaoImpl implements OrderDao {
 				Product product = productService.getProduct(
 						order.getProductSkuCode(), sellerId);
 				float deadWeight = (float) (chargesMap
-						.get(GlobalConstant.ReverseShippingFeeDeadWeightMinWeight));
-				if (deadWeight < product.getDeadWeight()) {
+						.containsKey(GlobalConstant.ReverseShippingFeeDeadWeightMinWeight)?chargesMap
+						.get(GlobalConstant.ReverseShippingFeeDeadWeightMinWeight):0);
+				if (product!=null&&deadWeight < product.getDeadWeight()) {
 					deadWeight = product.getDeadWeight();
 				}
 				float revShippingFeeDW = (float) (Math
 						.ceil(deadWeight
 								/ (chargesMap
-										.get(GlobalConstant.ReverseShippingFeeDeadWeightPerWeight))))
+										.containsKey(GlobalConstant.ReverseShippingFeeDeadWeightPerWeight)?chargesMap
+										.get(GlobalConstant.ReverseShippingFeeDeadWeightPerWeight):1)))
 						* (chargesMap
-								.get(GlobalConstant.ReverseShippingFeeDeadWeightAmt));
+								.containsKey(GlobalConstant.ReverseShippingFeeDeadWeightAmt)?chargesMap
+								.get(GlobalConstant.ReverseShippingFeeDeadWeightAmt):0);
 
 				float volumeWeight = (float) (chargesMap
-						.get(GlobalConstant.ReverseShippingFeeVolumeWeightMinWeight));
+						.containsKey(GlobalConstant.ReverseShippingFeeVolumeWeightMinWeight)?chargesMap
+						.get(GlobalConstant.ReverseShippingFeeVolumeWeightMinWeight):0);
 				if (volumeWeight < product.getVolWeight()) {
 					volumeWeight = product.getVolWeight();
 				}
 				float revShippingFeeVW = (float) (Math
 						.ceil(volumeWeight
 								/ (chargesMap
-										.get(GlobalConstant.ReverseShippingFeeVolumeWeightPerWeight))))
+										.containsKey(GlobalConstant.ReverseShippingFeeVolumeWeightPerWeight)?chargesMap
+										.get(GlobalConstant.ReverseShippingFeeVolumeWeightPerWeight):1)))
 						* (chargesMap
-								.get(GlobalConstant.ReverseShippingFeeVolumeWeightAmt));
+								.containsKey(GlobalConstant.ReverseShippingFeeVolumeWeightAmt)?chargesMap
+								.get(GlobalConstant.ReverseShippingFeeVolumeWeightAmt):0);
 
 				if (revShippingFeeDW > revShippingFeeVW) {
 					revShippingFee = revShippingFeeDW;
@@ -2835,43 +2872,45 @@ public class OrderDaoImpl implements OrderDao {
 			}
 
 			if (volWeight < 501) {
-				tempStr = volarea.append("vwlt500").toString();
-				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
-						.get(tempStr) : 0;
-				order.setVolShippingString(tempStr);
-			} else if (volWeight > 500 && volWeight < 1001) {
-				tempStr = volarea.append("vwgt500lt1000").toString();
-				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
-						.get(tempStr) : 0;
-				order.setVolShippingString(volarea.toString());
-			} else if (volWeight > 1000 && volWeight < 1501) {
-				tempStr = volarea.append("vwgt1000lt1500").toString();
-				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
-						.get(tempStr) : 0;
-				order.setVolShippingString(volarea.toString());
-			} else if (volWeight > 1500 && volWeight < 5001) {
-				tempStr = volarea.append("vwgt1500lt5000").toString();
-				log.debug(" tempStr " + tempStr);
-				vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
-						.get(tempStr) : 0;
-				order.setVolShippingString(volarea.toString());
-			} else if (volWeight > 5000) {
-				temp = new StringBuffer(volarea);
-				volarea.append("vwgt1500lt5000");
+					tempStr = volarea.append("vwlt500").toString();
+					log.debug(" tempStr " + tempStr);
 
-				vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap
-						.get(volarea.toString()) : 0;
-				log.debug(" vol Charges for lesstthan 500 : " + vwchargetemp);
-				temp.append("vwgt5000");
-				float range = (float) Math.ceil((volWeight - 5000) / 1000);
-				log.debug("volarea  " + volarea + " temp : " + temp
-						+ " range invol: " + range);
-				vwchargetemp = vwchargetemp
-						+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
-								.get(temp.toString()) : 0));
-				order.setVolShippingString(temp.toString());
+					vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
+							.get(tempStr) : 0;
+					order.setVolShippingString(tempStr);
+				} else if (volWeight > 500 && volWeight < 1001) {
+					tempStr = volarea.append("vwgt500lt1000").toString();
+					vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
+							.get(tempStr) : 0;
+					order.setVolShippingString(volarea.toString());
+				} else if (volWeight > 1000 && volWeight < 1501) {
+					tempStr = volarea.append("vwgt1000lt1500").toString();
+					vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
+							.get(tempStr) : 0;
+					order.setVolShippingString(volarea.toString());
+				} else if (volWeight > 1500 && volWeight < 5001) {
+					tempStr = volarea.append("vwgt1500lt5000").toString();
+					log.debug(" tempStr " + tempStr);
+					vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
+							.get(tempStr) : 0;
+					order.setVolShippingString(volarea.toString());
+				} else if (volWeight > 5000) {
+					temp = new StringBuffer(volarea);
+					volarea.append("vwgt1500lt5000");
 
-			}
+					vwchargetemp = chargesMap.containsKey(volarea.toString()) ? chargesMap
+							.get(volarea.toString()) : 0;
+					log.debug(" vol Charges for lesstthan 500 : " + vwchargetemp);
+					temp.append("vwgt5000");
+					float range = (float) Math.ceil((volWeight - 5000) / 1000);
+					log.debug("volarea  " + volarea + " temp : " + temp
+							+ " range invol: " + range);
+					vwchargetemp = vwchargetemp
+							+ (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
+									.get(temp.toString()) : 0));
+					order.setVolShippingString(temp.toString());
+
+				}
 			log.debug(" vwchargetemp : " + vwchargetemp + " dwchargetemp : "
 					+ dwchargetemp);
 			if (vwchargetemp > dwchargetemp)
@@ -2886,7 +2925,7 @@ public class OrderDaoImpl implements OrderDao {
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
 			props = PropertiesLoaderUtils.loadProperties(resource);
-			tds = (((props.getProperty("TDS")) != null ? Double.parseDouble(props.getProperty("TDS")) :0) + ((fixedfee + pccAmount) / 50))
+			tds = (((props.getProperty("TDS") != null ? Double.parseDouble(props.getProperty("TDS")) :0)*comission/100 + ((fixedfee + pccAmount + shippingCharges) / 50)))
 					* order.getQuantity();
 			order.getOrderTax().setTdsToDeduct(tds);
 			order.setGrossNetRate(nrValue);
@@ -3441,8 +3480,9 @@ public class OrderDaoImpl implements OrderDao {
 			int sellerId) throws CustomException {
 
 		log.info("$$$ addGatePass Starts : OrderDaoImpl $$$");
+		Session session = null;
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			session.beginTransaction();
 
 			double eossValue = 0;
@@ -3464,9 +3504,7 @@ public class OrderDaoImpl implements OrderDao {
 			productService.updateInventory(productConfig.getProductSkuCode(),
 					0, gatepass.getQuantity(), 0, false, sellerId);
 
-			session.saveOrUpdate(gatepass);
-			session.getTransaction().commit();
-
+			
 			TaxDetail taxDetails = new TaxDetail();
 			taxDetails.setBalanceRemaining(-(gatepass.getTaxPOAmt())
 					* gatepass.getQuantity());
@@ -3474,7 +3512,8 @@ public class OrderDaoImpl implements OrderDao {
 			taxDetails.setUploadDate(gatepass.getReturnDate());
 			taxDetailService.addMonthlyTaxDetail(session, taxDetails, sellerId);
 
-			session.close();
+			session.saveOrUpdate(gatepass);
+			session.getTransaction().commit();
 
 		} catch (Exception e) {
 
@@ -3482,6 +3521,8 @@ public class OrderDaoImpl implements OrderDao {
 			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.addReturnOrderError,
 					new Date(), 1, GlobalConstant.addReturnOrderErrorCode, e);
+		} finally {
+			session.close();
 		}
 		log.info("$$$ addGatePass Ends : OrderDaoImpl $$$");
 		return gatepass;
@@ -3621,6 +3662,7 @@ public class OrderDaoImpl implements OrderDao {
 			consolidatedOrder.setEossValue(eossValue);
 			consolidatedOrder.setQuantity(quantity);
 			consolidatedOrder.setNetRate(netRate);
+			consolidatedOrder.setPoPrice(totalReturnCharges);
 
 			consolidatedOrder.setOrderTax(new OrderTax());
 			consolidatedOrder.getOrderTax().setTax(taxValue);
@@ -3930,7 +3972,7 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	@Override
-	public boolean isPOOrderUploaded(String poId, String invoiceId)
+	public boolean isPOOrderUploaded(String poId, String invoiceId, int sellerId)
 			throws CustomException {
 		log.info("*** isPOOrderUploaded starts ***");
 		List<Order> returnList = null;
@@ -3942,6 +3984,9 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.add(Restrictions.eq("invoiceID", invoiceId));
 			criteria.add(Restrictions.eq("poOrder", true));
 			criteria.add(Restrictions.isNotNull("consolidatedOrder.orderId"));
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId));
 
 			returnList = criteria.list();
 			if (returnList != null && returnList.size() != 0

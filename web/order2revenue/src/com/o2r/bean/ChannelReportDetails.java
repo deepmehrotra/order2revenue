@@ -23,6 +23,7 @@ public class ChannelReportDetails {
 	private String logisticPartner;
 	private String partner;
 	private String category;
+	private String parentCategory;
 	private String productSku;
 	private double grossQty;
 	private double grossNrAmount;
@@ -185,6 +186,14 @@ public class ChannelReportDetails {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public String getParentCategory() {
+		return parentCategory;
+	}
+
+	public void setParentCategory(String parentCategory) {
+		this.parentCategory = parentCategory;
 	}
 
 	public String getProductSku() {
@@ -407,6 +416,8 @@ public class ChannelReportDetails {
 		Comparator<ChannelReportDetails> {
 		@Override
 		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
+			if(graph1.shippedDate == null || graph2.shippedDate == null)
+				return -1;
 			return graph1.shippedDate.after(graph2.shippedDate) ? 1
 					: (graph1.shippedDate.before(graph2.shippedDate) ? -1 : 0);
 		}

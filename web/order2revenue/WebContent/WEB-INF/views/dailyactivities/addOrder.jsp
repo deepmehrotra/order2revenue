@@ -70,8 +70,8 @@ span .#error {
 							<ul class="nav nav-tabs">
 								<li class="active"><a data-toggle="tab" href="#tab-1">Order</a></li>
 								<li class=""><a data-toggle="tab" href="#tab-2">Customer</a></li>
-								<li class=""><a data-toggle="tab" href="#tab-3">Payment</a></li>
-								<li class=""><a data-toggle="tab" href="#tab-4">RTO</a></li>
+								<!-- <li class=""><a data-toggle="tab" href="#tab-3">Payment</a></li>
+								<li class=""><a data-toggle="tab" href="#tab-4">RTO</a></li> -->
 							</ul>
 						</div>
 						<div class="tab-content">
@@ -190,7 +190,7 @@ span .#error {
 												class="form-control" />
 										</div>
 									</div>
-									<div class="mar-btm-20-oh">
+									<%-- <div class="mar-btm-20-oh">
 										<label class="col-sm-4 control-label">Shipping Charges</label>
 										<c:choose>
 											<c:when test="${order.shippingCharges gt 0}">
@@ -206,7 +206,7 @@ span .#error {
 												</div>
 											</c:otherwise>
 										</c:choose>
-									</div>
+									</div> --%>
 									<div class="mar-btm-20-oh">
 										<label class="col-sm-4 control-label">Shipping Date</label>
 										<div class="col-sm-8" id="data_1">
@@ -222,14 +222,14 @@ span .#error {
 									<div class="mar-btm-20-oh">
 										<label class="col-sm-4 control-label">Delivery Date</label>
 
-										<div class="col-sm-8" id="data_1">
+										<%-- <div class="col-sm-8" id="data_1">
 											<div class="input-group date">
 												<span class="input-group-addon"><i
 													class="fa fa-calendar"></i></span>
 												<form:input path="deliveryDate"
 													value="${order.deliveryDate}" class="form-control" />
 											</div>
-										</div>
+										</div> --%>
 									</div>
 									<div class="mar-btm-20-oh">
 										<label class="col-sm-4 control-label">Gross N/R</label>

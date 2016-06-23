@@ -21,80 +21,100 @@ import com.o2r.model.ProductConfig;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class ProductServiceImpl implements ProductService {
 
- @Autowired
- private ProductDao productDao;
+	@Autowired
+	private ProductDao productDao;
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public void addProduct(Product product, int sellerId)
+			throws CustomException {
+		System.out.println("Inside add order OrderServiceImpl awb :"
+				+ product.getProductName());
+		productDao.addProduct(product, sellerId);
+	}
 
-@Override
-@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public void addProduct(Product product ,int sellerId)throws CustomException {
-	System.out.println("Inside add order OrderServiceImpl awb :"+product.getProductName());
-	productDao.addProduct(product,sellerId);
-}
-
-@Override
-@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void addProductConfig(ProductConfig productConfig, int sellerId) {
 		productDao.addProductConfig(productConfig, sellerId);
 	}
 
-@Override
-public List<Product> listProducts(int sellerId,int pageNo)throws CustomException {
-	return productDao.listProducts(sellerId, pageNo);
-}
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public void removeSKUMapping(ProductConfig productConfig, int sellerId)
+			throws CustomException {
+		productDao.removeSKUMapping(productConfig, sellerId);
+	}
 
-@Override
-public List<Product> listProducts(int sellerId)throws CustomException {
-	return productDao.listProducts(sellerId);
-}
-@Override
-public Product getProduct(int orderId)throws CustomException {
-	return productDao.getProduct(orderId);
-}
+	@Override
+	public List<Product> listProducts(int sellerId, int pageNo)
+			throws CustomException {
+		return productDao.listProducts(sellerId, pageNo);
+	}
 
-@Override
-public void deleteProduct(Product product,int sellerId)throws CustomException {
+	@Override
+	public List<Product> listProducts(int sellerId) throws CustomException {
+		return productDao.listProducts(sellerId);
+	}
 
-	productDao.deleteProduct(product,sellerId);
-}
+	@Override
+	public Product getProduct(int orderId) throws CustomException {
+		return productDao.getProduct(orderId);
+	}
 
-@Override
-public void updateInventory(String sku , int currentInventory , int quantoAdd , int quantoSub ,boolean status,int sellerId)throws CustomException
-{
-	productDao.updateInventory(sku ,currentInventory ,quantoAdd ,quantoSub ,status,sellerId);
-}
+	@Override
+	public void deleteProduct(Product product, int sellerId)
+			throws CustomException {
 
-@Override
-public Product getProduct(String skuCode, int sellerId)throws CustomException
-{
-	return productDao.getProduct(skuCode, sellerId);
-}
+		productDao.deleteProduct(product, sellerId);
+	}
 
-@Override
-public ProductConfig getProductConfig(String skuCode, String channel, int sellerId)throws CustomException
-{
-	return productDao.getProductConfig(skuCode, channel, sellerId);
-}
+	@Override
+	public void updateInventory(String sku, int currentInventory,
+			int quantoAdd, int quantoSub, boolean status, int sellerId)
+			throws CustomException {
+		productDao.updateInventory(sku, currentInventory, quantoAdd, quantoSub,
+				status, sellerId);
+	}
 
-@Override
-public List<Product> getProductwithCreatedDate(Date startDate,Date endDate, int sellerId)throws CustomException
-{
-	return productDao.getProductwithCreatedDate(startDate,endDate,sellerId);
-}
+	@Override
+	public Product getProduct(String skuCode, int sellerId)
+			throws CustomException {
+		return productDao.getProduct(skuCode, sellerId);
+	}
 
-@Override
-public void addSKUMapping(ProductConfig productConfig, int sellerId)
-{
-	productDao.addSKUMapping(productConfig,sellerId);
-}
+	@Override
+	public ProductConfig getProductConfig(String channelSKUCode,
+			String channel, int sellerId) throws CustomException {
+		return productDao.getProductConfig(channelSKUCode, channel, sellerId);
+	}
 
-@Override
-public boolean getProductwithProductConfig(int sellerId) throws CustomException
-{
-	return productDao.getProductwithProductConfig(sellerId);
-}
-@Override
-	public String deleteProduct(int productId, int sellerId) throws Exception {		
+	@Override
+	public List<Product> getProductwithCreatedDate(Date startDate,
+			Date endDate, int sellerId) throws CustomException {
+		return productDao.getProductwithCreatedDate(startDate, endDate,
+				sellerId);
+	}
+
+	@Override
+	public void addSKUMapping(ProductConfig productConfig, int sellerId) {
+		productDao.addSKUMapping(productConfig, sellerId);
+	}
+
+	@Override
+	public boolean getProductwithProductConfig(int sellerId)
+			throws CustomException {
+		return productDao.getProductwithProductConfig(sellerId);
+	}
+
+	@Override
+	public String deleteProduct(int productId, int sellerId) throws Exception {
 		return productDao.deleteProduct(productId, sellerId);
+	}
+
+	@Override
+	public ProductConfig getProductConfig(int productConfigId)
+			throws CustomException {
+		return productDao.getProductConfig(productConfigId);
 	}
 }

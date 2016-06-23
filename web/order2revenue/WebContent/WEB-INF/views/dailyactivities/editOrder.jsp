@@ -8,7 +8,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>Order</title>
   <script type="text/javascript"
-    src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script type="text/javascript">
     function submitOrder(){
     	     $.ajax({

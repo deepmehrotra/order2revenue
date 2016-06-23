@@ -13,6 +13,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
@@ -25,7 +26,6 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.hibernate.SessionFactory;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -43,7 +43,6 @@ import com.o2r.bean.PoPaymentBean;
 import com.o2r.bean.ProductBean;
 import com.o2r.bean.ProductConfigBean;
 import com.o2r.dao.AreaConfigDao;
-import com.o2r.dao.ProductDaoImpl;
 import com.o2r.model.Category;
 import com.o2r.model.Events;
 import com.o2r.model.ExpenseCategory;
@@ -610,7 +609,7 @@ public class SaveContents {
 					if (curInvoiceId != null) {
 
 						if (orderService.isPOOrderUploaded(
-								order.getSubOrderID(), order.getInvoiceID())) {
+								order.getSubOrderID(), order.getInvoiceID(), sellerId)) {
 							errorMessage.append(" PO already uploaded ");
 							validaterow = false;
 						}
@@ -941,23 +940,44 @@ public class SaveContents {
 						productConfig.setProductSkuCode(entry.getCell(0)
 								.toString());
 						if (entry.getCell(1) != null
-								&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK
+								&&entry.getCell(2) != null
+								&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							ProductConfig procon=productService.getProductConfig(entry.getCell(1)
+									.toString(), entry.getCell(2).toString(), sellerId);
+							if(procon==null)
 							productConfig.setChannelSkuRef(entry.getCell(1)
 									.toString());
+							else
+							{
+								errorMessage.append(" Channel Reference Code already present for that channel ");
+								validaterow = false;
+							}
 						} else {
-							errorMessage.append(" Channel Name is null ");
+							errorMessage.append(" Channel Reference Code is null ");
 							validaterow = false;
 						}
 						if (entry.getCell(2) != null
 								&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							if(!entry.getCell(2)
+									.toString().equalsIgnoreCase("Myntra"))
 							productConfig.setChannelName(entry.getCell(2)
 									.toString());
+							else
+							{
+								errorMessage.append("Enter only Market Place Channels ");
+								validaterow = false;
+							}
 						} else {
 							errorMessage.append(" Channel Name is null ");
 							validaterow = false;
 						}
 
 					}
+					 else {
+							errorMessage.append(" Product with given SKU does not present ");
+							validaterow = false;
+						}
 				} else {
 					errorMessage.append(" Product SKU is null ");
 					validaterow = false;
@@ -1025,20 +1045,11 @@ public class SaveContents {
 				}
 				if (entry.getCell(1) != null
 						&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					productConfig.setChannelName(entry.getCell(1).toString());
+					productConfig.setChannelName(entry.getCell(1).toString().toLowerCase());
 				} else {
 					errorMessage.append(" Channel Name is null ");
 					validaterow = false;
 				}
-
-				ProductConfig productConfigChk = productService
-						.getProductConfig(productConfig.getProductSkuCode(),
-								productConfig.getChannelName(), sellerId);
-				if (productConfigChk != null) {
-					errorMessage.append(" Product config already exist ");
-					validaterow = false;
-				}
-
 				if (entry.getCell(2) != null
 						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					productConfig.setChannelSkuRef(entry.getCell(2).toString());
@@ -1046,6 +1057,16 @@ public class SaveContents {
 					errorMessage.append(" Channel SKU is null ");
 					validaterow = false;
 				}
+				
+				ProductConfig productConfigChk = productService
+						.getProductConfig(productConfig.getChannelSkuRef(),
+								productConfig.getChannelName(), sellerId);
+				if (productConfigChk != null) {
+					errorMessage.append(" Product config already exist ");
+					validaterow = false;
+				}
+
+				
 				if (entry.getCell(3) != null
 						&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
@@ -1132,6 +1153,8 @@ public class SaveContents {
 		Map<String, OrderBean> returnPaymentMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
 		boolean validaterow = true;
+		boolean generatePaymentUpload = false;
+		
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 
@@ -1159,7 +1182,7 @@ public class SaveContents {
 					} else {
 						channelOrderId = entry.getCell(0).toString();
 						errorMessage
-								.append(" Channel OrderId is already present ");
+								.append(" Channel OrderId not present ");
 						validaterow = false;
 					}
 				} else {
@@ -1174,7 +1197,7 @@ public class SaveContents {
 						errorMessage.append(" Product SKU does not exist ");
 						validaterow = false;
 					} else {
-						skucode = entry.getCell(2).toString();
+						skucode = product.getProductSkuCode();
 					}
 				} else {
 					errorMessage.append(" Product SKU is null ");
@@ -1230,23 +1253,23 @@ public class SaveContents {
 				}
 				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
 						+ entry.getCell(2) + " 3 :" + entry.getCell(3));
-				order = orderService.addOrderPayment(skucode, channelOrderId,
-						payment, sellerId);
+				/*order = orderService.addOrderPayment(skucode, channelOrderId,
+						payment, sellerId);*/
 				if (validaterow) {
-					orderService.addOrderPayment(skucode, channelOrderId,
+					order =orderService.addOrderPayment(skucode, channelOrderId,
 							payment, sellerId);
 				} else {
 					returnPaymentMap.put(errorMessage.toString(),
 							ConverterClass.prepareOrderBean(order));
 				}
 				if (order != null) {
-					System.out.println(order);
 					order.setPaymentUpload(paymentUpload);
 					paymentUpload.getOrders().add(order);
+					generatePaymentUpload = true;
 				}
 			}
 
-			if (validaterow) {
+			if (generatePaymentUpload) {
 				log.debug(" Total Positive Amount : " + totalpositive);
 				log.debug(" Total Negative Amount : " + totalnegative);
 				paymentUpload.setTotalpositivevalue(totalpositive);
@@ -1672,6 +1695,7 @@ public class SaveContents {
 		Map<String, PoPaymentBean> returnMap = new LinkedHashMap<>();
 		double totalpositive = 0;
 		double totalnegative = 0;
+		boolean generatePaymentUpload = false;
 
 		try {
 
@@ -1750,12 +1774,12 @@ public class SaveContents {
 								.append(" Positive Amount should be a number ");
 						validaterow = false;
 					}
-				} else {
+				} /*else {
 					if (popabean.getPoOrderId() != null) {
 						errorMessage.append(" Positive Amount is null ");
 						validaterow = false;
 					}
-				}
+				}*/
 
 				if (entry.getCell(4) != null
 						&& StringUtils.isNotBlank(entry.getCell(4).toString())) {
@@ -1770,12 +1794,12 @@ public class SaveContents {
 								.append(" Negative Amount should be a number ");
 						validaterow = false;
 					}
-				} else {
+				} /*else {
 					if (popabean.getGatePassId() != null) {
 						errorMessage.append(" Negative Amount is null ");
 						validaterow = false;
 					}
-				}
+				}*/
 
 				if (entry.getCell(5) != null
 						&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
@@ -1791,10 +1815,11 @@ public class SaveContents {
 				if (poOrder != null) {
 					poOrder.setPaymentUpload(paymentUpload);
 					paymentUpload.getOrders().add(poOrder);
+					generatePaymentUpload = true;
 				}
 			}
 
-			if (validaterow) {
+			if (generatePaymentUpload) {
 				log.debug(" Total Positive Amount : " + totalpositive);
 				log.debug(" Total Negative Amount : " + totalnegative);
 				paymentUpload.setTotalpositivevalue(totalpositive);
@@ -2050,7 +2075,7 @@ public class SaveContents {
 			uploadReport.setDescription("Imported");
 			uploadReport.setSeller(sellerService.getSeller(sellerId));
 			if (isError) {
-				uploadReport.setStatus("Error");
+				uploadReport.setStatus("Failed");
 			} else {
 				uploadReport.setStatus("Success");
 			}

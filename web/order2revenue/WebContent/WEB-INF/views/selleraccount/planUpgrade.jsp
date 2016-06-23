@@ -8,7 +8,7 @@
  <head>
  <jsp:include page="../globalcsslinks.jsp"></jsp:include>
   <script type="text/javascript"
-    src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script type="text/javascript">
     function onclickviewExpCat(id) {
        $.ajax({

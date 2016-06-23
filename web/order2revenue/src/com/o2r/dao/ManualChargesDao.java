@@ -1,5 +1,6 @@
 package com.o2r.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import com.o2r.helper.CustomException;
@@ -20,5 +21,7 @@ public interface ManualChargesDao {
  public void deleteManualCharges(ManualCharges manualCharges,int sellerId)throws CustomException;
 
 public Double getMCforPaymentID(String paymentId, int sellerId)throws CustomException;
+
+	public List<ManualCharges> listManualCharges(int sellerId, Date startDate, Date endDate) throws CustomException;
  
 }

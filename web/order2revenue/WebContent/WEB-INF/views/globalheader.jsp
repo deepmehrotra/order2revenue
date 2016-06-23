@@ -9,6 +9,10 @@
 
 <head>
 
+<link rel="stylesheet" href="/O2R/landing/css/fixednav.css">
+<script src="/O2R/landing/js/modernizr.js"></script>
+<script src="/O2R/seller/js/jquery-2.1.1.js"></script>
+
 <style type="text/css">
 .progress {
 	display: block;
@@ -65,14 +69,8 @@
 		e.parentNode.insertBefore($, e)
 	})(document, "script");
 </script>
-<!--End of Zopim Live Chat Script-->
-
-
-
-
-<link rel="stylesheet" type="text/css"
-	href="/O2R/landing/css/sticky.css">
-
+<!--End of Zopim Live Chat Script-->						
+		
 </head>
 
 <body>
@@ -93,16 +91,14 @@
 				<div class="form-group  top-search-180" id="search1">
 					<div class="top-search-30 f-left">
 						<select class="form-control" name="searchCriteria" required
-							autocomplete="off" / id="searchCriteria">
+							autocomplete="off" / id="searchCriteriaGlobal">
 							<option value="">Select Criteria</option>
-							<option id="1" value="channelOrderID">Channel Order
-								ID/PO ID</option>
+							<option id="1" value="channelOrderID">Channel OrderID/PO ID</option>
 							<option id="2" value="awbNum">AWB</option>
 							<option id="3" value="invoiceID">Invoice ID</option>
 							<option id="4" value="subOrderID">Sub Order ID</option>
 							<option id="5" value="PIreferenceNo">PI Reference No</option>
-							<option id="7" value="returnOrRTOId">Sale Return
-								ID/Debit Note No</option>
+							<option id="7" value="returnOrRTOId">Sale ReturnID/Debit Note No</option>
 							<option id="8" value="pcName">Partner</option>
 							<option id="9" value="productSkuCode">Product SKU</option>
 							<option id="10" value="customerName">Customer Name</option>
@@ -113,11 +109,9 @@
 							<option id="15" value="sellerNote">Seller Notes</option>
 							<option id="17" value="orderDate">Order Received Date</option>
 							<option id="18" value="shippedDate">Order Shipped Date</option>
-							<option id="19" value="deliveryDate">Order Delivery
-								Expected Date</option>
+							<option id="19" value="deliveryDate">Order Delivery	Expected Date</option>
 							<option id="20" value="paymentDueDate">Payment Due Date</option>
-							<option id="21" value="dateofPayment">Actual Date of
-								Payment</option>
+							<option id="21" value="dateofPayment">Actual Date of Payment</option>
 						</select>
 					</div>
 					<div class="top-search-60 f-left TopSearch-box1" id="newdiv">
@@ -128,15 +122,13 @@
 						<div class="input-group f-left" style="width: 150px;">
 							<div class="input-group date">
 								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-								<input type="text" name="startDate" id="startDate"
-									class="form-control">
+								<input type="text" name="startDate" id="startDate"  class="form-control">
 							</div>
 						</div>
 						<div class="input-group f-left" style="width: 150px;">
 							<div class="input-group date">
 								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-								<input type="text" name="endDate" id="endDate"
-									class="form-control">
+								<input type="text" name="endDate" id="endDate" 	class="form-control">
 							</div>
 						</div>
 					</div>
@@ -222,31 +214,6 @@
 					class="fa fa-exchange"></i>
 			</a>
 				<ul class="dropdown-menu dropdown-messages animated fadeInRight">
-					<%--<c:if test="${!empty uploadReportList}">
-						<c:forEach items="${uploadReportList}" var="uploadReport"
-							varStatus="loop">
-							<li>
-								<div class="dropdown-messages-box">
-									<a href="javascript:onclickDownload('${uploadReport.id}');"
-										class="pull-left"> <c:if
-											test="${fn:containsIgnoreCase(uploadReport.description, 'Exported')}">
-											<c:set value="fa-level-up" var="cssClass"></c:set>
-										</c:if> <c:if
-											test="${fn:containsIgnoreCase(uploadReport.description, 'Imported')}">
-											<c:set value="fa-level-down" var="cssClass"></c:set>
-										</c:if> <i class="fa ${cssClass}"></i>
-									</a>
-									<div class="media-body">
-										<small class="pull-right">${uploadReport.uploadedAt}</small> <strong>${uploadReport.description}</strong>
-										by ${uploadReport.sellerName} <br> <small
-											class="text-muted">${uploadReport.fileType} -
-											${uploadReport.uploadDate}</small>
-									</div>
-								</div>
-							</li>
-							<li class="divider"></li>
-						</c:forEach>
-					</c:if> --%>
 					<li>
 						<div id="uploadReport-div-3" class="dropdown-messages-box"
 							style="display: none;">
@@ -360,25 +327,16 @@
 		</ul>
 		</nav>
 	</div>
-	<aside id="sticky-social">
-	<ul>
-		<li><a href="#" onclick="onclickNavigate('upload',0)"
-			class="entypo-links"><span><img
-					src="/O2R/landing/img/export.png"></span></a></li>
-		<li><a href="#" onclick="onclickNavigate('upload',0)"
-			class="entypo-links2"><span><img
-					src="/O2R/landing/img/import.png"></span></a></li>
-		<li><a href="orderList.html" class="entypo-links3"><span><img
-					src="/O2R/landing/img/orderlist.png"></span></a></li>
-		<li><a href="#" onclick="onclickSideNavigation('RTO/Return')"
-			class="entypo-links4"><span><img
-					src="/O2R/landing/img/return1.png"></span></a></li>
-		<li><a href="paymentUploadList.html" class="entypo-links5"><span><img
-					src="/O2R/landing/img/payment.png"></span></a></li>
-	</ul>
-	</aside>
-
-	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<nav class="cd-vertical-nav">
+                    <ul>
+                        <li><a href="#" onclick="onclickNavigate('upload',0)" ><span class="label">Export</span></a></li>
+                        <li><a href="orderList.html"><span class="label">Order</span></a></li>
+                        <li><a href="paymentUploadList.html"><span class="label">Payment</span></a></li>
+                         <li><a href="poOrderList.html?value="><span class="label">PoList</span></a></li>
+                        <li><a href="#" onclick="onclickSideNavigation('RTO/Return')"><span class="label">Return</span></a></li>
+                    </ul>
+                </nav> 
+	
 	<script type="text/javascript">
 		function onclickNavigate(value, id) {
 			var targeturl = "";
@@ -402,16 +360,14 @@
 				.ready(
 						function() {
 
-							$
-									.ajax({
+							$.ajax({
 										url : "getUploadReports.html",
 										dataType : "json"
 									})
 									.success(
 											function(data) {
 												var i = 1;
-												data
-														.forEach(function(
+												data.forEach(function(
 																arrayItem) {
 															var cssClass;
 															if (arrayItem.description == "Exported") {
@@ -431,7 +387,7 @@
 																		+ "');";
 															}
 
-															if (arrayItem.status == "Error") {
+															if (arrayItem.status == "Error" || arrayItem.status == "Failed") {
 																document
 																		.getElementById("uploadReport-i-"
 																				+ i).style = "color: red !important;";
@@ -474,10 +430,11 @@
 														});
 											});
 
-							$('#searchCriteria').change(
+							$('#searchCriteriaGlobal').change(
 									function() {
 										var thisValue = $(this).children(
 												":selected").attr("id");
+										
 										if (thisValue == 1 || thisValue == 2
 												|| thisValue == 3
 												|| thisValue == 4
@@ -499,7 +456,7 @@
 											$('.TopSearch-box2').show();
 										}
 									});
-						});
+							});
 	</script>
 </body>
 

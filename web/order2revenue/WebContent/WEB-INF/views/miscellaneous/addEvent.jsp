@@ -690,7 +690,8 @@ function checkOnBlur()
 																								<input type="text" placeholder=""
 																									class="form-control" name="nr-metrodwgt500"
 																									value="${chargeMap.metrodwgt500}">
-																							</div></td>
+																							</div>
+																						</td>
 																					</tr>
 																				</tbody>
 																			</table>
@@ -714,13 +715,13 @@ function checkOnBlur()
 																				<tbody>
 																					<tr>
 																						<td><label>&lt; 500</label></td>
-																						<td><div class="form-group ">
-																								<div class=" content-rgt">
-																									<input type="text" placeholder=""
-																										class="form-control" name="nr-fixeddwlt500"
-																										value="${chargeMap.fixeddwlt500}">
-																								</div>
-																							</div></td>
+																						<td>
+																							<div class=" content-rgt">
+																								<input type="text" placeholder=""
+																									class="form-control" name="nr-fixeddwlt500"
+																									value="${chargeMap.fixeddwlt500}">
+																							</div>
+																						</td>
 																					</tr>
 																					<tr>
 																						<td><label>additional &gt; 500</label></td>
@@ -745,19 +746,19 @@ function checkOnBlur()
 																				<tbody>
 																					<tr>
 																						<td><label>&lt; 500</label></td>
-																						<td><div class="form-group ">
-																								<div class=" content-rgt">
-																									<input type="text" placeholder=""
-																										class="form-control" name="nr-fixedvwlt500"
-																										value="${chargeMap.fixedvwlt500}">
-																								</div>
-																							</div></td>
+																						<td>
+																							<div class=" content-rgt">
+																								<input type="text" placeholder=""
+																									class="form-control" name="nr-fixedvwlt500"
+																									value="${chargeMap.fixedvwlt500}">
+																							</div>
+																						</td>
 																					</tr>
 																					<tr>
 																						<td><label>500 &gt; 1000</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-fixedvwgt500lt1000"
 																									value="${chargeMap.fixedvwgt500lt1000}">
 																							</div></td>
@@ -766,7 +767,7 @@ function checkOnBlur()
 																						<td><label>1000 &gt; 1500</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-fixedvwgt1000lt1500"
 																									value="${chargeMap.fixedvwgt1000lt1500}">
 																							</div></td>
@@ -775,16 +776,16 @@ function checkOnBlur()
 																						<td><label>1500 &gt; 5000</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control"
+																									class="form-control validateNumber"
 																									name="nr-fixedvwgt1500lt5000"
-																									value="${chargeMap.fixedvwgt1000lt1500}">
+																									value="${chargeMap.fixedvwgt1500lt5000}">
 																							</div></td>
 																					</tr>
 																					<tr>
 																						<td><label>add 1 kg</label></td>
 																						<td><div class=" content-rgt">
 																								<input type="text" placeholder=""
-																									class="form-control" name="nr-fixedvwgt5000"
+																									class="form-control validateNumber" name="nr-fixedvwgt5000"
 																									value="${chargeMap.fixedvwgt5000}">
 																							</div></td>
 																					</tr>

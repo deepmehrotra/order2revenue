@@ -1,10 +1,13 @@
 package com.o2r.bean;
 
+import java.util.Comparator;
+
 public class ChannelNetQty {
 	private String key;
-	private Double settledQty;
-	private Double actionableQty;
-	private Double inProcessQty;
+	private int settledQty;
+	private int actionableQty;
+	private int inProcessQty;
+	private int totalQty;
 
 	public String getKey() {
 		return key;
@@ -14,28 +17,44 @@ public class ChannelNetQty {
 		this.key = key;
 	}
 
-	public Double getSettledQty() {
+	public int getSettledQty() {
 		return settledQty;
 	}
 
-	public void setSettledQty(Double settledQty) {
+	public void setSettledQty(int settledQty) {
 		this.settledQty = settledQty;
 	}
 
-	public Double getActionableQty() {
+	public int getActionableQty() {
 		return actionableQty;
 	}
 
-	public void setActionableQty(Double actionableQty) {
+	public void setActionableQty(int actionableQty) {
 		this.actionableQty = actionableQty;
 	}
 
-	public Double getInProcessQty() {
+	public int getInProcessQty() {
 		return inProcessQty;
 	}
 
-	public void setInProcessQty(Double inProcessQty) {
+	public void setInProcessQty(int inProcessQty) {
 		this.inProcessQty = inProcessQty;
 	}
 
+	public int getTotalQty() {
+		return totalQty;
+	}
+
+	public void setTotalQty(int totalQty) {
+		this.totalQty = totalQty;
+	}
+
+	public static class OrderByTotalQty implements Comparator<ChannelNetQty> {
+
+		@Override
+		public int compare(ChannelNetQty graph1, ChannelNetQty graph2) {
+			return graph1.totalQty < graph2.totalQty ? 1
+					: (graph1.totalQty > graph2.totalQty ? -1 : 0);
+		}
+	}
 }

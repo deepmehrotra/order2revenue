@@ -101,22 +101,21 @@
 								</div>
 								<div class="col-sm-12">
 									<div class="col-sm-5">
-										<label>Period:</label> &nbsp;&nbsp;&nbsp;<label>
-											${period} </label>
+										<label>Period:</label> &nbsp;&nbsp;&nbsp;
+										<input name="startDate"
+												id="monthYearPicker" class="month_year" value="${period}"
+												onchange="window.location.href = 'poOrderList.html?value=' + this.value;" >
 										<button class="btn btn-xs btn-grey"
 											onclick="location.href = 'poOrderList.html?value=All';">View
 											All</button>
-										<!-- <input name="startDate" id="monthYearPicker" /> -->
-										<%-- <input value="${period}" id="ChromeMonthPicker" type="month" 
-											class="form-control input-sm" style="width:70%;"/>  --%>
 									</div>
-									<div class="col-sm-3">
+									<div class="col-sm-4">
 										<label> Change Period: </label>
 										<button class="btn btn-xs btn-grey active">Monthly</button>
 										<button class="btn btn-xs btn-grey"
 											onclick="onclickNavigateOrder('viewPOOrderDetails','0')">Annually</button>
 									</div>
-									<div class="ibox-tools">
+									<div class="col-sm-3 ibox-tools">
 										<button class="btn btn-white table-menu-search search-dd">
 											<i class="fa fa-search"></i>
 										</button>
@@ -171,7 +170,6 @@
 								</div>
 							</div>
 							<div class="bs-example">
-
 								<div class="ibox-content overflow-h cus-table-filters">
 									<div class="scroll-y">
 										<c:if test="${!empty savedPOOrder}">
@@ -238,7 +236,8 @@
 															<%-- <td><fmt:formatNumber type="number" maxFractionDigits="2"
 											value="${poOrder.orderTax.tax}" /></td> --%>
 															<td><fmt:formatNumber type="number"
-																	maxFractionDigits="2" value="${poOrder.pr}" /></td>
+																	maxFractionDigits="2"
+																	value="${poOrder.orderPayment.positiveAmount - poOrder.orderPayment.negativeAmount}" /></td>
 															<td><fmt:formatNumber type="number"
 																	maxFractionDigits="2" value="${poOrder.eossValue}" /></td>
 															<td><fmt:formatNumber type="number"
@@ -290,20 +289,12 @@
 	<script>
     $(document).ready(function(){
     	    	
-    	$('#monthYearPicker').datepicker({
-    			changeMonth: true,
-    			changeYear: true,
-    			showButtonPanel: true,
-    			dateFormat: 'MM yy'
-    		}).focus(function() {
-    			var thisCalendar = $(this);
-    			$('.ui-datepicker-calendar').detach();
-    			$('.ui-datepicker-close').click(function() {
-				   	var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-				   	var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-				   	thisCalendar.datepicker('setDate', new Date(year, month, 1));
-    			});
-    		});
+    	$('.month_year').datepicker({
+    	    format: 'MM yyyy',
+    	    viewMode: "months", //this
+    	    minViewMode: "months",//and this
+    	    //autoClose:true
+    	});
     	
         $('.dataTables-example').dataTable({
                 responsive: true,
@@ -576,10 +567,6 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 
 .dataTables_filter label {
 	margin-right: 5px;
-}
-
-.ui-datepicker-calendar {
-	display: none;
 }
 </style>
 </body>

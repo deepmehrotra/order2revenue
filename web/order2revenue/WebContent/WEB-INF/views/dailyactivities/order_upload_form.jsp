@@ -3,9 +3,8 @@
 <head>
 <link rel='stylesheet' href='/O2R/seller/css/nprogress.css' />
 <script src='/O2R/seller/js/nprogress.js'></script>
-<script src="/O2R/seller/js/jquery-2.1.1.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- <script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
 <script src="/O2R/seller/js/jquery.ui.widget.js"></script>
 <script src="/O2R/seller/js/jquery.iframe-transport.js"></script>
 <script src="/O2R/seller/js/jquery.fileupload.js"></script>
@@ -102,7 +101,7 @@
 								<option value="gatepassSummary">GatePass Summary</option>
 								<option value="debitNoteSummary">Debit Note</option>
 								<option value="productSummary">Product Summary</option>
-								<option value="skuMapping">SKU Mapping</option>
+								<option value="skuMapping">MP Channels SKU Mapping</option>
 								<option value="productConfigSummary">Product Config
 									Summary</option>
 								<option value="inventorySummary">Inventory Summary</option>
@@ -137,7 +136,7 @@
 											<option value="gatepassSummary">GatePass Summary</option>
 											<option value="debitNoteSummary">Debit Note</option>
 											<option value="productSummary">Product Summary</option>
-											<option value="skuMapping">SKU Mapping</option>
+											<option value="skuMapping">MP Channels SKU Mapping</option>
 											<option value="productConfigSummary">Product Config
 												Summary</option>
 											<option value="inventorySummary">Inventory Summary</option>

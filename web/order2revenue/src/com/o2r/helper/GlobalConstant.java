@@ -540,6 +540,10 @@ public class GlobalConstant {
 	 * fixedfeelt500Big="fixedfeelt500Big";
 	 */
 
+	/**
+	 * Map of header names required for reports
+	 *  
+	 */
 	public static final Map<String, String> headerMap = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 
@@ -641,6 +645,53 @@ public class GlobalConstant {
 			// For Total Payments Received
 			put("getPaymentDate", "Expected Date of Payment");
 			put("getReceivedDate", "Order Received Date");
+		}
+	};
+	
+	/**
+	 * Map of Report Names for display
+	 * 
+	 */
+	public static final Map<String, String> reportNameMap = new HashMap<String, String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			put("totalShippedOrders", "Total Shipped Orders"); 
+			put("paymentDifferenceOrders", "Payment Difference Orders"); 
+			put("returnRTOReasonAnalysis", "Return/RTO reason Analysis");
+			put("saleReturnOrders", "Sale return Orders"); 
+			put("actionableOrders", "Actionable Orders");
+			put("disputedOrders", "Disputed Orders"); 
+			put("returnRTOLimitCrossed", "Return/RTO limit crossed Orders");
+			put("settledOrders", "Settled Orders");
+			put("channelSaleReport", "Channel Wise Sales Order");
+			put("categoryWiseSaleReport", "Category Wise Sales Order");
+			put("paymentsReceievedReport", "Total Payments Receieved");
+			put("orderwiseGPReport", "Orderwise GP Report");
+			put("productSaleReport", "Product Shipped Orders"); 
+			put("productSaleReport", "Payment Difference Orders"); 
+			put("productSaleReport", "Return/RTO limit crossed Orders");
+			put("productSaleReport", "Settled Orders");
+			put("partnerCommissionReport", "Partner Commission Paid Report"); 
+			put("partnerBusinessReport", "Partner Business Report");
+			put("debtorsReport", "Debtors Report");				  
+			put("expenditureReport", "Expenditure Report");
+			put("inventoryUploadHistory", "Inventory Upload History"); 
+			put("inventoryMovementDetails", "Inventory Movement Details"); 
+			put("inventoryThresholdReport", "Inventory Threshold Report");
+			put("closingStockReport", "Closing stock report");
+			put("customerDatabase", "Customer Database"); 
+			put("bestSellingSKUreport", "Best Selling SKU"); 
+			put("bestSellingRegionReport", "Best Selling Region Report");
+			put("netSaleReport", "Net Sale Report"); 
+			put("productSaleReport", "Product Sale Report");
+			put("channelSaleReport", "Channel Sale Report");
+			put("netDebtors", "Net Debtors"); 
+			put("grossProfitabilityReport", "Gross Profitability Report");
+			put("netProfitabilityReport", "Net Profitability Report"); 
+			put("netDebtors", "Net Debtors");
+			put("performanceAnalysis", "Performance Analysis"); 
+			put("totalTurnover", "Total Turnover");
+			put("totalPaymentsReceived", "Total Payments Received");
 		}
 	};
 	

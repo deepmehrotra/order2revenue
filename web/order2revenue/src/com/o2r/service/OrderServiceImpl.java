@@ -69,9 +69,9 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-	public boolean isPOOrderUploaded(String poId, String invoiceId)
+	public boolean isPOOrderUploaded(String poId, String invoiceId, int sellerId)
 			throws CustomException {
-		return orderDao.isPOOrderUploaded(poId, invoiceId);
+		return orderDao.isPOOrderUploaded(poId, invoiceId, sellerId);
 	}
 
 	@Override

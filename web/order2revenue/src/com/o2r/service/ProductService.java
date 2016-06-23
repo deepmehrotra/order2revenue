@@ -38,12 +38,19 @@ public interface ProductService {
 	public List<Product> getProductwithCreatedDate(Date startDate,
 			Date endDate, int sellerId) throws CustomException;
 
-	public ProductConfig getProductConfig(String skuCode, String channel,
-			int sellerId) throws CustomException;
+	public ProductConfig getProductConfig(String channelSKUCode,
+			String channel, int sellerId) throws CustomException;
 
 	public void addSKUMapping(ProductConfig productConfig, int sellerId);
+
+	public boolean getProductwithProductConfig(int sellerId)
+			throws CustomException;
+
+	public String deleteProduct(int productId, int sellerId) throws Exception;
+
+	public void removeSKUMapping(ProductConfig productConfig, int sellerId)
+			throws CustomException;
 	
-	public boolean getProductwithProductConfig(int sellerId) throws CustomException;
-	
-	public String deleteProduct(int productId, int sellerId)throws Exception;
+	public ProductConfig getProductConfig(int productConfigId)
+			throws CustomException;
 }

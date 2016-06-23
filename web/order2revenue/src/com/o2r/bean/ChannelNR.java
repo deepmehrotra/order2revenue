@@ -2,9 +2,10 @@ package com.o2r.bean;
 
 public class ChannelNR {
 	private String key;
-	private Double settledNR;
-	private Double actionableNR;
-	private Double inProcessNR;
+	private double settledNR;
+	private double actionableNR;
+	private double inProcessNR;
+	private double totalNR;
 
 	public String getKey() {
 		return key;
@@ -14,28 +15,36 @@ public class ChannelNR {
 		this.key = key;
 	}
 
-	public Double getSettledNR() {
+	public double getSettledNR() {
 		return settledNR;
 	}
 
-	public void setSettledNR(Double settledNR) {
+	public void setSettledNR(double settledNR) {
 		this.settledNR = settledNR;
 	}
 
-	public Double getActionableNR() {
+	public double getActionableNR() {
 		return actionableNR;
 	}
 
-	public void setActionableNR(Double actionableNR) {
+	public void setActionableNR(double actionableNR) {
 		this.actionableNR = actionableNR;
 	}
 
-	public Double getInProcessNR() {
+	public double getInProcessNR() {
 		return inProcessNR;
 	}
 
-	public void setInProcessNR(Double inProcessNR) {
+	public void setInProcessNR(double inProcessNR) {
 		this.inProcessNR = inProcessNR;
+	}
+
+	public double getTotalNR() {
+		return totalNR;
+	}
+
+	public void setTotalNR(double totalNR) {
+		this.totalNR = totalNR;
 	}
 
 }

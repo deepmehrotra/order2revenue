@@ -42,6 +42,10 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 		<property name="username" value="${database.user}" />
 		<property name="password" value="${database.password}" />
 	</bean>
+	
+	<bean id="dataConfig" class="com.o2r.bean.DataConfig">
+		<property name="serviceTax" value="${serviceTax}" />
+	</bean>
 
 <bean id="multipartResolver"
     class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

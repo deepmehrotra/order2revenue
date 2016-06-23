@@ -38,7 +38,7 @@
 					<div class="col-lg-12">
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
-								<h5>Reports</h5>
+								<h5>${reportNameStr}</h5>
 							</div>
 							<div class="ibox-content overflow-h">
 
@@ -127,6 +127,7 @@
 												</div>
 											</div>
 										</div>
+										<!-- 
 										<div class="row">
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
@@ -162,7 +163,7 @@
 													</div>
 												</div>
 											</div>
-										</div>
+										</div>  -->
 										<div class="row">
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
@@ -170,7 +171,7 @@
 														<table class="table table-bordered custom-table">
 															<thead>
 																<tr>
-																	<th>Partner</th>
+																	<th>Category</th>
 																	<th>Total  N/R Settled Orders</th>
 																	<th>Total  N/R Actionable Orders</th>
 																	<th>Total  N/R In-Process Orders</th>
@@ -208,7 +209,7 @@
 														<table class="table table-bordered custom-table">
 															<thead>
 																<tr>
-																	<th>Partner</th>
+																	<th>Category</th>
 																	<th>Total  N/R Settled Orders Qty</th>
 																	<th>Total  N/R Actionable Orders Qty</th>
 																	<th>Total  N/R In-Process Orders Qty</th>
@@ -288,7 +289,7 @@
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.saleRetSpAmount}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.saleRetQty}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.saleRetVsGrossSale}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.saleRetSpAmount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netNrAmount}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netSpAmount}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${partnerDto.netQty}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netTaxLiability}" /></td>
@@ -383,7 +384,7 @@
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);
 		
-		var dataArr = [];
+		/* var dataArr = [];
 		var yAxisText = 'NPR vs Net Payment Difference graph';
 		var divId = "#stacked-chart-3";
 		var xAxisCategories = ['Net Payment Result', 'Net Due To Be Received'];
@@ -393,7 +394,7 @@
 			data.data = [parseFloat(parseFloat('${partnerDto.netPaymentResult}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netToBeReceived}').toFixed(2))];
 			dataArr.push(data);
 		</c:forEach>
-		stackChart(divId, yAxisText, dataArr);
+		stackChart(divId, yAxisText, dataArr); */
 		
 		var dataArr = [];
 		var yAxisText = 'Settled vs Actionable vs In-Process N/R Graph';

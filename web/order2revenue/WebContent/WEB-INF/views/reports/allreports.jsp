@@ -169,11 +169,11 @@ $(document).ready(function(){
 var OrderRelatedReport = [
                   {display: "Total Shipped Orders", value: "totalShippedOrders" }, 
                   {display: "Payment Difference Orders", value: "paymentDifferenceOrders" }, 
-                  {display: " Return/RTO reason Analysis", value: " returnRTOReasonAnalysis" },
+                  {display: "Return/RTO reason Analysis", value: "returnRTOReasonAnalysis" },
                   {display: "Sale return Orders", value: "saleReturnOrders" }, 
                   {display: "Actionable Orders", value: "actionableOrders" },
                   {display: "Disputed Orders", value: "disputedOrders" }, 
-                  {display: " Return/RTO limit crossed Orders", value: " returnRTOLimitCrossed" },
+                  {display: "Return/RTO limit crossed Orders", value: "returnRTOLimitCrossed" },
                   {display: "Settled Orders", value: "settledOrders" }];
 var ChannelRelatedReport = [
                   {display: "Channel Wise Sales Order", value: "channelSaleReport" },
@@ -183,7 +183,7 @@ var ChannelRelatedReport = [
 var ProductRelatedReport = [
                   {display: "Product Shipped Orders", value: "productSaleReport" }, 
                   {display: "Payment Difference Orders", value: "productSaleReport" }, 
-                  {display: " Return/RTO limit crossed Orders", value: " productSaleReport" },
+                  {display: "Return/RTO limit crossed Orders", value: "productSaleReport" },
                   {display: "Settled Orders", value: "productSaleReport" }];                  
 var PartnerRelated = [
                   {display: "Partner Commission Paid Report", value: "partnerCommissionReport" }, 

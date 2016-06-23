@@ -30,6 +30,7 @@ public class PartnerReportDetails {
 	private String customerCity;
 	
 	private String productCategory;
+	private String parentCategory;
 	private double productPrice;
 
 	private int grossSaleQuantity;
@@ -262,6 +263,14 @@ public class PartnerReportDetails {
 
 	public void setProductCategory(String productCategory) {
 		this.productCategory = productCategory;
+	}
+
+	public String getParentCategory() {
+		return parentCategory;
+	}
+
+	public void setParentCategory(String parentCategory) {
+		this.parentCategory = parentCategory;
 	}
 
 	public int getGrossSaleQuantity() {
@@ -620,6 +629,8 @@ public class PartnerReportDetails {
 			Comparator<PartnerReportDetails> {
 		@Override
 		public int compare(PartnerReportDetails graph1, PartnerReportDetails graph2) {
+			if(graph1.shippedDate == null || graph2.shippedDate == null)
+				return -1;
 			return graph1.shippedDate.after(graph2.shippedDate) ? 1
 					: (graph1.shippedDate.before(graph2.shippedDate) ? -1 : 0);
 		}
