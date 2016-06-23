@@ -8,14 +8,9 @@
     <meta name="author" content="">
     <link rel="icon" href="img/favicon.ico">
     <title>order2revenue.com</title>
-
     <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->  
-
-    
     <link rel="stylesheet" href="css/fixednav.css">
     <script src="js/modernizr.js"></script> 
-
-
     <link href="css/animate.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap-dynamic-tabs.css">
@@ -24,12 +19,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="js/bootstrap-dynamic-tabs.js"></script>
-
     <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <link href="css/jquery.incremental-counter.css" rel="stylesheet" type="text/css">
-
     <!-- <script src="js/bootstrap.min.js"></script> -->
-
     <style type="text/css">
         .jssorb05 {
             position: absolute;
@@ -133,6 +125,18 @@
 .dynamic-tabs-container {
     position: relative;
     display: inline-flex;
+}
+.buton
+{
+    background: mediumvioletred;
+    padding: 0px 7px 0px 7px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    position: relative;
+    top: -7px;
+    left: 18px;
+    color: #fff;
+    font-weight: normal;
 }
    </style>
    <script src="js/modernizr.js"></script>
@@ -270,6 +274,36 @@
     <script>
         jssor_1_slider_init();
     </script>
+    <div class="modal inmodal fade" id="myModal22" tabindex="-1" role="dialog"  aria-hidden="true">
+                          <div class="modal-dialog modal-lg">
+                            <div class="modal-content animated bounceInRight" style="left: 22%;width:50%;background: #1ab394;">
+                              <div class="modal-header text-center">
+                              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="buton">&times;</span> </button>
+                                <h4 style="color: cornsilk;"><b>Fill up the form</b></h4>
+                                
+                               </div>
+                              <div class="modal-body">
+                                <div class="row">
+                                  <div class="col-sm-12">
+                                    <div class="form-group">
+                                      <form action="userquery.html"  id="contactusform" method="POST" >
+                                        <input type="text" placeholder="Name" class="form-control" name="name"/>
+                                        <br>
+                                        <input type="text"  name="email"  placeholder="Email" class="form-control"/>
+                                        <br>
+                                        <input type="text"  name="Number"  placeholder="Contact No" class="form-control"/>
+                                        <br>
+                                        <textarea name="query" id="" placeholder="Write your question or comments here" class="form-control"></textarea>
+                                        </br>
+                                        <input type="button" value="Send" class="btn btn-primary" onclick="submitQuery();" style="background: #5f7973;opacity: 0.9;color: cornsilk;">
+                                        </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
     
 </section>
@@ -1148,7 +1182,7 @@ still has the capacity to absorb many more players</strong>"</p>
         </div>
         <div class="row wow zoomIn animated animated">
             <div class="col-lg-12 text-center">
-                <a href="#" class="btn btn-primary popUp-link">Send us mail</a>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal22"> Send Us Mail </button>    
                 <p class="m-t-sm">
                     Or follow us on social platforms
                 </p>
@@ -1170,34 +1204,16 @@ still has the capacity to absorb many more players</strong>"</p>
         </div>
     </div>
 </section>
-<!--popup image starts-->
-<div id="hover"></div>
-<div id="popup" style="display:none;">
-    <div id="close"><a href="#"><i class="fa fa-remove"></i></a></div>
-    <div class="popup-content">
-    <form action="userquery.html"  id="contactusform" method="POST" >
-        <input type="text" placeholder="Name" class="subject" name="name"/>
-        <input type="text"  name="email"  placeholder="Email" class="subject"/>
-        <input type="text"  name="Number"  placeholder="Contact No" class="subject"/>
-        <textarea name="query" id="" placeholder="Write your question or comments here"></textarea>
-        <input type="button" value="Send" class="btn btn-primary" onclick="submitQuery()">
-        </form>
-    </div>
-</div>
 <script src="js/jquery-2.1.1.js"></script>
 <script src="js/pace.min.js"></script>
-
 <script src="js/classie.js"></script>
 <script src="js/cbpAnimatedHeader.js"></script>
 <script src="js/wow.min.js"></script>
 <script src="js/inspinia.js"></script>
-    
 <script type="text/javascript">
-
 $(document).ready(function () {
     var winHeight = $(window).height()+18;
     $('#inSlider.carousel, .header-back, #inSlider.carousel .item').css('height', winHeight)
-
     $('.tabs-head li > a').click(function(e){
         e.preventDefault();
         var Tabs_index = $('a[id^="tabsLink_"]').index(this);
@@ -1206,7 +1222,6 @@ $(document).ready(function () {
         $('.tabsCnt > div').css('display','none')
         $('.tabsCnt > div').eq(Tabs_index).fadeIn();
     });
-
     $(document).on('click', ".popUp-link", function (e) {
         e.preventDefault();
         $("#hover").show();
@@ -1217,34 +1232,39 @@ $(document).ready(function () {
         $("#hover").hide();
         $("#popup").hide();
     });
-})
-
+});
 function submitQuery(){
-	 var validator = $("#contactusform").validate({
-		  rules: {
-			  email: {
-			        required: true,
-			            }		            
-			  },
-	     messages: {
-	    	 email: "Email is mandatory",
-	        }
+	var validator = $("#contactusform").validate({
+		rules: 
+          {
+		    email: 
+            {
+			   required: true,
+			}		            
+		},
+	    messages: 
+        {
+	    	email: "Email is mandatory",
+	    }
 	 });
-	 if(validator.form())
-	 { 
-		 $.ajax({
-         url: $("#contactusform").attr("action"),
-         context: document.body,
-         type: 'post',
-         data:$("#contactusform").serialize(),
-         success : function(res) {
-        	 if(res=="true")
-        		 alert("Thank you for contacting us. We will get back to you shortly!");
-        	   $("#hover").hide();
-               $("#popup").hide();
-        
-     }
-  });
+	if(validator.form())
+	{ 
+		$.ajax({
+        url: $("#contactusform").attr("action"),
+        context: document.body,
+        type: 'post',
+        data:$("#contactusform").serialize(),
+        success : function(res) {
+        	if(res=="true")
+            {
+        	 alert("Thank you for contacting us. We will get back to you shortly!");
+        	 $("#hover").hide();
+             $("#popup").show();
+            }
+          }
+        });
+    }
+};
 </script>
 <!-- ----------------------------------script for counter-------------------------------------
  -->
@@ -1273,11 +1293,8 @@ function submitQuery(){
 
 </script>
 <a href="#0" class="cd-top">Top</a>
-
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-
     <script src="js/jquery.incremental-counter.js"></script>
-
     <script>
         $(".incremental-counter").incrementalCounter();
     </script>
