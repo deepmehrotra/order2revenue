@@ -13,6 +13,6 @@ private SampleJob sampleJob;
 	}	
 	@Override
 	protected void executeInternal(JobExecutionContext arg0)throws JobExecutionException {		
-		//sampleJob.executeJobProductStockList();
+		sampleJob.executeJobProductStockList();
 	}
 }

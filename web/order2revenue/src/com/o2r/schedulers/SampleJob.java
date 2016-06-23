@@ -103,6 +103,7 @@ public class SampleJob {
 			Criteria criteria = session.createCriteria(Product.class);
 			java.util.List<Product> list = criteria.list();
 			ProductStockList stockList = null;
+			int count=0;
 			if(list != null && list.size() != 0){
 				for (Product product : list) {
 					List<ProductStockList> stocklist = product.getClosingStocks();
@@ -122,12 +123,14 @@ public class SampleJob {
 						stockList.setPrice(product.getProductPrice());
 						product.getClosingStocks().add(stockList);
 						session.saveOrUpdate(product);
+						count++;
 						//session.saveOrUpdate(stockList);
 						log.info("PRODUCT ID : " + product.getProductId());
 	                }
 				}
 			}
 			session.getTransaction().commit();
+			log.debug("ProductStockList Updated !!!! No of new Entries : "+count);
 		} catch (Exception e) {
 			log.error("Failed!",e);
 		}

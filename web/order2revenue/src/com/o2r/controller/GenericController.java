@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.print.attribute.standard.JobSheets;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -32,6 +33,7 @@ import com.o2r.helper.HelperClass;
 import com.o2r.model.GenericQuery;
 import com.o2r.model.Order;
 import com.o2r.model.Seller;
+import com.o2r.schedulers.SampleJob;
 import com.o2r.service.AdminService;
 import com.o2r.service.CategoryService;
 import com.o2r.service.DashboardService;
@@ -73,8 +75,10 @@ public class GenericController {
 	 private PartnerService partnerService;
 	@Autowired
 	 private ExpenseService expenseService;
+	
 
 	private Logger logger = Logger.getLogger(GenericController.class);
+		
 	/*static
 	{
 	     System.setProperty("mail.smtp.auth", "true");
