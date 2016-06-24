@@ -3663,6 +3663,7 @@ public class OrderDaoImpl implements OrderDao {
 			}
 
 			/* populating derived values of order */
+			/* populating derived values of order */
 			consolidatedOrder.setStatus("Return Recieved");
 
 			consolidateReturn.setReturnorrtoQty(quantity);
@@ -3670,19 +3671,18 @@ public class OrderDaoImpl implements OrderDao {
 					.setReturnOrRTOChargestoBeDeducted(totalReturnCharges);
 			consolidateReturn.setNetNR(netRate);
 			consolidateReturn.setTaxPOAmt(taxValue);
-			consolidateReturn.setNetPR(grossPR);
+			//consolidateReturn.setNetPR(grossPR);
 			consolidateReturn.setGrossProfit(grossProfit);
 
 			consolidatedOrder.setEossValue(eossValue);
 			consolidatedOrder.setQuantity(quantity);
-			consolidatedOrder.setNetRate(netRate);
+			consolidatedOrder.setPr(grossPR);
 			consolidatedOrder.setPoPrice(totalReturnCharges);
 
 			consolidatedOrder.setOrderTax(new OrderTax());
 			consolidatedOrder.getOrderTax().setTax(taxValue);
 
-			consolidatedOrder.setTotalAmountRecieved(consolidatedOrder
-					.getNetRate());
+			consolidatedOrder.setTotalAmountRecieved(netRate);
 			consolidatedOrder.setPartnerCommission(partnerCommission);
 			consolidatedOrder.setDiscount(discount);
 			consolidatedOrder.getOrderTax().setTaxToReturn(taxSP);
