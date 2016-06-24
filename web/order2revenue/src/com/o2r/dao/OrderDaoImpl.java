@@ -153,7 +153,7 @@ public class OrderDaoImpl implements OrderDao {
 								if (!calculateNR(event.getNrnReturnConfig(),
 										order, product.getCategoryName(),
 										product.getDeadWeight(),
-										product.getVolWeight()))
+										product.getVolWeight(),sellerId))
 									throw new Exception();
 							} else if (event.getNrnReturnConfig()
 									.getNrCalculatorEvent()
@@ -181,6 +181,7 @@ public class OrderDaoImpl implements OrderDao {
 						order.setPartnerCommission((order.getOrderSP() - order
 								.getGrossNetRate()) * order.getQuantity());
 
+						if(partner.isTdsApplicable())
 						order.getOrderTax().setTdsToDeduct(
 								(order.getPartnerCommission() - (order
 										.getPartnerCommission() * 100 /(100 + Double.parseDouble(props.getProperty("serviceTax")))))
@@ -812,6 +813,7 @@ public class OrderDaoImpl implements OrderDao {
 		TaxDetail taxDetails = null;
 		TaxDetail tdsDetails = null;
 		float returnChargesCalculated = 0;
+		Partner partner=null;
 
 		// To add change order status
 		try {
@@ -941,6 +943,9 @@ public class OrderDaoImpl implements OrderDao {
 						sellerId);
 
 				// Reverting TDS information for Return Order
+				partner=partnerService.getPartner(order.getPcName(), sellerId);
+				if(partner!=null&&partner.isTdsApplicable())
+				{
 				tdsDetails = new TaxDetail();
 				tdsDetails.setBalanceRemaining(-(order.getOrderTax()
 						.getTdsToDeduct() / order.getQuantity())
@@ -957,18 +962,17 @@ public class OrderDaoImpl implements OrderDao {
 				tdsDetails.setUploadDate(orderReturn.getReturnDate());
 				taxDetailService.addMonthlyTDSDetail(session, tdsDetails,
 						sellerId);
-				order.getOrderTax().setTdsToDeduct(
-						order.getOrderTax().getTdsToDeduct()
-								+(order.
-										getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()/50));
-
-				order.getOrderTax().setTaxToReturn(
-						(order.getOrderTax().getTax() / order.getQuantity())
-								* orderReturn.getReturnorrtoQty());
+				order.getOrderTax().setTdsonReturnAmt(order.
+										getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()/50);
 				order.getOrderTax().setTdsToReturn(
 						(order.getOrderTax().getTdsToDeduct() / order
 								.getQuantity())
 								* orderReturn.getReturnorrtoQty());
+				}
+				order.getOrderTax().setTaxToReturn(
+						(order.getOrderTax().getTax() / order.getQuantity())
+								* orderReturn.getReturnorrtoQty());
+				
 
 				order.setFinalStatus("Actionable");
 				order.getOrderReturnOrRTO().setReturnorrtoQty(
@@ -2175,9 +2179,13 @@ public class OrderDaoImpl implements OrderDao {
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
 			props = PropertiesLoaderUtils.loadProperties(resource);
+			if(partner!=null&&partner.isTdsApplicable())
+			{
 			tds = (((props.getProperty("TDS") != null ? Double.parseDouble(props.getProperty("TDS")) :0)*comission/100 + ((fixedfee + pccAmount + shippingCharges) / 50)))
 					* order.getQuantity();
 			order.getOrderTax().setTdsToDeduct(tds);
+			}
+			
 			order.setGrossNetRate(nrValue);
 			order.setPartnerCommission(comission);
 			order.setFixedfee(fixedfee);
@@ -2711,7 +2719,7 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	private boolean calculateNR(NRnReturnConfig nrnReturnConfig, Order order,
-			String prodCat, float deadWeight, float volWeight) {
+			String prodCat, float deadWeight, float volWeight,int sellerId) {
 
 		log.info("$$$ calculateNR for Events Start $$$");
 
@@ -2721,6 +2729,7 @@ public class OrderDaoImpl implements OrderDao {
 		double pccAmount = 0;
 		float serviceTax = 0;
 		double tds = 0;
+		Partner partner=null;
 
 		StringBuffer area = new StringBuffer("");
 		StringBuffer volarea = new StringBuffer("");
@@ -2924,10 +2933,15 @@ public class OrderDaoImpl implements OrderDao {
 					/ 100;
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
+			
+			partner=partnerService.getPartner(order.getPcName(), sellerId);
+			if(partner!=null&&partner.isTdsApplicable())
+			{
 			props = PropertiesLoaderUtils.loadProperties(resource);
 			tds = (((props.getProperty("TDS") != null ? Double.parseDouble(props.getProperty("TDS")) :0)*comission/100 + ((fixedfee + pccAmount + shippingCharges) / 50)))
 					* order.getQuantity();
 			order.getOrderTax().setTdsToDeduct(tds);
+			}
 			order.setGrossNetRate(nrValue);
 			order.setPartnerCommission(comission);
 			order.setFixedfee(fixedfee);

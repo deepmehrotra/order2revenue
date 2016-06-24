@@ -13,7 +13,7 @@ public class OrderTaxBean {
 	private double totalpositivevalue;
 	private double tdsToDeduct;
 	private double tdsToReturn;
-	private double netTds;
+	private double tdsonReturnAmt;
 	private String taxCategtory;
 	private double taxRate;
 	private double tax;
@@ -71,11 +71,12 @@ public class OrderTaxBean {
 	public void setTdsToReturn(double tdsToReturn) {
 		this.tdsToReturn = tdsToReturn;
 	}
-	public double getNetTds() {
-		return netTds;
+	public double getTdsonReturnAmt() {
+		return tdsonReturnAmt;
 	}
-	public void setNetTds(double netTds) {
-		this.netTds = netTds;
+
+	public void setTdsonReturnAmt(double tdsonReturnAmt) {
+		this.tdsonReturnAmt = tdsonReturnAmt;
 	}
 	public String getTaxCategtory() {
 		return taxCategtory;
