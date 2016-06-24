@@ -802,7 +802,10 @@ public class ConverterClass {
 				beans.add(bean);
 			}
 		}else
+		{
+			beans = new ArrayList<ExpenseBean>();
 			beans.add(new ExpenseBean());
+		}
 		
 		return beans;
 	}
@@ -811,7 +814,7 @@ public class ConverterClass {
 		OrderTax orderTax = new OrderTax();
 		if (bean != null) {
 			orderTax.setNetTax(bean.getNetTax());
-			orderTax.setNetTds(bean.getNetTds());
+			orderTax.setTdsonReturnAmt(bean.getTdsonReturnAmt());
 			orderTax.setTax(bean.getTax());
 			orderTax.setTaxCategtory(bean.getTaxCategtory());
 			orderTax.setTaxdepositdate(bean.getTaxdepositdate());
@@ -832,7 +835,7 @@ public class ConverterClass {
 		OrderTaxBean orderTax = new OrderTaxBean();
 		if (bean != null) {
 			orderTax.setNetTax(bean.getNetTax());
-			orderTax.setNetTds(bean.getNetTds());
+			orderTax.setTdsonReturnAmt(bean.getTdsonReturnAmt());
 			orderTax.setTax(bean.getTax());
 			orderTax.setTaxCategtory(bean.getTaxCategtory());
 			orderTax.setTaxdepositdate(bean.getTaxdepositdate());

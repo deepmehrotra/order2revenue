@@ -32,7 +32,7 @@ public class OrderTax {
 	@Column
 	private double tdsToReturn;
 	@Column
-	private double netTds;
+	private double tdsonReturnAmt;
 	@Column
 	private String taxCategtory;
 	@Column
@@ -100,14 +100,6 @@ public class OrderTax {
 		this.tdsToReturn = tdsToReturn;
 	}
 
-	public double getNetTds() {
-		return netTds;
-	}
-
-	public void setNetTds(double netTds) {
-		this.netTds = netTds;
-	}
-
 	public String getTaxCategtory() {
 		return taxCategtory;
 	}
@@ -163,9 +155,17 @@ public class OrderTax {
 				+ tdsperiod + ", tdsdepositedate=" + tdsdepositedate
 				+ ", totalpositivevalue=" + totalpositivevalue
 				+ ", tdsToDeduct=" + tdsToDeduct + ", tdsToReturn="
-				+ tdsToReturn + ", netTds=" + netTds + ", taxCategtory="
+				+ tdsToReturn + ", tdsonReturnAmt=" + tdsonReturnAmt + ", taxCategtory="
 				+ taxCategtory + ", taxRate=" + taxRate + ", tax=" + tax
 				+ ", taxToReturn=" + taxToReturn + ", netTax=" + netTax + "]";
+	}
+
+	public double getTdsonReturnAmt() {
+		return tdsonReturnAmt;
+	}
+
+	public void setTdsonReturnAmt(double tdsonReturnAmt) {
+		this.tdsonReturnAmt = tdsonReturnAmt;
 	}
 
 }

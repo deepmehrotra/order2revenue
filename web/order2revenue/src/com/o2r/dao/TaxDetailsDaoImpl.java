@@ -77,7 +77,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 
 
 		log.info("*** addMonthlyTaxDetail Starts : TaxDetailsDaoImpl ****");
-		log.debug("***Add Monthly TDS : cat : " + taxDetail.getParticular()+ " Amoun :" + taxDetail.getBalanceRemaining());
+		log.debug("***Add Monthly Tax : cat : " + taxDetail.getParticular()+ " Amoun :" + taxDetail.getBalanceRemaining());
 
 		List<Integer> taxIds = null;
 
@@ -127,7 +127,10 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			}
 
 			if (!status)
+			{
 				session.getTransaction().commit();
+				session.close();
+			}
 			} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed!",e);
@@ -143,12 +146,13 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			int sellerId) {
 		
 		log.info("*** addMonthlyTDSDetail Starts : TaxDetailsDaoImpl ****");
-		System.out.println("Add Monthly TDS : cat : " + taxDetail.getParticular()+ " Amoun :" + taxDetail.getBalanceRemaining());
 		log.debug("Add Monthly TDS : cat : " + taxDetail.getParticular()+ " Amoun :" + taxDetail.getBalanceRemaining());
 		Seller seller = null;
 		List<Integer> taxIds = null;
 		TaxDetail existingObj = null;
 		double amount = taxDetail.getBalanceRemaining();
+		Date tempDate=(Date)taxDetail.getUploadDate().clone();
+		String particular=taxDetail.getParticular();
 		boolean sessionState = false;
 		try {
 			if (session != null) {
@@ -161,8 +165,8 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 				Query gettingTaxId = session
 						.createSQLQuery(taxTdRetriveQuery)
 						.setParameter("sellerId", sellerId)
-						.setParameter("month",taxDetail.getUploadDate().getMonth() + 1)
-						.setParameter("particular", taxDetail.getParticular());
+						.setParameter("month",tempDate.getMonth() + 1)
+						.setParameter("particular", particular);
 		
 				taxIds = gettingTaxId.list();
 				
@@ -171,7 +175,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 					existingObj = (TaxDetail) session.get(TaxDetail.class, taxId);
 
 					existingObj.setBalanceRemaining(existingObj.getBalanceRemaining() + amount);
-					existingObj.setUploadDate(taxDetail.getUploadDate());
+					existingObj.setUploadDate(tempDate);
 					session.saveOrUpdate(existingObj);
 				}else {
 					seller = (Seller) session.get(Seller.class, sellerId);
