@@ -3675,7 +3675,7 @@ public class OrderDaoImpl implements OrderDao {
 			consolidateReturn.setGrossProfit(grossProfit);
 
 			consolidatedOrder.setEossValue(eossValue);
-			consolidatedOrder.setQuantity(quantity);
+			//consolidatedOrder.setQuantity(quantity);
 			consolidatedOrder.setPr(grossPR);
 			consolidatedOrder.setPoPrice(totalReturnCharges);
 
