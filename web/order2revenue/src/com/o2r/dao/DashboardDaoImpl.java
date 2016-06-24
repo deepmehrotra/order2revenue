@@ -77,18 +77,20 @@ public class DashboardDaoImpl implements DashboardDao {
 			+ "op.dateOfPayment is NOT NULL and op.paymentId=ot.orderPayment_paymentId and ot.seller_Id=:sellerId";
 	private static final String orderCountForDurationQuery = "Select count(*) "
 			+ "from Order_Table ot where ot.shippedDate between :startDate AND :endDate and "
-			+ "(ot.poOrder =0 OR (ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL ))and ot.seller_Id=:sellerId";
+			+ "(ot.poOrder =0 OR (ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL )) and ot.seller_Id=:sellerId";
 	/*private static final String grossProfitForDurationQuery = "Select sum(grossProfit) from Order_Table ot where "
 			+ "ot.orderDate between :startDate AND :endDate and ot.seller_Id=:sellerId";
 	*/private static final String grossProfitForMPDurationQuery = "select sum((ot.pr-(prd.productPrice*ot.quantity)))"
 			+ " from order_table ot , Product prd where ot.productSkuCode=prd.productSkuCode "
 			+ "and ot.shippedDate between :startDate AND :endDate and "
-			+ "ot.poOrder =0 and ot.seller_Id=:sellerId";
+			+ "ot.poOrder =0 and prd.seller_id=ot.seller_Id "
+			+ "and ot.seller_Id=:sellerId";
 	private static final String grossProfitForMPReturnDurationQuery = "select sum(((ot.pr-(prd.productPrice*ot.quantity))/ot.quantity)"
 			+ "*orr.returnorrtoQty + orr.estimateddeduction) "
 			+ "from order_table ot , Product prd , orderreturn orr where ot.productSkuCode=prd.productSkuCode "
 			+ "and ot.orderReturnOrRTO_returnId=orr.returnId and orr.returnDate between :startDate AND :endDate "
-			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId";
+			+ "and ot.poOrder =0 and prd.seller_id=ot.seller_Id "
+			+ "and ot.seller_Id=:sellerId";
 	private static final String grossProfitPODurationQuery = "Select sum(ot.grossProfit) as grossProfit"
 			+ " from Order_Table ot where ot.shippedDate "
 			+ "between  :startDate AND :endDate and ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL "
@@ -98,7 +100,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			+ "between  :startDate AND :endDate and ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL "
 			+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId";
 	
-	private static final String returnNRPOMonthlyQuery = "Select sum(ort.estimateddeduction+ort.netNR) as returnCharges,"
+	private static final String returnNRPOMonthlyQuery = "Select sum(ort.netNR) as returnCharges,"
 			+ " sum(ort.returnorrtoQty) as quantity,Monthname(ort.returnDate) as month ,YEAR(ort.returnDate) from "
 			+ "Order_Table ot ,OrderReturn  ort where ort.returnDate between :startDate AND :endDate and "
 			+ "ort.returnId=ot.orderReturnOrRTO_returnId and ot.poOrder =1 and ot.consolidatedOrder_orderId is NULL and "
@@ -111,15 +113,17 @@ public class DashboardDaoImpl implements DashboardDao {
 			+ "order by YEAR(ort.returnDate), MONTH(ort.returnDate)";
 	private static final String grossProfitMPMonthlyQuery = "Select sum((ot.pr-(prd.productPrice*ot.quantity))) as grossProfit,"
 			+ "Monthname(ot.shippedDate) as month ,YEAR(ot.shippedDate) as year from Order_Table ot,Product prd where ot.shippedDate "
-			+ "between  :startDate AND :endDate and ot.productSkuCode=prd.productSkuCode and ot.poOrder =0 and"
-			+ " ot.seller_Id=:id GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)"
+			+ "between  :startDate AND :endDate and ot.productSkuCode=prd.productSkuCode and ot.poOrder =0 "
+			+ "and prd.seller_id=ot.seller_Id and"
+			+ " ot.seller_Id=:id GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate) "
 			+ "ORDER BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
 
 	private static final String grossProfitMPReturnMonthlyQuery = "Select sum(((ot.pr-(prd.productPrice*ot.quantity))/ot.quantity)*orr.returnorrtoQty + orr.estimateddeduction)"
 			+ ",Monthname(orr.returnDate) as month,YEAR(orr.returnDate) as year from "
 			+ "Order_Table ot,orderreturn orr,Product prd where orr.returnDate between "
 			+ ":startDate AND :endDate and ot.productSkuCode=prd.productSkuCode and ot.orderReturnOrRTO_returnId=orr.returnId"
-			+ " and ot.poOrder =0 and ot.seller_Id=:rtid "
+			+ " and ot.poOrder =0 "
+			+ "and prd.seller_id=ot.seller_Id and ot.seller_Id=:rtid "
 			+ "GROUP BY YEAR(orr.returnDate), MONTH(orr.returnDate)"
 			+ "ORDER BY YEAR(orr.returnDate), MONTH(orr.returnDate)";
 	private static final String grossProfitPOMonthlyQuery = "Select sum(ot.grossProfit) as grossProfit, "
@@ -1361,7 +1365,6 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
 				while (iterator1.hasNext()) {
-					System.out.println("Expense : row\n");
 					Object[] recordsRow = (Object[]) iterator1.next();					
 					if (recordsRow[0] != null && recordsRow[1] != null
 							&& recordsRow[2] != null && recordsRow[3] != null) {
@@ -1370,8 +1373,12 @@ public class DashboardDaoImpl implements DashboardDao {
 								+ "," + recordsRow[3].toString();
 						nrMAp.put(dateString,
 								Double.parseDouble(recordsRow[0].toString()));
+						System.out.println("dateString : "+dateString+"value :  "+recordsRow[0].toString());
 						quantityMAp.put(dateString,
 								Long.parseLong(recordsRow[1].toString()));
+						System.out.println("dateString : "+dateString+"value :  "+recordsRow[0].toString());
+						System.out.println("dateString : "+dateString+"value :  "+recordsRow[1].toString());
+						
 					}
 				}
 			}
@@ -1421,8 +1428,6 @@ public class DashboardDaoImpl implements DashboardDao {
 						if (recordsRow[0] != null && recordsRow[1] != null
 								&& recordsRow[2] != null
 								&& recordsRow[3] != null) {
-							System.out.println(" record length:"
-									+ recordsRow.length);
 							String dateString = recordsRow[2].toString()
 									.substring(0, 3)
 									+ ","
@@ -1431,37 +1436,62 @@ public class DashboardDaoImpl implements DashboardDao {
 									.parseDouble(recordsRow[0].toString()));
 							quantityMAp.put(dateString,
 									Long.parseLong(recordsRow[1].toString()));
+							System.out.println("MP dateString:"
+									+ dateString+" MP return Amount : "+recordsRow[0]+
+									" MP return qty : "+recordsRow[1]);
+							
 
 						}
 					}
 				}
 			}
+			System.out.println(" MP returnAMountMAp : "+returnAMountMAp+" MP quantityMAp : "+quantityMAp);
 			Iterator poIterator = resultsPO.iterator();
 			if (resultsPO != null) {
 				while (poIterator.hasNext()) {
 					if (resultsPO != null && resultsPO.size() != 0
 							&& resultsPO.get(0) != null) {
-						System.out.println("resultsPO : row\n");
 						Object[] recordsRow = (Object[]) poIterator.next();
 						if (recordsRow[0] != null && recordsRow[1] != null
 								&& recordsRow[2] != null
 								&& recordsRow[3] != null) {
-							System.out.println(" record length:"+ recordsRow.length);
 							String dateString = recordsRow[2].toString().substring(0, 3)+ "," + recordsRow[3].toString();
-							returnAMountMAp
+							System.out.println("PO dateString:"
+									+ dateString+" PO return Amount : "+recordsRow[0]+
+									" PO return qty : "+recordsRow[1]+" returnAMountMAp.get "
+									+returnAMountMAp.get(dateString)
+									+"add amount : "+Double
+									.parseDouble(recordsRow[0]
+											.toString()));
+							if(returnAMountMAp.containsKey(dateString))
+							returnAMountMAp.put(dateString, returnAMountMAp.get(dateString)+Double
+									.parseDouble(recordsRow[0]
+											.toString()));
+							else
+								returnAMountMAp.put(dateString, Double
+										.parseDouble(recordsRow[0]
+												.toString()));
+							/*returnAMountMAp
 									.put(dateString,
 											returnAMountMAp
 													.containsKey(dateString) ? returnAMountMAp
 													.get(dateString)
 													: 0 + Double
 															.parseDouble(recordsRow[0]
-																	.toString()));
+																	.toString()));*/
+							if(quantityMAp.containsKey(dateString))
 							quantityMAp
 									.put(dateString,
-											quantityMAp.containsKey(dateString) ? quantityMAp
-													.get(dateString) : 0 + Long
+											quantityMAp
+													.get(dateString) + Long
 													.parseLong(recordsRow[1]
 															.toString()));
+							else
+								quantityMAp
+								.put(dateString,Long
+												.parseLong(recordsRow[1]
+														.toString()));
+							System.out.println(" PO+MP returnAMountMAp : "+returnAMountMAp+"PO+ MP quantityMAp : "+quantityMAp);
 
 						}
 					}
