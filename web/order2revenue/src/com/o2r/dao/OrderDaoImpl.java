@@ -3671,12 +3671,14 @@ public class OrderDaoImpl implements OrderDao {
 					.setReturnOrRTOChargestoBeDeducted(totalReturnCharges);
 			consolidateReturn.setNetNR(netRate);
 			consolidateReturn.setTaxPOAmt(taxValue);
-			//consolidateReturn.setNetPR(grossPR);
+			consolidateReturn.setNetPR(grossPR);
 			consolidateReturn.setGrossProfit(grossProfit);
 
 			consolidatedOrder.setEossValue(eossValue);
+
 			//consolidatedOrder.setQuantity(quantity);
-			consolidatedOrder.setPr(grossPR);
+			//consolidatedOrder.setPr(grossPR);
+			//consolidatedOrder.setPr(grossPR);
 			consolidatedOrder.setPoPrice(totalReturnCharges);
 
 			consolidatedOrder.setOrderTax(new OrderTax());
