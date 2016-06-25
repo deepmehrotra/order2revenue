@@ -13,6 +13,7 @@
 <script src="/O2R/landing/js/modernizr.js"></script>
 <script src="/O2R/seller/js/jquery-2.1.1.js"></script>
 
+
 <style type="text/css">
 .progress {
 	display: block;
@@ -333,7 +334,7 @@
                         <li><a href="orderList.html"><span class="label">Order</span></a></li>
                         <li><a href="paymentUploadList.html"><span class="label">Payment</span></a></li>
                          <li><a href="poOrderList.html?value="><span class="label">PoList</span></a></li>
-                        <li><a href="#" onclick="onclickSideNavigation('RTO/Return')"><span class="label">Return</span></a></li>
+                        <li><a href="returnOrderList.html"><span class="label">Return</span></a></li>
                     </ul>
                 </nav> 
 	

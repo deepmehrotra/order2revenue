@@ -18,11 +18,13 @@
 	padding: 10px;
 	display: none;
 }
+
 </style>
 
 <script type="text/javascript">
 	$(document).ready(function(){
-	    $('#data_1 .input-group.date').datepicker({
+		
+	    $('#data_3 .input-group.date').datepicker({
 	            todayBtn: "linked",
 	            keyboardNavigation: false,
 	            forceParse: false,
@@ -50,6 +52,7 @@
 	               required: "Return Date is mandatory"
 	        }
 	     });
+	    
 	  
 	});
 	
@@ -102,8 +105,7 @@
 		<tbody>
 		
 					<c:if test="${!empty searchOrderList}">
-				<c:forEach items="${searchOrderList}" var="searchOrder"
-					varStatus="loop">
+				<c:forEach items="${searchOrderList}" var="searchOrder"	varStatus="loop">
 					<tr>
 						<td>${loop.index+1}</td>
 						<td>${searchOrder.pcName}</td>
@@ -120,23 +122,14 @@
 								onclick="setOrderID(${searchOrder.orderId},'${searchOrder.channelOrderID}','return')"
 								style='cursor: pointer;'>Mark Return</label></td>
 						</c:if>
-						<%-- <td><label
-							onclick="setOrderID(${searchOrder.orderId},'${searchOrder.channelOrderID}','payment')"
-							style='cursor: pointer;'>Mark Paid</label></td> --%>
-						<!-- <td class="tooltip-demo">
-                                    <a href="#"><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Delete Empty Category"></i></a></td>
-                     -->
 					</tr>
 				</c:forEach>
 			</c:if>
 		</tbody>
 	</table>
 </div>
-<!-- Code for Mark Return Popup -->
 
 <div class="col-sm-3">
-	<!-- <button type="button" class="btn btn-primary" data-toggle="modal"
-						data-target="#myModal22">View</button> -->
 	<form:form method="POST" action="saveReturnorRTO.html">
 		<div class="modal inmodal fade" id="myModal22" tabindex="-1"
 			role="dialog" aria-hidden="true">
@@ -168,15 +161,11 @@
 							<div class="col-sm-12">
 								<div class="mar-btm-20-oh">
 									<label class="col-sm-4 control-label">Return Date</label>
-									<div class="col-sm-8">
-										<div class="input-group date">
-											<form:input path=""
-												type="date" id="datefield" onchange="mydate();"
-												class="form-control" />
-											<form:input path="orderReturnOrRTO.returnDate"
-												id="datevalue" class="form-control" type="hidden"/>
+										<div class="col-sm-8" id="data_3">
+											<div class="input-group date"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+												<form:input path="orderReturnOrRTO.returnDate"  type="text" class="form-control" id="returnDate" ></form:input>
+											</div>
 										</div>
-									</div>
 								</div>
 							</div>
 							<br> <br> <br>
