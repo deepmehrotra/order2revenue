@@ -2201,7 +2201,7 @@ public class SaveContents {
 
 				if (entry.getCell(6) != null
 						&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
-					gatepass.setTaxAmt(Double.parseDouble(entry.getCell(6)
+					gatepass.setTaxPOAmt(Double.parseDouble(entry.getCell(6)
 							.toString()));
 				} else {
 					errorMessage.append(" Tax Amount is null ");

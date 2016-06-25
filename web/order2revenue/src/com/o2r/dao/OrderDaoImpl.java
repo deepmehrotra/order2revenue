@@ -3346,7 +3346,7 @@ public class OrderDaoImpl implements OrderDao {
 
 			consolidatedOrder.setPartnerCommission(partnerCommission);
 			consolidatedOrder.setDiscount(discount);
-			consolidatedOrder.getOrderTax().setTaxToReturn(taxSP);
+			consolidatedOrder.getOrderTax().setTaxSP(taxSP);
 
 			consolidatedOrder.setFinalStatus("In Process");
 			// Set Order Timeline
@@ -3499,6 +3499,9 @@ public class OrderDaoImpl implements OrderDao {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 
+			gatepass.setPartnerCommission(productConfig.getCommisionAmt() * gatepass.getQuantity());
+			gatepass.setTaxSPAmt(productConfig.getTaxSpAmt() * gatepass.getQuantity());
+			
 			double eossValue = 0;
 			if (gatepass.getPcName().equalsIgnoreCase(GlobalConstant.PCMYNTRA)) {
 				eossValue = (productConfig.getSuggestedPOPrice() * productConfig
@@ -3593,7 +3596,7 @@ public class OrderDaoImpl implements OrderDao {
 		double totalReturnCharges = 0;
 		double eossValue = 0;
 		double netRate = 0;
-		double taxValue = 0;
+		double taxPO = 0;
 		double grossPR = 0;
 		double grossProfit = 0;
 		double discount = 0;
@@ -3645,7 +3648,7 @@ public class OrderDaoImpl implements OrderDao {
 								.getDiscount()) / 100) * gatepass.getQuantity();
 					}
 					netRate += gatepass.getNetNR();
-					taxValue += (gatepass.getTaxAmt() * gatepass.getQuantity());
+					taxPO += (gatepass.getTaxPOAmt() * gatepass.getQuantity());
 					grossPR += gatepass.getNetPR();
 					grossProfit += gatepass.getGrossProfit();
 					partnerCommission += productConfig.getCommisionAmt()
@@ -3670,7 +3673,7 @@ public class OrderDaoImpl implements OrderDao {
 			consolidateReturn
 					.setReturnOrRTOChargestoBeDeducted(totalReturnCharges);
 			consolidateReturn.setNetNR(netRate);
-			consolidateReturn.setTaxPOAmt(taxValue);
+			consolidateReturn.setTaxPOAmt(taxPO);
 			consolidateReturn.setNetPR(grossPR);
 			consolidateReturn.setGrossProfit(grossProfit);
 
@@ -3682,12 +3685,12 @@ public class OrderDaoImpl implements OrderDao {
 			consolidatedOrder.setPoPrice(totalReturnCharges);
 
 			consolidatedOrder.setOrderTax(new OrderTax());
-			consolidatedOrder.getOrderTax().setTax(taxValue);
+			consolidatedOrder.getOrderTax().setTaxToReturn(taxPO);
+			consolidatedOrder.getOrderTax().setTaxSP(taxSP);
 
 			consolidatedOrder.setTotalAmountRecieved(netRate);
 			consolidatedOrder.setPartnerCommission(partnerCommission);
 			consolidatedOrder.setDiscount(discount);
-			consolidatedOrder.getOrderTax().setTaxToReturn(taxSP);
 			consolidatedOrder.setFinalStatus("In Process");
 			// Set Order Timeline
 			OrderTimeline timeline = new OrderTimeline();

@@ -53,6 +53,10 @@ public class OrderRTOorReturn {
 	private double netPR;
 	@Column
 	private double grossProfit;
+	@Column
+	private String inventoryType;
+	@Column
+	private int badReturnQty;
 	
 	@OneToMany(mappedBy="consolidatedReturn", cascade=CascadeType.ALL)  
 	private List<GatePass> gatepasses =new ArrayList<GatePass>();
@@ -202,6 +206,22 @@ public class OrderRTOorReturn {
 
 	public void setGatepasses(List<GatePass> gatepasses) {
 		this.gatepasses = gatepasses;
+	}
+
+	public String getInventoryType() {
+		return inventoryType;
+	}
+
+	public void setInventoryType(String inventoryType) {
+		this.inventoryType = inventoryType;
+	}
+
+	public int getBadReturnQty() {
+		return badReturnQty;
+	}
+
+	public void setBadReturnQty(int badReturnQty) {
+		this.badReturnQty = badReturnQty;
 	}
 
 }

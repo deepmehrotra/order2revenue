@@ -43,6 +43,8 @@ public class OrderTax {
 	private double taxToReturn;
 	@Column
 	private double netTax;
+	@Column
+	private double taxSP;
 
 	public String getTaxperiod() {
 		return taxperiod;
@@ -166,6 +168,14 @@ public class OrderTax {
 
 	public void setTdsonReturnAmt(double tdsonReturnAmt) {
 		this.tdsonReturnAmt = tdsonReturnAmt;
+	}
+
+	public double getTaxSP() {
+		return taxSP;
+	}
+
+	public void setTaxSP(double taxSP) {
+		this.taxSP = taxSP;
 	}
 
 }

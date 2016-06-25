@@ -1478,7 +1478,7 @@ public class ConverterClass {
 			double paymentDifference = partnerBusiness.getPaymentDifference();
 			double netTaxableSale = partnerBusiness.getNetSP();
 			double netActualSale = partnerBusiness.getNetPaymentResult() - partnerBusiness.getPaymentDifference();
-			double netPrSale = partnerBusiness.getNetPr() - partnerBusiness.getNetPr()*(partnerBusiness.getReturnQuantity()/partnerBusiness.getGrossSaleQuantity());
+			double netPrSale = partnerBusiness.getNetPr() - partnerBusiness.getNetPr()*(partnerBusiness.getReturnQuantity()/((partnerBusiness.getGrossSaleQuantity() == 0) ? 1 : partnerBusiness.getGrossSaleQuantity()));
 			double netTaxToBePaid = partnerBusiness.getNetTaxToBePaid();
 			double netEossDiscountPaid = partnerBusiness.getNetEossValue();
 			double netRate = partnerBusiness.getGrossNetRate();

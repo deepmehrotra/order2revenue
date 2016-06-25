@@ -34,7 +34,9 @@ public class GatePass {
 	@Column
 	private double returnRate;
 	@Column
-	private double taxAmt;
+	private double taxSPAmt;
+	@Column
+	private double partnerCommission;
 	@Column
 	private double returnCharges;
 	@Column
@@ -106,12 +108,12 @@ public class GatePass {
 		this.quantity = quantity;
 	}
 
-	public double getTaxAmt() {
-		return taxAmt;
+	public double getTaxSPAmt() {
+		return taxSPAmt;
 	}
 
-	public void setTaxAmt(double taxAmt) {
-		this.taxAmt = taxAmt;
+	public void setTaxSPAmt(double taxSPAmt) {
+		this.taxSPAmt = taxSPAmt;
 	}
 
 	public double getReturnCharges() {
@@ -216,6 +218,14 @@ public class GatePass {
 
 	public void setPcName(String pcName) {
 		this.pcName = pcName;
+	}
+
+	public double getPartnerCommission() {
+		return partnerCommission;
+	}
+
+	public void setPartnerCommission(double partnerCommission) {
+		this.partnerCommission = partnerCommission;
 	}
 
 	/*
