@@ -165,7 +165,7 @@ public class ReturnOrderController {
 		}
 		model.put("searchOrderList", orderlist);
 		log.info("$$$ searchReturnOrder Ends : ReturnOrderController $$$");
-		return new ModelAndView("dailyactivities/returnOrderTable", model);
+		return new ModelAndView("dailyactivities/returnOrRTOList", model);
 	}
 
 	/*

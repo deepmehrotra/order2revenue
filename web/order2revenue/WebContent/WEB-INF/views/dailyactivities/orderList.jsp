@@ -8,14 +8,9 @@
 <head>
 <jsp:include page="../globalcsslinks.jsp"></jsp:include>
 <!-- Data Tables -->
-<link href="/O2R/seller/css/plugins/dataTables/dataTables.bootstrap.css"
-	rel="stylesheet">
-<link
-	href="/O2R/seller/css/plugins/dataTables/dataTables.responsive.css"
-	rel="stylesheet">
-<link
-	href="/O2R/seller/css/plugins/dataTables/dataTables.tableTools.min.css"
-	rel="stylesheet">
+<link href="/O2R/seller/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+<link href="/O2R/seller/css/plugins/dataTables/dataTables.responsive.css" rel="stylesheet">
+<link href="/O2R/seller/css/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet">
 <script type="text/javascript">
     function onclickNavigateOrder(value,id) {
     	var targeturl="";
@@ -225,7 +220,7 @@
 			<jsp:include page="../globalfooter.jsp"></jsp:include>
 		</div>
 	</div>
-	</div>
+
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
 
 	<!-- Scripts ro Table -->
@@ -235,10 +230,8 @@
 	<!-- Data Tables -->
 	<script src="/O2R/seller/js/plugins/dataTables/jquery.dataTables.js"></script>
 	<script src="/O2R/seller/js/plugins/dataTables/dataTables.bootstrap.js"></script>
-	<script
-		src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
-	<script
-		src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
+	<script	src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
+	<script	src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
 
 	<script>
     $(document).ready(function(){

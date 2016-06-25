@@ -7,7 +7,7 @@
 <script src="/O2R/seller/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
  <!-- Jquery Validate -->
-    <script src="/O2R/seller/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="/O2R/seller/js/plugins/validate/jquery.validate.min.js"></script>
 <!-- Custom and plugin javascript -->
 <script src="/O2R/seller/js/inspinia.js"></script>
 <script src="/O2R/seller/js/plugins/pace/pace.min.js"></script>

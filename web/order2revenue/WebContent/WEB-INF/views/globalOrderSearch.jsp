@@ -279,6 +279,7 @@
 
 	<jsp:include page="globaljslinks.jsp"></jsp:include>
 	<script type="text/javascript">
+	
 $(document).ready(function(){
     $('#data_1 .input-group.date').datepicker({
     	    todayBtn: "linked",
