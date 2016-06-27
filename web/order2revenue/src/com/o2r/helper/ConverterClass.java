@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
@@ -26,7 +28,10 @@ import com.o2r.bean.DebtorsGraph1;
 import com.o2r.bean.EventsBean;
 import com.o2r.bean.ExpenseBean;
 import com.o2r.bean.ExpenseCategoryBean;
+import com.o2r.bean.ExpensesDetails;
 import com.o2r.bean.ManualChargesBean;
+import com.o2r.bean.NetPaymentResult;
+import com.o2r.bean.NetProfitabilityST;
 import com.o2r.bean.OrderBean;
 import com.o2r.bean.OrderPaymentBean;
 import com.o2r.bean.OrderRTOorReturnBean;
@@ -2396,5 +2401,87 @@ public class ConverterClass {
 			return "0" + i;
 		return i + "";
 	}
+
+	public static List<NetProfitabilityST> combineForShortTable(
+			List<YearlyStockList> combinedStockList,
+			List<NetPaymentResult> nprList,
+			List<ChannelNR> nrList,
+			List<ExpensesDetails> expensesCatList, List<String> catList) {
+		Map<String, NetProfitabilityST> npMap = new HashMap<String, NetProfitabilityST>();
+		List<NetProfitabilityST> npList = new ArrayList<NetProfitabilityST>();
+		
+		int counter = catList.size(); 
+		for(YearlyStockList stock: combinedStockList){
+			NetProfitabilityST npST = new NetProfitabilityST();
+			String key = stock.getMonthStr(); 
+			npST.setKey(key);
+			npST.setOpenStock(stock.getOpenStockValuation());
+			npST.setCloseStock(stock.getCloseStockValuation());
+			npST.setCatExpenses(getDoubleList(counter));
+			npST.setNetProfit(stock.getOpenStockValuation() - stock.getCloseStockValuation());
+			npMap.put(key, npST);
+		}
+		for(ChannelNR netRate: nrList){
+			String key = netRate.getKey();
+			NetProfitabilityST npST = npMap.get(key);
+			if(npST == null){
+				npST = new NetProfitabilityST();
+				npST.setKey(key);
+				npST.setCatExpenses(getDoubleList(counter));
+			}
+			npST.setNetRate(npST.getNpr() + netRate.getTotalNR());
+			npST.setNetProfit(npST.getNetProfit() + npST.getNetRate());
+			npMap.put(key, npST);
+		}
+		for(NetPaymentResult npr: nprList){
+			String key = npr.getKey();
+			NetProfitabilityST npST = npMap.get(key);
+			if(npST == null){
+				npST = new NetProfitabilityST();
+				npST.setKey(key);
+				npST.setCatExpenses(getDoubleList(counter));
+			}
+			npST.setNpr(npST.getNpr() + npr.getNetPaymentResult());
+			npST.setNetProfit(npST.getNetProfit() + npST.getNpr());
+			npMap.put(key, npST);
+		}
+		for(ExpensesDetails expenseCat: expensesCatList){
+			String key = expenseCat.getKey();
+			NetProfitabilityST npST = npMap.get(key);
+			if(npST == null){
+				npST = new NetProfitabilityST();
+				npST.setKey(key);
+			}
+			List<Double> expenseList = npST.getCatExpenses();
+			for(int index =0; index<catList.size(); index++){
+				String category = catList.get(index);
+				if(category.equals(expenseCat.getExpenseCatName())){
+					double expense = expenseCat.getAmount();
+					expenseList.set(index, expense);
+					npST.setNetProfit(npST.getNetProfit() - expense);
+					npST.setTotalExpenses(npST.getTotalExpenses() + expense);
+					break;
+				}
+			}
+			npMap.put(key, npST);
+		}
+		Iterator entries = npMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, NetProfitabilityST> thisEntry = (Entry<String, NetProfitabilityST>) entries
+					.next();
+			NetProfitabilityST stock = thisEntry.getValue();
+			npList.add(stock);
+		}
+		return npList;
+	}
+	
+	public static List<Double> getDoubleList(int counter){
+		List<Double> doubleList = new ArrayList<Double>();
+		for(int i=0; i<counter; i++){
+			doubleList.add(new Double(0));
+		}
+		return doubleList;
+	}
+
 
 }

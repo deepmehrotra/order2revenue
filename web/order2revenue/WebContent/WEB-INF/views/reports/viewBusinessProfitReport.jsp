@@ -137,16 +137,20 @@
 															<thead>
 																<tr>
 																	<th>Month</th>
+																	<th>Net Profit</th>
 																	<th>Net Expenses</th>
+																	<th>Net NPR</th>
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty expensesList}">
-																	<c:forEach items="${expensesList}"
+																<c:if test="${!empty shortTable}">
+																	<c:forEach items="${shortTable}"
 																		var="partnerDto" varStatus="loop">
 																		<tr>
 																			<td>${partnerDto.key}</td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.amount}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netProfit}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.totalExpenses}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.npr}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -165,6 +169,8 @@
 												</div>
 											</div>
 										</div>
+									</div>
+									<div id="tab-2" class="tab-pane col-sm-12">	
 										<div class="row">
 											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
@@ -173,16 +179,28 @@
 															<thead>
 																<tr>
 																	<th>Month</th>
-																	<th>Net NPR</th>
+																	<th>Opening Stock</th>
+																	<c:forEach items="${catList}" var="cat" varStatus="loop">
+																		<th>${cat}</th>
+																	</c:forEach>
+																	<th>Closing Stock</th>
+																	<th>Net N/R Sales</th>
+																	<th>Net Profit</th>
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty nprList}">
-																	<c:forEach items="${nprList}"
+																<c:if test="${!empty shortTable}">
+																	<c:forEach items="${shortTable}"
 																		var="partnerDto" varStatus="loop">
 																		<tr>
 																			<td>${partnerDto.key}</td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPaymentResult}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.openStock}" /></td>
+																			<c:forEach items="${partnerDto.catExpenses}" var="expense" varStatus="loop">
+																				<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${expense}" /></td>
+																			</c:forEach>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.closeStock}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.npr}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netProfit}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -190,21 +208,6 @@
 														</table>
 													</div>
 												</div>
-											</div>
-										</div>	
-										<div class="row">	
-											<div class="col-lg-12">
-												<div class="float-e-margins graph-brd">
-													<div class="ibox-content">
-														<div id="stacked-chart-4"></div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div id="tab-2" class="tab-pane col-sm-12">	
-										<div class="row">
-											<div class="col-lg-12">
 											</div>
 										</div>
 									</div>		
@@ -279,28 +282,18 @@
 	stackChart(divId, yAxisText, dataArr);		  
 	
 	var dataArr = [];
-	var yAxisText = 'Net Expenses';
+	var yAxisText = 'Net Profit vs Net Expenses vs Net NPR';
 	var divId = "#stacked-chart-3";
-	var xAxisCategories = ['Net Expenses'];
-	<c:forEach items="${expensesList}" var="partnerDto" varStatus="loop">
+	var xAxisCategories = ['Net Profit', 'Net Expenses', 'Net NPR'];
+	<c:forEach items="${shortTable}" var="partnerDto" varStatus="loop">
 		var data = {};
 		data.name = '${partnerDto.key}';
-		data.data = [parseFloat(parseFloat('${partnerDto.amount}').toFixed(2))];
+		data.data = [parseFloat(parseFloat('${partnerDto.netProfit}').toFixed(2)),
+		             parseFloat(parseFloat('${partnerDto.totalExpenses}').toFixed(2)),
+		             parseFloat(parseFloat('${partnerDto.npr}').toFixed(2))];
 		dataArr.push(data);
 	</c:forEach>
-	stackChart(divId, yAxisText, dataArr);
-	
-	var dataArr = [];
-	var yAxisText = 'Net NPR';
-	var divId = "#stacked-chart-4";
-	var xAxisCategories = ['Net NPR'];
-	<c:forEach items="${nprList}" var="partnerDto" varStatus="loop">
-		var data = {};
-		data.name = '${partnerDto.key}';
-		data.data = [parseFloat(parseFloat('${partnerDto.netPaymentResult}').toFixed(2))];
-		dataArr.push(data);
-	</c:forEach>
-	stackChart(divId, yAxisText, dataArr);		  
+	stackChart(divId, yAxisText, dataArr);	  
 
 </script>
 	<style>

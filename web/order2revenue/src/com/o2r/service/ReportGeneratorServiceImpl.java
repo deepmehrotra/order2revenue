@@ -208,6 +208,12 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 		return reportGeneratorDao.fetchNPR(sellerId, startDate, endDate);
 	}
 
+	@Override
+	public List<ChannelNR> fetchNetRate(int sellerId, Date startDate,
+			Date endDate) {
+		return reportGeneratorDao.fetchNetRate(sellerId, startDate, endDate);
+	}
+
 	/*
 	 * 
 	 * @Override

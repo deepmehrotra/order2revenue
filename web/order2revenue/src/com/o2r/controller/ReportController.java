@@ -36,6 +36,7 @@ import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.DebtorsGraph1;
 import com.o2r.bean.ExpensesDetails;
 import com.o2r.bean.NetPaymentResult;
+import com.o2r.bean.NetProfitabilityST;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
 import com.o2r.bean.YearlyStockList;
@@ -158,6 +159,18 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			model.put("expensesList", expensesList);
 			List<NetPaymentResult> nprList = reportGeneratorService.fetchNPR(sellerId, startDate, endDate);
 			model.put("nprList", nprList);
+			List<ChannelNR> nrList = reportGeneratorService.fetchNetRate(sellerId, startDate, endDate);
+			model.put("nrList", nrList);
+			List<ExpensesDetails> expensesCatList = expenseService.getExpenseByCatYear(sellerId, startDate, endDate);
+			Set<String> categorySet = new HashSet<String>();
+			for(ExpensesDetails expenseCat: expensesCatList){
+				categorySet.add(expenseCat.getExpenseCatName());
+			}
+			List<String> catList = new ArrayList<>();
+			catList.addAll(categorySet);
+			List<NetProfitabilityST> npList = ConverterClass.combineForShortTable(combinedStockList, nprList, nrList, expensesCatList, catList);
+			model.put("shortTable", npList);
+			model.put("catList", catList);
 			return new ModelAndView("reports/viewBusinessProfitReport", model);
 			
 		} catch (Exception ex) {

@@ -1865,6 +1865,83 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		return nprList;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChannelNR> fetchNetRate(int sellerId, Date startDate, Date endDate) {
+		List<ChannelNR> netRateList = new ArrayList<ChannelNR>();
+		Map<String, ChannelNR> netRateMap = new HashMap<String, ChannelNR>();
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		
+		String orderQueryStr = "select concat(monthname(shippedDate), ' ', year(shippedDate)) as Month, " +
+				"sum(netRate) from order_table where shippedDate between :startDate and :endDate " +
+				"and seller_id = :sellerId and (poOrder = 1 OR (poOrder = 1 and consolidatedOrder_orderId is null)) group by Month";
+		Query orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		List<Object[]> orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelNR netRate = new ChannelNR();
+			netRate.setKey(key);
+			netRate.setTotalNR(Double.parseDouble(order[1].toString()));
+			netRateMap.put(key, netRate);
+		}
+		
+		orderQueryStr = "select concat(monthname(orr.returnDate), ' ', year(orr.returnDate)) as Month, " +
+				"sum(ot.grossNetRate*orr.returnorrtoQty) as NetRate from orderreturn orr, order_table ot where " +
+				"orr.returnId = ot.orderReturnOrRTO_returnId and (poOrder = 0 OR ot.poOrder = 1 and ot.consolidatedOrder_orderId is null) " +
+				"and orr.returnDate between :startDate and :endDate and ot.seller_id = :sellerId group by Month";
+		orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelNR netRate = netRateMap.get(key);
+			if(netRate == null){
+				netRate = new ChannelNR();
+				netRate.setKey(key);
+			}
+			double retNetRate = Double.parseDouble(order[1].toString());
+			netRate.setTotalNR(netRate.getTotalNR() - retNetRate);
+			netRateMap.put(key, netRate);
+		}
+		
+		orderQueryStr = "select concat(monthname(orr.returnDate), ' ', year(orr.returnDate)) as Month, " +
+				"sum(orr.netNR) as NetRate from orderreturn orr, order_table ot where " +
+				"orr.returnId = ot.orderReturnOrRTO_returnId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null " +
+				"and orr.returnDate between :startDate and :endDate and ot.seller_id = :sellerId group by Month";
+		orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			ChannelNR netRate = netRateMap.get(key);
+			if(netRate == null){
+				netRate = new ChannelNR();
+				netRate.setKey(key);
+			}
+			double retNetRate = Double.parseDouble(order[1].toString());
+			netRate.setTotalNR(netRate.getTotalNR() - retNetRate);
+			netRateMap.put(key, netRate);
+		}
+		
+		Iterator entries = netRateMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, ChannelNR> thisEntry = (Entry<String, ChannelNR>) entries
+					.next();
+			ChannelNR netRate = thisEntry.getValue();
+			netRateList.add(netRate);
+		}
+		
+		return netRateList;
+	}
+	
 	public List<Double> getStockList(){
 		List<Double> stockList = new ArrayList<Double>();
 		for(int i=0; i<12; i++){

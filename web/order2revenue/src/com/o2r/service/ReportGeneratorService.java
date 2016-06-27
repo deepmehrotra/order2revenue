@@ -80,4 +80,6 @@ public interface ReportGeneratorService {
 
 	public List<NetPaymentResult> fetchNPR(int sellerId, Date startDate,
 			Date endDate);
+
+	public List<ChannelNR> fetchNetRate(int sellerId, Date startDate, Date endDate);
 }

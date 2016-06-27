@@ -66,6 +66,8 @@ public interface ReportsGeneratorDao {
 
 	public List<NetPaymentResult> fetchNPR(int sellerId, Date startDate, Date endDate);
 
+	public List<ChannelNR> fetchNetRate(int sellerId, Date startDate, Date endDate);
+
 	/*public List<UploadReport> listUploadReport() throws CustomException;
 
 	public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
