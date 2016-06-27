@@ -1414,42 +1414,48 @@ public class SaveContents {
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				orderReturn = new OrderRTOorReturn();				
 				
+				String criteria="";
+				String column="";
 				String id = null;
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
-					id = entry.getCell(0).toString();
-					orderlist = orderService.findOrders("channelOrderID", entry
-							.getCell(0).toString(), sellerId, false, false);
-					if (orderlist != null && orderlist.size() != 0) {
-
-						log.debug(" Found match for channel order id");
-						if (orderlist.get(0).getOrderReturnOrRTO() != null
-								&& orderlist.get(0).getOrderReturnOrRTO()
-										.getReturnDate() == null)
-							order.setChannelOrderID(entry.getCell(0).toString());
-						else {
+					
+					criteria=entry.getCell(0).toString();
+					if(criteria.equalsIgnoreCase("channelOrderId")){
+						column="channelOrderID";
+					}else if(criteria.equalsIgnoreCase("AWB")){
+						column="awbNum";
+					}else if(criteria.equalsIgnoreCase("PIreference")){
+						column="PIreferenceNo";
+					}else if(criteria.equalsIgnoreCase("suborderId")){
+						column="subOrderID";
+					}else if(criteria.equalsIgnoreCase("invoiceId")){
+						column="invoiceID";
+					}		
+					if (entry.getCell(1) != null
+						&& StringUtils.isNotBlank(entry.getCell(1).toString()) && column != "") {
+						
+						orderlist = orderService.findOrders(column, entry
+								.getCell(1).toString(), sellerId, false, false);
+						if(orderlist != null && orderlist.size() != 0){
+							if(orderlist.size() == 1){
+								order.setChannelOrderID(orderlist.get(0)
+										.getChannelOrderID());
+								id=order.getChannelOrderID();
+							}else{
+								validaterow = false;
+								errorMessage.append("Many Orders With "+criteria);
+							}
+							
+						}else{
 							validaterow = false;
-							errorMessage
-									.append("Return already recieved for order");
+							errorMessage.append("Order doesnt exist");
 						}
-					} else {
+					}else{
 						validaterow = false;
-						errorMessage.append("Order Id doesnt exist");
-					}
-				} else if (entry.getCell(1) != null
-						&& StringUtils.isNotBlank(entry.getCell(1).toString())) {
-					id = entry.getCell(1).toString();
-					orderlist = orderService.findOrders("subOrderID", entry
-							.getCell(1).toString(), sellerId, false, false);
-					if (orderlist != null && orderlist.size() != 0) {
-						log.debug(" Found match for sub order id");
-						order.setChannelOrderID(orderlist.get(0)
-								.getChannelOrderID());
-					} else {
-						validaterow = false;
-						errorMessage.append("Sub Order Id doesnt exist");
-					}
-				}
+						errorMessage.append("Invalid Criteria or Value !");
+					}		
+				}	
 				if (id != null) {
 					log.debug(" Order list in return : " + orderlist);
 					if (orderlist != null && orderlist.size() != 0) {
@@ -1554,7 +1560,7 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "OrderReturnReport", 9, errorSet,
+			downloadUploadReportXLS(offices, "OrderReturnReport", 11, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			e.printStackTrace();
