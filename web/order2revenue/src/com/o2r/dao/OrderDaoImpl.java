@@ -985,6 +985,7 @@ public class OrderDaoImpl implements OrderDao {
 						orderReturn.getReturnDate());
 				order.getOrderReturnOrRTO().setReturnOrRTOId(
 						orderReturn.getReturnOrRTOId());
+				order.getOrderReturnOrRTO().setBadReturnQty(orderReturn.getBadReturnQty());
 				
 				order.getOrderReturnOrRTO().setReturnOrRTOreason(
 						orderReturn.getReturnOrRTOreason());

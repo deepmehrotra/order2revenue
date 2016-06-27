@@ -1412,12 +1412,8 @@ public class SaveContents {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
-				orderReturn = new OrderRTOorReturn();
-				log.debug(entry.getCell(0));
-				log.debug(entry.getCell(1));
-				log.debug(entry.getCell(2));
-				log.debug(entry.getCell(3));
-				log.debug(entry.getCell(5));
+				orderReturn = new OrderRTOorReturn();				
+				
 				String id = null;
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
@@ -1533,15 +1529,15 @@ public class SaveContents {
 									.toString())) {
 						orderReturn.setCancelType(entry.getCell(9).toString());
 					}
+					if (entry.getCell(10) != null
+							&& StringUtils.isNotBlank(entry.getCell(10)
+									.toString())) {						
+						orderReturn.setInventoryType(entry.getCell(10).toString());
+					}
 					if (entry.getCell(11) != null
 							&& StringUtils.isNotBlank(entry.getCell(11)
-									.toString())) {
-						orderReturn.setInventoryType(entry.getCell(11).toString());
-					}
-					if (entry.getCell(12) != null
-							&& StringUtils.isNotBlank(entry.getCell(12)
-									.toString())) {
-						orderReturn.setBadReturnQty((int) Float.parseFloat(entry.getCell(12).toString()));;
+									.toString())) {						
+						orderReturn.setBadReturnQty((int) Float.parseFloat(entry.getCell(11).toString()));;
 					}
 					
 				} else {
