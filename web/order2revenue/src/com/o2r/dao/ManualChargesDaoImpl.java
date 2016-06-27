@@ -89,9 +89,12 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 		log.info("*** ManualCharges between selected date range");
 		List<ManualCharges> manualCharges = listManualCharges(sellerId);
 		List<ManualCharges> filteredList = new ArrayList<ManualCharges>();
-		for(ManualCharges manualCharge: manualCharges){
-			if(manualCharge.getDateOfPayment().after(startDate) && manualCharge.getDateOfPayment().before(endDate))
-				filteredList.add(manualCharge);
+
+		if(manualCharges!=null&&manualCharges.size()!=0){
+			for(ManualCharges manualCharge: manualCharges){
+				if(manualCharge.getDateOfPayment().after(startDate) && manualCharge.getDateOfPayment().before(endDate))
+					filteredList.add(manualCharge);
+			}
 		}
 		log.info("*** ManualCharges between selected date range");
 		return filteredList;

@@ -256,8 +256,8 @@
 																	<th colspan="3" style="text-align: center;">Net Sale</th>
 																	<th rowspan="2">Net Tax Liability</th>
 																	<th rowspan="2">Sum of Net P/R</th>
-																	<th rowspan="2">Sum of NPR</th>
-																	<th rowspan="2">Sum of Net Payment Difference</th>
+																	<!-- <th rowspan="2">Sum of NPR</th>
+																	<th rowspan="2">Sum of Net Payment Difference</th> -->
 																</tr>
 																<tr>
 																	<th>N/R Amount</th>
@@ -294,8 +294,8 @@
 																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${partnerDto.netQty}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netTaxLiability}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPr}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPaymentResult}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netToBeReceived}" /></td>
+																			<%-- <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPaymentResult}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netToBeReceived}" /></td> --%>
 																		</tr>
 																	</c:forEach>
 																</c:if>

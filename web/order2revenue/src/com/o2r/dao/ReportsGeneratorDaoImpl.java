@@ -894,13 +894,19 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		double saleRetSpAmount = 0;
 		channelReport.setGrossProfit(grossProfit);
 		channelReport.setGrossQty(grossSaleQty);
-		if(channelReport.isPoOrder())
-			channelReport.setGrossNrAmount(currOrder.getNetRate());
-		else
-			channelReport.setGrossNrAmount(grossNrAmount*grossSaleQty);
-		channelReport.setGrossSpAmount(grossSpAmount);
-
+		
 		OrderRTOorReturn currOrderReturn = currOrder.getOrderReturnOrRTO();
+		
+		if(channelReport.isPoOrder()) {
+			channelReport.setGrossNrAmount(currOrder.getNetRate());
+			if(currOrderReturn == null){
+				channelReport.setGrossSpAmount(currOrder.getPoPrice());
+			}
+		} else {
+			channelReport.setGrossNrAmount(grossNrAmount*grossSaleQty);
+			channelReport.setGrossSpAmount(grossSpAmount);
+		}
+		
 		double additionalCharges = 0; 
 		if(currOrderReturn != null){
 			additionalCharges = currOrderReturn.getReturnOrRTOChargestoBeDeducted();
@@ -911,6 +917,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			// Only for PO Order
 			if(channelReport.isPoOrder()){
 				saleRetNrAmount = currOrderReturn.getNetNR();
+				saleRetSpAmount = additionalCharges;
+				additionalCharges = 0;
 				channelReport.setReturnId(currOrderReturn.getReturnOrRTOId());
 			}
 		}
@@ -918,9 +926,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		channelReport.setNetPr(netPr);	
 		// MP/PO Order conditions
 		if(channelReport.isPoOrder()){
-			saleRetSpAmount = grossSpAmount;
-			if(grossSaleQty != 0)
-				channelReport.setPr(orderPr * saleRetQty/grossSaleQty);
+			//saleRetSpAmount = grossSpAmount;
+			if(currOrderReturn != null) {
+				channelReport.setNetPr(-currOrder.getPr());
+				channelReport.setPr(-currOrder.getPr());
+			} else {
+				channelReport.setNetPr(currOrder.getPr());
+				channelReport.setPr(currOrder.getPr());
+			}
+			/*if(grossSaleQty != 0)
+				channelReport.setPr(orderPr * saleRetQty/grossSaleQty);*/
 		} else {
 			saleRetNrAmount = grossNrAmount*saleRetQty;
 			if(grossSaleQty != 0)
@@ -940,12 +955,25 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		double netSpAmount = grossSpAmount - saleRetSpAmount;
 		channelReport.setSaleRetVsGrossSale(saleRetVsGrossSale);
 		channelReport.setNetQty(netQty);
-		channelReport.setNetNrAmount(netNrAmount);
-		channelReport.setNetSpAmount(netSpAmount);
+		if(channelReport.isPoOrder()){
+			channelReport.setNetNrAmount(channelReport.getGrossNrAmount() - channelReport.getSaleRetNrAmount());
+			channelReport.setNetSpAmount(channelReport.getGrossSpAmount() - channelReport.getSaleRetSpAmount());
+		} else {
+			channelReport.setNetNrAmount(netNrAmount);
+			channelReport.setNetSpAmount(netSpAmount);
+		}
 		
 		double taxCatPercent = 0;
+		double netTaxLiability = 0;
 		OrderTax currOrderTax = currOrder.getOrderTax();
 		if(currOrderTax != null){
+			if(channelReport.isPoOrder()){
+				if(currOrderReturn != null) {
+					netTaxLiability = - currOrderTax.getTaxToReturn();
+				} else {
+					netTaxLiability = currOrderTax.getTax();
+				}
+			} 
 			String taxCategory = currOrderTax.getTaxCategtory();
 			channelReport.setTaxCategory(taxCategory);
 			if(StringUtils.isNotBlank(taxCategory)){
@@ -957,7 +985,6 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				}
 			}
 		}
-		double netTaxLiability = 0;
 		if(taxCatPercent != 0)
 			netTaxLiability = netSpAmount - netSpAmount*(100/(100 + taxCatPercent));
 		channelReport.setNetTaxLiability(netTaxLiability);
