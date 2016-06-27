@@ -917,6 +917,8 @@ public class ConverterClass {
 			orderReturn.setTaxPOAmt(bean.getTaxPOAmt());
 			orderReturn.setNetPR(bean.getNetPR());
 			orderReturn.setGrossProfit(bean.getGrossProfit());
+			orderReturn.setBadReturnQty(bean.getBadReturnQty());
+			orderReturn.setInventoryType(bean.getInventoryType());
 		}
 		return orderReturn;
 	}
@@ -943,6 +945,8 @@ public class ConverterClass {
 			orderReturn.setTaxPOAmt(bean.getTaxPOAmt());
 			orderReturn.setNetPR(bean.getNetPR());
 			orderReturn.setGrossProfit(bean.getGrossProfit());
+			orderReturn.setBadReturnQty(bean.getBadReturnQty());
+			orderReturn.setInventoryType(bean.getInventoryType());
 		}
 		return orderReturn;
 	}

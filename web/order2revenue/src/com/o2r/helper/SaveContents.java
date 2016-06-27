@@ -1533,6 +1533,17 @@ public class SaveContents {
 									.toString())) {
 						orderReturn.setCancelType(entry.getCell(9).toString());
 					}
+					if (entry.getCell(11) != null
+							&& StringUtils.isNotBlank(entry.getCell(11)
+									.toString())) {
+						orderReturn.setInventoryType(entry.getCell(11).toString());
+					}
+					if (entry.getCell(12) != null
+							&& StringUtils.isNotBlank(entry.getCell(12)
+									.toString())) {
+						orderReturn.setBadReturnQty((int) Float.parseFloat(entry.getCell(12).toString()));;
+					}
+					
 				} else {
 					validaterow = false;
 					errorMessage
