@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
@@ -16,6 +17,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.bean.ExpensesDetails;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.ExpenseCategory;
@@ -422,5 +424,70 @@ public class ExpenseDaoImpl implements ExpenseDao {
 	public ExpenseCategory getExpenseByName(String expname) {
 		return null;
 	}
+	
+	@Override
+	public List<ExpensesDetails> getExpenseByYear(int sellerId, Date startDate, Date endDate)throws CustomException {
+		
+		log.info("*** getExpenseByDate start ***");
+		List<ExpensesDetails> expenseDetailsList = new ArrayList<ExpensesDetails>();
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			String queryStr = "SELECT concat(monthname(expenseDate), ' ', year(expenseDate)) as Month, sum(amount) " +
+					"FROM o2rschema.expenses where expenseDate between :startDate and :endDate and sellerId=:sellerId group by Month";
+			Query query = session.createSQLQuery(queryStr)
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			List<Object[]> expenselist = query.list();
+			for(Object[] expense: expenselist){
+				ExpensesDetails expensesDetails = new ExpensesDetails();
+				expensesDetails.setKey(expense[0].toString());
+				expensesDetails.setAmount(Double.parseDouble(expense[1].toString()));
+				expenseDetailsList.add(expensesDetails);
+			}
 
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
+			throw new CustomException(GlobalConstant.getExpenseByDateError, new Date(), 3,GlobalConstant.getExpenseByDateErrorCode, e);
+		}
+		log.info("*** getExpenseByDate exit ***");
+		return expenseDetailsList;
+	}
+
+	@Override
+	public List<ExpensesDetails> getExpenseByCatYear(int sellerId, Date startDate, Date endDate)throws CustomException {
+		
+		log.info("*** getExpenseByDate start ***");
+		List<ExpensesDetails> expenseDetailsList = new ArrayList<ExpensesDetails>();
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			String queryStr = "SELECT concat(monthname(expenseDate), ' ', year(expenseDate)) as Month, sum(amount), expenseCatName " +
+					"FROM o2rschema.expenses where expenseDate between :startDate and :endDate and sellerId=:sellerId group by Month, expenseCatName";
+			Query query = session.createSQLQuery(queryStr)
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			List<Object[]> expenselist = query.list();
+			for(Object[] expense: expenselist){
+				ExpensesDetails expensesDetails = new ExpensesDetails();
+				expensesDetails.setKey(expense[0].toString());
+				expensesDetails.setAmount(Double.parseDouble(expense[1].toString()));
+				expensesDetails.setExpenseCatName(expense[2].toString());
+				expenseDetailsList.add(expensesDetails);
+			}
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
+			throw new CustomException(GlobalConstant.getExpenseByDateError, new Date(), 3,GlobalConstant.getExpenseByDateErrorCode, e);
+		}
+		log.info("*** getExpenseByDate exit ***");
+		return expenseDetailsList;
+	}
 }

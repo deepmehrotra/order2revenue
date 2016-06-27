@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.PartnerReportDetails;
+import com.o2r.bean.YearlyStockList;
 import com.o2r.helper.FillManager;
 import com.o2r.helper.Layouter;
 import com.o2r.helper.Writer;
@@ -186,6 +187,40 @@ public class ReportDownloadService {
 			case "categoryWiseSaleReport": fileName = "Category_Wise_Sale_Report.xls";break;
 			case "orderwiseGPReport": fileName = "Orderwise_GP_Report.xls";break;
 			case "paymentsReceievedReport": fileName = "Total_Payments_Received_Report.xls";break;
+			default: break;
+		}
+		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
+		// Make sure to set the correct content type
+		response.setContentType("application/vnd.ms-excel");
+		
+		//7. Write to the output stream
+		Writer.write(response, worksheet,fileName);
+	}
+	
+	public void downloadRevenueReport(HttpServletResponse response , List<YearlyStockList> partnerlist, 
+			String[] headers, String reportName) throws ClassNotFoundException {	
+		
+		// 1. Create new workbook
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		
+		// 2. Create new worksheet
+		HSSFSheet worksheet = workbook.createSheet(reportName);
+		
+		// 3. Define starting indices for rows and columns
+		int startRowIndex = 0;
+		int startColIndex = 0;
+		
+		// 4. Build layout 
+		// Build title, date, and column headers
+		Layouter.buildOrderReport(worksheet, startRowIndex, startColIndex, reportName, headers);
+
+		// 5. Fill report
+		FillManager.fillRevenueReport(worksheet, startRowIndex, startColIndex, partnerlist , headers);
+		
+		// 6. Set the response properties
+		String fileName = "Revenue_Report.xls";
+		switch(reportName){
+			case "viewBusinessProfitReport.jsp": fileName = "Net_Profitability_Report.xls";break;
 			default: break;
 		}
 		response.setHeader("Content-Disposition", "inline; filename=" + fileName);

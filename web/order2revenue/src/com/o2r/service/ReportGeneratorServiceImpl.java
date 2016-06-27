@@ -18,8 +18,10 @@ import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionDetails;
+import com.o2r.bean.NetPaymentResult;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
+import com.o2r.bean.YearlyStockList;
 import com.o2r.dao.ReportsChannelnCategoryDao;
 import com.o2r.dao.ReportsGeneratorDao;
 import com.o2r.helper.CustomException;
@@ -193,6 +195,17 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 	public List<ChannelGP> getChannelNetGPList(Date startDate, Date endDate,
 			int sellerId, String criteria) {
 		return reportGeneratorDao.fetchChannelGP(sellerId, startDate, endDate, criteria);
+	}
+
+	@Override
+	public List<YearlyStockList> fetchStockList(int selectedYearInt) {
+		return reportGeneratorDao.fetchStockList(selectedYearInt);
+	}
+
+	@Override
+	public List<NetPaymentResult> fetchNPR(int sellerId, Date startDate,
+			Date endDate) {
+		return reportGeneratorDao.fetchNPR(sellerId, startDate, endDate);
 	}
 
 	/*

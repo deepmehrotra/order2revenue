@@ -15,6 +15,7 @@ import org.apache.poi.ss.usermodel.Font;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.PartnerReportDetails;
+import com.o2r.bean.YearlyStockList;
 import com.o2r.model.Order;
 
 public class FillManager {
@@ -368,7 +369,59 @@ public class FillManager {
 				}
 			}
 		}		
-	}		
+	}
+	
+	public static void fillRevenueReport(HSSFSheet worksheet, int startRowIndex,
+			int startColIndex, List<YearlyStockList> channelReportList,
+			String[] headers) {
+		// Row offset
+		startRowIndex += 2;
+		int startCol=0;
+		
+		// Create cell style for the body
+		HSSFCellStyle bodyCellStyle = worksheet.getWorkbook().createCellStyle();
+		bodyCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		bodyCellStyle.setWrapText(true);
+				
+		System.out.println(" Insidee fill manage : Channel Report size : "+channelReportList.size());
+		System.out.println(" Start ro index : "+startRowIndex);
+		System.out.println(" header length  : "+headers.length);
+		System.out.println(" headers  : "+headers);
+		// Create body
+		for (YearlyStockList channelReport: channelReportList) {
+			// Create a new row
+			startColIndex=0;
+			HSSFRow row = worksheet.createRow((short) ++startRowIndex);
+			// Retrieve the id value
+		
+			for(int j=0;j<headers.length;j++) {
+				if(headers[j].equals("SelectAll"))
+					startColIndex--;
+				
+				Class channelReportClass = channelReport.getClass();
+				Method method;
+				try {
+					method = channelReportClass.getDeclaredMethod(headers[j]);					
+					HSSFCell cell = row.createCell(startColIndex+j);
+					Object retObj = method.invoke(channelReport, null);
+					if(retObj!=null){
+						cell.setCellValue(retObj.toString());
+					}
+					cell.setCellStyle(bodyCellStyle);
+				} catch (NoSuchMethodException e) {
+					e.getMessage();
+				} catch (SecurityException e) {
+					e.getMessage();
+				} catch (IllegalAccessException e) {
+					e.getMessage();
+				} catch (IllegalArgumentException e) {
+					e.getMessage();
+				} catch (InvocationTargetException e) {
+					e.getMessage();
+				}
+			}
+		}		
+	}	
 }
 
 

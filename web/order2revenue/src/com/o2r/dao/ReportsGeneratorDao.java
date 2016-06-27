@@ -12,9 +12,12 @@ import com.o2r.bean.ChannelNR;
 import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
+import com.o2r.bean.NetPaymentResult;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
+import com.o2r.bean.YearlyStockList;
 import com.o2r.helper.CustomException;
+import com.o2r.model.ProductStockList;
 import com.o2r.model.UploadReport;
 
 /**
@@ -59,7 +62,9 @@ public interface ReportsGeneratorDao {
 
 	public List<ChannelGP> fetchChannelGP(int sellerId, Date startDate, Date endDate, String criteria);
 
-	//public void addUploadReport(UploadReport uploadReport) throws CustomException;
+	public List<YearlyStockList> fetchStockList(int year);
+
+	public List<NetPaymentResult> fetchNPR(int sellerId, Date startDate, Date endDate);
 
 	/*public List<UploadReport> listUploadReport() throws CustomException;
 

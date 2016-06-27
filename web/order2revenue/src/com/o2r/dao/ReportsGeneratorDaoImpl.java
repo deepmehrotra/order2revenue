@@ -1,7 +1,10 @@
 package com.o2r.dao;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,8 +40,11 @@ import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.DataConfig;
+import com.o2r.bean.NetPaymentResult;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
+import com.o2r.bean.YearlyStockList;
+import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Customer;
@@ -1761,7 +1767,112 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		orderList.addAll(criteria.list());
 		return orderList;
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<YearlyStockList> fetchStockList(int year) {
+		List<YearlyStockList> prStockList = new ArrayList<YearlyStockList>();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		String queryStr = "SELECT cat.parentCatName, pst.createdDate, pst.price, pst.stockAvailable FROM o2rschema.product pr, category cat, " +
+				"product_productstocklist ppst, productstocklist pst where " +
+				"pr.Category_categoryId = cat.categoryId and ppst.product_productId = pr.productId and " +
+				"pst.stockId = ppst.closingStocks_stockId order by cat.parentCatName";
+		Query query = session.createSQLQuery(queryStr);
+		List<Object[]> stockList = query.list();
+		Set<String> categorySet = new HashSet<String>();		
+		List<Map<String, String>> dateRangeList = ConverterClass.getDateRanges(year);
+		for(Object[] stock: stockList){
+			categorySet.add(stock[1].toString());
+		}
+		Map<String, YearlyStockList> yearlyStockMap = new HashMap<String, YearlyStockList>();
+		
+		for(Map<String, String> dateMap: dateRangeList){
+			String startDateStr = dateMap.get("startDate");
+			String[] startDateArr = startDateStr.split("-");
+			int startMonth = Integer.parseInt(startDateArr[1]) - 1;
+			String currMonth = GlobalConstant.monthNameMap.get(startDateArr[1]);
+			currMonth += " " + startDateArr[0];
+			String endDateStr = dateMap.get("endDate");
+			String[] endDateArr = endDateStr.split("-");
+			int endMonth = Integer.parseInt(endDateArr[1]) - 1;
+			for(Object[] stock: stockList){
+				String key = stock[0].toString();
+				double stockPrice = Double.parseDouble(stock[2].toString());
+				double stockAvailable = Double.parseDouble(stock[3].toString());
+				double stockValue = stockPrice * stockAvailable;
+				String createdDate = stock[1].toString().split(" ")[0];
+				int createdMonth = Integer.parseInt(createdDate.split("-")[1]) - 1;
+				
+				YearlyStockList stockObj = yearlyStockMap.get(key + currMonth);
+				if(stockObj == null){
+					stockObj = new YearlyStockList();
+					stockObj.setCategory(key);
+					stockObj.setMonthStr(currMonth);
+					stockObj.setMonth(startMonth);
+				}
+				
+				if(startMonth == createdMonth){
+					double existStock = stockObj.getOpenStock();
+					double existStockVal = stockObj.getOpenStockValuation();
+					stockObj.setOpenStock(existStock + stockAvailable);
+					stockObj.setOpenStockValuation(existStockVal + stockValue);
+				}
+				if(endMonth == createdMonth){
+					double existStock = stockObj.getCloseStock();
+					double existStockVal = stockObj.getCloseStockValuation();
+					stockObj.setCloseStock(existStock + stockAvailable);
+					stockObj.setCloseStockValuation(existStockVal + stockValue);
+				}
+				yearlyStockMap.put(key + currMonth, stockObj);				
+			}
+		}
+		
+		Iterator entries = yearlyStockMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, YearlyStockList> thisEntry = (Entry<String, YearlyStockList>) entries
+					.next();
+			YearlyStockList channelNPR = thisEntry.getValue();
+			prStockList.add(channelNPR);
+		}
+		Collections.sort(prStockList, new YearlyStockList.OrderByMonthCat());		
+		return prStockList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<NetPaymentResult> fetchNPR(int sellerId, Date startDate, Date endDate) {
+		List<NetPaymentResult> nprList = new ArrayList<NetPaymentResult>();
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		String orderQueryStr = "select concat(monthname(op.dateOfPayment), ' ', year(op.dateOfPayment)) as Month, " +
+				"sum(op.netPaymentResult) as NetPaymentResult from orderpay op, order_table ot where " +
+				"op.paymentId = ot.orderPayment_paymentId and op.dateOfPayment between :startDate and :endDate and " +
+				"op.dateOfPayment is not null and ot.seller_id = :sellerId group by Month";
+		Query orderQuery = session.createSQLQuery(orderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		List<Object[]> orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			NetPaymentResult npr = new NetPaymentResult();
+			String key = order[0].toString();
+			npr.setKey(key);
+			npr.setNetPaymentResult(Double.parseDouble(order[1].toString()));
+			nprList.add(npr);
+		}
+		return nprList;
+	}
+	
+	public List<Double> getStockList(){
+		List<Double> stockList = new ArrayList<Double>();
+		for(int i=0; i<12; i++){
+			stockList.add(new Double(0));
+		}
+		return stockList;
+	}
+		
 	@Override
 	public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
 			throws CustomException {

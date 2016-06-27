@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.o2r.bean.ExpensesDetails;
 import com.o2r.dao.ExpenseDao;
 import com.o2r.helper.CustomException;
 import com.o2r.model.ExpenseCategory;
@@ -93,5 +94,17 @@ public List<Expenses> getExpenseByDate(Date startDate, Date endDate,
 public List<Expenses> getExpenseByName(String expname, int sellerId)
 		throws CustomException {
 	return expenseDao.getExpenseByName(expname, sellerId);
+}
+
+@Override
+public List<ExpensesDetails> getExpenseByYear(int sellerId, Date startDate, Date endDate)
+		throws CustomException {
+	return expenseDao.getExpenseByYear(sellerId, startDate, endDate);
+}
+@Override
+
+public List<ExpensesDetails> getExpenseByCatYear(int sellerId, Date startDate, Date endDate)
+		throws CustomException {
+	return expenseDao.getExpenseByCatYear(sellerId, startDate, endDate);
 }
 }

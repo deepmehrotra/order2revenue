@@ -1,6 +1,7 @@
 package com.o2r.helper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -43,6 +44,7 @@ import com.o2r.bean.StateDeliveryTimeBean;
 import com.o2r.bean.TaxCategoryBean;
 import com.o2r.bean.TaxDetailBean;
 import com.o2r.bean.UploadReportBean;
+import com.o2r.bean.YearlyStockList;
 import com.o2r.model.AccountTransaction;
 import com.o2r.model.Category;
 import com.o2r.model.Customer;
@@ -2320,4 +2322,79 @@ public class ConverterClass {
 
 		return uploadReportBeans;
 	}
+
+	public static List<YearlyStockList> combineStockList(List<YearlyStockList> stockList) {
+		Map<String, YearlyStockList> stockMap = new HashMap<String, YearlyStockList>();
+		for(YearlyStockList stock: stockList){
+			String key = stock.getMonthStr();
+			YearlyStockList newStock = stockMap.get(key);
+			double openStock = stock.getOpenStock();
+			double openStockValuation = stock.getOpenStockValuation();
+			double closeStock = stock.getCloseStock();
+			double closeStockValuation = stock.getCloseStockValuation();
+			if(newStock == null){
+				newStock = new YearlyStockList();
+				newStock.setMonth(stock.getMonth());
+				newStock.setMonthStr(stock.getMonthStr());
+			}
+			newStock.setOpenStock(openStock + newStock.getOpenStock());
+			newStock.setOpenStockValuation(openStockValuation + newStock.getOpenStockValuation());
+			newStock.setCloseStock(closeStock + newStock.getCloseStock());
+			newStock.setCloseStockValuation(closeStockValuation + newStock.getCloseStockValuation());
+			stockMap.put(key, newStock);
+		}
+		
+		Iterator entries = stockMap.entrySet().iterator();
+		List<YearlyStockList> finalStockList = new ArrayList<YearlyStockList>();
+		while (entries.hasNext()) {
+			Entry<String, YearlyStockList> thisEntry = (Entry<String, YearlyStockList>) entries
+					.next();
+			YearlyStockList stock = thisEntry.getValue();
+			finalStockList.add(stock);
+		}
+		Collections.sort(finalStockList, new YearlyStockList.OrderByMonth());		
+		return finalStockList;
+	}
+
+	public static List<Expenses> combineExpenses(List<YearlyStockList> stockList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static List<Expenses> combineExpenses(int selectedYearInt, List<YearlyStockList> stockList) {
+		List<Map<String, String>> dateRangeList = getDateRanges(selectedYearInt);
+		for(Map<String, String> dateMap: dateRangeList){
+			
+		}
+		return null;
+	}
+	
+	public static List<Map<String, String>> getDateRanges(int year) {
+		List<Map<String, String>> dateRangeList = new ArrayList<Map<String, String>>();
+		for(int i=4;i<=12;i++){
+			Map<String, String> dateMap = new HashMap<String, String>();
+			dateMap.put("startDate", year + "-" + addZero(i) + "-01");
+			if(i==12){
+				dateMap.put("endDate", (year+1) + "-01-01");
+			} else{
+				dateMap.put("endDate", year + "-" + addZero(i+1) + "-01");
+			}			
+			dateRangeList.add(dateMap);
+		}
+		for(int i=1;i<=3;i++){
+			Map<String, String> dateMap = new HashMap<String, String>();
+			dateMap.put("startDate", (year+1) + "-" + addZero(i) + "-01");
+			dateMap.put("endDate", (year+1) + "-" + addZero(i+1) + "-01");
+			dateRangeList.add(dateMap);
+		}
+		
+		return dateRangeList;
+	}
+	
+	private static String addZero(int i) {
+		if(i<10)
+			return "0" + i;
+		return i + "";
+	}
+
 }

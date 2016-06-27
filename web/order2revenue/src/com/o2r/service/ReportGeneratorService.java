@@ -13,8 +13,10 @@ import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionDetails;
+import com.o2r.bean.NetPaymentResult;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
+import com.o2r.bean.YearlyStockList;
 import com.o2r.helper.CustomException;
 import com.o2r.model.UploadReport;
 
@@ -73,4 +75,9 @@ public interface ReportGeneratorService {
 	public List<ChannelNetQty> getChannelNetQtyList(Date startDate, Date endDate, int sellerId, String criteria);
 
 	public List<ChannelGP> getChannelNetGPList(Date startDate, Date endDate, int sellerId, String criteria);
+
+	public List<YearlyStockList> fetchStockList(int selectedYearInt);
+
+	public List<NetPaymentResult> fetchNPR(int sellerId, Date startDate,
+			Date endDate);
 }

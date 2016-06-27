@@ -3,6 +3,7 @@ package com.o2r.dao;
 import java.util.Date;
 import java.util.List;
 
+import com.o2r.bean.ExpensesDetails;
 import com.o2r.helper.CustomException;
 import com.o2r.model.ExpenseCategory;
 import com.o2r.model.Expenses;
@@ -39,4 +40,8 @@ public ExpenseCategory getExpenseByName(String expname);
 
 List<Expenses> getExpenseByName(String expCatName, int sellerId)
 		throws CustomException;
+
+public List<ExpensesDetails> getExpenseByYear(int sellerId, Date startDate, Date endDate) throws CustomException;
+
+public List<ExpensesDetails> getExpenseByCatYear(int sellerId, Date startDate, Date endDate) throws CustomException;
 }

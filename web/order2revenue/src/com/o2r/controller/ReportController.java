@@ -34,15 +34,20 @@ import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.DebtorsGraph1;
+import com.o2r.bean.ExpensesDetails;
+import com.o2r.bean.NetPaymentResult;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
+import com.o2r.bean.YearlyStockList;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.helper.HelperClass;
+import com.o2r.model.Expenses;
 import com.o2r.model.ManualCharges;
 import com.o2r.model.Order;
 import com.o2r.model.Partner;
+import com.o2r.service.ExpenseService;
 import com.o2r.service.ManualChargesService;
 import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
@@ -67,6 +72,9 @@ private PartnerService partnerService;
 
 @Resource(name="manualChargesService")
 private ManualChargesService manualChargesService;
+
+@Resource(name="expenseService")
+private ExpenseService expenseService; 
 
 @Autowired
 private OrderService orderService;
@@ -119,10 +127,46 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			return new ModelAndView("reports/partnerReport", model);
 		else if(reportName.equals("totalShippedOrders"))
 			return new ModelAndView("reports/filterReports", model);
+		else if(reportName.equals("netProfitabilityReport"))
+			return new ModelAndView("reports/revenueReport", model);
 		else
 			return new ModelAndView("reports/comingSoon", model);
 }
-	
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	@RequestMapping(value = "/seller/getRevenueReport", method = RequestMethod.POST)
+	public ModelAndView getRevenueReport(HttpServletRequest request)
+			throws Exception {
+		log.info("$$$ getPartnerReport Starts : ReportController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			String reportName = request.getParameter("reportName");
+			String selectedYear = request.getParameter("selectedYear");
+			int selectedYearInt = 2016;
+			if(StringUtils.isNotBlank(selectedYear))
+				selectedYearInt = Integer.parseInt(selectedYear);
+			model.put("reportNameStr", GlobalConstant.reportNameMap.get(reportName));
+			
+			SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd"); 
+			Date startDate = ft.parse(selectedYearInt + "-04-01");
+			Date endDate = ft.parse((selectedYearInt + 1) + "-03-31");
+			int sellerId = helperClass.getSellerIdfromSession(request);
+			
+			List<YearlyStockList> stockList = reportGeneratorService.fetchStockList(selectedYearInt);
+			List<YearlyStockList> combinedStockList = ConverterClass.combineStockList(stockList);
+			model.put("stockList", combinedStockList);
+			List<ExpensesDetails> expensesList = expenseService.getExpenseByYear(sellerId, startDate, endDate);
+			model.put("expensesList", expensesList);
+			List<NetPaymentResult> nprList = reportGeneratorService.fetchNPR(sellerId, startDate, endDate);
+			model.put("nprList", nprList);
+			return new ModelAndView("reports/viewBusinessProfitReport", model);
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			log.error("Failed!", ex);
+			model.put("errorMessage", ex.getMessage());
+		}
+		return new ModelAndView("globalErorPage", model);
+	}
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@RequestMapping(value = "/seller/getPartnerReport", method = RequestMethod.POST)
 	public ModelAndView getPartnerReport(HttpServletRequest request)
@@ -515,6 +559,37 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+		}
+		log.info("$$$ downloadreport Ends : ReportController $$$");
+	}
+	
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	@RequestMapping(value = "/seller/downloadRevenueReport", method = RequestMethod.POST)
+	public void downloadRevenueReport(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		log.info("$$$ downloadPartnerReport Starts : ReportController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			String reportName = request.getParameter("reportName");
+			String selectedYear = request.getParameter("selectedYear");
+			int selectedYearInt = 2016;
+			if(StringUtils.isNotBlank(selectedYear))
+				selectedYearInt = Integer.parseInt(selectedYear);
+			String[] reportheaders = request.getParameterValues("headers");
+
+			List<YearlyStockList> revenueReportList = reportGeneratorService.fetchStockList(selectedYearInt);
+			Collections.sort(revenueReportList,
+					new YearlyStockList.OrderByMonthCat());
+			reportDownloadService.downloadRevenueReport(response,
+					revenueReportList, reportheaders, reportName);
+		} catch (ClassNotFoundException e) {
+			System.out.println(" Class castexception in download report");
+			e.printStackTrace();
+			log.error(e);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed!", e);
