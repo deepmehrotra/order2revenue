@@ -145,6 +145,27 @@
 											</div>
 											<br> <br> <br>
 											<div class="col-sm-12">
+												<div class="form-group">
+													<label class="col-sm-4 control-label">Inventory Type</label>
+													<div class="col-sm-8">
+														<form:select path="orderReturnOrRTO.inventoryType" class="form-control"	id="inventoryType">
+															<form:option value="goodInventory" selected="true">Goog Inventory</form:option>
+															<form:option value="badInventory">Bad Inventory</form:option>																		
+														</form:select>
+													</div>
+												</div>
+											</div>
+											<br><br><br>														
+											<div class="col-sm-12" id="badQuantityDiv">															
+												<div class="mar-btm-20-oh">
+													<label class="col-sm-4 control-label">Return Quantity(Bad)</label>
+													<div class="col-sm-8">
+														<form:input path="orderReturnOrRTO.badReturnQty" id="badQuantity" class="form-control" onchange="badCheck();"/>
+													</div>
+												</div>
+											</div>
+											<br>
+											<div class="col-sm-12">
 												<div class="mar-btm-20-oh">
 													<label class="col-sm-4 control-label">Return Reason</label>
 													<div class="col-sm-8">
@@ -281,6 +302,18 @@
 	<script type="text/javascript">
 	
 $(document).ready(function(){
+	
+	$('#badQuantityDiv').hide();
+	$('#inventoryType').click(function(){		
+	    if(($('#inventoryType :selected').val())=='badInventory'){
+	    	$('#badQuantityDiv').show();
+	    }else{
+	    	$('#badQuantityDiv').hide();
+	    }
+	});
+	
+	
+	
     $('#data_1 .input-group.date').datepicker({
     	    todayBtn: "linked",
             keyboardNavigation: false,
@@ -352,6 +385,17 @@ $(document).ready(function(){
     
     
 });
+
+
+function badCheck(){
+	var goodQ=document.getElementById("quantity1").value;
+	var badQ=document.getElementById("badQuantity").value;
+	
+	if(goodQ < badQ){		
+		alert("Invalid Bad Return Quantity !");
+		document.getElementById("badQuantity").value="";
+	}
+}
 
 function setOrderID(orderid,channelorderid,value)
 {	

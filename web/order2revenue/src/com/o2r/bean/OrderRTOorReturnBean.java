@@ -23,7 +23,10 @@ public class OrderRTOorReturnBean {
 	private double taxPOAmt;
 	private double netPR;
 	private double grossProfit;
-
+	private String inventoryType;
+	private int badReturnQty;
+	
+	
 	public int getReturnId() {
 		return returnId;
 	}
@@ -126,6 +129,18 @@ public class OrderRTOorReturnBean {
 	}
 	public void setGrossProfit(double grossProfit) {
 		this.grossProfit = grossProfit;
+	}
+	public String getInventoryType() {
+		return inventoryType;
+	}
+	public void setInventoryType(String inventoryType) {
+		this.inventoryType = inventoryType;
+	}
+	public int getBadReturnQty() {
+		return badReturnQty;
+	}
+	public void setBadReturnQty(int badReturnQty) {
+		this.badReturnQty = badReturnQty;
 	}
 
 

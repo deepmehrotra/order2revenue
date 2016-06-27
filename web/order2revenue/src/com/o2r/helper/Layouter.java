@@ -564,6 +564,14 @@ public class Layouter {
 		HSSFCell cell10 = rowHeader.createCell(startColIndex + 9);
 		cell10.setCellValue("Stage");
 		cell10.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell11 = rowHeader.createCell(startColIndex + 10);
+		cell11.setCellValue("Inventory Type");
+		cell11.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell12 = rowHeader.createCell(startColIndex + 11);
+		cell12.setCellValue("Bad Inventory Quantity");
+		cell12.setCellStyle(headerCellStyle);
 	}
 	
 	public static void buildGatePassHeaders(HSSFSheet worksheet,
