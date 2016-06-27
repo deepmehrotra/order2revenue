@@ -12,10 +12,12 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 
+import com.o2r.bean.ChannelNR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.YearlyStockList;
+import com.o2r.model.Expenses;
 import com.o2r.model.Order;
 
 public class FillManager {
@@ -371,7 +373,7 @@ public class FillManager {
 		}		
 	}
 	
-	public static void fillRevenueReport(HSSFSheet worksheet, int startRowIndex,
+	public static void fillStockReport(HSSFSheet worksheet, int startRowIndex,
 			int startColIndex, List<YearlyStockList> channelReportList,
 			String[] headers) {
 		// Row offset
@@ -404,6 +406,100 @@ public class FillManager {
 					method = channelReportClass.getDeclaredMethod(headers[j]);					
 					HSSFCell cell = row.createCell(startColIndex+j);
 					Object retObj = method.invoke(channelReport, null);
+					if(retObj!=null){
+						cell.setCellValue(retObj.toString());
+					}
+					cell.setCellStyle(bodyCellStyle);
+				} catch (NoSuchMethodException e) {
+					e.getMessage();
+				} catch (SecurityException e) {
+					e.getMessage();
+				} catch (IllegalAccessException e) {
+					e.getMessage();
+				} catch (IllegalArgumentException e) {
+					e.getMessage();
+				} catch (InvocationTargetException e) {
+					e.getMessage();
+				}
+			}
+		}		
+	}
+
+	public static void fillExpenseReport(HSSFSheet worksheet,
+			int startRowIndex, int startColIndex, List<Expenses> expensesList,
+			String[] headers) {
+		// Row offset
+		startRowIndex += 2;
+		int startCol=0;
+		
+		// Create cell style for the body
+		HSSFCellStyle bodyCellStyle = worksheet.getWorkbook().createCellStyle();
+		bodyCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		bodyCellStyle.setWrapText(true);
+		// Create body
+		for (Expenses report: expensesList) {
+			// Create a new row
+			startColIndex=0;
+			HSSFRow row = worksheet.createRow((short) ++startRowIndex);
+			// Retrieve the id value
+		
+			for(int j=0;j<headers.length;j++) {
+				if(headers[j].equals("SelectAll"))
+					startColIndex--;
+				
+				Class channelReportClass = report.getClass();
+				Method method;
+				try {
+					method = channelReportClass.getDeclaredMethod(headers[j]);					
+					HSSFCell cell = row.createCell(startColIndex+j);
+					Object retObj = method.invoke(report, null);
+					if(retObj!=null){
+						cell.setCellValue(retObj.toString());
+					}
+					cell.setCellStyle(bodyCellStyle);
+				} catch (NoSuchMethodException e) {
+					e.getMessage();
+				} catch (SecurityException e) {
+					e.getMessage();
+				} catch (IllegalAccessException e) {
+					e.getMessage();
+				} catch (IllegalArgumentException e) {
+					e.getMessage();
+				} catch (InvocationTargetException e) {
+					e.getMessage();
+				}
+			}
+		}		
+	}
+
+	public static void fillNetRateReport(HSSFSheet worksheet,
+			int startRowIndex, int startColIndex, List<ChannelNR> nrList,
+			String[] headers) {
+		// Row offset
+		startRowIndex += 2;
+		int startCol=0;
+		
+		// Create cell style for the body
+		HSSFCellStyle bodyCellStyle = worksheet.getWorkbook().createCellStyle();
+		bodyCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		bodyCellStyle.setWrapText(true);
+		// Create body
+		for (ChannelNR report: nrList) {
+			// Create a new row
+			startColIndex=0;
+			HSSFRow row = worksheet.createRow((short) ++startRowIndex);
+			// Retrieve the id value
+		
+			for(int j=0;j<headers.length;j++) {
+				if(headers[j].equals("SelectAll"))
+					startColIndex--;
+				
+				Class channelReportClass = report.getClass();
+				Method method;
+				try {
+					method = channelReportClass.getDeclaredMethod(headers[j]);					
+					HSSFCell cell = row.createCell(startColIndex+j);
+					Object retObj = method.invoke(report, null);
 					if(retObj!=null){
 						cell.setCellValue(retObj.toString());
 					}

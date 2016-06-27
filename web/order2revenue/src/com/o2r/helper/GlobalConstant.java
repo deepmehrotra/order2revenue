@@ -645,6 +645,19 @@ public class GlobalConstant {
 			// For Total Payments Received
 			put("getPaymentDate", "Expected Date of Payment");
 			put("getReceivedDate", "Order Received Date");
+			
+			// For Expense Report
+			put("getExpenseDate", "Expense Date");
+			put("getExpenseName", "Expense Name");
+			put("getExpenseCatName", "Expense Category");
+			put("getAmount", "Amount");
+			
+			// For Stock Report
+			put("getMonthStr", "Month");
+			put("getOpenStock", "Opening Stock");
+			put("getOpenStockValuation", "Opening Stock Valuation");
+			put("getCloseStock", "Closing Stock");
+			put("getCloseStockValuation", "Closing Stock Valuation");
 		}
 	};
 	

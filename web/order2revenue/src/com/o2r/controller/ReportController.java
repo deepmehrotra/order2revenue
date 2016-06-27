@@ -592,13 +592,17 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			int selectedYearInt = 2016;
 			if(StringUtils.isNotBlank(selectedYear))
 				selectedYearInt = Integer.parseInt(selectedYear);
+			SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd"); 
+			Date startDate = ft.parse(selectedYearInt + "-04-01");
+			Date endDate = ft.parse((selectedYearInt + 1) + "-03-31");
+			int sellerId = helperClass.getSellerIdfromSession(request);
 			String[] reportheaders = request.getParameterValues("headers");
 
 			List<YearlyStockList> revenueReportList = reportGeneratorService.fetchStockList(selectedYearInt);
-			Collections.sort(revenueReportList,
-					new YearlyStockList.OrderByMonthCat());
-			reportDownloadService.downloadRevenueReport(response,
-					revenueReportList, reportheaders, reportName);
+			Collections.sort(revenueReportList, new YearlyStockList.OrderByMonthCat());
+			List<Expenses> expensesList = expenseService.getExpenseByDate(startDate, endDate, sellerId);
+			List<ChannelNR> nrList = reportGeneratorService.fetchNetRate(sellerId, startDate, endDate);
+			reportDownloadService.downloadRevenueReport(response, revenueReportList, expensesList, nrList, reportName);
 		} catch (ClassNotFoundException e) {
 			System.out.println(" Class castexception in download report");
 			e.printStackTrace();

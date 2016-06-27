@@ -1,6 +1,7 @@
 
 package com.o2r.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -12,6 +13,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.o2r.bean.ChannelNR;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.PartnerReportDetails;
@@ -19,6 +21,7 @@ import com.o2r.bean.YearlyStockList;
 import com.o2r.helper.FillManager;
 import com.o2r.helper.Layouter;
 import com.o2r.helper.Writer;
+import com.o2r.model.Expenses;
 import com.o2r.model.Order;
 
 
@@ -197,26 +200,79 @@ public class ReportDownloadService {
 		Writer.write(response, worksheet,fileName);
 	}
 	
-	public void downloadRevenueReport(HttpServletResponse response , List<YearlyStockList> partnerlist, 
-			String[] headers, String reportName) throws ClassNotFoundException {	
+	public void downloadRevenueReport(HttpServletResponse response,
+			List<YearlyStockList> revenueReportList,
+			List<Expenses> expensesList, List<ChannelNR> nrList,
+			String reportName) throws ClassNotFoundException {	
 		
 		// 1. Create new workbook
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		
+		// Begin: Expense Sheet
+		String[] headers = new String[4];
+		headers[0] = "getExpenseDate";
+		headers[1] = "getExpenseName";
+		headers[2] = "getExpenseCatName";
+		headers[3] = "getAmount";		
+		
 		// 2. Create new worksheet
-		HSSFSheet worksheet = workbook.createSheet(reportName);
+		HSSFSheet worksheet = workbook.createSheet("Gross Expenses");
 		
 		// 3. Define starting indices for rows and columns
 		int startRowIndex = 0;
 		int startColIndex = 0;
-		
+
 		// 4. Build layout 
 		// Build title, date, and column headers
 		Layouter.buildOrderReport(worksheet, startRowIndex, startColIndex, reportName, headers);
 
 		// 5. Fill report
-		FillManager.fillRevenueReport(worksheet, startRowIndex, startColIndex, partnerlist , headers);
+		FillManager.fillExpenseReport(worksheet, startRowIndex, startColIndex, expensesList, headers);
+		// End: Expense Sheet
 		
+		// Begin: Net Sales Sheet
+		headers = new String[2];
+		headers[0] = "getKey";
+		headers[1] = "getTotalNR";
+		
+		// 2. Create new worksheet
+		HSSFSheet worksheet2 = workbook.createSheet("Net Sales Receipts");
+		
+		// 3. Define starting indices for rows and columns
+		startRowIndex = 0;
+		startColIndex = 0;
+
+		// 4. Build layout 
+		// Build title, date, and column headers
+		Layouter.buildOrderReport(worksheet2, startRowIndex, startColIndex, reportName, headers);
+
+		// 5. Fill report
+		FillManager.fillNetRateReport(worksheet2, startRowIndex, startColIndex, nrList, headers);
+		// End: Expense Sheet
+		// Begin: Expense Sheet
+		headers = new String[6];
+		headers[0] = "getMonthStr";
+		headers[1] = "getCategory";
+		headers[2] = "getOpenStock";
+		headers[3] = "getOpenStockValuation";		
+		headers[4] = "getCloseStock";
+		headers[5] = "getCloseStockValuation";		
+		
+		// 2. Create new worksheet
+		HSSFSheet worksheet3 = workbook.createSheet("Stock Valuation");
+		
+		// 3. Define starting indices for rows and columns
+		startRowIndex = 0;
+		startColIndex = 0;
+
+		// 4. Build layout 
+		// Build title, date, and column headers
+		Layouter.buildOrderReport(worksheet3, startRowIndex, startColIndex, reportName, headers);
+
+		// 5. Fill report
+		FillManager.fillStockReport(worksheet3, startRowIndex, startColIndex, revenueReportList, headers);
+		// End: Expense Sheet
+
 		// 6. Set the response properties
 		String fileName = "Revenue_Report.xls";
 		switch(reportName){
