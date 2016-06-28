@@ -169,6 +169,8 @@ public class DashboardDaoImpl implements DashboardDao {
 		Date thismonthstart = new Date();
 		Date sixMonthsBack = new Date();
 		Date after10days = new Date();
+		Date thisFinancialYearStart = new Date();
+		Date lastFinancialYearStart = new Date();
 		List<Object> orderNRQuantityMonthly = null;
 		List<Object> returnNRQuantityMonthly = null;
 		/*todayDate.setDate(todayDate.getDate() + 1);
@@ -183,6 +185,11 @@ public class DashboardDaoImpl implements DashboardDao {
 		thisYearSatrt.setHours(0);
 		lastYearSatrt.setDate(1);
 		lastYearSatrt.setMonth(0);
+		thisFinancialYearStart.setMonth(3);
+		thisFinancialYearStart.setDate(1);
+		lastFinancialYearStart.setDate(1);
+		lastFinancialYearStart.setMonth(3);
+		lastFinancialYearStart.setYear(lastFinancialYearStart.getYear()-1);
 		lastYearSatrt.setYear(lastYearSatrt.getYear() - 1);
 		after10days.setDate(after10days.getDate() + 10);
 		oneMonthBack.setDate(1);
@@ -195,8 +202,10 @@ public class DashboardDaoImpl implements DashboardDao {
 			dashboardBean = new DashboardBean();
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();			
-			dashboardBean.setProfitThisYear(netProfitForTime(session,lastYearEnd, tommorrowDate, sellerId));
-			dashboardBean.setProfitLastYear(netProfitForTime(session,lastYearSatrt, thisYearSatrt, sellerId));
+			dashboardBean.setProfitThisYear(grossProfitForDuration(session,
+					thisFinancialYearStart, todayDate, sellerId));
+			dashboardBean.setProfitLastYear(grossProfitForDuration(session,
+					lastFinancialYearStart, thisFinancialYearStart, sellerId));
 			if ((int) dashboardBean.getProfitLastYear() != 0) {
 				if (dashboardBean.getProfitThisYear() > dashboardBean
 						.getProfitLastYear())
@@ -211,9 +220,9 @@ public class DashboardDaoImpl implements DashboardDao {
 							.getProfitLastYear()) * 100);
 			}
 			dashboardBean.setSaleQuantityThisYear(netSaleQtyforTime(session,
-					thisYearSatrt, todayDate, sellerId));
+					thisFinancialYearStart, todayDate, sellerId));
 			dashboardBean.setSaleQuantityLastYear(netSaleQtyforTime(session,
-					lastYearSatrt, lastYearEnd, sellerId));
+					lastFinancialYearStart, thisFinancialYearStart, sellerId));
 			if ((int) dashboardBean.getSaleQuantityLastYear() != 0) {
 				if (dashboardBean.getSaleQuantityThisYear() > dashboardBean
 						.getSaleQuantityLastYear())
@@ -239,29 +248,29 @@ public class DashboardDaoImpl implements DashboardDao {
 			dashboardBean.setLast12MonthsPaymentCount(paymentCountMonthly(
 					session, lastYearEnd, todayDate, sellerId));
 			dashboardBean.setTodaysOrderCount(countForDuration(session,
-					yeasterdayDate, todayDate, sellerId,
+					todayDate, todayDate, sellerId,
 					orderCountForDurationQuery));
 			dashboardBean.setThisMonthOrderCount(countForDuration(session,
 					thismonthstart, todayDate, sellerId,
 					orderCountForDurationQuery));
 			dashboardBean.setThisYearOrderCount(countForDuration(session,
-					lastYearEnd, todayDate, sellerId,
+					thisFinancialYearStart, todayDate, sellerId,
 					orderCountForDurationQuery));
 			dashboardBean.setTodaysPaymentCount(countForDuration(session,
-					yeasterdayDate, todayDate, sellerId,
+					todayDate, todayDate, sellerId,
 					paymentCountForDurationQuery)); // todays
 			dashboardBean.setThisMonthPaymentCount(countForDuration(session,
 					thismonthstart, todayDate, sellerId,
 					paymentCountForDurationQuery)); // this month
 			dashboardBean.setThisYearPaymentCount(countForDuration(session,
-					lastYearEnd, todayDate, sellerId,
+					thisFinancialYearStart, todayDate, sellerId,
 					paymentCountForDurationQuery));
 			dashboardBean.setTodaysGrossProfit(grossProfitForDuration(session,
-					yeasterdayDate, todayDate, sellerId));
+					todayDate, todayDate, sellerId));
 			dashboardBean.setThisMonthGrossProfit(grossProfitForDuration(session,
 					thismonthstart, todayDate, sellerId));
 			dashboardBean.setThisYearGrossProfit(grossProfitForDuration(session,
-					thisYearSatrt, todayDate, sellerId));
+					thisFinancialYearStart, todayDate, sellerId));
 			// testing purpose startdate as one monthback
 			dashboardBean.setTotalUpcomingPayments(listOfUpcomingPayment(
 					session, oneMonthBack, after10days, sellerId));
@@ -269,9 +278,9 @@ public class DashboardDaoImpl implements DashboardDao {
 					session, sellerId));
 			// Six months top selling sku and region just for testing
 			dashboardBean.setTopSellingSKU(topSellingSKU(session,
-					sixMonthsBack, todayDate, sellerId));
+					thisFinancialYearStart, todayDate, sellerId));
 			dashboardBean.setTopSellingRegion(topSellingRegion(session,
-					sixMonthsBack, todayDate, sellerId));
+					thisFinancialYearStart, todayDate, sellerId));
 			dashboardBean.setExpenditureThisMonth(expenseGroupByCatForTime(
 					session, oneMonthBack, todayDate, sellerId));
 			dashboardBean.setGrossProfitMonthly(grossProfitMonthly(session,
@@ -280,10 +289,10 @@ public class DashboardDaoImpl implements DashboardDao {
 					sixMonthsBack, todayDate, sellerId));
 			dashboardBean.setTaxAlerts(ConverterClass
 					.prepareListofTaxDetailBean(getTaxAlert(session,
-							sixMonthsBack, sellerId)));
+							thisFinancialYearStart, sellerId)));
 			dashboardBean.setTdsAlerts(ConverterClass
 					.prepareListofTaxDetailBean(getTDSAlert(session,
-							sixMonthsBack, sellerId)));
+							thisFinancialYearStart, sellerId)));
 			orderNRQuantityMonthly = orderNRQuantityMonthly(session,
 					sixMonthsBack, todayDate, sellerId);
 			if (orderNRQuantityMonthly != null
