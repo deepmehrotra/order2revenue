@@ -27,7 +27,7 @@
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
                                 <span class="label label-primary pull-right">Annual</span>
-                                <h5>Net Profit</h5>
+                                <h5>Gross Margin</h5>
                             </div>
                             <div class="ibox-content">
                                 <h1 class="no-margins">
@@ -112,7 +112,7 @@
                                         <li>
                                             <h2 class="no-margins "  id="totalGrossProfit">
                                              <fmt:formatNumber type="number"  maxFractionDigits="2"  value="${dashboardValue.todaysGrossProfit}" /></h2>
-                                            <small>Gross Profit</small>
+                                            <small>Gross Margin</small>
                                             <div class="stat-percent">60% <i class="fa fa-level-down text-navy"></i></div>
                                             <div class="progress progress-mini">
                                                 <div style="width: 60%;" class="progress-bar"></div>
@@ -274,7 +274,7 @@
                     <div class="col-lg-8">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <h5>Gross Profit Vs Expenses(Last 6 Month)</h5>
+                                <h5>Gross Margin Vs Expenses(Last 6 Month)</h5>
                             </div>
                             <div class="ibox-content">
                             <div>
