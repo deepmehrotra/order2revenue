@@ -110,8 +110,8 @@
     	                        <div class="col-md-3">
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetTaxLiability" name="headers"> Net Tax Liability </label></div>
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetPr" name="headers"> Net P/R </label></div>
-	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetPaymentResult" name="headers"> NPR </label></div>
-	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getPaymentDifference" name="headers"> Payment Difference </label></div>
+	                                <!-- <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetPaymentResult" name="headers"> NPR </label></div>
+	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getPaymentDifference" name="headers"> Payment Difference </label></div> -->
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getFinalStatus" name="headers"> Final Status </label></div>
     	                        </div>
                             </c:if>

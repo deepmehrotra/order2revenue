@@ -526,11 +526,11 @@ public class Layouter {
 		rowHeader.setHeight((short) 500);
 
 		HSSFCell cell1 = rowHeader.createCell(startColIndex + 0);
-		cell1.setCellValue("ChannelOrderId");
+		cell1.setCellValue("Criteria");
 		cell1.setCellStyle(headerCellStyle);
 
 		HSSFCell cell2 = rowHeader.createCell(startColIndex + 1);
-		cell2.setCellValue("SubOrderId");
+		cell2.setCellValue("Value");
 		cell2.setCellStyle(headerCellStyle);
 
 		HSSFCell cell3 = rowHeader.createCell(startColIndex + 2);
@@ -564,6 +564,14 @@ public class Layouter {
 		HSSFCell cell10 = rowHeader.createCell(startColIndex + 9);
 		cell10.setCellValue("Stage");
 		cell10.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell11 = rowHeader.createCell(startColIndex + 10);
+		cell11.setCellValue("Inventory Type");
+		cell11.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell12 = rowHeader.createCell(startColIndex + 11);
+		cell12.setCellValue("Bad Inventory Quantity");
+		cell12.setCellStyle(headerCellStyle);
 	}
 	
 	public static void buildGatePassHeaders(HSSFSheet worksheet,
@@ -917,7 +925,6 @@ public class Layouter {
 		// Build the column headers
 		buildReportHeadersCO(worksheet, reportheaders, startRowIndex,
 				startColIndex);
-		// TODO Auto-generated method stub
 	}
 
 	private static void buildReportHeadersCO(HSSFSheet worksheet,

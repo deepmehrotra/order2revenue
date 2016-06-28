@@ -58,6 +58,9 @@ public class OrderBean {
 	private ProductConfigBean productConfig;
 	private OrderBean consolidatedOrder;
 	private double grossProfit;
+	
+	
+	
 
 	public CustomerBean getCustomer() {
 		return customer;
