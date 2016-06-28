@@ -1415,7 +1415,7 @@ public class SaveContents {
 				orderReturn = new OrderRTOorReturn();				
 				
 				String criteria="";
-				String column="";
+				String column=null;
 				String id = null;
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
@@ -1433,7 +1433,7 @@ public class SaveContents {
 						column="invoiceID";
 					}		
 					if (entry.getCell(1) != null
-						&& StringUtils.isNotBlank(entry.getCell(1).toString()) && column != "") {
+						&& StringUtils.isNotBlank(entry.getCell(1).toString()) && column != null) {
 						
 						orderlist = orderService.findOrders(column, entry
 								.getCell(1).toString(), sellerId, false, false);
