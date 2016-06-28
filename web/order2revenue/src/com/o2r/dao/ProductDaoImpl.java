@@ -745,7 +745,7 @@ public class ProductDaoImpl implements ProductDao {
                 if (currentInventory != 0) {
                     product.setQuantity(currentInventory);
                 } else if (quantoAdd != 0) {
-                    product.setQuantity(product.getQuantity() + quantoAdd);
+                	product.setQuantity(product.getQuantity() + quantoAdd);
                     product.getCategory()
                             .setProductCount(
                                     product.getCategory().getProductCount()
