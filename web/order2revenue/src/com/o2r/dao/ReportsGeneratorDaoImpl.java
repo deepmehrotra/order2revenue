@@ -687,6 +687,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		double netPr = 0;
 		double returnNetPr = 0;
 		double grossProfit = 0;
+		double returnChargesToBeDeducted = 0;
 		if(partnerBusiness.isPoOrder())
 			grossProfit = currOrder.getGrossProfit();
 		else
@@ -701,7 +702,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				returnNetPr = currOrderReturnOrRTO.getNetPR();
 				partnerBusiness.setReturnQuantity(returnQty);
 				netReturnCharges = grossNetRate * returnQty;
-				double returnChargesToBeDeducted = currOrderReturnOrRTO.getReturnOrRTOChargestoBeDeducted();
+				returnChargesToBeDeducted = currOrderReturnOrRTO.getReturnOrRTOChargestoBeDeducted();
 				if(!partnerBusiness.isPoOrder()){
 					additionalReturnCharges = returnChargesToBeDeducted*returnQty;
 					grossProfit = (currOrder.getPr() - productCost*quantity)/quantity*returnQty + returnChargesToBeDeducted;
@@ -744,13 +745,19 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		partnerBusiness.setNetActualSale(netActualSale);
 		partnerBusiness.setOrderSP(orderSP);
 		partnerBusiness.setReturnSP(returnSP);
-		partnerBusiness.setNetSP(grossSP/quantity*(quantity-returnQty));
+		if(partnerBusiness.isPoOrder())
+			partnerBusiness.setNetSP(currOrder.getPoPrice());	
+		else
+			partnerBusiness.setNetSP(grossSP/quantity*(quantity-returnQty));
 		if (currOrderPayment != null) {
 			partnerBusiness.setDateofPayment(currOrderPayment
 					.getDateofPayment());
 			double netPaymentResult = currOrderPayment
 					.getNetPaymentResult();
-			partnerBusiness.setNetPaymentResult(netPaymentResult);
+			if(partnerBusiness.isPoOrder())
+				partnerBusiness.setNetPaymentResult(returnChargesToBeDeducted);
+			else
+				partnerBusiness.setNetPaymentResult(netPaymentResult);
 			double paymentDifference = currOrderPayment
 					.getPaymentDifference();
 			partnerBusiness.setPaymentDifference(paymentDifference);
@@ -807,14 +814,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			fixedFeeQty = currOrder.getFixedfee() * quantity; 
 			shippingChargesQty = currOrder.getShippingCharges() * quantity;
 		}
-		partnerBusiness.setPccAmount(pccAmount);				
-		partnerBusiness.setFixedfee(fixedFee);
-		partnerBusiness.setShippingCharges(shippingCharges);
+		partnerBusiness.setPccAmount(pccAmountQty);				
+		partnerBusiness.setFixedfee(fixedFeeQty);
+		partnerBusiness.setShippingCharges(shippingChargesQty);
 		double totalAmount = grossCommission + pccAmount + fixedFee + shippingCharges;
 		double serviceTax = (totalAmount)*dataConfig.getServiceTax()/100;
 		double serviceTaxNoQty = (grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty)*dataConfig.getServiceTax()/100;
 		double serviceTaxQty = (grossCommissionQty + pccAmountQty + fixedFeeQty + shippingChargesQty)*dataConfig.getServiceTax()/100;
-		partnerBusiness.setServiceTax(serviceTax);
+		partnerBusiness.setServiceTax(serviceTaxQty);
 		double grossCommissionToBePaid = 0;
 		if(partnerBusiness.isPoOrder())
 			grossCommissionToBePaid = grossCommission + taxSP - taxPOPrice;
