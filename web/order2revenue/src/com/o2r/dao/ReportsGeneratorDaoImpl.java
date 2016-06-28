@@ -792,7 +792,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			grossCommissionNoQty = currOrder.getPartnerCommission() * returnQty;
 			grossCommissionQty = currOrder.getPartnerCommission() * quantity;
 		}
-		partnerBusiness.setGrossPartnerCommission(grossCommissionQty);
+		partnerBusiness.setGrossPartnerCommission(grossCommission);
 		double pccAmount = 0;
 		double fixedFee = 0;
 		double shippingCharges = 0;
@@ -814,14 +814,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			fixedFeeQty = currOrder.getFixedfee() * quantity; 
 			shippingChargesQty = currOrder.getShippingCharges() * quantity;
 		}
-		partnerBusiness.setPccAmount(pccAmountQty);				
-		partnerBusiness.setFixedfee(fixedFeeQty);
-		partnerBusiness.setShippingCharges(shippingChargesQty);
+		partnerBusiness.setPccAmount(pccAmount);				
+		partnerBusiness.setFixedfee(fixedFee);
+		partnerBusiness.setShippingCharges(shippingCharges);
 		double totalAmount = grossCommission + pccAmount + fixedFee + shippingCharges;
 		double serviceTax = (totalAmount)*dataConfig.getServiceTax()/100;
 		double serviceTaxNoQty = (grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty)*dataConfig.getServiceTax()/100;
 		double serviceTaxQty = (grossCommissionQty + pccAmountQty + fixedFeeQty + shippingChargesQty)*dataConfig.getServiceTax()/100;
-		partnerBusiness.setServiceTax(serviceTaxQty);
+		partnerBusiness.setServiceTax(serviceTax);
 		double grossCommissionToBePaid = 0;
 		if(partnerBusiness.isPoOrder())
 			grossCommissionToBePaid = grossCommission + taxSP - taxPOPrice;
