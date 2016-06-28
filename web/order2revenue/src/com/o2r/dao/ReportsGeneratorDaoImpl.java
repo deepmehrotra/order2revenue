@@ -853,7 +853,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			netEossValue = currOrder.getEossValue();
 		partnerBusiness.setNetEossValue(netEossValue);
 		partnerBusiness.setNetPr(netPr);
-		partnerBusiness.setGrossNetRate(grossNetRate*quantity);
+		if(partnerBusiness.isPoOrder())
+			partnerBusiness.setGrossNetRate(currOrder.getNetRate());
+		else
+			partnerBusiness.setGrossNetRate(grossNetRate*quantity);
 		partnerBusiness.setNetRate(currOrder.getNetRate());
 		partnerBusiness.setFinalStatus(currOrder.getFinalStatus());
 		partnerBusiness.setGrossProfit(grossProfit);
