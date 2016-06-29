@@ -69,7 +69,7 @@ public interface ReportsGeneratorDao {
 
 	public List<ChannelNR> fetchNetRate(int sellerId, Date startDate, Date endDate);
 
-	public List<MonthlyCommission> fetchMonthlyComm(int sellerId, Date startDate, Date endDate, String criteria);
+	public List<MonthlyCommission> fetchMonthlyComm(int sellerId, Date startDate, Date endDate);
 
 	/*public List<UploadReport> listUploadReport() throws CustomException;
 

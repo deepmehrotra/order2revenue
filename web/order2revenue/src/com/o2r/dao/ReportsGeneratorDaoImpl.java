@@ -1446,12 +1446,12 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<MonthlyCommission> fetchMonthlyComm(int sellerId, Date startDate, Date endDate, String criteria) {
+	public List<MonthlyCommission> fetchMonthlyComm(int sellerId, Date startDate, Date endDate) {
 		List<MonthlyCommission> monthlyList = new ArrayList<MonthlyCommission>();
 		Map<String, MonthlyCommission> monthlyMap = new HashMap<String, MonthlyCommission>();
 		Session session=sessionFactory.openSession();
 		session.getTransaction().begin();
-		String queryStr = "select concat(monthname(op.shippedDate), ' ', year(op.dateOfPayment)) as Month, " +
+		String queryStr = "select concat(monthname(ot.shippedDate), ' ', year(ot.shippedDate)) as Month, " +
 				"sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * ot.quantity * 1.145) " +
 				"as grossComm from order_table ot " +
 				"where ot.poOrder = 0  and ot.seller_Id=:sellerId and ot.shippedDate " +
@@ -1469,7 +1469,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			monthlyMap.put(key, monthlyComm);
 		}
 		
-		queryStr = "select concat(monthname(op.shippedDate), ' ', year(op.dateOfPayment)) as Month, " +
+		queryStr = "select concat(monthname(orr.returnDate), ' ', year(orr.returnDate)) as Month, " +
 				"sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty) " +
 				"as returnComm from order_table ot, orderreturn orr " +
 				"where ot.orderReturnOrRTO_returnId = orr.returnId and ot.poOrder = 0  and ot.seller_Id=:sellerId and orr.returnDate " +
@@ -1488,7 +1488,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			monthlyComm.setReturnCommission(Double.parseDouble(order[1].toString()));
 			monthlyMap.put(key, monthlyComm);
 		}
-		queryStr = "select concat(monthname(op.shippedDate), ' ', year(op.dateOfPayment)) as Month, " +
+		queryStr = "select concat(monthname(orr.returnDate), ' ', year(orr.returnDate)) as Month, " +
 				"sum(orr.returnOrRTOChargestoBeDeducted * orr.returnorrtoQty) " +
 				"as addCharges from order_table ot, orderreturn orr " +
 				"where ot.orderReturnOrRTO_returnId = orr.returnId and ot.poOrder = 0  and ot.seller_Id=:sellerId and orr.returnDate " +

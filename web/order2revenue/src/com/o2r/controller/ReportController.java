@@ -35,6 +35,7 @@ import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.DebtorsGraph1;
 import com.o2r.bean.ExpensesDetails;
+import com.o2r.bean.MonthlyCommission;
 import com.o2r.bean.NetPaymentResult;
 import com.o2r.bean.NetProfitabilityST;
 import com.o2r.bean.PartnerReportDetails;
@@ -199,9 +200,8 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			int sellerId = helperClass.getSellerIdfromSession(request);
 			model.put("reportNameStr", GlobalConstant.reportNameMap.get(reportName));
 			
-			List<PartnerReportDetails> debtorsList = reportGeneratorService
-					.getDebtorsReportDetails(startDate, endDate, sellerId);
 			if ("debtorsReport".equalsIgnoreCase(reportName)) {
+				List<PartnerReportDetails> debtorsList = reportGeneratorService.getDebtorsReportDetails(startDate, endDate, sellerId);
 				List<DebtorsGraph1> debtorsGraph1PartnerList = ConverterClass.transformDebtorsGraph1Graph(debtorsList, "partner");
 				List<DebtorsGraph1> debtorsGraph1CategoryList = ConverterClass.transformDebtorsGraph1Graph(debtorsList, "category");
 				
@@ -279,7 +279,9 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 				model.put("categoryByGrossComm", ConverterClass.getCommissionSortedList(categoryCommissionGraphList, "GrossComm"));
 				Collections.sort(categoryCommissionGraphList, new CommissionDetails.OrderByNetChannelCommission());
 				model.put("categoryByNetChann", ConverterClass.getCommissionSortedList(categoryCommissionGraphList, "NetChann"));
-
+				
+				List<MonthlyCommission> monthlyGraph = reportGeneratorService.fetchMonthlyComm(sellerId, startDate, endDate);
+				model.put("monthlyGraph", monthlyGraph);
 				return new ModelAndView("reports/viewCommGraphReport", model);
 			}
 		} catch (CustomException ce) {

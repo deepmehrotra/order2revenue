@@ -18,6 +18,7 @@ import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionDetails;
+import com.o2r.bean.MonthlyCommission;
 import com.o2r.bean.NetPaymentResult;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
@@ -212,6 +213,12 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 	public List<ChannelNR> fetchNetRate(int sellerId, Date startDate,
 			Date endDate) {
 		return reportGeneratorDao.fetchNetRate(sellerId, startDate, endDate);
+	}
+
+	@Override
+	public List<MonthlyCommission> fetchMonthlyComm(int sellerId,
+			Date startDate, Date endDate) {
+		return reportGeneratorDao.fetchMonthlyComm(sellerId, startDate, endDate);
 	}
 
 	/*

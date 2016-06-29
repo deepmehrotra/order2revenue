@@ -135,6 +135,44 @@
 														<table class="table table-bordered custom-table">
 															<thead>
 																<tr>
+																	<th>Month</th>
+																	<th>Gross Commission to be paid</th>
+																	<th>Return Commission</th>
+																	<th>Additional Return Charges</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty monthlyGraph}">
+																	<c:forEach items="${monthlyGraph}"
+																		var="categoryDto" varStatus="loop">
+																		<tr>
+																			<td>${categoryDto.key}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.grossCommission}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.returnCommission}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netCommission}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div id="stacked-chart-3"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
 																	<th>Category</th>
 																	<th>Gross Commission to be paid</th>
 																	<th>Return Commission</th>
@@ -374,6 +412,20 @@
 		temp4.push(arr1);
 		categoryByNetChannArr.push(arr2);
 		</c:forEach>
+		
+		var dataArr = [];
+		var yAxisText = 'Gross Commission vs Return Commission vs Net Commission';
+		var divId = "#stacked-chart-3";
+		var xAxisCategories = ['Gross Commission', 'Return Commission', 'Net Commission'];
+		<c:forEach items="${monthlyGraph}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.key}';
+			data.data = [parseFloat(parseFloat('${partnerDto.grossCommission}').toFixed(2)), 
+			             parseFloat(parseFloat('${partnerDto.returnCommission}').toFixed(2)), 
+			             parseFloat(parseFloat('${partnerDto.netCommission}').toFixed(2))];
+			dataArr.push(data);
+		</c:forEach>
+		stackChart(divId, yAxisText, dataArr);
 
 		$(window)
 				.load(
