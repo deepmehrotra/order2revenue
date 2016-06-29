@@ -41,4 +41,6 @@ public void addStateDeliveryTime(List<StateDeliveryTime> stateDelTimeList, int s
 
 public Seller getSellerVerCode(String verCode);
 
+public boolean sendMail(String to, String subject, String body);
+
 }
