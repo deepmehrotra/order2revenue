@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
@@ -22,6 +20,7 @@ import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelNR;
 import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
+import com.o2r.bean.CommissionAnalysis;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.CustomerBean;
 import com.o2r.bean.DebtorsGraph1;
@@ -1474,7 +1473,7 @@ public class ConverterClass {
 				case "category":
 					key = partnerBusiness.getParentCategory();
 					if(StringUtils.isEmpty(key))
-						key = "PO-Consolidated";
+						key = "B2B";
 					break;
 				default: break;
 			}
@@ -1547,6 +1546,69 @@ public class ConverterClass {
 
 		return partnerBusinessGraphList;
 	}
+	
+	/**
+	 * Transform to List of PartnerBusinessGraph objects
+	 * 
+	 * @param partnerBusinessList
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List<CommissionAnalysis> transformCommAGraph(
+			List<PartnerReportDetails> partnerBusinessList, String criteria) {
+		Map<String, CommissionAnalysis> commAGraphMap = new HashMap<String, CommissionAnalysis>();
+		for (PartnerReportDetails partnerBusiness : partnerBusinessList) {
+			String key = "";
+			switch(criteria){
+				case "partner":key = partnerBusiness.getPcName();break;
+				case "category":
+					key = partnerBusiness.getParentCategory();
+					if(StringUtils.isEmpty(key))
+						key = "B2B";
+					break;
+				default: break;
+			}
+			CommissionAnalysis commAGraph = commAGraphMap.get(key);
+			double fixedFee = partnerBusiness.getFixedfee();
+			double pcc = partnerBusiness.getPccAmount();
+			double sellingFee = partnerBusiness.getGrossPartnerCommission();
+			double serviceTax = partnerBusiness.getServiceTax();
+			double shippingCharges = partnerBusiness.getShippingCharges();
+			double taxSP = partnerBusiness.getTaxSP();
+			double additionalCharges = partnerBusiness.getAdditionalReturnCharges();
+			if (commAGraph == null) {
+				commAGraph = new CommissionAnalysis();
+			} else {
+				fixedFee += commAGraph.getFixedFee();
+				pcc += commAGraph.getPcc();
+				sellingFee += commAGraph.getSellingFee();
+				serviceTax += commAGraph.getServiceTax();
+				shippingCharges += commAGraph.getShippingCharges();
+				taxSP += commAGraph.getTaxSP();
+				additionalCharges += commAGraph.getAdditionalCharges();
+			}
+			commAGraph.setKey(key);
+			commAGraph.setFixedFee(fixedFee);
+			commAGraph.setPcc(pcc);
+			commAGraph.setSellingFee(sellingFee);
+			commAGraph.setServiceTax(serviceTax);
+			commAGraph.setShippingCharges(shippingCharges);
+			commAGraph.setTaxSP(taxSP);
+			commAGraph.setAdditionalCharges(additionalCharges);
+			commAGraphMap.put(key, commAGraph);
+		}
+
+		List<CommissionAnalysis> commAGraphList = new ArrayList<CommissionAnalysis>();
+		Iterator entries = commAGraphMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, CommissionAnalysis> thisEntry = (Entry<String, CommissionAnalysis>) entries
+					.next();
+			CommissionAnalysis value = thisEntry.getValue();
+			commAGraphList.add(value);
+		}
+
+		return commAGraphList;
+	}
 
 	/**
 	 * Transform to List of PartnerCommissionPaidGraph objects
@@ -1565,7 +1627,7 @@ public class ConverterClass {
 				case "category":
 					key = partnerBusiness.getParentCategory();
 					if(StringUtils.isEmpty(key))
-						key = "PO-Consolidated";
+						key = "B2B";
 					break;
 				default: break;
 			}
@@ -1647,7 +1709,7 @@ public class ConverterClass {
 				case "category":
 					key = currChannelReport.getParentCategory();
 					if(StringUtils.isEmpty(key))
-						key = "PO-Consolidated";
+						key = "B2B";
 					break;
 				default: break;
 			}
@@ -1741,7 +1803,7 @@ public class ConverterClass {
 				case "category":
 					key = currChannelReport.getParentCategory();
 					if(StringUtils.isEmpty(key))
-						key = "PO-Consolidated";
+						key = "B2B";
 					break;
 				default: break;
 			}
@@ -1988,6 +2050,44 @@ public class ConverterClass {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List getCommASortedList(List<CommissionAnalysis> channelGraphList) {
+		int maxLength = 5;
+		if(channelGraphList.size()<=maxLength)
+			return channelGraphList;
+		List<CommissionAnalysis> newChannelReportList = new ArrayList<>();
+		int index = 1;
+		boolean initialize = false;
+		CommissionAnalysis consolidated = new CommissionAnalysis();
+		for(CommissionAnalysis channelGraph: channelGraphList){
+			if(index++ >= 5){
+				if(!initialize){
+					initialize = true;
+					consolidated.setKey("Others");
+					consolidated.setSellingFee(channelGraph.getSellingFee());
+					consolidated.setPcc(channelGraph.getPcc());
+					consolidated.setFixedFee(channelGraph.getFixedFee());
+					consolidated.setShippingCharges(channelGraph.getShippingCharges());
+					consolidated.setServiceTax(channelGraph.getServiceTax());
+					consolidated.setTaxSP(channelGraph.getTaxSP());
+					consolidated.setAdditionalCharges(channelGraph.getAdditionalCharges());
+				}else{
+					consolidated.setSellingFee(consolidated.getSellingFee() + channelGraph.getSellingFee());
+					consolidated.setPcc(consolidated.getPcc() + channelGraph.getPcc());
+					consolidated.setFixedFee(consolidated.getFixedFee() + channelGraph.getFixedFee());
+					consolidated.setShippingCharges(consolidated.getShippingCharges() + channelGraph.getShippingCharges());
+					consolidated.setServiceTax(consolidated.getServiceTax() + channelGraph.getServiceTax());
+					consolidated.setTaxSP(consolidated.getTaxSP() + channelGraph.getTaxSP());
+					consolidated.setAdditionalCharges(consolidated.getAdditionalCharges() + channelGraph.getAdditionalCharges());
+				}
+			} else{
+				newChannelReportList.add(channelGraph);
+			}
+		}
+		newChannelReportList.add(consolidated);
+		return newChannelReportList;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List getChannelCatNPRSortedList(List<ChannelCatNPR> channelGraphList) {
 		int maxLength = 5;
 		if(channelGraphList.size()<=maxLength)
@@ -2205,7 +2305,7 @@ public class ConverterClass {
 				case "category":
 					key = partnerBusiness.getParentCategory();
 					if(StringUtils.isEmpty(key))
-						key = "PO-Consolidated";
+						key = "B2B";
 					break;
 				default: break;
 			}

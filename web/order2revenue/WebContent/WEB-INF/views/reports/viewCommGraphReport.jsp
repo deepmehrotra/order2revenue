@@ -129,6 +129,54 @@
 											</div>
 										</div>
 										<div class="row">
+											<div class="col-lg-12">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Partner</th>
+																	<th>Selling Fee</th>
+																	<th>PCC</th>
+																	<th>Fixed Fee</th>
+																	<th>Shipping Charges</th>
+																	<th>Service Tax</th>
+																	<th>Tax SP</th>
+																	<th>Additional Return Charges</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty commTablePartner}">
+																	<c:forEach items="${commTablePartner}" var="categoryDto"
+																		varStatus="loop">
+																		<tr>
+																			<td>${categoryDto.key}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.sellingFee}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.pcc}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.fixedFee}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.shippingCharges}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.serviceTax}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.taxSP}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.additionalCharges}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>	
+										<div class="row">	
+											<div class="col-lg-12">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div id="stacked-chart-4"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
@@ -237,6 +285,54 @@
 															<div class="flot-chart-content"
 																id="bar-chart-category-net-chann"></div>
 														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-12">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Category</th>
+																	<th>Selling Fee</th>
+																	<th>PCC</th>
+																	<th>Fixed Fee</th>
+																	<th>Shipping Charges</th>
+																	<th>Service Tax</th>
+																	<th>Tax SP</th>
+																	<th>Additional Return Charges</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty commTableCategory}">
+																	<c:forEach items="${commTableCategory}" var="categoryDto"
+																		varStatus="loop">
+																		<tr>
+																			<td>${categoryDto.key}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.sellingFee}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.pcc}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.fixedFee}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.shippingCharges}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.serviceTax}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.taxSP}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.additionalCharges}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>	
+										<div class="row">	
+											<div class="col-lg-12">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div id="stacked-chart-5"></div>
 													</div>
 												</div>
 											</div>
@@ -423,6 +519,42 @@
 			data.data = [parseFloat(parseFloat('${partnerDto.grossCommission}').toFixed(2)), 
 			             parseFloat(parseFloat('${partnerDto.returnCommission}').toFixed(2)), 
 			             parseFloat(parseFloat('${partnerDto.netCommission}').toFixed(2))];
+			dataArr.push(data);
+		</c:forEach>
+		stackChart(divId, yAxisText, dataArr);
+		
+		var dataArr = [];
+		var yAxisText = 'Partner Commission Graph';
+		var divId = "#stacked-chart-4";
+		var xAxisCategories = ['Selling Fee', 'PCC', 'Fixed Fee', 'Shipping Charges', 'Service Tax', 'Tax SP', 'Additional Charges'];
+		<c:forEach items="${commTablePartner}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.key}';
+			data.data = [parseFloat(parseFloat('${partnerDto.sellingFee}').toFixed(2)), 
+			             parseFloat(parseFloat('${partnerDto.pcc}').toFixed(2)), 
+			             parseFloat(parseFloat('${partnerDto.fixedFee}').toFixed(2)),
+			             parseFloat(parseFloat('${partnerDto.shippingCharges}').toFixed(2)),
+			             parseFloat(parseFloat('${partnerDto.serviceTax}').toFixed(2)),
+			             parseFloat(parseFloat('${partnerDto.taxSP}').toFixed(2)),
+			             parseFloat(parseFloat('${partnerDto.additionalCharges}').toFixed(2))];
+			dataArr.push(data);
+		</c:forEach>
+		stackChart(divId, yAxisText, dataArr);
+
+		var dataArr = [];
+		var yAxisText = 'Category Commission Graph';
+		var divId = "#stacked-chart-5";
+		var xAxisCategories = ['Selling Fee', 'PCC', 'Fixed Fee', 'Shipping Charges', 'Service Tax', 'Tax SP', 'Additional Charges'];
+		<c:forEach items="${commTableCategory}" var="partnerDto" varStatus="loop">
+			var data = {};
+			data.name = '${partnerDto.key}';
+			data.data = [parseFloat(parseFloat('${partnerDto.sellingFee}').toFixed(2)), 
+			             parseFloat(parseFloat('${partnerDto.pcc}').toFixed(2)), 
+			             parseFloat(parseFloat('${partnerDto.fixedFee}').toFixed(2)),
+			             parseFloat(parseFloat('${partnerDto.shippingCharges}').toFixed(2)),
+			             parseFloat(parseFloat('${partnerDto.serviceTax}').toFixed(2)),
+			             parseFloat(parseFloat('${partnerDto.taxSP}').toFixed(2)),
+			             parseFloat(parseFloat('${partnerDto.additionalCharges}').toFixed(2))];
 			dataArr.push(data);
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);

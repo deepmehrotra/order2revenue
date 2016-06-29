@@ -32,6 +32,7 @@ import com.o2r.bean.ChannelNR;
 import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
+import com.o2r.bean.CommissionAnalysis;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.DebtorsGraph1;
 import com.o2r.bean.ExpensesDetails;
@@ -279,6 +280,11 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 				model.put("categoryByGrossComm", ConverterClass.getCommissionSortedList(categoryCommissionGraphList, "GrossComm"));
 				Collections.sort(categoryCommissionGraphList, new CommissionDetails.OrderByNetChannelCommission());
 				model.put("categoryByNetChann", ConverterClass.getCommissionSortedList(categoryCommissionGraphList, "NetChann"));
+				
+				List<CommissionAnalysis> partnerBusinessGraphList = ConverterClass.transformCommAGraph(partnerBusinessList, "partner");
+				model.put("commTablePartner", ConverterClass.getCommASortedList(partnerBusinessGraphList));
+				List<CommissionAnalysis> categoryBusinessGraphList = ConverterClass.transformCommAGraph(partnerBusinessList, "category");
+				model.put("commTableCategory", ConverterClass.getCommASortedList(categoryBusinessGraphList));
 				
 				List<MonthlyCommission> monthlyGraph = reportGeneratorService.fetchMonthlyComm(sellerId, startDate, endDate);
 				model.put("monthlyGraph", monthlyGraph);
