@@ -136,9 +136,9 @@
 															<thead>
 																<tr>
 																	<th>Month</th>
-																	<th>Gross Commission to be paid</th>
+																	<th>Gross Commission</th>
 																	<th>Return Commission</th>
-																	<th>Additional Return Charges</th>
+																	<th>Net Commission</th>
 																</tr>
 															</thead>
 															<tbody>

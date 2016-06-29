@@ -1489,7 +1489,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			monthlyMap.put(key, monthlyComm);
 		}
 		queryStr = "select concat(monthname(orr.returnDate), ' ', year(orr.returnDate)) as Month, " +
-				"sum(orr.returnOrRTOChargestoBeDeducted * orr.returnorrtoQty) " +
+				"sum(orr.estimateddeduction * orr.returnorrtoQty) " +
 				"as addCharges from order_table ot, orderreturn orr " +
 				"where ot.orderReturnOrRTO_returnId = orr.returnId and ot.poOrder = 0  and ot.seller_Id=:sellerId and orr.returnDate " +
 				"between :startDate AND :endDate group by ot.pcName";
