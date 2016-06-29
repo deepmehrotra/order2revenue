@@ -1215,15 +1215,15 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			commDetailsMap.put(key, commDetails);
 		}
 		
-		String poOrderQueryStr = "select ot.pcName, sum( ot.partnerCommission+otx.taxToReturn-otx.tax ) as grossComm, " +
-				"sum(ot.quantity) as saleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx " +
-				"where ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null " +
+		String poOrderQueryStr = "select ot.pcName, sum( ot.partnerCommission+otx.taxSP-orr.taxPOAmt ) as grossComm, " +
+				"sum(ot.quantity) as saleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx, orderreturn orr " +
+				"where ot.orderReturnOrRTO_returnId = orr.returnId and ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null " +
 				"and ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by ot.pcName";
 		if("category".equalsIgnoreCase(criteria))
-			poOrderQueryStr = "select cat.parentCatName, sum( ot.partnerCommission+otx.taxToReturn-otx.tax ) as grossComm, " +
-					"sum(ot.quantity) as saleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx, product pr, category cat " +
-					"where pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and " +
-					"ot.consolidatedOrder_orderId is null and ot.seller_Id=:sellerId and " +
+			poOrderQueryStr = "select cat.parentCatName, sum( ot.partnerCommission+otx.taxSP-orr.taxPOAmt ) as grossComm, " +
+					"sum(ot.quantity) as saleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx, product pr, category cat, orderreturn orr " +
+					"where ot.orderReturnOrRTO_returnId = orr.returnId and pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode " +
+					"and ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null and ot.seller_Id=:sellerId and " +
 					"ot.shippedDate between :startDate AND :endDate group by cat.parentCatName";
 		Query poOrderQuery = session.createSQLQuery(poOrderQueryStr)
 				.setParameter("startDate", startDate)
@@ -1297,13 +1297,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			commDetailsMap.put(key, commDetails);
 		}
 
-		String poReturnQueryStr = "select ot.pcName, sum( (ot.partnerCommission+otx.taxToReturn-otx.tax) * orr.returnorrtoQty ) as returnComm, " +
+		String poReturnQueryStr = "select ot.pcName, sum(ot.partnerCommission+otx.taxSP-orr.taxPOAmt) as returnComm, " +
 				"sum(estimateddeduction) as addRetCharges, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn) as tdsToReturn  " +
 				"from order_table ot, ordertax otx, orderreturn orr where ot.orderReturnOrRTO_returnId = orr.returnId and " +
 				"ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null and ot.seller_Id=:sellerId " +
 				"and orr.returnDate between :startDate AND :endDate group by ot.pcName";
 		if("category".equalsIgnoreCase(criteria))
-			poReturnQueryStr = "select cat.parentCatName, sum( (ot.partnerCommission+otx.taxToReturn-otx.tax) * orr.returnorrtoQty ), " +
+			poReturnQueryStr = "select cat.parentCatName, sum(ot.partnerCommission+otx.taxSP-orr.taxPOAmt), " +
 					"sum(estimateddeduction) as returnComm, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn) as tdsToReturn  " +
 					"from order_table ot, ordertax otx, orderreturn orr, product pr, category cat where pr.category_categoryId = cat.categoryId and " +
 					"ot.productSkuCode = pr.productSkuCode and " +
@@ -1465,13 +1465,15 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			MonthlyCommission monthlyComm = new MonthlyCommission();
 			String key = order[0].toString();
 			monthlyComm.setKey(key);
-			monthlyComm.setGrossCommission(Double.parseDouble(order[1].toString()));
+			double grossCommission = Double.parseDouble(order[1].toString());
+			monthlyComm.setGrossCommission(grossCommission);
+			monthlyComm.setNetCommission(grossCommission);
 			monthlyMap.put(key, monthlyComm);
 		}
 		
 		queryStr = "select concat(monthname(orr.returnDate), ' ', year(orr.returnDate)) as Month, " +
 				"sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty) " +
-				"as returnComm from order_table ot, orderreturn orr " +
+				"as returnComm, sum(orr.estimateddeduction * orr.returnorrtoQty) as additionalCharges from order_table ot, orderreturn orr " +
 				"where ot.orderReturnOrRTO_returnId = orr.returnId and ot.poOrder = 0  and ot.seller_Id=:sellerId and orr.returnDate " +
 				"between :startDate AND :endDate group by ot.pcName";
 		orderQuery = session.createSQLQuery(queryStr)
@@ -1485,32 +1487,65 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			if(monthlyComm == null)
 				monthlyComm = new MonthlyCommission();
 			monthlyComm.setKey(key);
-			monthlyComm.setReturnCommission(Double.parseDouble(order[1].toString()));
-			monthlyMap.put(key, monthlyComm);
-		}
-		queryStr = "select concat(monthname(orr.returnDate), ' ', year(orr.returnDate)) as Month, " +
-				"sum(orr.estimateddeduction * orr.returnorrtoQty) " +
-				"as addCharges from order_table ot, orderreturn orr " +
-				"where ot.orderReturnOrRTO_returnId = orr.returnId and ot.poOrder = 0  and ot.seller_Id=:sellerId and orr.returnDate " +
-				"between :startDate AND :endDate group by ot.pcName";
-		orderQuery = session.createSQLQuery(queryStr)
-				.setParameter("startDate", startDate)
-				.setParameter("endDate", endDate)
-				.setParameter("sellerId", sellerId);
-		orderList = orderQuery.list();
-		for(Object[] order: orderList){
-			String key = order[0].toString();
-			MonthlyCommission monthlyComm = monthlyMap.get(key);
-			if(monthlyComm == null)
-				monthlyComm = new MonthlyCommission();
-			monthlyComm.setKey(key);
-			double additionalCharges = Double.parseDouble(order[1].toString());
+			double returnCommission = Double.parseDouble(order[1].toString());
+			double additionalCharges = Double.parseDouble(order[2].toString());
+			monthlyComm.setReturnCommission(returnCommission);
 			monthlyComm.setAdditionalCharges(additionalCharges);
 			double grossCommission = monthlyComm.getGrossCommission();
-			double returnCommission = monthlyComm.getReturnCommission();
 			monthlyComm.setNetCommission(grossCommission - returnCommission + additionalCharges);
 			monthlyMap.put(key, monthlyComm);
 		}
+		
+		queryStr = "select concat(monthname(ot.shippedDate), ' ', year(ot.shippedDate)) as Month, " +
+				"sum(ot.partnerCommission+otx.taxSP-orr.taxPOAmt) as grossComm from order_table ot, ordertax otx, " +
+				"orderreturn orr where ot.orderReturnOrRTO_returnId = orr.returnId and ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 " +
+				"and ot.consolidatedOrder_orderId is null and ot.seller_Id=:sellerId and ot.shippedDate " +
+				"between :startDate AND :endDate group by ot.pcName";
+		orderQuery = session.createSQLQuery(queryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			MonthlyCommission monthlyComm = monthlyMap.get(key);
+			if(monthlyComm == null)
+				monthlyComm = new MonthlyCommission();
+			monthlyComm.setKey(key);
+			double additionalCharges = monthlyComm.getAdditionalCharges();
+			double grossCommission = monthlyComm.getGrossCommission();
+			double returnCommission = monthlyComm.getReturnCommission();
+			monthlyComm.setGrossCommission(grossCommission + Double.parseDouble(order[1].toString()));
+			grossCommission = monthlyComm.getGrossCommission();
+			monthlyComm.setNetCommission(grossCommission - returnCommission + additionalCharges);
+			monthlyMap.put(key, monthlyComm);
+		}
+		
+		queryStr = "select concat(monthname(orr.returnDate), ' ', year(orr.returnDate)) as Month, " +
+				"sum(ot.partnerCommission+otx.taxSP-orr.taxPOAmt) " +
+				"as returnComm from order_table ot, ordertax otx, orderreturn orr " +
+				"where ot.orderReturnOrRTO_returnId = orr.returnId and ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null " +
+				"and ot.seller_Id=:sellerId and orr.returnDate between :startDate AND :endDate group by ot.pcName";
+		orderQuery = session.createSQLQuery(queryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			MonthlyCommission monthlyComm = monthlyMap.get(key);
+			if(monthlyComm == null)
+				monthlyComm = new MonthlyCommission();
+			monthlyComm.setKey(key);
+			double additionalCharges = monthlyComm.getAdditionalCharges();
+			double grossCommission = monthlyComm.getGrossCommission();
+			double returnCommission = monthlyComm.getReturnCommission();
+			monthlyComm.setReturnCommission(returnCommission + Double.parseDouble(order[1].toString()));
+			returnCommission = monthlyComm.getReturnCommission();
+			monthlyComm.setNetCommission(grossCommission - returnCommission + additionalCharges);
+			monthlyMap.put(key, monthlyComm);
+		}
+
 		Iterator entries = monthlyMap.entrySet().iterator();
 		while (entries.hasNext()) {
 			Entry<String, MonthlyCommission> thisEntry = (Entry<String, MonthlyCommission>) entries.next();
