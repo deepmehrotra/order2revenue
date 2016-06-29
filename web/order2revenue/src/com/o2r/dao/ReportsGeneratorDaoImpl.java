@@ -40,6 +40,7 @@ import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.DataConfig;
+import com.o2r.bean.MonthlyCommission;
 import com.o2r.bean.NetPaymentResult;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.TotalShippedOrder;
@@ -760,12 +761,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					.getDateofPayment());
 			double netPaymentResult = currOrderPayment
 					.getNetPaymentResult();
-			if(partnerBusiness.isPoOrder())
-				partnerBusiness.setNetPaymentResult(returnChargesToBeDeducted);
-			else
-				partnerBusiness.setNetPaymentResult(netPaymentResult);
-			double paymentDifference = currOrderPayment
-					.getPaymentDifference();
+			partnerBusiness.setNetPaymentResult(netPaymentResult);
+			double paymentDifference = currOrderPayment.getPaymentDifference();
 			partnerBusiness.setPaymentDifference(paymentDifference);
 			partnerBusiness.setPaymentCycle(currOrderPayment.getPaymentCycle());
 			partnerBusiness.setNegativeAmount(currOrderPayment.getNegativeAmount());
@@ -829,14 +826,20 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		double serviceTaxQty = (grossCommissionQty + pccAmountQty + fixedFeeQty + shippingChargesQty)*dataConfig.getServiceTax()/100;
 		partnerBusiness.setServiceTax(serviceTax);
 		double grossCommissionToBePaid = 0;
+		// PO Condition
 		if(partnerBusiness.isPoOrder())
 			grossCommissionToBePaid = grossCommission + taxSP - taxPOPrice;
 		else
 			grossCommissionToBePaid = totalAmount + serviceTax;
 		double grossCommissionToBePaidNoQty = grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty + serviceTaxNoQty;
 		double grossCommissionToBePaidQty = 0;
-		if(currOrder.getShippedDate() != null)
+		// MP Condition
+		if(!partnerBusiness.isPoOrder())
 			grossCommissionToBePaidQty = grossCommissionQty + pccAmountQty + fixedFeeQty + shippingChargesQty + serviceTaxQty;
+		// PO Condition
+		if(partnerBusiness.isPoOrder() && currOrder.getShippedDate() != null){
+			grossCommissionToBePaidQty = grossCommissionToBePaid;
+		}
 		partnerBusiness.setGrossCommissionQty(grossCommissionToBePaidQty);
 		partnerBusiness.setGrossCommission(grossCommissionToBePaid);
 		double returnCommision = 0;
@@ -1439,6 +1442,81 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			channelNRList.add(thisEntry.getValue());
 		}
 		return channelNRList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<MonthlyCommission> fetchMonthlyComm(int sellerId, Date startDate, Date endDate, String criteria) {
+		List<MonthlyCommission> monthlyList = new ArrayList<MonthlyCommission>();
+		Map<String, MonthlyCommission> monthlyMap = new HashMap<String, MonthlyCommission>();
+		Session session=sessionFactory.openSession();
+		session.getTransaction().begin();
+		String queryStr = "select concat(monthname(op.shippedDate), ' ', year(op.dateOfPayment)) as Month, " +
+				"sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * ot.quantity * 1.145) " +
+				"as grossComm from order_table ot " +
+				"where ot.poOrder = 0  and ot.seller_Id=:sellerId and ot.shippedDate " +
+				"between :startDate AND :endDate group by ot.pcName";
+		Query orderQuery = session.createSQLQuery(queryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		List<Object[]> orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			MonthlyCommission monthlyComm = new MonthlyCommission();
+			String key = order[0].toString();
+			monthlyComm.setKey(key);
+			monthlyComm.setGrossCommission(Double.parseDouble(order[1].toString()));
+			monthlyMap.put(key, monthlyComm);
+		}
+		
+		queryStr = "select concat(monthname(op.shippedDate), ' ', year(op.dateOfPayment)) as Month, " +
+				"sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty) " +
+				"as returnComm from order_table ot, orderreturn orr " +
+				"where ot.orderReturnOrRTO_returnId = orr.returnId and ot.poOrder = 0  and ot.seller_Id=:sellerId and orr.returnDate " +
+				"between :startDate AND :endDate group by ot.pcName";
+		orderQuery = session.createSQLQuery(queryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			MonthlyCommission monthlyComm = monthlyMap.get(key);
+			if(monthlyComm == null)
+				monthlyComm = new MonthlyCommission();
+			monthlyComm.setKey(key);
+			monthlyComm.setReturnCommission(Double.parseDouble(order[1].toString()));
+			monthlyMap.put(key, monthlyComm);
+		}
+		queryStr = "select concat(monthname(op.shippedDate), ' ', year(op.dateOfPayment)) as Month, " +
+				"sum(orr.returnOrRTOChargestoBeDeducted * orr.returnorrtoQty) " +
+				"as addCharges from order_table ot, orderreturn orr " +
+				"where ot.orderReturnOrRTO_returnId = orr.returnId and ot.poOrder = 0  and ot.seller_Id=:sellerId and orr.returnDate " +
+				"between :startDate AND :endDate group by ot.pcName";
+		orderQuery = session.createSQLQuery(queryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = orderQuery.list();
+		for(Object[] order: orderList){
+			String key = order[0].toString();
+			MonthlyCommission monthlyComm = monthlyMap.get(key);
+			if(monthlyComm == null)
+				monthlyComm = new MonthlyCommission();
+			monthlyComm.setKey(key);
+			double additionalCharges = Double.parseDouble(order[1].toString());
+			monthlyComm.setAdditionalCharges(additionalCharges);
+			double grossCommission = monthlyComm.getGrossCommission();
+			double returnCommission = monthlyComm.getReturnCommission();
+			monthlyComm.setNetCommission(grossCommission - returnCommission + additionalCharges);
+			monthlyMap.put(key, monthlyComm);
+		}
+		Iterator entries = monthlyMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, MonthlyCommission> thisEntry = (Entry<String, MonthlyCommission>) entries.next();
+			monthlyList.add(thisEntry.getValue());
+		}
+		return monthlyList;
 	}
 	
 	@SuppressWarnings("unchecked")
