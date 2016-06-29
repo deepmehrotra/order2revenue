@@ -327,6 +327,8 @@ public class ConverterClass {
 			seller.setTanNumber(sellerBean.getTanNumber());
 			seller.setRole(sellerBean.getRole());
 			seller.setVerCode(sellerBean.getVerCode());
+			seller.setPlan(sellerBean.getPlan());
+			seller.setSellerAccount(sellerBean.getSellerAccount());
 			seller.setStateDeliveryTime(sellerBean.getStateDeliveryTime());
 		}
 		return seller;
@@ -401,6 +403,8 @@ public class ConverterClass {
 			bean.setTanNumber(seller.getTanNumber());
 			bean.setRole(seller.getRole());
 			bean.setVerCode(seller.getVerCode());
+			bean.setPlan(seller.getPlan());
+			bean.setSellerAccount(seller.getSellerAccount());
 			bean.setStateDeliveryTime(seller.getStateDeliveryTime());
 		}
 		return bean;

@@ -127,6 +127,7 @@ public class SellerDaoImpl implements SellerDao {
 				verCode="O2R"+r1+"USER"+r2;
 				verificationLink = (props.getProperty("mailPathURL"))+verCode;
 				seller.setVerCode(verCode);
+				seller.getSellerAccount().setAtivationDate(new Date());				
 				session.saveOrUpdate(seller);
 				sendMail(seller.getEmail(),verificationLink);
 			}
@@ -535,6 +536,58 @@ public class SellerDaoImpl implements SellerDao {
 			}
 	    
 	  }
+	
+	@Override
+	public boolean sendMail(String to, String subject, String body) {
+		try{
+			props = PropertiesLoaderUtils.loadProperties(resource);					
+		}catch(Exception e){
+			log.error("Failed!",e);
+			return false;
+		}
+		final String from=props.getProperty("mailFrom");
+		
+		Properties prop = new Properties();
+		prop.put("mail.smtp.starttls.enable", "true");
+		prop.put("mail.smtp.auth", "true");
+		prop.put("mail.smtp.host", "smtp.gmail.com");
+		prop.put("mail.smtp.port", "587");
+
+		javax.mail.Session session = javax.mail.Session.getInstance(prop,
+				new javax.mail.Authenticator() {
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(from, props.getProperty("fromMailPassword"));
+					}
+				});
+
+		try {
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(from));
+			message.addRecipient(Message.RecipientType.TO,
+					new InternetAddress(to));
+			message.setSubject(subject);
+			message.setContent("<html>\n" +
+                    "<body>\n" +
+                    "\n" +body+
+                    "\n" +
+                    "</body>\n" +
+                    "</html>", "text/html");
+			Transport.send(message);
+			log.info("Mail has been Send....");
+			System.out.println("Mail send Successfully....");
+		} catch (AddressException e) {
+			log.error("Mail fail to send Cause : "+e.getMessage());
+			log.error("Failed!",e);
+			e.printStackTrace();
+			return false;
+		} catch (MessagingException e) {
+			log.error("Mail fail to send Cause : "+e.getMessage());
+			log.error("Failed!",e);
+			e.printStackTrace();
+			return false;
+		}		
+		return true;
+	}
 	
 	@Override
 	public Seller getSellerVerCode(String verCode) {

@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.o2r.bean.EventsBean;
 import com.o2r.bean.PlanBean;
 import com.o2r.bean.SellerBean;
 import com.o2r.helper.ConverterClass;
@@ -163,6 +164,28 @@ public class SellerController {
 		log.info("$$$ addOrder Starts : SellerController $$$");
 		return new ModelAndView("addSeller", model);
 	}
+	
+	@RequestMapping(value = "/seller/sellerList", method = RequestMethod.GET)
+	public ModelAndView listSeller(HttpServletRequest request, @ModelAttribute("command") SellerBean sellerBean, BindingResult result) {
+		
+		log.info("$$$ listSeller Starts : SellerController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		List sellers=null;
+		try{
+			sellers=sellerService.listSellers();
+			if(sellers != null && sellers.size() != 0){
+				model.put("sellers", sellers);
+			}
+			
+		}catch(Exception e){
+			log.error("Failed to getting Sellers ! SellerController ", e);
+			e.printStackTrace();
+		}		
+		log.info("$$$ listSeller Ends : SellerController $$$");
+		return new ModelAndView("miscellaneous/sellerList", model);
+	}
+	
+	
 
 	@RequestMapping(value = "/seller/addSeller", method = RequestMethod.GET)
 	public ModelAndView addSeller(HttpServletRequest request,
@@ -262,12 +285,12 @@ public class SellerController {
 					}
 				}
 			}
-			session.setAttribute("sellerName", sellerBean.getName());
+			session.setAttribute("sellerName", sellerBean.getName());			
 			Seller seller = ConverterClass.prepareSellerModel(sellerBean);
 			log.debug("****** : "+seller.getLogoUrl());
 			Set<Seller> sellerRoles = new HashSet<Seller>();
 			sellerRoles.add(seller);
-			seller.getRole().setSellerRoles(sellerRoles);
+			seller.getRole().setSellerRoles(sellerRoles);			
 			
 			sellerService.addSeller(seller);
 			sellerService.addStateDeliveryTime(sdtList, seller.getId());
@@ -471,7 +494,6 @@ public class SellerController {
 			else
 				return "null,"+seller.getName();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				log.error("Error getting seller ", e);
 			}

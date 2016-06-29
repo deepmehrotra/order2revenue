@@ -1,6 +1,7 @@
 <%@page import="java.io.File"%>
 <%@page import="com.o2r.helper.HelperClass"%>
 <%@page import="com.o2r.bean.SellerBean"%>
+<%@page import="org.springframework.security.core.context.SecurityContextHolder" %>>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
@@ -72,7 +73,7 @@ window.onload = function() {
 					</span> <a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
 						class="clear"> <span class="block m-t-xs"> <strong
 								class="font-bold" id="sellerName"><%= session.getAttribute("sellerName")%></strong>
-						</span> <span class="text-muted text-xs block">Seller<b
+						</span> <span class="text-muted text-xs block"><%=SecurityContextHolder.getContext().getAuthentication().getAuthorities() %>Seller<b
 								class="caret"></b></span>
 					</span>
 					</a>
@@ -129,6 +130,7 @@ window.onload = function() {
 					<li><a href="#" onclick="onclickSideNavigation('Tax')">Tax</a></li>
 					<li><a href="#" onclick="onclickSideNavigation('TDS')">TDS</a></li>
 					<li><a href="eventsList.html">Events</a></li>
+					<li><a href="sellerList.html">Seller List</a></li>
 
 				</ul></li>
 			<li><a href="#"><i class="fa fa-envelope"></i> <span
