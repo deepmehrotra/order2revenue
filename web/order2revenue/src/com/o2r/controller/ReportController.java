@@ -386,6 +386,7 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			List<ChannelReportDetails> categoryListST = new ArrayList<ChannelReportDetails>();
 			List<ChannelReportDetails> partnerList = ConverterClass.transformChannelReport(channelReportDetailsList, "partner");
 			List<ChannelReportDetails> categoryList = ConverterClass.transformChannelReport(channelReportDetailsList, "category");
+			List<ChannelReportDetails> monthlyList = new ArrayList<ChannelReportDetails>();
 			
 			switch(reportName){
 				case "channelSaleReport":
@@ -395,15 +396,22 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 					
 					Collections.sort(partnerList, new ChannelReportDetails.OrderByNR());
 					model.put("partnerByNR", ConverterClass.getChannelSortedList(partnerList, "NetSaleSP"));
-					Collections.sort(partnerList, new ChannelReportDetails.OrderByNPR());
-					model.put("partnerByNPR", ConverterClass.getChannelSortedList(partnerList, "NPR"));
 					Collections.sort(partnerList, new ChannelReportDetails.OrderByGSvSR());
 					model.put("partnerByGSvSR", ConverterClass.getChannelSortedList(partnerList, "GSvSR"));
-					List<ChannelNR> channelNrList = reportGeneratorService.getChannelNrList(startDate, endDate, sellerId, "partner");
-					model.put("partnerByDiffNR", ConverterClass.getChannelNetNrSortedList(channelNrList));
-					List<ChannelNetQty> channelNetQtyList = reportGeneratorService.getChannelNetQtyList(startDate, endDate, sellerId, "partner");
-					Collections.sort(channelNetQtyList, new ChannelNetQty.OrderByTotalQty());
-					model.put("partnerByNetQty", ConverterClass.getChannelNetQtySortedList(channelNetQtyList));
+					
+					Collections.sort(partnerList, new ChannelReportDetails.OrderByEOSS());
+					model.put("partnerByEOSS", ConverterClass.getChannelSortedList(partnerList, "EOSS"));
+					Collections.sort(partnerList, new ChannelReportDetails.OrderByTaxableSale());
+					model.put("partnerByTaxableSale", ConverterClass.getChannelSortedList(partnerList, "TaxableSale"));
+					Collections.sort(partnerList, new ChannelReportDetails.OrderByActualSale());
+					model.put("partnerByActualSale", ConverterClass.getChannelSortedList(partnerList, "ActualSale"));
+					Collections.sort(partnerList, new ChannelReportDetails.OrderByTaxfreeSale());
+					model.put("partnerByTaxfreeSale", ConverterClass.getChannelSortedList(partnerList, "TaxfreeSale"));
+					
+					monthlyList = ConverterClass.getChannelMonthlyList(
+							channelReportDetailsList, startDate, endDate);
+					Collections.sort(monthlyList, new ChannelReportDetails.OrderByMonthIndex());
+					model.put("monthlySale", monthlyList);
 					break;
 				case "categoryWiseSaleReport":
 					categoryListST = ConverterClass.transformChannelReportST(channelReportDetailsList, "category");
@@ -412,14 +420,22 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 					
 					Collections.sort(categoryList, new ChannelReportDetails.OrderByNR());
 					model.put("categoryByNR", ConverterClass.getChannelSortedList(categoryList, "NetSaleSP"));
-					Collections.sort(categoryList, new ChannelReportDetails.OrderByNPR());
-					model.put("categoryByNPR", ConverterClass.getChannelSortedList(categoryList, "NetAR"));
 					Collections.sort(categoryList, new ChannelReportDetails.OrderByGSvSR());
 					model.put("categoryByGSvSR", ConverterClass.getChannelSortedList(categoryList, "GSvSR"));					
-					List<ChannelNR> categoryNrList = reportGeneratorService.getChannelNrList(startDate, endDate, sellerId, "category");
-					model.put("categoryByDiffNR", ConverterClass.getChannelNetNrSortedList(categoryNrList));
-					List<ChannelNetQty> categoryNetQtyList = reportGeneratorService.getChannelNetQtyList(startDate, endDate, sellerId, "category");
-					model.put("categoryByNetQty", ConverterClass.getChannelNetQtySortedList(categoryNetQtyList));
+					
+					Collections.sort(categoryList, new ChannelReportDetails.OrderByEOSS());
+					model.put("categoryByEOSS", ConverterClass.getChannelSortedList(categoryList, "EOSS"));
+					Collections.sort(categoryList, new ChannelReportDetails.OrderByTaxableSale());
+					model.put("categoryByTaxableSale", ConverterClass.getChannelSortedList(categoryList, "TaxableSale"));
+					Collections.sort(categoryList, new ChannelReportDetails.OrderByActualSale());
+					model.put("categoryByActualSale", ConverterClass.getChannelSortedList(categoryList, "ActualSale"));
+					Collections.sort(categoryList, new ChannelReportDetails.OrderByTaxfreeSale());
+					model.put("categoryByTaxfreeSale", ConverterClass.getChannelSortedList(categoryList, "TaxfreeSale"));
+					
+					monthlyList = ConverterClass.getChannelMonthlyList(
+							channelReportDetailsList, startDate, endDate);
+					Collections.sort(monthlyList, new ChannelReportDetails.OrderByMonthIndex());
+					model.put("monthlySale", monthlyList);
 					break;
 				case "orderwiseGPReport": 
 					model.put("shortTablePartner", partnerList);

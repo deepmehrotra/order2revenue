@@ -89,11 +89,13 @@
 	                                </c:if>
 	                                <c:if test="${reportName eq 'categoryWiseSaleReport'}">
 	                                	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getCategory" name="headers"> Category </label></div>
-	                                	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getProductSku" name="headers"> SKU </label></div>
+	                                	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getProductSku" name="headers"> SKU </label></div> 	
 	                                </c:if>
-                                	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossNrAmount" name="headers"> Gross N/R Amount </label></div>
+                                	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getShippedDate" name="headers"> Shipped Date </label></div>
+	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getReturnDate" name="headers"> Return Date </label></div>
 	                            </div>
 	                            <div class="col-md-3">
+	                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossNrAmount" name="headers"> Gross N/R Amount </label></div>
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossSpAmount" name="headers"> Gross SP Amount </label></div>
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getGrossQty" name="headers"> Gross Qty</label></div>
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getSaleRetNrAmount" name="headers"> Sale Return N/R Amount </label></div>
@@ -106,12 +108,12 @@
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetSpAmount" name="headers"> Net SP Amount </label></div>
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetQty" name="headers"> Net Qty</label></div>
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getTaxCategory" name="headers"> Tax Category </label></div>
+	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetTaxLiability" name="headers"> Net Tax Liability </label></div>
     	                        </div>
     	                        <div class="col-md-3">
-	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetTaxLiability" name="headers"> Net Tax Liability </label></div>
+	                                
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetPr" name="headers"> Net P/R </label></div>
-	                                <!-- <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetPaymentResult" name="headers"> NPR </label></div>
-	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getPaymentDifference" name="headers"> Payment Difference </label></div> -->
+	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetEOSSValue" name="headers"> Net EOSS </label></div>
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getFinalStatus" name="headers"> Final Status </label></div>
     	                        </div>
                             </c:if>
