@@ -179,10 +179,12 @@
 																<c:if test="${!empty partnerByEOSS}">
 																	<c:forEach items="${partnerByEOSS}"
 																		var="partnerDto" varStatus="loop">
+																		<c:if test="${partnerDto.partner eq 'Myntra'}">
 																		<tr>
 																			<td>${partnerDto.partner}</td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netEossDiscountPaid}" /></td>
 																		</tr>
+																		</c:if>
 																	</c:forEach>
 																</c:if>
 															</tbody>
@@ -452,10 +454,12 @@
 																<c:if test="${!empty categoryByEOSS}">
 																	<c:forEach items="${categoryByEOSS}"
 																		var="categoryDto" varStatus="loop">
+																		<c:if test="${categoryDto.categoryName eq 'B2B'}">
 																		<tr>
 																			<td>${categoryDto.categoryName}</td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netEossDiscountPaid}" /></td>
 																		</tr>
+																		</c:if>
 																	</c:forEach>
 																</c:if>
 															</tbody>
@@ -588,8 +592,8 @@
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty shortTablePartner}">
-																	<c:forEach items="${shortTablePartner}" var="partner"
+																<c:if test="${!empty shortTableMainPartner}">
+																	<c:forEach items="${shortTableMainPartner}" var="partner"
 																		varStatus="loop">
 																		<tr>
 																			<td>${partner.partner}</td>
@@ -640,8 +644,8 @@
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty shortTableCategory}">
-																	<c:forEach items="${shortTableCategory}" var="category"
+																<c:if test="${!empty shortTableMainCategory}">
+																	<c:forEach items="${shortTableMainCategory}" var="category"
 																		varStatus="loop">
 																		<tr>
 																			<td>${category.categoryName}</td>
