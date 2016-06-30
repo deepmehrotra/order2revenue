@@ -11,53 +11,54 @@
 		<property name="transaction.factory.class">org.hibernate.transaction.JTATransactionFactory</property >	-->	
 		<!-- Database connection settings --> 
 <!-- Database connection settings -->
-		<property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
 		<!--<property name="connection.url">jdbc:oracle:thin:@punitp118826d.ad.infosys.com:1521:VFNLPortal</property> -->
-		<property name="connection.url">jdbc:oracle:thin:@localhost:1521:xe</property>
+		<property name="connection.url">jdbc:mysql://localhost:3306/o2rschema</property>
 		<property name="connection.username">hibernate_user</property>
 		<property name="connection.password">Infosys123</property>
 		
 		<!--<property name="connection.datasource">datasouce1</property>-->
 		<!-- SQL dialect -->
-		<property name="dialect">org.hibernate.dialect.OracleDialect</property>
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
 		<!--<JDBC connection pool (use the built-in) -->
 		<property name="connection.pool_size">1</property>
 
-		<!-- SQL dialect -->
-		
-
-		<!-- JDBC connection pool (use the built-in) -->
-		<property name="connection.pool_size">1</property>
 
 		<!-- Echo all executed SQL to console -->
-		<property name="show_sql">true</property>
+		<property name="show_sql">false</property>
 
 		<property name="hibernate.query.factory_class">org.hibernate.hql.classic.ClassicQueryTranslatorFactory</property>
 
-		<property name="hbm2ddl.auto">update</property>
-		<!-- Mapping files --><!--
-		
-			
-			<mapping class="com.goEasy.model.login.entity.Administrator" />
-			
-			
-			-->
-			
-			<mapping class="com.goEasy.model.login.entity.Seller" />
-			
-			<mapping class="com.goEasy.model.login.entity.Category" />
-			
-			<mapping class="com.goEasy.model.login.entity.User" />
-			<mapping class="com.goEasy.model.login.entity.State" />
-			<mapping class="com.goEasy.model.login.entity.City" />
-			<mapping class="com.goEasy.model.login.entity.Product" />
-			<mapping class="com.goEasy.model.login.entity.PartnerCompany" />
-			<mapping class="com.goEasy.model.login.entity.Order" />
-			<mapping class="com.goEasy.model.login.entity.Customer" />
-			<mapping class="com.goEasy.model.login.entity.Invoice" />
-			<mapping class="com.goEasy.model.login.entity.Manifest" />
-			<mapping class="com.goEasy.model.login.entity.ShippingInfo" />
-			<mapping class="com.goEasy.model.login.entity.Rto" />
+		<property name="hbm2ddl.auto">none</property>
+		<!-- Mapping files -->
+			<mapping class="com.o2r.model.Role"/>
+			<mapping class="com.o2r.model.Category"/>
+			<mapping class="com.o2r.model.Expenses"/>
+			<mapping class="com.o2r.model.ExpenseCategory"/>
+			<mapping class="com.o2r.model.PaymentUpload"/>
+			<mapping class="com.o2r.model.TaxDetail"/>
+			<mapping class="com.o2r.model.ManualCharges"/>
+			<mapping class="com.o2r.model.OrderTimeline"/>
+			<mapping class="com.o2r.model.ProductStockList"/>
+			<mapping class="com.o2r.model.AccountTransaction"/>
+			<mapping class="com.o2r.model.SellerAccount"/>
+			<mapping class="com.o2r.model.NRnReturnCharges" />
+			<mapping class="com.o2r.model.GenericQuery" />
+			<mapping class="com.o2r.model.Customer" />
+			<mapping class="com.o2r.model.Order" />
+			<mapping class="com.o2r.model.OrderPayment"/>
+			<mapping class="com.o2r.model.OrderRTOorReturn"/>
+			<mapping class="com.o2r.model.OrderTax"/>
+			<mapping class="com.o2r.model.Partner" />
+			<mapping class="com.o2r.model.Product" />
+			<mapping class="com.o2r.model.Seller" />
+			<mapping class="com.o2r.model.UploadReport" />
+			<mapping class="com.o2r.model.GatePass" />
+			<mapping class="com.o2r.model.ProductConfig" />
+			<mapping class="com.o2r.model.Events" />
+			<mapping class="com.o2r.model.StateDeliveryTime" />
+			<mapping class="com.o2r.model.State" />
+			<mapping class="com.o2r.model.NRnReturnConfig" />
 			<!--
 					
 		

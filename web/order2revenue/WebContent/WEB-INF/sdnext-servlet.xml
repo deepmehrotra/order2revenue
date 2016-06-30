@@ -166,6 +166,60 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
      
      
      
-    <!-- <bean id="cStartEventHandler" class="com.o2r.schedulers.CStartEventHandler"/> -->
+    <!-- Session factory for backup databse values -->
+    
+    <bean id="dataSourceforBackup"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${database.backup.driver}" />
+		<property name="url" value="${database.backup.url}" />
+		<property name="username" value="${database.backup.user}" />
+		<property name="password" value="${database.backup.password}" />
+	</bean>
+    
+    <bean id="sessionFactoryforBackup"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceforBackup" />
+		<property name="annotatedClasses">
+			<list>
+				<value>com.o2r.model.GenericQuery</value>
+				<value>com.o2r.model.Customer</value>
+				<value>com.o2r.model.Order</value>
+				<value>com.o2r.model.Partner</value>
+				<value>com.o2r.model.Product</value>
+				<value>com.o2r.model.Seller</value>
+				<value>com.o2r.model.Role</value>
+				<value>com.o2r.model.Category</value>
+				<value>com.o2r.model.Expenses</value>
+				<value>com.o2r.model.ExpenseCategory</value>
+				<value>com.o2r.model.OrderPayment</value>
+				<value>com.o2r.model.OrderRTOorReturn</value>
+				<value>com.o2r.model.OrderTax</value>
+				<value>com.o2r.model.PaymentUpload</value>
+				<value>com.o2r.model.TaxDetail</value>
+				<value>com.o2r.model.ManualCharges</value>
+				<value>com.o2r.model.OrderTimeline</value>
+				<value>com.o2r.model.TaxCategory</value>
+				<value>com.o2r.model.ProductStockList</value>
+				<value>com.o2r.model.AccountTransaction</value>
+				<value>com.o2r.model.SellerAccount</value>
+				<value>com.o2r.model.Plan</value>
+				<value>com.o2r.model.NRnReturnCharges</value>
+				<value>com.o2r.model.NRnReturnConfig</value>
+				<value>com.o2r.model.State</value>
+				<value>com.o2r.model.StateDeliveryTime</value>
+				<value>com.o2r.model.Events</value>
+				<value>com.o2r.model.ProductConfig</value>
+				<value>com.o2r.model.GatePass</value>
+				<value>com.o2r.model.UploadReport</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.backup.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.backup.show_sql}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.backup.auto}</prop>				
+			</props>
+		</property>
+	</bean>	
    
 </beans>

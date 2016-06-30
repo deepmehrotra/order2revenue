@@ -23,6 +23,7 @@ import com.o2r.bean.OrderBean;
 import com.o2r.helper.CustomException;
 import com.o2r.model.Employee;
 import com.o2r.service.AdminService;
+import com.o2r.utility.DataRestore;
 
 /**
  * @author Deep Mehrotra
@@ -36,7 +37,7 @@ public class AdminController {
 
 	static Logger log = Logger.getLogger(AdminController.class.getName());
 
-	@RequestMapping(value = "/seller/save", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/seller/save", method = RequestMethod.POST)
 	public ModelAndView saveEmployee(
 			@ModelAttribute("command") EmployeeBean employeeBean,
 			BindingResult result) {
@@ -55,9 +56,9 @@ public class AdminController {
 		}
 		log.info("$$$ saveEmployee() Ends : AdminController $$$");
 		return new ModelAndView("redirect:/seller/add.html?page=1");
-	}
+	}*/
 	
-	@RequestMapping(value = "/seller/employees", method = RequestMethod.GET)
+/*	@RequestMapping(value = "/seller/employees", method = RequestMethod.GET)
 	public ModelAndView listEmployees() {
 
 		log.info("$$$ listEmployees Starts : AdminController $$$");
@@ -74,7 +75,7 @@ public class AdminController {
 		}
 		log.info("$$$ listEmployees Ends : AdminController $$$");
 		return new ModelAndView("employeesList", model);
-	}
+	}*/
 
 	@RequestMapping(value = "/admin/listQueries", method = RequestMethod.GET)
 	public ModelAndView listQueries() {
@@ -83,6 +84,27 @@ public class AdminController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			model.put("queries", adminService.listQueries());
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
+			return new ModelAndView("admin/queryList", model);
+		}
+
+		log.info("$$$ listQueries Ends : AdminController $$$");
+		return new ModelAndView("admin/queryList", model);
+	}
+	
+	@RequestMapping(value = "/admin/dataRestore", method = RequestMethod.GET)
+	public ModelAndView dataRestore() {
+
+		log.info("$$$ dataRestore Starts : AdminController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		DataRestore dsnew=new DataRestore();
+		try {
+			System.out.println(" Calling priary db : "+dsnew.getSellerFromDB(
+					2, "primary"));
+			System.out.println(" Calling secondary db : "+dsnew.getSellerFromDB(
+					2, "backup"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed!",e);
@@ -104,7 +126,7 @@ public class AdminController {
 		return new ModelAndView("/admin/reverseOrderList", model);
 	}
 
-	@RequestMapping(value = "/seller/controller", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/seller/controller", method = RequestMethod.POST)
 	public @ResponseBody String listEmployeesJtable(
 			@RequestParam(value = "action") String action) {
 
@@ -126,9 +148,9 @@ public class AdminController {
 		}
 		log.info("$$$ listEmployeesJtable Ends : AdminController $$$");
 		return jsonArray;
-	}
+	}*/
 
-	@RequestMapping(value = "/seller/add", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/seller/add", method = RequestMethod.GET)
 	public ModelAndView addEmployee(@RequestParam(value = "page") int page,
 			@ModelAttribute("command") EmployeeBean employeeBean,
 			BindingResult result) {
@@ -146,7 +168,7 @@ public class AdminController {
 		}
 		log.info("$$$ addEmployee Ends : AdminController $$$");
 		return new ModelAndView("addEmployee", model);
-	}
+	}*/
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public ModelAndView welcome() {
@@ -154,7 +176,7 @@ public class AdminController {
 		return new ModelAndView("redirect:/landing/home.html");
 	}
 
-	@RequestMapping(value = "/seller/delete", method = RequestMethod.GET)
+/*	@RequestMapping(value = "/seller/delete", method = RequestMethod.GET)
 	public ModelAndView editEmployee(@RequestParam(value = "page") int page,
 			@ModelAttribute("command") EmployeeBean employeeBean,
 			BindingResult result) {
@@ -174,9 +196,9 @@ public class AdminController {
 		}
 		log.info("$$$ editEmployee Ends : AdminController $$$");
 		return new ModelAndView("addEmployee", model);
-	}
+	}*/
 
-	@RequestMapping(value = "/seller/edit", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/seller/edit", method = RequestMethod.GET)
 	public ModelAndView deleteEmployee(@RequestParam(value = "page") int page,
 			@ModelAttribute("command") EmployeeBean employeeBean,
 			BindingResult result) {
@@ -195,44 +217,7 @@ public class AdminController {
 		}
 		log.info("$$$ deleteEmployee Ends : AdminController $$$");
 		return new ModelAndView("addEmployee", model);
-	}
+	}*/
 
-	private Employee prepareModel(EmployeeBean employeeBean) {
-		Employee employee = new Employee();
-		employee.setEmpAddress(employeeBean.getAddress());
-		employee.setEmpAge(employeeBean.getAge());
-		employee.setEmpName(employeeBean.getName());
-		employee.setSalary(employeeBean.getSalary());
-		employee.setEmpId(employeeBean.getId());
-		employeeBean.setId(null);
-		return employee;
-	}
-
-	private List<EmployeeBean> prepareListofBean(List<Employee> employees) {
-		List<EmployeeBean> beans = null;
-		if (employees != null && !employees.isEmpty()) {
-			beans = new ArrayList<EmployeeBean>();
-			EmployeeBean bean = null;
-			for (Employee employee : employees) {
-				bean = new EmployeeBean();
-				bean.setName(employee.getEmpName());
-				bean.setId(employee.getEmpId());
-				bean.setAddress(employee.getEmpAddress());
-				bean.setSalary(employee.getSalary());
-				bean.setAge(employee.getEmpAge());
-				beans.add(bean);
-			}
-		}
-		return beans;
-	}
-
-	private EmployeeBean prepareEmployeeBean(Employee employee) {
-		EmployeeBean bean = new EmployeeBean();
-		bean.setAddress(employee.getEmpAddress());
-		bean.setAge(employee.getEmpAge());
-		bean.setName(employee.getEmpName());
-		bean.setSalary(employee.getSalary());
-		bean.setId(employee.getEmpId());
-		return bean;
-	}
+	
 }
