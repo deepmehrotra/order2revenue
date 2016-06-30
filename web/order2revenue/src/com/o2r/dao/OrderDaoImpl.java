@@ -1426,8 +1426,8 @@ public class OrderDaoImpl implements OrderDao {
 				order.getOrderPayment().setPaymentCycle(
 						orderPayment.getPaymentCycle());
 				order.getOrderPayment().setUploadDate(new Date());
-				if (order.getOrderPayment().getPaymentDifference() > 0
-						|| (int) order.getOrderPayment().getPaymentDifference() == 0) {
+				if (order.getOrderPayment().getPaymentDifference()< 1
+						&& order.getOrderPayment().getPaymentDifference() > -1) {
 					order.setFinalStatus("Settled");
 				} else {
 
@@ -1613,8 +1613,8 @@ public class OrderDaoImpl implements OrderDao {
 				order.getOrderPayment().setPaymentCycle(
 						orderPayment.getPaymentCycle());
 				order.getOrderPayment().setUploadDate(new Date());
-				if (order.getOrderPayment().getPaymentDifference() > 0
-						|| (int) order.getOrderPayment().getPaymentDifference() == 0) {
+				if (order.getOrderPayment().getPaymentDifference()< 1
+						&& order.getOrderPayment().getPaymentDifference() > -1) {
 					order.setFinalStatus("Settled");
 				} else {
 
@@ -1690,10 +1690,11 @@ public class OrderDaoImpl implements OrderDao {
 			order.setSealNo(dnBean.getGatePassId());
 			order.setStatus("Return Recived");
 
-			if ((int) order.getOrderPayment().getPaymentDifference() != 0) {
-				order.setFinalStatus("Actionable");
-			} else {
+			if (order.getOrderPayment().getPaymentDifference()< 1
+					&& order.getOrderPayment().getPaymentDifference() > -1) {
 				order.setFinalStatus("Settled");
+			} else {
+				order.setFinalStatus("Actionable");
 			}
 
 			session.saveOrUpdate(order);
