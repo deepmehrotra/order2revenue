@@ -224,4 +224,13 @@ public class BusinessDetails {
 					: (graph1.netTaxableSale > graph2.netTaxableSale ? -1 : 0);
 		}
 	}
+	
+	public static class OrderByNetSP implements Comparator<BusinessDetails> {
+
+		@Override
+		public int compare(BusinessDetails graph1, BusinessDetails graph2) {
+			return graph1.netSP < graph2.netSP ? 1
+					: (graph1.netSP > graph2.netSP ? -1 : 0);
+		}
+	}
 }

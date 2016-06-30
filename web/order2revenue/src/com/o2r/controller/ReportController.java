@@ -229,9 +229,13 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			if ("partnerBusinessReport".equalsIgnoreCase(reportName)) {
 				List<BusinessDetails> partnerBusinessGraphList = ConverterClass.transformBusinessGraph(partnerBusinessList, "partner");
 				log.info("PartnerList: " + partnerBusinessGraphList.size());
+				model.put("shortTableMainPartner", partnerBusinessGraphList);
+				Collections.sort(partnerBusinessGraphList, new BusinessDetails.OrderByNetSP());
 				model.put("shortTablePartner", partnerBusinessGraphList);
 				List<BusinessDetails> categoryBusinessGraphList = ConverterClass.transformBusinessGraph(partnerBusinessList, "category");
 				log.info("CategoryList: " + categoryBusinessGraphList.size());
+				model.put("shortTableMainCategory", categoryBusinessGraphList);
+				Collections.sort(categoryBusinessGraphList, new BusinessDetails.OrderByNetSP());
 				model.put("shortTableCategory", categoryBusinessGraphList);
 
 				Collections.sort(partnerBusinessGraphList, new BusinessDetails.OrderByNetPartnerCommission());
