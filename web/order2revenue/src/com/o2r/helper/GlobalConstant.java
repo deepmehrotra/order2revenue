@@ -620,6 +620,7 @@ public class GlobalConstant {
 			put("getNetReturnCharges", "Return Charges");
 			put("getGrossProfit", "Gross Profit");
 			put("getGpVsProductCost", "%GP vs Product Cost");
+			put("getNetEOSSValue", "Net EOSS Value");
 			
 			// For Debtors Report
 			put("getAwb", "AWB");

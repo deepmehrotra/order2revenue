@@ -51,6 +51,19 @@ public class ChannelReportDetails {
 	private double grossProfit;
 	private double gpVsProductCost;
 	private String finalStatus;
+	
+	private double netEOSSValue;
+	private double grossTaxableSale;
+	private double returnTaxableSale;
+	private double netTaxableSale;
+	private double grossActualSale;
+	private double returnActualSale;
+	private double netActualSale;
+	private double grossTaxfreeSale;
+	private double returnTaxfreeSale;
+	private double netTaxfreeSale;
+	private String month;
+	private int monthIndex;
 
 	public String getOrderId() {
 		return orderId;
@@ -412,6 +425,102 @@ public class ChannelReportDetails {
 		this.finalStatus = finalStatus;
 	}
 
+	public double getNetEOSSValue() {
+		return netEOSSValue;
+	}
+
+	public void setNetEOSSValue(double netEOSSValue) {
+		this.netEOSSValue = netEOSSValue;
+	}
+
+	public double getGrossTaxableSale() {
+		return grossTaxableSale;
+	}
+
+	public void setGrossTaxableSale(double grossTaxableSale) {
+		this.grossTaxableSale = grossTaxableSale;
+	}
+
+	public double getReturnTaxableSale() {
+		return returnTaxableSale;
+	}
+
+	public void setReturnTaxableSale(double returnTaxableSale) {
+		this.returnTaxableSale = returnTaxableSale;
+	}
+
+	public double getNetTaxableSale() {
+		return netTaxableSale;
+	}
+
+	public void setNetTaxableSale(double netTaxableSale) {
+		this.netTaxableSale = netTaxableSale;
+	}
+
+	public double getGrossActualSale() {
+		return grossActualSale;
+	}
+
+	public void setGrossActualSale(double grossActualSale) {
+		this.grossActualSale = grossActualSale;
+	}
+
+	public double getReturnActualSale() {
+		return returnActualSale;
+	}
+
+	public void setReturnActualSale(double returnActualSale) {
+		this.returnActualSale = returnActualSale;
+	}
+
+	public double getNetActualSale() {
+		return netActualSale;
+	}
+
+	public void setNetActualSale(double netActualSale) {
+		this.netActualSale = netActualSale;
+	}
+
+	public double getGrossTaxfreeSale() {
+		return grossTaxfreeSale;
+	}
+
+	public void setGrossTaxfreeSale(double grossTaxfreeSale) {
+		this.grossTaxfreeSale = grossTaxfreeSale;
+	}
+
+	public double getReturnTaxfreeSale() {
+		return returnTaxfreeSale;
+	}
+
+	public void setReturnTaxfreeSale(double returnTaxfreeSale) {
+		this.returnTaxfreeSale = returnTaxfreeSale;
+	}
+
+	public double getNetTaxfreeSale() {
+		return netTaxfreeSale;
+	}
+
+	public void setNetTaxfreeSale(double netTaxfreeSale) {
+		this.netTaxfreeSale = netTaxfreeSale;
+	}
+
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
+	public int getMonthIndex() {
+		return monthIndex;
+	}
+
+	public void setMonthIndex(int monthIndex) {
+		this.monthIndex = monthIndex;
+	}
+
 	public static class OrderByShippedDate implements
 		Comparator<ChannelReportDetails> {
 		@Override
@@ -520,6 +629,51 @@ public class ChannelReportDetails {
 		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
 			return graph1.grossNrAmount < graph2.grossNrAmount ? 1
 					: (graph1.grossNrAmount > graph2.grossNrAmount ? -1 : 0);
+		}
+	}
+	
+	public static class OrderByEOSS implements
+	Comparator<ChannelReportDetails> {
+		@Override
+		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
+			return graph1.netEOSSValue < graph2.netEOSSValue ? 1
+					: (graph1.netEOSSValue > graph2.netEOSSValue ? -1 : 0);
+		}
+	}
+	
+	public static class OrderByTaxableSale implements
+	Comparator<ChannelReportDetails> {
+		@Override
+		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
+			return graph1.netTaxableSale < graph2.netTaxableSale ? 1
+					: (graph1.netTaxableSale > graph2.netTaxableSale ? -1 : 0);
+		}
+	}
+	
+	public static class OrderByActualSale implements
+	Comparator<ChannelReportDetails> {
+		@Override
+		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
+			return graph1.netActualSale < graph2.netActualSale ? 1
+					: (graph1.netActualSale > graph2.netActualSale ? -1 : 0);
+		}
+	}
+	
+	public static class OrderByTaxfreeSale implements
+	Comparator<ChannelReportDetails> {
+		@Override
+		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
+			return graph1.netTaxfreeSale < graph2.netTaxfreeSale ? 1
+					: (graph1.netTaxfreeSale > graph2.netTaxfreeSale ? -1 : 0);
+		}
+	}
+	
+	public static class OrderByMonthIndex implements
+	Comparator<ChannelReportDetails> {
+		@Override
+		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
+			return graph1.monthIndex > graph2.monthIndex ? 1
+					: (graph1.monthIndex < graph2.monthIndex ? -1 : 0);
 		}
 	}
 }

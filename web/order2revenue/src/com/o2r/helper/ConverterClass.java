@@ -1,6 +1,8 @@
 package com.o2r.helper;
 
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,6 +41,7 @@ import com.o2r.bean.PartnerBean;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.PaymentUploadBean;
 import com.o2r.bean.PlanBean;
+import com.o2r.bean.PoPaymentDetailsBean;
 import com.o2r.bean.ProductBean;
 import com.o2r.bean.ProductConfigBean;
 import com.o2r.bean.SellerAccountBean;
@@ -1733,6 +1736,21 @@ public class ConverterClass {
 			double saleRetSpAmount = currChannelReport.getSaleRetSpAmount();
 			double saleRetVsGrossSale = currChannelReport.getSaleRetVsGrossSale();
 			double netProductCost = currChannelReport.getNetProductCost();
+			
+			double netEOSSValue = currChannelReport.getNetEOSSValue();
+			
+			double grossTaxableSale = currChannelReport.getGrossTaxableSale();
+			double returnTaxableSale = currChannelReport.getReturnTaxableSale();
+			double netTaxableSale = currChannelReport.getNetTaxableSale();
+			
+			double grossActualSale = currChannelReport.getGrossActualSale();
+			double returnActualSale = currChannelReport.getReturnActualSale();
+			double netActualSale = currChannelReport.getNetActualSale();
+			
+			double grossTaxfreeSale = currChannelReport.getGrossTaxfreeSale();
+			double returnTaxfreeSale = currChannelReport.getReturnTaxfreeSale();
+			double netTaxfreeSale = currChannelReport.getNetTaxfreeSale();
+			
 			if(channelReport == null){
 				channelReport = new ChannelReportDetails();
 			} else{
@@ -1755,6 +1773,21 @@ public class ConverterClass {
 				saleRetSpAmount += channelReport.getSaleRetSpAmount();
 				saleRetVsGrossSale += channelReport.getSaleRetVsGrossSale();
 				netProductCost += channelReport.getNetProductCost();
+				
+				netEOSSValue += channelReport.getNetEOSSValue();
+				
+				grossTaxableSale += channelReport.getGrossTaxableSale();
+				returnTaxableSale += channelReport.getReturnTaxableSale();
+				netTaxableSale += channelReport.getNetTaxableSale();
+				
+				grossActualSale += channelReport.getGrossActualSale();
+				returnActualSale += channelReport.getReturnActualSale();
+				netActualSale += channelReport.getNetActualSale();
+				
+				grossTaxfreeSale += channelReport.getGrossTaxfreeSale();
+				returnTaxfreeSale += channelReport.getReturnTaxfreeSale();
+				netTaxfreeSale += channelReport.getNetTaxfreeSale();
+								
 			}
 			channelReport.setGpVsProductCost(gpVsProductCost);
 			channelReport.setGrossNrAmount(grossNrAmount);
@@ -1775,6 +1808,21 @@ public class ConverterClass {
 			channelReport.setSaleRetSpAmount(saleRetSpAmount);
 			channelReport.setSaleRetVsGrossSale(saleRetVsGrossSale);
 			channelReport.setNetProductCost(netProductCost);
+			
+			channelReport.setNetEOSSValue(netEOSSValue);
+			
+			channelReport.setGrossTaxableSale(grossTaxableSale);
+			channelReport.setReturnTaxableSale(returnTaxableSale);
+			channelReport.setNetTaxableSale(netTaxableSale);
+			
+			channelReport.setGrossActualSale(grossActualSale);
+			channelReport.setReturnActualSale(returnActualSale);
+			channelReport.setNetActualSale(netActualSale);
+			
+			channelReport.setGrossTaxfreeSale(grossTaxfreeSale);
+			channelReport.setReturnTaxfreeSale(returnTaxfreeSale);
+			channelReport.setNetTaxfreeSale(netTaxfreeSale);
+			
 			channelReport.setCategory(key);
 			channelReport.setPartner(key);
 			categoryReportMap.put(key, channelReport);
@@ -1827,6 +1875,7 @@ public class ConverterClass {
 			double saleRetNrAmount = currChannelReport.getSaleRetNrAmount();
 			double saleRetQty = currChannelReport.getSaleRetQty();
 			double saleRetSpAmount = currChannelReport.getSaleRetSpAmount();
+			
 			if(channelReport == null){
 				channelReport = new ChannelReportDetails();
 			} else{
@@ -2245,6 +2294,20 @@ public class ConverterClass {
 					consolidated.setGrossQty(channelGraph.getGrossQty());
 					consolidated.setSaleRetQty(channelGraph.getSaleRetQty());
 					consolidated.setGrossNrAmount(channelGraph.getGrossNrAmount());
+					
+					consolidated.setNetEOSSValue(channelGraph.getNetEOSSValue());
+					consolidated.setGrossTaxableSale(channelGraph.getGrossTaxableSale());
+					consolidated.setReturnTaxableSale(channelGraph.getReturnTaxableSale());
+					consolidated.setNetTaxableSale(channelGraph.getNetTaxableSale());
+					
+					consolidated.setGrossActualSale(channelGraph.getGrossActualSale());
+					consolidated.setReturnActualSale(channelGraph.getReturnActualSale());
+					consolidated.setNetActualSale(channelGraph.getNetActualSale());
+					
+					consolidated.setGrossTaxfreeSale(channelGraph.getGrossTaxfreeSale());
+					consolidated.setReturnTaxfreeSale(channelGraph.getReturnTaxfreeSale());
+					consolidated.setNetTaxfreeSale(channelGraph.getNetTaxfreeSale());
+					
 					consolidated.setCategory("Others");
 					consolidated.setPartner("Others");
 				} else{
@@ -2284,6 +2347,24 @@ public class ConverterClass {
 							consolidated.setGrossProfit(consolidated.getGrossProfit() + channelGraph.getGrossProfit());
 							consolidated.setNetNrAmount(consolidated.getGrossNrAmount() + channelGraph.getGrossNrAmount());
 							break;
+						case "EOSS": 
+							consolidated.setNetEOSSValue(consolidated.getNetEOSSValue() + channelGraph.getNetEOSSValue());
+							break;
+						case "TaxableSale":
+							consolidated.setGrossTaxableSale(consolidated.getGrossTaxableSale() + channelGraph.getGrossTaxableSale());
+							consolidated.setReturnTaxableSale(consolidated.getReturnTaxableSale() + channelGraph.getReturnTaxableSale());
+							consolidated.setNetTaxableSale(consolidated.getNetTaxableSale() + channelGraph.getNetTaxableSale());
+							break;
+						case "ActualSale":
+							consolidated.setGrossActualSale(consolidated.getGrossActualSale() + channelGraph.getGrossActualSale());
+							consolidated.setReturnActualSale(consolidated.getReturnActualSale() + channelGraph.getReturnActualSale());
+							consolidated.setNetActualSale(consolidated.getNetActualSale() + channelGraph.getNetActualSale());
+							break;
+						case "TaxfreeSale":
+							consolidated.setGrossTaxfreeSale(consolidated.getGrossTaxfreeSale() + channelGraph.getGrossTaxfreeSale());
+							consolidated.setReturnTaxfreeSale(consolidated.getReturnTaxfreeSale() + channelGraph.getReturnTaxfreeSale());
+							consolidated.setNetTaxfreeSale(consolidated.getNetTaxfreeSale() + channelGraph.getNetTaxfreeSale());
+							break;
 						default: break;
 					}
 				}
@@ -2292,6 +2373,69 @@ public class ConverterClass {
 			}
 		}
 		newChannelReportList.add(consolidated);
+		return newChannelReportList;
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	public static List<ChannelReportDetails> getChannelMonthlyList(
+			List<ChannelReportDetails> channelGraphList, Date startDate, Date endDate) {
+		
+		DateFormatSymbols dfs = new DateFormatSymbols();
+		String[] months = dfs.getMonths();
+		
+		Map<String, ChannelReportDetails> newChannelReportMap = new HashMap<String, ChannelReportDetails>();
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(startDate);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		int monthIndex = 1;
+		while (cal.getTime().before(endDate)) {
+			ChannelReportDetails consolidated = new ChannelReportDetails();
+			consolidated.setMonth(months[cal.get(Calendar.MONTH)].substring(0, 3) + "-" + cal.get(Calendar.YEAR));
+			consolidated.setMonthIndex(monthIndex);
+			newChannelReportMap.put(consolidated.getMonth(), consolidated);
+			cal.add(Calendar.MONTH, 1);
+			monthIndex++;
+		}
+		
+		for(ChannelReportDetails channelGraph: channelGraphList){
+			
+			if (channelGraph.getShippedDate() != null) {
+				Calendar orderCal = Calendar.getInstance();
+				orderCal.setTime(channelGraph.getShippedDate());
+				
+				ChannelReportDetails consolidated = newChannelReportMap.get(months[orderCal.get(Calendar.MONTH)].substring(0, 3) + "-" + orderCal.get(Calendar.YEAR));
+				if (consolidated != null) {
+					consolidated.setNetTaxableSale(
+							consolidated.getNetTaxableSale() + channelGraph.getGrossTaxableSale());
+					consolidated.setNetActualSale(
+							consolidated.getNetActualSale() + channelGraph.getGrossActualSale());
+					consolidated.setNetTaxfreeSale(
+							consolidated.getNetTaxfreeSale() + channelGraph.getGrossTaxfreeSale());
+				}
+			}
+			
+			if (channelGraph.getReturnDate() != null) {
+				Calendar orderCal = Calendar.getInstance();
+				orderCal.setTime(channelGraph.getReturnDate());
+				
+				ChannelReportDetails consolidated = newChannelReportMap.get(months[orderCal.get(Calendar.MONTH)].substring(0, 3) + "-" + orderCal.get(Calendar.YEAR));
+				if (consolidated != null) {
+					consolidated.setNetTaxableSale(
+							consolidated.getNetTaxableSale() - channelGraph.getReturnTaxableSale());
+					consolidated.setNetActualSale(
+							consolidated.getNetActualSale() - channelGraph.getReturnActualSale());
+					consolidated.setNetTaxfreeSale(
+							consolidated.getNetTaxfreeSale() - channelGraph.getReturnTaxfreeSale());
+				}
+			}
+
+		}
+		
+		List<ChannelReportDetails> newChannelReportList = new ArrayList<>();
+		for (String key: newChannelReportMap.keySet()) {
+			newChannelReportList.add(newChannelReportMap.get(key));
+		}
 		return newChannelReportList;
 	}
 
