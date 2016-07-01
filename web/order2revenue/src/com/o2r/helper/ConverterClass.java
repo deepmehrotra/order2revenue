@@ -2391,7 +2391,8 @@ public class ConverterClass {
 		int monthIndex = 1;
 		while (cal.getTime().before(endDate)) {
 			ChannelReportDetails consolidated = new ChannelReportDetails();
-			consolidated.setMonth(months[cal.get(Calendar.MONTH)].substring(0, 3) + "-" + cal.get(Calendar.YEAR));
+			//consolidated.setMonth(months[cal.get(Calendar.MONTH)].substring(0, 3) + "-" + cal.get(Calendar.YEAR));
+			consolidated.setMonth(cal.get(Calendar.YEAR) + "-" + cal.get(Calendar.MONTH));
 			consolidated.setMonthIndex(monthIndex);
 			newChannelReportMap.put(consolidated.getMonth(), consolidated);
 			cal.add(Calendar.MONTH, 1);
@@ -2404,7 +2405,7 @@ public class ConverterClass {
 				Calendar orderCal = Calendar.getInstance();
 				orderCal.setTime(channelGraph.getShippedDate());
 				
-				ChannelReportDetails consolidated = newChannelReportMap.get(months[orderCal.get(Calendar.MONTH)].substring(0, 3) + "-" + orderCal.get(Calendar.YEAR));
+				ChannelReportDetails consolidated = newChannelReportMap.get(orderCal.get(Calendar.YEAR) + "-" + orderCal.get(Calendar.MONTH));
 				if (consolidated != null) {
 					consolidated.setNetTaxableSale(
 							consolidated.getNetTaxableSale() + channelGraph.getGrossTaxableSale());
@@ -2419,7 +2420,7 @@ public class ConverterClass {
 				Calendar orderCal = Calendar.getInstance();
 				orderCal.setTime(channelGraph.getReturnDate());
 				
-				ChannelReportDetails consolidated = newChannelReportMap.get(months[orderCal.get(Calendar.MONTH)].substring(0, 3) + "-" + orderCal.get(Calendar.YEAR));
+				ChannelReportDetails consolidated = newChannelReportMap.get(orderCal.get(Calendar.YEAR) + "-" + orderCal.get(Calendar.MONTH));
 				if (consolidated != null) {
 					consolidated.setNetTaxableSale(
 							consolidated.getNetTaxableSale() - channelGraph.getReturnTaxableSale());
