@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -69,7 +70,7 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${partnerDto.partner}</td>
-																			<td>${partnerDto.netPaymentResult}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPaymentResult}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -98,17 +99,17 @@
 																<tr>
 																	<th>Partner</th>
 																	<th>Actionable Net Payment Difference Amounts</th>
-																	<th>Actionable Payment Difference Order Net Sale Qty</th>
+																	<th>Upcoming Payments Payment Diff Amt</th>																	
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty partnerByAC}">
-																	<c:forEach items="${partnerByAC}" var="partnerDto"
+																<c:if test="${!empty partnerByACPD}">
+																	<c:forEach items="${partnerByACPD}" var="partnerDto"
 																		varStatus="loop">
 																		<tr>
 																			<td>${partnerDto.partner}</td>
-																			<td>${partnerDto.netPaymentDifference}</td>
-																			<td>${partnerDto.netSaleQty}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPaymentDifference}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.upcomingPD}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -133,18 +134,18 @@
 															<thead>
 																<tr>
 																	<th>Partner</th>
-																	<th>Upcoming Payments Payment Diff Amt</th>
+																	<th>Actionable Payment Difference Order Net Sale Qty</th>
 																	<th>Upcoming Payments Net Sale Qty</th>
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty partnerByUP}">
-																	<c:forEach items="${partnerByUP}" var="partnerDto"
+																<c:if test="${!empty partnerByACNS}">
+																	<c:forEach items="${partnerByACNS}" var="partnerDto"
 																		varStatus="loop">
 																		<tr>
 																			<td>${partnerDto.partner}</td>
-																			<td>${partnerDto.upcomingPD}</td>
-																			<td>${partnerDto.upcomingNetQty}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${partnerDto.netSaleQty}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${partnerDto.upcomingNetQty}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -178,7 +179,7 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${categoryDto.category}</td>
-																			<td>${categoryDto.netPaymentResult}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netPaymentResult}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -207,17 +208,17 @@
 																<tr>
 																	<th>Category</th>
 																	<th>Actionable Net Payment Difference Amounts</th>
-																	<th>Actionable Payment Difference Order Net Sale Qty</th>
+																	<th>Upcoming Payments Payment Diff Amt</th>
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty categoryByAC}">
-																	<c:forEach items="${categoryByAC}" var="categoryDto"
+																<c:if test="${!empty categoryByACPD}">
+																	<c:forEach items="${categoryByACPD}" var="categoryDto"
 																		varStatus="loop">
 																		<tr>
 																			<td>${categoryDto.category}</td>
-																			<td>${categoryDto.netPaymentDifference}</td>
-																			<td>${categoryDto.netSaleQty}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netPaymentDifference}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.upcomingPD}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -242,18 +243,18 @@
 															<thead>
 																<tr>
 																	<th>Category</th>
-																	<th>Upcoming Payments Payment Diff Amt</th>
+																	<th>Actionable Payment Difference Order Net Sale Qty</th>
 																	<th>Upcoming Payments Net Sale Qty</th>
 																</tr>
 															</thead>
 															<tbody>
-																<c:if test="${!empty categoryByUP}">
-																	<c:forEach items="${categoryByUP}" var="categoryDto"
+																<c:if test="${!empty categoryByACNS}">
+																	<c:forEach items="${categoryByACNS}" var="categoryDto"
 																		varStatus="loop">
 																		<tr>
 																			<td>${categoryDto.category}</td>
-																			<td>${categoryDto.upcomingPD}</td>
-																			<td>${categoryDto.upcomingNetQty}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${categoryDto.netSaleQty}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${categoryDto.upcomingNetQty}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -292,10 +293,10 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${partner.partner}</td>
-																			<td>${partner.netSaleQty}</td>
-																			<td>${partner.upcomingPD}</td>
-																			<td>${partner.netPaymentResult}</td>
-																			<td>${partner.netPaymentDifference}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${partner.netSaleQty}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${partner.upcomingPD}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPaymentResult}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPaymentDifference}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -325,10 +326,10 @@
 																		varStatus="loop">
 																		<tr>
 																			<td>${category.category}</td>
-																			<td>${category.netSaleQty}</td>
-																			<td>${category.upcomingPD}</td>
-																			<td>${category.netPaymentResult}</td>
-																			<td>${category.netPaymentDifference}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${category.netSaleQty}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${category.upcomingPD}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPaymentResult}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPaymentDifference}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -418,7 +419,7 @@
 		var yAxisText = 'Actionable Net Payment Difference Amounts vs Actionable Payment Difference Order Net Sale Qty';
 		var divId = "#stacked-chart-1";
 		var xAxisCategories = ['Actionable Net Payment Difference Amounts', 'Actionable Payment Difference Order Net Sale Qty'];
-		<c:forEach items="${partnerByAC}" var="partnerDto" varStatus="loop">
+		<c:forEach items="${partnerByACPD}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.partner}';
 			data.data = [parseFloat(parseFloat('${partnerDto.actionablePD}').toFixed(2)), parseInt('${partnerDto.actionableNetQty}')];
@@ -430,7 +431,7 @@
 		var yAxisText = 'Actionable Net Payment Difference Amounts vs Actionable Payment Difference Order Net Sale Qty';
 		var divId = "#stacked-chart-3";
 		var xAxisCategories = ['Actionable Net Payment Difference Amounts', 'Actionable Payment Difference Order Net Sale Qty'];
-		<c:forEach items="${categoryByAC}" var="partnerDto" varStatus="loop">
+		<c:forEach items="${categoryByACPD}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.partner}';
 			data.data = [parseFloat(parseFloat('${partnerDto.actionablePD}').toFixed(2)), parseInt('${partnerDto.actionableNetQty}')];
@@ -442,7 +443,7 @@
 		var yAxisText = 'Upcoming Payment Difference Amounts vs Upcoming Payment Difference Order Net Sale Qty';
 		var divId = "#stacked-chart-2";
 		var xAxisCategories = ['Upcoming Net Payment Difference Amounts', 'Upcoming Payment Difference Order Net Sale Qty'];
-		<c:forEach items="${partnerByUP}" var="partnerDto" varStatus="loop">
+		<c:forEach items="${partnerByACNS}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.partner}';
 			data.data = [parseFloat(parseFloat('${partnerDto.upcomingPD}').toFixed(2)), parseInt('${partnerDto.upcomingNetQty}')];
@@ -454,7 +455,7 @@
 		var yAxisText = 'Upcoming Net Payment Difference Amounts vs Upcoming Payment Difference Order Net Sale Qty';
 		var divId = "#stacked-chart-4";
 		var xAxisCategories = ['Upcoming Net Payment Difference Amounts', 'Upcoming Payment Difference Order Net Sale Qty'];
-		<c:forEach items="${categoryByUP}" var="partnerDto" varStatus="loop">
+		<c:forEach items="${categoryByACNS}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.partner}';
 			data.data = [parseFloat(parseFloat('${partnerDto.upcomingPD}').toFixed(2)), parseInt('${partnerDto.upcomingNetQty}')];

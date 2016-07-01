@@ -205,22 +205,22 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 				List<PartnerReportDetails> debtorsList = reportGeneratorService.getDebtorsReportDetails(startDate, endDate, sellerId);
 				List<DebtorsGraph1> debtorsGraph1PartnerList = ConverterClass.transformDebtorsGraph1Graph(debtorsList, "partner");
 				List<DebtorsGraph1> debtorsGraph1CategoryList = ConverterClass.transformDebtorsGraph1Graph(debtorsList, "category");
+				model.put("shortTablePartner", debtorsGraph1PartnerList);
+				model.put("shortTableCategory", debtorsGraph1CategoryList);
 				
 				Collections.sort(debtorsGraph1PartnerList, new DebtorsGraph1.OrderByNPR());
 				model.put("partnerByNPR", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1PartnerList));
-				Collections.sort(debtorsGraph1PartnerList, new DebtorsGraph1.OrderByAC());
-				model.put("partnerByAC", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1PartnerList));
-				Collections.sort(debtorsGraph1PartnerList, new DebtorsGraph1.OrderByUP());
-				model.put("shortTablePartner", debtorsGraph1PartnerList);
-				model.put("partnerByUP", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1PartnerList));
+				Collections.sort(debtorsGraph1PartnerList, new DebtorsGraph1.OrderByACPD());
+				model.put("partnerByACPD", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1PartnerList));
+				Collections.sort(debtorsGraph1PartnerList, new DebtorsGraph1.OrderByACNS());
+				model.put("partnerByACNS", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1PartnerList));
 				
 				Collections.sort(debtorsGraph1CategoryList, new DebtorsGraph1.OrderByNPR());
 				model.put("categoryByNPR", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1CategoryList));
-				Collections.sort(debtorsGraph1CategoryList, new DebtorsGraph1.OrderByAC());
-				model.put("categoryByAC", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1CategoryList));
-				Collections.sort(debtorsGraph1CategoryList, new DebtorsGraph1.OrderByUP());
-				model.put("shortTableCategory", debtorsGraph1CategoryList);
-				model.put("categoryByUP", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1CategoryList));
+				Collections.sort(debtorsGraph1CategoryList, new DebtorsGraph1.OrderByACPD());
+				model.put("categoryByACPD", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1CategoryList));
+				Collections.sort(debtorsGraph1CategoryList, new DebtorsGraph1.OrderByACNS());
+				model.put("categoryByACNS", ConverterClass.getDebtorsGraph1SortedList(debtorsGraph1CategoryList));
 				
 				return new ModelAndView("reports/viewDebtorsGraphReport", model);
 			}

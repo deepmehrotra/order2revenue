@@ -2441,6 +2441,7 @@ public class ConverterClass {
 
 	public static List<DebtorsGraph1> transformDebtorsGraph1Graph(
 			List<PartnerReportDetails> debtorsList, String criteria) {
+		Date currDate = new Date();
 		Map<String, DebtorsGraph1> debtorsGraph1Map = new HashMap<String, DebtorsGraph1>();
 		for (PartnerReportDetails partnerBusiness : debtorsList) {
 			String key = "";
@@ -2461,18 +2462,28 @@ public class ConverterClass {
 			int upcomingNetQty = 0;
 			double netPaymentDifference = partnerBusiness.getPaymentDifference();
 			int netSaleQty = partnerBusiness.getNetSaleQuantity();
+			Date paymentDueDate = partnerBusiness.getPaymentDueDate();
 			
 			double netPaymentResult = partnerBusiness.getNetPaymentResult();
-			if("Actionable".equalsIgnoreCase(partnerBusiness.getFinalStatus())){
-				actionablePD = partnerBusiness.getPaymentDifference();
-				actionableNetQty = 1;
+			actionablePD = partnerBusiness.getPaymentDifference();
+			if(partnerBusiness.isPoOrder()){
+				actionableNetQty = partnerBusiness.getGrossSaleQuantity();
+				if(partnerBusiness.getReturnDate() != null)
+					actionableNetQty -= partnerBusiness.getReturnQuantity();
+			} else{
+				actionableNetQty = partnerBusiness.getNetSaleQuantity();
 			}
-			if("In Process".equalsIgnoreCase(partnerBusiness.getFinalStatus())){
+			if(paymentDueDate!=null && paymentDueDate.after(currDate)){
 				upcomingPD = partnerBusiness.getPaymentDifference();
-				upcomingNetQty = 1;
+				if(partnerBusiness.isPoOrder()){
+					upcomingNetQty = partnerBusiness.getGrossSaleQuantity();
+					if(partnerBusiness.getReturnDate() != null)
+						upcomingNetQty -= partnerBusiness.getReturnQuantity();
+				} else{
+					upcomingNetQty = partnerBusiness.getGrossSaleQuantity() - partnerBusiness.getReturnQuantity();
+				}
 			}
 			double netRate = 0;
-			Date paymentDueDate = partnerBusiness.getPaymentDueDate();
 			if(paymentDueDate!=null && paymentDueDate.after(new Date()))
 				netRate = partnerBusiness.getNetRate();
 			if (debtorsGraph1 == null) {

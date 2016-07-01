@@ -94,7 +94,7 @@ public class DebtorsGraph1 {
 		}
 	}
 
-	public static class OrderByAC implements Comparator<DebtorsGraph1> {
+	public static class OrderByACPD implements Comparator<DebtorsGraph1> {
 
 		@Override
 		public int compare(DebtorsGraph1 graph1, DebtorsGraph1 graph2) {
@@ -103,12 +103,12 @@ public class DebtorsGraph1 {
 		}
 	}
 	
-	public static class OrderByUP implements Comparator<DebtorsGraph1> {
+	public static class OrderByACNS implements Comparator<DebtorsGraph1> {
 
 		@Override
 		public int compare(DebtorsGraph1 graph1, DebtorsGraph1 graph2) {
-			return graph1.upcomingPD < graph2.upcomingPD ? 1
-					: (graph1.upcomingPD > graph2.upcomingPD ? -1 : 0);
+			return graph1.netSaleQty < graph2.netSaleQty ? 1
+					: (graph1.netSaleQty > graph2.netSaleQty ? -1 : 0);
 		}
 	}
 }
