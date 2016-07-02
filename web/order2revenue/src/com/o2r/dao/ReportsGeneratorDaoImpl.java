@@ -842,11 +842,11 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		double grossCommissionToBePaid = 0;
 		// PO Condition
 		if(partnerBusiness.isPoOrder()){
-			serviceTaxNoQty = (grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty)*dataConfig.getServiceTax()/100;
-			serviceTaxQty = (grossCommissionQty + pccAmountQty + fixedFeeQty + shippingChargesQty)*dataConfig.getServiceTax()/100;
 			grossCommissionToBePaid = grossCommission + taxSP - taxPOPrice;
 		}
 		else{
+			serviceTaxNoQty = (grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty)*dataConfig.getServiceTax()/100;
+			serviceTaxQty = (grossCommissionQty + pccAmountQty + fixedFeeQty + shippingChargesQty)*dataConfig.getServiceTax()/100;
 			grossCommissionToBePaid = totalAmount + serviceTax;
 		}
 		double grossCommissionToBePaidNoQty = grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty + serviceTaxNoQty;
