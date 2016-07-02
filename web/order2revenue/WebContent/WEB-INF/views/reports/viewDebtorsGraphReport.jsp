@@ -98,8 +98,7 @@
 															<thead>
 																<tr>
 																	<th>Partner</th>
-																	<th>Actionable Net Payment Difference Amounts</th>
-																	<th>Upcoming Payments Payment Diff Amt</th>																	
+																	<th>Actionable Net Payment Difference Amounts</th>														
 																</tr>
 															</thead>
 															<tbody>
@@ -109,7 +108,6 @@
 																		<tr>
 																			<td>${partnerDto.partner}</td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPaymentDifference}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.upcomingPD}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -121,7 +119,10 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<div id="stacked-chart-1"></div>
+														<div class="flot-chart">
+															<div class="flot-chart-content"
+																id="bar-chart-partner-acpd"></div>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -208,7 +209,6 @@
 																<tr>
 																	<th>Category</th>
 																	<th>Actionable Net Payment Difference Amounts</th>
-																	<th>Upcoming Payments Payment Diff Amt</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -218,7 +218,6 @@
 																		<tr>
 																			<td>${categoryDto.category}</td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netPaymentDifference}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.upcomingPD}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -230,7 +229,10 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<div id="stacked-chart-3"></div>
+														<div class="flot-chart">
+															<div class="flot-chart-content"
+																id="bar-chart-category-acpd"></div>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -415,50 +417,48 @@
 		categoryByNPR.push(arr2);
 		</c:forEach>
 		
-		var dataArr = [];
-		var yAxisText = 'Actionable Net Payment Difference Amounts vs Actionable Payment Difference Order Net Sale Qty';
-		var divId = "#stacked-chart-1";
-		var xAxisCategories = ['Actionable Net Payment Difference Amounts', 'Actionable Payment Difference Order Net Sale Qty'];
-		<c:forEach items="${partnerByACPD}" var="partnerDto" varStatus="loop">
-			var data = {};
-			data.name = '${partnerDto.partner}';
-			data.data = [parseFloat(parseFloat('${partnerDto.actionablePD}').toFixed(2)), parseInt('${partnerDto.actionableNetQty}')];
-			dataArr.push(data);
+		var temp3 = [];
+		var partnerByACPD = [];
+		var i = 1;
+		<c:forEach items="${partnerByACPD}" var="categoryDto" varStatus="loop">
+		var arr1 = [ i, '${categoryDto.actionablePD}' ];
+		var arr2 = [ i, '${categoryDto.partner}' ];
+		i++;
+		temp3.push(arr1);
+		partnerByACPD.push(arr2);
 		</c:forEach>
-		stackChart(divId, yAxisText, dataArr);
+		
+		var temp4 = [];
+		var categoryByACPD = [];
+		var i = 1;
+		<c:forEach items="${categoryByACPD}" var="categoryDto" varStatus="loop">
+		var arr1 = [ i, '${categoryDto.actionablePD}' ];
+		var arr2 = [ i, '${categoryDto.category}' ];
+		i++;
+		temp4.push(arr1);
+		categoryByACPD.push(arr2);
+		</c:forEach>
 		
 		var dataArr = [];
-		var yAxisText = 'Actionable Net Payment Difference Amounts vs Actionable Payment Difference Order Net Sale Qty';
-		var divId = "#stacked-chart-3";
-		var xAxisCategories = ['Actionable Net Payment Difference Amounts', 'Actionable Payment Difference Order Net Sale Qty'];
-		<c:forEach items="${categoryByACPD}" var="partnerDto" varStatus="loop">
-			var data = {};
-			data.name = '${partnerDto.partner}';
-			data.data = [parseFloat(parseFloat('${partnerDto.actionablePD}').toFixed(2)), parseInt('${partnerDto.actionableNetQty}')];
-			dataArr.push(data);
-		</c:forEach>
-		stackChart(divId, yAxisText, dataArr);
-		
-		var dataArr = [];
-		var yAxisText = 'Upcoming Payment Difference Amounts vs Upcoming Payment Difference Order Net Sale Qty';
+		var yAxisText = 'Actionable PD Order Net Sale Qty vs Upcoming PD Order Net Sale Qty';
 		var divId = "#stacked-chart-2";
-		var xAxisCategories = ['Upcoming Net Payment Difference Amounts', 'Upcoming Payment Difference Order Net Sale Qty'];
+		var xAxisCategories = ['Actionable PD Order Net Sale Qty', 'Upcoming PD Order Net Sale Qty'];
 		<c:forEach items="${partnerByACNS}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.partner}';
-			data.data = [parseFloat(parseFloat('${partnerDto.upcomingPD}').toFixed(2)), parseInt('${partnerDto.upcomingNetQty}')];
+			data.data = [parseFloat(parseFloat('${partnerDto.netSaleQty}').toFixed(2)), parseInt('${partnerDto.upcomingNetQty}')];
 			dataArr.push(data);
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);
 		
 		var dataArr = [];
-		var yAxisText = 'Upcoming Net Payment Difference Amounts vs Upcoming Payment Difference Order Net Sale Qty';
+		var yAxisText = 'Actionable PD Order Net Sale Qty vs Upcoming PD Order Net Sale Qty';
 		var divId = "#stacked-chart-4";
-		var xAxisCategories = ['Upcoming Net Payment Difference Amounts', 'Upcoming Payment Difference Order Net Sale Qty'];
+		var xAxisCategories = ['Actionable PD Order Net Sale Qty', 'Upcoming PD Order Net Sale Qty'];
 		<c:forEach items="${categoryByACNS}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.partner}';
-			data.data = [parseFloat(parseFloat('${partnerDto.upcomingPD}').toFixed(2)), parseInt('${partnerDto.upcomingNetQty}')];
+			data.data = [parseFloat(parseFloat('${partnerDto.netSaleQty}').toFixed(2)), parseInt('${partnerDto.upcomingNetQty}')];
 			dataArr.push(data);
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);
@@ -471,6 +471,10 @@
 									"#bar-chart-partner-npr");
 							flotbar(temp2, categoryByNPR,
 									"#bar-chart-category-npr");
+							flotbar(temp3, partnerByACPD,
+								"#bar-chart-partner-acpd");
+							flotbar(temp4, categoryByACPD,
+								"#bar-chart-category-acpd");
 
 							$('.dataTables-example')
 									.dataTable(
