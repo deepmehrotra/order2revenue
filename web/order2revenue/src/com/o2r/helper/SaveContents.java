@@ -130,6 +130,8 @@ public class SaveContents {
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				try
+				{
 				validaterow = true;
 				entry = worksheet.getRow(rowIndex);
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
@@ -256,13 +258,11 @@ public class SaveContents {
 						order.setOrderMRP(Double.parseDouble(entry.getCell(11)
 								.toString()));
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage.append(" Order MRP should be a number ");
 						validaterow = false;
 					}
-				} else {
-					errorMessage.append(" Order MRP is null ");
-					validaterow = false;
-				}
+				} 
 				if (entry.getCell(12) != null
 						&& entry.getCell(12).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
@@ -294,6 +294,8 @@ public class SaveContents {
 				}
 				if (entry.getCell(14) != null
 						&& entry.getCell(14).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					try
+					{
 					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(14))) {
 						order.setShippedDate(entry.getCell(14)
 								.getDateCellValue());
@@ -301,6 +303,13 @@ public class SaveContents {
 						errorMessage
 								.append(" Shipped Date formate is wrong ,enter mm/dd/yyyy,");
 						validaterow = false;
+					}
+					}
+					catch(Exception e)
+					{
+						errorMessage
+						.append(" Shipped Date formate is wrong ,enter mm/dd/yyyy,");
+				validaterow = false;
 					}
 				} else {
 					errorMessage.append(" Shipping Date is null ");
@@ -319,6 +328,7 @@ public class SaveContents {
 							validaterow = false;
 						}
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage.append(" Quantity should be a number ");
 						validaterow = false;
 					}
@@ -342,6 +352,7 @@ public class SaveContents {
 											.parseDouble(entry.getCell(16)
 													.toString()));
 								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
 									errorMessage
 											.append(" Net Rate should be number ");
 									validaterow = false;
@@ -364,6 +375,7 @@ public class SaveContents {
 											.parseDouble(entry.getCell(16)
 													.toString()));
 								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
 									errorMessage
 											.append(" Net Rate should be number ");
 									validaterow = false;
@@ -405,7 +417,7 @@ public class SaveContents {
 							customerBean.setZipcode(String.valueOf((long) entry
 									.getCell(21).getNumericCellValue()));
 						} catch (Exception e) {
-							e.printStackTrace();
+							log.error("Failed!", e);
 							errorMessage
 									.append("Customer zipcode is corrupted ");
 							validaterow = false;
@@ -441,6 +453,13 @@ public class SaveContents {
 							+ order.getChannelOrderID() + " errorMessage : "
 							+ errorMessage);
 					returnOrderMap.put(errorMessage.toString(), order);
+				}
+				}
+				catch(Exception e)
+				{
+					
+					log.error("Failed!", e);
+					returnOrderMap.put("Sever error in this order!"+errorMessage.toString(), order);
 				}
 			}
 			Set<String> errorSet = returnOrderMap.keySet();
@@ -563,6 +582,7 @@ public class SaveContents {
 						order.setPoPrice(Double.parseDouble(entry.getCell(4)
 								.toString()));
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage
 								.append(" Gross PO Price should be a number ");
 						validaterow = false;
@@ -578,6 +598,7 @@ public class SaveContents {
 						order.setOrderMRP(Double.parseDouble(entry.getCell(5)
 								.toString()));
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage.append(" PO MRP should be a number ");
 						validaterow = false;
 					}
@@ -593,6 +614,7 @@ public class SaveContents {
 								.getNumericCellValue());
 
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage.append(" Amount should be a number ");
 						validaterow = false;
 					}
@@ -779,6 +801,7 @@ public class SaveContents {
 						product.setProductPrice(Float.valueOf(entry.getCell(3)
 								.toString()));
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage
 								.append(" Product price should be a number ");
 						validaterow = false;
@@ -798,6 +821,7 @@ public class SaveContents {
 							validaterow = false;
 						}
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage.append(" Quantity should be a number ");
 						validaterow = false;
 					}
@@ -811,6 +835,7 @@ public class SaveContents {
 						product.setThreholdLimit(Float.valueOf(
 								entry.getCell(5).toString()).longValue());
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage
 								.append(" Product price should be a number ");
 						validaterow = false;
@@ -825,6 +850,7 @@ public class SaveContents {
 						product.setLength(Float.valueOf(
 								entry.getCell(7).toString()).longValue());
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage.append(" Length should be a number ");
 						validaterow = false;
 					}
@@ -838,6 +864,7 @@ public class SaveContents {
 						product.setBreadth(Float.valueOf(
 								entry.getCell(8).toString()).longValue());
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage.append(" Breadth should be a number ");
 						validaterow = false;
 					}
@@ -852,6 +879,7 @@ public class SaveContents {
 						product.setHeight(Float.valueOf(
 								entry.getCell(9).toString()).longValue());
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage.append(" Height should be a number ");
 						validaterow = false;
 					}
@@ -865,6 +893,7 @@ public class SaveContents {
 						product.setDeadWeight((float) entry.getCell(10)
 								.getNumericCellValue());
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage.append(" Dead Weight should be a number ");
 						validaterow = false;
 					}
@@ -1073,6 +1102,7 @@ public class SaveContents {
 						productConfig.setMrp(Double.valueOf(entry.getCell(3)
 								.toString()));
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage.append(" MRP should be a number ");
 						validaterow = false;
 					}
@@ -1087,6 +1117,7 @@ public class SaveContents {
 						productConfig.setProductPrice((double) entry.getCell(4)
 								.getNumericCellValue());
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage
 								.append(" Product Price should be a number ");
 						validaterow = false;
@@ -1101,6 +1132,7 @@ public class SaveContents {
 						productConfig.setDiscount(Float.valueOf(entry
 								.getCell(5).toString()));
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage.append(" Discount should be a number ");
 						validaterow = false;
 					}
@@ -1233,6 +1265,7 @@ public class SaveContents {
 						validaterow = false;
 					}
 				} catch (NumberFormatException e) {
+					log.error("Failed!", e);
 					errorMessage.append(" Recieved amount should be number ");
 					validaterow = false;
 				}
@@ -1505,6 +1538,7 @@ public class SaveContents {
 								validaterow = false;
 							}
 						} catch (NumberFormatException e) {
+							log.error("Failed!", e);
 							errorMessage
 									.append(" Quantity should be a number ");
 							validaterow = false;
@@ -1783,6 +1817,7 @@ public class SaveContents {
 										.toString());
 						log.debug(" ******toatal psitive :" + totalpositive);
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage
 								.append(" Positive Amount should be a number ");
 						validaterow = false;
@@ -1803,6 +1838,7 @@ public class SaveContents {
 								+ Math.abs(Double.parseDouble(entry.getCell(4)
 										.toString()));
 					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
 						errorMessage
 								.append(" Negative Amount should be a number ");
 						validaterow = false;
@@ -1925,6 +1961,7 @@ public class SaveContents {
 							expensebean.setAmount(Double.parseDouble(entry
 									.getCell(3).toString()));
 						} catch (NumberFormatException e) {
+							log.error("Failed!", e);
 							errorMessage.append(" Amount should be numeric ");
 							validaterow = false;
 						}
