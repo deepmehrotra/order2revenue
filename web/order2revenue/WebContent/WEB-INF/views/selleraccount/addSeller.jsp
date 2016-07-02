@@ -67,6 +67,29 @@ span .#error {
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
 								<h5>Seller Info</h5>
+								<c:if test="${passwordStatus != null }"><div align="center" style="width: 82%;float: left;">${passwordStatus}</div></c:if>
+								<div class="ibox-tools pull-right">
+									<a href="#"	class="btn btn-primary btn-xs password">Change Password</a>
+								</div>
+							</div>
+							<div id="showChangeBox" class="col-lg-12" style="padding: 11px 0px 8px 0px;">
+								<form:form method="POST" action="changePassword.html" role="form" id="changePassword">
+									<div class="col-sm-3" style="display: inline-flex;">							
+										<label style="width: 35%;">Old Password</label>
+										<input type="password" name="oldPass" class="form-control" style="width: 65%;" required />
+									</div>
+									<div class="col-sm-3" style="display: inline-flex;">
+										<label style="width: 35%;">New Password</label>
+										<input type="password" name="newPass" class="form-control" style="width: 65%;" required />
+									</div>
+									<div class="col-sm-3" style="display: inline-flex;">
+										<label style="width: 35%;">Re-Type Password</label>
+										<input type="password" class="form-control" style="width: 65%;" required />
+									</div>
+									<div class="col-sm-3">
+										<button type="submit" class="btn btn-primary btn-xs" style="margin-top: 6px;margin-left: 139px;">Save Changes</button>
+									</div>
+								</form:form>
 							</div>
 							<div class="ibox-content add-company">
 								<form:form method="POST" action="saveSeller.html" role="form"
@@ -77,6 +100,8 @@ span .#error {
 											<c:if test="${!empty seller.id}">
 												<form:input type="hidden" class="form-control"
 													value="${seller.id}" path="id" />
+												<form:input type="hidden" class="form-control" 
+													value="${seller.email}" path="email" />
 												<form:input type="hidden" class="form-control"
 													value="${seller.password}" path="password" />
 												<form:input type="hidden" class="form-control"
@@ -130,8 +155,7 @@ span .#error {
 												*</label>
 
 											<div class="col-sm-8">
-												<form:input type="email" class="form-control"
-													value="${seller.email}" path="email" required="true" readonly="true"/>
+												<label class="form-control">${seller.email}</label>																								
 											</div>
 										</div>
 										<div class="hr-line-dashed"></div>
@@ -225,7 +249,7 @@ span .#error {
 											<div class="col-lg-4 m-l-n"></div>
 										</div>
 									</div>
-									<div class="col-lg-6 m-l-n">
+									<div class="col-lg-6 ">
 										<img src="/O2R/seller/img/india_map.jpg" alt="india_map"
 											style="width: 71%;margin-left:100px;">
 									</div>
@@ -251,6 +275,12 @@ span .#error {
 <jsp:include page="../globaljslinks.jsp"></jsp:include>
 	<script>
 		$(document).ready(function() {
+			
+			$("#showChangeBox").hide();
+			$(".password").click(function(){
+		        $("#showChangeBox").toggle(1500);
+		    });
+			
 			$("#form").validate({
 				rules : {
 					number : {

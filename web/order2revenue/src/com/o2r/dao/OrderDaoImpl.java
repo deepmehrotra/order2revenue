@@ -395,7 +395,7 @@ public class OrderDaoImpl implements OrderDao {
 							.getProductConfig().getTaxPo())));
 
 					order.setOrderMRP(order.getOrderMRP() * order.getQuantity());
-					order.setOrderSP(order.getProductConfig().getSp()
+					order.setOrderSP(order.getProductConfig().getProductPrice()
 							* order.getQuantity());
 					order.setPoPrice(order.getPoPrice() * order.getQuantity());
 
@@ -3603,6 +3603,7 @@ public class OrderDaoImpl implements OrderDao {
 		double discount = 0;
 		double taxSP = 0;
 		double partnerCommission = 0;
+		double orderSP = 0;
 
 		OrderRTOorReturn consolidateReturn = new OrderRTOorReturn();
 		Order consolidatedOrder = new Order();
@@ -3618,6 +3619,8 @@ public class OrderDaoImpl implements OrderDao {
 		consolidatedOrder.setInvoiceID(gatepasslist.get(0).getInvoiceID());
 
 		consolidateReturn.setReturnDate(gatepasslist.get(0).getReturnDate());
+		consolidatedOrder.setDeliveryDate(gatepasslist.get(0).getReturnDate());
+		consolidatedOrder.setShippedDate(gatepasslist.get(0).getReturnDate());
 
 		Seller seller = null;
 		Session session = null;
@@ -3658,6 +3661,7 @@ public class OrderDaoImpl implements OrderDao {
 							.getDiscount()) / 100) * gatepass.getQuantity();
 					taxSP += productConfig.getTaxSpAmt()
 							* gatepass.getQuantity();
+					orderSP += productConfig.getProductPrice() * gatepass.getQuantity();
 				}
 			}
 
@@ -3665,6 +3669,13 @@ public class OrderDaoImpl implements OrderDao {
 					&& seller.getPartners().size() != 0) {
 				partner = seller.getPartners().get(0);
 			}
+			
+			Date reconciledate = getreconciledate(consolidatedOrder, partner, consolidatedOrder.getOrderDate());
+			if (reconciledate != null) {
+				consolidatedOrder.setPaymentDueDate(reconciledate);
+			}
+			consolidatedOrder.setDeliveryDate(null);
+			consolidatedOrder.setShippedDate(null);
 
 			/* populating derived values of order */
 			/* populating derived values of order */
@@ -3684,6 +3695,7 @@ public class OrderDaoImpl implements OrderDao {
 			//consolidatedOrder.setPr(grossPR);
 			//consolidatedOrder.setPr(grossPR);
 			consolidatedOrder.setPoPrice(totalReturnCharges);
+			consolidatedOrder.setOrderSP(orderSP);
 
 			consolidatedOrder.setOrderTax(new OrderTax());
 			consolidatedOrder.getOrderTax().setTaxToReturn(taxPO);

@@ -155,7 +155,11 @@ public class Layouter {
 		// Create date header
 		HSSFRow dateTitle = worksheet.createRow((short) startRowIndex + 1);
 		HSSFCell cellDate = dateTitle.createCell(startColIndex);
-		cellDate.setCellValue("This report was generated at " + new Date());
+		if(sheetName.equalsIgnoreCase("OrderReturnReport")){
+			cellDate.setCellValue("Note : Valid values For Criteria : channelOrderId, AWB, PIreference, suborderId, invoiceId & For Inventry Type : goodInventory, badInventory");
+		}else{
+			cellDate.setCellValue("This report was generated at " + new Date());
+		}
 	}
 
 	/**

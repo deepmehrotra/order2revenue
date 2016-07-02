@@ -6,7 +6,9 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
 
+import com.o2r.model.Plan;
 import com.o2r.model.Role;
+import com.o2r.model.SellerAccount;
 import com.o2r.model.StateDeliveryTime;
 import com.o2r.model.TaxCategory;
 
@@ -26,6 +28,8 @@ public class SellerBean {
 	private String logoUrl;
 	private Role role;
 	private String verCode;
+	private Plan plan;
+	private SellerAccount sellerAccount;
 	private List<OrderBean> orders = new ArrayList<OrderBean>();
 	private List<CategoryBean> categories = new ArrayList<CategoryBean>();
 	private List<ProductBean> products = new ArrayList<ProductBean>();
@@ -194,6 +198,22 @@ public class SellerBean {
 
 	public void setVerCode(String verCode) {
 		this.verCode = verCode;
+	}
+
+	public Plan getPlan() {
+		return plan;
+	}
+
+	public void setPlan(Plan plan) {
+		this.plan = plan;
+	}
+
+	public SellerAccount getSellerAccount() {
+		return sellerAccount;
+	}
+
+	public void setSellerAccount(SellerAccount sellerAccount) {
+		this.sellerAccount = sellerAccount;
 	}
 
 }

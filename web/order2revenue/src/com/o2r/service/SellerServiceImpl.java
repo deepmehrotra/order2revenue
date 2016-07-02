@@ -97,5 +97,8 @@ public class SellerServiceImpl implements SellerService,ServletContextAware {
 		return sellerDao.getSellerVerCode(verCode);
 	}
 	
-
+	@Override
+	public boolean sendMail(String to, String subject, String body) {
+		return sellerDao.sendMail(to, subject, body);
+	}
 }

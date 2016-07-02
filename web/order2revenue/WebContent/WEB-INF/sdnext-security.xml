@@ -28,7 +28,7 @@
 	<http auto-config="true" use-expressions="true">
 		<!-- <intercept-url pattern="/sec/moderation.html*" access="ROLE_MODERATOR" /> -->
 		<intercept-url pattern="/seller/*" access="hasRole('ROLE_MODERATOR')" />
-		<intercept-url pattern="/admin/*" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/admin/*" access="hasRole('ROLE_ADMIN','ROLE_MODERATOR')" />
 			<form-login login-page="/user-login.html" 
 			default-target-url="/seller/orderindex.html"
 			authentication-failure-url="/error-login.html" />
@@ -36,11 +36,22 @@
             delete-cookies="JSESSIONID" />
 		
 	</http>
-
-    <authentication-manager alias="authenticationManager">
 	
+	
+	<beans:bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
+
+    <authentication-manager alias="authenticationManager">	
 	  <authentication-provider user-service-ref="customUserDetailsService"/>
 	</authentication-manager>
+	
+    
+	<beans:bean id="authenticationManager" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+  		<beans:property name="userDetailsService" ref="userDetailsServiceImpl" />
+  		<beans:property name="passwordEncoder" ref="encoder" />
+	</beans:bean>
+	<!-- For hashing and salting user passwords -->
+    <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+	
 	
 
 </beans:beans>

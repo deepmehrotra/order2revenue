@@ -199,7 +199,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="row">
+										<%-- <div class="row">
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
@@ -236,7 +236,7 @@
 													</div>
 												</div>
 											</div>
-										</div>
+										</div> --%>
 										<div class="row">
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
@@ -383,7 +383,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="row">
+										<%-- <div class="row">
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
@@ -420,7 +420,7 @@
 													</div>
 												</div>
 											</div>
-										</div>
+										</div> --%>
 									</div>
 									<div id="tab-2" class="tab-pane col-sm-12">		
 										<div class="row">
@@ -439,8 +439,8 @@
 																	<th>Total Additional Charges</th>
 																	<th>Gross Profit/Loss</th>
 																	<th>% GP Vs Cost of Profit</th>
-																	<th>Net Payment Result</th>
-																	<th>Net Payment Difference</th>
+																	<!-- <th>Net Payment Result</th>
+																	<th>Net Payment Difference</th> -->
 																</tr>
 															</thead>
 															<tbody>
@@ -457,8 +457,8 @@
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netReturnCharges}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.grossProfit}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.gpVsProductCost}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPaymentResult}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.paymentDifference}" /></td>
+																			<%-- <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPaymentResult}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.paymentDifference}" /></td> --%>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -489,8 +489,8 @@
 																	<th>Total Addtional Charges</th>
 																	<th>Gross Profit/Loss</th>
 																	<th>% GP Vs Cost of Profit</th>
-																	<th>Net Payment Result</th>
-																	<th>Net Payment Difference</th>
+																	<!-- <th>Net Payment Result</th>
+																	<th>Net Payment Difference</th> -->
 																</tr>
 															</thead>
 															<tbody>
@@ -507,8 +507,8 @@
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netReturnCharges}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.grossProfit}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.gpVsProductCost}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPaymentResult}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.paymentDifference}" /></td>
+																			<%-- <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPaymentResult}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.paymentDifference}" /></td> --%>
 																		</tr>
 																	</c:forEach>
 																</c:if>
