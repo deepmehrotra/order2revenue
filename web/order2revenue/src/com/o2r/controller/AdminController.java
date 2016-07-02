@@ -1,27 +1,16 @@
 package com.o2r.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.o2r.bean.EmployeeBean;
 import com.o2r.bean.OrderBean;
-import com.o2r.helper.CustomException;
-import com.o2r.model.Employee;
 import com.o2r.service.AdminService;
 import com.o2r.utility.DataRestore;
 
@@ -34,6 +23,8 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
+	@Autowired
+	private DataRestore dataRestoreUtility;
 
 	static Logger log = Logger.getLogger(AdminController.class.getName());
 
@@ -94,17 +85,18 @@ public class AdminController {
 		return new ModelAndView("admin/queryList", model);
 	}
 	
-	@RequestMapping(value = "/admin/dataRestore", method = RequestMethod.GET)
+	@RequestMapping(value = "/seller/dataRestore", method = RequestMethod.GET)
 	public ModelAndView dataRestore() {
 
 		log.info("$$$ dataRestore Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		DataRestore dsnew=new DataRestore();
+		
 		try {
-			System.out.println(" Calling priary db : "+dsnew.getSellerFromDB(
+			dataRestoreUtility.moveSeller(2);
+			/*System.out.println(" Calling priary db : "+dataRestoreUtility.getSellerFromDB(
 					2, "primary"));
-			System.out.println(" Calling secondary db : "+dsnew.getSellerFromDB(
-					2, "backup"));
+			System.out.println(" Calling secondary db : "+dataRestoreUtility.getSellerFromDB(
+					2, "backup"));*/
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed!",e);
