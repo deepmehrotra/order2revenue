@@ -100,6 +100,8 @@ span .#error {
 											<c:if test="${!empty seller.id}">
 												<form:input type="hidden" class="form-control"
 													value="${seller.id}" path="id" />
+												<form:input type="hidden" class="form-control" 
+													value="${seller.email}" path="email" />
 												<form:input type="hidden" class="form-control"
 													value="${seller.password}" path="password" />
 												<form:input type="hidden" class="form-control"
@@ -153,8 +155,7 @@ span .#error {
 												*</label>
 
 											<div class="col-sm-8">
-												<form:input type="email" class="form-control"
-													value="${seller.email}" path="email" required="true" readonly="true"/>
+												<label class="form-control">${seller.email}</label>																								
 											</div>
 										</div>
 										<div class="hr-line-dashed"></div>
@@ -248,7 +249,7 @@ span .#error {
 											<div class="col-lg-4 m-l-n"></div>
 										</div>
 									</div>
-									<div class="col-lg-6 m-l-n">
+									<div class="col-lg-6 ">
 										<img src="/O2R/seller/img/india_map.jpg" alt="india_map"
 											style="width: 71%;margin-left:100px;">
 									</div>
