@@ -10,7 +10,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
  <head> 
+ 
+ 	<link href="/O2R/seller/css/summernote.css" rel="stylesheet">
+    <link href="/O2R/seller/css/summernote-bs3.css" rel="stylesheet">
+ 
+ 
+ 
+ 
  <jsp:include page="../globalcsslinks.jsp"></jsp:include>
+ 
  <style type="text/css">
  	.buton{
 		padding: 0px 6px 0px 6px;
@@ -54,7 +62,7 @@
                             <ul class="nav nav-tabs">
                                 <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i> Sellers</a></li>
                             </ul>
-                            <div class="tab-content">
+                            <div class="tab-content" style="overflow-x: hidden;overflow-y: scroll;height: 555px;">
                                 <div id="tab-1" class="tab-pane active">
                                     <div class="full-height-scroll">
                                         <div class="table-responsive">
@@ -63,6 +71,7 @@
                                                 <c:if test="${!empty sellers}">
                                                 	<c:forEach items="${sellers}" var="seller">
 		                                                <tr>
+		                                                	<td><input type="checkbox" value="${seller.id}"></td>
 		                                                	<c:if test="${seller.logoUrl != null}">
 		                                                    	<td class="client-avatar"><a data-toggle="tab" href="#contact-${seller.id}" class="client-link"><img alt="image" src="${seller.logoUrl}"></a> </td>
 		                                                    </c:if>
@@ -80,12 +89,17 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                    </div>
+                                   </div>
                                 </div>
                             </div>
+                             <hr>
+                             <div style="align:center">
+                                 <button class="btn btn-primary btn-sm btn-block pull-right" style="width:48%;margin-top:-14px;margin-right:25%;">SEND 2 SELECTED</button>
+                             </div>
+                           
                             </div>
                         </div>
-                    </div>
+                    </div>                    
                 </div>
                 <div class="col-sm-4">
                     <div class="ibox ">
@@ -182,12 +196,12 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>            
         </div>
         <c:forEach items="${sellers}" var="seller">
 	        <div class="modal inmodal fade" id="sendMail-${seller.id}" tabindex="-1" role="dialog"  aria-hidden="true">
 					<div class="modal-dialog modal-lg">
-						<div class="modal-content animated bounceInTop" style="left: 29%;width: 45%;top: 79px;">
+						<div class="modal-content animated bounceInTop" style="width: 100%;top: -9px;">
 							<div class="modal-header" style="padding: 10px 0px;">
 								<c:if test="${seller.logoUrl != null}">
 									<img alt="image" class="img-circle pull-right" src="${seller.logoUrl}" style="width: 38px;">
@@ -195,6 +209,7 @@
 								<c:if test="${seller.logoUrl == null}">
 									<img alt="image" class="img-circle pull-right" src="/O2R/sellerimages/defaultSeller.jpg" style="width: 38px;">
 								</c:if>
+								<img alt="image" class="img-circle pull-left" src="/O2R/landing/img/logoo2r.png" style="width: 40px;">
 								<h4>SEND MAIL</h4>
 								<i class="fa fa-share"></i>
 							</div>
@@ -203,12 +218,26 @@
 									<div class="col-sm-12">
 										<div class="form-group">
 											<form action="userquery.html"  id="contactusform" method="POST" >											
-												 <label class="pull-left" style="width: 20%;">To</label><input type="text" value="${seller.email}" class="form-control pull-right" style="color: darkgreen; width: 80%;" required>
+												 <%-- <label class="pull-left" style="width: 20%;">To</label><input type="text" value="${seller.email}" class="form-control pull-right" style="color: darkgreen; width: 80%;" required>
 												 <br>
 												 <label class="pull-left" style="width: 20%;">Subject</label><input type="text" class="form-control pull-right" style="color: darkgreen; width: 80%;" required>
 												 <br>
 												 <center><label>BODY</label></center>
-												 <textarea rows="5" cols="10" class="form-control"></textarea>
+												 <textarea rows="5" cols="10" class="form-control"></textarea> --%>
+												 <div class="mail-box">
+						                            <div class="mail-body">
+						                                <div class="form-group">
+						                                	<label class="col-sm-2">To:</label>
+						                                    <input type="text" class="form-control" value="${seller.email}" name="email">
+						                                   	<label class="col-sm-2">Subject:</label>
+						                                    <input type="text" class="form-control" name="subject">
+						                                </div>
+						                            </div>
+						                            <div class="mail-text h-200">						                                
+						                                <div class="summernote">						                                      
+						                                </div>
+						                            </div>
+						                            </div>
 												<br>
 												<button type="submit" class=" btn btn-primary form-control pull-left" style="background: #1ab394;width: 50%; color: #fff;">SEND</button>
 												<button type="submit" class=" btn btn-primary form-control pull-right" data-dismiss="modal" style="background: #1ab394;width: 50%; color: #fff;">CANCEL </button>
@@ -225,14 +254,30 @@
 	<jsp:include page="../globalfooter.jsp"></jsp:include>
 
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
+	<script src="/O2R/seller/js/summernote.min.js"></script>
+ 	<script src="/O2R/seller/js/plugins/iCheck/icheck.min.js"></script>
 <script>
-  $(document).ready(function()
-{
-  $('#search').keyup(function()
-  {
-    searchTable($(this).val());
-  });
+  $(document).ready(function(){
+	  
+	  $('#search').keyup(function()
+	  {
+	    searchTable($(this).val());
+	  });
+	  
+	  $('.i-checks').iCheck({
+	      checkboxClass: 'icheckbox_square-green',
+	      radioClass: 'iradio_square-green',
+	  });
+	  $('.summernote').summernote();
+		var edit = function() {
+		  $('.click2edit').summernote({focus: true});
+		};
+		var save = function() {
+		  var aHTML = $('.click2edit').code();
+		  $('.click2edit').destroy();
+		};  
 });
+   
 
 function searchTable(inputVal)
 {
@@ -258,6 +303,7 @@ function searchTable(inputVal)
   });
 }
 </script>
+            
 
 	</div>
 </div>

@@ -5,6 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<link href="/O2R/seller/css/bootstrap.min.css" rel="stylesheet">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Registration O2R</title>
 	<link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
@@ -12,6 +13,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>	
 	<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js"></script>	
+	
 	
 </head>
 	<body>
@@ -38,7 +40,7 @@
 	              		<img src="/O2R/landing/img/icons/email.png" alt="user">
 	              	</div>
 	              	<div class="inputtext">
-	              		<input type="email" name="j_username" id="j_username" required placeholder="Email id" />
+	              		<input type="email" name="j_username" id="j_username" required placeholder="Email id" style="height: 37px;"/>
 	              	</div>	
 	          	</div>
 	          	<br><br>
@@ -47,20 +49,49 @@
 	            	<img src="/O2R/landing/img/icons/password.png" alt="user">
 	            </div>
 	            <div class="inputtext">
-	            	<input type="password" name="j_password" id="j_password" required placeholder="Password" />
+	            	<input type="password" name="j_password" id="j_password" required placeholder="Password" style="height: 37px;"/>
 	            </div>
 	          </div>
 	          <br>
-	          <p class="forgot"><a href="#">Forgot Password?</a></p>
+	          <p class="forgot"><a href="#" data-toggle="modal" data-target="#sendInd" style="text-decoration:none;"><font size="3" color="white" > Forgot password ?</font></a></p>
 	          <button class="button button-block">Log In</button>
 	          </form>
-	        </div> 
+	        </div>
+	        
+	        <div class="modal inmodal fade" id="sendInd" tabindex="-1" role="dialog"  aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content animated bounceInTop" style="left: 29%;width: 45%;top: 79px;">
+						<div class="modal-header" style="height: 76px;background: currentColor;">
+							<h1 style="color:white;"><b>FORGOT PASSWORD</b></h1>
+							<button type="button" class="close danger" data-dismiss="modal" style="opacity: 0.8;position: relative;top : -92px;right: -8px;"><span class="buton" aria-hidden="true" data-backdrop="false">&times;</span> </button>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="form-group" style="width: 91%;margin-left: 15px; margin-top: -35px;">
+										<form action="mail4get.html"  id="contactusform" method="POST" >
+											<h3>Don't worry.We 've all been there.</h3>
+											<p>Enter your email id,we will send the instruction on your mail to change your password.</p>
+											<input type="email" placeholder="Enter Email id"  name="passwordMail" class="form-control" style="color: darkgreen;" required>
+											<br>
+											<input type="submit" value="Send Instruction" class=" btn btn-primary form-control" style="background: #1ab394;">
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	        
+	        
+	         
 	        <div id="signup">   
 	          <h1>Sign Up for Free</h1>
 	          <form method="POST" action="saveSeller.html" id="registerForm" >
 	          <div class="top-row">
 	            <div class="field-wrap">
-	            	<div class="icon">
+	            	<div class="icon1">
 	            		<img src="/O2R/landing/img/icons/user.png" alt="user">
 	            	</div>
 	            	<div class="inputtext">
@@ -68,7 +99,7 @@
 	              	</div>
 	            </div>
 	            <div class="field-wrap">
-	            	<div class="icon">
+	            	<div class="icon1">
 	              		<img src="/O2R/landing/img/icons/email.png" alt="user">
 	              	</div>
 	              	<div class="inputtext">
@@ -77,7 +108,7 @@
 	              	</div>
 	            </div>
 	            <div class="field-wrap">
-	            	<div class="icon">
+	            	<div class="icon1">
 	            		<img src="/O2R/landing/img/icons/password.png" alt="user">
 	            	</div>
 	            	<div class="inputtext">
@@ -85,7 +116,7 @@
 	            	</div>
 	          	</div>
 	          	<div class="field-wrap">
-	          		<div class="icon">
+	          		<div class="icon1">
 	          			<img src="/O2R/landing/img/icons/password.png" alt="user">
 	          		</div>
 	          		<div class="inputtext">
@@ -95,7 +126,7 @@
 	          	</div>
 	          	<div class="field-wrap" style="display:flex;">
 	          		<div class="check">
-	          			<input type="checkbox" name="terms" required autocomplete="off"/ style="width: 10%;height: 15px;margin-top: 9px; float: right;">
+	          			<input type="checkbox" name="terms" required autocomplete="off"/ style="width: 10%;height: 15px;margin-top: 7px; float: right;position: relative;left: 18px;">
 	          		</div> 
 	          		<div class="accept">
 	          			<p style="color: #a0b3b0;font-weight: 600;margin-top: 6px;">

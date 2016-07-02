@@ -1,7 +1,7 @@
 <%@page import="java.io.File"%>
 <%@page import="com.o2r.helper.HelperClass"%>
 <%@page import="com.o2r.bean.SellerBean"%>
-<%@page import="org.springframework.security.core.context.SecurityContextHolder" %>>
+<%@page import="org.springframework.security.core.context.SecurityContextHolder" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
@@ -73,8 +73,15 @@ window.onload = function() {
 					</span> <a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
 						class="clear"> <span class="block m-t-xs"> <strong
 								class="font-bold" id="sellerName"><%= session.getAttribute("sellerName")%></strong>
-						</span> <span class="text-muted text-xs block"><%=SecurityContextHolder.getContext().getAuthentication().getAuthorities() %>Seller<b
-								class="caret"></b></span>
+						</span> <span class="text-muted text-xs block">
+						
+						<c:if test='<%= SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equals("[ROLE_ADMIN, ROLE_MODERATOR]") %>'>						
+							Admin
+						</c:if>
+						<c:if test='<%= SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equals("[ROLE_MODERATOR]") %>'>
+							Seller
+						</c:if>
+						<b class="caret"></b></span>
 					</span>
 					</a>
 					<ul class="dropdown-menu animated fadeInRight m-t-xs">
@@ -130,9 +137,17 @@ window.onload = function() {
 					<li><a href="#" onclick="onclickSideNavigation('Tax')">Tax</a></li>
 					<li><a href="#" onclick="onclickSideNavigation('TDS')">TDS</a></li>
 					<li><a href="eventsList.html">Events</a></li>
-					<li><a href="sellerList.html">Seller List</a></li>
-
 				</ul></li>
+				
+			<c:if test='<%= SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equals("[ROLE_ADMIN, ROLE_MODERATOR]") %>'>	
+				<li><a href="minor.html"><i class="fa fa-wrench"></i> <span
+						class="nav-label">Admin Control</span> <span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">					
+						<li class="active"><a href="sellerList.html">Seller List</a></li>
+					</ul>
+				</li>
+			</c:if>	
+				
 			<li><a href="#"><i class="fa fa-envelope"></i> <span
 					class="nav-label">Orders</span> </a></li>
 			<!-- <li><a href="minor.html"><i class="fa fa-wrench"></i> <span

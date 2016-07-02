@@ -2,6 +2,7 @@ package com.o2r.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,11 +10,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -31,7 +34,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.o2r.bean.EventsBean;
 import com.o2r.bean.PlanBean;
 import com.o2r.bean.SellerBean;
 import com.o2r.helper.ConverterClass;
@@ -185,12 +187,70 @@ public class SellerController {
 		return new ModelAndView("miscellaneous/sellerList", model);
 	}
 	
+	@RequestMapping(value = "/seller/changePassword", method = RequestMethod.POST)
+	public ModelAndView changePassword(HttpServletRequest request, HttpSession session) {
+		
+		log.info("$$$ changePassword Starts : SellerController $$$");		
+		String oldPassword=request.getParameter("oldPass");	
+		System.out.println(request.getParameter("oldPass")+" --> "+oldPassword);
+		Seller seller=null;
+		
+		try{			
+			seller=sellerService.getSeller(helperClass.getSellerIdfromSession(request));
+			if(seller != null){
+				if(seller.getPassword().equals(DatatypeConverter.printHexBinary(oldPassword.getBytes("UTF-8")))){
+					seller.setPassword(DatatypeConverter.printHexBinary(request.getParameter("newPass").getBytes("UTF-8")));
+					sellerService.addSeller(seller);
+					session.setAttribute("passwordStatus", "Password Changed Successfully");					
+				}else{
+					session.setAttribute("passwordStatus", "Invalid Old Password");					
+				}
+			}			
+		}catch(Exception e){
+			log.error("Failed to Change Password ! SellerController ", e);
+			e.printStackTrace();
+		}		
+		log.info("$$$ changePassword Ends : SellerController $$$");
+		return new ModelAndView("redirect:/seller/addSeller.html");
+	}
 	
+	
+	@RequestMapping(value = "/mail4get", method = RequestMethod.POST)
+	public String mail4getPassword(HttpServletRequest request) {
+		
+		log.info("$$$ mail4getPassword Starts : SellerController $$$");
+		
+		String target_mail=request.getParameter("passwordMail");
+		System.out.println("Mail Address : "+target_mail);
+		Random random=new Random();
+		Seller seller=null;
+		String subject=null;
+		String body=null;
+		try{
+			seller=sellerService.getSeller(target_mail);
+			if(seller != null){
+				subject="Login Password";
+				int newPass=random.nextInt((999999 - 111111) + 1) + 111111;
+				System.out.println(newPass);
+				body="Your New Login Password : "+newPass;
+				boolean status=sellerService.sendMail(target_mail, subject, body);
+				if(status == true){
+					seller.setPassword(DatatypeConverter.printHexBinary(String.valueOf(newPass).getBytes("UTF-8")));
+					sellerService.addSeller(seller);
+				}
+			}
+		}catch(Exception e){
+			log.error("Failed to Sending Mail 4 get Password ! SellerController ", e);
+			e.printStackTrace();
+		}		
+		log.info("$$$ mail4getPassword Ends : SellerController $$$");
+		return "login_register";
+	}
 
 	@RequestMapping(value = "/seller/addSeller", method = RequestMethod.GET)
 	public ModelAndView addSeller(HttpServletRequest request,
 			@ModelAttribute("command") SellerBean sellerBean,
-			BindingResult result) {
+			BindingResult result, HttpSession session) {
 
 		log.info("$$$ addSeller Starts : SellerController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -219,6 +279,8 @@ public class SellerController {
 				}
 				
 			}
+			model.put("passwordStatus", session.getAttribute("passwordStatus"));
+			session.removeAttribute("passwordStatus");
 			model.put("stateTimes", stateTimes);
 			model.put("seller", seller);
 		} catch (Throwable e) {
@@ -539,5 +601,6 @@ public class SellerController {
 		}
 		log.info("$$$ saveImage Ends : SellerController $$$");
 	}
+	
 
 }
