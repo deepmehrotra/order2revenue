@@ -770,8 +770,8 @@ public class ProductDaoImpl implements ProductDao {
                     Collections.sort(stocklist);
                 log.debug("Incomming Date : "+orderDate);
                 log.debug(" Size of stocklist: " + stocklist.size());
-                log.debug("Updated month of StockList : "+stocklist.get(0).getMonth() +"-"+stocklist.get(0).getYear());
-                log.debug("Created Month : "+(orderDate.getMonth()+1)+"-"+orderDate.getYear());
+                //log.debug("Updated month of StockList : "+stocklist.get(0).getMonth() +"-"+stocklist.get(0).getYear());
+                //log.debug("Created Month : "+(orderDate.getMonth()+1)+"-"+orderDate.getYear());
                 if (stocklist != null && stocklist.size() != 0
                         && stocklist.get(0).getMonth() == (orderDate.getMonth()+1)
                         && stocklist.get(0).getYear() == orderDate.getYear()) {

@@ -985,6 +985,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				additionalCharges = 0;
 				channelReport.setReturnId(currOrderReturn.getReturnOrRTOId());
 				channelReport.setNetEOSSValue(-currOrder.getEossValue());
+				channelReport.setNetReturnCharges(additionalCharges);
 			}
 		}
 		double netPr = currOrder.getPr()/grossSaleQty*(grossSaleQty-saleRetQty);
@@ -1100,9 +1101,17 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		if(channelReport.isPoOrder()) {
 			if (currOrderReturn != null) {
 				channelReport.setReturnTaxfreeSale(-channelReport.getPr());
+				channelReport.setReturnProductCost(currOrder.getOrderSP());
+				channelReport.setNetProductCost(-currOrder.getOrderSP());
+				channelReport.setGrossProfit(-currOrder.getGrossProfit());
 			} else {
 				channelReport.setGrossTaxfreeSale(channelReport.getPr());
+				channelReport.setProductCost(currOrder.getOrderSP());
+				channelReport.setNetProductCost(currOrder.getOrderSP());
 			}
+			gpVsProductCost = channelReport.getGrossProfit() /
+								channelReport.getNetProductCost() * 100;
+			channelReport.setGpVsProductCost(gpVsProductCost);
 		} else {
 			channelReport.setReturnTaxfreeSale(currOrder.getPr()/grossSaleQty*saleRetQty);
 			channelReport.setGrossTaxfreeSale(channelReport.getPr());

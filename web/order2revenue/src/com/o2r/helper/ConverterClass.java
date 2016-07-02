@@ -2282,7 +2282,7 @@ public class ConverterClass {
 		boolean initialize = false;
 		ChannelReportDetails consolidated = new ChannelReportDetails();
 		for(ChannelReportDetails channelGraph: channelGraphList){
-			if(index++ >= 5){
+			if(index++ >= maxLength){
 				if(!initialize){
 					initialize = true;
 					consolidated.setGrossProfit(channelGraph.getGrossProfit());
@@ -2297,6 +2297,7 @@ public class ConverterClass {
 					consolidated.setNetToBeReceived(channelGraph.getNetToBeReceived());
 					consolidated.setGrossQty(channelGraph.getGrossQty());
 					consolidated.setSaleRetQty(channelGraph.getSaleRetQty());
+					consolidated.setNetQty(channelGraph.getNetQty());
 					consolidated.setGrossNrAmount(channelGraph.getGrossNrAmount());
 					
 					consolidated.setNetEOSSValue(channelGraph.getNetEOSSValue());
@@ -2319,7 +2320,7 @@ public class ConverterClass {
 						case "NetSaleSP":
 							consolidated.setNetSpAmount(consolidated.getNetSpAmount() + channelGraph.getNetSpAmount());
 							consolidated.setNetNrAmount(consolidated.getNetNrAmount() + channelGraph.getNetNrAmount());
-							consolidated.setNetAr(consolidated.getNetAr() + channelGraph.getNetAr());
+							consolidated.setNetPr(consolidated.getNetPr() + channelGraph.getNetPr());
 							break;
 						case "NetAR":
 							consolidated.setNetToBeReceived(consolidated.getNetToBeReceived() + channelGraph.getNetToBeReceived());
@@ -2328,6 +2329,7 @@ public class ConverterClass {
 						case "GSvSR":
 							consolidated.setGrossQty(consolidated.getGrossQty() + channelGraph.getGrossQty());
 							consolidated.setSaleRetQty(consolidated.getSaleRetQty() + channelGraph.getSaleRetQty());
+							consolidated.setNetQty(consolidated.getNetQty() + channelGraph.getNetQty());
 							break;
 						case "GSAvRA":
 							consolidated.setGrossSpAmount(consolidated.getGrossSpAmount() + channelGraph.getGrossSpAmount());
@@ -2340,7 +2342,7 @@ public class ConverterClass {
 							consolidated.setGpVsProductCost(consolidated.getGpVsProductCost() + channelGraph.getGpVsProductCost());
 							break;
 						case "PR": 
-							consolidated.setPr(consolidated.getNetPr() + channelGraph.getNetPr());
+							consolidated.setNetPr(consolidated.getNetPr() + channelGraph.getNetPr());
 							consolidated.setNetProductCost(consolidated.getNetProductCost() + channelGraph.getNetProductCost());
 							break;
 						case "NR": 
@@ -2349,7 +2351,7 @@ public class ConverterClass {
 							break;
 						case "GNR": 
 							consolidated.setGrossProfit(consolidated.getGrossProfit() + channelGraph.getGrossProfit());
-							consolidated.setNetNrAmount(consolidated.getGrossNrAmount() + channelGraph.getGrossNrAmount());
+							consolidated.setGrossNrAmount(consolidated.getGrossNrAmount() + channelGraph.getGrossNrAmount());
 							break;
 						case "EOSS": 
 							consolidated.setNetEOSSValue(consolidated.getNetEOSSValue() + channelGraph.getNetEOSSValue());
