@@ -1,5 +1,6 @@
 package com.o2r.service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,13 +43,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 		System.out.println("Inside customer user details...login"+domainSeller.getEmail());
 		System.out.println("Inside customer user details...pass"+domainSeller.getPassword());
 		 System.out.println(" Role "+getAuthorities(domainSeller.getRole().getRole()));
+		 
+		String password = new String(hexStringToByteArray(domainSeller.getPassword()),StandardCharsets.UTF_8);	 
 		boolean enabled = true;
 		boolean accountNonExpired = true;
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
 		 UserDetails user = new User(
 					domainSeller.getEmail(),
-					domainSeller.getPassword(),
+					password,
 					enabled,
 					accountNonExpired,
 					credentialsNonExpired,
@@ -83,7 +87,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
 		return authorities;
 	}
-
+	
+	public byte[] hexStringToByteArray(String hex) {
+	    int l = hex.length();
+	    byte[] data = new byte[l/2];
+	    for (int i = 0; i < l; i += 2) {
+	        data[i/2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
+	                             + Character.digit(hex.charAt(i+1), 16));
+	    }
+	    return data;
+	}
 
 
 }

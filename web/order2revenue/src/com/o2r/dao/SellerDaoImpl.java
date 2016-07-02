@@ -13,6 +13,7 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -25,8 +26,10 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.bean.SellerBean;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.AccountTransaction;
@@ -38,6 +41,7 @@ import com.o2r.model.Seller;
 import com.o2r.model.State;
 import com.o2r.model.StateDeliveryTime;
 import com.o2r.service.ExpenseService;
+import com.sun.mail.smtp.SMTPTransport;
 
 /**
  * @author Deep Mehrotra
@@ -96,7 +100,7 @@ public class SellerDaoImpl implements SellerDao {
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			if(seller!=null&&seller.getId()!=0)
+			if(seller!=null && seller.getId()!=0)
 			{
 				firsttimeflag=false;
 				sellerNew = (Seller) session.get(Seller.class, id);
@@ -127,6 +131,8 @@ public class SellerDaoImpl implements SellerDao {
 				verCode="O2R"+r1+"USER"+r2;
 				verificationLink = (props.getProperty("mailPathURL"))+verCode;
 				seller.setVerCode(verCode);
+				seller.setPassword(DatatypeConverter.printHexBinary(seller.getPassword().getBytes("UTF-8")));
+				//seller.getSellerAccount().setAtivationDate(new Date());				
 				session.saveOrUpdate(seller);
 				sendMail(seller.getEmail(),verificationLink);
 			}
@@ -485,45 +491,40 @@ public class SellerDaoImpl implements SellerDao {
 		log.info("*** updateProcessedOrdersCount Ends : SellerDaoImpl ****");
 	}	
 	
-	public void sendMail(String email, String verificationLink)throws Exception{
-		
+	public void sendMail(String email, String verificationLink)throws Exception{		
 			
 			try{
 				props = PropertiesLoaderUtils.loadProperties(resource);					
 			}catch(Exception e){
 				log.error("Failed!",e);
 			}
-			final String from=props.getProperty("mailFrom");
+			//final String from=props.getProperty("mailFrom");
 			
-			Properties prop = new Properties();
-			prop.put("mail.smtp.starttls.enable", "true");
-			prop.put("mail.smtp.auth", "true");
-			prop.put("mail.smtp.host", "smtp.gmail.com");
-			prop.put("mail.smtp.port", "587");
-
-			javax.mail.Session session = javax.mail.Session.getInstance(prop,
-					new javax.mail.Authenticator() {
-						protected PasswordAuthentication getPasswordAuthentication() {
-							return new PasswordAuthentication(from, props.getProperty("fromMailPassword"));
-						}
-					});
-
-			try {
-				Message message = new MimeMessage(session);
-				message.setFrom(new InternetAddress(from));
-				message.addRecipient(Message.RecipientType.TO,
-						new InternetAddress(email));
-				message.setSubject("Registration Confirmation");
-				message.setContent("<html>\n" +
+			Properties prop = System.getProperties();			
+			prop.put("mail.smtps.host","smtp.mailgun.org");
+	        prop.put("mail.smtps.auth","true");
+	        javax.mail.Session session = javax.mail.Session.getInstance(prop, null);			
+			try{				
+		        Message msg = new MimeMessage(session);
+		        msg.setFrom(new InternetAddress("bishnu@order2revenue.com"));
+		        msg.setRecipients(Message.RecipientType.TO,
+		        InternetAddress.parse(email, false));
+		        msg.setSubject("Hello");
+		        msg.setContent("<html>\n" +
 	                    "<body>\n" +
 	                    "\n" +
 	                    "<a href="+verificationLink+">\n" + "Click here to Complete Your Registration</a>\n" +
 	                    "\n" +
 	                    "</body>\n" +
-	                    "</html>", "text/html");
-				Transport.send(message);
-				log.info("Mail has been Send....");
-				System.out.println("Mail send Successfully....");
+	                    "</html>", "text/html");	        
+		        msg.setSentDate(new Date());
+		        SMTPTransport t =
+		            (SMTPTransport)session.getTransport("smtps");
+		        t.connect("smtp.mailgun.com", "postmaster@order2revenue.com", "e5bb36995811c60bb9cdb5b9176648f2");
+		        t.sendMessage(msg, msg.getAllRecipients());
+		        System.out.println("Response: " + t.getLastServerResponse());
+		        t.close();
+				
 			} catch (AddressException e) {
 				log.error("Mail fail to send Cause : "+e.getMessage());
 				log.error("Failed!",e);
@@ -532,9 +533,55 @@ public class SellerDaoImpl implements SellerDao {
 				log.error("Mail fail to send Cause : "+e.getMessage());
 				log.error("Failed!",e);
 				e.printStackTrace();
+			}catch (Exception e) {
+				e.printStackTrace();
 			}
 	    
 	  }
+	
+	@Override
+	public boolean sendMail(String to, String subject, String body) {
+		
+		Properties prop = System.getProperties();			
+		prop.put("mail.smtps.host","smtp.mailgun.org");
+        prop.put("mail.smtps.auth","true");
+        javax.mail.Session session = javax.mail.Session.getInstance(prop, null);			
+		try{				
+	        Message msg = new MimeMessage(session);
+	        msg.setFrom(new InternetAddress("bishnu@order2revenue.com"));
+	        msg.setRecipients(Message.RecipientType.TO,
+	        InternetAddress.parse(to, false));
+	        msg.setSubject(subject);
+	        msg.setContent("<html>\n" +
+                    "<body>\n" +
+                    "\n" +body+
+                    "\n" +
+                    "</body>\n" +
+                    "</html>", "text/html");	        
+	        msg.setSentDate(new Date());
+	        SMTPTransport t =
+	            (SMTPTransport)session.getTransport("smtps");
+	        t.connect("smtp.mailgun.com", "postmaster@order2revenue.com", "e5bb36995811c60bb9cdb5b9176648f2");
+	        t.sendMessage(msg, msg.getAllRecipients());
+	        System.out.println("Response: " + t.getLastServerResponse());
+	        t.close();
+			
+		} catch (AddressException e) {
+			log.error("Mail fail to send Cause : "+e.getMessage());
+			log.error("Failed!",e);
+			e.printStackTrace();
+			return false;
+		} catch (MessagingException e) {
+			log.error("Mail fail to send Cause : "+e.getMessage());
+			log.error("Failed!",e);
+			e.printStackTrace();
+			return false;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}		
+		return true;
+	}
 	
 	@Override
 	public Seller getSellerVerCode(String verCode) {

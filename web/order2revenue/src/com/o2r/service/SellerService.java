@@ -34,4 +34,6 @@ public interface SellerService {
  public void addStateDeliveryTime(List<StateDeliveryTime> stateDelTimeList, int sellerId)throws CustomException;
  
  public Seller getSellerVerCode(String verCode);
+ 
+ public boolean sendMail(String to, String subject, String body);
 }
