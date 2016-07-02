@@ -658,12 +658,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		double taxToDeduct = 0;
 		double tdsOnReturnAmt = 0;
 		if(currOrderTax != null){
-			grossTds = currOrderTax.getTdsToDeduct();
+			if(currOrder.getShippedDate() != null)
+				grossTds = currOrderTax.getTdsToDeduct();
 			taxToBePaid = currOrderTax.getTax();
 			tdsOnReturnAmt = currOrderTax.getTdsonReturnAmt();
-			if(currOrderReturnOrRTO != null){
+			if(currOrderReturnOrRTO != null && currOrderReturnOrRTO.getReturnDate() != null){
 				returnTds = currOrderTax.getTdsToReturn();
-				tdsToBeDeposited = grossTds - returnTds;
+				tdsToBeDeposited = grossTds - returnTds + tdsOnReturnAmt;
 				taxToBePaid -= currOrderTax.getTaxToReturn();
 				taxToDeduct = currOrderTax.getTdsToDeduct();
 			}
@@ -747,9 +748,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			}
 		} else{
 			if(currOrder.getShippedDate() != null)
-				netPr = currOrder.getPr();
-			if(returnDate != null)
-				netPr = returnNetPr;
+				netPr = currOrder.getPr() - returnNetPr;
 		}
 		partnerBusiness.setTaxPOPrice(taxPOPrice);
 		if(quantity != 0)
@@ -765,8 +764,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		}
 		partnerBusiness.setOrderSP(orderSP);
 		partnerBusiness.setReturnSP(returnSP);
-		if(partnerBusiness.isPoOrder())
-			partnerBusiness.setNetSP(currOrder.getPoPrice());	
+		if(partnerBusiness.isPoOrder()){
+			partnerBusiness.setNetSP(currOrder.getPoPrice() - returnChargesToBeDeducted);	
+		}
 		else{
 			if(quantity != 0)
 				partnerBusiness.setNetSP(grossSP/quantity*(quantity-returnQty));
