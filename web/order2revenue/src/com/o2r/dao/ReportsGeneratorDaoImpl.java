@@ -848,6 +848,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			serviceTaxNoQty = (grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty)*dataConfig.getServiceTax()/100;
 			serviceTaxQty = (grossCommissionQty + pccAmountQty + fixedFeeQty + shippingChargesQty)*dataConfig.getServiceTax()/100;
 			grossCommissionToBePaid = totalAmount + serviceTax;
+			partnerBusiness.setServiceTax(serviceTax);
 		}
 		double grossCommissionToBePaidNoQty = grossCommissionNoQty + pccAmountNoQty + fixedFeeNoQty + shippingChargesNoQty + serviceTaxNoQty;
 		double grossCommissionToBePaidQty = 0;
@@ -858,7 +859,6 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		if(partnerBusiness.isPoOrder() && currOrder.getShippedDate() != null){
 			grossCommissionToBePaidQty = grossCommissionToBePaid;
 		}
-		partnerBusiness.setServiceTax(serviceTax);
 		partnerBusiness.setGrossCommissionQty(grossCommissionToBePaidQty);
 		partnerBusiness.setGrossCommission(grossCommissionToBePaid);
 		double returnCommision = 0;
@@ -1268,14 +1268,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			commDetailsMap.put(key, commDetails);
 		}
 		
-		String poOrderQueryStr = "select ot.pcName, sum( ot.partnerCommission+otx.taxSP-orr.taxPOAmt ) as grossComm, " +
-				"sum(ot.quantity) as saleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx, orderreturn orr " +
-				"where ot.orderReturnOrRTO_returnId = orr.returnId and ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null " +
+		String poOrderQueryStr = "select ot.pcName, sum( ot.partnerCommission+otx.taxSP-otx.tax ) as grossComm, " +
+				"sum(ot.quantity) as saleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx " +
+				"where ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null " +
 				"and ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by ot.pcName";
 		if("category".equalsIgnoreCase(criteria))
-			poOrderQueryStr = "select cat.parentCatName, sum( ot.partnerCommission+otx.taxSP-orr.taxPOAmt ) as grossComm, " +
-					"sum(ot.quantity) as saleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx, product pr, category cat, orderreturn orr " +
-					"where ot.orderReturnOrRTO_returnId = orr.returnId and pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode " +
+			poOrderQueryStr = "select cat.parentCatName, sum( ot.partnerCommission+otx.taxSP-otx.tax ) as grossComm, " +
+					"sum(ot.quantity) as saleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx, product pr, category cat " +
+					"where pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode " +
 					"and ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null and ot.seller_Id=:sellerId and " +
 					"ot.shippedDate between :startDate AND :endDate group by cat.parentCatName";
 		Query poOrderQuery = session.createSQLQuery(poOrderQueryStr)
@@ -1351,13 +1351,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		}
 
 		String poReturnQueryStr = "select ot.pcName, sum(ot.partnerCommission+otx.taxSP-orr.taxPOAmt) as returnComm, " +
-				"sum(estimateddeduction) as addRetCharges, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn) as tdsToReturn  " +
+				"sum(estimateddeduction) as addRetCharges, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn - otx.tdsonReturnAmt) as tdsToReturn " +
 				"from order_table ot, ordertax otx, orderreturn orr where ot.orderReturnOrRTO_returnId = orr.returnId and " +
 				"ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null and ot.seller_Id=:sellerId " +
 				"and orr.returnDate between :startDate AND :endDate group by ot.pcName";
 		if("category".equalsIgnoreCase(criteria))
 			poReturnQueryStr = "select cat.parentCatName, sum(ot.partnerCommission+otx.taxSP-orr.taxPOAmt), " +
-					"sum(estimateddeduction) as returnComm, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn) as tdsToReturn  " +
+					"sum(estimateddeduction) as returnComm, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn - otx.tdsonReturnAmt) as tdsToReturn  " +
 					"from order_table ot, ordertax otx, orderreturn orr, product pr, category cat where pr.category_categoryId = cat.categoryId and " +
 					"ot.productSkuCode = pr.productSkuCode and " +
 					"ot.orderReturnOrRTO_returnId = orr.returnId and ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and " +
@@ -1550,8 +1550,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		}
 		
 		queryStr = "select concat(monthname(ot.shippedDate), ' ', year(ot.shippedDate)) as Month, " +
-				"sum(ot.partnerCommission+otx.taxSP-orr.taxPOAmt) as grossComm from order_table ot, ordertax otx, " +
-				"orderreturn orr where ot.orderReturnOrRTO_returnId = orr.returnId and ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 " +
+				"sum(ot.partnerCommission+otx.taxSP-otx.tax) as grossComm from order_table ot, ordertax otx " +
+				"where ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 " +
 				"and ot.consolidatedOrder_orderId is null and ot.seller_Id=:sellerId and ot.shippedDate " +
 				"between :startDate AND :endDate group by ot.pcName";
 		orderQuery = session.createSQLQuery(queryStr)
