@@ -106,6 +106,7 @@
 																	<th>Partner</th>
 																	<th>Gross Sale Qty</th>
 																	<th>Sale Return Qty</th>
+																	<th>Net Sale Qty</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -120,6 +121,9 @@
 																			<td><fmt:formatNumber type="number"
 																					maxFractionDigits="0"
 																					value="${partnerDto.saleRetQty}" /></td>
+																			<td><fmt:formatNumber type="number"
+																					maxFractionDigits="0"
+																					value="${partnerDto.netQty}" /></td>
 																		</tr>
 																	</c:forEach>
 																</c:if>
@@ -305,7 +309,7 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-lg-6">
+											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
 														<table class="table table-bordered custom-table">
@@ -340,13 +344,13 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-lg-6">
+											<!-- <div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
 														<div id="stacked-chart-7"></div>
 													</div>
 												</div>
-											</div>
+											</div> -->
 										</div>
 										<div class="ibox-content">
 											<div id="morris-line-chart"></div>
@@ -519,12 +523,13 @@
 		var dataArr = [];
 		var yAxisText = 'Gross Sale vs Return Qty Graph';
 		var divId = "#stacked-chart-2";
-		var xAxisCategories = [ 'Gross Sale Qty', 'Return Sale Qty' ];
+		var xAxisCategories = [ 'Gross Sale Qty', 'Return Sale Qty', 'Net Sale Qty' ];
 		<c:forEach items="${partnerByGSvSR}" var="partnerDto" varStatus="loop">
 		var data = {};
 		data.name = '${partnerDto.partner}';
 		data.data = [ parseInt('${partnerDto.grossQty}'),
-				parseInt('${partnerDto.saleRetQty}') ];
+				parseInt('${partnerDto.saleRetQty}'),
+				parseInt('${partnerDto.netQty}') ];
 		dataArr.push(data);
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);
@@ -642,7 +647,6 @@
 			};
 			dataArr.push(data);
 			</c:forEach>
-			alert(dataArr);
 			Morris.Line({
 				element : 'morris-line-chart',
 				data : dataArr,
