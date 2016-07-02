@@ -205,7 +205,7 @@ public class SellerController {
 				}else{
 					session.setAttribute("passwordStatus", "Invalid Old Password");					
 				}
-			}			
+			}	
 		}catch(Exception e){
 			log.error("Failed to Change Password ! SellerController ", e);
 			e.printStackTrace();
