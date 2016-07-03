@@ -177,7 +177,7 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-lg-6">
+											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
 														<table class="table table-bordered custom-table">
@@ -206,10 +206,12 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-lg-6">
+										</div>	
+										<div class="row">	
+											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<div id="stacked-chart-3"></div>
+														<div id="morris-line-chart"></div>
 													</div>
 												</div>
 											</div>
@@ -509,19 +511,32 @@
 		categoryByNetChannArr.push(arr2);
 		</c:forEach>
 		
-		var dataArr = [];
-		var yAxisText = 'Gross Commission vs Return Commission vs Net Commission';
-		var divId = "#stacked-chart-3";
-		var xAxisCategories = ['Gross Commission', 'Return Commission', 'Net Commission'];
+		var monthStrArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; 
+		var monthlyArr = [];
 		<c:forEach items="${monthlyGraph}" var="partnerDto" varStatus="loop">
-			var data = {};
-			data.name = '${partnerDto.key}';
-			data.data = [parseFloat(parseFloat('${partnerDto.grossCommission}').toFixed(2)), 
-			             parseFloat(parseFloat('${partnerDto.returnCommission}').toFixed(2)), 
-			             parseFloat(parseFloat('${partnerDto.netCommission}').toFixed(2))];
-			dataArr.push(data);
+		var monthStr = '${partnerDto.key}';
+		var month = monthStr.split(" ");
+		var monthInt = parseInt(monthStrArr.indexOf(month[0])) + 1;
+		var finalStr = [month[1], "-", monthInt].join("");
+		console.log(finalStr);
+		var data = {
+				key1 : finalStr,
+				key2 : parseFloat(parseFloat('${partnerDto.grossCommission}').toFixed(2)),
+				key3 : parseFloat(parseFloat('${partnerDto.returnCommission}').toFixed(2)),
+				key4 : parseFloat(parseFloat('${partnerDto.netCommission}').toFixed(2))
+		};
+		monthlyArr.push(data);
 		</c:forEach>
-		stackChart(divId, yAxisText, dataArr);
+		Morris.Line({
+			element : 'morris-line-chart',
+			data : monthlyArr,
+			xkey : 'key1',
+			ykeys : [ 'key2', 'key3', 'key4'],
+			labels : [ 'Gross Commission', 'Return Commission', 'Net Commission' ],
+			hideHover : 'auto',
+			resize : true,
+			lineColors : [ '#3a539b', '#2b4b5c', '#00bbb3' ],
+		});
 		
 		var dataArr = [];
 		var yAxisText = 'Partner Commission Graph';
