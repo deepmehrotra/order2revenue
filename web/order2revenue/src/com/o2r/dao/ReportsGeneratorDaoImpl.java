@@ -1309,12 +1309,12 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			commDetailsMap.put(key, commDetails);
 		}
 		String mpReturnQueryStr = "select ot.pcName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty * 1.145) as returnComm, " +
-				"sum(estimateddeduction) as addRetCharges, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn) as tdsToReturn from order_table ot, " +
+				"sum(estimateddeduction) as addRetCharges, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn - otx.tdsonReturnAmt) as tdsToReturn from order_table ot, " +
 				"orderreturn orr, ordertax otx where ot.orderTax_taxId = otx.taxId and ot.orderReturnOrRTO_returnId = orr.returnId and poOrder = 0 " +
 				"and ot.seller_Id=:sellerId and orr.returnDate between :startDate AND :endDate group by ot.pcName";
 		if("category".equalsIgnoreCase(criteria))
 			mpReturnQueryStr = "select cat.parentCatName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty * 1.145) as returnComm, " +
-					"sum(estimateddeduction) as addRetCharges, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn) as tdsToReturn from order_table ot, " +
+					"sum(estimateddeduction) as addRetCharges, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn - otx.tdsonReturnAmt) as tdsToReturn from order_table ot, " +
 					"orderreturn orr, ordertax otx, product pr, category cat where pr.category_categoryId = cat.categoryId and " +
 					"ot.productSkuCode = pr.productSkuCode and ot.orderTax_taxId = otx.taxId and " +
 					"ot.orderReturnOrRTO_returnId = orr.returnId and poOrder = 0 and ot.seller_Id=:sellerId and " +
@@ -1393,8 +1393,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			double tdsToReturn = Double.parseDouble(order[4].toString());
 			commDetails.setNetSaleQty(existRQ - returnQty);
 			commDetails.setNetReturnCommission(existRC + returnCommission);
-			commDetails.setAdditionalReturnCharges(existARC + additionalRetCharges);
-			commDetails.setNetTDSToBeDeposited(existTDS - tdsToReturn);
+//			commDetails.setAdditionalReturnCharges(existARC + additionalRetCharges);
+			commDetails.setNetTDSToBeDeposited(tdsToReturn - existTDS);
 			commDetailsMap.put(key, commDetails);
 		}
 		List<CommissionDetails> commDetailsList = new ArrayList<CommissionDetails>();
