@@ -182,6 +182,42 @@
 											</div>
 										</div>
 										<div class="row">
+											<div class="col-lg-12">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<table class="table table-bordered custom-table">
+															<thead>
+																<tr>
+																	<th>Month</th>
+																	<th>Total NPR</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty nprList}">
+																	<c:forEach items="${nprList}"
+																		var="categoryDto" varStatus="loop">
+																		<tr>
+																			<td>${categoryDto.key}</td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netPaymentResult}" /></td>
+																		</tr>
+																	</c:forEach>
+																</c:if>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>	
+										<div class="row">	
+											<div class="col-lg-12">
+												<div class="float-e-margins graph-brd">
+													<div class="ibox-content">
+														<div id="morris-line-chart"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
@@ -396,6 +432,31 @@
 		temp3.push(arr1);
 		channelMC.push(arr2);
 		</c:forEach>
+		
+		var monthStrArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; 
+		var monthlyArr = [];
+		<c:forEach items="${nprList}" var="partnerDto" varStatus="loop">
+		var monthStr = '${partnerDto.key}';
+		var month = monthStr.split(" ");
+		var monthInt = parseInt(monthStrArr.indexOf(month[0])) + 1;
+		var finalStr = [month[1], "-", monthInt].join("");
+		console.log(finalStr);
+		var data = {
+				key1 : finalStr,
+				key2 : parseFloat(parseFloat('${partnerDto.netPaymentResult}').toFixed(2))
+		};
+		monthlyArr.push(data);
+		</c:forEach>
+		Morris.Line({
+			element : 'morris-line-chart',
+			data : monthlyArr,
+			xkey : 'key1',
+			ykeys : [ 'key2'],
+			labels : [ 'Total NPR'],
+			hideHover : 'auto',
+			resize : true,
+			lineColors : [ '#3a539b' ],
+		});
 
 		$(window)
 				.load(

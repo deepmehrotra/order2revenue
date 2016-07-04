@@ -480,6 +480,8 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 					model.put("channelCatNPR", ConverterClass.getChannelCatNPRSortedList(channelCatNprList));
 					List<ChannelMC> channelMCList = reportGeneratorService.fetchChannelMC(sellerId, startDate, endDate, "");
 					model.put("channelMC", channelMCList);
+					List<NetPaymentResult> nprList = reportGeneratorService.fetchNPR(sellerId, startDate, endDate);
+					model.put("nprList", nprList);
 					List<ChannelMCNPR> shortTableList = reportGeneratorService.fetchChannelMCNPR(sellerId, startDate, endDate, "partner");
 					Collections.sort(shortTableList, new ChannelMCNPR.OrderByPartner());
 					model.put("shortTable", shortTableList);
