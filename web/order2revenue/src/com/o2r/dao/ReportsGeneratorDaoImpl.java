@@ -1803,7 +1803,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		String mpOrderQueryStr = "select ot.pcName, cat.parentCatName, sum(op.netPaymentResult) as 'NPR' from order_table ot, orderpay op " +
 				", product pr, category cat where pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and " +
 				"ot.orderPayment_paymentId = op.paymentId and (ot.poOrder = 0 or (ot.poOrder = 1 and ot.consolidatedOrder_orderId is null)) " +
-				"and ot.seller_Id=:sellerId and op.dateOfPayment between :startDate AND :endDate group by ot.pcName, cat.parentCatName order by ot.pcName";
+				"and ot.seller_Id=:sellerId and ot.seller_id=pr.seller_Id and op.dateOfPayment between :startDate AND :endDate group by ot.pcName, " +
+				"cat.parentCatName order by ot.pcName";
 		Query mpOrderQuery = session.createSQLQuery(mpOrderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1871,7 +1872,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			mpOrderQueryStr = "select cat.parentCatName, ot.paymentType, sum(op.netPaymentResult) as 'NPR' from order_table ot, orderpay op " +
 				", product pr, category cat where pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and " +
 				"ot.orderPayment_paymentId = op.paymentId and (ot.poOrder = 0 or (ot.poOrder = 1 and ot.consolidatedOrder_orderId is null)) " +
-				"and ot.seller_Id=:sellerId and op.dateOfPayment between :startDate AND :endDate group by cat.parentCatName, ot.paymentType";
+				"and ot.seller_id=pr.seller_Id and ot.seller_Id=:sellerId and op.dateOfPayment between :startDate AND :endDate group by cat.parentCatName, ot.paymentType";
 		Query mpOrderQuery = session.createSQLQuery(mpOrderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
