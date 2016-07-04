@@ -1,5 +1,6 @@
 package com.o2r.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.o2r.bean.ManualChargesBean;
-import com.o2r.bean.OrderBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.DateDeserializer;
@@ -31,8 +31,6 @@ import com.o2r.helper.HelperClass;
 import com.o2r.model.ManualCharges;
 import com.o2r.model.Partner;
 import com.o2r.model.PaymentUpload;
-import com.o2r.model.Product;
-import com.o2r.model.TaxCategory;
 import com.o2r.model.TaxDetail;
 import com.o2r.service.ManualChargesService;
 import com.o2r.service.PartnerService;
@@ -61,6 +59,7 @@ public class ManualChargesController {
 	 private HelperClass helperClass;
 
 	static Logger log = Logger.getLogger(ManualChargesController.class.getName());
+	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
 	@RequestMapping(value = "/seller/saveManualChargesJson", method = RequestMethod.POST)
 	public @ResponseBody String saveManualChargesJson(HttpServletRequest request) {
@@ -97,7 +96,11 @@ public class ManualChargesController {
 				.getParameter("paymentCycle") : "";
 		Double paidAmount = request.getParameter("paidAmount") != null ? Double
 				.parseDouble(request.getParameter("paidAmount")) : 0;
-		Date dateOfPayment = request.getParameter("dateOfPayment") != null ? new Date(
+				System.out.println(" Date of payment : "+request.getParameter("dateOfPayment"));
+				
+				System.out.println(format.parse(
+				request.getParameter("dateOfPayment").toString()));
+		Date dateOfPayment = request.getParameter("dateOfPayment") != null ? format.parse(
 				request.getParameter("dateOfPayment").toString()) : new Date();
 
 		if (mcId != 0) {
@@ -120,12 +123,27 @@ public class ManualChargesController {
 		model.put("Record", ConverterClass.prepareManualChargesBean(manualCharges));
 		}catch(CustomException ce){
 			log.error("saveManualChargesJson exception : " + ce.toString());
-			model.put("error", ce.getLocalMessage());
+			model.put("Result", "ERROR");
+			model.put("Message", ce.getLocalizedMessage());
+			
 			String errors = gson.toJson(model);
 			return errors;
-		}catch(Exception e){
-			log.error(e);
+		}catch(NumberFormatException e){
+			model.put("Result", "ERROR");
+			model.put("Message", "Enter number in amount!");
+			
+			String errors = gson.toJson(model);
 			log.error("Failed!",e);
+			return errors;
+			
+		}
+		catch(Exception e){
+			model.put("Result", "ERROR");
+			model.put("Message", "Invalid input!");
+			
+			String errors = gson.toJson(model);
+			log.error("Failed!",e);
+			return errors;
 		}
 		String jsonArray = gson.toJson(model);
 		log.info("$$$ saveManualChargesJson Ends : ManualChargesController $$$");

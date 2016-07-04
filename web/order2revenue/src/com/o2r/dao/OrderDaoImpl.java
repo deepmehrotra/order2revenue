@@ -1284,10 +1284,10 @@ public class OrderDaoImpl implements OrderDao {
 	public Order addOrderPayment(int orderid, OrderPayment orderPayment,
 			int sellerId) throws CustomException {
 
-		log.info("*** addOrderPayment starts : OrderDaoImpl ***");
+		log.info("*** addOrderPayment from UI starts : OrderDaoImpl ***");
 		Order order = null;
 		//TaxDetail taxDetails = null;
-		log.debug("Inside add ordr payment iwtih order id " + orderid);
+		log.debug("Inside add ordr payment with order id " + orderid);
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();

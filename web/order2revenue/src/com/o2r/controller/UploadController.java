@@ -211,7 +211,10 @@ public class UploadController {
 			int sellerId = helperClass.getSellerIdfromSession(request);
 			List<Order> orderlist = orderService.listOrders(sellerId);
 			for (Order order : orderlist) {
+				if(!order.isPoOrder())
+				{
 				orderIdmap.put(order.getOrderId(), order.getChannelOrderID());
+				}
 			}
 			List<Partner> partnerList = partnerService.listPartners(sellerId);
 			for (Partner partner : partnerList) {

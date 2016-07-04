@@ -5,14 +5,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
  <head>
-   <link href="/O2R/seller/css/plugins/datapicker/datepicker3.css" rel="stylesheet" type="text/css">
+  <!--  <link href="/O2R/seller/css/plugins/datapicker/datepicker3.css" rel="stylesheet" type="text/css"> -->
     <link href="/O2R/seller/css/jquery-ui.css" rel="stylesheet">
 <link href="/O2R/seller/css/jtable/jtable.css" rel="stylesheet" type="text/css" />
 
 
 <script src="/O2R/seller/js/jquery-ui-1.10.4.min.js" type="text/javascript"></script>
 <!-- Data picker -->
-<script src="/O2R/seller/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+<!-- <script src="/O2R/seller/js/plugins/datapicker/bootstrap-datepicker.js"></script> -->
 <script src="/O2R/seller/js/jquery.jtable.js" type="text/javascript"></script>
 
 <script type="text/javascript">
