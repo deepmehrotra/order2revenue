@@ -198,14 +198,6 @@ public class OrderDaoImpl implements OrderDao {
 						eventsService.addEvent(event, sellerId);
 					}
 
-					/*if ((int) order.getPoPrice() != 0
-							&& order.getPcName().equals(GlobalConstant.PCMYNTRA)) {
-						double taxvalue = order.getPoPrice()
-								- (order.getPoPrice() * (100 / (100 + taxpercent)));
-						order.setDiscount((Math.abs(order.getPoPrice()
-								- order.getNetRate())));
-						order.getOrderTax().setTax(taxvalue);
-					} else {*/
 						order.setDiscount((Math.abs(order.getOrderMRP()
 								- order.getOrderSP())));
 						log.debug(" Tax cal SP:"
@@ -224,8 +216,8 @@ public class OrderDaoImpl implements OrderDao {
 						taxDetails.setParticular(order.getOrderTax()
 								.getTaxCategtory());
 						taxDetails.setUploadDate(order.getOrderDate());
-						taxDetailService.addMonthlyTaxDetail(session,
-								taxDetails, sellerId);
+						/*taxDetailService.addMonthlyTaxDetail(session,
+								taxDetails, sellerId);*/
 					
 
 					order.setTotalAmountRecieved(order.getNetRate());
@@ -233,7 +225,7 @@ public class OrderDaoImpl implements OrderDao {
 					// Set Order Timeline
 					OrderTimeline timeline = new OrderTimeline();
 					// populating tax related values of order
-					if (seller.getPartners().get(0).isTdsApplicable()) {
+					/*if (seller.getPartners().get(0).isTdsApplicable()) {
 						log.debug(" PC " + order.getPartnerCommission());
 						taxDetails = new TaxDetail();
 						taxDetails.setBalanceRemaining(order.getOrderTax()
@@ -242,10 +234,10 @@ public class OrderDaoImpl implements OrderDao {
 						taxDetails.setUploadDate(order.getShippedDate());
 						taxDetailService.addMonthlyTDSDetail(session,
 								taxDetails, sellerId);
-					}
+					}*/
 					// Reducing Product Inventory For Order
-					productService.updateInventory(order.getProductSkuCode(),
-							0, 0, order.getQuantity(), false, sellerId,order.getShippedDate());
+					/*productService.updateInventory(order.getProductSkuCode(),
+							0, 0, order.getQuantity(), false, sellerId,order.getShippedDate());*/
 					/* checking if customer is available */
 					log.debug(" Customer Email id in add order :"
 							+ order.getCustomer().getCustomerEmail());
@@ -309,6 +301,20 @@ public class OrderDaoImpl implements OrderDao {
 						session.saveOrUpdate(partner);
 						session.saveOrUpdate(seller);
 					}
+					taxDetailService.addMonthlyTaxDetail(session,
+							taxDetails, sellerId);
+					if (partner.isTdsApplicable()) {
+						log.debug(" PC " + order.getPartnerCommission());
+						taxDetails = new TaxDetail();
+						taxDetails.setBalanceRemaining(order.getOrderTax()
+								.getTdsToDeduct());
+						taxDetails.setParticular("TDS");
+						taxDetails.setUploadDate(order.getShippedDate());
+						taxDetailService.addMonthlyTDSDetail(session,
+								taxDetails, sellerId);
+					}
+					productService.updateInventory(order.getProductSkuCode(),
+							0, 0, order.getQuantity(), false, sellerId,order.getShippedDate());
 					session.getTransaction().commit();
 
 				} catch (Exception e) {
