@@ -309,7 +309,7 @@
 																		var="partnerDto" varStatus="loop">
 																		<tr>
 																			<td>${partnerDto.partner}</td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netTaxableSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netSP}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netActualSale}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPrSale}" /></td>
 																		</tr>
@@ -547,7 +547,7 @@
 																		var="categoryDto" varStatus="loop">
 																		<tr>
 																			<td>${categoryDto.categoryName}</td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netTaxableSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netSP}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netActualSale}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${categoryDto.netPrSale}" /></td>
 																		</tr>
@@ -778,7 +778,7 @@
 		<c:forEach items="${partnerByNetTaxable}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.partner}';
-			data.data = [parseFloat(parseFloat('${partnerDto.netTaxableSale}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netActualSale}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netPrSale}').toFixed(2))];
+			data.data = [parseFloat(parseFloat('${partnerDto.netSP}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netActualSale}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netPrSale}').toFixed(2))];
 			dataArr.push(data);
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);
@@ -835,7 +835,7 @@
 		<c:forEach items="${categoryByNetTaxable}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.categoryName}';
-			data.data = [parseFloat(parseFloat('${partnerDto.netTaxableSale}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netActualSale}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netPrSale}').toFixed(2))];
+			data.data = [parseFloat(parseFloat('${partnerDto.netSP}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netActualSale}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netPrSale}').toFixed(2))];
 			dataArr.push(data);
 		</c:forEach>
 		stackChart(divId, yAxisText, dataArr);

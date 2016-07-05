@@ -1493,7 +1493,6 @@ public class ConverterClass {
 			double netPaymentResult = partnerBusiness.getNetPaymentResult();
 			double paymentDifference = partnerBusiness.getPaymentDifference();
 			double netTaxableSale = partnerBusiness.getNetSP();
-			double netActualSale = partnerBusiness.getNetPaymentResult() - partnerBusiness.getPaymentDifference();
 			double netTaxToBePaid = partnerBusiness.getNetTaxToBePaid();
 			double netEossDiscountPaid = 0;
 			double netSP = 0;
@@ -1501,12 +1500,14 @@ public class ConverterClass {
 			double grossProfit = 0;
 			double netProductCost = 0;
 			double netPrSale = 0;
+			double netActualSale = 0;
 			if(partnerBusiness.isPoOrder()){
 				if(partnerBusiness.getShippedDate() != null){
 					netSP = partnerBusiness.getNetSP();
 					netProductCost = partnerBusiness.getProductPrice();
 					grossProfit = partnerBusiness.getGrossProfit();
 					netRate = partnerBusiness.getNetRate();
+					netActualSale = partnerBusiness.getNetRate();
 					netPrSale = partnerBusiness.getNetPr();
 					System.out.println(partnerBusiness.getChannelOrderID() + ":" + netSP + ":" + netProductCost + ":" + netRate);
 				}
@@ -1515,6 +1516,7 @@ public class ConverterClass {
 					netProductCost -= partnerBusiness.getProductPrice();
 					grossProfit -= partnerBusiness.getGrossProfit();
 					netRate -= partnerBusiness.getTotalReturnCharges();
+					netActualSale -= partnerBusiness.getTotalReturnCharges();
 					netPrSale -= partnerBusiness.getNetReturnPr();
 					System.out.println(partnerBusiness.getChannelOrderID() + ":" + netSP + ":" + netProductCost + ":" + netRate);
 				}
@@ -1523,6 +1525,12 @@ public class ConverterClass {
 				netProductCost = partnerBusiness.getProductPrice();
 				grossProfit = partnerBusiness.getGrossProfit();
 				netRate = partnerBusiness.getGrossNetRate();
+				if(partnerBusiness.getShippedDate() != null){
+					netActualSale = partnerBusiness.getNetRate();
+				}
+				if(partnerBusiness.getReturnDate() != null){
+					netActualSale -= partnerBusiness.getTotalReturnCharges();
+				}
 				netPrSale = partnerBusiness.getNetPr() - partnerBusiness.getNetPr()*(partnerBusiness.getReturnQuantity()/((partnerBusiness.getGrossSaleQuantity() == 0) ? 1 : partnerBusiness.getGrossSaleQuantity()));
 			}
 			if(partnerBusiness.getShippedDate() != null){
@@ -2032,15 +2040,15 @@ public class ConverterClass {
 						consolidated.setNetEossDiscountPaid(netEoss + netEossTotal);
 						break;
 					case "NetTaxable": 
-						double netTaxableSale = businessGraph.getNetTaxableSale();
+						double netTaxableSale = businessGraph.getNetSP();
 						double netActualSale = businessGraph.getNetActualSale();
 						double netPrSale2 = businessGraph.getNetPrSale();
-						double netTaxableSaleTotal = consolidated.getNetTaxableSale();
-						consolidated.setNetTaxableSale(netTaxableSale + netTaxableSaleTotal);
+						double netTaxableSaleTotal = consolidated.getNetSP();
+						consolidated.setNetSP(netTaxableSale + netTaxableSaleTotal);
 						double netActualSaleTotal = consolidated.getNetActualSale();
-						consolidated.setNetTaxableSale(netActualSale + netActualSaleTotal);
+						consolidated.setNetActualSale(netActualSale + netActualSaleTotal);
 						double netPrSale2Total = consolidated.getNetPrSale();
-						consolidated.setNetTaxableSale(netPrSale2 + netPrSale2Total);
+						consolidated.setNetPrSale(netPrSale2 + netPrSale2Total);
 						break;
 					default: break;
 				}

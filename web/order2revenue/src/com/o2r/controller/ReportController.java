@@ -246,8 +246,7 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 				model.put("partnerByNetTDS", ConverterClass.getBusinessSortedList(partnerBusinessGraphList, "NetTDS"));
 				Collections.sort(partnerBusinessGraphList, new BusinessDetails.OrderByEOSS());
 				model.put("partnerByEOSS", ConverterClass.getBusinessSortedList(partnerBusinessGraphList, "EOSS"));
-				Collections.sort(partnerBusinessGraphList,
-						new BusinessDetails.OrderByNetTaxable());
+				Collections.sort(partnerBusinessGraphList, new BusinessDetails.OrderByNetTaxable());
 				model.put("partnerByNetTaxable", ConverterClass.getBusinessSortedList(partnerBusinessGraphList, "NetTaxable"));
 
 				Collections.sort(categoryBusinessGraphList, new BusinessDetails.OrderByNetPartnerCommission());
