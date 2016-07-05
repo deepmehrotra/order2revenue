@@ -1251,7 +1251,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			mpOrderQueryStr = "select cat.parentCatName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * ot.quantity * 1.145) " +
 				"as grossComm, sum(ot.quantity) as netSaleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx " +
 				", product pr, category cat where pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.orderTax_taxId = otx.taxId and ot.poOrder = 0  and " +
-				"ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by cat.parentCatName";
+				"ot.seller_Id=:sellerId and ot.seller_id=pr.seller_Id and ot.shippedDate between :startDate AND :endDate group by cat.parentCatName";
 		Query mpOrderQuery = session.createSQLQuery(mpOrderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1278,11 +1278,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				"where ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null " +
 				"and ot.seller_Id=:sellerId and ot.shippedDate between :startDate AND :endDate group by ot.pcName";
 		if("category".equalsIgnoreCase(criteria))
-			poOrderQueryStr = "select cat.parentCatName, sum( ot.partnerCommission+otx.taxSP-otx.tax ) as grossComm, " +
-					"sum(ot.quantity) as saleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx, product pr, category cat " +
-					"where pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode " +
-					"and ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null and ot.seller_Id=:sellerId and " +
-					"ot.shippedDate between :startDate AND :endDate group by cat.parentCatName";
+			poOrderQueryStr = "select 'B2B', sum( ot.partnerCommission+otx.taxSP-otx.tax ) as grossComm, " +
+					"sum(ot.quantity) as saleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx " +
+					"where ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null and ot.seller_Id=:sellerId and " +
+					"ot.shippedDate between :startDate AND :endDate";
 		Query poOrderQuery = session.createSQLQuery(poOrderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1320,10 +1319,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		if("category".equalsIgnoreCase(criteria))
 			mpReturnQueryStr = "select cat.parentCatName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty * 1.145) as returnComm, " +
 					"sum(estimateddeduction) as addRetCharges, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn - otx.tdsonReturnAmt) as tdsToReturn from order_table ot, " +
-					"orderreturn orr, ordertax otx, product pr, category cat where pr.category_categoryId = cat.categoryId and " +
-					"ot.productSkuCode = pr.productSkuCode and ot.orderTax_taxId = otx.taxId and " +
-					"ot.orderReturnOrRTO_returnId = orr.returnId and poOrder = 0 and ot.seller_Id=:sellerId and " +
-					"orr.returnDate between :startDate AND :endDate group by cat.parentCatName";
+					"orderreturn orr, ordertax otx, product pr, category cat where pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and " +
+					"ot.orderTax_taxId = otx.taxId and ot.orderReturnOrRTO_returnId = orr.returnId and poOrder = 0 and ot.seller_Id=:sellerId and " +
+					"ot.seller_id=pr.seller_Id and orr.returnDate between :startDate AND :endDate group by cat.parentCatName";
 		Query mpReturnQuery = session.createSQLQuery(mpReturnQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1361,13 +1359,12 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				"ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null and ot.seller_Id=:sellerId " +
 				"and orr.returnDate between :startDate AND :endDate group by ot.pcName";
 		if("category".equalsIgnoreCase(criteria))
-			poReturnQueryStr = "select cat.parentCatName, sum(ot.partnerCommission+otx.taxSP-orr.taxPOAmt), " +
+			poReturnQueryStr = "select 'B2B', sum(ot.partnerCommission+otx.taxSP-orr.taxPOAmt), " +
 					"sum(estimateddeduction) as returnComm, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn - otx.tdsonReturnAmt) as tdsToReturn  " +
-					"from order_table ot, ordertax otx, orderreturn orr, product pr, category cat where pr.category_categoryId = cat.categoryId and " +
-					"ot.productSkuCode = pr.productSkuCode and " +
+					"from order_table ot, ordertax otx, orderreturn orr where " +
 					"ot.orderReturnOrRTO_returnId = orr.returnId and ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and " +
 					"ot.consolidatedOrder_orderId is null and ot.seller_Id=:sellerId " +
-					"and orr.returnDate between :startDate AND :endDate group by cat.parentCatName";
+					"and orr.returnDate between :startDate AND :endDate";
 		Query poReturnQuery = session.createSQLQuery(poReturnQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1431,7 +1428,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		if("category".equals(criteria))
 			orderQueryStr = "select cat.parentCatName, sum(ot.netRate) as NetRate from order_table ot, product pr, category cat where ot.finalStatus = 'Actionable' " +
 					"and pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
-					"ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by NetRate";
+					"ot.seller_id=pr.seller_Id and ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by NetRate";
 		Query orderQuery = session.createSQLQuery(orderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1452,7 +1449,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		if("category".equals(criteria))
 			orderQueryStr = "select cat.parentCatName, sum(ot.netRate) as NetRate from order_table ot, product pr, category cat where ot.finalStatus = 'Settled' " +
 					"and pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
-					"ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by NetRate";
+					"ot.seller_id=pr.seller_Id and ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by NetRate";
 		orderQuery = session.createSQLQuery(orderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1476,7 +1473,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		if("category".equals(criteria))
 			orderQueryStr = "select cat.parentCatName, sum(ot.netRate) as NetRate from order_table ot, product pr, category cat where ot.finalStatus = 'In Process' " +
 					"and pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
-					"ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by NetRate";
+					"ot.seller_id=pr.seller_Id and ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by NetRate";
 		orderQuery = session.createSQLQuery(orderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1626,7 +1623,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			orderQueryStr = "select cat.parentCatName, sum(ot.quantity - orr.returnorrtoQty) as NetSaleQuantity from order_table ot, product pr, category cat, " +
 					"orderreturn orr where ot.orderReturnOrRTO_returnId = orr.returnId and ot.finalStatus = 'Actionable' " +
 					"and pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
-					"((ot.shippedDate between :startDate AND :endDate) or (orr.returnDate between :startDate AND :endDate)) group by cat.parentCatName order by NetSaleQuantity";
+					"ot.seller_id=pr.seller_Id and ((ot.shippedDate between :startDate AND :endDate) or (orr.returnDate between :startDate AND :endDate)) group by cat.parentCatName order by NetSaleQuantity";
 		Query orderQuery = session.createSQLQuery(orderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1649,7 +1646,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			orderQueryStr = "select cat.parentCatName, sum(ot.quantity - orr.returnorrtoQty) as NetSaleQuantity from order_table ot, product pr, category cat, " +
 					"orderreturn orr where ot.orderReturnOrRTO_returnId = orr.returnId and ot.finalStatus = 'Settled' " +
 					"and pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
-					"((ot.shippedDate between :startDate AND :endDate) or (orr.returnDate between :startDate AND :endDate)) group by cat.parentCatName order by NetSaleQuantity";
+					"ot.seller_id=pr.seller_Id and ((ot.shippedDate between :startDate AND :endDate) or (orr.returnDate between :startDate AND :endDate)) group by cat.parentCatName order by NetSaleQuantity";
 		orderQuery = session.createSQLQuery(orderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1675,7 +1672,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			orderQueryStr = "select cat.parentCatName, sum(ot.quantity - orr.returnorrtoQty) as NetSaleQuantity from order_table ot, product pr, category cat, " +
 					"orderreturn orr where ot.orderReturnOrRTO_returnId = orr.returnId and ot.finalStatus = 'In Process' " +
 					"and pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
-					"((ot.shippedDate between :startDate AND :endDate) or (orr.returnDate between :startDate AND :endDate)) group by cat.parentCatName order by NetSaleQuantity";
+					"ot.seller_id=pr.seller_Id and ((ot.shippedDate between :startDate AND :endDate) or (orr.returnDate between :startDate AND :endDate)) group by cat.parentCatName order by NetSaleQuantity";
 		orderQuery = session.createSQLQuery(orderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1713,7 +1710,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		if("category".equals(criteria))
 			orderQueryStr = "select cat.parentCatName, sum(ot.grossProfit) as NetSaleQuantity from order_table ot, product pr, category cat where ot.finalStatus = 'Actionable' " +
 					"and pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
-					"ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by grossProfit";
+					"ot.seller_id=pr.seller_Id and ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by grossProfit";
 		Query orderQuery = session.createSQLQuery(orderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1732,7 +1729,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		if("category".equals(criteria))
 			orderQueryStr = "select cat.parentCatName, sum(ot.grossProfit) as NetSaleQuantity from order_table ot, product pr, category cat where ot.finalStatus = 'Settled' " +
 					"and pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
-					"ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by grossProfit";
+					"ot.seller_id=pr.seller_Id and ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by grossProfit";
 		orderQuery = session.createSQLQuery(orderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1754,7 +1751,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		if("category".equals(criteria))
 			orderQueryStr = "select cat.parentCatName, sum(ot.grossProfit) as NetSaleQuantity from order_table ot, product pr, category cat where ot.finalStatus = 'In Process' " +
 					"and pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.seller_Id=:sellerId and " +
-					"ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by grossProfit";
+					"ot.seller_id=pr.seller_Id and ot.shippedDate between :startDate AND :endDate group by cat.parentCatName order by grossProfit";
 		orderQuery = session.createSQLQuery(orderQueryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1807,7 +1804,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		session.getTransaction().begin();
 		String mpOrderQueryStr = "select ot.pcName, cat.parentCatName, sum(op.netPaymentResult) as 'NPR' from order_table ot, orderpay op " +
 				", product pr, category cat where pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and " +
-				"ot.orderPayment_paymentId = op.paymentId and (ot.poOrder = 0 or (ot.poOrder = 1 and ot.consolidatedOrder_orderId is null)) " +
+				"ot.orderPayment_paymentId = op.paymentId and ot.poOrder = 0 " +
 				"and ot.seller_Id=:sellerId and ot.seller_id=pr.seller_Id and op.dateOfPayment between :startDate AND :endDate group by ot.pcName, " +
 				"cat.parentCatName order by ot.pcName";
 		Query mpOrderQuery = session.createSQLQuery(mpOrderQueryStr)
@@ -1816,12 +1813,51 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				.setParameter("sellerId", sellerId);
 		List<Object[]> orderList = mpOrderQuery.list();
 		Set<String> categorySet = new HashSet<String>();
+		categorySet.add("B2B");
 		for(Object[] order: orderList){
 			categorySet.add(order[1].toString());
 		}
 		List<String> catList = new ArrayList<>();
 		catList.addAll(categorySet);
 		Map<String, ChannelCatNPR> channelCatMap = new HashMap<String, ChannelCatNPR>();
+		for(Object[] order: orderList){
+			String currPartner = order[0].toString();
+			ChannelCatNPR channelCatNPR = channelCatMap.get(currPartner);
+			List<Double> netNPRList;
+			if(channelCatNPR == null){
+				channelCatNPR = new ChannelCatNPR();
+				netNPRList = new ArrayList<Double>();
+				int counter = 0;
+				while(counter++ < catList.size()){
+					netNPRList.add(new Double(0));
+				}
+				channelCatNPR.setPartner(currPartner);
+				channelCatNPR.setNetNPR(netNPRList);
+			}
+			netNPRList = channelCatNPR.getNetNPR();
+			double totalNPR = 0;
+			for(int index =0; index<catList.size(); index++){
+				String category = catList.get(index);
+				if(category.equals(order[1].toString())){
+					double netNPR = new Double(order[2].toString());
+					netNPRList.set(index, netNPR);
+					totalNPR += netNPR;
+					break;
+				}
+			}
+			channelCatNPR.setNetNPR(netNPRList);
+			channelCatNPR.setTotalNPR(totalNPR);
+			channelCatMap.put(currPartner, channelCatNPR);
+		}
+		
+		String poOrderQueryStr = "select ot.pcName, 'B2B', sum(op.netPaymentResult) as 'NPR' from order_table ot, orderpay op " +
+				"where ot.orderPayment_paymentId = op.paymentId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null " +
+				"and ot.seller_Id=:sellerId and op.dateOfPayment between :startDate AND :endDate group by ot.pcName order by ot.pcName";
+		Query poOrderQuery = session.createSQLQuery(poOrderQueryStr)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.setParameter("sellerId", sellerId);
+		orderList = poOrderQuery.list();
 		for(Object[] order: orderList){
 			String currPartner = order[0].toString();
 			ChannelCatNPR channelCatNPR = channelCatMap.get(currPartner);
@@ -1876,7 +1912,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		if("category".equalsIgnoreCase(criteria))
 			mpOrderQueryStr = "select cat.parentCatName, ot.paymentType, sum(op.netPaymentResult) as 'NPR' from order_table ot, orderpay op " +
 				", product pr, category cat where pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and " +
-				"ot.orderPayment_paymentId = op.paymentId and (ot.poOrder = 0 or (ot.poOrder = 1 and ot.consolidatedOrder_orderId is null)) " +
+				"ot.orderPayment_paymentId = op.paymentId and ot.poOrder = 0 " +
 				"and ot.seller_id=pr.seller_Id and ot.seller_Id=:sellerId and op.dateOfPayment between :startDate AND :endDate group by cat.parentCatName, ot.paymentType";
 		Query mpOrderQuery = session.createSQLQuery(mpOrderQueryStr)
 				.setParameter("startDate", startDate)
@@ -1905,6 +1941,35 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			channelNPR.setNetNPR(npr + channelNPR.getNetNPR());
 			channelNprMap.put(key, channelNPR);
 		}
+		
+		if("category".equalsIgnoreCase(criteria)){
+			String poOrderQueryStr = "select 'B2B', 'B2B', sum(op.netPaymentResult) as 'NPR' from order_table ot, orderpay op " +
+					"where ot.orderPayment_paymentId = op.paymentId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null " +
+					"and ot.seller_Id=:sellerId and op.dateOfPayment between :startDate AND :endDate";
+			Query poOrderQuery = session.createSQLQuery(poOrderQueryStr)
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			orderList = poOrderQuery.list();
+			for(Object[] order: orderList){
+				String key = order[0].toString();
+				ChannelNPR channelNPR = channelNprMap.get(key);
+				if(channelNPR == null){
+					channelNPR = new ChannelNPR();
+				}
+				channelNPR.setCategory(key);
+				channelNPR.setPartner(key);
+				String paymentType = order[1].toString();
+				double npr = Double.parseDouble(order[2].toString());
+				switch(paymentType){
+					case "Prepaid": channelNPR.setPrepaidNPR(npr); break;
+					case "COD": channelNPR.setCodNPR(npr); break;
+					default: channelNPR.setB2bNPR(npr); break;
+				}
+				channelNPR.setNetNPR(npr + channelNPR.getNetNPR());
+				channelNprMap.put(key, channelNPR);
+			}
+		}			
 		
 		Iterator entries = channelNprMap.entrySet().iterator();
 		while (entries.hasNext()) {
