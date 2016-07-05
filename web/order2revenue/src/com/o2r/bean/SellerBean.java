@@ -196,4 +196,14 @@ public class SellerBean {
 		this.verCode = verCode;
 	}
 
+	@Override
+	public String toString() {
+		return "SellerBean [id=" + id + ", name=" + name + ", address="
+				+ address + ", email=" + email + ", companyName=" + companyName
+				+ ", contactNo=" + contactNo + ", password=" + password
+				+ ", tinNumber=" + tinNumber + ", tanNumber=" + tanNumber
+				+ ", brandName=" + brandName + ", logoUrl=" + logoUrl
+				+ ", role=" + role + ", verCode=" + verCode + "]";
+	}
+
 }
