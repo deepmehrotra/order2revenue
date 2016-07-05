@@ -1,7 +1,6 @@
 package com.o2r.utility;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +83,7 @@ public class DataRestore {
 			log.error("Failed! in fetching seller from db1",e);
 					
 		}
-		System.out.println(" Successfu;;y fetc seller data");
+		System.out.println(" Successfully fetc seller data");
 		/*seller.setId(0);
 		seller.getSellerAccount().setSelaccId(0);*/
 		System.out.println(" Seller Accoount details : "+seller.getSellerAccount().getSelaccId());
