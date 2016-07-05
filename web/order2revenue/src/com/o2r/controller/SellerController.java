@@ -40,10 +40,12 @@ import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.HelperClass;
 import com.o2r.model.Seller;
+import com.o2r.model.SellerAccount;
 import com.o2r.model.State;
 import com.o2r.model.StateDeliveryTime;
 import com.o2r.service.PartnerService;
 import com.o2r.service.PlanService;
+import com.o2r.service.SellerAccountService;
 import com.o2r.service.SellerService;
 import com.o2r.service.TaxDetailService;
 
@@ -67,6 +69,8 @@ public class SellerController {
 	ServletContext context;
 	@Autowired
 	private HelperClass helperClass;
+	@Autowired
+	private SellerAccountService sellerAccountService;
 
 	Properties props = null;
 	org.springframework.core.io.Resource resource = new ClassPathResource(
@@ -212,6 +216,29 @@ public class SellerController {
 		}		
 		log.info("$$$ changePassword Ends : SellerController $$$");
 		return new ModelAndView("redirect:/seller/addSeller.html");
+	}
+	
+	@RequestMapping(value = "/seller/updateSellerAccount", method = RequestMethod.POST)
+	public ModelAndView updateSellerAccount(HttpServletRequest request, HttpSession session) {
+		
+		log.info("$$$ updateSellerAccount Starts : SellerController $$$");
+		int sellerAccId=Integer.parseInt(request.getParameter("sellerAccId"));
+		long updateBucket=Long.parseLong(request.getParameter("orderBucket"));	
+		System.out.println("New Orders In Bucket : --> "+updateBucket);
+		SellerAccount sellerAcc=null;		
+		try{			
+			sellerAcc=sellerAccountService.getSellerAccount(sellerAccId);
+			if(sellerAcc != null){
+				sellerAcc.setOrderBucket(updateBucket);
+				sellerAcc.setSellerId(helperClass.getSellerIdfromSession(request));
+				sellerAccountService.saveSellerAccount(sellerAcc);
+			}					
+		}catch(Exception e){
+			log.error("Failed to Update Bucket ! SellerController ", e);
+			e.printStackTrace();
+		}		
+		log.info("$$$ updateSellerAccount Ends : SellerController $$$");
+		return new ModelAndView("redirect:/seller/sellerList.html");
 	}
 	
 	

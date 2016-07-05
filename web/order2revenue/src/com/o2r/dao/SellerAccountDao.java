@@ -10,6 +10,7 @@ import com.o2r.model.SellerAccount;
 
 public interface SellerAccountDao {
 	 public List<SellerAccount> listSellerAccounts();
-	 public SellerAccount getSellerAccount(int cid);	 
+	 public SellerAccount getSellerAccount(int id);	 
 	 public void deleteSellerAccount(SellerAccount sellerAccount);
+	 public void saveSellerAccount(SellerAccount sellerAccount);
 }

@@ -38,6 +38,7 @@ import com.o2r.model.Plan;
 import com.o2r.model.Product;
 import com.o2r.model.ProductStockList;
 import com.o2r.model.Seller;
+import com.o2r.model.SellerAccount;
 import com.o2r.model.State;
 import com.o2r.model.StateDeliveryTime;
 import com.o2r.service.ExpenseService;
@@ -71,6 +72,7 @@ public class SellerDaoImpl implements SellerDao {
 		log.info("*** addSeller Starts : SellerDaoImpl ****");
 		boolean firsttimeflag=true;
 		Seller sellerNew=null;
+		SellerAccount sellerAcc= new SellerAccount();
 		int id =0;
 		String name = null;
 		String address =  null;
@@ -131,8 +133,10 @@ public class SellerDaoImpl implements SellerDao {
 				verCode="O2R"+r1+"USER"+r2;
 				verificationLink = (props.getProperty("mailPathURL"))+verCode;
 				seller.setVerCode(verCode);
-				seller.setPassword(DatatypeConverter.printHexBinary(seller.getPassword().getBytes("UTF-8")));
-				//seller.getSellerAccount().setAtivationDate(new Date());				
+				seller.setPassword(DatatypeConverter.printHexBinary(seller.getPassword().getBytes("UTF-8")));	
+				sellerAcc.setAtivationDate(new Date());
+				sellerAcc.setAccountStatus(true);
+				seller.setSellerAccount(sellerAcc);				
 				session.saveOrUpdate(seller);
 				sendMail(seller.getEmail(),verificationLink);
 			}
@@ -506,10 +510,10 @@ public class SellerDaoImpl implements SellerDao {
 	        javax.mail.Session session = javax.mail.Session.getInstance(prop, null);			
 			try{				
 		        Message msg = new MimeMessage(session);
-		        msg.setFrom(new InternetAddress("bishnu@order2revenue.com"));
+		        msg.setFrom(new InternetAddress("O2R@order2revenue.com"));
 		        msg.setRecipients(Message.RecipientType.TO,
 		        InternetAddress.parse(email, false));
-		        msg.setSubject("Hello");
+		        msg.setSubject("Registration Confirmation Mail");
 		        msg.setContent("<html>\n" +
 	                    "<body>\n" +
 	                    "\n" +
@@ -548,7 +552,7 @@ public class SellerDaoImpl implements SellerDao {
         javax.mail.Session session = javax.mail.Session.getInstance(prop, null);			
 		try{				
 	        Message msg = new MimeMessage(session);
-	        msg.setFrom(new InternetAddress("bishnu@order2revenue.com"));
+	        msg.setFrom(new InternetAddress("O2R@order2revenue.com"));
 	        msg.setRecipients(Message.RecipientType.TO,
 	        InternetAddress.parse(to, false));
 	        msg.setSubject(subject);
