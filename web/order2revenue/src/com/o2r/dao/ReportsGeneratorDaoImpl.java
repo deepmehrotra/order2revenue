@@ -665,7 +665,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			tdsToBeDeposited = grossTds;
 			if(currOrderReturnOrRTO != null && currOrderReturnOrRTO.getReturnDate() != null){
 				returnTds = currOrderTax.getTdsToReturn();
-				tdsToBeDeposited -= returnTds + tdsOnReturnAmt;
+				tdsToBeDeposited = tdsToBeDeposited - returnTds + tdsOnReturnAmt;
 				taxToBePaid -= currOrderTax.getTaxToReturn();
 				taxToDeduct = currOrderTax.getTdsToDeduct();
 			}
