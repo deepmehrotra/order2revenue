@@ -71,7 +71,7 @@
                                                 <c:if test="${!empty sellers}">
                                                 	<c:forEach items="${sellers}" var="seller">
 		                                                <tr>
-		                                                	<td><input type="checkbox" value="${seller.id}"></td>
+		                                                	<td><input type="checkbox" value="${seller.email}" id="${seller.id}"></td>
 		                                                	<c:if test="${seller.logoUrl != null}">
 		                                                    	<td class="client-avatar"><a data-toggle="tab" href="#contact-${seller.id}" class="client-link"><img alt="image" src="${seller.logoUrl}"></a> </td>
 		                                                    </c:if>
@@ -83,20 +83,101 @@
 		                                                    <td class="contact-type"><i class="fa fa-phone"> </i></td>
 		                                                    <td>${seller.contactNo}</td>
 		                                                    <td class="client-status"><span class="label label-primary">Active</span></td>
+		                                                    <td><a class="client-link"><i class="fa fa-edit text-navy" data-toggle="modal" data-target="#edit-${seller.id}" data-original-title="Edit"></i></a></td>
 		                                                </tr>
 	                                                </c:forEach> 
                                                 </c:if>                                                                      
                                                 </tbody>
                                             </table>
+                                            
+                                            <c:forEach items="${sellers}" var="seller">
+                                            <div class="modal inmodal fade" id="edit-${seller.id}" tabindex="-1" role="dialog"  aria-hidden="true">
+												<div class="modal-dialog modal-lg">
+													<div class="modal-content animated bounceInTop" style="left: 29%;width: 45%;top: 79px;">
+														<div class="modal-header" style="padding: 10px 0px;">
+															<h4>EDIT ORDER BUCKET</h4>
+														</div>
+														<div class="modal-body">
+															<div class="row">
+																<div class="col-sm-12">
+																	<div class="form-group">
+																		<form action="updateSellerAccount.html"  id="saveOrderBucket" method="POST" >	
+																			<div class="col-sm-12">
+																				<div class="mar-btm-20-oh">
+																					<label class="col-sm-6 control-label">Orders In Bucket</label>
+																					<div class="col-sm-6">
+																						<input value="${seller.sellerAccount.orderBucket}" name="orderBucket" id="orderBucket" style="width: 100%;"/>
+																					</div>
+																					<input type="hidden" name="sellerAccId" value="${seller.sellerAccount.selaccId}">
+																				</div>
+																			</div>																	 
+																			<button type="submit" class=" btn btn-primary form-control pull-left" style="background: #1ab394;width: 50%; color: #fff;">Update</button>
+																			<button type="button" class=" btn btn-primary form-control pull-right" data-dismiss="modal" style="background: #1ab394;width: 50%; color: #fff;">Cancel</button>
+																		</form>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+                                            </c:forEach>
+                                                                                   
                                         </div>
                                    </div>
                                 </div>
                             </div>
                              <hr>
                              <div style="align:center">
-                                 <button class="btn btn-primary btn-sm btn-block pull-right" style="width:48%;margin-top:-14px;margin-right:25%;">SEND 2 SELECTED</button>
+                                 <button class="btn btn-primary btn-sm btn-block pull-right" style="width:48%;margin-top:-14px;margin-right:25%;" data-toggle="modal" data-target="#sendMail-all">
+                                 <i class="fa fa-envelope "></i>SEND 2 SELECTED</button>
                              </div>
-                           
+                             
+                             <div class="modal inmodal fade" id="sendMail-all" tabindex="-1" role="dialog"  aria-hidden="true">
+									<div class="modal-dialog modal-lg">
+										<div class="modal-content animated bounceInTop" style="width: 100%;top: -9px;">
+											<div class="modal-header" style="padding: 10px 0px;">
+												<img alt="image" class="img-circle pull-right" src="/O2R/sellerimages/group.jpg" style="width: 45px;">
+												<img alt="image" class="img-circle pull-left" data-dismiss="modal" src="/O2R/landing/img/logoo2r.png" style="width: 40px;">
+												<h4>SEND MAIL</h4>
+												<i class="fa fa-share"></i>
+											</div>
+											<div class="modal-body">
+												<div class="row">
+													<div class="col-sm-12">
+														<div class="form-group">
+															<form action="userquery.html"  id="contactusform" method="POST" >											
+																 <%-- <label class="pull-left" style="width: 20%;">To</label><input type="text" value="${seller.email}" class="form-control pull-right" style="color: darkgreen; width: 80%;" required>
+																 <br>
+																 <label class="pull-left" style="width: 20%;">Subject</label><input type="text" class="form-control pull-right" style="color: darkgreen; width: 80%;" required>
+																 <br>
+																 <center><label>BODY</label></center>
+																 <textarea rows="5" cols="10" class="form-control"></textarea> --%>
+																 <div class="mail-box">
+										                            <div class="mail-body">
+										                                <div class="form-group">
+										                                	<label class="col-sm-2">To:</label>
+										                                    <input type="text" class="form-control" id="toSelected" name="email">
+										                                   	<label class="col-sm-2">Subject:</label>
+										                                    <input type="text" class="form-control" name="subject">
+										                                </div>
+										                            </div>
+										                            <div class="mail-text h-200">						                                
+										                                <div class="summernote">						                                      
+										                                </div>
+										                            </div>
+										                            </div>
+																<br>
+																<button type="submit" class=" btn btn-primary form-control pull-left" style="background: #1ab394;width: 50%; color: #fff;">SEND</button>
+																<button type="button" class=" btn btn-primary form-control pull-right" data-dismiss="modal" style="background: #1ab394;width: 50%; color: #fff;">CANCEL </button>
+															</form>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>                     
                             </div>
                         </div>
                     </div>                    
@@ -240,7 +321,7 @@
 						                            </div>
 												<br>
 												<button type="submit" class=" btn btn-primary form-control pull-left" style="background: #1ab394;width: 50%; color: #fff;">SEND</button>
-												<button type="submit" class=" btn btn-primary form-control pull-right" data-dismiss="modal" style="background: #1ab394;width: 50%; color: #fff;">CANCEL </button>
+												<button type="button" class=" btn btn-primary form-control pull-right" data-dismiss="modal" style="background: #1ab394;width: 50%; color: #fff;">CANCEL </button>
 											</form>
 										</div>
 									</div>
@@ -257,7 +338,16 @@
 	<script src="/O2R/seller/js/summernote.min.js"></script>
  	<script src="/O2R/seller/js/plugins/iCheck/icheck.min.js"></script>
 <script>
+
   $(document).ready(function(){
+	  
+	  $checks = $(":checkbox");
+	    $checks.on('click', function() {
+	        var string = $checks.filter(":checked").map(function(){
+	            return this.value;
+	        }).get().join(",");
+	        $('#toSelected').val(string);
+	    });	  
 	  
 	  $('#search').keyup(function()
 	  {
