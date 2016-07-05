@@ -108,6 +108,7 @@
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetPartnerCommissionPaid" name="headers"> Net Parnet Commission paid </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getTdsToBeDeducted10" name="headers"> TDS to be deducted @ 10% </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getTdsToBeDeducted2" name="headers"> TDS to be deducted @ 2% </label></div>
+		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getTdsToBeDeposited" name="headers"> TDS to be deducted </label></div>
 		                            	<div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetTaxToBePaid" name="headers"> Net Tax to be paid </label></div>
 		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetEossValue" name="headers"> Net EOSS Value </label></div>
 		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getNetPr" name="headers"> Net P/R </label></div>
