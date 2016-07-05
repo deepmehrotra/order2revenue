@@ -1487,7 +1487,6 @@ public class ConverterClass {
 			BusinessDetails partnerBusinessGraph = partnerBusinessGraphMap.get(key);
 			double netPartnerCommissionPaid = partnerBusiness.getNetPartnerCommissionPaid();
 			int netSaleQty = partnerBusiness.getNetSaleQuantity();
-			double netSP = partnerBusiness.getNetSP();
 			double netTDSToBeDeposited = partnerBusiness.getTdsToBeDeposited();
 			double netTDS2 = partnerBusiness.getTdsToBeDeducted2();
 			double netTDS10 = partnerBusiness.getTdsToBeDeducted10();
@@ -1495,18 +1494,43 @@ public class ConverterClass {
 			double paymentDifference = partnerBusiness.getPaymentDifference();
 			double netTaxableSale = partnerBusiness.getNetSP();
 			double netActualSale = partnerBusiness.getNetPaymentResult() - partnerBusiness.getPaymentDifference();
-			double netPrSale = partnerBusiness.getNetPr() - partnerBusiness.getNetPr()*(partnerBusiness.getReturnQuantity()/((partnerBusiness.getGrossSaleQuantity() == 0) ? 1 : partnerBusiness.getGrossSaleQuantity()));
 			double netTaxToBePaid = partnerBusiness.getNetTaxToBePaid();
 			double netEossDiscountPaid = 0;
+			double netSP = 0;
+			double netRate = 0;
+			double grossProfit = 0;
+			double netProductCost = 0;
+			double netPrSale = 0;
+			if(partnerBusiness.isPoOrder()){
+				if(partnerBusiness.getShippedDate() != null){
+					netSP = partnerBusiness.getNetSP();
+					netProductCost = partnerBusiness.getProductPrice();
+					grossProfit = partnerBusiness.getGrossProfit();
+					netRate = partnerBusiness.getNetRate();
+					netPrSale = partnerBusiness.getNetPr();
+					System.out.println(partnerBusiness.getChannelOrderID() + ":" + netSP + ":" + netProductCost + ":" + netRate);
+				}
+				if(partnerBusiness.getReturnDate() != null){
+					netSP -= partnerBusiness.getReturnSP();
+					netProductCost -= partnerBusiness.getProductPrice();
+					grossProfit -= partnerBusiness.getGrossProfit();
+					netRate -= partnerBusiness.getTotalReturnCharges();
+					netPrSale -= partnerBusiness.getNetReturnPr();
+					System.out.println(partnerBusiness.getChannelOrderID() + ":" + netSP + ":" + netProductCost + ":" + netRate);
+				}
+			} else{
+				netSP = partnerBusiness.getNetSP();
+				netProductCost = partnerBusiness.getProductPrice();
+				grossProfit = partnerBusiness.getGrossProfit();
+				netRate = partnerBusiness.getGrossNetRate();
+				netPrSale = partnerBusiness.getNetPr() - partnerBusiness.getNetPr()*(partnerBusiness.getReturnQuantity()/((partnerBusiness.getGrossSaleQuantity() == 0) ? 1 : partnerBusiness.getGrossSaleQuantity()));
+			}
 			if(partnerBusiness.getShippedDate() != null){
 				netEossDiscountPaid = partnerBusiness.getNetEossValue();
 			}
 			if(partnerBusiness.getReturnDate() != null){
 				netEossDiscountPaid -= partnerBusiness.getNetEossValue();
 			}
-			double netRate = partnerBusiness.getGrossNetRate();
-			double netProductCost = partnerBusiness.getProductPrice();
-			double grossProfit = partnerBusiness.getGrossProfit();
 			if (partnerBusinessGraph == null) {
 				partnerBusinessGraph = new BusinessDetails();
 			} else {

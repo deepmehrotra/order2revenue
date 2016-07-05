@@ -82,6 +82,7 @@ public class PartnerReportDetails {
 	private double netEossValue;
 
 	private double netPr;
+	private double netReturnPr;
 	private String finalStatus;
 
 	private String returnChargesDesciption;
@@ -583,6 +584,14 @@ public class PartnerReportDetails {
 
 	public void setNetPr(double netPr) {
 		this.netPr = netPr;
+	}
+
+	public double getNetReturnPr() {
+		return netReturnPr;
+	}
+
+	public void setNetReturnPr(double netReturnPr) {
+		this.netReturnPr = netReturnPr;
 	}
 
 	public String getFinalStatus() {

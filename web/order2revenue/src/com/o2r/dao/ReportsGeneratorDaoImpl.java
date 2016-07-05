@@ -703,6 +703,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				returnQty = currOrderReturnOrRTO.getReturnorrtoQty();
 				returnSP = grossSP*returnQty;
 				returnNetPr = currOrderReturnOrRTO.getNetPR();
+				partnerBusiness.setNetReturnPr(returnNetPr);
 				partnerBusiness.setReturnQuantity(returnQty);
 				netReturnCharges = grossNetRate * returnQty;
 				returnChargesToBeDeducted = currOrderReturnOrRTO.getReturnOrRTOChargestoBeDeducted();
@@ -747,14 +748,15 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			if(quantity != 0){
 				netPr = currOrder.getPr()/quantity*(quantity-returnQty);
 			}
+			partnerBusiness.setProductPrice(productCost*(quantity - returnQty));
 		} else{
 			if(currOrder.getShippedDate() != null)
 				netPr = currOrder.getPr() - returnNetPr;
+			partnerBusiness.setProductPrice(currOrder.getOrderSP());
 		}
 		partnerBusiness.setTaxPOPrice(taxPOPrice);
 		if(quantity != 0)
 			grossReturnChargesReversed = netRate/quantity*returnQty;
-		partnerBusiness.setProductPrice(productCost*(quantity - returnQty));
 		partnerBusiness.setGrossReturnChargesReversed(grossReturnChargesReversed);
 		if(!partnerBusiness.isPoOrder()){
 			double netActualSale = currOrder.getGrossNetRate()*(quantity - returnQty) - additionalReturnCharges;
@@ -763,12 +765,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		} else{
 			partnerBusiness.setTotalReturnCharges(returnNR);
 		}
-		partnerBusiness.setOrderSP(orderSP);
-		partnerBusiness.setReturnSP(returnSP);
 		if(partnerBusiness.isPoOrder()){
 			partnerBusiness.setNetSP(currOrder.getPoPrice() - returnChargesToBeDeducted);	
+			partnerBusiness.setReturnSP(currOrder.getPoPrice());
+			partnerBusiness.setOrderSP(currOrder.getOrderSP());
 		}
 		else{
+			partnerBusiness.setReturnSP(returnSP);
+			partnerBusiness.setOrderSP(orderSP);
 			if(quantity != 0)
 				partnerBusiness.setNetSP(grossSP/quantity*(quantity-returnQty));
 		}

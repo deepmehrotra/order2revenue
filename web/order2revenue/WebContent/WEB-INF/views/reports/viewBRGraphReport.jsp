@@ -266,7 +266,7 @@
 																			<td>${partner.partner}</td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netSP}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPartnerCommissionPaid}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netActualSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netNetRate}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netTaxToBePaid}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netPrSale}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.netTDSToBeDeposited}" /></td>
@@ -504,7 +504,7 @@
 																			<td>${category.categoryName}</td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netSP}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPartnerCommissionPaid}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netActualSale}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netNetRate}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netTaxToBePaid}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netPrSale}" /></td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.netTDSToBeDeposited}" /></td>
@@ -759,12 +759,12 @@
 		var dataArr = [];
 		var yAxisText = 'Partner Fields';
 		var divId = "#stacked-chart-1";
-		var xAxisCategories = ['Net SP', 'Net Partner Commission Paid', 'Net Actual Sale', 'Net Tax To Be Paid', 'Net P/R Sale', 'Net TDS To Be Deposited', 'Net Product Cost', 'Gross Profit'];
+		var xAxisCategories = ['Net SP', 'Net Partner Commission Paid', 'Net N/R', 'Net Tax To Be Paid', 'Net P/R Sale', 'Net TDS To Be Deposited', 'Net Product Cost', 'Gross Profit'];
 		<c:forEach items="${shortTablePartner}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.partner}';
 			data.data = [parseFloat(parseFloat('${partnerDto.netSP}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netPartnerCommissionPaid}').toFixed(2))
-			             , parseFloat(parseFloat('${partnerDto.netActualSale}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netTaxToBePaid}').toFixed(2))
+			             , parseFloat(parseFloat('${partnerDto.netNetRate}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netTaxToBePaid}').toFixed(2))
 			             , parseFloat(parseFloat('${partnerDto.netPrSale}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netTDSToBeDeposited}').toFixed(2))
 	            		 , parseFloat(parseFloat('${partnerDto.netProductCost}').toFixed(2)), parseFloat(parseFloat('${partnerDto.grossProfit}').toFixed(2))];
 			dataArr.push(data);
@@ -816,12 +816,12 @@
 		var dataArr = [];
 		var yAxisText = 'Partner Fields';
 		var divId = "#stacked-chart-3";
-		var xAxisCategories = ['Net SP', 'Net Partner Commission Paid', 'Net Actual Sale', 'Net Tax To Be Paid', 'Net P/R Sale', 'Net TDS To Be Deposited', 'Net Product Cost', 'Gross Profit'];
+		var xAxisCategories = ['Net SP', 'Net Partner Commission Paid', 'Net N/R', 'Net Tax To Be Paid', 'Net P/R Sale', 'Net TDS To Be Deposited', 'Net Product Cost', 'Gross Profit'];
 		<c:forEach items="${shortTableCategory}" var="partnerDto" varStatus="loop">
 			var data = {};
 			data.name = '${partnerDto.categoryName}';
 			data.data = [parseFloat(parseFloat('${partnerDto.netSP}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netPartnerCommissionPaid}').toFixed(2))
-			             , parseFloat(parseFloat('${partnerDto.netActualSale}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netTaxToBePaid}').toFixed(2))
+			             , parseFloat(parseFloat('${partnerDto.netNetRate}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netTaxToBePaid}').toFixed(2))
 			             , parseFloat(parseFloat('${partnerDto.netPrSale}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netTDSToBeDeposited}').toFixed(2))
 	            		 , parseFloat(parseFloat('${partnerDto.netProductCost}').toFixed(2)), parseFloat(parseFloat('${partnerDto.grossProfit}').toFixed(2))];
 			dataArr.push(data);
