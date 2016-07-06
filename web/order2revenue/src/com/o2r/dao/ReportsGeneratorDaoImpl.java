@@ -1510,7 +1510,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				"sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * ot.quantity * 1.145) " +
 				"as grossComm from order_table ot " +
 				"where ot.poOrder = 0  and ot.seller_Id=:sellerId and ot.shippedDate " +
-				"between :startDate AND :endDate group by ot.pcName";
+				"between :startDate AND :endDate group by Month";
 		Query orderQuery = session.createSQLQuery(queryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1530,7 +1530,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				"sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty) " +
 				"as returnComm, sum(orr.estimateddeduction * orr.returnorrtoQty) as additionalCharges from order_table ot, orderreturn orr " +
 				"where ot.orderReturnOrRTO_returnId = orr.returnId and ot.poOrder = 0  and ot.seller_Id=:sellerId and orr.returnDate " +
-				"between :startDate AND :endDate group by ot.pcName";
+				"between :startDate AND :endDate group by Month";
 		orderQuery = session.createSQLQuery(queryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1555,7 +1555,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				"sum(ot.partnerCommission+otx.taxSP-otx.tax) as grossComm from order_table ot, ordertax otx " +
 				"where ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 " +
 				"and ot.consolidatedOrder_orderId is null and ot.seller_Id=:sellerId and ot.shippedDate " +
-				"between :startDate AND :endDate group by ot.pcName";
+				"between :startDate AND :endDate group by Month";
 		orderQuery = session.createSQLQuery(queryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
@@ -1580,7 +1580,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				"sum(ot.partnerCommission+otx.taxSP-orr.taxPOAmt) " +
 				"as returnComm from order_table ot, ordertax otx, orderreturn orr " +
 				"where ot.orderReturnOrRTO_returnId = orr.returnId and ot.orderTax_taxId = otx.taxId and ot.poOrder = 1 and ot.consolidatedOrder_orderId is null " +
-				"and ot.seller_Id=:sellerId and orr.returnDate between :startDate AND :endDate group by ot.pcName";
+				"and ot.seller_Id=:sellerId and orr.returnDate between :startDate AND :endDate group by Month";
 		orderQuery = session.createSQLQuery(queryStr)
 				.setParameter("startDate", startDate)
 				.setParameter("endDate", endDate)
