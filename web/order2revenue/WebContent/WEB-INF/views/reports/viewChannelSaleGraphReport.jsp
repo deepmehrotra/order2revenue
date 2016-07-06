@@ -57,7 +57,8 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="partnerByNR_table"
+															class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -82,6 +83,12 @@
 																					maxFractionDigits="2" value="${partnerDto.netPr}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#DCDCDC">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -100,7 +107,8 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="partnerByGSvSR_table"
+															class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -122,10 +130,15 @@
 																					maxFractionDigits="0"
 																					value="${partnerDto.saleRetQty}" /></td>
 																			<td><fmt:formatNumber type="number"
-																					maxFractionDigits="0"
-																					value="${partnerDto.netQty}" /></td>
+																					maxFractionDigits="0" value="${partnerDto.netQty}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -369,7 +382,7 @@
 																	<th colspan="3" style="text-align: center;">Gross</th>
 																	<th colspan="3" style="text-align: center;">Sale
 																		Return</th>
-																	<th rowspan="2">Sale Return vs Gross Sale</th>
+																	<th rowspan="2">Return Actual %</th>
 																	<th colspan="3" style="text-align: center;">Net
 																		Sale</th>
 																	<th rowspan="2">Net Tax Liability</th>
@@ -424,7 +437,7 @@
 																					value="${partnerDto.saleRetQty}" /></td>
 																			<td><fmt:formatNumber type="number"
 																					maxFractionDigits="2"
-																					value="${partnerDto.saleRetVsGrossSale}" /></td>
+																					value="${partnerDto.retActualPercent}" /></td>
 																			<td><fmt:formatNumber type="number"
 																					maxFractionDigits="2"
 																					value="${partnerDto.netNrAmount}" /></td>
@@ -485,8 +498,8 @@
 	<script src="/O2R/seller/js/plugins/morris/raphael-2.1.0.min.js"></script>
 	<script src="/O2R/seller/js/plugins/morris/morris.js"></script>
 
-	<!-- Highchart Custom -->
-	<script src="/O2R/seller/js/demo/highchart-demo.js"></script>
+	<!-- <!-- Highchart Custom -->
+	<script src="/O2R/seller/js/demo/highchart-demo.js"></script> -->
 
 	<!-- ChartJS-->
 	<script src="/O2R/seller/js/plugins/chartJs/Chart.min.js"></script>
@@ -504,6 +517,61 @@
 		src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
 	<script>
 		//Script for Bar Chart	
+		function stackChart(divId, yAxisText, dataArr) {
+			$(divId)
+					.highcharts(
+							{
+								chart : {
+									type : 'column'
+								},
+								title : {
+									text : ''
+								},
+								xAxis : {
+									categories : xAxisCategories
+								},
+								yAxis : {
+									min : 0,
+									title : {
+										text : yAxisText
+									},
+									stackLabels : {
+										enabled : true,
+										style : {
+											fontWeight : 'bold',
+											color : (Highcharts.theme && Highcharts.theme.textColor)
+													|| 'gray'
+										}
+									}
+								},
+								legend: {
+					                backgroundColor: '#FFFFFF',
+					                reversed: true,
+					                align: 'right',
+					                verticalAlign: 'top',
+					                x: 0,
+					                y: 0
+					            },
+								tooltip : {
+									headerFormat : '<b>{point.x}</b><br/>',
+									pointFormat : '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+								},
+								plotOptions : {
+									column : {
+										stacking : 'normal',
+										dataLabels : {
+											enabled : true,
+											color : (Highcharts.theme && Highcharts.theme.dataLabelsColor)
+													|| 'white',
+											style : {
+												textShadow : '0 0 3px black'
+											}
+										}
+									}
+								},
+								series : dataArr
+							});
+		}
 
 		var dataArr = [];
 		var yAxisText = 'Net Sale SP vs N/R vs P/R Graph';
@@ -523,7 +591,8 @@
 		var dataArr = [];
 		var yAxisText = 'Gross Sale vs Return Qty Graph';
 		var divId = "#stacked-chart-2";
-		var xAxisCategories = [ 'Gross Sale Qty', 'Return Sale Qty', 'Net Sale Qty' ];
+		var xAxisCategories = [ 'Gross Sale Qty', 'Return Sale Qty',
+				'Net Sale Qty' ];
 		<c:forEach items="${partnerByGSvSR}" var="partnerDto" varStatus="loop">
 		var data = {};
 		data.name = '${partnerDto.partner}';
@@ -636,14 +705,28 @@
 						});
 
 		$(function() {
-			
+
+			var monthStrArr = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+					'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 			var dataArr = [];
 			<c:forEach items="${monthlySale}" var="partnerDto" varStatus="loop">
+			var monthStr = '${partnerDto.month}';
+			var month = monthStr.split(" ");
+			var monthInt = parseInt(monthStrArr.indexOf(month[0])) + 1;
+			var finalMonth = "";
+			if (monthInt < 10)
+				finalMonth = "0" + monthInt;
+			else
+				finalMonth = monthInt;
+			var finalStr = [ month[1], "-", finalMonth ].join("");
 			var data = {
-					key1 : '${partnerDto.month}',
-					key2 : parseFloat(parseFloat('${partnerDto.netTaxableSale}').toFixed(2)),
-					key3 : parseFloat(parseFloat('${partnerDto.netActualSale}').toFixed(2)),
-					key4 : parseFloat(parseFloat('${partnerDto.netTaxfreeSale}').toFixed(2))
+				key1 : finalStr,
+				key2 : parseFloat(parseFloat('${partnerDto.netTaxableSale}')
+						.toFixed(2)),
+				key3 : parseFloat(parseFloat('${partnerDto.netActualSale}')
+						.toFixed(2)),
+				key4 : parseFloat(parseFloat('${partnerDto.netTaxfreeSale}')
+						.toFixed(2))
 			};
 			dataArr.push(data);
 			</c:forEach>
@@ -651,15 +734,50 @@
 				element : 'morris-line-chart',
 				data : dataArr,
 				xkey : 'key1',
-				ykeys : [ 'key2', 'key3', 'key4'],
+				ykeys : [ 'key2', 'key3', 'key4' ],
 				labels : [ 'Net Taxable Sale', 'Net Actual Sale',
-							'Net Taxfree Sale' ],
+						'Net Taxfree Sale' ],
 				hideHover : 'auto',
+				xLabelFormat : function(x) {
+					var month = monthStrArr[x.getMonth()] + " "
+							+ x.getFullYear();
+					return month;
+				},
+				dateFormat : function(x) {
+					var month = monthStrArr[new Date(x).getMonth()];
+					var year = new Date(x).getFullYear();
+					return month + ' ' + year;
+				},
 				resize : true,
+				xLabelAngle : 45,
 				lineColors : [ '#3a539b', '#2b4b5c', '#00bbb3' ],
 			});
 
 		});
+
+		$("#partnerByNR_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+
+		$("#partnerByGSvSR_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
 	</script>
 	<style>
 body.DTTT_Print {
