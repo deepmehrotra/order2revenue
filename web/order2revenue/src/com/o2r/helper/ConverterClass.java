@@ -1616,10 +1616,23 @@ public class ConverterClass {
 			CommissionAnalysis commAGraph = commAGraphMap.get(key);
 			double fixedFee = partnerBusiness.getFixedfee();
 			double pcc = partnerBusiness.getPccAmount();
-			double sellingFee = partnerBusiness.getGrossPartnerCommission();
 			double serviceTax = partnerBusiness.getServiceTax();
 			double shippingCharges = partnerBusiness.getShippingCharges();
-			double taxSP = partnerBusiness.getTaxSP();
+			double taxSP = 0;
+			double sellingFee = 0;
+			if(partnerBusiness.isPoOrder()){
+				if(partnerBusiness.getShippedDate() != null){
+					taxSP = partnerBusiness.getTaxSP();
+					sellingFee = partnerBusiness.getGrossPartnerCommission();
+				}
+				if(partnerBusiness.getReturnDate() != null){
+					taxSP -= partnerBusiness.getTaxSP();
+					sellingFee -= partnerBusiness.getGrossPartnerCommission();
+				}
+			} else{
+				taxSP = partnerBusiness.getTaxSP();
+				sellingFee = partnerBusiness.getGrossPartnerCommission();
+			}
 			double additionalCharges = partnerBusiness.getAdditionalReturnCharges();
 			if (commAGraph == null) {
 				commAGraph = new CommissionAnalysis();
