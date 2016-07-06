@@ -65,6 +65,9 @@ public class ChannelReportDetails {
 	private double netTaxfreeSale;
 	private String month;
 	private int monthIndex;
+	
+	private double saleGrossProfit;
+	private double returnGrossProfit;
 
 	public String getOrderId() {
 		return orderId;
@@ -528,6 +531,22 @@ public class ChannelReportDetails {
 
 	public void setRetActualPercent(double retActualPercent) {
 		this.retActualPercent = retActualPercent;
+	}
+
+	public double getSaleGrossProfit() {
+		return saleGrossProfit;
+	}
+
+	public void setSaleGrossProfit(double saleGrossProfit) {
+		this.saleGrossProfit = saleGrossProfit;
+	}
+
+	public double getReturnGrossProfit() {
+		return returnGrossProfit;
+	}
+
+	public void setReturnGrossProfit(double returnGrossProfit) {
+		this.returnGrossProfit = returnGrossProfit;
 	}
 
 	public static class OrderByShippedDate implements

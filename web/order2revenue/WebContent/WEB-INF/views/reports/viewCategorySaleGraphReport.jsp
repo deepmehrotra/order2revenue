@@ -57,7 +57,8 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="categoryByNR_table"
+															class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Category</th>
@@ -82,6 +83,12 @@
 																					maxFractionDigits="2" value="${partnerDto.netPr}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -100,7 +107,8 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="categoryByGSvSR_table"
+															class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Category</th>
@@ -125,6 +133,12 @@
 																					maxFractionDigits="0" value="${partnerDto.netQty}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -143,7 +157,8 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="categoryByEOSS_table"
+															class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -161,6 +176,10 @@
 																					value="${partnerDto.netEOSSValue}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -179,7 +198,8 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="categoryByTaxableSale_table"
+															class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -205,6 +225,12 @@
 																					value="${partnerDto.netTaxableSale}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -223,7 +249,8 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="categoryByActualSale_table"
+															class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -249,6 +276,12 @@
 																					value="${partnerDto.netActualSale}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -267,7 +300,8 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="categoryByTaxfreeSale_table"
+															class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -293,6 +327,12 @@
 																					value="${partnerDto.netTaxfreeSale}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -311,7 +351,8 @@
 											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="monthlySale_table"
+															class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Month</th>
@@ -337,6 +378,12 @@
 																					value="${partnerDto.netTaxfreeSale}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -360,7 +407,8 @@
 											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div style="overflow-y: hidden; overflow-x: scroll;">
-														<table class="table table-bordered custom-table"
+														<table id="shortTableCategory_table"
+															class="table table-bordered custom-table"
 															style="margin-bottom: auto;">
 															<thead>
 																<tr>
@@ -368,7 +416,7 @@
 																	<th colspan="3" style="text-align: center;">Gross</th>
 																	<th colspan="3" style="text-align: center;">Sale
 																		Return</th>
-																	<th rowspan="2">Sale Return vs Gross Sale</th>
+																	<th rowspan="2">Return Actual %</th>
 																	<th colspan="3" style="text-align: center;">Net
 																		Sale</th>
 																	<th rowspan="2">Net Tax Liability</th>
@@ -423,7 +471,7 @@
 																					value="${partnerDto.saleRetQty}" /></td>
 																			<td><fmt:formatNumber type="number"
 																					maxFractionDigits="2"
-																					value="${partnerDto.saleRetVsGrossSale}" /></td>
+																					value="${partnerDto.retActualPercent}" /></td>
 																			<td><fmt:formatNumber type="number"
 																					maxFractionDigits="2"
 																					value="${partnerDto.netNrAmount}" /></td>
@@ -441,108 +489,140 @@
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netToBeReceived}" /></td> --%>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
 													</div>
 												</div>
-												<div class="col-sm-12">
-													<div class="hr-line-dashed"></div>
-													<div class="float-e-margins graph-brd">
-														<div style="overflow-y: hidden; overflow-x: scroll;">
-															<table class="table table-bordered custom-table"
-																style="margin-bottom: auto;">
-																<thead>
-																	<tr>
-																		<th rowspan="2">Partner</th>
-																		<th colspan="3" style="text-align: center;">Gross</th>
-																		<th colspan="3" style="text-align: center;">Sale
-																			Return</th>
-																		<th rowspan="2">Sale Return vs Gross Sale</th>
-																		<th colspan="3" style="text-align: center;">Net
-																			Sale</th>
-																		<th rowspan="2">Net Tax Liability</th>
-																		<th rowspan="2">Sum of Net P/R</th>
-																		<!-- <th rowspan="2">Sum of NPR</th>
+											</div>
+											<div class="col-sm-12">
+												<div class="hr-line-dashed"></div>
+												<div class="float-e-margins graph-brd">
+													<div style="overflow-y: hidden; overflow-x: scroll;">
+														<table id="shortTableCategory1_table"
+															class="table table-bordered custom-table"
+															style="margin-bottom: auto;">
+															<thead>
+																<tr>
+																	<th rowspan="2">Partner</th>
+																	<th colspan="3" style="text-align: center;">Gross</th>
+																	<th colspan="3" style="text-align: center;">Sale
+																		Return</th>
+																	<th rowspan="2">Return Actual %</th>
+																	<th colspan="3" style="text-align: center;">Net
+																		Sale</th>
+																	<th rowspan="2">Net Tax Liability</th>
+																	<th rowspan="2">Sum of Net P/R</th>
+																	<!-- <th rowspan="2">Sum of NPR</th>
 																	<th rowspan="2">Sum of Net Payment Difference</th> -->
-																	</tr>
-																	<tr>
-																		<th>N/R Amount</th>
-																		<th>SP Amount</th>
-																		<th>Qty</th>
-																		<th>N/R Amount</th>
-																		<th>SP Amount</th>
-																		<th>Qty</th>
-																		<th>N/R Amount</th>
-																		<th>SP Amount</th>
-																		<th>Qty</th>
-																	</tr>
-																</thead>
-																<tbody>
-																	<c:if test="${!empty shortTableCategory1}">
-																		<c:set var="initialTC" value="" />
-																		<c:forEach items="${shortTableCategory1}"
-																			var="partnerDto" varStatus="loop">
-																			<c:set var="currTC" value="${partnerDto.taxCategory}" />
-																			<c:if test="${!(currTC eq initialTC)}">
-																				<c:set var="initialTC" value="${currTC}" />
-																				<tr>
-																					<td colspan="16" style="background-color: #F5F5CF;"><c:out
-																							value="${partnerDto.taxCategory}" /></td>
-																				</tr>
-																			</c:if>
+																</tr>
+																<tr>
+																	<th>N/R Amount</th>
+																	<th>SP Amount</th>
+																	<th>Qty</th>
+																	<th>N/R Amount</th>
+																	<th>SP Amount</th>
+																	<th>Qty</th>
+																	<th>N/R Amount</th>
+																	<th>SP Amount</th>
+																	<th>Qty</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:if test="${!empty shortTableCategory1}">
+																	<c:set var="initialTC" value="" />
+																	<c:forEach items="${shortTableCategory1}"
+																		var="partnerDto" varStatus="loop">
+																		<c:set var="currTC" value="${partnerDto.taxCategory}" />
+																		<c:if test="${!(currTC eq initialTC)}">
+																			<c:set var="initialTC" value="${currTC}" />
 																			<tr>
-																				<td>${partnerDto.partner}</td>
-																				<td><fmt:formatNumber type="number"
-																						maxFractionDigits="2"
-																						value="${partnerDto.grossNrAmount}" /></td>
-																				<td><fmt:formatNumber type="number"
-																						maxFractionDigits="2"
-																						value="${partnerDto.grossSpAmount}" /></td>
-																				<td><fmt:formatNumber type="number"
-																						maxFractionDigits="2"
-																						value="${partnerDto.grossQty}" /></td>
-																				<td><fmt:formatNumber type="number"
-																						maxFractionDigits="2"
-																						value="${partnerDto.saleRetNrAmount}" /></td>
-																				<td><fmt:formatNumber type="number"
-																						maxFractionDigits="2"
-																						value="${partnerDto.saleRetSpAmount}" /></td>
-																				<td><fmt:formatNumber type="number"
-																						maxFractionDigits="2"
-																						value="${partnerDto.saleRetQty}" /></td>
-																				<td><fmt:formatNumber type="number"
-																						maxFractionDigits="2"
-																						value="${partnerDto.saleRetVsGrossSale}" /></td>
-																				<td><fmt:formatNumber type="number"
-																						maxFractionDigits="2"
-																						value="${partnerDto.netNrAmount}" /></td>
-																				<td><fmt:formatNumber type="number"
-																						maxFractionDigits="2"
-																						value="${partnerDto.netSpAmount}" /></td>
-																				<td><fmt:formatNumber type="number"
-																						maxFractionDigits="0" value="${partnerDto.netQty}" /></td>
-																				<td><fmt:formatNumber type="number"
-																						maxFractionDigits="2"
-																						value="${partnerDto.netTaxLiability}" /></td>
-																				<td><fmt:formatNumber type="number"
-																						maxFractionDigits="2" value="${partnerDto.netPr}" /></td>
-																				<%-- <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPaymentResult}" /></td>
-																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netToBeReceived}" /></td> --%>
+																				<td colspan="16" style="background-color: #F5F5CF;"><c:out
+																						value="${partnerDto.taxCategory}" /></td>
 																			</tr>
-																		</c:forEach>
-																	</c:if>
-																</tbody>
-															</table>
-														</div>
+																		</c:if>
+																		<tr>
+																			<td>${partnerDto.partner}</td>
+																			<td><fmt:formatNumber type="number"
+																					maxFractionDigits="2"
+																					value="${partnerDto.grossNrAmount}" /></td>
+																			<td><fmt:formatNumber type="number"
+																					maxFractionDigits="2"
+																					value="${partnerDto.grossSpAmount}" /></td>
+																			<td><fmt:formatNumber type="number"
+																					maxFractionDigits="2"
+																					value="${partnerDto.grossQty}" /></td>
+																			<td><fmt:formatNumber type="number"
+																					maxFractionDigits="2"
+																					value="${partnerDto.saleRetNrAmount}" /></td>
+																			<td><fmt:formatNumber type="number"
+																					maxFractionDigits="2"
+																					value="${partnerDto.saleRetSpAmount}" /></td>
+																			<td><fmt:formatNumber type="number"
+																					maxFractionDigits="2"
+																					value="${partnerDto.saleRetQty}" /></td>
+																			<td><fmt:formatNumber type="number"
+																					maxFractionDigits="2"
+																					value="${partnerDto.retActualPercent}" /></td>
+																			<td><fmt:formatNumber type="number"
+																					maxFractionDigits="2"
+																					value="${partnerDto.netNrAmount}" /></td>
+																			<td><fmt:formatNumber type="number"
+																					maxFractionDigits="2"
+																					value="${partnerDto.netSpAmount}" /></td>
+																			<td><fmt:formatNumber type="number"
+																					maxFractionDigits="0" value="${partnerDto.netQty}" /></td>
+																			<td><fmt:formatNumber type="number"
+																					maxFractionDigits="2"
+																					value="${partnerDto.netTaxLiability}" /></td>
+																			<td><fmt:formatNumber type="number"
+																					maxFractionDigits="2" value="${partnerDto.netPr}" /></td>
+																			<%-- <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netPaymentResult}" /></td>
+																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netToBeReceived}" /></td> --%>
+																		</tr>
+																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
+																</c:if>
+															</tbody>
+														</table>
 													</div>
 												</div>
-
-												<div class="col-sm-12">
-													<div class="hr-line-dashed"></div>
-													<button class="btn btn-primary pull-right" type="submit">Print</button>
-												</div>
 											</div>
+
+											<div class="col-sm-12">
+												<div class="hr-line-dashed"></div>
+												<button class="btn btn-primary pull-right" type="submit">Print</button>
+											</div>
+
 										</div>
 									</div>
 								</div>
@@ -728,10 +808,21 @@
 
 				$(function() {
 
+					var monthStrArr = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May',
+							'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 					var dataArr = [];
 					<c:forEach items="${monthlySale}" var="partnerDto" varStatus="loop">
+					var monthStr = '${partnerDto.month}';
+					var month = monthStr.split(" ");
+					var monthInt = parseInt(monthStrArr.indexOf(month[0])) + 1;
+					var finalMonth = "";
+					if (monthInt < 10)
+						finalMonth = "0" + monthInt;
+					else
+						finalMonth = monthInt;
+					var finalStr = [ month[1], "-", finalMonth ].join("");
 					var data = {
-						key1 : '${partnerDto.month}',
+						key1 : finalStr,
 						key2 : parseFloat(parseFloat(
 								'${partnerDto.netTaxableSale}').toFixed(2)),
 						key3 : parseFloat(parseFloat(
@@ -749,11 +840,148 @@
 						labels : [ 'Net Taxable Sale', 'Net Actual Sale',
 								'Net Taxfree Sale' ],
 						hideHover : 'auto',
+						xLabelFormat : function(x) {
+							var month = monthStrArr[x.getMonth()] + " "
+									+ x.getFullYear();
+							return month;
+						},
+						dateFormat : function(x) {
+							var month = monthStrArr[new Date(x).getMonth()];
+							var year = new Date(x).getFullYear();
+							return month + ' ' + year;
+						},
 						resize : true,
+						xLabelAngle : 45,
 						lineColors : [ '#3a539b', '#2b4b5c', '#00bbb3' ],
 					});
 
 				});
+
+				$("#categoryByNR_table tr:last td:not(:first)").text(
+						function(i) {
+							var t = 0;
+							$(this).parent().prevAll().find(
+									"td:nth-child(" + (i + 2) + ")").each(
+									function() {
+										var val = $(this).text().replace(',',
+												'');
+										t += parseFloat(val) || 0;
+									});
+							return t.toFixed(2);
+							;
+						});
+
+				$("#categoryByGSvSR_table tr:last td:not(:first)").text(
+						function(i) {
+							var t = 0;
+							$(this).parent().prevAll().find(
+									"td:nth-child(" + (i + 2) + ")").each(
+									function() {
+										var val = $(this).text().replace(',',
+												'');
+										t += parseFloat(val) || 0;
+									});
+							return t.toFixed(0);
+							;
+						});
+
+				$("#categoryByEOSS_table tr:last td:not(:first)").text(
+						function(i) {
+							var t = 0;
+							$(this).parent().prevAll().find(
+									"td:nth-child(" + (i + 2) + ")").each(
+									function() {
+										var val = $(this).text().replace(',',
+												'');
+										t += parseFloat(val) || 0;
+									});
+							return t.toFixed(2);
+							;
+						});
+
+				$("#categoryByTaxableSale_table tr:last td:not(:first)").text(
+						function(i) {
+							var t = 0;
+							$(this).parent().prevAll().find(
+									"td:nth-child(" + (i + 2) + ")").each(
+									function() {
+										var val = $(this).text().replace(',',
+												'');
+										t += parseFloat(val) || 0;
+									});
+							return t.toFixed(2);
+							;
+						});
+
+				$("#categoryByActualSale_table tr:last td:not(:first)").text(
+						function(i) {
+							var t = 0;
+							$(this).parent().prevAll().find(
+									"td:nth-child(" + (i + 2) + ")").each(
+									function() {
+										var val = $(this).text().replace(',',
+												'');
+										t += parseFloat(val) || 0;
+									});
+							return t.toFixed(2);
+							;
+						});
+
+				$("#categoryByTaxfreeSale_table tr:last td:not(:first)").text(
+						function(i) {
+							var t = 0;
+							$(this).parent().prevAll().find(
+									"td:nth-child(" + (i + 2) + ")").each(
+									function() {
+										var val = $(this).text().replace(',',
+												'');
+										t += parseFloat(val) || 0;
+									});
+							return t.toFixed(2);
+							;
+						});
+
+				$("#monthlySale_table tr:last td:not(:first)").text(
+						function(i) {
+							var t = 0;
+							$(this).parent().prevAll().find(
+									"td:nth-child(" + (i + 2) + ")").each(
+									function() {
+										var val = $(this).text().replace(',',
+												'');
+										t += parseFloat(val) || 0;
+									});
+							return t.toFixed(2);
+							;
+						});
+
+				$("#shortTableCategory_table tr:last td:not(:first)").text(
+						function(i) {
+							var t = 0;
+							$(this).parent().prevAll().find(
+									"td:nth-child(" + (i + 2) + ")").each(
+									function() {
+										var val = $(this).text().replace(',',
+												'');
+										t += parseFloat(val) || 0;
+									});
+							return t.toFixed(2);
+							;
+						});
+
+				$("#shortTableCategory1_table tr:last td:not(:first)").text(
+						function(i) {
+							var t = 0;
+							$(this).parent().prevAll().find(
+									"td:nth-child(" + (i + 2) + ")").each(
+									function() {
+										var val = $(this).text().replace(',',
+												'');
+										t += parseFloat(val) || 0;
+									});
+							return t.toFixed(2);
+							;
+						});
 			</script>
 			<style>
 body.DTTT_Print {

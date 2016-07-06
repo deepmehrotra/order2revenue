@@ -83,7 +83,7 @@
 																					maxFractionDigits="2" value="${partnerDto.netPr}" /></td>
 																		</tr>
 																	</c:forEach>
-																	<tr class="totalColumn" bgcolor="#DCDCDC">
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
 																		<td class="totalCol"><b>Total :</b></td>
 																		<td class="totalCol"></td>
 																		<td class="totalCol"></td>
@@ -133,7 +133,7 @@
 																					maxFractionDigits="0" value="${partnerDto.netQty}" /></td>
 																		</tr>
 																	</c:forEach>
-																	<tr class="totalColumn">
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
 																		<td class="totalCol"><b>Total :</b></td>
 																		<td class="totalCol"></td>
 																		<td class="totalCol"></td>
@@ -157,7 +157,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="partnerByEOSS_table" class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -175,6 +175,10 @@
 																					value="${partnerDto.netEOSSValue}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -193,7 +197,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="partnerByTaxableSale_table" class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -219,6 +223,12 @@
 																					value="${partnerDto.netTaxableSale}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -237,7 +247,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="partnerByActualSale_table" class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -263,6 +273,12 @@
 																					value="${partnerDto.netActualSale}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -281,7 +297,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="partnerByTaxfreeSale_table"  class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -307,6 +323,12 @@
 																					value="${partnerDto.netTaxfreeSale}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -325,7 +347,7 @@
 											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="monthlySale_table" class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Month</th>
@@ -351,6 +373,12 @@
 																					value="${partnerDto.netTaxfreeSale}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -374,7 +402,7 @@
 											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div style="overflow-y: hidden; overflow-x: scroll;">
-														<table class="table table-bordered custom-table"
+														<table id="shortTablePartner_table" class="table table-bordered custom-table"
 															style="margin-bottom: auto;">
 															<thead>
 																<tr>
@@ -455,6 +483,21 @@
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partnerDto.netToBeReceived}" /></td> --%>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -498,7 +541,7 @@
 	<script src="/O2R/seller/js/plugins/morris/raphael-2.1.0.min.js"></script>
 	<script src="/O2R/seller/js/plugins/morris/morris.js"></script>
 
-	<!-- <!-- Highchart Custom -->
+	<!-- Highchart Custom -->
 	<script src="/O2R/seller/js/demo/highchart-demo.js"></script> -->
 
 	<!-- ChartJS-->
@@ -517,61 +560,6 @@
 		src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
 	<script>
 		//Script for Bar Chart	
-		function stackChart(divId, yAxisText, dataArr) {
-			$(divId)
-					.highcharts(
-							{
-								chart : {
-									type : 'column'
-								},
-								title : {
-									text : ''
-								},
-								xAxis : {
-									categories : xAxisCategories
-								},
-								yAxis : {
-									min : 0,
-									title : {
-										text : yAxisText
-									},
-									stackLabels : {
-										enabled : true,
-										style : {
-											fontWeight : 'bold',
-											color : (Highcharts.theme && Highcharts.theme.textColor)
-													|| 'gray'
-										}
-									}
-								},
-								legend: {
-					                backgroundColor: '#FFFFFF',
-					                reversed: true,
-					                align: 'right',
-					                verticalAlign: 'top',
-					                x: 0,
-					                y: 0
-					            },
-								tooltip : {
-									headerFormat : '<b>{point.x}</b><br/>',
-									pointFormat : '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-								},
-								plotOptions : {
-									column : {
-										stacking : 'normal',
-										dataLabels : {
-											enabled : true,
-											color : (Highcharts.theme && Highcharts.theme.dataLabelsColor)
-													|| 'white',
-											style : {
-												textShadow : '0 0 3px black'
-											}
-										}
-									}
-								},
-								series : dataArr
-							});
-		}
 
 		var dataArr = [];
 		var yAxisText = 'Net Sale SP vs N/R vs P/R Graph';
@@ -768,6 +756,78 @@
 				});
 
 		$("#partnerByGSvSR_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(0);
+					;
+				});
+		
+		$("#partnerByEOSS_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+		
+		$("#partnerByTaxableSale_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+		
+		$("#partnerByActualSale_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+		
+		$("#partnerByTaxfreeSale_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+		
+		$("#monthlySale_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+		
+		$("#shortTablePartner_table tr:last td:not(:first)").text(
 				function(i) {
 					var t = 0;
 					$(this).parent().prevAll().find(

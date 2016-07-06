@@ -986,6 +986,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		double saleRetNrAmount = 0;
 		double saleRetSpAmount = 0;
 		channelReport.setGrossProfit(grossProfit);
+		
 		channelReport.setGrossQty(grossSaleQty);
 		
 		OrderRTOorReturn currOrderReturn = currOrder.getOrderReturnOrRTO();
@@ -1017,7 +1018,11 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				channelReport.setNetEOSSValue(-currOrder.getEossValue());
 				channelReport.setNetReturnCharges(additionalCharges);
 			}
+			channelReport.setReturnGrossProfit(currOrder.getGrossProfit());
+		} else {
+			channelReport.setSaleGrossProfit(currOrder.getGrossProfit());
 		}
+		
 		double netPr = currOrder.getPr()/grossSaleQty*(grossSaleQty-saleRetQty);
 		channelReport.setNetPr(netPr);	
 		// MP/PO Order conditions

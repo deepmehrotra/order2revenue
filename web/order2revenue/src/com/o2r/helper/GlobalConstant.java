@@ -619,6 +619,8 @@ public class GlobalConstant {
 			put("getPr", "P/R");
 			put("getNetReturnCharges", "Return Charges");
 			put("getGrossProfit", "Gross Profit");
+			put("getSaleGrossProfit", "Sale Gross Profit");
+			put("getReturnGrossProfit", "Return Gross Profit");
 			put("getGpVsProductCost", "%GP vs Product Cost");
 			put("getNetEOSSValue", "Net EOSS Value");
 			

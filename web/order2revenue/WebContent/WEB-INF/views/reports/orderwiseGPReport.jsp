@@ -57,7 +57,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="partnerByGrossProfit_table" class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -75,6 +75,10 @@
 																					value="${partnerDto.grossProfit}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -96,7 +100,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id ="partnerByGPCP_table" class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -114,6 +118,10 @@
 																					value="${partnerDto.gpVsProductCost}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -135,7 +143,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="partnerByPR_table" class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -156,6 +164,11 @@
 																					value="${partnerDto.netProductCost}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -174,7 +187,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="partnerByGNR_table" class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -196,6 +209,11 @@
 																					value="${partnerDto.grossProfit}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -252,7 +270,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="categoryByGrossProfit_table" class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Category</th>
@@ -270,6 +288,10 @@
 																					value="${categoryDto.grossProfit}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -291,7 +313,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="categoryByGPCP_table" class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Category</th>
@@ -309,6 +331,10 @@
 																					value="${categoryDto.gpVsProductCost}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -330,7 +356,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="categoryByPR_table" class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Category</th>
@@ -351,6 +377,11 @@
 																					value="${categoryDto.netProductCost}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -369,7 +400,7 @@
 											<div class="col-lg-6">
 												<div class="float-e-margins graph-brd">
 													<div class="ibox-content">
-														<table class="table table-bordered custom-table">
+														<table id="categoryByGNR_table" class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Category</th>
@@ -391,6 +422,11 @@
 																					value="${categoryDto.grossProfit}" /></td>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -449,7 +485,7 @@
 											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div>
-														<table class="table table-bordered custom-table">
+														<table id="shortTablePartner_table" class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Partner</th>
@@ -497,6 +533,17 @@
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${partner.paymentDifference}" /></td> --%>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -513,7 +560,7 @@
 											<div class="col-lg-12">
 												<div class="float-e-margins graph-brd">
 													<div>
-														<table class="table table-bordered custom-table">
+														<table id="shortTableCategory_table" class="table table-bordered custom-table">
 															<thead>
 																<tr>
 																	<th>Category</th>
@@ -561,6 +608,17 @@
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${category.paymentDifference}" /></td> --%>
 																		</tr>
 																	</c:forEach>
+																	<tr class="totalColumn" bgcolor="#D3D3D3">
+																		<td class="totalCol"><b>Total :</b></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																		<td class="totalCol"></td>
+																	</tr>
 																</c:if>
 															</tbody>
 														</table>
@@ -612,7 +670,7 @@
 
 	<!-- ChartJS-->
 	<script src="/O2R/seller/js/plugins/chartJs/Chart.min.js"></script>
-	<!-- <script src="/O2R/seller/js/demo/flot-demo-1.js"></script>  -->
+	<script src="/O2R/seller/js/demo/flot-demo-1.js"></script>
 
 
 	<!-- Data Tables -->
@@ -624,60 +682,6 @@
 		src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
 	<script>
 		//Script for Bar Chart
-
-		function flotbar(data, barticks, calledId) {
-
-			var barData = {
-				label : "Percentage N/R",
-				data : data
-			};
-			var ticks = barticks;
-			barOptions = {
-				series : {
-					bars : {
-						show : true,
-						barWidth : 0.6,
-						fill : true,
-						fillColor : {
-							colors : [ {
-								opacity : 0.8
-							}, {
-								opacity : 0.8
-							} ]
-						}
-					}
-				},
-				xaxis : {
-					axisLabel : "Partners",
-					axisLabelUseCanvas : true,
-					axisLabelFontSizePixels : 12,
-					axisLabelFontFamily : 'Verdana, Arial',
-					axisLabelPadding : 10,
-					ticks : ticks
-				},
-				colors : [ "#1ab394" ],
-				grid : {
-					color : "#999999",
-					hoverable : true,
-					clickable : true,
-					tickColor : "#D4D4D4",
-					borderWidth : 0
-				},
-				legend : {
-					show : false
-				},
-				tooltip : true,
-				tooltipOpts : {
-					content: function(label, xval, yval, flotItem){
-						var xlabel = "" + barticks[xval - 1];
-						xlabel = xlabel.substring(xlabel.indexOf(',') + 1);
-			            return xlabel + ": " + yval
-			        },
-				}
-			};
-
-			$.plot($(calledId), [ barData ], barOptions);
-		}
 		
 		var temp1 = [];
 		var partnerByGrossProfit = [];
@@ -832,6 +836,126 @@
 												}
 											});
 						});
+		
+		$("#partnerByGrossProfit_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+
+		$("#partnerByGPCP_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+		
+		$("#partnerByPR_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+		
+		$("#partnerByGNR_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+		
+		$("#categoryByGrossProfit_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+		
+		$("#categoryByGPCP_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+		
+		$("#categoryByPR_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+		
+		$("#categoryByGNR_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+		
+		$("#shortTablePartner_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
+		
+		$("#shortTableCategory_table tr:last td:not(:first)").text(
+				function(i) {
+					var t = 0;
+					$(this).parent().prevAll().find(
+							"td:nth-child(" + (i + 2) + ")").each(function() {
+						var val = $(this).text().replace(',', '');
+						t += parseFloat(val) || 0;
+					});
+					return t.toFixed(2);
+					;
+				});
 	</script>
 	<style>
 body.DTTT_Print {
