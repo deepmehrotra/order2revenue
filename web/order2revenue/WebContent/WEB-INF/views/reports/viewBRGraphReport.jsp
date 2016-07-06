@@ -844,20 +844,24 @@
 		var partnerByEOSS = [];
 		var i = 1;
 		<c:forEach items="${partnerByEOSS}" var="partnerDto" varStatus="loop">
-		var arr1 = [ i, '${partnerDto.netEossDiscountPaid}' ];
-		var arr2 = [ i++, '${partnerDto.partner}' ];
-		temp7.push(arr1);
-		partnerByEOSS.push(arr2);
+			<c:if test="${partnerDto.partner eq 'Myntra'}">
+				var arr1 = [ i, '${partnerDto.netEossDiscountPaid}' ];
+				var arr2 = [ i++, '${partnerDto.partner}' ];
+				temp7.push(arr1);
+				partnerByEOSS.push(arr2);
+			</c:if>
 		</c:forEach>
 		
 		var temp8 = [];
 		var categoryByEOSS = [];
 		var i = 1;
 		<c:forEach items="${categoryByEOSS}" var="partnerDto" varStatus="loop">
-		var arr1 = [ i, '${partnerDto.netEossDiscountPaid}' ];
-		var arr2 = [ i++, '${partnerDto.categoryName}' ];
-		temp8.push(arr1);
-		categoryByEOSS.push(arr2);
+			<c:if test="${partnerDto.categoryName eq 'B2B'}">
+				var arr1 = [ i, '${partnerDto.netEossDiscountPaid}' ];
+				var arr2 = [ i++, '${partnerDto.categoryName}' ];
+				temp8.push(arr1);
+				categoryByEOSS.push(arr2);
+			</c:if>
 		</c:forEach>
 		
 		var temp9 = [];

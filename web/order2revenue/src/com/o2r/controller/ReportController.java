@@ -231,12 +231,12 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 				log.info("PartnerList: " + partnerBusinessGraphList.size());
 				model.put("shortTableMainPartner", partnerBusinessGraphList);
 				Collections.sort(partnerBusinessGraphList, new BusinessDetails.OrderByNetSP());
-				model.put("shortTablePartner", partnerBusinessGraphList);
+				model.put("shortTablePartner", ConverterClass.getBusinessSortedList(partnerBusinessGraphList, "NetSP"));
 				List<BusinessDetails> categoryBusinessGraphList = ConverterClass.transformBusinessGraph(partnerBusinessList, "category");
 				log.info("CategoryList: " + categoryBusinessGraphList.size());
 				model.put("shortTableMainCategory", categoryBusinessGraphList);
 				Collections.sort(categoryBusinessGraphList, new BusinessDetails.OrderByNetSP());
-				model.put("shortTableCategory", categoryBusinessGraphList);
+				model.put("shortTableCategory", ConverterClass.getBusinessSortedList(categoryBusinessGraphList, "NetSP"));
 
 				Collections.sort(partnerBusinessGraphList, new BusinessDetails.OrderByNetPartnerCommission());
 				model.put("partnerByNetCommission", ConverterClass.getBusinessSortedList(partnerBusinessGraphList, "NetCommission"));

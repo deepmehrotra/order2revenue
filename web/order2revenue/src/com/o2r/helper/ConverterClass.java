@@ -1524,12 +1524,13 @@ public class ConverterClass {
 				netSP = partnerBusiness.getNetSP();
 				netProductCost = partnerBusiness.getProductPrice();
 				grossProfit = partnerBusiness.getGrossProfit();
-				netRate = partnerBusiness.getGrossNetRate();
 				if(partnerBusiness.getShippedDate() != null){
 					netActualSale = partnerBusiness.getNetRate();
+					netRate = partnerBusiness.getNetRate();
 				}
 				if(partnerBusiness.getReturnDate() != null){
 					netActualSale -= partnerBusiness.getTotalReturnCharges();
+					netRate -= partnerBusiness.getTotalReturnCharges();
 				}
 				netPrSale = partnerBusiness.getNetPr() - partnerBusiness.getNetPr()*(partnerBusiness.getReturnQuantity()/((partnerBusiness.getGrossSaleQuantity() == 0) ? 1 : partnerBusiness.getGrossSaleQuantity()));
 			}
@@ -2032,20 +2033,46 @@ public class ConverterClass {
 			if(index++ >= 5){
 				BusinessDetails businessGraph = (BusinessDetails)businessGraphObj;
 				switch(string){
+					case "NetSP":
+						double netSP = businessGraph.getNetSP();
+						double netSPTotal = consolidated.getNetSP();
+						consolidated.setNetSP(netSP + netSPTotal);
+						double netPartnerCommissionPaid = businessGraph.getNetPartnerCommissionPaid();
+						double netPartnerCommissionPaidTotal = consolidated.getNetPartnerCommissionPaid();
+						consolidated.setNetPartnerCommissionPaid(netPartnerCommissionPaid + netPartnerCommissionPaidTotal);
+						double netNetRate = businessGraph.getNetNetRate();
+						double netNetRateTotal = consolidated.getNetNetRate();
+						consolidated.setNetNetRate(netNetRate + netNetRateTotal);
+						double netTaxToBePaid = businessGraph.getNetTaxToBePaid();
+						double netTaxToBePaidTotal = consolidated.getNetTaxToBePaid();
+						consolidated.setNetTaxToBePaid(netTaxToBePaid + netTaxToBePaidTotal);
+						double netPrSale = businessGraph.getNetPrSale();
+						double netPrSaleTotal = consolidated.getNetPrSale();
+						consolidated.setNetPrSale(netPrSale + netPrSaleTotal);						
+						double netTDSToBeDeposited = businessGraph.getNetTDSToBeDeposited();
+						double netTDSToBeDepositedTotal = consolidated.getNetTDSToBeDeposited();
+						consolidated.setNetTDSToBeDeposited(netTDSToBeDeposited + netTDSToBeDepositedTotal);						
+						double netProductCost = businessGraph.getNetProductCost();
+						double netProductCostTotal = consolidated.getNetProductCost();
+						consolidated.setNetProductCost(netProductCost + netProductCostTotal);						
+						double grossProfit = businessGraph.getGrossProfit();
+						double grossProfitTotal = consolidated.getGrossProfit();
+						consolidated.setGrossProfit(grossProfit + grossProfitTotal);						
+						break;
 					case "NetCommission": 
 						double netCommission = businessGraph.getNetPartnerCommissionPaid();
 						double netCommissionTotal = consolidated.getNetPartnerCommissionPaid();
 						consolidated.setNetPartnerCommissionPaid(netCommission + netCommissionTotal);
 						break;
 					case "NetTax": 
-						double netTaxToBePaid = businessGraph.getNetTaxToBePaid();
-						double netTaxToBePaidTotal = consolidated.getNetTaxToBePaid();
-						consolidated.setNetTaxToBePaid(netTaxToBePaid + netTaxToBePaidTotal);
+						double netTaxToBePaid2 = businessGraph.getNetTaxToBePaid();
+						double netTaxToBePaidTotal2 = consolidated.getNetTaxToBePaid();
+						consolidated.setNetTaxToBePaid(netTaxToBePaid2 + netTaxToBePaidTotal2);
 						break;
 					case "NetTDS": 
-						double netTDSToBeDeposited = businessGraph.getNetTDSToBeDeposited();
-						double netTDSToBeDepositedTotal = consolidated.getNetTDSToBeDeposited();
-						consolidated.setNetTDSToBeDeposited(netTDSToBeDeposited + netTDSToBeDepositedTotal);
+						double netTDSToBeDeposited2 = businessGraph.getNetTDSToBeDeposited();
+						double netTDSToBeDepositedTotal2 = consolidated.getNetTDSToBeDeposited();
+						consolidated.setNetTDSToBeDeposited(netTDSToBeDeposited2 + netTDSToBeDepositedTotal2);
 						break;
 					case "EOSS": 
 						double netEoss = businessGraph.getNetEossDiscountPaid();
