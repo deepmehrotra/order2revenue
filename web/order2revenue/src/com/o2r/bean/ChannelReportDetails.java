@@ -52,6 +52,7 @@ public class ChannelReportDetails {
 	private double gpVsProductCost;
 	private String finalStatus;
 	
+	private double retActualPercent;
 	private double netEOSSValue;
 	private double grossTaxableSale;
 	private double returnTaxableSale;
@@ -519,6 +520,14 @@ public class ChannelReportDetails {
 
 	public void setMonthIndex(int monthIndex) {
 		this.monthIndex = monthIndex;
+	}
+
+	public double getRetActualPercent() {
+		return retActualPercent;
+	}
+
+	public void setRetActualPercent(double retActualPercent) {
+		this.retActualPercent = retActualPercent;
 	}
 
 	public static class OrderByShippedDate implements

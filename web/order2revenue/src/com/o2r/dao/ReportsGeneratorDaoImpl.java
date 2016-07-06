@@ -1116,7 +1116,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			channelReport.setReturnTaxfreeSale(currOrder.getPr()/grossSaleQty*saleRetQty);
 			channelReport.setGrossTaxfreeSale(channelReport.getPr());
 		}
-	
+		
 		channelReport.setGrossTaxableSale(channelReport.getGrossSpAmount());
 		channelReport.setGrossActualSale(channelReport.getGrossNrAmount());
 		

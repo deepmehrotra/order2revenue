@@ -1797,7 +1797,6 @@ public class ConverterClass {
 				grossTaxfreeSale += channelReport.getGrossTaxfreeSale();
 				returnTaxfreeSale += channelReport.getReturnTaxfreeSale();
 				netTaxfreeSale += channelReport.getNetTaxfreeSale();
-								
 			}
 			channelReport.setGpVsProductCost(gpVsProductCost);
 			channelReport.setGrossNrAmount(grossNrAmount);
@@ -1833,6 +1832,9 @@ public class ConverterClass {
 			channelReport.setReturnTaxfreeSale(returnTaxfreeSale);
 			channelReport.setNetTaxfreeSale(netTaxfreeSale);
 			
+			channelReport.setRetActualPercent(
+					returnActualSale * 100 / grossActualSale);
+			
 			channelReport.setCategory(key);
 			channelReport.setPartner(key);
 			categoryReportMap.put(key, channelReport);
@@ -1860,6 +1862,11 @@ public class ConverterClass {
 				case "partner":key = currChannelReport.getPartner();break;
 				case "category":
 					key = currChannelReport.getParentCategory();
+					if(StringUtils.isEmpty(key))
+						key = "B2B";
+					break;
+				case "category1":
+					key = currChannelReport.getCategory();
 					if(StringUtils.isEmpty(key))
 						key = "B2B";
 					break;
@@ -1925,6 +1932,9 @@ public class ConverterClass {
 			channelReport.setCategory(key);
 			channelReport.setPartner(key);
 			channelReport.setTaxCategory(taxCategory);
+			channelReport.setRetActualPercent(
+					channelReport.getSaleRetNrAmount() * 100 / 
+					channelReport.getGrossNrAmount());
 			categoryReportMap.put(key + taxCategory, channelReport);
 		}
 		
@@ -2280,7 +2290,7 @@ public class ConverterClass {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List getChannelSortedList(
 			List<ChannelReportDetails> channelGraphList, String criteria) {
-		int maxLength = 5;
+		int maxLength = 6;
 		if(channelGraphList.size()<=maxLength)
 			return channelGraphList;
 		List<ChannelReportDetails> newChannelReportList = new ArrayList<>();
@@ -2403,8 +2413,7 @@ public class ConverterClass {
 		int monthIndex = 1;
 		while (cal.getTime().before(endDate)) {
 			ChannelReportDetails consolidated = new ChannelReportDetails();
-			//consolidated.setMonth(months[cal.get(Calendar.MONTH)].substring(0, 3) + "-" + cal.get(Calendar.YEAR));
-			consolidated.setMonth(cal.get(Calendar.YEAR) + "-" + cal.get(Calendar.MONTH));
+			consolidated.setMonth(months[cal.get(Calendar.MONTH)].substring(0, 3) + " " + cal.get(Calendar.YEAR));
 			consolidated.setMonthIndex(monthIndex);
 			newChannelReportMap.put(consolidated.getMonth(), consolidated);
 			cal.add(Calendar.MONTH, 1);
@@ -2416,8 +2425,10 @@ public class ConverterClass {
 			if (channelGraph.getShippedDate() != null) {
 				Calendar orderCal = Calendar.getInstance();
 				orderCal.setTime(channelGraph.getShippedDate());
+				orderCal.set(Calendar.DAY_OF_MONTH, 1);
 				
-				ChannelReportDetails consolidated = newChannelReportMap.get(orderCal.get(Calendar.YEAR) + "-" + orderCal.get(Calendar.MONTH));
+				ChannelReportDetails consolidated = newChannelReportMap.get(
+						months[orderCal.get(Calendar.MONTH)].substring(0, 3) + " " + orderCal.get(Calendar.YEAR));
 				if (consolidated != null) {
 					consolidated.setNetTaxableSale(
 							consolidated.getNetTaxableSale() + channelGraph.getGrossTaxableSale());
@@ -2431,8 +2442,10 @@ public class ConverterClass {
 			if (channelGraph.getReturnDate() != null) {
 				Calendar orderCal = Calendar.getInstance();
 				orderCal.setTime(channelGraph.getReturnDate());
+				orderCal.set(Calendar.DAY_OF_MONTH, 1);
 				
-				ChannelReportDetails consolidated = newChannelReportMap.get(orderCal.get(Calendar.YEAR) + "-" + orderCal.get(Calendar.MONTH));
+				ChannelReportDetails consolidated = newChannelReportMap.get(
+						months[orderCal.get(Calendar.MONTH)].substring(0, 3) + " " + orderCal.get(Calendar.YEAR));
 				if (consolidated != null) {
 					consolidated.setNetTaxableSale(
 							consolidated.getNetTaxableSale() - channelGraph.getReturnTaxableSale());

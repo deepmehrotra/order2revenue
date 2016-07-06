@@ -422,6 +422,10 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 					Collections.sort(categoryListST, new ChannelReportDetails.OrderByTC());
 					model.put("shortTableCategory", categoryListST);
 					
+					categoryListST = ConverterClass.transformChannelReportST(channelReportDetailsList, "category1");
+					Collections.sort(categoryListST, new ChannelReportDetails.OrderByTC());
+					model.put("shortTableCategory1", categoryListST);
+					
 					Collections.sort(categoryList, new ChannelReportDetails.OrderByNR());
 					model.put("categoryByNR", ConverterClass.getChannelSortedList(categoryList, "NetSaleSP"));
 					Collections.sort(categoryList, new ChannelReportDetails.OrderByGSvSR());
