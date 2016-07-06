@@ -1,6 +1,3 @@
-/**
- * @author Kapil Halewale
- */
 package com.o2r.model;
 
 import java.util.ArrayList;

@@ -91,7 +91,7 @@ public class Seller {
 
 	// Seller to SellerAccount OneToOne
 	@OneToOne(cascade = CascadeType.ALL)
-	private SellerAccount sellerAccount = new SellerAccount();
+	private SellerAccount sellerAccount;
 
 	// Plan To Seller OneTwoOne
 	@OneToOne(cascade = CascadeType.ALL)

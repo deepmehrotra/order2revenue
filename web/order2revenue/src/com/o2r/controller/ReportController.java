@@ -34,6 +34,7 @@ import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionAnalysis;
 import com.o2r.bean.CommissionDetails;
+import com.o2r.bean.ConsolidatedOrderBean;
 import com.o2r.bean.DebtorsGraph1;
 import com.o2r.bean.ExpensesDetails;
 import com.o2r.bean.MonthlyCommission;
@@ -128,7 +129,7 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 		else if(reportName.equals("partnerBusinessReport") || reportName.equals("partnerCommissionReport")
 				 || reportName.equals("debtorsReport"))
 			return new ModelAndView("reports/partnerReport", model);
-		else if(reportName.equals("totalShippedOrders"))
+		else if(reportName.equals("consolidatedOrders"))
 			return new ModelAndView("reports/filterReports", model);
 		else if(reportName.equals("netProfitabilityReport"))
 			return new ModelAndView("reports/revenueReport", model);
@@ -313,12 +314,15 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 		List<TotalShippedOrder> ttso = new ArrayList<>();
 		String reportName=null;
 		Date startDate;
-		Date endDate;		
+		Date endDate;
+		List<ConsolidatedOrderBean> consolidatedBeans=new ArrayList<ConsolidatedOrderBean>();
 		try{
 			reportName = request.getParameter("reportName");
 			startDate = new Date(request.getParameter("startdate"));
 			endDate = new Date(request.getParameter("enddate"));
-
+		
+		//consolidatedBeans=
+			
 		ttso = reportGeneratorService.getAllPartnerTSOdetails(startDate,
 				endDate, helperClass.getSellerIdfromSession(request));
 		if (ttso != null)
@@ -344,7 +348,7 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 		Collections.sort(ttso, new TotalShippedOrder.OrderBySaleamount());
 		model.put("saleAmounrsortedttso", getSortedList(ttso));
 
-		model.put("period",dateFormat.format(startDate) + " to "+ dateFormat.format(endDate));
+		model.put("period",new SimpleDateFormat("dd-MM-yyyy").format(startDate)+" to "+new SimpleDateFormat("dd-MM-yyyy").format(endDate));
 		}catch(CustomException ce){
 			log.error("getReport exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -661,7 +665,7 @@ public void downloadreport(HttpServletRequest request ,HttpServletResponse respo
 		endDate = new Date(request.getParameter("enddate"));
 		reportheaders = request.getParameterValues("headers");
 		try {
-			orderlist = orderService.findOrdersbyDate("orderDate", startDate,endDate, helperClass.getSellerIdfromSession(request), false);
+			orderlist = orderService.findOrdersbyDate("shippedDate", startDate,endDate, helperClass.getSellerIdfromSession(request), false);
 			reportDownloadService.downloadReport(response, orderlist,reportheaders, reportName,	helperClass.getSellerIdfromSession(request));
 		} catch (ClassNotFoundException e) {
 			System.out.println(" Class castexception in download report");
