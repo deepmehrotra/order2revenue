@@ -330,12 +330,11 @@
                                 </div>
                                 <div class="col-sm-12">
                                 <div class="hr-line-dashed"></div>
-                                    <button class="btn btn-primary pull-right" type="submit">Print</button>
+                                    <button class="btn btn-primary pull-right" type="submit" onClick="window.print()">Print</button>
                                 </div>
                             </div>
                             <div id="tab-2" class="tab-pane col-sm-12">
-                            <form role="form" class="form-horizontal">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12" style="background: #f5f5f5;overflow: scroll;overflow-y: hidden;">
                                 <table class="table table-striped table-bordered table-hover dataTables-example" >
                                 <thead>
                                 <tr>
@@ -343,6 +342,13 @@
                                     <th>#</th>
                                     <th>Partner Name</th>
                                     <th>Period</th>
+                                    <th>Net SP</th>
+                                    <th>Net N/R</th>
+                                    <th>Total Return Charges</th>
+                                    <th>Total Net P/R</th>
+                                    <th>Total Net Tax</th>
+                                    <th>Net TDS to Deposite</th>
+                                    <th>Net Commission Paid</th>
                                     <th>Net Payment Result</th>
                                     <th>Sale Quantity</th>
                                     <th>Return Quantity</th>
@@ -353,6 +359,7 @@
                                     <th>Actionable Order</th>
                                     <th>Return Limit Crossed</th>
                                     <th>RTO limit Crossed</th>
+                                    <th>Total Gross Profit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -363,17 +370,25 @@
                                     <td>${loop.index+1}</td>
                                     <td>${ttso.pcName}</td>
                                     <td>${period}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td>${ttso.netPaymentResult}</td>
                                     <td>${ttso.saleQuantity}</td>
                                     <td>${ttso.returnQuantity}</td>
                                     <td>${ttso.noOfDeliveredOrder}</td>
-                                     <td>${ttso.totalPaymentDiffference}</td>
+                                    <td>${ttso.totalPaymentDiffference}</td>
                                     <td>${ttso.noOfReturnOrder}</td>
                                     <td>${ttso.noOfSettledOrders}</td>
                                     <td>${ttso.noOfActionableOrders}</td>
                                     <td>${ttso.noOfReturnLimitCrossed}</td>
                                     <td>${ttso.noOfRTOLimitCrossed}</td>
-                                     </tr>
+                                    <td></td>
+                                </tr>
                                 </c:forEach>
                                 </c:if>
                                 </tbody>
@@ -381,10 +396,8 @@
                             </div>
                                 <div class="col-sm-12">
                                 <div class="hr-line-dashed"></div>
-                                    <button class="btn btn-primary pull-right" type="submit">Save</button>
-                                </div>
-
-                            </form>
+                                    <button class="btn btn-primary pull-right" type="submit" onClick="window.print()">Print</button>
+                                </div>                           
                             </div>
                             </div>
                         </div>

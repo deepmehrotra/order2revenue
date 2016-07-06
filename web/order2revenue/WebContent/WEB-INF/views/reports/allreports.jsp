@@ -57,7 +57,7 @@
                         <div class="hr-line-dashed"></div>
                             <h2><small>Order Related</small></h2>
                             <div class="col-md-4">
-                                <a href=""><i class="fa fa-arrow-right"></i> Total Shipped Orders</a>
+                                <a href=""><i class="fa fa-arrow-right"></i> Consolidated Orders</a>
                                 <a href=""><i class="fa fa-arrow-right"></i> Payment Difference Orders</a>
                                 <a href=""><i class="fa fa-arrow-right"></i> Return/RTO reason Analysis</a>
                             </div>
@@ -167,7 +167,7 @@
 
 $(document).ready(function(){
 var OrderRelatedReport = [
-                  {display: "Total Shipped Orders", value: "totalShippedOrders" }, 
+                  {display: "Consolidated Orders", value: "consolidatedOrders" }, 
                   {display: "Payment Difference Orders", value: "paymentDifferenceOrders" }, 
                   {display: "Return/RTO reason Analysis", value: "returnRTOReasonAnalysis" },
                   {display: "Sale return Orders", value: "saleReturnOrders" }, 

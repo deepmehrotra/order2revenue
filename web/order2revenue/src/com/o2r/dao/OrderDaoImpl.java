@@ -20,6 +20,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -1125,7 +1126,13 @@ public class OrderDaoImpl implements OrderDao {
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			if (poOrder)
 				criteria.add(Restrictions.isNull("order.consolidatedOrder"));
-
+			Criterion rest1 = Restrictions.eq("order.poOrder", false);
+            Criterion rest2 = Restrictions.and(    
+                    Restrictions.eq("order.poOrder", true),
+                    Restrictions.isNull("order.consolidatedOrder"));
+            criteria.add(Restrictions.or(rest1, rest2));
+			
+			
 			temp = criteria.list();
 			if (temp != null && temp.size() != 0) {
 				seller = (Seller) temp.get(0);

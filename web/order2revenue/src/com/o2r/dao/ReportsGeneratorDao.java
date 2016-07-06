@@ -12,6 +12,7 @@ import com.o2r.bean.ChannelNR;
 import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
+import com.o2r.bean.ConsolidatedOrderBean;
 import com.o2r.bean.MonthlyCommission;
 import com.o2r.bean.NetPaymentResult;
 import com.o2r.bean.PartnerReportDetails;
@@ -70,6 +71,8 @@ public interface ReportsGeneratorDao {
 	public List<ChannelNR> fetchNetRate(int sellerId, Date startDate, Date endDate);
 
 	public List<MonthlyCommission> fetchMonthlyComm(int sellerId, Date startDate, Date endDate);
+	
+	public List<ConsolidatedOrderBean> getConsolidatedOrdersReport(Date startDate, Date endDate, int sellerId);
 
 	/*public List<UploadReport> listUploadReport() throws CustomException;
 
