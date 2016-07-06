@@ -34,7 +34,7 @@ import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionAnalysis;
 import com.o2r.bean.CommissionDetails;
-import com.o2r.bean.ConsolidatedOrderBean;
+//import com.o2r.bean.ConsolidatedOrderBean;
 import com.o2r.bean.DebtorsGraph1;
 import com.o2r.bean.ExpensesDetails;
 import com.o2r.bean.MonthlyCommission;
@@ -315,7 +315,7 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 		String reportName=null;
 		Date startDate;
 		Date endDate;
-		List<ConsolidatedOrderBean> consolidatedBeans=new ArrayList<ConsolidatedOrderBean>();
+		//List<ConsolidatedOrderBean> consolidatedBeans=new ArrayList<ConsolidatedOrderBean>();
 		try{
 			reportName = request.getParameter("reportName");
 			startDate = new Date(request.getParameter("startdate"));
