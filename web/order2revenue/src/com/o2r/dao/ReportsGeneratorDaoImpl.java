@@ -39,6 +39,7 @@ import com.o2r.bean.ChannelNR;
 import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
+import com.o2r.bean.ConsolidatedOrderBean;
 import com.o2r.bean.DataConfig;
 import com.o2r.bean.MonthlyCommission;
 import com.o2r.bean.NetPaymentResult;
@@ -57,6 +58,7 @@ import com.o2r.model.Product;
 import com.o2r.model.Seller;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
+import com.o2r.service.OrderService;
 import com.o2r.service.TaxDetailService;
 
 /**
@@ -72,6 +74,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	
 	@Autowired
 	private DataConfig dataConfig;
+	
+	@Autowired
+	private OrderService orderService;
 	
 	@Resource(name="taxDetailService")
 	private TaxDetailService taxDetailService;
@@ -127,7 +132,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		log.info("*** getPartnerTSOdetails ends : ReportsGeneratorDaoImpl ****");
 		return ttso;
 	}
-
+	
+	
+	
+	
 	@Override
 	public List<TotalShippedOrder> getAllPartnerTSOdetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException {
@@ -555,6 +563,25 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		log.info("*** getAllPartnerTSOdetails Starts : ReportsGeneratorDaoImpl ****");
 		return Arrays.asList(ttso);
 	}
+	
+	@Override
+	public List<ConsolidatedOrderBean> getConsolidatedOrdersReport(
+			Date startDate, Date endDate, int sellerId) {
+		List<Order> orderList=null;
+		Map<String, Object> consolidatedMap=new HashMap<String, Object>();
+		ConsolidatedOrderBean bean=null;
+		try {
+			orderList=orderService.findOrdersbyDate("shippedDate", startDate, endDate, sellerId, false);
+			if(orderList != null && orderList.size() != 0){
+				
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
+	}
+	
+	
 	
 	@SuppressWarnings("unchecked")
 	@Override

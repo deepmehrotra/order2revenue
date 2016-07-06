@@ -1,7 +1,6 @@
 
 package com.o2r.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -10,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +19,7 @@ import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.YearlyStockList;
 import com.o2r.helper.FillManager;
+import com.o2r.helper.HelperClass;
 import com.o2r.helper.Layouter;
 import com.o2r.helper.Writer;
 import com.o2r.model.Expenses;
@@ -34,7 +35,10 @@ import com.o2r.model.Order;
 @Transactional
 public class ReportDownloadService {
 
-	
+	@Autowired
+	private ProductService productService;
+	@Autowired
+	private HelperClass helperClass;
 	
 	@Resource(name="sessionFactory")
 	private SessionFactory sessionFactory;
@@ -68,12 +72,12 @@ public class ReportDownloadService {
 		// 4. Build layout 
 		// Build title, date, and column headers
 		Layouter.buildOrderReport(worksheet, startRowIndex, startColIndex,reportname,headers);
-
+		
 		// 5. Fill report
-		FillManager.fillReport(worksheet, startRowIndex, startColIndex, orderlist , headers);
+		FillManager.fillReport(worksheet, startRowIndex, startColIndex, orderlist , headers, productService, sellerId );
 		
 		// 6. Set the response properties
-		String fileName = "Total_Shipped_Order_Report.xls";
+		String fileName = "Consolidated_Order_Report.xls";
 		response.setHeader("Content-Disposition", "inline; filename=" + fileName);
 		// Make sure to set the correct content type
 		response.setContentType("application/vnd.ms-excel");
@@ -103,7 +107,7 @@ public class ReportDownloadService {
 		FillManager.fillCOReport(worksheet, startRowIndex, startColIndex, orderlist , reportheaders);
 		
 		// 6. Set the response properties
-		String fileName = "Total_Shipped_Order_Report.xls";
+		String fileName = "Consolidated_Order_Report.xls";
 		response.setHeader("Content-Disposition", "inline; filename=" + reportName);
 		// Make sure to set the correct content type
 	//	response.setContentType("application/vnd.ms-excel");

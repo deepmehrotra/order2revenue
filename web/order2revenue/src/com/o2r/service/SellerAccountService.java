@@ -9,7 +9,9 @@ import com.o2r.model.SellerAccount;
 
 public interface SellerAccountService {
 	
-	 public List<SellerAccount> listSellerAccounts();
+	public void saveSellerAccount(SellerAccount sellerAccount); 
+	
+	public List<SellerAccount> listSellerAccounts();
 	 
 	 public SellerAccount getSellerAccount(int cid);	 
 	 

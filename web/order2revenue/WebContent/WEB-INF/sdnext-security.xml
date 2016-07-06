@@ -37,21 +37,9 @@
 		
 	</http>
 	
-	
-	<beans:bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
-
-    <authentication-manager alias="authenticationManager">	
+	<authentication-manager alias="authenticationManager">	
 	  <authentication-provider user-service-ref="customUserDetailsService"/>
-	</authentication-manager>
-	
-    
-	<beans:bean id="authenticationManager" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
-  		<beans:property name="userDetailsService" ref="userDetailsServiceImpl" />
-  		<beans:property name="passwordEncoder" ref="encoder" />
-	</beans:bean>
-	<!-- For hashing and salting user passwords -->
-    <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
-	
+	</authentication-manager>	
 	
 
 </beans:beans>

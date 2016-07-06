@@ -23,7 +23,7 @@ public interface ProductService {
 
 	public List<Product> listProducts(int sellerId) throws CustomException;
 
-	public Product getProduct(int orderId) throws CustomException;
+	public Product getProduct(int productId) throws CustomException;
 
 	public void deleteProduct(Product product, int sellerId)
 			throws CustomException;

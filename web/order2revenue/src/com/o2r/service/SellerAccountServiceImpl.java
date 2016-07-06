@@ -19,6 +19,12 @@ public class SellerAccountServiceImpl implements SellerAccountService {
 
 	@Autowired
 	 private SellerAccountDao sellerAccountDao;
+	
+	@Override
+	public void saveSellerAccount(SellerAccount sellerAccount) {
+		sellerAccountDao.saveSellerAccount(sellerAccount);		
+	}
+	
 	@Override
 	public List<SellerAccount> listSellerAccounts() {
 		return sellerAccountDao.listSellerAccounts();
