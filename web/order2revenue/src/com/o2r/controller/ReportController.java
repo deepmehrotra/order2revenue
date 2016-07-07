@@ -321,8 +321,9 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 			startDate = new Date(request.getParameter("startdate"));
 			endDate = new Date(request.getParameter("enddate"));
 		
-		//consolidatedBeans=
-			
+		consolidatedBeans=reportGeneratorService.getConsolidatedOrdersReport(startDate, endDate, helperClass.getSellerIdfromSession(request));
+		model.put("consolidatedOrders", consolidatedBeans);		
+		
 		ttso = reportGeneratorService.getAllPartnerTSOdetails(startDate,
 				endDate, helperClass.getSellerIdfromSession(request));
 		if (ttso != null)
