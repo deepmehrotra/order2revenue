@@ -29,11 +29,11 @@ import com.o2r.bean.ChannelMC;
 import com.o2r.bean.ChannelMCNPR;
 import com.o2r.bean.ChannelNPR;
 import com.o2r.bean.ChannelNR;
-import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.CommissionAnalysis;
 import com.o2r.bean.CommissionDetails;
+import com.o2r.bean.ConsolidatedOrderBean;
 //import com.o2r.bean.ConsolidatedOrderBean;
 import com.o2r.bean.DebtorsGraph1;
 import com.o2r.bean.ExpensesDetails;
@@ -315,14 +315,15 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 		String reportName=null;
 		Date startDate;
 		Date endDate;
-		//List<ConsolidatedOrderBean> consolidatedBeans=new ArrayList<ConsolidatedOrderBean>();
+		List<ConsolidatedOrderBean> consolidatedBeans=new ArrayList<ConsolidatedOrderBean>();
 		try{
 			reportName = request.getParameter("reportName");
 			startDate = new Date(request.getParameter("startdate"));
 			endDate = new Date(request.getParameter("enddate"));
 		
-		//consolidatedBeans=
-			
+		consolidatedBeans=reportGeneratorService.getConsolidatedOrdersReport(startDate, endDate, helperClass.getSellerIdfromSession(request));
+		model.put("consolidatedOrders", consolidatedBeans);		
+		
 		ttso = reportGeneratorService.getAllPartnerTSOdetails(startDate,
 				endDate, helperClass.getSellerIdfromSession(request));
 		if (ttso != null)

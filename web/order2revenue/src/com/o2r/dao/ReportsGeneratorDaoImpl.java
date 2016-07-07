@@ -39,7 +39,7 @@ import com.o2r.bean.ChannelNR;
 import com.o2r.bean.ChannelNetQty;
 import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
-//import com.o2r.bean.ConsolidatedOrderBean;
+import com.o2r.bean.ConsolidatedOrderBean;
 import com.o2r.bean.DataConfig;
 import com.o2r.bean.MonthlyCommission;
 import com.o2r.bean.NetPaymentResult;
@@ -564,22 +564,90 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		return Arrays.asList(ttso);
 	}
 	
-	/*@Override
+	@Override
 	public List<ConsolidatedOrderBean> getConsolidatedOrdersReport(
 			Date startDate, Date endDate, int sellerId) {
 		List<Order> orderList=null;
+		List<Order> orderlistGpReturn=null;
+		Seller seller = null;
+		List temp=null;
+		List<ConsolidatedOrderBean> consolidatedList=new ArrayList<ConsolidatedOrderBean>();
+		Date currentDate=new Date();
 		Map<String, Object> consolidatedMap=new HashMap<String, Object>();
 		ConsolidatedOrderBean bean=null;
 		try {
 			orderList=orderService.findOrdersbyDate("shippedDate", startDate, endDate, sellerId, false);
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",CriteriaSpecification.LEFT_JOIN);
+			criteria.createAlias("seller", "seller",CriteriaSpecification.LEFT_JOIN);
+			criteria.add(Restrictions.eq("seller.id", sellerId));
+			criteria.add(Restrictions.between("orderReturnOrRTO.returnDate", startDate, endDate))
+					.add(Restrictions.and(    
+                    Restrictions.eq("poOrder", true),
+                    Restrictions.isNull("consolidatedOrder")))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);						
+			
+			temp = criteria.list();
+			if (temp != null && temp.size() != 0) {				
+				orderlistGpReturn = temp;
+			}			
+			orderList.addAll(orderlistGpReturn);			
 			if(orderList != null && orderList.size() != 0){
-				
+				for (Order order:orderList) {
+					if(consolidatedMap.containsKey(order.getPcName())){
+						bean=(ConsolidatedOrderBean)consolidatedMap.get(order.getPcName());						
+					}else{
+						bean=new ConsolidatedOrderBean();
+						bean.setPcName(order.getPcName());
+					}
+					bean.setNetPaymentResult(bean.getNetPaymentResult()+order.getOrderPayment().getNetPaymentResult());
+					bean.setSaleQuantity(bean.getSaleQuantity()+order.getQuantity());
+					
+					if(order.getOrderReturnOrRTO() != null){
+						bean.setReturnQuantiy(bean.getReturnQuantiy()+order.getOrderReturnOrRTO().getReturnorrtoQty());
+						if(order.getOrderReturnOrRTO().getReturnDate() != null){
+							bean.setReturnOrder(bean.getReturnOrder()+1);
+						}
+						if(order.getOrderReturnOrRTO().getReturnDate() != null && order.getReturnLimitCrossed() != null 
+								&& order.getOrderReturnOrRTO().getReturnDate().after(order.getReturnLimitCrossed())){
+							bean.setReturnLimitCrossed(bean.getReturnLimitCrossed()+1);						
+						}
+						if(order.getOrderReturnOrRTO().getReturnDate() != null && order.getrTOLimitCrossed() != null 
+								&& order.getOrderReturnOrRTO().getReturnDate().after(order.getrTOLimitCrossed())){
+							bean.setRtoLimitCrossed(bean.getRtoLimitCrossed()+1);						
+						}
+					}
+					
+					if(order.getDeliveryDate() != null && order.getDeliveryDate().before(currentDate)){
+						bean.setDeliveredOrder(bean.getDeliveredOrder()+1);						
+					}				
+					bean.setPaymentDifferenceAmount(bean.getPaymentDifferenceAmount()+order.getOrderPayment().getPaymentDifference());
+					if(order.getOrderPayment().getPaymentDifference() < 1 && order.getOrderPayment().getPaymentDifference() > -1){
+						bean.setSettledOrder(bean.getSettledOrder()+1);
+					}
+					if(order.getOrderPayment().getPaymentDifference() < -1 || order.getOrderPayment().getPaymentDifference() > 1){
+						bean.setActionableOrder(bean.getActionableOrder()+1);
+					}										
+					consolidatedMap.put(order.getPcName(), bean);
+				}				
 			}
+			if(consolidatedMap != null){
+				for (Map.Entry<String, Object> entry : consolidatedMap.entrySet())
+				{
+				    consolidatedList.add((ConsolidatedOrderBean)entry.getValue());
+				}
+			}
+			
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
-		return null;
-	}*/
+
+		return consolidatedList;
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Override

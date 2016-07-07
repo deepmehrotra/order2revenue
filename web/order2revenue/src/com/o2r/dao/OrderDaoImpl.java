@@ -1120,18 +1120,14 @@ public class OrderDaoImpl implements OrderDao {
 					Restrictions.eq("id", sellerId));
 			criteria.createAlias("orders", "order",
 					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.between(searchString, startDate, endDate))
-					.add(Restrictions.eq("order.poOrder", poOrder))
-					.setResultTransformer(
-							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			if (poOrder)
-				criteria.add(Restrictions.isNull("order.consolidatedOrder"));
+					.add(Restrictions.between(searchString, startDate, endDate));
 			Criterion rest1 = Restrictions.eq("order.poOrder", false);
             Criterion rest2 = Restrictions.and(    
                     Restrictions.eq("order.poOrder", true),
                     Restrictions.isNull("order.consolidatedOrder"));
-            criteria.add(Restrictions.or(rest1, rest2));
-			
+            criteria.add(Restrictions.or(rest1, rest2))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);			
 			
 			temp = criteria.list();
 			if (temp != null && temp.size() != 0) {
