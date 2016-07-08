@@ -180,22 +180,14 @@
 																	maxFractionDigits="2"
 																	value="${gatepass.orderPayment.negativeAmount}" /></td>
 															<td>${gatepass.sellerNote}</td>
-															<td><a href="#">Reconcile</a>&nbsp;&nbsp;
-																<a href="#">Add Manual Charge</a></td>
+															<td><a href="#" onclick="onclickGatePass('uploadGatePass',0)">Reconcile</a>&nbsp;&nbsp;
+																<a href="#" onclick="onclickSideNavigation('ManualCharges')">Add Manual Charge</a></td>
 														</tr>
 													</c:forEach>
 												</c:if>
 											</tbody>
 										</table>
 									</div>
-									<div class="col-sm-12">
-										<div class="hr-line-dashed"></div>
-										<a href="#" onclick="onclickGatePass('uploadGatePass',0)"
-											class="btn btn-success btn-xs">Bulk Upload GatePass</a>&nbsp;&nbsp;
-										<a href="#" onclick="onclickGatePass('downloadGatePass',0)"
-											class="btn btn-success btn-xs">Download GatePass Format</a>
-									</div>
-
 								</div>
 							</div>
 						</div>

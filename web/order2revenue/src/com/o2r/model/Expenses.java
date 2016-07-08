@@ -2,7 +2,6 @@ package com.o2r.model;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -108,7 +107,4 @@ public class Expenses {
 	public void setExpenseDate(Date expenseDate) {
 		this.expenseDate = expenseDate;
 	}
-	
-	
-	
 }
