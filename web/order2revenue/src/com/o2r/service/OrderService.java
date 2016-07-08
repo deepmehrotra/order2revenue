@@ -111,4 +111,7 @@ public interface OrderService {
 
 	public List<GatePass> getGatepassesFromConsolidated(int returnId, int sellerId)
 			throws CustomException;
+
+	List<Order> listDisputedGatePasses(int sellerId, int pageNo)
+			throws CustomException;
 }

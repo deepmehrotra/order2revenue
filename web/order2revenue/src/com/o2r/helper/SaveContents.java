@@ -1743,6 +1743,7 @@ public class SaveContents {
 		double totalpositive = 0;
 		double totalnegative = 0;
 		boolean generatePaymentUpload = false;
+		boolean disputedGP = false;
 
 		try {
 
@@ -1782,8 +1783,11 @@ public class SaveContents {
 								"channelOrderID", popabean.getInvoiceID(),
 								sellerId);
 						if (order == null) {
-							errorMessage.append(" PO or GatePass not found");
-							validaterow = false;
+							log.info(" Disputed Gatepass");
+							disputedGP = true;
+							popabean.setGatePassId(popabean.getInvoiceID());
+							//errorMessage.append(" PO or GatePass not found");
+							//validaterow = false;
 						} else {
 							popabean.setGatePassId(order.getChannelOrderID());
 						}

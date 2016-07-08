@@ -203,6 +203,12 @@ public class OrderServiceImpl implements OrderService {
 			throws CustomException {
 		return orderDao.listGatePasses(sellerId, pageNo);
 	}
+	
+	@Override
+	public List<Order> listDisputedGatePasses(int sellerId, int pageNo)
+			throws CustomException {
+		return orderDao.listDisputedGatePasses(sellerId, pageNo);
+	}
 
 	@Override
 	public OrderRTOorReturn generateConsolidatedReturn(

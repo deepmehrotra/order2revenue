@@ -572,7 +572,11 @@ public class OrderDaoImpl implements OrderDao {
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
 					.add(Restrictions.eq("poOrder", true))
-					.add(Restrictions.isNull("consolidatedOrder"));
+					.add(Restrictions.isNull("consolidatedOrder"))
+					.add(Restrictions.disjunction()
+					        .add(Restrictions.isNotNull("shippedDate"))
+					        .add(Restrictions.isNotNull("orderReturnOrRTO"))
+					 );
 			// .add(Restrictions.isNull("orderReturnOrRTO"));
 
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
@@ -1069,7 +1073,7 @@ public class OrderDaoImpl implements OrderDao {
 					criteria.add(Restrictions.eq(searchString, value));
 				}
 				if (poOrder)
-					criteria.add(Restrictions.eq("consolidatedOrder", null));
+					criteria.add(Restrictions.isNull("consolidatedOrder"));
 				criteria.add(Restrictions.eq("poOrder", poOrder))
 						.addOrder(
 								org.hibernate.criterion.Order
@@ -1730,6 +1734,7 @@ public class OrderDaoImpl implements OrderDao {
 
 			String orderID = null;
 			boolean isGP = false;
+			boolean disputedGP = false;
 			boolean paymentOK = false;
 			double paymentDiff = 0;
 
@@ -1742,12 +1747,30 @@ public class OrderDaoImpl implements OrderDao {
 
 			Order poOrder = findConsolidatedPO("channelOrderID", orderID,
 					sellerId);
+			if (poOrder == null) {
+				poOrder = new Order();
+				poOrder.setChannelOrderID(orderID);
+				poOrder.setPcName(popaBean.getPcName());
+				poOrder.setSellerNote(popaBean.getSellerNote());
+				poOrder.setPoOrder(true);
+				poOrder.setSeller(sellerDao.getSeller(sellerId));
+				disputedGP = true;
+			}
 
 			OrderPayment orderPayment = new OrderPayment();
 			orderPayment.setUploadDate(new Date());
 			orderPayment.setDateofPayment(popaBean.getPaymentDate());
-			orderPayment.setPositiveAmount(popaBean.getPositiveAmount());
-			orderPayment.setNegativeAmount(popaBean.getNegativeAmount());
+			
+			if (poOrder.getOrderPayment() != null) {
+				orderPayment.setPositiveAmount(
+						poOrder.getOrderPayment().getPositiveAmount() + popaBean.getPositiveAmount());
+				orderPayment.setNegativeAmount(
+						poOrder.getOrderPayment().getNegativeAmount() + popaBean.getNegativeAmount());
+			} else {
+				orderPayment.setPositiveAmount(popaBean.getPositiveAmount());
+				orderPayment.setNegativeAmount(popaBean.getNegativeAmount());
+			}
+			
 			orderPayment.setNetPaymentResult(orderPayment.getPositiveAmount()
 					- orderPayment.getNegativeAmount());
 
@@ -1760,14 +1783,15 @@ public class OrderDaoImpl implements OrderDao {
 							
 				}
 			} else {
-				
-				if ( - orderPayment.getNetPaymentResult() == poOrder
-						.getOrderReturnOrRTO()
-						.getReturnOrRTOChargestoBeDeducted()) {
-					paymentOK = true;
-				} else {
-					paymentDiff =  poOrder.getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()
-							+ orderPayment.getNetPaymentResult();
+				if (!disputedGP) {
+					if ( - orderPayment.getNetPaymentResult() == poOrder
+							.getOrderReturnOrRTO()
+							.getReturnOrRTOChargestoBeDeducted()) {
+						paymentOK = true;
+					} else {
+						paymentDiff =  poOrder.getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()
+								+ orderPayment.getNetPaymentResult();
+					}
 				}
 			}
 
@@ -1778,12 +1802,17 @@ public class OrderDaoImpl implements OrderDao {
 			// orderPayment.setNetPaymentResult(popaBean.getNpr());
 			orderPayment.setPaymentdesc(popaBean.getSellerNote());
 
-			if (paymentOK) {
-				poOrder.setFinalStatus("Settled");
+			if(disputedGP) {
+				poOrder.setFinalStatus("Disputed");
 				poOrder.setStatus("PO payment");
 			} else {
-				poOrder.setFinalStatus("Actionable");
-				poOrder.setStatus("Inappropriate Payment Recieved");
+				if (paymentOK) {
+					poOrder.setFinalStatus("Settled");
+					poOrder.setStatus("PO payment");
+				} else {
+					poOrder.setFinalStatus("Actionable");
+					poOrder.setStatus("Inappropriate Payment Recieved");
+				}
 			}
 
 			OrderTimeline timeline = new OrderTimeline();
@@ -3571,6 +3600,49 @@ public class OrderDaoImpl implements OrderDao {
 					.add(Restrictions.eq("poOrder", true))
 					.add(Restrictions.isNull("consolidatedOrder"))
 					.add(Restrictions.isNotNull("orderReturnOrRTO"));
+
+			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			criteria.addOrder(org.hibernate.criterion.Order
+					.desc("lastActivityOnOrder"));
+			criteria.setFirstResult(pageNo * pageSize);
+			criteria.setMaxResults(pageSize);
+			returnlist = criteria.list();
+			for (Order order : returnlist) {
+				Hibernate.initialize(order.getOrderReturnOrRTO());
+				Hibernate.initialize(order.getOrderTax());
+				Hibernate.initialize(order.getOrderPayment());
+				Hibernate.initialize(order.getOrderTimeline());
+				Hibernate.initialize(order.getCustomer());
+			}
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+			throw new CustomException(GlobalConstant.listOrdersError,
+					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
+		}
+		log.info("$$$ listGatePasses Ends : OrderDaoImpl $$$");
+		return returnlist;
+	}
+	
+	@Override
+	public List<Order> listDisputedGatePasses(int sellerId, int pageNo)
+			throws CustomException {
+
+		log.info("$$$ listDisputedGatePasses Starts : OrderDaoImpl $$$");
+		List<Order> returnlist = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions.eq("poOrder", true))
+					.add(Restrictions.isNull("consolidatedOrder"))
+					.add(Restrictions.isNull("shippedDate"))
+					.add(Restrictions.isNull("orderReturnOrRTO"));
 
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			criteria.addOrder(org.hibernate.criterion.Order

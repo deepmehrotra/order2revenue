@@ -396,7 +396,7 @@ public class OrderController {
 					|| searchOrder.equals("status") && channelOrderID != null) {
 				orderList = ConverterClass.prepareListofBean(orderService
 						.findOrders(searchOrder, channelOrderID, sellerId,
-								false, true));
+								true, true));
 			} else if (searchOrder != null
 					&& searchOrder.equals("customerName")
 					&& channelOrderID != null) {
@@ -407,7 +407,7 @@ public class OrderController {
 					&& endDate != null) {
 				orderList = ConverterClass.prepareListofBean(orderService
 						.findOrdersbyDate("orderDate", new Date(startDate),
-								new Date(endDate), sellerId, false));
+								new Date(endDate), sellerId, true));
 
 			}
 		} catch (CustomException ce) {
@@ -830,6 +830,34 @@ public class OrderController {
 		}
 		log.info("$$$ gatepasslistDA Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/gatepasslist", model);
+	}
+	
+	@RequestMapping(value = "/seller/disputedGPList", method = RequestMethod.GET)
+	public ModelAndView disputedGPList(HttpServletRequest request,
+			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
+
+		log.info("$$$ disputedGPList Starts : OrderController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			int pageNo = request.getParameter("page") != null ? Integer
+					.parseInt(request.getParameter("page")) : 0;
+
+			model.put(
+					"gatepasses",
+					ConverterClass.prepareListofBean(orderService.listDisputedGatePasses(
+							helperClass.getSellerIdfromSession(request), pageNo)));
+		} catch (CustomException ce) {
+			log.error("orderListDailyAct exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+		}
+		log.info("$$$ disputedGPList Ends : OrderController $$$");
+		return new ModelAndView("dailyactivities/disputedGPList", model);
 	}
 
 	@RequestMapping(value = "/seller/poOrderList", method = RequestMethod.GET)
