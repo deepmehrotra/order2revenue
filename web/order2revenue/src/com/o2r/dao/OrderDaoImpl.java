@@ -1734,6 +1734,7 @@ public class OrderDaoImpl implements OrderDao {
 
 			String orderID = null;
 			boolean isGP = false;
+			boolean disputedGP = false;
 			boolean paymentOK = false;
 			double paymentDiff = 0;
 
@@ -1746,12 +1747,19 @@ public class OrderDaoImpl implements OrderDao {
 
 			Order poOrder = findConsolidatedPO("channelOrderID", orderID,
 					sellerId);
+			if (poOrder == null) {
+				poOrder = new Order();
+				poOrder.setChannelOrderID(orderID);
+				disputedGP = true;
+			}
 
 			OrderPayment orderPayment = new OrderPayment();
 			orderPayment.setUploadDate(new Date());
 			orderPayment.setDateofPayment(popaBean.getPaymentDate());
-			orderPayment.setPositiveAmount(popaBean.getPositiveAmount());
-			orderPayment.setNegativeAmount(popaBean.getNegativeAmount());
+			orderPayment.setPositiveAmount(
+					poOrder.getOrderPayment().getPositiveAmount() + popaBean.getPositiveAmount());
+			orderPayment.setNegativeAmount(
+					poOrder.getOrderPayment().getNegativeAmount() + popaBean.getNegativeAmount());
 			orderPayment.setNetPaymentResult(orderPayment.getPositiveAmount()
 					- orderPayment.getNegativeAmount());
 
@@ -1764,14 +1772,15 @@ public class OrderDaoImpl implements OrderDao {
 							
 				}
 			} else {
-				
-				if ( - orderPayment.getNetPaymentResult() == poOrder
-						.getOrderReturnOrRTO()
-						.getReturnOrRTOChargestoBeDeducted()) {
-					paymentOK = true;
-				} else {
-					paymentDiff =  poOrder.getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()
-							+ orderPayment.getNetPaymentResult();
+				if (!disputedGP) {
+					if ( - orderPayment.getNetPaymentResult() == poOrder
+							.getOrderReturnOrRTO()
+							.getReturnOrRTOChargestoBeDeducted()) {
+						paymentOK = true;
+					} else {
+						paymentDiff =  poOrder.getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()
+								+ orderPayment.getNetPaymentResult();
+					}
 				}
 			}
 
@@ -1782,12 +1791,17 @@ public class OrderDaoImpl implements OrderDao {
 			// orderPayment.setNetPaymentResult(popaBean.getNpr());
 			orderPayment.setPaymentdesc(popaBean.getSellerNote());
 
-			if (paymentOK) {
-				poOrder.setFinalStatus("Settled");
+			if(disputedGP) {
+				poOrder.setFinalStatus("Disputed");
 				poOrder.setStatus("PO payment");
 			} else {
-				poOrder.setFinalStatus("Actionable");
-				poOrder.setStatus("Inappropriate Payment Recieved");
+				if (paymentOK) {
+					poOrder.setFinalStatus("Settled");
+					poOrder.setStatus("PO payment");
+				} else {
+					poOrder.setFinalStatus("Actionable");
+					poOrder.setStatus("Inappropriate Payment Recieved");
+				}
 			}
 
 			OrderTimeline timeline = new OrderTimeline();
