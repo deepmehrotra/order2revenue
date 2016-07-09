@@ -27,7 +27,7 @@ import com.o2r.model.Seller;
 public class ManualChargesDaoImpl implements ManualChargesDao {
 
 	@Autowired
-	private SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;	
 
 	static Logger log = Logger.getLogger(ManualChargesDaoImpl.class.getName());
 
@@ -59,6 +59,36 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 		}
 		log.info("***addManualCharges exit***");
 	}
+	
+	
+	@Override
+	public void addListManualCharges(List<ManualCharges> manualCharges,
+			int sellerId) throws CustomException {
+		
+		log.info("***** addListManualCharges starts ****");
+		Seller seller=null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			if(manualCharges != null && manualCharges.size() != 0 && sellerId != 0 ){
+				Criteria criteria = session.createCriteria(Seller.class).add(
+						Restrictions.eq("id", sellerId));
+				seller = (Seller) criteria.list().get(0);
+				seller.getManualCharges().addAll(manualCharges);
+				session.saveOrUpdate(seller);
+			}
+			session.getTransaction().commit();
+			session.close();
+			
+		} catch (Exception e) {			
+			log.error("Failed!",e);
+			e.printStackTrace();
+			throw new CustomException(GlobalConstant.addManualChargesError,
+					new Date(), 1, GlobalConstant.addManualChargesErrorCode, e);
+		}
+		log.info("***** addListManualCharges Exits ****");
+	}
+	
 
 	public List<ManualCharges> listManualCharges(int sellerId)
 			throws CustomException {

@@ -17,6 +17,23 @@ import javax.persistence.Table;
 @Table
 public class Expenses {
 
+	
+	public Expenses() {
+		
+	}
+	
+	public Expenses(String expenseName, String expenseDescription,
+			String expenseCatName, Date createdOn, Date expenseDate,
+			double amount, int sellerId) {
+		super();
+		this.expenseName = expenseName;
+		this.expenseDescription = expenseDescription;
+		this.expenseCatName = expenseCatName;
+		this.createdOn = createdOn;
+		this.expenseDate = expenseDate;
+		this.amount = amount;
+		this.sellerId = sellerId;
+	}
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column

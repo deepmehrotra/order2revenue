@@ -880,8 +880,7 @@ public class ConverterClass {
 			orderPayment.setPaymentCycle(bean.getPaymentCycle());
 			orderPayment.setPaymentDifference(bean.getPaymentDifference());
 			orderPayment.setPaymentCycleStart(bean.getPaymentCycleStart());
-			orderPayment.setPaymentCycleEnd(bean.getPaymentCycleEnd());
-
+			orderPayment.setPaymentCycleEnd(bean.getPaymentCycleEnd());			
 		}
 		return orderPayment;
 	}
@@ -901,7 +900,7 @@ public class ConverterClass {
 			orderPayment.setPaymentCycle(bean.getPaymentCycle());
 			orderPayment.setPaymentDifference(bean.getPaymentDifference());
 			orderPayment.setPaymentCycleStart(bean.getPaymentCycleStart());
-			orderPayment.setPaymentCycleEnd(bean.getPaymentCycleEnd());
+			orderPayment.setPaymentCycleEnd(bean.getPaymentCycleEnd());			
 		}
 		return orderPayment;
 	}

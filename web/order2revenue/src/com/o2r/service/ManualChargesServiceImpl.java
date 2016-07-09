@@ -32,6 +32,13 @@ public void addManualCharges(ManualCharges manualCharges , int sellerId)throws C
 }
 
 @Override
+	public void addListManualCharges(List<ManualCharges> manualCharges,
+			int sellerId) throws CustomException {
+		manualChargesDao.addListManualCharges(manualCharges, sellerId);
+		
+	}
+
+@Override
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public List<ManualCharges> listManualCharges(int sellerId)throws CustomException {
 	return manualChargesDao.listManualCharges(sellerId);
