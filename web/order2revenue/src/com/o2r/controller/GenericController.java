@@ -199,6 +199,28 @@ public class GenericController {
 		logger.info("$$$ getUploadReports Ends : GenericController $$$");
 		return gson.toJson(uploadReports);
 	}
+	
+	@RequestMapping(value = "/seller/getUploadReportList", method = RequestMethod.GET)
+	public ModelAndView getUploadReportList(HttpServletRequest request) {
+		
+		logger.info("$$$ getUploadReportList Starts : GenericController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		List<UploadReportBean> uploadReports = null;
+		try{
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
+			gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer());
+			
+			uploadReports = ConverterClass.prepareUploadReportListBean(
+					reportGeneratorService.listUploadReport(helperClass.getSellerIdfromSession(request)));
+			model.put("uploadlist", uploadReports);
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("Failed!",e);
+		}
+		logger.info("$$$ getUploadReportList Ends : GenericController $$$");
+		return new ModelAndView("allUploadList", model);
+	}
 
 	@RequestMapping(value = "/seller/initialsetup", method = RequestMethod.GET)
 	public String initialsetup(HttpServletRequest request) {
