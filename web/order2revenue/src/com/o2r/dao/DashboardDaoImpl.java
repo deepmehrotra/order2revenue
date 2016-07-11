@@ -601,16 +601,19 @@ public class DashboardDaoImpl implements DashboardDao {
 			criteria.createAlias("orderPayment", "orderPayment",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.between("paymentDueDate", startDate,
-							endDate))
+					.add(Restrictions.between("paymentDueDate", startDate,endDate))
 					.add(Restrictions.isNull("orderPayment.dateofPayment"));
+			Criterion rest1 = Restrictions.eq("poOrder", false);
+            Criterion rest2 = Restrictions.and(    
+                    Restrictions.eq("poOrder", true),
+                    Restrictions.isNull("consolidatedOrder"));
+            criteria.add(Restrictions.or(rest1, rest2));
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			ProjectionList projList = Projections.projectionList();
 			projList.add(Projections.sum("netRate"));
 			projList.add(Projections.groupProperty("paymentDueDate"));
 			criteria.setProjection(projList);
-			criteria.addOrder(org.hibernate.criterion.Order
-					.desc("paymentDueDate"));
+			criteria.addOrder(org.hibernate.criterion.Order.desc("paymentDueDate"));
 			results = criteria.list();
 			Iterator iterator1 = results.iterator();
 			if (results != null) {

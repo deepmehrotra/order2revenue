@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -1212,13 +1213,19 @@ public class SaveContents {
 				OrderPayment payment = new OrderPayment();
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				log.debug(" channelOrderId " + channelOrderId);
-				
+				Map<String, String> channelOrderIdCheck=new HashMap<String, String>();
 				if(entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK && entry.getCell(0).toString().equalsIgnoreCase("payment")){
 					
 					
 					if (entry.getCell(1) != null
 							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						if(channelOrderIdCheck.containsKey("entry.getCell(1).toString()")){
+							errorMessage.append("Duplicate Channel OrderId ");
+							validaterow = false;
+						}else{
+							channelOrderIdCheck.put(entry.getCell(1).toString(), entry.getCell(0).toString());
+						}						
 						List<Order> onj = orderService
 								.findOrders("channelOrderID", entry.getCell(1)
 										.toString(), sellerId, false, false);
@@ -1243,7 +1250,7 @@ public class SaveContents {
 							payment.setNegativeAmount(Math.abs(Double
 									.parseDouble(entry.getCell(4).toString())));
 							totalnegative = totalnegative
-									+ Math.abs(Double.parseDouble(entry.getCell(5)
+									+ Math.abs(Double.parseDouble(entry.getCell(4)
 											.toString()));
 
 						} else if (entry.getCell(3) != null
@@ -1255,7 +1262,7 @@ public class SaveContents {
 							payment.setPositiveAmount(Double.parseDouble(entry
 									.getCell(3).toString()));
 							totalpositive = totalpositive
-									+ Double.parseDouble(entry.getCell(4)
+									+ Double.parseDouble(entry.getCell(3)
 											.toString());
 							log.debug(" ******toatal psitive :" + totalpositive);
 
@@ -1367,6 +1374,7 @@ public class SaveContents {
 					
 				}else{
 					errorMessage.append("Invalid Criteria !");
+					returnPaymentMap.put(errorMessage.toString(),null);
 				}
 				
 			}

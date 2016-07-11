@@ -1475,8 +1475,8 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.eq("channelOrderID", channelOrderId))
-					.add(Restrictions.eq("productSkuCode", skucode));
+					.add(Restrictions.eq("channelOrderID", channelOrderId));
+					
 
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			if (criteria.list() != null && criteria.list().size() != 0) {

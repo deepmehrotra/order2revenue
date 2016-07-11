@@ -157,6 +157,8 @@ public class Layouter {
 		HSSFCell cellDate = dateTitle.createCell(startColIndex);
 		if(sheetName.equalsIgnoreCase("OrderReturnReport")){
 			cellDate.setCellValue("Note : Valid values For Criteria : channelOrderId, AWB, PIreference, suborderId, invoiceId & For Inventry Type : goodInventory, badInventory");
+		}else if(sheetName.equalsIgnoreCase("PaymentReport")){
+			cellDate.setCellValue("Note : Valid values For Criteria : 'manual charges' or 'payment'");
 		}else{
 			cellDate.setCellValue("This report was generated at " + new Date());
 		}
