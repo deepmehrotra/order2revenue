@@ -308,4 +308,22 @@ public class Seller {
 	public void setUploadReportList(List<UploadReport> uploadReportList) {
 		this.uploadReportList = uploadReportList;
 	}
+
+	@Override
+	public String toString() {
+		return "Seller [id=" + id + ", name=" + name + ", address=" + address
+				+ ", email=" + email + ", CompanyName=" + CompanyName
+				+ ", contactNo=" + contactNo + ", password=" + password
+				+ ", tinNumber=" + tinNumber + ", tanNumber=" + tanNumber
+				+ ", brandName=" + brandName + ", logoUrl=" + logoUrl
+				+ ", verCode=" + verCode + ", role=" + role + ", orders="
+				+ orders + ", categories=" + categories + ", products="
+				+ products + ", expensecategories=" + expensecategories
+				+ ", partners=" + partners + ", paymentUploads="
+				+ paymentUploads + ", manualCharges=" + manualCharges
+				+ ", taxDetails=" + taxDetails + ", taxCategories="
+				+ taxCategories + ", stateDeliveryTime=" + stateDeliveryTime
+				+ ", sellerAccount=" + sellerAccount + ", plan=" + plan
+				+ ", uploadReportList=" + uploadReportList + "]";
+	}
 }

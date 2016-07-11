@@ -1,12 +1,17 @@
 package com.o2r.utility;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.o2r.model.Seller;
+import com.o2r.model.SellerAccount;
 
 @Repository("dataRestoreUtility")
 public class DataRestore {
@@ -57,6 +62,7 @@ public class DataRestore {
 	{
 		log.info("*** getSeller from sellerId Starts : getSellerFromDB ****");
 		Seller seller=null;
+		Seller newSeller=new Seller();
 		Session session = null;
 		try{
 			
@@ -65,17 +71,13 @@ public class DataRestore {
 			Object obj=session.get(Seller.class,
 					sellerid);
 			if(obj!=null)
-			seller=(Seller)obj;
-			else
-				System.out.println(" No selled in db with that id");
-			if(seller!=null)
 			{
-			/*Hibernate.initialize(seller.getStateDeliveryTime());
+			seller=(Seller)obj;
 			Hibernate.initialize(seller.getPartners());
-			Hibernate.initialize(seller.getProducts());
-			Hibernate.initialize(seller.getExpensecategories());
-			Hibernate.initialize(seller.getPaymentUploads());*/
+			//HelperUtility.convertor(seller.getSellerAccount(),newSeller.getSellerAccount(), SellerAccount.class);
 			}
+			
+			
 			session.getTransaction().commit();
 			session.close();
 		}catch(Exception e){
@@ -83,18 +85,25 @@ public class DataRestore {
 			log.error("Failed! in fetching seller from db1",e);
 					
 		}
-		System.out.println(" Successfully fetc seller data");
-		/*seller.setId(0);
-		seller.getSellerAccount().setSelaccId(0);*/
-		System.out.println(" Seller Accoount details : "+seller.getSellerAccount().getSelaccId());
+		System.out.println(" Successfully fetc seller data "+newSeller.getSellerAccount().getSelaccId());
+		
+		/*newSeller.setId(0);
+		newSeller.getSellerAccount().setSelaccId(0);*/
+		/*System.out.println("Old Seller :->"+seller);
+		System.out.println("New Seller :->"+newSeller);*/
+			System.out.println(" newSeller Seller Accoount details : "+newSeller.getSellerAccount().getSelaccId());
 		try{
 			
 			session=sessionFactoryforBackup.openSession();
 			
 		session.beginTransaction();
-		if(seller!=null)
+		if(newSeller!=null)
+			newSeller=(Seller)session.get(Seller.class, 1);
+			HelperUtility.convertor(seller,newSeller, Seller.class,
+					new ArrayList<String>(
+						    Arrays.asList("id", "sellerAccount","role","plan")));
 			
-			session.saveOrUpdate(seller);
+			session.saveOrUpdate(newSeller);
 		session.getTransaction().commit();
 		session.close();
 	}catch(Exception e){
