@@ -13,6 +13,8 @@ import com.o2r.model.ManualCharges;
 public interface ManualChargesService {
  
 	public void addManualCharges(ManualCharges manualCharges , int sellerId)throws CustomException;
+	
+	public void addListManualCharges(List<ManualCharges> manualCharges , int sellerId)throws CustomException;
 	 
 	 public List<ManualCharges> listManualCharges(int sellerId)throws CustomException;
 	 

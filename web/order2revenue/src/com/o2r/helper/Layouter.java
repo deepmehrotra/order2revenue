@@ -157,6 +157,8 @@ public class Layouter {
 		HSSFCell cellDate = dateTitle.createCell(startColIndex);
 		if(sheetName.equalsIgnoreCase("OrderReturnReport")){
 			cellDate.setCellValue("Note : Valid values For Criteria : channelOrderId, AWB, PIreference, suborderId, invoiceId & For Inventry Type : goodInventory, badInventory");
+		}else if(sheetName.equalsIgnoreCase("PaymentReport")){
+			cellDate.setCellValue("Note : Valid values For Criteria : 'manual charges' or 'payment'");
 		}else{
 			cellDate.setCellValue("This report was generated at " + new Date());
 		}
@@ -444,16 +446,16 @@ public class Layouter {
 		rowHeader.setHeight((short) 500);
 
 		HSSFCell cell1 = rowHeader.createCell(startColIndex + 0);
-		cell1.setCellValue("ChannelOrderId");
-		cell1.setCellStyle(headerCellStyle);
-
+		cell1.setCellValue("Criteria");
+		cell1.setCellStyle(headerCellStyle);		
+		
 		HSSFCell cell2 = rowHeader.createCell(startColIndex + 1);
-		cell2.setCellValue("InvoiceId");
+		cell2.setCellValue("ChannelOrderId");
 		cell2.setCellStyle(headerCellStyle);
 
 		HSSFCell cell3 = rowHeader.createCell(startColIndex + 2);
-		cell3.setCellValue("SKUCode");
-		cell3.setCellStyle(headerCellStyle);
+		cell3.setCellValue("InvoiceId");
+		cell3.setCellStyle(headerCellStyle);		
 
 		HSSFCell cell4 = rowHeader.createCell(startColIndex + 3);
 		cell4.setCellValue("Recieved Amount");
@@ -466,6 +468,14 @@ public class Layouter {
 		HSSFCell cell6 = rowHeader.createCell(startColIndex + 5);
 		cell6.setCellValue("Payment Date");
 		cell6.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell7 = rowHeader.createCell(startColIndex + 6);
+		cell7.setCellValue("Channel");
+		cell7.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell8 = rowHeader.createCell(startColIndex + 7);
+		cell8.setCellValue("Particular");
+		cell8.setCellStyle(headerCellStyle);
 
 	}
 

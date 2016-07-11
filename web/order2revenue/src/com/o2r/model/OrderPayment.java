@@ -18,7 +18,7 @@ public class OrderPayment {
 	@Column
 	private int paymentId;
 	@Column
-	private String paymentdesc;
+	private String paymentdesc;	
 	@Column
 	private Date dateofPayment;
 	@Column

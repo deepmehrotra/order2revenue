@@ -31,6 +31,7 @@ public class OrderPaymentBean {
 	public void setPaymentdesc(String paymentdesc) {
 		this.paymentdesc = paymentdesc;
 	}
+	
 	public Date getDateofPayment() {
 		return dateofPayment;
 	}

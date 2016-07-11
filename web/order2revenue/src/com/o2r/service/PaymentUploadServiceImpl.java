@@ -23,9 +23,9 @@ public class PaymentUploadServiceImpl implements PaymentUploadService {
 	private PaymentUploadDao paymentUploadDao;
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public void addPaymentUpload(PaymentUpload upload, int sellerId)
+	public String addPaymentUpload(PaymentUpload upload, int sellerId)
 			throws CustomException {
-		paymentUploadDao.addPaymentUpload(upload, sellerId);
+		return paymentUploadDao.addPaymentUpload(upload, sellerId);
 	}
 
 	@Override

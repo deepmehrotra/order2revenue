@@ -11,7 +11,7 @@ import com.o2r.model.PaymentUpload;
  */
 public interface PaymentUploadDao {
  
- public void addPaymentUpload(PaymentUpload upload , int sellerId) throws CustomException;
+ public String addPaymentUpload(PaymentUpload upload , int sellerId) throws CustomException;
 
  public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomException;
  
