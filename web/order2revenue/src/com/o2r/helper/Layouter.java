@@ -453,26 +453,26 @@ public class Layouter {
 
 		HSSFCell cell3 = rowHeader.createCell(startColIndex + 2);
 		cell3.setCellValue("InvoiceId");
-		cell3.setCellStyle(headerCellStyle);
+		cell3.setCellStyle(headerCellStyle);		
 
 		HSSFCell cell4 = rowHeader.createCell(startColIndex + 3);
-		cell4.setCellValue("SKUCode");
+		cell4.setCellValue("Recieved Amount");
 		cell4.setCellStyle(headerCellStyle);
 
 		HSSFCell cell5 = rowHeader.createCell(startColIndex + 4);
-		cell5.setCellValue("Recieved Amount");
+		cell5.setCellValue("Negative Charges");
 		cell5.setCellStyle(headerCellStyle);
 
 		HSSFCell cell6 = rowHeader.createCell(startColIndex + 5);
-		cell6.setCellValue("Negative Charges");
+		cell6.setCellValue("Payment Date");
 		cell6.setCellStyle(headerCellStyle);
-
+		
 		HSSFCell cell7 = rowHeader.createCell(startColIndex + 6);
-		cell7.setCellValue("Payment Date");
+		cell7.setCellValue("Channel");
 		cell7.setCellStyle(headerCellStyle);
 		
 		HSSFCell cell8 = rowHeader.createCell(startColIndex + 7);
-		cell8.setCellValue("Channel");
+		cell8.setCellValue("Particular");
 		cell8.setCellStyle(headerCellStyle);
 
 	}

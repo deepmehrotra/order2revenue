@@ -1233,41 +1233,27 @@ public class SaveContents {
 					} else {
 						errorMessage.append(" Channel OrderId is null ");
 						validaterow = false;
-					}
-					if (entry.getCell(3) != null
-							&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						Product product = productService.getProduct(entry
-								.getCell(3).toString(), sellerId);
-						if (product == null) {
-							errorMessage.append(" Product SKU does not exist ");
-							validaterow = false;
-						} else {
-							skucode = product.getProductSkuCode();
-						}
-					} else {
-						errorMessage.append(" Product SKU is null ");
-						validaterow = false;
-					}
+					}					
 					try {
-						if (entry.getCell(5) != null
-								&& StringUtils.isNotBlank(entry.getCell(5)
+						if (entry.getCell(4) != null
+								&& StringUtils.isNotBlank(entry.getCell(4)
 										.toString())
-								&& (int) entry.getCell(5).getNumericCellValue() != 0) {
+								&& (int) entry.getCell(4).getNumericCellValue() != 0) {
 
 							payment.setNegativeAmount(Math.abs(Double
-									.parseDouble(entry.getCell(5).toString())));
+									.parseDouble(entry.getCell(4).toString())));
 							totalnegative = totalnegative
 									+ Math.abs(Double.parseDouble(entry.getCell(5)
 											.toString()));
 
-						} else if (entry.getCell(4) != null
-								&& StringUtils.isNotBlank(entry.getCell(4)
+						} else if (entry.getCell(3) != null
+								&& StringUtils.isNotBlank(entry.getCell(3)
 										.toString())
-								&& (int) Float.parseFloat(entry.getCell(4)
+								&& (int) Float.parseFloat(entry.getCell(3)
 										.toString()) != 0) {
 
 							payment.setPositiveAmount(Double.parseDouble(entry
-									.getCell(4).toString()));
+									.getCell(3).toString()));
 							totalpositive = totalpositive
 									+ Double.parseDouble(entry.getCell(4)
 											.toString());
@@ -1282,11 +1268,11 @@ public class SaveContents {
 						errorMessage.append(" Recieved amount should be number ");
 						validaterow = false;
 					}
-					if (entry.getCell(6) != null
-							&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
+					if (entry.getCell(5) != null
+							&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
 
-						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(6))) {
-							payment.setDateofPayment(entry.getCell(6)
+						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(5))) {
+							payment.setDateofPayment(entry.getCell(5)
 									.getDateCellValue());
 						} else {
 							errorMessage
@@ -1316,29 +1302,35 @@ public class SaveContents {
 				}else if(entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK && entry.getCell(0).toString().equalsIgnoreCase("manual charges")){
 					ManualCharges manualCharges=new ManualCharges();
-					if (entry.getCell(7) != null
-							&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						manualCharges.setPartner(entry.getCell(7).toString());					
+					if (entry.getCell(6) != null
+							&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						manualCharges.setPartner(entry.getCell(6).toString());					
 					} else {
 						errorMessage.append(" Channel is null ");					
 					}
+					if (entry.getCell(7) != null
+							&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						manualCharges.setParticular(entry.getCell(7).toString());					
+					} else {
+						errorMessage.append(" Particulars is null ");					
+					}
 					try {
-						if (entry.getCell(5) != null
-								&& StringUtils.isNotBlank(entry.getCell(5)
-										.toString())
-								&& (int) entry.getCell(5).getNumericCellValue() != 0) {
-
-							manualCharges.setPaidAmount(Math.abs(Double
-									.parseDouble(entry.getCell(5).toString())));							
-
-						} else if (entry.getCell(4) != null
+						if (entry.getCell(4) != null
 								&& StringUtils.isNotBlank(entry.getCell(4)
 										.toString())
-								&& (int) Float.parseFloat(entry.getCell(4)
+								&& (int) entry.getCell(4).getNumericCellValue() != 0) {
+
+							manualCharges.setPaidAmount(Math.abs(Double
+									.parseDouble(entry.getCell(4).toString())));							
+
+						} else if (entry.getCell(3) != null
+								&& StringUtils.isNotBlank(entry.getCell(3)
+										.toString())
+								&& (int) Float.parseFloat(entry.getCell(3)
 										.toString()) != 0) {
 
 							manualCharges.setPaidAmount(-Double.parseDouble(entry
-									.getCell(4).toString()));
+									.getCell(3).toString()));
 							
 							log.debug(" ******toatal psitive :" + totalpositive);
 
@@ -1351,11 +1343,11 @@ public class SaveContents {
 						errorMessage.append(" Recieved amount should be number ");
 						validaterow = false;
 					}
-					if (entry.getCell(6) != null
-							&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
+					if (entry.getCell(5) != null
+							&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
 
-						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(6))) {
-							manualCharges.setDateOfPayment(entry.getCell(6)
+						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(5))) {
+							manualCharges.setDateOfPayment(entry.getCell(5)
 									.getDateCellValue());
 						} else {
 							errorMessage
