@@ -597,11 +597,12 @@ public class DashboardDaoImpl implements DashboardDao {
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Order.class);
 			criteria.createAlias("seller", "seller",
-					CriteriaSpecification.LEFT_JOIN)			
+					CriteriaSpecification.LEFT_JOIN);
+			criteria.createAlias("orderPayment", "orderPayment",
+					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
 					.add(Restrictions.between("paymentDueDate", startDate,endDate))
 					.add(Restrictions.isNull("orderPayment.dateofPayment"));
-
 			Criterion rest1 = Restrictions.eq("poOrder", false);
             Criterion rest2 = Restrictions.and(    
                     Restrictions.eq("poOrder", true),
@@ -614,7 +615,6 @@ public class DashboardDaoImpl implements DashboardDao {
 			criteria.setProjection(projList);
 			criteria.addOrder(org.hibernate.criterion.Order.desc("paymentDueDate"));
 			results = criteria.list();
-			System.out.println(results.size());
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
 				while (iterator1.hasNext()) {
