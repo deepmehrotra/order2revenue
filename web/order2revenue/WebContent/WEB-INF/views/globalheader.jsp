@@ -289,7 +289,7 @@
 					<li class="divider"></li>
 					<li>
 						<div class="text-center link-block">
-							<a href="mailbox.html"> <i class="fa fa-envelope"></i> <strong>Read
+							<a href="getUploadReportList.html"> <i class="fa fa-envelope"></i> <strong>Read
 									All Updates</strong>
 							</a>
 						</div>
