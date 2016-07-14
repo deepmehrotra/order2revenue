@@ -57,7 +57,6 @@ import com.o2r.model.Partner;
 import com.o2r.model.PaymentUpload;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
-import com.o2r.model.Seller;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
 import com.o2r.service.CategoryService;
@@ -143,9 +142,9 @@ public class SaveContents {
 				entry = worksheet.getRow(rowIndex);
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				log.debug(" Row index : " + (rowIndex - 2));
-				log.debug(entry.getCell(0).toString());
-				log.debug(entry.getCell(1).getDateCellValue());
-				log.debug(entry.getCell(2).toString());
+				log.debug(entry.getCell(0));
+				log.debug(entry.getCell(1));
+				log.debug(entry.getCell(2));
 
 				order = new OrderBean();
 				customerBean = new CustomerBean();
@@ -515,7 +514,8 @@ public class SaveContents {
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 
 				order = new OrderBean();
-
+				try
+				{
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					partner = partnerService.getPartner(entry.getCell(0)
@@ -712,6 +712,11 @@ public class SaveContents {
 				} else {
 					returnOrderMap.put(errorMessage.toString(), order);
 				}
+				}catch(Exception e)
+				{
+					errorMessage.append("Invalid Input! ");
+					returnOrderMap.put(errorMessage.toString(), order);
+				}
 			}
 
 			if (!orderlist.isEmpty()) {
@@ -757,14 +762,17 @@ public class SaveContents {
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				Product product =null;
+				try
+				{
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
-				log.debug("Product 1" + entry.getCell(1).toString());
-				log.debug("Product  2" + entry.getCell(2).toString());
-				log.debug(entry.getCell(3).toString());
-				log.debug(entry.getCell(4).toString());
-				Product product = new Product();
+				log.debug("Product 1" + entry.getCell(1));
+				log.debug("Product  2" + entry.getCell(2));
+				log.debug(entry.getCell(3));
+				log.debug(entry.getCell(4));
+				product=new Product();
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					product.setProductName(entry.getCell(0).toString());
@@ -926,6 +934,13 @@ public class SaveContents {
 								+ " 2 :" + entry.getCell(2) + " 3 :"
 								+ entry.getCell(3));
 				// Pre save to generate id for use in hierarchy
+			}catch(Exception e)
+				{
+				log.error("Failed!",e);
+				if(product!=null)
+				returnProductMap.put("Invalid input!",
+						ConverterClass.prepareProductBean(product));
+				}
 			}
 			Set<String> errorSet = returnProductMap.keySet();
 			downloadUploadReportXLS(offices, "ProductReport", 11, errorSet,
@@ -962,12 +977,15 @@ public class SaveContents {
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				ProductConfig productConfig =null;
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				log.debug("Product 1" + entry.getCell(1));
 				log.debug("Product  2" + entry.getCell(2));
-				ProductConfig productConfig = new ProductConfig();
+				productConfig=new ProductConfig();
+				try
+				{
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					Product product = productService.getProduct(entry
@@ -1026,6 +1044,15 @@ public class SaveContents {
 							ConverterClass
 									.prepareProductConfigBean(productConfig));
 				}
+				}catch(Exception e)
+				{
+					log.error("Failed!", e);
+					if(productConfig!=null)
+					returnProductConfigMap.put("Invalid Input!",
+							ConverterClass
+									.prepareProductConfigBean(productConfig));
+					
+				}
 				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
 						+ entry.getCell(2) + " 3 :" + entry.getCell(3));
 				// Pre save to generate id for use in hierarchy
@@ -1063,14 +1090,16 @@ public class SaveContents {
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				ProductConfig productConfig = null;
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
-				log.debug("Product 1" + entry.getCell(1).toString());
-				log.debug("Product  2" + entry.getCell(2).toString());
-				log.debug(entry.getCell(3).toString());
-				log.debug(entry.getCell(4).toString());
-				ProductConfig productConfig = new ProductConfig();
+				log.debug("Product 1" + entry.getCell(1));
+				log.debug("Product  2" + entry.getCell(2));
+				log.debug(entry.getCell(3));
+				log.debug(entry.getCell(4));
+				productConfig = new ProductConfig();
+				try{
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					productConfig
@@ -1158,6 +1187,13 @@ public class SaveContents {
 				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
 						+ entry.getCell(2) + " 3 :" + entry.getCell(3));
 				// Pre save to generate id for use in hierarchy
+			}catch(Exception e)
+				{
+				if(productConfig!=null)
+				returnProductConfigMap.put("Invalid input!",
+						ConverterClass
+								.prepareProductConfigBean(productConfig));
+				}
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
 			downloadUploadReportXLS(offices, "ProductConfigReport", 6,
@@ -1214,8 +1250,11 @@ public class SaveContents {
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				log.debug(" channelOrderId " + channelOrderId);
 				Map<String, String> channelOrderIdCheck=new HashMap<String, String>();
+				try
+				{
 				if(entry.getCell(0) != null
-						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK && entry.getCell(0).toString().equalsIgnoreCase("payment")){
+						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK &&
+						entry.getCell(0).toString().equalsIgnoreCase("payment")){
 					
 					
 					if (entry.getCell(1) != null
@@ -1307,7 +1346,8 @@ public class SaveContents {
 					}	
 				
 				}else if(entry.getCell(0) != null
-						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK && entry.getCell(0).toString().equalsIgnoreCase("manual charges")){
+						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK && 
+						entry.getCell(0).toString().equalsIgnoreCase("manual charges")){
 					ManualCharges manualCharges=new ManualCharges();
 					if (entry.getCell(6) != null
 							&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -1376,7 +1416,11 @@ public class SaveContents {
 					errorMessage.append("Invalid Criteria !");
 					returnPaymentMap.put(errorMessage.toString(),null);
 				}
-				
+				}catch(Exception e)
+				{
+					errorMessage.append("Invalid Input !");
+					returnPaymentMap.put(errorMessage.toString(),null);
+				}
 			}
 
 			if (generatePaymentUpload) {
@@ -1393,8 +1437,15 @@ public class SaveContents {
 			}
 			if(manualChargesList != null && manualChargesList.size() != 0){
 				for(ManualCharges manuals:manualChargesList){
+					try
+					{
 					manuals.setChargesDesc(uploadPaymentId);
 					expenseService.addExpense(new Expenses("Manual Charges", uploadPaymentId, "Manual Charges", new Date(), manuals.getDateOfPayment(), manuals.getPaidAmount(), sellerId), sellerId);
+					}
+					catch(Exception e)
+					{
+						log.error("Failed!", e);
+					}
 				}
 				manualChargesService.addListManualCharges(manualChargesList, sellerId);
 			}
@@ -1439,8 +1490,8 @@ public class SaveContents {
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				validaterow = true;
 				entry = worksheet.getRow(rowIndex);
-				log.debug("Product 1" + entry.getCell(1).toString());
-				log.debug("Product  2" + entry.getCell(2).toString());
+				log.debug("Product 1" + entry.getCell(1));
+				log.debug("Product  2" + entry.getCell(2));
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					Product product = productService.getProduct(entry
@@ -1533,6 +1584,8 @@ public class SaveContents {
 				String criteria="";
 				String column=null;
 				String id = null;
+				try
+				{
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					
@@ -1675,6 +1728,14 @@ public class SaveContents {
 					order.setOrderReturnOrRTO(orderReturn);
 					returnlist.put(errorMessage.toString(), order);
 				}
+				}catch(Exception e)
+				{
+					log.error("Failed!", e);
+					errorMessage
+					.append("Invalid input");
+					order.setOrderReturnOrRTO(orderReturn);
+					returnlist.put(errorMessage.toString(), order);
+				}
 			}
 			Set<String> errorSet = returnlist.keySet();
 			downloadUploadReportXLS(offices, "OrderReturnReport", 11, errorSet,
@@ -1711,10 +1772,10 @@ public class SaveContents {
 				validaterow = true;
 				entry = worksheet.getRow(rowIndex);
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
-				log.debug(entry.getCell(1).toString());
-				log.debug(entry.getCell(2).toString());
-				log.debug(entry.getCell(3).toString());
-				log.debug(entry.getCell(4).toString());
+				log.debug(entry.getCell(1));
+				log.debug(entry.getCell(2));
+				log.debug(entry.getCell(3));
+				log.debug(entry.getCell(4));
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					dnBean = new DebitNoteBean();
@@ -2001,9 +2062,11 @@ public class SaveContents {
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
-				log.debug(entry.getCell(1).toString());
-				log.debug(entry.getCell(2).toString());
+				log.debug(entry.getCell(1));
+				log.debug(entry.getCell(2));
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
+				try
+				{
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					expensebean = new ExpenseBean();
@@ -2081,6 +2144,7 @@ public class SaveContents {
 						errorMessage.append(" Expense Date is null;");
 						validaterow = false;
 					}
+				
 				}
 				log.debug("Validaterow : " + validaterow + "  error message: "
 						+ errorMessage);
@@ -2090,6 +2154,12 @@ public class SaveContents {
 							sellerId);
 				else {
 					returnlist.put(errorMessage.toString(), expensebean);
+				}
+			}catch(Exception e)
+				{
+				log.error("Failed!", e);
+				errorMessage.append(" Invalid Input!");
+				returnlist.put(errorMessage.toString(), expensebean);
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
@@ -2280,7 +2350,8 @@ public class SaveContents {
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				// orderReturn = new OrderRTOorReturn();
 				gatepass = new GatePass();
-
+				try
+				{
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					gatepass.setGatepassId(entry.getCell(0).toString());
@@ -2414,6 +2485,12 @@ public class SaveContents {
 							gatepass, sellerId));
 				} else {
 					returnlist.put(errorMessage.toString(), gatepass);
+				}
+			}catch(Exception e)
+				{
+				log.error("Failed!", e);
+				errorMessage.append(" Invalid input ");
+				returnlist.put(errorMessage.toString(), gatepass);
 				}
 			}
 
