@@ -2504,6 +2504,7 @@ public class OrderDaoImpl implements OrderDao {
 			order.setPccAmount(pccAmount);
 			order.setShippingCharges(shippingCharges);
 		} catch (Exception e) {
+			log.error("Failed!!", e);
 			e.printStackTrace();
 			return false;
 		}
@@ -2538,6 +2539,8 @@ public class OrderDaoImpl implements OrderDao {
 		boolean paycollcharges = false;
 		boolean isRevShippingFee = false;
 
+		try
+		{
 		Partner partner = partnerService
 				.getPartner(order.getPcName(), sellerId);
 
@@ -2841,7 +2844,11 @@ public class OrderDaoImpl implements OrderDao {
 		if (serviceTax > 0) {
 			totalcharge = totalcharge + (totalcharge * serviceTax) / 100;
 		}
-
+		}
+		catch(Exception e)
+		{
+			log.error("Failed",e);
+		}
 		log.info("*** calculateReturnCharges ends : OrderDaoImpl ***");
 		return totalcharge;
 	}
