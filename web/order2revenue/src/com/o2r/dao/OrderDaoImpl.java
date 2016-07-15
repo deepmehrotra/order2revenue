@@ -102,6 +102,7 @@ public class OrderDaoImpl implements OrderDao {
 		Events event = null;
 		Partner partner = null;
 		Product product;
+		
 		try {
 			product = productService.getProduct(order.getProductSkuCode(),
 					sellerId);
@@ -344,7 +345,7 @@ public class OrderDaoImpl implements OrderDao {
 	public void addOrder(List<Order> orderList, int sellerId)
 			throws CustomException {
 
-		log.info("*** AddOrder starts ***");
+		log.info("*** AddOrder List starts ***");
 		Seller seller = null;
 		Date reconciledate = null;
 		Date tempDate = null;
@@ -353,6 +354,8 @@ public class OrderDaoImpl implements OrderDao {
 		Events event = null;
 		Partner partner = null;
 		Product product;
+		boolean status=true;
+		StringBuffer erroneousOrders=null;
 		try {
 
 			session = sessionFactory.openSession();
@@ -362,11 +365,17 @@ public class OrderDaoImpl implements OrderDao {
 						.createCriteria(Seller.class).add(
 								Restrictions.eq("id", sellerId));
 				seller = (Seller) criteria.list().get(0);
+				erroneousOrders=new StringBuffer("");
 				for (Order order : orderList) {
+					
 					try {
 						product = productService.getProduct(
 								order.getProductSkuCode(), sellerId);
 						partner = partnerService.getPartner(order.getPcName(), sellerId);
+						
+						partner=(Partner) session.get(Partner.class, partner.getPcId());
+						Hibernate.initialize(partner.getOrders());
+						
 						calculateDeliveryDate(order, sellerId);
 						
 						float taxpercent = taxDetailService
@@ -574,7 +583,8 @@ public class OrderDaoImpl implements OrderDao {
 						session.getTransaction().commit();
 
 					} catch (Exception e) {
-						
+						status=false;
+						erroneousOrders.append(order.getChannelOrderID()+",");
 						e.printStackTrace();
 						log.error("Failed!", e);
 
@@ -582,16 +592,20 @@ public class OrderDaoImpl implements OrderDao {
 				}
 			}
 		} catch (Exception e) {
+			
 			e.printStackTrace();
 			log.error("Failed!", e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
-			throw new CustomException(GlobalConstant.addOrderError, new Date(),
+			throw new CustomException(erroneousOrders.toString(), new Date(),
 					1, GlobalConstant.addOrderErrorCode, e);
 		} finally {
 			session.close();
 		}
-		log.info("*** AddOrder ends ***");
+		if(!status)
+			throw new CustomException(erroneousOrders.toString(), new Date(),
+					1, GlobalConstant.addOrderErrorCode, new Exception());
+		log.info("*** AddOrder List ends ***");
 	}
 	
 	
@@ -2251,6 +2265,7 @@ public class OrderDaoImpl implements OrderDao {
 		String tempStr = null;
 		String state = null;
 
+		try {
 		if (partner.getNrnReturnConfig() != null
 				&& partner.getNrnReturnConfig().getMetroList() != null
 				&& partner.getNrnReturnConfig().getMetroList().length() != 0) {
@@ -2278,7 +2293,7 @@ public class OrderDaoImpl implements OrderDao {
 			chargesMap.put(charge.getChargeName(), charge.getChargeAmount());
 		}
 		// Extracting comiision value
-		try {
+		
 			if (partner.getNrnReturnConfig().getCommissionType() != null
 					&& partner.getNrnReturnConfig().getCommissionType()
 							.equals("fixed")) {
