@@ -117,4 +117,6 @@ public interface OrderDao {
 
 	List<Order> listDisputedGatePasses(int sellerId, int pageNo)
 			throws CustomException;
+
+	public void addOrder(List<Order> orderList, int sellerId) throws CustomException;
 }

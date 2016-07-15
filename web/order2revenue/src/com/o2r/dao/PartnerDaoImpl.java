@@ -134,6 +134,7 @@ public class PartnerDaoImpl implements PartnerDao {
 					Restrictions.eq("id", sellerId));
 			criteria.createAlias("partners", "partner",CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.like("partner.pcName", partnername, MatchMode.EXACT))
+				//	.add(Restrictions.eq("partner.pcName", partnername))
 					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
 			if (criteria.list() != null && criteria.list().size() != 0) {

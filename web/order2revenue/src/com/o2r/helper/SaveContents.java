@@ -127,9 +127,11 @@ public class SaveContents {
 		OrderTaxBean otb = null;
 		Partner partner = null;
 		Events event = null;
+		List<Order> saveList=null;
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
+			saveList=new ArrayList<Order>();
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
@@ -450,8 +452,9 @@ public class SaveContents {
 				if (validaterow) {
 					order.setCustomer(customerBean);
 					order.setOrderTax(otb);
-					orderService.addOrder(ConverterClass.prepareModel(order),
-							sellerId);
+					/*orderService.addOrder(ConverterClass.prepareModel(order),
+							sellerId);*/
+					saveList.add(ConverterClass.prepareModel(order));
 				} else {
 					order.setCustomer(customerBean);
 					order.setOrderTax(otb);
@@ -465,7 +468,7 @@ public class SaveContents {
 				{
 					
 					log.error("Failed!", e);
-					returnOrderMap.put("Sever error in this order!"+errorMessage.toString(), order);
+					returnOrderMap.put("Invalid input!"+errorMessage.toString(), order);
 				}
 			}
 			Set<String> errorSet = returnOrderMap.keySet();

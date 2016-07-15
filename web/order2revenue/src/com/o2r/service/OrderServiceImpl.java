@@ -239,4 +239,11 @@ public class OrderServiceImpl implements OrderService {
 			int sellerId) throws CustomException {
 		return orderDao.getGatepassesFromConsolidated(returnId, sellerId);
 	}
+
+	@Override
+	public void addOrder(List<Order> orderList, int sellerId)
+			throws CustomException {
+		orderDao.addOrder(orderList, sellerId);
+		
+	}
 }
