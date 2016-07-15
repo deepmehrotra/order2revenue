@@ -127,9 +127,12 @@ public class SaveContents {
 		OrderTaxBean otb = null;
 		Partner partner = null;
 		Events event = null;
+		List<Order> saveList=null;
+		Map<String,String> duplicateKey=new HashMap<String, String>();
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
+			saveList=new ArrayList<Order>();
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
@@ -157,8 +160,10 @@ public class SaveContents {
 					List<Order> onj = orderService
 							.findOrders("channelOrderID", entry.getCell(0)
 									.toString(), sellerId, false, false);
-					if (onj == null || onj.size() == 0) {
+					if ((onj == null || onj.size() == 0)&&!duplicateKey.containsKey(entry.getCell(0)
+									.toString())) {
 						order.setChannelOrderID(entry.getCell(0).toString());
+						duplicateKey.put(entry.getCell(0).toString(), "");
 					} else {
 						order.setChannelOrderID(entry.getCell(0).toString());
 						errorMessage
@@ -205,7 +210,7 @@ public class SaveContents {
 						order.setPcName(entry.getCell(3).toString());
 					else {
 						order.setPcName(entry.getCell(3).toString());
-						errorMessage.append(" Partner does not exist;");
+						errorMessage.append(" Partner do not exist;");
 						validaterow = false;
 					}
 				} else {
@@ -450,8 +455,10 @@ public class SaveContents {
 				if (validaterow) {
 					order.setCustomer(customerBean);
 					order.setOrderTax(otb);
-					orderService.addOrder(ConverterClass.prepareModel(order),
-							sellerId);
+					/*orderService.addOrder(ConverterClass.prepareModel(order),
+							sellerId);*/
+					System.out.println(" Adding order to save list : "+order.getChannelOrderID());
+					saveList.add(ConverterClass.prepareModel(order));
 				} else {
 					order.setCustomer(customerBean);
 					order.setOrderTax(otb);
@@ -465,8 +472,20 @@ public class SaveContents {
 				{
 					
 					log.error("Failed!", e);
-					returnOrderMap.put("Sever error in this order!"+errorMessage.toString(), order);
+					errorMessage.append("Invalid Input! ");
+					returnOrderMap.put(errorMessage.toString(), order);
 				}
+			}
+			try
+			{
+				System.out.println(" SaveList Size : "+saveList.size());
+				if(saveList!=null&&saveList.size()!=0)
+					orderService.addOrder(saveList, sellerId);
+			}
+			catch(CustomException ce)
+			{
+				returnOrderMap.put("1:Note-Some orders("+ce.getLocalMessage() +" ) with valid input "
+						+ "failed due to internal server error. Please contact admin.!", null);
 			}
 			Set<String> errorSet = returnOrderMap.keySet();
 			downloadUploadReportXLS(offices, "Order Report", 24, errorSet,
@@ -852,11 +871,11 @@ public class SaveContents {
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
 						errorMessage
-								.append(" Product price should be a number ");
+								.append(" Threshold limit should be a number ");
 						validaterow = false;
 					}
 				} else {
-					errorMessage.append(" Product price is null ");
+					errorMessage.append(" Threshold limit is null ");
 					validaterow = false;
 				}
 				if (entry.getCell(7) != null
@@ -938,8 +957,11 @@ public class SaveContents {
 				{
 				log.error("Failed!",e);
 				if(product!=null)
-				returnProductMap.put("Invalid input!",
+				{
+					errorMessage.append("Invalid Input! ");
+				returnProductMap.put(errorMessage.toString(),
 						ConverterClass.prepareProductBean(product));
+				}
 				}
 			}
 			Set<String> errorSet = returnProductMap.keySet();
@@ -1048,9 +1070,12 @@ public class SaveContents {
 				{
 					log.error("Failed!", e);
 					if(productConfig!=null)
-					returnProductConfigMap.put("Invalid Input!",
+					{
+						errorMessage.append("Invalid Input! ");
+					returnProductConfigMap.put(errorMessage.toString(),
 							ConverterClass
 									.prepareProductConfigBean(productConfig));
+					}
 					
 				}
 				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
@@ -1190,9 +1215,12 @@ public class SaveContents {
 			}catch(Exception e)
 				{
 				if(productConfig!=null)
-				returnProductConfigMap.put("Invalid input!",
+				{
+					errorMessage.append("Invalid Input! ");
+				returnProductConfigMap.put(errorMessage.toString(),
 						ConverterClass
 								.prepareProductConfigBean(productConfig));
+				}
 				}
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
@@ -1259,12 +1287,12 @@ public class SaveContents {
 					
 					if (entry.getCell(1) != null
 							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						if(channelOrderIdCheck.containsKey("entry.getCell(1).toString()")){
+						if(channelOrderIdCheck.containsKey(entry.getCell(1).toString())){
 							errorMessage.append("Duplicate Channel OrderId ");
 							validaterow = false;
 						}else{
 							channelOrderIdCheck.put(entry.getCell(1).toString(), entry.getCell(0).toString());
-						}						
+												
 						List<Order> onj = orderService
 								.findOrders("channelOrderID", entry.getCell(1)
 										.toString(), sellerId, false, false);
@@ -1275,6 +1303,7 @@ public class SaveContents {
 							errorMessage
 									.append(" Channel OrderId not present ");
 							validaterow = false;
+						}
 						}
 					} else {
 						errorMessage.append(" Channel OrderId is null ");

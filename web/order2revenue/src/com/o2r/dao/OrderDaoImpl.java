@@ -102,6 +102,7 @@ public class OrderDaoImpl implements OrderDao {
 		Events event = null;
 		Partner partner = null;
 		Product product;
+		
 		try {
 			product = productService.getProduct(order.getProductSkuCode(),
 					sellerId);
@@ -338,6 +339,276 @@ public class OrderDaoImpl implements OrderDao {
 		}
 		log.info("*** AddOrder ends ***");
 	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public void addOrder(List<Order> orderList, int sellerId)
+			throws CustomException {
+
+		log.info("*** AddOrder List starts ***");
+		Seller seller = null;
+		Date reconciledate = null;
+		Date tempDate = null;
+		Session session = null;
+		TaxDetail taxDetails = null;
+		Events event = null;
+		Partner partner = null;
+		Product product;
+		boolean status=true;
+		StringBuffer erroneousOrders=null;
+		try {
+
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			if (orderList != null && orderList.size() != 0) {
+				Criteria criteria = session
+						.createCriteria(Seller.class).add(
+								Restrictions.eq("id", sellerId));
+				seller = (Seller) criteria.list().get(0);
+				erroneousOrders=new StringBuffer("");
+				for (Order order : orderList) {
+					
+					try {
+						product = productService.getProduct(
+								order.getProductSkuCode(), sellerId);
+						partner = partnerService.getPartner(order.getPcName(), sellerId);
+						
+						partner=(Partner) session.get(Partner.class, partner.getPcId());
+						Hibernate.initialize(partner.getOrders());
+						
+						calculateDeliveryDate(order, sellerId);
+						
+						float taxpercent = taxDetailService
+								.getTaxCategory(
+										order.getOrderTax().getTaxCategtory(),
+										sellerId).getTaxPercent();
+						
+							reconciledate = getreconciledate(order, seller
+									.getPartners().get(0), order.getOrderDate());
+							if (reconciledate != null)
+								order.setPaymentDueDate(reconciledate);
+							log.debug(" after settinf rec date delivery date :"
+									+ order.getDeliveryDate());
+						
+						order.setStatus("Shipped");
+						if (partner != null
+								&& partner.getNrnReturnConfig() != null
+								&& partner.getNrnReturnConfig()
+										.isNrCalculator()) {
+
+							// Check conditions here....
+							event = eventsService.isEventActiive(
+									order.getOrderDate(), partner.getPcName(),
+									sellerId);
+							if (event != null) {
+
+								order.setEventName(event.getEventName());
+								event.setNetSalesQuantity(event
+										.getNetSalesQuantity()
+										+ order.getQuantity());
+
+								if (event.getNrnReturnConfig()
+										.getNrCalculatorEvent()
+										.equalsIgnoreCase("variable")) {
+									if (!calculateNR(
+											event.getNrnReturnConfig(), order,
+											product.getCategoryName(),
+											product.getDeadWeight(),
+											product.getVolWeight(), sellerId))
+										throw new Exception();
+								} else if (event.getNrnReturnConfig()
+										.getNrCalculatorEvent()
+										.equalsIgnoreCase("original")) {
+									if (!calculateNR(partner, order,
+											product.getCategoryName(),
+											product.getDeadWeight(),
+											product.getVolWeight()))
+										throw new Exception();
+								}
+
+							} else if (!calculateNR(
+									partner, order,
+									product.getCategoryName(),
+									product.getDeadWeight(),
+									product.getVolWeight()))
+								throw new Exception();
+
+							log.debug(" Shipping charges :"
+									+ order.getShippingCharges()
+									+ " >> Gross net rate "
+									+ order.getGrossNetRate()
+									+ " delivery date :"
+									+ order.getDeliveryDate());
+						} else {
+
+							props = PropertiesLoaderUtils
+									.loadProperties(resource);
+							order.setPartnerCommission((order.getOrderSP() - order
+									.getGrossNetRate()) * order.getQuantity());
+
+							if (partner.isTdsApplicable())
+								order.getOrderTax()
+										.setTdsToDeduct(
+												(order.getPartnerCommission() - (order
+														.getPartnerCommission() * 100 / (100 + Double.parseDouble(props
+														.getProperty("serviceTax")))))
+														* (((props
+																.getProperty("TDS")) != null ? Double
+																.parseDouble(props
+																		.getProperty("TDS"))
+																: 0) / 100)
+														* order.getQuantity());
+
+						}
+						order.setOrderMRP(order.getOrderMRP()
+								* order.getQuantity());
+						order.setOrderSP(order.getOrderSP()
+								* order.getQuantity());
+						order.setNetRate(order.getGrossNetRate()
+								* order.getQuantity());
+						if (event != null) {
+							event.setNetSalesAmount(event.getNetSalesAmount()
+									+ order.getNetRate());
+							eventsService.addEvent(event, sellerId);
+						}
+
+						order.setDiscount((Math.abs(order.getOrderMRP()
+								- order.getOrderSP())));
+						log.debug(" Tax cal SP:"
+								+ order.getOrderSP()
+								+ " >>TAxReate="
+								+ taxpercent
+								+ "  Tax>>"
+								+ (order.getOrderSP() - (order.getOrderSP() * (100 / (100 + seller
+										.getPartners().get(0).getTaxrate())))));
+						order.getOrderTax()
+								.setTax(order.getOrderSP()
+										- (order.getOrderSP() * (100 / (100 + taxpercent))));
+						taxDetails = new TaxDetail();
+						taxDetails.setBalanceRemaining(order.getOrderTax()
+								.getTax());
+						taxDetails.setParticular(order.getOrderTax()
+								.getTaxCategtory());
+						taxDetails.setUploadDate(order.getOrderDate());
+						/*
+						 * taxDetailService.addMonthlyTaxDetail(session,
+						 * taxDetails, sellerId);
+						 */
+
+						order.setTotalAmountRecieved(order.getNetRate());
+						order.setFinalStatus("In Process");
+						// Set Order Timeline
+						OrderTimeline timeline = new OrderTimeline();
+						/* checking if customer is available */
+						log.debug(" Customer Email id in add order :"
+								+ order.getCustomer().getCustomerEmail());
+						order.getCustomer().setSellerId(sellerId);
+						order.getCustomer().getOrders().add(order);
+
+						// Adding order to the Partner
+						if (partner.getOrders() != null
+								&& order.getOrderId() == 0) {
+							partner.getOrders().add(order);
+						}
+
+						// Setting payment difference for old orders
+						if (order.getPaymentDueDate().compareTo(
+								java.util.Calendar.getInstance().getTime()) < 0) {
+							order.getOrderPayment().setPaymentDifference(
+									0 - order.getNetRate());
+							order.setStatus("Payment Disputed");
+							order.setFinalStatus("Actionable");
+
+						}
+
+						// Setting return and rto limits
+						tempDate = (Date) order.getDeliveryDate().clone();
+						tempDate.setDate(tempDate.getDate()
+								+ partner.getMaxReturnAcceptance());
+						order.setReturnLimitCrossed(tempDate);
+						tempDate = (Date) order.getDeliveryDate().clone();
+						tempDate.setDate(tempDate.getDate()
+								+ partner.getMaxRTOAcceptance());
+						order.setrTOLimitCrossed(tempDate);
+						// Setting Pr and Gross Profit for Order
+						order.setPr(order.getNetRate()
+								- order.getOrderTax().getTax());
+
+						order.setGrossProfit(order.getPr()
+								- (product.getProductPrice() * order
+										.getQuantity()));
+
+						// Setting order status if return limit is crossed
+						if (order.getReturnLimitCrossed().compareTo(
+								java.util.Calendar.getInstance().getTime()) < 0) {
+							order.setStatus("Return Limit Crossed");
+						}
+						if (order.getOrderId() != 0) {
+							System.out.println(" Saving edited order");
+							// Code for order timeline
+							timeline.setEventDate(new Date());
+							timeline.setEvent(" Order Edited");
+							order.getOrderTimeline().add(timeline);
+							order.setLastActivityOnOrder(new Date());
+							session.merge(order);
+						} else {
+							log.debug("******Saving new  order delivery date : "
+									+ order.getDeliveryDate());
+							// Code for order timeline
+							timeline.setEvent("Order Created");
+							order.setLastActivityOnOrder(new Date());
+							timeline.setEventDate(new Date());
+							order.getOrderTimeline().add(timeline);
+							order.setSeller(seller);
+							seller.getOrders().add(order);
+							session.saveOrUpdate(partner);
+							session.saveOrUpdate(seller);
+						}
+						taxDetailService.addMonthlyTaxDetail(session,
+								taxDetails, sellerId);
+						if (partner.isTdsApplicable()) {
+							log.debug(" PC " + order.getPartnerCommission());
+							taxDetails = new TaxDetail();
+							taxDetails.setBalanceRemaining(order.getOrderTax()
+									.getTdsToDeduct());
+							taxDetails.setParticular("TDS");
+							taxDetails.setUploadDate(order.getShippedDate());
+							taxDetailService.addMonthlyTDSDetail(session,
+									taxDetails, sellerId);
+						}
+						productService.updateInventory(
+								order.getProductSkuCode(), 0, 0,
+								order.getQuantity(), false, sellerId,
+								order.getShippedDate());
+						session.getTransaction().commit();
+
+					} catch (Exception e) {
+						status=false;
+						erroneousOrders.append(order.getChannelOrderID()+",");
+						e.printStackTrace();
+						log.error("Failed!", e);
+
+					}
+				}
+			}
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			log.error("Failed!", e);
+			log.info("Error : " + GlobalConstant.addOrderError);
+			log.info("Error : " + GlobalConstant.addOrderErrorCode);
+			throw new CustomException(erroneousOrders.toString(), new Date(),
+					1, GlobalConstant.addOrderErrorCode, e);
+		} finally {
+			session.close();
+		}
+		if(!status)
+			throw new CustomException(erroneousOrders.toString(), new Date(),
+					1, GlobalConstant.addOrderErrorCode, new Exception());
+		log.info("*** AddOrder List ends ***");
+	}
+	
+	
 
 	@Override
 	public Order addPO(Order order, int sellerId) throws CustomException {
@@ -2016,6 +2287,7 @@ public class OrderDaoImpl implements OrderDao {
 		String tempStr = null;
 		String state = null;
 
+		try {
 		if (partner.getNrnReturnConfig() != null
 				&& partner.getNrnReturnConfig().getMetroList() != null
 				&& partner.getNrnReturnConfig().getMetroList().length() != 0) {
@@ -2043,7 +2315,7 @@ public class OrderDaoImpl implements OrderDao {
 			chargesMap.put(charge.getChargeName(), charge.getChargeAmount());
 		}
 		// Extracting comiision value
-		try {
+		
 			if (partner.getNrnReturnConfig().getCommissionType() != null
 					&& partner.getNrnReturnConfig().getCommissionType()
 							.equals("fixed")) {
@@ -2254,6 +2526,7 @@ public class OrderDaoImpl implements OrderDao {
 			order.setPccAmount(pccAmount);
 			order.setShippingCharges(shippingCharges);
 		} catch (Exception e) {
+			log.error("Failed!!", e);
 			e.printStackTrace();
 			return false;
 		}
@@ -2288,6 +2561,8 @@ public class OrderDaoImpl implements OrderDao {
 		boolean paycollcharges = false;
 		boolean isRevShippingFee = false;
 
+		try
+		{
 		Partner partner = partnerService
 				.getPartner(order.getPcName(), sellerId);
 
@@ -2591,7 +2866,11 @@ public class OrderDaoImpl implements OrderDao {
 		if (serviceTax > 0) {
 			totalcharge = totalcharge + (totalcharge * serviceTax) / 100;
 		}
-
+		}
+		catch(Exception e)
+		{
+			log.error("Failed",e);
+		}
 		log.info("*** calculateReturnCharges ends : OrderDaoImpl ***");
 		return totalcharge;
 	}
