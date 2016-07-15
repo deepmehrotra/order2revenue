@@ -1,5 +1,10 @@
 package com.o2r.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.o2r.model.Order;
+
 
 public class CustomerBean {
 
@@ -12,6 +17,7 @@ public class CustomerBean {
 	private String customerAddress;
 	private String zipcode;
 	private int sellerId;
+	private List<Order> orders =new ArrayList<Order>();
 	
 	public String getCustomerName() {
 		return customerName;
@@ -60,5 +66,11 @@ public class CustomerBean {
 	}
 	public void setZipcode(String zipcode) {
 		this.zipcode = zipcode;
+	}
+	public List<Order> getOrders() {
+		return orders;
+	}
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
 	}
 }

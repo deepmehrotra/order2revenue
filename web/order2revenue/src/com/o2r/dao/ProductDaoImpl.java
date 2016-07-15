@@ -1,5 +1,6 @@
 package com.o2r.dao;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,8 +20,10 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.bean.ProductConfigBean;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
+import com.o2r.helper.HelperClass;
 import com.o2r.model.Category;
 import com.o2r.model.NRnReturnCharges;
 import com.o2r.model.Order;
@@ -51,7 +54,12 @@ public class ProductDaoImpl implements ProductDao {
 	private OrderService orderService;
 
 	private final int pageSize = 500;
-
+	private final String listProductConfig="select pc.productSkuCode,pc.channelName,pc.channelSkuRef,pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,pc.eossDiscountValue,pc.grossNR,pc.productConfigId from productconfig pc,product p,product_productconfig pp where p.seller_id=? and pp.Product_productId=p.productId and pp.productConfig_productConfigId=pc.productConfigId and pc.mrp <> 0";
+	private final String listProductMapping="select pc.productSkuCode,pc.channelName,pc.channelSkuRef,pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,pc.eossDiscountValue,pc.grossNR,pc.productConfigId from productconfig pc,product p,product_productconfig pp where p.seller_id=? and pp.Product_productId=p.productId and pp.productConfig_productConfigId=pc.productConfigId and pc.mrp=0";
+	
+	private final String searchProductConfig="select pc.productSkuCode,pc.channelName,pc.channelSkuRef,pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,pc.eossDiscountValue,pc.grossNR,pc.productConfigId from productconfig pc,product p,product_productconfig pp where p.seller_id=? and pp.Product_productId=p.productId and pp.productConfig_productConfigId=pc.productConfigId and pc.mrp <> 0 and pc.";
+	private final String searchProductMapping="select pc.productSkuCode,pc.channelName,pc.channelSkuRef,pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,pc.eossDiscountValue,pc.grossNR,pc.productConfigId from productconfig pc,product p,product_productconfig pp where p.seller_id=? and pp.Product_productId=p.productId and pp.productConfig_productConfigId=pc.productConfigId and pc.mrp=0 and pc.";
+	
 	static Logger log = Logger.getLogger(ProductDaoImpl.class.getName());
 
 	@Override
@@ -419,7 +427,104 @@ public class ProductDaoImpl implements ProductDao {
 		log.info("*** listProducts Ends : ProductDaoImpl ****");
 		return returnlist;
 	}
-
+	
+	@Override
+	public List<ProductConfig> listProductConfig(int sellerId, int pageNo, String condition)throws CustomException {
+		
+		log.info("*** listProductConfig by SellerId Starts : ProductDaoImpl ****");
+		List<ProductConfig> productConfigList=new ArrayList<ProductConfig>();
+		ProductConfig productConfig=null;
+		String targetSQL=null;
+		if(condition.equals("config")){
+			targetSQL=listProductConfig;
+		}else{
+			targetSQL=listProductMapping;
+		}
+		try {
+			Session session=sessionFactory.openSession();
+			session.beginTransaction();			
+			Query listQuery=session.createSQLQuery(targetSQL);
+					listQuery.setInteger(0, sellerId);
+					listQuery.setFirstResult(pageNo * pageSize);
+					listQuery.setMaxResults(pageSize);
+			if(listQuery != null && listQuery.list().size() != 0){
+				List<Object> objects=listQuery.list();
+				for(Object eachObject : objects) {
+					Object[] object=(Object[]) eachObject;
+					System.out.println(object.length);
+					productConfig=new ProductConfig();
+					productConfig.setProductSkuCode((String)object[0]);
+					productConfig.setChannelName((String)object[1]);
+					productConfig.setChannelSkuRef((String)object[2]);
+					productConfig.setDiscount((float)object[3]);
+					productConfig.setMrp((double)object[4]);
+					productConfig.setProductPrice((double)object[5]);
+					productConfig.setSuggestedPOPrice((double)object[6]);
+					productConfig.setEossDiscountValue((double)object[7]);
+					productConfig.setGrossNR((double)object[8]);
+					productConfig.setProductConfigId((int)object[9]);
+					productConfigList.add(productConfig);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+			throw new CustomException(GlobalConstant.listProductsError,
+					new Date(), 3, GlobalConstant.listProductsErrorCode, e);
+		}
+		log.info("*** listProductConfig by SellerId Ends : ProductDaoImpl ****");
+		return productConfigList;
+	}
+	
+	@Override
+	public List<ProductConfig> searchProductConfig(String field, String value,
+			int sellerId, String condition) throws CustomException {
+		List<ProductConfig> productConfigList=new ArrayList<ProductConfig>();
+		ProductConfig productConfig=null;
+		String targetSQL=null;
+		if(condition.equals("config")){
+			targetSQL=searchProductConfig+field+"=?";
+		}else{
+			targetSQL=searchProductMapping+field+"=?";
+		}		
+		try {
+			Session session=sessionFactory.openSession();
+			session.beginTransaction();			
+			Query listQuery=session.createSQLQuery(targetSQL);
+					listQuery.setInteger(0, sellerId);					
+					listQuery.setString(1, value);
+					
+					if(listQuery != null && listQuery.list().size() != 0){
+						List<Object> objects=listQuery.list();
+						for(Object eachObject : objects) {
+							Object[] object=(Object[]) eachObject;
+							System.out.println(object.length);
+							productConfig=new ProductConfig();
+							productConfig.setProductSkuCode((String)object[0]);
+							productConfig.setChannelName((String)object[1]);
+							productConfig.setChannelSkuRef((String)object[2]);
+							productConfig.setDiscount((float)object[3]);
+							productConfig.setMrp((double)object[4]);
+							productConfig.setProductPrice((double)object[5]);
+							productConfig.setSuggestedPOPrice((double)object[6]);
+							productConfig.setEossDiscountValue((double)object[7]);
+							productConfig.setGrossNR((double)object[8]);
+							productConfig.setProductConfigId((int)object[9]);
+							productConfigList.add(productConfig);
+						}
+					}
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+			throw new CustomException(GlobalConstant.getProductError,
+					new Date(), 3, GlobalConstant.getProductErrorCode, e);
+		}
+		return productConfigList;
+	}
+	
+	
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Product> listProducts(int sellerId) throws CustomException {
@@ -876,12 +981,6 @@ public class ProductDaoImpl implements ProductDao {
 									count++;
 								}
 								System.out.println(count);
-								/*
-								 * session.createSQLQuery(
-								 * "delete from productstocklist where stockId=:ids"
-								 * ) .setParameterList("ids",
-								 * ids).executeUpdate();
-								 */
 
 								int countPro = session.createSQLQuery(
 										"delete from product where productId="

@@ -16,10 +16,14 @@ public interface ProductDao {
 	public void addProduct(Product product, int sellerId)
 			throws CustomException;
 
-	public void addProductConfig(ProductConfig productConfig, int sellerId);
+	public void addProductConfig(ProductConfig productConfig, int sellerId)throws CustomException;
 
 	public List<Product> listProducts(int sellerId, int pageNo)
 			throws CustomException;
+	
+	public List<ProductConfig> listProductConfig(int sellerId, int pageNo, String condition)throws CustomException;
+	
+	public List<ProductConfig> searchProductConfig(String field, String value, int sellerId, String condition)throws CustomException;
 
 	public List<Product> listProducts(int sellerId) throws CustomException;
 
