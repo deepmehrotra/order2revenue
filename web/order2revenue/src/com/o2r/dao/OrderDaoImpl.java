@@ -557,6 +557,31 @@ public class OrderDaoImpl implements OrderDao {
 		log.info("*** listOrders with sellerId n pageNo ends***");
 		return returnlist;
 	}
+	
+	@Override
+	public List<Order> listMpOrders(int sellerId)throws CustomException {
+		
+		List<Order> orderList=null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions.eq("poOrder", false));
+			
+			if(criteria != null && criteria.list().size() != 0){
+				orderList=criteria.list();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+			throw new CustomException(GlobalConstant.listOrdersError,
+					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
+		}
+		return orderList;
+	}
 
 	@Override
 	public List<Order> listPOOrders(int sellerId, int pageNo)
@@ -1258,21 +1283,18 @@ public class OrderDaoImpl implements OrderDao {
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Seller.class).add(
-					Restrictions.eq("id", sellerId));
-			seller = (Seller) criteria.list().get(0);
-
-			for (Order order : seller.getOrders()) {
-				if (order!=null&&order.getCustomer()!=null&&order.getCustomer().getCustomerCity()
-						.equalsIgnoreCase(value)
-						|| order.getCustomer().getCustomerName()
-								.equalsIgnoreCase(value)
-						|| order.getCustomer().getCustomerEmail()
-								.equalsIgnoreCase(value)
-						|| order.getCustomer().getCustomerPhnNo()
-								.equalsIgnoreCase(value))
-					orderlist.add(order);
-			}
+			
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.createAlias("customer", "customer",CriteriaSpecification.LEFT_JOIN);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions.eq("poOrder", false))
+					.add(Restrictions.eq("customer."+column, value));
+			if(criteria != null && criteria.list().size() != 0){
+				System.out.println(criteria.list().size());
+				orderlist=criteria.list();
+			}			
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {

@@ -23,6 +23,8 @@ public interface OrderService {
 	public void addOrder(Order order, int sellerId) throws CustomException;
 
 	public List<Order> listOrders(int sellerId) throws CustomException;
+	
+	public List<Order> listMpOrders(int sellerId) throws CustomException;
 
 	public Order getOrder(int orderId) throws CustomException;
 

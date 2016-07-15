@@ -37,6 +37,11 @@ public class OrderServiceImpl implements OrderService {
 		orderDao.addOrder(order, sellerId);
 
 	}
+	
+	@Override
+	public List<Order> listMpOrders(int sellerId) throws CustomException {		
+		return orderDao.listMpOrders(sellerId);
+	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)

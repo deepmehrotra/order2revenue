@@ -706,6 +706,28 @@ public class ConverterClass {
 
 		return customerBean;
 	}
+	
+	public static List<CustomerBean> prepareListofCusomerBean(
+			List<Customer> customers) {
+		List<CustomerBean> beans = null;
+		if (customers != null && !customers.isEmpty()) {
+			beans = new ArrayList<CustomerBean>();
+			CustomerBean bean = null;
+			for (Customer customer : customers) {
+				bean = new CustomerBean();
+				bean.setCustomerId(customer.getCustomerId());
+				bean.setCustomerAddress(customer.getCustomerAddress());
+				bean.setCustomerCity(customer.getCustomerCity());
+				bean.setCustomerEmail(customer.getCustomerEmail());
+				bean.setCustomerName(customer.getCustomerName());
+				bean.setCustomerPhnNo(customer.getCustomerPhnNo());
+				bean.setZipcode(customer.getZipcode());
+				beans.add(bean);
+			}
+		}
+		return beans;
+	}
+	
 
 	public static ExpenseCategoryBean prepareExpenseCategoryBean(
 			ExpenseCategory category) {
@@ -717,8 +739,6 @@ public class ConverterClass {
 			bean.setExpcatName(category.getExpcatName());
 			bean.setExpenseSize(category.getExpenses().size());
 		}
-		// bean.setExpenses(prepareListofExpenseBean(category.getExpenses()));
-
 		return bean;
 	}
 

@@ -35,8 +35,19 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public void addProductConfig(ProductConfig productConfig, int sellerId) {
+	public void addProductConfig(ProductConfig productConfig, int sellerId)throws CustomException {
 		productDao.addProductConfig(productConfig, sellerId);
+	}
+	
+	@Override
+	public List<ProductConfig> listProductConfig(int sellerId, int pageNo, String condition)throws CustomException {
+		return productDao.listProductConfig(sellerId, pageNo, condition);
+	}
+	
+	@Override
+	public List<ProductConfig> searchProductConfig(String field, String value,
+			int sellerId, String condition) throws CustomException {		
+		return productDao.searchProductConfig(field, value, sellerId, condition);
 	}
 
 	@Override
