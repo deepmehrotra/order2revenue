@@ -121,7 +121,9 @@ public class OrderController {
 				downloadService.downloadGatePassXLS(response);
 			} else if (sheetvalue.equals("productSummary")) {
 				downloadService.downloadProductXLS(response);
-			} else if (sheetvalue.equals("productConfigSummary")) {
+			}else if (sheetvalue.equals("editProductSummary")) {
+				downloadService.downloadEditProductXLS(response);
+			}else if (sheetvalue.equals("productConfigSummary")) {
 				downloadService.downloadProductConfigXLS(response);
 			} else if (sheetvalue.equals("inventorySummary")) {
 				downloadService.downloadInventoryXLS(response);
@@ -279,6 +281,12 @@ public class OrderController {
 							files.get(0), sellerId, applicationPath,
 							uploadReport));
 					model.put("mapType", "productMap");
+					break;					
+				case "editProductSummary":
+					model.put("editProductMap", saveContents.saveEditProductContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport));
+					model.put("mapType", "editProductMap");
 					break;
 				case "productConfigSummary":
 					model.put("productMap", saveContents

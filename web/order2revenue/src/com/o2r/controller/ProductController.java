@@ -538,7 +538,7 @@ public class ProductController {
 		try {
 			if (request.getParameter("id") != null) {
 				int productId = Integer.parseInt(request.getParameter("id"));
-				product = productService.getProduct(productId);
+				product = productService.getProduct(productId);				
 			}
 		} catch (CustomException ce) {
 			log.error("editProduct exception : " + ce.toString());

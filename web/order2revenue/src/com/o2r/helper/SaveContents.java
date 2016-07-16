@@ -978,6 +978,165 @@ public class SaveContents {
 		log.info("$$$ saveProductContents ends : SaveContents $$$");
 		return returnProductMap;
 	}
+	
+	
+	public Map<String, ProductBean> saveEditProductContents(MultipartFile file,
+			int sellerId, String path, UploadReport uploadReport)
+			throws IOException {
+
+		log.info("$$$ saveEditProductContents starts : SaveContents $$$");
+		boolean validaterow = true;
+		Map<String, ProductBean> returnProductMap = new LinkedHashMap<>();
+		StringBuffer errorMessage = null;
+		Product product=null;
+		try {
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			HSSFRow entry;
+			Integer noOfEntries = 1;
+
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			log.info(noOfEntries.toString());
+			log.debug("After getting no of rows" + noOfEntries);
+			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {				
+				try
+				{
+					entry = worksheet.getRow(rowIndex);
+					validaterow = true;
+					errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
+					log.debug("Product 1" + entry.getCell(1));
+					log.debug("Product  2" + entry.getCell(2));
+					log.debug(entry.getCell(3));
+					log.debug(entry.getCell(4));				
+					
+					if (entry.getCell(1) != null
+							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						product = productService.getProduct(entry.getCell(1)
+								.toString(), sellerId);
+						if (product == null) {
+							errorMessage.append(" Invalid SKU code ! Product Doesn't Exist ! ");
+							validaterow = false;
+						} else {
+							
+							if (entry.getCell(0) != null
+									&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								product.setProductName(entry.getCell(0).toString());
+							}						
+							if (entry.getCell(2) != null
+									&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									product.setProductPrice(Float.valueOf(entry.getCell(2)
+											.toString()));
+								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
+									errorMessage.append(" Product price should be a number ");
+									validaterow = false;
+								}
+							}						
+							if (entry.getCell(3) != null
+									&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									product.setThreholdLimit(Float.valueOf(
+											entry.getCell(3).toString()).longValue());
+								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
+									errorMessage.append(" Threshold limit should be a number ");
+									validaterow = false;
+								}
+							}
+							if (entry.getCell(5) != null
+									&& entry.getCell(5).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									product.setLength(Float.valueOf(
+											entry.getCell(5).toString()).longValue());
+								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
+									errorMessage.append(" Length should be a number ");
+									validaterow = false;
+								}
+							}
+							if (entry.getCell(6) != null
+									&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									product.setBreadth(Float.valueOf(
+											entry.getCell(6).toString()).longValue());
+								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
+									errorMessage.append(" Breadth should be a number ");
+									validaterow = false;
+								}
+							}
+							if (entry.getCell(7) != null
+									&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									product.setHeight(Float.valueOf(
+											entry.getCell(7).toString()).longValue());
+								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
+									errorMessage.append(" Height should be a number ");
+									validaterow = false;
+								}
+							}
+							if (entry.getCell(8) != null
+									&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									product.setDeadWeight((float) entry.getCell(8).getNumericCellValue());
+								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
+									errorMessage.append(" Dead Weight should be a number ");
+									validaterow = false;
+								}
+							}						
+							product.setVolume(product.getHeight() * product.getLength()
+									* product.getBreadth());
+							product.setVolWeight(product.getVolume() / 5);
+							if (entry.getCell(4) != null
+									&& entry.getCell(4).getCellType() != HSSFCell.CELL_TYPE_BLANK)
+								product.setChannelSKU(entry.getCell(4).toString());
+							
+						}
+					} else {
+						errorMessage.append(" Blank or Null Sku Value ! SKU Code Should Not Be Blank or Null ! ");
+						validaterow = false;
+					}
+					if (validaterow) {
+						productService.addProduct(product, sellerId);
+					} else {
+						returnProductMap.put(errorMessage.toString(),
+								ConverterClass.prepareProductBean(product));
+					}				
+				}catch(Exception e)
+					{
+					log.error("Failed!",e);
+					if (product != null) {
+						errorMessage.append("Invalid Input! ");
+						returnProductMap.put(errorMessage.toString(),
+								ConverterClass.prepareProductBean(product));
+					}
+				}
+			}
+			Set<String> errorSet = returnProductMap.keySet();
+			downloadUploadReportXLS(offices, "EditProductReport", 9, errorSet,
+					path, sellerId, uploadReport);
+		} catch (Exception e) {
+			log.debug("Inside save contents exception :"
+					+ e.getLocalizedMessage());
+			e.printStackTrace();
+			log.error("Failed!", e);
+			addErrorUploadReport("ProductReport", sellerId, uploadReport);
+			throw new MultipartException("Constraints Violated");
+		}
+		log.info("$$$ saveEditProductContents ends : SaveContents $$$");
+		return returnProductMap;
+	}
+	
+	
+	
+	
+	
+	
 
 	// My coding Product Config *********
 
