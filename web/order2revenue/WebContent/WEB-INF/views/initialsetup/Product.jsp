@@ -81,7 +81,7 @@
                                     <th>Stock Available</th>
                                     <th>Threshold Limit</th>
                                     <th>Channel SKU(Separated by ;)</th>
-                                     <th>Action</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>

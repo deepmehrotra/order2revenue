@@ -1004,11 +1004,12 @@ public class ProductDaoImpl implements ProductDao {
 								|| (productcat.getOsUpdate().getMonth() > orderDate.getMonth() && productcat.getOsUpdate().getYear() < orderDate.getYear())) {
 							productcat.setOpeningStock(catproductcount);
 							productcat.setOsUpdate(orderDate);
+							productcat.setProductCount(productcat.getProductCount()+quantoAdd-quantoSub);
 						}
-
 					} else {
 						productcat.setOpeningStock(productcat.getProductCount());
 						productcat.setOsUpdate(orderDate);
+						productcat.setProductCount(productcat.getProductCount()+quantoAdd-quantoSub);
 					}
                     session.saveOrUpdate(productcat);
                 }                

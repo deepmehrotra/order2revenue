@@ -91,6 +91,21 @@ public class DownloadService {
 		response.setContentType("application/vnd.ms-excel");
 		Writer.write(response, worksheet, fileName);
 	}
+	
+	public void downloadEditProductXLS(HttpServletResponse response)
+			throws ClassNotFoundException {
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet worksheet = workbook.createSheet("EditProductReport");
+		int startRowIndex = 0;
+		int startColIndex = 0;
+		Layouter.buildReport(worksheet, startRowIndex, startColIndex,
+				"EditProductReport");
+		String fileName = "EditProductReport.xls";
+		response.setHeader("Content-Disposition", "inline; filename="
+				+ fileName);
+		response.setContentType("application/vnd.ms-excel");
+		Writer.write(response, worksheet, fileName);
+	}
 
 	public void downloadProductConfigXLS(HttpServletResponse response)
 			throws ClassNotFoundException {
