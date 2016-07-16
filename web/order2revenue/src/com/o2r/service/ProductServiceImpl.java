@@ -107,10 +107,10 @@ public class ProductServiceImpl implements ProductService {
 				sellerId);
 	}
 
-	@Override
+	/*@Override
 	public void addSKUMapping(ProductConfig productConfig, int sellerId) {
 		productDao.addSKUMapping(productConfig, sellerId);
-	}
+	}*/
 
 	@Override
 	public boolean getProductwithProductConfig(int sellerId)
@@ -127,5 +127,19 @@ public class ProductServiceImpl implements ProductService {
 	public ProductConfig getProductConfig(int productConfigId)
 			throws CustomException {
 		return productDao.getProductConfig(productConfigId);
+	}
+
+	@Override
+	public void addProduct(List<Product> productList, int sellerId)
+			throws CustomException {
+		productDao.addProduct(productList, sellerId);
+		
+	}
+
+	@Override
+	public void addSKUMapping(List<ProductConfig> productConfigList,
+			int sellerId) throws CustomException {
+		productDao.addSKUMapping(productConfigList, sellerId);
+		
 	}
 }

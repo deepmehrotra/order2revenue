@@ -20,7 +20,7 @@ import com.o2r.model.ProductConfig;
  */
 public interface OrderService {
 
-	public void addOrder(Order order, int sellerId) throws CustomException;
+	//public void addOrder(Order order, int sellerId) throws CustomException;
 
 	public List<Order> listOrders(int sellerId) throws CustomException;
 	

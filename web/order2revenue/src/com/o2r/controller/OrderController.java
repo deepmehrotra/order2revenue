@@ -695,10 +695,12 @@ public class OrderController {
 
 		log.info("$$$ saveOrderDA Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
+		List<Order> orderlist=new ArrayList<Order>();
 
 		try {
 			Order order = ConverterClass.prepareModel(orderBean);
-			orderService.addOrder(order,
+			orderlist.add(order);
+			orderService.addOrder(orderlist,
 					helperClass.getSellerIdfromSession(request));
 		} catch (CustomException ce) {
 			log.error("saveOrderDA exception : " + ce.toString());

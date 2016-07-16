@@ -45,7 +45,7 @@ public interface ProductDao {
 	public ProductConfig getProductConfig(String channelSKUCode,
 			String channel, int sellerId) throws CustomException;
 
-	public void addSKUMapping(ProductConfig productConfig, int sellerId);
+	//public void addSKUMapping(ProductConfig productConfig, int sellerId);
 
 	public boolean getProductwithProductConfig(int sellerId)
 			throws CustomException;
@@ -56,6 +56,12 @@ public interface ProductDao {
 			throws CustomException;
 
 	public ProductConfig getProductConfig(int productConfigId)
+			throws CustomException;
+
+	public void addProduct(List<Product> productList, int sellerId)
+			throws CustomException;
+
+	public void addSKUMapping(List<ProductConfig> productConfigList, int sellerId)
 			throws CustomException;
 
 }

@@ -89,7 +89,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	static Logger log = Logger.getLogger(OrderDaoImpl.class.getName());
 
-	@SuppressWarnings("deprecation")
+	/*@SuppressWarnings("deprecation")
 	@Override
 	public void addOrder(Order order, int sellerId) throws CustomException {
 
@@ -218,8 +218,8 @@ public class OrderDaoImpl implements OrderDao {
 						taxDetails.setParticular(order.getOrderTax()
 								.getTaxCategtory());
 						taxDetails.setUploadDate(order.getOrderDate());
-						/*taxDetailService.addMonthlyTaxDetail(session,
-								taxDetails, sellerId);*/
+						taxDetailService.addMonthlyTaxDetail(session,
+								taxDetails, sellerId);
 					
 
 					order.setTotalAmountRecieved(order.getNetRate());
@@ -227,7 +227,7 @@ public class OrderDaoImpl implements OrderDao {
 					// Set Order Timeline
 					OrderTimeline timeline = new OrderTimeline();
 					// populating tax related values of order
-					/*if (seller.getPartners().get(0).isTdsApplicable()) {
+					if (seller.getPartners().get(0).isTdsApplicable()) {
 						log.debug(" PC " + order.getPartnerCommission());
 						taxDetails = new TaxDetail();
 						taxDetails.setBalanceRemaining(order.getOrderTax()
@@ -236,11 +236,11 @@ public class OrderDaoImpl implements OrderDao {
 						taxDetails.setUploadDate(order.getShippedDate());
 						taxDetailService.addMonthlyTDSDetail(session,
 								taxDetails, sellerId);
-					}*/
+					}
 					// Reducing Product Inventory For Order
-					/*productService.updateInventory(order.getProductSkuCode(),
-							0, 0, order.getQuantity(), false, sellerId,order.getShippedDate());*/
-					/* checking if customer is available */
+					productService.updateInventory(order.getProductSkuCode(),
+							0, 0, order.getQuantity(), false, sellerId,order.getShippedDate());
+					 checking if customer is available 
 					log.debug(" Customer Email id in add order :"
 							+ order.getCustomer().getCustomerEmail());
 					order.getCustomer().setSellerId(sellerId);
@@ -338,7 +338,7 @@ public class OrderDaoImpl implements OrderDao {
 					1, GlobalConstant.addOrderErrorCode, e);
 		}
 		log.info("*** AddOrder ends ***");
-	}
+	}*/
 	
 	@SuppressWarnings("deprecation")
 	@Override

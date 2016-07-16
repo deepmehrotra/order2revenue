@@ -31,12 +31,12 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private OrderDao orderDao;
 
-	@Override
+	/*@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void addOrder(Order order, int sellerId) throws CustomException {
 		orderDao.addOrder(order, sellerId);
 
-	}
+	}*/
 	
 	@Override
 	public List<Order> listMpOrders(int sellerId) throws CustomException {		

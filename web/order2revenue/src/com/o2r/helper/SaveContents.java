@@ -484,7 +484,7 @@ public class SaveContents {
 			}
 			catch(CustomException ce)
 			{
-				returnOrderMap.put("1:Note-Some orders("+ce.getLocalMessage() +" ) with valid input "
+				returnOrderMap.put("Row :1:Note-Some orders("+ce.getLocalMessage() +" ) with valid input "
 						+ "failed due to internal server error. Please contact admin.!", null);
 			}
 			Set<String> errorSet = returnOrderMap.keySet();
@@ -769,12 +769,14 @@ public class SaveContents {
 		boolean validaterow = true;
 		Map<String, ProductBean> returnProductMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
+		Map<String,String> uniqueProductMap=new HashMap<String, String>();
+		List<Product> saveList=null;
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
 			HSSFRow entry;
 			Integer noOfEntries = 1;
-
+			saveList=new ArrayList<Product>();
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
@@ -803,8 +805,9 @@ public class SaveContents {
 						&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					Product obj = productService.getProduct(entry.getCell(1)
 							.toString(), sellerId);
-					if (obj == null) {
+					if (obj == null&&!uniqueProductMap.containsKey(entry.getCell(1).toString())) {
 						product.setProductSkuCode(entry.getCell(1).toString());
+						uniqueProductMap.put(entry.getCell(1).toString(), entry.getCell(1).toString());
 					} else {
 						product.setProductSkuCode(entry.getCell(1).toString());
 						errorMessage.append(" Product SKU already present ");
@@ -943,7 +946,8 @@ public class SaveContents {
 						&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK)
 					product.setChannelSKU(entry.getCell(6).toString());
 				if (validaterow) {
-					productService.addProduct(product, sellerId);
+					saveList.add(product);
+					//productService.addProduct(product, sellerId);
 				} else {
 					returnProductMap.put(errorMessage.toString(),
 							ConverterClass.prepareProductBean(product));
@@ -956,13 +960,23 @@ public class SaveContents {
 			}catch(Exception e)
 				{
 				log.error("Failed!",e);
-				if(product!=null)
-				{
+				
 					errorMessage.append("Invalid Input! ");
 				returnProductMap.put(errorMessage.toString(),
-						ConverterClass.prepareProductBean(product));
+						null);
+				
 				}
-				}
+			}
+			try
+			{
+				System.out.println(" SaveList Size : "+saveList.size());
+				if(saveList!=null&&saveList.size()!=0)
+					productService.addProduct(saveList, sellerId);
+			}
+			catch(CustomException ce)
+			{
+				returnProductMap.put("Row:1:Note-Some products("+ce.getLocalMessage() +" ) with valid input "
+						+ "failed due to internal server error. Please contact admin.!", null);
 			}
 			Set<String> errorSet = returnProductMap.keySet();
 			downloadUploadReportXLS(offices, "ProductReport", 11, errorSet,
@@ -988,6 +1002,8 @@ public class SaveContents {
 		boolean validaterow = true;
 		Map<String, ProductConfigBean> returnProductConfigMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
+		Map<String,String> uniqueProductMap=new HashMap<String, String>();
+		List<ProductConfig> saveList=new ArrayList<ProductConfig>();
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -1021,12 +1037,16 @@ public class SaveContents {
 								&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							ProductConfig procon=productService.getProductConfig(entry.getCell(1)
 									.toString(), entry.getCell(2).toString(), sellerId);
-							if(procon==null)
+							if(procon==null&&!uniqueProductMap.containsKey(entry.getCell(1)
+									.toString()))
+							{
 							productConfig.setChannelSkuRef(entry.getCell(1)
 									.toString());
+							uniqueProductMap.put(entry.getCell(1).toString(), entry.getCell(1).toString());
+							}
 							else
 							{
-								errorMessage.append(" Channel Reference Code already present for that channel ");
+								errorMessage.append(" Channel Reference Code already present for that SKU ");
 								validaterow = false;
 							}
 						} else {
@@ -1060,7 +1080,8 @@ public class SaveContents {
 				}
 
 				if (validaterow) {
-					productService.addSKUMapping(productConfig, sellerId);
+					//productService.addSKUMapping(productConfig, sellerId);
+					saveList.add(productConfig);
 				} else {
 					returnProductConfigMap.put(errorMessage.toString(),
 							ConverterClass
@@ -1082,13 +1103,21 @@ public class SaveContents {
 						+ entry.getCell(2) + " 3 :" + entry.getCell(3));
 				// Pre save to generate id for use in hierarchy
 			}
+			try
+			{
+				if(saveList!=null&&saveList.size()!=0)
+					productService.addSKUMapping(saveList, sellerId);
+			}
+			catch(CustomException ce)
+			{
+				returnProductConfigMap.put("Row:1:Note-Some channel SKU("+ce.getLocalMessage() +" ) with valid input "
+						+ "failed due to internal server error. Please contact admin.!", null);
+			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
-			downloadUploadReportXLS(offices, "SKUMappingReport", 4, errorSet,
+			downloadUploadReportXLS(offices, "SKUMappingReport", 3, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
-			log.debug("Inside save contents exception :"
-					+ e.getLocalizedMessage());
-			e.printStackTrace();
+			
 			log.error("Failed!", e);
 			addErrorUploadReport("SKUMappingReport", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
