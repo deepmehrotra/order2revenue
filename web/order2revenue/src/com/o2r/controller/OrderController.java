@@ -115,10 +115,10 @@ public class OrderController {
 		log.info("$$$ getXLS Starts : OrderController $$$");
 		log.debug(" Downloading the sheet: " + sheetvalue);
 			
-			int BUFF_SIZE = 1024;
+			/*int BUFF_SIZE = 1024;
 			int byteRead = 0;
 			byte[] buffer = new byte[BUFF_SIZE];
-			File targetFile = new File(System.getProperty("catalina.base")+dataConfig.getXlsPath()+sheetvalue+".xls");
+			File targetFile = new File(System.getProperty("catalina.base")+dataConfig.getXlsPath()+sheetvalue);
 			FileInputStream inputStream = new FileInputStream(targetFile);
 			response.setContentType("application/vnd.ms-excel");
 			System.out.println(System.getProperty("catalina.base")+dataConfig.getXlsPath()+sheetvalue+".xls");
@@ -138,38 +138,38 @@ public class OrderController {
 			} finally {
 				outputStream.close();
 				inputStream.close();
-			}		
+			}*/		
 		
 		
-		/*if (sheetvalue != null) {
+		if (sheetvalue != null) {
 			if (sheetvalue.equals("ordersummary")) {
 				downloadService.downloadXLS(response);
-			} else if (sheetvalue.equals("orderPoSummary")) {
+			} else if (sheetvalue.equals("orderposummary")) {
 				downloadService.downloadOrderPOXLS(response);
-			} else if (sheetvalue.equals("paymentSummary")) {
+			} else if (sheetvalue.equals("paymentsummary")) {
 				downloadService.downloadPaymentXLS(response);
-			} else if (sheetvalue.equals("returnSummary")) {
+			} else if (sheetvalue.equals("returnsummary")) {
 				downloadService.downloadReturnXLS(response);
-			} else if (sheetvalue.equals("gatepassSummary")) {
+			} else if (sheetvalue.equals("gatepasssummary")) {
 				downloadService.downloadGatePassXLS(response);
-			} else if (sheetvalue.equals("productSummary")) {
+			} else if (sheetvalue.equals("productsummary")) {
 				downloadService.downloadProductXLS(response);
-			}else if (sheetvalue.equals("editProductSummary")) {
+			}else if (sheetvalue.equals("editproductsummary")) {
 				downloadService.downloadEditProductXLS(response);
-			}else if (sheetvalue.equals("productConfigSummary")) {
+			}else if (sheetvalue.equals("productconfigsummary")) {
 				downloadService.downloadProductConfigXLS(response);
-			} else if (sheetvalue.equals("inventorySummary")) {
+			} else if (sheetvalue.equals("inventorysummary")) {
 				downloadService.downloadInventoryXLS(response);
-			} else if (sheetvalue.equals("debitNoteSummary")) {
+			} else if (sheetvalue.equals("debitNotesummary")) {
 				downloadService.downloadDebitNoteXLS(response);
-			} else if (sheetvalue.equals("poPaymentSummary")) {
+			} else if (sheetvalue.equals("popaymentsummary")) {
 				downloadService.downloadPOPaymentXLS(response);
-			} else if (sheetvalue.equals("expenseSummary")) {
+			} else if (sheetvalue.equals("expensesummary")) {
 				downloadService.downloadExpensesXLS(response);
-			}else if (sheetvalue.equals("skuMapping")) {
+			}else if (sheetvalue.equals("skumappingsummary")) {
 				downloadService.downloadSKUMappingXLS(response);
 			}
-		}*/
+		}
 		log.info("$$$ getXLS Ends : OrderController $$$");
 	}
 

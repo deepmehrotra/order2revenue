@@ -881,11 +881,11 @@ public class SaveContents {
 					errorMessage.append(" Threshold limit is null ");
 					validaterow = false;
 				}
-				if (entry.getCell(7) != null
-						&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+				if (entry.getCell(6) != null
+						&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
 						product.setLength(Float.valueOf(
-								entry.getCell(7).toString()).longValue());
+								entry.getCell(6).toString()).longValue());
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
 						errorMessage.append(" Length should be a number ");
@@ -895,11 +895,11 @@ public class SaveContents {
 					errorMessage.append(" Length is null ");
 					validaterow = false;
 				}
-				if (entry.getCell(8) != null
-						&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+				if (entry.getCell(7) != null
+						&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
 						product.setBreadth(Float.valueOf(
-								entry.getCell(8).toString()).longValue());
+								entry.getCell(7).toString()).longValue());
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
 						errorMessage.append(" Breadth should be a number ");
@@ -910,11 +910,11 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				if (entry.getCell(9) != null
-						&& entry.getCell(9).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+				if (entry.getCell(8) != null
+						&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
 						product.setHeight(Float.valueOf(
-								entry.getCell(9).toString()).longValue());
+								entry.getCell(8).toString()).longValue());
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
 						errorMessage.append(" Height should be a number ");
@@ -924,10 +924,10 @@ public class SaveContents {
 					errorMessage.append(" Height is null ");
 					validaterow = false;
 				}
-				if (entry.getCell(10) != null
-						&& entry.getCell(10).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+				if (entry.getCell(9) != null
+						&& entry.getCell(9).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
-						product.setDeadWeight((float) entry.getCell(10)
+						product.setDeadWeight((float) entry.getCell(9)
 								.getNumericCellValue());
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
@@ -941,10 +941,7 @@ public class SaveContents {
 				product.setProductDate(new Date());
 				product.setVolume(product.getHeight() * product.getLength()
 						* product.getBreadth());
-				product.setVolWeight(product.getVolume() / 5);
-				if (entry.getCell(6) != null
-						&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK)
-					product.setChannelSKU(entry.getCell(6).toString());
+				product.setVolWeight(product.getVolume() / 5);				
 				if (validaterow) {
 					saveList.add(product);
 					//productService.addProduct(product, sellerId);
@@ -979,7 +976,7 @@ public class SaveContents {
 						+ "failed due to internal server error. Please contact admin.!", null);
 			}
 			Set<String> errorSet = returnProductMap.keySet();
-			downloadUploadReportXLS(offices, "ProductReport", 11, errorSet,
+			downloadUploadReportXLS(offices, "ProductReport", 10, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
