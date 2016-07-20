@@ -33,12 +33,15 @@ span .#error {
 }
 </style>
 <link href="/O2R/seller/css/bootstrap.min.css" rel="stylesheet">
-<link href="/O2R/seller/font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="/O2R/seller/font-awesome/css/font-awesome.css"
+	rel="stylesheet">
 <link href="/O2R/seller/css/plugins/iCheck/custom.css" rel="stylesheet">
 <link href="/O2R/seller/css/animate.css" rel="stylesheet">
 <link href="/O2R/seller/css/style.css" rel="stylesheet">
-<link href="/O2R/seller/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
-<link href="/O2R/seller/css/plugins/switchery/switchery.css" rel="stylesheet">
+<link href="/O2R/seller/css/plugins/datapicker/datepicker3.css"
+	rel="stylesheet">
+<link href="/O2R/seller/css/plugins/switchery/switchery.css"
+	rel="stylesheet">
 <link href="/O2R/seller/css/tooltip.css" rel="stylesheet">
 
 
@@ -436,23 +439,25 @@ span .#error {
 																		<div class="col-sm-12">
 																			<div class="form-group col-md-12">
 																				<div class="col-md-3 content-rgt">
-																					<select class="form-control">
-																						<option value="">Select Fee</option>
-																						<option value="">Upto</option>
-																						<option value="">Greater</option>
-																					</select>
+																					<form:select class="form-control" path="fixedfeeList[0].criteria"
+																						name="nr-fixedfee-criteria">
+																						<option>Upto</option>
+																						<option>Greater Than</option>
+																					</form:select>
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text" name="fixedFee-criteria"
-																						class="form-control">
+																					<form:input type="text" path="fixedfeeList[0].range"
+																						class="form-control validateNumber"
+																						name="nr-fixedfee-range" id="nr-fixedfee-range" />
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text" name="fixedfee-value"
-																						class="form-control">
+																					<form:input type="text" path="fixedfeeList[0].value"
+																						class="form-control validateNumber"
+																						name="nr-fixedfee-value" id="nr-fixedfee-value" />
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="button" onclick="myFunction();"
-																						value="+" class="btn btn-primary" />
+																						value="+" class="btn btn-primary" id="myBtn" />
 																				</div>
 																			</div>
 																		</div>
@@ -460,6 +465,7 @@ span .#error {
 																</div>
 															</div>
 														</div>
+
 													</div>
 													<div class="panel panel-default">
 														<div class="panel-heading">
@@ -475,8 +481,9 @@ span .#error {
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.whicheverGreaterPCC"
-																					value="false" id="pccValue" name="pccValue"
-																					class="pccValue" /> Value Based
+																					value="false" id="pccValue"
+																					name="whicheverGreaterPCC" class="pccValue" />
+																				Value Based
 																			</label>
 																		</div>
 																	</div>
@@ -484,8 +491,9 @@ span .#error {
 																		<div class="radio">
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.whicheverGreaterPCC"
-																					value="true" id="pccHigher" name="pccHigher"
-																					class="pccHigher" /> Which Ever is Higher
+																					value="true" id="pccHigher"
+																					name="whicheverGreaterPCC" class="pccHigher" />
+																				Which Ever is Higher
 																			</label>
 																		</div>
 																	</div>
@@ -497,26 +505,24 @@ span .#error {
 																				<label>Upto</label>
 																			</div>
 																			<div class="col-md-5" style="padding: 0px;">
-																				<input type="text" name="" class="form-control"
+																				<input type="text" name="nr-pcc-range" class="form-control"
 																					ng-model="firstname">
 
 																			</div>
 																			<div class="col-md-5">
-																				<input type="text" name="" class="form-control">
+																				<input type="text" name="nr-pcc-value" class="form-control">
 																			</div>
-																			<br> <br>
+																			<br> <br> <br>
 																			<div class="col-md-2">
-																				<label>Greater</label>
+																				<label>Greater than</label>
 																			</div>
-																			<div class="col-md-5" style="padding: 0px;">
-
-																				<!-- <input type="text" name="" class="form-control" value= "{{firstname}}" style="border: none;"> -->
+																			<div class="col-md-5" style="padding: 0px;">																
 																				<label> &nbsp; &nbsp;{{firstname}}</label>
 																			</div>
 
 																			<div class="col-md-5">
 																				<div class="col-md-4" style="padding: 0px;">
-																					<input type="text" class="form-control">
+																					<input type="text" name="nr-pcc-percentSP" class="form-control">
 
 																				</div>
 																				<div class="col-md-8"
@@ -529,41 +535,24 @@ span .#error {
 																		<div class="col-sm-6"></div>
 																	</div>
 																	<div class="col-sm-12 radio1" id="blk-pccHigher">
-																		<div class="col-sm-6"
-																			style="padding: 0px 0px 0px 30px;">
-																			<div class="checkbox i-checks">
-																				<label> <input type="checkbox" value="">
-																					<i></i> Which Ever Is Greater
-																				</label>
-																			</div>
-																		</div>
-																		<div class="col-sm-6"></div>
 																		<div class="col-sm-12">
 																			<div class="col-sm-6">
-																				<div class="checkbox i-checks">
-																					<label> <input type="checkbox" value="">
-																						<i></i> Percentage of SP
-																					</label>
-																				</div>
+																				<label> Percentage of SP </label>
 																			</div>
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
-																					<input type="text" class="form-control"> <span
+																					<input type="text" name="nr-pcc-percentSP" class="form-control"> <span
 																						class="input-group-addon">%</span>
 																				</div>
 																			</div>
 																		</div>
 																		<div class="col-sm-12">
 																			<div class="col-sm-6">
-																				<div class="checkbox i-checks">
-																					<label> <input type="checkbox" value="">
-																						<i></i> Fixed Amount
-																					</label>
-																				</div>
+																				<label> Fixed Amount </label>
 																			</div>
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
-																					<input type="text" class="form-control"> <span
+																					<input type="text" name="nr-pcc-fixedAmt" class="form-control"> <span
 																						class="input-group-addon">%</span>
 																				</div>
 																			</div>
@@ -585,22 +574,21 @@ span .#error {
 																<div class="col-sm-12">
 																	<div class="col-sm-6">
 																		<div class="radio">
-																			<label> <!-- <input type="radio" value="6" id="optionsRadios1" name="toggler"> -->
-																				<form:radiobutton
+																			<label> <form:radiobutton
 																					path="nrnReturnConfig.shippingFeeType"
 																					value="variable" id="shippingfee-variable"
-																					name="toggler" class="shippingFeeType" /> Variable
-																				Shipping Charges
+																					name="shippingFeeType" class="shippingFeeType" />
+																			 	Variable Shipping Charges
 																			</label>
 																		</div>
 																	</div>
 																	<div class="col-sm-6">
 																		<div class="radio">
-																			<label> <!--    <input type="radio" value="7" id="optionsRadios1" name="toggler"> -->
-																				<form:radiobutton
+																			<label> <form:radiobutton
 																					path="nrnReturnConfig.shippingFeeType"
 																					value="fixed" id="shippingfee-fixed"
-																					class="shippingFeeType" /> Fixed Shipping Charges
+																					name="shippingFeeType" class="shippingFeeType" /> 																
+																				Fixed Shipping Charges
 																			</label>
 																		</div>
 																	</div>
@@ -628,32 +616,32 @@ span .#error {
 																			<tbody>
 																				<tr>
 																					<td><select class="form-control selected"
-																						name="links">
+																						name="nr-shippingFeeVolume-criteria" name="nr-shippingFeeVolume-criteria">
 																							<option value="upto">Upto</option>
 																							<option value="additional">Additional</option>
 																					</select></td>
 																					<td><div class="form-group ">
 																							<div class=" content-rgt">
-																								<input type="text" placeholder=""
+																								<input type="text" name="nr-shippingFeeVolume-range"
 																									class="form-control">
 																							</div>
 																						</div></td>
 																					<td><div class="form-group ">
 																							<div class=" content-rgt">
-																								<input type="text" placeholder=""
+																								<input type="text" name="nr-shippingFeeVolume-localValue"
 																									class="form-control">
 																							</div>
 																						</div></td>
 																					<td><div class=" content-rgt">
-																							<input type="text" placeholder=""
+																							<input type="text" name="nr-shippingFeeVolume-zonalValue"
 																								class="form-control">
 																						</div></td>
 																					<td><div class=" content-rgt">
-																							<input type="text" placeholder=""
+																							<input type="text" name="nr-shippingFeeVolume-nationalValue"
 																								class="form-control">
 																						</div></td>
 																					<td><div class=" content-rgt">
-																							<input type="text" placeholder=""
+																							<input type="text" name="nr-shippingFeeVolume-metroValue"
 																								class="form-control">
 																						</div></td>
 																					<td><div class=" content-rgt">
@@ -682,30 +670,30 @@ span .#error {
 																			<tbody>
 																				<tr>
 																					<td><select class="form-control selected"
-																						name="links2">
+																						name="nr-shippingFeeWeight-criteria">
 																							<option value="upto">Upto</option>
 																							<option value="additional">Additional</option>
 																					</select></td>
 																					<td><div class="form-group ">
 																							<div class=" content-rgt">
-																								<input type="text" placeholder=""
+																								<input type="text" name="nr-shippingFeeWeight-range"
 																									class="form-control">
 																							</div>
 																						</div></td>
 																					<td><div class=" content-rgt">
-																							<input type="text" placeholder=""
+																							<input type="text" name="nr-shippingFeeWeight-localValue"
 																								class="form-control">
 																						</div></td>
 																					<td><div class=" content-rgt">
-																							<input type="text" placeholder=""
+																							<input type="text" name="nr-shippingFeeWeight-zonalValue"
 																								class="form-control">
 																						</div></td>
 																					<td><div class=" content-rgt">
-																							<input type="text" placeholder=""
+																							<input type="text" name="nr-shippingFeeWeight-nationalValue"
 																								class="form-control">
 																						</div></td>
 																					<td><div class=" content-rgt">
-																							<input type="text" placeholder=""
+																							<input type="text" name="nr-shippingFeeWeight-metroValue"
 																								class="form-control">
 																						</div></td>
 																					<td><div class=" content-rgt">
@@ -738,14 +726,14 @@ span .#error {
 																			<tbody>
 																				<tr>
 																					<td><select class="form-control selected"
-																						name="links3">
+																						name="nr-shippingFeeWeight-criteria">
 																							<option value="upto">Upto</option>
 																							<option value="additional">Additional</option>
 																					</select></td>
 																					<td>
 																						<div class="form-group ">
 																							<div class=" content-rgt">
-																								<input type="text" placeholder=""
+																								<input type="text" name="nr-shippingFeeWeight-range"
 																									class="form-control">
 																							</div>
 																						</div>
@@ -753,7 +741,7 @@ span .#error {
 																					<td>
 																						<div class="form-group ">
 																							<div class=" content-rgt">
-																								<input type="text" placeholder=""
+																								<input type="text" name="nr-shippingFeeWeight-value"
 																									class="form-control">
 																							</div>
 																						</div>
@@ -779,16 +767,16 @@ span .#error {
 																			<tbody>
 																				<tr>
 																					<td><select class="form-control selected"
-																						name="links3">
+																						name="nr-shippingFeeVolume-criteria">
 																							<option value="upto">Upto</option>
 																							<option value="additional">Additional</option>
 																					</select></td>
-																					<td><input type="text" name=""
+																					<td><input type="text" name="nr-shippingFeeVolume-range"
 																						class="form-control"></td>
 																					<td>
 																						<div class="form-group ">
 																							<div class=" content-rgt">
-																								<input type="text" placeholder=""
+																								<input type="text" name="nr-shippingFeeVolume-value"
 																									class="form-control">
 																							</div>
 																						</div>
@@ -803,7 +791,6 @@ span .#error {
 																</div>
 															</div>
 														</div>
-
 													</div>
 													<div class="panel panel-default">
 														<div class="panel-heading">
@@ -2507,10 +2494,316 @@ span .#error {
 	<!-- iCheck -->
 	<script src="/O2R/seller/js/plugins/iCheck/icheck.min.js"></script>
 	<!-- Switchery -->
-	<script src="/O2R/seller/js/plugins/switchery/switchery.js"></script>	
+	<script src="/O2R/seller/js/plugins/switchery/switchery.js"></script>
 	<script src="/O2R/seller/js/pickList.js"></script>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+	<script type="text/javascript">
+		div = {
+			show : function(elem) {
+				document.getElementById(elem).style.visibility = 'visible';
+			},
+			hide : function(elem) {
+				document.getElementById(elem).style.visibility = 'hidden';
+			}
+		}
+	</script>
+
+	<script type="text/javascript">
+		var v = 1;
+		var index = 0;
+		function myFunction() {
+			v++;
+			index = index + 1;
+			var objTo = document.getElementById('room_fileds');
+			var divtest = document.createElement("div");
+			divtest.innerHTML = "<div class='col-sm-12'>"
+					+ "<div class='form-group col-md-12'>"
+					+ "<div class='col-md-3 content-rgt'>"
+					+ "<select name='nr-fixedfee-criteria"+index+"' id=='nr-fixedfee-criteria"+index+"' onchange='(this.selectedIndex == 0) ? upto() : additional("
+					+ (index - 1)
+					+ ")' class='form-control'>"
+					+ "<option>Upto</option>"
+					+ "<option>Greater Than</option>"
+					+ "</select>"
+					+
+
+					"</div>"
+					+ "<div class='col-md-3 content-rgt'>"
+					+ "<input type='text' name='nr-fixedfee-range"+index+"' placeholder='' class='form-control' id='txt_name"+index+"' multiple>"
+					+ "</div>"
+					+ "<div class='col-md-3 content-rgt'>"
+					+ "<input type='text' placeholder='' name='nr-fixedfee-value"+index+"' id='nr-fixedfee-value"+index+"' class='form-control'>"
+					+ "</div>" + "<div class='col-md-3 content-rgt'>"
+					+ "</div>" + "</div>" + "</div>";
+			objTo.appendChild(divtest)
+		}
+	</script>
+	<script type="text/javascript">
+		function addField(argument) {
+			var myTable = document.getElementById("myTable");
+			var currentIndex = myTable.rows.length;
+			var currentRow = myTable.insertRow(-1);
+
+			var linksBox = document.createElement("select");
+			linksBox.setAttribute("name", "nr-shippingFeeVolume-criteria" + currentIndex);
+			linksBox.setAttribute("option", "");
+			linksBox.setAttribute("value", "");
+
+			linksBox.setAttribute("type", "button");
+			linksBox.setAttribute("class", "form-control");
+
+			theOption = document.createElement("OPTION");
+			theText = document.createTextNode("Upto");
+			theOption.setAttribute("value", "Upto");
+			theOption.appendChild(theText);
+			linksBox.appendChild(theOption);
+
+			theOption = document.createElement("OPTION");
+			theText = document.createTextNode("Additional");
+			theOption.setAttribute("value", "Additional");
+			theOption.appendChild(theText);
+			linksBox.appendChild(theOption);
+
+			var linksBox1 = document.createElement("input");
+			linksBox1.setAttribute("name", "nr-shippingFeeVolume-range" + currentIndex);
+			linksBox1.setAttribute("class", "form-control");
+
+			var linksBox2 = document.createElement("input");
+			linksBox2.setAttribute("name", "nr-shippingFeeVolume-localValue" + currentIndex);
+			linksBox2.setAttribute("class", "form-control");
+
+			var linksBox3 = document.createElement("input");
+			linksBox3.setAttribute("name", "nr-shippingFeeVolume-zonalValue" + currentIndex);
+			linksBox3.setAttribute("class", "form-control");
+
+			var keywordsBox = document.createElement("input");
+			keywordsBox.setAttribute("name", "nr-shippingFeeVolume-nationalValue" + currentIndex);
+			keywordsBox.setAttribute("class", "form-control");
+
+			var violationsBox = document.createElement("input");
+			violationsBox.setAttribute("name", "nr-shippingFeeVolume-metroValue" + currentIndex);
+			violationsBox.setAttribute("class", "form-control");
+
+			var addRowBox = document.createElement("input");
+			addRowBox.setAttribute("type", "button");
+			addRowBox.setAttribute("value", "+");
+			addRowBox.setAttribute("onclick", "addField();");
+			addRowBox.setAttribute("class", "button btn btn-primary");
+
+			var currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(linksBox);
+
+			var currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(linksBox1);
+
+			var currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(linksBox2);
+
+			var currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(linksBox3);
+
+			currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(keywordsBox);
+
+			currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(violationsBox);
+
+			currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(addRowBox);
+		}
+		function addField2(argument) {
+			var myTable = document.getElementById("myTable2");
+			var currentIndex = myTable.rows.length;
+			var currentRow = myTable.insertRow(-1);
+
+			var linksBox = document.createElement("select");
+			linksBox.setAttribute("name", "nr-shippingFeeWeight-criteria" + currentIndex);
+			linksBox.setAttribute("option", "");
+			linksBox.setAttribute("value", "");
+
+			linksBox.setAttribute("type", "button");
+			linksBox.setAttribute("class", "form-control");
+
+			theOption = document.createElement("OPTION");
+			theText = document.createTextNode("Upto");
+			theOption.setAttribute("value", "Upto");
+			theOption.appendChild(theText);
+			linksBox.appendChild(theOption);
+
+			theOption = document.createElement("OPTION");
+			theText = document.createTextNode("Additional");
+			theOption.setAttribute("value", "Additional");
+			theOption.appendChild(theText);
+			linksBox.appendChild(theOption);
+
+			var linksBox1 = document.createElement("input");
+			linksBox1.setAttribute("name", "nr-shippingFeeWeight-range" + currentIndex);
+			linksBox1.setAttribute("class", "form-control");
+
+			var linksBox2 = document.createElement("input");
+			linksBox2.setAttribute("name", "nr-shippingFeeWeight-localValue" + currentIndex);
+			linksBox2.setAttribute("class", "form-control");
+
+			var linksBox3 = document.createElement("input");
+			linksBox3.setAttribute("name", "nr-shippingFeeWeight-zonalValue" + currentIndex);
+			linksBox3.setAttribute("class", "form-control");
+
+			var keywordsBox = document.createElement("input");
+			keywordsBox.setAttribute("name", "nr-shippingFeeWeight-nationalValue" + currentIndex);
+			keywordsBox.setAttribute("class", "form-control");
+
+			var violationsBox = document.createElement("input");
+			violationsBox.setAttribute("name", "nr-shippingFeeWeight-metroValue" + currentIndex);
+			violationsBox.setAttribute("class", "form-control");
+
+			var addRowBox = document.createElement("input");
+			addRowBox.setAttribute("type", "button");
+			addRowBox.setAttribute("value", "+");
+			addRowBox.setAttribute("onclick", "addField2();");
+			addRowBox.setAttribute("class", "button btn btn-primary");
+
+			var currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(linksBox);
+
+			var currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(linksBox1);
+
+			var currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(linksBox2);
+
+			var currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(linksBox3);
+
+			currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(keywordsBox);
+
+			currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(violationsBox);
+
+			currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(addRowBox);
+		}
+		function addField3(argument) {
+			var myTable = document.getElementById("myTable3");
+			var currentIndex = myTable.rows.length;
+			var currentRow = myTable.insertRow(-1);
+
+			var linksBox = document.createElement("select");
+			linksBox.setAttribute("name", "nr-shippingFeeWeight-criteria" + currentIndex);
+			linksBox.setAttribute("option", "");
+			linksBox.setAttribute("value", "");
+
+			linksBox.setAttribute("type", "button");
+			linksBox.setAttribute("class", "form-control");
+
+			theOption = document.createElement("OPTION");
+			theText = document.createTextNode("Upto");
+			theOption.setAttribute("value", "Upto");
+			theOption.appendChild(theText);
+			linksBox.appendChild(theOption);
+
+			theOption = document.createElement("OPTION");
+			theText = document.createTextNode("Additional");
+			theOption.setAttribute("value", "Additional");
+			theOption.appendChild(theText);
+			linksBox.appendChild(theOption);
+
+			var linksBox1 = document.createElement("input");
+			linksBox1.setAttribute("name", "nr-shippingFeeWeight-range" + currentIndex);
+			linksBox1.setAttribute("class", "form-control");
+
+			var linksBox2 = document.createElement("input");
+			linksBox2.setAttribute("name", "nr-shippingFeeWeight-value" + currentIndex);
+			linksBox2.setAttribute("class", "form-control");
+
+			var addRowBox = document.createElement("input");
+			addRowBox.setAttribute("type", "button");
+			addRowBox.setAttribute("value", "+");
+			addRowBox.setAttribute("onclick", "addField3();");
+			addRowBox.setAttribute("class", "button btn btn-primary");
+
+			var currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(linksBox);
+
+			var currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(linksBox1);
+
+			var currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(linksBox2);
+
+			currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(addRowBox);
+		}
+		function addField4(argument) {
+			var myTable = document.getElementById("myTable4");
+			var currentIndex = myTable.rows.length;
+			var currentRow = myTable.insertRow(-1);
+
+			var linksBox = document.createElement("select");
+			linksBox.setAttribute("name", "nr-shippingFeeVolume-criteria" + currentIndex);
+			linksBox.setAttribute("option", "");
+			linksBox.setAttribute("value", "");
+			linksBox.setAttribute("type", "button");
+			linksBox.setAttribute("class", "form-control");
+
+			theOption = document.createElement("OPTION");
+			theText = document.createTextNode("Upto");
+			theOption.setAttribute("value", "Upto");
+			theOption.appendChild(theText);
+			linksBox.appendChild(theOption);
+
+			theOption = document.createElement("OPTION");
+			theText = document.createTextNode("Additional");
+			theOption.setAttribute("value", "Additional");
+			theOption.appendChild(theText);
+			linksBox.appendChild(theOption);
+
+			var linksBox1 = document.createElement("input");
+			linksBox1.setAttribute("name", "nr-shippingFeeVolume-range" + currentIndex);
+			linksBox1.setAttribute("class", "form-control");
+
+			var linksBox2 = document.createElement("input");
+			linksBox2.setAttribute("name", "nr-shippingFeeVolume-value" + currentIndex);
+			linksBox2.setAttribute("class", "form-control");
+
+			var addRowBox = document.createElement("input");
+			addRowBox.setAttribute("type", "button");
+			addRowBox.setAttribute("value", "+");
+			addRowBox.setAttribute("onclick", "addField4();");
+			addRowBox.setAttribute("class", "button btn btn-primary");
+
+			var currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(linksBox);
+
+			var currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(linksBox1);
+
+			var currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(linksBox2);
+
+			currentCell = currentRow.insertCell(-1);
+			currentCell.appendChild(addRowBox);
+		}
+	</script>
+
+
+	<script>
+		var app = angular.module('myApp', []);
+		app.controller('myCtrl', function($scope) {
+			$scope.firstname = "";
+		});
+	</script>
+
+	<script language=JavaScript>
+		function additional(x) {
+			var v = $("#txt_name" + x + "").val();
+			$("#txt_name" + (x + 1) + "").val(v);
+			document.getElementById("myBtn").disabled = true;
+
+		}
+	</script>
 
 	<script type="text/javascript">
 		$(document)
@@ -2611,7 +2904,7 @@ span .#error {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
 							});
-					
+
 							$("[name=paymentType]").click(function() {
 								$('.radio1').hide();
 								$("#blk-" + $(this).val()).slideDown();
@@ -3214,287 +3507,6 @@ span .#error {
 					"input." + radioclassname + ":checked").val();
 		}
 	</script>
-	<script type="text/javascript">
-		div = {
-			show : function(elem) {
-				document.getElementById(elem).style.visibility = 'visible';
-			},
-			hide : function(elem) {
-				document.getElementById(elem).style.visibility = 'hidden';
-			}
-		}
-
-		var v = 1;
-		function myFunction() {
-			v++;
-			var objTo = document.getElementById('room_fileds');
-			var divtest = document.createElement("div");
-			divtest.innerHTML = "<div class='col-sm-12'>"
-					+ "<div class='form-group col-md-12'>"
-					+ "<div class='col-md-3 content-rgt'>"
-					+ "<select class='form-control'>"
-					+ "<option value=''>Select Fee</option>"
-					+ "<option value=''>Upto</option>"
-					+ "<option value=''>Greater</option>" + "</select>"
-					+ "</div>" + "<div class='col-md-3 content-rgt'>"
-					+ "<input type='text' name='fixedFee-criteria' class='form-control'>"
-					+ "</div>" + "<div class='col-md-3 content-rgt'>"
-					+ "<input type='text' name='fixedFee-value' class='form-control'>"
-					+ "</div>" + "<div class='col-md-3 content-rgt'>"
-					+ "</div>" + "</div>" + "</div>";
-			objTo.appendChild(divtest)
-		}
-
-		function addField(argument) {
-			var myTable = document.getElementById("myTable");
-			var currentIndex = myTable.rows.length;
-			var currentRow = myTable.insertRow(-1);
-
-			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "links" + currentIndex);
-			linksBox.setAttribute("option", "");
-			linksBox.setAttribute("value", "");
-
-			linksBox.setAttribute("type", "button");
-			linksBox.setAttribute("class", "form-control");
-
-			theOption = document.createElement("OPTION");
-			theText = document.createTextNode("Upto");
-			theOption.setAttribute("value", "Upto");
-			theOption.appendChild(theText);
-			linksBox.appendChild(theOption);
-
-			theOption = document.createElement("OPTION");
-			theText = document.createTextNode("Additional");
-			theOption.setAttribute("value", "Additional");
-			theOption.appendChild(theText);
-			linksBox.appendChild(theOption);
-
-			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "links1" + currentIndex);
-			linksBox1.setAttribute("class", "form-control");
-
-			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "links2" + currentIndex);
-			linksBox2.setAttribute("class", "form-control");
-
-			var linksBox3 = document.createElement("input");
-			linksBox3.setAttribute("name", "links3" + currentIndex);
-			linksBox3.setAttribute("class", "form-control");
-
-			var keywordsBox = document.createElement("input");
-			keywordsBox.setAttribute("name", "keywords" + currentIndex);
-			keywordsBox.setAttribute("class", "form-control");
-
-			var violationsBox = document.createElement("input");
-			violationsBox.setAttribute("name", "violationtype" + currentIndex);
-			violationsBox.setAttribute("class", "form-control");
-
-			var addRowBox = document.createElement("input");
-			addRowBox.setAttribute("type", "button");
-			addRowBox.setAttribute("value", "+");
-			addRowBox.setAttribute("onclick", "addField();");
-			addRowBox.setAttribute("class", "button btn btn-primary");
-
-			var currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(linksBox);
-
-			var currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(linksBox1);
-
-			var currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(linksBox2);
-
-			var currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(linksBox3);
-
-			currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(keywordsBox);
-
-			currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(violationsBox);
-
-			currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(addRowBox);
-		}
-		function addField2(argument) {
-			var myTable = document.getElementById("myTable2");
-			var currentIndex = myTable.rows.length;
-			var currentRow = myTable.insertRow(-1);
-
-			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "links2" + currentIndex);
-			linksBox.setAttribute("option", "");
-			linksBox.setAttribute("value", "");
-
-			linksBox.setAttribute("type", "button");
-			linksBox.setAttribute("class", "form-control");
-
-			theOption = document.createElement("OPTION");
-			theText = document.createTextNode("Upto");
-			theOption.setAttribute("value", "Upto");
-			theOption.appendChild(theText);
-			linksBox.appendChild(theOption);
-
-			theOption = document.createElement("OPTION");
-			theText = document.createTextNode("Additional");
-			theOption.setAttribute("value", "Additional");
-			theOption.appendChild(theText);
-			linksBox.appendChild(theOption);
-
-			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "links2" + currentIndex);
-			linksBox1.setAttribute("class", "form-control");
-
-			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "links2" + currentIndex);
-			linksBox2.setAttribute("class", "form-control");
-
-			var linksBox3 = document.createElement("input");
-			linksBox3.setAttribute("name", "links3" + currentIndex);
-			linksBox3.setAttribute("class", "form-control");
-
-			var keywordsBox = document.createElement("input");
-			keywordsBox.setAttribute("name", "keywords" + currentIndex);
-			keywordsBox.setAttribute("class", "form-control");
-
-			var violationsBox = document.createElement("input");
-			violationsBox.setAttribute("name", "violationtype" + currentIndex);
-			violationsBox.setAttribute("class", "form-control");
-
-			var addRowBox = document.createElement("input");
-			addRowBox.setAttribute("type", "button");
-			addRowBox.setAttribute("value", "+");
-			addRowBox.setAttribute("onclick", "addField2();");
-			addRowBox.setAttribute("class", "button btn btn-primary");
-
-			var currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(linksBox);
-
-			var currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(linksBox1);
-
-			var currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(linksBox2);
-
-			var currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(linksBox3);
-
-			currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(keywordsBox);
-
-			currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(violationsBox);
-
-			currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(addRowBox);
-		}
-		function addField3(argument) {
-			var myTable = document.getElementById("myTable3");
-			var currentIndex = myTable.rows.length;
-			var currentRow = myTable.insertRow(-1);
-
-			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "links3" + currentIndex);
-			linksBox.setAttribute("option", "");
-			linksBox.setAttribute("value", "");
-
-			linksBox.setAttribute("type", "button");
-			linksBox.setAttribute("class", "form-control");
-
-			theOption = document.createElement("OPTION");
-			theText = document.createTextNode("Upto");
-			theOption.setAttribute("value", "Upto");
-			theOption.appendChild(theText);
-			linksBox.appendChild(theOption);
-
-			theOption = document.createElement("OPTION");
-			theText = document.createTextNode("Additional");
-			theOption.setAttribute("value", "Additional");
-			theOption.appendChild(theText);
-			linksBox.appendChild(theOption);
-
-			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "links3" + currentIndex);
-			linksBox1.setAttribute("class", "form-control");
-
-			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "links3" + currentIndex);
-			linksBox2.setAttribute("class", "form-control");
-
-			var addRowBox = document.createElement("input");
-			addRowBox.setAttribute("type", "button");
-			addRowBox.setAttribute("value", "+");
-			addRowBox.setAttribute("onclick", "addField3();");
-			addRowBox.setAttribute("class", "button btn btn-primary");
-
-			var currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(linksBox);
-
-			var currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(linksBox1);
-
-			var currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(linksBox2);
-
-			currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(addRowBox);
-		}
-		function addField4(argument) {
-			var myTable = document.getElementById("myTable4");
-			var currentIndex = myTable.rows.length;
-			var currentRow = myTable.insertRow(-1);
-
-			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "links4" + currentIndex);
-			linksBox.setAttribute("option", "");
-			linksBox.setAttribute("value", "");
-			linksBox.setAttribute("type", "button");
-			linksBox.setAttribute("class", "form-control");
-
-			theOption = document.createElement("OPTION");
-			theText = document.createTextNode("Upto");
-			theOption.setAttribute("value", "Upto");
-			theOption.appendChild(theText);
-			linksBox.appendChild(theOption);
-
-			theOption = document.createElement("OPTION");
-			theText = document.createTextNode("Additional");
-			theOption.setAttribute("value", "Additional");
-			theOption.appendChild(theText);
-			linksBox.appendChild(theOption);
-
-			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "links4" + currentIndex);
-			linksBox1.setAttribute("class", "form-control");
-
-			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "links4" + currentIndex);
-			linksBox2.setAttribute("class", "form-control");
-
-			var addRowBox = document.createElement("input");
-			addRowBox.setAttribute("type", "button");
-			addRowBox.setAttribute("value", "+");
-			addRowBox.setAttribute("onclick", "addField4();");
-			addRowBox.setAttribute("class", "button btn btn-primary");
-
-			var currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(linksBox);
-
-			var currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(linksBox1);
-
-			var currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(linksBox2);
-
-			currentCell = currentRow.insertCell(-1);
-			currentCell.appendChild(addRowBox);
-		}
-		  var app = angular.module('myApp', []);
-		  app.controller('myCtrl', function($scope) {
-		      $scope.firstname = "";
-		  });
-  </script>
 
 </body>
 </html>

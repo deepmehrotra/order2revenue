@@ -33,6 +33,10 @@ public class PartnerBean {
 	private List<Events> events=new ArrayList<Events>();
 	private List<Order> orders = new ArrayList<Order>();
 	private NRnReturnConfig nrnReturnConfig;
+	
+	private List<ChargesBean> fixedfeeList = new ArrayList<ChargesBean>();
+	private List<ChargesBean> shippingfeeVolumeList = new ArrayList<ChargesBean>();
+	private List<ChargesBean> shippingfeeWeightList = new ArrayList<ChargesBean>();
 
 	public List<Events> getEvents() {
 		return events;
@@ -187,6 +191,24 @@ public class PartnerBean {
 	}
 	public void setNrnReturnConfig(NRnReturnConfig nrnReturnConfig) {
 		this.nrnReturnConfig = nrnReturnConfig;
+	}
+	public List<ChargesBean> getFixedfeeList() {
+		return fixedfeeList;
+	}
+	public void setFixedfeeList(List<ChargesBean> fixedfeeList) {
+		this.fixedfeeList = fixedfeeList;
+	}
+	public List<ChargesBean> getShippingfeeVolumeList() {
+		return shippingfeeVolumeList;
+	}
+	public void setShippingfeeVolumeList(List<ChargesBean> shippingfeeVolumeList) {
+		this.shippingfeeVolumeList = shippingfeeVolumeList;
+	}
+	public List<ChargesBean> getShippingfeeWeightList() {
+		return shippingfeeWeightList;
+	}
+	public void setShippingfeeWeightList(List<ChargesBean> shippingfeeWeightList) {
+		this.shippingfeeWeightList = shippingfeeWeightList;
 	}
 
 
