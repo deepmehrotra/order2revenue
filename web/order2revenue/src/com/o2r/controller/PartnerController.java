@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.o2r.bean.ChargesBean;
 import com.o2r.bean.PartnerBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
@@ -108,6 +109,9 @@ public class PartnerController {
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		log.info("$$$ savePartner Starts : OrderController $$$");
+		log.info(partnerBean.getFixedfeeList().size());
+		log.info(partnerBean.getShippingfeeVolumeList().size());
+		log.info(partnerBean.getShippingfeeWeightList().size());
 		
 		Map<String, Object> model = new HashMap<String, Object>();
 		if (partnerBean.getPcId() != 0) {
@@ -122,7 +126,7 @@ public class PartnerController {
 		Map<String, String[]> parameters = request.getParameterMap();
 		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
 			if (entry.getKey().contains("nr-")) {
-				log.debug(" Key with nr: " + entry.getKey() + " Values is : "
+				log.info(" Key with nr: " + entry.getKey() + " Values is : "
 						+ entry.getValue()[0]);
 			}
 		}
@@ -133,15 +137,34 @@ public class PartnerController {
 
 			if (entry.getValue()[0] != null && !entry.getValue()[0].isEmpty()) {
 				if (entry.getKey().contains("nr-")) {
-					log.debug(" Key : " + entry.getKey());
-					String temp = entry.getKey().substring(3);
-					NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-					nrnReturncharge.setChargeAmount(Float.parseFloat(entry
-							.getValue()[0]));
-					nrnReturncharge.setChargeName(temp);
-					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
-					partnerBean.getNrnReturnConfig().getCharges()
-							.add(nrnReturncharge);
+					
+					if (entry.getKey().contains("fixedfee")) {
+						log.debug(" Key : " + entry.getKey());
+						String temp = entry.getKey().substring(3);
+						NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+						nrnReturncharge.setChargeAmount(Float.parseFloat(entry
+								.getValue()[0]));
+						nrnReturncharge.setChargeName(temp);
+						nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
+						partnerBean.getNrnReturnConfig().getCharges()
+								.add(nrnReturncharge);
+					
+					} else if (entry.getKey().contains("pcc")) {
+						
+						
+					} else if (entry.getKey().contains("shippingFee")) {	
+						
+					} else {
+						log.debug(" Key : " + entry.getKey());
+						String temp = entry.getKey().substring(3);
+						NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+						nrnReturncharge.setChargeAmount(Float.parseFloat(entry
+								.getValue()[0]));
+						nrnReturncharge.setChargeName(temp);
+						nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
+						partnerBean.getNrnReturnConfig().getCharges()
+								.add(nrnReturncharge);
+					}
 				} else if (entry.getKey().contains("local")) {
 
 					String localstring = Arrays.toString(entry.getValue());

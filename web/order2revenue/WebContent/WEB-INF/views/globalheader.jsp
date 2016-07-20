@@ -238,7 +238,7 @@
 							</div>
 						</div>
 					</li>
-					<li class="divider"></li>
+					<li class="divider" id="uploadReport-line-3" style="display: none;"></li>
 					<li>
 						<div id="uploadReport-div-2" class="dropdown-messages-box"
 							style="display: none;">
@@ -262,7 +262,7 @@
 							</div>
 						</div>
 					</li>
-					<li class="divider"></li>
+					<li class="divider" id="uploadReport-line-2" style="display: none;"></li>
 					<li>
 						<div id="uploadReport-div-1" class="dropdown-messages-box"
 							style="display: none;">
@@ -286,17 +286,17 @@
 							</div>
 						</div>
 					</li>
-					<li class="divider"></li>
+					<li class="divider" id="uploadReport-line-1" style="display: none;"></li>
 					<li>
-						<div class="text-center link-block">
-							<a href="mailbox.html"> <i class="fa fa-envelope"></i> <strong>Read
+						<div class="text-center link-block" id="uploadReport-div-0" style="display: none;" >
+							<a href="getUploadReportList.html"> <i class="fa fa-envelope"></i> <strong>Read
 									All Updates</strong>
 							</a>
 						</div>
 					</li>
-					<li class="divider"></li>
+					<li class="divider" id="uploadReport-line-0" style="display: none;"></li>
 					<li>
-						<div class="progress"></div>
+						<!-- <div class="progress"></div> -->
 						<div class="bar" role="bar" id="bar1" style="display: none;">
 							<div class="peg">Uploading...</div>
 						</div>
@@ -368,67 +368,79 @@
 									.success(
 											function(data) {
 												var i = 1;
-												data.forEach(function(
-																arrayItem) {
-															var cssClass;
-															if (arrayItem.description == "Exported") {
-																cssClass = "fa-level-up";
-															} else {
-																cssClass = "fa-level-down";
-															}
-
-															if (arrayItem.filePath == null
-																	|| arrayItem.filePath == '') {
-																cssClass = "fa-minus-circle";
-															} else {
+												if (data) {
+													data.forEach(function(
+																	arrayItem) {
+																var cssClass;
+																if (arrayItem.description == "Exported") {
+																	cssClass = "fa-level-up";
+																} else {
+																	cssClass = "fa-level-down";
+																}
+	
+																if (arrayItem.filePath == null
+																		|| arrayItem.filePath == '') {
+																	cssClass = "fa-minus-circle";
+																} else {
+																	document
+																			.getElementById("uploadReport-a-"
+																					+ i).href = "javascript:onclickDownload('"
+																			+ arrayItem.id
+																			+ "');";
+																}
+	
+																if (arrayItem.status == "Error" || arrayItem.status == "Failed") {
+																	document
+																			.getElementById("uploadReport-i-"
+																					+ i).style = "color: red !important;";
+																	document
+																			.getElementById("uploadReport-status-"
+																					+ i).style = "font-size: smaller; font-weight: normal !important; color: red !important;";
+																} else {
+																	document
+																			.getElementById("uploadReport-status-"
+																					+ i).style = "font-size: smaller; font-weight: normal !important; color: green !important;";
+																}
+	
 																document
-																		.getElementById("uploadReport-a-"
-																				+ i).href = "javascript:onclickDownload('"
-																		+ arrayItem.id
-																		+ "');";
-															}
-
-															if (arrayItem.status == "Error" || arrayItem.status == "Failed") {
+																	.getElementById("uploadReport-div-0").style.display = "inherit";
+															
+																document
+																	.getElementById("uploadReport-line-0").style.display = "inherit";
+														
+																document
+																		.getElementById("uploadReport-div-"
+																				+ i).style.display = "inherit";
+																document
+																		.getElementById("uploadReport-line-"
+																		+ i).style.display = "inherit";
+																
 																document
 																		.getElementById("uploadReport-i-"
-																				+ i).style = "color: red !important;";
+																				+ i).className = "fa "
+																		+ cssClass;
+																document
+																		.getElementById("uploadReport-uploadedAt-"
+																				+ i).innerHTML = arrayItem.uploadedAt;
+																document
+																		.getElementById("uploadReport-description-"
+																				+ i).innerHTML = arrayItem.description;
+																document
+																		.getElementById("uploadReport-sellerName-"
+																				+ i).innerHTML = arrayItem.sellerName;
+																document
+																		.getElementById("uploadReport-fileType-"
+																				+ i).innerHTML = arrayItem.fileType;
+																document
+																		.getElementById("uploadReport-uploadDate-"
+																				+ i).innerHTML = arrayItem.uploadDate;
 																document
 																		.getElementById("uploadReport-status-"
-																				+ i).style = "font-size: smaller; font-weight: normal !important; color: red !important;";
-															} else {
-																document
-																		.getElementById("uploadReport-status-"
-																				+ i).style = "font-size: smaller; font-weight: normal !important; color: green !important;";
-															}
-
-															document
-																	.getElementById("uploadReport-div-"
-																			+ i).style.display = "inherit";
-															document
-																	.getElementById("uploadReport-i-"
-																			+ i).className = "fa "
-																	+ cssClass;
-															document
-																	.getElementById("uploadReport-uploadedAt-"
-																			+ i).innerHTML = arrayItem.uploadedAt;
-															document
-																	.getElementById("uploadReport-description-"
-																			+ i).innerHTML = arrayItem.description;
-															document
-																	.getElementById("uploadReport-sellerName-"
-																			+ i).innerHTML = arrayItem.sellerName;
-															document
-																	.getElementById("uploadReport-fileType-"
-																			+ i).innerHTML = arrayItem.fileType;
-															document
-																	.getElementById("uploadReport-uploadDate-"
-																			+ i).innerHTML = arrayItem.uploadDate;
-															document
-																	.getElementById("uploadReport-status-"
-																			+ i).innerHTML = arrayItem.status;
-
-															i++;
-														});
+																				+ i).innerHTML = arrayItem.status;
+	
+																i++;						
+															});
+												}
 											});
 
 							$('#searchCriteriaGlobal').change(
