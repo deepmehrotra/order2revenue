@@ -21,6 +21,10 @@ public interface ProductDao {
 	public List<Product> listProducts(int sellerId, int pageNo)
 			throws CustomException;
 	
+	public int editProduct(int sellerId,List<Product> products)throws CustomException;
+	
+	public Product getProductEdit(String sku, int sellerId) throws CustomException;
+	
 	public List<ProductConfig> listProductConfig(int sellerId, int pageNo, String condition)throws CustomException;
 	
 	public List<ProductConfig> searchProductConfig(String field, String value, int sellerId, String condition)throws CustomException;

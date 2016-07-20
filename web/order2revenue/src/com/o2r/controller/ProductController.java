@@ -350,21 +350,31 @@ public class ProductController {
 
 		log.info("$$$ saveProduct Starts : ProductController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		
+		List<Product> productList=new ArrayList<Product>();
 		log.debug(" Product Id :" + productBean.getProductId());
 		log.debug(" Product SKU :" + productBean.getProductSkuCode());
 		log.debug(" Product category  :"+ productBean.getCategoryName());
 
 		try {
-			if (productBean.getProductSkuCode() != null) {
-				productBean.setProductDate(new Date());
+			if(productBean.getProductId() != 0){
 				productBean.setVolume(productBean.getHeight()
 						* productBean.getLength() * productBean.getBreadth());
-				productBean.setVolWeight(productBean.getVolume() / 5);
-				Product product = ConverterClass
+				productBean.setVolWeight(productBean.getVolume() / 5);				
+				Product product=ConverterClass
 						.prepareProductModel(productBean);
-				productService.addProduct(product,
-						helperClass.getSellerIdfromSession(request));
+				productList.add(product);
+				productService.editProduct(helperClass.getSellerIdfromSession(request),productList);
+			}else{
+				if (productBean.getProductSkuCode() != null) {
+					productBean.setProductDate(new Date());
+					productBean.setVolume(productBean.getHeight()
+							* productBean.getLength() * productBean.getBreadth());
+					productBean.setVolWeight(productBean.getVolume() / 5);
+					Product product = ConverterClass
+							.prepareProductModel(productBean);
+					productService.addProduct(product,
+							helperClass.getSellerIdfromSession(request));
+				}
 			}
 		} catch (CustomException ce) {
 			log.error("saveProduct exception : " + ce.toString());

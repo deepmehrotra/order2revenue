@@ -71,11 +71,15 @@
                                     <td>${loop.index+1}</td>
                                     <td><a href="#" onclick="onclickviewCat('view',${category.id})">${category.catName}</a></td>
                                     <td>${category.createdOn}</td>
-                                     <td>${category.skuCount}</td>
-                                      <td>${category.productCount}</td>
-                                       <td>${category.openingStock}</td>
-                                    <td class="tooltip-demo"><a href="#" onclick="onclickviewCat('delete',${category.id})"><i class="fa fa-list-alt text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Delete"></i></a>
-                                    </td>
+                                    <td>${category.skuCount}</td>
+                                    <td>${category.productCount}</td>
+                                    <td>${category.openingStock}</td>
+                                    <c:if test="${category.skuCount != 0}">
+                                    	<td class="tooltip-demo"><a href="#"><i class="fa fa-trash text-navy" onclick="checkkDelete();" data-original-title="Delete"></i></a></td>
+                                    </c:if>
+                                    <c:if test="${category.skuCount == 0}">
+                                    	<td class="tooltip-demo"><a href="#" onclick="onclickviewCat('delete',${category.id})"><i class="fa fa-trash text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Delete"></i></a></td>
+                                    </c:if>
                                  </tr>
                                </c:forEach>
                                 </tbody>
@@ -84,12 +88,15 @@
                     </div>
                 </div>
             </div>
-            <script>
+ <script>
     $(document).ready(function(){
         $('.panel').each(function() {
             animationHover(this, 'flipInY');
         });
     });
+    function checkkDelete(){
+    	alert("Inventory Cann't Be Deleted ! Due to product Existance ! ");
+    }
 </script>
 </body>
 </html>

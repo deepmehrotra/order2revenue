@@ -43,7 +43,9 @@ public class DownloadService {
 	 * 7. Write to the output stream
 	 * </pre>
 	 */
-
+	
+	public void downloadXLSFiles(){}	
+	
 	public void downloadXLS(HttpServletResponse response)
 			throws ClassNotFoundException {
 

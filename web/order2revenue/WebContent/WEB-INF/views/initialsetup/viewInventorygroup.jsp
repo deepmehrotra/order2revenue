@@ -133,11 +133,17 @@ function checkOnBlur()
                                             <td>${loop.index+1}</td>
                                             <td>${subcategory.catName}</td>
                                             <td>${subcategory.createdOn}</td>
-                                             <td>${subcategory.skuCount}</td>
-		                                      <td>${subcategory.productCount}</td>
-		                                       <td>${subcategory.openingStock}</td>
-                                            <td class="tooltip-demo">
-                                            <a href="#"  onclick="onclickDeleteCategory(${category.id},${subcategory.id})"><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Delete"></i></a></td>
+                                            <td>${subcategory.skuCount}</td>
+		                                    <td>${subcategory.productCount}</td>
+		                                    <td>${subcategory.openingStock}</td>
+                                            
+                                            <c:if test="${subcategory.skuCount == 0}">
+                                           		<td><a href="#"  onclick="onclickDeleteCategory(${category.id},${subcategory.id})"><i class="fa fa-trash text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Delete"></i></a></td>
+                                        	</c:if>
+                                            
+                                            <c:if test="${subcategory.skuCount != 0}">
+                                            	<td><a href="#"><i class="fa fa-trash text-navy"  data-original-title="Delete" onclick="checkkDelete();"></i></a></td>
+                                        	</c:if>
                                         </tr>
                                        </c:forEach>
                                         </tbody>
@@ -248,11 +254,16 @@ function checkOnBlur()
                     </div>
                 </div>
             </div>
-            <script>
+ <script>
     $(document).ready(function(){
         $('.panel').each(function() {
             animationHover(this, 'flipInY');
         });
     });
+    
+    function checkkDelete(){
+    	alert("Product Cann't Be Deleted !");
+    }
+    
 </script>
 </html>

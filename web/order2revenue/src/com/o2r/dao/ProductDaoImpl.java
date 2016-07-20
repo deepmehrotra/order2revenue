@@ -238,6 +238,85 @@ public class ProductDaoImpl implements ProductDao {
 					new Date(), 1, GlobalConstant.addProductErrorCode, new Exception());
 		log.info("*** addProduct Ends : ProductDaoImpl ****");
 	}
+	
+	
+	
+	@Override
+	public Product getProductEdit(String sku, int sellerId)
+			throws CustomException {
+		Product product=null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Product.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN).add(
+					Restrictions.eq("seller.id", sellerId));				
+			criteria.add(Restrictions.eq("productSkuCode",sku));
+			
+			if(criteria != null && criteria.list().size() != 0){				
+				product=(Product)criteria.list().get(0);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return product;
+	}
+	
+	
+	
+	@Override
+	public int editProduct(int sellerId, List<Product> products)throws CustomException {
+		
+		Product newProduct=null;
+		StringBuffer editError=null;
+		boolean status=true;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			editError=new StringBuffer();
+			for(Product product:products){
+				try {
+					Criteria criteria = session.createCriteria(Product.class);
+					criteria.createAlias("seller", "seller",
+							CriteriaSpecification.LEFT_JOIN).add(
+							Restrictions.eq("seller.id", sellerId));				
+					criteria.add(Restrictions.eq("productSkuCode",product.getProductSkuCode()));
+					if(criteria != null && criteria.list().size() != 0){
+						newProduct=(Product)criteria.list().get(0);
+						newProduct.setProductName(product.getProductName());
+						newProduct.setProductPrice(product.getProductPrice());
+						newProduct.setLength(product.getLength());
+						newProduct.setBreadth(product.getBreadth());
+						newProduct.setHeight(product.getHeight());
+						newProduct.setThreholdLimit(product.getThreholdLimit());
+						newProduct.setChannelSKU(product.getChannelSKU());
+						newProduct.setDeadWeight(product.getDeadWeight());
+						newProduct.setVolume(product.getVolume());
+						newProduct.setVolWeight(product.getVolWeight());
+						session.saveOrUpdate(newProduct);
+					}
+				} catch (Exception e) {
+					status=false;
+					editError.append(product.getProductSkuCode()+",");
+					log.error("Failed !", e);
+				}				
+			}
+			session.getTransaction().commit();
+			session.close();
+			if(!status){
+				throw new CustomException(editError.toString(),
+						new Date(), 1, "Server Error", new Exception());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed !",e);
+		}
+		return 1;
+	}
+	
+	
 
 	@Override
 	public void addProductConfig(ProductConfig productConfig, int sellerId) {

@@ -1,6 +1,7 @@
 package com.o2r.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +39,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.o2r.bean.DataConfig;
 import com.o2r.bean.OrderBean;
 import com.o2r.bean.PoPaymentDetailsBean;
 import com.o2r.bean.UploadReportBean;
@@ -89,6 +91,8 @@ public class OrderController {
 	private HelperClass helperClass;
 	@Autowired
 	EventsService eventsService;
+	@Autowired
+	DataConfig dataConfig;
 
 	private static final String UPLOAD_DIR = "upload";
 
@@ -100,15 +104,44 @@ public class OrderController {
 	 * <p>
 	 * Make sure this method doesn't return any model. Otherwise, you'll get an
 	 * "IllegalStateException: getOutputStream() has already been called for this response"
+	 * @throws IOException 
+	 * 
 	 */
 	@RequestMapping(value = "/seller/download/xls", method = RequestMethod.GET)
 	public void getXLS(HttpServletResponse response,
-			@RequestParam(value = "sheetvalue") String sheetvalue)
-			throws ClassNotFoundException {
+			@RequestParam(value = "sheetvalue") String sheetvalue,HttpServletRequest request)
+			throws ClassNotFoundException, IOException {
 
 		log.info("$$$ getXLS Starts : OrderController $$$");
 		log.debug(" Downloading the sheet: " + sheetvalue);
-		if (sheetvalue != null) {
+			
+			int BUFF_SIZE = 1024;
+			int byteRead = 0;
+			byte[] buffer = new byte[BUFF_SIZE];
+			File targetFile = new File(System.getProperty("catalina.base")+dataConfig.getXlsPath()+sheetvalue+".xls");
+			FileInputStream inputStream = new FileInputStream(targetFile);
+			response.setContentType("application/vnd.ms-excel");
+			System.out.println(System.getProperty("catalina.base")+dataConfig.getXlsPath()+sheetvalue+".xls");
+			response.setHeader("Content-Disposition", "inline; filename="+ sheetvalue+".xls");
+			response.setContentLength((int) targetFile.length());
+			OutputStream outputStream = response.getOutputStream();
+			
+			try {			    
+			    while ((byteRead = inputStream.read()) != -1) {
+			    	outputStream.write(buffer, 0, byteRead);
+			
+			    }
+			    outputStream.flush();
+			} catch (Exception e) {			    
+			    e.printStackTrace();
+			    log.error("failed !", e);
+			} finally {
+				outputStream.close();
+				inputStream.close();
+			}		
+		
+		
+		/*if (sheetvalue != null) {
 			if (sheetvalue.equals("ordersummary")) {
 				downloadService.downloadXLS(response);
 			} else if (sheetvalue.equals("orderPoSummary")) {
@@ -136,7 +169,7 @@ public class OrderController {
 			}else if (sheetvalue.equals("skuMapping")) {
 				downloadService.downloadSKUMappingXLS(response);
 			}
-		}
+		}*/
 		log.info("$$$ getXLS Ends : OrderController $$$");
 	}
 

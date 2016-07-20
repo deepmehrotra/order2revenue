@@ -74,7 +74,11 @@
 	});
 	$('#download').click(function() {
 		var value = $('#downloadreporttype').val();
-		window.location = 'download/xls.html?sheetvalue=' + value;
+		if(value == ''){
+			window.location.reload();
+		}else{
+			window.location = 'download/xls.html?sheetvalue=' + value;
+		}
 	});
 </script>
 
@@ -94,19 +98,19 @@
 								name="downloadreporttype">
 								<option value="">Select file to download</option>
 								<option value="ordersummary">Order Summary</option>
-								<option value="orderPoSummary">Order PO Summary</option>
-								<option value="paymentSummary">Payment Summary</option>
-								<option value="poPaymentSummary">PO Payment Summary</option>
-								<option value="returnSummary">Return Summary</option>
-								<option value="gatepassSummary">GatePass Summary</option>
-								<option value="debitNoteSummary">Debit Note</option>
-								<option value="productSummary">Product Summary</option>
-								<option value="editProductSummary">Edit Product Summary</option>
-								<option value="skuMapping">MP Channels SKU Mapping</option>
-								<option value="productConfigSummary">Product Config
+								<option value="orderposummary">Order PO Summary</option>
+								<option value="paymentsummary">Payment Summary</option>
+								<option value="popaymentsummary">PO Payment Summary</option>
+								<option value="returnsummary">Return Summary</option>
+								<option value="gatepasssummary">GatePass Summary</option>
+								<option value="debitnotesummary">Debit Note</option>
+								<option value="productsummary">Product Summary</option>
+								<option value="editproductsummary">Edit Product Summary</option>
+								<option value="skumappingsummary">MP Channels SKU Mapping</option>
+								<option value="productconfigsummary">Product Config
 									Summary</option>
-								<option value="inventorySummary">Inventory Summary</option>
-								<option value="expenseSummary">Expense Summary</option>
+								<option value="inventorysummary">Inventory Summary</option>
+								<option value="expensesummary">Expense Summary</option>
 							</select>
 						</div>
 						<div class="col-md-4">
@@ -128,7 +132,7 @@
 
 									<!-- 	<input id="addFile" type="button" value="Add File" /> -->
 									<div class="col-md-4">
-										<select class="form-control" id="sheetValue" name="sheetValue">
+										<select class="form-control" id="sheetValue" name="sheetValue" required	autocomplete="off" >
 											<option value="">Select file to download</option>
 											<option value="ordersummary">Order Summary</option>
 											<option value="orderPoSummary">Order PO Summary</option>
@@ -148,10 +152,10 @@
 
 									</div>
 									<div class="col-md-4">															
-										<input name="files[0]" type="file"	class="form-control" />											
+										<input name="files[0]" type="file"	class="form-control" required/>											
 									</div>
 									<div class="col-md-2">
-										<!-- <input type="submit" value="Upload" class="form-control" /> -->
+										
 										<button class="btn btn-success " type="submit" id="upload">
 											<i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Upload</span>
 										</button>

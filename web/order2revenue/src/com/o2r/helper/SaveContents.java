@@ -1002,6 +1002,7 @@ public class SaveContents {
 		boolean validaterow = true;
 		Map<String, ProductBean> returnProductMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
+		List<Product> productList=new ArrayList<Product>();
 		Product product=null;
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -1116,11 +1117,11 @@ public class SaveContents {
 						validaterow = false;
 					}
 					if (validaterow) {
-						productService.addProduct(product, sellerId);
-					} else {
+						productList.add(product);
+					}else{
 						returnProductMap.put(errorMessage.toString(),
 								ConverterClass.prepareProductBean(product));
-					}				
+					}
 				}catch(Exception e)
 					{
 					log.error("Failed!",e);
@@ -1131,6 +1132,15 @@ public class SaveContents {
 					}
 				}
 			}
+			if(productList != null && productList.size() != 0){
+				try {
+					productService.editProduct(sellerId, productList);
+				} catch (CustomException ce) {
+					errorMessage.append(ce.getMessage());
+				}				
+			}
+			returnProductMap.put(errorMessage.toString(),
+					ConverterClass.prepareProductBean(product));
 			Set<String> errorSet = returnProductMap.keySet();
 			downloadUploadReportXLS(offices, "EditProductReport", 9, errorSet,
 					path, sellerId, uploadReport);
@@ -1784,6 +1794,20 @@ public class SaveContents {
 		OrderRTOorReturn orderReturn = null;
 		Map<String, Order> returnlist = new LinkedHashMap<>();
 		List<Order> orderlist = null;
+		
+		Map<String , String> returnMap=new HashMap<String, String>();
+		returnMap.put("goodInventory", "goodInventory");
+		returnMap.put("badInventory", "badInventory");
+		returnMap.put("returnCharges", "returnCharges");
+		returnMap.put("RTOCharges", "RTOCharges");
+		returnMap.put("replacementCharges", "replacementCharges");
+		returnMap.put("partialDeliveryCharges", "partialDeliveryCharges");
+		returnMap.put("cancellationCharges", "cancellationCharges");
+		returnMap.put("buyerReturn", "buyerReturn");
+		returnMap.put("sellerFault", "sellerFault");
+		returnMap.put("beforeRTD", "beforeRTD");
+		returnMap.put("afterRTD", "afterRTD");				
+		
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -1821,16 +1845,18 @@ public class SaveContents {
 					if (entry.getCell(1) != null
 						&& StringUtils.isNotBlank(entry.getCell(1).toString()) && column != null) {
 						
+						System.out.println(entry
+								.getCell(1).toString());
 						orderlist = orderService.findOrders(column, entry
 								.getCell(1).toString(), sellerId, false, false);
 						if(orderlist != null && orderlist.size() != 0){
-							if(orderlist.size() == 1){
+							if(orderlist.size() == 1 && orderlist.get(0).getOrderReturnOrRTO().getReturnDate() == null){
 								order.setChannelOrderID(orderlist.get(0)
 										.getChannelOrderID());
 								id=order.getChannelOrderID();
 							}else{
 								validaterow = false;
-								errorMessage.append("Many Orders With "+criteria);
+								errorMessage.append("Many Orders or Return accepted With this "+criteria);
 							}
 							
 						}else{
@@ -1902,29 +1928,29 @@ public class SaveContents {
 					}
 					if (entry.getCell(7) != null
 							&& StringUtils.isNotBlank(entry.getCell(7)
-									.toString())) {
+									.toString()) && returnMap.containsKey(entry.getCell(7).toString())) {
 						orderReturn.setType(entry.getCell(7).toString());
 					} else {
-						errorMessage.append(" Mark order Return Type");
+						errorMessage.append("Invalid order Return Type");
 						validaterow = false;
 					}
 					if (entry.getCell(8) != null
 							&& StringUtils.isNotBlank(entry.getCell(8)
-									.toString())) {
+									.toString()) && returnMap.containsKey(entry.getCell(8).toString())) {
 						orderReturn.setReturnCategory(entry.getCell(8)
 								.toString());
 					} else {
-						errorMessage.append(" Mark order Return Fault Type");
+						errorMessage.append("Invalid order Return Fault Type");
 						validaterow = false;
 					}
 					if (entry.getCell(9) != null
-							&& StringUtils.isNotBlank(entry.getCell(9)
-									.toString())) {
+							&& StringUtils.isNotBlank(entry.getCell(9).toString()) 
+							&& returnMap.containsKey(entry.getCell(9).toString())) {
 						orderReturn.setCancelType(entry.getCell(9).toString());
 					}
 					if (entry.getCell(10) != null
-							&& StringUtils.isNotBlank(entry.getCell(10)
-									.toString())) {						
+							&& StringUtils.isNotBlank(entry.getCell(10).toString()) 
+							&& returnMap.containsKey(entry.getCell(10).toString())) {						
 						orderReturn.setInventoryType(entry.getCell(10).toString());
 					}
 					if (entry.getCell(11) != null
@@ -1935,8 +1961,7 @@ public class SaveContents {
 					
 				} else {
 					validaterow = false;
-					errorMessage
-							.append("Order Id and Suborder Id values are null");
+					errorMessage.append("Value of "+criteria+" is Null or Invalid.. ");
 				}
 				if (validaterow)
 					orderService.addReturnOrder(order.getChannelOrderID(),
@@ -1955,7 +1980,7 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "OrderReturnReport", 11, errorSet,
+			downloadUploadReportXLS(offices, "OrderReturnReport", 12, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			e.printStackTrace();
