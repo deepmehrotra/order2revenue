@@ -94,7 +94,7 @@
 					<div class="col-lg-12">
 						<div class="hr-line-dashed"></div>
 						<div class="col-md-4">
-							<select class="form-control" id="downloadreporttype"
+							<!-- <select class="form-control" id="downloadreporttype"
 								name="downloadreporttype">
 								<option value="">Select file to download</option>
 								<option value="ordersummary">Order Summary</option>
@@ -111,8 +111,25 @@
 									Summary</option>
 								<option value="inventorysummary">Inventory Summary</option>
 								<option value="expensesummary">Expense Summary</option>
+							</select> -->
+							<select class="form-control" id="downloadreporttype"
+								name="downloadreporttype">
+								<option value="">Select file to download</option>
+								<option value="MP_Order_Upload">Order Summary</option>
+								<option value="PO_Order_Upload">Order PO Summary</option>
+								<option value="MP_Payment_Upload">Payment Summary</option>
+								<option value="popaymentsummary">PO Payment Summary</option>
+								<option value="MP_Return_Upload">Return Summary</option>
+								<option value="gatepasssummary">GatePass Summary</option>
+								<option value="debitnotesummary">Debit Note</option>
+								<option value="Create_Parent_Product">Product Summary</option>
+								<option value="Product_Edit">Edit Product Summary</option>
+								<option value="MP_SKU_Mapping">MP Channels SKU Mapping</option>
+								<option value="PO_Product_Config">Product Config	Summary</option>
+								<option value="inventorysummary">Inventory Summary</option>
+								<option value="Expense_Upload">Expense Summary</option>
 							</select>
-						</div>
+						</div>						
 						<div class="col-md-4">
 							<button class="btn btn-success " type="button" id="download">
 								<i class="fa fa-download"></i>&nbsp;&nbsp;<span class="bold">Download</span>

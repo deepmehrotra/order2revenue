@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -115,22 +116,20 @@ public class OrderController {
 		log.info("$$$ getXLS Starts : OrderController $$$");
 		log.debug(" Downloading the sheet: " + sheetvalue);
 			
-			/*int BUFF_SIZE = 1024;
+			response.reset();
+			int BUFF_SIZE = 1024;
 			int byteRead = 0;
 			byte[] buffer = new byte[BUFF_SIZE];
-			File targetFile = new File(System.getProperty("catalina.base")+dataConfig.getXlsPath()+sheetvalue);
+			File targetFile = new File(System.getProperty("catalina.base")+dataConfig.getXlsPath()+sheetvalue+".xls");
 			FileInputStream inputStream = new FileInputStream(targetFile);
-			response.setContentType("application/vnd.ms-excel");
-			System.out.println(System.getProperty("catalina.base")+dataConfig.getXlsPath()+sheetvalue+".xls");
-			response.setHeader("Content-Disposition", "inline; filename="+ sheetvalue+".xls");
+			response.setContentType("application/vnd.ms-excel");			
+			response.setHeader("Content-Disposition", "attachment; filename="+targetFile.getName());
 			response.setContentLength((int) targetFile.length());
-			OutputStream outputStream = response.getOutputStream();
-			
+			OutputStream outputStream = response.getOutputStream();			
 			try {			    
 			    while ((byteRead = inputStream.read()) != -1) {
-			    	outputStream.write(buffer, 0, byteRead);
-			
-			    }
+			    	outputStream.write(buffer, 0, byteRead);			
+			    }			    
 			    outputStream.flush();
 			} catch (Exception e) {			    
 			    e.printStackTrace();
@@ -138,10 +137,10 @@ public class OrderController {
 			} finally {
 				outputStream.close();
 				inputStream.close();
-			}*/		
+			}		
 		
 		
-		if (sheetvalue != null) {
+		/*if (sheetvalue != null) {
 			if (sheetvalue.equals("ordersummary")) {
 				downloadService.downloadXLS(response);
 			} else if (sheetvalue.equals("orderposummary")) {
@@ -169,7 +168,7 @@ public class OrderController {
 			}else if (sheetvalue.equals("skumappingsummary")) {
 				downloadService.downloadSKUMappingXLS(response);
 			}
-		}
+		}*/
 		log.info("$$$ getXLS Ends : OrderController $$$");
 	}
 
