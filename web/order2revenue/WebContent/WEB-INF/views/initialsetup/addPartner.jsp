@@ -438,27 +438,69 @@ span .#error {
 																	<div id="content">
 																		<div class="col-sm-12">
 																			<div class="form-group col-md-12">
-																				<div class="col-md-3 content-rgt">
-																					<form:select class="form-control" path="fixedfeeList[0].criteria"
-																						name="nr-fixedfee-criteria">
-																						<option>Upto</option>
-																						<option>Greater Than</option>
-																					</form:select>
-																				</div>
-																				<div class="col-md-3 content-rgt">
-																					<form:input type="text" path="fixedfeeList[0].range"
-																						class="form-control validateNumber"
-																						name="nr-fixedfee-range" id="nr-fixedfee-range" />
-																				</div>
-																				<div class="col-md-3 content-rgt">
-																					<form:input type="text" path="fixedfeeList[0].value"
-																						class="form-control validateNumber"
-																						name="nr-fixedfee-value" id="nr-fixedfee-value" />
-																				</div>
-																				<div class="col-md-3 content-rgt">
-																					<input type="button" onclick="myFunction();"
-																						value="+" class="btn btn-primary" id="myBtn" />
-																				</div>
+
+																				<c:choose>
+																					<c:when test="${!empty partner.fixedfeeList}">
+																						<c:forEach items="${partner.fixedfeeList}"
+																							var="fixedfee" varStatus="loop">
+																							<div class="col-md-3 content-rgt">
+																								<select class="form-control"
+																									name="nr-fixedfee-criteria" >
+																									<c:choose>
+																										<c:when test="${partner.fixedfeeList.criteria eq 'Upto'}">
+																											<option selected>Upto</option>
+																											<option>Greater Than</option>
+																										</c:when>
+																										<c:otherwise>
+																											<option>Upto</option>
+																											<option selected>Greater Than</option>
+																										</c:otherwise>
+																									</c:choose>
+																								</select>
+																							</div>
+																							<div class="col-md-3 content-rgt">
+																								<input type="text"
+																									class="form-control validateNumber"
+																									name="nr-fixedfee-range" id="nr-fixedfee-range" 
+																									value="${partner.fixedfeeList.range}"/>
+																							</div>
+																							<div class="col-md-3 content-rgt">
+																								<input type="text"
+																									class="form-control validateNumber"
+																									name="nr-fixedfee-value" id="nr-fixedfee-value"
+																									value="${partner.fixedfeeList.value}"/>
+																							</div>
+																							<div class="col-md-3 content-rgt">
+																								<input type="button" onclick="myFunction();"
+																									value="+" class="btn btn-primary" id="myBtn" />
+																							</div>
+																						</c:forEach>
+																					</c:when>
+																					<c:otherwise>
+
+																						<div class="col-md-3 content-rgt">
+																							<select class="form-control"
+																								name="nr-fixedfee-criteria">
+																								<option>Upto</option>
+																								<option>Greater Than</option>
+																							</select>
+																						</div>
+																						<div class="col-md-3 content-rgt">
+																							<input type="text"
+																								class="form-control validateNumber"
+																								name="nr-fixedfee-range" id="nr-fixedfee-range" />
+																						</div>
+																						<div class="col-md-3 content-rgt">
+																							<input type="text"
+																								class="form-control validateNumber"
+																								name="nr-fixedfee-value" id="nr-fixedfee-value" />
+																						</div>
+																						<div class="col-md-3 content-rgt">
+																							<input type="button" onclick="myFunction();"
+																								value="+" class="btn btn-primary" id="myBtn" />
+																						</div>
+																					</c:otherwise>
+																				</c:choose>
 																			</div>
 																		</div>
 																	</div>
@@ -505,25 +547,28 @@ span .#error {
 																				<label>Upto</label>
 																			</div>
 																			<div class="col-md-5" style="padding: 0px;">
-																				<input type="text" name="nr-pcc-range" class="form-control"
-																					ng-model="firstname">
+																				<input type="text" name="nr-pcc-range"
+																					class="form-control" ng-model="firstname"
+																					value="${chargeMap.pcc-range}">
 
 																			</div>
 																			<div class="col-md-5">
-																				<input type="text" name="nr-pcc-value" class="form-control">
+																				<input type="text" name="nr-pcc-value"
+																					class="form-control" value="${chargeMap.pcc-value}">
 																			</div>
 																			<br> <br> <br>
 																			<div class="col-md-2">
 																				<label>Greater than</label>
 																			</div>
-																			<div class="col-md-5" style="padding: 0px;">																
+																			<div class="col-md-5" style="padding: 0px;">
 																				<label> &nbsp; &nbsp;{{firstname}}</label>
 																			</div>
 
 																			<div class="col-md-5">
 																				<div class="col-md-4" style="padding: 0px;">
-																					<input type="text" name="nr-pcc-percentSP" class="form-control">
-
+																					<input type="text" name="nr-pcc-percentSP"
+																						class="form-control"
+																						value="${chargeMap.pcc-percentSP}">
 																				</div>
 																				<div class="col-md-8"
 																					style="margin-top: 3px; padding: 0px 0px 0px 5px;">
@@ -541,7 +586,9 @@ span .#error {
 																			</div>
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
-																					<input type="text" name="nr-pcc-percentSP" class="form-control"> <span
+																					<input type="text" name="nr-pcc-percentSP"
+																						class="form-control"
+																						value="${chargeMap.pcc-percentSP}"> <span
 																						class="input-group-addon">%</span>
 																				</div>
 																			</div>
@@ -552,7 +599,9 @@ span .#error {
 																			</div>
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
-																					<input type="text" name="nr-pcc-fixedAmt" class="form-control"> <span
+																					<input type="text" name="nr-pcc-fixedAmt"
+																						class="form-control"
+																						value="${chargeMap.pcc-fixedAmt}"> <span
 																						class="input-group-addon">%</span>
 																				</div>
 																			</div>
@@ -578,7 +627,7 @@ span .#error {
 																					path="nrnReturnConfig.shippingFeeType"
 																					value="variable" id="shippingfee-variable"
 																					name="shippingFeeType" class="shippingFeeType" />
-																			 	Variable Shipping Charges
+																				Variable Shipping Charges
 																			</label>
 																		</div>
 																	</div>
@@ -587,7 +636,7 @@ span .#error {
 																			<label> <form:radiobutton
 																					path="nrnReturnConfig.shippingFeeType"
 																					value="fixed" id="shippingfee-fixed"
-																					name="shippingFeeType" class="shippingFeeType" /> 																
+																					name="shippingFeeType" class="shippingFeeType" />
 																				Fixed Shipping Charges
 																			</label>
 																		</div>
@@ -616,32 +665,38 @@ span .#error {
 																			<tbody>
 																				<tr>
 																					<td><select class="form-control selected"
-																						name="nr-shippingFeeVolume-criteria" name="nr-shippingFeeVolume-criteria">
-																							<option value="upto">Upto</option>
-																							<option value="additional">Additional</option>
+																						name="nr-shippingFeeVolume-criteria"
+																						name="nr-shippingFeeVolume-criteria">
+																							<option value="Upto">Upto</option>
+																							<option value="Additional">Additional</option>
 																					</select></td>
 																					<td><div class="form-group ">
 																							<div class=" content-rgt">
-																								<input type="text" name="nr-shippingFeeVolume-range"
+																								<input type="text"
+																									name="nr-shippingFeeVolume-range"
 																									class="form-control">
 																							</div>
 																						</div></td>
 																					<td><div class="form-group ">
 																							<div class=" content-rgt">
-																								<input type="text" name="nr-shippingFeeVolume-localValue"
+																								<input type="text"
+																									name="nr-shippingFeeVolume-localValue"
 																									class="form-control">
 																							</div>
 																						</div></td>
 																					<td><div class=" content-rgt">
-																							<input type="text" name="nr-shippingFeeVolume-zonalValue"
+																							<input type="text"
+																								name="nr-shippingFeeVolume-zonalValue"
 																								class="form-control">
 																						</div></td>
 																					<td><div class=" content-rgt">
-																							<input type="text" name="nr-shippingFeeVolume-nationalValue"
+																							<input type="text"
+																								name="nr-shippingFeeVolume-nationalValue"
 																								class="form-control">
 																						</div></td>
 																					<td><div class=" content-rgt">
-																							<input type="text" name="nr-shippingFeeVolume-metroValue"
+																							<input type="text"
+																								name="nr-shippingFeeVolume-metroValue"
 																								class="form-control">
 																						</div></td>
 																					<td><div class=" content-rgt">
@@ -671,29 +726,34 @@ span .#error {
 																				<tr>
 																					<td><select class="form-control selected"
 																						name="nr-shippingFeeWeight-criteria">
-																							<option value="upto">Upto</option>
-																							<option value="additional">Additional</option>
+																							<option value="Upto">Upto</option>
+																							<option value="Additional">Additional</option>
 																					</select></td>
 																					<td><div class="form-group ">
 																							<div class=" content-rgt">
-																								<input type="text" name="nr-shippingFeeWeight-range"
+																								<input type="text"
+																									name="nr-shippingFeeWeight-range"
 																									class="form-control">
 																							</div>
 																						</div></td>
 																					<td><div class=" content-rgt">
-																							<input type="text" name="nr-shippingFeeWeight-localValue"
+																							<input type="text"
+																								name="nr-shippingFeeWeight-localValue"
 																								class="form-control">
 																						</div></td>
 																					<td><div class=" content-rgt">
-																							<input type="text" name="nr-shippingFeeWeight-zonalValue"
+																							<input type="text"
+																								name="nr-shippingFeeWeight-zonalValue"
 																								class="form-control">
 																						</div></td>
 																					<td><div class=" content-rgt">
-																							<input type="text" name="nr-shippingFeeWeight-nationalValue"
+																							<input type="text"
+																								name="nr-shippingFeeWeight-nationalValue"
 																								class="form-control">
 																						</div></td>
 																					<td><div class=" content-rgt">
-																							<input type="text" name="nr-shippingFeeWeight-metroValue"
+																							<input type="text"
+																								name="nr-shippingFeeWeight-metroValue"
 																								class="form-control">
 																						</div></td>
 																					<td><div class=" content-rgt">
@@ -727,13 +787,14 @@ span .#error {
 																				<tr>
 																					<td><select class="form-control selected"
 																						name="nr-shippingFeeWeight-criteria">
-																							<option value="upto">Upto</option>
-																							<option value="additional">Additional</option>
+																							<option value="Upto">Upto</option>
+																							<option value="Additional">Additional</option>
 																					</select></td>
 																					<td>
 																						<div class="form-group ">
 																							<div class=" content-rgt">
-																								<input type="text" name="nr-shippingFeeWeight-range"
+																								<input type="text"
+																									name="nr-shippingFeeWeight-range"
 																									class="form-control">
 																							</div>
 																						</div>
@@ -741,7 +802,8 @@ span .#error {
 																					<td>
 																						<div class="form-group ">
 																							<div class=" content-rgt">
-																								<input type="text" name="nr-shippingFeeWeight-value"
+																								<input type="text"
+																									name="nr-shippingFeeWeight-value"
 																									class="form-control">
 																							</div>
 																						</div>
@@ -768,15 +830,17 @@ span .#error {
 																				<tr>
 																					<td><select class="form-control selected"
 																						name="nr-shippingFeeVolume-criteria">
-																							<option value="upto">Upto</option>
-																							<option value="additional">Additional</option>
+																							<option value="Upto">Upto</option>
+																							<option value="Additional">Additional</option>
 																					</select></td>
-																					<td><input type="text" name="nr-shippingFeeVolume-range"
+																					<td><input type="text"
+																						name="nr-shippingFeeVolume-range"
 																						class="form-control"></td>
 																					<td>
 																						<div class="form-group ">
 																							<div class=" content-rgt">
-																								<input type="text" name="nr-shippingFeeVolume-value"
+																								<input type="text"
+																									name="nr-shippingFeeVolume-value"
 																									class="form-control">
 																							</div>
 																						</div>
@@ -2521,7 +2585,11 @@ span .#error {
 			divtest.innerHTML = "<div class='col-sm-12'>"
 					+ "<div class='form-group col-md-12'>"
 					+ "<div class='col-md-3 content-rgt'>"
-					+ "<select name='nr-fixedfee-criteria"+index+"' id=='nr-fixedfee-criteria"+index+"' onchange='(this.selectedIndex == 0) ? upto() : additional("
+					+ "<select name='nr-fixedfee"
+					+ index
+					+ "-criteria' id=='nr-fixedfee"
+					+ index
+					+ "-criteria' onchange='(this.selectedIndex == 0) ? upto() : additional("
 					+ (index - 1)
 					+ ")' class='form-control'>"
 					+ "<option>Upto</option>"
@@ -2531,10 +2599,10 @@ span .#error {
 
 					"</div>"
 					+ "<div class='col-md-3 content-rgt'>"
-					+ "<input type='text' name='nr-fixedfee-range"+index+"' placeholder='' class='form-control' id='txt_name"+index+"' multiple>"
+					+ "<input type='text' name='nr-fixedfee"+index+"-range' placeholder='' class='form-control' id='txt_name"+index+"' multiple>"
 					+ "</div>"
 					+ "<div class='col-md-3 content-rgt'>"
-					+ "<input type='text' placeholder='' name='nr-fixedfee-value"+index+"' id='nr-fixedfee-value"+index+"' class='form-control'>"
+					+ "<input type='text' placeholder='' name='nr-fixedfee"+index+"-value' id='nr-fixedfee"+index+"-value' class='form-control'>"
 					+ "</div>" + "<div class='col-md-3 content-rgt'>"
 					+ "</div>" + "</div>" + "</div>";
 			objTo.appendChild(divtest)
@@ -2547,9 +2615,11 @@ span .#error {
 			var currentRow = myTable.insertRow(-1);
 
 			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "nr-shippingFeeVolume-criteria" + currentIndex);
+			linksBox.setAttribute("name", "nr-shippingFeeVolume" + currentIndex
+					+ "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
+			linksBox.setAttribute("path", "");
 
 			linksBox.setAttribute("type", "button");
 			linksBox.setAttribute("class", "form-control");
@@ -2567,23 +2637,28 @@ span .#error {
 			linksBox.appendChild(theOption);
 
 			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "nr-shippingFeeVolume-range" + currentIndex);
+			linksBox1.setAttribute("name", "nr-shippingFeeVolume"
+					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control");
 
 			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "nr-shippingFeeVolume-localValue" + currentIndex);
+			linksBox2.setAttribute("name", "nr-shippingFeeVolume"
+					+ currentIndex + "-localValue");
 			linksBox2.setAttribute("class", "form-control");
 
 			var linksBox3 = document.createElement("input");
-			linksBox3.setAttribute("name", "nr-shippingFeeVolume-zonalValue" + currentIndex);
+			linksBox3.setAttribute("name", "nr-shippingFeeVolume"
+					+ currentIndex + "-zonalValue");
 			linksBox3.setAttribute("class", "form-control");
 
 			var keywordsBox = document.createElement("input");
-			keywordsBox.setAttribute("name", "nr-shippingFeeVolume-nationalValue" + currentIndex);
+			keywordsBox.setAttribute("name", "nr-shippingFeeVolume"
+					+ currentIndex + "-nationalValue");
 			keywordsBox.setAttribute("class", "form-control");
 
 			var violationsBox = document.createElement("input");
-			violationsBox.setAttribute("name", "nr-shippingFeeVolume-metroValue" + currentIndex);
+			violationsBox.setAttribute("name", "nr-shippingFeeVolume"
+					+ currentIndex + "-metroValue");
 			violationsBox.setAttribute("class", "form-control");
 
 			var addRowBox = document.createElement("input");
@@ -2619,7 +2694,8 @@ span .#error {
 			var currentRow = myTable.insertRow(-1);
 
 			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "nr-shippingFeeWeight-criteria" + currentIndex);
+			linksBox.setAttribute("name", "nr-shippingFeeWeight" + currentIndex
+					+ "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
 
@@ -2639,23 +2715,28 @@ span .#error {
 			linksBox.appendChild(theOption);
 
 			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "nr-shippingFeeWeight-range" + currentIndex);
+			linksBox1.setAttribute("name", "nr-shippingFeeWeight"
+					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control");
 
 			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "nr-shippingFeeWeight-localValue" + currentIndex);
+			linksBox2.setAttribute("name", "nr-shippingFeeWeight"
+					+ currentIndex + "-localValue");
 			linksBox2.setAttribute("class", "form-control");
 
 			var linksBox3 = document.createElement("input");
-			linksBox3.setAttribute("name", "nr-shippingFeeWeight-zonalValue" + currentIndex);
+			linksBox3.setAttribute("name", "nr-shippingFeeWeight"
+					+ currentIndex + "-zonalValue");
 			linksBox3.setAttribute("class", "form-control");
 
 			var keywordsBox = document.createElement("input");
-			keywordsBox.setAttribute("name", "nr-shippingFeeWeight-nationalValue" + currentIndex);
+			keywordsBox.setAttribute("name", "nr-shippingFeeWeight"
+					+ currentIndex + "-nationalValue");
 			keywordsBox.setAttribute("class", "form-control");
 
 			var violationsBox = document.createElement("input");
-			violationsBox.setAttribute("name", "nr-shippingFeeWeight-metroValue" + currentIndex);
+			violationsBox.setAttribute("name", "nr-shippingFeeWeight"
+					+ currentIndex + "-metroValue");
 			violationsBox.setAttribute("class", "form-control");
 
 			var addRowBox = document.createElement("input");
@@ -2691,7 +2772,8 @@ span .#error {
 			var currentRow = myTable.insertRow(-1);
 
 			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "nr-shippingFeeWeight-criteria" + currentIndex);
+			linksBox.setAttribute("name", "nr-shippingFeeWeight" + currentIndex
+					+ "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
 
@@ -2711,11 +2793,13 @@ span .#error {
 			linksBox.appendChild(theOption);
 
 			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "nr-shippingFeeWeight-range" + currentIndex);
+			linksBox1.setAttribute("name", "nr-shippingFeeWeight"
+					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control");
 
 			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "nr-shippingFeeWeight-value" + currentIndex);
+			linksBox2.setAttribute("name", "nr-shippingFeeWeight"
+					+ currentIndex + "-value");
 			linksBox2.setAttribute("class", "form-control");
 
 			var addRowBox = document.createElement("input");
@@ -2742,7 +2826,8 @@ span .#error {
 			var currentRow = myTable.insertRow(-1);
 
 			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "nr-shippingFeeVolume-criteria" + currentIndex);
+			linksBox.setAttribute("name", "nr-shippingFeeVolume" + currentIndex
+					+ "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
 			linksBox.setAttribute("type", "button");
@@ -2761,11 +2846,13 @@ span .#error {
 			linksBox.appendChild(theOption);
 
 			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "nr-shippingFeeVolume-range" + currentIndex);
+			linksBox1.setAttribute("name", "nr-shippingFeeVolume"
+					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control");
 
 			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "nr-shippingFeeVolume-value" + currentIndex);
+			linksBox2.setAttribute("name", "nr-shippingFeeVolume"
+					+ currentIndex + "-value");
 			linksBox2.setAttribute("class", "form-control");
 
 			var addRowBox = document.createElement("input");
@@ -2802,6 +2889,9 @@ span .#error {
 			$("#txt_name" + (x + 1) + "").val(v);
 			document.getElementById("myBtn").disabled = true;
 
+		}
+		function upto() {
+			document.getElementById("myBtn").disabled = false;
 		}
 	</script>
 

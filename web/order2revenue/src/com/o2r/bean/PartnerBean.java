@@ -210,6 +210,31 @@ public class PartnerBean {
 	public void setShippingfeeWeightList(List<ChargesBean> shippingfeeWeightList) {
 		this.shippingfeeWeightList = shippingfeeWeightList;
 	}
-
-
+	
+	public ChargesBean getChargesBean(String type, String criteria, long criteriaRange) {
+		ChargesBean returnBean = null;
+		if (type.equalsIgnoreCase("fixedfee")) {
+			for (ChargesBean bean : this.fixedfeeList) {
+				if (bean.getCriteria().equalsIgnoreCase(criteria)
+						&& bean.getRange() == criteriaRange) {
+					returnBean = bean;
+				}
+			}
+		} else if (type.equalsIgnoreCase("shippingfeeVolume")) {
+			for (ChargesBean bean : this.shippingfeeVolumeList) {
+				if (bean.getCriteria().equalsIgnoreCase(criteria)
+						&& bean.getRange() == criteriaRange) {
+					returnBean = bean;
+				}
+			}
+		} else if (type.equalsIgnoreCase("shippingfeeWeight")) {
+			for (ChargesBean bean : this.shippingfeeWeightList) {
+				if (bean.getCriteria().equalsIgnoreCase(criteria)
+						&& bean.getRange() == criteriaRange) {
+					returnBean = bean;
+				}
+			}
+		}
+		return returnBean;
+	}
 }

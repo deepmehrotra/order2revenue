@@ -24,7 +24,8 @@ public class NRnReturnCharges {
 	@Column
 	private String criteria;
 	@Column
-	private long criteriaRange;
+	private long criteriaRange = 0;
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private NRnReturnConfig config;
 
