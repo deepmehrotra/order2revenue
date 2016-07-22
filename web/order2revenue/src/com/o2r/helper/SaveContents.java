@@ -618,7 +618,7 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				if (entry.getCell(5) != null
+				/*if (entry.getCell(5) != null
 						&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
 					try {
 						order.setOrderMRP(Double.parseDouble(entry.getCell(5)
@@ -631,12 +631,12 @@ public class SaveContents {
 				} else {
 					errorMessage.append(" PO MRP is null ");
 					validaterow = false;
-				}
-
-				if (entry.getCell(6) != null
-						&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
+				}*/
+				
+				if (entry.getCell(5) != null
+						&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
 					try {
-						order.setTotalAmountRecieved(entry.getCell(6)
+						order.setTotalAmountRecieved(entry.getCell(5)
 								.getNumericCellValue());
 
 					} catch (NumberFormatException e) {
@@ -649,11 +649,11 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				if (entry.getCell(7) != null
-						&& StringUtils.isNotBlank(entry.getCell(7).toString())) {
-					order.setInvoiceID(entry.getCell(7).toString());
+				if (entry.getCell(6) != null
+						&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
+					order.setInvoiceID(entry.getCell(6).toString());
 
-					String curInvoiceId = entry.getCell(7).toString();
+					String curInvoiceId = entry.getCell(6).toString();
 					if (curInvoiceId != null) {
 
 						if (orderService.isPOOrderUploaded(
@@ -689,23 +689,23 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				if (entry.getCell(8) != null
-						&& StringUtils.isNotBlank(entry.getCell(8).toString())) {
-					order.setSealNo(entry.getCell(8).toString());
-					order.setAwbNum(entry.getCell(8).toString());
+				if (entry.getCell(7) != null
+						&& StringUtils.isNotBlank(entry.getCell(7).toString())) {
+					order.setSealNo(entry.getCell(7).toString());
+					order.setAwbNum(entry.getCell(7).toString());
 				} else {
 					errorMessage.append(" Seal No is null ");
 					validaterow = false;
 				}
 
-				if (entry.getCell(9) != null
-						&& StringUtils.isNotBlank(entry.getCell(9).toString())) {
+				if (entry.getCell(8) != null
+						&& StringUtils.isNotBlank(entry.getCell(8).toString())) {
 
-					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(9))) {
-						order.setOrderDate(entry.getCell(9).getDateCellValue());
-						order.setShippedDate(entry.getCell(9)
+					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(8))) {
+						order.setOrderDate(entry.getCell(8).getDateCellValue());
+						order.setShippedDate(entry.getCell(8)
 								.getDateCellValue());
-						order.setDeliveryDate(entry.getCell(9)
+						order.setDeliveryDate(entry.getCell(8)
 								.getDateCellValue());
 					} else {
 						errorMessage.append(" Shipped Date format is wrong ");
@@ -716,9 +716,9 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				if (entry.getCell(10) != null
-						&& StringUtils.isNotBlank(entry.getCell(10).toString())) {
-					order.setSellerNote(entry.getCell(10).toString());
+				if (entry.getCell(9) != null
+						&& StringUtils.isNotBlank(entry.getCell(9).toString())) {
+					order.setSellerNote(entry.getCell(9).toString());
 				}
 
 				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
@@ -746,7 +746,7 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = returnOrderMap.keySet();
-			downloadUploadReportXLS(offices, "OrderPOSheet", 11, errorSet,
+			downloadUploadReportXLS(offices, "OrderPOSheet", 10, errorSet,
 					path, sellerId, uploadReport);
 
 		} catch (Exception e) {
@@ -2645,7 +2645,7 @@ public class SaveContents {
 					errorMessage.append(" Return Rate is null ");
 					validaterow = false;
 				}
-
+/*
 				if (entry.getCell(6) != null
 						&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
 					gatepass.setTaxPOAmt(Double.parseDouble(entry.getCell(6)
@@ -2663,27 +2663,27 @@ public class SaveContents {
 					errorMessage.append(" Return Charges is null ");
 					validaterow = false;
 				}
-
-				if (entry.getCell(8) != null
-						&& StringUtils.isNotBlank(entry.getCell(8).toString())) {
-					gatepass.setTotalReturnCharges(entry.getCell(8)
+*/
+				if (entry.getCell(6) != null
+						&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
+					gatepass.setTotalReturnCharges(entry.getCell(6)
 							.getNumericCellValue());
 				} else {
 					errorMessage.append(" Total Return Charges is null ");
 					validaterow = false;
 				}
 
-				if (entry.getCell(9) != null
+				/*if (entry.getCell(9) != null
 						&& StringUtils.isNotBlank(entry.getCell(9).toString())) {
 					gatepass.setSellerNotes(entry.getCell(9).toString());
 				} else {
 					errorMessage.append(" Seller Note is null ");
 					validaterow = false;
-				}
+				}*/
 
-				if (entry.getCell(10) != null
-						&& StringUtils.isNotBlank(entry.getCell(10).toString())) {
-					gatepass.setPcName(entry.getCell(10).toString());
+				if (entry.getCell(7) != null
+						&& StringUtils.isNotBlank(entry.getCell(7).toString())) {
+					gatepass.setPcName(entry.getCell(7).toString());
 					productConfig = productService.getProductConfig(
 							gatepass.getChannelSkuRef(), gatepass.getPcName(),
 							sellerId);
@@ -2696,18 +2696,18 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				if (entry.getCell(11) != null
-						&& StringUtils.isNotBlank(entry.getCell(11).toString())) {
-					gatepass.setReturnReason(entry.getCell(11).toString());
+				if (entry.getCell(8) != null
+						&& StringUtils.isNotBlank(entry.getCell(8).toString())) {
+					gatepass.setReturnReason(entry.getCell(8).toString());
 				} else {
 					errorMessage.append(" Return Reason is null ");
 					validaterow = false;
 				}
 
-				if (entry.getCell(12) != null
-						&& StringUtils.isNotBlank(entry.getCell(12).toString())) {
-					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(12))) {
-						gatepass.setReturnDate(entry.getCell(12)
+				if (entry.getCell(9) != null
+						&& StringUtils.isNotBlank(entry.getCell(9).toString())) {
+					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(9))) {
+						gatepass.setReturnDate(entry.getCell(9)
 								.getDateCellValue());
 
 					} else {
@@ -2741,7 +2741,7 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "GatePassReport", 13, errorSet,
+			downloadUploadReportXLS(offices, "GatePassReport", 10, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed!", e);

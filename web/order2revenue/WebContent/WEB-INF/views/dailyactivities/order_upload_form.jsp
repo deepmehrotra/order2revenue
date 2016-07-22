@@ -80,6 +80,15 @@
 			window.location = 'download/xls.html?sheetvalue=' + value;
 		}
 	});
+	$('#download1').click(function() {
+		var value = $('#downloadreporttype').val();
+		var url="/O2R/XLSFiles/"+value+".xls";		
+		if(value == ''){
+			window.location.reload();
+		}else{			
+			document.getElementById('my_iframe').src = url;			
+		}
+	});
 </script>
 
 </head>
@@ -112,15 +121,16 @@
 								<option value="inventorysummary">Inventory Summary</option>
 								<option value="expensesummary">Expense Summary</option>
 							</select> -->
+							<iframe id="my_iframe" style="display:none;"></iframe>
 							<select class="form-control" id="downloadreporttype"
 								name="downloadreporttype">
 								<option value="">Select file to download</option>
 								<option value="MP_Order_Upload">Order Summary</option>
 								<option value="PO_Order_Upload">Order PO Summary</option>
 								<option value="MP_Payment_Upload">Payment Summary</option>
-								<option value="popaymentsummary">PO Payment Summary</option>
+								<option value="Po_Payment_Upload">PO Payment Summary</option>
 								<option value="MP_Return_Upload">Return Summary</option>
-								<option value="gatepasssummary">GatePass Summary</option>
+								<option value="PO_Gatepass_Uplooad">GatePass Summary</option>
 								<option value="debitnotesummary">Debit Note</option>
 								<option value="Create_Parent_Product">Product Summary</option>
 								<option value="Product_Edit">Edit Product Summary</option>
@@ -131,7 +141,7 @@
 							</select>
 						</div>						
 						<div class="col-md-4">
-							<button class="btn btn-success " type="button" id="download">
+							<button class="btn btn-success " type="button" id="download1">
 								<i class="fa fa-download"></i>&nbsp;&nbsp;<span class="bold">Download</span>
 							</button>
 						</div>
@@ -160,13 +170,11 @@
 											<option value="productSummary">Product Summary</option>
 											<option value="editProductSummary">Edit Product Summary</option>
 											<option value="skuMapping">MP Channels SKU Mapping</option>
-											<option value="productConfigSummary">Product Config
-												Summary</option>
+											<option value="productConfigSummary">Product Config Summary</option>
 											<option value="inventorySummary">Inventory Summary</option>
 											<option value="poPaymentSummary">PO Payment Summary</option>
 											<option value="expenseSummary">Expense Summary</option>
 										</select>
-
 									</div>
 									<div class="col-md-4">															
 										<input name="files[0]" type="file"	class="form-control" required/>											
