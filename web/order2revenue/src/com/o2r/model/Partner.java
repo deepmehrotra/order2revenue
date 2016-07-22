@@ -31,6 +31,8 @@ public class Partner {
 	@Column
 	private String paymentType;
 	@Column
+	private String paymentCategory;
+	@Column
 	private boolean isshippeddatecalc;
 	@Column
 	private int noofdaysfromshippeddate;
@@ -185,6 +187,12 @@ public class Partner {
 	}
 	public void setEvents(List<Events> events) {
 		this.events = events;
+	}
+	public String getPaymentCategory() {
+		return paymentCategory;
+	}
+	public void setPaymentCategory(String paymentCategory) {
+		this.paymentCategory = paymentCategory;
 	}
 
 

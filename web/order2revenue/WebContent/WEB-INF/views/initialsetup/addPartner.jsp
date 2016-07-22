@@ -438,16 +438,15 @@ span .#error {
 																	<div id="content">
 																		<div class="col-sm-12">
 																			<div class="form-group col-md-12">
-
 																				<c:choose>
 																					<c:when test="${!empty partner.fixedfeeList}">
 																						<c:forEach items="${partner.fixedfeeList}"
 																							var="fixedfee" varStatus="loop">
 																							<div class="col-md-3 content-rgt">
 																								<select class="form-control"
-																									name="nr-fixedfee-criteria" >
+																									name="nr-fixedfee-criteria">
 																									<c:choose>
-																										<c:when test="${partner.fixedfeeList.criteria eq 'Upto'}">
+																										<c:when test="${fixedfee.criteria eq 'Upto'}">
 																											<option selected>Upto</option>
 																											<option>Greater Than</option>
 																										</c:when>
@@ -461,18 +460,27 @@ span .#error {
 																							<div class="col-md-3 content-rgt">
 																								<input type="text"
 																									class="form-control validateNumber"
-																									name="nr-fixedfee-range" id="nr-fixedfee-range" 
-																									value="${partner.fixedfeeList.range}"/>
+																									name="nr-fixedfee-range" id="nr-fixedfee-range"
+																									value="${fixedfee.range}" />
 																							</div>
 																							<div class="col-md-3 content-rgt">
 																								<input type="text"
 																									class="form-control validateNumber"
 																									name="nr-fixedfee-value" id="nr-fixedfee-value"
-																									value="${partner.fixedfeeList.value}"/>
+																									value="${fixedfee.value}" />
 																							</div>
 																							<div class="col-md-3 content-rgt">
-																								<input type="button" onclick="myFunction();"
-																									value="+" class="btn btn-primary" id="myBtn" />
+																								<c:choose>
+																									<c:when test="${fixedfee.criteria eq 'Upto'}">
+																										<input type="button" onclick="myFunction();"
+																											value="+" class="btn btn-primary" id="myBtn" />
+																									</c:when>
+																									<c:otherwise>
+																										<input type="button" onclick="myFunction();"
+																											value="+" class="btn btn-primary" id="myBtn"
+																											disabled="disabled" />
+																									</c:otherwise>
+																								</c:choose>
 																							</div>
 																						</c:forEach>
 																					</c:when>
@@ -663,48 +671,113 @@ span .#error {
 																				</tr>
 																			</thead>
 																			<tbody>
-																				<tr>
-																					<td><select class="form-control selected"
-																						name="nr-shippingFeeVolume-criteria"
-																						name="nr-shippingFeeVolume-criteria">
-																							<option value="Upto">Upto</option>
-																							<option value="Additional">Additional</option>
-																					</select></td>
-																					<td><div class="form-group ">
-																							<div class=" content-rgt">
-																								<input type="text"
-																									name="nr-shippingFeeVolume-range"
-																									class="form-control">
-																							</div>
-																						</div></td>
-																					<td><div class="form-group ">
-																							<div class=" content-rgt">
-																								<input type="text"
-																									name="nr-shippingFeeVolume-localValue"
-																									class="form-control">
-																							</div>
-																						</div></td>
-																					<td><div class=" content-rgt">
-																							<input type="text"
-																								name="nr-shippingFeeVolume-zonalValue"
-																								class="form-control">
-																						</div></td>
-																					<td><div class=" content-rgt">
-																							<input type="text"
-																								name="nr-shippingFeeVolume-nationalValue"
-																								class="form-control">
-																						</div></td>
-																					<td><div class=" content-rgt">
-																							<input type="text"
-																								name="nr-shippingFeeVolume-metroValue"
-																								class="form-control">
-																						</div></td>
-																					<td><div class=" content-rgt">
-																							<input type="button"
-																								class="button btn btn-primary" value="+"
-																								onclick="addField()">
-																						</div></td>
-																				</tr>
+																				<c:choose>
+																					<c:when
+																						test="${!empty partner.shippingfeeVolumeList}">
+																						<c:forEach
+																							items="${partner.shippingfeeVolumeList}"
+																							var="shippingfee" varStatus="loop">
+																							<tr>
+																								<td><select class="form-control selected"
+																									name="nr-shippingFeeVolume-criteria">
+																										<c:choose>
+																											<c:when
+																												test="${shippingfee.criteria eq 'Upto'}">
+																												<option value="Upto" selected>Upto</option>
+																												<option value="Additional">Additional</option>
+																											</c:when>
+																											<c:otherwise>
+																												<option value="Upto">Upto</option>
+																												<option value="Additional" selected>Additional</option>
+																											</c:otherwise>
+																										</c:choose>
+																								</select></td>
+																								<td><div class="form-group ">
+																										<div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingFeeVolume-range"
+																												class="form-control"
+																												value="${shippingfee.range}">
+																										</div>
+																									</div></td>
+																								<td><div class="form-group ">
+																										<div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingFeeVolume-localValue"
+																												class="form-control"
+																												value="${shippingfee.localValue}">
+																										</div>
+																									</div></td>
+																								<td><div class=" content-rgt">
+																										<input type="text"
+																											name="nr-shippingFeeVolume-zonalValue"
+																											class="form-control"
+																											value="${shippingfee.zonalValue}">
+																									</div></td>
+																								<td><div class=" content-rgt">
+																										<input type="text"
+																											name="nr-shippingFeeVolume-nationalValue"
+																											class="form-control"
+																											value="${shippingfee.nationalValue}">
+																									</div></td>
+																								<td><div class=" content-rgt">
+																										<input type="text"
+																											name="nr-shippingFeeVolume-metroValue"
+																											class="form-control"
+																											value="${shippingfee.metroValue}">
+																									</div></td>
+																								<td><div class=" content-rgt">
+																										<input type="button"
+																											class="button btn btn-primary" value="+"
+																											onclick="addField()">
+																									</div></td>
+																							</tr>
+																						</c:forEach>
+																					</c:when>
+																					<c:otherwise>
+																						<tr>
+																							<td><select class="form-control selected"
+																								name="nr-shippingFeeVolume-criteria">
+																									<option value="Upto">Upto</option>
+																									<option value="Additional">Additional</option>
+																							</select></td>
+																							<td><div class="form-group ">
+																									<div class=" content-rgt">
+																										<input type="text"
+																											name="nr-shippingFeeVolume-range"
+																											class="form-control">
+																									</div>
+																								</div></td>
+																							<td><div class="form-group ">
+																									<div class=" content-rgt">
+																										<input type="text"
+																											name="nr-shippingFeeVolume-localValue"
+																											class="form-control">
+																									</div>
+																								</div></td>
+																							<td><div class=" content-rgt">
+																									<input type="text"
+																										name="nr-shippingFeeVolume-zonalValue"
+																										class="form-control">
+																								</div></td>
+																							<td><div class=" content-rgt">
+																									<input type="text"
+																										name="nr-shippingFeeVolume-nationalValue"
+																										class="form-control">
+																								</div></td>
+																							<td><div class=" content-rgt">
+																									<input type="text"
+																										name="nr-shippingFeeVolume-metroValue"
+																										class="form-control">
+																								</div></td>
+																							<td><div class=" content-rgt">
+																									<input type="button"
+																										class="button btn btn-primary" value="+"
+																										onclick="addField()">
+																								</div></td>
+																						</tr>
+																					</c:otherwise>
+																				</c:choose>
 																			</tbody>
 																		</table>
 																	</div>
@@ -723,46 +796,111 @@ span .#error {
 																				</tr>
 																			</thead>
 																			<tbody>
-																				<tr>
-																					<td><select class="form-control selected"
-																						name="nr-shippingFeeWeight-criteria">
-																							<option value="Upto">Upto</option>
-																							<option value="Additional">Additional</option>
-																					</select></td>
-																					<td><div class="form-group ">
-																							<div class=" content-rgt">
-																								<input type="text"
-																									name="nr-shippingFeeWeight-range"
-																									class="form-control">
-																							</div>
-																						</div></td>
-																					<td><div class=" content-rgt">
-																							<input type="text"
-																								name="nr-shippingFeeWeight-localValue"
-																								class="form-control">
-																						</div></td>
-																					<td><div class=" content-rgt">
-																							<input type="text"
-																								name="nr-shippingFeeWeight-zonalValue"
-																								class="form-control">
-																						</div></td>
-																					<td><div class=" content-rgt">
-																							<input type="text"
-																								name="nr-shippingFeeWeight-nationalValue"
-																								class="form-control">
-																						</div></td>
-																					<td><div class=" content-rgt">
-																							<input type="text"
-																								name="nr-shippingFeeWeight-metroValue"
-																								class="form-control">
-																						</div></td>
-																					<td><div class=" content-rgt">
-																							<input type="button"
-																								class="button btn btn-primary" value="+"
-																								onclick="addField2()">
-																						</div></td>
-																				</tr>
-
+																				<c:choose>
+																					<c:when
+																						test="${!empty partner.shippingfeeWeightList}">
+																						<c:forEach
+																							items="${partner.shippingfeeWeightList}"
+																							var="shippingfee" varStatus="loop">
+																							<tr>
+																								<td><select class="form-control selected"
+																									name="nr-shippingFeeWeight-criteria">
+																										<c:choose>
+																											<c:when
+																												test="${shippingfee.criteria eq 'Upto'}">
+																												<option value="Upto" selected>Upto</option>
+																												<option value="Additional">Additional</option>
+																											</c:when>
+																											<c:otherwise>
+																												<option value="Upto">Upto</option>
+																												<option value="Additional" selected>Additional</option>
+																											</c:otherwise>
+																										</c:choose>
+																								</select></td>
+																								<td><div class="form-group ">
+																										<div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingFeeWeight-range"
+																												class="form-control"
+																												value="${shippingfee.range}">
+																										</div>
+																									</div></td>
+																								<td><div class="form-group ">
+																										<div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingFeeWeight-localValue"
+																												class="form-control"
+																												value="${shippingfee.localValue}">
+																										</div>
+																									</div></td>
+																								<td><div class=" content-rgt">
+																										<input type="text"
+																											name="nr-shippingFeeWeight-zonalValue"
+																											class="form-control"
+																											value="${shippingfee.zonalValue}">
+																									</div></td>
+																								<td><div class=" content-rgt">
+																										<input type="text"
+																											name="nr-shippingFeeWeight-nationalValue"
+																											class="form-control"
+																											value="${shippingfee.nationalValue}">
+																									</div></td>
+																								<td><div class=" content-rgt">
+																										<input type="text"
+																											name="nr-shippingFeeWeight-metroValue"
+																											class="form-control"
+																											value="${shippingfee.metroValue}">
+																									</div></td>
+																								<td><div class=" content-rgt">
+																										<input type="button"
+																											class="button btn btn-primary" value="+"
+																											onclick="addField2()">
+																									</div></td>
+																							</tr>
+																						</c:forEach>
+																					</c:when>
+																					<c:otherwise>
+																						<tr>
+																							<td><select class="form-control selected"
+																								name="nr-shippingFeeWeight-criteria">
+																									<option value="Upto">Upto</option>
+																									<option value="Additional">Additional</option>
+																							</select></td>
+																							<td><div class="form-group ">
+																									<div class=" content-rgt">
+																										<input type="text"
+																											name="nr-shippingFeeWeight-range"
+																											class="form-control">
+																									</div>
+																								</div></td>
+																							<td><div class=" content-rgt">
+																									<input type="text"
+																										name="nr-shippingFeeWeight-localValue"
+																										class="form-control">
+																								</div></td>
+																							<td><div class=" content-rgt">
+																									<input type="text"
+																										name="nr-shippingFeeWeight-zonalValue"
+																										class="form-control">
+																								</div></td>
+																							<td><div class=" content-rgt">
+																									<input type="text"
+																										name="nr-shippingFeeWeight-nationalValue"
+																										class="form-control">
+																								</div></td>
+																							<td><div class=" content-rgt">
+																									<input type="text"
+																										name="nr-shippingFeeWeight-metroValue"
+																										class="form-control">
+																								</div></td>
+																							<td><div class=" content-rgt">
+																									<input type="button"
+																										class="button btn btn-primary" value="+"
+																										onclick="addField2()">
+																								</div></td>
+																						</tr>
+																					</c:otherwise>
+																				</c:choose>
 																			</tbody>
 																		</table>
 																	</div>
@@ -784,34 +922,82 @@ span .#error {
 																				</tr>
 																			</thead>
 																			<tbody>
-																				<tr>
-																					<td><select class="form-control selected"
-																						name="nr-shippingFeeWeight-criteria">
-																							<option value="Upto">Upto</option>
-																							<option value="Additional">Additional</option>
-																					</select></td>
-																					<td>
-																						<div class="form-group ">
-																							<div class=" content-rgt">
-																								<input type="text"
-																									name="nr-shippingFeeWeight-range"
-																									class="form-control">
-																							</div>
-																						</div>
-																					</td>
-																					<td>
-																						<div class="form-group ">
-																							<div class=" content-rgt">
-																								<input type="text"
-																									name="nr-shippingFeeWeight-value"
-																									class="form-control">
-																							</div>
-																						</div>
-																					</td>
-																					<td><input type="button" name=""
-																						class="button btn btn-primary"
-																						onclick="addField3()" value="+"></td>
-																				</tr>
+																				<c:choose>
+																					<c:when
+																						test="${!empty partner.shippingfeeWeightList}">
+																						<c:forEach
+																							items="${partner.shippingfeeWeightList}"
+																							var="shippingfee" varStatus="loop">
+																							<tr>
+																								<td><select class="form-control selected"
+																									name="nr-shippingFeeWeight-criteria">
+																										<c:choose>
+																											<c:when
+																												test="${shippingfee.criteria eq 'Upto'}">
+																												<option value="Upto" selected>Upto</option>
+																												<option value="Additional">Additional</option>
+																											</c:when>
+																											<c:otherwise>
+																												<option value="Upto">Upto</option>
+																												<option value="Additional" selected>Additional</option>
+																											</c:otherwise>
+																										</c:choose>
+																								</select></td>
+																								<td><div class="form-group ">
+																										<div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingFeeWeight-range"
+																												class="form-control"
+																												value="${shippingfee.range}">
+																										</div>
+																									</div></td>
+																								<td><div class="form-group ">
+																										<div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingFeeWeight-value"
+																												class="form-control"
+																												value="${shippingfee.value}">
+																										</div>
+																									</div></td>
+																								<td><div class=" content-rgt">
+																										<input type="button"
+																											class="button btn btn-primary" value="+"
+																											onclick="addField3()">
+																									</div></td>
+																							</tr>
+																						</c:forEach>
+																					</c:when>
+																					<c:otherwise>
+																						<tr>
+																							<td><select class="form-control selected"
+																								name="nr-shippingFeeWeight-criteria">
+																									<option value="Upto">Upto</option>
+																									<option value="Additional">Additional</option>
+																							</select></td>
+																							<td>
+																								<div class="form-group ">
+																									<div class=" content-rgt">
+																										<input type="text"
+																											name="nr-shippingFeeWeight-range"
+																											class="form-control">
+																									</div>
+																								</div>
+																							</td>
+																							<td>
+																								<div class="form-group ">
+																									<div class=" content-rgt">
+																										<input type="text"
+																											name="nr-shippingFeeWeight-value"
+																											class="form-control">
+																									</div>
+																								</div>
+																							</td>
+																							<td><input type="button" name=""
+																								class="button btn btn-primary"
+																								onclick="addField3()" value="+"></td>
+																						</tr>
+																					</c:otherwise>
+																				</c:choose>
 																			</tbody>
 																		</table>
 																	</div>
@@ -827,28 +1013,76 @@ span .#error {
 																				</tr>
 																			</thead>
 																			<tbody>
-																				<tr>
-																					<td><select class="form-control selected"
-																						name="nr-shippingFeeVolume-criteria">
-																							<option value="Upto">Upto</option>
-																							<option value="Additional">Additional</option>
-																					</select></td>
-																					<td><input type="text"
-																						name="nr-shippingFeeVolume-range"
-																						class="form-control"></td>
-																					<td>
-																						<div class="form-group ">
-																							<div class=" content-rgt">
-																								<input type="text"
-																									name="nr-shippingFeeVolume-value"
-																									class="form-control">
-																							</div>
-																						</div>
-																					</td>
-																					<td><input type="button" name=""
-																						class="button btn btn-primary" value="+"
-																						onclick="addField4()"></td>
-																				</tr>
+																				<c:choose>
+																					<c:when
+																						test="${!empty partner.shippingfeeVolumeList}">
+																						<c:forEach
+																							items="${partner.shippingfeeVolumeList}"
+																							var="shippingfee" varStatus="loop">
+																							<tr>
+																								<td><select class="form-control selected"
+																									name="nr-shippingFeeVolume-criteria">
+																										<c:choose>
+																											<c:when
+																												test="${shippingfee.criteria eq 'Upto'}">
+																												<option value="Upto" selected>Upto</option>
+																												<option value="Additional">Additional</option>
+																											</c:when>
+																											<c:otherwise>
+																												<option value="Upto">Upto</option>
+																												<option value="Additional" selected>Additional</option>
+																											</c:otherwise>
+																										</c:choose>
+																								</select></td>
+																								<td><div class="form-group ">
+																										<div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingFeeVolume-range"
+																												class="form-control"
+																												value="${shippingfee.range}">
+																										</div>
+																									</div></td>
+																								<td><div class="form-group ">
+																										<div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingFeeVolume-value"
+																												class="form-control"
+																												value="${shippingfee.value}">
+																										</div>
+																									</div></td>
+																								<td><div class=" content-rgt">
+																										<input type="button"
+																											class="button btn btn-primary" value="+"
+																											onclick="addField4()">
+																									</div></td>
+																							</tr>
+																						</c:forEach>
+																					</c:when>
+																					<c:otherwise>
+																						<tr>
+																							<td><select class="form-control selected"
+																								name="nr-shippingFeeVolume-criteria">
+																									<option value="Upto">Upto</option>
+																									<option value="Additional">Additional</option>
+																							</select></td>
+																							<td><input type="text"
+																								name="nr-shippingFeeVolume-range"
+																								class="form-control"></td>
+																							<td>
+																								<div class="form-group ">
+																									<div class=" content-rgt">
+																										<input type="text"
+																											name="nr-shippingFeeVolume-value"
+																											class="form-control">
+																									</div>
+																								</div>
+																							</td>
+																							<td><input type="button" name=""
+																								class="button btn btn-primary" value="+"
+																								onclick="addField4()"></td>
+																						</tr>
+																					</c:otherwise>
+																				</c:choose>
 																			</tbody>
 																		</table>
 																	</div>

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,7 +30,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.o2r.bean.BusinessDetails;
 import com.o2r.bean.ChargesBean;
+import com.o2r.bean.ChargesBean.SortByCriteriaRange;
+import com.o2r.bean.ChargesBean.SortByCriteria;
 import com.o2r.bean.PartnerBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
@@ -155,15 +159,6 @@ public class PartnerController {
 						partnerBean.getNrnReturnConfig().getCharges()
 								.add(nrnReturncharge);
 
-						/*
-						 * ChargesBean charge = new ChargesBean();
-						 * charge.setChargeType("fixedfee");
-						 * charge.setCriteria(parameters.get(param +
-						 * "criteria")[0]);
-						 * charge.setRange(Long.parseLong(parameters.get(param +
-						 * "range")[0])); charge.setValue(Long.parseLong();
-						 * partnerBean.getFixedfeeList().add(charge);
-						 */
 					}
 				} else if (entry.getKey().contains("shippingFeeVolume")) {
 
@@ -241,18 +236,6 @@ public class PartnerController {
 							partnerBean.getNrnReturnConfig().getCharges()
 									.add(nrnReturncharge);
 
-							/*
-							 * ChargesBean charge = new ChargesBean();
-							 * charge.setChargeType("shippingfeeVolume");
-							 * charge.setCriteria(parameters.get(param +
-							 * "criteria")[0]);
-							 * charge.setRange(Long.parseLong(parameters
-							 * .get(param + "range")[0]));
-							 * charge.setValue(Long.parseLong
-							 * (parameters.get(param + "value")[0]));
-							 * partnerBean
-							 * .getShippingfeeVolumeList().add(charge);
-							 */
 						}
 					} else {
 						String param = entry.getKey().substring(0,
@@ -275,19 +258,6 @@ public class PartnerController {
 									.getNrnReturnConfig());
 							partnerBean.getNrnReturnConfig().getCharges()
 									.add(nrnReturncharge);
-
-							/*
-							 * ChargesBean charge = new ChargesBean();
-							 * charge.setChargeType("shippingfeeVolume");
-							 * charge.setCriteria(parameters.get(param +
-							 * "criteria")[0]);
-							 * charge.setRange(Long.parseLong(parameters
-							 * .get(param + "range")[0]));
-							 * charge.setValue(Long.parseLong
-							 * (parameters.get(param + "value")[0]));
-							 * partnerBean
-							 * .getShippingfeeVolumeList().add(charge);
-							 */
 						}
 					}
 				} else if (entry.getKey().contains("shippingFeeWeight")) {
@@ -366,18 +336,6 @@ public class PartnerController {
 							partnerBean.getNrnReturnConfig().getCharges()
 									.add(nrnReturncharge);
 
-							/*
-							 * ChargesBean charge = new ChargesBean();
-							 * charge.setChargeType("shippingfeeVolume");
-							 * charge.setCriteria(parameters.get(param +
-							 * "criteria")[0]);
-							 * charge.setRange(Long.parseLong(parameters
-							 * .get(param + "range")[0]));
-							 * charge.setValue(Long.parseLong
-							 * (parameters.get(param + "value")[0]));
-							 * partnerBean
-							 * .getShippingfeeVolumeList().add(charge);
-							 */
 						}
 					} else {
 						String param = entry.getKey().substring(0,
@@ -400,19 +358,6 @@ public class PartnerController {
 									.getNrnReturnConfig());
 							partnerBean.getNrnReturnConfig().getCharges()
 									.add(nrnReturncharge);
-
-							/*
-							 * ChargesBean charge = new ChargesBean();
-							 * charge.setChargeType("shippingfeeWeight");
-							 * charge.setCriteria(parameters.get(param +
-							 * "criteria")[0]);
-							 * charge.setRange(Long.parseLong(parameters
-							 * .get(param + "range")[0]));
-							 * charge.setValue(Long.parseLong
-							 * (parameters.get(param + "value")[0]));
-							 * partnerBean
-							 * .getShippingfeeWeightList().add(charge);
-							 */
 						}
 					}
 				}
@@ -1171,16 +1116,20 @@ public class PartnerController {
 					+ pbean.getNrnReturnConfig().getConfigId());
 			for (NRnReturnCharges charge : pbean.getNrnReturnConfig()
 					.getCharges()) {
-				if (charge.getChargeName().contains("fixedfee")) {
+				if (charge.getChargeName().contains("fixedfee")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
 
 					ChargesBean chargeBean = new ChargesBean();
 					chargeBean.setChargeType("fixedfee");
 					chargeBean.setCriteria(charge.getCriteria());
 					chargeBean.setRange(charge.getCriteriaRange());
 					chargeBean.setValue(charge.getChargeAmount());
-					partnerBean.getShippingfeeVolumeList().add(chargeBean);
+					pbean.getFixedfeeList().add(chargeBean);
 
-				} else if (charge.getChargeName().contains("shippingfeeVolume")) {
+				} else if (charge.getChargeName().contains("shippingfeeVolume")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
 
 					if (pbean.getNrnReturnConfig().getShippingFeeType()
 							.equalsIgnoreCase("variable")) {
@@ -1193,7 +1142,7 @@ public class PartnerController {
 							chargeBean.setChargeType("shippingfeeVolume");
 							chargeBean.setCriteria(charge.getCriteria());
 							chargeBean.setRange(charge.getCriteriaRange());
-							partnerBean.getShippingfeeVolumeList().add(chargeBean);
+							pbean.getShippingfeeVolumeList().add(chargeBean);
 						}
 
 						if (charge.getChargeName().contains("Local")) {
@@ -1213,10 +1162,12 @@ public class PartnerController {
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
 						chargeBean.setValue(charge.getChargeAmount());
-						partnerBean.getShippingfeeVolumeList().add(chargeBean);
+						pbean.getShippingfeeVolumeList().add(chargeBean);
 					}
 
-				} else if (charge.getChargeName().contains("shippingfeeWeight")) {
+				} else if (charge.getChargeName().contains("shippingfeeWeight")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
 
 					if (pbean.getNrnReturnConfig().getShippingFeeType()
 							.equalsIgnoreCase("variable")) {
@@ -1229,7 +1180,7 @@ public class PartnerController {
 							chargeBean.setChargeType("shippingfeeWeight");
 							chargeBean.setCriteria(charge.getCriteria());
 							chargeBean.setRange(charge.getCriteriaRange());
-							partnerBean.getShippingfeeWeightList().add(chargeBean);
+							pbean.getShippingfeeWeightList().add(chargeBean);
 						}
 
 						if (charge.getChargeName().contains("Local")) {
@@ -1249,7 +1200,7 @@ public class PartnerController {
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
 						chargeBean.setValue(charge.getChargeAmount());
-						partnerBean.getShippingfeeWeightList().add(chargeBean);
+						pbean.getShippingfeeWeightList().add(chargeBean);
 					}
 
 				} else {
@@ -1258,6 +1209,12 @@ public class PartnerController {
 				}
 
 			}
+			if (pbean.getFixedfeeList() != null && pbean.getFixedfeeList().size() != 0) 
+				Collections.sort(pbean.getFixedfeeList(), new SortByCriteriaRange());
+			if (pbean.getShippingfeeVolumeList() != null && pbean.getShippingfeeVolumeList().size() != 0)
+				Collections.sort(pbean.getShippingfeeVolumeList(), new SortByCriteria());
+			if (pbean.getShippingfeeWeightList() != null && pbean.getShippingfeeWeightList().size() != 0)
+				Collections.sort(pbean.getShippingfeeWeightList(), new SortByCriteria());
 
 			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
