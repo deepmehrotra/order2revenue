@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,6 +30,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.o2r.bean.BusinessDetails;
+import com.o2r.bean.ChargesBean;
+import com.o2r.bean.ChargesBean.SortByCriteriaRange;
+import com.o2r.bean.ChargesBean.SortByCriteria;
 import com.o2r.bean.PartnerBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
@@ -71,29 +76,29 @@ public class PartnerController {
 
 		{
 			add("amazon");
-            add("flipkart");
-            add("snapdeal");
-            add("ebay");
-            add("shopclues");
-            add("jabong");
-            add("myntra");
-            add("askmebazaar");
-            add("babyoye");
-            add("craftsvilla");
-            add("fabfurnish");
-            add("firstcry");
-            add("fashionnyou");
-            add("homeshop18");
-            add("indiatimes");
-            add("infibeam");
-            add("limeroad");
-            add("mebelkart");
-            add("naaptol");
-            add("pepperfry");
-            add("rediff");
-            add("tradus");
-            add("voonik");
-            add("zansaar");
+			add("flipkart");
+			add("snapdeal");
+			add("ebay");
+			add("shopclues");
+			add("jabong");
+			add("myntra");
+			add("askmebazaar");
+			add("babyoye");
+			add("craftsvilla");
+			add("fabfurnish");
+			add("firstcry");
+			add("fashionnyou");
+			add("homeshop18");
+			add("indiatimes");
+			add("infibeam");
+			add("limeroad");
+			add("mebelkart");
+			add("naaptol");
+			add("pepperfry");
+			add("rediff");
+			add("tradus");
+			add("voonik");
+			add("zansaar");
 		}
 	};
 
@@ -108,7 +113,10 @@ public class PartnerController {
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		log.info("$$$ savePartner Starts : OrderController $$$");
-		
+		log.info(partnerBean.getFixedfeeList().size());
+		log.info(partnerBean.getShippingfeeVolumeList().size());
+		log.info(partnerBean.getShippingfeeWeightList().size());
+
 		Map<String, Object> model = new HashMap<String, Object>();
 		if (partnerBean.getPcId() != 0) {
 			log.debug("******** ConfigId : "
@@ -120,10 +128,239 @@ public class PartnerController {
 		log.debug(" Nr calculayor value from bean : "
 				+ partnerBean.getNrnReturnConfig().isNrCalculator());
 		Map<String, String[]> parameters = request.getParameterMap();
+
+		List<String> fixedfeeParams = new ArrayList<String>();
+		List<String> shippingfeeVolumeParams = new ArrayList<String>();
+		List<String> shippingfeeWeightParams = new ArrayList<String>();
+
 		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
 			if (entry.getKey().contains("nr-")) {
-				log.debug(" Key with nr: " + entry.getKey() + " Values is : "
+				log.info(" Key with nr: " + entry.getKey() + " Values is : "
 						+ entry.getValue()[0]);
+
+				if (entry.getKey().contains("fixedfee")) {
+
+					String param = entry.getKey().substring(0,
+							entry.getKey().lastIndexOf('-') + 1);
+					if (!fixedfeeParams.contains(param)) {
+						fixedfeeParams.add(param);
+						NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+						nrnReturncharge
+								.setChargeAmount(Float.parseFloat(parameters
+										.get(param + "value")[0]));
+						nrnReturncharge.setChargeName("fixedfee");
+						nrnReturncharge.setCriteria(parameters.get(param
+								+ "criteria")[0]);
+						nrnReturncharge.setCriteriaRange(Long
+								.parseLong(parameters.get(param + "range")[0]));
+
+						nrnReturncharge.setConfig(partnerBean
+								.getNrnReturnConfig());
+						partnerBean.getNrnReturnConfig().getCharges()
+								.add(nrnReturncharge);
+
+					}
+				} else if (entry.getKey().contains("shippingFeeVolume")) {
+
+					if (partnerBean.getNrnReturnConfig().getShippingFeeType()
+							.equalsIgnoreCase("variable")) {
+						String param = entry.getKey().substring(0,
+								entry.getKey().lastIndexOf('-') + 1);
+						if (!shippingfeeVolumeParams.contains(param)) {
+							shippingfeeVolumeParams.add(param);
+							NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+							nrnReturncharge.setChargeAmount(Float
+									.parseFloat(parameters.get(param
+											+ "localValue")[0]));
+							nrnReturncharge
+									.setChargeName("shippingfeeVolumeLocal");
+							nrnReturncharge.setCriteria(parameters.get(param
+									+ "criteria")[0]);
+							nrnReturncharge
+									.setCriteriaRange(Long.parseLong(parameters
+											.get(param + "range")[0]));
+
+							nrnReturncharge.setConfig(partnerBean
+									.getNrnReturnConfig());
+							partnerBean.getNrnReturnConfig().getCharges()
+									.add(nrnReturncharge);
+
+							nrnReturncharge = new NRnReturnCharges();
+							nrnReturncharge.setChargeAmount(Float
+									.parseFloat(parameters.get(param
+											+ "zonalValue")[0]));
+							nrnReturncharge
+									.setChargeName("shippingfeeVolumeZonal");
+							nrnReturncharge.setCriteria(parameters.get(param
+									+ "criteria")[0]);
+							nrnReturncharge
+									.setCriteriaRange(Long.parseLong(parameters
+											.get(param + "range")[0]));
+
+							nrnReturncharge.setConfig(partnerBean
+									.getNrnReturnConfig());
+							partnerBean.getNrnReturnConfig().getCharges()
+									.add(nrnReturncharge);
+
+							nrnReturncharge = new NRnReturnCharges();
+							nrnReturncharge.setChargeAmount(Float
+									.parseFloat(parameters.get(param
+											+ "nationalValue")[0]));
+							nrnReturncharge
+									.setChargeName("shippingfeeVolumeNational");
+							nrnReturncharge.setCriteria(parameters.get(param
+									+ "criteria")[0]);
+							nrnReturncharge
+									.setCriteriaRange(Long.parseLong(parameters
+											.get(param + "range")[0]));
+
+							nrnReturncharge.setConfig(partnerBean
+									.getNrnReturnConfig());
+							partnerBean.getNrnReturnConfig().getCharges()
+									.add(nrnReturncharge);
+
+							nrnReturncharge = new NRnReturnCharges();
+							nrnReturncharge.setChargeAmount(Float
+									.parseFloat(parameters.get(param
+											+ "metroValue")[0]));
+							nrnReturncharge
+									.setChargeName("shippingfeeVolumeMetro");
+							nrnReturncharge.setCriteria(parameters.get(param
+									+ "criteria")[0]);
+							nrnReturncharge
+									.setCriteriaRange(Long.parseLong(parameters
+											.get(param + "range")[0]));
+
+							nrnReturncharge.setConfig(partnerBean
+									.getNrnReturnConfig());
+							partnerBean.getNrnReturnConfig().getCharges()
+									.add(nrnReturncharge);
+
+						}
+					} else {
+						String param = entry.getKey().substring(0,
+								entry.getKey().lastIndexOf('-') + 1);
+						if (!shippingfeeVolumeParams.contains(param)) {
+							shippingfeeVolumeParams.add(param);
+							NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+							nrnReturncharge
+									.setChargeAmount(Float
+											.parseFloat(parameters.get(param
+													+ "value")[0]));
+							nrnReturncharge.setChargeName("shippingfeeVolume");
+							nrnReturncharge.setCriteria(parameters.get(param
+									+ "criteria")[0]);
+							nrnReturncharge
+									.setCriteriaRange(Long.parseLong(parameters
+											.get(param + "range")[0]));
+
+							nrnReturncharge.setConfig(partnerBean
+									.getNrnReturnConfig());
+							partnerBean.getNrnReturnConfig().getCharges()
+									.add(nrnReturncharge);
+						}
+					}
+				} else if (entry.getKey().contains("shippingFeeWeight")) {
+
+					if (partnerBean.getNrnReturnConfig().getShippingFeeType()
+							.equalsIgnoreCase("variable")) {
+						String param = entry.getKey().substring(0,
+								entry.getKey().lastIndexOf('-') + 1);
+						if (!shippingfeeVolumeParams.contains(param)) {
+							shippingfeeVolumeParams.add(param);
+							NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+							nrnReturncharge.setChargeAmount(Float
+									.parseFloat(parameters.get(param
+											+ "localValue")[0]));
+							nrnReturncharge
+									.setChargeName("shippingfeeWeightLocal");
+							nrnReturncharge.setCriteria(parameters.get(param
+									+ "criteria")[0]);
+							nrnReturncharge
+									.setCriteriaRange(Long.parseLong(parameters
+											.get(param + "range")[0]));
+
+							nrnReturncharge.setConfig(partnerBean
+									.getNrnReturnConfig());
+							partnerBean.getNrnReturnConfig().getCharges()
+									.add(nrnReturncharge);
+
+							nrnReturncharge = new NRnReturnCharges();
+							nrnReturncharge.setChargeAmount(Float
+									.parseFloat(parameters.get(param
+											+ "zonalValue")[0]));
+							nrnReturncharge
+									.setChargeName("shippingfeeWeightZonal");
+							nrnReturncharge.setCriteria(parameters.get(param
+									+ "criteria")[0]);
+							nrnReturncharge
+									.setCriteriaRange(Long.parseLong(parameters
+											.get(param + "range")[0]));
+
+							nrnReturncharge.setConfig(partnerBean
+									.getNrnReturnConfig());
+							partnerBean.getNrnReturnConfig().getCharges()
+									.add(nrnReturncharge);
+
+							nrnReturncharge = new NRnReturnCharges();
+							nrnReturncharge.setChargeAmount(Float
+									.parseFloat(parameters.get(param
+											+ "nationalValue")[0]));
+							nrnReturncharge
+									.setChargeName("shippingfeeWeightNational");
+							nrnReturncharge.setCriteria(parameters.get(param
+									+ "criteria")[0]);
+							nrnReturncharge
+									.setCriteriaRange(Long.parseLong(parameters
+											.get(param + "range")[0]));
+
+							nrnReturncharge.setConfig(partnerBean
+									.getNrnReturnConfig());
+							partnerBean.getNrnReturnConfig().getCharges()
+									.add(nrnReturncharge);
+
+							nrnReturncharge = new NRnReturnCharges();
+							nrnReturncharge.setChargeAmount(Float
+									.parseFloat(parameters.get(param
+											+ "metroValue")[0]));
+							nrnReturncharge
+									.setChargeName("shippingfeeWeightMetro");
+							nrnReturncharge.setCriteria(parameters.get(param
+									+ "criteria")[0]);
+							nrnReturncharge
+									.setCriteriaRange(Long.parseLong(parameters
+											.get(param + "range")[0]));
+
+							nrnReturncharge.setConfig(partnerBean
+									.getNrnReturnConfig());
+							partnerBean.getNrnReturnConfig().getCharges()
+									.add(nrnReturncharge);
+
+						}
+					} else {
+						String param = entry.getKey().substring(0,
+								entry.getKey().lastIndexOf('-') + 1);
+						if (!shippingfeeWeightParams.contains(param)) {
+							shippingfeeWeightParams.add(param);
+							NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+							nrnReturncharge
+									.setChargeAmount(Float
+											.parseFloat(parameters.get(param
+													+ "value")[0]));
+							nrnReturncharge.setChargeName("shippingfeeWeight");
+							nrnReturncharge.setCriteria(parameters.get(param
+									+ "criteria")[0]);
+							nrnReturncharge
+									.setCriteriaRange(Long.parseLong(parameters
+											.get(param + "range")[0]));
+
+							nrnReturncharge.setConfig(partnerBean
+									.getNrnReturnConfig());
+							partnerBean.getNrnReturnConfig().getCharges()
+									.add(nrnReturncharge);
+						}
+					}
+				}
 			}
 		}
 		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
@@ -133,15 +370,22 @@ public class PartnerController {
 
 			if (entry.getValue()[0] != null && !entry.getValue()[0].isEmpty()) {
 				if (entry.getKey().contains("nr-")) {
-					log.debug(" Key : " + entry.getKey());
-					String temp = entry.getKey().substring(3);
-					NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-					nrnReturncharge.setChargeAmount(Float.parseFloat(entry
-							.getValue()[0]));
-					nrnReturncharge.setChargeName(temp);
-					nrnReturncharge.setConfig(partnerBean.getNrnReturnConfig());
-					partnerBean.getNrnReturnConfig().getCharges()
-							.add(nrnReturncharge);
+
+					if (entry.getKey().contains("fixedfee")
+							|| entry.getKey().contains("shippingFee")) {
+
+					} else {
+						log.debug(" Key : " + entry.getKey());
+						String temp = entry.getKey().substring(3);
+						NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+						nrnReturncharge.setChargeAmount(Float.parseFloat(entry
+								.getValue()[0]));
+						nrnReturncharge.setChargeName(temp);
+						nrnReturncharge.setConfig(partnerBean
+								.getNrnReturnConfig());
+						partnerBean.getNrnReturnConfig().getCharges()
+								.add(nrnReturncharge);
+					}
 				} else if (entry.getKey().contains("local")) {
 
 					String localstring = Arrays.toString(entry.getValue());
@@ -181,43 +425,42 @@ public class PartnerController {
 					.getNoofdaysfromdeliverydate());
 		}
 
-		if (image.getSize() != 0) {			
-				if (!image.isEmpty()) {
-					try {
-						validateImage(image);
-
-					} catch (RuntimeException re) {
-						log.error("Failed!",re);
-						result.reject(re.getMessage());
-					}
-				}
+		if (image.getSize() != 0) {
+			if (!image.isEmpty()) {
 				try {
-					props = PropertiesLoaderUtils.loadProperties(resource);
-					partnerBean.setPcLogoUrl(props
-								.getProperty("partnerimage.view")
-								+ helperClass.getSellerIdfromSession(request)
-								+ partnerBean.getPcName() + ".jpg");
-					saveImage(helperClass.getSellerIdfromSession(request)
-								+ partnerBean.getPcName() + ".jpg", image);
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-					log.error("Failed!", e);
-					result.reject(e.getMessage());
-					return new ModelAndView("redirect:/seller/partners.html");
+					validateImage(image);
+
+				} catch (RuntimeException re) {
+					log.error("Failed!", re);
+					result.reject(re.getMessage());
 				}
+			}
+			try {
+				props = PropertiesLoaderUtils.loadProperties(resource);
+				partnerBean.setPcLogoUrl(props.getProperty("partnerimage.view")
+						+ helperClass.getSellerIdfromSession(request)
+						+ partnerBean.getPcName() + ".jpg");
+				saveImage(helperClass.getSellerIdfromSession(request)
+						+ partnerBean.getPcName() + ".jpg", image);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("Failed!", e);
+				result.reject(e.getMessage());
+				return new ModelAndView("redirect:/seller/partners.html");
+			}
 		} else {
-			try{
+			try {
 				props = PropertiesLoaderUtils.loadProperties(resource);
 				if (partnerList.contains(partnerBean.getPcName())) {
 					partnerBean.setPcLogoUrl(props
 							.getProperty("partnerimage.view")
 							+ partnerBean.getPcName() + ".jpg");
 				}
-			}catch(Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
-			}			
-		}		
+			}
+		}
 		try {
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
 			partnerService.addPartner(partner,
@@ -228,7 +471,7 @@ public class PartnerController {
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed!", e);
 		}
@@ -246,14 +489,14 @@ public class PartnerController {
 		try {
 			addedlist = ConverterClass.prepareListofPartnerBean(partnerService
 					.listPartners(helperClass.getSellerIdfromSession(request)));
-		}catch (CustomException ce) {
+		} catch (CustomException ce) {
 			log.error("ListAllPartner exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			e.printStackTrace();
 			log.error(e.getCause());
 		}
@@ -362,7 +605,7 @@ public class PartnerController {
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		log.info("$$$ saveJabong Starts : OrderController $$$");
-		
+
 		Map<String, Object> model = new HashMap<String, Object>();
 		log.debug(" Nr calculayor value from bean : "
 				+ partnerBean.getNrnReturnConfig().isNrCalculator());
@@ -411,7 +654,7 @@ public class PartnerController {
 					validateImage(image);
 
 				} catch (RuntimeException re) {
-					log.error("Failed!",re);
+					log.error("Failed!", re);
 					result.reject(re.getMessage());
 				}
 			}
@@ -441,7 +684,7 @@ public class PartnerController {
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
 			partnerService.addPartner(partner,
 					helperClass.getSellerIdfromSession(request));
-		}catch (CustomException ce) {
+		} catch (CustomException ce) {
 			log.error("SaveJabong exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
@@ -539,13 +782,13 @@ public class PartnerController {
 			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
 			partnerService.addPartner(partner,
 					helperClass.getSellerIdfromSession(request));
-		}catch (CustomException ce) {
+		} catch (CustomException ce) {
 			log.error("SaveMyntra exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			log.error("Failed!", e);
 			e.printStackTrace();
 		}
@@ -566,7 +809,7 @@ public class PartnerController {
 		List<String> taxCategoryList = new ArrayList<String>();
 		List<Category> categoryObjects = null;
 		List<TaxCategory> taxCategoryObjects = null;
-		
+
 		datemap.put("true", "Select payment from");
 		datemap.put("true", "Shipping Date");
 		datemap.put("false", "Delivery Date");
@@ -574,7 +817,7 @@ public class PartnerController {
 		try {
 			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
-			if(categoryObjects != null){
+			if (categoryObjects != null) {
 				for (Category cat : categoryObjects) {
 					categoryList.add(cat.getCatName());
 				}
@@ -721,12 +964,12 @@ public class PartnerController {
 							.listPartners(helperClass
 									.getSellerIdfromSession(request))));
 		} catch (CustomException ce) {
-			log.error("Failed!",ce);
+			log.error("Failed!", ce);
 			log.error("deletePartner exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
-			return new ModelAndView("globalErorPage", model);			
+			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed!", e);
@@ -746,12 +989,12 @@ public class PartnerController {
 		PartnerBean pbean = null;
 		Map<String, Float> chargeMap = new HashMap<String, Float>();
 		Map<String, Float> categoryMap = new HashMap<String, Float>();
-		
+
 		Map<String, String> chargesMap = new HashMap<String, String>();
 		Map<String, Float> commissionMap = new HashMap<String, Float>();
 		Map<String, String> taxSpMap = new HashMap<String, String>();
 		Map<String, String> taxPoMap = new HashMap<String, String>();
-		
+
 		List<Category> categoryObjects = null;
 		try {
 			datemap.put("true", "Select payment from");
@@ -873,12 +1116,109 @@ public class PartnerController {
 					+ pbean.getNrnReturnConfig().getConfigId());
 			for (NRnReturnCharges charge : pbean.getNrnReturnConfig()
 					.getCharges()) {
-				chargeMap.put(charge.getChargeName(), charge.getChargeAmount());
+				if (charge.getChargeName().contains("fixedfee")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
+
+					ChargesBean chargeBean = new ChargesBean();
+					chargeBean.setChargeType("fixedfee");
+					chargeBean.setCriteria(charge.getCriteria());
+					chargeBean.setRange(charge.getCriteriaRange());
+					chargeBean.setValue(charge.getChargeAmount());
+					pbean.getFixedfeeList().add(chargeBean);
+
+				} else if (charge.getChargeName().contains("shippingfeeVolume")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
+
+					if (pbean.getNrnReturnConfig().getShippingFeeType()
+							.equalsIgnoreCase("variable")) {
+
+						ChargesBean chargeBean = pbean.getChargesBean(
+								"shippingfeeVolume", charge.getCriteria(),
+								charge.getCriteriaRange());
+						if (chargeBean == null) {
+							chargeBean = new ChargesBean();
+							chargeBean.setChargeType("shippingfeeVolume");
+							chargeBean.setCriteria(charge.getCriteria());
+							chargeBean.setRange(charge.getCriteriaRange());
+							pbean.getShippingfeeVolumeList().add(chargeBean);
+						}
+
+						if (charge.getChargeName().contains("Local")) {
+							chargeBean.setLocalValue(charge.getChargeAmount());
+						} else if (charge.getChargeName().contains("Zonal")) {
+							chargeBean.setZonalValue(charge.getChargeAmount());
+						} else if (charge.getChargeName().contains("National")) {
+							chargeBean.setNationalValue(charge
+									.getChargeAmount());
+						} else if (charge.getChargeName().contains("Metro")) {
+							chargeBean.setMetroValue(charge.getChargeAmount());
+						}
+
+					} else {
+						ChargesBean chargeBean = new ChargesBean();
+						chargeBean.setChargeType("shippingfeeVolume");
+						chargeBean.setCriteria(charge.getCriteria());
+						chargeBean.setRange(charge.getCriteriaRange());
+						chargeBean.setValue(charge.getChargeAmount());
+						pbean.getShippingfeeVolumeList().add(chargeBean);
+					}
+
+				} else if (charge.getChargeName().contains("shippingfeeWeight")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
+
+					if (pbean.getNrnReturnConfig().getShippingFeeType()
+							.equalsIgnoreCase("variable")) {
+
+						ChargesBean chargeBean = pbean.getChargesBean(
+								"shippingfeeWeight", charge.getCriteria(),
+								charge.getCriteriaRange());
+						if (chargeBean == null) {
+							chargeBean = new ChargesBean();
+							chargeBean.setChargeType("shippingfeeWeight");
+							chargeBean.setCriteria(charge.getCriteria());
+							chargeBean.setRange(charge.getCriteriaRange());
+							pbean.getShippingfeeWeightList().add(chargeBean);
+						}
+
+						if (charge.getChargeName().contains("Local")) {
+							chargeBean.setLocalValue(charge.getChargeAmount());
+						} else if (charge.getChargeName().contains("Zonal")) {
+							chargeBean.setZonalValue(charge.getChargeAmount());
+						} else if (charge.getChargeName().contains("National")) {
+							chargeBean.setNationalValue(charge
+									.getChargeAmount());
+						} else if (charge.getChargeName().contains("Metro")) {
+							chargeBean.setMetroValue(charge.getChargeAmount());
+						}
+
+					} else {
+						ChargesBean chargeBean = new ChargesBean();
+						chargeBean.setChargeType("shippingfeeWeight");
+						chargeBean.setCriteria(charge.getCriteria());
+						chargeBean.setRange(charge.getCriteriaRange());
+						chargeBean.setValue(charge.getChargeAmount());
+						pbean.getShippingfeeWeightList().add(chargeBean);
+					}
+
+				} else {
+					chargeMap.put(charge.getChargeName(),
+							charge.getChargeAmount());
+				}
+
 			}
+			if (pbean.getFixedfeeList() != null && pbean.getFixedfeeList().size() != 0) 
+				Collections.sort(pbean.getFixedfeeList(), new SortByCriteriaRange());
+			if (pbean.getShippingfeeVolumeList() != null && pbean.getShippingfeeVolumeList().size() != 0)
+				Collections.sort(pbean.getShippingfeeVolumeList(), new SortByCriteria());
+			if (pbean.getShippingfeeWeightList() != null && pbean.getShippingfeeWeightList().size() != 0)
+				Collections.sort(pbean.getShippingfeeWeightList(), new SortByCriteria());
 
 			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
-			if(categoryObjects != null){
+			if (categoryObjects != null) {
 				for (Category cat : categoryObjects) {
 					categoryMap.put(cat.getCatName(),
 							chargeMap.get(cat.getCatName()));

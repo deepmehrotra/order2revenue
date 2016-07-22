@@ -33,6 +33,10 @@ public class PartnerBean {
 	private List<Events> events=new ArrayList<Events>();
 	private List<Order> orders = new ArrayList<Order>();
 	private NRnReturnConfig nrnReturnConfig;
+	
+	private List<ChargesBean> fixedfeeList = new ArrayList<ChargesBean>();
+	private List<ChargesBean> shippingfeeVolumeList = new ArrayList<ChargesBean>();
+	private List<ChargesBean> shippingfeeWeightList = new ArrayList<ChargesBean>();
 
 	public List<Events> getEvents() {
 		return events;
@@ -188,6 +192,49 @@ public class PartnerBean {
 	public void setNrnReturnConfig(NRnReturnConfig nrnReturnConfig) {
 		this.nrnReturnConfig = nrnReturnConfig;
 	}
-
-
+	public List<ChargesBean> getFixedfeeList() {
+		return fixedfeeList;
+	}
+	public void setFixedfeeList(List<ChargesBean> fixedfeeList) {
+		this.fixedfeeList = fixedfeeList;
+	}
+	public List<ChargesBean> getShippingfeeVolumeList() {
+		return shippingfeeVolumeList;
+	}
+	public void setShippingfeeVolumeList(List<ChargesBean> shippingfeeVolumeList) {
+		this.shippingfeeVolumeList = shippingfeeVolumeList;
+	}
+	public List<ChargesBean> getShippingfeeWeightList() {
+		return shippingfeeWeightList;
+	}
+	public void setShippingfeeWeightList(List<ChargesBean> shippingfeeWeightList) {
+		this.shippingfeeWeightList = shippingfeeWeightList;
+	}
+	
+	public ChargesBean getChargesBean(String type, String criteria, long criteriaRange) {
+		ChargesBean returnBean = null;
+		if (type.equalsIgnoreCase("fixedfee")) {
+			for (ChargesBean bean : this.fixedfeeList) {
+				if (bean.getCriteria().equalsIgnoreCase(criteria)
+						&& bean.getRange() == criteriaRange) {
+					returnBean = bean;
+				}
+			}
+		} else if (type.equalsIgnoreCase("shippingfeeVolume")) {
+			for (ChargesBean bean : this.shippingfeeVolumeList) {
+				if (bean.getCriteria().equalsIgnoreCase(criteria)
+						&& bean.getRange() == criteriaRange) {
+					returnBean = bean;
+				}
+			}
+		} else if (type.equalsIgnoreCase("shippingfeeWeight")) {
+			for (ChargesBean bean : this.shippingfeeWeightList) {
+				if (bean.getCriteria().equalsIgnoreCase(criteria)
+						&& bean.getRange() == criteriaRange) {
+					returnBean = bean;
+				}
+			}
+		}
+		return returnBean;
+	}
 }

@@ -21,10 +21,13 @@ public class NRnReturnCharges {
 	private String chargeName;
 	@Column
 	private float chargeAmount;
+	@Column
+	private String criteria;
+	@Column
+	private long criteriaRange = 0;
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private NRnReturnConfig config;
-
-	
 
 	public long getNrchargeId() {
 		return nrchargeId;
@@ -66,6 +69,22 @@ public class NRnReturnCharges {
 
 	public void setConfig(NRnReturnConfig config) {
 		this.config = config;
+	}
+
+	public String getCriteria() {
+		return criteria;
+	}
+
+	public void setCriteria(String criteria) {
+		this.criteria = criteria;
+	}
+
+	public long getCriteriaRange() {
+		return criteriaRange;
+	}
+
+	public void setCriteriaRange(long criteriaRange) {
+		this.criteriaRange = criteriaRange;
 	}
 
 }
