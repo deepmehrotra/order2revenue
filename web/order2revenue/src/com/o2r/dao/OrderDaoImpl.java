@@ -590,7 +590,7 @@ public class OrderDaoImpl implements OrderDao {
 							.getPoPrice() * 100 / (100 + order
 							.getProductConfig().getTaxPo())));
 
-					order.setOrderMRP(order.getOrderMRP() * order.getQuantity());
+					order.setOrderMRP(order.getProductConfig().getMrp() * order.getQuantity());
 					order.setOrderSP(order.getProductConfig().getProductPrice()
 							* order.getQuantity());
 					order.setPoPrice(order.getPoPrice() * order.getQuantity());
