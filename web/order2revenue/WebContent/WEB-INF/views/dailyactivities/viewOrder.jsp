@@ -104,6 +104,30 @@
 												type="number" maxFractionDigits="2"
 												value="${order.partnerCommission * order.quantity}" /></td>  
                                     </tr>
+                                    <%-- <tr>
+                                        <td>Gross PCC</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.pccAmount * order.quantity}" /></td>  
+                                    </tr> --%>
+                                    <tr>
+                                        <td>Gross Shipping Charges</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.shippingCharges * order.quantity}" /></td>  
+                                    </tr>
+                                    <%-- <tr>
+                                        <td>Gross Fixed Fee</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${(order.fixedfee) * (order.quantity)}" /></td>  
+                                    </tr> --%>
+                                    <%-- <tr>
+                                        <td>Service Tax</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.serviceTax * order.quantity}" /></td>  
+                                    </tr> --%>
                                     <tr>
                                         <td>TDS</td>
                                         <td><fmt:formatNumber
@@ -114,7 +138,7 @@
                                         <td>Gross N/R</td>
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
-												value="${order.grossNetRate}" /></td>  
+												value="${order.grossNetRate * order.quantity}" /></td>  
                                     </tr>
                                     <tr>
                                         <td>Tax</td>
@@ -136,9 +160,18 @@
                                     </tr>
                                     <tr>
                                         <td>Gross Profit</td>
-                                        <td><fmt:formatNumber
+                                        <td>
+                                        	<c:if test="${(order.quantity- order.orderReturnOrRTO.returnorrtoQty) != 0 }">
+                                        		<fmt:formatNumber
 												type="number" maxFractionDigits="2"
-												value="${((order.grossProfit / order.quantity)- order.orderReturnOrRTO.returnorrtoQty) * order.quantity}" /></td>  
+												value="${(order.grossProfit / (order.quantity- order.orderReturnOrRTO.returnorrtoQty)) * order.quantity}" />                                        	
+                                        	</c:if>
+                                        	<c:if test="${(order.quantity- order.orderReturnOrRTO.returnorrtoQty) == 0 }">
+                                        		<fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${(order.grossProfit / 1) * order.quantity}" />
+                                        	</c:if>                                  
+                                        </td>  
                                     </tr>
                                     </tbody>
                                 </table>
@@ -175,16 +208,48 @@
                                     </tr>
                                     <tr>
                                         <td>Sale Return Type</td>
-                                        <td>${order.orderReturnOrRTO.cancelType}</td>  
+                                        <td>${order.orderReturnOrRTO.returnCategory}</td>  
                                     </tr>
                                     <tr>
                                         <td>Return Charges</td>
-                                        <td>${order.orderReturnOrRTO.returnOrRTOChargestoBeDeducted}</td>  
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.orderReturnOrRTO.returnOrRTOChargestoBeDeducted}" /></td>  
                                     </tr>
                                     <tr>
                                         <td>Return Reason</td>
                                         <td>${order.orderReturnOrRTO.returnOrRTOreason}</td>  
                                     </tr>
+                                    <tr>
+                                        <td>Commission Return</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.partnerCommission * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
+                                    </tr>
+                                    <%-- <tr>
+                                        <td>PCC Return</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.pccAmount * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
+                                    </tr> --%>
+                                    <tr>
+                                        <td>Shipping Charges Return</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.shippingCharges * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
+                                    </tr>
+                                    <%-- <tr>
+                                        <td>Fixed Fee Return</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.fixedfee * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
+                                    </tr> --%>
+                                    <%-- <tr>
+                                        <td>Service Tax Return</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.serviceTax * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
+                                    </tr> --%>
                                     </tbody>
                                 </table>
                               </div>
@@ -233,6 +298,30 @@
 												type="number" maxFractionDigits="2"
 												value="${order.partnerCommission * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
                                     </tr>
+                                    <%-- <tr>
+                                        <td>Net PCC</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.pccAmount * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
+                                    </tr> --%>
+                                    <tr>
+                                        <td>Net Shipping Charges</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.shippingCharges * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
+                                    </tr>
+                                    <%-- <tr>
+                                        <td>Net Fixed Fee</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.fixedfee * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
+                                    </tr> --%>
+                                    <%-- <tr>
+                                        <td>Net Service Tax</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.serviceTax * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
+                                    </tr> --%>                                    
                                     <tr>
                                         <td>Net TDS</td>
                                         <td><fmt:formatNumber
@@ -345,15 +434,21 @@
                                     </tr>
                                     <tr>
                                         <td>Total Positive Amount</td>
-                                        <td>${order.orderPayment.positiveAmount}</td>  
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.orderPayment.positiveAmount}" /></td>  
                                     </tr>
                                     <tr>
                                         <td>Net Payment Result</td>
-                                        <td>${order.orderPayment.netPaymentResult}</td>  
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.orderPayment.netPaymentResult}" /></td>  
                                     </tr>
                                     <tr>
                                         <td>Payment Difference</td>
-                                        <td>${order.orderPayment.paymentDifference}</td>  
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.orderPayment.paymentDifference}" /></td>  
                                     </tr>
 
                                     </tbody>
