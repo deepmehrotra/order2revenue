@@ -1441,8 +1441,46 @@ span .#error {
 																		</div>
 																	</div>
 																</div>
-																
-																
+																<div class="col-lg-12">
+																<div class="hr-line-dashed"></div>
+																	<div class="col-sm-12">
+																		<div class="radio" style="text-align: center;">
+																			<label><strong>REVERSE SHIPPING</strong></label>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-12" style="padding: 2px;">
+																	<c:choose>
+																		<c:when	test="${partner.nrnReturnConfig.revShippingFeeType == 'revShipFeePCC'}">
+																			<label class="labelfix">% of Shipping Fee :	${chargeMap.revShipFeePCC}</label><br>
+																		</c:when>
+																		<c:when	test="${partner.nrnReturnConfig.revShippingFeeType == 'revShipFeeGRT'}">
+																			<label class="labelfix"><u>Which Ever Is Higher</u></label><br>
+																			<label class="labelfix">Flat Amount :	${chargeMap.revShipFeeFlatAmt}</label><br>
+																			<label class="labelfix">% of Market Fee :	${chargeMap.revShipFeePCCMF}</label><br>
+																		</c:when>
+																		<c:when	test="${partner.nrnReturnConfig.revShippingFeeType == 'revShipFeeFF'}">
+																			<label class="labelfix">Flat Amount :	${chargeMap.revShipFeeFF}</label><br>
+																		</c:when>
+																		<c:when	test="${partner.nrnReturnConfig.revShippingFeeType == 'revShipFeeShipFee'}">
+																			<label class="labelfix">Same as Shipping Fee</label><br>
+																		</c:when>
+																		<c:when	test="${partner.nrnReturnConfig.revShippingFeeType == 'revShipFeeVar'}">
+																			<div class="col-sm-6" style="padding: 0px;">
+																				<label class="labelfix"><u>Dead Weight</u></label><br>
+																					Amount : ${chargeMap.revShipFeeDWAmt}<br>
+																					Per Weight : ${chargeMap.revShipFeeDWPW}<br>
+																					Min Weight : ${chargeMap.revShipFeeDWMW}<br>
+																			</div>
+																			<div class="col-sm-6" style="padding: 0px;">
+																				<label class="labelfix"><u>Volume Weight</u></label><br>
+																					Amount : ${chargeMap.revShipFeeVWAmt}<br>
+																					Per Weight : ${chargeMap.revShipFeeVWPW}<br>
+																					Min Weight : ${chargeMap.revShipFeeVWMW}
+																			</div>
+																		</c:when>																		
+																	</c:choose>
+																</div>
 																
 															
 														</div>

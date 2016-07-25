@@ -45,6 +45,8 @@ public class Layouter {
 			buildHeaders(worksheet, startRowIndex, startColIndex);
 		else if (sheetName.equalsIgnoreCase("ProductReport")) {
 			buildProductHeaders(worksheet, startRowIndex, startColIndex);
+		} else if (sheetName.equalsIgnoreCase("EditProductReport")) {
+			buildEditProductHeaders(worksheet, startRowIndex, startColIndex);
 		} else if (sheetName.equalsIgnoreCase("ProductConfigReport")) {
 			buildProductConfigHeaders(worksheet, startRowIndex, startColIndex);
 		} else if (sheetName.equalsIgnoreCase("PaymentReport")) {
@@ -157,6 +159,8 @@ public class Layouter {
 		HSSFCell cellDate = dateTitle.createCell(startColIndex);
 		if(sheetName.equalsIgnoreCase("OrderReturnReport")){
 			cellDate.setCellValue("Note : Valid values For Criteria : channelOrderId, AWB, PIreference, suborderId, invoiceId & For Inventry Type : goodInventory, badInventory");
+		}else if(sheetName.equalsIgnoreCase("PaymentReport")){
+			cellDate.setCellValue("Note : Valid values For Criteria : 'manual charges' or 'payment'");
 		}else{
 			cellDate.setCellValue("This report was generated at " + new Date());
 		}
@@ -366,6 +370,67 @@ public class Layouter {
 		cell11.setCellStyle(headerCellStyle);
 
 	}
+	
+	public static void buildEditProductHeaders(HSSFSheet worksheet,
+			int startRowIndex, int startColIndex) {
+		// Create font style for the headers
+		Font font = worksheet.getWorkbook().createFont();
+		font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+
+		// Create cell style for the headers
+		HSSFCellStyle headerCellStyle = worksheet.getWorkbook()
+				.createCellStyle();
+		headerCellStyle.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);
+		headerCellStyle.setFillPattern(CellStyle.FINE_DOTS);
+		headerCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		headerCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		headerCellStyle.setWrapText(true);
+		headerCellStyle.setFont(font);
+		headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
+
+		// Create the column headers
+		HSSFRow rowHeader = worksheet.createRow((short) startRowIndex + 2);
+		rowHeader.setHeight((short) 500);
+
+		HSSFCell cell1 = rowHeader.createCell(startColIndex + 0);
+		cell1.setCellValue("Title");
+		cell1.setCellStyle(headerCellStyle);
+
+		HSSFCell cell2 = rowHeader.createCell(startColIndex + 1);
+		cell2.setCellValue("productSkuCode");
+		cell2.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell3 = rowHeader.createCell(startColIndex + 2);
+		cell3.setCellValue("ProductPrice");
+		cell3.setCellStyle(headerCellStyle);		
+
+		HSSFCell cell4 = rowHeader.createCell(startColIndex + 3);
+		cell4.setCellValue("Threshold Limit");
+		cell4.setCellStyle(headerCellStyle);
+
+		HSSFCell cell5 = rowHeader.createCell(startColIndex + 4);
+		cell5.setCellValue("ChanelSKU(Separated by ;)");
+		cell5.setCellStyle(headerCellStyle);
+
+		HSSFCell cell6 = rowHeader.createCell(startColIndex + 5);
+		cell6.setCellValue("Length");
+		cell6.setCellStyle(headerCellStyle);
+
+		HSSFCell cell7 = rowHeader.createCell(startColIndex + 6);
+		cell7.setCellValue("Breadth");
+		cell7.setCellStyle(headerCellStyle);
+
+		HSSFCell cell8 = rowHeader.createCell(startColIndex + 7);
+		cell8.setCellValue("Height");
+		cell8.setCellStyle(headerCellStyle);
+
+		HSSFCell cell9 = rowHeader.createCell(startColIndex + 8);
+		cell9.setCellValue("Dead Weight");
+		cell9.setCellStyle(headerCellStyle);
+
+	}
+	
+	
 
 	public static void buildProductConfigHeaders(HSSFSheet worksheet,
 			int startRowIndex, int startColIndex) {
@@ -444,16 +509,16 @@ public class Layouter {
 		rowHeader.setHeight((short) 500);
 
 		HSSFCell cell1 = rowHeader.createCell(startColIndex + 0);
-		cell1.setCellValue("ChannelOrderId");
-		cell1.setCellStyle(headerCellStyle);
-
+		cell1.setCellValue("Criteria");
+		cell1.setCellStyle(headerCellStyle);		
+		
 		HSSFCell cell2 = rowHeader.createCell(startColIndex + 1);
-		cell2.setCellValue("InvoiceId");
+		cell2.setCellValue("ChannelOrderId");
 		cell2.setCellStyle(headerCellStyle);
 
 		HSSFCell cell3 = rowHeader.createCell(startColIndex + 2);
-		cell3.setCellValue("SKUCode");
-		cell3.setCellStyle(headerCellStyle);
+		cell3.setCellValue("InvoiceId");
+		cell3.setCellStyle(headerCellStyle);		
 
 		HSSFCell cell4 = rowHeader.createCell(startColIndex + 3);
 		cell4.setCellValue("Recieved Amount");
@@ -466,6 +531,14 @@ public class Layouter {
 		HSSFCell cell6 = rowHeader.createCell(startColIndex + 5);
 		cell6.setCellValue("Payment Date");
 		cell6.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell7 = rowHeader.createCell(startColIndex + 6);
+		cell7.setCellValue("Channel");
+		cell7.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell8 = rowHeader.createCell(startColIndex + 7);
+		cell8.setCellValue("Particular");
+		cell8.setCellStyle(headerCellStyle);
 
 	}
 

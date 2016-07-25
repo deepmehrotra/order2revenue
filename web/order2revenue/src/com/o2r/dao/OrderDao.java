@@ -20,9 +20,11 @@ import com.o2r.model.ProductConfig;
  */
 public interface OrderDao {
 
-	public void addOrder(Order order, int sellerId) throws CustomException;
+	//public void addOrder(Order order, int sellerId) throws CustomException;
 
 	public List<Order> listOrders(int sellerId) throws CustomException;
+	
+	public List<Order> listMpOrders(int sellerId)throws CustomException;
 
 	public Order getOrder(int orderId) throws CustomException;
 
@@ -114,4 +116,9 @@ public interface OrderDao {
 
 	public List<GatePass> getGatepassesFromConsolidated(int returnId, int sellerId)
 			throws CustomException;
+
+	List<Order> listDisputedGatePasses(int sellerId, int pageNo)
+			throws CustomException;
+
+	public void addOrder(List<Order> orderList, int sellerId) throws CustomException;
 }

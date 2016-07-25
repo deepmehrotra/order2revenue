@@ -35,8 +35,19 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public void addProductConfig(ProductConfig productConfig, int sellerId) {
+	public void addProductConfig(ProductConfig productConfig, int sellerId)throws CustomException {
 		productDao.addProductConfig(productConfig, sellerId);
+	}
+	
+	@Override
+	public List<ProductConfig> listProductConfig(int sellerId, int pageNo, String condition)throws CustomException {
+		return productDao.listProductConfig(sellerId, pageNo, condition);
+	}
+	
+	@Override
+	public List<ProductConfig> searchProductConfig(String field, String value,
+			int sellerId, String condition) throws CustomException {		
+		return productDao.searchProductConfig(field, value, sellerId, condition);
 	}
 
 	@Override
@@ -46,6 +57,12 @@ public class ProductServiceImpl implements ProductService {
 		productDao.removeSKUMapping(productConfig, sellerId);
 	}
 
+	@Override
+	public int editProduct(int sellerId, List<Product> products)throws CustomException {
+		return productDao.editProduct(sellerId, products);
+	}
+	
+	
 	@Override
 	public List<Product> listProducts(int sellerId, int pageNo)
 			throws CustomException {
@@ -82,6 +99,13 @@ public class ProductServiceImpl implements ProductService {
 			throws CustomException {
 		return productDao.getProduct(skuCode, sellerId);
 	}
+	
+	@Override
+	public Product getProductEdit(String sku, int sellerId)
+			throws CustomException {
+		
+		return productDao.getProductEdit(sku, sellerId);
+	}
 
 	@Override
 	public ProductConfig getProductConfig(String channelSKUCode,
@@ -96,10 +120,10 @@ public class ProductServiceImpl implements ProductService {
 				sellerId);
 	}
 
-	@Override
+	/*@Override
 	public void addSKUMapping(ProductConfig productConfig, int sellerId) {
 		productDao.addSKUMapping(productConfig, sellerId);
-	}
+	}*/
 
 	@Override
 	public boolean getProductwithProductConfig(int sellerId)
@@ -116,5 +140,19 @@ public class ProductServiceImpl implements ProductService {
 	public ProductConfig getProductConfig(int productConfigId)
 			throws CustomException {
 		return productDao.getProductConfig(productConfigId);
+	}
+
+	@Override
+	public void addProduct(List<Product> productList, int sellerId)
+			throws CustomException {
+		productDao.addProduct(productList, sellerId);
+		
+	}
+
+	@Override
+	public void addSKUMapping(List<ProductConfig> productConfigList,
+			int sellerId) throws CustomException {
+		productDao.addSKUMapping(productConfigList, sellerId);
+		
 	}
 }

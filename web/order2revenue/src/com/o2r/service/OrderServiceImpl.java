@@ -31,11 +31,16 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private OrderDao orderDao;
 
-	@Override
+	/*@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void addOrder(Order order, int sellerId) throws CustomException {
 		orderDao.addOrder(order, sellerId);
 
+	}*/
+	
+	@Override
+	public List<Order> listMpOrders(int sellerId) throws CustomException {		
+		return orderDao.listMpOrders(sellerId);
 	}
 
 	@Override
@@ -203,6 +208,12 @@ public class OrderServiceImpl implements OrderService {
 			throws CustomException {
 		return orderDao.listGatePasses(sellerId, pageNo);
 	}
+	
+	@Override
+	public List<Order> listDisputedGatePasses(int sellerId, int pageNo)
+			throws CustomException {
+		return orderDao.listDisputedGatePasses(sellerId, pageNo);
+	}
 
 	@Override
 	public OrderRTOorReturn generateConsolidatedReturn(
@@ -232,5 +243,12 @@ public class OrderServiceImpl implements OrderService {
 	public List<GatePass> getGatepassesFromConsolidated(int returnId,
 			int sellerId) throws CustomException {
 		return orderDao.getGatepassesFromConsolidated(returnId, sellerId);
+	}
+
+	@Override
+	public void addOrder(List<Order> orderList, int sellerId)
+			throws CustomException {
+		orderDao.addOrder(orderList, sellerId);
+		
 	}
 }

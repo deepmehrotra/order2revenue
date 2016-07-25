@@ -120,6 +120,54 @@ public class ProductController {
 		return new ModelAndView("redirect:/seller/Product.html");
 
 	}
+	
+	@RequestMapping(value = "/seller/searchProductConfig", method = RequestMethod.POST)
+	public ModelAndView searchProductConfig(HttpServletRequest request,
+			@ModelAttribute("command") ProductBean productBean,
+			BindingResult result) {
+
+		log.info("$$$ searchProductConfig Starts : ProductController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		List<ProductConfig> productConfigList = new ArrayList<>();		
+		String value = request.getParameter("value");		
+		String searchProduct = request.getParameter("searchProduct");
+		try {			
+			if (searchProduct != null && value != null) {
+				productConfigList=productService.searchProductConfig(searchProduct, value, helperClass.getSellerIdfromSession(request), "config");
+				System.out.println(" Product bean in search product: "+productBean);
+			}
+			model.put("productConfigList", productConfigList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
+		}
+		log.info("$$$ searchProductConfig Ends : ProductController $$$");
+		return new ModelAndView("initialsetup/productConfig", model);
+	}
+	
+	@RequestMapping(value = "/seller/searchProductMapping", method = RequestMethod.POST)
+	public ModelAndView searchProductMapping(HttpServletRequest request,
+			@ModelAttribute("command") ProductBean productBean,
+			BindingResult result) {
+
+		log.info("$$$ searchProductMapping Starts : ProductController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		List<ProductConfig> productConfigList = new ArrayList<>();		
+		String value = request.getParameter("value");		
+		String searchProduct = request.getParameter("searchProduct");
+		try {			
+			if (searchProduct != null && value != null) {
+				productConfigList=productService.searchProductConfig(searchProduct, value, helperClass.getSellerIdfromSession(request), "mappings");
+				System.out.println(" Product bean in search product: "+productBean);
+			}
+			model.put("productMappingList", productConfigList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
+		}	
+		log.info("$$$ searchProductMapping Ends : ProductController $$$");
+		return new ModelAndView("initialsetup/productMapping", model);
+	}
 
 	@RequestMapping(value = "/seller/Product", method = RequestMethod.GET)
 	public ModelAndView productList(HttpServletRequest request,
@@ -200,25 +248,10 @@ public class ProductController {
 								helperClass.getSellerIdfromSession(request),
 								pageNo)));
 			}
-			products = productService.listProducts(helperClass
-					.getSellerIdfromSession(request));
-			if (products != null) {
-				for (Product product : products) {
-					if (product.getProductConfig() != null) {
-						productMappings.addAll(product.getProductConfig());
-					}
-				}
-				if (productMappings != null) {
-					Iterator<ProductConfig> productMappingIterator = productMappings.iterator();
-					while (productMappingIterator.hasNext()) {
-						ProductConfig productMapping = productMappingIterator.next();
-						if (productMapping.getMrp() != 0) {
-							productMappingIterator.remove();
-						}
-					}
-				}
-				model.put("productMappingList", productMappings);
-			}
+			int pageNo = request.getParameter("page") != null ? Integer
+						.parseInt(request.getParameter("page")) : 0;
+			model.put("productMappingList", productService.listProductConfig(helperClass.getSellerIdfromSession(request), pageNo, "mapping"));
+			
 		} catch (CustomException ce) {
 			log.error("productList exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -245,40 +278,10 @@ public class ProductController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<ProductConfig> productConfigs = new ArrayList<ProductConfig>();
 
-		try {
-			Object obj = request.getSession().getAttribute(
-					"productSearchObject");
-			if (obj != null) {
-				System.out.println(" Getting list from session" + obj);
-				model.put("productList", obj);
-				request.getSession().removeAttribute("productSearchObject");
-			} else {
-				int pageNo = request.getParameter("page") != null ? Integer
-						.parseInt(request.getParameter("page")) : 0;
-				model.put("productList", ConverterClass
-						.prepareListofProductBean(productService.listProducts(
-								helperClass.getSellerIdfromSession(request),
-								pageNo)));
-			}
-			products = productService.listProducts(helperClass
-					.getSellerIdfromSession(request));
-			if (products != null) {
-				for (Product product : products) {
-					if (product.getProductConfig() != null) {
-						productConfigs.addAll(product.getProductConfig());
-					}
-				}
-				if (productConfigs != null) {
-					Iterator<ProductConfig> productConfigIterator = productConfigs.iterator();
-					while (productConfigIterator.hasNext()) {
-						ProductConfig productConfig = productConfigIterator.next();
-						if (productConfig.getMrp() == 0) {
-							productConfigIterator.remove();
-						}
-					}
-				}
-				model.put("productConfigList", productConfigs);
-			}
+		try {			
+			int pageNo = request.getParameter("page") != null ? Integer
+					.parseInt(request.getParameter("page")) : 0;
+			model.put("productConfigList", productService.listProductConfig(helperClass.getSellerIdfromSession(request), pageNo, "config"));
 		} catch (CustomException ce) {
 			log.error("productList exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -347,21 +350,31 @@ public class ProductController {
 
 		log.info("$$$ saveProduct Starts : ProductController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		
+		List<Product> productList=new ArrayList<Product>();
 		log.debug(" Product Id :" + productBean.getProductId());
 		log.debug(" Product SKU :" + productBean.getProductSkuCode());
 		log.debug(" Product category  :"+ productBean.getCategoryName());
 
 		try {
-			if (productBean.getProductSkuCode() != null) {
-				productBean.setProductDate(new Date());
+			if(productBean.getProductId() != 0){
 				productBean.setVolume(productBean.getHeight()
 						* productBean.getLength() * productBean.getBreadth());
-				productBean.setVolWeight(productBean.getVolume() / 5);
-				Product product = ConverterClass
+				productBean.setVolWeight(productBean.getVolume() / 5);				
+				Product product=ConverterClass
 						.prepareProductModel(productBean);
-				productService.addProduct(product,
-						helperClass.getSellerIdfromSession(request));
+				productList.add(product);
+				productService.editProduct(helperClass.getSellerIdfromSession(request),productList);
+			}else{
+				if (productBean.getProductSkuCode() != null) {
+					productBean.setProductDate(new Date());
+					productBean.setVolume(productBean.getHeight()
+							* productBean.getLength() * productBean.getBreadth());
+					productBean.setVolWeight(productBean.getVolume() / 5);
+					Product product = ConverterClass
+							.prepareProductModel(productBean);
+					productService.addProduct(product,
+							helperClass.getSellerIdfromSession(request));
+				}
 			}
 		} catch (CustomException ce) {
 			log.error("saveProduct exception : " + ce.toString());
@@ -535,7 +548,7 @@ public class ProductController {
 		try {
 			if (request.getParameter("id") != null) {
 				int productId = Integer.parseInt(request.getParameter("id"));
-				product = productService.getProduct(productId);
+				product = productService.getProduct(productId);				
 			}
 		} catch (CustomException ce) {
 			log.error("editProduct exception : " + ce.toString());

@@ -14,7 +14,6 @@
 					<h5>Order : ${order.channelOrderID}</h5>
 				</div>
 				<div class="ibox-content view-order">
-
 					<div class="time-line-wrp">
 						<ul>
 							<c:if test="${!empty order.orderTimeline}">
@@ -28,7 +27,6 @@
 							</c:if>
 						</ul>
 					</div>
-
 				</div>
 			</div>
 			<div class="ibox float-e-margins">
@@ -458,36 +456,10 @@
                                   <div class="ibox-content add-company view-order">        
                                     <table class="table table table-striped">
                                         <tbody>
-                                        <tr>
-                                            <td>Payment Type</td>
-                                            <td>type</td>  
-                                        </tr>
-                                        <tr>
-                                            <td>Payment Due Date</td>
-                                            <td>09-20-2016</td>
-                                           
-                                        </tr>
-                                        <tr>
-                                            <td>Last Payment Date</td>
-                                            <td>10-21-2016</td>  
-                                        </tr>
-                                        <tr>
-                                            <td>Total Negative Amount</td>
-                                            <td>2</td>  
-                                        </tr>
-                                        <tr>
-                                            <td>Total Positive Amount</td>
-                                            <td>2</td>  
-                                        </tr>
-                                        <tr>
-                                            <td>Net Payment Result</td>
-                                            <td>8</td>  
-                                        </tr>
-                                        <tr>
-                                            <td>Payment Difference</td>
-                                            <td>6</td>  
-                                        </tr>
-
+                                        	<tr>
+	                                            <td>Note : </td>
+	                                            <td>${order.sellerNote}</td>        
+                                        	</tr>
                                         </tbody>
                                     </table>
                                   </div>

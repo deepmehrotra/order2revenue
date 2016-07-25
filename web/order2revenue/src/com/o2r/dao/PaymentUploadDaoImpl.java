@@ -31,12 +31,12 @@ public class PaymentUploadDaoImpl implements PaymentUploadDao{
  
  static Logger log = Logger.getLogger(PaymentUploadDaoImpl.class.getName());
  @Override
- public void addPaymentUpload(PaymentUpload upload , int sellerId) throws CustomException
+ public String addPaymentUpload(PaymentUpload upload , int sellerId) throws CustomException
  {
 	
 	 log.info("*** addPaymentUpload Starts : PaymentUploadDaoImpl ****");
 		Seller seller=null;
-		
+		String paymentUploadId=null;
 		   try
 		   {
 			   Session session=sessionFactory.openSession();
@@ -48,10 +48,12 @@ public class PaymentUploadDaoImpl implements PaymentUploadDao{
 				   upload.setUploadDate(new Date());
 				   seller.getPaymentUploads().add(upload);				  
 				   session.saveOrUpdate(seller);
+				   paymentUploadId=upload.getUploadDesc();
 			   }
 			   else
 			   {
 				   session.saveOrUpdate(upload);
+				   paymentUploadId=upload.getUploadDesc();
 			   }
 		    session.getTransaction().commit();
 		    session.close();
@@ -64,6 +66,7 @@ public class PaymentUploadDaoImpl implements PaymentUploadDao{
 		}
 		
 	log.info("*** addPaymentUpload Ends : PaymentUploadDaoImpl ****");
+	return paymentUploadId;
  }
  
  

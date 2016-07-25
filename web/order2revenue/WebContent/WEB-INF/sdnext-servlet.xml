@@ -45,6 +45,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 	
 	<bean id="dataConfig" class="com.o2r.bean.DataConfig">
 		<property name="serviceTax" value="${serviceTax}" />
+		<!-- <property name="xlsPath" value="${xlsPath}" /> -->
 	</bean>
 
 <bean id="multipartResolver"

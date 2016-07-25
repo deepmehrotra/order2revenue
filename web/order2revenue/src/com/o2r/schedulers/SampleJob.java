@@ -35,14 +35,14 @@ public class SampleJob {
 	public void executeJobPaymentDueDate() {
 
 		log.info("$$$ executeJobPaymentDueDate() Starts : SampleJob $$$");
-		
+		Session session=null;
 		List<Order> orders=new ArrayList<Order>();
 		try {
 			Date currentDate= new Date();
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.DATE, -2);
 			Date backDate=cal.getTime();
-			Session session=sessionFactory.openSession();			
+			session=sessionFactory.openSession();			
 			if(session != null)
 				session.beginTransaction();
 			else
@@ -65,7 +65,7 @@ public class SampleJob {
             if(temp != null && temp.size() != 0){
             	orders=temp;            
     			log.info(orders.size());    			
-    			for(Order order : orders){
+    			for(Order order : orders){    				
     				if(order.getFinalStatus().equals("Actionable")){
     					log.info("Already Setted......");
     				}else{
@@ -73,8 +73,7 @@ public class SampleJob {
 	    				order.setFinalStatus("Actionable");
 	    				order.getOrderPayment().setPaymentDifference(-(order.getNetRate()));
 	    				try{
-	    					session.merge(order);
-	        				session.getTransaction().commit();
+	    					session.merge(order);	    					
 	        				log.info("Order Merged Successfully....");
 	        			}catch(Exception e){
 	        				log.error("Failed! During Merging !", e);    				
@@ -85,7 +84,9 @@ public class SampleJob {
             }else{
             	log.info("No orders....!!!!");
             }
-            
+            session.getTransaction().commit();
+            if(session != null)
+            	session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed!",e);

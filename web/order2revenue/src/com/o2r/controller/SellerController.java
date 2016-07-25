@@ -346,8 +346,8 @@ public class SellerController {
 
 					if (sellerBean.getName() != null) {
 						sellerBean.setLogoUrl(props.getProperty("sellerimages.view")
-								+ sellerBean.getName() + ".jpg");
-						saveImage(sellerBean.getName() +sellerBean.getId() +".jpg", image);
+								 +"seller"+sellerBean.getId() +".jpg");
+						saveImage("seller"+sellerBean.getId() +".jpg", image);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

@@ -74,32 +74,18 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 									</button>
 									<div class="search-more-wrp">
 										<form role="search" class="form-inline" method="post"
-											action="searchProduct.html">
+											action="searchProductMapping.html">
 											<div class="form-group">
 												<select class="form-control" name="searchProduct"
 													id="searchProduct">
-													<option value="SKU">SKU</option>
-													<option value="createdDate">Created Date</option>
+													<option value="productSkuCode">Product SKU Code</option>
+													<option value="channelName">Channel Name</option>
+													<option value="channelSkuRef">Channel SKU Ref.</option>													
 												</select>
 											</div>
 											<div class="form-group ProductSearch-box" id="SKU">
-												<input type="text" placeholder="SKU code"
-													class="form-control" name="skuCode">
-											</div>
-											<div class="form-group ProductSearch-box" id="createdDate"
-												style="display: none">
-												<div class="input-group date">
-													<span class="input-group-addon"><i
-														class="fa fa-calendar"></i></span> <input type="text"
-														class="form-control" placeholder="Start Date"
-														name="startDate">
-												</div>
-												<div class="input-group date">
-													<span class="input-group-addon"><i
-														class="fa fa-calendar"></i></span> <input type="text"
-														class="form-control" placeholder="End Date" name="endDate">
-												</div>
-											</div>
+												<input type="text" class="form-control" name="value" style="width: 100%" required>
+											</div>											
 											<div class="form-group">
 												<button class="btn btn-primary btn-block" type="submit">Search</button>
 											</div>
@@ -186,8 +172,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
                                     });
 
                                 $('#searchProduct').change(function() {
-                                    $('.ProductSearch-box').hide();
-                                    $('#' + $(this).val()).fadeIn();
+                                    $('#SKU'.fadeIn());
                                 });
                                 $('.search-dd').on('click', function(e) {
                                     e.stopPropagation();
@@ -207,11 +192,11 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
                                             e.preventDefault();
                                             pageno = parseInt(getQueryVariable("page"));
                                             pageno = pageno + 1;
-                                            window.location = "Product.html?page=" + pageno;
+                                            window.location = "productMapping.html?page=" + pageno;
 
                                         });
                                 $('#LoadFirst500').click(function(e) {
-                                    window.location = "Product.html?page=" + 0;
+                                    window.location = "productMapping.html?page=" + 0;
 
                                 });
                             });

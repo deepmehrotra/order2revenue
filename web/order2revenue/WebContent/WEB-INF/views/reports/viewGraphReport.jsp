@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -341,14 +342,7 @@
                                     <th></th>
                                     <th>#</th>
                                     <th>Partner Name</th>
-                                    <th>Period</th>
-                                    <th>Net SP</th>
-                                    <th>Net N/R</th>
-                                    <th>Total Return Charges</th>
-                                    <th>Total Net P/R</th>
-                                    <th>Total Net Tax</th>
-                                    <th>Net TDS to Deposite</th>
-                                    <th>Net Commission Paid</th>
+                                    <th>Period</th>                                    
                                     <th>Net Payment Result</th>
                                     <th>Sale Quantity</th>
                                     <th>Return Quantity</th>
@@ -359,36 +353,31 @@
                                     <th>Actionable Order</th>
                                     <th>Return Limit Crossed</th>
                                     <th>RTO limit Crossed</th>
-                                    <th>Total Gross Profit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                 <c:if test="${!empty ttsolist}">
-                                 			 <c:forEach items="${ttsolist}" var="ttso" varStatus="loop">
+                                 <c:if test="${!empty consolidatedOrders}">
+                                 			 <c:forEach items="${consolidatedOrders}" var="order" varStatus="loop">
                                 <tr>
                                     <td><input type="checkbox"></td>
                                     <td>${loop.index+1}</td>
-                                    <td>${ttso.pcName}</td>
+                                    <td>${order.pcName}</td>
                                     <td>${period}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>${ttso.netPaymentResult}</td>
-                                    <td>${ttso.saleQuantity}</td>
-                                    <td>${ttso.returnQuantity}</td>
-                                    <td>${ttso.noOfDeliveredOrder}</td>
-                                    <td>${ttso.totalPaymentDiffference}</td>
-                                    <td>${ttso.noOfReturnOrder}</td>
-                                    <td>${ttso.noOfSettledOrders}</td>
-                                    <td>${ttso.noOfActionableOrders}</td>
-                                    <td>${ttso.noOfReturnLimitCrossed}</td>
-                                    <td>${ttso.noOfRTOLimitCrossed}</td>
-                                    <td></td>
-                                </tr>
+                                    <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.netPaymentResult}" /></td>
+                                    <td>${order.saleQuantity}</td>
+                                    <td>${order.returnQuantiy}</td>
+                                    <td>${order.deliveredOrder}</td>
+                                    <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.paymentDifferenceAmount}" /></td>
+                                    <td>${order.returnOrder}</td>
+                                    <td>${order.settledOrder}</td>
+                                    <td>${order.actionableOrder}</td>
+                                    <td>${order.returnLimitCrossed}</td>
+                                    <td>${order.rtoLimitCrossed}</td>
+                                 </tr>
                                 </c:forEach>
                                 </c:if>
                                 </tbody>

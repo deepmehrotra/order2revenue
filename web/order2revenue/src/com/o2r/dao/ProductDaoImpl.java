@@ -1,5 +1,6 @@
 package com.o2r.dao;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,8 +20,10 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.bean.ProductConfigBean;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
+import com.o2r.helper.HelperClass;
 import com.o2r.model.Category;
 import com.o2r.model.NRnReturnCharges;
 import com.o2r.model.Order;
@@ -51,7 +54,29 @@ public class ProductDaoImpl implements ProductDao {
 	private OrderService orderService;
 
 	private final int pageSize = 500;
-
+	private final String listProductConfig="select pc.productSkuCode,pc.channelName,pc.channelSkuRef,"
+			+ "pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,pc.eossDiscountValue,pc.grossNR,"
+			+ "pc.productConfigId from productconfig pc,product p,product_productconfig pp where "
+			+ "p.seller_id=? and pp.Product_productId=p.productId and "
+			+ "pp.productConfig_productConfigId=pc.productConfigId and pc.mrp <> 0";
+	private final String listProductMapping="select pc.productSkuCode,pc.channelName,"
+			+ "pc.channelSkuRef,pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,"
+			+ "pc.eossDiscountValue,pc.grossNR,pc.productConfigId from productconfig pc,"
+			+ "product p,product_productconfig pp where p.seller_id=? and pp.Product_productId="
+			+ "p.productId and pp.productConfig_productConfigId=pc.productConfigId and pc.mrp=0";
+	
+	private final String searchProductConfig="select pc.productSkuCode,pc.channelName,pc.channelSkuRef,"
+			+ "pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,pc.eossDiscountValue,pc.grossNR,"
+			+ "pc.productConfigId from productconfig pc,product p,product_productconfig pp where "
+			+ "p.seller_id=? and pp.Product_productId=p.productId and pp.productConfig_productConfigId=pc.productConfigId "
+			+ "and pc.mrp <> 0 and pc.";
+	private final String searchProductMapping="select pc.productSkuCode,"
+			+ "pc.channelName,pc.channelSkuRef,pc.discount,pc.mrp,pc.productPrice,"
+			+ "pc.suggestedPOPrice,pc.eossDiscountValue,pc.grossNR,pc.productConfigId "
+			+ "from productconfig pc,product p,product_productconfig pp where p.seller_id=? "
+			+ "and pp.Product_productId=p.productId and pp.productConfig_productConfigId=pc.productConfigId"
+			+ " and pc.mrp=0 and pc.";
+	
 	static Logger log = Logger.getLogger(ProductDaoImpl.class.getName());
 
 	@Override
@@ -119,6 +144,179 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		log.info("*** addProduct Ends : ProductDaoImpl ****");
 	}
+	
+	@Override
+	public void addProduct(List<Product> productList, int sellerId)
+			throws CustomException {
+
+		log.info("*** addProductList Starts : ProductDaoImpl ****");
+		Seller seller = null;
+		StringBuffer errorSkus=null;
+		boolean status=true;
+		Session session=null;
+		Map<String,Category> categoryMap=new HashMap<String, Category>();
+		
+		if(productList!=null&&productList.size()!=0)
+		{
+			errorSkus=new StringBuffer();
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
+			seller = (Seller) criteria.list().get(0);
+			for (Category category : seller.getCategories()) {
+				if (!categoryMap.containsKey(category.getCatName())) {
+					categoryMap.put(category.getCatName(), category);
+				}
+			}
+			for(Product product:productList)
+			{
+				Category productcat = null;
+				int productId = product.getProductId();
+				String sku = product.getProductSkuCode();
+				String productName = product.getProductName();
+				String catName = product.getCategoryName();
+				String skuChannel = product.getChannelSKU();
+				long quant = product.getQuantity();
+				float price = product.getProductPrice();
+				Date proddate = product.getProductDate();
+				
+				// Date todayDate = new Date();
+				try {
+					
+			
+			
+			if (productId == 0) {
+				productcat=categoryMap.containsKey(catName)?categoryMap.get(catName):null;
+				if(productcat!=null)
+				{
+				productcat =(Category) session.get(Category.class,productcat.getCategoryId());
+				//Hibernate.initialize(productcat.getProducts());
+				
+					product.setCategory(productcat);
+					productcat.getProducts().add(product);
+					productcat.setProductCount(productcat.getProductCount()
+							+ product.getQuantity());
+					productcat.setSkuCount(productcat.getSkuCount() + 1);
+
+					session.saveOrUpdate(productcat);
+				}
+				if (seller.getProducts() != null)
+					seller.getProducts().add(product);
+				product.setSeller(seller);
+				session.saveOrUpdate(seller);
+			} else {
+				Product productObj = (Product) session.get(Product.class,
+						productId);
+				productObj.setProductName(productName);
+				productObj.setProductDate(proddate);
+				productObj.setProductPrice(price);
+				productObj.setProductSkuCode(sku);
+				productObj.setChannelSKU(skuChannel);
+				productObj.setQuantity(quant);
+				session.saveOrUpdate(productObj);
+
+			}
+
+			
+			
+		} catch (Exception e) {
+			status=false;
+			errorSkus.append(product.getProductSkuCode()+",");
+			log.error("Failed!", e);
+			/*throw new CustomException(GlobalConstant.addProductError,
+					new Date(), 1, GlobalConstant.addProductErrorCode, e);*/
+		}
+			}
+			session.getTransaction().commit();
+			session.close();
+		}
+		
+		
+		if(!status)
+			throw new CustomException(errorSkus.toString(),
+					new Date(), 1, GlobalConstant.addProductErrorCode, new Exception());
+		log.info("*** addProduct Ends : ProductDaoImpl ****");
+	}
+	
+	
+	
+	@Override
+	public Product getProductEdit(String sku, int sellerId)
+			throws CustomException {
+		Product product=null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Product.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN).add(
+					Restrictions.eq("seller.id", sellerId));				
+			criteria.add(Restrictions.eq("productSkuCode",sku));
+			
+			if(criteria != null && criteria.list().size() != 0){				
+				product=(Product)criteria.list().get(0);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return product;
+	}
+	
+	
+	
+	@Override
+	public int editProduct(int sellerId, List<Product> products)throws CustomException {
+		
+		Product newProduct=null;
+		StringBuffer editError=null;
+		boolean status=true;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			editError=new StringBuffer();
+			for(Product product:products){
+				try {
+					Criteria criteria = session.createCriteria(Product.class);
+					criteria.createAlias("seller", "seller",
+							CriteriaSpecification.LEFT_JOIN).add(
+							Restrictions.eq("seller.id", sellerId));				
+					criteria.add(Restrictions.eq("productSkuCode",product.getProductSkuCode()));
+					if(criteria != null && criteria.list().size() != 0){
+						newProduct=(Product)criteria.list().get(0);
+						newProduct.setProductName(product.getProductName());
+						newProduct.setProductPrice(product.getProductPrice());
+						newProduct.setLength(product.getLength());
+						newProduct.setBreadth(product.getBreadth());
+						newProduct.setHeight(product.getHeight());
+						newProduct.setThreholdLimit(product.getThreholdLimit());
+						newProduct.setChannelSKU(product.getChannelSKU());
+						newProduct.setDeadWeight(product.getDeadWeight());
+						newProduct.setVolume(product.getVolume());
+						newProduct.setVolWeight(product.getVolWeight());
+						session.saveOrUpdate(newProduct);
+					}
+				} catch (Exception e) {
+					status=false;
+					editError.append(product.getProductSkuCode()+",");
+					log.error("Failed !", e);
+				}				
+			}
+			session.getTransaction().commit();
+			session.close();
+			if(!status){
+				throw new CustomException(editError.toString(),
+						new Date(), 1, "Server Error", new Exception());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed !",e);
+		}
+		return 1;
+	}
+	
+	
 
 	@Override
 	public void addProductConfig(ProductConfig productConfig, int sellerId) {
@@ -164,11 +362,16 @@ public class ProductDaoImpl implements ProductDao {
 				float commision = 0;
 				if (partner.getNrnReturnConfig().getCommissionType()
 						.equals("fixed")) {
-					commision = chargesMap
-							.get(GlobalConstant.fixedCommissionPercent);
+					if (chargesMap.containsKey(GlobalConstant.fixedCommissionPercent)) {
+						commision = chargesMap
+								.get(GlobalConstant.fixedCommissionPercent);
+					}
 				} else {
-					commision = chargesMap.get(GlobalConstant.CommPOPrefix
-							+ category);
+					if (chargesMap.containsKey(GlobalConstant.CommPOPrefix
+							+ category)) {
+						commision = chargesMap.get(GlobalConstant.CommPOPrefix
+								+ category);
+					}
 				}
 				productConfig.setCommision(commision);
 				productConfig
@@ -282,38 +485,22 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public void addSKUMapping(ProductConfig productConfig, int sellerId) {
+	public void addSKUMapping(List<ProductConfig> productConfigList, int sellerId)
+			throws CustomException{
 
-		log.info("*** addProductConfig Starts : ProductDaoImpl ****");
+		log.info("*** addProductConfig List Starts : ProductDaoImpl ****");
 		Product product = null;
 		List dbresult = null;
-		/*
-		 * boolean status=true; String
-		 * prodSKU=productConfig.getProductSkuCode(); String
-		 * channelREF=productConfig.getChannelSkuRef(); String
-		 * channel=productConfig.getChannelName();
-		 */
-		// List<ProductConfig> productConfigs = null;
+		boolean status=true;
+		StringBuffer errorSKUS=new StringBuffer("");
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		for(ProductConfig productConfig:productConfigList)
+		{
 		try {
-			Session session = sessionFactory.openSession();
-			session.beginTransaction();
+			
 			Criteria criteria = session.createCriteria(Product.class);
-			/*
-			 * criteria.createAlias("seller", "seller",
-			 * CriteriaSpecification.LEFT_JOIN).add(
-			 * Restrictions.eq("seller.id", sellerId));
-			 * criteria.add(Restrictions.eq("productSkuCode", prodSKU)); product
-			 * = (Product) criteria.list().get(0); if(product !=
-			 * null&&product.getProductConfig()!=null) for(ProductConfig procon
-			 * : product.getProductConfig()) {
-			 * if(procon.getChannelName()!=null&&
-			 * procon.getChannelName().equals(channel)) {
-			 * procon.setChannelSkuRef(channelREF); status = false; } } if
-			 * (product != null&&status) { productConfig.setProduct(product);
-			 * product.getProductConfig().add(productConfig);
-			 * 
-			 * }
-			 */
+			
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN).add(
 					Restrictions.eq("seller.id", sellerId));
@@ -321,7 +508,7 @@ public class ProductDaoImpl implements ProductDao {
 					productConfig.getProductSkuCode()));
 			dbresult = criteria.list();
 			if (dbresult != null && dbresult.size() != 0) {
-				product = (Product) criteria.list().get(0);
+				product = (Product) dbresult.get(0);
 				if (product != null) {
 					productConfig.setProduct(product);
 					product.getProductConfig().add(productConfig);
@@ -329,12 +516,19 @@ public class ProductDaoImpl implements ProductDao {
 				}
 				session.saveOrUpdate(product);
 			}
-			session.getTransaction().commit();
-			session.close();
+		
 		} catch (Exception e) {
+			errorSKUS.append(productConfig.getChannelSkuRef()+",");
+			status=false;
 			log.error("Failed!", e);
 			e.printStackTrace();
 		}
+		}
+		session.getTransaction().commit();
+		session.close();
+		if(!status)
+			throw new CustomException(errorSKUS.toString(),
+					new Date(), 1, GlobalConstant.addProductErrorCode, new Exception());
 		log.info("*** addProductConfig Ends : ProductDaoImpl ****");
 	}
 	
@@ -419,7 +613,104 @@ public class ProductDaoImpl implements ProductDao {
 		log.info("*** listProducts Ends : ProductDaoImpl ****");
 		return returnlist;
 	}
-
+	
+	@Override
+	public List<ProductConfig> listProductConfig(int sellerId, int pageNo, String condition)throws CustomException {
+		
+		log.info("*** listProductConfig by SellerId Starts : ProductDaoImpl ****");
+		List<ProductConfig> productConfigList=new ArrayList<ProductConfig>();
+		ProductConfig productConfig=null;
+		String targetSQL=null;
+		if(condition.equals("config")){
+			targetSQL=listProductConfig;
+		}else{
+			targetSQL=listProductMapping;
+		}
+		try {
+			Session session=sessionFactory.openSession();
+			session.beginTransaction();			
+			Query listQuery=session.createSQLQuery(targetSQL);
+					listQuery.setInteger(0, sellerId);
+					listQuery.setFirstResult(pageNo * pageSize);
+					listQuery.setMaxResults(pageSize);
+			if(listQuery != null && listQuery.list().size() != 0){
+				List<Object> objects=listQuery.list();
+				for(Object eachObject : objects) {
+					Object[] object=(Object[]) eachObject;
+					System.out.println(object.length);
+					productConfig=new ProductConfig();
+					productConfig.setProductSkuCode((String)object[0]);
+					productConfig.setChannelName((String)object[1]);
+					productConfig.setChannelSkuRef((String)object[2]);
+					productConfig.setDiscount((float)object[3]);
+					productConfig.setMrp((double)object[4]);
+					productConfig.setProductPrice((double)object[5]);
+					productConfig.setSuggestedPOPrice((double)object[6]);
+					productConfig.setEossDiscountValue((double)object[7]);
+					productConfig.setGrossNR((double)object[8]);
+					productConfig.setProductConfigId((int)object[9]);
+					productConfigList.add(productConfig);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+			throw new CustomException(GlobalConstant.listProductsError,
+					new Date(), 3, GlobalConstant.listProductsErrorCode, e);
+		}
+		log.info("*** listProductConfig by SellerId Ends : ProductDaoImpl ****");
+		return productConfigList;
+	}
+	
+	@Override
+	public List<ProductConfig> searchProductConfig(String field, String value,
+			int sellerId, String condition) throws CustomException {
+		List<ProductConfig> productConfigList=new ArrayList<ProductConfig>();
+		ProductConfig productConfig=null;
+		String targetSQL=null;
+		if(condition.equals("config")){
+			targetSQL=searchProductConfig+field+"=?";
+		}else{
+			targetSQL=searchProductMapping+field+"=?";
+		}		
+		try {
+			Session session=sessionFactory.openSession();
+			session.beginTransaction();			
+			Query listQuery=session.createSQLQuery(targetSQL);
+					listQuery.setInteger(0, sellerId);					
+					listQuery.setString(1, value);
+					
+					if(listQuery != null && listQuery.list().size() != 0){
+						List<Object> objects=listQuery.list();
+						for(Object eachObject : objects) {
+							Object[] object=(Object[]) eachObject;
+							System.out.println(object.length);
+							productConfig=new ProductConfig();
+							productConfig.setProductSkuCode((String)object[0]);
+							productConfig.setChannelName((String)object[1]);
+							productConfig.setChannelSkuRef((String)object[2]);
+							productConfig.setDiscount((float)object[3]);
+							productConfig.setMrp((double)object[4]);
+							productConfig.setProductPrice((double)object[5]);
+							productConfig.setSuggestedPOPrice((double)object[6]);
+							productConfig.setEossDiscountValue((double)object[7]);
+							productConfig.setGrossNR((double)object[8]);
+							productConfig.setProductConfigId((int)object[9]);
+							productConfigList.add(productConfig);
+						}
+					}
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+			throw new CustomException(GlobalConstant.getProductError,
+					new Date(), 3, GlobalConstant.getProductErrorCode, e);
+		}
+		return productConfigList;
+	}
+	
+	
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Product> listProducts(int sellerId) throws CustomException {
@@ -797,11 +1088,12 @@ public class ProductDaoImpl implements ProductDao {
 								|| (productcat.getOsUpdate().getMonth() > orderDate.getMonth() && productcat.getOsUpdate().getYear() < orderDate.getYear())) {
 							productcat.setOpeningStock(catproductcount);
 							productcat.setOsUpdate(orderDate);
+							productcat.setProductCount(productcat.getProductCount()+quantoAdd-quantoSub);
 						}
-
 					} else {
 						productcat.setOpeningStock(productcat.getProductCount());
 						productcat.setOsUpdate(orderDate);
+						productcat.setProductCount(productcat.getProductCount()+quantoAdd-quantoSub);
 					}
                     session.saveOrUpdate(productcat);
                 }                
@@ -876,12 +1168,6 @@ public class ProductDaoImpl implements ProductDao {
 									count++;
 								}
 								System.out.println(count);
-								/*
-								 * session.createSQLQuery(
-								 * "delete from productstocklist where stockId=:ids"
-								 * ) .setParameterList("ids",
-								 * ids).executeUpdate();
-								 */
 
 								int countPro = session.createSQLQuery(
 										"delete from product where productId="

@@ -134,9 +134,11 @@ window.onload = function() {
 					<li class="active"><a href="#"
 						onclick="onclickSideNavigation('ManualCharges')">Manual
 							Charges</a></li>
+					<li><a href="disputedGPList.html">Disputed GatePass</a></li>
 					<li><a href="#" onclick="onclickSideNavigation('Tax')">Tax</a></li>
 					<li><a href="#" onclick="onclickSideNavigation('TDS')">TDS</a></li>
 					<li><a href="eventsList.html">Events</a></li>
+					<li><a href="customerList.html">Customers</a></li>
 				</ul></li>
 				
 			<c:if test='<%= SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equals("[ROLE_ADMIN, ROLE_MODERATOR]") %>'>	

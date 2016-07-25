@@ -1,6 +1,7 @@
 package com.o2r.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -38,6 +40,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.o2r.bean.DataConfig;
 import com.o2r.bean.OrderBean;
 import com.o2r.bean.PoPaymentDetailsBean;
 import com.o2r.bean.UploadReportBean;
@@ -89,6 +92,8 @@ public class OrderController {
 	private HelperClass helperClass;
 	@Autowired
 	EventsService eventsService;
+	@Autowired
+	DataConfig dataConfig;
 
 	private static final String UPLOAD_DIR = "upload";
 
@@ -100,41 +105,70 @@ public class OrderController {
 	 * <p>
 	 * Make sure this method doesn't return any model. Otherwise, you'll get an
 	 * "IllegalStateException: getOutputStream() has already been called for this response"
+	 * @throws IOException 
+	 * 
 	 */
 	@RequestMapping(value = "/seller/download/xls", method = RequestMethod.GET)
 	public void getXLS(HttpServletResponse response,
-			@RequestParam(value = "sheetvalue") String sheetvalue)
-			throws ClassNotFoundException {
+			@RequestParam(value = "sheetvalue") String sheetvalue,HttpServletRequest request)
+			throws ClassNotFoundException, IOException {
 
 		log.info("$$$ getXLS Starts : OrderController $$$");
 		log.debug(" Downloading the sheet: " + sheetvalue);
-		if (sheetvalue != null) {
+			
+			response.reset();
+			int BUFF_SIZE = 1024;
+			int byteRead = 0;
+			byte[] buffer = new byte[BUFF_SIZE];
+			File targetFile = new File(System.getProperty("catalina.base")+dataConfig.getXlsPath()+sheetvalue+".xls");
+			FileInputStream inputStream = new FileInputStream(targetFile);
+			response.setContentType("application/vnd.ms-excel");			
+			response.setHeader("Content-Disposition", "attachment; filename="+targetFile.getName());
+			response.setContentLength((int) targetFile.length());
+			OutputStream outputStream = response.getOutputStream();			
+			try {			    
+			    while ((byteRead = inputStream.read()) != -1) {
+			    	outputStream.write(buffer, 0, byteRead);			
+			    }			    
+			    outputStream.flush();
+			} catch (Exception e) {			    
+			    e.printStackTrace();
+			    log.error("failed !", e);
+			} finally {
+				outputStream.close();
+				inputStream.close();
+			}		
+		
+		
+		/*if (sheetvalue != null) {
 			if (sheetvalue.equals("ordersummary")) {
 				downloadService.downloadXLS(response);
-			} else if (sheetvalue.equals("orderPoSummary")) {
+			} else if (sheetvalue.equals("orderposummary")) {
 				downloadService.downloadOrderPOXLS(response);
-			} else if (sheetvalue.equals("paymentSummary")) {
+			} else if (sheetvalue.equals("paymentsummary")) {
 				downloadService.downloadPaymentXLS(response);
-			} else if (sheetvalue.equals("returnSummary")) {
+			} else if (sheetvalue.equals("returnsummary")) {
 				downloadService.downloadReturnXLS(response);
-			} else if (sheetvalue.equals("gatepassSummary")) {
+			} else if (sheetvalue.equals("gatepasssummary")) {
 				downloadService.downloadGatePassXLS(response);
-			} else if (sheetvalue.equals("productSummary")) {
+			} else if (sheetvalue.equals("productsummary")) {
 				downloadService.downloadProductXLS(response);
-			} else if (sheetvalue.equals("productConfigSummary")) {
+			}else if (sheetvalue.equals("editproductsummary")) {
+				downloadService.downloadEditProductXLS(response);
+			}else if (sheetvalue.equals("productconfigsummary")) {
 				downloadService.downloadProductConfigXLS(response);
-			} else if (sheetvalue.equals("inventorySummary")) {
+			} else if (sheetvalue.equals("inventorysummary")) {
 				downloadService.downloadInventoryXLS(response);
-			} else if (sheetvalue.equals("debitNoteSummary")) {
+			} else if (sheetvalue.equals("debitNotesummary")) {
 				downloadService.downloadDebitNoteXLS(response);
-			} else if (sheetvalue.equals("poPaymentSummary")) {
+			} else if (sheetvalue.equals("popaymentsummary")) {
 				downloadService.downloadPOPaymentXLS(response);
-			} else if (sheetvalue.equals("expenseSummary")) {
+			} else if (sheetvalue.equals("expensesummary")) {
 				downloadService.downloadExpensesXLS(response);
-			}else if (sheetvalue.equals("skuMapping")) {
+			}else if (sheetvalue.equals("skumappingsummary")) {
 				downloadService.downloadSKUMappingXLS(response);
 			}
-		}
+		}*/
 		log.info("$$$ getXLS Ends : OrderController $$$");
 	}
 
@@ -279,6 +313,12 @@ public class OrderController {
 							files.get(0), sellerId, applicationPath,
 							uploadReport));
 					model.put("mapType", "productMap");
+					break;					
+				case "editProductSummary":
+					model.put("editProductMap", saveContents.saveEditProductContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport));
+					model.put("mapType", "editProductMap");
 					break;
 				case "productConfigSummary":
 					model.put("productMap", saveContents
@@ -396,7 +436,7 @@ public class OrderController {
 					|| searchOrder.equals("status") && channelOrderID != null) {
 				orderList = ConverterClass.prepareListofBean(orderService
 						.findOrders(searchOrder, channelOrderID, sellerId,
-								false, true));
+								true, true));
 			} else if (searchOrder != null
 					&& searchOrder.equals("customerName")
 					&& channelOrderID != null) {
@@ -407,7 +447,7 @@ public class OrderController {
 					&& endDate != null) {
 				orderList = ConverterClass.prepareListofBean(orderService
 						.findOrdersbyDate("orderDate", new Date(startDate),
-								new Date(endDate), sellerId, false));
+								new Date(endDate), sellerId, true));
 
 			}
 		} catch (CustomException ce) {
@@ -695,10 +735,12 @@ public class OrderController {
 
 		log.info("$$$ saveOrderDA Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
+		List<Order> orderlist=new ArrayList<Order>();
 
 		try {
 			Order order = ConverterClass.prepareModel(orderBean);
-			orderService.addOrder(order,
+			orderlist.add(order);
+			orderService.addOrder(orderlist,
 					helperClass.getSellerIdfromSession(request));
 		} catch (CustomException ce) {
 			log.error("saveOrderDA exception : " + ce.toString());
@@ -830,6 +872,34 @@ public class OrderController {
 		}
 		log.info("$$$ gatepasslistDA Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/gatepasslist", model);
+	}
+	
+	@RequestMapping(value = "/seller/disputedGPList", method = RequestMethod.GET)
+	public ModelAndView disputedGPList(HttpServletRequest request,
+			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
+
+		log.info("$$$ disputedGPList Starts : OrderController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			int pageNo = request.getParameter("page") != null ? Integer
+					.parseInt(request.getParameter("page")) : 0;
+
+			model.put(
+					"gatepasses",
+					ConverterClass.prepareListofBean(orderService.listDisputedGatePasses(
+							helperClass.getSellerIdfromSession(request), pageNo)));
+		} catch (CustomException ce) {
+			log.error("orderListDailyAct exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+		}
+		log.info("$$$ disputedGPList Ends : OrderController $$$");
+		return new ModelAndView("dailyactivities/disputedGPList", model);
 	}
 
 	@RequestMapping(value = "/seller/poOrderList", method = RequestMethod.GET)

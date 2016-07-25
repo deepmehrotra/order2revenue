@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,9 @@ import com.o2r.dao.AreaConfigDao;
 import com.o2r.model.Category;
 import com.o2r.model.Events;
 import com.o2r.model.ExpenseCategory;
+import com.o2r.model.Expenses;
 import com.o2r.model.GatePass;
+import com.o2r.model.ManualCharges;
 import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
 import com.o2r.model.OrderRTOorReturn;
@@ -59,6 +62,7 @@ import com.o2r.model.UploadReport;
 import com.o2r.service.CategoryService;
 import com.o2r.service.EventsService;
 import com.o2r.service.ExpenseService;
+import com.o2r.service.ManualChargesService;
 import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.PaymentUploadService;
@@ -98,6 +102,8 @@ public class SaveContents {
 	private ReportGeneratorService reportGeneratorService;
 	@Autowired
 	private AreaConfigDao areaConfigDao;
+	@Autowired
+	private ManualChargesService manualChargesService;
 
 	private static final String UPLOAD_DIR = "UploadReport";
 
@@ -121,9 +127,12 @@ public class SaveContents {
 		OrderTaxBean otb = null;
 		Partner partner = null;
 		Events event = null;
+		List<Order> saveList=null;
+		Map<String,String> duplicateKey=new HashMap<String, String>();
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
+			saveList=new ArrayList<Order>();
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
@@ -136,9 +145,9 @@ public class SaveContents {
 				entry = worksheet.getRow(rowIndex);
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				log.debug(" Row index : " + (rowIndex - 2));
-				log.debug(entry.getCell(0).toString());
-				log.debug(entry.getCell(1).getDateCellValue());
-				log.debug(entry.getCell(2).toString());
+				log.debug(entry.getCell(0));
+				log.debug(entry.getCell(1));
+				log.debug(entry.getCell(2));
 
 				order = new OrderBean();
 				customerBean = new CustomerBean();
@@ -151,8 +160,10 @@ public class SaveContents {
 					List<Order> onj = orderService
 							.findOrders("channelOrderID", entry.getCell(0)
 									.toString(), sellerId, false, false);
-					if (onj == null || onj.size() == 0) {
+					if ((onj == null || onj.size() == 0)&&!duplicateKey.containsKey(entry.getCell(0)
+									.toString())) {
 						order.setChannelOrderID(entry.getCell(0).toString());
+						duplicateKey.put(entry.getCell(0).toString(), "");
 					} else {
 						order.setChannelOrderID(entry.getCell(0).toString());
 						errorMessage
@@ -199,7 +210,7 @@ public class SaveContents {
 						order.setPcName(entry.getCell(3).toString());
 					else {
 						order.setPcName(entry.getCell(3).toString());
-						errorMessage.append(" Partner does not exist;");
+						errorMessage.append(" Partner do not exist;");
 						validaterow = false;
 					}
 				} else {
@@ -444,8 +455,10 @@ public class SaveContents {
 				if (validaterow) {
 					order.setCustomer(customerBean);
 					order.setOrderTax(otb);
-					orderService.addOrder(ConverterClass.prepareModel(order),
-							sellerId);
+					/*orderService.addOrder(ConverterClass.prepareModel(order),
+							sellerId);*/
+					System.out.println(" Adding order to save list : "+order.getChannelOrderID());
+					saveList.add(ConverterClass.prepareModel(order));
 				} else {
 					order.setCustomer(customerBean);
 					order.setOrderTax(otb);
@@ -459,8 +472,20 @@ public class SaveContents {
 				{
 					
 					log.error("Failed!", e);
-					returnOrderMap.put("Sever error in this order!"+errorMessage.toString(), order);
+					errorMessage.append("Invalid Input! ");
+					returnOrderMap.put(errorMessage.toString(), order);
 				}
+			}
+			try
+			{
+				System.out.println(" SaveList Size : "+saveList.size());
+				if(saveList!=null&&saveList.size()!=0)
+					orderService.addOrder(saveList, sellerId);
+			}
+			catch(CustomException ce)
+			{
+				returnOrderMap.put("Row :1:Note-Some orders("+ce.getLocalMessage() +" ) with valid input "
+						+ "failed due to internal server error. Please contact admin.!", null);
 			}
 			Set<String> errorSet = returnOrderMap.keySet();
 			downloadUploadReportXLS(offices, "Order Report", 24, errorSet,
@@ -508,7 +533,8 @@ public class SaveContents {
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 
 				order = new OrderBean();
-
+				try
+				{
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					partner = partnerService.getPartner(entry.getCell(0)
@@ -592,7 +618,7 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				if (entry.getCell(5) != null
+				/*if (entry.getCell(5) != null
 						&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
 					try {
 						order.setOrderMRP(Double.parseDouble(entry.getCell(5)
@@ -605,12 +631,12 @@ public class SaveContents {
 				} else {
 					errorMessage.append(" PO MRP is null ");
 					validaterow = false;
-				}
-
-				if (entry.getCell(6) != null
-						&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
+				}*/
+				
+				if (entry.getCell(5) != null
+						&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
 					try {
-						order.setTotalAmountRecieved(entry.getCell(6)
+						order.setTotalAmountRecieved(entry.getCell(5)
 								.getNumericCellValue());
 
 					} catch (NumberFormatException e) {
@@ -623,11 +649,11 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				if (entry.getCell(7) != null
-						&& StringUtils.isNotBlank(entry.getCell(7).toString())) {
-					order.setInvoiceID(entry.getCell(7).toString());
+				if (entry.getCell(6) != null
+						&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
+					order.setInvoiceID(entry.getCell(6).toString());
 
-					String curInvoiceId = entry.getCell(7).toString();
+					String curInvoiceId = entry.getCell(6).toString();
 					if (curInvoiceId != null) {
 
 						if (orderService.isPOOrderUploaded(
@@ -663,23 +689,23 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				if (entry.getCell(8) != null
-						&& StringUtils.isNotBlank(entry.getCell(8).toString())) {
-					order.setSealNo(entry.getCell(8).toString());
-					order.setAwbNum(entry.getCell(8).toString());
+				if (entry.getCell(7) != null
+						&& StringUtils.isNotBlank(entry.getCell(7).toString())) {
+					order.setSealNo(entry.getCell(7).toString());
+					order.setAwbNum(entry.getCell(7).toString());
 				} else {
 					errorMessage.append(" Seal No is null ");
 					validaterow = false;
 				}
 
-				if (entry.getCell(9) != null
-						&& StringUtils.isNotBlank(entry.getCell(9).toString())) {
+				if (entry.getCell(8) != null
+						&& StringUtils.isNotBlank(entry.getCell(8).toString())) {
 
-					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(9))) {
-						order.setOrderDate(entry.getCell(9).getDateCellValue());
-						order.setShippedDate(entry.getCell(9)
+					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(8))) {
+						order.setOrderDate(entry.getCell(8).getDateCellValue());
+						order.setShippedDate(entry.getCell(8)
 								.getDateCellValue());
-						order.setDeliveryDate(entry.getCell(9)
+						order.setDeliveryDate(entry.getCell(8)
 								.getDateCellValue());
 					} else {
 						errorMessage.append(" Shipped Date format is wrong ");
@@ -690,9 +716,9 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				if (entry.getCell(10) != null
-						&& StringUtils.isNotBlank(entry.getCell(10).toString())) {
-					order.setSellerNote(entry.getCell(10).toString());
+				if (entry.getCell(9) != null
+						&& StringUtils.isNotBlank(entry.getCell(9).toString())) {
+					order.setSellerNote(entry.getCell(9).toString());
 				}
 
 				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
@@ -705,6 +731,11 @@ public class SaveContents {
 				} else {
 					returnOrderMap.put(errorMessage.toString(), order);
 				}
+				}catch(Exception e)
+				{
+					errorMessage.append("Invalid Input! ");
+					returnOrderMap.put(errorMessage.toString(), order);
+				}
 			}
 
 			if (!orderlist.isEmpty()) {
@@ -715,7 +746,7 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = returnOrderMap.keySet();
-			downloadUploadReportXLS(offices, "OrderPOSheet", 11, errorSet,
+			downloadUploadReportXLS(offices, "OrderPOSheet", 10, errorSet,
 					path, sellerId, uploadReport);
 
 		} catch (Exception e) {
@@ -738,26 +769,31 @@ public class SaveContents {
 		boolean validaterow = true;
 		Map<String, ProductBean> returnProductMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
+		Map<String,String> uniqueProductMap=new HashMap<String, String>();
+		List<Product> saveList=null;
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
 			HSSFRow entry;
 			Integer noOfEntries = 1;
-
+			saveList=new ArrayList<Product>();
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				Product product =null;
+				try
+				{
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
-				log.debug("Product 1" + entry.getCell(1).toString());
-				log.debug("Product  2" + entry.getCell(2).toString());
-				log.debug(entry.getCell(3).toString());
-				log.debug(entry.getCell(4).toString());
-				Product product = new Product();
+				log.debug("Product 1" + entry.getCell(1));
+				log.debug("Product  2" + entry.getCell(2));
+				log.debug(entry.getCell(3));
+				log.debug(entry.getCell(4));
+				product=new Product();
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					product.setProductName(entry.getCell(0).toString());
@@ -769,8 +805,9 @@ public class SaveContents {
 						&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					Product obj = productService.getProduct(entry.getCell(1)
 							.toString(), sellerId);
-					if (obj == null) {
+					if (obj == null&&!uniqueProductMap.containsKey(entry.getCell(1).toString())) {
 						product.setProductSkuCode(entry.getCell(1).toString());
+						uniqueProductMap.put(entry.getCell(1).toString(), entry.getCell(1).toString());
 					} else {
 						product.setProductSkuCode(entry.getCell(1).toString());
 						errorMessage.append(" Product SKU already present ");
@@ -837,18 +874,18 @@ public class SaveContents {
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
 						errorMessage
-								.append(" Product price should be a number ");
+								.append(" Threshold limit should be a number ");
 						validaterow = false;
 					}
 				} else {
-					errorMessage.append(" Product price is null ");
+					errorMessage.append(" Threshold limit is null ");
 					validaterow = false;
 				}
-				if (entry.getCell(7) != null
-						&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+				if (entry.getCell(6) != null
+						&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
 						product.setLength(Float.valueOf(
-								entry.getCell(7).toString()).longValue());
+								entry.getCell(6).toString()).longValue());
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
 						errorMessage.append(" Length should be a number ");
@@ -858,11 +895,11 @@ public class SaveContents {
 					errorMessage.append(" Length is null ");
 					validaterow = false;
 				}
-				if (entry.getCell(8) != null
-						&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+				if (entry.getCell(7) != null
+						&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
 						product.setBreadth(Float.valueOf(
-								entry.getCell(8).toString()).longValue());
+								entry.getCell(7).toString()).longValue());
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
 						errorMessage.append(" Breadth should be a number ");
@@ -873,11 +910,11 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				if (entry.getCell(9) != null
-						&& entry.getCell(9).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+				if (entry.getCell(8) != null
+						&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
 						product.setHeight(Float.valueOf(
-								entry.getCell(9).toString()).longValue());
+								entry.getCell(8).toString()).longValue());
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
 						errorMessage.append(" Height should be a number ");
@@ -887,10 +924,10 @@ public class SaveContents {
 					errorMessage.append(" Height is null ");
 					validaterow = false;
 				}
-				if (entry.getCell(10) != null
-						&& entry.getCell(10).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+				if (entry.getCell(9) != null
+						&& entry.getCell(9).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
-						product.setDeadWeight((float) entry.getCell(10)
+						product.setDeadWeight((float) entry.getCell(9)
 								.getNumericCellValue());
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
@@ -904,12 +941,10 @@ public class SaveContents {
 				product.setProductDate(new Date());
 				product.setVolume(product.getHeight() * product.getLength()
 						* product.getBreadth());
-				product.setVolWeight(product.getVolume() / 5);
-				if (entry.getCell(6) != null
-						&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK)
-					product.setChannelSKU(entry.getCell(6).toString());
+				product.setVolWeight(product.getVolume() / 5);				
 				if (validaterow) {
-					productService.addProduct(product, sellerId);
+					saveList.add(product);
+					//productService.addProduct(product, sellerId);
 				} else {
 					returnProductMap.put(errorMessage.toString(),
 							ConverterClass.prepareProductBean(product));
@@ -919,9 +954,29 @@ public class SaveContents {
 								+ " 2 :" + entry.getCell(2) + " 3 :"
 								+ entry.getCell(3));
 				// Pre save to generate id for use in hierarchy
+			}catch(Exception e)
+				{
+				log.error("Failed!",e);
+				
+					errorMessage.append("Invalid Input! ");
+				returnProductMap.put(errorMessage.toString(),
+						null);
+				
+				}
+			}
+			try
+			{
+				System.out.println(" SaveList Size : "+saveList.size());
+				if(saveList!=null&&saveList.size()!=0)
+					productService.addProduct(saveList, sellerId);
+			}
+			catch(CustomException ce)
+			{
+				returnProductMap.put("Row:1:Note-Some products("+ce.getLocalMessage() +" ) with valid input "
+						+ "failed due to internal server error. Please contact admin.!", null);
 			}
 			Set<String> errorSet = returnProductMap.keySet();
-			downloadUploadReportXLS(offices, "ProductReport", 11, errorSet,
+			downloadUploadReportXLS(offices, "ProductReport", 10, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
@@ -934,6 +989,175 @@ public class SaveContents {
 		log.info("$$$ saveProductContents ends : SaveContents $$$");
 		return returnProductMap;
 	}
+	
+	
+	public Map<String, ProductBean> saveEditProductContents(MultipartFile file,
+			int sellerId, String path, UploadReport uploadReport)
+			throws IOException {
+
+		log.info("$$$ saveEditProductContents starts : SaveContents $$$");
+		boolean validaterow = true;
+		Map<String, ProductBean> returnProductMap = new LinkedHashMap<>();
+		StringBuffer errorMessage = null;
+		List<Product> productList=new ArrayList<Product>();
+		Product product=null;
+		try {
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			HSSFRow entry;
+			Integer noOfEntries = 1;
+
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			log.info(noOfEntries.toString());
+			log.debug("After getting no of rows" + noOfEntries);
+			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {				
+				try
+				{
+					entry = worksheet.getRow(rowIndex);
+					validaterow = true;
+					errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
+					log.debug("Product 1" + entry.getCell(1));
+					log.debug("Product  2" + entry.getCell(2));
+					log.debug(entry.getCell(3));
+					log.debug(entry.getCell(4));				
+					
+					if (entry.getCell(1) != null
+							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						product = productService.getProduct(entry.getCell(1)
+								.toString(), sellerId);
+						if (product == null) {
+							errorMessage.append(" Invalid SKU code ! Product Doesn't Exist ! ");
+							validaterow = false;
+						} else {
+							
+							if (entry.getCell(0) != null
+									&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								product.setProductName(entry.getCell(0).toString());
+							}						
+							if (entry.getCell(2) != null
+									&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									product.setProductPrice(Float.valueOf(entry.getCell(2)
+											.toString()));
+								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
+									errorMessage.append(" Product price should be a number ");
+									validaterow = false;
+								}
+							}						
+							if (entry.getCell(3) != null
+									&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									product.setThreholdLimit(Float.valueOf(
+											entry.getCell(3).toString()).longValue());
+								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
+									errorMessage.append(" Threshold limit should be a number ");
+									validaterow = false;
+								}
+							}
+							if (entry.getCell(5) != null
+									&& entry.getCell(5).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									product.setLength(Float.valueOf(
+											entry.getCell(5).toString()).longValue());
+								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
+									errorMessage.append(" Length should be a number ");
+									validaterow = false;
+								}
+							}
+							if (entry.getCell(6) != null
+									&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									product.setBreadth(Float.valueOf(
+											entry.getCell(6).toString()).longValue());
+								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
+									errorMessage.append(" Breadth should be a number ");
+									validaterow = false;
+								}
+							}
+							if (entry.getCell(7) != null
+									&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									product.setHeight(Float.valueOf(
+											entry.getCell(7).toString()).longValue());
+								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
+									errorMessage.append(" Height should be a number ");
+									validaterow = false;
+								}
+							}
+							if (entry.getCell(8) != null
+									&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									product.setDeadWeight((float) entry.getCell(8).getNumericCellValue());
+								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
+									errorMessage.append(" Dead Weight should be a number ");
+									validaterow = false;
+								}
+							}						
+							product.setVolume(product.getHeight() * product.getLength()
+									* product.getBreadth());
+							product.setVolWeight(product.getVolume() / 5);
+							if (entry.getCell(4) != null
+									&& entry.getCell(4).getCellType() != HSSFCell.CELL_TYPE_BLANK)
+								product.setChannelSKU(entry.getCell(4).toString());
+							
+						}
+					} else {
+						errorMessage.append(" Blank or Null Sku Value ! SKU Code Should Not Be Blank or Null ! ");
+						validaterow = false;
+					}
+					if (validaterow) {
+						productList.add(product);
+					}else{
+						returnProductMap.put(errorMessage.toString(),
+								ConverterClass.prepareProductBean(product));
+					}
+				}catch(Exception e)
+					{
+					log.error("Failed!",e);
+					if (product != null) {
+						errorMessage.append("Invalid Input! ");
+						returnProductMap.put(errorMessage.toString(),
+								ConverterClass.prepareProductBean(product));
+					}
+				}
+			}
+			if(productList != null && productList.size() != 0){
+				try {
+					productService.editProduct(sellerId, productList);
+				} catch (CustomException ce) {
+					errorMessage.append(ce.getMessage());
+				}				
+			}
+			returnProductMap.put(errorMessage.toString(),
+					ConverterClass.prepareProductBean(product));
+			Set<String> errorSet = returnProductMap.keySet();
+			downloadUploadReportXLS(offices, "EditProductReport", 9, errorSet,
+					path, sellerId, uploadReport);
+		} catch (Exception e) {
+			log.debug("Inside save contents exception :"
+					+ e.getLocalizedMessage());
+			e.printStackTrace();
+			log.error("Failed!", e);
+			addErrorUploadReport("ProductReport", sellerId, uploadReport);
+			throw new MultipartException("Constraints Violated");
+		}
+		log.info("$$$ saveEditProductContents ends : SaveContents $$$");
+		return returnProductMap;
+	}
+	
+	
+	
+	
+	
+	
 
 	// My coding Product Config *********
 
@@ -944,6 +1168,8 @@ public class SaveContents {
 		boolean validaterow = true;
 		Map<String, ProductConfigBean> returnProductConfigMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
+		Map<String,String> uniqueProductMap=new HashMap<String, String>();
+		List<ProductConfig> saveList=new ArrayList<ProductConfig>();
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -955,12 +1181,15 @@ public class SaveContents {
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				ProductConfig productConfig =null;
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				log.debug("Product 1" + entry.getCell(1));
 				log.debug("Product  2" + entry.getCell(2));
-				ProductConfig productConfig = new ProductConfig();
+				productConfig=new ProductConfig();
+				try
+				{
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					Product product = productService.getProduct(entry
@@ -974,12 +1203,16 @@ public class SaveContents {
 								&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							ProductConfig procon=productService.getProductConfig(entry.getCell(1)
 									.toString(), entry.getCell(2).toString(), sellerId);
-							if(procon==null)
+							if(procon==null&&!uniqueProductMap.containsKey(entry.getCell(1)
+									.toString()))
+							{
 							productConfig.setChannelSkuRef(entry.getCell(1)
 									.toString());
+							uniqueProductMap.put(entry.getCell(1).toString(), entry.getCell(1).toString());
+							}
 							else
 							{
-								errorMessage.append(" Channel Reference Code already present for that channel ");
+								errorMessage.append(" Channel Reference Code already present for that SKU ");
 								validaterow = false;
 							}
 						} else {
@@ -1013,23 +1246,44 @@ public class SaveContents {
 				}
 
 				if (validaterow) {
-					productService.addSKUMapping(productConfig, sellerId);
+					//productService.addSKUMapping(productConfig, sellerId);
+					saveList.add(productConfig);
 				} else {
 					returnProductConfigMap.put(errorMessage.toString(),
 							ConverterClass
 									.prepareProductConfigBean(productConfig));
 				}
+				}catch(Exception e)
+				{
+					log.error("Failed!", e);
+					if(productConfig!=null)
+					{
+						errorMessage.append("Invalid Input! ");
+					returnProductConfigMap.put(errorMessage.toString(),
+							ConverterClass
+									.prepareProductConfigBean(productConfig));
+					}
+					
+				}
 				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
 						+ entry.getCell(2) + " 3 :" + entry.getCell(3));
 				// Pre save to generate id for use in hierarchy
 			}
+			try
+			{
+				if(saveList!=null&&saveList.size()!=0)
+					productService.addSKUMapping(saveList, sellerId);
+			}
+			catch(CustomException ce)
+			{
+				returnProductConfigMap.put("Row:1:Note-Some channel SKU("+ce.getLocalMessage() +" ) with valid input "
+						+ "failed due to internal server error. Please contact admin.!", null);
+			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
-			downloadUploadReportXLS(offices, "SKUMappingReport", 4, errorSet,
+			downloadUploadReportXLS(offices, "SKUMappingReport", 3, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
-			log.debug("Inside save contents exception :"
-					+ e.getLocalizedMessage());
-			e.printStackTrace();
+			
 			log.error("Failed!", e);
 			addErrorUploadReport("SKUMappingReport", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
@@ -1056,14 +1310,16 @@ public class SaveContents {
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				ProductConfig productConfig = null;
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
-				log.debug("Product 1" + entry.getCell(1).toString());
-				log.debug("Product  2" + entry.getCell(2).toString());
-				log.debug(entry.getCell(3).toString());
-				log.debug(entry.getCell(4).toString());
-				ProductConfig productConfig = new ProductConfig();
+				log.debug("Product 1" + entry.getCell(1));
+				log.debug("Product  2" + entry.getCell(2));
+				log.debug(entry.getCell(3));
+				log.debug(entry.getCell(4));
+				productConfig = new ProductConfig();
+				try{
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					productConfig
@@ -1151,6 +1407,16 @@ public class SaveContents {
 				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
 						+ entry.getCell(2) + " 3 :" + entry.getCell(3));
 				// Pre save to generate id for use in hierarchy
+			}catch(Exception e)
+				{
+				if(productConfig!=null)
+				{
+					errorMessage.append("Invalid Input! ");
+				returnProductConfigMap.put(errorMessage.toString(),
+						ConverterClass
+								.prepareProductConfigBean(productConfig));
+				}
+				}
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
 			downloadUploadReportXLS(offices, "ProductConfigReport", 6,
@@ -1169,7 +1435,7 @@ public class SaveContents {
 
 	// My Coding Product Config Ends ********
 
-	public Map<String, OrderBean> savePaymentContents(MultipartFile file,
+	public Map<String, Object> savePaymentContents(MultipartFile file,
 			int sellerId, String path, UploadReport uploadReport)
 			throws IOException {
 		log.info("$$$ savePaymentContents starts : SaveContents $$$");
@@ -1179,10 +1445,12 @@ public class SaveContents {
 		String channelOrderId = null;
 		String skucode = null;
 		Order order = null;
+		String uploadPaymentId=null;
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		Date todaydat = new Date();
-		Map<String, OrderBean> returnPaymentMap = new LinkedHashMap<>();
+		List<ManualCharges> manualChargesList=new ArrayList<ManualCharges>();
+		Map<String, Object> returnPaymentMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
 		boolean validaterow = true;
 		boolean generatePaymentUpload = false;
@@ -1204,101 +1472,178 @@ public class SaveContents {
 				OrderPayment payment = new OrderPayment();
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				log.debug(" channelOrderId " + channelOrderId);
-				if (entry.getCell(0) != null
-						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					List<Order> onj = orderService
-							.findOrders("channelOrderID", entry.getCell(0)
-									.toString(), sellerId, false, false);
-					if (onj != null && onj.size() != 0) {
-						channelOrderId = entry.getCell(0).toString();
+				Map<String, String> channelOrderIdCheck=new HashMap<String, String>();
+				try
+				{
+				if(entry.getCell(0) != null
+						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK &&
+						entry.getCell(0).toString().equalsIgnoreCase("payment")){
+					
+					
+					if (entry.getCell(1) != null
+							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						if(channelOrderIdCheck.containsKey(entry.getCell(1).toString())){
+							errorMessage.append("Duplicate Channel OrderId ");
+							validaterow = false;
+						}else{
+							channelOrderIdCheck.put(entry.getCell(1).toString(), entry.getCell(0).toString());
+												
+						List<Order> onj = orderService
+								.findOrders("channelOrderID", entry.getCell(1)
+										.toString(), sellerId, false, false);
+						if (onj != null && onj.size() != 0) {
+							channelOrderId = entry.getCell(1).toString();
+						} else {
+							channelOrderId = entry.getCell(1).toString();
+							errorMessage
+									.append(" Channel OrderId not present ");
+							validaterow = false;
+						}
+						}
 					} else {
-						channelOrderId = entry.getCell(0).toString();
-						errorMessage
-								.append(" Channel OrderId not present ");
+						errorMessage.append(" Channel OrderId is null ");
+						validaterow = false;
+					}					
+					try {
+						if (entry.getCell(4) != null
+								&& StringUtils.isNotBlank(entry.getCell(4)
+										.toString())
+								&& (int) entry.getCell(4).getNumericCellValue() != 0) {
+
+							payment.setNegativeAmount(Math.abs(Double
+									.parseDouble(entry.getCell(4).toString())));
+							totalnegative = totalnegative
+									+ Math.abs(Double.parseDouble(entry.getCell(4)
+											.toString()));
+
+						} else if (entry.getCell(3) != null
+								&& StringUtils.isNotBlank(entry.getCell(3)
+										.toString())
+								&& (int) Float.parseFloat(entry.getCell(3)
+										.toString()) != 0) {
+
+							payment.setPositiveAmount(Double.parseDouble(entry
+									.getCell(3).toString()));
+							totalpositive = totalpositive
+									+ Double.parseDouble(entry.getCell(3)
+											.toString());
+							log.debug(" ******toatal psitive :" + totalpositive);
+
+						} else {
+							errorMessage.append(" Amount should be given ");
+							validaterow = false;
+						}
+					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
+						errorMessage.append(" Recieved amount should be number ");
 						validaterow = false;
 					}
-				} else {
-					errorMessage.append(" Channel OrderId is null ");
-					validaterow = false;
-				}
-				if (entry.getCell(2) != null
-						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					Product product = productService.getProduct(entry
-							.getCell(2).toString(), sellerId);
-					if (product == null) {
-						errorMessage.append(" Product SKU does not exist ");
-						validaterow = false;
+					if (entry.getCell(5) != null
+							&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
+
+						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(5))) {
+							payment.setDateofPayment(entry.getCell(5)
+									.getDateCellValue());
+						} else {
+							errorMessage
+									.append(" Payment Date format is wrong ,enter mm/dd/yyyy ");
+							validaterow = false;
+						}
 					} else {
-						skucode = product.getProductSkuCode();
-					}
-				} else {
-					errorMessage.append(" Product SKU is null ");
-					validaterow = false;
-				}
-				try {
-					if (entry.getCell(4) != null
-							&& StringUtils.isNotBlank(entry.getCell(4)
-									.toString())
-							&& (int) entry.getCell(4).getNumericCellValue() != 0) {
-
-						payment.setNegativeAmount(Math.abs(Double
-								.parseDouble(entry.getCell(4).toString())));
-						totalnegative = totalnegative
-								+ Math.abs(Double.parseDouble(entry.getCell(4)
-										.toString()));
-
-					} else if (entry.getCell(3) != null
-							&& StringUtils.isNotBlank(entry.getCell(3)
-									.toString())
-							&& (int) Float.parseFloat(entry.getCell(3)
-									.toString()) != 0) {
-
-						payment.setPositiveAmount(Double.parseDouble(entry
-								.getCell(3).toString()));
-						totalpositive = totalpositive
-								+ Double.parseDouble(entry.getCell(3)
-										.toString());
-						log.debug(" ******toatal psitive :" + totalpositive);
-
+						errorMessage.append(" Payment Date is null ");
+						validaterow = false;
+					}					
+					log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
+							+ entry.getCell(2) + " 3 :" + entry.getCell(3));
+					
+					if (validaterow) {
+						order =orderService.addOrderPayment(skucode, channelOrderId,
+								payment, sellerId);
 					} else {
-						errorMessage.append(" Amount should be given ");
+						returnPaymentMap.put(errorMessage.toString(),
+								ConverterClass.prepareOrderBean(order));
+					}
+					if (order != null) {
+						order.setPaymentUpload(paymentUpload);
+						paymentUpload.getOrders().add(order);
+						generatePaymentUpload = true;
+					}	
+				
+				}else if(entry.getCell(0) != null
+						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK && 
+						entry.getCell(0).toString().equalsIgnoreCase("manual charges")){
+					ManualCharges manualCharges=new ManualCharges();
+					if (entry.getCell(6) != null
+							&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						manualCharges.setPartner(entry.getCell(6).toString());					
+					} else {
+						errorMessage.append(" Channel is null ");					
+					}
+					if (entry.getCell(7) != null
+							&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						manualCharges.setParticular(entry.getCell(7).toString());					
+					} else {
+						errorMessage.append(" Particulars is null ");					
+					}
+					try {
+						if (entry.getCell(4) != null
+								&& StringUtils.isNotBlank(entry.getCell(4)
+										.toString())
+								&& (int) entry.getCell(4).getNumericCellValue() != 0) {
+
+							manualCharges.setPaidAmount(Math.abs(Double
+									.parseDouble(entry.getCell(4).toString())));							
+
+						} else if (entry.getCell(3) != null
+								&& StringUtils.isNotBlank(entry.getCell(3)
+										.toString())
+								&& (int) Float.parseFloat(entry.getCell(3)
+										.toString()) != 0) {
+
+							manualCharges.setPaidAmount(-Double.parseDouble(entry
+									.getCell(3).toString()));
+							
+							log.debug(" ******toatal psitive :" + totalpositive);
+
+						} else {
+							errorMessage.append(" Amount should be given ");
+							validaterow = false;
+						}
+					} catch (NumberFormatException e) {
+						log.error("Failed!", e);
+						errorMessage.append(" Recieved amount should be number ");
 						validaterow = false;
 					}
-				} catch (NumberFormatException e) {
-					log.error("Failed!", e);
-					errorMessage.append(" Recieved amount should be number ");
-					validaterow = false;
-				}
-				if (entry.getCell(5) != null
-						&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
+					if (entry.getCell(5) != null
+							&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
 
-					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(5))) {
-						payment.setDateofPayment(entry.getCell(5)
-								.getDateCellValue());
+						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(5))) {
+							manualCharges.setDateOfPayment(entry.getCell(5)
+									.getDateCellValue());
+						} else {
+							errorMessage
+									.append(" Payment Date format is wrong ,enter mm/dd/yyyy ");
+							validaterow = false;
+						}
 					} else {
-						errorMessage
-								.append(" Payment Date format is wrong ,enter mm/dd/yyyy ");
+						errorMessage.append(" Payment Date is null ");
 						validaterow = false;
 					}
-				} else {
-					errorMessage.append(" Payment Date is null ");
-					validaterow = false;
+					if (validaterow) {
+						manualChargesList.add(manualCharges);
+					} else {
+						returnPaymentMap.put(errorMessage.toString(),
+								ConverterClass.prepareManualChargesBean(manualCharges));
+					}
+					
+				}else{
+					errorMessage.append("Invalid Criteria !");
+					returnPaymentMap.put(errorMessage.toString(),null);
 				}
-				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
-						+ entry.getCell(2) + " 3 :" + entry.getCell(3));
-				/*order = orderService.addOrderPayment(skucode, channelOrderId,
-						payment, sellerId);*/
-				if (validaterow) {
-					order =orderService.addOrderPayment(skucode, channelOrderId,
-							payment, sellerId);
-				} else {
-					returnPaymentMap.put(errorMessage.toString(),
-							ConverterClass.prepareOrderBean(order));
-				}
-				if (order != null) {
-					order.setPaymentUpload(paymentUpload);
-					paymentUpload.getOrders().add(order);
-					generatePaymentUpload = true;
+				}catch(Exception e)
+				{
+					errorMessage.append("Invalid Input !");
+					returnPaymentMap.put(errorMessage.toString(),null);
 				}
 			}
 
@@ -1312,11 +1657,24 @@ public class SaveContents {
 				paymentUpload.setUploadDesc("PAYU" + sellerId + ""
 						+ todaydat.getTime());
 				paymentUpload.setUploadStatus("Success");
-				paymentUploadService.addPaymentUpload(paymentUpload, sellerId);
+				uploadPaymentId=paymentUploadService.addPaymentUpload(paymentUpload, sellerId);				
 			}
-
+			if(manualChargesList != null && manualChargesList.size() != 0){
+				for(ManualCharges manuals:manualChargesList){
+					try
+					{
+					manuals.setChargesDesc(uploadPaymentId);
+					expenseService.addExpense(new Expenses("Manual Charges", uploadPaymentId, "Manual Charges", new Date(), manuals.getDateOfPayment(), manuals.getPaidAmount(), sellerId), sellerId);
+					}
+					catch(Exception e)
+					{
+						log.error("Failed!", e);
+					}
+				}
+				manualChargesService.addListManualCharges(manualChargesList, sellerId);
+			}
 			Set<String> errorSet = returnPaymentMap.keySet();
-			downloadUploadReportXLS(offices, "PaymentReport", 6, errorSet,
+			downloadUploadReportXLS(offices, "PaymentReport", 8, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
@@ -1356,8 +1714,8 @@ public class SaveContents {
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				validaterow = true;
 				entry = worksheet.getRow(rowIndex);
-				log.debug("Product 1" + entry.getCell(1).toString());
-				log.debug("Product  2" + entry.getCell(2).toString());
+				log.debug("Product 1" + entry.getCell(1));
+				log.debug("Product  2" + entry.getCell(2));
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					Product product = productService.getProduct(entry
@@ -1433,6 +1791,20 @@ public class SaveContents {
 		OrderRTOorReturn orderReturn = null;
 		Map<String, Order> returnlist = new LinkedHashMap<>();
 		List<Order> orderlist = null;
+		
+		Map<String , String> returnMap=new HashMap<String, String>();
+		returnMap.put("goodInventory", "goodInventory");
+		returnMap.put("badInventory", "badInventory");
+		returnMap.put("returnCharges", "returnCharges");
+		returnMap.put("RTOCharges", "RTOCharges");
+		returnMap.put("replacementCharges", "replacementCharges");
+		returnMap.put("partialDeliveryCharges", "partialDeliveryCharges");
+		returnMap.put("cancellationCharges", "cancellationCharges");
+		returnMap.put("buyerReturn", "buyerReturn");
+		returnMap.put("sellerFault", "sellerFault");
+		returnMap.put("beforeRTD", "beforeRTD");
+		returnMap.put("afterRTD", "afterRTD");				
+		
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -1450,6 +1822,8 @@ public class SaveContents {
 				String criteria="";
 				String column=null;
 				String id = null;
+				try
+				{
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					
@@ -1468,16 +1842,18 @@ public class SaveContents {
 					if (entry.getCell(1) != null
 						&& StringUtils.isNotBlank(entry.getCell(1).toString()) && column != null) {
 						
+						System.out.println(entry
+								.getCell(1).toString());
 						orderlist = orderService.findOrders(column, entry
 								.getCell(1).toString(), sellerId, false, false);
 						if(orderlist != null && orderlist.size() != 0){
-							if(orderlist.size() == 1){
+							if(orderlist.size() == 1 && orderlist.get(0).getOrderReturnOrRTO().getReturnDate() == null){
 								order.setChannelOrderID(orderlist.get(0)
 										.getChannelOrderID());
 								id=order.getChannelOrderID();
 							}else{
 								validaterow = false;
-								errorMessage.append("Many Orders With "+criteria);
+								errorMessage.append("Many Orders or Return accepted With this "+criteria);
 							}
 							
 						}else{
@@ -1549,29 +1925,29 @@ public class SaveContents {
 					}
 					if (entry.getCell(7) != null
 							&& StringUtils.isNotBlank(entry.getCell(7)
-									.toString())) {
+									.toString()) && returnMap.containsKey(entry.getCell(7).toString())) {
 						orderReturn.setType(entry.getCell(7).toString());
 					} else {
-						errorMessage.append(" Mark order Return Type");
+						errorMessage.append("Invalid order Return Type");
 						validaterow = false;
 					}
 					if (entry.getCell(8) != null
 							&& StringUtils.isNotBlank(entry.getCell(8)
-									.toString())) {
+									.toString()) && returnMap.containsKey(entry.getCell(8).toString())) {
 						orderReturn.setReturnCategory(entry.getCell(8)
 								.toString());
 					} else {
-						errorMessage.append(" Mark order Return Fault Type");
+						errorMessage.append("Invalid order Return Fault Type");
 						validaterow = false;
 					}
 					if (entry.getCell(9) != null
-							&& StringUtils.isNotBlank(entry.getCell(9)
-									.toString())) {
+							&& StringUtils.isNotBlank(entry.getCell(9).toString()) 
+							&& returnMap.containsKey(entry.getCell(9).toString())) {
 						orderReturn.setCancelType(entry.getCell(9).toString());
 					}
 					if (entry.getCell(10) != null
-							&& StringUtils.isNotBlank(entry.getCell(10)
-									.toString())) {						
+							&& StringUtils.isNotBlank(entry.getCell(10).toString()) 
+							&& returnMap.containsKey(entry.getCell(10).toString())) {						
 						orderReturn.setInventoryType(entry.getCell(10).toString());
 					}
 					if (entry.getCell(11) != null
@@ -1582,8 +1958,7 @@ public class SaveContents {
 					
 				} else {
 					validaterow = false;
-					errorMessage
-							.append("Order Id and Suborder Id values are null");
+					errorMessage.append("Value of "+criteria+" is Null or Invalid.. ");
 				}
 				if (validaterow)
 					orderService.addReturnOrder(order.getChannelOrderID(),
@@ -1592,9 +1967,17 @@ public class SaveContents {
 					order.setOrderReturnOrRTO(orderReturn);
 					returnlist.put(errorMessage.toString(), order);
 				}
+				}catch(Exception e)
+				{
+					log.error("Failed!", e);
+					errorMessage
+					.append("Invalid input");
+					order.setOrderReturnOrRTO(orderReturn);
+					returnlist.put(errorMessage.toString(), order);
+				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "OrderReturnReport", 11, errorSet,
+			downloadUploadReportXLS(offices, "OrderReturnReport", 12, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1628,10 +2011,10 @@ public class SaveContents {
 				validaterow = true;
 				entry = worksheet.getRow(rowIndex);
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
-				log.debug(entry.getCell(1).toString());
-				log.debug(entry.getCell(2).toString());
-				log.debug(entry.getCell(3).toString());
-				log.debug(entry.getCell(4).toString());
+				log.debug(entry.getCell(1));
+				log.debug(entry.getCell(2));
+				log.debug(entry.getCell(3));
+				log.debug(entry.getCell(4));
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					dnBean = new DebitNoteBean();
@@ -1743,6 +2126,7 @@ public class SaveContents {
 		double totalpositive = 0;
 		double totalnegative = 0;
 		boolean generatePaymentUpload = false;
+		boolean disputedGP = false;
 
 		try {
 
@@ -1782,8 +2166,11 @@ public class SaveContents {
 								"channelOrderID", popabean.getInvoiceID(),
 								sellerId);
 						if (order == null) {
-							errorMessage.append(" PO or GatePass not found");
-							validaterow = false;
+							log.info(" Disputed Gatepass");
+							disputedGP = true;
+							popabean.setGatePassId(popabean.getInvoiceID());
+							//errorMessage.append(" PO or GatePass not found");
+							//validaterow = false;
 						} else {
 							popabean.setGatePassId(order.getChannelOrderID());
 						}
@@ -1914,9 +2301,11 @@ public class SaveContents {
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
-				log.debug(entry.getCell(1).toString());
-				log.debug(entry.getCell(2).toString());
+				log.debug(entry.getCell(1));
+				log.debug(entry.getCell(2));
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
+				try
+				{
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					expensebean = new ExpenseBean();
@@ -1994,6 +2383,7 @@ public class SaveContents {
 						errorMessage.append(" Expense Date is null;");
 						validaterow = false;
 					}
+				
 				}
 				log.debug("Validaterow : " + validaterow + "  error message: "
 						+ errorMessage);
@@ -2003,6 +2393,12 @@ public class SaveContents {
 							sellerId);
 				else {
 					returnlist.put(errorMessage.toString(), expensebean);
+				}
+			}catch(Exception e)
+				{
+				log.error("Failed!", e);
+				errorMessage.append(" Invalid Input!");
+				returnlist.put(errorMessage.toString(), expensebean);
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
@@ -2193,7 +2589,8 @@ public class SaveContents {
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				// orderReturn = new OrderRTOorReturn();
 				gatepass = new GatePass();
-
+				try
+				{
 				if (entry.getCell(0) != null
 						&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
 					gatepass.setGatepassId(entry.getCell(0).toString());
@@ -2248,7 +2645,7 @@ public class SaveContents {
 					errorMessage.append(" Return Rate is null ");
 					validaterow = false;
 				}
-
+/*
 				if (entry.getCell(6) != null
 						&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
 					gatepass.setTaxPOAmt(Double.parseDouble(entry.getCell(6)
@@ -2266,27 +2663,27 @@ public class SaveContents {
 					errorMessage.append(" Return Charges is null ");
 					validaterow = false;
 				}
-
-				if (entry.getCell(8) != null
-						&& StringUtils.isNotBlank(entry.getCell(8).toString())) {
-					gatepass.setTotalReturnCharges(entry.getCell(8)
+*/
+				if (entry.getCell(6) != null
+						&& StringUtils.isNotBlank(entry.getCell(6).toString())) {
+					gatepass.setTotalReturnCharges(entry.getCell(6)
 							.getNumericCellValue());
 				} else {
 					errorMessage.append(" Total Return Charges is null ");
 					validaterow = false;
 				}
 
-				if (entry.getCell(9) != null
+				/*if (entry.getCell(9) != null
 						&& StringUtils.isNotBlank(entry.getCell(9).toString())) {
 					gatepass.setSellerNotes(entry.getCell(9).toString());
 				} else {
 					errorMessage.append(" Seller Note is null ");
 					validaterow = false;
-				}
+				}*/
 
-				if (entry.getCell(10) != null
-						&& StringUtils.isNotBlank(entry.getCell(10).toString())) {
-					gatepass.setPcName(entry.getCell(10).toString());
+				if (entry.getCell(7) != null
+						&& StringUtils.isNotBlank(entry.getCell(7).toString())) {
+					gatepass.setPcName(entry.getCell(7).toString());
 					productConfig = productService.getProductConfig(
 							gatepass.getChannelSkuRef(), gatepass.getPcName(),
 							sellerId);
@@ -2299,18 +2696,18 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				if (entry.getCell(11) != null
-						&& StringUtils.isNotBlank(entry.getCell(11).toString())) {
-					gatepass.setReturnReason(entry.getCell(11).toString());
+				if (entry.getCell(8) != null
+						&& StringUtils.isNotBlank(entry.getCell(8).toString())) {
+					gatepass.setReturnReason(entry.getCell(8).toString());
 				} else {
 					errorMessage.append(" Return Reason is null ");
 					validaterow = false;
 				}
 
-				if (entry.getCell(12) != null
-						&& StringUtils.isNotBlank(entry.getCell(12).toString())) {
-					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(12))) {
-						gatepass.setReturnDate(entry.getCell(12)
+				if (entry.getCell(9) != null
+						&& StringUtils.isNotBlank(entry.getCell(9).toString())) {
+					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(9))) {
+						gatepass.setReturnDate(entry.getCell(9)
 								.getDateCellValue());
 
 					} else {
@@ -2328,6 +2725,12 @@ public class SaveContents {
 				} else {
 					returnlist.put(errorMessage.toString(), gatepass);
 				}
+			}catch(Exception e)
+				{
+				log.error("Failed!", e);
+				errorMessage.append(" Invalid input ");
+				returnlist.put(errorMessage.toString(), gatepass);
+				}
 			}
 
 			if (!gatepasslist.isEmpty()) {
@@ -2338,7 +2741,7 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "GatePassReport", 13, errorSet,
+			downloadUploadReportXLS(offices, "GatePassReport", 10, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed!", e);

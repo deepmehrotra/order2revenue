@@ -10,6 +10,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -132,7 +133,8 @@ public class PartnerDaoImpl implements PartnerDao {
 			Criteria criteria = session.createCriteria(Seller.class).add(
 					Restrictions.eq("id", sellerId));
 			criteria.createAlias("partners", "partner",CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("partner.pcName", partnername))
+					.add(Restrictions.like("partner.pcName", partnername, MatchMode.EXACT))
+				//	.add(Restrictions.eq("partner.pcName", partnername).ignoreCase())
 					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
 			if (criteria.list() != null && criteria.list().size() != 0) {

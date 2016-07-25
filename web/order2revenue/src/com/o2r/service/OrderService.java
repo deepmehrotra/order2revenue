@@ -20,9 +20,11 @@ import com.o2r.model.ProductConfig;
  */
 public interface OrderService {
 
-	public void addOrder(Order order, int sellerId) throws CustomException;
+	//public void addOrder(Order order, int sellerId) throws CustomException;
 
 	public List<Order> listOrders(int sellerId) throws CustomException;
+	
+	public List<Order> listMpOrders(int sellerId) throws CustomException;
 
 	public Order getOrder(int orderId) throws CustomException;
 
@@ -111,4 +113,9 @@ public interface OrderService {
 
 	public List<GatePass> getGatepassesFromConsolidated(int returnId, int sellerId)
 			throws CustomException;
+
+	public List<Order> listDisputedGatePasses(int sellerId, int pageNo)
+			throws CustomException;
+	
+	public void addOrder(List<Order> orderList, int sellerId) throws CustomException;
 }

@@ -16,10 +16,18 @@ public interface ProductDao {
 	public void addProduct(Product product, int sellerId)
 			throws CustomException;
 
-	public void addProductConfig(ProductConfig productConfig, int sellerId);
+	public void addProductConfig(ProductConfig productConfig, int sellerId)throws CustomException;
 
 	public List<Product> listProducts(int sellerId, int pageNo)
 			throws CustomException;
+	
+	public int editProduct(int sellerId,List<Product> products)throws CustomException;
+	
+	public Product getProductEdit(String sku, int sellerId) throws CustomException;
+	
+	public List<ProductConfig> listProductConfig(int sellerId, int pageNo, String condition)throws CustomException;
+	
+	public List<ProductConfig> searchProductConfig(String field, String value, int sellerId, String condition)throws CustomException;
 
 	public List<Product> listProducts(int sellerId) throws CustomException;
 
@@ -41,7 +49,7 @@ public interface ProductDao {
 	public ProductConfig getProductConfig(String channelSKUCode,
 			String channel, int sellerId) throws CustomException;
 
-	public void addSKUMapping(ProductConfig productConfig, int sellerId);
+	//public void addSKUMapping(ProductConfig productConfig, int sellerId);
 
 	public boolean getProductwithProductConfig(int sellerId)
 			throws CustomException;
@@ -52,6 +60,12 @@ public interface ProductDao {
 			throws CustomException;
 
 	public ProductConfig getProductConfig(int productConfigId)
+			throws CustomException;
+
+	public void addProduct(List<Product> productList, int sellerId)
+			throws CustomException;
+
+	public void addSKUMapping(List<ProductConfig> productConfigList, int sellerId)
 			throws CustomException;
 
 }
