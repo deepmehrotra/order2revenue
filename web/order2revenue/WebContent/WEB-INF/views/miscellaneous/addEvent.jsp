@@ -1017,10 +1017,12 @@ span .#error {
 											</div>
 										</div>
 									</div>
-									<div class="ibox-content ">
-										<div class="col-sm-12 ">
-											<h4>Return Calculator/Charges</h4>
-
+									
+									<div class="col-sm-12 " style=" margin-top: 10px;">
+										<h4>Return Calculator/Charges</h4>
+									</div>
+										<div class="col-sm-12" style="margin-bottom: 14px;">
+										<div class="col-sm-12">
 											<div class="col-sm-6">
 												<div class="radio">
 													<label> <form:radiobutton value="original"
@@ -2618,14 +2620,14 @@ span .#error {
 											</div>
 
 										</div>
-
+										</div>
 										<div class="ibox-content add-company">
 											<button class="btn btn-primary pull-right" type="submit"
 												id="EveSubmit" onclick="submitOrder()">Save</button>
 										</div>
 
 
-									</div>
+									
 								</div>
 							</form:form>
 						</div>

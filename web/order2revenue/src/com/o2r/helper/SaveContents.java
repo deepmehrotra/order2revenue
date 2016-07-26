@@ -241,8 +241,7 @@ public class SaveContents {
 						&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					order.setAwbNum(entry.getCell(6).toString());
 				} else {
-					errorMessage.append(" AWBNUM is null;");
-					validaterow = false;
+					errorMessage.append(" AWBNUM is null;");					
 				}
 				if (entry.getCell(7) != null
 						&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -270,8 +269,7 @@ public class SaveContents {
 								.toString()));
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
-						errorMessage.append(" Order MRP should be a number ");
-						validaterow = false;
+						errorMessage.append(" Order MRP should be a number ");						
 					}
 				} 
 				if (entry.getCell(12) != null
@@ -364,14 +362,12 @@ public class SaveContents {
 													.toString()));
 								} catch (NumberFormatException e) {
 									log.error("Failed!", e);
-									errorMessage
-											.append(" Net Rate should be number ");
+									errorMessage.append(" Net Rate should be number ");
 									validaterow = false;
 								}
 							} else {
-								errorMessage
-										.append(" Net Rate is null and ongoing event on the order with fixed price.");
-								validaterow = false;
+								errorMessage.append(" Net Rate is null and ongoing event on the order with fixed price.");
+								
 							}
 						}
 					} else {
@@ -387,13 +383,11 @@ public class SaveContents {
 													.toString()));
 								} catch (NumberFormatException e) {
 									log.error("Failed!", e);
-									errorMessage
-											.append(" Net Rate should be number ");
-									validaterow = false;
+									errorMessage.append(" Net Rate should be number ");
+									
 								}
 							} else {
-								errorMessage.append(" Net Rate is null ");
-								validaterow = false;
+								errorMessage.append(" Net Rate is null ");								
 							}
 						}
 
@@ -421,12 +415,9 @@ public class SaveContents {
 				if (entry.getCell(21) != null
 						&& entry.getCell(21).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					log.debug(" getting zipcode ");
-					if (areaConfigDao.isZipCodeValid(String
-							.valueOf((long) entry.getCell(21)
-									.getNumericCellValue()))) {
+					if (areaConfigDao.isZipCodeValid(entry.getCell(21).toString())) {
 						try {
-							customerBean.setZipcode(String.valueOf((long) entry
-									.getCell(21).getNumericCellValue()));
+							customerBean.setZipcode(entry.getCell(21).toString());
 						} catch (Exception e) {
 							log.error("Failed!", e);
 							errorMessage
@@ -436,8 +427,7 @@ public class SaveContents {
 					} else {
 						errorMessage.append("Customer zipcode is not valid ");
 						validaterow = false;
-						customerBean.setZipcode(String.valueOf((long) entry
-								.getCell(21).getNumericCellValue()));
+						customerBean.setZipcode(entry.getCell(21).toString());
 					}
 				} else {
 					errorMessage.append("Customer zipcode is blank ");
@@ -839,9 +829,7 @@ public class SaveContents {
 								.toString()));
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
-						errorMessage
-								.append(" Product price should be a number ");
-						validaterow = false;
+						errorMessage.append(" Product price should be a number ");						
 					}
 				} else {
 					errorMessage.append(" Product price is null ");
@@ -873,9 +861,7 @@ public class SaveContents {
 								entry.getCell(5).toString()).longValue());
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
-						errorMessage
-								.append(" Threshold limit should be a number ");
-						validaterow = false;
+						errorMessage.append(" Threshold limit should be a number ");						
 					}
 				} else {
 					errorMessage.append(" Threshold limit is null ");
@@ -1043,8 +1029,7 @@ public class SaveContents {
 											.toString()));
 								} catch (NumberFormatException e) {
 									log.error("Failed!", e);
-									errorMessage.append(" Product price should be a number ");
-									validaterow = false;
+									errorMessage.append(" Product price should be a number ");									
 								}
 							}						
 							if (entry.getCell(3) != null
@@ -1054,59 +1039,52 @@ public class SaveContents {
 											entry.getCell(3).toString()).longValue());
 								} catch (NumberFormatException e) {
 									log.error("Failed!", e);
-									errorMessage.append(" Threshold limit should be a number ");
-									validaterow = false;
+									errorMessage.append(" Threshold limit should be a number ");									
+								}
+							}
+							if (entry.getCell(4) != null
+									&& entry.getCell(4).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									product.setLength(Float.valueOf(
+											entry.getCell(4).toString()).longValue());
+								} catch (NumberFormatException e) {
+									log.error("Failed!", e);
+									errorMessage.append(" Length should be a number ");									
 								}
 							}
 							if (entry.getCell(5) != null
 									&& entry.getCell(5).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								try {
-									product.setLength(Float.valueOf(
+									product.setBreadth(Float.valueOf(
 											entry.getCell(5).toString()).longValue());
 								} catch (NumberFormatException e) {
 									log.error("Failed!", e);
-									errorMessage.append(" Length should be a number ");
-									validaterow = false;
+									errorMessage.append(" Breadth should be a number ");									
 								}
 							}
 							if (entry.getCell(6) != null
 									&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								try {
-									product.setBreadth(Float.valueOf(
+									product.setHeight(Float.valueOf(
 											entry.getCell(6).toString()).longValue());
 								} catch (NumberFormatException e) {
 									log.error("Failed!", e);
-									errorMessage.append(" Breadth should be a number ");
-									validaterow = false;
+									errorMessage.append(" Height should be a number ");
+									
 								}
 							}
 							if (entry.getCell(7) != null
 									&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								try {
-									product.setHeight(Float.valueOf(
-											entry.getCell(7).toString()).longValue());
+									product.setDeadWeight((float) entry.getCell(7).getNumericCellValue());
 								} catch (NumberFormatException e) {
 									log.error("Failed!", e);
-									errorMessage.append(" Height should be a number ");
-									validaterow = false;
-								}
-							}
-							if (entry.getCell(8) != null
-									&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-								try {
-									product.setDeadWeight((float) entry.getCell(8).getNumericCellValue());
-								} catch (NumberFormatException e) {
-									log.error("Failed!", e);
-									errorMessage.append(" Dead Weight should be a number ");
-									validaterow = false;
+									errorMessage.append(" Dead Weight should be a number ");									
 								}
 							}						
 							product.setVolume(product.getHeight() * product.getLength()
 									* product.getBreadth());
-							product.setVolWeight(product.getVolume() / 5);
-							if (entry.getCell(4) != null
-									&& entry.getCell(4).getCellType() != HSSFCell.CELL_TYPE_BLANK)
-								product.setChannelSKU(entry.getCell(4).toString());
+							product.setVolWeight(product.getVolume() / 5);							
 							
 						}
 					} else {
@@ -1139,8 +1117,7 @@ public class SaveContents {
 			returnProductMap.put(errorMessage.toString(),
 					ConverterClass.prepareProductBean(product));
 			Set<String> errorSet = returnProductMap.keySet();
-			downloadUploadReportXLS(offices, "EditProductReport", 9, errorSet,
-					path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "EditProductReport", 8, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
@@ -2368,6 +2345,9 @@ public class SaveContents {
 							&& StringUtils.isNotBlank(entry.getCell(5)
 									.toString())) {
 						expensebean.setPaidTo(entry.getCell(5).toString());
+					}else{
+						errorMessage.append("'PaidTo' field should be filled with correct data");
+						validaterow = false;
 					}
 					if (entry.getCell(6) != null
 							&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -2700,8 +2680,7 @@ public class SaveContents {
 						&& StringUtils.isNotBlank(entry.getCell(8).toString())) {
 					gatepass.setReturnReason(entry.getCell(8).toString());
 				} else {
-					errorMessage.append(" Return Reason is null ");
-					validaterow = false;
+					errorMessage.append(" Return Reason is null ");					
 				}
 
 				if (entry.getCell(9) != null

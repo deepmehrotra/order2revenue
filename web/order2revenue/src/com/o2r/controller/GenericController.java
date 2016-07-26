@@ -128,6 +128,8 @@ public class GenericController {
 		}
 		if (seller != null) {
 			request.getSession().setAttribute("sellerId", seller.getId());
+			request.getSession().setAttribute("logoUrl", seller.getLogoUrl());
+			request.getSession().setAttribute("sellerName", seller.getName());
 			logger.debug(" Afterlogin"+ request.getUserPrincipal().getName());
 			logger.info("$$$ welcome Ends : GenericController $$$");
 			return new ModelAndView("redirect:/seller/dashboard.html");
