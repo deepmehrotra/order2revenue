@@ -64,7 +64,7 @@
 				</div>
 
 
-			</div>
+			</div>			
 			<div class="col-lg-12 order-info-block">
                     <div class="float-e-margins col-lg-4">
                         <div class="panel panel-default">
@@ -104,30 +104,30 @@
 												type="number" maxFractionDigits="2"
 												value="${order.partnerCommission * order.quantity}" /></td>  
                                     </tr>
-                                    <%-- <tr>
+                                    <tr>
                                         <td>Gross PCC</td>
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
 												value="${order.pccAmount * order.quantity}" /></td>  
-                                    </tr> --%>
+                                    </tr>
                                     <tr>
                                         <td>Gross Shipping Charges</td>
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
 												value="${order.shippingCharges * order.quantity}" /></td>  
                                     </tr>
-                                    <%-- <tr>
+                                    <tr>
                                         <td>Gross Fixed Fee</td>
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
 												value="${(order.fixedfee) * (order.quantity)}" /></td>  
-                                    </tr> --%>
-                                    <%-- <tr>
+                                    </tr>
+                                    <tr>
                                         <td>Service Tax</td>
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
-												value="${order.serviceTax * order.quantity}" /></td>  
-                                    </tr> --%>
+												value="${serviceTax * order.quantity}" /></td>  
+                                    </tr>
                                     <tr>
                                         <td>TDS</td>
                                         <td><fmt:formatNumber
@@ -204,11 +204,44 @@
                                     </tr>
                                     <tr>
                                         <td>RLC Status</td>
-                                        <td>${order.orderReturnOrRTO.returnOrRTOstatus}</td>  
+                                        <c:choose>
+                                        	<c:when test="${order.orderReturnOrRTO.type == 'returnCharges'}">
+                                        		<td>Return Charges</td>
+                                        	</c:when>
+                                        	<c:when test="${order.orderReturnOrRTO.type == 'RTOCharges'}">
+                                        		<td>RTO Charges</td>
+                                        	</c:when>
+                                        	<c:when test="${order.orderReturnOrRTO.type == 'replacementCharges'}">
+                                        		<td>Replacement Charges</td>
+                                        	</c:when>
+                                        	<c:when test="${order.orderReturnOrRTO.type == 'partialDeliveryCharges'}">
+                                        		<td>Partial Delivery Charges</td>
+                                        	</c:when>
+                                        	<c:when test="${order.orderReturnOrRTO.type == 'cancellationCharges'}">
+                                        		<td>Cancellation Charges</td>
+                                        	</c:when>                                    
+                                        </c:choose>                                      
                                     </tr>
                                     <tr>
                                         <td>Sale Return Type</td>
-                                        <td>${order.orderReturnOrRTO.returnCategory}</td>  
+                                        <c:choose>
+                                        	<c:when test="${order.orderReturnOrRTO.returnCategory == 'buyerReturn'}">
+                                        		<td>Buyer Return</td>
+                                        	</c:when>
+                                        	<c:when test="${order.orderReturnOrRTO.returnCategory == 'sellerFault'}">
+                                        		<c:choose>
+	                                        		<c:when test="${order.orderReturnOrRTO.cancelType == 'beforeRTD'}">
+	                                        			<td>Seller Fault : Before RTD</td>
+	                                        		</c:when>
+	                                        		<c:when test="${order.orderReturnOrRTO.cancelType == 'afterRTD'}">
+	                                        			<td>Seller Fault : After RTD</td>
+	                                        		</c:when>
+	                                        		<c:otherwise>
+	                                        			<td>Seller Fault</td>
+	                                        		</c:otherwise>
+                                        		</c:choose>    
+                                        	</c:when>                                        	                                       	                                
+                                        </c:choose>                                          
                                     </tr>
                                     <tr>
                                         <td>Return Charges</td>
@@ -226,30 +259,30 @@
 												type="number" maxFractionDigits="2"
 												value="${order.partnerCommission * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
                                     </tr>
-                                    <%-- <tr>
+                                    <tr>
                                         <td>PCC Return</td>
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
 												value="${order.pccAmount * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
-                                    </tr> --%>
+                                    </tr>
                                     <tr>
                                         <td>Shipping Charges Return</td>
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
 												value="${order.shippingCharges * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
                                     </tr>
-                                    <%-- <tr>
+                                    <tr>
                                         <td>Fixed Fee Return</td>
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
 												value="${order.fixedfee * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
-                                    </tr> --%>
-                                    <%-- <tr>
+                                    </tr>
+                                    <tr>
                                         <td>Service Tax Return</td>
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
-												value="${order.serviceTax * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
-                                    </tr> --%>
+												value="${serviceTax * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
+                                    </tr>
                                     </tbody>
                                 </table>
                               </div>
@@ -298,30 +331,30 @@
 												type="number" maxFractionDigits="2"
 												value="${order.partnerCommission * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
                                     </tr>
-                                    <%-- <tr>
+                                    <tr>
                                         <td>Net PCC</td>
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
 												value="${order.pccAmount * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
-                                    </tr> --%>
+                                    </tr>
                                     <tr>
                                         <td>Net Shipping Charges</td>
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
 												value="${order.shippingCharges * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
                                     </tr>
-                                    <%-- <tr>
+                                    <tr>
                                         <td>Net Fixed Fee</td>
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
 												value="${order.fixedfee * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
-                                    </tr> --%>
-                                    <%-- <tr>
+                                    </tr>
+                                    <tr>
                                         <td>Net Service Tax</td>
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
-												value="${order.serviceTax * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
-                                    </tr> --%>                                    
+												value="${serviceTax * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
+                                    </tr>                                   
                                     <tr>
                                         <td>Net TDS</td>
                                         <td><fmt:formatNumber
