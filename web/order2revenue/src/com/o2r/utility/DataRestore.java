@@ -98,6 +98,16 @@ public class DataRestore {
 			+ " in (:nrnreturnconfiglist)";
 	private static final String deleteNRConfigQuery = "delete from nrnreturnconfig where configId"
 			+ " in (:nrnreturnconfiglist)";
+	private static final String deleteOTOrderTimelineQuery = "delete from order_table_ordertimeline where orderTimeline_timelineId "
+			+ " in (:listorderTimelineQuery)";
+	private static final String deletePOOrdersQuery = "delete from order_table where seller_id=:sellerId and "
+			+ "consolidatedOrder_orderId is not null";
+	private static final String deleteNONPOOrdersQuery = "delete from order_table where seller_id=:sellerId ";
+	private static final String deleteCustomerQuery = "delete from customer where sellerId =:sellerId ";
+	private static final String deleteGatePassQuery = "delete from gatepass where gpId in (:gatePassList)";
+	private static final String deleteOrderRetrunQuery = "delete from orderreturn where returnId in (:returnOrderList)";
+	private static final String deleteOrderTaxQuery = "delete from ordertax where taxId in (:orderTaxList)";
+	private static final String deleteOrderPayQuery = "delete from orderpay where paymentId in (:orderPaymentList)";
 	
 	
 	public Seller getSellerFromDB(int sellerid, String dbtype)
