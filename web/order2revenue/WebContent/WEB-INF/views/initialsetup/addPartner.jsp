@@ -31,6 +31,7 @@ span .#error {
 .pickList1Select {
 	height: 200px !important;
 }
+
 </style>
 <link href="/O2R/seller/css/bootstrap.min.css" rel="stylesheet">
 <link href="/O2R/seller/font-awesome/css/font-awesome.css"
@@ -555,14 +556,14 @@ span .#error {
 																				<label>Upto</label>
 																			</div>
 																			<div class="col-md-5" style="padding: 0px;">
-																				<input type="text" name="nr-pcc-range"
-																					class="form-control" ng-model="firstname"
-																					value="${chargeMap.pcc-range}">
-
+																				<input type="text" name="nr-pccrange"
+																					class="form-control validateNumber" ng-model="firstname"
+																					ng-init="firstname=${chargeMap.pccrange}"
+																					value="${chargeMap.pccrange}">
 																			</div>
 																			<div class="col-md-5">
-																				<input type="text" name="nr-pcc-value"
-																					class="form-control" value="${chargeMap.pcc-value}">
+																				<input type="text" name="nr-pccvalue"
+																					class="form-control validateNumber" value="${chargeMap.pccvalue}">
 																			</div>
 																			<br> <br> <br>
 																			<div class="col-md-2">
@@ -574,9 +575,9 @@ span .#error {
 
 																			<div class="col-md-5">
 																				<div class="col-md-4" style="padding: 0px;">
-																					<input type="text" name="nr-pcc-percentSP"
-																						class="form-control"
-																						value="${chargeMap.pcc-percentSP}">
+																					<input type="text" name="nr-pccpercentSP"
+																						class="form-control validateNumber"
+																						value="${chargeMap.pccpercentSP}">
 																				</div>
 																				<div class="col-md-8"
 																					style="margin-top: 3px; padding: 0px 0px 0px 5px;">
@@ -594,9 +595,9 @@ span .#error {
 																			</div>
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
-																					<input type="text" name="nr-pcc-percentSP"
-																						class="form-control"
-																						value="${chargeMap.pcc-percentSP}"> <span
+																					<input type="text" name="nr-pccpercentSP"
+																						class="form-control validateNumber"
+																						value="${chargeMap.pccpercentSP}"> <span
 																						class="input-group-addon">%</span>
 																				</div>
 																			</div>
@@ -607,9 +608,9 @@ span .#error {
 																			</div>
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
-																					<input type="text" name="nr-pcc-fixedAmt"
-																						class="form-control"
-																						value="${chargeMap.pcc-fixedAmt}"> <span
+																					<input type="text" name="nr-pccfixedAmt"
+																						class="form-control validateNumber"
+																						value="${chargeMap.pccfixedAmt}"> <span
 																						class="input-group-addon">%</span>
 																				</div>
 																			</div>
@@ -696,7 +697,7 @@ span .#error {
 																										<div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeVolume-range"
-																												class="form-control"
+																												class="form-control validateNumber"
 																												value="${shippingfee.range}">
 																										</div>
 																									</div></td>
@@ -704,26 +705,26 @@ span .#error {
 																										<div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeVolume-localValue"
-																												class="form-control"
+																												class="form-control validateNumber"
 																												value="${shippingfee.localValue}">
 																										</div>
 																									</div></td>
 																								<td><div class=" content-rgt">
 																										<input type="text"
 																											name="nr-shippingFeeVolume-zonalValue"
-																											class="form-control"
+																											class="form-control validateNumber"
 																											value="${shippingfee.zonalValue}">
 																									</div></td>
 																								<td><div class=" content-rgt">
 																										<input type="text"
 																											name="nr-shippingFeeVolume-nationalValue"
-																											class="form-control"
+																											class="form-control validateNumber"
 																											value="${shippingfee.nationalValue}">
 																									</div></td>
 																								<td><div class=" content-rgt">
 																										<input type="text"
 																											name="nr-shippingFeeVolume-metroValue"
-																											class="form-control"
+																											class="form-control validateNumber"
 																											value="${shippingfee.metroValue}">
 																									</div></td>
 																								<td><div class=" content-rgt">
@@ -745,30 +746,30 @@ span .#error {
 																									<div class=" content-rgt">
 																										<input type="text"
 																											name="nr-shippingFeeVolume-range"
-																											class="form-control">
+																											class="form-control validateNumber">
 																									</div>
 																								</div></td>
 																							<td><div class="form-group ">
 																									<div class=" content-rgt">
 																										<input type="text"
 																											name="nr-shippingFeeVolume-localValue"
-																											class="form-control">
+																											class="form-control validateNumber">
 																									</div>
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="text"
 																										name="nr-shippingFeeVolume-zonalValue"
-																										class="form-control">
+																										class="form-control validateNumber">
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="text"
 																										name="nr-shippingFeeVolume-nationalValue"
-																										class="form-control">
+																										class="form-control validateNumber">
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="text"
 																										name="nr-shippingFeeVolume-metroValue"
-																										class="form-control">
+																										class="form-control validateNumber">
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="button"
@@ -821,7 +822,7 @@ span .#error {
 																										<div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeWeight-range"
-																												class="form-control"
+																												class="form-control validateNumber"
 																												value="${shippingfee.range}">
 																										</div>
 																									</div></td>
@@ -829,14 +830,14 @@ span .#error {
 																										<div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeWeight-localValue"
-																												class="form-control"
+																												class="form-control validateNumber"
 																												value="${shippingfee.localValue}">
 																										</div>
 																									</div></td>
 																								<td><div class=" content-rgt">
 																										<input type="text"
 																											name="nr-shippingFeeWeight-zonalValue"
-																											class="form-control"
+																											class="form-control validateNumber"
 																											value="${shippingfee.zonalValue}">
 																									</div></td>
 																								<td><div class=" content-rgt">
@@ -848,7 +849,7 @@ span .#error {
 																								<td><div class=" content-rgt">
 																										<input type="text"
 																											name="nr-shippingFeeWeight-metroValue"
-																											class="form-control"
+																											class="form-control validateNumber"
 																											value="${shippingfee.metroValue}">
 																									</div></td>
 																								<td><div class=" content-rgt">
@@ -870,28 +871,28 @@ span .#error {
 																									<div class=" content-rgt">
 																										<input type="text"
 																											name="nr-shippingFeeWeight-range"
-																											class="form-control">
+																											class="form-control validateNumber">
 																									</div>
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="text"
 																										name="nr-shippingFeeWeight-localValue"
-																										class="form-control">
+																										class="form-control validateNumber">
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="text"
 																										name="nr-shippingFeeWeight-zonalValue"
-																										class="form-control">
+																										class="form-control validateNumber">
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="text"
 																										name="nr-shippingFeeWeight-nationalValue"
-																										class="form-control">
+																										class="form-control validateNumber">
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="text"
 																										name="nr-shippingFeeWeight-metroValue"
-																										class="form-control">
+																										class="form-control validateNumber">
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="button"
@@ -947,7 +948,7 @@ span .#error {
 																										<div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeWeight-range"
-																												class="form-control"
+																												class="form-control validateNumber"
 																												value="${shippingfee.range}">
 																										</div>
 																									</div></td>
@@ -955,7 +956,7 @@ span .#error {
 																										<div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeWeight-value"
-																												class="form-control"
+																												class="form-control validateNumber"
 																												value="${shippingfee.value}">
 																										</div>
 																									</div></td>
@@ -979,7 +980,7 @@ span .#error {
 																									<div class=" content-rgt">
 																										<input type="text"
 																											name="nr-shippingFeeWeight-range"
-																											class="form-control">
+																											class="form-control validateNumber">
 																									</div>
 																								</div>
 																							</td>
@@ -988,7 +989,7 @@ span .#error {
 																									<div class=" content-rgt">
 																										<input type="text"
 																											name="nr-shippingFeeWeight-value"
-																											class="form-control">
+																											class="form-control validateNumber">
 																									</div>
 																								</div>
 																							</td>
@@ -1038,7 +1039,7 @@ span .#error {
 																										<div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeVolume-range"
-																												class="form-control"
+																												class="form-control validateNumber"
 																												value="${shippingfee.range}">
 																										</div>
 																									</div></td>
@@ -1046,7 +1047,7 @@ span .#error {
 																										<div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeVolume-value"
-																												class="form-control"
+																												class="form-control validateNumber"
 																												value="${shippingfee.value}">
 																										</div>
 																									</div></td>
@@ -1067,13 +1068,13 @@ span .#error {
 																							</select></td>
 																							<td><input type="text"
 																								name="nr-shippingFeeVolume-range"
-																								class="form-control"></td>
+																								class="form-control validateNumber"></td>
 																							<td>
 																								<div class="form-group ">
 																									<div class=" content-rgt">
 																										<input type="text"
 																											name="nr-shippingFeeVolume-value"
-																											class="form-control">
+																											class="form-control validateNumber">
 																									</div>
 																								</div>
 																							</td>
@@ -2873,27 +2874,27 @@ span .#error {
 			var linksBox1 = document.createElement("input");
 			linksBox1.setAttribute("name", "nr-shippingFeeVolume"
 					+ currentIndex + "-range");
-			linksBox1.setAttribute("class", "form-control");
+			linksBox1.setAttribute("class", "form-control validateNumber");
 
 			var linksBox2 = document.createElement("input");
 			linksBox2.setAttribute("name", "nr-shippingFeeVolume"
 					+ currentIndex + "-localValue");
-			linksBox2.setAttribute("class", "form-control");
+			linksBox2.setAttribute("class", "form-control validateNumber");
 
 			var linksBox3 = document.createElement("input");
 			linksBox3.setAttribute("name", "nr-shippingFeeVolume"
 					+ currentIndex + "-zonalValue");
-			linksBox3.setAttribute("class", "form-control");
+			linksBox3.setAttribute("class", "form-control validateNumber");
 
 			var keywordsBox = document.createElement("input");
 			keywordsBox.setAttribute("name", "nr-shippingFeeVolume"
 					+ currentIndex + "-nationalValue");
-			keywordsBox.setAttribute("class", "form-control");
+			keywordsBox.setAttribute("class", "form-control validateNumber");
 
 			var violationsBox = document.createElement("input");
 			violationsBox.setAttribute("name", "nr-shippingFeeVolume"
 					+ currentIndex + "-metroValue");
-			violationsBox.setAttribute("class", "form-control");
+			violationsBox.setAttribute("class", "form-control validateNumber");
 
 			var addRowBox = document.createElement("input");
 			addRowBox.setAttribute("type", "button");
@@ -2951,12 +2952,12 @@ span .#error {
 			var linksBox1 = document.createElement("input");
 			linksBox1.setAttribute("name", "nr-shippingFeeWeight"
 					+ currentIndex + "-range");
-			linksBox1.setAttribute("class", "form-control");
+			linksBox1.setAttribute("class", "form-control validateNumber");
 
 			var linksBox2 = document.createElement("input");
 			linksBox2.setAttribute("name", "nr-shippingFeeWeight"
 					+ currentIndex + "-localValue");
-			linksBox2.setAttribute("class", "form-control");
+			linksBox2.setAttribute("class", "form-control validateNumber");
 
 			var linksBox3 = document.createElement("input");
 			linksBox3.setAttribute("name", "nr-shippingFeeWeight"
@@ -2966,12 +2967,12 @@ span .#error {
 			var keywordsBox = document.createElement("input");
 			keywordsBox.setAttribute("name", "nr-shippingFeeWeight"
 					+ currentIndex + "-nationalValue");
-			keywordsBox.setAttribute("class", "form-control");
+			keywordsBox.setAttribute("class", "form-control validateNumber");
 
 			var violationsBox = document.createElement("input");
 			violationsBox.setAttribute("name", "nr-shippingFeeWeight"
 					+ currentIndex + "-metroValue");
-			violationsBox.setAttribute("class", "form-control");
+			violationsBox.setAttribute("class", "form-control validateNumber");
 
 			var addRowBox = document.createElement("input");
 			addRowBox.setAttribute("type", "button");
@@ -3029,12 +3030,12 @@ span .#error {
 			var linksBox1 = document.createElement("input");
 			linksBox1.setAttribute("name", "nr-shippingFeeWeight"
 					+ currentIndex + "-range");
-			linksBox1.setAttribute("class", "form-control");
+			linksBox1.setAttribute("class", "form-control validateNumber");
 
 			var linksBox2 = document.createElement("input");
 			linksBox2.setAttribute("name", "nr-shippingFeeWeight"
 					+ currentIndex + "-value");
-			linksBox2.setAttribute("class", "form-control");
+			linksBox2.setAttribute("class", "form-control validateNumber");
 
 			var addRowBox = document.createElement("input");
 			addRowBox.setAttribute("type", "button");
@@ -3082,12 +3083,12 @@ span .#error {
 			var linksBox1 = document.createElement("input");
 			linksBox1.setAttribute("name", "nr-shippingFeeVolume"
 					+ currentIndex + "-range");
-			linksBox1.setAttribute("class", "form-control");
+			linksBox1.setAttribute("class", "form-control validateNumber");
 
 			var linksBox2 = document.createElement("input");
 			linksBox2.setAttribute("name", "nr-shippingFeeVolume"
 					+ currentIndex + "-value");
-			linksBox2.setAttribute("class", "form-control");
+			linksBox2.setAttribute("class", "form-control validateNumber");
 
 			var addRowBox = document.createElement("input");
 			addRowBox.setAttribute("type", "button");
