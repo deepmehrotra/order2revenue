@@ -308,6 +308,9 @@ public class ConverterClass {
 			bean.setSealNo(order.getSealNo());
 			bean.setPoPrice(order.getPoPrice());
 			bean.setEventName(order.getEventName());
+			bean.setPccAmount(order.getPccAmount());
+			bean.setFixedfee(order.getFixedfee());
+			bean.setServiceTax(order.getServiceTax());
 		}
 		return bean;
 	}
