@@ -43,8 +43,6 @@ public boolean empty(String s)
 	int error=0;
 	String hashString="";
 	
-	out.println("Request: " + request.getRequestURL());
-	
 	Enumeration paramNames = request.getParameterNames();
 	Map<String,String> params= new HashMap<String,String>();
     	while(paramNames.hasMoreElements()) 
