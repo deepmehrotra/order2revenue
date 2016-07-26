@@ -41,9 +41,10 @@ window.onload = function() {
 				success : function(res) {
 					if (res != "true") {
 						var values = res.split(",");
-						/* if(values[0]!="null")
-						document.getElementById("logoUrl").src=values[0]; */
-						document.getElementById("sellerName").textContent=values[1]; 
+						if(values[0]!="null"){
+							document.getElementById("logoUrl").src=values[0];
+						}
+						document.getElementById("sellerName").textContent=values[1];						
 					} else {
 						
 					}

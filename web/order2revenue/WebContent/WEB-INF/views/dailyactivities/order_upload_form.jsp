@@ -130,8 +130,7 @@
 								<option value="MP_Payment_Upload">Payment Summary</option>
 								<option value="Po_Payment_Upload">PO Payment Summary</option>
 								<option value="MP_Return_Upload">Return Summary</option>
-								<option value="PO_Gatepass_Uplooad">GatePass Summary</option>
-								<option value="debitnotesummary">Debit Note</option>
+								<option value="PO_Gatepass_Uplooad">GatePass Summary</option>								
 								<option value="Create_Parent_Product">Product Summary</option>
 								<option value="Product_Edit">Edit Product Summary</option>
 								<option value="MP_SKU_Mapping">MP Channels SKU Mapping</option>
@@ -165,8 +164,7 @@
 											<option value="orderPoSummary">Order PO Summary</option>
 											<option value="paymentSummary">Payment Summary</option>
 											<option value="returnSummary">Return Summary</option>
-											<option value="gatepassSummary">GatePass Summary</option>
-											<option value="debitNoteSummary">Debit Note</option>
+											<option value="gatepassSummary">GatePass Summary</option>											
 											<option value="productSummary">Product Summary</option>
 											<option value="editProductSummary">Edit Product Summary</option>
 											<option value="skuMapping">MP Channels SKU Mapping</option>

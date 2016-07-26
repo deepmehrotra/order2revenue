@@ -347,7 +347,7 @@ public class SellerController {
 					if (sellerBean.getName() != null) {
 						sellerBean.setLogoUrl(props.getProperty("sellerimages.view")
 								 +"seller"+sellerBean.getId() +".jpg");
-						saveImage("seller"+sellerBean.getId() +".jpg", image);
+						saveImage("seller"+sellerBean.getId() +".jpg", image);						
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -374,7 +374,8 @@ public class SellerController {
 					}
 				}
 			}
-			session.setAttribute("sellerName", sellerBean.getName());			
+			session.setAttribute("sellerName", sellerBean.getName());
+			session.setAttribute("logoUrl", sellerBean.getLogoUrl());
 			Seller seller = ConverterClass.prepareSellerModel(sellerBean);
 			log.debug("****** : "+seller.getLogoUrl());
 			Set<Seller> sellerRoles = new HashSet<Seller>();
@@ -579,7 +580,7 @@ public class SellerController {
 			request.getSession().setAttribute("logoUrl", seller.getLogoUrl());
 			request.getSession().setAttribute("sellerName", seller.getName());
 			if(seller.getLogoUrl()!=null&&StringUtils.isNotBlank(seller.getLogoUrl()))
-			return seller.getLogoUrl()+","+seller.getName();
+				return seller.getLogoUrl()+","+seller.getName();
 			else
 				return "null,"+seller.getName();
 			} catch (Exception e) {
@@ -588,10 +589,8 @@ public class SellerController {
 			}
 			
 		}
-		return "true";
-		
-	}
-	
+		return "true";		
+	}	
 	
 	private void validateImage(MultipartFile image) {
 		if (!image.getContentType().equals("image/jpeg")) {

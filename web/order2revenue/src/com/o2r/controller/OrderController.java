@@ -617,6 +617,8 @@ public class OrderController {
 			event = eventsService.getEvent(order.getEventName(), sellerId);
 			model.put("order", ConverterClass.prepareOrderBean(order));
 			model.put("event", ConverterClass.prepareEventsBean(event));
+			model.put("serviceTax", (order.getPccAmount()+order.getFixedfee()+order.getPartnerCommission()+order.getShippingCharges())*dataConfig.getServiceTax()/100);
+			System.out.println((order.getPccAmount()+order.getFixedfee()+order.getPartnerCommission()+order.getShippingCharges())*dataConfig.getServiceTax()/100);
 		} catch (CustomException ce) {
 			log.error("viewOrderDailyAct exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());

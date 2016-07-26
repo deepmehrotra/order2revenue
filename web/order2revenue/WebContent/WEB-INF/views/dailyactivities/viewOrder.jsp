@@ -64,7 +64,7 @@
 				</div>
 
 
-			</div>
+			</div>			
 			<div class="col-lg-12 order-info-block">
                     <div class="float-e-margins col-lg-4">
                         <div class="panel panel-default">
@@ -97,37 +97,7 @@
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
 												value="${order.orderSP}" /></td>  
-                                    </tr>
-                                    <tr>
-                                        <td>Gross Commission</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.partnerCommission * order.quantity}" /></td>  
-                                    </tr>
-                                    <%-- <tr>
-                                        <td>Gross PCC</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.pccAmount * order.quantity}" /></td>  
-                                    </tr> --%>
-                                    <tr>
-                                        <td>Gross Shipping Charges</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.shippingCharges * order.quantity}" /></td>  
-                                    </tr>
-                                    <%-- <tr>
-                                        <td>Gross Fixed Fee</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${(order.fixedfee) * (order.quantity)}" /></td>  
-                                    </tr> --%>
-                                    <%-- <tr>
-                                        <td>Service Tax</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.serviceTax * order.quantity}" /></td>  
-                                    </tr> --%>
+                                    </tr>                                    
                                     <tr>
                                         <td>TDS</td>
                                         <td><fmt:formatNumber
@@ -186,7 +156,7 @@
                             <h4 class="panel-title ibox-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapsevents">Return Info <i class="glyphicon glyphicon-minus" style="float: right;"></i> </a></h4>
                           </div>
                           <div id="collapsevents" class="panel-collapse collapse in">
-                            <div class="panel-body" style="height: 472px;">
+                            <div class="panel-body" style="height: 436px;">
                               <div class="ibox-content add-company view-order">        
                                 <table class="table table table-striped">
                                     <tbody>
@@ -203,12 +173,45 @@
                                         <td><fmt:formatDate	value="${order.orderReturnOrRTO.returnDate}" pattern="MMM dd,YY" /></td>  
                                     </tr>
                                     <tr>
-                                        <td>RLC Status</td>
-                                        <td>${order.orderReturnOrRTO.returnOrRTOstatus}</td>  
+                                        <td>Return Type</td>
+                                        <c:choose>
+                                        	<c:when test="${order.orderReturnOrRTO.type == 'returnCharges'}">
+                                        		<td>Return Charges</td>
+                                        	</c:when>
+                                        	<c:when test="${order.orderReturnOrRTO.type == 'RTOCharges'}">
+                                        		<td>RTO Charges</td>
+                                        	</c:when>
+                                        	<c:when test="${order.orderReturnOrRTO.type == 'replacementCharges'}">
+                                        		<td>Replacement Charges</td>
+                                        	</c:when>
+                                        	<c:when test="${order.orderReturnOrRTO.type == 'partialDeliveryCharges'}">
+                                        		<td>Partial Delivery Charges</td>
+                                        	</c:when>
+                                        	<c:when test="${order.orderReturnOrRTO.type == 'cancellationCharges'}">
+                                        		<td>Cancellation Charges</td>
+                                        	</c:when>                                    
+                                        </c:choose>                                      
                                     </tr>
                                     <tr>
-                                        <td>Sale Return Type</td>
-                                        <td>${order.orderReturnOrRTO.returnCategory}</td>  
+                                        <td>Fault Type</td>
+                                        <c:choose>
+                                        	<c:when test="${order.orderReturnOrRTO.returnCategory == 'buyerReturn'}">
+                                        		<td>Buyer Return</td>
+                                        	</c:when>
+                                        	<c:when test="${order.orderReturnOrRTO.returnCategory == 'sellerFault'}">
+                                        		<c:choose>
+	                                        		<c:when test="${order.orderReturnOrRTO.cancelType == 'beforeRTD'}">
+	                                        			<td>Seller Fault : Before RTD</td>
+	                                        		</c:when>
+	                                        		<c:when test="${order.orderReturnOrRTO.cancelType == 'afterRTD'}">
+	                                        			<td>Seller Fault : After RTD</td>
+	                                        		</c:when>
+	                                        		<c:otherwise>
+	                                        			<td>Seller Fault</td>
+	                                        		</c:otherwise>
+                                        		</c:choose>    
+                                        	</c:when>                                        	                                       	                                
+                                        </c:choose>                                          
                                     </tr>
                                     <tr>
                                         <td>Return Charges</td>
@@ -217,39 +220,15 @@
 												value="${order.orderReturnOrRTO.returnOrRTOChargestoBeDeducted}" /></td>  
                                     </tr>
                                     <tr>
+                                        <td>Return Product Cost</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.orderReturnOrRTO.returnorrtoQty * productCost}" /></td>  
+                                    </tr>
+                                    <tr>
                                         <td>Return Reason</td>
                                         <td>${order.orderReturnOrRTO.returnOrRTOreason}</td>  
-                                    </tr>
-                                    <tr>
-                                        <td>Commission Return</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.partnerCommission * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
-                                    </tr>
-                                    <%-- <tr>
-                                        <td>PCC Return</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.pccAmount * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
-                                    </tr> --%>
-                                    <tr>
-                                        <td>Shipping Charges Return</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.shippingCharges * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
-                                    </tr>
-                                    <%-- <tr>
-                                        <td>Fixed Fee Return</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.fixedfee * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
-                                    </tr> --%>
-                                    <%-- <tr>
-                                        <td>Service Tax Return</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.serviceTax * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
-                                    </tr> --%>
+                                    </tr>                                    
                                     </tbody>
                                 </table>
                               </div>
@@ -291,37 +270,7 @@
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
 												value="${(order.orderSP / order.quantity) * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
-                                    </tr>
-                                    <tr>
-                                        <td>Net Commission</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.partnerCommission * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
-                                    </tr>
-                                    <%-- <tr>
-                                        <td>Net PCC</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.pccAmount * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
-                                    </tr> --%>
-                                    <tr>
-                                        <td>Net Shipping Charges</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.shippingCharges * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
-                                    </tr>
-                                    <%-- <tr>
-                                        <td>Net Fixed Fee</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.fixedfee * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
-                                    </tr> --%>
-                                    <%-- <tr>
-                                        <td>Net Service Tax</td>
-                                        <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.serviceTax * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
-                                    </tr> --%>                                    
+                                    </tr>                                                                      
                                     <tr>
                                         <td>Net TDS</td>
                                         <td><fmt:formatNumber
@@ -357,6 +306,150 @@
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
 												value="${order.grossProfit}" /></td>  
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12 order-info-block">
+                    <div class="float-e-margins col-lg-4">
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title ibox-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapseSaleCom">Sale Commission <i class="glyphicon glyphicon-minus" style="float: right;"></i> </a></h4>
+                          </div>
+                          <div id="collapseSaleCom" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                              <div class="ibox-content add-company view-order">                                
+                                <table class="table table table-striped">
+                                    <tbody>                                    
+                                    <tr>
+                                        <td>Gross Commission</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.partnerCommission * order.quantity}" /></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Gross PCC</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.pccAmount * order.quantity}" /></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Gross Shipping Charges</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.shippingCharges * order.quantity}" /></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Gross Fixed Fee</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${(order.fixedfee) * (order.quantity)}" /></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Service Tax</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${serviceTax * order.quantity}" /></td>  
+                                    </tr>                                    
+                                    </tbody>
+                                </table>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="float-e-margins col-lg-4">
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title ibox-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapseReturnCom">Return Commission<i class="glyphicon glyphicon-minus" style="float: right;"></i> </a></h4>
+                          </div>
+                          <div id="collapseReturnCom" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                              <div class="ibox-content add-company view-order">        
+                                <table class="table table table-striped">
+                                    <tbody>
+                                    <tr>
+                                        <td>Return Commission</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.partnerCommission * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Return PCC</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.pccAmount * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Return Shipping Charges</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.shippingCharges * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Return Fixed Fee</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.fixedfee * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Return Service Tax</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${serviceTax * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
+                                    </tr>
+                                    </tbody>
+                                </table>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="float-e-margins col-lg-4">
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title ibox-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapseNetCom">Net Commission<i class="glyphicon glyphicon-minus" style="float: right;"></i> </a>
+                          </h4>
+                        </div>
+                        <div id="collapseNetCom" class="panel-collapse collapse in">
+                          <div class="panel-body">
+                            <div class="ibox-content add-company view-order">      
+                              <table class="table table table-striped">
+                                    <tbody>                                    
+                                    <tr>
+                                        <td>Net Commission</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.partnerCommission * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Net PCC</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.pccAmount * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Net Shipping Charges</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.shippingCharges * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Net Fixed Fee</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.fixedfee * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Net Service Tax</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${serviceTax * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
                                     </tr>
                                     </tbody>
                                 </table>
@@ -643,6 +736,24 @@ $(function ($) {
 var selectIds7 = $('#collapsesellernotes');
 $(function ($) {
     selectIds7.on('show.bs.collapse hidden.bs.collapse', function () {
+        $(this).prev().find('.glyphicon').toggleClass('glyphicon-plus glyphicon-minus');
+    })
+});
+var selectIds8 = $('#collapseSaleCom');
+$(function ($) {
+    selectIds8.on('show.bs.collapse hidden.bs.collapse', function () {
+        $(this).prev().find('.glyphicon').toggleClass('glyphicon-plus glyphicon-minus');
+    })
+});
+var selectIds9 = $('#collapseReturnCom');
+$(function ($) {
+    selectIds9.on('show.bs.collapse hidden.bs.collapse', function () {
+        $(this).prev().find('.glyphicon').toggleClass('glyphicon-plus glyphicon-minus');
+    })
+});
+var selectIds10 = $('#collapseNetCom');
+$(function ($) {
+    selectIds10.on('show.bs.collapse hidden.bs.collapse', function () {
         $(this).prev().find('.glyphicon').toggleClass('glyphicon-plus glyphicon-minus');
     })
 });

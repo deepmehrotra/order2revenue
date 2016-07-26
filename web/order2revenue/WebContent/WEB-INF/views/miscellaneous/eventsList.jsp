@@ -85,6 +85,7 @@
 										<th>Event Status</th>
 										<th>Net Sales Quantity</th>
 										<th>Net Sales Amount</th>
+										<th>Action</th>
 									</tr>
 								</thead>
 								<tbody>

@@ -117,7 +117,7 @@ public class SellerDaoImpl implements SellerDao {
 		                    sellerNew.setTanNumber(tanNumber);
 		                    sellerNew.setBrandName(brandName);
 		                    if(logoUrl != null){
-		                    	sellerNew.setLogoUrl(logoUrl); 
+		                    	sellerNew.setLogoUrl(logoUrl);		                    	
 		                    }
 		                    if(verCode!=null&&verCode.equals("Verified")){
 		                    	sellerNew.setVerCode(verCode);
