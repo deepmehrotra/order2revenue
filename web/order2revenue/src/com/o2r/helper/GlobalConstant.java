@@ -435,8 +435,12 @@ public class GlobalConstant {
 	public static final String fixedfeegt500lt1000 = "fixedfeegt500lt1000";
 	public static final String fixedfeegt1000lt10000 = "fixedfeegt1000lt10000";
 	public static final String fixedfeegt10000 = "fixedfeegt10000";
-	public static final String percentSPPCC = "percentSPPCC";
-	public static final String fixedAmtPCC = "fixedAmtPCC";
+	
+	public static final String percentSPPCC = "pccpercentSP";
+	public static final String fixedAmtPCC = "pccfixedAmt";
+	public static final String rangePCC = "pccrange";
+	public static final String valuePCC = "pccvalue";
+	
 
 	// Return Configuration Constansts
 	public static final String SellerFaultString = "sellerFault";

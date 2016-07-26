@@ -590,7 +590,8 @@ public class OrderDaoImpl implements OrderDao {
 							.getPoPrice() * 100 / (100 + order
 							.getProductConfig().getTaxPo())));
 
-					order.setOrderMRP(order.getProductConfig().getMrp() * order.getQuantity());
+					order.setOrderMRP(order.getProductConfig().getMrp()
+							* order.getQuantity());
 					order.setOrderSP(order.getProductConfig().getProductPrice()
 							* order.getQuantity());
 					order.setPoPrice(order.getPoPrice() * order.getQuantity());
@@ -2252,7 +2253,7 @@ public class OrderDaoImpl implements OrderDao {
 						&& charge.getCriteria() != null
 						&& !"".equals(charge.getCriteria())) {
 
-					if (pbean.getNrnReturnConfig().getShippingFeeType()
+					if (partner.getNrnReturnConfig().getShippingFeeType()
 							.equalsIgnoreCase("variable")) {
 
 						ChargesBean chargeBean = pbean.getChargesBean(
@@ -2290,7 +2291,7 @@ public class OrderDaoImpl implements OrderDao {
 						&& charge.getCriteria() != null
 						&& !"".equals(charge.getCriteria())) {
 
-					if (pbean.getNrnReturnConfig().getShippingFeeType()
+					if (partner.getNrnReturnConfig().getShippingFeeType()
 							.equalsIgnoreCase("variable")) {
 
 						ChargesBean chargeBean = pbean.getChargesBean(
@@ -2329,12 +2330,18 @@ public class OrderDaoImpl implements OrderDao {
 							charge.getChargeAmount());
 				}
 			}
-			if (pbean.getFixedfeeList() != null && pbean.getFixedfeeList().size() != 0) 
-				Collections.sort(pbean.getFixedfeeList(), new SortByCriteriaRange());
-			if (pbean.getShippingfeeVolumeList() != null && pbean.getShippingfeeVolumeList().size() != 0)
-				Collections.sort(pbean.getShippingfeeVolumeList(), new SortByCriteria());
-			if (pbean.getShippingfeeWeightList() != null && pbean.getShippingfeeWeightList().size() != 0)
-				Collections.sort(pbean.getShippingfeeWeightList(), new SortByCriteria());
+			if (pbean.getFixedfeeList() != null
+					&& pbean.getFixedfeeList().size() != 0)
+				Collections.sort(pbean.getFixedfeeList(),
+						new SortByCriteriaRange());
+			if (pbean.getShippingfeeVolumeList() != null
+					&& pbean.getShippingfeeVolumeList().size() != 0)
+				Collections.sort(pbean.getShippingfeeVolumeList(),
+						new SortByCriteria());
+			if (pbean.getShippingfeeWeightList() != null
+					&& pbean.getShippingfeeWeightList().size() != 0)
+				Collections.sort(pbean.getShippingfeeWeightList(),
+						new SortByCriteria());
 
 			// Extracting comiision value
 			if (partner.getNrnReturnConfig().getCommissionType() != null
@@ -2350,7 +2357,8 @@ public class OrderDaoImpl implements OrderDao {
 			// Add partner new changes:
 
 			// Getting Fixed fee
-			if (pbean.getFixedfeeList() != null && pbean.getFixedfeeList().size() != 0) {
+			if (pbean.getFixedfeeList() != null
+					&& pbean.getFixedfeeList().size() != 0) {
 				boolean inRange = false;
 				Iterator<ChargesBean> fixedfeeIterator = pbean
 						.getFixedfeeList().iterator();
@@ -2381,14 +2389,26 @@ public class OrderDaoImpl implements OrderDao {
 							.containsKey(GlobalConstant.fixedAmtPCC) ? chargesMap
 							.get(GlobalConstant.fixedAmtPCC) : 0;
 
-			} else if (chargesMap.containsKey(GlobalConstant.fixedAmtPCC)
-					&& chargesMap.get(GlobalConstant.fixedAmtPCC) != 0.0)
-				pccAmount = chargesMap.get(GlobalConstant.fixedAmtPCC);
+			} else {
+				double pccRange = chargesMap
+						.containsKey(GlobalConstant.rangePCC) ? chargesMap
+						.get(GlobalConstant.rangePCC) : 0;
 
-			else
-				pccAmount = chargesMap.containsKey(GlobalConstant.percentSPPCC) ? chargesMap
-						.get(GlobalConstant.percentSPPCC) * SP / 100
-						: 0;
+				if (pccRange == 0) {
+					pccAmount = 0;
+				} else {
+					if (SP < pccRange) {
+						pccAmount = chargesMap
+								.containsKey(GlobalConstant.valuePCC) ? chargesMap
+								.get(GlobalConstant.valuePCC) : 0;
+					} else {
+						pccAmount = chargesMap
+								.containsKey(GlobalConstant.percentSPPCC) ? chargesMap
+								.get(GlobalConstant.percentSPPCC) * SP / 100
+								: 0;
+					}
+				}
+			}
 
 			log.debug(" States : MetroLsit : "
 					+ partner.getNrnReturnConfig().getMetroList()
@@ -2427,7 +2447,8 @@ public class OrderDaoImpl implements OrderDao {
 				valueType = "fixed";
 			}
 
-			if (pbean.getShippingfeeWeightList() != null && pbean.getShippingfeeWeightList().size() != 0) {
+			if (pbean.getShippingfeeWeightList() != null
+					&& pbean.getShippingfeeWeightList().size() != 0) {
 				boolean inRange = false;
 				Iterator<ChargesBean> shippingfeeWeightIterator = pbean
 						.getShippingfeeWeightList().iterator();
@@ -2515,7 +2536,8 @@ public class OrderDaoImpl implements OrderDao {
 				}
 			}
 
-			if (pbean.getShippingfeeVolumeList() != null && pbean.getShippingfeeVolumeList().size() != 0) {
+			if (pbean.getShippingfeeVolumeList() != null
+					&& pbean.getShippingfeeVolumeList().size() != 0) {
 				boolean inRange = false;
 				Iterator<ChargesBean> shippingfeeVolumeIterator = pbean
 						.getShippingfeeVolumeList().iterator();
@@ -3470,12 +3492,18 @@ public class OrderDaoImpl implements OrderDao {
 						.put(charge.getChargeName(), charge.getChargeAmount());
 			}
 		}
-		if (pbean.getFixedfeeList() != null && pbean.getFixedfeeList().size() != 0) 
-			Collections.sort(pbean.getFixedfeeList(), new SortByCriteriaRange());
-		if (pbean.getShippingfeeVolumeList() != null && pbean.getShippingfeeVolumeList().size() != 0)
-			Collections.sort(pbean.getShippingfeeVolumeList(), new SortByCriteria());
-		if (pbean.getShippingfeeWeightList() != null && pbean.getShippingfeeWeightList().size() != 0)
-			Collections.sort(pbean.getShippingfeeWeightList(), new SortByCriteria());
+		if (pbean.getFixedfeeList() != null
+				&& pbean.getFixedfeeList().size() != 0)
+			Collections
+					.sort(pbean.getFixedfeeList(), new SortByCriteriaRange());
+		if (pbean.getShippingfeeVolumeList() != null
+				&& pbean.getShippingfeeVolumeList().size() != 0)
+			Collections.sort(pbean.getShippingfeeVolumeList(),
+					new SortByCriteria());
+		if (pbean.getShippingfeeWeightList() != null
+				&& pbean.getShippingfeeWeightList().size() != 0)
+			Collections.sort(pbean.getShippingfeeWeightList(),
+					new SortByCriteria());
 
 		// Extracting comiision value
 		try {
@@ -3491,7 +3519,8 @@ public class OrderDaoImpl implements OrderDao {
 			// Add partner new changes:
 
 			// Getting Fixed fee
-			if (pbean.getFixedfeeList() != null && pbean.getFixedfeeList().size() != 0) {
+			if (pbean.getFixedfeeList() != null
+					&& pbean.getFixedfeeList().size() != 0) {
 				boolean inRange = false;
 				Iterator<ChargesBean> fixedfeeIterator = pbean
 						.getFixedfeeList().iterator();
@@ -3509,7 +3538,7 @@ public class OrderDaoImpl implements OrderDao {
 			}
 
 			// Payment collection charges
-			if (partner.getNrnReturnConfig().isWhicheverGreaterPCC()) {
+			if (nrnReturnConfig.isWhicheverGreaterPCC()) {
 				double percentAmount = chargesMap
 						.containsKey(GlobalConstant.percentSPPCC) ? chargesMap
 						.get(GlobalConstant.percentSPPCC) * SP / 100 : 0;
@@ -3522,14 +3551,26 @@ public class OrderDaoImpl implements OrderDao {
 							.containsKey(GlobalConstant.fixedAmtPCC) ? chargesMap
 							.get(GlobalConstant.fixedAmtPCC) : 0;
 
-			} else if (chargesMap.containsKey(GlobalConstant.fixedAmtPCC)
-					&& chargesMap.get(GlobalConstant.fixedAmtPCC) != 0.0)
-				pccAmount = chargesMap.get(GlobalConstant.fixedAmtPCC);
+			} else {
+				double pccRange = chargesMap
+						.containsKey(GlobalConstant.rangePCC) ? chargesMap
+						.get(GlobalConstant.rangePCC) : 0;
 
-			else
-				pccAmount = chargesMap.containsKey(GlobalConstant.percentSPPCC) ? chargesMap
-						.get(GlobalConstant.percentSPPCC) * SP / 100
-						: 0;
+				if (pccRange == 0) {
+					pccAmount = 0;
+				} else {
+					if (SP < pccRange) {
+						pccAmount = chargesMap
+								.containsKey(GlobalConstant.valuePCC) ? chargesMap
+								.get(GlobalConstant.valuePCC) : 0;
+					} else {
+						pccAmount = chargesMap
+								.containsKey(GlobalConstant.percentSPPCC) ? chargesMap
+								.get(GlobalConstant.percentSPPCC) * SP / 100
+								: 0;
+					}
+				}
+			}
 
 			log.debug(" States : MetroLsit : "
 					+ partner.getNrnReturnConfig().getMetroList()
@@ -3568,7 +3609,8 @@ public class OrderDaoImpl implements OrderDao {
 				valueType = "fixed";
 			}
 
-			if (pbean.getShippingfeeWeightList() != null && pbean.getShippingfeeWeightList().size() != 0) {
+			if (pbean.getShippingfeeWeightList() != null
+					&& pbean.getShippingfeeWeightList().size() != 0) {
 				boolean inRange = false;
 				Iterator<ChargesBean> shippingfeeWeightIterator = pbean
 						.getShippingfeeWeightList().iterator();
@@ -3656,7 +3698,8 @@ public class OrderDaoImpl implements OrderDao {
 				}
 			}
 
-			if (pbean.getShippingfeeVolumeList() != null && pbean.getShippingfeeVolumeList().size() != 0) {
+			if (pbean.getShippingfeeVolumeList() != null
+					&& pbean.getShippingfeeVolumeList().size() != 0) {
 				boolean inRange = false;
 				Iterator<ChargesBean> shippingfeeVolumeIterator = pbean
 						.getShippingfeeVolumeList().iterator();

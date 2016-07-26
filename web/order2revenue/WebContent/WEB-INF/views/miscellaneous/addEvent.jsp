@@ -450,15 +450,15 @@ span .#error {
 																						<label>Upto</label>
 																					</div>
 																					<div class="col-md-5" style="padding: 0px;">
-																						<input type="text" name="nr-pcc-range"
+																						<input type="text" name="nr-pccrange"
 																							class="form-control" ng-model="firstname"
-																							value="${chargeMap.pcc-range}">
+																							value="${chargeMap.pccrange}">
 
 																					</div>
 																					<div class="col-md-5">
-																						<input type="text" name="nr-pcc-value"
+																						<input type="text" name="nr-pccvalue"
 																							class="form-control"
-																							value="${chargeMap.pcc-value}">
+																							value="${chargeMap.pccvalue}">
 																					</div>
 																					<br> <br> <br>
 																					<div class="col-md-2">
@@ -470,9 +470,9 @@ span .#error {
 
 																					<div class="col-md-5">
 																						<div class="col-md-4" style="padding: 0px;">
-																							<input type="text" name="nr-pcc-percentSP"
+																							<input type="text" name="nr-pccpercentSP"
 																								class="form-control"
-																								value="${chargeMap.pcc-percentSP}">
+																								value="${chargeMap.pccpercentSP}">
 																						</div>
 																						<div class="col-md-8"
 																							style="margin-top: 3px; padding: 0px 0px 0px 5px;">
@@ -491,9 +491,9 @@ span .#error {
 																					</div>
 																					<div class="col-sm-6">
 																						<div class="input-group m-b">
-																							<input type="text" name="nr-pcc-percentSP"
+																							<input type="text" name="nr-pccpercentSP"
 																								class="form-control"
-																								value="${chargeMap.pcc-percentSP}"> <span
+																								value="${chargeMap.pccpercentSP}"> <span
 																								class="input-group-addon">%</span>
 																						</div>
 																					</div>
@@ -504,9 +504,9 @@ span .#error {
 																					</div>
 																					<div class="col-sm-6">
 																						<div class="input-group m-b">
-																							<input type="text" name="nr-pcc-fixedAmt"
+																							<input type="text" name="nr-pccfixedAmt"
 																								class="form-control"
-																								value="${chargeMap.pcc-fixedAmt}"> <span
+																								value="${chargeMap.pccfixedAmt}"> <span
 																								class="input-group-addon">%</span>
 																						</div>
 																					</div>
