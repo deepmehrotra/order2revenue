@@ -38,7 +38,6 @@
 														value="${product.productName}" class="form-control" />
 												</div>
 											</div>
-
 											<div class="mar-btm-20-oh">
 												<label class="col-sm-5 control-label">SKU</label>
 												<div class="col-sm-7">
@@ -131,14 +130,7 @@
 													<form:input path="threholdLimit"
 														value="${product.threholdLimit}" class="form-control" />
 												</div>
-											</div>
-											<div class="mar-btm-20-oh">
-												<label class="col-sm-4 control-label">Channel SKU</label>
-												<div class="col-sm-8">
-													<form:input path="channelSKU" value="${product.channelSKU}"
-														class="form-control" />
-												</div>
-											</div>
+											</div>											
 											<div>
 												<label class="col-sm-4 control-label">Deadweight (gm)</label>
 												<div class="col-sm-8">
@@ -204,18 +196,12 @@
 						required : true,
 						min : 1,
 						number : true,
-					},
-					productPrice : {
-						required : true,
-						min : 1,
-						number : true,
 					}
 				},
 				messages : {
 					productName : "Product Title Required",
 					productSkuCode : "SKU ismandatory",
-					categoryName : "Product Title Required",
-					productPrice : "Product Price  is mandatory",
+					categoryName : "Product Title Required",					
 					quantity : "Quantity  is required"
 				}
 			});

@@ -125,18 +125,18 @@
 							<select class="form-control" id="downloadreporttype"
 								name="downloadreporttype">
 								<option value="">Select file to download</option>
-								<option value="MP_Order_Upload">Order Summary</option>
-								<option value="PO_Order_Upload">Order PO Summary</option>
-								<option value="MP_Payment_Upload">Payment Summary</option>
-								<option value="Po_Payment_Upload">PO Payment Summary</option>
-								<option value="MP_Return_Upload">Return Summary</option>
-								<option value="PO_Gatepass_Uplooad">GatePass Summary</option>								
-								<option value="Create_Parent_Product">Product Summary</option>
-								<option value="Product_Edit">Edit Product Summary</option>
-								<option value="MP_SKU_Mapping">MP Channels SKU Mapping</option>
-								<option value="PO_Product_Config">Product Config	Summary</option>
-								<option value="inventorysummary">Inventory Summary</option>
-								<option value="Expense_Upload">Expense Summary</option>
+								<option value="MP_Order_Upload">MP Order Upload</option>
+								<option value="PO_Order_Upload">PO Order Upload</option>
+								<option value="MP_Payment_Upload">MP Payment Upload</option>
+								<option value="Po_Payment_Upload">PO Payment Upload</option>
+								<option value="MP_Return_Upload">MP Return Upload</option>
+								<option value="PO_Gatepass_Uplooad">PO GatePass Upload</option>								
+								<option value="Create_Parent_Product">Create Parent Product</option>
+								<option value="Product_Edit">Edit Product Upload</option>
+								<option value="MP_SKU_Mapping">MP SKU Mapping</option>
+								<option value="PO_Product_Config">PO Product Config</option>
+								<option value="inventorysummary">Inventory Upload</option>
+								<option value="Expense_Upload">Expense Upload</option>
 							</select>
 						</div>						
 						<div class="col-md-4">
@@ -160,18 +160,18 @@
 									<div class="col-md-4">
 										<select class="form-control" id="sheetValue" name="sheetValue" required	autocomplete="off" >
 											<option value="">Select file to download</option>
-											<option value="ordersummary">Order Summary</option>
-											<option value="orderPoSummary">Order PO Summary</option>
-											<option value="paymentSummary">Payment Summary</option>
-											<option value="returnSummary">Return Summary</option>
-											<option value="gatepassSummary">GatePass Summary</option>											
-											<option value="productSummary">Product Summary</option>
-											<option value="editProductSummary">Edit Product Summary</option>
-											<option value="skuMapping">MP Channels SKU Mapping</option>
-											<option value="productConfigSummary">Product Config Summary</option>
-											<option value="inventorySummary">Inventory Summary</option>
-											<option value="poPaymentSummary">PO Payment Summary</option>
-											<option value="expenseSummary">Expense Summary</option>
+											<option value="ordersummary">MP Order Upload</option>
+											<option value="orderPoSummary">PO Order Upload</option>
+											<option value="paymentSummary">MP Payment Upload</option>
+											<option value="returnSummary">MP Return Upload</option>
+											<option value="gatepassSummary">PO GatePass Upload</option>											
+											<option value="productSummary">Create Parent Product</option>
+											<option value="editProductSummary">Edit Product Upload</option>
+											<option value="skuMapping">MP SKU Mapping</option>
+											<option value="productConfigSummary">PO Product Config</option>
+											<option value="inventorySummary">Inventory Upload</option>
+											<option value="poPaymentSummary">PO Payment Upload</option>
+											<option value="expenseSummary">Expense Upload</option>
 										</select>
 									</div>
 									<div class="col-md-4">															
