@@ -41,31 +41,31 @@ public class Layouter {
 		// Build the title and date headers
 		buildTitle(worksheet, startRowIndex, startColIndex, sheetName);
 		// Build the column headers
-		if (sheetName.equalsIgnoreCase("Order Report"))
+		if (sheetName.equalsIgnoreCase("MP_Order_Upload"))
 			buildHeaders(worksheet, startRowIndex, startColIndex);
-		else if (sheetName.equalsIgnoreCase("ProductReport")) {
+		else if (sheetName.equalsIgnoreCase("Create_Parent_Product")) {
 			buildProductHeaders(worksheet, startRowIndex, startColIndex);
-		} else if (sheetName.equalsIgnoreCase("EditProductReport")) {
+		} else if (sheetName.equalsIgnoreCase("Product_Edit")) {
 			buildEditProductHeaders(worksheet, startRowIndex, startColIndex);
-		} else if (sheetName.equalsIgnoreCase("ProductConfigReport")) {
+		} else if (sheetName.equalsIgnoreCase("PO_Product_Config")) {
 			buildProductConfigHeaders(worksheet, startRowIndex, startColIndex);
-		} else if (sheetName.equalsIgnoreCase("PaymentReport")) {
+		} else if (sheetName.equalsIgnoreCase("MP_Payment_Upload")) {
 			buildPaymentHeaders(worksheet, startRowIndex, startColIndex);
 		} else if (sheetName.equalsIgnoreCase("InventoryReport")) {
 			buildInventoryHeaders(worksheet, startRowIndex, startColIndex);
-		} else if (sheetName.equalsIgnoreCase("OrderReturnReport")) {
+		} else if (sheetName.equalsIgnoreCase("MP_Return_Upload")) {
 			buildReturnHeaders(worksheet, startRowIndex, startColIndex);
-		} else if (sheetName.equalsIgnoreCase("GatePassReport")) {
+		} else if (sheetName.equalsIgnoreCase("PO_Gatepass_Uplooad")) {
 			buildGatePassHeaders(worksheet, startRowIndex, startColIndex);
-		} else if (sheetName.equalsIgnoreCase("OrderPOSheet")) {
+		} else if (sheetName.equalsIgnoreCase("PO_Order_Upload")) {
 			buildOrderPOHeaders(worksheet, startRowIndex, startColIndex);
 		} else if (sheetName.equalsIgnoreCase("DebitNoteSheet")) {
 			buildDebitNoteHeaders(worksheet, startRowIndex, startColIndex);
-		} else if (sheetName.equalsIgnoreCase("POPaymentSheet")) {
+		} else if (sheetName.equalsIgnoreCase("Po_Payment_Upload")) {
 			buildPOPaymentHeaders(worksheet, startRowIndex, startColIndex);
-		} else if (sheetName.equalsIgnoreCase("ExpenseSheet")) {
+		} else if (sheetName.equalsIgnoreCase("Expense_Upload")) {
 			buildPExpenseHeaders(worksheet, startRowIndex, startColIndex);
-		}else if (sheetName.equalsIgnoreCase("SKU Mapping")) {
+		}else if (sheetName.equalsIgnoreCase("MP_SKU_Mapping")) {
 			buildSKUMappingHeaders(worksheet, startRowIndex, startColIndex);
 		}
 	}

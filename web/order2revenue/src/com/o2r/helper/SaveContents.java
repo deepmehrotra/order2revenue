@@ -478,14 +478,14 @@ public class SaveContents {
 						+ "failed due to internal server error. Please contact admin.!", null);
 			}
 			Set<String> errorSet = returnOrderMap.keySet();
-			downloadUploadReportXLS(offices, "Order Report", 24, errorSet,
+			downloadUploadReportXLS(offices, "MP_Order_Upload", 24, errorSet,
 					path, sellerId, uploadReport);
 
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
-			addErrorUploadReport("Order Report", sellerId, uploadReport);
+			addErrorUploadReport("MP_Order_Upload", sellerId, uploadReport);
 			log.error("Failed!", e);
 		}
 		log.info("$$$ saveOrderContents ends : SaveContents $$$");
@@ -736,7 +736,7 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = returnOrderMap.keySet();
-			downloadUploadReportXLS(offices, "OrderPOSheet", 10, errorSet,
+			downloadUploadReportXLS(offices, "PO_Order_Upload", 10, errorSet,
 					path, sellerId, uploadReport);
 
 		} catch (Exception e) {
@@ -744,7 +744,7 @@ public class SaveContents {
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
 			log.error("Failed!", e);
-			addErrorUploadReport("OrderPOSheet", sellerId, uploadReport);
+			addErrorUploadReport("PO_Order_Upload", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
 		log.info("$$$ saveOrderPOContents ends : SaveContents $$$");
@@ -960,14 +960,14 @@ public class SaveContents {
 						+ "failed due to internal server error. Please contact admin.!", null);
 			}
 			Set<String> errorSet = returnProductMap.keySet();
-			downloadUploadReportXLS(offices, "ProductReport", 10, errorSet,
+			downloadUploadReportXLS(offices, "Create_Parent_Product", 10, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
 			log.error("Failed!", e);
-			addErrorUploadReport("ProductReport", sellerId, uploadReport);
+			addErrorUploadReport("Create_Parent_Product", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
 		log.info("$$$ saveProductContents ends : SaveContents $$$");
@@ -1115,13 +1115,13 @@ public class SaveContents {
 			returnProductMap.put(errorMessage.toString(),
 					ConverterClass.prepareProductBean(product));
 			Set<String> errorSet = returnProductMap.keySet();
-			downloadUploadReportXLS(offices, "EditProductReport", 8, errorSet, path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "Product_Edit", 8, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
 			log.error("Failed!", e);
-			addErrorUploadReport("ProductReport", sellerId, uploadReport);
+			addErrorUploadReport("Product_Edit", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
 		log.info("$$$ saveEditProductContents ends : SaveContents $$$");
@@ -1255,12 +1255,12 @@ public class SaveContents {
 						+ "failed due to internal server error. Please contact admin.!", null);
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
-			downloadUploadReportXLS(offices, "SKUMappingReport", 3, errorSet,
+			downloadUploadReportXLS(offices, "MP_SKU_Mapping", 3, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			
 			log.error("Failed!", e);
-			addErrorUploadReport("SKUMappingReport", sellerId, uploadReport);
+			addErrorUploadReport("MP_SKU_Mapping", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
 		log.info("$$$ saveSKUMappingContents ends : SaveContents $$$");
@@ -1394,14 +1394,14 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
-			downloadUploadReportXLS(offices, "ProductConfigReport", 6,
+			downloadUploadReportXLS(offices, "PO_Product_Config", 6,
 					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
 			log.error("Failed!", e);
-			addErrorUploadReport("ProductConfigReport", sellerId, uploadReport);
+			addErrorUploadReport("PO_Product_Config", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
 		log.info("$$$ saveProductConfigContents ends : SaveContents $$$");
@@ -1649,14 +1649,14 @@ public class SaveContents {
 				manualChargesService.addListManualCharges(manualChargesList, sellerId);
 			}
 			Set<String> errorSet = returnPaymentMap.keySet();
-			downloadUploadReportXLS(offices, "PaymentReport", 8, errorSet,
+			downloadUploadReportXLS(offices, "MP_Payment_Upload", 8, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
 			log.error("Failed!", e);
-			addErrorUploadReport("PaymentReport", sellerId, uploadReport);
+			addErrorUploadReport("MP_Payment_Upload", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
 		log.info("$$$ savePaymentContents ends : SaveContents $$$");
@@ -1958,12 +1958,12 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "OrderReturnReport", 12, errorSet,
+			downloadUploadReportXLS(offices, "MP_Return_Upload", 12, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed!", e);
-			addErrorUploadReport("OrderReturnReport", sellerId, uploadReport);
+			addErrorUploadReport("MP_Return_Upload", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
 		log.info("$$$ saveOrderReturnDetails ends : SaveContents $$$");
@@ -2249,12 +2249,12 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = returnMap.keySet();
-			downloadUploadReportXLS(offices, "POPaymentSheet", 6, errorSet,
+			downloadUploadReportXLS(offices, "Po_Payment_Upload", 6, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed!", e);
 			e.printStackTrace();
-			addErrorUploadReport("POPaymentSheet", sellerId, uploadReport);
+			addErrorUploadReport("Po_Payment_Upload", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
 		log.info("$$$ savePoPaymentDetails ends : SaveContents $$$");
@@ -2386,12 +2386,12 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "ExpenseSheet", 7, errorSet, path,
+			downloadUploadReportXLS(offices, "Expense_Upload", 7, errorSet, path,
 					sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed!", e);
 			e.printStackTrace();
-			addErrorUploadReport("ExpenseSheet", sellerId, uploadReport);
+			addErrorUploadReport("Expense_Upload", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
 		log.info("$$$ saveExpenseDetails ends : SaveContents $$$");
@@ -2724,12 +2724,12 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "GatePassReport", 10, errorSet,
+			downloadUploadReportXLS(offices, "PO_Gatepass_Uplooad", 10, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed!", e);
 			e.printStackTrace();
-			addErrorUploadReport("GatePassReport", sellerId, uploadReport);
+			addErrorUploadReport("PO_Gatepass_Uplooad", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
 		log.info("$$$ saveGatePassDetails ends : SaveContents $$$");

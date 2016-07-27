@@ -30,7 +30,7 @@
 										<div class="col-sm-6">
 											<div class="mar-btm-20-dt">
 												<label class="col-sm-5 control-label">Product SKU
-													Code</label>
+													Code *</label>
 												<div class="col-sm-6 input-group pad-lr">
 													<form:select data-placeholder="Choose a Product SKU..."
 														path="productSkuCode" items="${productSkuMap}"
@@ -44,7 +44,7 @@
 									<div class="col-sm-12">
 										<div class="col-sm-6">
 											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Channel Name</label>
+												<label class="col-sm-5 control-label">Channel Name *</label>
 												<div class="col-sm-7">
 													<%-- <form:input path="channelName"
 														value="${productConfigBean.channelName}"
@@ -60,7 +60,7 @@
 										<div class="col-sm-6">
 											<div class="mar-btm-20-oh">
 												<label class="col-sm-5 control-label">Channel SKU
-													Reference</label>
+													Reference *</label>
 												<div class="col-sm-7">
 													<form:input path="channelSkuRef"
 														value="${productConfigBean.channelSkuRef}"
@@ -72,7 +72,7 @@
 									<div class="col-sm-12">
 										<div class="col-sm-6">
 											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Discount</label>
+												<label class="col-sm-5 control-label">Discount *</label>
 												<div class="col-sm-7">
 													<div class="input-group m-b">
 														<form:input path="discount"
@@ -87,7 +87,7 @@
 									<div class="col-sm-12">
 										<div class="col-sm-6">
 											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">MRP</label>
+												<label class="col-sm-5 control-label">MRP *</label>
 												<div class="col-sm-7">
 													<form:input path="mrp" value="${productConfigBean.mrp}"
 														class="form-control" />
@@ -98,7 +98,7 @@
 									<div class="col-sm-12">
 										<div class="col-sm-6">
 											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Product Price</label>
+												<label class="col-sm-5 control-label">Product Price *</label>
 												<div class="col-sm-7">
 													<form:input path="productPrice"
 														value="${productConfigBean.productPrice}"
@@ -150,9 +150,24 @@
 					channelSkuRef : {
 						required : true
 					},
+					discount : {
+						required : true,						
+						number : true,
+					},
+					mrp : {
+						required : true,						
+						number : true,
+					},
+					productPrice : {
+						required : true,
+						number : true,
+					},
 				},
 				messages : {
 					channelSkuRef : "Channel SKU Required !",
+					productPrice  : "Product Price Should Be Filled !",
+					discount	  : "Dicount Required !",
+					mrp 	      :	"MRP Required !",
 				}
 			});
 			if (validator.form() && nameAvailability) { // validation perform

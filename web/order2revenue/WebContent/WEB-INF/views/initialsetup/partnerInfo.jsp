@@ -108,8 +108,7 @@
                         <div class="ibox-title">
                             <h5>Active Sales Channels</h5>
                             <div class="ibox-tools">
-                                <a href="#"  onclick="onclickaddpartner('add',0)" class="btn btn-primary btn-xs" >Add Sales Channel</a>&nbsp;&nbsp;
-                                 <a href="#"  onclick="onclickaddpartner('partnerDetails',0)" class="btn btn-primary btn-xs" >Channel Details</a>
+                                <a href="#"  onclick="onclickaddpartner('add',0)" class="btn btn-primary btn-xs" >Add Sales Channel</a>                                 
                             </div>
                         </div>
                         <div class="ibox-content add-company">

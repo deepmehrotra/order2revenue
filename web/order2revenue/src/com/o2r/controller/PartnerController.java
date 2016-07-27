@@ -118,435 +118,444 @@ public class PartnerController {
 		log.info(partnerBean.getShippingfeeWeightList().size());
 
 		Map<String, Object> model = new HashMap<String, Object>();
-		if (partnerBean.getPcId() != 0) {
-			log.debug("******** ConfigId : "
-					+ partnerBean.getNrnReturnConfig().getConfigId());
-			log.debug("******** Partner ID : " + partnerBean.getPcId());
-
-		}
-
-		log.debug(" Nr calculayor value from bean : "
-				+ partnerBean.getNrnReturnConfig().isNrCalculator());
-		Map<String, String[]> parameters = request.getParameterMap();
-
-		List<String> fixedfeeParams = new ArrayList<String>();
-		List<String> shippingfeeVolumeParams = new ArrayList<String>();
-		List<String> shippingfeeWeightParams = new ArrayList<String>();
-
+		Partner existPartner=null;
 		try {
-			for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
-				if (entry.getKey().contains("nr-")) {
-					log.info(" Key with nr: " + entry.getKey()
-							+ " Values is : " + entry.getValue()[0]);
+			existPartner=partnerService.getPartner(partnerBean.getPcName(), helperClass.getSellerIdfromSession(request));
+		} catch (Exception e) {
+			log.error("Exception in getPartner(name,sellerId) : ", e);
+		}		
+		if(existPartner != null && partnerBean.getPcId() == 0){
+			log.info("Partner is Exist With the Same Name ! ");
+		}else{
+			if (partnerBean.getPcId() != 0) {
+				log.debug("******** ConfigId : "
+						+ partnerBean.getNrnReturnConfig().getConfigId());
+				log.debug("******** Partner ID : " + partnerBean.getPcId());
 
-					if (entry.getKey().contains("fixedfee")) {
-
-						String param = entry.getKey().substring(0,
-								entry.getKey().lastIndexOf('-') + 1);
-						if (!fixedfeeParams.contains(param)) {
-							fixedfeeParams.add(param);
-							NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-							String charge = parameters.get(param + "value")[0];
-							if (charge.isEmpty()) {
-								nrnReturncharge.setChargeAmount(0);
-							} else {
-								nrnReturncharge.setChargeAmount(Float
-										.parseFloat(charge));
-							}
-
-							nrnReturncharge.setChargeName("fixedfee");
-							nrnReturncharge.setCriteria(parameters.get(param
-									+ "criteria")[0]);
-							if (!parameters.get(param + "range")[0].isEmpty()) {
-								nrnReturncharge.setCriteriaRange(Long
-										.parseLong(parameters.get(param
-												+ "range")[0]));
-							}
-
-							nrnReturncharge.setConfig(partnerBean
-									.getNrnReturnConfig());
-							partnerBean.getNrnReturnConfig().getCharges()
-									.add(nrnReturncharge);
-
-						}
-					} else if (entry.getKey().contains("shippingFeeVolume")
-							&& partnerBean.getNrnReturnConfig()
-									.getShippingFeeType() != null) {
-
-						if (partnerBean.getNrnReturnConfig()
-								.getShippingFeeType()
-								.equalsIgnoreCase("variable")) {
-							String param = entry.getKey().substring(0,
-									entry.getKey().lastIndexOf('-') + 1);
-							if (!shippingfeeVolumeParams.contains(param)) {
-								shippingfeeVolumeParams.add(param);
-								NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-
-								if (!parameters.get(param + "localValue")[0]
-										.isEmpty())
-									nrnReturncharge.setChargeAmount(Float
-											.parseFloat(parameters.get(param
-													+ "localValue")[0]));
-								nrnReturncharge
-										.setChargeName("shippingfeeVolumeLocal");
-								nrnReturncharge.setCriteria(parameters
-										.get(param + "criteria")[0]);
-
-								if (!parameters.get(param + "range")[0]
-										.isEmpty())
-									nrnReturncharge.setCriteriaRange(Long
-											.parseLong(parameters.get(param
-													+ "range")[0]));
-
-								nrnReturncharge.setConfig(partnerBean
-										.getNrnReturnConfig());
-								partnerBean.getNrnReturnConfig().getCharges()
-										.add(nrnReturncharge);
-
-								nrnReturncharge = new NRnReturnCharges();
-								if (!parameters.get(param + "zonalValue")[0]
-										.isEmpty())
-									nrnReturncharge.setChargeAmount(Float
-											.parseFloat(parameters.get(param
-													+ "zonalValue")[0]));
-								nrnReturncharge
-										.setChargeName("shippingfeeVolumeZonal");
-								nrnReturncharge.setCriteria(parameters
-										.get(param + "criteria")[0]);
-								if (!parameters.get(param + "range")[0]
-										.isEmpty())
-									nrnReturncharge.setCriteriaRange(Long
-											.parseLong(parameters.get(param
-													+ "range")[0]));
-
-								nrnReturncharge.setConfig(partnerBean
-										.getNrnReturnConfig());
-								partnerBean.getNrnReturnConfig().getCharges()
-										.add(nrnReturncharge);
-
-								nrnReturncharge = new NRnReturnCharges();
-								if (!parameters.get(param + "nationalValue")[0]
-										.isEmpty())
-									nrnReturncharge.setChargeAmount(Float
-											.parseFloat(parameters.get(param
-													+ "nationalValue")[0]));
-								nrnReturncharge
-										.setChargeName("shippingfeeVolumeNational");
-								nrnReturncharge.setCriteria(parameters
-										.get(param + "criteria")[0]);
-								if (!parameters.get(param + "range")[0]
-										.isEmpty())
-									nrnReturncharge.setCriteriaRange(Long
-											.parseLong(parameters.get(param
-													+ "range")[0]));
-
-								nrnReturncharge.setConfig(partnerBean
-										.getNrnReturnConfig());
-								partnerBean.getNrnReturnConfig().getCharges()
-										.add(nrnReturncharge);
-
-								nrnReturncharge = new NRnReturnCharges();
-								if (!parameters.get(param + "metroValue")[0]
-										.isEmpty())
-									nrnReturncharge.setChargeAmount(Float
-											.parseFloat(parameters.get(param
-													+ "metroValue")[0]));
-								nrnReturncharge
-										.setChargeName("shippingfeeVolumeMetro");
-								nrnReturncharge.setCriteria(parameters
-										.get(param + "criteria")[0]);
-								if (!parameters.get(param + "range")[0]
-										.isEmpty())
-									nrnReturncharge.setCriteriaRange(Long
-											.parseLong(parameters.get(param
-													+ "range")[0]));
-
-								nrnReturncharge.setConfig(partnerBean
-										.getNrnReturnConfig());
-								partnerBean.getNrnReturnConfig().getCharges()
-										.add(nrnReturncharge);
-
-							}
-						} else {
-							String param = entry.getKey().substring(0,
-									entry.getKey().lastIndexOf('-') + 1);
-							if (!shippingfeeVolumeParams.contains(param)) {
-								shippingfeeVolumeParams.add(param);
-								NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-								if (!parameters.get(param + "value")[0]
-										.isEmpty())
-									nrnReturncharge.setChargeAmount(Float
-											.parseFloat(parameters.get(param
-													+ "value")[0]));
-								nrnReturncharge
-										.setChargeName("shippingfeeVolume");
-								nrnReturncharge.setCriteria(parameters
-										.get(param + "criteria")[0]);
-								if (!parameters.get(param + "range")[0]
-										.isEmpty())
-									nrnReturncharge.setCriteriaRange(Long
-											.parseLong(parameters.get(param
-													+ "range")[0]));
-
-								nrnReturncharge.setConfig(partnerBean
-										.getNrnReturnConfig());
-								partnerBean.getNrnReturnConfig().getCharges()
-										.add(nrnReturncharge);
-							}
-						}
-					} else if (entry.getKey().contains("shippingFeeWeight")
-							&& partnerBean.getNrnReturnConfig()
-									.getShippingFeeType() != null) {
-
-						if (partnerBean.getNrnReturnConfig()
-								.getShippingFeeType()
-								.equalsIgnoreCase("variable")) {
-							String param = entry.getKey().substring(0,
-									entry.getKey().lastIndexOf('-') + 1);
-							if (!shippingfeeVolumeParams.contains(param)) {
-								shippingfeeVolumeParams.add(param);
-								NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-
-								if (!parameters.get(param + "localValue")[0]
-										.isEmpty()) {
-									nrnReturncharge.setChargeAmount(Float
-											.parseFloat(parameters.get(param
-													+ "localValue")[0]));
-								}
-
-								nrnReturncharge
-										.setChargeName("shippingfeeWeightLocal");
-								nrnReturncharge.setCriteria(parameters
-										.get(param + "criteria")[0]);
-								if (!parameters.get(param + "range")[0]
-										.isEmpty())
-									nrnReturncharge.setCriteriaRange(Long
-											.parseLong(parameters.get(param
-													+ "range")[0]));
-
-								nrnReturncharge.setConfig(partnerBean
-										.getNrnReturnConfig());
-								partnerBean.getNrnReturnConfig().getCharges()
-										.add(nrnReturncharge);
-
-								nrnReturncharge = new NRnReturnCharges();
-								if (!parameters.get(param + "zonalValue")[0]
-										.isEmpty()) {
-									nrnReturncharge.setChargeAmount(Float
-											.parseFloat(parameters.get(param
-													+ "zonalValue")[0]));
-								}
-
-								nrnReturncharge
-										.setChargeName("shippingfeeWeightZonal");
-								nrnReturncharge.setCriteria(parameters
-										.get(param + "criteria")[0]);
-								if (!parameters.get(param + "range")[0]
-										.isEmpty())
-									nrnReturncharge.setCriteriaRange(Long
-											.parseLong(parameters.get(param
-													+ "range")[0]));
-
-								nrnReturncharge.setConfig(partnerBean
-										.getNrnReturnConfig());
-								partnerBean.getNrnReturnConfig().getCharges()
-										.add(nrnReturncharge);
-
-								nrnReturncharge = new NRnReturnCharges();
-								if (!parameters.get(param + "nationalValue")[0]
-										.isEmpty()) {
-									nrnReturncharge.setChargeAmount(Float
-											.parseFloat(parameters.get(param
-													+ "nationalValue")[0]));
-								}
-
-								nrnReturncharge
-										.setChargeName("shippingfeeWeightNational");
-								nrnReturncharge.setCriteria(parameters
-										.get(param + "criteria")[0]);
-								if (!parameters.get(param + "range")[0]
-										.isEmpty())
-									nrnReturncharge.setCriteriaRange(Long
-											.parseLong(parameters.get(param
-													+ "range")[0]));
-
-								nrnReturncharge.setConfig(partnerBean
-										.getNrnReturnConfig());
-								partnerBean.getNrnReturnConfig().getCharges()
-										.add(nrnReturncharge);
-
-								nrnReturncharge = new NRnReturnCharges();
-								if (!parameters.get(param + "metroValue")[0]
-										.isEmpty()) {
-									nrnReturncharge.setChargeAmount(Float
-											.parseFloat(parameters.get(param
-													+ "metroValue")[0]));
-								}
-								nrnReturncharge
-										.setChargeName("shippingfeeWeightMetro");
-								nrnReturncharge.setCriteria(parameters
-										.get(param + "criteria")[0]);
-
-								if (!parameters.get(param + "range")[0]
-										.isEmpty())
-									nrnReturncharge.setCriteriaRange(Long
-											.parseLong(parameters.get(param
-													+ "range")[0]));
-
-								nrnReturncharge.setConfig(partnerBean
-										.getNrnReturnConfig());
-								partnerBean.getNrnReturnConfig().getCharges()
-										.add(nrnReturncharge);
-
-							}
-						} else {
-							String param = entry.getKey().substring(0,
-									entry.getKey().lastIndexOf('-') + 1);
-							if (!shippingfeeWeightParams.contains(param)) {
-								shippingfeeWeightParams.add(param);
-								NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-								if (!parameters.get(param + "value")[0]
-										.isEmpty())
-									nrnReturncharge.setChargeAmount(Float
-											.parseFloat(parameters.get(param
-													+ "value")[0]));
-								nrnReturncharge
-										.setChargeName("shippingfeeWeight");
-								nrnReturncharge.setCriteria(parameters
-										.get(param + "criteria")[0]);
-								if (!parameters.get(param + "range")[0]
-										.isEmpty())
-									nrnReturncharge.setCriteriaRange(Long
-											.parseLong(parameters.get(param
-													+ "range")[0]));
-
-								nrnReturncharge.setConfig(partnerBean
-										.getNrnReturnConfig());
-								partnerBean.getNrnReturnConfig().getCharges()
-										.add(nrnReturncharge);
-							}
-						}
-					}
-				}
 			}
-			for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
-				if (entry.getKey() != null && !entry.getKey().isEmpty())
-					log.debug(" Print :entry.getKey()  " + entry.getKey()
-							+ " value: " + entry.getValue()[0]);
 
-				if (entry.getValue()[0] != null
-						&& !entry.getValue()[0].isEmpty()) {
+			log.debug(" Nr calculayor value from bean : "
+					+ partnerBean.getNrnReturnConfig().isNrCalculator());
+			Map<String, String[]> parameters = request.getParameterMap();
+
+			List<String> fixedfeeParams = new ArrayList<String>();
+			List<String> shippingfeeVolumeParams = new ArrayList<String>();
+			List<String> shippingfeeWeightParams = new ArrayList<String>();
+
+			try {
+				for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
 					if (entry.getKey().contains("nr-")) {
+						log.info(" Key with nr: " + entry.getKey()
+								+ " Values is : " + entry.getValue()[0]);
 
-						if (entry.getKey().contains("fixedfee")
-								|| entry.getKey().contains("shippingFee")) {
+						if (entry.getKey().contains("fixedfee")) {
 
-						} else {
-							log.debug(" Key : " + entry.getKey());
-							String temp = entry.getKey().substring(3);
-							NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-							nrnReturncharge.setChargeAmount(Float
-									.parseFloat(entry.getValue()[0]));
-							nrnReturncharge.setChargeName(temp);
-							nrnReturncharge.setConfig(partnerBean
-									.getNrnReturnConfig());
-							partnerBean.getNrnReturnConfig().getCharges()
-									.add(nrnReturncharge);
+							String param = entry.getKey().substring(0,
+									entry.getKey().lastIndexOf('-') + 1);
+							if (!fixedfeeParams.contains(param)) {
+								fixedfeeParams.add(param);
+								NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+								String charge = parameters.get(param + "value")[0];
+								if (charge.isEmpty()) {
+									nrnReturncharge.setChargeAmount(0);
+								} else {
+									nrnReturncharge.setChargeAmount(Float
+											.parseFloat(charge));
+								}
+
+								nrnReturncharge.setChargeName("fixedfee");
+								nrnReturncharge.setCriteria(parameters.get(param
+										+ "criteria")[0]);
+								if (!parameters.get(param + "range")[0].isEmpty()) {
+									nrnReturncharge.setCriteriaRange(Long
+											.parseLong(parameters.get(param
+													+ "range")[0]));
+								}
+
+								nrnReturncharge.setConfig(partnerBean
+										.getNrnReturnConfig());
+								partnerBean.getNrnReturnConfig().getCharges()
+										.add(nrnReturncharge);
+
+							}
+						} else if (entry.getKey().contains("shippingFeeVolume")
+								&& partnerBean.getNrnReturnConfig()
+										.getShippingFeeType() != null) {
+
+							if (partnerBean.getNrnReturnConfig()
+									.getShippingFeeType()
+									.equalsIgnoreCase("variable")) {
+								String param = entry.getKey().substring(0,
+										entry.getKey().lastIndexOf('-') + 1);
+								if (!shippingfeeVolumeParams.contains(param)) {
+									shippingfeeVolumeParams.add(param);
+									NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+
+									if (!parameters.get(param + "localValue")[0]
+											.isEmpty())
+										nrnReturncharge.setChargeAmount(Float
+												.parseFloat(parameters.get(param
+														+ "localValue")[0]));
+									nrnReturncharge
+											.setChargeName("shippingfeeVolumeLocal");
+									nrnReturncharge.setCriteria(parameters
+											.get(param + "criteria")[0]);
+
+									if (!parameters.get(param + "range")[0]
+											.isEmpty())
+										nrnReturncharge.setCriteriaRange(Long
+												.parseLong(parameters.get(param
+														+ "range")[0]));
+
+									nrnReturncharge.setConfig(partnerBean
+											.getNrnReturnConfig());
+									partnerBean.getNrnReturnConfig().getCharges()
+											.add(nrnReturncharge);
+
+									nrnReturncharge = new NRnReturnCharges();
+									if (!parameters.get(param + "zonalValue")[0]
+											.isEmpty())
+										nrnReturncharge.setChargeAmount(Float
+												.parseFloat(parameters.get(param
+														+ "zonalValue")[0]));
+									nrnReturncharge
+											.setChargeName("shippingfeeVolumeZonal");
+									nrnReturncharge.setCriteria(parameters
+											.get(param + "criteria")[0]);
+									if (!parameters.get(param + "range")[0]
+											.isEmpty())
+										nrnReturncharge.setCriteriaRange(Long
+												.parseLong(parameters.get(param
+														+ "range")[0]));
+
+									nrnReturncharge.setConfig(partnerBean
+											.getNrnReturnConfig());
+									partnerBean.getNrnReturnConfig().getCharges()
+											.add(nrnReturncharge);
+
+									nrnReturncharge = new NRnReturnCharges();
+									if (!parameters.get(param + "nationalValue")[0]
+											.isEmpty())
+										nrnReturncharge.setChargeAmount(Float
+												.parseFloat(parameters.get(param
+														+ "nationalValue")[0]));
+									nrnReturncharge
+											.setChargeName("shippingfeeVolumeNational");
+									nrnReturncharge.setCriteria(parameters
+											.get(param + "criteria")[0]);
+									if (!parameters.get(param + "range")[0]
+											.isEmpty())
+										nrnReturncharge.setCriteriaRange(Long
+												.parseLong(parameters.get(param
+														+ "range")[0]));
+
+									nrnReturncharge.setConfig(partnerBean
+											.getNrnReturnConfig());
+									partnerBean.getNrnReturnConfig().getCharges()
+											.add(nrnReturncharge);
+
+									nrnReturncharge = new NRnReturnCharges();
+									if (!parameters.get(param + "metroValue")[0]
+											.isEmpty())
+										nrnReturncharge.setChargeAmount(Float
+												.parseFloat(parameters.get(param
+														+ "metroValue")[0]));
+									nrnReturncharge
+											.setChargeName("shippingfeeVolumeMetro");
+									nrnReturncharge.setCriteria(parameters
+											.get(param + "criteria")[0]);
+									if (!parameters.get(param + "range")[0]
+											.isEmpty())
+										nrnReturncharge.setCriteriaRange(Long
+												.parseLong(parameters.get(param
+														+ "range")[0]));
+
+									nrnReturncharge.setConfig(partnerBean
+											.getNrnReturnConfig());
+									partnerBean.getNrnReturnConfig().getCharges()
+											.add(nrnReturncharge);
+
+								}
+							} else {
+								String param = entry.getKey().substring(0,
+										entry.getKey().lastIndexOf('-') + 1);
+								if (!shippingfeeVolumeParams.contains(param)) {
+									shippingfeeVolumeParams.add(param);
+									NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+									if (!parameters.get(param + "value")[0]
+											.isEmpty())
+										nrnReturncharge.setChargeAmount(Float
+												.parseFloat(parameters.get(param
+														+ "value")[0]));
+									nrnReturncharge
+											.setChargeName("shippingfeeVolume");
+									nrnReturncharge.setCriteria(parameters
+											.get(param + "criteria")[0]);
+									if (!parameters.get(param + "range")[0]
+											.isEmpty())
+										nrnReturncharge.setCriteriaRange(Long
+												.parseLong(parameters.get(param
+														+ "range")[0]));
+
+									nrnReturncharge.setConfig(partnerBean
+											.getNrnReturnConfig());
+									partnerBean.getNrnReturnConfig().getCharges()
+											.add(nrnReturncharge);
+								}
+							}
+						} else if (entry.getKey().contains("shippingFeeWeight")
+								&& partnerBean.getNrnReturnConfig()
+										.getShippingFeeType() != null) {
+
+							if (partnerBean.getNrnReturnConfig()
+									.getShippingFeeType()
+									.equalsIgnoreCase("variable")) {
+								String param = entry.getKey().substring(0,
+										entry.getKey().lastIndexOf('-') + 1);
+								if (!shippingfeeVolumeParams.contains(param)) {
+									shippingfeeVolumeParams.add(param);
+									NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+
+									if (!parameters.get(param + "localValue")[0]
+											.isEmpty()) {
+										nrnReturncharge.setChargeAmount(Float
+												.parseFloat(parameters.get(param
+														+ "localValue")[0]));
+									}
+
+									nrnReturncharge
+											.setChargeName("shippingfeeWeightLocal");
+									nrnReturncharge.setCriteria(parameters
+											.get(param + "criteria")[0]);
+									if (!parameters.get(param + "range")[0]
+											.isEmpty())
+										nrnReturncharge.setCriteriaRange(Long
+												.parseLong(parameters.get(param
+														+ "range")[0]));
+
+									nrnReturncharge.setConfig(partnerBean
+											.getNrnReturnConfig());
+									partnerBean.getNrnReturnConfig().getCharges()
+											.add(nrnReturncharge);
+
+									nrnReturncharge = new NRnReturnCharges();
+									if (!parameters.get(param + "zonalValue")[0]
+											.isEmpty()) {
+										nrnReturncharge.setChargeAmount(Float
+												.parseFloat(parameters.get(param
+														+ "zonalValue")[0]));
+									}
+
+									nrnReturncharge
+											.setChargeName("shippingfeeWeightZonal");
+									nrnReturncharge.setCriteria(parameters
+											.get(param + "criteria")[0]);
+									if (!parameters.get(param + "range")[0]
+											.isEmpty())
+										nrnReturncharge.setCriteriaRange(Long
+												.parseLong(parameters.get(param
+														+ "range")[0]));
+
+									nrnReturncharge.setConfig(partnerBean
+											.getNrnReturnConfig());
+									partnerBean.getNrnReturnConfig().getCharges()
+											.add(nrnReturncharge);
+
+									nrnReturncharge = new NRnReturnCharges();
+									if (!parameters.get(param + "nationalValue")[0]
+											.isEmpty()) {
+										nrnReturncharge.setChargeAmount(Float
+												.parseFloat(parameters.get(param
+														+ "nationalValue")[0]));
+									}
+
+									nrnReturncharge
+											.setChargeName("shippingfeeWeightNational");
+									nrnReturncharge.setCriteria(parameters
+											.get(param + "criteria")[0]);
+									if (!parameters.get(param + "range")[0]
+											.isEmpty())
+										nrnReturncharge.setCriteriaRange(Long
+												.parseLong(parameters.get(param
+														+ "range")[0]));
+
+									nrnReturncharge.setConfig(partnerBean
+											.getNrnReturnConfig());
+									partnerBean.getNrnReturnConfig().getCharges()
+											.add(nrnReturncharge);
+
+									nrnReturncharge = new NRnReturnCharges();
+									if (!parameters.get(param + "metroValue")[0]
+											.isEmpty()) {
+										nrnReturncharge.setChargeAmount(Float
+												.parseFloat(parameters.get(param
+														+ "metroValue")[0]));
+									}
+									nrnReturncharge
+											.setChargeName("shippingfeeWeightMetro");
+									nrnReturncharge.setCriteria(parameters
+											.get(param + "criteria")[0]);
+
+									if (!parameters.get(param + "range")[0]
+											.isEmpty())
+										nrnReturncharge.setCriteriaRange(Long
+												.parseLong(parameters.get(param
+														+ "range")[0]));
+
+									nrnReturncharge.setConfig(partnerBean
+											.getNrnReturnConfig());
+									partnerBean.getNrnReturnConfig().getCharges()
+											.add(nrnReturncharge);
+
+								}
+							} else {
+								String param = entry.getKey().substring(0,
+										entry.getKey().lastIndexOf('-') + 1);
+								if (!shippingfeeWeightParams.contains(param)) {
+									shippingfeeWeightParams.add(param);
+									NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+									if (!parameters.get(param + "value")[0]
+											.isEmpty())
+										nrnReturncharge.setChargeAmount(Float
+												.parseFloat(parameters.get(param
+														+ "value")[0]));
+									nrnReturncharge
+											.setChargeName("shippingfeeWeight");
+									nrnReturncharge.setCriteria(parameters
+											.get(param + "criteria")[0]);
+									if (!parameters.get(param + "range")[0]
+											.isEmpty())
+										nrnReturncharge.setCriteriaRange(Long
+												.parseLong(parameters.get(param
+														+ "range")[0]));
+
+									nrnReturncharge.setConfig(partnerBean
+											.getNrnReturnConfig());
+									partnerBean.getNrnReturnConfig().getCharges()
+											.add(nrnReturncharge);
+								}
+							}
 						}
-					} else if (entry.getKey().contains("local")) {
-
-						String localstring = Arrays.toString(entry.getValue());
-						log.debug("localstring " + localstring);
-						partnerBean.getNrnReturnConfig().setLocalList(
-								localstring.substring(localstring.toString()
-										.indexOf('[') + 1, localstring
-										.toString().indexOf(']')));
-					} else if (entry.getKey().contains("zonal")) {
-						String zonalstring = Arrays.toString(entry.getValue());
-						log.debug("zonalstring " + zonalstring);
-
-						partnerBean.getNrnReturnConfig().setZonalList(
-								zonalstring.substring(zonalstring.toString()
-										.indexOf('[') + 1, zonalstring
-										.toString().indexOf(']')));
-					} else if (entry.getKey().contains("national")) {
-						String nationalstring = Arrays.toString(entry
-								.getValue());
-						partnerBean.getNrnReturnConfig()
-								.setNationalList(
-										nationalstring.substring(nationalstring
-												.toString().indexOf('[') + 1,
-												nationalstring.toString()
-														.indexOf(']')));
-					} else if (entry.getKey().contains("metro")) {
-						String metrostring = Arrays.toString(entry.getValue());
-						log.debug("metrostring " + metrostring);
-
-						partnerBean.getNrnReturnConfig().setMetroList(
-								metrostring.substring(metrostring.toString()
-										.indexOf('[') + 1, metrostring
-										.toString().indexOf(']')));
 					}
 				}
-			}
+				for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+					if (entry.getKey() != null && !entry.getKey().isEmpty())
+						log.debug(" Print :entry.getKey()  " + entry.getKey()
+								+ " value: " + entry.getValue()[0]);
 
-			if (!partnerBean.isIsshippeddatecalc()) {
-				partnerBean.setNoofdaysfromshippeddate(partnerBean
-						.getNoofdaysfromdeliverydate());
-			}
+					if (entry.getValue()[0] != null
+							&& !entry.getValue()[0].isEmpty()) {
+						if (entry.getKey().contains("nr-")) {
 
-			if (image.getSize() != 0) {
-				if (!image.isEmpty()) {
+							if (entry.getKey().contains("fixedfee")
+									|| entry.getKey().contains("shippingFee")) {
+
+							} else {
+								log.debug(" Key : " + entry.getKey());
+								String temp = entry.getKey().substring(3);
+								NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+								nrnReturncharge.setChargeAmount(Float
+										.parseFloat(entry.getValue()[0]));
+								nrnReturncharge.setChargeName(temp);
+								nrnReturncharge.setConfig(partnerBean
+										.getNrnReturnConfig());
+								partnerBean.getNrnReturnConfig().getCharges()
+										.add(nrnReturncharge);
+							}
+						} else if (entry.getKey().contains("local")) {
+
+							String localstring = Arrays.toString(entry.getValue());
+							log.debug("localstring " + localstring);
+							partnerBean.getNrnReturnConfig().setLocalList(
+									localstring.substring(localstring.toString()
+											.indexOf('[') + 1, localstring
+											.toString().indexOf(']')));
+						} else if (entry.getKey().contains("zonal")) {
+							String zonalstring = Arrays.toString(entry.getValue());
+							log.debug("zonalstring " + zonalstring);
+
+							partnerBean.getNrnReturnConfig().setZonalList(
+									zonalstring.substring(zonalstring.toString()
+											.indexOf('[') + 1, zonalstring
+											.toString().indexOf(']')));
+						} else if (entry.getKey().contains("national")) {
+							String nationalstring = Arrays.toString(entry
+									.getValue());
+							partnerBean.getNrnReturnConfig()
+									.setNationalList(
+											nationalstring.substring(nationalstring
+													.toString().indexOf('[') + 1,
+													nationalstring.toString()
+															.indexOf(']')));
+						} else if (entry.getKey().contains("metro")) {
+							String metrostring = Arrays.toString(entry.getValue());
+							log.debug("metrostring " + metrostring);
+
+							partnerBean.getNrnReturnConfig().setMetroList(
+									metrostring.substring(metrostring.toString()
+											.indexOf('[') + 1, metrostring
+											.toString().indexOf(']')));
+						}
+					}
+				}
+
+				if (!partnerBean.isIsshippeddatecalc()) {
+					partnerBean.setNoofdaysfromshippeddate(partnerBean
+							.getNoofdaysfromdeliverydate());
+				}
+
+				if (image.getSize() != 0) {
+					if (!image.isEmpty()) {
+						try {
+							validateImage(image);
+
+						} catch (RuntimeException re) {
+							log.error("Failed!", re);
+							result.reject(re.getMessage());
+						}
+					}
 					try {
-						validateImage(image);
-
-					} catch (RuntimeException re) {
-						log.error("Failed!", re);
-						result.reject(re.getMessage());
-					}
-				}
-				try {
-					props = PropertiesLoaderUtils.loadProperties(resource);
-					partnerBean.setPcLogoUrl(props
-							.getProperty("partnerimage.view")
-							+ helperClass.getSellerIdfromSession(request)
-							+ partnerBean.getPcName() + ".jpg");
-					saveImage(helperClass.getSellerIdfromSession(request)
-							+ partnerBean.getPcName() + ".jpg", image);
-
-				} catch (Exception e) {
-					e.printStackTrace();
-					log.error("Failed!", e);
-					result.reject(e.getMessage());
-					return new ModelAndView("redirect:/seller/partners.html");
-				}
-			} else {
-				try {
-					props = PropertiesLoaderUtils.loadProperties(resource);
-					if (partnerList.contains(partnerBean.getPcName())) {
+						props = PropertiesLoaderUtils.loadProperties(resource);
 						partnerBean.setPcLogoUrl(props
 								.getProperty("partnerimage.view")
+								+ helperClass.getSellerIdfromSession(request)
 								+ partnerBean.getPcName() + ".jpg");
+						saveImage(helperClass.getSellerIdfromSession(request)
+								+ partnerBean.getPcName() + ".jpg", image);
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						log.error("Failed!", e);
+						result.reject(e.getMessage());
+						return new ModelAndView("redirect:/seller/partners.html");
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				} else {
+					try {
+						props = PropertiesLoaderUtils.loadProperties(resource);
+						if (partnerList.contains(partnerBean.getPcName())) {
+							partnerBean.setPcLogoUrl(props
+									.getProperty("partnerimage.view")
+									+ partnerBean.getPcName() + ".jpg");
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
-			}
 
-			Partner partner = ConverterClass.preparePartnerModel(partnerBean);
-			partnerService.addPartner(partner,
-					helperClass.getSellerIdfromSession(request));
-		} catch (CustomException ce) {
-			log.error("SavePartner exception : " + ce.toString());
-			model.put("errorMessage", ce.getLocalMessage());
-			model.put("errorTime", ce.getErrorTime());
-			model.put("errorCode", ce.getErrorCode());
-			return new ModelAndView("globalErorPage", model);
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error("Failed!", e);
+				Partner partner = ConverterClass.preparePartnerModel(partnerBean);
+				partnerService.addPartner(partner,
+						helperClass.getSellerIdfromSession(request));
+			} catch (CustomException ce) {
+				log.error("SavePartner exception : " + ce.toString());
+				model.put("errorMessage", ce.getLocalMessage());
+				model.put("errorTime", ce.getErrorTime());
+				model.put("errorCode", ce.getErrorCode());
+				return new ModelAndView("globalErorPage", model);
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("Failed!", e);
+			}			
 		}
-
 		log.info("$$$ savePartner Ends : OrderController $$$");
 		return new ModelAndView("redirect:/seller/partners.html");
 	}

@@ -32,14 +32,14 @@
 									<div class="col-sm-12">
 										<div class="col-sm-6">
 											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Title</label>
+												<label class="col-sm-5 control-label">SKU Name *</label>
 												<div class="col-sm-7">
 													<form:input path="productName"
 														value="${product.productName}" class="form-control" />
 												</div>
 											</div>
 											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">SKU</label>
+												<label class="col-sm-5 control-label">Parent SKU *</label>
 												<div class="col-sm-7">
 													<c:choose>
 														<c:when test="${empty product.productSkuCode}">
@@ -64,7 +64,7 @@
 											</div>
 											
 											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Length (cm)</label>
+												<label class="col-sm-5 control-label">Length (cm) *</label>
 												<div class="col-sm-7">
 													<form:input path="length"
 														value="${product.length}" class="form-control" />
@@ -73,7 +73,7 @@
 											
 											<div class="mar-btm-20-oh">
 											
-												<label class="col-sm-5 control-label">Breadth (cm)</label>
+												<label class="col-sm-5 control-label">Breadth (cm) *</label>
 												<div class="col-sm-7">
 													<form:input path="breadth"
 														value="${product.breadth}" class="form-control" />
@@ -81,7 +81,7 @@
 											</div>
 											
 											<div class="mar-btm-20-oh">
-												<label class="col-sm-5 control-label">Height (cm)</label>
+												<label class="col-sm-5 control-label">Height (cm) *</label>
 												<div class="col-sm-7">
 													<form:input path="height"
 														value="${product.height}" class="form-control" />
@@ -91,8 +91,7 @@
 										<div class="col-sm-6">
 
 											<div class="mar-btm-20-oh">
-												<label class="col-sm-4 control-label">Product
-													Category </label>
+												<label class="col-sm-4 control-label">Product Category *</label>
 												<div class="col-sm-8">
 													<c:choose>
 														<c:when test="${empty product.categoryName}">
@@ -109,7 +108,7 @@
 												</div>
 											</div>
 											<div class="mar-btm-20-oh">
-												<label class="col-sm-4 control-label">Stock</label>
+												<label class="col-sm-4 control-label">Quantity *</label>
 												<div class="col-sm-8">
 													<c:choose>
 														<c:when test="${empty product.productSkuCode}">
@@ -132,7 +131,7 @@
 												</div>
 											</div>											
 											<div>
-												<label class="col-sm-4 control-label">Deadweight (gm)</label>
+												<label class="col-sm-4 control-label">Deadweight (gm) *</label>
 												<div class="col-sm-8">
 													<form:input path="deadWeight"
 														value="${product.deadWeight}" class="form-control" />

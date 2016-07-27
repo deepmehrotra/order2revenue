@@ -179,8 +179,8 @@ $('.tab a').on('click', function (e) {
 });
 
 
-var passCon=true;
-var nameAvailability=true;
+var passCon=false;
+var nameAvailability=false;
 function onBlur(){
 	
 	var email=document.getElementById("email").value;
