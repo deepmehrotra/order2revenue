@@ -50,8 +50,7 @@ function checkOnBlur()
       	   }
 	 });
 	}
-    function onclickDeleteCategory(parentId,catId) {
-    	alert("calling delete cat : "+parentId+" category : "+catId );
+    function onclickDeleteCategory(parentId,catId) {    	
         $.ajax({
             url : 'deleteProductCategory.html?id='+catId+'&parentId='+parentId,
             success : function(data) {

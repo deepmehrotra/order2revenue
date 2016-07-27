@@ -832,8 +832,7 @@ public class SaveContents {
 						errorMessage.append(" Product price should be a number ");						
 					}
 				} else {
-					errorMessage.append(" Product price is null ");
-					validaterow = false;
+					errorMessage.append(" Product price is null ");					
 				}
 				if (entry.getCell(4) != null
 						&& entry.getCell(4).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -864,14 +863,13 @@ public class SaveContents {
 						errorMessage.append(" Threshold limit should be a number ");						
 					}
 				} else {
-					errorMessage.append(" Threshold limit is null ");
-					validaterow = false;
+					errorMessage.append(" Threshold limit is null ");					
 				}
 				if (entry.getCell(6) != null
 						&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
 						product.setLength(Float.valueOf(
-								entry.getCell(6).toString()).longValue());
+								entry.getCell(6).toString()));
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
 						errorMessage.append(" Length should be a number ");
@@ -885,7 +883,7 @@ public class SaveContents {
 						&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
 						product.setBreadth(Float.valueOf(
-								entry.getCell(7).toString()).longValue());
+								entry.getCell(7).toString()));
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
 						errorMessage.append(" Breadth should be a number ");
@@ -900,7 +898,7 @@ public class SaveContents {
 						&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
 						product.setHeight(Float.valueOf(
-								entry.getCell(8).toString()).longValue());
+								entry.getCell(8).toString()));
 					} catch (NumberFormatException e) {
 						log.error("Failed!", e);
 						errorMessage.append(" Height should be a number ");
@@ -1865,14 +1863,20 @@ public class SaveContents {
 					}
 					if (entry.getCell(5) != null
 							&& entry.getCell(5).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(5))) {
-							orderReturn.setReturnDate(entry.getCell(5)
-									.getDateCellValue());
-						} else {
-							errorMessage
-									.append(" Return Date formate is wrong ,enter mm/dd/yyyy,");
+						try {
+							if (HSSFDateUtil.isCellDateFormatted(entry.getCell(5))) {
+								orderReturn.setReturnDate(entry.getCell(5)
+										.getDateCellValue());
+							} else {
+								errorMessage.append(" Return Date formate is wrong ,enter mm/dd/yyyy,");
+								validaterow = false;
+							}
+						} catch (Exception e) {
+							log.error("Failed !",e);
+							errorMessage.append(" Return Date formate is wrong ,enter mm/dd/yyyy,");
 							validaterow = false;
 						}
+						
 					} else {
 						errorMessage.append(" Return Date is null;");
 						validaterow = false;
