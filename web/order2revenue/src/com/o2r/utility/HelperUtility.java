@@ -39,8 +39,8 @@ public class HelperUtility {
 				 {
 					 //System.out.println(" Filed "+f.getType()+" gerneric "+f.getGenericType());
 						 Method getter = pd.getReadMethod();
-					Method setter = pd.getWriteMethod();
-					setter.invoke(toObject,getter.invoke(fromObject));
+						Method setter = pd.getWriteMethod();
+						setter.invoke(toObject,getter.invoke(fromObject));
 					
 				 }
 			 }

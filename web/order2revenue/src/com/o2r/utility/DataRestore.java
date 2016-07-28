@@ -16,7 +16,21 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.model.Category;
+import com.o2r.model.ExpenseCategory;
+import com.o2r.model.ManualCharges;
+import com.o2r.model.NRnReturnCharges;
+import com.o2r.model.Order;
+import com.o2r.model.Partner;
+import com.o2r.model.PaymentUpload;
+import com.o2r.model.Product;
 import com.o2r.model.Seller;
+import com.o2r.model.SellerAccount;
+import com.o2r.model.StateDeliveryTime;
+import com.o2r.model.TaxCategory;
+import com.o2r.model.TaxDetail;
+import com.o2r.model.UploadReport;
+import com.o2r.service.SellerService;
 
 @Repository("dataRestoreUtility")
 public class DataRestore {
@@ -26,6 +40,8 @@ public class DataRestore {
 	
 	@Autowired
 	private SessionFactory sessionFactoryforBackup;
+	@Autowired
+	private SellerService sellerService;
 	static Logger log = Logger.getLogger(DataRestore.class.getName());
 	
 	private static final String listPartnersQuery = "select partners_pcId from seller_partner "
@@ -110,31 +126,78 @@ public class DataRestore {
 	private static final String deleteOrderPayQuery = "delete from orderpay where paymentId in (:orderPaymentList)";
 	
 	
+	private List<Partner> partners;
+	private List<Order> orders;
+	private List<Category> categories;
+	private List<Product> products;
+	private List<ExpenseCategory> expensecategories;
+	private List<PaymentUpload> paymentUploads;
+	private List<ManualCharges> manualCharges;
+	private List<TaxDetail> taxDetails;
+	private List<TaxCategory> taxCategories;
+	private List<StateDeliveryTime> stateDeliveryTime;
+	private SellerAccount sellerAccount;
+	private List<UploadReport> uploadReportList;
+	
 	public Seller getSellerFromDB(int sellerid, String dbtype)
 	{
 		log.info("*** getSeller from sellerId Starts : getSellerFromDB ****");
 		Seller seller=null;
 		Session session = null;
+		Session backupsession = null;
 		try{
-			if(dbtype!=null&&dbtype.equals("primary"))
-			{
+			
 				session=sessionFactory.openSession();
-			}
-			else
-			{
-				session=sessionFactoryforBackup.openSession();
-			}
+				backupsession=sessionFactoryforBackup.openSession();
 				
 			session.beginTransaction();
 			Object obj=session.get(Seller.class,
 					sellerid);
 			if(obj!=null)
+			{
 			seller=(Seller)obj;
+			partners=seller.getPartners();
+			orders=seller.getOrders();
+			categories=seller.getCategories();
+			products=seller.getProducts();
+			expensecategories=seller.getExpensecategories();
+			paymentUploads=seller.getPaymentUploads();
+			manualCharges=seller.getManualCharges();
+			taxDetails=seller.getTaxDetails();
+			taxCategories=seller.getTaxCategories();
+			stateDeliveryTime=seller.getStateDeliveryTime();
+			sellerAccount=seller.getSellerAccount();
+			uploadReportList=seller.getUploadReportList();
+			
+			for(Partner partner:partners)
+			{
+				partner.getNrnReturnConfig().getCharges();
+				partner.getEvents();
+			}
+			}
+			
 			else
 				System.out.println(" No selled in db with that id");
 			//Hibernate.initialize(seller.getStateDeliveryTime());
 			session.getTransaction().commit();
 			session.close();
+			
+			for(Partner partner:partners)
+			{
+				partner.setPcId(0);
+				partner.getNrnReturnConfig().setConfigId(0);
+				for(NRnReturnCharges charge:partner.getNrnReturnConfig().getCharges())
+				{
+					charge.setNrchargeId(0);
+				}
+				partner.getEvents();
+			}
+			backupsession.beginTransaction();
+			
+			backupsession.getTransaction().commit();
+			backupsession.close();
+			
+			
 		System.out.println(" Seller Nname and id from "+dbtype+" name :"+seller.getName());
 		}catch(Exception e){
 			e.printStackTrace();
@@ -198,6 +261,39 @@ public class DataRestore {
 		log.error("Failed! in saving seller from db1",e);
 				
 	}
+		log.info("*** getSeller from sellerId Ends : getSellerFromDB ****");
+		
+	}
+	
+	public void restoreSeller(int sellerid)
+	{
+		log.info("*** getSeller from sellerId Starts : getSellerFromDB ****");
+		Seller seller=null;
+		Seller newSeller=new Seller();
+		Session backupsession = null;
+		int selleracId=0;
+		try{
+			
+			seller=sellerService.getSeller(sellerid);
+			seller.setId(0);
+			selleracId=seller.getSellerAccount().getSelaccId();
+			seller.getSellerAccount().setSelaccId(0);
+			//HelperUtility.convertor(seller.getSellerAccount(),newSeller.getSellerAccount(), SellerAccount.class);
+			backupsession=sessionFactoryforBackup.openSession();
+			backupsession.beginTransaction();
+			
+			backupsession.saveOrUpdate(seller);
+			
+			backupsession.getTransaction().commit();
+			backupsession.close();
+		}catch(Exception e){
+			e.printStackTrace();
+			log.error("Failed! in fetching seller from db1",e);
+					
+		}
+		System.out.println(" Successfully fetc seller data "+newSeller.getSellerAccount().getSelaccId());
+		
+	
 		log.info("*** getSeller from sellerId Ends : getSellerFromDB ****");
 		
 	}
