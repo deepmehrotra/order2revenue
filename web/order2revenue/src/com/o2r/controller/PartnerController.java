@@ -1128,6 +1128,113 @@ public class PartnerController {
 							charge.getChargeAmount());
 				}
 			}
+			for (NRnReturnCharges charge : pbean.getNrnReturnConfig()
+					.getCharges()) {
+				if (charge.getChargeName().contains("fixedfee")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
+
+					ChargesBean chargeBean = new ChargesBean();
+					chargeBean.setChargeType("fixedfee");
+					chargeBean.setCriteria(charge.getCriteria());
+					chargeBean.setRange(charge.getCriteriaRange());
+					chargeBean.setValue(charge.getChargeAmount());
+					pbean.getFixedfeeList().add(chargeBean);
+
+				} else if (charge.getChargeName().contains("shippingfeeVolume")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
+
+					if (pbean.getNrnReturnConfig().getShippingFeeType()
+							.equalsIgnoreCase("variable")) {
+
+						ChargesBean chargeBean = pbean.getChargesBean(
+								"shippingfeeVolume", charge.getCriteria(),
+								charge.getCriteriaRange());
+						if (chargeBean == null) {
+							chargeBean = new ChargesBean();
+							chargeBean.setChargeType("shippingfeeVolume");
+							chargeBean.setCriteria(charge.getCriteria());
+							chargeBean.setRange(charge.getCriteriaRange());
+							pbean.getShippingfeeVolumeList().add(chargeBean);
+						}
+
+						if (charge.getChargeName().contains("Local")) {
+							chargeBean.setLocalValue(charge.getChargeAmount());
+						} else if (charge.getChargeName().contains("Zonal")) {
+							chargeBean.setZonalValue(charge.getChargeAmount());
+						} else if (charge.getChargeName().contains("National")) {
+							chargeBean.setNationalValue(charge
+									.getChargeAmount());
+						} else if (charge.getChargeName().contains("Metro")) {
+							chargeBean.setMetroValue(charge.getChargeAmount());
+						}
+
+					} else {
+						ChargesBean chargeBean = new ChargesBean();
+						chargeBean.setChargeType("shippingfeeVolume");
+						chargeBean.setCriteria(charge.getCriteria());
+						chargeBean.setRange(charge.getCriteriaRange());
+						chargeBean.setValue(charge.getChargeAmount());
+						pbean.getShippingfeeVolumeList().add(chargeBean);
+					}
+
+				} else if (charge.getChargeName().contains("shippingfeeWeight")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
+
+					if (pbean.getNrnReturnConfig().getShippingFeeType()
+							.equalsIgnoreCase("variable")) {
+
+						ChargesBean chargeBean = pbean.getChargesBean(
+								"shippingfeeWeight", charge.getCriteria(),
+								charge.getCriteriaRange());
+						if (chargeBean == null) {
+							chargeBean = new ChargesBean();
+							chargeBean.setChargeType("shippingfeeWeight");
+							chargeBean.setCriteria(charge.getCriteria());
+							chargeBean.setRange(charge.getCriteriaRange());
+							pbean.getShippingfeeWeightList().add(chargeBean);
+						}
+
+						if (charge.getChargeName().contains("Local")) {
+							chargeBean.setLocalValue(charge.getChargeAmount());
+						} else if (charge.getChargeName().contains("Zonal")) {
+							chargeBean.setZonalValue(charge.getChargeAmount());
+						} else if (charge.getChargeName().contains("National")) {
+							chargeBean.setNationalValue(charge
+									.getChargeAmount());
+						} else if (charge.getChargeName().contains("Metro")) {
+							chargeBean.setMetroValue(charge.getChargeAmount());
+						}
+
+					} else {
+						ChargesBean chargeBean = new ChargesBean();
+						chargeBean.setChargeType("shippingfeeWeight");
+						chargeBean.setCriteria(charge.getCriteria());
+						chargeBean.setRange(charge.getCriteriaRange());
+						chargeBean.setValue(charge.getChargeAmount());
+						pbean.getShippingfeeWeightList().add(chargeBean);
+					}
+
+				} else {
+					chargeMap.put(charge.getChargeName(),
+							charge.getChargeAmount());
+				}
+
+			}
+			if (pbean.getFixedfeeList() != null
+					&& pbean.getFixedfeeList().size() != 0)
+				Collections.sort(pbean.getFixedfeeList(),
+						new SortByCriteriaRange());
+			if (pbean.getShippingfeeVolumeList() != null
+					&& pbean.getShippingfeeVolumeList().size() != 0)
+				Collections.sort(pbean.getShippingfeeVolumeList(),
+						new SortByCriteria());
+			if (pbean.getShippingfeeWeightList() != null
+					&& pbean.getShippingfeeWeightList().size() != 0)
+				Collections.sort(pbean.getShippingfeeWeightList(),
+						new SortByCriteria());
 
 			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
@@ -1138,6 +1245,7 @@ public class PartnerController {
 				}
 			}
 			model.put("categoryMap", categoryMap);
+			System.out.println(pbean.getFixedfeeList().size());
 			model.put("partner", pbean);
 			model.put("chargeMap", chargeMap);
 			model.put("partnerList", ConverterClass

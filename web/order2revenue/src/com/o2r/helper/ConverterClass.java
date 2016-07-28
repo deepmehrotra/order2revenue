@@ -1356,7 +1356,9 @@ public class ConverterClass {
 		events.setPartner(eventsBean.getPartner());
 		events.setCreatedDate(eventsBean.getCreatedDate());
 		events.setNetSalesQuantity(eventsBean.getNetSalesQuantity());
-		events.setNetSalesAmount(eventsBean.getNetSalesAmount());		
+		events.setNetSalesAmount(eventsBean.getNetSalesAmount());
+		events.setSkuList(eventsBean.getSkuList());
+		events.setStatus(eventsBean.getStatus());
 		return events;
 		
 	}
@@ -1379,6 +1381,8 @@ public class ConverterClass {
 		eventsBean.setCreatedDate(events.getCreatedDate());
 		eventsBean.setNetSalesQuantity(events.getNetSalesQuantity());
 		eventsBean.setNetSalesAmount(events.getNetSalesAmount());
+		eventsBean.setSkuList(events.getSkuList());
+		eventsBean.setStatus(events.getStatus());
 		}
 		return eventsBean;
 	}
@@ -1403,6 +1407,8 @@ public class ConverterClass {
 				bean.setCreatedDate(event.getCreatedDate());
 				bean.setNetSalesQuantity(event.getNetSalesQuantity());
 				bean.setNetSalesAmount(event.getNetSalesAmount());
+				bean.setSkuList(event.getSkuList());
+				bean.setStatus(event.getStatus());
 				beans.add(bean);
 			}
 		}		

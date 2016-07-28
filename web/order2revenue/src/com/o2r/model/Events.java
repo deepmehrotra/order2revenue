@@ -40,7 +40,11 @@ public class Events {
 	@Column
 	private long netSalesQuantity;
 	@Column
-	private double netSalesAmount;	
+	private double netSalesAmount;
+	@Column
+	private String skuList;
+	@Column
+	private String status;
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	private NRnReturnConfig nrnReturnConfig;
@@ -133,5 +137,17 @@ public class Events {
 	}
 	public void setNetSalesQuantity(long netSalesQuantity) {
 		this.netSalesQuantity = netSalesQuantity;
+	}
+	public String getSkuList() {
+		return skuList;
+	}
+	public void setSkuList(String skuList) {
+		this.skuList = skuList;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

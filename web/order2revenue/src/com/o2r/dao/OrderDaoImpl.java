@@ -318,7 +318,7 @@ public class OrderDaoImpl implements OrderDao {
 
 							// Check conditions here....
 							event = eventsService.isEventActiive(
-									order.getOrderDate(), partner.getPcName(),
+									order.getOrderDate(), partner.getPcName(), order.getProductSkuCode(),
 									sellerId);
 							if (event != null) {
 
@@ -1058,7 +1058,7 @@ public class OrderDaoImpl implements OrderDao {
 
 				// Check condition 4 Events here
 				event = eventsService.isEventActiive(order.getOrderDate(),
-						order.getPcName(), sellerId);
+						order.getPcName(),order.getProductSkuCode(), sellerId);
 				if (event != null) {
 					if (event.getNrnReturnConfig().getReturnCalculatorEvent()
 							.equalsIgnoreCase("newTerms")) {

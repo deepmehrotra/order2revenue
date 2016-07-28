@@ -193,7 +193,7 @@ public class EventsDaoImpl implements EventsDao {
 	}
 	
 	@Override
-	public Events isEventActiive(Date orderDate, String channelName,int sellerId)throws CustomException {
+	public Events isEventActiive(Date orderDate, String channelName, String sku, int sellerId)throws CustomException {
 		log.info("$$$ isEventActive Start $$$");
 		
 		List eventList=null;
@@ -208,9 +208,11 @@ public class EventsDaoImpl implements EventsDao {
 				if(criteria.list().get(0)!=null)
 				{
 					eventList=criteria.list();
-					Events event=(Events)eventList.get(0);
-					log.info("$$$ isEventActive Exit $$$");
-					return event;
+					Events event=(Events)eventList.get(0);					
+					if(event != null && event.getSkuList().contains("sku") && event.getStatus().equals("Active")){	
+						log.info("$$$ isEventActive Exit $$$");
+						return event;
+					}
 				}
 			}
 		}catch(Exception e){
@@ -280,6 +282,39 @@ public class EventsDaoImpl implements EventsDao {
 		}
 		log.info("*** isDatesAllowForEvent ends ***");
 		return true;
+	}
+	
+	@Override
+	public void changeStatus(int eventId, int sellerId) {
+		log.info("*** changeStatus starts ***");
+		Session session=null;
+		Events event=null;
+		List eventList=null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();	
+			
+			Criteria criteria = session.createCriteria(Events.class).add(Restrictions.eq("sellerId", sellerId)).add(Restrictions.eq("eventId", eventId));
+			eventList=criteria.list();
+			if (eventList != null && eventList.size() != 0 && eventList.get(0) != null)
+				event = (Events) eventList.get(0);
+			if(event != null){
+				if(event.getStatus().equals("Active")){
+					event.setStatus("Pause");
+				}else{
+					event.setStatus("Active");
+				}
+			}
+			session.merge(event);
+			session.getTransaction().commit();
+		}catch(Exception e){
+			e.printStackTrace();
+			log.error("Failed!",e);
+		}finally{
+			if(session != null)
+				session.close();
+		}
+		log.info("*** changeStatus ends ***");
 	}
 
 }

@@ -51,8 +51,8 @@ public class EventsServiceImpl implements EventsService{
 	}
 	
 	@Override
-	public Events isEventActiive(Date orderDate, String channelName,int sellerId)throws CustomException {
-		return eventsDao.isEventActiive(orderDate, channelName, sellerId);
+	public Events isEventActiive(Date orderDate, String channelName, String sku,int sellerId)throws CustomException {
+		return eventsDao.isEventActiive(orderDate, channelName, sku, sellerId);
 	}
 	
 	@Override
@@ -64,6 +64,11 @@ public class EventsServiceImpl implements EventsService{
 	public boolean isDatesAllowForEvent(Date startDate, Date endDate,
 			String channelName, int sellerId) {
 		return eventsDao.isDatesAllowForEvent(startDate, endDate, channelName, sellerId);
+	}
+	
+	@Override
+	public void changeStatus(int eventId, int sellerId) {
+		eventsDao.changeStatus(eventId, sellerId);		
 	}
 
 }

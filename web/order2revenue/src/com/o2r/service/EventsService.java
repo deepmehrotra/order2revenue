@@ -15,7 +15,8 @@ public interface EventsService {
 	public Events getEvent(int partnerId, int sellerId)throws CustomException;
 	public List<Events> listEvents(int sellerId)throws CustomException;
 	public List<Events> listEvents(Date sDate, Date eDate, int sellerID)throws CustomException;
-	public Events isEventActiive(Date orderDate,String channelName, int sellerId)throws CustomException;
+	public Events isEventActiive(Date orderDate,String channelName, String sku, int sellerId)throws CustomException;
 	public Events getEvent(String eventName, int sellerID)throws CustomException;
 	public boolean isDatesAllowForEvent(Date startDate, Date endDate, String channelName, int sellerId);
+	public void changeStatus(int eventId,int sellerId);
 }

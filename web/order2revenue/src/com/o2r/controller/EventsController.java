@@ -32,9 +32,11 @@ import com.o2r.model.Category;
 import com.o2r.model.Events;
 import com.o2r.model.NRnReturnCharges;
 import com.o2r.model.Partner;
+import com.o2r.model.Product;
 import com.o2r.service.CategoryService;
 import com.o2r.service.EventsService;
 import com.o2r.service.PartnerService;
+import com.o2r.service.ProductService;
 
 @Controller
 public class EventsController {
@@ -47,6 +49,10 @@ public class EventsController {
 	private CategoryService categoryService;
 	@Autowired
 	private HelperClass helperClass;
+	@Autowired
+	private ProductService productService;
+	
+	
 	static Logger log = Logger.getLogger(EventsController.class.getName());
 
 	@RequestMapping(value = "/seller/saveEvent", method = RequestMethod.POST)
@@ -58,17 +64,26 @@ public class EventsController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<NRnReturnCharges> chargeList = new ArrayList<NRnReturnCharges>();
 		Map<String, String[]> parameters = request.getParameterMap();
-		
+		StringBuffer skus4Event=new StringBuffer();
 		List<String> fixedfeeParams = new ArrayList<String>();
 		List<String> shippingfeeVolumeParams = new ArrayList<String>();
 		List<String> shippingfeeWeightParams = new ArrayList<String>();
-
+		
+		String[] skuList=request.getParameterValues("multiSku");
+		if(skuList != null && skuList.length != 0){
+			for(int i=0; i<skuList.length; i++){
+				skus4Event.append(skuList[i]+",");
+			}
+		}
+		System.out.println(skus4Event.toString().contains("Ranjan"));
+		eventsBean.setSkuList(skus4Event.toString());
+		eventsBean.setStatus("Active");
 		try {
 			/*
 			 * if(eventsBean.getEventId() != 0){ eventsBean.setEventId(0); }
 			 */
 
-			for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+			/*for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
 
 				if (entry.getValue()[0] != null
 						&& !entry.getValue()[0].isEmpty()) {
@@ -88,9 +103,7 @@ public class EventsController {
 								if (!fixedfeeParams.contains(param)) {
 									fixedfeeParams.add(param);
 									NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-									nrnReturncharge.setChargeAmount(Float
-											.parseFloat(parameters.get(param
-													+ "value")[0]));
+									nrnReturncharge.setChargeAmount(Float.parseFloat(parameters.get(param+ "value")[0]));
 									nrnReturncharge.setChargeName("fixedfee");
 									nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
@@ -118,51 +131,28 @@ public class EventsController {
 											.contains(param)) {
 										shippingfeeVolumeParams.add(param);
 										NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-										nrnReturncharge
-												.setChargeAmount(Float.parseFloat(parameters
-														.get(param
-																+ "localValue")[0]));
-										nrnReturncharge
-												.setChargeName("shippingfeeVolumeLocal");
-										nrnReturncharge.setCriteria(parameters
-												.get(param + "criteria")[0]);
-										nrnReturncharge.setCriteriaRange(Long
-												.parseLong(parameters.get(param
-														+ "range")[0]));
+										nrnReturncharge.setChargeAmount(Float.parseFloat(parameters.get(param + "localValue")[0]));
+										nrnReturncharge.setChargeName("shippingfeeVolumeLocal");
+										nrnReturncharge.setCriteria(parameters.get(param + "criteria")[0]);
+										nrnReturncharge.setCriteriaRange(Long.parseLong(parameters.get(param + "range")[0]));
 
-										nrnReturncharge.setConfig(eventsBean
-												.getNrnReturnConfig());
+										nrnReturncharge.setConfig(eventsBean.getNrnReturnConfig());
 										chargeList.add(nrnReturncharge);
 
 										nrnReturncharge = new NRnReturnCharges();
-										nrnReturncharge
-												.setChargeAmount(Float.parseFloat(parameters
-														.get(param
-																+ "zonalValue")[0]));
-										nrnReturncharge
-												.setChargeName("shippingfeeVolumeZonal");
-										nrnReturncharge.setCriteria(parameters
-												.get(param + "criteria")[0]);
-										nrnReturncharge.setCriteriaRange(Long
-												.parseLong(parameters.get(param
-														+ "range")[0]));
+										nrnReturncharge.setChargeAmount(Float.parseFloat(parameters.get(param + "zonalValue")[0]));
+										nrnReturncharge.setChargeName("shippingfeeVolumeZonal");
+										nrnReturncharge.setCriteria(parameters.get(param + "criteria")[0]);
+										nrnReturncharge.setCriteriaRange(Long.parseLong(parameters.get(param + "range")[0]));
 
-										nrnReturncharge.setConfig(eventsBean
-												.getNrnReturnConfig());
+										nrnReturncharge.setConfig(eventsBean.getNrnReturnConfig());
 										chargeList.add(nrnReturncharge);
 
 										nrnReturncharge = new NRnReturnCharges();
-										nrnReturncharge
-												.setChargeAmount(Float.parseFloat(parameters
-														.get(param
-																+ "nationalValue")[0]));
-										nrnReturncharge
-												.setChargeName("shippingfeeVolumeNational");
-										nrnReturncharge.setCriteria(parameters
-												.get(param + "criteria")[0]);
-										nrnReturncharge.setCriteriaRange(Long
-												.parseLong(parameters.get(param
-														+ "range")[0]));
+										nrnReturncharge.setChargeAmount(Float.parseFloat(parameters.get(param + "nationalValue")[0]));
+										nrnReturncharge.setChargeName("shippingfeeVolumeNational");
+										nrnReturncharge.setCriteria(parameters.get(param + "criteria")[0]);
+										nrnReturncharge.setCriteriaRange(Long.parseLong(parameters.get(param + "range")[0]));
 
 										nrnReturncharge.setConfig(eventsBean
 												.getNrnReturnConfig());
@@ -349,7 +339,7 @@ public class EventsController {
 								Arrays.toString(entry.getValue()));
 					}
 				}
-			}
+			}*/
 
 			Partner partner = partnerService.getPartner(
 					eventsBean.getChannelName(),
@@ -404,7 +394,15 @@ public class EventsController {
 		Map<String, Float> chargeMap = new HashMap<String, Float>();
 		Map<String, Float> categoryMap = new HashMap<String, Float>();
 		Map<String, Object> model = new HashMap<String, Object>();
+		List<String> productList=new ArrayList<String>();
 		try {
+			List<Product> products = productService.listProducts(helperClass
+					.getSellerIdfromSession(request));
+			if (products != null && products.size() != 0) {
+				for (Product product : products) {
+					productList.add(product.getProductSkuCode());
+				}
+			}
 			List<Partner> partnerList = partnerService.listPartners(helperClass
 					.getSellerIdfromSession(request));
 			Map<String, String> partnerMap = new HashMap<String, String>();
@@ -419,6 +417,7 @@ public class EventsController {
 				categoryMap.put(cat.getCatName(),
 						chargeMap.get(cat.getCatName()));
 			}
+			model.put("skus", productList);
 			model.put("partnerMap", partnerMap);
 			model.put("categoryMap", categoryMap);
 		} catch (CustomException ce) {
@@ -675,6 +674,28 @@ public class EventsController {
 		}
 		log.info("$$$ eventsList Ends : EventsController $$$");
 		return new ModelAndView("miscellaneous/eventsList", model);
+	}
+	
+	@RequestMapping(value = "/seller/eventAction", method = RequestMethod.GET)
+	public ModelAndView PlayPause(HttpServletRequest request,
+			@ModelAttribute("command") EventsBean eventsBean,
+			BindingResult result) {
+
+		log.info("$$$ eventsList Starts : EventsController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		int id=Integer.parseInt(request.getParameter("id"));
+		try {			
+			eventsService.changeStatus(id, helperClass.getSellerIdfromSession(request));
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Exception in PlayPause : EventsController ",e);
+			model.put("errorMessage", "Invalid Operation");
+			model.put("errorTime", new Date());
+			model.put("errorCode", 500);
+			return new ModelAndView("globalErorPage", model);
+		}
+		log.info("$$$ eventsList Ends : EventsController $$$");
+		return new ModelAndView("redirect:/seller/eventsList.html");
 	}
 
 	@RequestMapping(value = "/seller/checkEvent", method = RequestMethod.GET)

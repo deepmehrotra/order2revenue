@@ -305,14 +305,14 @@ public class SaveContents {
 						&& entry.getCell(14).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try
 					{
-					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(14))) {
-						order.setShippedDate(entry.getCell(14)
-								.getDateCellValue());
-					} else {
-						errorMessage
-								.append(" Shipped Date formate is wrong ,enter mm/dd/yyyy,");
-						validaterow = false;
-					}
+						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(14))) {
+							order.setShippedDate(entry.getCell(14)
+									.getDateCellValue());
+						} else {
+							errorMessage
+									.append(" Shipped Date formate is wrong ,enter mm/dd/yyyy,");
+							validaterow = false;
+						}
 					}
 					catch(Exception e)
 					{
@@ -348,7 +348,7 @@ public class SaveContents {
 
 				if (partner != null) {
 					event = eventsService.isEventActiive(order.getOrderDate(),
-							partner.getPcName(), sellerId);
+							partner.getPcName(),order.getProductSkuCode(), sellerId);
 					if (event != null) {
 						if (event.getNrnReturnConfig().getNrCalculatorEvent()
 								.equalsIgnoreCase("fixed")) {
@@ -1044,7 +1044,7 @@ public class SaveContents {
 									&& entry.getCell(4).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								try {
 									product.setLength(Float.valueOf(
-											entry.getCell(4).toString()).longValue());
+											entry.getCell(4).toString()));
 								} catch (NumberFormatException e) {
 									log.error("Failed!", e);
 									errorMessage.append(" Length should be a number ");									
@@ -1054,7 +1054,7 @@ public class SaveContents {
 									&& entry.getCell(5).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								try {
 									product.setBreadth(Float.valueOf(
-											entry.getCell(5).toString()).longValue());
+											entry.getCell(5).toString()));
 								} catch (NumberFormatException e) {
 									log.error("Failed!", e);
 									errorMessage.append(" Breadth should be a number ");									
@@ -1064,7 +1064,7 @@ public class SaveContents {
 									&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								try {
 									product.setHeight(Float.valueOf(
-											entry.getCell(6).toString()).longValue());
+											entry.getCell(6).toString()));
 								} catch (NumberFormatException e) {
 									log.error("Failed!", e);
 									errorMessage.append(" Height should be a number ");

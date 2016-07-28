@@ -23,6 +23,8 @@ public class EventsBean {
 	private Date createdDate;
 	private long netSalesQuantity;
 	private double netSalesAmount;
+	private String skuList;
+	private String status;	
 	
 	private List<ChargesBean> fixedfeeList = new ArrayList<ChargesBean>();
 	private List<ChargesBean> shippingfeeVolumeList = new ArrayList<ChargesBean>();
@@ -157,6 +159,18 @@ public class EventsBean {
 			}
 		}
 		return returnBean;
+	}
+	public String getSkuList() {
+		return skuList;
+	}
+	public void setSkuList(String skuList) {
+		this.skuList = skuList;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

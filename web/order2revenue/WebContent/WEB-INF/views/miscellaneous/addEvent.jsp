@@ -8,7 +8,7 @@
 <html>
 <head>
 <jsp:include page="../globalcsslinks.jsp"></jsp:include>
-
+<link href="/O2R/seller/css/chosen.css" rel="stylesheet">
 <style>
 body.DTTT_Print {
 	background: #fff;
@@ -202,6 +202,23 @@ span .#error {
 												</div>
 											</div>
 										</div>
+										
+										<div class="col-sm-12">
+											<h4>Product SKU</h4>
+										</div>
+										<div class="col-sm-12 input-group">
+											<div class="col-sm-12">	                                       
+		                                        <select data-placeholder="Click To Select" name="multiSku" class="chosen-select" multiple="multiple" style="width:350px;" tabindex="4" required>
+		                                            <c:if test="${!empty skus}">
+		                                            	<c:forEach items="${skus}" var="sku" varStatus="loop">
+		                                            		<option value="${sku}">${sku}</option>
+		                                            	</c:forEach>
+		                                            </c:if>
+		                                        </select>
+		                                    </div>
+                                   		</div>
+                                   		<br>                                						
+										
 										<div class="col-sm-12">
 											<h4>NR Calculator</h4>
 										</div>
@@ -3499,7 +3516,19 @@ Custom and plugin javascript
 			}
 		}
 	</script>
-
+	<script src="/O2R/seller/js/chosen.jquery.js"></script>
+	<script>
+        var config = {
+                '.chosen-select'           : {},
+                '.chosen-select-deselect'  : {allow_single_deselect:true},
+                '.chosen-select-no-single' : {disable_search_threshold:10},
+                '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+                '.chosen-select-width'     : {width:"95%"}
+            }
+            for (var selector in config) {
+                $(selector).chosen(config[selector]);
+            };
+    </script>
 
 
 

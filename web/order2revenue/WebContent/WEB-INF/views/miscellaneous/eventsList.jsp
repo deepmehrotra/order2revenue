@@ -115,7 +115,16 @@
     											</c:choose>																										  
 												<td>${event.netSalesQuantity}</td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${event.netSalesAmount}" /></td>
-												
+												<td>
+													<c:if test="${event.status eq 'Active'}">
+														<i class="fa fa-play text-navy" data-toggle="tooltip" data-placement="top" style="opacity: 0.5;"></i>
+														&nbsp;&nbsp;&nbsp;&nbsp;<a href="eventAction.html?id=${event.eventId}" title="Pause" ><i class="fa fa-pause text-navy" data-toggle="tooltip" data-placement="top"></i></a>
+													</c:if>
+													<c:if test="${event.status eq 'Pause'}">
+														<a href="eventAction.html?id=${event.eventId}" title="Active"><i class="fa fa-play text-navy" data-toggle="tooltip" data-placement="top"></i></a>
+														&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-pause text-navy" data-toggle="tooltip" data-placement="top" style="opacity: 0.5;"></i>
+													</c:if>
+												</td>
 											</tr>
 										</c:forEach>
 									</c:if>

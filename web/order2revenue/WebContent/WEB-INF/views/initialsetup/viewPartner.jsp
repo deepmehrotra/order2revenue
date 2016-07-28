@@ -327,48 +327,16 @@ span .#error {
 																		</td>
 																	</tr>
 																	<tr>
-																		<td style="width: 50%;"><label>FIXED FEE</label></td>
-																		<td><c:if
-																				test="${chargeMap.fixedfeelt250 != null }">
+																		<td style="width: 50%;">
+																			<label>FIXED FEE</label>
+																		</td>
+																		<td><c:if test="${!empty partner.fixedfeeList}">
+																			<c:forEach items="${partner.fixedfeeList}" var="fixedfee" varStatus="loop">
 																				<div>
-																					<label class="labelfix" style="text-align: left;">&lt;250 :
-																						${chargeMap.fixedfeelt250}</label>
+																					<label class="labelfix" style="text-align: left;">${fixedfee.criteria} ${fixedfee.range} : ${fixedfee.value}</label>
 																				</div>
-																				<div>
-																					<label class="labelfix" style="text-align: left;">&gt;250&&&lt;500 :
-																						${chargeMap.fixedfeegt250lt500}</label>
-																				</div>
-																				<div>
-																					<label class="labelfix" style="text-align: left;">&gt;500 :
-																						${chargeMap.fixedfeegt500}</label>
-																				</div>
-																			</c:if> <c:if test="${chargeMap.fixedfeelt500Big != null }">
-																				<div>
-																					<label class="labelfix" style="text-align: left;">&lt;500 :
-																						${chargeMap.fixedfeelt500Big}</label>
-																				</div>
-																				<div>
-																					<label class="labelfix" style="text-align: left;">&gt;500 && &lt;1000
-																						: ${chargeMap.fixedfeegt500lt1000}</label>
-																				</div>
-																				<div>
-																					<label class="labelfix" style="text-align: left;">&gt;1000 &&
-																						&lt;10000 : ${chargeMap.fixedfeegt1000lt10000}</label>
-																				</div>
-																				<div>
-																					<label class="labelfix" style="text-align: left;">&gt;10000 :
-																						${chargeMap.fixedfeegt10000}</label>
-																				</div>
-																			</c:if> <c:if test="${chargeMap.fixedfeelt500 != null }">
-																				<div>
-																					<label class="labelfix" style="text-align: left;">&lt;500 :
-																						${chargeMap.fixedfeelt500}</label>
-																				</div>
-																				<div>
-																					<label class="labelfix" style="text-align: left;">&gt;500 :
-																						${chargeMap.fixedfeegt500Big}</label>
-																				</div>
-																			</c:if></td>
+																			</c:forEach>
+																		</c:if></td>																		
 																	</tr>
 																	<tr>
 																		<td style="width: 50%;"><label>PCC</label></td>
@@ -416,42 +384,13 @@ span .#error {
 																								<th>Metro</th>
 																							</tr>
 																						</thead>
-																						<tbody>
+																						<tbody>	
+																							<c:if test="${!empty partner.shippingfeeVolumeList}">
+																							</c:if>																				
 																							<tr>
 																								<td>&lt;500</td>
-																								<td><label class="labelfix">${chargeMap.localvwlt500}</label></td>
-																								<td><label class="labelfix">${chargeMap.zonalvwlt500}</label></td>
-																								<td><label class="labelfix">${chargeMap.nationalvwlt500}</label></td>
-																								<td><label class="labelfix">${chargeMap.metrovwlt500}</label></td>
-																							</tr>
-																							<tr>
-																								<td>500 &gt; 1000</td>
-																								<td><label class="labelfix">${chargeMap.localvwgt500lt1000}</label></td>
-																								<td><label class="labelfix">${chargeMap.zonalvwgt500lt1000}</label></td>
-																								<td><label class="labelfix">${chargeMap.nationalvwgt500lt1000}</label></td>
-																								<td><label class="labelfix">${chargeMap.metrovwgt500lt1000}</label></td>
-																							</tr>
-																							<tr>
-																								<td>1000 &gt; 1500</td>
-																								<td><label class="labelfix">${chargeMap.localvwgt1000lt1500}</label></td>
-																								<td><label class="labelfix">${chargeMap.zonalvwgt1000lt1500}</label></td>
-																								<td><label class="labelfix">${chargeMap.nationalvwgt1000lt1500}</label></td>
-																								<td><label class="labelfix">${chargeMap.metrovwgt1000lt1500}</label></td>
-																							</tr>
-																							<tr>
-																								<td>1500 &gt; 5000</td>
-																								<td><label class="labelfix">${chargeMap.localvwgt1500lt5000}</label></td>
-																								<td><label class="labelfix">${chargeMap.zonalvwgt1500lt5000}</label></td>
-																								<td><label class="labelfix">${chargeMap.nationalvwgt1500lt5000}</label></td>
-																								<td><label class="labelfix">${chargeMap.metrovwgt1500lt5000}</label></td>
-																							</tr>
-																							<tr>
-																								<td>add 1 kg</td>
-																								<td><label class="labelfix">${chargeMap.localvwgt5000}</label></td>
-																								<td><label class="labelfix">${chargeMap.zonalvwgt5000}</label></td>
-																								<td><label class="labelfix">${chargeMap.nationalvwgt5000}</label></td>
-																								<td><label class="labelfix">${chargeMap.metrovwgt5000}</label></td>
-																							</tr>
+																								<td><label class="labelfix">${chargeMap.localvwlt500}</label></td>																								
+																							</tr>																							
 																						</tbody>
 																					</table>
 																					<br>
@@ -470,18 +409,8 @@ span .#error {
 																						<tbody>
 																							<tr>
 																								<td>&lt;500</td>
-																								<td><label class="labelfix">${chargeMap.localdwlt500}</label></td>
-																								<td><label class="labelfix">${chargeMap.zonaldwlt500}</label></td>
-																								<td><label class="labelfix">${chargeMap.nationaldwlt500}</label></td>
-																								<td><label class="labelfix">${chargeMap.metrodwlt500}</label></td>
-																							</tr>
-																							<tr>
-																								<td>&gt; 500</td>
-																								<td><label class="labelfix">${chargeMap.localdwgt500}</label></td>
-																								<td><label class="labelfix">${chargeMap.zonaldwgt500}</label></td>
-																								<td><label class="labelfix">${chargeMap.nationaldwgt500}</label></td>
-																								<td><label class="labelfix">${chargeMap.metrodwgt500}</label></td>
-																							</tr>
+																								<td><label class="labelfix">${chargeMap.localdwlt500}</label></td>																								
+																							</tr>																							
 																						</tbody>
 																					</table>
 																				</c:if>
