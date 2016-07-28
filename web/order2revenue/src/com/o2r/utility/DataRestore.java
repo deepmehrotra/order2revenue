@@ -275,6 +275,8 @@ public class DataRestore {
 		try{
 			
 			seller=sellerService.getSeller(sellerid);
+			//System.out.println(" MAnual Charges : "+seller.getManualCharges());
+			//seller.getManualCharges().clear();
 			seller.setId(0);
 			selleracId=seller.getSellerAccount().getSelaccId();
 			seller.getSellerAccount().setSelaccId(0);
