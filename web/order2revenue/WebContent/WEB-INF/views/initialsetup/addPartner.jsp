@@ -3281,6 +3281,13 @@ span .#error {
 							else if ('${partner.nrnReturnConfig.commissionType}' == 'categoryWise')
 								$("#commisionType-categoryWise").prop(
 										"checked", true).trigger("click");
+							
+							if ('${partner.nrnReturnConfig.whicheverGreaterPCC}' == 'true')
+								$("#pccHigher").prop("checked", true)
+										.trigger("click");
+							else if ('${partner.nrnReturnConfig.whicheverGreaterPCC}' == 'false')
+								$("#pccValue").prop(
+										"checked", true).trigger("click");
 
 							if ('${partner.nrnReturnConfig.shippingFeeType}' == 'fixed')
 								$("#shippingfee-fixed").prop("checked", true)

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.dao.PartnerDao;
 import com.o2r.helper.CustomException;
+import com.o2r.model.MetaPartner;
 import com.o2r.model.Partner;
 
 /**
@@ -27,6 +28,12 @@ public class PartnerServiceImpl implements PartnerService {
 			throws CustomException {
 		partnerDao.addPartner(partner, sellerId);
 	}
+	
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public void addMetaPartner(MetaPartner partner)
+			throws CustomException {
+		partnerDao.addMetaPartner(partner);
+	}
 
 	public List<Partner> listPartners(int sellerId) throws CustomException {
 		return partnerDao.listPartner(sellerId);
@@ -44,5 +51,11 @@ public class PartnerServiceImpl implements PartnerService {
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public Partner getPartner(String name, int sellerId) throws CustomException {
 		return partnerDao.getPartner(name, sellerId);
+	}
+
+	@Override
+	public MetaPartner getMetaPartner(String partnerName)
+			throws CustomException { 
+		return partnerDao.getMetaPartner(partnerName);
 	}
 }

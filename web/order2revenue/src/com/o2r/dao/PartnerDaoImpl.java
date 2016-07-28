@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
+import com.o2r.model.MetaPartner;
 import com.o2r.model.Partner;
 import com.o2r.model.Seller;
 
@@ -118,6 +119,34 @@ public class PartnerDaoImpl implements PartnerDao {
 		log.info("*** getPartner Ends : partnerDaoImpl****");
 		return partner;
 	}
+	
+	@Override
+	public MetaPartner getMetaPartner(String partnerName) throws CustomException {
+		
+		log.info("*** getPartner Starts : partnerDaoImpl****");
+		MetaPartner partner=null;
+		try {			
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			//partner =(MetaPartner) session.get(MetaPartner.class,partnerName);
+			Criteria criteria = session.createCriteria(MetaPartner.class).add(
+					Restrictions.eq("pcName", partnerName));
+			if (criteria.list() != null && criteria.list().size() != 0) {
+				partner = (MetaPartner) criteria.list().get(0);
+				Hibernate.initialize(partner.getNrnReturnConfig().getCharges());
+			}
+			session.getTransaction().commit();
+			session.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();			
+			log.error("Failed!",e);
+			throw new CustomException(GlobalConstant.getPartnerError,
+					new Date(), 3, GlobalConstant.getPartnerErrorCode, e);
+		}
+		log.info("*** getPartner Ends : partnerDaoImpl****");
+		return partner;
+	}
 
 	@Override
 	public Partner getPartner(String partnername, int sellerId)
@@ -191,6 +220,32 @@ public class PartnerDaoImpl implements PartnerDao {
 
 		}
 		log.info("*** DeletePartner Ends : partnerDaoImpl****");
+	}
+	
+	@Override
+	public void addMetaPartner(MetaPartner partner)
+			throws CustomException {
+		
+
+		log.info("*** AddPArtner Starts : partnerDaoImpl****");
+		log.debug("******* Inside PartnerDaoIMpl partner id :"+ partner.getPcId()+"******* ConfigId : "+partner.getNrnReturnConfig().getConfigId());
+		long id=partner.getPcId();
+		
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			session.saveOrUpdate(partner);
+			
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
+			throw new CustomException(GlobalConstant.addPartnerError,
+					new Date(), 1, GlobalConstant.addPartnerErrorCode, e);			
+		}
+		log.info("*** AddPArtner Ends : partnerDaoImpl****");
 	}
 	
 	/*@Override

@@ -31,6 +31,7 @@ import com.o2r.bean.ExpenseBean;
 import com.o2r.bean.ExpenseCategoryBean;
 import com.o2r.bean.ExpensesDetails;
 import com.o2r.bean.ManualChargesBean;
+import com.o2r.bean.MetaPartnerBean;
 import com.o2r.bean.NetPaymentResult;
 import com.o2r.bean.NetProfitabilityST;
 import com.o2r.bean.OrderBean;
@@ -59,6 +60,11 @@ import com.o2r.model.Events;
 import com.o2r.model.ExpenseCategory;
 import com.o2r.model.Expenses;
 import com.o2r.model.ManualCharges;
+import com.o2r.model.MetaNRnReturnCharges;
+import com.o2r.model.MetaNRnReturnConfig;
+import com.o2r.model.MetaPartner;
+import com.o2r.model.NRnReturnCharges;
+import com.o2r.model.NRnReturnConfig;
 import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
 import com.o2r.model.OrderRTOorReturn;
@@ -479,6 +485,163 @@ public class ConverterClass {
 		}
 		return partner;
 	}
+	
+	public static MetaPartner prepareMetaPartnerModel(MetaPartnerBean partnerBean) {
+
+		MetaPartner partner = new MetaPartner();
+		if (partnerBean != null) {
+			partner.setPcId(partnerBean.getPcId());
+			partner.setPcDesc(partnerBean.getPcDesc());
+			partner.setPcLogoUrl(partnerBean.getPcLogoUrl());
+			partner.setPcName(partnerBean.getPcName());
+			partner.setPaymentType(partnerBean.getPaymentType());
+			partner.setIsshippeddatecalc(partnerBean.isIsshippeddatecalc());
+			partner.setNoofdaysfromshippeddate(partnerBean
+					.getNoofdaysfromshippeddate());
+			partner.setStartcycleday(partnerBean.getStartcycleday());
+			partner.setPaycycleduration(partnerBean.getPaycycleduration());
+			partner.setPaydaysfromstartday(partnerBean.getPaydaysfromstartday());
+			partner.setMaxReturnAcceptance(partnerBean.getMaxReturnAcceptance());
+			partner.setMaxRTOAcceptance(partnerBean.getMaxRTOAcceptance());
+			partner.setTaxcategory(partnerBean.getTaxcategory());
+			partner.setTaxrate(partnerBean.getTaxrate());
+			partner.setTdsApplicable(partnerBean.isTdsApplicable());
+			partner.setPaycyclefromshipordel(partnerBean
+					.isPaycyclefromshipordel());
+			partner.setMonthlypaydate(partnerBean.getMonthlypaydate());
+			partner.setNrnReturnConfig(partnerBean.getNrnReturnConfig());
+		}
+		return partner;
+	}
+	
+	public static Partner convertPartner(MetaPartner metaPartner) {
+
+		Partner partner = new Partner();
+		if (metaPartner != null) {
+			partner.setPcDesc(metaPartner.getPcDesc());
+			partner.setPcLogoUrl(metaPartner.getPcLogoUrl());
+			partner.setPcName(metaPartner.getPcName());
+			partner.setPaymentType(metaPartner.getPaymentType());
+			partner.setIsshippeddatecalc(metaPartner.isIsshippeddatecalc());
+			partner.setNoofdaysfromshippeddate(metaPartner
+					.getNoofdaysfromshippeddate());
+			partner.setStartcycleday(metaPartner.getStartcycleday());
+			partner.setPaycycleduration(metaPartner.getPaycycleduration());
+			partner.setPaydaysfromstartday(metaPartner.getPaydaysfromstartday());
+			partner.setMaxReturnAcceptance(metaPartner.getMaxReturnAcceptance());
+			partner.setMaxRTOAcceptance(metaPartner.getMaxRTOAcceptance());
+			partner.setTaxcategory(metaPartner.getTaxcategory());
+			partner.setTaxrate(metaPartner.getTaxrate());
+			partner.setTdsApplicable(metaPartner.isTdsApplicable());
+			partner.setPaycyclefromshipordel(metaPartner
+					.isPaycyclefromshipordel());
+			partner.setMonthlypaydate(metaPartner.getMonthlypaydate());
+			partner.setNrnReturnConfig(convertNRnReturnConfig(metaPartner.getNrnReturnConfig()));
+		}
+		return partner;
+	}
+	
+	public static NRnReturnConfig convertNRnReturnConfig(MetaNRnReturnConfig metaNRnReturnConfig) {
+
+		NRnReturnConfig nRnReturnConfig = new NRnReturnConfig();
+		if (metaNRnReturnConfig != null) {
+			nRnReturnConfig.setNrCalculator(metaNRnReturnConfig.isNrCalculator());
+			nRnReturnConfig.setCommissionType(metaNRnReturnConfig.getCommissionType());
+			nRnReturnConfig.setCategoryWiseCommsion(metaNRnReturnConfig.getCategoryWiseCommsion());
+			nRnReturnConfig.setWhicheverGreaterPCC(metaNRnReturnConfig.isWhicheverGreaterPCC());
+			nRnReturnConfig.setShippingFeeType(metaNRnReturnConfig.getShippingFeeType()); 
+			nRnReturnConfig.setRetCharSFType(metaNRnReturnConfig.getRetCharSFType());
+			nRnReturnConfig.setRetCharBRType(metaNRnReturnConfig.getRetCharBRType());
+			nRnReturnConfig.setRetCharSFFF(metaNRnReturnConfig.isRetCharSFFF());
+			nRnReturnConfig.setRetCharSFShipFee(metaNRnReturnConfig.isRetCharSFShipFee());
+			nRnReturnConfig.setRetCharSFSerTax(metaNRnReturnConfig.isRetCharSFSerTax());
+			nRnReturnConfig.setRetCharSFPCC(metaNRnReturnConfig.isRetCharSFPCC());
+			nRnReturnConfig.setRetCharBRFF(metaNRnReturnConfig.isRetCharBRFF());
+			nRnReturnConfig.setRetCharBRShipFee(metaNRnReturnConfig.isRetCharBRShipFee());
+			nRnReturnConfig.setRetCharBRSerTax(metaNRnReturnConfig.isRetCharBRSerTax());
+			nRnReturnConfig.setRetCharBRPCC(metaNRnReturnConfig.isRetCharBRPCC());
+			nRnReturnConfig.setRTOCharSFType(metaNRnReturnConfig.getRTOCharSFType());
+			nRnReturnConfig.setRTOCharBRType(metaNRnReturnConfig.getRTOCharBRType());
+			nRnReturnConfig.setRTOCharSFFF(metaNRnReturnConfig.isRTOCharSFFF());
+			nRnReturnConfig.setRTOCharSFShipFee(metaNRnReturnConfig.isRTOCharSFShipFee());
+			nRnReturnConfig.setRTOCharSFSerTax(metaNRnReturnConfig.isRTOCharSFSerTax());
+			nRnReturnConfig.setRTOCharSFPCC(metaNRnReturnConfig.isRTOCharSFPCC());
+			nRnReturnConfig.setRTOCharBRFF(metaNRnReturnConfig.isRTOCharBRFF());
+			nRnReturnConfig.setRTOCharBRShipFee(metaNRnReturnConfig.isRTOCharBRShipFee());
+			nRnReturnConfig.setRTOCharBRSerTax(metaNRnReturnConfig.isRTOCharBRSerTax());
+			nRnReturnConfig.setRTOCharBRPCC(metaNRnReturnConfig.isRTOCharBRPCC());
+			nRnReturnConfig.setRepCharSFType(metaNRnReturnConfig.getRepCharSFType());
+			nRnReturnConfig.setRepCharBRType(metaNRnReturnConfig.getRepCharBRType());
+			nRnReturnConfig.setRepCharSFFF(metaNRnReturnConfig.isRepCharSFFF());
+			nRnReturnConfig.setRepCharSFShipFee(metaNRnReturnConfig.isRepCharSFShipFee());
+			nRnReturnConfig.setRepCharSFSerTax(metaNRnReturnConfig.isRepCharSFSerTax());
+			nRnReturnConfig.setRepCharSFPCC(metaNRnReturnConfig.isRepCharSFPCC());
+			nRnReturnConfig.setRepCharBRFF(metaNRnReturnConfig.isRepCharBRFF());
+			nRnReturnConfig.setRepCharBRShipFee(metaNRnReturnConfig.isRepCharBRShipFee());
+			nRnReturnConfig.setRepCharBRSerTax(metaNRnReturnConfig.isRepCharBRSerTax());
+			nRnReturnConfig.setRepCharBRPCC(metaNRnReturnConfig.isRepCharBRPCC());
+			nRnReturnConfig.setPDCharSFType(metaNRnReturnConfig.getPDCharSFType());
+			nRnReturnConfig.setPDCharBRType(metaNRnReturnConfig.getPDCharBRType());
+			nRnReturnConfig.setPDCharSFFF(metaNRnReturnConfig.isPDCharSFFF());
+			nRnReturnConfig.setPDCharSFShipFee(metaNRnReturnConfig.isPDCharSFShipFee());
+			nRnReturnConfig.setPDCharSFSerTax(metaNRnReturnConfig.isPDCharSFSerTax());
+			nRnReturnConfig.setPDCharSFPCC(metaNRnReturnConfig.isPDCharSFPCC());
+			nRnReturnConfig.setPDCharBRFF(metaNRnReturnConfig.isPDCharBRFF());
+			nRnReturnConfig.setPDCharBRShipFee(metaNRnReturnConfig.isPDCharBRShipFee());
+			nRnReturnConfig.setPDCharBRSerTax(metaNRnReturnConfig.isPDCharBRSerTax());
+			nRnReturnConfig.setPDCharBRPCC(metaNRnReturnConfig.isPDCharBRPCC());
+			nRnReturnConfig.setCanCharSFARTDType(metaNRnReturnConfig.getCanCharSFARTDType());
+			nRnReturnConfig.setCanCharSFBFRTDType(metaNRnReturnConfig.getCanCharSFBFRTDType());
+			nRnReturnConfig.setCanCharBRType(metaNRnReturnConfig.getCanCharBRType());
+			nRnReturnConfig.setCanCharSFFF(metaNRnReturnConfig.isCanCharSFFF());
+			nRnReturnConfig.setCanCharSFShipFee(metaNRnReturnConfig.isCanCharSFShipFee());
+			nRnReturnConfig.setCanCharSFSerTax(metaNRnReturnConfig.isCanCharSFSerTax());
+			nRnReturnConfig.setCanCharSFPCC(metaNRnReturnConfig.isCanCharSFPCC());
+			nRnReturnConfig.setCanCharSFBRTDFF(metaNRnReturnConfig.isCanCharSFBRTDFF());
+			nRnReturnConfig.setCanCharSFBRTDShipFee(metaNRnReturnConfig.isCanCharSFBRTDShipFee());
+			nRnReturnConfig.setCanCharSFBRTDSerTax(metaNRnReturnConfig.isCanCharSFBRTDSerTax());
+			nRnReturnConfig.setCanCharSFBRTDPCC(metaNRnReturnConfig.isCanCharSFBRTDPCC());
+			nRnReturnConfig.setCanCharBRFF(metaNRnReturnConfig.isCanCharBRFF());
+			nRnReturnConfig.setCanCharBRShipFee(metaNRnReturnConfig.isCanCharBRShipFee());
+			nRnReturnConfig.setCanCharBRSerTax(metaNRnReturnConfig.isCanCharBRSerTax());
+			nRnReturnConfig.setCanCharBRPCC(metaNRnReturnConfig.isCanCharBRPCC());
+			nRnReturnConfig.setRevShippingFeeType(metaNRnReturnConfig.getRevShippingFeeType());
+			nRnReturnConfig.setRetCharSFRevShipFee(metaNRnReturnConfig.isRetCharSFRevShipFee());
+			nRnReturnConfig.setRepCharSFRevShipFee(metaNRnReturnConfig.isRepCharSFRevShipFee());
+			nRnReturnConfig.setPDCharSFRevShipFee(metaNRnReturnConfig.isPDCharSFRevShipFee());
+			nRnReturnConfig.setRTOCharSFRevShipFee(metaNRnReturnConfig.isRTOCharSFRevShipFee());
+			nRnReturnConfig.setCanCharSFBRTDRevShipFee(metaNRnReturnConfig.isCanCharSFBRTDRevShipFee());
+			nRnReturnConfig.setCanCharSFARTDRevShipFee(metaNRnReturnConfig.isCanCharSFARTDRevShipFee());
+			nRnReturnConfig.setRetCharBRRevShipFee(metaNRnReturnConfig.isRetCharBRRevShipFee());
+			nRnReturnConfig.setRepCharBRRevShipFee(metaNRnReturnConfig.isRepCharBRRevShipFee());
+			nRnReturnConfig.setPDCharBRRevShipFee(metaNRnReturnConfig.isPDCharBRRevShipFee());
+			nRnReturnConfig.setRTOCharBRRevShipFee(metaNRnReturnConfig.isRTOCharBRRevShipFee());
+			nRnReturnConfig.setCanCharBRRevShipFee(metaNRnReturnConfig.isCanCharBRRevShipFee());
+			nRnReturnConfig.setNrCalculatorEvent(metaNRnReturnConfig.getNrCalculatorEvent());
+			nRnReturnConfig.setReturnCalculatorEvent(metaNRnReturnConfig.getReturnCalculatorEvent());
+			nRnReturnConfig.setTaxSpType(metaNRnReturnConfig.getTaxSpType());
+			nRnReturnConfig.setTaxPoType(metaNRnReturnConfig.getTaxPoType());
+			List<NRnReturnCharges> nRnReturnChargeList = new ArrayList<NRnReturnCharges>();
+			for (MetaNRnReturnCharges metaNRnReturnCharges : metaNRnReturnConfig.getCharges()) {
+				nRnReturnChargeList.add(convertNRnReturnCharges(metaNRnReturnCharges));
+			}
+			nRnReturnConfig.setCharges(nRnReturnChargeList);
+		}
+		return nRnReturnConfig;
+	}
+	
+	public static NRnReturnCharges convertNRnReturnCharges(MetaNRnReturnCharges metaNRnReturnCharges) {
+
+		NRnReturnCharges nRnReturnCharges = new NRnReturnCharges();
+		if (metaNRnReturnCharges != null) {
+			nRnReturnCharges.setChargeName(metaNRnReturnCharges.getChargeName());
+			nRnReturnCharges.setChargeAmount(metaNRnReturnCharges.getChargeAmount());
+			nRnReturnCharges.setCriteria(metaNRnReturnCharges.getCriteria());
+			nRnReturnCharges.setCriteriaRange(metaNRnReturnCharges.getCriteriaRange());
+		}
+		return nRnReturnCharges;
+	}
+	
 
 	public static List<PartnerBean> prepareListofPartnerBean(
 			List<Partner> partners) {
