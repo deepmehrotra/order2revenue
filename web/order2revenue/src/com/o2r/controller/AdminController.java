@@ -92,7 +92,7 @@ public class AdminController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		
 		try {
-			dataRestoreUtility.deleteSeller(1);
+			dataRestoreUtility.restoreSeller(1);
 			/*System.out.println(" Calling priary db : "+dataRestoreUtility.getSellerFromDB(
 					2, "primary"));
 			System.out.println(" Calling secondary db : "+dataRestoreUtility.getSellerFromDB(
