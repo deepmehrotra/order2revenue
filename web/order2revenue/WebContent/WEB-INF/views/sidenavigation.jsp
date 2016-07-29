@@ -123,7 +123,7 @@ window.onload = function() {
 					<li><a href="gatepasslist.html">Gate-Passes</a></li>
 					<li><a href="paymentUploadList.html">Payment</a></li>
 					<li><a href="expenselist.html">Expenses</a></li>
-
+					<li><a href="amazonOrders.html">Amazon</a></li>
 				</ul></li>
 			<li><a href="getAllReports.html"><i
 					class="fa fa-bar-chart-o"></i> <span class="nav-label">Reports</span>

@@ -86,6 +86,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 				<value>com.o2r.model.ProductConfig</value>
 				<value>com.o2r.model.GatePass</value>
 				<value>com.o2r.model.UploadReport</value>
+				<value>com.o2r.model.AmazonOrder</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

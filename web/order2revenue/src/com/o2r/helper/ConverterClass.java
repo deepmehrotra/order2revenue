@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.o2r.bean.AccountTransactionBean;
@@ -2859,5 +2861,10 @@ public class ConverterClass {
 		return doubleList;
 	}
 
-
+	public static Date getDate(XMLGregorianCalendar calendar){
+		if(calendar == null) {
+            return null;
+        }
+        return calendar.toGregorianCalendar().getTime();
+	}
 }

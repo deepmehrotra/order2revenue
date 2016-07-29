@@ -16,12 +16,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.o2r.bean.ConsolidatedOrderBean;
+import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersClient;
+import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsRequest;
+import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResponse;
+import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersRequest;
+import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResponse;
+import com.amazonservices.mws.orders._2013_09_01.samples.ListOrderItemsSample;
+import com.amazonservices.mws.orders._2013_09_01.samples.ListOrdersSample;
+import com.amazonservices.mws.orders._2013_09_01.samples.MarketplaceWebServiceOrdersSampleConfig;
 import com.o2r.bean.CustomerBean;
 import com.o2r.bean.CustomerDBaseBean;
+import com.o2r.helper.AmazonUtils;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.HelperClass;
+import com.o2r.model.AmazonOrder;
 import com.o2r.model.Order;
+import com.o2r.service.AmazonService;
 import com.o2r.service.CustomerService;
 import com.o2r.service.OrderService;
 
@@ -34,6 +44,8 @@ public class CustomerController {
 	private CustomerService customerService;	
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private AmazonService amazonService;
 	
 	static Logger log = Logger.getLogger(EventsController.class.getName());
 	
@@ -92,5 +104,44 @@ public class CustomerController {
 		}
 		log.info("$$$ listCustomerOrders Ends : CustomerController $$$");
 		return new ModelAndView("miscellaneous/viewCustomerOrder",model);
+	}
+	
+	@RequestMapping(value = "/seller/amazonOrders", method = RequestMethod.GET)
+	public ModelAndView amazonOrders(HttpServletRequest request, 
+			@ModelAttribute("command") CustomerBean customerBean, BindingResult result){		
+		log.info("$$$ START: pullAmazonOrders - CustomerController $$$");
+		log.info("$$$ END: pullAmazonOrders - CustomerController $$$");
+		return new ModelAndView("dailyactivities/amazonOrders");
+	}
+	
+	@RequestMapping(value = "/seller/pullAmazonOrders", method = RequestMethod.GET)
+	public ModelAndView pullAmazonOrders(HttpServletRequest request, 
+			@ModelAttribute("command") CustomerBean customerBean, BindingResult result){		
+		log.info("$$$ START: pullAmazonOrders - CustomerController $$$");
+		MarketplaceWebServiceOrdersClient client = MarketplaceWebServiceOrdersSampleConfig.getClient();
+
+        // Create a request.
+        ListOrdersRequest listOrderRequest = AmazonUtils.prepareListOrderRequest();
+        ListOrdersResponse listOrderResponse = ListOrdersSample.invokeListOrders(client, listOrderRequest);
+        List<com.amazonservices.mws.orders._2013_09_01.model.Order> orderList = listOrderResponse.getListOrdersResult().getOrders();
+        for(com.amazonservices.mws.orders._2013_09_01.model.Order order: orderList){
+        	String amazonOrderId = order.getAmazonOrderId();
+    		log.info("$$$ BEGIN: addAmazonOrder" + amazonOrderId);
+        	ListOrderItemsRequest listOrderItemRequest = AmazonUtils.prepareListOrderItemRequest(amazonOrderId);
+        	ListOrderItemsResponse listOrderItemResponse = ListOrderItemsSample.invokeListOrderItems(client, listOrderItemRequest);
+        	List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItemList = listOrderItemResponse.getListOrderItemsResult().getOrderItems();
+        	for(com.amazonservices.mws.orders._2013_09_01.model.OrderItem orderItem: orderItemList){
+            	AmazonOrder amazonOrder = new AmazonOrder(order, orderItem);
+            	try {
+    				amazonService.addAmazonOrder(amazonOrder);
+    			} catch (CustomException ex) {
+    				ex.printStackTrace();
+    			}
+        	}
+    		log.info("$$$ END: addAmazonOrder" + amazonOrderId);
+        	break;
+        }
+		log.info("$$$ END: pullAmazonOrders - CustomerController $$$");
+		return new ModelAndView("dailyactivities/amazonOrders");
 	}
 }
