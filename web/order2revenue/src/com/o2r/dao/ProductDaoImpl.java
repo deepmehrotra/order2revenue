@@ -138,7 +138,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 			throw new CustomException(GlobalConstant.addProductError,
 					new Date(), 1, GlobalConstant.addProductErrorCode, e);
 		}
@@ -223,7 +223,7 @@ public class ProductDaoImpl implements ProductDao {
 		} catch (Exception e) {
 			status=false;
 			errorSkus.append(product.getProductSkuCode()+",");
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 			/*throw new CustomException(GlobalConstant.addProductError,
 					new Date(), 1, GlobalConstant.addProductErrorCode, e);*/
 		}
@@ -300,7 +300,7 @@ public class ProductDaoImpl implements ProductDao {
 				} catch (Exception e) {
 					status=false;
 					editError.append(product.getProductSkuCode()+",");
-					log.error("Failed !", e);
+					log.error("Failed! by sellerId : "+sellerId, e);
 				}				
 			}
 			session.getTransaction().commit();
@@ -311,7 +311,7 @@ public class ProductDaoImpl implements ProductDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 		}
 		return 1;
 	}
@@ -478,7 +478,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 			e.printStackTrace();
 		}
 		log.info("*** addProductConfig Ends : ProductDaoImpl ****");
@@ -520,7 +520,7 @@ public class ProductDaoImpl implements ProductDao {
 		} catch (Exception e) {
 			errorSKUS.append(productConfig.getChannelSkuRef()+",");
 			status=false;
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 			e.printStackTrace();
 		}
 		}
@@ -575,7 +575,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 			throw new CustomException(GlobalConstant.listProductsError,
 					new Date(), 3, GlobalConstant.listProductsErrorCode, e);
 		}
@@ -605,7 +605,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 			throw new CustomException(GlobalConstant.listProductsError,
 					new Date(), 3, GlobalConstant.listProductsErrorCode, e);
 
@@ -654,7 +654,7 @@ public class ProductDaoImpl implements ProductDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 			throw new CustomException(GlobalConstant.listProductsError,
 					new Date(), 3, GlobalConstant.listProductsErrorCode, e);
 		}
@@ -702,7 +702,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 			throw new CustomException(GlobalConstant.getProductError,
 					new Date(), 3, GlobalConstant.getProductErrorCode, e);
 		}
@@ -734,7 +734,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 			throw new CustomException(GlobalConstant.listProductsError,
 					new Date(), 3, GlobalConstant.listProductsErrorCode, e);
 
@@ -803,7 +803,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 			throw new CustomException(GlobalConstant.getProductError,
 					new Date(), 3, GlobalConstant.getProductErrorCode, e);
 
@@ -852,7 +852,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 			throw new CustomException(GlobalConstant.getProductError,
 					new Date(), 3, GlobalConstant.getProductErrorCode, e);
 
@@ -928,7 +928,7 @@ public class ProductDaoImpl implements ProductDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 			throw new CustomException(GlobalConstant.deleteProductError,
 					new Date(), 3, GlobalConstant.deleteProductErrorCode, e);
 		}
@@ -958,7 +958,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 			throw new CustomException(
 					GlobalConstant.getProductwithCreatedDateError, new Date(),
 					3, GlobalConstant.getProductwithCreatedDateErrorCode, e);
@@ -992,7 +992,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 			throw new CustomException(
 					GlobalConstant.getProductwithCreatedDateError, new Date(),
 					3, GlobalConstant.getProductwithCreatedDateErrorCode, e);
@@ -1101,7 +1101,7 @@ public class ProductDaoImpl implements ProductDao {
             }
          } catch (Exception e) {
             e.printStackTrace();
-            log.error("Failed!", e);
+            log.error("Failed! by sellerId : "+sellerId, e);
             throw new CustomException(GlobalConstant.updateInventoryError,
                     new Date(), 3, GlobalConstant.updateInventoryErrorCode, e);
 
@@ -1176,14 +1176,14 @@ public class ProductDaoImpl implements ProductDao {
 								session.getTransaction().commit();
 								return "Deleted";
 							} catch (Exception e) {
-								log.error("Failed!", e);
+								log.error("Failed! by sellerId : "+sellerId, e);
 							}
 						}
 					}
 				}
 			}
 		} catch (Exception e) {
-			log.error("Failed!", e);
+			log.error("Failed! by sellerId : "+sellerId, e);
 		}
 		log.info("$$$ deleteProduct Ends : ProductDaoImpl $$$");
 		return "Server Issue";

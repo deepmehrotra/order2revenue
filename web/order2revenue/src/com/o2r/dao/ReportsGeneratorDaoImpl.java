@@ -124,7 +124,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.getPartnerTSOdetailsError,
 					new Date(), 3,
 					GlobalConstant.getPartnerTSOdetailsErrorCode, e);			
@@ -553,7 +553,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(
 					GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3,
 					GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
@@ -666,7 +666,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.info("Total Orders" + partnerBusinessList.size());
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(
 					GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3,
 					GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
@@ -693,7 +693,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.info("Total Orders" + partnerBusinessList.size());
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(
 					GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3,
 					GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
@@ -1015,7 +1015,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				 channelReportDetailsList.add(channelReport);
 			 }
 		 } catch (Exception e) {
-			 log.error("Failed!",e);
+			 log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(
 					GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3,
 					GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
@@ -2372,7 +2372,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		} catch (Exception e) {
 			log.equals("**Error Code : "
 					+ (sellerId + "-" + GlobalConstant.addReportErrorCode));
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.addReportError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.addReportErrorCode, e);
@@ -2395,7 +2395,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			session.close();
 			return returnlist;
 		} catch (Exception e) {
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.listReportError,
 					new Date(), 3, GlobalConstant.listReportsErrorCode, e);
 		}
@@ -2425,7 +2425,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			session.close();
 			return returnlist.get(0);
 		} catch (Exception e) {
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.listReportError,
 					new Date(), 3, GlobalConstant.listReportsErrorCode, e);
 		}
