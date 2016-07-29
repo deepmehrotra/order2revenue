@@ -960,8 +960,8 @@ public class OrderController {
 
 			if (dateRange) {
 				poOrderlist = ConverterClass.prepareListofBean(orderService
-						.findOrdersbyDate("orderDate", startDate, endDate,
-								sellerId, true));
+						.findPOOrdersbyDate("orderDate", startDate, endDate,
+								sellerId));
 			} else {
 				int pageNo = request.getParameter("page") != null ? Integer
 						.parseInt(request.getParameter("page")) : 0;

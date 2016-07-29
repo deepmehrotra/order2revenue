@@ -251,4 +251,10 @@ public class OrderServiceImpl implements OrderService {
 		orderDao.addOrder(orderList, sellerId);
 		
 	}
+
+	@Override
+	public List<Order> findPOOrdersbyDate(String column, Date startDate,
+			Date endDate, int sellerId) throws CustomException {
+		return orderDao.findPOOrdersbyDate(column, startDate, endDate, sellerId);
+	}
 }

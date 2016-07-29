@@ -445,7 +445,7 @@ span .#error {
 																							var="fixedfee" varStatus="loop">
 																							<div class="col-md-3 content-rgt">
 																								<select class="form-control"
-																									name="nr-fixedfee-criteria">
+																									name="nr-fixedfee${loop.index}-criteria">
 																									<c:choose>
 																										<c:when test="${fixedfee.criteria eq 'Upto'}">
 																											<option selected>Upto</option>
@@ -461,13 +461,13 @@ span .#error {
 																							<div class="col-md-3 content-rgt">
 																								<input type="text"
 																									class="form-control validateNumber"
-																									name="nr-fixedfee-range" id="nr-fixedfee-range"
+																									name="nr-fixedfee${loop.index}-range" id="nr-fixedfee${loop.index}-range"
 																									value="${fixedfee.range}" />
 																							</div>
 																							<div class="col-md-3 content-rgt">
 																								<input type="text"
 																									class="form-control validateNumber"
-																									name="nr-fixedfee-value" id="nr-fixedfee-value"
+																									name="nr-fixedfee${loop.index}-value" id="nr-fixedfee${loop.index}-value"
 																									value="${fixedfee.value}" />
 																							</div>
 																							<div class="col-md-3 content-rgt">
@@ -489,7 +489,7 @@ span .#error {
 
 																						<div class="col-md-3 content-rgt">
 																							<select class="form-control"
-																								name="nr-fixedfee-criteria">
+																								name="nr-fixedfee0-criteria">
 																								<option>Upto</option>
 																								<option>Greater Than</option>
 																							</select>
@@ -497,12 +497,12 @@ span .#error {
 																						<div class="col-md-3 content-rgt">
 																							<input type="text"
 																								class="form-control validateNumber"
-																								name="nr-fixedfee-range" id="nr-fixedfee-range" />
+																								name="nr-fixedfee0-range" id="nr-fixedfee0-range" />
 																						</div>
 																						<div class="col-md-3 content-rgt">
 																							<input type="text"
 																								class="form-control validateNumber"
-																								name="nr-fixedfee-value" id="nr-fixedfee-value" />
+																								name="nr-fixedfee0-value" id="nr-fixedfee0-value" />
 																						</div>
 																						<div class="col-md-3 content-rgt">
 																							<input type="button" onclick="myFunction();"
@@ -575,9 +575,9 @@ span .#error {
 
 																			<div class="col-md-5">
 																				<div class="col-md-4" style="padding: 0px;">
-																					<input type="text" name="nr-pccpercentSP"
+																					<input type="text" name="nr-pccpercentSPValue"
 																						class="form-control validateNumber"
-																						value="${chargeMap.pccpercentSP}">
+																						value="${chargeMap.pccpercentSPValue}">
 																				</div>
 																				<div class="col-md-8"
 																					style="margin-top: 3px; padding: 0px 0px 0px 5px;">
@@ -595,9 +595,9 @@ span .#error {
 																			</div>
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
-																					<input type="text" name="nr-pccpercentSP"
+																					<input type="text" name="nr-pccpercentSPHigher"
 																						class="form-control validateNumber"
-																						value="${chargeMap.pccpercentSP}"> <span
+																						value="${chargeMap.pccpercentSPHigher}"> <span
 																						class="input-group-addon">%</span>
 																				</div>
 																			</div>
@@ -674,13 +674,13 @@ span .#error {
 																			<tbody>
 																				<c:choose>
 																					<c:when
-																						test="${!empty partner.shippingfeeVolumeList}">
+																						test="${!empty partner.shippingfeeVolumeVariableList}">
 																						<c:forEach
-																							items="${partner.shippingfeeVolumeList}"
+																							items="${partner.shippingfeeVolumeVariableList}"
 																							var="shippingfee" varStatus="loop">
 																							<tr>
 																								<td><select class="form-control selected"
-																									name="nr-shippingFeeVolume-criteria">
+																									name="nr-shippingFeeVolumeVariable${loop.index}-criteria">
 																										<c:choose>
 																											<c:when
 																												test="${shippingfee.criteria eq 'Upto'}">
@@ -696,7 +696,7 @@ span .#error {
 																								<td><div class="form-group ">
 																										<div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeVolume-range"
+																												name="nr-shippingFeeVolumeVariable${loop.index}-range"
 																												class="form-control validateNumber"
 																												value="${shippingfee.range}">
 																										</div>
@@ -704,26 +704,26 @@ span .#error {
 																								<td><div class="form-group ">
 																										<div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeVolume-localValue"
+																												name="nr-shippingFeeVolumeVariable${loop.index}-localValue"
 																												class="form-control validateNumber"
 																												value="${shippingfee.localValue}">
 																										</div>
 																									</div></td>
 																								<td><div class=" content-rgt">
 																										<input type="text"
-																											name="nr-shippingFeeVolume-zonalValue"
+																											name="nr-shippingFeeVolumeVariable${loop.index}-zonalValue"
 																											class="form-control validateNumber"
 																											value="${shippingfee.zonalValue}">
 																									</div></td>
 																								<td><div class=" content-rgt">
 																										<input type="text"
-																											name="nr-shippingFeeVolume-nationalValue"
+																											name="nr-shippingFeeVolumeVariable${loop.index}-nationalValue"
 																											class="form-control validateNumber"
 																											value="${shippingfee.nationalValue}">
 																									</div></td>
 																								<td><div class=" content-rgt">
 																										<input type="text"
-																											name="nr-shippingFeeVolume-metroValue"
+																											name="nr-shippingFeeVolumeVariable${loop.index}-metroValue"
 																											class="form-control validateNumber"
 																											value="${shippingfee.metroValue}">
 																									</div></td>
@@ -738,37 +738,37 @@ span .#error {
 																					<c:otherwise>
 																						<tr>
 																							<td><select class="form-control selected"
-																								name="nr-shippingFeeVolume-criteria">
+																								name="nr-shippingFeeVolumeVariable0-criteria">
 																									<option value="Upto">Upto</option>
 																									<option value="Additional">Additional</option>
 																							</select></td>
 																							<td><div class="form-group ">
 																									<div class=" content-rgt">
 																										<input type="text"
-																											name="nr-shippingFeeVolume-range"
+																											name="nr-shippingFeeVolumeVariable0-range"
 																											class="form-control validateNumber">
 																									</div>
 																								</div></td>
 																							<td><div class="form-group ">
 																									<div class=" content-rgt">
 																										<input type="text"
-																											name="nr-shippingFeeVolume-localValue"
+																											name="nr-shippingFeeVolumeVariable0-localValue"
 																											class="form-control validateNumber">
 																									</div>
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="text"
-																										name="nr-shippingFeeVolume-zonalValue"
+																										name="nr-shippingFeeVolumeVariable0-zonalValue"
 																										class="form-control validateNumber">
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="text"
-																										name="nr-shippingFeeVolume-nationalValue"
+																										name="nr-shippingFeeVolumeVariable0-nationalValue"
 																										class="form-control validateNumber">
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="text"
-																										name="nr-shippingFeeVolume-metroValue"
+																										name="nr-shippingFeeVolumeVariable0-metroValue"
 																										class="form-control validateNumber">
 																								</div></td>
 																							<td><div class=" content-rgt">
@@ -799,13 +799,13 @@ span .#error {
 																			<tbody>
 																				<c:choose>
 																					<c:when
-																						test="${!empty partner.shippingfeeWeightList}">
+																						test="${!empty partner.shippingfeeWeightVariableList}">
 																						<c:forEach
-																							items="${partner.shippingfeeWeightList}"
+																							items="${partner.shippingfeeWeightVariableList}"
 																							var="shippingfee" varStatus="loop">
 																							<tr>
 																								<td><select class="form-control selected"
-																									name="nr-shippingFeeWeight-criteria">
+																									name="nr-shippingFeeWeightVariable${loop.index}-criteria">
 																										<c:choose>
 																											<c:when
 																												test="${shippingfee.criteria eq 'Upto'}">
@@ -821,7 +821,7 @@ span .#error {
 																								<td><div class="form-group ">
 																										<div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeWeight-range"
+																												name="nr-shippingFeeWeightVariable${loop.index}-range"
 																												class="form-control validateNumber"
 																												value="${shippingfee.range}">
 																										</div>
@@ -829,26 +829,26 @@ span .#error {
 																								<td><div class="form-group ">
 																										<div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeWeight-localValue"
+																												name="nr-shippingFeeWeightVariable${loop.index}-localValue"
 																												class="form-control validateNumber"
 																												value="${shippingfee.localValue}">
 																										</div>
 																									</div></td>
 																								<td><div class=" content-rgt">
 																										<input type="text"
-																											name="nr-shippingFeeWeight-zonalValue"
+																											name="nr-shippingFeeWeightVariable${loop.index}-zonalValue"
 																											class="form-control validateNumber"
 																											value="${shippingfee.zonalValue}">
 																									</div></td>
 																								<td><div class=" content-rgt">
 																										<input type="text"
-																											name="nr-shippingFeeWeight-nationalValue"
+																											name="nr-shippingFeeWeightVariable${loop.index}-nationalValue"
 																											class="form-control"
 																											value="${shippingfee.nationalValue}">
 																									</div></td>
 																								<td><div class=" content-rgt">
 																										<input type="text"
-																											name="nr-shippingFeeWeight-metroValue"
+																											name="nr-shippingFeeWeightVariable${loop.index}-metroValue"
 																											class="form-control validateNumber"
 																											value="${shippingfee.metroValue}">
 																									</div></td>
@@ -863,35 +863,35 @@ span .#error {
 																					<c:otherwise>
 																						<tr>
 																							<td><select class="form-control selected"
-																								name="nr-shippingFeeWeight-criteria">
+																								name="nr-shippingFeeWeightVariable0-criteria">
 																									<option value="Upto">Upto</option>
 																									<option value="Additional">Additional</option>
 																							</select></td>
 																							<td><div class="form-group ">
 																									<div class=" content-rgt">
 																										<input type="text"
-																											name="nr-shippingFeeWeight-range"
+																											name="nr-shippingFeeWeightVariable0-range"
 																											class="form-control validateNumber">
 																									</div>
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="text"
-																										name="nr-shippingFeeWeight-localValue"
+																										name="nr-shippingFeeWeightVariable0-localValue"
 																										class="form-control validateNumber">
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="text"
-																										name="nr-shippingFeeWeight-zonalValue"
+																										name="nr-shippingFeeWeightVariable0-zonalValue"
 																										class="form-control validateNumber">
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="text"
-																										name="nr-shippingFeeWeight-nationalValue"
+																										name="nr-shippingFeeWeightVariable0-nationalValue"
 																										class="form-control validateNumber">
 																								</div></td>
 																							<td><div class=" content-rgt">
 																									<input type="text"
-																										name="nr-shippingFeeWeight-metroValue"
+																										name="nr-shippingFeeWeightVariable0-metroValue"
 																										class="form-control validateNumber">
 																								</div></td>
 																							<td><div class=" content-rgt">
@@ -925,13 +925,13 @@ span .#error {
 																			<tbody>
 																				<c:choose>
 																					<c:when
-																						test="${!empty partner.shippingfeeWeightList}">
+																						test="${!empty partner.shippingfeeWeightFixedList}">
 																						<c:forEach
-																							items="${partner.shippingfeeWeightList}"
+																							items="${partner.shippingfeeWeightFixedList}"
 																							var="shippingfee" varStatus="loop">
 																							<tr>
 																								<td><select class="form-control selected"
-																									name="nr-shippingFeeWeight-criteria">
+																									name="nr-shippingFeeWeightFixed${loop.index}-criteria">
 																										<c:choose>
 																											<c:when
 																												test="${shippingfee.criteria eq 'Upto'}">
@@ -947,7 +947,7 @@ span .#error {
 																								<td><div class="form-group ">
 																										<div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeWeight-range"
+																												name="nr-shippingFeeWeightFixed${loop.index}-range"
 																												class="form-control validateNumber"
 																												value="${shippingfee.range}">
 																										</div>
@@ -955,7 +955,7 @@ span .#error {
 																								<td><div class="form-group ">
 																										<div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeWeight-value"
+																												name="nr-shippingFeeWeightFixed${loop.index}-value"
 																												class="form-control validateNumber"
 																												value="${shippingfee.value}">
 																										</div>
@@ -971,7 +971,7 @@ span .#error {
 																					<c:otherwise>
 																						<tr>
 																							<td><select class="form-control selected"
-																								name="nr-shippingFeeWeight-criteria">
+																								name="nr-shippingFeeWeightFixed0-criteria">
 																									<option value="Upto">Upto</option>
 																									<option value="Additional">Additional</option>
 																							</select></td>
@@ -979,7 +979,7 @@ span .#error {
 																								<div class="form-group ">
 																									<div class=" content-rgt">
 																										<input type="text"
-																											name="nr-shippingFeeWeight-range"
+																											name="nr-shippingFeeWeightFixed0-range"
 																											class="form-control validateNumber">
 																									</div>
 																								</div>
@@ -988,7 +988,7 @@ span .#error {
 																								<div class="form-group ">
 																									<div class=" content-rgt">
 																										<input type="text"
-																											name="nr-shippingFeeWeight-value"
+																											name="nr-shippingFeeWeightFixed0-value"
 																											class="form-control validateNumber">
 																									</div>
 																								</div>
@@ -1016,13 +1016,13 @@ span .#error {
 																			<tbody>
 																				<c:choose>
 																					<c:when
-																						test="${!empty partner.shippingfeeVolumeList}">
+																						test="${!empty partner.shippingfeeVolumeFixedList}">
 																						<c:forEach
-																							items="${partner.shippingfeeVolumeList}"
+																							items="${partner.shippingfeeVolumeFixedList}"
 																							var="shippingfee" varStatus="loop">
 																							<tr>
 																								<td><select class="form-control selected"
-																									name="nr-shippingFeeVolume-criteria">
+																									name="nr-shippingFeeVolumeFixed${loop.index}-criteria">
 																										<c:choose>
 																											<c:when
 																												test="${shippingfee.criteria eq 'Upto'}">
@@ -1038,7 +1038,7 @@ span .#error {
 																								<td><div class="form-group ">
 																										<div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeVolume-range"
+																												name="nr-shippingFeeVolumeFixed${loop.index}-range"
 																												class="form-control validateNumber"
 																												value="${shippingfee.range}">
 																										</div>
@@ -1046,7 +1046,7 @@ span .#error {
 																								<td><div class="form-group ">
 																										<div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeVolume-value"
+																												name="nr-shippingFeeVolumeFixed${loop.index}-value"
 																												class="form-control validateNumber"
 																												value="${shippingfee.value}">
 																										</div>
@@ -1062,18 +1062,18 @@ span .#error {
 																					<c:otherwise>
 																						<tr>
 																							<td><select class="form-control selected"
-																								name="nr-shippingFeeVolume-criteria">
+																								name="nr-shippingFeeVolumeFixed0-criteria">
 																									<option value="Upto">Upto</option>
 																									<option value="Additional">Additional</option>
 																							</select></td>
 																							<td><input type="text"
-																								name="nr-shippingFeeVolume-range"
+																								name="nr-shippingFeeVolumeFixed0-range"
 																								class="form-control validateNumber"></td>
 																							<td>
 																								<div class="form-group ">
 																									<div class=" content-rgt">
 																										<input type="text"
-																											name="nr-shippingFeeVolume-value"
+																											name="nr-shippingFeeVolumeFixed0-value"
 																											class="form-control validateNumber">
 																									</div>
 																								</div>
@@ -2850,7 +2850,7 @@ span .#error {
 			var currentRow = myTable.insertRow(-1);
 
 			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "nr-shippingFeeVolume" + currentIndex
+			linksBox.setAttribute("name", "nr-shippingFeeVolumeVariable" + currentIndex
 					+ "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
@@ -2872,27 +2872,27 @@ span .#error {
 			linksBox.appendChild(theOption);
 
 			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "nr-shippingFeeVolume"
+			linksBox1.setAttribute("name", "nr-shippingFeeVolumeVariable"
 					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control validateNumber");
 
 			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "nr-shippingFeeVolume"
+			linksBox2.setAttribute("name", "nr-shippingFeeVolumeVariable"
 					+ currentIndex + "-localValue");
 			linksBox2.setAttribute("class", "form-control validateNumber");
 
 			var linksBox3 = document.createElement("input");
-			linksBox3.setAttribute("name", "nr-shippingFeeVolume"
+			linksBox3.setAttribute("name", "nr-shippingFeeVolumeVariable"
 					+ currentIndex + "-zonalValue");
 			linksBox3.setAttribute("class", "form-control validateNumber");
 
 			var keywordsBox = document.createElement("input");
-			keywordsBox.setAttribute("name", "nr-shippingFeeVolume"
+			keywordsBox.setAttribute("name", "nr-shippingFeeVolumeVariable"
 					+ currentIndex + "-nationalValue");
 			keywordsBox.setAttribute("class", "form-control validateNumber");
 
 			var violationsBox = document.createElement("input");
-			violationsBox.setAttribute("name", "nr-shippingFeeVolume"
+			violationsBox.setAttribute("name", "nr-shippingFeeVolumeVariable"
 					+ currentIndex + "-metroValue");
 			violationsBox.setAttribute("class", "form-control validateNumber");
 
@@ -2929,7 +2929,7 @@ span .#error {
 			var currentRow = myTable.insertRow(-1);
 
 			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "nr-shippingFeeWeight" + currentIndex
+			linksBox.setAttribute("name", "nr-shippingFeeWeightVariable" + currentIndex
 					+ "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
@@ -2950,27 +2950,27 @@ span .#error {
 			linksBox.appendChild(theOption);
 
 			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "nr-shippingFeeWeight"
+			linksBox1.setAttribute("name", "nr-shippingFeeWeightVariable"
 					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control validateNumber");
 
 			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "nr-shippingFeeWeight"
+			linksBox2.setAttribute("name", "nr-shippingFeeWeightVariable"
 					+ currentIndex + "-localValue");
 			linksBox2.setAttribute("class", "form-control validateNumber");
 
 			var linksBox3 = document.createElement("input");
-			linksBox3.setAttribute("name", "nr-shippingFeeWeight"
+			linksBox3.setAttribute("name", "nr-shippingFeeWeightVariable"
 					+ currentIndex + "-zonalValue");
 			linksBox3.setAttribute("class", "form-control");
 
 			var keywordsBox = document.createElement("input");
-			keywordsBox.setAttribute("name", "nr-shippingFeeWeight"
+			keywordsBox.setAttribute("name", "nr-shippingFeeWeightVariable"
 					+ currentIndex + "-nationalValue");
 			keywordsBox.setAttribute("class", "form-control validateNumber");
 
 			var violationsBox = document.createElement("input");
-			violationsBox.setAttribute("name", "nr-shippingFeeWeight"
+			violationsBox.setAttribute("name", "nr-shippingFeeWeightVariable"
 					+ currentIndex + "-metroValue");
 			violationsBox.setAttribute("class", "form-control validateNumber");
 
@@ -3007,7 +3007,7 @@ span .#error {
 			var currentRow = myTable.insertRow(-1);
 
 			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "nr-shippingFeeWeight" + currentIndex
+			linksBox.setAttribute("name", "nr-shippingFeeWeightFixed" + currentIndex
 					+ "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
@@ -3028,12 +3028,12 @@ span .#error {
 			linksBox.appendChild(theOption);
 
 			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "nr-shippingFeeWeight"
+			linksBox1.setAttribute("name", "nr-shippingFeeWeightFixed"
 					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control validateNumber");
 
 			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "nr-shippingFeeWeight"
+			linksBox2.setAttribute("name", "nr-shippingFeeWeightFixed"
 					+ currentIndex + "-value");
 			linksBox2.setAttribute("class", "form-control validateNumber");
 
@@ -3061,7 +3061,7 @@ span .#error {
 			var currentRow = myTable.insertRow(-1);
 
 			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "nr-shippingFeeVolume" + currentIndex
+			linksBox.setAttribute("name", "nr-shippingFeeVolumeFixed" + currentIndex
 					+ "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
@@ -3081,12 +3081,12 @@ span .#error {
 			linksBox.appendChild(theOption);
 
 			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "nr-shippingFeeVolume"
+			linksBox1.setAttribute("name", "nr-shippingFeeVolumeFixed"
 					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control validateNumber");
 
 			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "nr-shippingFeeVolume"
+			linksBox2.setAttribute("name", "nr-shippingFeeVolumeFixed"
 					+ currentIndex + "-value");
 			linksBox2.setAttribute("class", "form-control validateNumber");
 

@@ -318,8 +318,8 @@ public class OrderDaoImpl implements OrderDao {
 
 							// Check conditions here....
 							event = eventsService.isEventActiive(
-									order.getOrderDate(), partner.getPcName(), order.getProductSkuCode(),
-									sellerId);
+									order.getOrderDate(), partner.getPcName(),
+									order.getProductSkuCode(), sellerId);
 							if (event != null) {
 
 								order.setEventName(event.getEventName());
@@ -1058,7 +1058,7 @@ public class OrderDaoImpl implements OrderDao {
 
 				// Check condition 4 Events here
 				event = eventsService.isEventActiive(order.getOrderDate(),
-						order.getPcName(),order.getProductSkuCode(), sellerId);
+						order.getPcName(), order.getProductSkuCode(), sellerId);
 				if (event != null) {
 					if (event.getNrnReturnConfig().getReturnCalculatorEvent()
 							.equalsIgnoreCase("newTerms")) {
@@ -2256,15 +2256,18 @@ public class OrderDaoImpl implements OrderDao {
 					if (partner.getNrnReturnConfig().getShippingFeeType()
 							.equalsIgnoreCase("variable")) {
 
-						ChargesBean chargeBean = pbean.getChargesBean(
-								"shippingfeeVolume", charge.getCriteria(),
-								charge.getCriteriaRange());
+						ChargesBean chargeBean = pbean
+								.getChargesBean("shippingfeeVolumeVariable",
+										charge.getCriteria(),
+										charge.getCriteriaRange());
 						if (chargeBean == null) {
 							chargeBean = new ChargesBean();
-							chargeBean.setChargeType("shippingfeeVolume");
+							chargeBean
+									.setChargeType("shippingfeeVolumeVariable");
 							chargeBean.setCriteria(charge.getCriteria());
 							chargeBean.setRange(charge.getCriteriaRange());
-							pbean.getShippingfeeVolumeList().add(chargeBean);
+							pbean.getshippingfeeVolumeVariableList().add(
+									chargeBean);
 						}
 
 						if (charge.getChargeName().contains("Local")) {
@@ -2280,11 +2283,11 @@ public class OrderDaoImpl implements OrderDao {
 
 					} else {
 						ChargesBean chargeBean = new ChargesBean();
-						chargeBean.setChargeType("shippingfeeVolume");
+						chargeBean.setChargeType("shippingfeeVolumeFixed");
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
 						chargeBean.setValue(charge.getChargeAmount());
-						pbean.getShippingfeeVolumeList().add(chargeBean);
+						pbean.getshippingfeeVolumeFixedList().add(chargeBean);
 					}
 
 				} else if (charge.getChargeName().contains("shippingfeeWeight")
@@ -2294,15 +2297,18 @@ public class OrderDaoImpl implements OrderDao {
 					if (partner.getNrnReturnConfig().getShippingFeeType()
 							.equalsIgnoreCase("variable")) {
 
-						ChargesBean chargeBean = pbean.getChargesBean(
-								"shippingfeeWeight", charge.getCriteria(),
-								charge.getCriteriaRange());
+						ChargesBean chargeBean = pbean
+								.getChargesBean("shippingfeeWeightVariable",
+										charge.getCriteria(),
+										charge.getCriteriaRange());
 						if (chargeBean == null) {
 							chargeBean = new ChargesBean();
-							chargeBean.setChargeType("shippingfeeWeight");
+							chargeBean
+									.setChargeType("shippingfeeWeightVariable");
 							chargeBean.setCriteria(charge.getCriteria());
 							chargeBean.setRange(charge.getCriteriaRange());
-							pbean.getShippingfeeWeightList().add(chargeBean);
+							pbean.getshippingfeeWeightVariableList().add(
+									chargeBean);
 						}
 
 						if (charge.getChargeName().contains("Local")) {
@@ -2318,11 +2324,11 @@ public class OrderDaoImpl implements OrderDao {
 
 					} else {
 						ChargesBean chargeBean = new ChargesBean();
-						chargeBean.setChargeType("shippingfeeWeight");
+						chargeBean.setChargeType("shippingfeeWeightFixed");
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
 						chargeBean.setValue(charge.getChargeAmount());
-						pbean.getShippingfeeWeightList().add(chargeBean);
+						pbean.getshippingfeeWeightFixedList().add(chargeBean);
 					}
 
 				} else {
@@ -2334,13 +2340,21 @@ public class OrderDaoImpl implements OrderDao {
 					&& pbean.getFixedfeeList().size() != 0)
 				Collections.sort(pbean.getFixedfeeList(),
 						new SortByCriteriaRange());
-			if (pbean.getShippingfeeVolumeList() != null
-					&& pbean.getShippingfeeVolumeList().size() != 0)
-				Collections.sort(pbean.getShippingfeeVolumeList(),
+			if (pbean.getshippingfeeVolumeFixedList() != null
+					&& pbean.getshippingfeeVolumeFixedList().size() != 0)
+				Collections.sort(pbean.getshippingfeeVolumeFixedList(),
 						new SortByCriteria());
-			if (pbean.getShippingfeeWeightList() != null
-					&& pbean.getShippingfeeWeightList().size() != 0)
-				Collections.sort(pbean.getShippingfeeWeightList(),
+			if (pbean.getshippingfeeWeightFixedList() != null
+					&& pbean.getshippingfeeWeightFixedList().size() != 0)
+				Collections.sort(pbean.getshippingfeeWeightFixedList(),
+						new SortByCriteria());
+			if (pbean.getshippingfeeVolumeVariableList() != null
+					&& pbean.getshippingfeeVolumeVariableList().size() != 0)
+				Collections.sort(pbean.getshippingfeeVolumeVariableList(),
+						new SortByCriteria());
+			if (pbean.getshippingfeeWeightVariableList() != null
+					&& pbean.getshippingfeeWeightVariableList().size() != 0)
+				Collections.sort(pbean.getshippingfeeWeightVariableList(),
 						new SortByCriteria());
 
 			// Extracting comiision value
@@ -2378,8 +2392,8 @@ public class OrderDaoImpl implements OrderDao {
 			// Payment collection charges
 			if (partner.getNrnReturnConfig().isWhicheverGreaterPCC()) {
 				double percentAmount = chargesMap
-						.containsKey(GlobalConstant.percentSPPCC) ? chargesMap
-						.get(GlobalConstant.percentSPPCC) * SP / 100 : 0;
+						.containsKey(GlobalConstant.percentSPPCCHigher) ? chargesMap
+						.get(GlobalConstant.percentSPPCCHigher) * SP / 100 : 0;
 				if (chargesMap.containsKey(GlobalConstant.fixedAmtPCC)
 						&& percentAmount > chargesMap
 								.get(GlobalConstant.fixedAmtPCC)) {
@@ -2403,8 +2417,8 @@ public class OrderDaoImpl implements OrderDao {
 								.get(GlobalConstant.valuePCC) : 0;
 					} else {
 						pccAmount = chargesMap
-								.containsKey(GlobalConstant.percentSPPCC) ? chargesMap
-								.get(GlobalConstant.percentSPPCC) * SP / 100
+								.containsKey(GlobalConstant.percentSPPCCValue) ? chargesMap
+								.get(GlobalConstant.percentSPPCCValue) * SP / 100
 								: 0;
 					}
 				}
@@ -2447,180 +2461,273 @@ public class OrderDaoImpl implements OrderDao {
 				valueType = "fixed";
 			}
 
-			if (pbean.getShippingfeeWeightList() != null
-					&& pbean.getShippingfeeWeightList().size() != 0) {
-				boolean inRange = false;
-				Iterator<ChargesBean> shippingfeeWeightIterator = pbean
-						.getShippingfeeWeightList().iterator();
-				while (shippingfeeWeightIterator.hasNext()) {
-					ChargesBean cBean = shippingfeeWeightIterator.next();
-					if (deadWeight < cBean.getRange()) {
-						if (valueType.equalsIgnoreCase("fixed"))
-							dwchargetemp = (float) cBean.getValue();
-						else if (valueType.equalsIgnoreCase("metro"))
-							dwchargetemp = (float) cBean.getMetroValue();
+			if (partner.getNrnReturnConfig().getShippingFeeType() != null
+					&& partner.getNrnReturnConfig().getShippingFeeType()
+							.equals("variable")) {
+
+				if (pbean.getshippingfeeWeightVariableList() != null
+						&& pbean.getshippingfeeWeightVariableList().size() != 0) {
+					boolean inRange = false;
+					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
+							.getshippingfeeWeightVariableList().iterator();
+					while (shippingfeeWeightIterator.hasNext()) {
+						ChargesBean cBean = shippingfeeWeightIterator.next();
+						if (deadWeight < cBean.getRange()) {
+							if (valueType.equalsIgnoreCase("metro"))
+								dwchargetemp = (float) cBean.getMetroValue();
+							else if (valueType.equalsIgnoreCase("national"))
+								dwchargetemp = (float) cBean.getNationalValue();
+							else if (valueType.equalsIgnoreCase("local"))
+								dwchargetemp = (float) cBean.getLocalValue();
+							else if (valueType.equalsIgnoreCase("zonal"))
+								dwchargetemp = (float) cBean.getZonalValue();
+							inRange = true;
+						}
+					}
+					if (!inRange) {
+						float tempWeight = deadWeight
+								- (float) pbean
+										.getshippingfeeWeightVariableList()
+										.get(pbean
+												.getshippingfeeWeightVariableList()
+												.size() - 2).getRange();
+						float addWeight = (float) pbean
+								.getshippingfeeWeightVariableList()
+								.get(pbean.getshippingfeeWeightVariableList()
+										.size() - 1).getRange();
+
+						if (valueType.equalsIgnoreCase("metro"))
+							dwchargetemp = (float) pbean
+									.getshippingfeeWeightVariableList()
+									.get(pbean
+											.getshippingfeeWeightVariableList()
+											.size() - 2).getMetroValue();
 						else if (valueType.equalsIgnoreCase("national"))
-							dwchargetemp = (float) cBean.getNationalValue();
+							dwchargetemp = (float) pbean
+									.getshippingfeeWeightVariableList()
+									.get(pbean
+											.getshippingfeeWeightVariableList()
+											.size() - 2).getNationalValue();
 						else if (valueType.equalsIgnoreCase("local"))
-							dwchargetemp = (float) cBean.getLocalValue();
+							dwchargetemp = (float) pbean
+									.getshippingfeeWeightVariableList()
+									.get(pbean
+											.getshippingfeeWeightVariableList()
+											.size() - 2).getLocalValue();
 						else if (valueType.equalsIgnoreCase("zonal"))
-							dwchargetemp = (float) cBean.getZonalValue();
-						inRange = true;
+							dwchargetemp = (float) pbean
+									.getshippingfeeWeightVariableList()
+									.get(pbean
+											.getshippingfeeWeightVariableList()
+											.size() - 2).getZonalValue();
+
+						while (tempWeight > 0) {
+							if (valueType.equalsIgnoreCase("metro"))
+								dwchargetemp += (float) pbean
+										.getshippingfeeWeightVariableList()
+										.get(pbean
+												.getshippingfeeWeightVariableList()
+												.size() - 1).getMetroValue();
+							else if (valueType.equalsIgnoreCase("national"))
+								dwchargetemp += (float) pbean
+										.getshippingfeeWeightVariableList()
+										.get(pbean
+												.getshippingfeeWeightVariableList()
+												.size() - 1).getNationalValue();
+							else if (valueType.equalsIgnoreCase("local"))
+								dwchargetemp += (float) pbean
+										.getshippingfeeWeightVariableList()
+										.get(pbean
+												.getshippingfeeWeightVariableList()
+												.size() - 1).getLocalValue();
+							else if (valueType.equalsIgnoreCase("zonal"))
+								dwchargetemp += (float) pbean
+										.getshippingfeeWeightVariableList()
+										.get(pbean
+												.getshippingfeeWeightVariableList()
+												.size() - 1).getZonalValue();
+
+							tempWeight = tempWeight - addWeight;
+						}
 					}
 				}
-				if (!inRange) {
-					float tempWeight = deadWeight
-							- (float) pbean
-									.getShippingfeeWeightList()
-									.get(pbean.getShippingfeeWeightList()
-											.size() - 2).getRange();
-					float addWeight = (float) pbean.getShippingfeeWeightList()
-							.get(pbean.getShippingfeeWeightList().size() - 1)
-							.getRange();
 
-					if (valueType.equalsIgnoreCase("fixed"))
-						dwchargetemp = (float) pbean
-								.getShippingfeeWeightList()
-								.get(pbean.getShippingfeeWeightList().size() - 2)
-								.getValue();
-					else if (valueType.equalsIgnoreCase("metro"))
-						dwchargetemp = (float) pbean
-								.getShippingfeeWeightList()
-								.get(pbean.getShippingfeeWeightList().size() - 2)
-								.getMetroValue();
-					else if (valueType.equalsIgnoreCase("national"))
-						dwchargetemp = (float) pbean
-								.getShippingfeeWeightList()
-								.get(pbean.getShippingfeeWeightList().size() - 2)
-								.getNationalValue();
-					else if (valueType.equalsIgnoreCase("local"))
-						dwchargetemp = (float) pbean
-								.getShippingfeeWeightList()
-								.get(pbean.getShippingfeeWeightList().size() - 2)
-								.getLocalValue();
-					else if (valueType.equalsIgnoreCase("zonal"))
-						dwchargetemp = (float) pbean
-								.getShippingfeeWeightList()
-								.get(pbean.getShippingfeeWeightList().size() - 2)
-								.getZonalValue();
+				if (pbean.getshippingfeeVolumeVariableList() != null
+						&& pbean.getshippingfeeVolumeVariableList().size() != 0) {
+					boolean inRange = false;
+					Iterator<ChargesBean> shippingfeeVolumeIterator = pbean
+							.getshippingfeeVolumeVariableList().iterator();
+					while (shippingfeeVolumeIterator.hasNext()) {
+						ChargesBean cBean = shippingfeeVolumeIterator.next();
+						if (volWeight < cBean.getRange()) {
+							if (valueType.equalsIgnoreCase("metro"))
+								vwchargetemp = (float) cBean.getMetroValue();
+							else if (valueType.equalsIgnoreCase("national"))
+								vwchargetemp = (float) cBean.getNationalValue();
+							else if (valueType.equalsIgnoreCase("local"))
+								vwchargetemp = (float) cBean.getLocalValue();
+							else if (valueType.equalsIgnoreCase("zonal"))
+								vwchargetemp = (float) cBean.getZonalValue();
+							inRange = true;
+						}
+					}
+					if (!inRange) {
+						float tempWeight = volWeight
+								- (float) pbean
+										.getshippingfeeVolumeVariableList()
+										.get(pbean
+												.getshippingfeeVolumeVariableList()
+												.size() - 2).getRange();
+						float addWeight = (float) pbean
+								.getshippingfeeVolumeVariableList()
+								.get(pbean.getshippingfeeVolumeVariableList()
+										.size() - 1).getRange();
 
-					while (tempWeight > 0) {
-						if (valueType.equalsIgnoreCase("fixed"))
-							dwchargetemp += (float) pbean
-									.getShippingfeeWeightList()
-									.get(pbean.getShippingfeeWeightList()
-											.size() - 1).getValue();
-						else if (valueType.equalsIgnoreCase("metro"))
-							dwchargetemp += (float) pbean
-									.getShippingfeeWeightList()
-									.get(pbean.getShippingfeeWeightList()
-											.size() - 1).getMetroValue();
+						if (valueType.equalsIgnoreCase("metro"))
+							vwchargetemp = (float) pbean
+									.getshippingfeeVolumeVariableList()
+									.get(pbean
+											.getshippingfeeVolumeVariableList()
+											.size() - 2).getMetroValue();
 						else if (valueType.equalsIgnoreCase("national"))
-							dwchargetemp += (float) pbean
-									.getShippingfeeWeightList()
-									.get(pbean.getShippingfeeWeightList()
-											.size() - 1).getNationalValue();
+							vwchargetemp = (float) pbean
+									.getshippingfeeVolumeVariableList()
+									.get(pbean
+											.getshippingfeeVolumeVariableList()
+											.size() - 2).getNationalValue();
 						else if (valueType.equalsIgnoreCase("local"))
-							dwchargetemp += (float) pbean
-									.getShippingfeeWeightList()
-									.get(pbean.getShippingfeeWeightList()
-											.size() - 1).getLocalValue();
+							vwchargetemp = (float) pbean
+									.getshippingfeeVolumeVariableList()
+									.get(pbean
+											.getshippingfeeVolumeVariableList()
+											.size() - 2).getLocalValue();
 						else if (valueType.equalsIgnoreCase("zonal"))
-							dwchargetemp += (float) pbean
-									.getShippingfeeWeightList()
-									.get(pbean.getShippingfeeWeightList()
-											.size() - 1).getZonalValue();
+							vwchargetemp = (float) pbean
+									.getshippingfeeVolumeVariableList()
+									.get(pbean
+											.getshippingfeeVolumeVariableList()
+											.size() - 2).getZonalValue();
 
-						tempWeight = tempWeight - addWeight;
+						while (tempWeight > 0) {
+							if (valueType.equalsIgnoreCase("metro"))
+								vwchargetemp += (float) pbean
+										.getshippingfeeVolumeVariableList()
+										.get(pbean
+												.getshippingfeeVolumeVariableList()
+												.size() - 1).getMetroValue();
+							else if (valueType.equalsIgnoreCase("national"))
+								vwchargetemp += (float) pbean
+										.getshippingfeeVolumeVariableList()
+										.get(pbean
+												.getshippingfeeVolumeVariableList()
+												.size() - 1).getNationalValue();
+							else if (valueType.equalsIgnoreCase("local"))
+								vwchargetemp += (float) pbean
+										.getshippingfeeVolumeVariableList()
+										.get(pbean
+												.getshippingfeeVolumeVariableList()
+												.size() - 1).getLocalValue();
+							else if (valueType.equalsIgnoreCase("zonal"))
+								vwchargetemp += (float) pbean
+										.getshippingfeeVolumeVariableList()
+										.get(pbean
+												.getshippingfeeVolumeVariableList()
+												.size() - 1).getZonalValue();
+
+							tempWeight = tempWeight - addWeight;
+						}
 					}
 				}
-			}
+			} else if (partner.getNrnReturnConfig().getShippingFeeType() != null
+					&& partner.getNrnReturnConfig().getShippingFeeType()
+							.equals("fixed")) {
 
-			if (pbean.getShippingfeeVolumeList() != null
-					&& pbean.getShippingfeeVolumeList().size() != 0) {
-				boolean inRange = false;
-				Iterator<ChargesBean> shippingfeeVolumeIterator = pbean
-						.getShippingfeeVolumeList().iterator();
-				while (shippingfeeVolumeIterator.hasNext()) {
-					ChargesBean cBean = shippingfeeVolumeIterator.next();
-					if (volWeight < cBean.getRange()) {
+				if (pbean.getshippingfeeWeightFixedList() != null
+						&& pbean.getshippingfeeWeightFixedList().size() != 0) {
+					boolean inRange = false;
+					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
+							.getshippingfeeWeightFixedList().iterator();
+					while (shippingfeeWeightIterator.hasNext()) {
+						ChargesBean cBean = shippingfeeWeightIterator.next();
+						if (deadWeight < cBean.getRange()) {
+							if (valueType.equalsIgnoreCase("fixed"))
+								dwchargetemp = (float) cBean.getValue();
+							inRange = true;
+						}
+					}
+					if (!inRange) {
+						float tempWeight = deadWeight
+								- (float) pbean
+										.getshippingfeeWeightFixedList()
+										.get(pbean
+												.getshippingfeeWeightFixedList()
+												.size() - 2).getRange();
+						float addWeight = (float) pbean
+								.getshippingfeeWeightFixedList()
+								.get(pbean.getshippingfeeWeightFixedList()
+										.size() - 1).getRange();
+
 						if (valueType.equalsIgnoreCase("fixed"))
-							vwchargetemp = (float) cBean.getValue();
-						else if (valueType.equalsIgnoreCase("metro"))
-							vwchargetemp = (float) cBean.getMetroValue();
-						else if (valueType.equalsIgnoreCase("national"))
-							vwchargetemp = (float) cBean.getNationalValue();
-						else if (valueType.equalsIgnoreCase("local"))
-							vwchargetemp = (float) cBean.getLocalValue();
-						else if (valueType.equalsIgnoreCase("zonal"))
-							vwchargetemp = (float) cBean.getZonalValue();
-						inRange = true;
+							dwchargetemp = (float) pbean
+									.getshippingfeeWeightFixedList()
+									.get(pbean.getshippingfeeWeightFixedList()
+											.size() - 2).getValue();
+
+						while (tempWeight > 0) {
+							if (valueType.equalsIgnoreCase("fixed"))
+								dwchargetemp += (float) pbean
+										.getshippingfeeWeightFixedList()
+										.get(pbean
+												.getshippingfeeWeightFixedList()
+												.size() - 1).getValue();
+
+							tempWeight = tempWeight - addWeight;
+						}
 					}
 				}
-				if (!inRange) {
-					float tempWeight = volWeight
-							- (float) pbean
-									.getShippingfeeVolumeList()
-									.get(pbean.getShippingfeeVolumeList()
-											.size() - 2).getRange();
-					float addWeight = (float) pbean.getShippingfeeVolumeList()
-							.get(pbean.getShippingfeeVolumeList().size() - 1)
-							.getRange();
 
-					if (valueType.equalsIgnoreCase("fixed"))
-						vwchargetemp = (float) pbean
-								.getShippingfeeVolumeList()
-								.get(pbean.getShippingfeeVolumeList().size() - 2)
-								.getValue();
-					else if (valueType.equalsIgnoreCase("metro"))
-						vwchargetemp = (float) pbean
-								.getShippingfeeVolumeList()
-								.get(pbean.getShippingfeeVolumeList().size() - 2)
-								.getMetroValue();
-					else if (valueType.equalsIgnoreCase("national"))
-						vwchargetemp = (float) pbean
-								.getShippingfeeVolumeList()
-								.get(pbean.getShippingfeeVolumeList().size() - 2)
-								.getNationalValue();
-					else if (valueType.equalsIgnoreCase("local"))
-						vwchargetemp = (float) pbean
-								.getShippingfeeVolumeList()
-								.get(pbean.getShippingfeeVolumeList().size() - 2)
-								.getLocalValue();
-					else if (valueType.equalsIgnoreCase("zonal"))
-						vwchargetemp = (float) pbean
-								.getShippingfeeVolumeList()
-								.get(pbean.getShippingfeeVolumeList().size() - 2)
-								.getZonalValue();
+				if (pbean.getshippingfeeVolumeFixedList() != null
+						&& pbean.getshippingfeeVolumeFixedList().size() != 0) {
+					boolean inRange = false;
+					Iterator<ChargesBean> shippingfeeVolumeIterator = pbean
+							.getshippingfeeVolumeFixedList().iterator();
+					while (shippingfeeVolumeIterator.hasNext()) {
+						ChargesBean cBean = shippingfeeVolumeIterator.next();
+						if (volWeight < cBean.getRange()) {
+							if (valueType.equalsIgnoreCase("fixed"))
+								vwchargetemp = (float) cBean.getValue();
 
-					while (tempWeight > 0) {
+							inRange = true;
+						}
+					}
+					if (!inRange) {
+						float tempWeight = volWeight
+								- (float) pbean
+										.getshippingfeeVolumeFixedList()
+										.get(pbean
+												.getshippingfeeVolumeFixedList()
+												.size() - 2).getRange();
+						float addWeight = (float) pbean
+								.getshippingfeeVolumeFixedList()
+								.get(pbean.getshippingfeeVolumeFixedList()
+										.size() - 1).getRange();
+
 						if (valueType.equalsIgnoreCase("fixed"))
-							vwchargetemp += (float) pbean
-									.getShippingfeeVolumeList()
-									.get(pbean.getShippingfeeVolumeList()
-											.size() - 1).getValue();
-						else if (valueType.equalsIgnoreCase("metro"))
-							vwchargetemp += (float) pbean
-									.getShippingfeeVolumeList()
-									.get(pbean.getShippingfeeVolumeList()
-											.size() - 1).getMetroValue();
-						else if (valueType.equalsIgnoreCase("national"))
-							vwchargetemp += (float) pbean
-									.getShippingfeeVolumeList()
-									.get(pbean.getShippingfeeVolumeList()
-											.size() - 1).getNationalValue();
-						else if (valueType.equalsIgnoreCase("local"))
-							vwchargetemp += (float) pbean
-									.getShippingfeeVolumeList()
-									.get(pbean.getShippingfeeVolumeList()
-											.size() - 1).getLocalValue();
-						else if (valueType.equalsIgnoreCase("zonal"))
-							vwchargetemp += (float) pbean
-									.getShippingfeeVolumeList()
-									.get(pbean.getShippingfeeVolumeList()
-											.size() - 1).getZonalValue();
+							vwchargetemp = (float) pbean
+									.getshippingfeeVolumeFixedList()
+									.get(pbean.getshippingfeeVolumeFixedList()
+											.size() - 2).getValue();
 
-						tempWeight = tempWeight - addWeight;
+						while (tempWeight > 0) {
+							if (valueType.equalsIgnoreCase("fixed"))
+								vwchargetemp += (float) pbean
+										.getshippingfeeVolumeFixedList()
+										.get(pbean
+												.getshippingfeeVolumeFixedList()
+												.size() - 1).getValue();
+
+							tempWeight = tempWeight - addWeight;
+						}
 					}
 				}
 			}
@@ -3421,14 +3528,14 @@ public class OrderDaoImpl implements OrderDao {
 						.equalsIgnoreCase("variable")) {
 
 					ChargesBean chargeBean = pbean.getChargesBean(
-							"shippingfeeVolume", charge.getCriteria(),
+							"shippingfeeVolumeVariable", charge.getCriteria(),
 							charge.getCriteriaRange());
 					if (chargeBean == null) {
 						chargeBean = new ChargesBean();
-						chargeBean.setChargeType("shippingfeeVolume");
+						chargeBean.setChargeType("shippingfeeVolumeVariable");
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
-						pbean.getShippingfeeVolumeList().add(chargeBean);
+						pbean.getshippingfeeVolumeVariableList().add(chargeBean);
 					}
 
 					if (charge.getChargeName().contains("Local")) {
@@ -3443,11 +3550,11 @@ public class OrderDaoImpl implements OrderDao {
 
 				} else {
 					ChargesBean chargeBean = new ChargesBean();
-					chargeBean.setChargeType("shippingfeeVolume");
+					chargeBean.setChargeType("shippingfeeVolumeFixed");
 					chargeBean.setCriteria(charge.getCriteria());
 					chargeBean.setRange(charge.getCriteriaRange());
 					chargeBean.setValue(charge.getChargeAmount());
-					pbean.getShippingfeeVolumeList().add(chargeBean);
+					pbean.getshippingfeeVolumeFixedList().add(chargeBean);
 				}
 
 			} else if (charge.getChargeName().contains("shippingfeeWeight")
@@ -3458,14 +3565,14 @@ public class OrderDaoImpl implements OrderDao {
 						.equalsIgnoreCase("variable")) {
 
 					ChargesBean chargeBean = pbean.getChargesBean(
-							"shippingfeeWeight", charge.getCriteria(),
+							"shippingfeeWeightVariable", charge.getCriteria(),
 							charge.getCriteriaRange());
 					if (chargeBean == null) {
 						chargeBean = new ChargesBean();
-						chargeBean.setChargeType("shippingfeeWeight");
+						chargeBean.setChargeType("shippingfeeWeightVariable");
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
-						pbean.getShippingfeeWeightList().add(chargeBean);
+						pbean.getshippingfeeWeightVariableList().add(chargeBean);
 					}
 
 					if (charge.getChargeName().contains("Local")) {
@@ -3480,11 +3587,11 @@ public class OrderDaoImpl implements OrderDao {
 
 				} else {
 					ChargesBean chargeBean = new ChargesBean();
-					chargeBean.setChargeType("shippingfeeWeight");
+					chargeBean.setChargeType("shippingfeeWeightFixed");
 					chargeBean.setCriteria(charge.getCriteria());
 					chargeBean.setRange(charge.getCriteriaRange());
 					chargeBean.setValue(charge.getChargeAmount());
-					pbean.getShippingfeeWeightList().add(chargeBean);
+					pbean.getshippingfeeWeightFixedList().add(chargeBean);
 				}
 
 			} else {
@@ -3496,13 +3603,21 @@ public class OrderDaoImpl implements OrderDao {
 				&& pbean.getFixedfeeList().size() != 0)
 			Collections
 					.sort(pbean.getFixedfeeList(), new SortByCriteriaRange());
-		if (pbean.getShippingfeeVolumeList() != null
-				&& pbean.getShippingfeeVolumeList().size() != 0)
-			Collections.sort(pbean.getShippingfeeVolumeList(),
+		if (pbean.getshippingfeeVolumeFixedList() != null
+				&& pbean.getshippingfeeVolumeFixedList().size() != 0)
+			Collections.sort(pbean.getshippingfeeVolumeFixedList(),
 					new SortByCriteria());
-		if (pbean.getShippingfeeWeightList() != null
-				&& pbean.getShippingfeeWeightList().size() != 0)
-			Collections.sort(pbean.getShippingfeeWeightList(),
+		if (pbean.getshippingfeeWeightFixedList() != null
+				&& pbean.getshippingfeeWeightFixedList().size() != 0)
+			Collections.sort(pbean.getshippingfeeWeightFixedList(),
+					new SortByCriteria());
+		if (pbean.getshippingfeeVolumeVariableList() != null
+				&& pbean.getshippingfeeVolumeVariableList().size() != 0)
+			Collections.sort(pbean.getshippingfeeVolumeVariableList(),
+					new SortByCriteria());
+		if (pbean.getshippingfeeWeightVariableList() != null
+				&& pbean.getshippingfeeWeightVariableList().size() != 0)
+			Collections.sort(pbean.getshippingfeeWeightVariableList(),
 					new SortByCriteria());
 
 		// Extracting comiision value
@@ -3538,10 +3653,10 @@ public class OrderDaoImpl implements OrderDao {
 			}
 
 			// Payment collection charges
-			if (nrnReturnConfig.isWhicheverGreaterPCC()) {
+			if (partner.getNrnReturnConfig().isWhicheverGreaterPCC()) {
 				double percentAmount = chargesMap
-						.containsKey(GlobalConstant.percentSPPCC) ? chargesMap
-						.get(GlobalConstant.percentSPPCC) * SP / 100 : 0;
+						.containsKey(GlobalConstant.percentSPPCCHigher) ? chargesMap
+						.get(GlobalConstant.percentSPPCCHigher) * SP / 100 : 0;
 				if (chargesMap.containsKey(GlobalConstant.fixedAmtPCC)
 						&& percentAmount > chargesMap
 								.get(GlobalConstant.fixedAmtPCC)) {
@@ -3565,8 +3680,8 @@ public class OrderDaoImpl implements OrderDao {
 								.get(GlobalConstant.valuePCC) : 0;
 					} else {
 						pccAmount = chargesMap
-								.containsKey(GlobalConstant.percentSPPCC) ? chargesMap
-								.get(GlobalConstant.percentSPPCC) * SP / 100
+								.containsKey(GlobalConstant.percentSPPCCValue) ? chargesMap
+								.get(GlobalConstant.percentSPPCCValue) * SP / 100
 								: 0;
 					}
 				}
@@ -3609,180 +3724,273 @@ public class OrderDaoImpl implements OrderDao {
 				valueType = "fixed";
 			}
 
-			if (pbean.getShippingfeeWeightList() != null
-					&& pbean.getShippingfeeWeightList().size() != 0) {
-				boolean inRange = false;
-				Iterator<ChargesBean> shippingfeeWeightIterator = pbean
-						.getShippingfeeWeightList().iterator();
-				while (shippingfeeWeightIterator.hasNext()) {
-					ChargesBean cBean = shippingfeeWeightIterator.next();
-					if (deadWeight < cBean.getRange()) {
-						if (valueType.equalsIgnoreCase("fixed"))
-							dwchargetemp = (float) cBean.getValue();
-						else if (valueType.equalsIgnoreCase("metro"))
-							dwchargetemp = (float) cBean.getMetroValue();
+			if (partner.getNrnReturnConfig().getShippingFeeType() != null
+					&& partner.getNrnReturnConfig().getShippingFeeType()
+							.equals("variable")) {
+
+				if (pbean.getshippingfeeWeightVariableList() != null
+						&& pbean.getshippingfeeWeightVariableList().size() != 0) {
+					boolean inRange = false;
+					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
+							.getshippingfeeWeightVariableList().iterator();
+					while (shippingfeeWeightIterator.hasNext()) {
+						ChargesBean cBean = shippingfeeWeightIterator.next();
+						if (deadWeight < cBean.getRange()) {
+							if (valueType.equalsIgnoreCase("metro"))
+								dwchargetemp = (float) cBean.getMetroValue();
+							else if (valueType.equalsIgnoreCase("national"))
+								dwchargetemp = (float) cBean.getNationalValue();
+							else if (valueType.equalsIgnoreCase("local"))
+								dwchargetemp = (float) cBean.getLocalValue();
+							else if (valueType.equalsIgnoreCase("zonal"))
+								dwchargetemp = (float) cBean.getZonalValue();
+							inRange = true;
+						}
+					}
+					if (!inRange) {
+						float tempWeight = deadWeight
+								- (float) pbean
+										.getshippingfeeWeightVariableList()
+										.get(pbean
+												.getshippingfeeWeightVariableList()
+												.size() - 2).getRange();
+						float addWeight = (float) pbean
+								.getshippingfeeWeightVariableList()
+								.get(pbean.getshippingfeeWeightVariableList()
+										.size() - 1).getRange();
+
+						if (valueType.equalsIgnoreCase("metro"))
+							dwchargetemp = (float) pbean
+									.getshippingfeeWeightVariableList()
+									.get(pbean
+											.getshippingfeeWeightVariableList()
+											.size() - 2).getMetroValue();
 						else if (valueType.equalsIgnoreCase("national"))
-							dwchargetemp = (float) cBean.getNationalValue();
+							dwchargetemp = (float) pbean
+									.getshippingfeeWeightVariableList()
+									.get(pbean
+											.getshippingfeeWeightVariableList()
+											.size() - 2).getNationalValue();
 						else if (valueType.equalsIgnoreCase("local"))
-							dwchargetemp = (float) cBean.getLocalValue();
+							dwchargetemp = (float) pbean
+									.getshippingfeeWeightVariableList()
+									.get(pbean
+											.getshippingfeeWeightVariableList()
+											.size() - 2).getLocalValue();
 						else if (valueType.equalsIgnoreCase("zonal"))
-							dwchargetemp = (float) cBean.getZonalValue();
-						inRange = true;
+							dwchargetemp = (float) pbean
+									.getshippingfeeWeightVariableList()
+									.get(pbean
+											.getshippingfeeWeightVariableList()
+											.size() - 2).getZonalValue();
+
+						while (tempWeight > 0) {
+							if (valueType.equalsIgnoreCase("metro"))
+								dwchargetemp += (float) pbean
+										.getshippingfeeWeightVariableList()
+										.get(pbean
+												.getshippingfeeWeightVariableList()
+												.size() - 1).getMetroValue();
+							else if (valueType.equalsIgnoreCase("national"))
+								dwchargetemp += (float) pbean
+										.getshippingfeeWeightVariableList()
+										.get(pbean
+												.getshippingfeeWeightVariableList()
+												.size() - 1).getNationalValue();
+							else if (valueType.equalsIgnoreCase("local"))
+								dwchargetemp += (float) pbean
+										.getshippingfeeWeightVariableList()
+										.get(pbean
+												.getshippingfeeWeightVariableList()
+												.size() - 1).getLocalValue();
+							else if (valueType.equalsIgnoreCase("zonal"))
+								dwchargetemp += (float) pbean
+										.getshippingfeeWeightVariableList()
+										.get(pbean
+												.getshippingfeeWeightVariableList()
+												.size() - 1).getZonalValue();
+
+							tempWeight = tempWeight - addWeight;
+						}
 					}
 				}
-				if (!inRange) {
-					float tempWeight = deadWeight
-							- (float) pbean
-									.getShippingfeeWeightList()
-									.get(pbean.getShippingfeeWeightList()
-											.size() - 2).getRange();
-					float addWeight = (float) pbean.getShippingfeeWeightList()
-							.get(pbean.getShippingfeeWeightList().size() - 1)
-							.getRange();
 
-					if (valueType.equalsIgnoreCase("fixed"))
-						dwchargetemp = (float) pbean
-								.getShippingfeeWeightList()
-								.get(pbean.getShippingfeeWeightList().size() - 2)
-								.getValue();
-					else if (valueType.equalsIgnoreCase("metro"))
-						dwchargetemp = (float) pbean
-								.getShippingfeeWeightList()
-								.get(pbean.getShippingfeeWeightList().size() - 2)
-								.getMetroValue();
-					else if (valueType.equalsIgnoreCase("national"))
-						dwchargetemp = (float) pbean
-								.getShippingfeeWeightList()
-								.get(pbean.getShippingfeeWeightList().size() - 2)
-								.getNationalValue();
-					else if (valueType.equalsIgnoreCase("local"))
-						dwchargetemp = (float) pbean
-								.getShippingfeeWeightList()
-								.get(pbean.getShippingfeeWeightList().size() - 2)
-								.getLocalValue();
-					else if (valueType.equalsIgnoreCase("zonal"))
-						dwchargetemp = (float) pbean
-								.getShippingfeeWeightList()
-								.get(pbean.getShippingfeeWeightList().size() - 2)
-								.getZonalValue();
+				if (pbean.getshippingfeeVolumeVariableList() != null
+						&& pbean.getshippingfeeVolumeVariableList().size() != 0) {
+					boolean inRange = false;
+					Iterator<ChargesBean> shippingfeeVolumeIterator = pbean
+							.getshippingfeeVolumeVariableList().iterator();
+					while (shippingfeeVolumeIterator.hasNext()) {
+						ChargesBean cBean = shippingfeeVolumeIterator.next();
+						if (volWeight < cBean.getRange()) {
+							if (valueType.equalsIgnoreCase("metro"))
+								vwchargetemp = (float) cBean.getMetroValue();
+							else if (valueType.equalsIgnoreCase("national"))
+								vwchargetemp = (float) cBean.getNationalValue();
+							else if (valueType.equalsIgnoreCase("local"))
+								vwchargetemp = (float) cBean.getLocalValue();
+							else if (valueType.equalsIgnoreCase("zonal"))
+								vwchargetemp = (float) cBean.getZonalValue();
+							inRange = true;
+						}
+					}
+					if (!inRange) {
+						float tempWeight = volWeight
+								- (float) pbean
+										.getshippingfeeVolumeVariableList()
+										.get(pbean
+												.getshippingfeeVolumeVariableList()
+												.size() - 2).getRange();
+						float addWeight = (float) pbean
+								.getshippingfeeVolumeVariableList()
+								.get(pbean.getshippingfeeVolumeVariableList()
+										.size() - 1).getRange();
 
-					while (tempWeight > 0) {
-						if (valueType.equalsIgnoreCase("fixed"))
-							dwchargetemp += (float) pbean
-									.getShippingfeeWeightList()
-									.get(pbean.getShippingfeeWeightList()
-											.size() - 1).getValue();
-						else if (valueType.equalsIgnoreCase("metro"))
-							dwchargetemp += (float) pbean
-									.getShippingfeeWeightList()
-									.get(pbean.getShippingfeeWeightList()
-											.size() - 1).getMetroValue();
+						if (valueType.equalsIgnoreCase("metro"))
+							vwchargetemp = (float) pbean
+									.getshippingfeeVolumeVariableList()
+									.get(pbean
+											.getshippingfeeVolumeVariableList()
+											.size() - 2).getMetroValue();
 						else if (valueType.equalsIgnoreCase("national"))
-							dwchargetemp += (float) pbean
-									.getShippingfeeWeightList()
-									.get(pbean.getShippingfeeWeightList()
-											.size() - 1).getNationalValue();
+							vwchargetemp = (float) pbean
+									.getshippingfeeVolumeVariableList()
+									.get(pbean
+											.getshippingfeeVolumeVariableList()
+											.size() - 2).getNationalValue();
 						else if (valueType.equalsIgnoreCase("local"))
-							dwchargetemp += (float) pbean
-									.getShippingfeeWeightList()
-									.get(pbean.getShippingfeeWeightList()
-											.size() - 1).getLocalValue();
+							vwchargetemp = (float) pbean
+									.getshippingfeeVolumeVariableList()
+									.get(pbean
+											.getshippingfeeVolumeVariableList()
+											.size() - 2).getLocalValue();
 						else if (valueType.equalsIgnoreCase("zonal"))
-							dwchargetemp += (float) pbean
-									.getShippingfeeWeightList()
-									.get(pbean.getShippingfeeWeightList()
-											.size() - 1).getZonalValue();
+							vwchargetemp = (float) pbean
+									.getshippingfeeVolumeVariableList()
+									.get(pbean
+											.getshippingfeeVolumeVariableList()
+											.size() - 2).getZonalValue();
 
-						tempWeight = tempWeight - addWeight;
+						while (tempWeight > 0) {
+							if (valueType.equalsIgnoreCase("metro"))
+								vwchargetemp += (float) pbean
+										.getshippingfeeVolumeVariableList()
+										.get(pbean
+												.getshippingfeeVolumeVariableList()
+												.size() - 1).getMetroValue();
+							else if (valueType.equalsIgnoreCase("national"))
+								vwchargetemp += (float) pbean
+										.getshippingfeeVolumeVariableList()
+										.get(pbean
+												.getshippingfeeVolumeVariableList()
+												.size() - 1).getNationalValue();
+							else if (valueType.equalsIgnoreCase("local"))
+								vwchargetemp += (float) pbean
+										.getshippingfeeVolumeVariableList()
+										.get(pbean
+												.getshippingfeeVolumeVariableList()
+												.size() - 1).getLocalValue();
+							else if (valueType.equalsIgnoreCase("zonal"))
+								vwchargetemp += (float) pbean
+										.getshippingfeeVolumeVariableList()
+										.get(pbean
+												.getshippingfeeVolumeVariableList()
+												.size() - 1).getZonalValue();
+
+							tempWeight = tempWeight - addWeight;
+						}
 					}
 				}
-			}
+			} else if (partner.getNrnReturnConfig().getShippingFeeType() != null
+					&& partner.getNrnReturnConfig().getShippingFeeType()
+							.equals("fixed")) {
 
-			if (pbean.getShippingfeeVolumeList() != null
-					&& pbean.getShippingfeeVolumeList().size() != 0) {
-				boolean inRange = false;
-				Iterator<ChargesBean> shippingfeeVolumeIterator = pbean
-						.getShippingfeeVolumeList().iterator();
-				while (shippingfeeVolumeIterator.hasNext()) {
-					ChargesBean cBean = shippingfeeVolumeIterator.next();
-					if (volWeight < cBean.getRange()) {
+				if (pbean.getshippingfeeWeightFixedList() != null
+						&& pbean.getshippingfeeWeightFixedList().size() != 0) {
+					boolean inRange = false;
+					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
+							.getshippingfeeWeightFixedList().iterator();
+					while (shippingfeeWeightIterator.hasNext()) {
+						ChargesBean cBean = shippingfeeWeightIterator.next();
+						if (deadWeight < cBean.getRange()) {
+							if (valueType.equalsIgnoreCase("fixed"))
+								dwchargetemp = (float) cBean.getValue();
+							inRange = true;
+						}
+					}
+					if (!inRange) {
+						float tempWeight = deadWeight
+								- (float) pbean
+										.getshippingfeeWeightFixedList()
+										.get(pbean
+												.getshippingfeeWeightFixedList()
+												.size() - 2).getRange();
+						float addWeight = (float) pbean
+								.getshippingfeeWeightFixedList()
+								.get(pbean.getshippingfeeWeightFixedList()
+										.size() - 1).getRange();
+
 						if (valueType.equalsIgnoreCase("fixed"))
-							vwchargetemp = (float) cBean.getValue();
-						else if (valueType.equalsIgnoreCase("metro"))
-							vwchargetemp = (float) cBean.getMetroValue();
-						else if (valueType.equalsIgnoreCase("national"))
-							vwchargetemp = (float) cBean.getNationalValue();
-						else if (valueType.equalsIgnoreCase("local"))
-							vwchargetemp = (float) cBean.getLocalValue();
-						else if (valueType.equalsIgnoreCase("zonal"))
-							vwchargetemp = (float) cBean.getZonalValue();
-						inRange = true;
+							dwchargetemp = (float) pbean
+									.getshippingfeeWeightFixedList()
+									.get(pbean.getshippingfeeWeightFixedList()
+											.size() - 2).getValue();
+
+						while (tempWeight > 0) {
+							if (valueType.equalsIgnoreCase("fixed"))
+								dwchargetemp += (float) pbean
+										.getshippingfeeWeightFixedList()
+										.get(pbean
+												.getshippingfeeWeightFixedList()
+												.size() - 1).getValue();
+
+							tempWeight = tempWeight - addWeight;
+						}
 					}
 				}
-				if (!inRange) {
-					float tempWeight = volWeight
-							- (float) pbean
-									.getShippingfeeVolumeList()
-									.get(pbean.getShippingfeeVolumeList()
-											.size() - 2).getRange();
-					float addWeight = (float) pbean.getShippingfeeVolumeList()
-							.get(pbean.getShippingfeeVolumeList().size() - 1)
-							.getRange();
 
-					if (valueType.equalsIgnoreCase("fixed"))
-						vwchargetemp = (float) pbean
-								.getShippingfeeVolumeList()
-								.get(pbean.getShippingfeeVolumeList().size() - 2)
-								.getValue();
-					else if (valueType.equalsIgnoreCase("metro"))
-						vwchargetemp = (float) pbean
-								.getShippingfeeVolumeList()
-								.get(pbean.getShippingfeeVolumeList().size() - 2)
-								.getMetroValue();
-					else if (valueType.equalsIgnoreCase("national"))
-						vwchargetemp = (float) pbean
-								.getShippingfeeVolumeList()
-								.get(pbean.getShippingfeeVolumeList().size() - 2)
-								.getNationalValue();
-					else if (valueType.equalsIgnoreCase("local"))
-						vwchargetemp = (float) pbean
-								.getShippingfeeVolumeList()
-								.get(pbean.getShippingfeeVolumeList().size() - 2)
-								.getLocalValue();
-					else if (valueType.equalsIgnoreCase("zonal"))
-						vwchargetemp = (float) pbean
-								.getShippingfeeVolumeList()
-								.get(pbean.getShippingfeeVolumeList().size() - 2)
-								.getZonalValue();
+				if (pbean.getshippingfeeVolumeFixedList() != null
+						&& pbean.getshippingfeeVolumeFixedList().size() != 0) {
+					boolean inRange = false;
+					Iterator<ChargesBean> shippingfeeVolumeIterator = pbean
+							.getshippingfeeVolumeFixedList().iterator();
+					while (shippingfeeVolumeIterator.hasNext()) {
+						ChargesBean cBean = shippingfeeVolumeIterator.next();
+						if (volWeight < cBean.getRange()) {
+							if (valueType.equalsIgnoreCase("fixed"))
+								vwchargetemp = (float) cBean.getValue();
 
-					while (tempWeight > 0) {
+							inRange = true;
+						}
+					}
+					if (!inRange) {
+						float tempWeight = volWeight
+								- (float) pbean
+										.getshippingfeeVolumeFixedList()
+										.get(pbean
+												.getshippingfeeVolumeFixedList()
+												.size() - 2).getRange();
+						float addWeight = (float) pbean
+								.getshippingfeeVolumeFixedList()
+								.get(pbean.getshippingfeeVolumeFixedList()
+										.size() - 1).getRange();
+
 						if (valueType.equalsIgnoreCase("fixed"))
-							vwchargetemp += (float) pbean
-									.getShippingfeeVolumeList()
-									.get(pbean.getShippingfeeVolumeList()
-											.size() - 1).getValue();
-						else if (valueType.equalsIgnoreCase("metro"))
-							vwchargetemp += (float) pbean
-									.getShippingfeeVolumeList()
-									.get(pbean.getShippingfeeVolumeList()
-											.size() - 1).getMetroValue();
-						else if (valueType.equalsIgnoreCase("national"))
-							vwchargetemp += (float) pbean
-									.getShippingfeeVolumeList()
-									.get(pbean.getShippingfeeVolumeList()
-											.size() - 1).getNationalValue();
-						else if (valueType.equalsIgnoreCase("local"))
-							vwchargetemp += (float) pbean
-									.getShippingfeeVolumeList()
-									.get(pbean.getShippingfeeVolumeList()
-											.size() - 1).getLocalValue();
-						else if (valueType.equalsIgnoreCase("zonal"))
-							vwchargetemp += (float) pbean
-									.getShippingfeeVolumeList()
-									.get(pbean.getShippingfeeVolumeList()
-											.size() - 1).getZonalValue();
+							vwchargetemp = (float) pbean
+									.getshippingfeeVolumeFixedList()
+									.get(pbean.getshippingfeeVolumeFixedList()
+											.size() - 2).getValue();
 
-						tempWeight = tempWeight - addWeight;
+						while (tempWeight > 0) {
+							if (valueType.equalsIgnoreCase("fixed"))
+								vwchargetemp += (float) pbean
+										.getshippingfeeVolumeFixedList()
+										.get(pbean
+												.getshippingfeeVolumeFixedList()
+												.size() - 1).getValue();
+
+							tempWeight = tempWeight - addWeight;
+						}
 					}
 				}
 			}
