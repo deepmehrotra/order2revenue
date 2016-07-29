@@ -118,4 +118,7 @@ public interface OrderService {
 			throws CustomException;
 	
 	public void addOrder(List<Order> orderList, int sellerId) throws CustomException;
+
+	public List<Order> findPOOrdersbyDate(String string, Date startDate,
+			Date endDate, int sellerId) throws CustomException;
 }

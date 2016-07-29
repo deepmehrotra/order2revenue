@@ -574,14 +574,14 @@ public class ChannelReportDetails {
 		@Override
 		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
 			String taxCategory1 = graph1.taxCategory;
-			int tcPer1 = 0;
+			float tcPer1 = 0;
 			if(StringUtils.isNotBlank(taxCategory1) && taxCategory1.indexOf("@")>-1){
-				tcPer1 = Integer.parseInt(taxCategory1.split("@")[1]);
+				tcPer1 = Float.parseFloat(taxCategory1.split("@")[1]);
 			}
 			String taxCategory2 = graph2.taxCategory;
-			int tcPer2 = 0;
+			float tcPer2 = 0;
 			if(StringUtils.isNotBlank(taxCategory2) && taxCategory2.indexOf("@")>-1){
-				tcPer2 = Integer.parseInt(taxCategory2.split("@")[1]);
+				tcPer2 = Float.parseFloat(taxCategory2.split("@")[1]);
 			}
 			return tcPer1 < tcPer2 ? -1
 					: (tcPer1 > tcPer2 ? 1 : 0);
