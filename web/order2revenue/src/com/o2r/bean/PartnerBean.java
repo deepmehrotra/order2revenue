@@ -35,8 +35,10 @@ public class PartnerBean {
 	private NRnReturnConfig nrnReturnConfig;
 	
 	private List<ChargesBean> fixedfeeList = new ArrayList<ChargesBean>();
-	private List<ChargesBean> shippingfeeVolumeList = new ArrayList<ChargesBean>();
-	private List<ChargesBean> shippingfeeWeightList = new ArrayList<ChargesBean>();
+	private List<ChargesBean> shippingfeeVolumeFixedList = new ArrayList<ChargesBean>();
+	private List<ChargesBean> shippingfeeWeightFixedList = new ArrayList<ChargesBean>();
+	private List<ChargesBean> shippingfeeVolumeVariableList = new ArrayList<ChargesBean>();
+	private List<ChargesBean> shippingfeeWeightVariableList = new ArrayList<ChargesBean>();
 
 	public List<Events> getEvents() {
 		return events;
@@ -197,20 +199,7 @@ public class PartnerBean {
 	}
 	public void setFixedfeeList(List<ChargesBean> fixedfeeList) {
 		this.fixedfeeList = fixedfeeList;
-	}
-	public List<ChargesBean> getShippingfeeVolumeList() {
-		return shippingfeeVolumeList;
-	}
-	public void setShippingfeeVolumeList(List<ChargesBean> shippingfeeVolumeList) {
-		this.shippingfeeVolumeList = shippingfeeVolumeList;
-	}
-	public List<ChargesBean> getShippingfeeWeightList() {
-		return shippingfeeWeightList;
-	}
-	public void setShippingfeeWeightList(List<ChargesBean> shippingfeeWeightList) {
-		this.shippingfeeWeightList = shippingfeeWeightList;
-	}
-	
+	}	
 	public ChargesBean getChargesBean(String type, String criteria, long criteriaRange) {
 		ChargesBean returnBean = null;
 		if (type.equalsIgnoreCase("fixedfee")) {
@@ -220,15 +209,29 @@ public class PartnerBean {
 					returnBean = bean;
 				}
 			}
-		} else if (type.equalsIgnoreCase("shippingfeeVolume")) {
-			for (ChargesBean bean : this.shippingfeeVolumeList) {
+		} else if (type.equalsIgnoreCase("shippingfeeVolumeFixed")) {
+			for (ChargesBean bean : this.shippingfeeVolumeFixedList) {
 				if (bean.getCriteria().equalsIgnoreCase(criteria)
 						&& bean.getRange() == criteriaRange) {
 					returnBean = bean;
 				}
 			}
-		} else if (type.equalsIgnoreCase("shippingfeeWeight")) {
-			for (ChargesBean bean : this.shippingfeeWeightList) {
+		} else if (type.equalsIgnoreCase("shippingfeeWeightFixed")) {
+			for (ChargesBean bean : this.shippingfeeWeightFixedList) {
+				if (bean.getCriteria().equalsIgnoreCase(criteria)
+						&& bean.getRange() == criteriaRange) {
+					returnBean = bean;
+				}
+			}
+		} else if (type.equalsIgnoreCase("shippingfeeVolumeVariable")) {
+			for (ChargesBean bean : this.shippingfeeVolumeVariableList) {
+				if (bean.getCriteria().equalsIgnoreCase(criteria)
+						&& bean.getRange() == criteriaRange) {
+					returnBean = bean;
+				}
+			}
+		} else if (type.equalsIgnoreCase("shippingfeeWeightVariable")) {
+			for (ChargesBean bean : this.shippingfeeWeightVariableList) {
 				if (bean.getCriteria().equalsIgnoreCase(criteria)
 						&& bean.getRange() == criteriaRange) {
 					returnBean = bean;
@@ -236,5 +239,33 @@ public class PartnerBean {
 			}
 		}
 		return returnBean;
+	}
+	public List<ChargesBean> getshippingfeeVolumeFixedList() {
+		return shippingfeeVolumeFixedList;
+	}
+	public void setshippingfeeVolumeFixedList(
+			List<ChargesBean> shippingfeeVolumeFixedList) {
+		this.shippingfeeVolumeFixedList = shippingfeeVolumeFixedList;
+	}
+	public List<ChargesBean> getshippingfeeWeightFixedList() {
+		return shippingfeeWeightFixedList;
+	}
+	public void setshippingfeeWeightFixedList(
+			List<ChargesBean> shippingfeeWeightFixedList) {
+		this.shippingfeeWeightFixedList = shippingfeeWeightFixedList;
+	}
+	public List<ChargesBean> getshippingfeeVolumeVariableList() {
+		return shippingfeeVolumeVariableList;
+	}
+	public void setshippingfeeVolumeVariableList(
+			List<ChargesBean> shippingfeeVolumeVariableList) {
+		this.shippingfeeVolumeVariableList = shippingfeeVolumeVariableList;
+	}
+	public List<ChargesBean> getshippingfeeWeightVariableList() {
+		return shippingfeeWeightVariableList;
+	}
+	public void setshippingfeeWeightVariableList(
+			List<ChargesBean> shippingfeeWeightVariableList) {
+		this.shippingfeeWeightVariableList = shippingfeeWeightVariableList;
 	}
 }

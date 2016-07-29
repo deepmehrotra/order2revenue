@@ -119,8 +119,10 @@ public class PartnerController {
 
 		log.info("$$$ savePartner Starts : OrderController $$$");
 		log.info(partnerBean.getFixedfeeList().size());
-		log.info(partnerBean.getShippingfeeVolumeList().size());
-		log.info(partnerBean.getShippingfeeWeightList().size());
+		log.info(partnerBean.getshippingfeeVolumeFixedList().size());
+		log.info(partnerBean.getshippingfeeWeightFixedList().size());
+		log.info(partnerBean.getshippingfeeVolumeVariableList().size());
+		log.info(partnerBean.getshippingfeeWeightVariableList().size());
 
 		Map<String, Object> model = new HashMap<String, Object>();
 		Partner existPartner = null;
@@ -191,7 +193,8 @@ public class PartnerController {
 
 							if (partnerBean.getNrnReturnConfig()
 									.getShippingFeeType()
-									.equalsIgnoreCase("variable")) {
+									.equalsIgnoreCase("variable")
+									&& entry.getKey().contains("shippingFeeVolumeVariable")) {
 								String param = entry.getKey().substring(0,
 										entry.getKey().lastIndexOf('-') + 1);
 								if (!shippingfeeVolumeParams.contains(param)) {
@@ -205,7 +208,7 @@ public class PartnerController {
 														.get(param
 																+ "localValue")[0]));
 									nrnReturncharge
-											.setChargeName("shippingfeeVolumeLocal");
+											.setChargeName("shippingfeeVolumeVariableLocal");
 									nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
 
@@ -228,7 +231,7 @@ public class PartnerController {
 														.get(param
 																+ "zonalValue")[0]));
 									nrnReturncharge
-											.setChargeName("shippingfeeVolumeZonal");
+											.setChargeName("shippingfeeVolumeVariableZonal");
 									nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
 									if (!parameters.get(param + "range")[0]
@@ -251,7 +254,7 @@ public class PartnerController {
 														.get(param
 																+ "nationalValue")[0]));
 									nrnReturncharge
-											.setChargeName("shippingfeeVolumeNational");
+											.setChargeName("shippingfeeVolumeVariableNational");
 									nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
 									if (!parameters.get(param + "range")[0]
@@ -273,7 +276,7 @@ public class PartnerController {
 														.get(param
 																+ "metroValue")[0]));
 									nrnReturncharge
-											.setChargeName("shippingfeeVolumeMetro");
+											.setChargeName("shippingfeeVolumeVariableMetro");
 									nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
 									if (!parameters.get(param + "range")[0]
@@ -288,7 +291,7 @@ public class PartnerController {
 											.getCharges().add(nrnReturncharge);
 
 								}
-							} else {
+							} else if (entry.getKey().contains("shippingFeeVolumeFixed"))  {
 								String param = entry.getKey().substring(0,
 										entry.getKey().lastIndexOf('-') + 1);
 								if (!shippingfeeVolumeParams.contains(param)) {
@@ -300,7 +303,7 @@ public class PartnerController {
 												.setChargeAmount(Float.parseFloat(parameters
 														.get(param + "value")[0]));
 									nrnReturncharge
-											.setChargeName("shippingfeeVolume");
+											.setChargeName("shippingfeeVolumeFixed");
 									nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
 									if (!parameters.get(param + "range")[0]
@@ -321,7 +324,8 @@ public class PartnerController {
 
 							if (partnerBean.getNrnReturnConfig()
 									.getShippingFeeType()
-									.equalsIgnoreCase("variable")) {
+									.equalsIgnoreCase("variable")
+									&& entry.getKey().contains("shippingFeeWeightVariable")) {
 								String param = entry.getKey().substring(0,
 										entry.getKey().lastIndexOf('-') + 1);
 								if (!shippingfeeVolumeParams.contains(param)) {
@@ -337,7 +341,7 @@ public class PartnerController {
 									}
 
 									nrnReturncharge
-											.setChargeName("shippingfeeWeightLocal");
+											.setChargeName("shippingfeeWeightVariableLocal");
 									nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
 									if (!parameters.get(param + "range")[0]
@@ -361,7 +365,7 @@ public class PartnerController {
 									}
 
 									nrnReturncharge
-											.setChargeName("shippingfeeWeightZonal");
+											.setChargeName("shippingfeeWeightVariableZonal");
 									nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
 									if (!parameters.get(param + "range")[0]
@@ -386,7 +390,7 @@ public class PartnerController {
 									}
 
 									nrnReturncharge
-											.setChargeName("shippingfeeWeightNational");
+											.setChargeName("shippingfeeWeightVariableNational");
 									nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
 									if (!parameters.get(param + "range")[0]
@@ -409,7 +413,7 @@ public class PartnerController {
 																+ "metroValue")[0]));
 									}
 									nrnReturncharge
-											.setChargeName("shippingfeeWeightMetro");
+											.setChargeName("shippingfeeWeightVariableMetro");
 									nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
 
@@ -425,7 +429,7 @@ public class PartnerController {
 											.getCharges().add(nrnReturncharge);
 
 								}
-							} else {
+							} else if (entry.getKey().contains("shippingFeeWeightFixed")) {
 								String param = entry.getKey().substring(0,
 										entry.getKey().lastIndexOf('-') + 1);
 								if (!shippingfeeWeightParams.contains(param)) {
@@ -437,7 +441,7 @@ public class PartnerController {
 												.setChargeAmount(Float.parseFloat(parameters
 														.get(param + "value")[0]));
 									nrnReturncharge
-											.setChargeName("shippingfeeWeight");
+											.setChargeName("shippingfeeWeightFIxed");
 									nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
 									if (!parameters.get(param + "range")[0]
@@ -719,18 +723,18 @@ public class PartnerController {
 									.equalsIgnoreCase("variable")) {
 
 								ChargesBean chargeBean = partner
-										.getChargesBean("shippingfeeVolume",
+										.getChargesBean("shippingfeeVolumeVariable",
 												charge.getCriteria(),
 												charge.getCriteriaRange());
 								if (chargeBean == null) {
 									chargeBean = new ChargesBean();
 									chargeBean
-											.setChargeType("shippingfeeVolume");
+											.setChargeType("shippingfeeVolumeVariable");
 									chargeBean
 											.setCriteria(charge.getCriteria());
 									chargeBean.setRange(charge
 											.getCriteriaRange());
-									partner.getShippingfeeVolumeList().add(
+									partner.getshippingfeeVolumeVariableList().add(
 											chargeBean);
 								}
 
@@ -753,11 +757,11 @@ public class PartnerController {
 
 							} else {
 								ChargesBean chargeBean = new ChargesBean();
-								chargeBean.setChargeType("shippingfeeVolume");
+								chargeBean.setChargeType("shippingfeeVolumeFixed");
 								chargeBean.setCriteria(charge.getCriteria());
 								chargeBean.setRange(charge.getCriteriaRange());
 								chargeBean.setValue(charge.getChargeAmount());
-								partner.getShippingfeeVolumeList().add(
+								partner.getshippingfeeVolumeFixedList().add(
 										chargeBean);
 							}
 
@@ -771,18 +775,18 @@ public class PartnerController {
 									.equalsIgnoreCase("variable")) {
 
 								ChargesBean chargeBean = partner
-										.getChargesBean("shippingfeeWeight",
+										.getChargesBean("shippingfeeWeightVariable",
 												charge.getCriteria(),
 												charge.getCriteriaRange());
 								if (chargeBean == null) {
 									chargeBean = new ChargesBean();
 									chargeBean
-											.setChargeType("shippingfeeWeight");
+											.setChargeType("shippingfeeWeightVariable");
 									chargeBean
 											.setCriteria(charge.getCriteria());
 									chargeBean.setRange(charge
 											.getCriteriaRange());
-									partner.getShippingfeeWeightList().add(
+									partner.getshippingfeeWeightVariableList().add(
 											chargeBean);
 								}
 
@@ -809,7 +813,7 @@ public class PartnerController {
 								chargeBean.setCriteria(charge.getCriteria());
 								chargeBean.setRange(charge.getCriteriaRange());
 								chargeBean.setValue(charge.getChargeAmount());
-								partner.getShippingfeeWeightList().add(
+								partner.getshippingfeeWeightFixedList().add(
 										chargeBean);
 							}
 
@@ -823,13 +827,21 @@ public class PartnerController {
 							&& partner.getFixedfeeList().size() != 0)
 						Collections.sort(partner.getFixedfeeList(),
 								new SortByCriteriaRange());
-					if (partner.getShippingfeeVolumeList() != null
-							&& partner.getShippingfeeVolumeList().size() != 0)
-						Collections.sort(partner.getShippingfeeVolumeList(),
+					if (partner.getshippingfeeVolumeFixedList() != null
+							&& partner.getshippingfeeVolumeFixedList().size() != 0)
+						Collections.sort(partner.getshippingfeeVolumeFixedList(),
 								new SortByCriteria());
-					if (partner.getShippingfeeWeightList() != null
-							&& partner.getShippingfeeWeightList().size() != 0)
-						Collections.sort(partner.getShippingfeeWeightList(),
+					if (partner.getshippingfeeWeightFixedList() != null
+							&& partner.getshippingfeeWeightFixedList().size() != 0)
+						Collections.sort(partner.getshippingfeeWeightFixedList(),
+								new SortByCriteria());
+					if (partner.getshippingfeeVolumeVariableList() != null
+							&& partner.getshippingfeeVolumeVariableList().size() != 0)
+						Collections.sort(partner.getshippingfeeVolumeVariableList(),
+								new SortByCriteria());
+					if (partner.getshippingfeeWeightVariableList() != null
+							&& partner.getshippingfeeWeightVariableList().size() != 0)
+						Collections.sort(partner.getshippingfeeWeightVariableList(),
 								new SortByCriteria());
 
 					model.put("chargeMap", chargeMap);
@@ -1323,14 +1335,14 @@ public class PartnerController {
 							.equalsIgnoreCase("variable")) {
 
 						ChargesBean chargeBean = pbean.getChargesBean(
-								"shippingfeeVolume", charge.getCriteria(),
+								"shippingfeeVolumeVariable", charge.getCriteria(),
 								charge.getCriteriaRange());
 						if (chargeBean == null) {
 							chargeBean = new ChargesBean();
-							chargeBean.setChargeType("shippingfeeVolume");
+							chargeBean.setChargeType("shippingfeeVolumeVariable");
 							chargeBean.setCriteria(charge.getCriteria());
 							chargeBean.setRange(charge.getCriteriaRange());
-							pbean.getShippingfeeVolumeList().add(chargeBean);
+							pbean.getshippingfeeVolumeVariableList().add(chargeBean);
 						}
 
 						if (charge.getChargeName().contains("Local")) {
@@ -1346,11 +1358,11 @@ public class PartnerController {
 
 					} else {
 						ChargesBean chargeBean = new ChargesBean();
-						chargeBean.setChargeType("shippingfeeVolume");
+						chargeBean.setChargeType("shippingfeeVolumeFixed");
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
 						chargeBean.setValue(charge.getChargeAmount());
-						pbean.getShippingfeeVolumeList().add(chargeBean);
+						pbean.getshippingfeeVolumeFixedList().add(chargeBean);
 					}
 
 				} else if (charge.getChargeName().contains("shippingfeeWeight")
@@ -1361,14 +1373,14 @@ public class PartnerController {
 							.equalsIgnoreCase("variable")) {
 
 						ChargesBean chargeBean = pbean.getChargesBean(
-								"shippingfeeWeight", charge.getCriteria(),
+								"shippingfeeWeightVariable", charge.getCriteria(),
 								charge.getCriteriaRange());
 						if (chargeBean == null) {
 							chargeBean = new ChargesBean();
-							chargeBean.setChargeType("shippingfeeWeight");
+							chargeBean.setChargeType("shippingfeeWeightVariable");
 							chargeBean.setCriteria(charge.getCriteria());
 							chargeBean.setRange(charge.getCriteriaRange());
-							pbean.getShippingfeeWeightList().add(chargeBean);
+							pbean.getshippingfeeWeightVariableList().add(chargeBean);
 						}
 
 						if (charge.getChargeName().contains("Local")) {
@@ -1384,11 +1396,11 @@ public class PartnerController {
 
 					} else {
 						ChargesBean chargeBean = new ChargesBean();
-						chargeBean.setChargeType("shippingfeeWeight");
+						chargeBean.setChargeType("shippingfeeWeightFixed");
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
 						chargeBean.setValue(charge.getChargeAmount());
-						pbean.getShippingfeeWeightList().add(chargeBean);
+						pbean.getshippingfeeWeightFixedList().add(chargeBean);
 					}
 
 				} else {
@@ -1401,13 +1413,21 @@ public class PartnerController {
 					&& pbean.getFixedfeeList().size() != 0)
 				Collections.sort(pbean.getFixedfeeList(),
 						new SortByCriteriaRange());
-			if (pbean.getShippingfeeVolumeList() != null
-					&& pbean.getShippingfeeVolumeList().size() != 0)
-				Collections.sort(pbean.getShippingfeeVolumeList(),
+			if (pbean.getshippingfeeVolumeFixedList() != null
+					&& pbean.getshippingfeeVolumeFixedList().size() != 0)
+				Collections.sort(pbean.getshippingfeeVolumeFixedList(),
 						new SortByCriteria());
-			if (pbean.getShippingfeeWeightList() != null
-					&& pbean.getShippingfeeWeightList().size() != 0)
-				Collections.sort(pbean.getShippingfeeWeightList(),
+			if (pbean.getshippingfeeWeightFixedList() != null
+					&& pbean.getshippingfeeWeightFixedList().size() != 0)
+				Collections.sort(pbean.getshippingfeeWeightFixedList(),
+						new SortByCriteria());
+			if (pbean.getshippingfeeVolumeVariableList() != null
+					&& pbean.getshippingfeeVolumeVariableList().size() != 0)
+				Collections.sort(pbean.getshippingfeeVolumeVariableList(),
+						new SortByCriteria());
+			if (pbean.getshippingfeeWeightVariableList() != null
+					&& pbean.getshippingfeeWeightVariableList().size() != 0)
+				Collections.sort(pbean.getshippingfeeWeightVariableList(),
 						new SortByCriteria());
 
 			categoryObjects = categoryService.listCategories(helperClass
@@ -1499,14 +1519,14 @@ public class PartnerController {
 							.equalsIgnoreCase("variable")) {
 
 						ChargesBean chargeBean = pbean.getChargesBean(
-								"shippingfeeVolume", charge.getCriteria(),
+								"shippingfeeVolumeVariable", charge.getCriteria(),
 								charge.getCriteriaRange());
 						if (chargeBean == null) {
 							chargeBean = new ChargesBean();
 							chargeBean.setChargeType("shippingfeeVolume");
 							chargeBean.setCriteria(charge.getCriteria());
 							chargeBean.setRange(charge.getCriteriaRange());
-							pbean.getShippingfeeVolumeList().add(chargeBean);
+							pbean.getshippingfeeVolumeVariableList().add(chargeBean);
 						}
 
 						if (charge.getChargeName().contains("Local")) {
@@ -1526,7 +1546,7 @@ public class PartnerController {
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
 						chargeBean.setValue(charge.getChargeAmount());
-						pbean.getShippingfeeVolumeList().add(chargeBean);
+						pbean.getshippingfeeVolumeFixedList().add(chargeBean);
 					}
 
 				} else if (charge.getChargeName().contains("shippingfeeWeight")
@@ -1537,14 +1557,14 @@ public class PartnerController {
 							.equalsIgnoreCase("variable")) {
 
 						ChargesBean chargeBean = pbean.getChargesBean(
-								"shippingfeeWeight", charge.getCriteria(),
+								"shippingfeeWeightVariable", charge.getCriteria(),
 								charge.getCriteriaRange());
 						if (chargeBean == null) {
 							chargeBean = new ChargesBean();
 							chargeBean.setChargeType("shippingfeeWeight");
 							chargeBean.setCriteria(charge.getCriteria());
 							chargeBean.setRange(charge.getCriteriaRange());
-							pbean.getShippingfeeWeightList().add(chargeBean);
+							pbean.getshippingfeeWeightVariableList().add(chargeBean);
 						}
 
 						if (charge.getChargeName().contains("Local")) {
@@ -1564,7 +1584,7 @@ public class PartnerController {
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
 						chargeBean.setValue(charge.getChargeAmount());
-						pbean.getShippingfeeWeightList().add(chargeBean);
+						pbean.getshippingfeeWeightFixedList().add(chargeBean);
 					}
 
 				} else {
@@ -1577,13 +1597,21 @@ public class PartnerController {
 					&& pbean.getFixedfeeList().size() != 0)
 				Collections.sort(pbean.getFixedfeeList(),
 						new SortByCriteriaRange());
-			if (pbean.getShippingfeeVolumeList() != null
-					&& pbean.getShippingfeeVolumeList().size() != 0)
-				Collections.sort(pbean.getShippingfeeVolumeList(),
+			if (pbean.getshippingfeeVolumeFixedList() != null
+					&& pbean.getshippingfeeVolumeFixedList().size() != 0)
+				Collections.sort(pbean.getshippingfeeVolumeFixedList(),
 						new SortByCriteria());
-			if (pbean.getShippingfeeWeightList() != null
-					&& pbean.getShippingfeeWeightList().size() != 0)
-				Collections.sort(pbean.getShippingfeeWeightList(),
+			if (pbean.getshippingfeeWeightFixedList() != null
+					&& pbean.getshippingfeeWeightFixedList().size() != 0)
+				Collections.sort(pbean.getshippingfeeWeightFixedList(),
+						new SortByCriteria());
+			if (pbean.getshippingfeeVolumeVariableList() != null
+					&& pbean.getshippingfeeVolumeVariableList().size() != 0)
+				Collections.sort(pbean.getshippingfeeVolumeVariableList(),
+						new SortByCriteria());
+			if (pbean.getshippingfeeWeightVariableList() != null
+					&& pbean.getshippingfeeWeightVariableList().size() != 0)
+				Collections.sort(pbean.getshippingfeeWeightVariableList(),
 						new SortByCriteria());
 
 			categoryObjects = categoryService.listCategories(helperClass
