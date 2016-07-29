@@ -121,7 +121,7 @@ public class SellerDaoImpl implements SellerDao {
 		                    }
 		                    if(verCode!=null&&verCode.equals("Verified")){
 		                    	sellerNew.setVerCode(verCode);
-		                    	assignRole(sellerNew.getId());
+		                    	//assignRole(sellerNew.getId());
 		                    }
 		                }
 					session.saveOrUpdate(sellerNew);				
@@ -184,7 +184,7 @@ public class SellerDaoImpl implements SellerDao {
 		
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerid,e);
 			throw new CustomException(GlobalConstant.getSellerByIdError, new Date(), 3, GlobalConstant.getSellerByIdErrorCode, e);
 			
 		}
@@ -309,7 +309,7 @@ public class SellerDaoImpl implements SellerDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerid,e);
 			throw new CustomException(GlobalConstant.planUpgradeError, new Date(), 1, GlobalConstant.planUpgradeErrorCode, e);
 		}
 		log.info("*** planUpgrade Ends : SellerDaoImpl ****");
@@ -386,7 +386,7 @@ public class SellerDaoImpl implements SellerDao {
 		} catch (Exception e) {
 			System.out.println(" Error getting state elivery time  ");
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.getSellerByEmailError, new Date(), 3, GlobalConstant.getSellerByEmailErrorCode, e);
 		}
 		log.info("*** getStateDeliveryTime Ends : SellerDaoImpl ****");
@@ -405,7 +405,7 @@ public class SellerDaoImpl implements SellerDao {
 		 }
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 		}
 		log.info("*** setExpenseGroupsForSeller Ends : SellerDaoImpl ****");
 	}
@@ -437,7 +437,7 @@ public class SellerDaoImpl implements SellerDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.addStateDeliveryTimeError,
 					new Date(), 1, GlobalConstant.addStateDeliveryTimeErrorCode,
 					e);			
@@ -489,7 +489,7 @@ public class SellerDaoImpl implements SellerDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.updateProcessedOrdersCountError, new Date(), 1, GlobalConstant.updateProcessedOrdersCountErrorCode, e);
 		}
 		log.info("*** updateProcessedOrdersCount Ends : SellerDaoImpl ****");
@@ -510,14 +510,14 @@ public class SellerDaoImpl implements SellerDao {
 	        javax.mail.Session session = javax.mail.Session.getInstance(prop, null);			
 			try{				
 		        Message msg = new MimeMessage(session);
-		        msg.setFrom(new InternetAddress("O2R@order2revenue.com"));
+		        msg.setFrom(new InternetAddress("o2r_support@order2revenue.com"));
 		        msg.setRecipients(Message.RecipientType.TO,
 		        InternetAddress.parse(email, false));
 		        msg.setSubject("Registration Confirmation Mail");
 		        msg.setContent("<html>\n" +
 	                    "<body>\n" +
 	                    "\n" +
-	                    "<a href="+verificationLink+">\n" + "Click here to Complete Your Registration</a>\n" +
+	                    "Thanks for your Registration. Admin will contact you soon !!!\n" +
 	                    "\n" +
 	                    "</body>\n" +
 	                    "</html>", "text/html");	        
@@ -621,7 +621,7 @@ public class SellerDaoImpl implements SellerDao {
 			assignRoles.executeUpdate();
 			session.getTransaction().commit();
 		}catch(Exception e){
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
 		}finally{
 			if(session != null)

@@ -149,7 +149,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		   }
 		   catch (Exception e) {
 			   e.printStackTrace();
-			   log.error("Failed!",e);
+			   log.error("Failed! by sellerId : "+sellerId,e);
 			   throw new CustomException(GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3, GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
 		}
 		 log.info("*** getChannelSalesDetails Ends : ReportsChannelnCategoryDaoImpl ****");	 
@@ -423,7 +423,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		   }
 		   catch (Exception e) {
 			   e.printStackTrace();
-			   log.error("Failed!",e);
+			   log.error("Failed! by sellerId : "+sellerIdfromSession,e);
 			   throw new CustomException(GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3, GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
 		}		 
 		 log.info("*** getCategorySalesDetails Exit : ReportsChannelnCategoryDaoImpl ****");
@@ -574,7 +574,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		   }
 		   catch (Exception e) {
 			   e.printStackTrace();
-			   log.error("Failed!",e);
+			   log.error("Failed! by sellerId : "+sellerIdfromSession,e);
 			   throw new CustomException(GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3, GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
 		}
 		List aList=getConsolidatedDetails(startDate,endDate,sellerIdfromSession);
@@ -736,7 +736,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		   }
 		   catch (Exception e) {
 			   e.printStackTrace();
-			   log.error("Failed!",e);
+			   log.error("Failed! by sellerId : "+sellerIdfromSession,e);
 			   throw new CustomException(GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3, GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
 		}
 		 ttso.addAll(ttsonew);
@@ -945,7 +945,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 		   }
 		   catch (Exception e) {
 			   e.printStackTrace();
-			   log.error("Failed!",e);
+			   log.error("Failed! by sellerId : "+sellerId,e);
 			   throw new CustomException(GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3, GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
 		}
 		 
@@ -1027,7 +1027,7 @@ public class ReportsChannelnCategoryDaoImpl implements ReportsChannelnCategoryDa
 							 i++;}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 		}
 		 
 		log.info("*** ttsoReturn Ends : ReportsChannelnCategoryDaoImpl ****"); 

@@ -180,7 +180,7 @@ public class SaveContents {
 						order.setOrderDate(entry.getCell(1).getDateCellValue());
 					} else {
 						errorMessage
-								.append(" Order Recieved Date formate is wrong ,enter mm/dd/yyyy,");
+								.append(" Order Received Date format is wrong ,enter mm/dd/yyyy,");
 						validaterow = false;
 					}
 				} else {

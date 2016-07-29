@@ -78,7 +78,7 @@ public class EventsDaoImpl implements EventsDao {
 			session.flush();
 			session.close();
 		} catch (Exception e) {
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.addEventError,new Date(), 1, GlobalConstant.addEventErrorCode, e);
 		}		
@@ -129,7 +129,7 @@ public class EventsDaoImpl implements EventsDao {
 					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			returnList=criteria.list();
 		} catch (Exception e) {
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.getEventError,new Date(), 3, GlobalConstant.getEventErrorCode, e);
 		}
@@ -153,7 +153,7 @@ public class EventsDaoImpl implements EventsDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.listEventError,new Date(), 3, GlobalConstant.listEventErrorCode, e);
 		}
@@ -184,7 +184,7 @@ public class EventsDaoImpl implements EventsDao {
 				
 				returnlist = criteria.list();			
 		} catch (Exception e) {
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.listEventError,new Date(), 3, GlobalConstant.listEventErrorCode, e);
 		}
@@ -216,7 +216,7 @@ public class EventsDaoImpl implements EventsDao {
 				}
 			}
 		}catch(Exception e){
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
 		}
 		
@@ -240,7 +240,7 @@ public class EventsDaoImpl implements EventsDao {
 				event=(Events)eventList.get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerID,e);
 			throw new CustomException(GlobalConstant.getEventError,new Date(), 3, GlobalConstant.getEventErrorCode, e);
 		}finally{
 			if(session != null){
@@ -275,7 +275,7 @@ public class EventsDaoImpl implements EventsDao {
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 		}finally{
 			if(session != null)
 				session.close();
@@ -309,7 +309,7 @@ public class EventsDaoImpl implements EventsDao {
 			session.getTransaction().commit();
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 		}finally{
 			if(session != null)
 				session.close();
