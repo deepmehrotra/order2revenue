@@ -129,10 +129,11 @@ public boolean empty(String s)
     }
 	function updateFields(obj){
 		if($(obj).val() && "notSelected" != $(obj).val()){
+			var serviceTax = parseFloat('${serviceTax}');
 			var minAmount = parseInt($(obj).find(':selected').data('minamount'));
 			var planPrice = $(obj).find(':selected').data('planprice');
 			var orderCount = parseInt(Math.ceil(minAmount/planPrice));
-			var taxAmount = parseFloat(parseFloat(minAmount*14.5/100).toFixed(2));
+			var taxAmount = parseFloat(parseFloat(minAmount*serviceTax/100).toFixed(2));
 			var totalAmount = minAmount + taxAmount;
 			$(".currPlanPriceTxt").html(planPrice);
 			$(".currAmount").val(minAmount);
@@ -165,10 +166,11 @@ public boolean empty(String s)
 			var minAmount = parseInt($(".selectPlanField").find(':selected').data('minamount'));
 			var currAmount = parseInt(currObjVal);
 			if(currAmount >= minAmount){
+				var serviceTax = parseFloat('${serviceTax}');
 				$(".checkoutButton").removeAttr('disabled');
 				var planPrice = $(".selectPlanField").find(':selected').data('planprice');
 				var orderCount = parseInt(Math.ceil(currAmount/planPrice));
-				var taxAmount = parseFloat(parseFloat(currAmount*14.5/100).toFixed(2));
+				var taxAmount = parseFloat(parseFloat(currAmount*serviceTax/100).toFixed(2));
 				var totalAmount = currAmount + taxAmount;
 				$(".currTotalAmount").val(totalAmount);
 				$(".currOrderCount").val(orderCount);
@@ -294,19 +296,26 @@ public boolean empty(String s)
 						<div class="col-md-4">
 							<div class="column text-center">
 								<h3>Current Plan</h3>
-								<button class="btn btn-block"><c:out value="${myAccount.plan.planName}"/></button>
-								<br>
-								<div align="center">
-									<p>								
-										<img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${myAccount.plan.planPrice}"/> per Order
-									</p>
-									<p>
-										MIN AMOUNT = <span><img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${myAccount.plan.orderCount}"/>/-</span>
-									</p>
-									<p>
-										ORDER COUNT = <fmt:formatNumber type="number" maxFractionDigits="0" value="${myAccount.plan.orderCount/myAccount.plan.planPrice}" />
-									</p>
-								</div>
+								<c:choose>
+									<c:when test="${myAccount.plan == null}">
+										No Plan subscribed yet.
+									</c:when>
+									<c:otherwise>
+										<button class="btn btn-block"><c:out value="${myAccount.plan.planName}"/></button>
+										<br>
+										<div align="center">
+											<p>								
+												<img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${myAccount.plan.planPrice}"/> per Order
+											</p>
+											<p>
+												MIN AMOUNT = <span><img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${myAccount.plan.orderCount}"/>/-</span>
+											</p>
+											<p>
+												ORDER COUNT = <fmt:formatNumber type="number" maxFractionDigits="0" value="${myAccount.plan.orderCount/myAccount.plan.planPrice}" />
+											</p>
+										</div>
+									</c:otherwise>
+								</c:choose>
 							</div>
 						</div>
 						<c:forEach items="${upgrade}" var="up">

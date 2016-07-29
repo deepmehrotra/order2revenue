@@ -185,6 +185,10 @@ label.star:before {
 	content: '\f006';
 	font-family: FontAwesome;
 }
+
+.black-color {
+	color: #000 !important;
+}
 </style>
 </head>
 <body>
@@ -212,7 +216,7 @@ label.star:before {
 								<p>
 									<b>Orders</b>
 								</p>
-								<p class="para">
+								<p class="para black-color">
 									<c:out value="${myAccount.sellerAccount.orderBucket}" />
 								</p>
 
