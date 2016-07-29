@@ -52,7 +52,7 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.addManualChargesError,
 					new Date(), 1, GlobalConstant.addManualChargesErrorCode, e);			
@@ -81,7 +81,7 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 			session.close();
 			
 		} catch (Exception e) {			
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.addManualChargesError,
 					new Date(), 1, GlobalConstant.addManualChargesErrorCode, e);
@@ -104,7 +104,7 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.listManualChargesError,
 					new Date(), 3, GlobalConstant.listManualChargesErrorCode, e);
@@ -162,7 +162,7 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.getMCforPaymentIDError,
 					new Date(), 3, GlobalConstant.getMCforPaymentIDErrorCode, e);			
 		}
@@ -209,7 +209,7 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 			session.close();
 
 		} catch (Exception e) {
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.deleteManualChargesError,
 					new Date(), 3, GlobalConstant.deleteManualChargesErrorCode,

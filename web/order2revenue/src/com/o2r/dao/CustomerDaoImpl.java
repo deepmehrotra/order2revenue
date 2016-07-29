@@ -209,7 +209,7 @@ public Customer getCustomer(String customerEmail,int sellerId,Session session) {
 		}
 	catch(Exception e)
 	{
-		log.error("Failed!",e);
+		log.error("Failed! by sellerId : "+sellerId,e);
 		System.out.println(" Exception in getting cutomer list :"+e.getLocalizedMessage());
 		e.printStackTrace();
 	}

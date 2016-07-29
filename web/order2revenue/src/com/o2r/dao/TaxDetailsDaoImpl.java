@@ -62,7 +62,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.addTaxDetailErrorCode));
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 
 		}
 		log.info("*** addTaxDetail Ends : TaxDetailsDaoImpl ****");
@@ -133,7 +133,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			}
 			} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw e;
 		}
 		log.info("*** addMonthlyTaxDetail Ends : TaxDetailsDaoImpl ****");
@@ -199,7 +199,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("Inside exception in add monthly tdsdetails  ");
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw e;
 		}
 		log.info("*** addMonthlyTDSDetail Ends : TaxDetailsDaoImpl ****");
@@ -231,7 +231,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.addTaxPaymentDetailErrorCode));
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.addTaxPaymentDetailError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.addTaxPaymentDetailErrorCode, e);
@@ -264,7 +264,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.addTDSPaymentDetailErrorCode));
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.addTDSPaymentDetailError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.addTDSPaymentDetailErrorCode, e);
@@ -304,7 +304,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.getTaxDetailListErrorCode));
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.getTaxDetailListError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.getTaxDetailListErrorCode, e);
@@ -333,7 +333,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.getTaxDetailListErrorCode2));
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.getTaxDetailListError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.getTaxDetailListErrorCode2, e);
@@ -377,7 +377,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("**Error Code : "+ (sellerId + "-" + GlobalConstant.getTaxDetailListErrorCode));
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.getTaxDetailListError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.getTaxDetailListErrorCode, e);
@@ -405,7 +405,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.getTaxCatListErrorCode));
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.getTaxCatListError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.getTaxCatListErrorCode, e);
@@ -472,7 +472,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.getTaxCategoryErrorCode));
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.getTaxCategoryError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.getTaxCategoryErrorCode, e);
@@ -510,7 +510,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		} catch (Exception e) {
 			log.debug("Inside delleting taxdetail"+ e.getLocalizedMessage());
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 		}
 		log.info("*** deleteTaxDetail Ends : TaxDetailsDaoImpl ****");
 	}
@@ -543,7 +543,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.deleteTaxCategoryErrorCode));
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.deleteTaxCategoryError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.deleteTaxCategoryErrorCode, e);
