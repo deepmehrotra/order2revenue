@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.o2r.bean.DataConfig;
 import com.o2r.bean.PlanBean;
 import com.o2r.bean.SellerBean;
 import com.o2r.helper.ConverterClass;
@@ -59,6 +60,8 @@ public class SellerController {
 
 	@Autowired
 	private SellerService sellerService;
+	@Autowired
+	private DataConfig dataConfig;
 	@Autowired
 	private PlanService planService;
 	@Autowired
@@ -492,6 +495,7 @@ public class SellerController {
 					.prepareListofPlanBean(planService.listPlans()));
 			int sellerId = helperClass.getSellerIdfromSession(request);
 			model.put("myAccount", sellerService.getSeller(sellerId));
+			model.put("serviceTax", dataConfig.getServiceTax());
 		} catch (CustomException ce) {
 			log.error("planUpgrade exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
