@@ -197,7 +197,7 @@ label.star:before {
 		<div id="page-wrapper" class="gray-bg">
 			<jsp:include page="../globalheader.jsp"></jsp:include>
 			<div class="wrapper wrapper-content animated fadeInRight"
-				id="centerpane">
+				id="centerpane" style="background: #fff;">
 				<div class="row">
 					<div class="col-lg-12 text-center">
 						<div class="navy-line"
@@ -257,7 +257,7 @@ label.star:before {
 									the number of order purchased,consumed,remaining during the
 									current cycle and the whole life period</p>
 							</div>
-							<div class="col-md-12">
+							<div class="col-md-12" style="margin-top: -137px;">
 								<h1 class="heading">Account Summary</h1>
 								<div class="col-md-6 text-center">
 									<p>
