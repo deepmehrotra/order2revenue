@@ -2254,7 +2254,8 @@ public class OrderDaoImpl implements OrderDao {
 						&& !"".equals(charge.getCriteria())) {
 
 					if (partner.getNrnReturnConfig().getShippingFeeType()
-							.equalsIgnoreCase("variable")) {
+							.equalsIgnoreCase("variable")
+								&& charge.getChargeName().contains("shippingfeeVolumeVariable")) {
 
 						ChargesBean chargeBean = pbean
 								.getChargesBean("shippingfeeVolumeVariable",
@@ -2281,7 +2282,7 @@ public class OrderDaoImpl implements OrderDao {
 							chargeBean.setMetroValue(charge.getChargeAmount());
 						}
 
-					} else {
+					} else if (charge.getChargeName().contains("shippingfeeVolumeFixed")) {
 						ChargesBean chargeBean = new ChargesBean();
 						chargeBean.setChargeType("shippingfeeVolumeFixed");
 						chargeBean.setCriteria(charge.getCriteria());
@@ -2295,7 +2296,8 @@ public class OrderDaoImpl implements OrderDao {
 						&& !"".equals(charge.getCriteria())) {
 
 					if (partner.getNrnReturnConfig().getShippingFeeType()
-							.equalsIgnoreCase("variable")) {
+							.equalsIgnoreCase("variable")
+								&& charge.getChargeName().contains("shippingfeeWeightVariable")) {
 
 						ChargesBean chargeBean = pbean
 								.getChargesBean("shippingfeeWeightVariable",
@@ -2322,7 +2324,7 @@ public class OrderDaoImpl implements OrderDao {
 							chargeBean.setMetroValue(charge.getChargeAmount());
 						}
 
-					} else {
+					} else if (charge.getChargeName().contains("shippingfeeWeightFixed")) {
 						ChargesBean chargeBean = new ChargesBean();
 						chargeBean.setChargeType("shippingfeeWeightFixed");
 						chargeBean.setCriteria(charge.getCriteria());
@@ -3525,7 +3527,8 @@ public class OrderDaoImpl implements OrderDao {
 					&& !"".equals(charge.getCriteria())) {
 
 				if (pbean.getNrnReturnConfig().getShippingFeeType()
-						.equalsIgnoreCase("variable")) {
+						.equalsIgnoreCase("variable")
+							&& charge.getChargeName().contains("shippingfeeVolumeVariable")) {
 
 					ChargesBean chargeBean = pbean.getChargesBean(
 							"shippingfeeVolumeVariable", charge.getCriteria(),
@@ -3548,7 +3551,7 @@ public class OrderDaoImpl implements OrderDao {
 						chargeBean.setMetroValue(charge.getChargeAmount());
 					}
 
-				} else {
+				} else if (charge.getChargeName().contains("shippingfeeVolumeFixed")) {
 					ChargesBean chargeBean = new ChargesBean();
 					chargeBean.setChargeType("shippingfeeVolumeFixed");
 					chargeBean.setCriteria(charge.getCriteria());
@@ -3562,7 +3565,8 @@ public class OrderDaoImpl implements OrderDao {
 					&& !"".equals(charge.getCriteria())) {
 
 				if (pbean.getNrnReturnConfig().getShippingFeeType()
-						.equalsIgnoreCase("variable")) {
+						.equalsIgnoreCase("variable")
+							&& charge.getChargeName().contains("shippingfeeWeightVariable")) {
 
 					ChargesBean chargeBean = pbean.getChargesBean(
 							"shippingfeeWeightVariable", charge.getCriteria(),
@@ -3585,7 +3589,7 @@ public class OrderDaoImpl implements OrderDao {
 						chargeBean.setMetroValue(charge.getChargeAmount());
 					}
 
-				} else {
+				} else if (charge.getChargeName().contains("shippingfeeWeightFixed")) {
 					ChargesBean chargeBean = new ChargesBean();
 					chargeBean.setChargeType("shippingfeeWeightFixed");
 					chargeBean.setCriteria(charge.getCriteria());
