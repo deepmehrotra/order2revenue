@@ -176,13 +176,19 @@ public class SaveContents {
 				}
 				if (entry.getCell(1) != null
 						&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(1))) {
-						order.setOrderDate(entry.getCell(1).getDateCellValue());
-					} else {
-						errorMessage
-								.append(" Order Received Date format is wrong ,enter mm/dd/yyyy,");
+					try {
+						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(1))) {
+							order.setOrderDate(entry.getCell(1).getDateCellValue());
+						} else {
+							errorMessage
+									.append(" Order Received Date format is wrong ,enter mm/dd/yyyy,");
+							validaterow = false;
+						}
+					} catch (Exception e) {
+						errorMessage.append(" Order Received Date format is wrong ,enter mm/dd/yyyy,");
 						validaterow = false;
-					}
+					}				
+					
 				} else {
 					errorMessage.append(" Order Recieved Date is null;");
 					validaterow = false;
@@ -225,7 +231,8 @@ public class SaveContents {
 						&& entry.getCell(5).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					if (entry.getCell(5).toString().equalsIgnoreCase("COD")
 							|| entry.getCell(5).toString()
-									.equalsIgnoreCase("Prepaid"))
+									.equalsIgnoreCase("Prepaid") || entry.getCell(5).toString()
+									.equalsIgnoreCase("Others"))
 						order.setPaymentType(entry.getCell(5).toString());
 					else {
 						order.setPaymentType(entry.getCell(5).toString());
@@ -268,7 +275,7 @@ public class SaveContents {
 						order.setOrderMRP(Double.parseDouble(entry.getCell(11)
 								.toString()));
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage.append(" Order MRP should be a number ");						
 					}
 				} 
@@ -318,7 +325,7 @@ public class SaveContents {
 					{
 						errorMessage
 						.append(" Shipped Date formate is wrong ,enter mm/dd/yyyy,");
-				validaterow = false;
+						validaterow = false;
 					}
 				} else {
 					errorMessage.append(" Shipping Date is null ");
@@ -337,7 +344,7 @@ public class SaveContents {
 							validaterow = false;
 						}
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage.append(" Quantity should be a number ");
 						validaterow = false;
 					}
@@ -361,7 +368,7 @@ public class SaveContents {
 											.parseDouble(entry.getCell(16)
 													.toString()));
 								} catch (NumberFormatException e) {
-									log.error("Failed!", e);
+									log.error("Failed! by SellerId : "+sellerId, e);
 									errorMessage.append(" Net Rate should be number ");
 									validaterow = false;
 								}
@@ -382,7 +389,7 @@ public class SaveContents {
 											.parseDouble(entry.getCell(16)
 													.toString()));
 								} catch (NumberFormatException e) {
-									log.error("Failed!", e);
+									log.error("Failed! by SellerId : "+sellerId, e);
 									errorMessage.append(" Net Rate should be number ");
 									
 								}
@@ -419,7 +426,7 @@ public class SaveContents {
 						try {
 							customerBean.setZipcode(entry.getCell(21).toString());
 						} catch (Exception e) {
-							log.error("Failed!", e);
+							log.error("Failed! by SellerId : "+sellerId, e);
 							errorMessage
 									.append("Customer zipcode is corrupted ");
 							validaterow = false;
@@ -461,7 +468,7 @@ public class SaveContents {
 				catch(Exception e)
 				{
 					
-					log.error("Failed!", e);
+					log.error("Failed! by SellerId : "+sellerId, e);
 					errorMessage.append("Invalid Input! ");
 					returnOrderMap.put(errorMessage.toString(), order);
 				}
@@ -486,7 +493,7 @@ public class SaveContents {
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
 			addErrorUploadReport("MP_Order_Upload", sellerId, uploadReport);
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 		}
 		log.info("$$$ saveOrderContents ends : SaveContents $$$");
 		return returnOrderMap;
@@ -598,7 +605,7 @@ public class SaveContents {
 						order.setPoPrice(Double.parseDouble(entry.getCell(4)
 								.toString()));
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage
 								.append(" Gross PO Price should be a number ");
 						validaterow = false;
@@ -630,7 +637,7 @@ public class SaveContents {
 								.getNumericCellValue());
 
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage.append(" Amount should be a number ");
 						validaterow = false;
 					}
@@ -691,16 +698,22 @@ public class SaveContents {
 				if (entry.getCell(8) != null
 						&& StringUtils.isNotBlank(entry.getCell(8).toString())) {
 
-					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(8))) {
-						order.setOrderDate(entry.getCell(8).getDateCellValue());
-						order.setShippedDate(entry.getCell(8)
-								.getDateCellValue());
-						order.setDeliveryDate(entry.getCell(8)
-								.getDateCellValue());
-					} else {
+					try {
+						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(8))) {
+							order.setOrderDate(entry.getCell(8).getDateCellValue());
+							order.setShippedDate(entry.getCell(8)
+									.getDateCellValue());
+							order.setDeliveryDate(entry.getCell(8)
+									.getDateCellValue());
+						} else {
+							errorMessage.append(" Shipped Date format is wrong ");
+							validaterow = false;
+						}
+					} catch (Exception e) {
 						errorMessage.append(" Shipped Date format is wrong ");
 						validaterow = false;
-					}
+					}				
+					
 				} else {
 					errorMessage.append(" Shipped Date is null ");
 					validaterow = false;
@@ -743,7 +756,7 @@ public class SaveContents {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 			addErrorUploadReport("PO_Order_Upload", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
@@ -828,7 +841,7 @@ public class SaveContents {
 						product.setProductPrice(Float.valueOf(entry.getCell(3)
 								.toString()));
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage.append(" Product price should be a number ");						
 					}
 				} else {
@@ -845,7 +858,7 @@ public class SaveContents {
 							validaterow = false;
 						}
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage.append(" Quantity should be a number ");
 						validaterow = false;
 					}
@@ -859,7 +872,7 @@ public class SaveContents {
 						product.setThreholdLimit(Float.valueOf(
 								entry.getCell(5).toString()).longValue());
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage.append(" Threshold limit should be a number ");						
 					}
 				} else {
@@ -871,7 +884,7 @@ public class SaveContents {
 						product.setLength(Float.valueOf(
 								entry.getCell(6).toString()));
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage.append(" Length should be a number ");
 						validaterow = false;
 					}
@@ -885,7 +898,7 @@ public class SaveContents {
 						product.setBreadth(Float.valueOf(
 								entry.getCell(7).toString()));
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage.append(" Breadth should be a number ");
 						validaterow = false;
 					}
@@ -900,7 +913,7 @@ public class SaveContents {
 						product.setHeight(Float.valueOf(
 								entry.getCell(8).toString()));
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage.append(" Height should be a number ");
 						validaterow = false;
 					}
@@ -914,7 +927,7 @@ public class SaveContents {
 						product.setDeadWeight((float) entry.getCell(9)
 								.getNumericCellValue());
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage.append(" Dead Weight should be a number ");
 						validaterow = false;
 					}
@@ -940,7 +953,7 @@ public class SaveContents {
 				// Pre save to generate id for use in hierarchy
 			}catch(Exception e)
 				{
-				log.error("Failed!",e);
+				log.error("Failed! by SellerId : "+sellerId,e);
 				
 					errorMessage.append("Invalid Input! ");
 				returnProductMap.put(errorMessage.toString(),
@@ -966,7 +979,7 @@ public class SaveContents {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 			addErrorUploadReport("Create_Parent_Product", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
@@ -1026,7 +1039,7 @@ public class SaveContents {
 									product.setProductPrice(Float.valueOf(entry.getCell(2)
 											.toString()));
 								} catch (NumberFormatException e) {
-									log.error("Failed!", e);
+									log.error("Failed! by SellerId : "+sellerId, e);
 									errorMessage.append(" Product price should be a number ");									
 								}
 							}						
@@ -1036,7 +1049,7 @@ public class SaveContents {
 									product.setThreholdLimit(Float.valueOf(
 											entry.getCell(3).toString()).longValue());
 								} catch (NumberFormatException e) {
-									log.error("Failed!", e);
+									log.error("Failed! by SellerId : "+sellerId, e);
 									errorMessage.append(" Threshold limit should be a number ");									
 								}
 							}
@@ -1046,7 +1059,7 @@ public class SaveContents {
 									product.setLength(Float.valueOf(
 											entry.getCell(4).toString()));
 								} catch (NumberFormatException e) {
-									log.error("Failed!", e);
+									log.error("Failed! by SellerId : "+sellerId, e);
 									errorMessage.append(" Length should be a number ");									
 								}
 							}
@@ -1056,7 +1069,7 @@ public class SaveContents {
 									product.setBreadth(Float.valueOf(
 											entry.getCell(5).toString()));
 								} catch (NumberFormatException e) {
-									log.error("Failed!", e);
+									log.error("Failed! by SellerId : "+sellerId, e);
 									errorMessage.append(" Breadth should be a number ");									
 								}
 							}
@@ -1066,7 +1079,7 @@ public class SaveContents {
 									product.setHeight(Float.valueOf(
 											entry.getCell(6).toString()));
 								} catch (NumberFormatException e) {
-									log.error("Failed!", e);
+									log.error("Failed! by SellerId : "+sellerId, e);
 									errorMessage.append(" Height should be a number ");
 									
 								}
@@ -1076,7 +1089,7 @@ public class SaveContents {
 								try {
 									product.setDeadWeight((float) entry.getCell(7).getNumericCellValue());
 								} catch (NumberFormatException e) {
-									log.error("Failed!", e);
+									log.error("Failed! by SellerId : "+sellerId, e);
 									errorMessage.append(" Dead Weight should be a number ");									
 								}
 							}						
@@ -1097,7 +1110,7 @@ public class SaveContents {
 					}
 				}catch(Exception e)
 					{
-					log.error("Failed!",e);
+					log.error("Failed! by SellerId : "+sellerId,e);
 					if (product != null) {
 						errorMessage.append("Invalid Input! ");
 						returnProductMap.put(errorMessage.toString(),
@@ -1120,7 +1133,7 @@ public class SaveContents {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 			addErrorUploadReport("Product_Edit", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
@@ -1230,7 +1243,7 @@ public class SaveContents {
 				}
 				}catch(Exception e)
 				{
-					log.error("Failed!", e);
+					log.error("Failed! by SellerId : "+sellerId, e);
 					if(productConfig!=null)
 					{
 						errorMessage.append("Invalid Input! ");
@@ -1259,7 +1272,7 @@ public class SaveContents {
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 			addErrorUploadReport("MP_SKU_Mapping", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
@@ -1333,7 +1346,7 @@ public class SaveContents {
 						productConfig.setMrp(Double.valueOf(entry.getCell(3)
 								.toString()));
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage.append(" MRP should be a number ");
 						validaterow = false;
 					}
@@ -1348,7 +1361,7 @@ public class SaveContents {
 						productConfig.setProductPrice((double) entry.getCell(4)
 								.getNumericCellValue());
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage
 								.append(" Product Price should be a number ");
 						validaterow = false;
@@ -1363,7 +1376,7 @@ public class SaveContents {
 						productConfig.setDiscount(Float.valueOf(entry
 								.getCell(5).toString()));
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage.append(" Discount should be a number ");
 						validaterow = false;
 					}
@@ -1400,7 +1413,7 @@ public class SaveContents {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 			addErrorUploadReport("PO_Product_Config", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
@@ -1509,21 +1522,27 @@ public class SaveContents {
 							validaterow = false;
 						}
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage.append(" Recieved amount should be number ");
 						validaterow = false;
 					}
 					if (entry.getCell(5) != null
 							&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
 
-						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(5))) {
-							payment.setDateofPayment(entry.getCell(5)
-									.getDateCellValue());
-						} else {
+						try {
+							if (HSSFDateUtil.isCellDateFormatted(entry.getCell(5))) {
+								payment.setDateofPayment(entry.getCell(5)
+										.getDateCellValue());
+							} else {
+								errorMessage
+										.append(" Payment Date format is wrong ,enter mm/dd/yyyy ");
+								validaterow = false;
+							}
+						} catch (Exception e) {
 							errorMessage
-									.append(" Payment Date format is wrong ,enter mm/dd/yyyy ");
+							.append(" Payment Date format is wrong ,enter mm/dd/yyyy ");
 							validaterow = false;
-						}
+						}						
 					} else {
 						errorMessage.append(" Payment Date is null ");
 						validaterow = false;
@@ -1585,21 +1604,27 @@ public class SaveContents {
 							validaterow = false;
 						}
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage.append(" Recieved amount should be number ");
 						validaterow = false;
 					}
 					if (entry.getCell(5) != null
 							&& StringUtils.isNotBlank(entry.getCell(5).toString())) {
 
-						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(5))) {
-							manualCharges.setDateOfPayment(entry.getCell(5)
-									.getDateCellValue());
-						} else {
+						try {
+							if (HSSFDateUtil.isCellDateFormatted(entry.getCell(5))) {
+								manualCharges.setDateOfPayment(entry.getCell(5)
+										.getDateCellValue());
+							} else {
+								errorMessage
+										.append(" Payment Date format is wrong ,enter mm/dd/yyyy ");
+								validaterow = false;
+							}
+						} catch (Exception e) {
 							errorMessage
-									.append(" Payment Date format is wrong ,enter mm/dd/yyyy ");
+							.append(" Payment Date format is wrong ,enter mm/dd/yyyy ");
 							validaterow = false;
-						}
+						}						
 					} else {
 						errorMessage.append(" Payment Date is null ");
 						validaterow = false;
@@ -1643,7 +1668,7 @@ public class SaveContents {
 					}
 					catch(Exception e)
 					{
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 					}
 				}
 				manualChargesService.addListManualCharges(manualChargesList, sellerId);
@@ -1655,7 +1680,7 @@ public class SaveContents {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 			addErrorUploadReport("MP_Payment_Upload", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
@@ -1745,7 +1770,7 @@ public class SaveContents {
 			log.debug("Inside save c" + "ontents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 			addErrorUploadReport("InventoryReport", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
@@ -1872,7 +1897,7 @@ public class SaveContents {
 								validaterow = false;
 							}
 						} catch (Exception e) {
-							log.error("Failed !",e);
+							log.error("Failed! by SellerId : "+sellerId,e);
 							errorMessage.append(" Return Date formate is wrong ,enter mm/dd/yyyy,");
 							validaterow = false;
 						}
@@ -1895,7 +1920,7 @@ public class SaveContents {
 								validaterow = false;
 							}
 						} catch (NumberFormatException e) {
-							log.error("Failed!", e);
+							log.error("Failed! by SellerId : "+sellerId, e);
 							errorMessage
 									.append(" Quantity should be a number ");
 							validaterow = false;
@@ -1950,7 +1975,7 @@ public class SaveContents {
 				}
 				}catch(Exception e)
 				{
-					log.error("Failed!", e);
+					log.error("Failed! by SellerId : "+sellerId, e);
 					errorMessage
 					.append("Invalid input");
 					order.setOrderReturnOrRTO(orderReturn);
@@ -1962,7 +1987,7 @@ public class SaveContents {
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 			addErrorUploadReport("MP_Return_Upload", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
@@ -2082,7 +2107,7 @@ public class SaveContents {
 			downloadUploadReportXLS(offices, "DebitNoteSheet", 9, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 			e.printStackTrace();
 			addErrorUploadReport("DebitNoteSheet", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
@@ -2163,13 +2188,18 @@ public class SaveContents {
 				if (entry.getCell(2) != null
 						&& StringUtils.isNotBlank(entry.getCell(2).toString())) {
 
-					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(2))) {
-						popabean.setPaymentDate(entry.getCell(2)
-								.getDateCellValue());
-					} else {
+					try {
+						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(2))) {
+							popabean.setPaymentDate(entry.getCell(2)
+									.getDateCellValue());
+						} else {
+							errorMessage.append(" Payment Date format is wrong ");
+							validaterow = false;
+						}
+					} catch (Exception e) {
 						errorMessage.append(" Payment Date format is wrong ");
 						validaterow = false;
-					}
+					}					
 				} else {
 					errorMessage.append(" Payment Date is null ");
 					validaterow = false;
@@ -2185,7 +2215,7 @@ public class SaveContents {
 										.toString());
 						log.debug(" ******toatal psitive :" + totalpositive);
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage
 								.append(" Positive Amount should be a number ");
 						validaterow = false;
@@ -2206,7 +2236,7 @@ public class SaveContents {
 								+ Math.abs(Double.parseDouble(entry.getCell(4)
 										.toString()));
 					} catch (NumberFormatException e) {
-						log.error("Failed!", e);
+						log.error("Failed! by SellerId : "+sellerId, e);
 						errorMessage
 								.append(" Negative Amount should be a number ");
 						validaterow = false;
@@ -2252,7 +2282,7 @@ public class SaveContents {
 			downloadUploadReportXLS(offices, "Po_Payment_Upload", 6, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 			e.printStackTrace();
 			addErrorUploadReport("Po_Payment_Upload", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
@@ -2331,7 +2361,7 @@ public class SaveContents {
 							expensebean.setAmount(Double.parseDouble(entry
 									.getCell(3).toString()));
 						} catch (NumberFormatException e) {
-							log.error("Failed!", e);
+							log.error("Failed! by SellerId : "+sellerId, e);
 							errorMessage.append(" Amount should be numeric ");
 							validaterow = false;
 						}
@@ -2355,14 +2385,20 @@ public class SaveContents {
 					}
 					if (entry.getCell(6) != null
 							&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(6))) {
-							expensebean.setExpenseDate(entry.getCell(6)
-									.getDateCellValue());
-						} else {
+						try {
+							if (HSSFDateUtil.isCellDateFormatted(entry.getCell(6))) {
+								expensebean.setExpenseDate(entry.getCell(6)
+										.getDateCellValue());
+							} else {
+								errorMessage
+										.append(" Expense Date formate is wrong ,enter mm/dd/yyyy,");
+								validaterow = false;
+							}
+						} catch (Exception e) {
 							errorMessage
-									.append(" Expense Date formate is wrong ,enter mm/dd/yyyy,");
+							.append(" Expense Date formate is wrong ,enter mm/dd/yyyy,");
 							validaterow = false;
-						}
+						}						
 					} else {
 						errorMessage.append(" Expense Date is null;");
 						validaterow = false;
@@ -2380,7 +2416,7 @@ public class SaveContents {
 				}
 			}catch(Exception e)
 				{
-				log.error("Failed!", e);
+				log.error("Failed! by SellerId : "+sellerId, e);
 				errorMessage.append(" Invalid Input!");
 				returnlist.put(errorMessage.toString(), expensebean);
 				}
@@ -2389,7 +2425,7 @@ public class SaveContents {
 			downloadUploadReportXLS(offices, "Expense_Upload", 7, errorSet, path,
 					sellerId, uploadReport);
 		} catch (Exception e) {
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 			e.printStackTrace();
 			addErrorUploadReport("Expense_Upload", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");
@@ -2513,10 +2549,10 @@ public class SaveContents {
 			log.info("$$$ downloadUploadReportXLS ends : SaveContents $$$");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 		}
 	}
 	
@@ -2537,7 +2573,7 @@ public class SaveContents {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 		}
 	}
 
@@ -2689,14 +2725,20 @@ public class SaveContents {
 
 				if (entry.getCell(9) != null
 						&& StringUtils.isNotBlank(entry.getCell(9).toString())) {
-					if (HSSFDateUtil.isCellDateFormatted(entry.getCell(9))) {
-						gatepass.setReturnDate(entry.getCell(9)
-								.getDateCellValue());
+					
+					try {
+						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(9))) {
+							gatepass.setReturnDate(entry.getCell(9)
+									.getDateCellValue());
 
-					} else {
+						} else {
+							errorMessage.append(" Return Date format is wrong ");
+							validaterow = false;
+						}
+					} catch (Exception e) {
 						errorMessage.append(" Return Date format is wrong ");
 						validaterow = false;
-					}
+					}					
 				} else {
 					errorMessage.append(" Return Date is null ");
 					validaterow = false;
@@ -2710,7 +2752,7 @@ public class SaveContents {
 				}
 			}catch(Exception e)
 				{
-				log.error("Failed!", e);
+				log.error("Failed! by SellerId : "+sellerId, e);
 				errorMessage.append(" Invalid input ");
 				returnlist.put(errorMessage.toString(), gatepass);
 				}
@@ -2727,7 +2769,7 @@ public class SaveContents {
 			downloadUploadReportXLS(offices, "PO_Gatepass_Uplooad", 10, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
-			log.error("Failed!", e);
+			log.error("Failed! by SellerId : "+sellerId, e);
 			e.printStackTrace();
 			addErrorUploadReport("PO_Gatepass_Uplooad", sellerId, uploadReport);
 			throw new MultipartException("Constraints Violated");

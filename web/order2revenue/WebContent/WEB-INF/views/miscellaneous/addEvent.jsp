@@ -206,17 +206,21 @@ span .#error {
 										<div class="col-sm-12">
 											<h4>Product SKU</h4>
 										</div>
-										<div class="col-sm-12 input-group">
-											<div class="col-sm-12">	                                       
-		                                        <select data-placeholder="Click To Select" name="multiSku" class="chosen-select" multiple="multiple" style="width:350px;" tabindex="4" required>
-		                                            <c:if test="${!empty skus}">
-		                                            	<c:forEach items="${skus}" var="sku" varStatus="loop">
-		                                            		<option value="${sku}">${sku}</option>
-		                                            	</c:forEach>
-		                                            </c:if>
-		                                        </select>
+										
+											<div class="col-sm-6">
+												<label class="col-sm-4 control-label">Select SKU </label>
+												<div class="col-sm-8">	                                       
+			                                        <select data-placeholder="Click To Select" name="multiSku" id="multiSku" class="chosen-select" multiple="multiple" style="width:350px;" tabindex="4" required>
+			                                            <c:if test="${!empty skus}">
+			                                            		<option id="selectAll" value="">Select All</option>
+			                                            	<c:forEach items="${skus}" var="sku" varStatus="loop">
+			                                            		<option value="${sku}">${sku}</option>
+			                                            	</c:forEach>
+			                                            </c:if>
+			                                        </select>
+		                                        </div>
 		                                    </div>
-                                   		</div>
+                                   		
                                    		<br>                                						
 										
 										<div class="col-sm-12">
@@ -3046,6 +3050,14 @@ Custom and plugin javascript
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
 							});
+							$(".pccValue").click(function() {
+								$('.radio1').hide();
+								$("#blk-" + $(this).attr('id')).slideDown();
+							});
+							$(".pccHigher").click(function() {
+								$('.radio1').hide();
+								$("#blk-" + $(this).attr('id')).slideDown();
+							});
 							$(".retCharBRType").click(function() {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
@@ -3372,6 +3384,13 @@ Custom and plugin javascript
 								$('#revShippingFeeType_revShipFeePCC').iCheck(
 										'check');
 
+							
+							$('#selectAll').click(function() {
+								alert("Lets Work")
+							    $('#multiSku option').prop('selected', true);
+							});
+							
+							
 							/* Retrive CheckBoxes Ends */
 
 							$('.i-checks').iCheck({

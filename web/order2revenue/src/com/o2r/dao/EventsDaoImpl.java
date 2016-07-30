@@ -209,7 +209,7 @@ public class EventsDaoImpl implements EventsDao {
 				{
 					eventList=criteria.list();
 					Events event=(Events)eventList.get(0);					
-					if(event != null && event.getSkuList().contains("sku") && event.getStatus().equals("Active")){	
+					if(event != null && event.getSkuList().contains(sku) && event.getStatus().equals("Active")){	
 						log.info("$$$ isEventActive Exit $$$");
 						return event;
 					}
