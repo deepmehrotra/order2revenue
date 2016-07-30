@@ -692,6 +692,9 @@ public class PartnerController {
 		try {
 			if (partnerName != null) {
 				partner.setPcName(partnerName);
+				
+				//Code to fetch default values
+				/*
 				MetaPartner metaPartner = partnerService
 						.getMetaPartner(partnerName);
 
@@ -846,6 +849,7 @@ public class PartnerController {
 
 					model.put("chargeMap", chargeMap);
 				}
+				*/
 			}
 			model.put("partner", partner);
 			model.put("categoryList", categoryList);
@@ -1523,7 +1527,7 @@ public class PartnerController {
 								charge.getCriteriaRange());
 						if (chargeBean == null) {
 							chargeBean = new ChargesBean();
-							chargeBean.setChargeType("shippingfeeVolume");
+							chargeBean.setChargeType("shippingfeeVolumeVariable");
 							chargeBean.setCriteria(charge.getCriteria());
 							chargeBean.setRange(charge.getCriteriaRange());
 							pbean.getshippingfeeVolumeVariableList().add(chargeBean);
@@ -1542,7 +1546,7 @@ public class PartnerController {
 
 					} else {
 						ChargesBean chargeBean = new ChargesBean();
-						chargeBean.setChargeType("shippingfeeVolume");
+						chargeBean.setChargeType("shippingfeeVolumeFixed");
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
 						chargeBean.setValue(charge.getChargeAmount());
@@ -1561,7 +1565,7 @@ public class PartnerController {
 								charge.getCriteriaRange());
 						if (chargeBean == null) {
 							chargeBean = new ChargesBean();
-							chargeBean.setChargeType("shippingfeeWeight");
+							chargeBean.setChargeType("shippingfeeWeightVariable");
 							chargeBean.setCriteria(charge.getCriteria());
 							chargeBean.setRange(charge.getCriteriaRange());
 							pbean.getshippingfeeWeightVariableList().add(chargeBean);
@@ -1580,7 +1584,7 @@ public class PartnerController {
 
 					} else {
 						ChargesBean chargeBean = new ChargesBean();
-						chargeBean.setChargeType("shippingfeeWeight");
+						chargeBean.setChargeType("shippingfeeWeightFixed");
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
 						chargeBean.setValue(charge.getChargeAmount());

@@ -383,7 +383,7 @@ span .#error {
 																					name="nr-fixedCommissionPercent"
 																					id="fixedCommissionPercent"
 																					value="${chargeMap.fixedCommissionPercent}">
-																				<span class="input-group-addon"></span>
+																				<span class="input-group-addon">%</span>
 																			</div>
 																		</div>
 																	</div>
@@ -574,12 +574,12 @@ span .#error {
 																			</div>
 
 																			<div class="col-md-5">
-																				<div class="col-md-4" style="padding: 0px;">
+																				<div class="col-md-6" style="padding: 0px;">
 																					<input type="text" name="nr-pccpercentSPValue"
 																						class="form-control validateNumber"
 																						value="${chargeMap.pccpercentSPValue}">
 																				</div>
-																				<div class="col-md-8"
+																				<div class="col-md-6"
 																					style="margin-top: 3px; padding: 0px 0px 0px 5px;">
 																					<span class="input-group-addon"
 																						style="border: 1px solid #ebdfdf;">% Of SP</span>
@@ -610,8 +610,7 @@ span .#error {
 																				<div class="input-group m-b">
 																					<input type="text" name="nr-pccfixedAmt"
 																						class="form-control validateNumber"
-																						value="${chargeMap.pccfixedAmt}"> <span
-																						class="input-group-addon">%</span>
+																						value="${chargeMap.pccfixedAmt}">
 																				</div>
 																			</div>
 																		</div>
