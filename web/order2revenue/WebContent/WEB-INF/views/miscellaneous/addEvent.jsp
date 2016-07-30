@@ -210,8 +210,9 @@ span .#error {
 											<div class="col-sm-6">
 												<label class="col-sm-4 control-label">Select SKU </label>
 												<div class="col-sm-8">	                                       
-			                                        <select data-placeholder="Click To Select" name="multiSku" class="chosen-select" multiple="multiple" style="width:350px;" tabindex="4" required>
+			                                        <select data-placeholder="Click To Select" name="multiSku" id="multiSku" class="chosen-select" multiple="multiple" style="width:350px;" tabindex="4" required>
 			                                            <c:if test="${!empty skus}">
+			                                            		<option id="selectAll" value="">Select All</option>
 			                                            	<c:forEach items="${skus}" var="sku" varStatus="loop">
 			                                            		<option value="${sku}">${sku}</option>
 			                                            	</c:forEach>
@@ -3383,6 +3384,13 @@ Custom and plugin javascript
 								$('#revShippingFeeType_revShipFeePCC').iCheck(
 										'check');
 
+							
+							$('#selectAll').click(function() {
+								alert("Lets Work")
+							    $('#multiSku option').prop('selected', true);
+							});
+							
+							
 							/* Retrive CheckBoxes Ends */
 
 							$('.i-checks').iCheck({
