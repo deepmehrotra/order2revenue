@@ -316,13 +316,15 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 		String reportName=null;
 		Date startDate;
 		Date endDate;
+		String status;
 		List<ConsolidatedOrderBean> consolidatedBeans=new ArrayList<ConsolidatedOrderBean>();
 		try{
 			reportName = request.getParameter("reportName");
 			startDate = new Date(request.getParameter("startdate"));
 			endDate = new Date(request.getParameter("enddate"));
+			status = request.getParameter("statusList");
 		
-		consolidatedBeans=reportGeneratorService.getConsolidatedOrdersReport(startDate, endDate, helperClass.getSellerIdfromSession(request));
+		consolidatedBeans=reportGeneratorService.getConsolidatedOrdersReport(startDate, endDate, status, helperClass.getSellerIdfromSession(request));
 		model.put("consolidatedOrders", consolidatedBeans);		
 		
 		ttso = reportGeneratorService.getAllPartnerTSOdetails(startDate,
@@ -662,6 +664,7 @@ public void downloadreport(HttpServletRequest request ,HttpServletResponse respo
 		String reportName;
 		Date startDate;
 		Date endDate;
+		String status;
 		String[] reportheaders;
 		log.debug(request.getParameter("enddate"));
 		log.debug(request.getParameter("startdate"));
@@ -670,9 +673,11 @@ public void downloadreport(HttpServletRequest request ,HttpServletResponse respo
 		startDate = new Date(request.getParameter("startdate"));
 		endDate = new Date(request.getParameter("enddate"));
 		reportheaders = request.getParameterValues("headers");
+		status=request.getParameter("statusList");
 		try {
 			orderlist = orderService.findOrdersbyDate("shippedDate", startDate,endDate, helperClass.getSellerIdfromSession(request), false);
-			reportDownloadService.downloadReport(response, orderlist,reportheaders, reportName,	helperClass.getSellerIdfromSession(request));
+			System.out.println(orderlist.size());
+			reportDownloadService.downloadReport(response, status, orderlist,reportheaders, reportName,	helperClass.getSellerIdfromSession(request));
 		} catch (ClassNotFoundException e) {
 			System.out.println(" Class castexception in download report");
 			e.printStackTrace();
