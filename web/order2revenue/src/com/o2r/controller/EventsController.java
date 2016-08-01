@@ -51,8 +51,7 @@ public class EventsController {
 	private HelperClass helperClass;
 	@Autowired
 	private ProductService productService;
-	
-	
+
 	static Logger log = Logger.getLogger(EventsController.class.getName());
 
 	@RequestMapping(value = "/seller/saveEvent", method = RequestMethod.POST)
@@ -64,15 +63,15 @@ public class EventsController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<NRnReturnCharges> chargeList = new ArrayList<NRnReturnCharges>();
 		Map<String, String[]> parameters = request.getParameterMap();
-		StringBuffer skus4Event=new StringBuffer();
+		StringBuffer skus4Event = new StringBuffer();
 		List<String> fixedfeeParams = new ArrayList<String>();
 		List<String> shippingfeeVolumeParams = new ArrayList<String>();
 		List<String> shippingfeeWeightParams = new ArrayList<String>();
-		
-		String[] skuList=request.getParameterValues("multiSku");
-		if(skuList != null && skuList.length != 0){
-			for(int i=0; i<skuList.length; i++){
-				skus4Event.append(skuList[i]+",");
+
+		String[] skuList = request.getParameterValues("multiSku");
+		if (skuList != null && skuList.length != 0) {
+			for (int i = 0; i < skuList.length; i++) {
+				skus4Event.append(skuList[i] + ",");
 			}
 		}
 		System.out.println(skus4Event.toString().contains("Ranjan"));
@@ -83,7 +82,7 @@ public class EventsController {
 			 * if(eventsBean.getEventId() != 0){ eventsBean.setEventId(0); }
 			 */
 
-			/*for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+			for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
 
 				if (entry.getValue()[0] != null
 						&& !entry.getValue()[0].isEmpty()) {
@@ -103,7 +102,9 @@ public class EventsController {
 								if (!fixedfeeParams.contains(param)) {
 									fixedfeeParams.add(param);
 									NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-									nrnReturncharge.setChargeAmount(Float.parseFloat(parameters.get(param+ "value")[0]));
+									nrnReturncharge.setChargeAmount(Float
+											.parseFloat(parameters.get(param
+													+ "value")[0]));
 									nrnReturncharge.setChargeName("fixedfee");
 									nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
@@ -117,11 +118,15 @@ public class EventsController {
 
 								}
 							} else if (entry.getKey().contains(
-									"shippingFeeVolume")) {
+									"shippingFeeVolume")
+									&& eventsBean.getNrnReturnConfig()
+											.getShippingFeeType() != null) {
 
 								if (eventsBean.getNrnReturnConfig()
 										.getShippingFeeType()
-										.equalsIgnoreCase("variable")) {
+										.equalsIgnoreCase("variable")
+										&& entry.getKey().contains(
+												"shippingFeeVolumeVariable")) {
 									String param = entry.getKey()
 											.substring(
 													0,
@@ -131,52 +136,114 @@ public class EventsController {
 											.contains(param)) {
 										shippingfeeVolumeParams.add(param);
 										NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-										nrnReturncharge.setChargeAmount(Float.parseFloat(parameters.get(param + "localValue")[0]));
-										nrnReturncharge.setChargeName("shippingfeeVolumeLocal");
-										nrnReturncharge.setCriteria(parameters.get(param + "criteria")[0]);
-										nrnReturncharge.setCriteriaRange(Long.parseLong(parameters.get(param + "range")[0]));
 
-										nrnReturncharge.setConfig(eventsBean.getNrnReturnConfig());
-										chargeList.add(nrnReturncharge);
-
-										nrnReturncharge = new NRnReturnCharges();
-										nrnReturncharge.setChargeAmount(Float.parseFloat(parameters.get(param + "zonalValue")[0]));
-										nrnReturncharge.setChargeName("shippingfeeVolumeZonal");
-										nrnReturncharge.setCriteria(parameters.get(param + "criteria")[0]);
-										nrnReturncharge.setCriteriaRange(Long.parseLong(parameters.get(param + "range")[0]));
-
-										nrnReturncharge.setConfig(eventsBean.getNrnReturnConfig());
-										chargeList.add(nrnReturncharge);
-
-										nrnReturncharge = new NRnReturnCharges();
-										nrnReturncharge.setChargeAmount(Float.parseFloat(parameters.get(param + "nationalValue")[0]));
-										nrnReturncharge.setChargeName("shippingfeeVolumeNational");
-										nrnReturncharge.setCriteria(parameters.get(param + "criteria")[0]);
-										nrnReturncharge.setCriteriaRange(Long.parseLong(parameters.get(param + "range")[0]));
-
-										nrnReturncharge.setConfig(eventsBean
-												.getNrnReturnConfig());
-										chargeList.add(nrnReturncharge);
-
-										nrnReturncharge = new NRnReturnCharges();
+										if (!parameters.get(param
+												+ "localValue")[0].isEmpty())
+											nrnReturncharge
+													.setChargeAmount(Float
+															.parseFloat(parameters
+																	.get(param
+																			+ "localValue")[0]));
 										nrnReturncharge
-												.setChargeAmount(Float.parseFloat(parameters
-														.get(param
-																+ "metroValue")[0]));
-										nrnReturncharge
-												.setChargeName("shippingfeeVolumeMetro");
+												.setChargeName("shippingfeeVolumeVariableLocal");
 										nrnReturncharge.setCriteria(parameters
 												.get(param + "criteria")[0]);
-										nrnReturncharge.setCriteriaRange(Long
-												.parseLong(parameters.get(param
-														+ "range")[0]));
+
+										if (!parameters.get(param + "range")[0]
+												.isEmpty())
+											nrnReturncharge
+													.setCriteriaRange(Long
+															.parseLong(parameters
+																	.get(param
+																			+ "range")[0]));
 
 										nrnReturncharge.setConfig(eventsBean
 												.getNrnReturnConfig());
-										chargeList.add(nrnReturncharge);
+										eventsBean.getNrnReturnConfig()
+												.getCharges()
+												.add(nrnReturncharge);
+
+										nrnReturncharge = new NRnReturnCharges();
+										if (!parameters.get(param
+												+ "zonalValue")[0].isEmpty())
+											nrnReturncharge
+													.setChargeAmount(Float
+															.parseFloat(parameters
+																	.get(param
+																			+ "zonalValue")[0]));
+										nrnReturncharge
+												.setChargeName("shippingfeeVolumeVariableZonal");
+										nrnReturncharge.setCriteria(parameters
+												.get(param + "criteria")[0]);
+										if (!parameters.get(param + "range")[0]
+												.isEmpty())
+											nrnReturncharge
+													.setCriteriaRange(Long
+															.parseLong(parameters
+																	.get(param
+																			+ "range")[0]));
+
+										nrnReturncharge.setConfig(eventsBean
+												.getNrnReturnConfig());
+										eventsBean.getNrnReturnConfig()
+												.getCharges()
+												.add(nrnReturncharge);
+
+										nrnReturncharge = new NRnReturnCharges();
+										if (!parameters.get(param
+												+ "nationalValue")[0].isEmpty())
+											nrnReturncharge
+													.setChargeAmount(Float
+															.parseFloat(parameters
+																	.get(param
+																			+ "nationalValue")[0]));
+										nrnReturncharge
+												.setChargeName("shippingfeeVolumeVariableNational");
+										nrnReturncharge.setCriteria(parameters
+												.get(param + "criteria")[0]);
+										if (!parameters.get(param + "range")[0]
+												.isEmpty())
+											nrnReturncharge
+													.setCriteriaRange(Long
+															.parseLong(parameters
+																	.get(param
+																			+ "range")[0]));
+
+										nrnReturncharge.setConfig(eventsBean
+												.getNrnReturnConfig());
+										eventsBean.getNrnReturnConfig()
+												.getCharges()
+												.add(nrnReturncharge);
+
+										nrnReturncharge = new NRnReturnCharges();
+										if (!parameters.get(param
+												+ "metroValue")[0].isEmpty())
+											nrnReturncharge
+													.setChargeAmount(Float
+															.parseFloat(parameters
+																	.get(param
+																			+ "metroValue")[0]));
+										nrnReturncharge
+												.setChargeName("shippingfeeVolumeVariableMetro");
+										nrnReturncharge.setCriteria(parameters
+												.get(param + "criteria")[0]);
+										if (!parameters.get(param + "range")[0]
+												.isEmpty())
+											nrnReturncharge
+													.setCriteriaRange(Long
+															.parseLong(parameters
+																	.get(param
+																			+ "range")[0]));
+
+										nrnReturncharge.setConfig(eventsBean
+												.getNrnReturnConfig());
+										eventsBean.getNrnReturnConfig()
+												.getCharges()
+												.add(nrnReturncharge);
 
 									}
-								} else {
+								} else if (entry.getKey().contains(
+										"shippingFeeVolumeFixed")) {
 									String param = entry.getKey()
 											.substring(
 													0,
@@ -186,28 +253,42 @@ public class EventsController {
 											.contains(param)) {
 										shippingfeeVolumeParams.add(param);
 										NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+										if (!parameters.get(param + "value")[0]
+												.isEmpty())
+											nrnReturncharge
+													.setChargeAmount(Float
+															.parseFloat(parameters
+																	.get(param
+																			+ "value")[0]));
 										nrnReturncharge
-												.setChargeAmount(Float.parseFloat(parameters
-														.get(param + "value")[0]));
-										nrnReturncharge
-												.setChargeName("shippingfeeVolume");
+												.setChargeName("shippingfeeVolumeFixed");
 										nrnReturncharge.setCriteria(parameters
 												.get(param + "criteria")[0]);
-										nrnReturncharge.setCriteriaRange(Long
-												.parseLong(parameters.get(param
-														+ "range")[0]));
+										if (!parameters.get(param + "range")[0]
+												.isEmpty())
+											nrnReturncharge
+													.setCriteriaRange(Long
+															.parseLong(parameters
+																	.get(param
+																			+ "range")[0]));
 
 										nrnReturncharge.setConfig(eventsBean
 												.getNrnReturnConfig());
-										chargeList.add(nrnReturncharge);
+										eventsBean.getNrnReturnConfig()
+												.getCharges()
+												.add(nrnReturncharge);
 									}
 								}
 							} else if (entry.getKey().contains(
-									"shippingFeeWeight")) {
+									"shippingFeeWeight")
+									&& eventsBean.getNrnReturnConfig()
+											.getShippingFeeType() != null) {
 
 								if (eventsBean.getNrnReturnConfig()
 										.getShippingFeeType()
-										.equalsIgnoreCase("variable")) {
+										.equalsIgnoreCase("variable")
+										&& entry.getKey().contains(
+												"shippingFeeWeightVariable")) {
 									String param = entry.getKey()
 											.substring(
 													0,
@@ -217,75 +298,121 @@ public class EventsController {
 											.contains(param)) {
 										shippingfeeVolumeParams.add(param);
 										NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+
+										if (!parameters.get(param
+												+ "localValue")[0].isEmpty()) {
+											nrnReturncharge
+													.setChargeAmount(Float
+															.parseFloat(parameters
+																	.get(param
+																			+ "localValue")[0]));
+										}
+
 										nrnReturncharge
-												.setChargeAmount(Float.parseFloat(parameters
-														.get(param
-																+ "localValue")[0]));
-										nrnReturncharge
-												.setChargeName("shippingfeeWeightLocal");
+												.setChargeName("shippingfeeWeightVariableLocal");
 										nrnReturncharge.setCriteria(parameters
 												.get(param + "criteria")[0]);
-										nrnReturncharge.setCriteriaRange(Long
-												.parseLong(parameters.get(param
-														+ "range")[0]));
+										if (!parameters.get(param + "range")[0]
+												.isEmpty())
+											nrnReturncharge
+													.setCriteriaRange(Long
+															.parseLong(parameters
+																	.get(param
+																			+ "range")[0]));
 
 										nrnReturncharge.setConfig(eventsBean
 												.getNrnReturnConfig());
-										chargeList.add(nrnReturncharge);
+										eventsBean.getNrnReturnConfig()
+												.getCharges()
+												.add(nrnReturncharge);
 
 										nrnReturncharge = new NRnReturnCharges();
+										if (!parameters.get(param
+												+ "zonalValue")[0].isEmpty()) {
+											nrnReturncharge
+													.setChargeAmount(Float
+															.parseFloat(parameters
+																	.get(param
+																			+ "zonalValue")[0]));
+										}
+
 										nrnReturncharge
-												.setChargeAmount(Float.parseFloat(parameters
-														.get(param
-																+ "zonalValue")[0]));
-										nrnReturncharge
-												.setChargeName("shippingfeeWeightZonal");
+												.setChargeName("shippingfeeWeightVariableZonal");
 										nrnReturncharge.setCriteria(parameters
 												.get(param + "criteria")[0]);
-										nrnReturncharge.setCriteriaRange(Long
-												.parseLong(parameters.get(param
-														+ "range")[0]));
+										if (!parameters.get(param + "range")[0]
+												.isEmpty())
+											nrnReturncharge
+													.setCriteriaRange(Long
+															.parseLong(parameters
+																	.get(param
+																			+ "range")[0]));
 
 										nrnReturncharge.setConfig(eventsBean
 												.getNrnReturnConfig());
-										chargeList.add(nrnReturncharge);
+										eventsBean.getNrnReturnConfig()
+												.getCharges()
+												.add(nrnReturncharge);
 
 										nrnReturncharge = new NRnReturnCharges();
+										if (!parameters.get(param
+												+ "nationalValue")[0].isEmpty()) {
+											nrnReturncharge
+													.setChargeAmount(Float
+															.parseFloat(parameters
+																	.get(param
+																			+ "nationalValue")[0]));
+										}
+
 										nrnReturncharge
-												.setChargeAmount(Float.parseFloat(parameters
-														.get(param
-																+ "nationalValue")[0]));
-										nrnReturncharge
-												.setChargeName("shippingfeeWeightNational");
+												.setChargeName("shippingfeeWeightVariableNational");
 										nrnReturncharge.setCriteria(parameters
 												.get(param + "criteria")[0]);
-										nrnReturncharge.setCriteriaRange(Long
-												.parseLong(parameters.get(param
-														+ "range")[0]));
+										if (!parameters.get(param + "range")[0]
+												.isEmpty())
+											nrnReturncharge
+													.setCriteriaRange(Long
+															.parseLong(parameters
+																	.get(param
+																			+ "range")[0]));
 
 										nrnReturncharge.setConfig(eventsBean
 												.getNrnReturnConfig());
-										chargeList.add(nrnReturncharge);
+										eventsBean.getNrnReturnConfig()
+												.getCharges()
+												.add(nrnReturncharge);
 
 										nrnReturncharge = new NRnReturnCharges();
+										if (!parameters.get(param
+												+ "metroValue")[0].isEmpty()) {
+											nrnReturncharge
+													.setChargeAmount(Float
+															.parseFloat(parameters
+																	.get(param
+																			+ "metroValue")[0]));
+										}
 										nrnReturncharge
-												.setChargeAmount(Float.parseFloat(parameters
-														.get(param
-																+ "metroValue")[0]));
-										nrnReturncharge
-												.setChargeName("shippingfeeWeightMetro");
+												.setChargeName("shippingfeeWeightVariableMetro");
 										nrnReturncharge.setCriteria(parameters
 												.get(param + "criteria")[0]);
-										nrnReturncharge.setCriteriaRange(Long
-												.parseLong(parameters.get(param
-														+ "range")[0]));
+
+										if (!parameters.get(param + "range")[0]
+												.isEmpty())
+											nrnReturncharge
+													.setCriteriaRange(Long
+															.parseLong(parameters
+																	.get(param
+																			+ "range")[0]));
 
 										nrnReturncharge.setConfig(eventsBean
 												.getNrnReturnConfig());
-										chargeList.add(nrnReturncharge);
+										eventsBean.getNrnReturnConfig()
+												.getCharges()
+												.add(nrnReturncharge);
 
 									}
-								} else {
+								} else if (entry.getKey().contains(
+										"shippingFeeWeightFixed")) {
 									String param = entry.getKey()
 											.substring(
 													0,
@@ -295,51 +422,82 @@ public class EventsController {
 											.contains(param)) {
 										shippingfeeWeightParams.add(param);
 										NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+										if (!parameters.get(param + "value")[0]
+												.isEmpty())
+											nrnReturncharge
+													.setChargeAmount(Float
+															.parseFloat(parameters
+																	.get(param
+																			+ "value")[0]));
 										nrnReturncharge
-												.setChargeAmount(Float.parseFloat(parameters
-														.get(param + "value")[0]));
-										nrnReturncharge
-												.setChargeName("shippingfeeWeight");
+												.setChargeName("shippingfeeWeightFixed");
 										nrnReturncharge.setCriteria(parameters
 												.get(param + "criteria")[0]);
-										nrnReturncharge.setCriteriaRange(Long
-												.parseLong(parameters.get(param
-														+ "range")[0]));
+										if (!parameters.get(param + "range")[0]
+												.isEmpty())
+											nrnReturncharge
+													.setCriteriaRange(Long
+															.parseLong(parameters
+																	.get(param
+																			+ "range")[0]));
 
 										nrnReturncharge.setConfig(eventsBean
 												.getNrnReturnConfig());
-										chargeList.add(nrnReturncharge);
+										eventsBean.getNrnReturnConfig()
+												.getCharges()
+												.add(nrnReturncharge);
 									}
 								}
 							}
-
 						} else {
-							log.debug(" Key : " + entry.getKey());
-							String temp = entry.getKey().substring(3);
-							NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-							nrnReturncharge.setChargeAmount(Float
-									.parseFloat(entry.getValue()[0]));
-							nrnReturncharge.setChargeName(temp);
-							nrnReturncharge.setConfig(eventsBean
-									.getNrnReturnConfig());
-							chargeList.add(nrnReturncharge);
+							String param = entry.getKey().substring(0,
+									entry.getKey().lastIndexOf('-') + 1);
+							if (!shippingfeeWeightParams.contains(param)) {
+								shippingfeeWeightParams.add(param);
+								NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+								nrnReturncharge.setChargeAmount(Float
+										.parseFloat(parameters.get(param
+												+ "value")[0]));
+								nrnReturncharge
+										.setChargeName("shippingfeeWeight");
+								nrnReturncharge.setCriteria(parameters
+										.get(param + "criteria")[0]);
+								nrnReturncharge.setCriteriaRange(Long
+										.parseLong(parameters.get(param
+												+ "range")[0]));
+
+								nrnReturncharge.setConfig(eventsBean
+										.getNrnReturnConfig());
+								chargeList.add(nrnReturncharge);
+							}
 						}
 
-					} else if (entry.getKey().contains("local")) {
-						eventsBean.getNrnReturnConfig().setLocalList(
-								Arrays.toString(entry.getValue()));
-					} else if (entry.getKey().contains("zonal")) {
-						eventsBean.getNrnReturnConfig().setZonalList(
-								Arrays.toString(entry.getValue()));
-					} else if (entry.getKey().contains("national")) {
-						eventsBean.getNrnReturnConfig().setNationalList(
-								Arrays.toString(entry.getValue()));
-					} else if (entry.getKey().contains("metro")) {
-						eventsBean.getNrnReturnConfig().setMetroList(
-								Arrays.toString(entry.getValue()));
+					} else {
+						log.debug(" Key : " + entry.getKey());
+						String temp = entry.getKey().substring(3);
+						NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+						nrnReturncharge.setChargeAmount(Float.parseFloat(entry
+								.getValue()[0]));
+						nrnReturncharge.setChargeName(temp);
+						nrnReturncharge.setConfig(eventsBean
+								.getNrnReturnConfig());
+						chargeList.add(nrnReturncharge);
 					}
+
+				} else if (entry.getKey().contains("local")) {
+					eventsBean.getNrnReturnConfig().setLocalList(
+							Arrays.toString(entry.getValue()));
+				} else if (entry.getKey().contains("zonal")) {
+					eventsBean.getNrnReturnConfig().setZonalList(
+							Arrays.toString(entry.getValue()));
+				} else if (entry.getKey().contains("national")) {
+					eventsBean.getNrnReturnConfig().setNationalList(
+							Arrays.toString(entry.getValue()));
+				} else if (entry.getKey().contains("metro")) {
+					eventsBean.getNrnReturnConfig().setMetroList(
+							Arrays.toString(entry.getValue()));
 				}
-			}*/
+			}
 
 			Partner partner = partnerService.getPartner(
 					eventsBean.getChannelName(),
@@ -394,7 +552,7 @@ public class EventsController {
 		Map<String, Float> chargeMap = new HashMap<String, Float>();
 		Map<String, Float> categoryMap = new HashMap<String, Float>();
 		Map<String, Object> model = new HashMap<String, Object>();
-		List<String> productList=new ArrayList<String>();
+		List<String> productList = new ArrayList<String>();
 		try {
 			List<Product> products = productService.listProducts(helperClass
 					.getSellerIdfromSession(request));
@@ -516,7 +674,7 @@ public class EventsController {
 								.getNrCalculatorEvent()).toString());
 				for (NRnReturnCharges charge : eventsBean.getNrnReturnConfig()
 						.getCharges()) {
-					
+
 					if (charge.getChargeName().contains("fixedfee")
 							&& charge.getCriteria() != null
 							&& !"".equals(charge.getCriteria())) {
@@ -528,80 +686,106 @@ public class EventsController {
 						chargeBean.setValue(charge.getChargeAmount());
 						eventsBean.getFixedfeeList().add(chargeBean);
 
-					} else if (charge.getChargeName().contains("shippingfeeVolume")
+					} else if (charge.getChargeName().contains(
+							"shippingfeeVolume")
 							&& charge.getCriteria() != null
 							&& !"".equals(charge.getCriteria())) {
 
-						if (eventsBean.getNrnReturnConfig().getShippingFeeType()
-								.equalsIgnoreCase("variable")) {
+						if (eventsBean.getNrnReturnConfig()
+								.getShippingFeeType()
+								.equalsIgnoreCase("variable")
+								&& charge.getChargeName().contains(
+										"shippingfeeVolumeVariable")) {
 
 							ChargesBean chargeBean = eventsBean.getChargesBean(
-									"shippingfeeVolume", charge.getCriteria(),
+									"shippingfeeVolumeVariable",
+									charge.getCriteria(),
 									charge.getCriteriaRange());
 							if (chargeBean == null) {
 								chargeBean = new ChargesBean();
-								chargeBean.setChargeType("shippingfeeVolume");
+								chargeBean
+										.setChargeType("shippingfeeVolumeVariable");
 								chargeBean.setCriteria(charge.getCriteria());
 								chargeBean.setRange(charge.getCriteriaRange());
-								eventsBean.getShippingfeeVolumeList().add(chargeBean);
+								eventsBean.getShippingfeeVolumeVariableList()
+										.add(chargeBean);
 							}
 
 							if (charge.getChargeName().contains("Local")) {
-								chargeBean.setLocalValue(charge.getChargeAmount());
+								chargeBean.setLocalValue(charge
+										.getChargeAmount());
 							} else if (charge.getChargeName().contains("Zonal")) {
-								chargeBean.setZonalValue(charge.getChargeAmount());
-							} else if (charge.getChargeName().contains("National")) {
+								chargeBean.setZonalValue(charge
+										.getChargeAmount());
+							} else if (charge.getChargeName().contains(
+									"National")) {
 								chargeBean.setNationalValue(charge
 										.getChargeAmount());
 							} else if (charge.getChargeName().contains("Metro")) {
-								chargeBean.setMetroValue(charge.getChargeAmount());
+								chargeBean.setMetroValue(charge
+										.getChargeAmount());
 							}
 
-						} else {
+						} else if (charge.getChargeName().contains(
+								"shippingfeeVolumeFixed")) {
 							ChargesBean chargeBean = new ChargesBean();
 							chargeBean.setChargeType("shippingfeeVolume");
 							chargeBean.setCriteria(charge.getCriteria());
 							chargeBean.setRange(charge.getCriteriaRange());
 							chargeBean.setValue(charge.getChargeAmount());
-							eventsBean.getShippingfeeVolumeList().add(chargeBean);
+							eventsBean.getShippingfeeVolumeFixedList().add(
+									chargeBean);
 						}
 
-					} else if (charge.getChargeName().contains("shippingfeeWeight")
+					} else if (charge.getChargeName().contains(
+							"shippingfeeWeight")
 							&& charge.getCriteria() != null
 							&& !"".equals(charge.getCriteria())) {
 
-						if (eventsBean.getNrnReturnConfig().getShippingFeeType()
-								.equalsIgnoreCase("variable")) {
+						if (eventsBean.getNrnReturnConfig()
+								.getShippingFeeType()
+								.equalsIgnoreCase("variable")
+								&& charge.getChargeName().contains(
+										"shippingfeeWeightVariable")) {
 
 							ChargesBean chargeBean = eventsBean.getChargesBean(
-									"shippingfeeWeight", charge.getCriteria(),
+									"shippingfeeWeightVariable",
+									charge.getCriteria(),
 									charge.getCriteriaRange());
 							if (chargeBean == null) {
 								chargeBean = new ChargesBean();
-								chargeBean.setChargeType("shippingfeeWeight");
+								chargeBean
+										.setChargeType("shippingfeeWeightVariable");
 								chargeBean.setCriteria(charge.getCriteria());
 								chargeBean.setRange(charge.getCriteriaRange());
-								eventsBean.getShippingfeeWeightList().add(chargeBean);
+								eventsBean.getShippingfeeWeightVariableList()
+										.add(chargeBean);
 							}
 
 							if (charge.getChargeName().contains("Local")) {
-								chargeBean.setLocalValue(charge.getChargeAmount());
+								chargeBean.setLocalValue(charge
+										.getChargeAmount());
 							} else if (charge.getChargeName().contains("Zonal")) {
-								chargeBean.setZonalValue(charge.getChargeAmount());
-							} else if (charge.getChargeName().contains("National")) {
+								chargeBean.setZonalValue(charge
+										.getChargeAmount());
+							} else if (charge.getChargeName().contains(
+									"National")) {
 								chargeBean.setNationalValue(charge
 										.getChargeAmount());
 							} else if (charge.getChargeName().contains("Metro")) {
-								chargeBean.setMetroValue(charge.getChargeAmount());
+								chargeBean.setMetroValue(charge
+										.getChargeAmount());
 							}
 
-						} else {
+						} else if (charge.getChargeName().contains(
+								"shippingfeeWeightFixed")) {
 							ChargesBean chargeBean = new ChargesBean();
 							chargeBean.setChargeType("shippingfeeWeight");
 							chargeBean.setCriteria(charge.getCriteria());
 							chargeBean.setRange(charge.getCriteriaRange());
 							chargeBean.setValue(charge.getChargeAmount());
-							eventsBean.getShippingfeeWeightList().add(chargeBean);
+							eventsBean.getShippingfeeWeightFixedList().add(
+									chargeBean);
 						}
 
 					} else {
@@ -609,13 +793,26 @@ public class EventsController {
 								charge.getChargeAmount());
 					}
 				}
-				if (eventsBean.getFixedfeeList() != null) 
-					Collections.sort(eventsBean.getFixedfeeList(), new SortByCriteriaRange());
-				if (eventsBean.getShippingfeeVolumeList() != null)
-					Collections.sort(eventsBean.getShippingfeeVolumeList(), new SortByCriteria());
-				if (eventsBean.getShippingfeeWeightList() != null)
-					Collections.sort(eventsBean.getShippingfeeWeightList(), new SortByCriteria());
-				
+				if (eventsBean.getFixedfeeList() != null)
+					Collections.sort(eventsBean.getFixedfeeList(),
+							new SortByCriteriaRange());
+				if (eventsBean.getShippingfeeVolumeVariableList() != null)
+					Collections.sort(
+							eventsBean.getShippingfeeVolumeVariableList(),
+							new SortByCriteria());
+				if (eventsBean.getShippingfeeWeightVariableList() != null)
+					Collections.sort(
+							eventsBean.getShippingfeeWeightVariableList(),
+							new SortByCriteria());
+				if (eventsBean.getShippingfeeVolumeFixedList() != null)
+					Collections.sort(
+							eventsBean.getShippingfeeVolumeFixedList(),
+							new SortByCriteria());
+				if (eventsBean.getShippingfeeWeightFixedList() != null)
+					Collections.sort(
+							eventsBean.getShippingfeeWeightFixedList(),
+							new SortByCriteria());
+
 				model.put("chargeMap", chargeMap);
 			}
 			List<Category> categoryList = categoryService
@@ -675,7 +872,7 @@ public class EventsController {
 		log.info("$$$ eventsList Ends : EventsController $$$");
 		return new ModelAndView("miscellaneous/eventsList", model);
 	}
-	
+
 	@RequestMapping(value = "/seller/eventAction", method = RequestMethod.GET)
 	public ModelAndView PlayPause(HttpServletRequest request,
 			@ModelAttribute("command") EventsBean eventsBean,
@@ -683,12 +880,13 @@ public class EventsController {
 
 		log.info("$$$ eventsList Starts : EventsController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		int id=Integer.parseInt(request.getParameter("id"));
-		try {			
-			eventsService.changeStatus(id, helperClass.getSellerIdfromSession(request));
+		int id = Integer.parseInt(request.getParameter("id"));
+		try {
+			eventsService.changeStatus(id,
+					helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Exception in PlayPause : EventsController ",e);
+			log.error("Exception in PlayPause : EventsController ", e);
 			model.put("errorMessage", "Invalid Operation");
 			model.put("errorTime", new Date());
 			model.put("errorCode", 500);

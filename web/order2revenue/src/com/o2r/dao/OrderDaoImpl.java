@@ -2219,7 +2219,8 @@ public class OrderDaoImpl implements OrderDao {
 				log.debug(" City from zipcode : " + state);
 			}
 			if (state == null
-					|| !(state.equalsIgnoreCase("Chennai")
+					|| !(state.equalsIgnoreCase("New Delhi")
+							|| state.equalsIgnoreCase("Chennai")
 							|| state.equalsIgnoreCase("Mumbai") || state
 								.equalsIgnoreCase("Kolkata"))) {
 				state = areaConfigDao.getStateFromZipCode(order.getCustomer()

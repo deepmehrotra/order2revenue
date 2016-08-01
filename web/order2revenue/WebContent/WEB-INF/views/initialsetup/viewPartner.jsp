@@ -385,7 +385,7 @@ span .#error {
 																							</tr>
 																						</thead>
 																						<tbody>	
-																							<c:if test="${!empty partner.shippingfeeVolumeList}">
+																							<c:if test="${!empty partner.shippingfeeVolumeVariableList}">
 																							</c:if>																				
 																							<tr>
 																								<td>&lt;500</td>
