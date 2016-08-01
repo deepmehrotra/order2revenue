@@ -206,13 +206,20 @@ span .#error {
 										<div class="col-sm-12">
 											<h4>Product SKU</h4>
 										</div>
-										
-											<div class="col-sm-6">
+											<div class="col-sm-6">												
+												<label class="col-sm-4 control-label text-center" style="padding: 0px;margin-right: -6px;position: relative;right: 22px;"><b>Select All</b></label>
+												<div class="col-sm-8">
+													<div class="checkbox i-checks" style="padding: 0px;">
+														<%-- <form:checkbox	path="" id="random123" value="selectAllSku" /> --%>
+														<input type="checkbox" id="random123" onchange="selectAllSKU()" />
+													</div>												
+												</div>
+											</div>										
+											<div class="col-sm-6">												
 												<label class="col-sm-4 control-label">Select SKU </label>
 												<div class="col-sm-8">	                                       
 			                                        <select data-placeholder="Click To Select" name="multiSku" id="multiSku" class="chosen-select" multiple="multiple" style="width:350px;" tabindex="4" required>
-			                                            <c:if test="${!empty skus}">
-			                                            		<option id="selectAll" value="">Select All</option>
+			                                            <c:if test="${!empty skus}">			                                            		
 			                                            	<c:forEach items="${skus}" var="sku" varStatus="loop">
 			                                            		<option value="${sku}">${sku}</option>
 			                                            	</c:forEach>
@@ -2697,6 +2704,10 @@ Custom and plugin javascript
 	<script type="text/javascript">
 		var v = 1;
 		var index = 0;
+		function selectAllSKU()
+		{
+			alert("Inside function");
+		}
 		function myFunction() {
 			v++;
 			index = index + 1;
@@ -2993,15 +3004,7 @@ Custom and plugin javascript
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(addRowBox);
 		}
-	</script>
-
-
-	<script>
-		var app = angular.module('myApp', []);
-		app.controller('myCtrl', function($scope) {
-			$scope.firstname = "";
-		});
-	</script>
+	</script>	
 
 	<script language=JavaScript>
 		function additional(x) {
@@ -3013,13 +3016,36 @@ Custom and plugin javascript
 		function upto() {
 			document.getElementById("myBtn").disabled = false;
 		}
-	</script>
+	</script>	
 
 	<script type="text/javascript">
 		$(document)
 				.ready(
-						function() {
-
+						function() {							
+							alert("bfore select all");
+							/*  $('#selectAllSku').change(function() {
+								 	alert("Checked On");
+							        if ($(this).prop('checked')) {
+							            alert("Checked");
+							        }
+							        else {
+							            alert("Unchecked");
+							        }
+							    });
+							
+							
+							 */
+						
+							/*   $("#selectAllSku").click(function () {
+								  alert("clicked");
+							    if ($("#selectAllSku").is(":checked")) {
+							    	alert("clicked");
+							        $('#multiSku').multiselect("disable");
+							    }
+							    else {
+							        $('#multiSku').prop('disabled', false);
+							    }
+							  });  */
 							$("#EndDate")
 									.change(
 											function() {
