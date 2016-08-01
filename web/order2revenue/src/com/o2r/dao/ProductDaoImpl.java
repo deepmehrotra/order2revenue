@@ -360,7 +360,8 @@ public class ProductDaoImpl implements ProductDao {
 				}
 
 				float commision = 0;
-				if (partner.getNrnReturnConfig().getCommissionType()
+				if (partner.getNrnReturnConfig().getCommissionType() != null
+						&& partner.getNrnReturnConfig().getCommissionType()
 						.equals("fixed")) {
 					if (chargesMap.containsKey(GlobalConstant.fixedCommissionPercent)) {
 						commision = chargesMap
