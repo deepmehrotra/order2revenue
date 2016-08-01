@@ -566,7 +566,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	
 	@Override
 	public List<ConsolidatedOrderBean> getConsolidatedOrdersReport(
-			Date startDate, Date endDate, int sellerId) {
+			Date startDate, Date endDate, String status, int sellerId) {
 		List<Order> orderList=null;
 		List<Order> orderlistGpReturn=null;
 		Seller seller = null;
@@ -583,7 +583,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			Criteria criteria = session.createCriteria(Order.class);
 			criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",CriteriaSpecification.LEFT_JOIN);
 			criteria.createAlias("seller", "seller",CriteriaSpecification.LEFT_JOIN);
-			criteria.add(Restrictions.eq("seller.id", sellerId));
+			criteria.add(Restrictions.eq("seller.id", sellerId));			
 			criteria.add(Restrictions.between("orderReturnOrRTO.returnDate", startDate, endDate))
 					.add(Restrictions.and(    
                     Restrictions.eq("poOrder", true),

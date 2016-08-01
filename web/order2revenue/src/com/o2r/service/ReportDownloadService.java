@@ -56,7 +56,7 @@ public class ReportDownloadService {
 	 * </pre>
 	 */
 	
-	public void downloadReport(HttpServletResponse response , List<Order> orderlist, String[] headers,String reportname ,int sellerId) throws ClassNotFoundException {
+	public void downloadReport(HttpServletResponse response , String status, List<Order> orderlist, String[] headers,String reportname ,int sellerId) throws ClassNotFoundException {
 		
 		
 		// 1. Create new workbook
@@ -74,7 +74,7 @@ public class ReportDownloadService {
 		Layouter.buildOrderReport(worksheet, startRowIndex, startColIndex,reportname,headers);
 		
 		// 5. Fill report
-		FillManager.fillReport(worksheet, startRowIndex, startColIndex, orderlist , headers, productService, sellerId );
+		FillManager.fillReport(worksheet, startRowIndex, startColIndex,status, orderlist , headers, productService, sellerId );
 		
 		// 6. Set the response properties
 		String fileName = "Consolidated_Order_Report.xls";

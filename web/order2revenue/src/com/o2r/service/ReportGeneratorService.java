@@ -108,5 +108,5 @@ public interface ReportGeneratorService {
 			Date startDate, Date endDate);
 
 	public List<ConsolidatedOrderBean> getConsolidatedOrdersReport(Date
-			startDate, Date endDate, int sellerId);
+			startDate, Date endDate, String status, int sellerId);
 }

@@ -72,7 +72,7 @@ public interface ReportsGeneratorDao {
 
 	public List<MonthlyCommission> fetchMonthlyComm(int sellerId, Date startDate, Date endDate);
 	
-	public List<ConsolidatedOrderBean> getConsolidatedOrdersReport(Date startDate, Date endDate, int sellerId);
+	public List<ConsolidatedOrderBean> getConsolidatedOrdersReport(Date startDate, Date endDate, String status, int sellerId);
 
 	/*public List<UploadReport> listUploadReport() throws CustomException;
 

@@ -72,7 +72,7 @@ span .#error {
 <link href="/O2R/seller/css/plugins/iCheck/custom.css" rel="stylesheet">
 
 <script type="text/javascript">
-	var nameAvailability = true;
+	var nameAvailability = false;
 
 	function checkOnBlur() {
 		var name = document.getElementById("eventName").value;
@@ -3531,7 +3531,9 @@ Custom and plugin javascript
 										"Valid Start Date !").hide();
 								$("#endDateMessageG").html("Valid End Date !")
 										.hide();
+								nameAvailability=false;
 							} else {
+								nameAvailability=true;
 								$("#startDateMessageG").html(
 										"Valid Start Date !").show();
 								$("#endDateMessageG").html("Valid End Date !")

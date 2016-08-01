@@ -225,8 +225,8 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 	
 	@Override
 	public List<ConsolidatedOrderBean> getConsolidatedOrdersReport(
-			Date startDate, Date endDate, int sellerId) {		
-		return reportGeneratorDao.getConsolidatedOrdersReport(startDate, endDate, sellerId);
+			Date startDate, Date endDate, String status, int sellerId) {		
+		return reportGeneratorDao.getConsolidatedOrdersReport(startDate, endDate, status, sellerId);
 	}
 
 	/*

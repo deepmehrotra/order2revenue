@@ -34,47 +34,68 @@
 						<input type="hidden" name="reportName" id="reportName"
 							value="${reportName}" />
 
-						<div class="col-sm-12 mar-btm-20-oh">
+						<div class="col-sm-12">
 
 							<div class="form-group">
-
-								<label class="col-sm-4 control-label label-text-mrg">Select
-									Period</label>
-
-								<div class="col-sm-8">
-
-									<div class="row">
-
-										<div class="col-md-4" id="data_1">
-
-											<div class="input-group date">
-
-												<span class="input-group-addon"><i
-													class="fa fa-calendar"></i></span><input type="text"
-													name="startdate" class="form-control" value="Start Date">
-
+							
+								<div class="col-lg-12">
+									<label class="col-sm-4 control-label label-text-mrg">Select	Period</label>
+									<div class="col-sm-8">	
+										<div class="row">
+	
+											<div class="col-md-4" id="data_1">
+	
+												<div class="input-group date">
+	
+													<span class="input-group-addon"><i
+														class="fa fa-calendar"></i></span><input type="text"
+														name="startdate" class="form-control" value="Start Date">
+	
+												</div>
+	
 											</div>
-
-										</div>
-
-										<div class="col-md-4" id="data_2">
-
-											<div class="input-group date">
-
-												<span class="input-group-addon"><i
-													class="fa fa-calendar"></i></span><input type="text"
-													name="enddate" class="form-control" value="End Date">
-
+	
+											<div class="col-md-4" id="data_2">
+	
+												<div class="input-group date">
+	
+													<span class="input-group-addon"><i
+														class="fa fa-calendar"></i></span><input type="text"
+														name="enddate" class="form-control" value="End Date">
+	
+												</div>
+	
 											</div>
-
+											<div class="col-md-4">
+											</div>
 										</div>
-
 									</div>
-
 								</div>
-
+								
+								<div class="col-lg-12" style="margin-top: 15px;">
+									<label class="col-sm-4 control-label label-text-mrg">Select	Status</label>
+									<div class="col-sm-8">
+										
+										<div class="col-md-8">
+											<div class="row">
+												<select class="form-control" name="statusList" id="statusList" class="chosen-select" style="width: 97.5%;">
+													<option value="">Select Status</option>
+					                            	<option value="Actionable">Actionable</option>
+					                            	<option value="Settled">Settled</option>
+					                            	<option value="In Process">In Process</option>
+					                            	<option value="Payment Recieved">Payment Received</option>
+					                            	<option value="Payment Deducted">Payment Deducted</option>
+					                            	<option value="Return Recieved">Return Received</option>
+					                            	<option value="Return Limit Crossed">Return Limit Crossed</option>			                            				                            	
+					                            </select>										
+											</div>
+										</div>
+										<div class="col-md-4">
+										</div>
+									</div>
+								</div>
+								
 							</div>
-
 						</div>
 
 
