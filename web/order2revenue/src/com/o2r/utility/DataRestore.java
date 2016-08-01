@@ -30,6 +30,7 @@ import com.o2r.model.StateDeliveryTime;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.TaxDetail;
 import com.o2r.model.UploadReport;
+import com.o2r.service.PartnerService;
 import com.o2r.service.SellerService;
 
 @Repository("dataRestoreUtility")
@@ -42,6 +43,8 @@ public class DataRestore {
 	private SessionFactory sessionFactoryforBackup;
 	@Autowired
 	private SellerService sellerService;
+	@Autowired
+	private PartnerService partnerService;
 	static Logger log = Logger.getLogger(DataRestore.class.getName());
 	
 	private static final String listPartnersQuery = "select partners_pcId from seller_partner "
@@ -275,16 +278,42 @@ public class DataRestore {
 		try{
 			
 			seller=sellerService.getSeller(sellerid);
+			HelperUtility.convertor(seller,newSeller, Seller.class,
+					new ArrayList<String>(
+						    Arrays.asList("id", "sellerAccount","role","plan")));
+			List<Partner> partnerlist=partnerService.listPartners(sellerid);
+			
+			
+	
+			newSeller.setSellerAccount(seller.getSellerAccount());
+			newSeller.getSellerAccount().setSelaccId(0);
 			//System.out.println(" MAnual Charges : "+seller.getManualCharges());
 			//seller.getManualCharges().clear();
-			seller.setId(0);
+			/*seller.setId(0);
 			selleracId=seller.getSellerAccount().getSelaccId();
-			seller.getSellerAccount().setSelaccId(0);
+			seller.getSellerAccount().setSelaccId(0);*/
 			//HelperUtility.convertor(seller.getSellerAccount(),newSeller.getSellerAccount(), SellerAccount.class);
 			backupsession=sessionFactoryforBackup.openSession();
 			backupsession.beginTransaction();
 			
-			backupsession.saveOrUpdate(seller);
+			backupsession.saveOrUpdate(newSeller);
+			
+			backupsession.getTransaction().commit();
+			
+			if(partnerlist!=null)
+			{
+				for(Partner partner:partnerlist)
+				{
+					Partner newpartner=null;
+					HelperUtility.convertor(partner,newpartner, Partner.class,
+							new ArrayList<String>(
+								    Arrays.asList("pcId", "events","orders")));
+					newSeller.getPartners().add(newpartner);
+				}
+			}
+			backupsession.beginTransaction();
+			
+			backupsession.saveOrUpdate(newSeller);
 			
 			backupsession.getTransaction().commit();
 			backupsession.close();
