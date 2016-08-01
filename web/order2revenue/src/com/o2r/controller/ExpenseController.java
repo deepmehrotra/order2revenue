@@ -39,6 +39,7 @@ public class ExpenseController {
  private ExpenseService expenseService;
  @Autowired
  private HelperClass helperClass;
+ private int sellerId=0;
  static Logger log = Logger.getLogger(AdminController.class.getName());
 
 @RequestMapping(value = "/seller/saveExpenseCategory", method = RequestMethod.POST)
@@ -50,8 +51,9 @@ public ModelAndView saveExpenseCategory(HttpServletRequest request,@ModelAttribu
 	categoryBean.setCreatedOn(new Date());
 	ExpenseCategory category;
 	try{
-	category = ConverterClass.prepareExpenseCategoryModel(categoryBean);
-	expenseService.addExpenseCategory(category, helperClass.getSellerIdfromSession(request));
+		sellerId=helperClass.getSellerIdfromSession(request);
+		category = ConverterClass.prepareExpenseCategoryModel(categoryBean);
+		expenseService.addExpenseCategory(category, helperClass.getSellerIdfromSession(request));
 	}catch(CustomException ce){
 		log.error("saveExpenseCategory exception : " + ce.toString());
 		model.put("errorMessage", ce.getLocalMessage());
@@ -60,7 +62,7 @@ public ModelAndView saveExpenseCategory(HttpServletRequest request,@ModelAttribu
 		return new ModelAndView("globalErorPage", model);
 	}catch(Exception e){
 		e.printStackTrace();
-		log.error("Failed!",e);
+		log.error("Failed! by Seller Id : "+sellerId,e);
 	}
 	log.info("$$$ saveExpenseCategory Ends : ExpenseController $$$");
   return new ModelAndView("redirect:/seller/expenseCategories.html");
@@ -74,8 +76,9 @@ public ModelAndView saveExpense(HttpServletRequest request,@ModelAttribute("comm
 	Map<String, Object> model = new HashMap<String, Object>();
 	Expenses expense;
 	try{
-	expense = ConverterClass.prepareExpenseModel(expenseBean);
-	expenseService.addExpense(expense, helperClass.getSellerIdfromSession(request));
+		sellerId=helperClass.getSellerIdfromSession(request);
+		expense = ConverterClass.prepareExpenseModel(expenseBean);
+		expenseService.addExpense(expense, helperClass.getSellerIdfromSession(request));
 	}catch(CustomException ce){
 		log.error("saveExpense exception : " + ce.toString());
 		model.put("errorMessage", ce.getLocalMessage());
@@ -84,7 +87,7 @@ public ModelAndView saveExpense(HttpServletRequest request,@ModelAttribute("comm
 		return new ModelAndView("globalErorPage", model);
 	}catch(Exception e){
 		e.printStackTrace();
-		log.error("Failed!",e);
+		log.error("Failed! by Seller Id : "+sellerId,e);
 	}
 	log.info("$$$ saveExpense Ends : ExpenseController $$$");
 	return new ModelAndView("redirect:/seller/expenselist.html");
@@ -101,8 +104,7 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
 		String expenseCategory = request.getParameter("expenseCategory");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
-		String searchExpense = request.getParameter("searchExpense");
-		int sellerId;
+		String searchExpense = request.getParameter("searchExpense");		
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			if (searchExpense != null
@@ -139,7 +141,7 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by Seller Id : "+sellerId,e);
 		}
 		request.getSession().setAttribute("expenseSearchObject", expenseList);
 		log.info("$$$ searchExpense Ends : ExpenseController $$$");
@@ -152,10 +154,8 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
 		
 
 	 	log.info("$$$ listExpenseCategory Starts : ExpenseController $$$");
-		Map<String, Object> model = new HashMap<String, Object>();
-		int sellerId;
+		Map<String, Object> model = new HashMap<String, Object>();		
 		List<ExpenseCategoryBean> expenseCategories = null;
-
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			expenseCategories = ConverterClass
@@ -176,7 +176,7 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by Seller Id : "+sellerId,e);
 		}
 
 		model.put("expenseCategories", expenseCategories);
@@ -189,9 +189,9 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
 		
 	 	log.info("$$$ listExpenses Starts : ExpenseController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-
 		Object obj = request.getSession().getAttribute("expenseSearchObject");
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			if (obj != null) {
 				System.out.println(" Getting list from session" + obj);
 				model.put("expenses", obj);
@@ -210,7 +210,7 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by Seller Id : "+sellerId,e);
 		}
 		log.info("$$$ listExpenses Ends : ExpenseController $$$");
 		return new ModelAndView("initialsetup/viewExpenseGroup", model);
@@ -229,6 +229,7 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
 		Map<String, Object> model = new HashMap<String, Object>();
 		ExpenseCategoryBean expcatbean=null;
 		try{
+			sellerId=helperClass.getSellerIdfromSession(request);
 			expcatbean = ConverterClass.prepareExpenseCategoryBean(expenseService.getExpenseCategory(categoryBean.getExpcategoryId()));
 		}catch(CustomException ce){
 			log.error("viewExpenseCategory exception : " + ce.toString());
@@ -238,7 +239,7 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
 			return new ModelAndView("globalErorPage", model);
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by Seller Id : "+sellerId,e);
 		}
 		model.put("expenseCategory", expcatbean);
 		model.put("expenses", expcatbean.getExpenses());
@@ -255,11 +256,12 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
 	 Map<String,String> catmap=new HashMap<String, String>();
 	 List<ExpenseCategory> categorylist;
 	 try{
-	 categorylist =expenseService.listExpenseCategories(helperClass.getSellerIdfromSession(request));
-	 for(ExpenseCategory expcat:categorylist)
-	 {
-		 catmap.put(expcat.getExpcatName(), expcat.getExpcatName());
-	 }
+		 sellerId=helperClass.getSellerIdfromSession(request);
+		 categorylist =expenseService.listExpenseCategories(helperClass.getSellerIdfromSession(request));
+		 for(ExpenseCategory expcat:categorylist)
+		 {
+			 catmap.put(expcat.getExpcatName(), expcat.getExpcatName());
+		 }
 	 }catch(CustomException ce){
 		 log.error("addExpense exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -268,7 +270,7 @@ public ModelAndView searchExpense(HttpServletRequest request,@ModelAttribute("co
 			return new ModelAndView("globalErorPage", model);
 	 }catch (Exception e) {
 		 e.printStackTrace();
-		log.error("Failed",e);
+		log.error("Failed! by Seller Id : "+sellerId,e);
 	 }
 	 model.put("catmap", catmap);
 	 log.info("$$$ addExpense Ends : ExpenseController $$$");
@@ -283,7 +285,8 @@ public ModelAndView deleteExpenseCategory(HttpServletRequest request,@ModelAttri
 	 	log.info("$$$ deleteExpenseCategory Starts : ExpenseController $$$");
 		int catdelete;		
 		Map<String, Object> model = new HashMap<String, Object>();
-		try{		
+		try{
+			sellerId=helperClass.getSellerIdfromSession(request);
 			catdelete = expenseService.deleteExpenseCategory(ConverterClass.prepareExpenseCategoryModel(categoryBean),helperClass.getSellerIdfromSession(request));
 			if (catdelete == 0) {
 				model.put("error","Unable to delete Expense Category , first delete subcategories");
@@ -297,7 +300,7 @@ public ModelAndView deleteExpenseCategory(HttpServletRequest request,@ModelAttri
 			return new ModelAndView("globalErorPage", model);
 		}catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by Seller Id : "+sellerId,e);
 		}
 		log.info("$$$ deleteExpenseCategory Ends : ExpenseController $$$");
 		return new ModelAndView("initialsetup/expenseCategoryList", model);
@@ -311,6 +314,7 @@ public ModelAndView deleteExpense(HttpServletRequest request,@ModelAttribute("co
 		int catdelete;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			catdelete = expenseService.deleteExpense(
 					ConverterClass.prepareExpenseModel(expenseBean),
 					helperClass.getSellerIdfromSession(request));
@@ -329,7 +333,7 @@ public ModelAndView deleteExpense(HttpServletRequest request,@ModelAttribute("co
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by Seller Id : "+sellerId,e);
 		}
 		log.info("$$$ deleteExpense Ends : ExpenseController $$$");
 		return new ModelAndView("initialsetup/viewExpenseGroup", model);
@@ -344,6 +348,7 @@ public ModelAndView editExpenseCategory(HttpServletRequest request,@ModelAttribu
 		log.info("$$$ editExpenseCategory Starts : ExpenseController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			model.put(
 					"expenseCategory",
 					ConverterClass.prepareExpenseCategoryBean(expenseService
@@ -360,7 +365,7 @@ public ModelAndView editExpenseCategory(HttpServletRequest request,@ModelAttribu
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by Seller Id : "+sellerId,e);
 		}
 		log.info("$$$ editExpenseCategory Ends : ExpenseController $$$");	
 		return new ModelAndView("addExpenseCategory", model);
@@ -375,6 +380,7 @@ public ModelAndView editExpense(HttpServletRequest request,@ModelAttribute("comm
 		Map<String, String> catmap = new HashMap<String, String>();
 		List<ExpenseCategory> categorylist = null;
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			categorylist = expenseService.listExpenseCategories(helperClass
 					.getSellerIdfromSession(request));
 			if (categorylist != null) {
@@ -394,7 +400,7 @@ public ModelAndView editExpense(HttpServletRequest request,@ModelAttribute("comm
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by Seller Id : "+sellerId,e);
 		}
 		log.info("$$$ editExpense Ends : ExpenseController $$$");
 		return new ModelAndView("initialsetup/addExpense", model);

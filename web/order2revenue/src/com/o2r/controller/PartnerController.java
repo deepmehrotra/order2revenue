@@ -66,7 +66,9 @@ public class PartnerController {
 	private HelperClass helperClass;
 	@Autowired
 	private TaxDetailService taxDetailService;
-
+	
+	private int sellerId=0;
+	
 	@Autowired
 	ServletContext context;
 	Properties props = null;
@@ -127,6 +129,7 @@ public class PartnerController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Partner existPartner = null;
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			existPartner = partnerService.getPartner(partnerBean.getPcName(),
 					helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
@@ -540,7 +543,7 @@ public class PartnerController {
 							validateImage(image);
 
 						} catch (RuntimeException re) {
-							log.error("Failed!", re);
+							log.error("Failed! by Seller ID : "+sellerId, re);
 							result.reject(re.getMessage());
 						}
 					}
@@ -555,7 +558,7 @@ public class PartnerController {
 
 					} catch (Exception e) {
 						e.printStackTrace();
-						log.error("Failed!", e);
+						log.error("Failed! by Seller ID : "+sellerId, e);
 						result.reject(e.getMessage());
 						return new ModelAndView(
 								"redirect:/seller/partners.html");
@@ -585,7 +588,7 @@ public class PartnerController {
 				return new ModelAndView("globalErorPage", model);
 			} catch (Exception e) {
 				e.printStackTrace();
-				log.error("Failed!", e);
+				log.error("Failed! by Seller ID : "+sellerId, e);
 			}
 		}
 		log.info("$$$ savePartner Ends : OrderController $$$");
@@ -599,6 +602,7 @@ public class PartnerController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<PartnerBean> addedlist = null;
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			addedlist = ConverterClass.prepareListofPartnerBean(partnerService
 					.listPartners(helperClass.getSellerIdfromSession(request)));
 		} catch (CustomException ce) {
@@ -608,7 +612,7 @@ public class PartnerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 			e.printStackTrace();
 			log.error(e.getCause());
 		}
@@ -625,6 +629,7 @@ public class PartnerController {
 		List<PartnerBean> toAddPartner = new ArrayList<PartnerBean>();
 		List<PartnerBean> addedlist = null;
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			addedlist = ConverterClass.prepareListofPartnerBean(partnerService
 					.listPartners(helperClass.getSellerIdfromSession(request)));
 
@@ -647,7 +652,7 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		model.put("partners", addedlist);
 		model.put("partnertoadd", toAddPartner);
@@ -671,6 +676,7 @@ public class PartnerController {
 		datemap.put("false", "Delivery Date");
 		PartnerBean partner = new PartnerBean();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
 			if (categoryObjects != null)
@@ -686,7 +692,7 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		String partnerName = request.getParameter("partnerName");
 		try {
@@ -860,7 +866,7 @@ public class PartnerController {
 									.getSellerIdfromSession(request))));
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		log.info("$$$ addPartner Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/addPartner", model);
@@ -924,13 +930,14 @@ public class PartnerController {
 					validateImage(image);
 
 				} catch (RuntimeException re) {
-					log.error("Failed!", re);
+					log.error("Failed! by Seller ID : "+sellerId, re);
 					result.reject(re.getMessage());
 				}
 			}
 		}
 
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			props = PropertiesLoaderUtils.loadProperties(resource);
 
 			if (!partnerList.contains(partnerBean.getPcName())) {
@@ -944,7 +951,7 @@ public class PartnerController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 			result.reject(e.getMessage());
 			return new ModelAndView("redirect:/seller/partners.html");
 		}
@@ -961,7 +968,7 @@ public class PartnerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 			e.printStackTrace();
 		}
 
@@ -1023,12 +1030,13 @@ public class PartnerController {
 					validateImage(image);
 				} catch (RuntimeException re) {
 					re.printStackTrace();
-					log.error("Failed!", re);
+					log.error("Failed! by Seller ID : "+sellerId, re);
 					result.reject(re.getMessage());
 				}
 			}
 		}
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			props = PropertiesLoaderUtils.loadProperties(resource);
 
 			if (!partnerList.contains(partnerBean.getPcName())) {
@@ -1042,7 +1050,7 @@ public class PartnerController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 			result.reject(e.getMessage());
 			return new ModelAndView("redirect:/seller/partners.html");
 		}
@@ -1059,7 +1067,7 @@ public class PartnerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 			e.printStackTrace();
 		}
 
@@ -1085,6 +1093,7 @@ public class PartnerController {
 		datemap.put("false", "Delivery Date");
 		PartnerBean partner = new PartnerBean();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
 			if (categoryObjects != null) {
@@ -1101,7 +1110,7 @@ public class PartnerController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		String partnerName = request.getParameter("partnerName");
 		try {
@@ -1114,7 +1123,7 @@ public class PartnerController {
 			model.put("datemap", datemap);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		log.info("$$$ addJabong Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/addJabong", model);
@@ -1137,6 +1146,7 @@ public class PartnerController {
 		datemap.put("false", "Delivery Date");
 		PartnerBean partner = new PartnerBean();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			categoryObjects = categoryService.listCategories(helperClass
 					.getSellerIdfromSession(request));
 			if (categoryObjects != null && categoryObjects.size() > 0) {
@@ -1159,7 +1169,7 @@ public class PartnerController {
 		 * }
 		 */catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 
 		try {
@@ -1173,7 +1183,7 @@ public class PartnerController {
 									.getSellerIdfromSession(request))));
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		log.info("$$$ addMyntra Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/addMyntra", model);
@@ -1193,6 +1203,7 @@ public class PartnerController {
 		log.debug(" Inside partner controller :" + id);
 
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			if (id != null) {
 
 				if (id.equals("1"))
@@ -1205,7 +1216,7 @@ public class PartnerController {
 									.getSellerIdfromSession(request))));
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		log.info("$$$ addPartnertest Ends : OrderController $$$");
 		return new ModelAndView("addPartner", model);
@@ -1234,7 +1245,7 @@ public class PartnerController {
 							.listPartners(helperClass
 									.getSellerIdfromSession(request))));
 		} catch (CustomException ce) {
-			log.error("Failed!", ce);
+			log.error("Failed! by Seller ID : "+sellerId, ce);
 			log.error("deletePartner exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
@@ -1242,7 +1253,7 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		log.info("$$$ deletePartner Ends : OrderController $$$");
 		return new ModelAndView("addPartner", model);
@@ -1267,6 +1278,7 @@ public class PartnerController {
 
 		List<Category> categoryObjects = null;
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			datemap.put("true", "Select payment from");
 			datemap.put("true", "Shipping Date");
 			datemap.put("false", "Delivery Date");
@@ -1460,7 +1472,7 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 			log.error("editPartner exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());
 
@@ -1496,6 +1508,7 @@ public class PartnerController {
 		List<Category> categoryObjects = null;
 
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			datemap.put("true", "Select payment from");
 			datemap.put("true", "Shipping Date");
 			datemap.put("false", "Delivery Date");
@@ -1648,7 +1661,7 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("FAiled!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 			log.error("editPartner exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());
 
@@ -1676,6 +1689,7 @@ public class PartnerController {
 		List<TaxCategory> taxCategoryObjects = null;
 
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			datemap.put("true", "Select payment from");
 			datemap.put("true", "Shipping Date");
 			datemap.put("false", "Delivery Date");
@@ -1746,7 +1760,7 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 			log.error("editPartner exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());
 
@@ -1769,6 +1783,7 @@ public class PartnerController {
 		List<Category> categoryObjects = null;
 
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			datemap.put("true", "Select payment from");
 			datemap.put("true", "Shipping Date");
 			datemap.put("false", "Delivery Date");
@@ -1799,7 +1814,7 @@ public class PartnerController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("FAiled!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 			log.error("editJabong exception : " + e.getLocalizedMessage());
 			model.put("errorMessage", e.getMessage());
 
@@ -1855,6 +1870,7 @@ public class PartnerController {
 		log.info("$$$ getCheckPartner Starts : OrderController $$$");
 		log.debug(request.getParameter("partner"));
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			Partner parner = partnerService.getPartner(
 					request.getParameter("partner"),
 					helperClass.getSellerIdfromSession(request));
@@ -1867,7 +1883,7 @@ public class PartnerController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 			return "Error";
 		}
 	}
@@ -1886,6 +1902,7 @@ public class PartnerController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Partner existPartner = null;
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			existPartner = partnerService.getPartner(partnerBean.getPcName(),
 					helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
@@ -2297,7 +2314,7 @@ public class PartnerController {
 							validateImage(image);
 
 						} catch (RuntimeException re) {
-							log.error("Failed!", re);
+							log.error("Failed! by Seller ID : "+sellerId, re);
 							result.reject(re.getMessage());
 						}
 					}
@@ -2312,7 +2329,7 @@ public class PartnerController {
 
 					} catch (Exception e) {
 						e.printStackTrace();
-						log.error("Failed!", e);
+						log.error("Failed! by Seller ID : "+sellerId, e);
 						result.reject(e.getMessage());
 						return new ModelAndView(
 								"redirect:/seller/partners.html");
@@ -2341,7 +2358,7 @@ public class PartnerController {
 				return new ModelAndView("globalErorPage", model);
 			} catch (Exception e) {
 				e.printStackTrace();
-				log.error("Failed!", e);
+				log.error("Failed! by Seller ID : "+sellerId, e);
 			}
 		}
 		log.info("$$$ savePartner Ends : OrderController $$$");

@@ -75,7 +75,7 @@ public class GenericController {
 	 private PartnerService partnerService;
 	@Autowired
 	 private ExpenseService expenseService;
-	
+	private int sellerId=0;
 
 	private Logger logger = Logger.getLogger(GenericController.class);
 		
@@ -114,6 +114,7 @@ public class GenericController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Seller seller = null;
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			seller = sellerService.getSeller(request.getUserPrincipal()
 					.getName());
 		} catch (CustomException ce) {
@@ -124,7 +125,7 @@ public class GenericController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("failed!",e);
+			logger.error("Failed! by seller ID : "+sellerId,e);
 		}
 		if (seller != null) {
 			request.getSession().setAttribute("sellerId", seller.getId());
@@ -150,18 +151,19 @@ public class GenericController {
 		DashboardBean dbean=null;
 		Seller seller=null;
 		try{
-		seller=sellerService.getSeller(helperClass.getSellerIdfromSession(request));
-		SellerBean sellerBean=ConverterClass.prepareSellerBean(seller);
-		dbean = dashboardService.getDashboardDetails(helperClass.getSellerIdfromSession(request));
-		model.put("sellerBean", sellerBean);
-		model.put("dashboardValue", dbean);
-		List<UploadReportBean> uploadReports = ConverterClass.prepareUploadReportListBean(
-				reportGeneratorService.listUploadReport(helperClass.getSellerIdfromSession(request)));
-		if (uploadReports != null && uploadReports.size() > 3) {
-			uploadReports = uploadReports.subList(uploadReports.size() - 3, uploadReports.size());
-		}
-		model.put("uploadReportList", uploadReports);
-		
+			sellerId=helperClass.getSellerIdfromSession(request);
+			seller=sellerService.getSeller(helperClass.getSellerIdfromSession(request));
+			SellerBean sellerBean=ConverterClass.prepareSellerBean(seller);
+			dbean = dashboardService.getDashboardDetails(helperClass.getSellerIdfromSession(request));
+			model.put("sellerBean", sellerBean);
+			model.put("dashboardValue", dbean);
+			List<UploadReportBean> uploadReports = ConverterClass.prepareUploadReportListBean(
+					reportGeneratorService.listUploadReport(helperClass.getSellerIdfromSession(request)));
+			if (uploadReports != null && uploadReports.size() > 3) {
+				uploadReports = uploadReports.subList(uploadReports.size() - 3, uploadReports.size());
+			}
+			model.put("uploadReportList", uploadReports);
+			
 		}catch(CustomException ce){
 			logger.error("displayDashboard exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -170,7 +172,7 @@ public class GenericController {
 			return new ModelAndView("globalErorPage", model);
 		}catch(Exception e){
 			e.printStackTrace();
-			logger.error("Failed!",e);
+			logger.error("Failed! by seller ID : "+sellerId,e);
 		}
 		logger.info("$$$ displayDashboard Ends : GenericController $$$");
 		return new ModelAndView("landing", model);
@@ -184,6 +186,7 @@ public class GenericController {
 		List<UploadReportBean> uploadReports = null;
 		Gson gson = null;
 		try{
+			sellerId=helperClass.getSellerIdfromSession(request);
 			GsonBuilder gsonBuilder = new GsonBuilder();
 			gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
 			gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer());
@@ -196,7 +199,7 @@ public class GenericController {
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-			logger.error("Failed!",e);
+			logger.error("Failed! by seller ID : "+sellerId,e);
 		}
 		logger.info("$$$ getUploadReports Ends : GenericController $$$");
 		return gson.toJson(uploadReports);
@@ -209,6 +212,7 @@ public class GenericController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<UploadReportBean> uploadReports = null;
 		try{
+			sellerId=helperClass.getSellerIdfromSession(request);
 			GsonBuilder gsonBuilder = new GsonBuilder();
 			gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
 			gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer());
@@ -218,7 +222,7 @@ public class GenericController {
 			model.put("uploadlist", uploadReports);
 		}catch(Exception e){
 			e.printStackTrace();
-			logger.error("Failed!",e);
+			logger.error("Failed! by seller ID : "+sellerId,e);
 		}
 		logger.info("$$$ getUploadReportList Ends : GenericController $$$");
 		return new ModelAndView("allUploadList", model);
@@ -264,14 +268,13 @@ public class GenericController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Date startDate = null;
 		Date endDate = null;
-		int sellerId;
 		String searchCriteria = null;
 		String searchString =null;
 		
 		try{		
-		sellerId = helperClass.getSellerIdfromSession(request);
-		searchCriteria = request.getParameter("searchCriteria");
-		searchString = request.getParameter("searchString");
+			sellerId = helperClass.getSellerIdfromSession(request);
+			searchCriteria = request.getParameter("searchCriteria");
+			searchString = request.getParameter("searchString");
 		
 		if (request.getParameter("startDate") != null
 				&& request.getParameter("endDate") != null
@@ -320,7 +323,7 @@ public class GenericController {
 			return new ModelAndView("globalErorPage", model);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Failed!",e);
+			logger.error("Failed! by seller ID : "+sellerId,e);
 		}
 		logger.info("$$$ findGlobalOrders Ends : GenericController $$$");
 		return new ModelAndView("globalOrderSearch", model);
@@ -335,6 +338,7 @@ public class GenericController {
 		String query = request.getParameter("query");
 		GenericQuery gq = new GenericQuery();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			if (email != null) {
 				gq.setEmail(email);
 				if (name != null)
@@ -346,7 +350,7 @@ public class GenericController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Failed!",e);
+			logger.error("Failed! by seller ID : "+sellerId,e);
 			return "false";
 		}
 		logger.info("$$$ saveQuery Ends : GenericController $$$");
@@ -359,6 +363,7 @@ public class GenericController {
 		logger.info("$$$ getSetupStatus Starts : GenericController $$$");
 		Seller seller=null;
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			seller=sellerService.getSeller(helperClass.getSellerIdfromSession(request));
 			if(seller.getStateDeliveryTime()==null)
 			{
@@ -395,7 +400,7 @@ public class GenericController {
 				
 		}catch (CustomException e) {
 			e.printStackTrace();
-			logger.error("Failed!",e);
+			logger.error("Failed! by seller ID : "+sellerId,e);
 			
 		}
 		catch (Exception e) {

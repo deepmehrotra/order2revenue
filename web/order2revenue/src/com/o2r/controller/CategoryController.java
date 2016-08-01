@@ -48,7 +48,7 @@ public class CategoryController {
 	private SellerService sellerService;
 	@Autowired
 	private HelperClass helperClass;
-
+	private int sellerId=0;
 	@Resource(name = "downloadService")
 	private DownloadService downloadService;
 	@Resource(name = "saveContents")
@@ -71,6 +71,7 @@ public class CategoryController {
 		Category category = null;
 		if (catId != null) {
 			try {
+				sellerId=helperClass.getSellerIdfromSession(request);
 				categorylist = ConverterClass
 						.prepareListofCategoryBean(categoryService
 								.listParentCategories(helperClass
@@ -88,7 +89,7 @@ public class CategoryController {
 				model.put("errorCode", ce.getErrorCode());
 				return new ModelAndView("globalErorPage", model);
 			} catch (Throwable e) {
-				log.error("Failed ! ",e);
+				log.error("Failed! by Seller ID : "+sellerId,e);
 				e.printStackTrace();
 				return new ModelAndView("globalErorPage", model);
 			}
@@ -110,7 +111,7 @@ public class CategoryController {
 		log.debug(" Category  to delete :" + categoryBean.getId());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-
+			sellerId=helperClass.getSellerIdfromSession(request);
 			if (categoryBean.getId() != 0) {
 				int sellerId = helperClass.getSellerIdfromSession(request);
 				int deleted = categoryService.deleteCategory(
@@ -143,7 +144,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by Seller ID : "+sellerId,e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ deleteInventoryGroup Ends : CategoryController $$$");
@@ -160,6 +161,7 @@ public class CategoryController {
 		log.debug(" Category  to delete :" + categoryBean.getId());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			if (categoryBean.getId() != 0) {
 				int sellerId = helperClass.getSellerIdfromSession(request);
 				int deleted = categoryService.deleteCategory(
@@ -198,7 +200,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by Seller ID : "+sellerId,e);
 			return new ModelAndView("globalErorPage", model);
 		}
 
@@ -216,6 +218,7 @@ public class CategoryController {
 		log.debug(" Category  to view  :" + categoryBean.getId());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			if (categoryBean.getId() != 0) {
 				List<CategoryBean> categorylist = ConverterClass
 						.prepareListofCategoryBean(categoryService
@@ -247,7 +250,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! ",e);
+			log.error("Failed! by Seller ID : "+sellerId,e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ viewsingleInventorygroup Ends : CategoryController $$$");
@@ -259,12 +262,10 @@ public class CategoryController {
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
 		
-		log.info("$$$ inventorygroups Starts : CategoryController $$$");
-		int sellerId;
+		log.info("$$$ inventorygroups Starts : CategoryController $$$");		
 		Map<String, Object> model = new HashMap<String, Object>();
-		try {
+		try {			
 			sellerId = helperClass.getSellerIdfromSession(request);
-
 			List<CategoryBean> categorylist = ConverterClass
 					.prepareListofCategoryBean(categoryService
 							.listParentCategories(sellerId));
@@ -290,7 +291,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by Seller ID : "+sellerId,e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ inventorygroups Ends : CategoryController $$$");
@@ -306,6 +307,7 @@ public class CategoryController {
 		log.debug(" category id :" + categoryBean.getCatName());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			if (result.hasErrors()) {
 				return new ModelAndView("initialsetup/addInventoryGroup");
 			}
@@ -322,7 +324,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by Seller ID : "+sellerId,e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ saveInventoryGroup Ends : CategoryController $$$");
@@ -346,6 +348,7 @@ public class CategoryController {
 							+ parentcatid);
 		}
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			categoryBean.setSubCategory(true);
 			Category category = ConverterClass
 					.prepareCategoryModel(categoryBean);
@@ -359,7 +362,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by Seller ID : "+sellerId,e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ saveCatInventory Ends : CategoryController $$$");
@@ -383,6 +386,7 @@ public class CategoryController {
 		log.debug(" *********checkInventoryGroup name :"+ categoryBean.getParentCatName());
 		String name = request.getParameter("name");
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			if (name != null && name.length() != 0) {
 				Category cat = categoryService.getCategory(name,
 						helperClass.getSellerIdfromSession(request));
@@ -393,7 +397,7 @@ public class CategoryController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by Seller ID : "+sellerId,e);
 			return "false";
 		}
 		log.info("$$$ checkInventoryGroup Ends : CategoryController $$$");
@@ -411,6 +415,7 @@ public class CategoryController {
 		log.debug("category id :" + taxCategoryBean.getTaxCatName());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			TaxCategory category = ConverterClass
 					.prepareTaxCategoryModel(taxCategoryBean);
 			taxDetailService.addTaxCategory(category,
@@ -423,7 +428,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by Seller ID : "+sellerId,e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ saveTaxCategory Ends : CategoryController $$$");
@@ -439,6 +444,7 @@ public class CategoryController {
 		log.debug("category id :" + taxCategoryBean.getTaxCatName());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			model.put("taxCategories", ConverterClass
 					.prepareListofTaxCategoryBean(taxDetailService
 							.listTaxCategories(helperClass
@@ -451,7 +457,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by Seller ID : "+sellerId,e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ listTaxCategory Ends : CategoryController $$$");
@@ -472,6 +478,7 @@ public class CategoryController {
 		log.info("$$$ checkTaxCategory Starts : CategoryController $$$");
 		log.debug("tax category name : " + request.getParameter("name"));
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			TaxCategory taxCategory = taxDetailService.getTaxCategory(
 					request.getParameter("name"),
 					helperClass.getSellerIdfromSession(request));
@@ -487,7 +494,7 @@ public class CategoryController {
 			return "false";
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed !",e);
+			log.error("Failed! by Seller ID : "+sellerId,e);
 			return "false";
 		}
 		

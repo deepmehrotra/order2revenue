@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,7 @@ import com.google.gson.GsonBuilder;
 import com.o2r.bean.EmployeeBean;
 import com.o2r.bean.OrderBean;
 import com.o2r.helper.CustomException;
+import com.o2r.helper.HelperClass;
 import com.o2r.model.Employee;
 import com.o2r.service.AdminService;
 
@@ -33,59 +36,72 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
-
+	@Autowired
+	private HelperClass helperClass;
+	
+	private int sellerId=0;
+	 
 	static Logger log = Logger.getLogger(AdminController.class.getName());
 
 	@RequestMapping(value = "/seller/save", method = RequestMethod.POST)
-	public ModelAndView saveEmployee(
+	public ModelAndView saveEmployee(HttpServletRequest request,
 			@ModelAttribute("command") EmployeeBean employeeBean,
 			BindingResult result) {
 		
 		log.info("$$$ saveEmployee() Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try{
-		Employee employee = prepareModel(employeeBean);
-		adminService.addEmployee(employee);
+			sellerId=helperClass.getSellerIdfromSession(request);					
+			Employee employee = prepareModel(employeeBean);
+			adminService.addEmployee(employee);
 		}catch(CustomException ce){
 			log.error("saveEmployee exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
+		}catch (Exception e) {
+			log.error("Failed by seller ID : "+sellerId,e);
+			e.printStackTrace();
 		}
 		log.info("$$$ saveEmployee() Ends : AdminController $$$");
 		return new ModelAndView("redirect:/seller/add.html?page=1");
 	}
 	
 	@RequestMapping(value = "/seller/employees", method = RequestMethod.GET)
-	public ModelAndView listEmployees() {
+	public ModelAndView listEmployees(HttpServletRequest request) {
 
 		log.info("$$$ listEmployees Starts : AdminController $$$");
 		Map<String, String> model = new HashMap<String, String>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try{
-		String jsonArray = gson.toJson(prepareListofBean(adminService.listEmployeess(1)));
-		model.put("employees", jsonArray);
+			sellerId=helperClass.getSellerIdfromSession(request);
+			String jsonArray = gson.toJson(prepareListofBean(adminService.listEmployeess(1)));
+			model.put("employees", jsonArray);
 		}catch(CustomException ce){
 			log.error("listEmployee exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
+		}catch (Exception e) {
+			log.error("Failed by Seller Id : "+sellerId,e);
+			e.printStackTrace();
 		}
 		log.info("$$$ listEmployees Ends : AdminController $$$");
 		return new ModelAndView("employeesList", model);
 	}
 
 	@RequestMapping(value = "/admin/listQueries", method = RequestMethod.GET)
-	public ModelAndView listQueries() {
+	public ModelAndView listQueries(HttpServletRequest request) {
 
 		log.info("$$$ listQueries Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			model.put("queries", adminService.listQueries());
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by seller Id : "+sellerId,e);
 			return new ModelAndView("admin/queryList", model);
 		}
 

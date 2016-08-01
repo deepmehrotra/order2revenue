@@ -70,7 +70,7 @@ public class ProductController {
 	private CategoryService categoryService;
 	@Autowired
 	private HelperClass helperClass;
-
+	private int sellerId=0;
 	static Logger log = Logger.getLogger(ProductController.class.getName());
 
 	private static final String UPLOAD_DIR = "upload";
@@ -83,7 +83,6 @@ public class ProductController {
 		log.info("$$$ searchProduct Starts : ProductController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<ProductBean> productList = new ArrayList<>();
-		int sellerId;
 		String skuCode = request.getParameter("skuCode");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
@@ -113,7 +112,7 @@ public class ProductController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 		}
 		request.getSession().setAttribute("productSearchObject", productList);
 		log.info("$$$ searchProduct Ends : ProductController $$$");
@@ -131,7 +130,8 @@ public class ProductController {
 		List<ProductConfig> productConfigList = new ArrayList<>();		
 		String value = request.getParameter("value");		
 		String searchProduct = request.getParameter("searchProduct");
-		try {			
+		try {	
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (searchProduct != null && value != null) {
 				productConfigList=productService.searchProductConfig(searchProduct, value, helperClass.getSellerIdfromSession(request), "config");
 				System.out.println(" Product bean in search product: "+productBean);
@@ -139,7 +139,7 @@ public class ProductController {
 			model.put("productConfigList", productConfigList);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 		}
 		log.info("$$$ searchProductConfig Ends : ProductController $$$");
 		return new ModelAndView("initialsetup/productConfig", model);
@@ -155,7 +155,8 @@ public class ProductController {
 		List<ProductConfig> productConfigList = new ArrayList<>();		
 		String value = request.getParameter("value");		
 		String searchProduct = request.getParameter("searchProduct");
-		try {			
+		try {	
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (searchProduct != null && value != null) {
 				productConfigList=productService.searchProductConfig(searchProduct, value, helperClass.getSellerIdfromSession(request), "mappings");
 				System.out.println(" Product bean in search product: "+productBean);
@@ -163,7 +164,7 @@ public class ProductController {
 			model.put("productMappingList", productConfigList);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 		}	
 		log.info("$$$ searchProductMapping Ends : ProductController $$$");
 		return new ModelAndView("initialsetup/productMapping", model);
@@ -180,6 +181,7 @@ public class ProductController {
 		List<List<ProductConfig>> productConfigs = new ArrayList<List<ProductConfig>>();
 
 		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
 			Object obj = request.getSession().getAttribute("productSearchObject");
 			Object deleteStatus=request.getSession().getAttribute("deleteStatus");
 			if(deleteStatus != null){
@@ -215,7 +217,7 @@ public class ProductController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 		}
 
 		log.info("$$$ productList Ends : ProductController $$$");
@@ -234,6 +236,7 @@ public class ProductController {
 		List<ProductConfig> productMappings = new ArrayList<ProductConfig>();
 
 		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
 			Object obj = request.getSession().getAttribute(
 					"productSearchObject");
 			if (obj != null) {
@@ -260,7 +263,7 @@ public class ProductController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 		}
 
 		log.info("$$$ productConfigList Ends : ProductController $$$");
@@ -278,7 +281,8 @@ public class ProductController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<ProductConfig> productConfigs = new ArrayList<ProductConfig>();
 
-		try {			
+		try {	
+			sellerId = helperClass.getSellerIdfromSession(request);
 			int pageNo = request.getParameter("page") != null ? Integer
 					.parseInt(request.getParameter("page")) : 0;
 			model.put("productConfigList", productService.listProductConfig(helperClass.getSellerIdfromSession(request), pageNo, "config"));
@@ -290,7 +294,7 @@ public class ProductController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 		}
 
 		log.info("$$$ productConfigList Ends : ProductController $$$");
@@ -316,13 +320,12 @@ public class ProductController {
 			int quantityToSubstract = (request
 					.getParameter("quantityToSubtract") != null && request
 					.getParameter("quantityToSubtract").toString().length() != 0) ? Integer
-					.parseInt(request.getParameter("quantityToSubtract")) : 0;
-			int sellerId = 0;
+					.parseInt(request.getParameter("quantityToSubtract")) : 0;			
 			try {
 				sellerId = helperClass.getSellerIdfromSession(request);
 			} catch (Exception e) {
 				e.printStackTrace();
-				log.error("Failed!", e);
+				log.error("Failed By seller ID :"+sellerId, e);
 			}
 
 			try {
@@ -335,7 +338,7 @@ public class ProductController {
 				model.put("errorCode", ce.getErrorCode());
 				return new ModelAndView("globalErorPage", model);
 			}catch(Exception e){
-				log.error("Failed!",e);
+				log.error("Failed By seller ID :"+sellerId,e);
 			}
 
 		}
@@ -356,6 +359,7 @@ public class ProductController {
 		log.debug(" Product category  :"+ productBean.getCategoryName());
 
 		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if(productBean.getProductId() != 0){
 				productBean.setVolume(productBean.getHeight()
 						* productBean.getLength() * productBean.getBreadth());
@@ -384,7 +388,7 @@ public class ProductController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 			log.equals(e);
 		}
 		log.info("$$$ saveProduct Ends : ProductController $$$");
@@ -398,6 +402,7 @@ public class ProductController {
 		log.info("$$$ removeProductMapping Starts : ProductController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
 			int productConfigId = Integer.parseInt(value);
 			ProductConfig productConfig = productService.getProductConfig(productConfigId);
 			productService.removeSKUMapping(productConfig,
@@ -409,7 +414,7 @@ public class ProductController {
 			model.put("errorCode", "#0012");
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {			
-			log.error("Failed!", e);
+			log.error("Failed By seller ID :"+sellerId, e);
 			model.put("errorMessage", "Error in Saving Product Config");
 			model.put("errorTime", new Date());
 			model.put("errorCode", "#0012");
@@ -429,6 +434,7 @@ public class ProductController {
 		log.info("$$$ saveProductConfig Starts : ProductController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
 			ProductConfig productConfig = ConverterClass
 					.prepareProductConfigModel(productConfigBean);
 			productService.addProductConfig(productConfig,
@@ -440,7 +446,7 @@ public class ProductController {
 			model.put("errorCode", "#0012");
 			return new ModelAndView("globalErorPage", model);
 		}*/ catch (Exception e) {			
-			log.error("Failed!", e);
+			log.error("Failed By seller ID :"+sellerId, e);
 			model.put("errorMessage", "Error in Saving Product Config");
 			model.put("errorTime", new Date());
 			model.put("errorCode", "#0012");
@@ -461,6 +467,7 @@ public class ProductController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, String> productSkuCodeMap = new LinkedHashMap<>();
 		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
 			List<Product> products = productService.listProducts(helperClass
 					.getSellerIdfromSession(request));
 
@@ -493,7 +500,7 @@ public class ProductController {
 			log.info("$$$ addProductConfig Ends : ProductController $$$");
 			return new ModelAndView("initialsetup/addProductConfig", model);
 		} catch (Throwable e) {
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 			e.printStackTrace();
 			model.put("errorMessage", "Error in Adding Product Config");
 			model.put("errorTime", new Date());
@@ -511,6 +518,7 @@ public class ProductController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, String> categoryMap = new LinkedHashMap<>();
 		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
 			List<Category> categoryList = categoryService
 					.listCategories(helperClass.getSellerIdfromSession(request));
 			if (categoryList != null && categoryList.size() != 0) {
@@ -528,7 +536,7 @@ public class ProductController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		model.put("categoryMap", categoryMap);
@@ -546,6 +554,7 @@ public class ProductController {
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (request.getParameter("id") != null) {
 				int productId = Integer.parseInt(request.getParameter("id"));
 				product = productService.getProduct(productId);				
@@ -556,6 +565,8 @@ public class ProductController {
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
+		} catch (Exception e) {
+			log.error("Failed By seller ID :"+sellerId, e);
 		}
 		if (product != null)
 			model.put("product", product);
@@ -572,6 +583,7 @@ public class ProductController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		String status="";
 		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (request.getParameter("id") != null) {
 				int productId = Integer.parseInt(request.getParameter("id"));
 				status=productService.deleteProduct(productId,helperClass.getSellerIdfromSession(request));
@@ -589,7 +601,7 @@ public class ProductController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e){
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 		}
 		
 		log.info("$$$ deleteProduct Ends : ProductController $$$");
@@ -609,6 +621,7 @@ public class ProductController {
 		log.debug("Product id " + request.getParameter("productId"));
 		int productId = 0;
 		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (request.getParameter("productId") != null
 					&& request.getParameter("productId").toString().length() != 0) {
 				productId = Integer.parseInt(request.getParameter("productId"));
@@ -664,7 +677,7 @@ public class ProductController {
 			return errors;
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 		}
 
 		model.put("Result", "OK");
@@ -722,12 +735,13 @@ public class ProductController {
 
 		Gson gson = gsonBuilder.setPrettyPrinting().create();
 		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
 			model.put("Records", ConverterClass
 					.prepareListofProductBean(productService.listProducts(
 							helperClass.getSellerIdfromSession(request), 0)));
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 		}
 		model.put("Result", "OK");
 		String jsonArray = gson.toJson(model);
@@ -742,8 +756,6 @@ public class ProductController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String action = request.getParameter("action");
-		int sellerId;
-
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			if (action != null && action.equals("list")) {
@@ -784,7 +796,7 @@ public class ProductController {
 			return error;
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 		}
 		model.put("Result", "OK");
 
@@ -801,8 +813,7 @@ public class ProductController {
 		List<MultipartFile> files = uploadForm.getFiles();
 
 		List<String> fileNames = new ArrayList<String>();
-		MultipartFile fileinput = files.get(0);
-		int sellerId;
+		MultipartFile fileinput = files.get(0);		
 		UploadReport uploadReport = new UploadReport();
 
 		// gets absolute path of the web application
@@ -839,7 +850,7 @@ public class ProductController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 		}
 
 		log.info("$$$ save() Ends : ProductController $$$");
@@ -860,11 +871,9 @@ public class ProductController {
 
 		List<String> fileNames = new ArrayList<String>();
 		MultipartFile fileinput = files.get(0);
-		int sellerId;
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		try {
-
 			sellerId = helperClass.getSellerIdfromSession(request);
 			if (null != files && files.size() > 0) {
 				fileNames.add(files.get(0).getOriginalFilename());
@@ -891,7 +900,7 @@ public class ProductController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed By seller ID :"+sellerId,e);
 		}
 		log.info("$$$ saveInventories Ends : ProductController $$$");
 		return new ModelAndView("productList", model);
@@ -904,10 +913,11 @@ public class ProductController {
 		log.info("$$$ checkSKUAvailability Starts : ProductController $$$");
 		Product product = null;
 		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
 			product = productService.getProduct(request.getParameter("sku"),
 					helperClass.getSellerIdfromSession(request));
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Failed By seller ID :"+sellerId,e);
 		}
 		
 		if (product != null) {

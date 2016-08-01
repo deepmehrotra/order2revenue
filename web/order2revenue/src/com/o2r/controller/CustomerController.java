@@ -34,7 +34,7 @@ public class CustomerController {
 	private CustomerService customerService;	
 	@Autowired
 	private OrderService orderService;
-	
+	private int sellerId=0;
 	static Logger log = Logger.getLogger(EventsController.class.getName());
 	
 	@RequestMapping(value = "/seller/customerList", method = RequestMethod.GET)
@@ -49,12 +49,14 @@ public class CustomerController {
 		Map<String, CustomerDBaseBean> customerBeanMap=new HashMap<String, CustomerDBaseBean>();
 		List<CustomerDBaseBean> customerBeanList=new ArrayList<CustomerDBaseBean>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			customerBeanList=customerService.listCustomerDB(helperClass.getSellerIdfromSession(request),pageNo);
 			if(customerBeanList != null)
 			{
 				model.put("customers", customerBeanList);
 			}
 		} catch (Exception e) {
+			log.error("Failed by sellerId : "+sellerId, e);
 			e.printStackTrace();
 		}
 		log.info("$$$ listCustomer Ends : CustomerController $$$");
@@ -77,6 +79,7 @@ public class CustomerController {
 		model.put("netPurchased",Long.parseLong(request.getParameter("netPurchased")));
 		
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			orderList=orderService.findOrdersbyCustomerDetails("customerEmail", email, helperClass.getSellerIdfromSession(request));
 			if(orderList != null){
 				model.put("orderList", orderList);
@@ -88,6 +91,7 @@ public class CustomerController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		}catch (Exception e) {
+			log.error("Failed By Seller ID : "+sellerId, e);
 			e.printStackTrace();
 		}
 		log.info("$$$ listCustomerOrders Ends : CustomerController $$$");

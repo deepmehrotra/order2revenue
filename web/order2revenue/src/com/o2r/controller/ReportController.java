@@ -86,7 +86,7 @@ private OrderService orderService;
 private HelperClass helperClass;
 
 private static final SimpleDateFormat dateFormat = new SimpleDateFormat("mm/dd/yy");
-
+private int sellerId=0;
 static Logger log = Logger.getLogger(ReportController.class.getName());
 
 @RequestMapping(value = "/seller/getAllReports", method = RequestMethod.GET)
@@ -104,6 +104,7 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 		List<Partner> partners=new ArrayList<Partner>();
 		String reportName = request.getParameter("reportName");
 		try{
+			sellerId=helperClass.getSellerIdfromSession(request);					
 			partners = partnerService.listPartners(helperClass.getSellerIdfromSession(request));
 			for (Partner partner : partners)
 				partnerlist.add(partner.getPcName());
@@ -119,7 +120,7 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			return new ModelAndView("globalErorPage", model);
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! By Seller ID : "+sellerId,e);
 		} 
 		log.info("$$$ addManualPayment Ends : ReportController $$$");
 		if(reportName.equals("channelSaleReport") || reportName.equals("categoryWiseSaleReport"))
@@ -153,7 +154,7 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd"); 
 			Date startDate = ft.parse(selectedYearInt + "-04-01");
 			Date endDate = ft.parse((selectedYearInt + 1) + "-03-31");
-			int sellerId = helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			
 			List<YearlyStockList> stockList = reportGeneratorService.fetchStockList(selectedYearInt);
 			List<YearlyStockList> combinedStockList = ConverterClass.combineStockList(stockList);
@@ -178,7 +179,7 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			log.error("Failed!", ex);
+			log.error("Failed! By Seller ID : "+sellerId, ex);
 			model.put("errorMessage", ex.getMessage());
 		}
 		return new ModelAndView("globalErorPage", model);
@@ -199,7 +200,7 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			Date endDate = null;
 			if(StringUtils.isNotBlank(endDateStr))
 				endDate = new Date(endDateStr);
-			int sellerId = helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			model.put("reportNameStr", GlobalConstant.reportNameMap.get(reportName));
 			
 			if ("debtorsReport".equalsIgnoreCase(reportName)) {
@@ -301,7 +302,7 @@ public ModelAndView addManualPayment(HttpServletRequest request) {
 			model.put("errorCode", ce.getErrorCode());
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			log.error("Failed!", ex);
+			log.error("Failed! By Seller ID : "+sellerId, ex);
 			model.put("errorMessage", ex.getMessage());
 		}
 		return new ModelAndView("globalErorPage", model);
@@ -358,7 +359,7 @@ public ModelAndView getReport(HttpServletRequest request)throws Exception
 			return new ModelAndView("globalErorPage", model);
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! By Seller ID : "+sellerId,e);
 		}
 		log.info("$$$ getReport Ends : ReportController $$$");
 		if(reportName.equals("channelSaleReport"))
@@ -386,7 +387,7 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			Date endDate = null;
 			if(StringUtils.isNotBlank(endDateStr))
 				endDate = new Date(endDateStr);
-			int sellerId = helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			
 			model.put("reportNameStr", GlobalConstant.reportNameMap.get(reportName));
 			List<ChannelReportDetails> channelReportDetailsList =  reportGeneratorService.getChannelReportDetails(startDate, endDate, sellerId, reportName);
@@ -510,7 +511,7 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			return new ModelAndView("globalErorPage", model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! By Seller ID : "+sellerId,e);
 		}
 		log.info("$$$ getChannelReport Ends : ReportController $$$");
 		if(reportName.equals("channelSaleReport"))
@@ -549,7 +550,7 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			if(StringUtils.isNotBlank(endDateStr))
 				endDate = new Date(endDateStr);
 			String[] reportheaders = request.getParameterValues("headers");
-			int sellerId = helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			
 			List<PartnerReportDetails> partnerBusinessList = new ArrayList<PartnerReportDetails>();
 			if ("debtorsReport".equalsIgnoreCase(reportName)) {
@@ -575,7 +576,7 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			model.put("errorCode", ce.getErrorCode());
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! By Seller ID : "+sellerId, e);
 		}
 		log.info("$$$ downloadreport Ends : ReportController $$$");
 	}
@@ -592,7 +593,7 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			Date startDate = new Date(request.getParameter("startdate"));
 			Date endDate = new Date(request.getParameter("enddate"));
 			String[] reportheaders = request.getParameterValues("headers");
-			int sellerId = helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 
 			List<ChannelReportDetails> channelReportList = reportGeneratorService
 					.getChannelReportDetails(startDate, endDate, sellerId, reportName);
@@ -612,7 +613,7 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			model.put("errorCode", ce.getErrorCode());
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! By Seller ID : "+sellerId, e);
 		}
 		log.info("$$$ downloadreport Ends : ReportController $$$");
 	}
@@ -633,7 +634,7 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd"); 
 			Date startDate = ft.parse(selectedYearInt + "-04-01");
 			Date endDate = ft.parse((selectedYearInt + 1) + "-03-31");
-			int sellerId = helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			String[] reportheaders = request.getParameterValues("headers");
 
 			List<YearlyStockList> revenueReportList = reportGeneratorService.fetchStockList(selectedYearInt);
@@ -647,7 +648,7 @@ public ModelAndView getChannelReport(HttpServletRequest request)throws Exception
 			log.error(e);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("! By Seller ID : "+sellerId, e);
 		}
 		log.info("$$$ downloadreport Ends : ReportController $$$");
 	}
@@ -684,7 +685,7 @@ public void downloadreport(HttpServletRequest request ,HttpServletResponse respo
 			model.put("errorCode", ce.getErrorCode());
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! By Seller ID : "+sellerId,e);
 		}
 		log.debug(" Got response ttso size in controller: "+ ttso.size());
 		log.info("$$$ downloadreport Ends : ReportController $$$");
@@ -739,7 +740,7 @@ public void downloadOrderReport(HttpServletRequest request ,HttpServletResponse 
 			model.put("errorCode", ce.getErrorCode());
 			//return new ModelAndView("globalErorPage", model);
 		}catch(Exception e){
-			log.error("Failed!",e);
+			log.error("Failed! By Seller ID : "+sellerId,e);
 			log.error(e);
 		}
 		log.info("$$$ downloadOrderReport Ends : ReportController $$$");		

@@ -63,7 +63,7 @@ public class PartnerDaoImpl implements PartnerDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.addPartnerError,
 					new Date(), 1, GlobalConstant.addPartnerErrorCode, e);			
 		}
@@ -88,7 +88,7 @@ public class PartnerDaoImpl implements PartnerDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.listPartnerError,
 					new Date(), 3, GlobalConstant.listPartnerErrorCode, e);
 			
@@ -176,7 +176,7 @@ public class PartnerDaoImpl implements PartnerDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.getPartnerError,
 					new Date(), 3, GlobalConstant.getPartnerErrorCode, e);
 			
@@ -214,7 +214,7 @@ public class PartnerDaoImpl implements PartnerDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.deletePartnerError,
 					new Date(), 3, GlobalConstant.deletePartnerErrorCode, e);			
 

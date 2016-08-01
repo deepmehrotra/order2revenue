@@ -57,7 +57,7 @@ public class ManualChargesController {
 	private PaymentUploadService paymentUploadService;
 	@Autowired
 	 private HelperClass helperClass;
-
+	private int sellerId=0;
 	static Logger log = Logger.getLogger(ManualChargesController.class.getName());
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -75,8 +75,7 @@ public class ManualChargesController {
 		Gson gson = gsonBuilder.setPrettyPrinting().create();
 
 		log.debug("mcId id " + request.getParameter("mcId"));
-		int mcId = 0;
-		int sellerId;
+		int mcId = 0;		
 		try{
 		sellerId = helperClass.getSellerIdfromSession(request);
 		if (request.getParameter("mcId") != null
@@ -133,7 +132,7 @@ public class ManualChargesController {
 			model.put("Message", "Enter number in amount!");
 			
 			String errors = gson.toJson(model);
-			log.error("Failed!",e);
+			log.error("Failed! by seller Id : "+sellerId,e);
 			return errors;
 			
 		}
@@ -142,7 +141,7 @@ public class ManualChargesController {
 			model.put("Message", "Invalid input!");
 			
 			String errors = gson.toJson(model);
-			log.error("Failed!",e);
+			log.error("Failed! by seller Id : "+sellerId,e);
 			return errors;
 		}
 		String jsonArray = gson.toJson(model);
@@ -164,8 +163,7 @@ public class ManualChargesController {
 		Gson gson = gsonBuilder.setPrettyPrinting().create();
 		TaxDetail taxDetail = new TaxDetail();
 		log.debug("taxId id " + request.getParameter("taxId"));
-		int taxId = 0;
-		int sellerId;
+		int taxId = 0;		
 		try{
 		sellerId = helperClass.getSellerIdfromSession(request);
 		if (request.getParameter("taxId") != null
@@ -216,7 +214,7 @@ public class ManualChargesController {
 			return errors;
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by seller Id : "+sellerId,e);
 		}
 		String jsonArray = gson.toJson(model);
 		log.info("$$$ saveTaxDetailJson Ends : ManualChargesController $$$");
@@ -233,11 +231,11 @@ public class ManualChargesController {
 		// implementing gson date deserializer
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
 			gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer());
 			gson = gsonBuilder.setPrettyPrinting().create();
-			TaxDetail taxDetail = new TaxDetail();
-			System.out.println("taxId id " + request.getParameter("taxId"));
+			TaxDetail taxDetail = new TaxDetail();			
 			int taxId = 0;
 			int sellerId = helperClass.getSellerIdfromSession(request);
 			if (request.getParameter("taxId") != null
@@ -269,7 +267,7 @@ public class ManualChargesController {
 			}
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);			
+			log.error("Failed! by seller Id : "+sellerId,e);			
 		}
 		String jsonArray = gson.toJson(model);
 		log.info("$$$ savePaidTaxDetailJson Ends : ManualChargesController $$$");
@@ -301,6 +299,7 @@ public class ManualChargesController {
 		log.info("$$$ addManualCharge Starts : ManualChargeController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
 			List<Partner> partnerlist = partnerService.listPartners(helperClass
 					.getSellerIdfromSession(request));
 			Map<String, String> partnermap = new HashMap<String, String>();
@@ -330,7 +329,7 @@ public class ManualChargesController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by seller Id : "+sellerId, e);
 			model.put("errorMessage", e.getCause());
 			return new ModelAndView("globalErorPage", model);
 		}
@@ -342,21 +341,18 @@ public class ManualChargesController {
 	public @ResponseBody String listManualChargesJson(HttpServletRequest request) {
 		
 		log.info("$$$ listManualChargesJson Starts : ManualChargesController $$$");
-		int sellerId;
-		Map<String, Object> model = new HashMap<String, Object>();
 		
-		// Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		Map<String, Object> model = new HashMap<String, Object>();		
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
 		gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer());
-
 		Gson gson = gsonBuilder.setPrettyPrinting().create();
 		try{
-		sellerId = helperClass.getSellerIdfromSession(request);
-		model.put("Records", ConverterClass
-				.prepareListofManualChargesBean(manualChargesService
-						.listManualCharges(sellerId)));
-		model.put("Result", "OK");
+			sellerId = helperClass.getSellerIdfromSession(request);
+			model.put("Records", ConverterClass
+					.prepareListofManualChargesBean(manualChargesService
+							.listManualCharges(sellerId)));
+			model.put("Result", "OK");
 		}catch(CustomException ce){
 			log.error("listManualChargesJson exception : " + ce.toString());
 			model.put("error", ce.getLocalMessage());
@@ -364,7 +360,7 @@ public class ManualChargesController {
 			return errors;
 		}catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by seller Id : "+sellerId,e);
 		}
 		String jsonArray = gson.toJson(model);
 		log.info("$$$ listManualChargesJson Ends : ManualChargesController $$$");
@@ -376,7 +372,6 @@ public class ManualChargesController {
 		
 		log.info("$$$ listtaxDetailsJson Starts : ManualChargesController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		int sellerId;
 		Gson gson = null;
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		try {
@@ -396,7 +391,7 @@ public class ManualChargesController {
 			return errors;
 		}catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by seller Id : "+sellerId,e);
 		}
 		String jsonArray = gson.toJson(model);
 		log.info("$$$ listtaxDetailsJson Ends : ManualChargesController $$$");
@@ -410,9 +405,8 @@ public class ManualChargesController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Gson gson = null;
 		try {
-
+			sellerId=helperClass.getSellerIdfromSession(request);
 			GsonBuilder gsonBuilder = new GsonBuilder();
-			int sellerId = helperClass.getSellerIdfromSession(request);
 			gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
 			gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer());
 
@@ -423,7 +417,7 @@ public class ManualChargesController {
 			model.put("Result", "OK");
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by seller Id : "+sellerId,e);
 		}
 		String jsonArray = gson.toJson(model);
 		log.info("$$$ listTdsDetailsJson Ends : ManualChargesController $$$");
@@ -434,28 +428,27 @@ public class ManualChargesController {
 	public @ResponseBody String deleteTaxDetailsJson(HttpServletRequest request) {
 		
 		log.info("$$$ deleteTaxDetailsJson Starts : ManualChargesController $$$");
-		int sellerId;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		TaxDetail taxDetail = new TaxDetail();
 		log.debug("taxId id " + request.getParameter("taxId"));
 		int taxId = 0;
 		try{
-		sellerId = helperClass.getSellerIdfromSession(request);
-		if (request.getParameter("taxId") != null
-				&& request.getParameter("taxId").toString().length() != 0) {
-			taxId = Integer.parseInt(request.getParameter("taxId"));
-		}
-		if (taxId != 0) {
-			taxDetail.setTaxId(taxId);
-
-		}
-
-		taxDetailService.deleteTaxDetail(taxDetail, sellerId);
-		model.put("Result", "OK");
+			sellerId = helperClass.getSellerIdfromSession(request);
+			if (request.getParameter("taxId") != null
+					&& request.getParameter("taxId").toString().length() != 0) {
+				taxId = Integer.parseInt(request.getParameter("taxId"));
+			}
+			if (taxId != 0) {
+				taxDetail.setTaxId(taxId);
+	
+			}
+	
+			taxDetailService.deleteTaxDetail(taxDetail, sellerId);
+			model.put("Result", "OK");
 		}catch(Exception e){
 			e.printStackTrace();
-			log.error("Failed!",e);			
+			log.error("Failed! by seller Id : "+sellerId,e);			
 		}
 		String jsonArray = gson.toJson(model);
 		log.info("$$$ deleteTaxDetailsJson Ends : ManualChargesController $$$");
@@ -471,21 +464,20 @@ public class ManualChargesController {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		ManualCharges manualCharges = new ManualCharges();
 		log.debug("mcId id " + request.getParameter("mcId"));
-		int mcId = 0;
-		int sellerId;
+		int mcId = 0;		
 		try{
-		sellerId = helperClass.getSellerIdfromSession(request);
-		if (request.getParameter("mcId") != null
-				&& request.getParameter("mcId").toString().length() != 0) {
-			mcId = Integer.parseInt(request.getParameter("mcId"));
-		}
-		if (mcId != 0) {
-			manualCharges.setMcId(mcId);
-			;
-
-		}
-		manualChargesService.deleteManualCharges(manualCharges, sellerId);
-		model.put("Result", "OK");
+			sellerId = helperClass.getSellerIdfromSession(request);
+			if (request.getParameter("mcId") != null
+					&& request.getParameter("mcId").toString().length() != 0) {
+				mcId = Integer.parseInt(request.getParameter("mcId"));
+			}
+			if (mcId != 0) {
+				manualCharges.setMcId(mcId);
+				;
+	
+			}
+			manualChargesService.deleteManualCharges(manualCharges, sellerId);
+			model.put("Result", "OK");
 		}catch(CustomException ce){
 			log.error("deleteManualChargesJson exception : " + ce.toString());
 			model.put("error", ce.getLocalMessage());
@@ -493,7 +485,7 @@ public class ManualChargesController {
 			return errors;
 		}catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by seller Id : "+sellerId,e);
 		}
 		String jsonArray = gson.toJson(model);
 		log.info("$$$ deleteManualChargesJson Ends : ManualChargesController $$$");
@@ -502,7 +494,6 @@ public class ManualChargesController {
 
 	@RequestMapping(value = "/seller/getPartnerForMC", method = RequestMethod.POST)
 	public @ResponseBody String gtePartnerForMC(HttpServletRequest request) {
-		int sellerId;
 		
 		log.info("$$$ gtePartnerForMC Starts : ManualChargesController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -519,18 +510,18 @@ public class ManualChargesController {
 		ja.add(otherjo);
 		List<Partner> partnerList;
 		try{
-		sellerId = helperClass.getSellerIdfromSession(request);
-		partnerList = partnerService.listPartners(sellerId);
-		for (Partner partner : partnerList) {
-			System.out.println(" Partner name : " + partner.getPcName());
-			JSONObject jo = new JSONObject();
-			jo.put("DisplayText", partner.getPcName());
-			jo.put("Value", partner.getPcName());
-			ja.add(jo);
-
-		}
-		model.put("Options", ja);
-		model.put("Result", "OK");
+			sellerId = helperClass.getSellerIdfromSession(request);
+			partnerList = partnerService.listPartners(sellerId);
+			for (Partner partner : partnerList) {
+				System.out.println(" Partner name : " + partner.getPcName());
+				JSONObject jo = new JSONObject();
+				jo.put("DisplayText", partner.getPcName());
+				jo.put("Value", partner.getPcName());
+				ja.add(jo);
+	
+			}
+			model.put("Options", ja);
+			model.put("Result", "OK");
 		}catch(CustomException ce){
 			log.error("getPartnerFromMC exception : " + ce.toString());
 			model.put("error", ce.getLocalMessage());
@@ -538,7 +529,7 @@ public class ManualChargesController {
 			return errors;
 		}catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by seller Id : "+sellerId,e);
 		}
 		String jsonArray = gson.toJson(model);
 		log.info("$$$ gtePartnerForMC Ends : ManualChargesController $$$");
@@ -549,7 +540,6 @@ public class ManualChargesController {
 	public @ResponseBody String getPaymentIdForMC(HttpServletRequest request) {
 		
 		log.info("$$$ getPaymentIdForMC Starts : ManualChargesController $$$");
-		int sellerId;		
 		Map<String, Object> model = new HashMap<String, Object>();
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
@@ -567,21 +557,21 @@ public class ManualChargesController {
 		List<PaymentUpload> paymentUploadList;
 		
 		try{
-		sellerId = helperClass.getSellerIdfromSession(request);
-		paymentUploadList = paymentUploadService.listPaymentUploads(sellerId);
-		if (paymentUploadList != null) {
-			for (PaymentUpload upload : paymentUploadList) {
-				System.out.println(" Pauyment upload id  name : "
-						+ upload.getUploadDesc());
-				JSONObject jo = new JSONObject();
-				jo.put("DisplayText", upload.getUploadDesc());
-				jo.put("Value", upload.getUploadDesc());
-				ja.add(jo);
-
+			sellerId = helperClass.getSellerIdfromSession(request);
+			paymentUploadList = paymentUploadService.listPaymentUploads(sellerId);
+			if (paymentUploadList != null) {
+				for (PaymentUpload upload : paymentUploadList) {
+					System.out.println(" Pauyment upload id  name : "
+							+ upload.getUploadDesc());
+					JSONObject jo = new JSONObject();
+					jo.put("DisplayText", upload.getUploadDesc());
+					jo.put("Value", upload.getUploadDesc());
+					ja.add(jo);
+	
+				}
 			}
-		}
-		model.put("Options", ja);
-		model.put("Result", "OK");
+			model.put("Options", ja);
+			model.put("Result", "OK");
 		}catch(CustomException ce){
 			log.error("getPaymantIdForMC exception : " + ce.toString());
 			model.put("error", ce.getLocalMessage());
@@ -589,7 +579,7 @@ public class ManualChargesController {
 			return errors;
 		}catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by Seller Id : "+sellerId,e);
 		}
 		String jsonArray = gson.toJson(model);
 		log.info("$$$ getPaymentIdForMC Ends : ManualChargesController $$$");

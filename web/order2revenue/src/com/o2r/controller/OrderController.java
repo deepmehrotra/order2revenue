@@ -94,7 +94,7 @@ public class OrderController {
 	EventsService eventsService;
 	@Autowired
 	DataConfig dataConfig;
-
+	private int sellerId=0;
 	private static final String UPLOAD_DIR = "upload";
 
 	static Logger log = Logger.getLogger(OrderController.class.getName());
@@ -199,12 +199,13 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/user-login", method = RequestMethod.GET)
-	public ModelAndView loginForm() {
+	public ModelAndView loginForm(HttpServletRequest request) {
 
 		log.info("$$$ loginForm Starts : OrderController $$$");
 		log.debug("catalina.base  " + System.getProperty("catalina.base"));
 
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);					
 			org.springframework.core.io.Resource resource = new ClassPathResource(
 					"database.properties");
 			Properties props = PropertiesLoaderUtils.loadProperties(resource);
@@ -212,7 +213,9 @@ public class OrderController {
 					+ props.getProperty("hibernate.dialect"));
 		} catch (IOException e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
+		} catch (Exception e) {
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		log.info("$$$ loginForm Ends : OrderController $$$");
 		return new ModelAndView("login_register");
@@ -243,9 +246,7 @@ public class OrderController {
 		MultipartFile fileinput = files.get(0);
 		UploadReport uploadReport = new UploadReport();
 		uploadReport.setUploadDate(new Date());
-		int sellerId;
-		System.out.println(" got file");
-
+		
 		// gets absolute path of the web application
 		String applicationPath = request.getServletContext().getRealPath("");
 
@@ -403,7 +404,7 @@ public class OrderController {
 				log.debug("Inside exception , filetype not accepted "
 						+ e.getLocalizedMessage());
 				e.printStackTrace();
-				log.error("Failed!", e);
+				log.error("Failed! by Seller ID : "+sellerId, e);
 			}
 
 		}
@@ -421,7 +422,6 @@ public class OrderController {
 		log.info("$$$ searchOrder() Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<OrderBean> orderList = new ArrayList<>();
-		int sellerId;
 		String channelOrderID = request.getParameter("channelOrderID");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
@@ -458,7 +458,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		request.getSession().setAttribute("orderSearchObject", orderList);
 		log.info("$$$ searchOrder() Ends : OrderController $$$");
@@ -475,10 +475,8 @@ public class OrderController {
 
 		log.info("$$$ poOrderDetails Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		int sellerId;
 		try {
-			sellerId = helperClass.getSellerIdfromSession(request);
-			
+			sellerId = helperClass.getSellerIdfromSession(request);			
 			String year = "";
 			if ("".equals(value.trim()) || value.equals("0")) {
 				Calendar c = Calendar.getInstance();
@@ -500,7 +498,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed! by Seller ID : "+sellerId,e);
 		}
 
 		log.info("$$$ poOrderDetails Ends : OrderController $$$");
@@ -517,7 +515,6 @@ public class OrderController {
 		List<OrderBean> returnlist = new ArrayList<OrderBean>();
 		List<OrderBean> poOrderlist = new ArrayList<OrderBean>();
 		Object obj = request.getSession().getAttribute("orderSearchObject");
-		int sellerId;
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			if (obj != null) {
@@ -588,7 +585,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		if (savedOrder != null)
 			model.put("savedOrder", savedOrder);
@@ -603,7 +600,6 @@ public class OrderController {
 
 		log.info("$$$ viewOrderDailyAct Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		int sellerId;
 		Product product = null;
 		Events event = null;
 		try {
@@ -627,7 +623,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		if (product != null)
 			model.put("productCost", product.getProductPrice());
@@ -642,7 +638,6 @@ public class OrderController {
 
 		log.info("$$$ viewPOOrderDailyAct Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		int sellerId;
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			Order order = orderService.getOrder(orderBean.getOrderId(),
@@ -673,7 +668,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 			return new ModelAndView("globalErorPage", model);
 		}
 	}
@@ -685,6 +680,7 @@ public class OrderController {
 		log.info("$$$ editOrderDA Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);	
 			model.put("order", ConverterClass.prepareOrderBean(orderService
 					.getOrder(orderBean.getOrderId())));
 			model.put("orders", ConverterClass.prepareListofBean(orderService
@@ -697,7 +693,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		log.info("$$$ editOrderDA Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/editOrder", model);
@@ -711,6 +707,7 @@ public class OrderController {
 		log.debug(" Order bean id todelete :" + orderBean.getOrderId());
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);	
 			orderService.deleteOrder(ConverterClass.prepareModel(orderBean),
 					helperClass.getSellerIdfromSession(request));
 			model.put("order", null);
@@ -724,7 +721,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 
 		log.info("$$$ deleteOrderDA Ends : OrderController $$$");
@@ -740,6 +737,7 @@ public class OrderController {
 		List<Order> orderlist=new ArrayList<Order>();
 
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);	
 			Order order = ConverterClass.prepareModel(orderBean);
 			orderlist.add(order);
 			orderService.addOrder(orderlist,
@@ -752,7 +750,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 
 		log.info("$$$ saveOrderDA Ends : OrderController $$$");
@@ -768,6 +766,7 @@ public class OrderController {
 		log.info("$$$ addOrderDA Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);	
 			List<Partner> partnerlist = partnerService.listPartners(helperClass
 					.getSellerIdfromSession(request));
 			List<TaxCategory> taxCatList = taxDetailService
@@ -809,7 +808,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 			model.put("errorMessage", e.getCause());
 			return new ModelAndView("globalErorPage", model);
 		}
@@ -827,6 +826,7 @@ public class OrderController {
 		Map<String, Object> mode = new HashMap<String, Object>();
 		List parner = new ArrayList();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);	
 			parner = orderService.findOrders("channelOrderID",
 					request.getParameter("id"),
 					helperClass.getSellerIdfromSession(request), false, false);
@@ -837,7 +837,7 @@ public class OrderController {
 			return errors;
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		if (parner != null && parner.size() != 0 && parner.get(0) != null) {
 			log.info("$$$ getCheckPartner Ends : OrderController $$$");
@@ -855,6 +855,7 @@ public class OrderController {
 		log.info("$$$ gatepasslistDA Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);	
 			int pageNo = request.getParameter("page") != null ? Integer
 					.parseInt(request.getParameter("page")) : 0;
 
@@ -870,7 +871,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		log.info("$$$ gatepasslistDA Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/gatepasslist", model);
@@ -883,6 +884,7 @@ public class OrderController {
 		log.info("$$$ disputedGPList Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);	
 			int pageNo = request.getParameter("page") != null ? Integer
 					.parseInt(request.getParameter("page")) : 0;
 
@@ -898,7 +900,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		log.info("$$$ disputedGPList Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/disputedGPList", model);
@@ -912,10 +914,8 @@ public class OrderController {
 		log.info("$$$ poOrderListDailyAct Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<OrderBean> poOrderlist = new ArrayList<OrderBean>();
-		int sellerId;
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-
 			String dateString;
 			DateFormat format = new SimpleDateFormat("d MMMM yyyy",
 					Locale.ENGLISH);
@@ -981,7 +981,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 
 		log.info("$$$ poOrderListDailyAct Ends : OrderController $$$");
@@ -996,9 +996,9 @@ public class OrderController {
 
 		log.info("$$$ getUploadLog Starts : OrderController $$$");
 		try {
+			sellerId=helperClass.getSellerIdfromSession(request);	
 			log.debug(" Downloading the Log: " + id);
-			int uploadId = Integer.parseInt(id);
-			int sellerId = helperClass.getSellerIdfromSession(request);
+			int uploadId = Integer.parseInt(id);			
 			String filePath = reportGeneratorService.getUploadLog(uploadId, sellerId).getFilePath();
 			if (filePath != null) {
 				downloadService.getUploadLog(response, filePath);
@@ -1006,7 +1006,7 @@ public class OrderController {
 
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller ID : "+sellerId, e);
 		}
 		log.info("$$$ getXLS Ends : OrderController $$$");
 	}
