@@ -436,7 +436,7 @@ public class PartnerController {
 
 								}
 							} else if (entry.getKey().contains(
-									"shippingFeeWeightFixed")) {
+									"shippingfeeWeightFixed")) {
 								String param = entry.getKey().substring(0,
 										entry.getKey().lastIndexOf('-') + 1);
 								if (!shippingfeeWeightParams.contains(param)) {
@@ -828,9 +828,9 @@ public class PartnerController {
 								}
 
 							} else if (charge.getChargeName().contains(
-									"shippingFeeWeightFixed")) {
+									"shippingfeeWeightFixed")) {
 								ChargesBean chargeBean = new ChargesBean();
-								chargeBean.setChargeType("shippingfeeWeight");
+								chargeBean.setChargeType("shippingfeeWeightFixed");
 								chargeBean.setCriteria(charge.getCriteria());
 								chargeBean.setRange(charge.getCriteriaRange());
 								chargeBean.setValue(charge.getChargeAmount());
@@ -1934,8 +1934,6 @@ public class PartnerController {
 
 		log.info("$$$ saveMetaPartner Starts : OrderController $$$");
 		log.info(partnerBean.getFixedfeeList().size());
-		log.info(partnerBean.getShippingfeeVolumeList().size());
-		log.info(partnerBean.getShippingfeeWeightList().size());
 
 		Map<String, Object> model = new HashMap<String, Object>();
 		Partner existPartner = null;
@@ -2247,7 +2245,7 @@ public class PartnerController {
 
 								}
 							} else if (entry.getKey().contains(
-									"shippingFeeWeightFixed")) {
+									"shippingfeeWeightFixed")) {
 								String param = entry.getKey().substring(0,
 										entry.getKey().lastIndexOf('-') + 1);
 								if (!shippingfeeWeightParams.contains(param)) {

@@ -55,43 +55,43 @@
 
                         function onclickConfigurepartner(value) {
                             var urltogo = "";
-                            if (value.localeCompare("jabong") != 0) {
+                            /* if (value.localeCompare("jabong") != 0) { */
                                 if (value.localeCompare("myntra") != 0) {
                                     urltogo = 'addPartner.html?partnerName=' + value;
                                 } else {
                                     urltogo = 'addMyntra.html?partnerName=' + value;
                                 }
-                            } else {
+                            /* } else {
                                 urltogo = 'addJabong.html?partnerName=' + value;
-                            }
+                            } */
                             location.href = urltogo;
                         }
 
                         function onclickEditpartner(id, name) {
                             var urltogo = "";
-                            if (name.localeCompare("jabong") != 0) {
+                            /* if (name.localeCompare("jabong") != 0) { */
                                 if (name.localeCompare("myntra") != 0) {
                                     urltogo = 'editPartner.html?pcId=' + id;
                                 } else {
                                     urltogo = 'editMyntra.html?pcId=' + id;
                                 }
-                            } else {
+                            /* } else {
                                 urltogo = 'editJabong.html?pcId=' + id;
-                            }
+                            } */
                             location.href = urltogo;
                         }
                         
                         function onclickDuplicatepartner(id, name) {
                             var urltogo = "";
-                            if (name.localeCompare("jabong") != 0) {
+                            /* if (name.localeCompare("jabong") != 0) { */
                                 if (name.localeCompare("myntra") != 0) {
                                     urltogo = 'editPartner.html?pcId=' + id + "&isDuplicate=true";
                                 } else {
                                     urltogo = 'editMyntra.html?pcId=' + id + "&isDuplicate=true";
                                 }
-                            } else {
+                            /* } else {
                                 urltogo = 'editJabong.html?pcId=' + id;
-                            }
+                            } */
                             location.href = urltogo;
                         }
                         </script>

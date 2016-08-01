@@ -412,7 +412,7 @@ public class EventsController {
 
 									}
 								} else if (entry.getKey().contains(
-										"shippingFeeWeightFixed")) {
+										"shippingfeeWeightFixed")) {
 									String param = entry.getKey()
 											.substring(
 													0,

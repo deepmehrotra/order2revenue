@@ -527,10 +527,13 @@ public class OrderController {
 					returnlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Return Recieved", sellerId,
 									false, false));
-					returnlist.addAll(ConverterClass
+					List<OrderBean> orderList = ConverterClass
 							.prepareListofBean(orderService.findOrders(
 									"status", "Return Limit Crossed", sellerId,
-									false, false)));
+									false, false));
+					if (orderList != null) {
+						returnlist.addAll(orderList);
+					}
 					model.put("orders", returnlist);
 
 					poOrderlist = ConverterClass.prepareListofBean(orderService
@@ -542,10 +545,13 @@ public class OrderController {
 					returnlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Payment Recieved", sellerId,
 									false, false));
-					returnlist.addAll(ConverterClass
+					List<OrderBean> orderList = ConverterClass
 							.prepareListofBean(orderService.findOrders(
 									"status", "Payment Deducted", sellerId,
-									false, false)));
+									false, false));
+					if (orderList != null) {
+						returnlist.addAll(orderList);
+					}
 					model.put("orders", returnlist);
 
 					poOrderlist = ConverterClass.prepareListofBean(orderService

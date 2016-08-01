@@ -426,22 +426,12 @@ public class GlobalConstant {
 
 	// NRnReturn Configuration Constants
 	public static final String fixedCommissionPercent = "fixedCommissionPercent";
-	public static final String fixedfeelt250 = "fixedfeelt250";
-	public static final String fixedfeelt500 = "fixedfeelt500";
-	public static final String fixedfeelt500Big = "fixedfeelt500Big";
-	public static final String fixedfeegt250lt500 = "fixedfeegt250lt500";
-	public static final String fixedfeegt500 = "fixedfeegt500";
-	public static final String fixedfeegt500Big = "fixedfeegt500Big";
-	public static final String fixedfeegt500lt1000 = "fixedfeegt500lt1000";
-	public static final String fixedfeegt1000lt10000 = "fixedfeegt1000lt10000";
-	public static final String fixedfeegt10000 = "fixedfeegt10000";
 	
 	public static final String percentSPPCCValue = "pccpercentSPValue";
 	public static final String percentSPPCCHigher = "pccpercentSPHigher";
 	public static final String fixedAmtPCC = "pccfixedAmt";
 	public static final String rangePCC = "pccrange";
 	public static final String valuePCC = "pccvalue";
-	
 
 	// Return Configuration Constansts
 	public static final String SellerFaultString = "sellerFault";
@@ -458,7 +448,7 @@ public class GlobalConstant {
 	public static final String ReturnChargesBuyerReturnFixedAmount = "retCharBRFixedAmt";
 	public static final String ReturnChargesBuyerReturnVariableFixedAmt = "retCharBRVarFixedAmt";
 	public static final String ReturnChargesBuyerReturnVariablePercentSP = "retCharBRPercentSP";
-
+	
 	// RTO Charges Configuration
 	public static final String RTOChargesSellerFaultVariablePercentSP = "RTOCharSFPercentSP";
 	public static final String RTOChargesSellerFaultFixedAmount = "RTOCharSFFixedAmt";
