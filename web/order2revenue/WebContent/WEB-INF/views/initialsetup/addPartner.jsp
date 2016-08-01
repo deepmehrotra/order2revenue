@@ -3686,6 +3686,22 @@ span .#error {
 								35 : {
 									id : 35,
 									text : 'West Bengal'
+								},
+								36 : {
+									id : 36,
+									text : 'New Delhi'
+								},
+								37 : {
+									id : 37,
+									text : 'Kolkata'
+								},
+								38 : {
+									id : 38,
+									text : 'Mumbai'
+								},
+								39 : {
+									id : 39,
+									text : 'Chennai'
 								}
 							};
 
