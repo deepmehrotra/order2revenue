@@ -31,6 +31,7 @@ import com.o2r.helper.FileUploadForm;
 import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
 import com.o2r.helper.ValidateUpload;
+import com.o2r.model.ChannelUploadMapping;
 import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
 import com.o2r.model.Partner;
@@ -41,6 +42,7 @@ import com.o2r.service.ManualChargesService;
 import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.PaymentUploadService;
+import com.o2r.service.UploadMappingService;
 
 /**
  * @author Deep Mehrotra
@@ -61,6 +63,8 @@ public class UploadController {
 	private PartnerService partnerService;
 	@Autowired
 	private ManualChargesService manualChargesService;
+	@Autowired
+	private UploadMappingService uploadMappingService;
 	@Autowired
 	private HelperClass helperClass;
 
@@ -348,5 +352,57 @@ public class UploadController {
 		return new ModelAndView("dailyactivities/dailyactivities");
 
 	}
+	
+	
+	/*
+	 * Method to view Channel Upload Sheets Mapping
+	 * 
+	 */
+	@RequestMapping(value = "/seller/uploadmappings", method = RequestMethod.GET)
+		public ModelAndView uploadmappingsDetails(HttpServletRequest request) {
+
+			log.info("$$$ uploadmappingsDetails Starts : UploadController $$$");
+			String channelName = request.getParameter("channelName");
+			String fileName = request.getParameter("fileName");
+			Map<String, Object> model = new HashMap<String, Object>();
+			String manualpayid = null;
+			ChannelUploadMapping cum=null;
+			List<Partner> partnerList = null;
+			List<String> partnerNames=new ArrayList<String>();
+			int sellerId=0;
+			try {
+				sellerId = helperClass.getSellerIdfromSession(request);
+				partnerList=partnerService.listPartners(sellerId);
+				if(partnerList!=null)
+				{
+					for(Partner partner:partnerList)
+					{
+						partnerNames.add(partner.getPcName());
+					}
+				}
+				if (fileName != null && channelName!=null) {
+					cum=uploadMappingService.getChannelUploadMapping(channelName, fileName, sellerId);
+					model.put("mapping", cum);
+					model.put("fileName", fileName);
+					model.put("channelName",channelName);
+				} 
+				model.put("partnerNames", partnerNames);
+			} catch (CustomException ce) {
+				log.error("uploadmappings exception : "+sellerId +"-"+ ce.toString());
+				model.put("errorMessage", ce.getLocalMessage());
+				model.put("errorTime", ce.getErrorTime());
+				model.put("errorCode", ce.getErrorCode());
+				return new ModelAndView("globalErorPage", model);
+			} catch (Throwable e) {
+				e.printStackTrace();
+				log.error("Failed! - "+sellerId,e);
+				model.put("errorMessage", e.getCause());
+				return new ModelAndView("globalErorPage", model);
+			}
+			log.info("$$$ uploadmappingsDetails Ends : UploadController $$$");
+			return new ModelAndView("dailyactivities/orderPaymentDetails", model);
+		}
+	
+	 
 
 }

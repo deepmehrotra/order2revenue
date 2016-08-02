@@ -415,6 +415,14 @@ public class GlobalConstant {
 
 	public static final String deleteTaxCategoryError = "Error while deleting Tax Category. Either try again  or contact admin with the error details.";
 	public static final String deleteTaxCategoryErrorCode = "#00079";
+	
+	public static final String addChannelUploadMappingError = "Error while adding Channel Mapping of  the seller. Either try again with correct values or contact admin with the error details.";
+	public static final String addChannelUploadMappingErrorCode = "#00212";
+	
+	public static final String getChannelUploadMappingError = "Error while get Channel Mapping of  the seller. Either try again with correct values or contact admin with the error details.";
+	public static final String getChannelUploadMappingErrorCode = "#00213";
+
+
 
 	// Error Codes
 	public static final String addCategoryErrorCode = "#00061";
