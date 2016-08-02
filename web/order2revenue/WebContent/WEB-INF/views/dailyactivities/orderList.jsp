@@ -135,10 +135,10 @@
 									<button type="button" class="btn btn-xs btn-white">1000</button>
 									<button type="button" id="LoadMoreOrder"
 										class="btn btn-xs btn-white">More</button>
-									<a href="#" onclick="onclickNavigateOrder('addOrder','0')"
-										class="btn btn-primary btn-xs">Create New Order</a>
+									<a href="#" class="btn btn-primary btn-xs">Create New Order</a>
 								</div>
 							</div>
+							<!-- onclick="onclickNavigateOrder('addOrder','0')" -->
 							<div class="bs-example">
 								<div class="ibox-content overflow-h cus-table-filters">
 									<div class="scroll-y">
@@ -192,9 +192,8 @@
 															<td><fmt:formatNumber type="number"
 																	maxFractionDigits="2"
 																	value="${order.orderPayment.paymentDifference}" /></td>
-															<td>${order.status}</td>
-															<td class="tooltip-demo"><a href="#"
-																onclick="onclickNavigateOrder('editOrder',${order.orderId})"><i
+															<td>${order.status}</td>														
+															<td class="tooltip-demo"><a href="#"><i
 																	class="fa fa-edit text-navy" data-toggle="tooltip"
 																	data-placement="top" data-original-title="Edit"></i></a></td>
 														</tr>
@@ -203,6 +202,7 @@
 											</tbody>
 										</table>
 									</div>
+									<%-- onclick="onclickNavigateOrder('editOrder',${order.orderId})" --%>
 									<div class="col-sm-12">
 										<div class="hr-line-dashed"></div>
 										<a href="#" onclick="onclickNavigateOrder('upload',0)"

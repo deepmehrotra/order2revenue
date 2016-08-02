@@ -344,14 +344,15 @@ span .#error {
 																				test="${partner.nrnReturnConfig.whicheverGreaterPCC == 'true'}">
 																				<div>
 																					<label class="labelfix" style="text-align: left;">Which Ever Is Greater</label>
+																					<label class="labelfix" style="text-align: left;">% of SP : ${chargeMap.pccpercentSPHigher}</label>
+																					<label class="labelfix" style="text-align: left;">Fixed AMT : ${chargeMap.pccfixedAmt}</label>
 																				</div>
-																			</c:if> <c:if test="${chargeMap.percentSPPCC != null}">
+																			</c:if> 
+																			<c:if test="${partner.nrnReturnConfig.whicheverGreaterPCC == 'false'}">
 																				<div>
-																					<label class="labelfix" style="text-align: left;">% of SP :${chargeMap.percentSPPCC}</label>
-																				</div>
-																			</c:if> <c:if test="${chargeMap.fixedAmtPCC != null}">
-																				<div>
-																					<label class="labelfix" style="text-align: left;">Fixed AMT :${chargeMap.fixedAmtPCC}</label>
+																					<label class="labelfix" style="text-align: left;">Value Based</label>
+																					<label class="labelfix" style="text-align: left;">Upto ${chargeMap.pccrange} : ${chargeMap.pccvalue}</label>
+																					<label class="labelfix" style="text-align: left;">Greater than ${chargeMap.pccrange} : ${chargeMap.pccpercentSPValue} % of SP</label>
 																				</div>
 																			</c:if></td>
 																	</tr>
@@ -378,6 +379,7 @@ span .#error {
 																						<thead>
 																							<tr>
 																								<th>Volume Weight Slab(gms)</th>
+																								<th>Value</th>
 																								<th>Local</th>
 																								<th>Zonal</th>
 																								<th>National</th>
@@ -386,11 +388,17 @@ span .#error {
 																						</thead>
 																						<tbody>	
 																							<c:if test="${!empty partner.shippingfeeVolumeVariableList}">
+																								<c:forEach	items="${partner.shippingfeeVolumeVariableList}" var="shippingfee" varStatus="loop">
+																									<tr>
+																										<td>${shippingfee.criteria}</td>
+																										<td><label class="labelfix">${shippingfee.range}</label></td>
+																										<td><label class="labelfix">${shippingfee.localValue}</label></td>
+																										<td><label class="labelfix">${shippingfee.zonalValue}</label></td>
+																										<td><label class="labelfix">${shippingfee.nationalValue}</label></td>
+																										<td><label class="labelfix">${shippingfee.metroValue}</label></td>																								
+																									</tr>
+																								</c:forEach>
 																							</c:if>																				
-																							<tr>
-																								<td>&lt;500</td>
-																								<td><label class="labelfix">${chargeMap.localvwlt500}</label></td>																								
-																							</tr>																							
 																						</tbody>
 																					</table>
 																					<br>
@@ -400,6 +408,7 @@ span .#error {
 																						<thead>
 																							<tr>
 																								<th>Dead Weight Slab(gms)</th>
+																								<th>Value</th>
 																								<th>Local</th>
 																								<th>Zonal</th>
 																								<th>National</th>
@@ -407,10 +416,18 @@ span .#error {
 																							</tr>
 																						</thead>
 																						<tbody>
-																							<tr>
-																								<td>&lt;500</td>
-																								<td><label class="labelfix">${chargeMap.localdwlt500}</label></td>																								
-																							</tr>																							
+																							<c:if test="${!empty partner.shippingfeeWeightVariableList}">
+																								<c:forEach	items="${partner.shippingfeeWeightVariableList}" var="shippingfee" varStatus="loop">
+																									<tr>
+																										<td>${shippingfee.criteria}</td>
+																										<td><label class="labelfix">${shippingfee.range}</label></td>
+																										<td><label class="labelfix">${shippingfee.localValue}</label></td>
+																										<td><label class="labelfix">${shippingfee.zonalValue}</label></td>
+																										<td><label class="labelfix">${shippingfee.nationalValue}</label></td>
+																										<td><label class="labelfix">${shippingfee.metroValue}</label></td>																								
+																									</tr>
+																								</c:forEach>
+																							</c:if>																							
 																						</tbody>
 																					</table>
 																				</c:if>
@@ -422,18 +439,20 @@ span .#error {
 																						<thead>
 																							<tr>
 																								<th>Weight Weight Slab(gms)</th>
+																								<th>Value</th>
 																								<th>Price</th>
 																							</tr>
 																						</thead>
 																						<tbody>
-																							<tr>
-																								<td>&lt; 500</td>
-																								<td><label class="labelfix">${chargeMap.fixeddwlt500}</label></td>
-																							</tr>
-																							<tr>
-																								<td>&gt; 500</td>
-																								<td><label class="labelfix">${chargeMap.fixeddwgt500}</label></td>
-																							</tr>
+																							<c:if test="${!empty partner.shippingfeeWeightFixedList}">
+																								<c:forEach	items="${partner.shippingfeeWeightFixedList}" var="shippingfee" varStatus="loop">
+																									<tr>
+																										<td>${shippingfee.criteria}</td>
+																										<td><label class="labelfix">${shippingfee.range}</label></td>
+																										<td><label class="labelfix">${shippingfee.value}</label></td>																																																		
+																									</tr>
+																								</c:forEach>
+																							</c:if>
 																						</tbody>
 																					</table>
 
@@ -444,30 +463,20 @@ span .#error {
 																						<thead>
 																							<tr>
 																								<th>Volume Weight Slab(gms)</th>
+																								<th>Value</th>
 																								<th>Price</th>
 																							</tr>
 																						</thead>
 																						<tbody>
-																							<tr>
-																								<td>&lt; 500</td>
-																								<td><label class="labelfix">${chargeMap.fixedvwlt500}</label></td>
-																							</tr>
-																							<tr>
-																								<td>500 &gt; 1000</td>
-																								<td><label class="labelfix">${chargeMap.fixedvwgt500lt1000}</label></td>
-																							</tr>
-																							<tr>
-																								<td>1000 &gt; 1500</td>
-																								<td><label class="labelfix">${chargeMap.fixedvwgt1000lt1500}</label></td>
-																							</tr>
-																							<tr>
-																								<td>1500 &gt; 5000</td>
-																								<td><label class="labelfix">${chargeMap.fixedvwgt1500lt5000}</label></td>
-																							</tr>
-																							<tr>
-																								<td>add 1 kg</td>
-																								<td><label class="labelfix">${chargeMap.fixedvwgt5000}</label></td>
-																							</tr>
+																							<c:if test="${!empty partner.shippingfeeVolumeFixedList}">
+																								<c:forEach	items="${partner.shippingfeeVolumeFixedList}" var="shippingfee" varStatus="loop">
+																									<tr>
+																										<td>${shippingfee.criteria}</td>
+																										<td><label class="labelfix">${shippingfee.range}</label></td>
+																										<td><label class="labelfix">${shippingfee.value}</label></td>
+																									</tr>
+																								</c:forEach>
+																							</c:if>
 																						</tbody>
 																					</table>
 																				</c:if>

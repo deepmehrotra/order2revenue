@@ -205,7 +205,7 @@ public class OrderController {
 		log.debug("catalina.base  " + System.getProperty("catalina.base"));
 
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);					
+			//sellerId=helperClass.getSellerIdfromSession(request);					
 			org.springframework.core.io.Resource resource = new ClassPathResource(
 					"database.properties");
 			Properties props = PropertiesLoaderUtils.loadProperties(resource);
@@ -213,9 +213,9 @@ public class OrderController {
 					+ props.getProperty("hibernate.dialect"));
 		} catch (IOException e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! At login Time ", e);
 		} catch (Exception e) {
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! At login Time ", e);
 		}
 		log.info("$$$ loginForm Ends : OrderController $$$");
 		return new ModelAndView("login_register");

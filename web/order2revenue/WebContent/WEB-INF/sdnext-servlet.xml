@@ -156,7 +156,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
      	<bean id="cronTrigger1" class="org.springframework.scheduling.quartz.CronTriggerBean">
 			<property name="jobDetail" ref="setTriggerJobProductSL" />
 			<property name="cronExpression" value="0 0 1 1 * ?" />	
-		</bean>		
+		</bean>	
 		<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 			<property name="triggers">
 				<list>
