@@ -20,10 +20,10 @@ public class UploadMappingServiceImpl implements UploadMappingService {
 	 private UploadMappingDao uploadMappingDao;
 	
 	@Override
-	public void addChannelUploadMapping(ChannelUploadMapping uploadMapping,
-			int sellerId) throws CustomException
+	public void addChannelUploadMapping(ChannelUploadMapping uploadMapping
+			) throws CustomException
 			{
-		uploadMappingDao.addChannelUploadMapping(uploadMapping, sellerId);
+		uploadMappingDao.addChannelUploadMapping(uploadMapping);
 			}
 	
 	@Override
@@ -34,9 +34,9 @@ public class UploadMappingServiceImpl implements UploadMappingService {
 			}
 	@Override
 	public ChannelUploadMapping getChannelUploadMapping(String channelName,
-			String fileName, int sellerId) throws CustomException
+			String fileName) throws CustomException
 			{
-		return uploadMappingDao.getChannelUploadMapping(channelName,fileName,sellerId);
+		return uploadMappingDao.getChannelUploadMapping(channelName,fileName);
 		
 			}
 

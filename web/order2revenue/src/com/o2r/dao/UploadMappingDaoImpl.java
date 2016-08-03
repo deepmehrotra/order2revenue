@@ -12,7 +12,6 @@ import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Repository;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.ChannelUploadMapping;
-import com.o2r.model.Seller;
 
 
 @Repository("uploadMappingDao")
@@ -33,20 +31,16 @@ public class UploadMappingDaoImpl implements UploadMappingDao {
 	
 	 
 		@Override
-	public void addChannelUploadMapping(ChannelUploadMapping uploadMapping,int sellerId) 
+	public void addChannelUploadMapping(ChannelUploadMapping uploadMapping) 
 	 throws CustomException{
 		 
 		 log.info("*** addChannelUploadMapping starts : UploadMappingDaoImpl ****");
-			Seller seller = null;
 			try {
 				Session session = sessionFactory.openSession();
 				session.beginTransaction();
 				if (uploadMapping.getMapId() == 0) {
-					Criteria criteria = session.createCriteria(Seller.class).add(
-							Restrictions.eq("id", sellerId));
-					seller = (Seller) criteria.list().get(0);
-					seller.getUploadMapping().add(uploadMapping);
-						session.saveOrUpdate(seller);
+					
+						session.saveOrUpdate(uploadMapping);
 				} else {
 					Query gettingTaxId = session
 							.createSQLQuery(columMapDeleteQuery)
@@ -58,10 +52,10 @@ public class UploadMappingDaoImpl implements UploadMappingDao {
 				session.close();
 			} catch (Exception e) {
 				e.printStackTrace();
-				log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.addChannelUploadMappingError));
-				log.error("Failed! by sellerId : "+sellerId,e);
+				log.equals("**Error Code : Admin: -" + GlobalConstant.addChannelUploadMappingError);
+				log.error("Failed! by sellerId : "+e);
 				throw new CustomException(GlobalConstant.addChannelUploadMappingError,
-						new Date(), 1, sellerId + "-"
+						new Date(), 1, "Admin-"
 								+ GlobalConstant.addChannelUploadMappingErrorCode, e);
 			}
 	}
@@ -92,30 +86,23 @@ public class UploadMappingDaoImpl implements UploadMappingDao {
 		return returnObj;
 	}
 	@Override
-	public ChannelUploadMapping getChannelUploadMapping(String channelName,String fileName,int sellerId) 
+	public ChannelUploadMapping getChannelUploadMapping(String channelName,String fileName) 
 			throws CustomException{
 		log.info("*** getChannelUploadMapping by channelName starts : UploadMappingDaoImpl ****");
 		ChannelUploadMapping returnObj = null;
-		Seller seller = null;
 		List resultsetList=null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 
-			Criteria criteria = session.createCriteria(Seller.class).add(
-					Restrictions.eq("id", sellerId));
-			criteria.createAlias("uploadMapping", "uploadMapping",
-					CriteriaSpecification.LEFT_JOIN)
+			Criteria criteria = session.createCriteria(ChannelUploadMapping.class);
+			criteria
 					.add(Restrictions.eq("uploadMapping.channelName", channelName))
-					.add(Restrictions.eq("uploadMapping.fileName", fileName))
-					.setResultTransformer(
-							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+					.add(Restrictions.eq("uploadMapping.fileName", fileName));
 			resultsetList=criteria.list();
 			if (resultsetList != null && resultsetList.size() != 0) {
 				
-				seller = (Seller) resultsetList.get(0);
-				returnObj = seller.getUploadMapping()!=null?seller.getUploadMapping().get(0):null;
-				if(returnObj!=null)
+				returnObj = (ChannelUploadMapping) resultsetList.get(0);
 					Hibernate.initialize(returnObj.getColumMap());
 				
 			}
@@ -123,11 +110,11 @@ public class UploadMappingDaoImpl implements UploadMappingDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("**Error Code : "+ (sellerId + "-" + GlobalConstant.getChannelUploadMappingErrorCode));
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.error("**Error Code : Admin-" + GlobalConstant.getChannelUploadMappingErrorCode);
+			log.error("Failed! by Admin : ",e);
 			throw new CustomException(GlobalConstant.getChannelUploadMappingError,
-					new Date(), 1, sellerId + "-"
-							+ GlobalConstant.getChannelUploadMappingErrorCode, e);
+					new Date(), 1, 
+					GlobalConstant.getChannelUploadMappingErrorCode, e);
 
 		}
 

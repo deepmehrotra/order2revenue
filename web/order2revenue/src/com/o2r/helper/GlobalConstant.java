@@ -43,6 +43,31 @@ public class GlobalConstant {
 
 		}
 	};
+	public static final ArrayList<String> channelMappingList = new ArrayList<String>() {
+		/**
+ *
+ */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Amazon");
+			add("Flipkart");
+			add("SnapDeal");
+			add("PayTM");
+
+		}
+	};
+	public static final ArrayList<String> filesMappingList = new ArrayList<String>() {
+		/**
+ *
+ */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Payment");
+
+		}
+	};
 
 	public final ArrayList<String> productHeaderList = new ArrayList<String>() {
 		/**
@@ -62,7 +87,7 @@ public class GlobalConstant {
 		}
 	};
 
-	public final ArrayList<String> paymentHeaderList = new ArrayList<String>() {
+	public static final ArrayList<String> paymentHeaderList = new ArrayList<String>() {
 		/**
 	 *
 	 */
@@ -71,7 +96,6 @@ public class GlobalConstant {
 		{
 			add("ChannelOrderId");
 			add("InvoiceId");
-			add("SkUCode");
 			add("Recieved Amount");
 			add("Negative Charges");
 			add("Payment Date");
