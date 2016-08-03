@@ -45,6 +45,8 @@ public class Events {
 	private String skuList;
 	@Column
 	private String status;
+	@Column
+	private String selectAll;
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	private NRnReturnConfig nrnReturnConfig;
@@ -149,5 +151,11 @@ public class Events {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getSelectAll() {
+		return selectAll;
+	}
+	public void setSelectAll(String selectAll) {
+		this.selectAll = selectAll;
 	}
 }

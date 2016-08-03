@@ -25,6 +25,7 @@ public class EventsBean {
 	private double netSalesAmount;
 	private String skuList;
 	private String status;
+	private String selectAll;
 
 	private List<ChargesBean> fixedfeeList = new ArrayList<ChargesBean>();
 	private List<ChargesBean> shippingfeeVolumeFixedList = new ArrayList<ChargesBean>();
@@ -244,6 +245,14 @@ public class EventsBean {
 	public void setShippingfeeWeightVariableList(
 			List<ChargesBean> shippingfeeWeightVariableList) {
 		this.shippingfeeWeightVariableList = shippingfeeWeightVariableList;
+	}
+
+	public String getSelectAll() {
+		return selectAll;
+	}
+
+	public void setSelectAll(String selectAll) {
+		this.selectAll = selectAll;
 	}
 
 }

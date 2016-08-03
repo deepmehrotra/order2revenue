@@ -102,13 +102,16 @@ public class EventsController {
 								if (!fixedfeeParams.contains(param)) {
 									fixedfeeParams.add(param);
 									NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-									nrnReturncharge.setChargeAmount(Float
+									if(!parameters.get(param+ "value")[0].isEmpty())
+										nrnReturncharge.setChargeAmount(Float
 											.parseFloat(parameters.get(param
 													+ "value")[0]));
 									nrnReturncharge.setChargeName("fixedfee");
-									nrnReturncharge.setCriteria(parameters
+									if(!parameters.get(param + "criteria")[0].isEmpty())
+										nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
-									nrnReturncharge.setCriteriaRange(Long
+									if(!parameters.get(param+ "range")[0].isEmpty())
+										nrnReturncharge.setCriteriaRange(Long
 											.parseLong(parameters.get(param
 													+ "range")[0]));
 
@@ -449,28 +452,7 @@ public class EventsController {
 									}
 								}
 							}
-						} else {
-							String param = entry.getKey().substring(0,
-									entry.getKey().lastIndexOf('-') + 1);
-							if (!shippingfeeWeightParams.contains(param)) {
-								shippingfeeWeightParams.add(param);
-								NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-								nrnReturncharge.setChargeAmount(Float
-										.parseFloat(parameters.get(param
-												+ "value")[0]));
-								nrnReturncharge
-										.setChargeName("shippingfeeWeight");
-								nrnReturncharge.setCriteria(parameters
-										.get(param + "criteria")[0]);
-								nrnReturncharge.setCriteriaRange(Long
-										.parseLong(parameters.get(param
-												+ "range")[0]));
-
-								nrnReturncharge.setConfig(eventsBean
-										.getNrnReturnConfig());
-								chargeList.add(nrnReturncharge);
-							}
-						}
+						
 
 					} else {
 						log.debug(" Key : " + entry.getKey());
@@ -497,6 +479,7 @@ public class EventsController {
 					eventsBean.getNrnReturnConfig().setMetroList(
 							Arrays.toString(entry.getValue()));
 				}
+			}
 			}
 
 			Partner partner = partnerService.getPartner(

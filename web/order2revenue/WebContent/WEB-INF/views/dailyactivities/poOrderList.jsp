@@ -88,12 +88,27 @@
 						<div class="ibox float-e-margins">
 							<div class="ibox-title" style='min-height: 90px;'>
 								<div>
-									<h5>PO Orders(${poOrders.size()})</h5>
+									<h5>PO Orders(${PoOrdersCount})</h5>
 									<div class="table-menu-links">
 										<a href="orderList.html" id="Orders">MP Orders</a> <a href="#"
 											id="returnOrders">Return</a> <a href="gatepasslist.html"
 											id="gatepass">GatePass</a> <a href="#" id="paymentOrders">Payment</a>
 										<a href="#" id="actionableOrders">Actionable</a>
+									</div>
+									<div class="pull-right">
+										<c:if test="${PoOrdersCount != 0 }">
+										<c:choose>
+											<c:when test="${PoOrdersCount >= listSize}">
+												<label class="m-l-lg">Showing ${listSize-499} to ${listSize} of ${PoOrdersCount} entries</label>
+											</c:when>
+											<c:when test="${PoOrdersCount < listSize}">
+												<label class="m-l-lg">Showing ${listSize-499} to ${PoOrdersCount} of ${PoOrdersCount} entries</label>
+											</c:when>																			
+										</c:choose>									
+										</c:if>
+										<c:if test="${PoOrdersCount == 0 }">
+											<label class="m-l-lg">Showing 0 to 0 of 0 entries</label>
+										</c:if>								
 									</div>
 								</div>
 								<div class="col-sm-12">
@@ -114,9 +129,9 @@
 										<button class="btn btn-xs btn-grey active">Monthly</button>
 										<button class="btn btn-xs btn-grey"
 											onclick="onclickNavigateOrder('viewPOOrderDetails','0')">Annually</button>
-									</div>
+									</div>																		
 									<div class="col-sm-3 ibox-tools">
-										<button class="btn btn-white table-menu-search search-dd">
+										<button class="btn btn-white table-menu-search search-dd" style="margin-top: -5px !important;">
 											<i class="fa fa-search"></i>
 										</button>
 										<div class="search-more-wrp">
@@ -154,8 +169,8 @@
 															class="fa fa-calendar"></i></span><input type="text"
 															class="form-control" placeholder="" name="endDate">
 													</div>
-												</div>
-												<div class="form-group">
+												</div>												
+												<div class="form-group ">
 													<button class="btn btn-primary btn-block" type="submit">Search</button>
 												</div>
 											</form>

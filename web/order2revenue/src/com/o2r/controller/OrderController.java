@@ -96,7 +96,9 @@ public class OrderController {
 	DataConfig dataConfig;
 	private int sellerId=0;
 	private static final String UPLOAD_DIR = "upload";
-
+	
+	private int listSize=500;
+	
 	static Logger log = Logger.getLogger(OrderController.class.getName());
 	Gson gson = new Gson();
 
@@ -571,7 +573,7 @@ public class OrderController {
 				}
 			} else {
 				int pageNo = request.getParameter("page") != null ? Integer
-						.parseInt(request.getParameter("page")) : 0;
+						.parseInt(request.getParameter("page")) : 0;							
 				model.put("orders", ConverterClass
 						.prepareListofBean(orderService.listOrders(
 								helperClass.getSellerIdfromSession(request),
@@ -581,6 +583,8 @@ public class OrderController {
 						.prepareListofBean(orderService.listPOOrders(
 								helperClass.getSellerIdfromSession(request),
 								pageNo)));
+				model.put("listSize", (listSize + (listSize*pageNo)));
+				model.put("MpOrdersCount", orderService.mpOrdersCount(sellerId));	
 			}
 		} catch (CustomException ce) {
 			ce.printStackTrace();
@@ -969,14 +973,18 @@ public class OrderController {
 						.findPOOrdersbyDate("orderDate", startDate, endDate,
 								sellerId));
 			} else {
-				int pageNo = request.getParameter("page") != null ? Integer
-						.parseInt(request.getParameter("page")) : 0;
+				int pageNo = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 0;					
+				
 				poOrderlist = ConverterClass.prepareListofBean(orderService
 						.listPOOrders(sellerId, pageNo));
+				model.put("listSize", (listSize + (listSize*pageNo)));				
+				
 			}
 			
 			model.put("poOrders", poOrderlist);
 			model.put("period", period);
+			model.put("listSize", (listSize + (listSize*0)));
+			model.put("PoOrdersCount", orderService.poOrdersCount(sellerId));
 
 		} catch (CustomException ce) {
 			ce.printStackTrace();

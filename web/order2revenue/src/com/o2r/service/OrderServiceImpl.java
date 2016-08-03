@@ -257,4 +257,14 @@ public class OrderServiceImpl implements OrderService {
 			Date endDate, int sellerId) throws CustomException {
 		return orderDao.findPOOrdersbyDate(column, startDate, endDate, sellerId);
 	}
+	
+	@Override
+	public int mpOrdersCount(int sellerId) {
+		return orderDao.mpOrdersCount(sellerId);
+	}
+	
+	@Override
+	public int poOrdersCount(int sellerId) {
+		return orderDao.poOrdersCount(sellerId);
+	}
 }

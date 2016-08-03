@@ -121,4 +121,8 @@ public interface OrderDao {
 			throws CustomException;
 
 	public void addOrder(List<Order> orderList, int sellerId) throws CustomException;
+	
+	public int mpOrdersCount(int sellerId);
+	
+	public int poOrdersCount(int sellerId);
 }

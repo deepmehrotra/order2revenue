@@ -5314,5 +5314,57 @@ public class OrderDaoImpl implements OrderDao {
 		log.info("*** isPOOrderUploaded ends ***");
 		return false;
 	}
+	
+	@Override
+	public int mpOrdersCount(int sellerId) {
+		
+		int noOfMpOrders=0;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions.eq("poOrder", false));
+			criteria.setProjection(Projections.rowCount());			
+			
+			if(criteria != null)
+				noOfMpOrders = (int) criteria.uniqueResult();
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId+" In MPORDER Count" , e);			
+		}
+		return noOfMpOrders;
+	}
+	
+	@Override
+	public int poOrdersCount(int sellerId) {
+		int noOfPoOrders=0;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions.eq("poOrder", true))
+					.add(Restrictions.isNull("consolidatedOrder"))
+					.add(Restrictions.disjunction()
+							.add(Restrictions.isNotNull("shippedDate"))
+							.add(Restrictions.isNotNull("orderReturnOrRTO")));
+			criteria.setProjection(Projections.rowCount());			
+			if(criteria != null)
+				noOfPoOrders = (int) criteria.uniqueResult();
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId+" In POORDER Count", e);			
+		}
+		return noOfPoOrders;
+	}
 
 }

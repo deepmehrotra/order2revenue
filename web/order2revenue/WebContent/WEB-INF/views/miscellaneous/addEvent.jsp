@@ -206,18 +206,16 @@ span .#error {
 										<div class="col-sm-12">
 											<h4>Product SKU</h4>
 										</div>
-<<<<<<< HEAD
 											<div class="col-sm-6">												
 												<label class="col-sm-4 control-label text-center" style="padding: 0px;margin-right: -6px;position: relative;right: 22px;"><b>Select All</b></label>
 												<div class="col-sm-8">
-													<div class="checkbox i-checks" style="padding: 0px;">
-														<%-- <form:checkbox	path="" id="random123" value="selectAllSku" /> --%>
-														<input type="checkbox" id="random123" onchange="selectAllSKU()" />
+													<div style="padding: 0px;">														
+														<form:checkbox path="selectAll" id="selectAllSku" value="true" />
 													</div>												
 												</div>
 											</div>										
-											<div class="col-sm-6">												
-												<label class="col-sm-4 control-label">Select SKU </label>
+											<div class="col-sm-6" id="multiSelect" >												
+												<label class="col-sm-4 control-label" >Select SKU </label>
 												<div class="col-sm-8">	                                       
 			                                        <select data-placeholder="Click To Select" name="multiSku" id="multiSku" class="chosen-select" multiple="multiple" style="width:350px;" tabindex="4" required>
 			                                            <c:if test="${!empty skus}">			                                            		
@@ -227,32 +225,10 @@ span .#error {
 			                                            </c:if>
 			                                        </select>
 		                                        </div>
-		                                    </div>
+		                                    </div>                                  		
+                                   		<br>
                                    		
-                                   		<br>                                						
-										
-=======
-
-										<div class="col-sm-6">
-											<label class="col-sm-4 control-label">Select SKU </label>
-											<div class="col-sm-8">
-												<select data-placeholder="Click To Select" name="multiSku"
-													id="multiSku" class="chosen-select" multiple="multiple"
-													style="width: 350px;" tabindex="4" required>
-													<c:if test="${!empty skus}">
-														<option id="selectAll" value="">Select All</option>
-														<c:forEach items="${skus}" var="sku" varStatus="loop">
-															<option value="${sku}">${sku}</option>
-														</c:forEach>
-													</c:if>
-												</select>
-											</div>
-										</div>
-
-										<br>
-
->>>>>>> refs/heads/Release_14_May_AddPartner
-										<div class="col-sm-12">
+                                   		<div class="col-sm-12">
 											<h4>NR Calculator</h4>
 										</div>
 										<div class="col-sm-12">
@@ -2723,11 +2699,7 @@ Custom and plugin javascript
 
 	<script type="text/javascript">
 		var v = 1;
-		var index = 0;
-		function selectAllSKU()
-		{
-			alert("Inside function");
-		}
+		var index = 0;		
 		function myFunction() {
 			v++;
 			index = index + 1;
@@ -3048,31 +3020,7 @@ Custom and plugin javascript
 	<script type="text/javascript">
 		$(document)
 				.ready(
-						function() {							
-							alert("bfore select all");
-							/*  $('#selectAllSku').change(function() {
-								 	alert("Checked On");
-							        if ($(this).prop('checked')) {
-							            alert("Checked");
-							        }
-							        else {
-							            alert("Unchecked");
-							        }
-							    });
-							
-							
-							 */
-						
-							/*   $("#selectAllSku").click(function () {
-								  alert("clicked");
-							    if ($("#selectAllSku").is(":checked")) {
-							    	alert("clicked");
-							        $('#multiSku').multiselect("disable");
-							    }
-							    else {
-							        $('#multiSku').prop('disabled', false);
-							    }
-							  });  */
+						function() {
 							$("#EndDate")
 									.change(
 											function() {
@@ -3608,8 +3556,15 @@ Custom and plugin javascript
 		for ( var selector in config) {
 			$(selector).chosen(config[selector]);
 		};
+	</script>	
+	<script type="text/javascript">	
+	$("#selectAllSku").click(function()
+	{		
+	  	alert(document.getElementById("selectAllSku").val);	   
+	   	alert("Yaa... Working");
+	});
+	
 	</script>
-
 
 
 </body>

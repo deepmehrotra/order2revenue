@@ -100,7 +100,7 @@
                                     <td>${product.threholdLimit}</td>                                    
                                     <td class="tooltip-demo">
 			                           	<a href="editProduct.html?id=${product.productId}"  ><i class="fa fa-edit text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Edit"></i></a>
-			   							<a href="javascript:show('${product.productName}','${product.productSkuCode}')"  ><i class="fa fa-recycle text-navy" data-toggle="modal tooltip" data-target="#myModal" data-placement="top" data-original-title="Update"></i></a>
+			   							<a href="javascript:show('${product.productName}','${product.productSkuCode}')"  ><i class="fa fa-recycle text-navy" data-toggle="modal" data-target="#myModal" data-placement="top" data-original-title="Update"></i></a>
 			   							<a href="deleteProduct.html?id=${product.productId}"  ><i class="fa fa-trash text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Delete"></i></a>			   										   							
  									</td>
 

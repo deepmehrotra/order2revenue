@@ -1522,6 +1522,7 @@ public class ConverterClass {
 		events.setNetSalesAmount(eventsBean.getNetSalesAmount());
 		events.setSkuList(eventsBean.getSkuList());
 		events.setStatus(eventsBean.getStatus());
+		events.setSelectAll(eventsBean.getSelectAll());
 		return events;
 		
 	}
@@ -1546,6 +1547,7 @@ public class ConverterClass {
 		eventsBean.setNetSalesAmount(events.getNetSalesAmount());
 		eventsBean.setSkuList(events.getSkuList());
 		eventsBean.setStatus(events.getStatus());
+		eventsBean.setSelectAll(events.getSelectAll());
 		}
 		return eventsBean;
 	}
@@ -1572,6 +1574,7 @@ public class ConverterClass {
 				bean.setNetSalesAmount(event.getNetSalesAmount());
 				bean.setSkuList(event.getSkuList());
 				bean.setStatus(event.getStatus());
+				bean.setSelectAll(event.getSelectAll());
 				beans.add(bean);
 			}
 		}		

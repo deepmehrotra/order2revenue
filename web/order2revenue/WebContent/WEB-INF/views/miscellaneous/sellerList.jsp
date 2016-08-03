@@ -60,7 +60,7 @@
                             </form>
                             <div class="clients-list">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i> Sellers</a></li>
+                                <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i> Sellers (${sellers.size()})</a></li>
                             </ul>
                             <div class="tab-content" style="overflow-x: hidden;overflow-y: scroll;height: 555px;">
                                 <div id="tab-1" class="tab-pane active">

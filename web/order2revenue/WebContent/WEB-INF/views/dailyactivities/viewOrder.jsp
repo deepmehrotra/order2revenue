@@ -64,7 +64,10 @@
 				</div>
 
 
-			</div>			
+			</div>
+			<div class="col-lg-12 m-b-sm">
+				<a href="#" class="btn btn-default openall">Expand All</a> <a href="#" class="btn btn-default closeall">Collapse All</a>			
+			</div>
 			<div class="col-lg-12 order-info-block">
                     <div class="float-e-margins col-lg-4">
                         <div class="panel panel-default">
@@ -676,7 +679,7 @@
 		<jsp:include page="../globalfooter.jsp"></jsp:include>
 	</div>
 	<script>
-		$(document).ready(function() {
+		$(document).ready(function() {			
 			$("#form").validate({
 				rules : {
 					number : {
@@ -685,7 +688,8 @@
 					}
 				}
 			});
-		});
+		});	
+		
 	</script>
 	<script type="text/javascript">
 
@@ -759,8 +763,14 @@ $(function ($) {
 });
 
 
-
-
+	$('.closeall').click(function(){
+	  $('.panel-collapse.in')
+	    .collapse('hide');
+	});
+	$('.openall').click(function(){
+	  $('.panel-collapse:not(".in")')
+	    .collapse('show');
+	});
 
 
 
