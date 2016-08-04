@@ -99,6 +99,7 @@ public class GlobalConstant {
 			add("Recieved Amount");
 			add("Fulfilment Type");
 			add("Payment Date");
+			add("Seller SKU");
 
 		}
 	};

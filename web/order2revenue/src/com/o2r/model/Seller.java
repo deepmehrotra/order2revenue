@@ -101,9 +101,6 @@ public class Seller {
 	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
 	private List<UploadReport> uploadReportList = new ArrayList<UploadReport>();
 	
-	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
-	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-	private List<ChannelUploadMapping> uploadMapping = new ArrayList<ChannelUploadMapping>();
 
 	public SellerAccount getSellerAccount() {
 		return sellerAccount;
@@ -313,11 +310,5 @@ public class Seller {
 		this.uploadReportList = uploadReportList;
 	}
 
-	public List<ChannelUploadMapping> getUploadMapping() {
-		return uploadMapping;
-	}
 
-	public void setUploadMapping(List<ChannelUploadMapping> uploadMapping) {
-		this.uploadMapping = uploadMapping;
-	}
 }

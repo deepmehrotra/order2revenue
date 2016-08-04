@@ -12,6 +12,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -97,8 +98,8 @@ public class UploadMappingDaoImpl implements UploadMappingDao {
 
 			Criteria criteria = session.createCriteria(ChannelUploadMapping.class);
 			criteria
-					.add(Restrictions.eq("uploadMapping.channelName", channelName))
-					.add(Restrictions.eq("uploadMapping.fileName", fileName));
+					.add(Restrictions.eq("channelName", channelName))
+					.add(Restrictions.eq("fileName", fileName));
 			resultsetList=criteria.list();
 			if (resultsetList != null && resultsetList.size() != 0) {
 				

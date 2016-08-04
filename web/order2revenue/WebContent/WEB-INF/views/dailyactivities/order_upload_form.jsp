@@ -172,6 +172,7 @@
 											<option value="inventorySummary">Inventory Upload</option>
 											<option value="poPaymentSummary">PO Payment Upload</option>
 											<option value="expenseSummary">Expense Upload</option>
+											<option value="Flipkart_Payment">Flipkart Payment</option>
 										</select>
 									</div>
 									<div class="col-md-4">															

@@ -26,6 +26,7 @@ import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.helper.HelperClass;
 import com.o2r.model.ChannelUploadMapping;
+import com.o2r.model.ColumMap;
 import com.o2r.model.Employee;
 import com.o2r.service.AdminService;
 import com.o2r.service.UploadMappingService;
@@ -138,13 +139,32 @@ public class AdminController {
 		return jsonArray;
 	}
 	
-	@RequestMapping(value = "/seller/savemappingdetails", method = RequestMethod.GET)
+	@RequestMapping(value = "/seller/savemappingdetails", method = RequestMethod.POST)
 	public ModelAndView savemappingdetails(HttpServletRequest request,
 			@ModelAttribute("command") ChannelUploadMapping channeluploadmapping, BindingResult result) {
 
 		log.info("$$$ savemappingdetails admin Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
+			ColumMap colmap=null;
+			Map<String, String[]> parameters = request.getParameterMap();
+			for (String header : GlobalConstant.paymentHeaderList) {
+				colmap=new ColumMap();
+				colmap.setO2rColumName(header);
+				String temp="map-"+header;
+				if(parameters.containsKey(temp))
+				{
+					colmap.setChannelColumName(parameters.get(temp)[0]);
+				}
+				else
+				{
+					continue;
+				}
+				System.out.println(channeluploadmapping.getChannelName()+" File name : "+
+				channeluploadmapping.getFileName());
+				colmap.setUploadMapping(channeluploadmapping);
+				channeluploadmapping.getColumMap().add(colmap);
+			}
 			uploadMappingService.addChannelUploadMapping(channeluploadmapping);
 		} catch (CustomException ce) {
 			log.error("savemappingdetails exception : " + ce.toString());
@@ -188,24 +208,28 @@ public class AdminController {
 	@RequestMapping(value = "/seller/uploadmappings", method = RequestMethod.GET)
 		public ModelAndView uploadmappingsDetails(HttpServletRequest request) {
 
-			log.info("$$$ uploadmappingsDetails Starts : UploadController $$$");
+			log.info("$$$ uploadmappingsDetails Starts : AdminController $$$");
 			String channelName = request.getParameter("channelName");
 			String fileName = request.getParameter("fileName");
 			Map<String, Object> model = new HashMap<String, Object>();
 			ChannelUploadMapping cum=null;
 			try {
-				
+				System.out.println("fileName : "+fileName+"channelName  "+channelName);
 				if (fileName != null && channelName!=null) {
 					cum=uploadMappingService.getChannelUploadMapping(channelName, fileName);
-					if(cum!=null)
+					if(cum!=null&&cum.getColumMap()!=null&&cum.getColumMap().size()!=0)
+					{
+						System.out.println(" Cum is not null");
 					model.put("mapping", cum);
+					}
 					else
 					{
 						switch(fileName)
 						{
 						case "payment":
+							System.out.println(" Stting [ayment headers"+GlobalConstant.paymentHeaderList);
 							model.put("o2rheaders", GlobalConstant.paymentHeaderList);
-							model.put("mapping", new ChannelUploadMapping());
+							
 						}
 					}
 					model.put("fileName", fileName);
@@ -226,8 +250,8 @@ public class AdminController {
 				model.put("errorMessage", e.getCause());
 				return new ModelAndView("globalErorPage", model);
 			}
-			log.info("$$$ uploadmappingsDetails Ends : UploadController $$$");
-			return new ModelAndView("admin/uploadMapping", model);
+			log.info("$$$ uploadmappingsDetails Ends : AdminController $$$");
+			return new ModelAndView("admin/uploadmapping", model);
 		}
 	
 	

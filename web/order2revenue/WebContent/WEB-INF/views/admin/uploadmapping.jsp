@@ -30,7 +30,7 @@
 								</div>
 								<div class="col-lg-3">
 									<select class="form-control" name="channelName" id="channelName">
-                                             <c:forEach items="${channelName}" var="channelName">
+                                             <c:forEach items="${partnerNames}" var="channelName">
 										   
 										         <option value="${channelName}">${channelName}</option>
 										    </c:forEach>
@@ -38,14 +38,14 @@
 								</div>
 								<div class="col-lg-3" style="padding: 0px 16px 0px 0px;">
 									<select class="form-control" name="channelName" id="channelName">
-                                             <c:forEach items="${fileName}" var="fileName">
+                                             <c:forEach items="${fileNames}" var="fileName">
 										   
 										         <option value="${fileName}">${fileName}</option>
 										    </c:forEach>
                                             </select>
 								</div>
 								<div class="col-lg-3" style="margin: 0px;padding: 0px;">
-                                      <a href="uploadmappings.html?filename=payment&channelName=Amazon" class="btn btn-white pull-left" ><i class="fa fa-search"></i></a>
+                                      <a href="uploadmappings.html?fileName=payment&channelName=Flipkart" class="btn btn-white pull-left" ><i class="fa fa-search"></i></a>
                                 </div>
 							</div>
 							<div class="col-lg-12 m-t-xs">
@@ -59,6 +59,9 @@
 										<tbody>
 										<c:choose>
 										<c:when test="${mapping != null}">
+										<form:hidden path="channelName" value="${mapping.channelName}"/>
+										<form:hidden path="channelName" value="${mapping.channelName}"/>
+										<form:hidden path="mapId" value="${mapping.mapId}"/>
 										<c:forEach items="${mapping.columMap}" var="columMap" varStatus="status">
 											<tr>
 												<td style="width:70%;padding: 4px;">
@@ -77,12 +80,12 @@
 										
 											<tr>
 												<td style="width:70%;padding: 4px;">
-												<input name="${mapping.columMap[${status.index}].o2rColumName}" value="${o2rheaders}"
+												<input name="${o2rheaders}" value="${o2rheaders}"
 												 readonly="readonly"/>
 							
 												</td>
 												<td style="width:70%;padding: 4px;">
-												<input name="${mapping.columMap[${status.index}].channelColumName}" value=""/>
+												<input name="map-${o2rheaders}"/>
 												</td>
 											</tr>
 											</c:forEach>

@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -49,6 +48,7 @@ import com.o2r.helper.CustomException;
 import com.o2r.helper.FileUploadForm;
 import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
+import com.o2r.helper.SaveMappedFiles;
 import com.o2r.model.Events;
 import com.o2r.model.GatePass;
 import com.o2r.model.Order;
@@ -94,6 +94,8 @@ public class OrderController {
 	EventsService eventsService;
 	@Autowired
 	DataConfig dataConfig;
+	@Resource(name = "saveMappedFiles")
+	private SaveMappedFiles saveMappedFiles;
 
 	private static final String UPLOAD_DIR = "upload";
 
@@ -353,7 +355,11 @@ public class OrderController {
 							files.get(0), sellerId, applicationPath,
 							uploadReport));
 					model.put("mapType", "skuMappingMap");
-					break;
+				case "Flipkart_Payment":
+					saveMappedFiles.saveFlipkartPaymentContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport);
+						break;
 
 				}
 				inputStream = files.get(0).getInputStream();
