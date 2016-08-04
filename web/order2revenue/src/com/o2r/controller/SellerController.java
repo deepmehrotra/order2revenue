@@ -40,6 +40,7 @@ import com.o2r.bean.SellerBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.HelperClass;
+import com.o2r.model.AccountTransaction;
 import com.o2r.model.Seller;
 import com.o2r.model.SellerAccount;
 import com.o2r.model.State;
@@ -466,7 +467,10 @@ public class SellerController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			int sellerId = helperClass.getSellerIdfromSession(request);
-			model.put("myAccount", sellerService.getSeller(sellerId));
+			Seller seller = sellerService.getSeller(sellerId);
+			model.put("myAccount", seller);
+			List<AccountTransaction> acctList = sellerService.getAccountTransactions(sellerId); 
+			model.put("accountTransactions", acctList);
 		} catch (CustomException ce) {
 			log.error("planUpgrade exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -527,8 +531,9 @@ public class SellerController {
 		try {
 			model.put("currTotalAmount", currTotalAmount);
 			model.put("currOrderCount", currOrderCount);
-			sellerService.planUpgrade(planBean.getPid(), currTotalAmount, currOrderCount,
+			AccountTransaction at = sellerService.planUpgrade(planBean.getPid(), currTotalAmount, currOrderCount,
 					helperClass.getSellerIdfromSession(request));
+			model.put("accountTransaction", at);
 		} catch (CustomException ce) {
 			log.error("planUpgrade2 exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());

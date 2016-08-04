@@ -323,22 +323,16 @@ label.star:before {
 										</tr>
 									</thead>
 									<tbody style="background-color: #fff;">
+										<c:forEach items="${accountTransactions}" var="at">
 										<tr>
-											<td>OD00039219880</td>
-											<td>2 Aug 2015</td>
-											<td>UTOOOOO8815</td>
-											<td>Successfull</td>
-											<td>2280.00</td>
+											<td><c:out value="${at.invoiceId}"/></td>
+											<td><fmt:formatDate type="date" value="${at.transactionDate}"/></td>
+											<td><c:out value="${at.transactionId}"/></td>
+											<td><c:out value="${at.status}"/></td>
+											<td><c:out value="${at.transactionAmount}"/></td>
 											<td></td>
 										</tr>
-										<tr>
-											<td>OD00039219880</td>
-											<td>2 Aug 2015</td>
-											<td>UTOOOOO8815</td>
-											<td>Successfull</td>
-											<td>2280.00</td>
-											<td></td>
-										</tr>
+										</c:forEach>
 									</tbody>
 								</table>
 							</div>

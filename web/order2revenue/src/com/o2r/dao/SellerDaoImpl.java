@@ -1,5 +1,6 @@
 package com.o2r.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
@@ -245,7 +246,7 @@ public class SellerDaoImpl implements SellerDao {
 	}
 
 	@Override
-	public void planUpgrade(int pid, double totalAmount, long orderCount, int sellerid)throws CustomException {
+	public AccountTransaction planUpgrade(int pid, double totalAmount, long orderCount, int sellerid)throws CustomException {
 		
 
 		log.info("*** planUpgrade Starts : SellerDaoImpl ****");
@@ -257,28 +258,19 @@ public class SellerDaoImpl implements SellerDao {
 			session.beginTransaction();
 			plan = (Plan) session.get(Plan.class, pid);
 			seller = (Seller) session.get(Seller.class, sellerid);			
-			AccountTransaction acct = payementStatus(plan);
-			log.debug(" AFTER getting  ACCOUNT TRANSacttion object "
-					+ acct.getStatus() + " plan order count : "
-					+ plan.getOrderCount());
-			log.debug(" Current ORDER BUCKET : "
-					+ seller.getSellerAccount());
 			if (seller.getSellerAccount() == null) {
 				throw new Exception();
 			}
 			log.debug(" Current ORDER BUCKET : "+ seller.getSellerAccount().getOrderBucket());
-			if (acct.getStatus().equals("Success")) {
-				seller.getSellerAccount().setOrderBucket(
-						seller.getSellerAccount().getOrderBucket()
-								+ orderCount);
-				seller.getSellerAccount().setTotalAmountPaidToO2r(
-						seller.getSellerAccount().getTotalAmountPaidToO2r() + 
-						totalAmount);
-				seller.getSellerAccount().setPlanId(
-						plan.getPid());
-				seller.setPlan(plan);
-
-			}
+			seller.getSellerAccount().setOrderBucket(
+					seller.getSellerAccount().getOrderBucket()
+							+ orderCount);
+			seller.getSellerAccount().setTotalAmountPaidToO2r(
+					seller.getSellerAccount().getTotalAmountPaidToO2r() + 
+					totalAmount);
+			seller.getSellerAccount().setPlanId(
+					plan.getPid());
+			seller.setPlan(plan);
 			if (seller.getSellerAccount().getLastLogin() == null
 					|| seller.getSellerAccount().isAccountStatus() == false) {
 				seller.getSellerAccount().setAccountStatus(true);
@@ -289,7 +281,6 @@ public class SellerDaoImpl implements SellerDao {
 				seller.getSellerAccount().setAtivationDate(new Date());
 			}
 			seller.getSellerAccount().setLastTransaction(new Date());
-			seller.getSellerAccount().getAccountTransactions().add(acct); //
 
 			Random r = new Random();
 			int randomId = r.nextInt(9999999);
@@ -297,11 +288,11 @@ public class SellerDaoImpl implements SellerDao {
 
 			at = new AccountTransaction();
 			at.setTransactionDate(new Date());
-			at.setTransactionAmount(plan.getPlanPrice());
-			at.setCurrentOrderCount(plan.getOrderCount());
+			at.setTransactionAmount(totalAmount);
+			at.setCurrentOrderCount(orderCount);
 			at.setStatus("Done");
 			at.setInvoiceId(invoiceId);
-			at.setTransactionId("RecivedFrom Third Party");
+			at.setTransactionId("Received From Third Party: PayUMoney");
 			seller.getSellerAccount().getAccountTransactions().add(at);
 			session.saveOrUpdate(seller);
 
@@ -313,6 +304,7 @@ public class SellerDaoImpl implements SellerDao {
 			throw new CustomException(GlobalConstant.planUpgradeError, new Date(), 1, GlobalConstant.planUpgradeErrorCode, e);
 		}
 		log.info("*** planUpgrade Ends : SellerDaoImpl ****");
+		return at;
 	}
 
 	public AccountTransaction payementStatus(Plan plan) {
@@ -627,5 +619,25 @@ public class SellerDaoImpl implements SellerDao {
 			if(session != null)
 				session.close();
 		}
+	}
+
+	@Override
+	public List<AccountTransaction> getAccountTransactions(int sellerId) {
+		Session session=null;
+		List<AccountTransaction> acctList = new ArrayList<AccountTransaction>();
+		try{
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Seller seller = (Seller) session.get(Seller.class, sellerId);
+			acctList.addAll(seller.getSellerAccount().getAccountTransactions());
+			session.getTransaction().commit();
+		}catch(Exception e){
+			log.error("Failed! by sellerId : "+sellerId,e);
+			e.printStackTrace();
+		}finally{
+			if(session != null)
+				session.close();
+		}
+		return acctList;
 	}
 }

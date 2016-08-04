@@ -13,6 +13,7 @@ import org.springframework.web.context.ServletContextAware;
 
 import com.o2r.dao.SellerDao;
 import com.o2r.helper.CustomException;
+import com.o2r.model.AccountTransaction;
 import com.o2r.model.Seller;
 import com.o2r.model.State;
 import com.o2r.model.StateDeliveryTime;
@@ -62,8 +63,8 @@ public class SellerServiceImpl implements SellerService,ServletContextAware {
 		return sellerDao.getSeller(email);
 	}
 
-	public void planUpgrade(int pid, double totalAmount, long orderCount, int sellerid) throws CustomException {
-		sellerDao.planUpgrade(pid, totalAmount,orderCount, sellerid);
+	public AccountTransaction planUpgrade(int pid, double totalAmount, long orderCount, int sellerid) throws CustomException {
+		return sellerDao.planUpgrade(pid, totalAmount,orderCount, sellerid);
 	}
 	
 	public void updateProcessedOrdersCount(int sellerId, int processedOrderCount) throws CustomException {
@@ -100,5 +101,10 @@ public class SellerServiceImpl implements SellerService,ServletContextAware {
 	@Override
 	public boolean sendMail(String to, String subject, String body) {
 		return sellerDao.sendMail(to, subject, body);
+	}
+
+	@Override
+	public List<AccountTransaction> getAccountTransactions(int sellerId) {
+		return sellerDao.getAccountTransactions(sellerId);
 	}
 }

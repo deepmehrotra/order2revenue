@@ -177,6 +177,7 @@ public boolean empty(String s)
 				$(".currAmountText").html(currAmount);
 				$(".currTaxAmountText").html(taxAmount);
 				$(".currTotalAmountText").html(totalAmount);
+				$(".payuAmount").val(totalAmount);
 				localStorage.setItem("totalAmount", totalAmount);
 				localStorage.setItem("orderCount", orderCount);
 				localStorage.setItem("pid", $(".selectPlanField").val());				

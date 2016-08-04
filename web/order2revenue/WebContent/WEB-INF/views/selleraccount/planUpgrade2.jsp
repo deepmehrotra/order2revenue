@@ -54,18 +54,26 @@
 								<tbody>
 									<tr>
 										<td>
-											Transaction Id :
+											Invoice ID:
 										</td>
 										<td>
-											ALK1234
+											<c:out value="${accountTransaction.invoiceId}"/>
 										</td>
 									</tr>
 									<tr>
 										<td>
-											Transaction Date :
+											Transaction Details:
 										</td>
 										<td>
-											21/09/2015
+											<c:out value="${accountTransaction.transactionId}"/>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											Transaction Date:
+										</td>
+										<td>
+											<fmt:formatDate type="date" value="${accountTransaction.transactionDate}"/>
 										</td>
 									</tr>
 									<tr>
@@ -73,7 +81,7 @@
 											Total Orders :
 										</td>
 										<td>
-											<c:out value="${currOrderCount}"/>
+											<c:out value="${accountTransaction.currentOrderCount}"/>
 										</td>
 									</tr>
 									<tr>
@@ -81,7 +89,7 @@
 											Transaction Amount :
 										</td>
 										<td>
-											&#8377; <c:out value="${currTotalAmount}"/> /-
+											&#8377; <c:out value="${accountTransaction.transactionAmount}"/> /-
 										</td>
 									</tr>
 								</tbody>

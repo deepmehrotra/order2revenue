@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.o2r.helper.CustomException;
+import com.o2r.model.AccountTransaction;
 import com.o2r.model.Seller;
 import com.o2r.model.State;
 import com.o2r.model.StateDeliveryTime;
@@ -25,7 +26,7 @@ public interface SellerDao {
  
  public Seller getSeller(String email)throws CustomException;
  
- public void planUpgrade(int pid, double totalAmount, long orderCount, int sellerid)throws CustomException;
+ public AccountTransaction planUpgrade(int pid, double totalAmount, long orderCount, int sellerid)throws CustomException;
 
  public List<State> listStates();
 
@@ -42,5 +43,7 @@ public void addStateDeliveryTime(List<StateDeliveryTime> stateDelTimeList, int s
 public Seller getSellerVerCode(String verCode);
 
 public boolean sendMail(String to, String subject, String body);
+
+public List<AccountTransaction> getAccountTransactions(int sellerId);
 
 }
