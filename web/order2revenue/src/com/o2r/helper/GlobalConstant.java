@@ -97,7 +97,7 @@ public class GlobalConstant {
 			add("ChannelOrderId");
 			add("InvoiceId");
 			add("Recieved Amount");
-			add("Negative Charges");
+			add("Fulfilment Type");
 			add("Payment Date");
 
 		}
