@@ -3720,7 +3720,7 @@ hgroup h2 {
 								$('#revShippingFeeType_revShipFeePCC').iCheck(
 										'check');
 
-							if ('${partner.nrnReturnConfig.retCharSFPCC}' == 'true') {
+							if ('${partner.nrnReturnConfig.retCharSFPCC}' == 'true') 
 								$('#retCharSFPCC').iCheck('check');
 							if ('${partner.nrnReturnConfig.RTOCharSFPCC}' == 'true')
 								$('#RTOCharSFPCC').iCheck('check');
