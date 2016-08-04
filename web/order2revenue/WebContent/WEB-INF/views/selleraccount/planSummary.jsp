@@ -87,6 +87,18 @@
 			$(".checkoutButton").prop('disabled', true);
 		}
 	}
+	function show_sidebar1(){
+		$("#box1").show();		
+	}
+	function hide_sidebar1(){
+		$("#box1").hide();		
+	}
+	function show_sidebar(){
+		$("#box").show();		
+	}
+	function hide_sidebar(){
+		$("#box").hide();		
+	}
 </script>
 <style type="text/css">
 .column {
@@ -189,6 +201,11 @@ label.star:before {
 .black-color {
 	color: #000 !important;
 }
+
+.progress {
+	width: auto !important;
+	height: auto !important;
+}
 </style>
 </head>
 <body>
@@ -220,7 +237,7 @@ label.star:before {
 									<c:out value="${myAccount.sellerAccount.orderBucket}" />
 								</p>
 
-								<p id="box" style="visibility: hidden;">All balance credited
+								<p id="box" style="display: none;position: relative; left: 20%;">All balance credited
 									into O2R account is non refundable & can only be used towards
 									processing of orders & purchase of products/services from
 									Uniware.</p>
@@ -231,14 +248,20 @@ label.star:before {
 										<b>Complete life</b>
 									</p>
 								</div>
+								<c:set var="remainingOrders" value="${myAccount.sellerAccount.orderBucket - myAccount.sellerAccount.totalOrderProcessed}" />
+								<c:set var="ordersProcessed" value="${myAccount.sellerAccount.totalOrderProcessed}" />
+								<c:set var="remainingOrdersPer" value="${remainingOrders/myAccount.sellerAccount.orderBucket*100}" />
+								<c:set var="ordersProcessedPer" value="${ordersProcessed/myAccount.sellerAccount.orderBucket*100}" />
 								<div class="progress" onmouseover="show_sidebar1();"
 									onmouseout="hide_sidebar1();">
 									<div class="progress-bar progress-bar-success"
 										role="progressbar"
-										style="width: 80%; background-color: #b4d733;">12654</div>
+										style="width: <c:out value="${ordersProcessedPer}" />%; background-color: #b4d733;">
+										<c:out value="${ordersProcessed}" />
+									</div>
 									<div class="progress-bar progress-bar-warning"
-										role="progressbar" style="width: 20%; background-color: #000;">
-										456</div>
+										role="progressbar" style="width: <c:out value="${remainingOrdersPer}" />%; background-color: #000;">
+										<c:out value="${remainingOrders}" /></div>
 								</div>
 								<div class="progress" onmouseover="show_sidebar1();"
 									onmouseout="hide_sidebar1();">
@@ -253,11 +276,11 @@ label.star:before {
 										<b>Complete Cycle</b>
 									</p>
 								</div>
-								<p id="box1" style="visibility: hidden;">These bar represent
+								<p id="box1" style="position: relative; left: 25%; display: none;">These bar represent
 									the number of order purchased,consumed,remaining during the
 									current cycle and the whole life period</p>
 							</div>
-							<div class="col-md-12" style="margin-top: -137px;">
+							<div class="col-md-12" style="margin-top: -25px;">
 								<h1 class="heading">Account Summary</h1>
 								<div class="col-md-6 text-center">
 									<p>
