@@ -248,37 +248,45 @@ label.star:before {
 										<b>Complete life</b>
 									</p>
 								</div>
-								<c:set var="remainingOrders" value="${myAccount.sellerAccount.orderBucket - myAccount.sellerAccount.totalOrderProcessed}" />
-								<c:set var="ordersProcessed" value="${myAccount.sellerAccount.totalOrderProcessed}" />
-								<c:set var="remainingOrdersPer" value="${remainingOrders/myAccount.sellerAccount.orderBucket*100}" />
-								<c:set var="ordersProcessedPer" value="${ordersProcessed/myAccount.sellerAccount.orderBucket*100}" />
-								<div class="progress" onmouseover="show_sidebar1();"
-									onmouseout="hide_sidebar1();">
-									<div class="progress-bar progress-bar-success"
-										role="progressbar"
-										style="width: <c:out value="${ordersProcessedPer}" />%; background-color: #b4d733;">
-										<c:out value="${ordersProcessed}" />
-									</div>
-									<div class="progress-bar progress-bar-warning"
-										role="progressbar" style="width: <c:out value="${remainingOrdersPer}" />%; background-color: #000;">
-										<c:out value="${remainingOrders}" /></div>
-								</div>
-								<div class="progress" onmouseover="show_sidebar1();"
-									onmouseout="hide_sidebar1();">
-									<div class="progress-bar progress-bar-success"
-										role="progressbar" style="width: 60%;">746</div>
-									<div class="progress-bar progress-bar-warning"
-										role="progressbar" style="width: 40%; background-color: #000;">
-										254</div>
-								</div>
-								<div>
-									<p style="position: relative; left: -31%; top: -5px;">
-										<b>Complete Cycle</b>
-									</p>
-								</div>
-								<p id="box1" style="position: relative; left: 25%; display: none;">These bar represent
-									the number of order purchased,consumed,remaining during the
-									current cycle and the whole life period</p>
+								<c:set var="orderBucket" value="${myAccount.sellerAccount.orderBucket}"/>
+								<c:choose>
+									<c:when test="${orderBucket != null && orderBucket > 0}">
+										<c:set var="remainingOrders" value="${myAccount.sellerAccount.orderBucket - myAccount.sellerAccount.totalOrderProcessed}" />
+										<c:set var="ordersProcessed" value="${myAccount.sellerAccount.totalOrderProcessed}" />
+										<c:set var="remainingOrdersPer" value="${remainingOrders/orderBucket*100}" />
+										<c:set var="ordersProcessedPer" value="${ordersProcessed/orderBucket*100}" />
+										<div class="progress" onmouseover="show_sidebar1();"
+											onmouseout="hide_sidebar1();">
+											<div class="progress-bar progress-bar-success"
+												role="progressbar"
+												style="width: <c:out value="${ordersProcessedPer}" />%; background-color: #b4d733;">
+												<c:out value="${ordersProcessed}" />
+											</div>
+											<div class="progress-bar progress-bar-warning"
+												role="progressbar" style="width: <c:out value="${remainingOrdersPer}" />%; background-color: #000;">
+												<c:out value="${remainingOrders}" /></div>
+										</div>
+										<div class="progress" onmouseover="show_sidebar1();"
+											onmouseout="hide_sidebar1();">
+											<div class="progress-bar progress-bar-success"
+												role="progressbar" style="width: 60%;">746</div>
+											<div class="progress-bar progress-bar-warning"
+												role="progressbar" style="width: 40%; background-color: #000;">
+												254</div>
+										</div>
+										<div>
+											<p style="position: relative; left: -31%; top: -5px;">
+												<b>Complete Cycle</b>
+											</p>
+										</div>
+										<p id="box1" style="position: relative; left: 25%; display: none;">These bar represent
+											the number of order purchased,consumed,remaining during the
+											current cycle and the whole life period</p>
+									</c:when>
+									<c:otherwise>
+										<div>Nothing in Order Bucket yet. Please purchase/upgrade your plan.</div>
+									</c:otherwise>
+								</c:choose>						
 							</div>
 							<div class="col-md-12" style="margin-top: -25px;">
 								<h1 class="heading">Account Summary</h1>
