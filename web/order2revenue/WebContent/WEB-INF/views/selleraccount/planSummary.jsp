@@ -342,7 +342,7 @@ label.star:before {
 											<th>Transaction ID</th>
 											<th>Status</th>
 											<th>Amount</th>
-											<th><img src="img/download.png" alt="download"></th>
+											<th><img src="/O2R/seller/img/download.png" alt="download"></th>
 										</tr>
 									</thead>
 									<tbody style="background-color: #fff;">
