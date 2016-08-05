@@ -29,7 +29,7 @@ public class EventsBean {
 
 	private List<ChargesBean> fixedfeeList = new ArrayList<ChargesBean>();
 	private List<ChargesBean> shippingfeeVolumeFixedList = new ArrayList<ChargesBean>();
-	private List<ChargesBean> shippingFeeWeightFixedList = new ArrayList<ChargesBean>();
+	private List<ChargesBean> shippingfeeWeightFixedList = new ArrayList<ChargesBean>();
 	private List<ChargesBean> shippingfeeVolumeVariableList = new ArrayList<ChargesBean>();
 	private List<ChargesBean> shippingfeeWeightVariableList = new ArrayList<ChargesBean>();
 
@@ -170,8 +170,8 @@ public class EventsBean {
 					returnBean = bean;
 				}
 			}
-		} else if (type.equalsIgnoreCase("shippingFeeWeightFixed")) {
-			for (ChargesBean bean : this.shippingFeeWeightFixedList) {
+		} else if (type.equalsIgnoreCase("shippingfeeWeightFixed")) {
+			for (ChargesBean bean : this.shippingfeeWeightFixedList) {
 				if (bean.getCriteria().equalsIgnoreCase(criteria)
 						&& bean.getRange() == criteriaRange) {
 					returnBean = bean;
@@ -221,12 +221,12 @@ public class EventsBean {
 	}
 
 	public List<ChargesBean> getShippingfeeWeightFixedList() {
-		return shippingFeeWeightFixedList;
+		return shippingfeeWeightFixedList;
 	}
 
 	public void setShippingfeeWeightFixedList(
-			List<ChargesBean> shippingFeeWeightFixedList) {
-		this.shippingFeeWeightFixedList = shippingFeeWeightFixedList;
+			List<ChargesBean> shippingfeeWeightFixedList) {
+		this.shippingfeeWeightFixedList = shippingfeeWeightFixedList;
 	}
 
 	public List<ChargesBean> getShippingfeeVolumeVariableList() {

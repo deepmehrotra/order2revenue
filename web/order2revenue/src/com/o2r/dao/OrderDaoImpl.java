@@ -2325,13 +2325,13 @@ public class OrderDaoImpl implements OrderDao {
 							chargeBean.setMetroValue(charge.getChargeAmount());
 						}
 
-					} else if (charge.getChargeName().contains("shippingFeeWeightFixed")) {
+					} else if (charge.getChargeName().contains("shippingfeeWeightFixed")) {
 						ChargesBean chargeBean = new ChargesBean();
-						chargeBean.setChargeType("shippingFeeWeightFixed");
+						chargeBean.setChargeType("shippingfeeWeightFixed");
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
 						chargeBean.setValue(charge.getChargeAmount());
-						pbean.getshippingFeeWeightFixedList().add(chargeBean);
+						pbean.getshippingfeeWeightFixedList().add(chargeBean);
 					}
 
 				} else {
@@ -2347,9 +2347,9 @@ public class OrderDaoImpl implements OrderDao {
 					&& pbean.getshippingfeeVolumeFixedList().size() != 0)
 				Collections.sort(pbean.getshippingfeeVolumeFixedList(),
 						new SortByCriteria());
-			if (pbean.getshippingFeeWeightFixedList() != null
-					&& pbean.getshippingFeeWeightFixedList().size() != 0)
-				Collections.sort(pbean.getshippingFeeWeightFixedList(),
+			if (pbean.getshippingfeeWeightFixedList() != null
+					&& pbean.getshippingfeeWeightFixedList().size() != 0)
+				Collections.sort(pbean.getshippingfeeWeightFixedList(),
 						new SortByCriteria());
 			if (pbean.getshippingfeeVolumeVariableList() != null
 					&& pbean.getshippingfeeVolumeVariableList().size() != 0)
@@ -2645,11 +2645,11 @@ public class OrderDaoImpl implements OrderDao {
 					&& partner.getNrnReturnConfig().getShippingFeeType()
 							.equals("fixed")) {
 
-				if (pbean.getshippingFeeWeightFixedList() != null
-						&& pbean.getshippingFeeWeightFixedList().size() != 0) {
+				if (pbean.getshippingfeeWeightFixedList() != null
+						&& pbean.getshippingfeeWeightFixedList().size() != 0) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
-							.getshippingFeeWeightFixedList().iterator();
+							.getshippingfeeWeightFixedList().iterator();
 					while (shippingfeeWeightIterator.hasNext()) {
 						ChargesBean cBean = shippingfeeWeightIterator.next();
 						if (deadWeight < cBean.getRange()) {
@@ -2661,27 +2661,27 @@ public class OrderDaoImpl implements OrderDao {
 					if (!inRange) {
 						float tempWeight = deadWeight
 								- (float) pbean
-										.getshippingFeeWeightFixedList()
+										.getshippingfeeWeightFixedList()
 										.get(pbean
-												.getshippingFeeWeightFixedList()
+												.getshippingfeeWeightFixedList()
 												.size() - 2).getRange();
 						float addWeight = (float) pbean
-								.getshippingFeeWeightFixedList()
-								.get(pbean.getshippingFeeWeightFixedList()
+								.getshippingfeeWeightFixedList()
+								.get(pbean.getshippingfeeWeightFixedList()
 										.size() - 1).getRange();
 
 						if (valueType.equalsIgnoreCase("fixed"))
 							dwchargetemp = (float) pbean
-									.getshippingFeeWeightFixedList()
-									.get(pbean.getshippingFeeWeightFixedList()
+									.getshippingfeeWeightFixedList()
+									.get(pbean.getshippingfeeWeightFixedList()
 											.size() - 2).getValue();
 
 						while (tempWeight > 0) {
 							if (valueType.equalsIgnoreCase("fixed"))
 								dwchargetemp += (float) pbean
-										.getshippingFeeWeightFixedList()
+										.getshippingfeeWeightFixedList()
 										.get(pbean
-												.getshippingFeeWeightFixedList()
+												.getshippingfeeWeightFixedList()
 												.size() - 1).getValue();
 
 							tempWeight = tempWeight - addWeight;
@@ -3590,13 +3590,13 @@ public class OrderDaoImpl implements OrderDao {
 						chargeBean.setMetroValue(charge.getChargeAmount());
 					}
 
-				} else if (charge.getChargeName().contains("shippingFeeWeightFixed")) {
+				} else if (charge.getChargeName().contains("shippingfeeWeightFixed")) {
 					ChargesBean chargeBean = new ChargesBean();
-					chargeBean.setChargeType("shippingFeeWeightFixed");
+					chargeBean.setChargeType("shippingfeeWeightFixed");
 					chargeBean.setCriteria(charge.getCriteria());
 					chargeBean.setRange(charge.getCriteriaRange());
 					chargeBean.setValue(charge.getChargeAmount());
-					pbean.getshippingFeeWeightFixedList().add(chargeBean);
+					pbean.getshippingfeeWeightFixedList().add(chargeBean);
 				}
 
 			} else {
@@ -3612,9 +3612,9 @@ public class OrderDaoImpl implements OrderDao {
 				&& pbean.getshippingfeeVolumeFixedList().size() != 0)
 			Collections.sort(pbean.getshippingfeeVolumeFixedList(),
 					new SortByCriteria());
-		if (pbean.getshippingFeeWeightFixedList() != null
-				&& pbean.getshippingFeeWeightFixedList().size() != 0)
-			Collections.sort(pbean.getshippingFeeWeightFixedList(),
+		if (pbean.getshippingfeeWeightFixedList() != null
+				&& pbean.getshippingfeeWeightFixedList().size() != 0)
+			Collections.sort(pbean.getshippingfeeWeightFixedList(),
 					new SortByCriteria());
 		if (pbean.getshippingfeeVolumeVariableList() != null
 				&& pbean.getshippingfeeVolumeVariableList().size() != 0)
@@ -3910,11 +3910,11 @@ public class OrderDaoImpl implements OrderDao {
 					&& partner.getNrnReturnConfig().getShippingFeeType()
 							.equals("fixed")) {
 
-				if (pbean.getshippingFeeWeightFixedList() != null
-						&& pbean.getshippingFeeWeightFixedList().size() != 0) {
+				if (pbean.getshippingfeeWeightFixedList() != null
+						&& pbean.getshippingfeeWeightFixedList().size() != 0) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
-							.getshippingFeeWeightFixedList().iterator();
+							.getshippingfeeWeightFixedList().iterator();
 					while (shippingfeeWeightIterator.hasNext()) {
 						ChargesBean cBean = shippingfeeWeightIterator.next();
 						if (deadWeight < cBean.getRange()) {
@@ -3926,27 +3926,27 @@ public class OrderDaoImpl implements OrderDao {
 					if (!inRange) {
 						float tempWeight = deadWeight
 								- (float) pbean
-										.getshippingFeeWeightFixedList()
+										.getshippingfeeWeightFixedList()
 										.get(pbean
-												.getshippingFeeWeightFixedList()
+												.getshippingfeeWeightFixedList()
 												.size() - 2).getRange();
 						float addWeight = (float) pbean
-								.getshippingFeeWeightFixedList()
-								.get(pbean.getshippingFeeWeightFixedList()
+								.getshippingfeeWeightFixedList()
+								.get(pbean.getshippingfeeWeightFixedList()
 										.size() - 1).getRange();
 
 						if (valueType.equalsIgnoreCase("fixed"))
 							dwchargetemp = (float) pbean
-									.getshippingFeeWeightFixedList()
-									.get(pbean.getshippingFeeWeightFixedList()
+									.getshippingfeeWeightFixedList()
+									.get(pbean.getshippingfeeWeightFixedList()
 											.size() - 2).getValue();
 
 						while (tempWeight > 0) {
 							if (valueType.equalsIgnoreCase("fixed"))
 								dwchargetemp += (float) pbean
-										.getshippingFeeWeightFixedList()
+										.getshippingfeeWeightFixedList()
 										.get(pbean
-												.getshippingFeeWeightFixedList()
+												.getshippingfeeWeightFixedList()
 												.size() - 1).getValue();
 
 							tempWeight = tempWeight - addWeight;
