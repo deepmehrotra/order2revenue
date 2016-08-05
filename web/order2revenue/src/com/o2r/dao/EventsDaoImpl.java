@@ -119,9 +119,10 @@ public class EventsDaoImpl implements EventsDao {
 		
 		log.info("*** getEvents Starts...***");
 		List<Events> returnList=null;
+		Session session=null;
 		try {
 			
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Seller.class).add(Restrictions.eq("sellerId", sellerId));
 			criteria.createAlias("events", "events", CriteriaSpecification.LEFT_JOIN)
@@ -132,6 +133,10 @@ public class EventsDaoImpl implements EventsDao {
 			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.getEventError,new Date(), 3, GlobalConstant.getEventErrorCode, e);
+		} finally{
+			if(session != null){
+				session.close();
+			}			
 		}
 		log.info("*** getEvents ends...***");
 		return returnList;
@@ -142,9 +147,9 @@ public class EventsDaoImpl implements EventsDao {
 		
 		log.info("*** listEvents Starts...***");		
 		List<Events> returnlist = null;
-				
+		Session session=null; 		
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			session.beginTransaction();
 			
 			Criteria criteria = session.createCriteria(Events.class).add(Restrictions.eq("sellerId", sellerId));			
@@ -156,6 +161,10 @@ public class EventsDaoImpl implements EventsDao {
 			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.listEventError,new Date(), 3, GlobalConstant.listEventErrorCode, e);
+		}finally{
+			if(session != null){
+				session.close();
+			}			
 		}
 		log.info("*** listEvents Ends...***");		
 		return returnlist;
@@ -173,9 +182,10 @@ public class EventsDaoImpl implements EventsDao {
 		cal.setTime(eDate);
 		cal.add(Calendar.DATE, 1);
 		Date endDate=cal.getTime();
+		Session session=null;
 		try {
 
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
 			criteria.createAlias("events", "events", CriteriaSpecification.LEFT_JOIN)
@@ -187,6 +197,10 @@ public class EventsDaoImpl implements EventsDao {
 			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.listEventError,new Date(), 3, GlobalConstant.listEventErrorCode, e);
+		} finally{
+			if(session != null){
+				session.close();
+			}			
 		}
 		log.info("*** listEvents between dates ends...***");
 		return returnlist;
@@ -197,8 +211,9 @@ public class EventsDaoImpl implements EventsDao {
 		log.info("$$$ isEventActive Start $$$");
 		
 		List eventList=null;
+		Session session=null;
 		try{
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Events.class).add(Restrictions.eq("sellerId", sellerId)).add(Restrictions.eq("channelName", channelName))
 								.add(Restrictions.le("startDate",orderDate))
@@ -218,6 +233,10 @@ public class EventsDaoImpl implements EventsDao {
 		}catch(Exception e){
 			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
+		}finally{
+			if(session != null){
+				session.close();
+			}			
 		}
 		
 		log.info("$$$ isEventActive Exit $$$");

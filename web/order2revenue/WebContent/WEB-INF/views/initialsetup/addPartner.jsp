@@ -98,7 +98,7 @@ hgroup h2 {
 			<div class="wrapper wrapper-content animated fadeInRight">
 				<div class="row">
 					<div class="col-lg-12">
-						<form:form method="POST" action="saveMetaPartner.html"
+						<form:form method="POST" action="savePartner.html"
 							id="addpartnerform" name="addpartnerform" role="form"
 							class="wizard-big form-horizontal" enctype="multipart/form-data">
 							<%-- <form id="form" action="#" class="wizard-big form-horizontal"
@@ -134,10 +134,9 @@ hgroup h2 {
 																</c:when>
 																<c:otherwise>
 																	<form:input path="pcName" value="${partner.pcName}"
-																		class="form-control" id="partnerName"
+																		class="form-control required" id="partnerName"
 																		onblur="checkOnBlur()" />
-																	<span id="partnerNameMessage"
-																		style="font-weight: bold;color=red"></span>
+																	<span id="partnerNameMessage" style="font-weight: bold;color=red"></span>
 																</c:otherwise>
 															</c:choose>
 														</div>
@@ -194,7 +193,7 @@ hgroup h2 {
 												<div class="radio">
 													<label><form:radiobutton path="paymentType"
 															value="paymentcycle" id="paymentcycle" name="toggler"
-															class="paymentcycleClass" />Subdivided Monthly </label>
+															class="paymentcycleClass required" />Subdivided Monthly </label>
 												</div>
 											</div>
 											<div class="col-sm-4">
@@ -221,7 +220,7 @@ hgroup h2 {
 															<form:input path="startcycleday"
 																value="${partner.startcycleday}"
 																placeholder="Duration of Payment from Start Date"
-																class="form-control" />
+																class="form-control number" />
 														</div>
 													</div>
 													<div class="mar-btm-20-oh">
@@ -231,7 +230,7 @@ hgroup h2 {
 															<form:input path="paycycleduration"
 																value="${partner.paycycleduration}"
 																placeholder="Duration of Payment from Start Date"
-																class="form-control" />
+																class="form-control number" />
 														</div>
 													</div>
 												</div>
@@ -242,7 +241,7 @@ hgroup h2 {
 															<form:input path="paydaysfromstartday"
 																value="${partner.paydaysfromstartday}"
 																placeholder="Duration of Payment from Start Date"
-																class="form-control" />
+																class="form-control number" />
 														</div>
 													</div>
 													<div class="mar-btm-20-oh">
@@ -280,7 +279,7 @@ hgroup h2 {
 															id="noofdaysfromdeliverydate"
 															value="${partner.noofdaysfromdeliverydate}"
 															placeholder="Payment Days From Delivery Date"
-															class="form-control" />
+															class="form-control number" />
 													</div>
 												</div>
 											</div>
@@ -289,7 +288,7 @@ hgroup h2 {
 													<div class="col-md-4">
 														<form:input path="monthlypaydate"
 															value="${partner.monthlypaydate}" placeholder="Enter Day"
-															class="form-control" />
+															class="form-control number" />
 													</div>
 												</div>
 											</div>
@@ -301,7 +300,7 @@ hgroup h2 {
 													<div class="col-md-4">
 														<form:input path="maxRTOAcceptance"
 															value="${partner.maxRTOAcceptance}"
-															placeholder="Enter Value" class="form-control" />
+															placeholder="Enter Value" class="form-control number" />
 													</div>
 													<div class="col-md-4">
 														<select class="form-control" name="account">
@@ -317,7 +316,7 @@ hgroup h2 {
 													<div class="col-md-4">
 														<form:input path="maxReturnAcceptance"
 															value="${partner.maxReturnAcceptance}"
-															placeholder="Enter Value" class="form-control" />
+															placeholder="Enter Value" class="form-control number" />
 													</div>
 													<div class="col-md-4">
 														<select class="form-control" name="account">
@@ -443,7 +442,7 @@ hgroup h2 {
 																				<div class="form-group">
 																					<div class="input-group m-b col-md-4">
 																						<input type="text"
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-fixedCommissionPercent"
 																							id="fixedCommissionPercent"
 																							value="${chargeMap.fixedCommissionPercent}">
@@ -462,7 +461,7 @@ hgroup h2 {
 																							<label class="col-md-4 control-label">${cat.key}</label>
 																							<div class="input-group m-b col-md-4">
 																								<input type="text"
-																									class="form-control validateNumber "
+																									class="form-control number "
 																									name='nr-${cat.key}' value='${cat.value}'
 																									id='categoryWiseCommission'> <span
 																									class="input-group-addon">%</span>
@@ -477,7 +476,7 @@ hgroup h2 {
 																							<label class="col-md-4 control-label">${category}</label>
 																							<div class="input-group m-b col-md-4">
 																								<input type="text"
-																									class="form-control validateNumber"
+																									class="form-control number"
 																									name='nr-${category}'>
 																								<!--   <span class="input-group-addon">%</span> -->
 																							</div>
@@ -525,14 +524,14 @@ hgroup h2 {
 																									</div>
 																									<div class="col-md-3 content-rgt">
 																										<input type="text"
-																											class="form-control validateNumber"
+																											class="form-control number"
 																											name="nr-fixedfee${loop.index}-range"
 																											id="nr-fixedfee${loop.index}-range"
 																											value="${fixedfee.range}" />
 																									</div>
 																									<div class="col-md-3 content-rgt">
 																										<input type="text"
-																											class="form-control validateNumber"
+																											class="form-control number"
 																											name="nr-fixedfee${loop.index}-value"
 																											id="nr-fixedfee${loop.index}-value"
 																											value="${fixedfee.value}" />
@@ -564,13 +563,13 @@ hgroup h2 {
 																								</div>
 																								<div class="col-md-3 content-rgt">
 																									<input type="text"
-																										class="form-control validateNumber"
+																										class="form-control number"
 																										name="nr-fixedfee0-range"
 																										id="txt_name0" />
 																								</div>
 																								<div class="col-md-3 content-rgt">
 																									<input type="text"
-																										class="form-control validateNumber"
+																										class="form-control number"
 																										name="nr-fixedfee0-value"
 																										id="nr-fixedfee0-value" />
 																								</div>
@@ -626,12 +625,12 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-5" style="padding: 0px;">
 																						<input type="text" name="nr-pccrange"
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							value="${chargeMap.pccrange}" id="text1">
 																					</div>
 																					<div class="col-md-5">
 																						<input type="text" name="nr-pccvalue"
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							value="${chargeMap.pccvalue}">
 																					</div>
 																					<br> <br> <br>
@@ -645,7 +644,7 @@ hgroup h2 {
 																					<div class="col-md-5">
 																						<div class="col-md-6" style="padding: 0px;">
 																							<input type="text" name="nr-pccpercentSPValue"
-																								class="form-control validateNumber"
+																								class="form-control number"
 																								value="${chargeMap.pccpercentSPValue}">
 																						</div>
 																						<div class="col-md-6"
@@ -666,7 +665,7 @@ hgroup h2 {
 																					<div class="col-sm-6">
 																						<div class="input-group m-b">
 																							<input type="text" name="nr-pccpercentSPHigher"
-																								class="form-control validateNumber"
+																								class="form-control number"
 																								value="${chargeMap.pccpercentSPHigher}">
 																							<span class="input-group-addon">%</span>
 																						</div>
@@ -679,7 +678,7 @@ hgroup h2 {
 																					<div class="col-sm-6">
 																						<div class="input-group m-b">
 																							<input type="text" name="nr-pccfixedAmt"
-																								class="form-control validateNumber"
+																								class="form-control number"
 																								value="${chargeMap.pccfixedAmt}">
 																						</div>
 																					</div>
@@ -766,7 +765,7 @@ hgroup h2 {
 																												<div class=" content-rgt">
 																													<input type="text"
 																														name="nr-shippingFeeVolumeVariable${loop.index}-range"
-																														class="form-control validateNumber"
+																														class="form-control number"
 																														value="${shippingfee.range}">
 																												</div>
 																											</div></td>
@@ -774,26 +773,26 @@ hgroup h2 {
 																												<div class=" content-rgt">
 																													<input type="text"
 																														name="nr-shippingFeeVolumeVariable${loop.index}-localValue"
-																														class="form-control validateNumber"
+																														class="form-control number"
 																														value="${shippingfee.localValue}">
 																												</div>
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingFeeVolumeVariable${loop.index}-zonalValue"
-																													class="form-control validateNumber"
+																													class="form-control number"
 																													value="${shippingfee.zonalValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingFeeVolumeVariable${loop.index}-nationalValue"
-																													class="form-control validateNumber"
+																													class="form-control number"
 																													value="${shippingfee.nationalValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingFeeVolumeVariable${loop.index}-metroValue"
-																													class="form-control validateNumber"
+																													class="form-control number"
 																													value="${shippingfee.metroValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
@@ -815,30 +814,30 @@ hgroup h2 {
 																											<div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingFeeVolumeVariable0-range"
-																													class="form-control validateNumber">
+																													class="form-control number">
 																											</div>
 																										</div></td>
 																									<td><div class="form-group ">
 																											<div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingFeeVolumeVariable0-localValue"
-																													class="form-control validateNumber">
+																													class="form-control number">
 																											</div>
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeVolumeVariable0-zonalValue"
-																												class="form-control validateNumber">
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeVolumeVariable0-nationalValue"
-																												class="form-control validateNumber">
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeVolumeVariable0-metroValue"
-																												class="form-control validateNumber">
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="button"
@@ -891,7 +890,7 @@ hgroup h2 {
 																												<div class=" content-rgt">
 																													<input type="text"
 																														name="nr-shippingFeeWeightVariable${loop.index}-range"
-																														class="form-control validateNumber"
+																														class="form-control number"
 																														value="${shippingfee.range}">
 																												</div>
 																											</div></td>
@@ -899,14 +898,14 @@ hgroup h2 {
 																												<div class=" content-rgt">
 																													<input type="text"
 																														name="nr-shippingFeeWeightVariable${loop.index}-localValue"
-																														class="form-control validateNumber"
+																														class="form-control number"
 																														value="${shippingfee.localValue}">
 																												</div>
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingFeeWeightVariable${loop.index}-zonalValue"
-																													class="form-control validateNumber"
+																													class="form-control number"
 																													value="${shippingfee.zonalValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
@@ -918,7 +917,7 @@ hgroup h2 {
 																										<td><div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingFeeWeightVariable${loop.index}-metroValue"
-																													class="form-control validateNumber"
+																													class="form-control number"
 																													value="${shippingfee.metroValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
@@ -940,28 +939,28 @@ hgroup h2 {
 																											<div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingFeeWeightVariable0-range"
-																													class="form-control validateNumber">
+																													class="form-control number">
 																											</div>
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeWeightVariable0-localValue"
-																												class="form-control validateNumber">
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeWeightVariable0-zonalValue"
-																												class="form-control validateNumber">
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeWeightVariable0-nationalValue"
-																												class="form-control validateNumber">
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingFeeWeightVariable0-metroValue"
-																												class="form-control validateNumber">
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="button"
@@ -1018,7 +1017,7 @@ hgroup h2 {
 																												<div class=" content-rgt">
 																													<input type="text"
 																														name="nr-shippingFeeWeightFixed${loop.index}-range"
-																														class="form-control validateNumber"
+																														class="form-control number"
 																														value="${shippingfee.range}">
 																												</div>
 																											</div></td>
@@ -1026,7 +1025,7 @@ hgroup h2 {
 																												<div class=" content-rgt">
 																													<input type="text"
 																														name="nr-shippingFeeWeightFixed${loop.index}-value"
-																														class="form-control validateNumber"
+																														class="form-control number"
 																														value="${shippingfee.value}">
 																												</div>
 																											</div></td>
@@ -1050,7 +1049,7 @@ hgroup h2 {
 																											<div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingFeeWeightFixed0-range"
-																													class="form-control validateNumber">
+																													class="form-control number">
 																											</div>
 																										</div>
 																									</td>
@@ -1059,7 +1058,7 @@ hgroup h2 {
 																											<div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingFeeWeightFixed0-value"
-																													class="form-control validateNumber">
+																													class="form-control number">
 																											</div>
 																										</div>
 																									</td>
@@ -1109,7 +1108,7 @@ hgroup h2 {
 																												<div class=" content-rgt">
 																													<input type="text"
 																														name="nr-shippingFeeVolumeFixed${loop.index}-range"
-																														class="form-control validateNumber"
+																														class="form-control number"
 																														value="${shippingfee.range}">
 																												</div>
 																											</div></td>
@@ -1117,7 +1116,7 @@ hgroup h2 {
 																												<div class=" content-rgt">
 																													<input type="text"
 																														name="nr-shippingFeeVolumeFixed${loop.index}-value"
-																														class="form-control validateNumber"
+																														class="form-control number"
 																														value="${shippingfee.value}">
 																												</div>
 																											</div></td>
@@ -1138,13 +1137,13 @@ hgroup h2 {
 																									</select></td>
 																									<td><input type="text"
 																										name="nr-shippingFeeVolumeFixed0-range"
-																										class="form-control validateNumber"></td>
+																										class="form-control number"></td>
 																									<td>
 																										<div class="form-group ">
 																											<div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingFeeVolumeFixed0-value"
-																													class="form-control validateNumber">
+																													class="form-control number">
 																											</div>
 																										</div>
 																									</td>
@@ -1173,7 +1172,7 @@ hgroup h2 {
 																		<div class="form-group col-md-12">
 																			<div class="col-md-4 input-group m-b">
 																				<input type="text" placeholder=""
-																					class="form-control validateNumber"
+																					class="form-control number"
 																					name="nr-serviceTax"
 																					value="${chargeMap.serviceTax}" id="serviceTax" />
 																				<span class="input-group-addon">%</span>
@@ -1253,7 +1252,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-3 content-rgt">
 																						<input type="text"
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-retCharSFFixedAmt"
 																							value="${chargeMap.retCharSFFixedAmt}">
 																					</div>
@@ -1270,7 +1269,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-retCharSFVarFixedAmt"
 																							value="${chargeMap.retCharSFVarFixedAmt}">
 																					</div>
@@ -1282,7 +1281,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-retCharSFPercentSP"
 																							value="${chargeMap.retCharSFPercentSP}">
 																						<span class="input-group-addon">%</span>
@@ -1295,7 +1294,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-5 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-retCharSFPercentPCC"
 																							value="${chargeMap.retCharSFPercentPCC}">
 																						<span class="input-group-addon">%</span>
@@ -1384,7 +1383,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-3 content-rgt">
 																						<input type="text"
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-retCharBRFixedAmt"
 																							value="${chargeMap.retCharBRFixedAmt}">
 																					</div>
@@ -1400,7 +1399,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-retCharBRVarFixedAmt"
 																							value="${chargeMap.retCharBRVarFixedAmt}">
 																					</div>
@@ -1411,7 +1410,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-retCharBRPercentSP"
 																							value="${chargeMap.retCharBRPercentSP}"><span
 																							class="input-group-addon">%</span>
@@ -1425,7 +1424,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-5 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-retCharBRPercentPCC"
 																							value="${chargeMap.retCharBRPercentPCC}"><span
 																							class="input-group-addon">%</span>
@@ -1504,7 +1503,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-3 content-rgt">
 																						<input type="text"
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-RTOCharSFFixedAmt"
 																							value="${chargeMap.RTOCharSFFixedAmt}">
 																					</div>
@@ -1520,7 +1519,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-RTOCharSFVarFixedAmt"
 																							value="${chargeMap.RTOCharSFFixedAmt}">
 																					</div>
@@ -1531,7 +1530,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-RTOCharSFPercentSP"
 																							value="${chargeMap.RTOCharSFPercentSP}">
 																						<span class="input-group-addon">%</span>
@@ -1544,7 +1543,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-5 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-RTOCharSFPercentPCC"
 																							value="${chargeMap.RTOCharSFPercentPCC}">
 																						<span class="input-group-addon">%</span>
@@ -1633,7 +1632,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-3 content-rgt">
 																						<input type="text"
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-RTOCharBRFixedAmt"
 																							value="${chargeMap.RTOCharBRFixedAmt}">
 																					</div>
@@ -1649,7 +1648,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-RTOCharBRVarFixedAmt"
 																							value="${chargeMap.RTOCharBRVarFixedAmt}">
 																					</div>
@@ -1660,7 +1659,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-RTOCharBRPercentSP"
 																							value="${chargeMap.RTOCharBRPercentSP}">
 																						<span class="input-group-addon">%</span>
@@ -1673,7 +1672,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-5 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-RTOCharBRPercentPCC"
 																							value="${chargeMap.RTOCharBRPercentPCC}">
 																						<span class="input-group-addon">%</span>
@@ -1755,7 +1754,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-3 content-rgt">
 																						<input type="text"
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-repCharSFFixedAmt"
 																							value="${chargeMap.repCharSFFixedAmt}">
 																					</div>
@@ -1771,7 +1770,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-repCharSFVarFixedAmt"
 																							value="${chargeMap.repCharSFVarFixedAmt}">
 																					</div>
@@ -1782,7 +1781,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-repCharSFPercentSP"
 																							value="${chargeMap.repCharSFPercentSP}">
 																						<span class="input-group-addon">%</span>
@@ -1795,7 +1794,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-5 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-repCharSFPercentPCC"
 																							value="${chargeMap.repCharSFPercentPCC}">
 																						<span class="input-group-addon">%</span>
@@ -1884,7 +1883,7 @@ hgroup h2 {
 																						</div>
 																						<div class="col-md-3 content-rgt">
 																							<input type="text"
-																								class="form-control validateNumber"
+																								class="form-control number"
 																								name="nr-repCharBRFixedAmt"
 																								value="${chargeMap.repCharBRFixedAmt}">
 																						</div>
@@ -1900,7 +1899,7 @@ hgroup h2 {
 																						</div>
 																						<div class="col-md-6">
 																							<input type="text" placeholder=""
-																								class="form-control validateNumber"
+																								class="form-control number"
 																								name="nr-repCharBRVarFixedAmt"
 																								value="${chargeMap.repCharBRFixedAmt}">
 																						</div>
@@ -1911,7 +1910,7 @@ hgroup h2 {
 																						</div>
 																						<div class="col-md-6 input-group m-b">
 																							<input type="text" placeholder=""
-																								class="form-control validateNumber"
+																								class="form-control number"
 																								name="nr-repCharBRPercentSP"
 																								value="${chargeMap.repCharBRPercentSP}">
 																							<span class="input-group-addon">%</span>
@@ -1924,7 +1923,7 @@ hgroup h2 {
 																						</div>
 																						<div class="col-md-5 input-group m-b">
 																							<input type="text" placeholder=""
-																								class="form-control validateNumber"
+																								class="form-control number"
 																								name="nr-repCharBRPercentPCC"
 																								value="${chargeMap.repCharBRPercentPCC}">
 																							<span class="input-group-addon">%</span>
@@ -2005,7 +2004,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-3 content-rgt">
 																						<input type="text"
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-PDCharSFFixedAmt"
 																							value="${chargeMap.PDCharSFFixedAmt}">
 																					</div>
@@ -2021,7 +2020,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-PDCharSFVarFixedAmt"
 																							value="${chargeMap.PDCharSFVarFixedAmt}">
 																					</div>
@@ -2032,7 +2031,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-PDCharSFPercentSP"
 																							value="${chargeMap.PDCharSFPercentSP}"> <span
 																							class="input-group-addon">%</span>
@@ -2045,7 +2044,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-5 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-PDCharSFPercentPCC"
 																							value="${chargeMap.PDCharSFPercentPCC}">
 																						<span class="input-group-addon">%</span>
@@ -2134,7 +2133,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-3 content-rgt">
 																						<input type="text"
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-PDCharBRFixedAmt"
 																							value="${chargeMap.PDCharBRFixedAmt}">
 																					</div>
@@ -2149,7 +2148,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-PDCharBRVarFixedAmt"
 																							value="${chargeMap.PDCharBRVarFixedAmt}">
 																					</div>
@@ -2160,7 +2159,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-PDCharBRPercentSP"
 																							value="${chargeMap.PDCharBRPercentSP}"> <span
 																							class="input-group-addon">%</span>
@@ -2173,7 +2172,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-5 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-PDCharBRPercentPCC"
 																							value="${chargeMap.PDCharBRPercentPCC}">
 																						<span class="input-group-addon">%</span>
@@ -2259,7 +2258,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-3 content-rgt">
 																						<input type="text"
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-canCharSFBFRTDFixedAmt"
 																							value="${chargeMap.canCharSFBFRTDFixedAmt}">
 																					</div>
@@ -2276,7 +2275,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-canCharSFBFRTDVarFixedAmt"
 																							value="${chargeMap.canCharSFBFRTDVarFixedAmt}">
 																					</div>
@@ -2287,7 +2286,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-6 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-canCharSFBFRTDPercentSP"
 																							value="${chargeMap.canCharSFBFRTDPercentSP}">
 																						<span class="input-group-addon">%</span>
@@ -2300,7 +2299,7 @@ hgroup h2 {
 																					</div>
 																					<div class="col-md-5 input-group m-b">
 																						<input type="text" placeholder=""
-																							class="form-control validateNumber"
+																							class="form-control number"
 																							name="nr-canCharSFBFRTDPercentPCC"
 																							value="${chargeMap.canCharSFBFRTDPercentPCC}">
 																						<span class="input-group-addon">%</span>
@@ -2393,7 +2392,7 @@ hgroup h2 {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text"
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-canCharSFFixedAmt"
 																						value="${chargeMap.canCharSFFixedAmt}">
 																				</div>
@@ -2421,7 +2420,7 @@ hgroup h2 {
 																				</div>
 																				<div class="col-md-6 input-group m-b">
 																					<input type="text" placeholder=""
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-canCharSFPercentSP"
 																						value="${chargeMap.canCharSFPercentSP}"> <span
 																						class="input-group-addon">%</span>
@@ -2434,7 +2433,7 @@ hgroup h2 {
 																				</div>
 																				<div class="col-md-5 input-group m-b">
 																					<input type="text" placeholder=""
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-canCharSFPercentPCC"
 																						value="${chargeMap.canCharSFPercentPCC}">
 																					<span class="input-group-addon">%</span>
@@ -2523,7 +2522,7 @@ hgroup h2 {
 																				</div>
 																				<div class="col-md-3 content-rgt">
 																					<input type="text"
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-canCharBRFixedAmt"
 																						value="${chargeMap.canCharSFPercentPCC}">
 																				</div>
@@ -2538,7 +2537,7 @@ hgroup h2 {
 																				</div>
 																				<div class="col-md-6">
 																					<input type="text" placeholder=""
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-canCharBRVarFixedAmt"
 																						value="${chargeMap.canCharBRVarFixedAmt}">
 																				</div>
@@ -2549,7 +2548,7 @@ hgroup h2 {
 																				</div>
 																				<div class="col-md-6 input-group m-b">
 																					<input type="text" placeholder=""
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-canCharBRPercentSP"
 																						value="${chargeMap.canCharBRPercentSP}"> <span
 																						class="input-group-addon">%</span>
@@ -2562,7 +2561,7 @@ hgroup h2 {
 																				</div>
 																				<div class="col-md-5 input-group m-b">
 																					<input type="text" placeholder=""
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-canCharBRPercentPCC"
 																						value="${chargeMap.canCharBRPercentPCC}">
 																					<span class="input-group-addon">%</span>
@@ -2621,7 +2620,7 @@ hgroup h2 {
 																		<div class="col-sm-6">
 																			<div class="input-group m-b">
 																				<input type="text" placeholder=""
-																					class="form-control validateNumber"
+																					class="form-control number"
 																					name="nr-revShipFeePCC"
 																					value="${chargeMap.revShipFeePCC}"> <span
 																					class="input-group-addon">%</span>
@@ -2651,7 +2650,7 @@ hgroup h2 {
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
 																					<input type="text" placeholder=""
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-revShipFeeFlatAmt"
 																						value="${chargeMap.revShipFeeFlatAmt}">
 																				</div>
@@ -2668,7 +2667,7 @@ hgroup h2 {
 																			<div class="col-sm-6">
 																				<div class="input-group m-b">
 																					<input type="text" placeholder=""
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-revShipFeePCCMF"
 																						value="${chargeMap.revShipFeePCCMF}"> <span
 																						class="input-group-addon">%</span>
@@ -2692,7 +2691,7 @@ hgroup h2 {
 																		<div class="col-sm-6">
 																			<div class="input-group m-b" style="width: 96%;">
 																				<input type="text" placeholder=""
-																					class="form-control validateNumber"
+																					class="form-control number"
 																					name="nr-revShipFeeFF"
 																					value="${chargeMap.revShipFeeFF}">
 																			</div>
@@ -2752,7 +2751,7 @@ hgroup h2 {
 																				</div>
 																				<div class="col-md-2 content-rgt">
 																					<input type="text" placeholder=""
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-revShipFeeDWAmt"
 																						value="${chargeMap.revShipFeeDWAmt}">
 																				</div>
@@ -2764,7 +2763,7 @@ hgroup h2 {
 																				</div>
 																				<div class="col-md-2 content-rgt">
 																					<input type="text" placeholder=""
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-revShipFeeVWAmt"
 																						value="${chargeMap.revShipFeeVWAmt}">
 																				</div>
@@ -2780,7 +2779,7 @@ hgroup h2 {
 																				</div>
 																				<div class="col-md-2 content-rgt">
 																					<input type="text" placeholder=""
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-revShipFeeDWPW"
 																						value="${chargeMap.revShipFeeDWPW}">
 																				</div>
@@ -2792,7 +2791,7 @@ hgroup h2 {
 																				</div>
 																				<div class="col-md-2 content-rgt">
 																					<input type="text" placeholder=""
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-revShipFeeVWPW"
 																						value="${chargeMap.revShipFeeVWPW}">
 																				</div>
@@ -2808,7 +2807,7 @@ hgroup h2 {
 																				</div>
 																				<div class="col-md-2 content-rgt">
 																					<input type="text" placeholder=""
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-revShipFeeDWMW"
 																						value="${chargeMap.revShipFeeDWMW}">
 																				</div>
@@ -2820,7 +2819,7 @@ hgroup h2 {
 																				</div>
 																				<div class="col-md-2 content-rgt">
 																					<input type="text" placeholder=""
-																						class="form-control validateNumber"
+																						class="form-control number"
 																						name="nr-revShipFeeVWMW"
 																						value="${chargeMap.revShipFeeVWMW}">
 																				</div>
