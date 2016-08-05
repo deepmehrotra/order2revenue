@@ -415,7 +415,7 @@ public class EventsController {
 
 									}
 								} else if (entry.getKey().contains(
-										"shippingfeeWeightFixed")) {
+										"shippingFeeWeightFixed")) {
 									String param = entry.getKey()
 											.substring(
 													0,
@@ -433,7 +433,7 @@ public class EventsController {
 																	.get(param
 																			+ "value")[0]));
 										nrnReturncharge
-												.setChargeName("shippingfeeWeightFixed");
+												.setChargeName("shippingFeeWeightFixed");
 										nrnReturncharge.setCriteria(parameters
 												.get(param + "criteria")[0]);
 										if (!parameters.get(param + "range")[0]
@@ -761,7 +761,7 @@ public class EventsController {
 							}
 
 						} else if (charge.getChargeName().contains(
-								"shippingfeeWeightFixed")) {
+								"shippingFeeWeightFixed")) {
 							ChargesBean chargeBean = new ChargesBean();
 							chargeBean.setChargeType("shippingfeeWeight");
 							chargeBean.setCriteria(charge.getCriteria());

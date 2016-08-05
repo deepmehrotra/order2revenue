@@ -98,7 +98,7 @@ hgroup h2 {
 			<div class="wrapper wrapper-content animated fadeInRight">
 				<div class="row">
 					<div class="col-lg-12">
-						<form:form method="POST" action="saveMetaPartner.html"
+						<form:form method="POST" action="savePartner.html"
 							id="addpartnerform" name="addpartnerform" role="form"
 							class="wizard-big form-horizontal" enctype="multipart/form-data">
 							<%-- <form id="form" action="#" class="wizard-big form-horizontal"
@@ -123,6 +123,7 @@ hgroup h2 {
 														id="nrnReturnConfig.configId"
 														value="${partner.nrnReturnConfig.configId}" />
 												</c:if>
+												<div class="col-lg-12">
 												<div class="col-sm-6">
 													<div class="form-group">
 														<label class="col-sm-4 control-label">Partner Name</label>
@@ -152,6 +153,8 @@ hgroup h2 {
 														</div>
 													</div>
 												</div>
+												</div>
+												<div class="col-lg-12">
 												<div class="col-sm-6" style="margin-top: 6px;">
 													<div class="form-group">
 														<label class="col-sm-4 control-label">Upload Brand
@@ -172,6 +175,10 @@ hgroup h2 {
 														</div>
 
 													</div>
+												</div>
+												<div class="col-sm-6">
+													
+												</div>
 												</div>
 											</div>
 										</div>
@@ -565,8 +572,7 @@ hgroup h2 {
 																								<div class="col-md-3 content-rgt">
 																									<input type="text"
 																										class="form-control validateNumber"
-																										name="nr-fixedfee0-range"
-																										id="txt_name0" />
+																										name="nr-fixedfee0-range" id="txt_name0" />
 																								</div>
 																								<div class="col-md-3 content-rgt">
 																									<input type="text"
@@ -639,7 +645,7 @@ hgroup h2 {
 																						<label>Greater than</label>
 																					</div>
 																					<div class="col-md-5" style="padding: 0px;">
-																						&nbsp;&nbsp;&nbsp;&nbsp;<label id="label1"></label>
+																						&nbsp;&nbsp;&nbsp;&nbsp;<label id="label1" value="${chargeMap.pccrange}" ></label>
 																					</div>
 
 																					<div class="col-md-5">
@@ -995,9 +1001,9 @@ hgroup h2 {
 																					<tbody>
 																						<c:choose>
 																							<c:when
-																								test="${!empty partner.shippingfeeWeightFixedList}">
+																								test="${!empty partner.shippingFeeWeightFixedList}">
 																								<c:forEach
-																									items="${partner.shippingfeeWeightFixedList}"
+																									items="${partner.shippingFeeWeightFixedList}"
 																									var="shippingfee" varStatus="loop">
 																									<tr>
 																										<td><select class="form-control selected"
@@ -2900,8 +2906,9 @@ hgroup h2 {
 	<script src="/O2R/seller/js/plugins/iCheck/icheck.min.js"></script>
 	<!-- Switchery -->
 	<script src="/O2R/seller/js/plugins/switchery/switchery.js"></script>
-	<script src="/O2R/seller/js/jquery.steps.min.js"></script>
+	
 	<script src="/O2R/seller/js/plugins/validate/jquery.validate.min.js"></script>
+	<script src="/O2R/seller/js/jquery.steps.min.js"></script>
 	<script src="/O2R/seller/js/pickList.js"></script>
 
 	<script type="text/javascript">
@@ -2937,7 +2944,6 @@ hgroup h2 {
 					+ "<option>Greater Than</option>"
 					+ "</select>"
 					+
-
 					"</div>"
 					+ "<div class='col-md-3 content-rgt'>"
 					+ "<input type='text' name='nr-fixedfee"+index+"-range' placeholder='' class='form-control' id='txt_name"+index+"' multiple>"
@@ -2954,78 +2960,61 @@ hgroup h2 {
 			var myTable = document.getElementById("myTable");
 			var currentIndex = myTable.rows.length;
 			var currentRow = myTable.insertRow(-1);
-
 			var linksBox = document.createElement("select");
 			linksBox.setAttribute("name", "nr-shippingFeeVolumeVariable"
 					+ currentIndex + "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
 			linksBox.setAttribute("path", "");
-
 			linksBox.setAttribute("type", "button");
 			linksBox.setAttribute("class", "form-control");
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Upto");
 			theOption.setAttribute("value", "Upto");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Additional");
 			theOption.setAttribute("value", "Additional");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			var linksBox1 = document.createElement("input");
 			linksBox1.setAttribute("name", "nr-shippingFeeVolumeVariable"
 					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control validateNumber");
-
 			var linksBox2 = document.createElement("input");
 			linksBox2.setAttribute("name", "nr-shippingFeeVolumeVariable"
 					+ currentIndex + "-localValue");
 			linksBox2.setAttribute("class", "form-control validateNumber");
-
 			var linksBox3 = document.createElement("input");
 			linksBox3.setAttribute("name", "nr-shippingFeeVolumeVariable"
 					+ currentIndex + "-zonalValue");
 			linksBox3.setAttribute("class", "form-control validateNumber");
-
 			var keywordsBox = document.createElement("input");
 			keywordsBox.setAttribute("name", "nr-shippingFeeVolumeVariable"
 					+ currentIndex + "-nationalValue");
 			keywordsBox.setAttribute("class", "form-control validateNumber");
-
 			var violationsBox = document.createElement("input");
 			violationsBox.setAttribute("name", "nr-shippingFeeVolumeVariable"
 					+ currentIndex + "-metroValue");
 			violationsBox.setAttribute("class", "form-control validateNumber");
-
 			var addRowBox = document.createElement("input");
 			addRowBox.setAttribute("type", "button");
 			addRowBox.setAttribute("value", "+");
 			addRowBox.setAttribute("onclick", "addField();");
 			addRowBox.setAttribute("class", "button btn btn-primary");
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox1);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox2);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox3);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(keywordsBox);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(violationsBox);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(addRowBox);
 		}
@@ -3033,77 +3022,60 @@ hgroup h2 {
 			var myTable = document.getElementById("myTable2");
 			var currentIndex = myTable.rows.length;
 			var currentRow = myTable.insertRow(-1);
-
 			var linksBox = document.createElement("select");
 			linksBox.setAttribute("name", "nr-shippingFeeWeightVariable"
 					+ currentIndex + "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
-
 			linksBox.setAttribute("type", "button");
 			linksBox.setAttribute("class", "form-control");
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Upto");
 			theOption.setAttribute("value", "Upto");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Additional");
 			theOption.setAttribute("value", "Additional");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			var linksBox1 = document.createElement("input");
 			linksBox1.setAttribute("name", "nr-shippingFeeWeightVariable"
 					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control validateNumber");
-
 			var linksBox2 = document.createElement("input");
 			linksBox2.setAttribute("name", "nr-shippingFeeWeightVariable"
 					+ currentIndex + "-localValue");
 			linksBox2.setAttribute("class", "form-control validateNumber");
-
 			var linksBox3 = document.createElement("input");
 			linksBox3.setAttribute("name", "nr-shippingFeeWeightVariable"
 					+ currentIndex + "-zonalValue");
 			linksBox3.setAttribute("class", "form-control");
-
 			var keywordsBox = document.createElement("input");
 			keywordsBox.setAttribute("name", "nr-shippingFeeWeightVariable"
 					+ currentIndex + "-nationalValue");
 			keywordsBox.setAttribute("class", "form-control validateNumber");
-
 			var violationsBox = document.createElement("input");
 			violationsBox.setAttribute("name", "nr-shippingFeeWeightVariable"
 					+ currentIndex + "-metroValue");
 			violationsBox.setAttribute("class", "form-control validateNumber");
-
 			var addRowBox = document.createElement("input");
 			addRowBox.setAttribute("type", "button");
 			addRowBox.setAttribute("value", "+");
 			addRowBox.setAttribute("onclick", "addField2();");
 			addRowBox.setAttribute("class", "button btn btn-primary");
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox1);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox2);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox3);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(keywordsBox);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(violationsBox);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(addRowBox);
 		}
@@ -3111,53 +3083,42 @@ hgroup h2 {
 			var myTable = document.getElementById("myTable3");
 			var currentIndex = myTable.rows.length;
 			var currentRow = myTable.insertRow(-1);
-
 			var linksBox = document.createElement("select");
 			linksBox.setAttribute("name", "nr-shippingFeeWeightFixed"
 					+ currentIndex + "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
-
 			linksBox.setAttribute("type", "button");
 			linksBox.setAttribute("class", "form-control");
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Upto");
 			theOption.setAttribute("value", "Upto");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Additional");
 			theOption.setAttribute("value", "Additional");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			var linksBox1 = document.createElement("input");
 			linksBox1.setAttribute("name", "nr-shippingFeeWeightFixed"
 					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control validateNumber");
-
 			var linksBox2 = document.createElement("input");
 			linksBox2.setAttribute("name", "nr-shippingFeeWeightFixed"
 					+ currentIndex + "-value");
 			linksBox2.setAttribute("class", "form-control validateNumber");
-
 			var addRowBox = document.createElement("input");
 			addRowBox.setAttribute("type", "button");
 			addRowBox.setAttribute("value", "+");
 			addRowBox.setAttribute("onclick", "addField3();");
 			addRowBox.setAttribute("class", "button btn btn-primary");
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox1);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox2);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(addRowBox);
 		}
@@ -3165,7 +3126,6 @@ hgroup h2 {
 			var myTable = document.getElementById("myTable4");
 			var currentIndex = myTable.rows.length;
 			var currentRow = myTable.insertRow(-1);
-
 			var linksBox = document.createElement("select");
 			linksBox.setAttribute("name", "nr-shippingFeeVolumeFixed"
 					+ currentIndex + "-criteria");
@@ -3173,44 +3133,35 @@ hgroup h2 {
 			linksBox.setAttribute("value", "");
 			linksBox.setAttribute("type", "button");
 			linksBox.setAttribute("class", "form-control");
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Upto");
 			theOption.setAttribute("value", "Upto");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Additional");
 			theOption.setAttribute("value", "Additional");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			var linksBox1 = document.createElement("input");
 			linksBox1.setAttribute("name", "nr-shippingFeeVolumeFixed"
 					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control validateNumber");
-
 			var linksBox2 = document.createElement("input");
 			linksBox2.setAttribute("name", "nr-shippingFeeVolumeFixed"
 					+ currentIndex + "-value");
 			linksBox2.setAttribute("class", "form-control validateNumber");
-
 			var addRowBox = document.createElement("input");
 			addRowBox.setAttribute("type", "button");
 			addRowBox.setAttribute("value", "+");
 			addRowBox.setAttribute("onclick", "addField4();");
 			addRowBox.setAttribute("class", "button btn btn-primary");
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox1);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox2);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(addRowBox);
 		}
@@ -3220,7 +3171,6 @@ hgroup h2 {
 			var v = $("#txt_name" + x + "").val();
 			$("#txt_name" + (x + 1) + "").val(v);
 			document.getElementById("myBtn").disabled = true;
-
 		}
 		function upto() {
 			document.getElementById("myBtn").disabled = false;
@@ -3242,16 +3192,13 @@ hgroup h2 {
 													if (currentIndex > newIndex) {
 														return true;
 													}
-
 													// Forbid suppressing "Warning" step if the user is to young
 													if (newIndex === 3
 															&& Number($("#age")
 																	.val()) < 18) {
 														return false;
 													}
-
 													var form = $(this);
-
 													// Clean up if user went backward before
 													if (currentIndex < newIndex) {
 														// To remove error styles
@@ -3268,10 +3215,8 @@ hgroup h2 {
 																.removeClass(
 																		"error");
 													}
-
 													// Disable validation on fields that are disabled or hidden.
 													form.validate().settings.ignore = ":disabled,:hidden";
-
 													// Start validation; Prevent going forward if false
 													return form.valid();
 												},
@@ -3284,7 +3229,6 @@ hgroup h2 {
 																	.val()) >= 18) {
 														$(this).steps("next");
 													}
-
 													// Suppress (skip) "Warning" step if the user is old enough and wants to the previous step.
 													if (currentIndex === 3
 															&& priorIndex === 3) {
@@ -3295,11 +3239,9 @@ hgroup h2 {
 												onFinishing : function(event,
 														currentIndex) {
 													var form = $(this);
-
 													// Disable validation on fields that are disabled.
 													// At this point it's recommended to do an overall check (mean ignoring only disabled fields)
 													form.validate().settings.ignore = ":disabled";
-
 													// Start validation; Prevent form submission if false
 													return form.valid();
 												},
@@ -3322,11 +3264,9 @@ hgroup h2 {
 													}
 												}
 											});
-
 							$("#text1").keyup(function() {
 								$("#label1").text($(this).val()); //OR $("#label1").html($(this).val());
 							});
-
 							$('.i-checks').iCheck({
 								checkboxClass : 'icheckbox_square-green',
 								radioClass : 'iradio_square-green',
@@ -3335,28 +3275,22 @@ hgroup h2 {
 							var switchery = new Switchery(elem, {
 								color : '#1AB394'
 							});
-
 							var elem_2 = document.querySelector('.js-switch_2');
 							var switchery_2 = new Switchery(elem_2, {
 								color : '#ED5565'
 							});
-
 							var elem_3 = document.querySelector('.js-switch_3');
 							var switchery_3 = new Switchery(elem_3, {
 								color : '#1AB394'
 							});
-
 							$("#nr-switch").change(function() {
 								if (this.checked) {
-
 									$('.radio5').hide();
 									$("#nr-switch-sec").slideDown();
 								} else {
 									$("#nr-switch-sec").slideUp();
-
 								}
 							});
-
 							$(".commissionType").click(function() {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
@@ -3413,7 +3347,6 @@ hgroup h2 {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
 							});
-
 							$(".pccValue").click(function() {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
@@ -3422,7 +3355,6 @@ hgroup h2 {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
 							});
-
 							$("[name=paymentType]").click(function() {
 								$('.radio1').hide();
 								$("#blk-" + $(this).val()).slideDown();
@@ -3442,7 +3374,6 @@ hgroup h2 {
 								calendarWeeks : true,
 								autoclose : true
 							});
-
 							if ('${partner.paymentType}' == 'paymentcycle')
 								$("#paymentcycle").prop("checked", true)
 										.trigger("click");
@@ -3458,30 +3389,25 @@ hgroup h2 {
 							} else if ('${partner.paymentType}' == 'monthly')
 								$('#monthly').prop("checked", true).trigger(
 										"click");
-
 							if ('${partner.tdsApplicable}' == 'true')
 								$("#tdsApplicable").prop("checked", true);
-
 							$("#submitButton").click(function() {
 								submitForm();
 							});
 							if ('${partner.nrnReturnConfig.nrCalculator}' == 'true')
 								$('input.js-switch_2').click();
-
 							if ('${partner.nrnReturnConfig.commissionType}' == 'fixed')
 								$("#commisionType-fixed").prop("checked", true)
 										.trigger("click");
 							else if ('${partner.nrnReturnConfig.commissionType}' == 'categoryWise')
 								$("#commisionType-categoryWise").prop(
 										"checked", true).trigger("click");
-
 							if ('${partner.nrnReturnConfig.whicheverGreaterPCC}' == 'true')
 								$("#pccHigher").prop("checked", true).trigger(
 										"click");
 							else if ('${partner.nrnReturnConfig.whicheverGreaterPCC}' == 'false')
 								$("#pccValue").prop("checked", true).trigger(
 										"click");
-
 							if ('${partner.nrnReturnConfig.shippingFeeType}' == 'fixed')
 								$("#shippingfee-fixed").prop("checked", true)
 										.trigger("click");
@@ -3497,7 +3423,6 @@ hgroup h2 {
 							} else if ('${partner.nrnReturnConfig.retCharSFType}' == 'noCharges')
 								$("#retrun-sf-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.retCharBRType}' == 'fixed')
 								$("#retrun-br-fix").prop("checked", true)
 										.trigger("click");
@@ -3507,7 +3432,6 @@ hgroup h2 {
 							else if ('${partner.nrnReturnConfig.retCharBRType}' == 'noCharges')
 								$("#retrun-br-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.RTOCharSFType}' == 'fixed')
 								$("#RTO-sf-fix").prop("checked", true).trigger(
 										"click");
@@ -3517,7 +3441,6 @@ hgroup h2 {
 							else if ('${partner.nrnReturnConfig.RTOCharSFType}' == 'noCharges')
 								$("#RTO-sf-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.RTOCharBRType}' == 'fixed')
 								$("#RTO-br-fix").prop("checked", true).trigger(
 										"click");
@@ -3527,7 +3450,6 @@ hgroup h2 {
 							else if ('${partner.nrnReturnConfig.RTOCharBRType}' == 'noCharges')
 								$("#RTO-br-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.repCharSFType}' == 'fixed')
 								$("#rep-sf-fix").prop("checked", true).trigger(
 										"click");
@@ -3537,7 +3459,6 @@ hgroup h2 {
 							else if ('${partner.nrnReturnConfig.repCharSFType}' == 'noCharges')
 								$("#rep-sf-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.repCharBRType}' == 'fixed')
 								$("#rep-br-fix").prop("checked", true).trigger(
 										"click");
@@ -3547,7 +3468,6 @@ hgroup h2 {
 							else if ('${partner.nrnReturnConfig.repCharBRType}' == 'noCharges')
 								$("#rep-br-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.PDCharSFType}' == 'fixed')
 								$("#PD-sf-fix").prop("checked", true).trigger(
 										"click");
@@ -3557,7 +3477,6 @@ hgroup h2 {
 							else if ('${partner.nrnReturnConfig.PDCharSFType}' == 'noCharges')
 								$("#PD-sf-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.PDCharBRType}' == 'fixed')
 								$("#PD-br-fix").prop("checked", true).trigger(
 										"click");
@@ -3567,7 +3486,6 @@ hgroup h2 {
 							else if ('${partner.nrnReturnConfig.PDCharBRType}' == 'noCharges')
 								$("#PD-br-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.canCharSFBFRTDType}' == 'fixed')
 								$("#can-sfbfrtd-fix").prop("checked", true)
 										.trigger("click");
@@ -3577,7 +3495,6 @@ hgroup h2 {
 							else if ('${partner.nrnReturnConfig.canCharSFBFRTDType}' == 'noCharges')
 								$("#can-sfbfrtd-nocharges").prop("checked",
 										true).trigger("click");
-
 							if ('${partner.nrnReturnConfig.canCharSFARTDType}' == 'fixed')
 								$("#can-sfartd-fix").prop("checked", true)
 										.trigger("click");
@@ -3587,7 +3504,6 @@ hgroup h2 {
 							else if ('${partner.nrnReturnConfig.canCharSFARTDType}' == 'noCharges')
 								$("#can-sfartd-nocharges")
 										.prop("checked", true).trigger("click");
-
 							if ('${partner.nrnReturnConfig.canCharBRType}' == 'fixed')
 								$("#can-br-fix").prop("checked", true).trigger(
 										"click");
@@ -3597,7 +3513,6 @@ hgroup h2 {
 							else if ('${partner.nrnReturnConfig.canCharBRType}' == 'noCharges')
 								$("#can-br-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.whicheverGreaterPCC}' == 'true') {
 								$('#whicheverGreaterPCC').iCheck('check');
 							}
@@ -3607,106 +3522,73 @@ hgroup h2 {
 								$('#retCharSFShipFee').iCheck('check');
 							if ('${partner.nrnReturnConfig.retCharBRFF}' == 'true')
 								$('#retCharBRFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.retCharBRShipFee}' == 'true')
 								$('#retCharBRShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.RTOCharSFRevShipFee}' == 'true')
 								$('#RTOCharSFRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.RTOCharSFFF}' == 'true')
 								$('#RTOCharSFFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.RTOCharSFShipFee}' == 'true')
 								$('#RTOCharSFShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.RTOCharSFRevShipFee}' == 'true')
 								$('#RTOCharSFRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.RTOCharBRFF}' == 'true')
 								$('#RTOCharBRFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.RTOCharBRShipFee}' == 'true')
 								$('#RTOCharBRShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.repCharSFRevShipFee}' == 'true')
 								$('#repCharSFRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.repCharSFFF}' == 'true')
 								$('#repCharSFFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.repCharSFShipFee}' == 'true')
 								$('#repCharSFShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.repCharSFRevShipFee}' == 'true')
 								$('#repCharSFRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.repCharBRFF}' == 'true')
 								$('#repCharBRFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.repCharBRShipFee}' == 'true')
 								$('#repCharBRShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.PDCharSFRevShipFee}' == 'true')
 								$('#PDCharSFRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.PDCharSFFF}' == 'true')
 								$('#PDCharSFFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.PDCharSFShipFee}' == 'true')
 								$('#PDCharSFShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.PDCharSFRevShipFee}' == 'true')
 								$('#PDCharSFRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.PDCharBRFF}' == 'true')
 								$('#PDCharBRFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.PDCharBRShipFee}' == 'true')
 								$('#PDCharBRShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFBRTDRevShipFee}' == 'true')
 								$('#canCharSFBRTDRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFBRTDFF}' == 'true')
 								$('#canCharSFBRTDFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFBRTDShipFee}' == 'true')
 								$('#canCharSFBRTDShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFBRTDRevShipFee}' == 'true')
 								$('#canCharSFBRTDRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFARTDRevShipFee}' == 'true')
 								$('#canCharSFARTDRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFFF}' == 'true')
 								$('#canCharSFFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFShipFee}' == 'true')
 								$('#canCharSFShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFARTDRevShipFee}' == 'true')
 								$('#canCharSFARTDRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharBRFF}' == 'true')
 								$('#canCharBRFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharBRFF}' == 'true')
 								$('#canCharBRFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharBRShipFee}' == 'true')
 								$('#canCharBRShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharBRRevShipFee}' == 'true')
 								$('#canCharBRRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeVar')
 								$('#revShippingFeeType_revShipFeeVar').iCheck(
 										'check');
 							if ('${partner.nrnReturnConfig.retCharSFFF}' == 'true')
 								$('#retCharSFFF').iCheck('check');
-
 							else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeShipFee')
 								$('#revShippingFeeType_revShipFeeShipFee')
 										.iCheck('check');
@@ -3719,7 +3601,6 @@ hgroup h2 {
 							else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeePCC')
 								$('#revShippingFeeType_revShipFeePCC').iCheck(
 										'check');
-
 							if ('${partner.nrnReturnConfig.retCharSFPCC}' == 'true') 
 								$('#retCharSFPCC').iCheck('check');
 							if ('${partner.nrnReturnConfig.RTOCharSFPCC}' == 'true')
@@ -3744,15 +3625,11 @@ hgroup h2 {
 										}
 									});
 							/*  $("#shippingfee-variable").click(function() {
-
 								    alert($('#pickListResult :selected').text());
-
 								   }); */
-
 							/*    $(".validateNumber").rules("add", { 
 										number : true
 									}); */
-
 							var val = {
 								01 : {
 									id : 01,
@@ -3911,15 +3788,11 @@ hgroup h2 {
 									text : 'Chennai'
 								}
 							};
-
 							var pick = $("#pickList").pickList({
 								data : val
 							});
-
 						});
-
 		var nameAvailability = true;
-
 		function checkOnBlur() {
 			var partner = document.getElementById("partnerName").value;
 			$.ajax({
@@ -3944,7 +3817,6 @@ hgroup h2 {
 			});
 		}
 		function submitForm() {
-
 			var validator = $("#addpartnerform")
 					.validate(
 							{
@@ -3975,7 +3847,6 @@ hgroup h2 {
 										number : true,
 										min : 1,
 										max : 31,
-
 									},
 									paycycleduration : {
 										required : function(element) {
@@ -3984,7 +3855,6 @@ hgroup h2 {
 										number : true,
 										min : 1,
 										max : 31,
-
 									},
 									paydaysfromstartday : {
 										required : function(element) {
@@ -3993,7 +3863,6 @@ hgroup h2 {
 										number : true,
 										min : 1,
 										max : 31,
-
 									},
 									monthlypaydate : {
 										required : function(element) {
@@ -4002,7 +3871,6 @@ hgroup h2 {
 										number : true,
 										min : 1,
 										max : 31,
-
 									}
 								},
 								errorElement : "span",
@@ -4012,16 +3880,13 @@ hgroup h2 {
 									maxRTOAcceptance : "RTO acceptance required between 1 and 100",
 									toggler : "Please select any Payment Cycle"
 								}
-
 							});
-
 			$(".commissionType").rules("add", {
 				required : function(element) {
 					var clickCheckbox = document.querySelector('.js-switch_2');
 					return clickCheckbox.checked;
 				}
 			});
-
 			$("#fixedCommissionPercent").rules("add", {
 				required : function(element) {
 					if (getRole('commissionType') == 'fixed')
@@ -4051,7 +3916,6 @@ hgroup h2 {
 				},
 				number : true
 			});
-
 			if (validator.form() && nameAvailability) {
 				$('form#addpartnerform').submit();
 			} else {

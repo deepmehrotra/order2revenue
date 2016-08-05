@@ -122,7 +122,7 @@ public class PartnerController {
 		log.info("$$$ savePartner Starts : OrderController $$$");
 		log.info(partnerBean.getFixedfeeList().size());
 		log.info(partnerBean.getshippingfeeVolumeFixedList().size());
-		log.info(partnerBean.getshippingfeeWeightFixedList().size());
+		log.info(partnerBean.getshippingFeeWeightFixedList().size());
 		log.info(partnerBean.getshippingfeeVolumeVariableList().size());
 		log.info(partnerBean.getshippingfeeWeightVariableList().size());
 
@@ -436,7 +436,7 @@ public class PartnerController {
 
 								}
 							} else if (entry.getKey().contains(
-									"shippingfeeWeightFixed")) {
+									"shippingFeeWeightFixed")) {
 								String param = entry.getKey().substring(0,
 										entry.getKey().lastIndexOf('-') + 1);
 								if (!shippingfeeWeightParams.contains(param)) {
@@ -448,7 +448,7 @@ public class PartnerController {
 												.setChargeAmount(Float.parseFloat(parameters
 														.get(param + "value")[0]));
 									nrnReturncharge
-											.setChargeName("shippingfeeWeightFixed");
+											.setChargeName("shippingFeeWeightFixed");
 									nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
 									if (!parameters.get(param + "range")[0]
@@ -828,13 +828,13 @@ public class PartnerController {
 								}
 
 							} else if (charge.getChargeName().contains(
-									"shippingfeeWeightFixed")) {
+									"shippingFeeWeightFixed")) {
 								ChargesBean chargeBean = new ChargesBean();
-								chargeBean.setChargeType("shippingfeeWeightFixed");
+								chargeBean.setChargeType("shippingFeeWeightFixed");
 								chargeBean.setCriteria(charge.getCriteria());
 								chargeBean.setRange(charge.getCriteriaRange());
 								chargeBean.setValue(charge.getChargeAmount());
-								partner.getshippingfeeWeightFixedList().add(
+								partner.getshippingFeeWeightFixedList().add(
 										chargeBean);
 							}
 
@@ -853,10 +853,10 @@ public class PartnerController {
 						Collections.sort(
 								partner.getshippingfeeVolumeFixedList(),
 								new SortByCriteria());
-					if (partner.getshippingfeeWeightFixedList() != null
-							&& partner.getshippingfeeWeightFixedList().size() != 0)
+					if (partner.getshippingFeeWeightFixedList() != null
+							&& partner.getshippingFeeWeightFixedList().size() != 0)
 						Collections.sort(
-								partner.getshippingfeeWeightFixedList(),
+								partner.getshippingFeeWeightFixedList(),
 								new SortByCriteria());
 					if (partner.getshippingfeeVolumeVariableList() != null
 							&& partner.getshippingfeeVolumeVariableList()
@@ -1440,13 +1440,13 @@ public class PartnerController {
 						}
 
 					} else if (charge.getChargeName().contains(
-							"shippingfeeWeightFixed")) {
+							"shippingFeeWeightFixed")) {
 						ChargesBean chargeBean = new ChargesBean();
-						chargeBean.setChargeType("shippingfeeWeightFixed");
+						chargeBean.setChargeType("shippingFeeWeightFixed");
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
 						chargeBean.setValue(charge.getChargeAmount());
-						pbean.getshippingfeeWeightFixedList().add(chargeBean);
+						pbean.getshippingFeeWeightFixedList().add(chargeBean);
 					}
 
 				} else {
@@ -1463,9 +1463,9 @@ public class PartnerController {
 					&& pbean.getshippingfeeVolumeFixedList().size() != 0)
 				Collections.sort(pbean.getshippingfeeVolumeFixedList(),
 						new SortByCriteria());
-			if (pbean.getshippingfeeWeightFixedList() != null
-					&& pbean.getshippingfeeWeightFixedList().size() != 0)
-				Collections.sort(pbean.getshippingfeeWeightFixedList(),
+			if (pbean.getshippingFeeWeightFixedList() != null
+					&& pbean.getshippingFeeWeightFixedList().size() != 0)
+				Collections.sort(pbean.getshippingFeeWeightFixedList(),
 						new SortByCriteria());
 			if (pbean.getshippingfeeVolumeVariableList() != null
 					&& pbean.getshippingfeeVolumeVariableList().size() != 0)
@@ -1637,13 +1637,13 @@ public class PartnerController {
 						}
 
 					} else if (charge.getChargeName().contains(
-							"shippingfeeWeightFixed")) {
+							"shippingFeeWeightFixed")) {
 						ChargesBean chargeBean = new ChargesBean();
-						chargeBean.setChargeType("shippingfeeWeightFixed");
+						chargeBean.setChargeType("shippingFeeWeightFixed");
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
 						chargeBean.setValue(charge.getChargeAmount());
-						pbean.getshippingfeeWeightFixedList().add(chargeBean);
+						pbean.getshippingFeeWeightFixedList().add(chargeBean);
 					}
 
 				} else {
@@ -1660,9 +1660,9 @@ public class PartnerController {
 					&& pbean.getshippingfeeVolumeFixedList().size() != 0)
 				Collections.sort(pbean.getshippingfeeVolumeFixedList(),
 						new SortByCriteria());
-			if (pbean.getshippingfeeWeightFixedList() != null
-					&& pbean.getshippingfeeWeightFixedList().size() != 0)
-				Collections.sort(pbean.getshippingfeeWeightFixedList(),
+			if (pbean.getshippingFeeWeightFixedList() != null
+					&& pbean.getshippingFeeWeightFixedList().size() != 0)
+				Collections.sort(pbean.getshippingFeeWeightFixedList(),
 						new SortByCriteria());
 			if (pbean.getshippingfeeVolumeVariableList() != null
 					&& pbean.getshippingfeeVolumeVariableList().size() != 0)
@@ -2245,7 +2245,7 @@ public class PartnerController {
 
 								}
 							} else if (entry.getKey().contains(
-									"shippingfeeWeightFixed")) {
+									"shippingFeeWeightFixed")) {
 								String param = entry.getKey().substring(0,
 										entry.getKey().lastIndexOf('-') + 1);
 								if (!shippingfeeWeightParams.contains(param)) {
@@ -2257,7 +2257,7 @@ public class PartnerController {
 												.setChargeAmount(Float.parseFloat(parameters
 														.get(param + "value")[0]));
 									nrnReturncharge
-											.setChargeName("shippingfeeWeightFixed");
+											.setChargeName("shippingFeeWeightFixed");
 									nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
 									if (!parameters.get(param + "range")[0]

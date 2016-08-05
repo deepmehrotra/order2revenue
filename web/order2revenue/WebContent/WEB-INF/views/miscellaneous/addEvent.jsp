@@ -847,9 +847,9 @@ span .#error {
 																					<tbody>
 																						<c:choose>
 																							<c:when
-																								test="${!empty partner.shippingfeeWeightFixedList}">
+																								test="${!empty partner.shippingFeeWeightFixedList}">
 																								<c:forEach
-																									items="${partner.shippingfeeWeightFixedList}"
+																									items="${partner.shippingFeeWeightFixedList}"
 																									var="shippingfee" varStatus="loop">
 																									<tr>
 																										<td><select class="form-control selected"
