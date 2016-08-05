@@ -87,6 +87,19 @@ hgroup h2 {
 .wrapper-content {
 	padding: 20px 10px 50px;
 }
+input:required,
+textarea:required {
+  
+}
+input:required + label {
+  color: #000;
+}
+label {
+  display: block;
+}
+input + label {
+  display: inline-block;
+}
 </style>
 
 </head>
@@ -123,6 +136,7 @@ hgroup h2 {
 														id="nrnReturnConfig.configId"
 														value="${partner.nrnReturnConfig.configId}" />
 												</c:if>
+												<div class="col-lg-12">
 												<div class="col-sm-6">
 													<div class="form-group">
 														<label class="col-sm-4 control-label">Partner Name</label>
@@ -151,25 +165,31 @@ hgroup h2 {
 														</div>
 													</div>
 												</div>
-												<div class="col-sm-6" style="margin-top: 6px;">
-													<div class="form-group">
-														<label class="col-sm-4 control-label">Upload Brand
-															Logo</label>
-
-														<div class="col-sm-8">
-															<label title="Upload image file" for="image"
-																class="btn btn-white btn-block"> <i
-																class="fa fa-upload"></i> <input type="file"
-																accept="image/*" name="image" id="image" class="hide">
-																Upload Logo
-															</label>
-															<c:if test="${partner.pcLogoUrl != null}">
-																<input type="hidden" name="pcLogoUrl" id="pcLogoUrl"
-																	value="${partner.pcLogoUrl}" />
-
-															</c:if>
+												</div>
+												<div class="col-lg-12">
+													<div class="col-sm-6" style="margin-top: 6px;">
+														<div class="form-group">
+															<label class="col-sm-4 control-label">Upload Brand
+																Logo</label>
+	
+															<div class="col-sm-8">
+																<label title="Upload image file" for="image"
+																	class="btn btn-white btn-block"> <i
+																	class="fa fa-upload"></i> <input type="file"
+																	accept="image/*" name="image" id="image" class="hide">
+																	Upload Logo
+																</label>
+																<c:if test="${partner.pcLogoUrl != null}">
+																	<input type="hidden" name="pcLogoUrl" id="pcLogoUrl"
+																		value="${partner.pcLogoUrl}" />
+	
+																</c:if>
+															</div>
+	
 														</div>
-
+													</div>
+													<div class="col-sm-6">
+													
 													</div>
 												</div>
 											</div>
@@ -188,27 +208,28 @@ hgroup h2 {
 											style="margin: -11px 0px 34px 19px;"></div>
 
 										<div class="add-company"
-											style="padding: 0px 0px 0px 39px; height: 330px; overflow-y: scroll; overflow-x: hidden;">
+											style="padding: 15px 0px 0px 39px; height: 330px; overflow-y: scroll; overflow-x: hidden;">
 											<div class="col-sm-4">
 												<div class="radio">
-													<label><form:radiobutton path="paymentType"
+													<form:radiobutton path="paymentType"
 															value="paymentcycle" id="paymentcycle" name="toggler"
-															class="paymentcycleClass required" />Subdivided Monthly </label>
+															class="paymentcycleClass required" />
+													<label>Subdivided Monthly </label>
 												</div>
 											</div>
 											<div class="col-sm-4">
 												<div class="radio">
-													<label><form:radiobutton path="paymentType"
+													<form:radiobutton path="paymentType"
 															value="datewisepay" id="datewisepay" name="toggler"
-															class="paymentcycleClass" />Payment From Delivery / Ship
-														Date </label>
+															class="paymentcycleClass" />
+												<label>Payment From Delivery / Ship	Date </label>
 												</div>
 											</div>
 											<div class="col-sm-4" style="padding-bottom: 18px;">
 												<div class="radio">
-													<label><form:radiobutton path="paymentType"
-															value="monthly" id="monthly" name="toggler" />Monthly
-														payment </label>
+													<form:radiobutton path="paymentType"
+															value="monthly" id="monthly" name="toggler" />
+													<label>Monthly payment </label>
 												</div>
 											</div>
 											<div class="col-sm-12 radio1" id="blk-paymentcycle">
@@ -220,7 +241,7 @@ hgroup h2 {
 															<form:input path="startcycleday"
 																value="${partner.startcycleday}"
 																placeholder="Duration of Payment from Start Date"
-																class="form-control number" />
+																class="form-control number" type="number"/>
 														</div>
 													</div>
 													<div class="mar-btm-20-oh">
@@ -230,7 +251,7 @@ hgroup h2 {
 															<form:input path="paycycleduration"
 																value="${partner.paycycleduration}"
 																placeholder="Duration of Payment from Start Date"
-																class="form-control number" />
+																class="form-control number" type="number"/>
 														</div>
 													</div>
 												</div>
@@ -241,7 +262,7 @@ hgroup h2 {
 															<form:input path="paydaysfromstartday"
 																value="${partner.paydaysfromstartday}"
 																placeholder="Duration of Payment from Start Date"
-																class="form-control number" />
+																class="form-control number" type="number"/>
 														</div>
 													</div>
 													<div class="mar-btm-20-oh">
