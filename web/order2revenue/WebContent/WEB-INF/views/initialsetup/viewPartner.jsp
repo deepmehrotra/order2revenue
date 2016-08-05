@@ -444,8 +444,8 @@ span .#error {
 																							</tr>
 																						</thead>
 																						<tbody>
-																							<c:if test="${!empty partner.shippingfeeWeightFixedList}">
-																								<c:forEach	items="${partner.shippingfeeWeightFixedList}" var="shippingfee" varStatus="loop">
+																							<c:if test="${!empty partner.shippingFeeWeightFixedList}">
+																								<c:forEach	items="${partner.shippingFeeWeightFixedList}" var="shippingfee" varStatus="loop">
 																									<tr>
 																										<td>${shippingfee.criteria}</td>
 																										<td><label class="labelfix">${shippingfee.range}</label></td>
