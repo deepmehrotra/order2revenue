@@ -93,7 +93,7 @@ public class EventsController {
 					else if (entry.getKey().contains("nr-")) {
 
 						if (entry.getKey().contains("fixedfee")
-								|| entry.getKey().contains("shippingFee")) {
+								|| entry.getKey().contains("shippingfee")) {
 
 							if (entry.getKey().contains("fixedfee")) {
 
@@ -121,7 +121,7 @@ public class EventsController {
 
 								}
 							} else if (entry.getKey().contains(
-									"shippingFeeVolume")
+									"shippingfeeVolume")
 									&& eventsBean.getNrnReturnConfig()
 											.getShippingFeeType() != null) {
 
@@ -129,7 +129,7 @@ public class EventsController {
 										.getShippingFeeType()
 										.equalsIgnoreCase("variable")
 										&& entry.getKey().contains(
-												"shippingFeeVolumeVariable")) {
+												"shippingfeeVolumeVariable")) {
 									String param = entry.getKey()
 											.substring(
 													0,
@@ -246,7 +246,7 @@ public class EventsController {
 
 									}
 								} else if (entry.getKey().contains(
-										"shippingFeeVolumeFixed")) {
+										"shippingfeeVolumeFixed")) {
 									String param = entry.getKey()
 											.substring(
 													0,
@@ -283,7 +283,7 @@ public class EventsController {
 									}
 								}
 							} else if (entry.getKey().contains(
-									"shippingFeeWeight")
+									"shippingfeeWeight")
 									&& eventsBean.getNrnReturnConfig()
 											.getShippingFeeType() != null) {
 
@@ -291,7 +291,7 @@ public class EventsController {
 										.getShippingFeeType()
 										.equalsIgnoreCase("variable")
 										&& entry.getKey().contains(
-												"shippingFeeWeightVariable")) {
+												"shippingfeeWeightVariable")) {
 									String param = entry.getKey()
 											.substring(
 													0,

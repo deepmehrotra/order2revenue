@@ -87,18 +87,21 @@ hgroup h2 {
 .wrapper-content {
 	padding: 20px 10px 50px;
 }
-input:required,
-textarea:required {
-  
+
+input:required, textarea:required {
+	
 }
-input:required + label {
-  color: #000;
+
+input:required+label {
+	color: #000;
 }
+
 label {
-  display: block;
+	display: block;
 }
-input + label {
-  display: inline-block;
+
+input+label {
+	display: inline-block;
 }
 </style>
 
@@ -137,41 +140,43 @@ input + label {
 														value="${partner.nrnReturnConfig.configId}" />
 												</c:if>
 												<div class="col-lg-12">
-												<div class="col-sm-6">
-													<div class="form-group">
-														<label class="col-sm-4 control-label">Partner Name</label>
-														<div class="col-sm-8">
-															<c:choose>
-																<c:when test="${partner.pcId != 0}">
-																	<form:input path="pcName" value="${partner.pcName}"
-																		class="form-control" id="partnerName" readonly="true" />
-																</c:when>
-																<c:otherwise>
-																	<form:input path="pcName" value="${partner.pcName}"
-																		class="form-control required" id="partnerName"
-																		onblur="checkOnBlur()" />
-																	<span id="partnerNameMessage" style="font-weight: bold;color=red"></span>
-																</c:otherwise>
-															</c:choose>
+													<div class="col-sm-6">
+														<div class="form-group">
+															<label class="col-sm-4 control-label">Partner
+																Name</label>
+															<div class="col-sm-8">
+																<c:choose>
+																	<c:when test="${partner.pcId != 0}">
+																		<form:input path="pcName" value="${partner.pcName}"
+																			class="form-control" id="partnerName" readonly="true" />
+																	</c:when>
+																	<c:otherwise>
+																		<form:input path="pcName" value="${partner.pcName}"
+																			class="form-control required" id="partnerName"
+																			onblur="checkOnBlur()" />
+																		<span id="partnerNameMessage"
+																			style="font-weight: bold;color=red"></span>
+																	</c:otherwise>
+																</c:choose>
+															</div>
 														</div>
 													</div>
-												</div>
-												<div class="col-sm-6">
-													<div class="form-group">
-														<label class="col-sm-4 control-label">Alias Name</label>
-														<div class="col-sm-8">
-															<form:input path="pcDesc" value="${partner.pcDesc}"
-																class="form-control" />
+													<div class="col-sm-6">
+														<div class="form-group">
+															<label class="col-sm-4 control-label">Alias Name</label>
+															<div class="col-sm-8">
+																<form:input path="pcDesc" value="${partner.pcDesc}"
+																	class="form-control" />
+															</div>
 														</div>
 													</div>
-												</div>
 												</div>
 												<div class="col-lg-12">
 													<div class="col-sm-6" style="margin-top: 6px;">
 														<div class="form-group">
-															<label class="col-sm-4 control-label">Upload Brand
-																Logo</label>
-	
+															<label class="col-sm-4 control-label">Upload
+																Brand Logo</label>
+
 															<div class="col-sm-8">
 																<label title="Upload image file" for="image"
 																	class="btn btn-white btn-block"> <i
@@ -182,15 +187,13 @@ input + label {
 																<c:if test="${partner.pcLogoUrl != null}">
 																	<input type="hidden" name="pcLogoUrl" id="pcLogoUrl"
 																		value="${partner.pcLogoUrl}" />
-	
+
 																</c:if>
 															</div>
-	
 														</div>
+														<div class="col-sm-6"></div>
 													</div>
-													<div class="col-sm-6">
-													
-													</div>
+													<div class="col-sm-6"></div>
 												</div>
 											</div>
 										</div>
@@ -211,24 +214,23 @@ input + label {
 											style="padding: 15px 0px 0px 39px; height: 330px; overflow-y: scroll; overflow-x: hidden;">
 											<div class="col-sm-4">
 												<div class="radio">
-													<form:radiobutton path="paymentType"
-															value="paymentcycle" id="paymentcycle" name="toggler"
-															class="paymentcycleClass required" />
+													<form:radiobutton path="paymentType" value="paymentcycle"
+														id="paymentcycle" name="toggler"
+														class="paymentcycleClass required" />
 													<label>Subdivided Monthly </label>
 												</div>
 											</div>
 											<div class="col-sm-4">
 												<div class="radio">
-													<form:radiobutton path="paymentType"
-															value="datewisepay" id="datewisepay" name="toggler"
-															class="paymentcycleClass" />
-												<label>Payment From Delivery / Ship	Date </label>
+													<form:radiobutton path="paymentType" value="datewisepay"
+														id="datewisepay" name="toggler" class="paymentcycleClass" />
+													<label>Payment From Delivery / Ship Date </label>
 												</div>
 											</div>
 											<div class="col-sm-4" style="padding-bottom: 18px;">
 												<div class="radio">
-													<form:radiobutton path="paymentType"
-															value="monthly" id="monthly" name="toggler" />
+													<form:radiobutton path="paymentType" value="monthly"
+														id="monthly" name="toggler" />
 													<label>Monthly payment </label>
 												</div>
 											</div>
@@ -241,7 +243,7 @@ input + label {
 															<form:input path="startcycleday"
 																value="${partner.startcycleday}"
 																placeholder="Duration of Payment from Start Date"
-																class="form-control number" type="number"/>
+																class="form-control number" type="number" />
 														</div>
 													</div>
 													<div class="mar-btm-20-oh">
@@ -251,7 +253,7 @@ input + label {
 															<form:input path="paycycleduration"
 																value="${partner.paycycleduration}"
 																placeholder="Duration of Payment from Start Date"
-																class="form-control number" type="number"/>
+																class="form-control number" type="number" />
 														</div>
 													</div>
 												</div>
@@ -262,7 +264,7 @@ input + label {
 															<form:input path="paydaysfromstartday"
 																value="${partner.paydaysfromstartday}"
 																placeholder="Duration of Payment from Start Date"
-																class="form-control number" type="number"/>
+																class="form-control number" type="number" />
 														</div>
 													</div>
 													<div class="mar-btm-20-oh">
@@ -462,8 +464,7 @@ input + label {
 																			<div class="col-sm-12">
 																				<div class="form-group">
 																					<div class="input-group m-b col-md-4">
-																						<input type="text"
-																							class="form-control number"
+																						<input type="text" class="form-control number"
 																							name="nr-fixedCommissionPercent"
 																							id="fixedCommissionPercent"
 																							value="${chargeMap.fixedCommissionPercent}">
@@ -481,8 +482,7 @@ input + label {
 																						<div class="form-group col-md-12">
 																							<label class="col-md-4 control-label">${cat.key}</label>
 																							<div class="input-group m-b col-md-4">
-																								<input type="text"
-																									class="form-control number "
+																								<input type="text" class="form-control number "
 																									name='nr-${cat.key}' value='${cat.value}'
 																									id='categoryWiseCommission'> <span
 																									class="input-group-addon">%</span>
@@ -496,8 +496,7 @@ input + label {
 																						<div class="form-group col-md-12">
 																							<label class="col-md-4 control-label">${category}</label>
 																							<div class="input-group m-b col-md-4">
-																								<input type="text"
-																									class="form-control number"
+																								<input type="text" class="form-control number"
 																									name='nr-${category}'>
 																								<!--   <span class="input-group-addon">%</span> -->
 																							</div>
@@ -544,15 +543,13 @@ input + label {
 																										</select>
 																									</div>
 																									<div class="col-md-3 content-rgt">
-																										<input type="text"
-																											class="form-control number"
+																										<input type="text" class="form-control number"
 																											name="nr-fixedfee${loop.index}-range"
 																											id="nr-fixedfee${loop.index}-range"
 																											value="${fixedfee.range}" />
 																									</div>
 																									<div class="col-md-3 content-rgt">
-																										<input type="text"
-																											class="form-control number"
+																										<input type="text" class="form-control number"
 																											name="nr-fixedfee${loop.index}-value"
 																											id="nr-fixedfee${loop.index}-value"
 																											value="${fixedfee.value}" />
@@ -583,14 +580,12 @@ input + label {
 																									</select>
 																								</div>
 																								<div class="col-md-3 content-rgt">
-																									<input type="text"
-																										class="form-control number"
-																										name="nr-fixedfee0-range"
-																										id="txt_name0" />
+																									<input type="text" class="form-control number"
+																										name="nr-fixedfee0-range" id="txt_name0" />
+
 																								</div>
 																								<div class="col-md-3 content-rgt">
-																									<input type="text"
-																										class="form-control number"
+																									<input type="text" class="form-control number"
 																										name="nr-fixedfee0-value"
 																										id="nr-fixedfee0-value" />
 																								</div>
@@ -659,7 +654,7 @@ input + label {
 																						<label>Greater than</label>
 																					</div>
 																					<div class="col-md-5" style="padding: 0px;">
-																						&nbsp;&nbsp;&nbsp;&nbsp;<label id="label1"></label>
+																						&nbsp;&nbsp;&nbsp;&nbsp;<label id="label1">${chargeMap.pccrange}</label>
 																					</div>
 
 																					<div class="col-md-5">
@@ -769,7 +764,7 @@ input + label {
 																									var="shippingfee" varStatus="loop">
 																									<tr>
 																										<td><select class="form-control selected"
-																											name="nr-shippingFeeVolumeVariable${loop.index}-criteria">
+																											name="nr-shippingfeeVolumeVariable${loop.index}-criteria">
 																												<c:choose>
 																													<c:when
 																														test="${shippingfee.criteria eq 'Upto'}">
@@ -785,7 +780,7 @@ input + label {
 																										<td><div class="form-group ">
 																												<div class=" content-rgt">
 																													<input type="text"
-																														name="nr-shippingFeeVolumeVariable${loop.index}-range"
+																														name="nr-shippingfeeVolumeVariable${loop.index}-range"
 																														class="form-control number"
 																														value="${shippingfee.range}">
 																												</div>
@@ -793,26 +788,26 @@ input + label {
 																										<td><div class="form-group ">
 																												<div class=" content-rgt">
 																													<input type="text"
-																														name="nr-shippingFeeVolumeVariable${loop.index}-localValue"
+																														name="nr-shippingfeeVolumeVariable${loop.index}-localValue"
 																														class="form-control number"
 																														value="${shippingfee.localValue}">
 																												</div>
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
-																													name="nr-shippingFeeVolumeVariable${loop.index}-zonalValue"
+																													name="nr-shippingfeeVolumeVariable${loop.index}-zonalValue"
 																													class="form-control number"
 																													value="${shippingfee.zonalValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
-																													name="nr-shippingFeeVolumeVariable${loop.index}-nationalValue"
+																													name="nr-shippingfeeVolumeVariable${loop.index}-nationalValue"
 																													class="form-control number"
 																													value="${shippingfee.nationalValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
-																													name="nr-shippingFeeVolumeVariable${loop.index}-metroValue"
+																													name="nr-shippingfeeVolumeVariable${loop.index}-metroValue"
 																													class="form-control number"
 																													value="${shippingfee.metroValue}">
 																											</div></td>
@@ -827,37 +822,37 @@ input + label {
 																							<c:otherwise>
 																								<tr>
 																									<td><select class="form-control selected"
-																										name="nr-shippingFeeVolumeVariable0-criteria">
+																										name="nr-shippingfeeVolumeVariable0-criteria">
 																											<option value="Upto">Upto</option>
 																											<option value="Additional">Additional</option>
 																									</select></td>
 																									<td><div class="form-group ">
 																											<div class=" content-rgt">
 																												<input type="text"
-																													name="nr-shippingFeeVolumeVariable0-range"
+																													name="nr-shippingfeeVolumeVariable0-range"
 																													class="form-control number">
 																											</div>
 																										</div></td>
 																									<td><div class="form-group ">
 																											<div class=" content-rgt">
 																												<input type="text"
-																													name="nr-shippingFeeVolumeVariable0-localValue"
+																													name="nr-shippingfeeVolumeVariable0-localValue"
 																													class="form-control number">
 																											</div>
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeVolumeVariable0-zonalValue"
+																												name="nr-shippingfeeVolumeVariable0-zonalValue"
 																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeVolumeVariable0-nationalValue"
+																												name="nr-shippingfeeVolumeVariable0-nationalValue"
 																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeVolumeVariable0-metroValue"
+																												name="nr-shippingfeeVolumeVariable0-metroValue"
 																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
@@ -894,7 +889,7 @@ input + label {
 																									var="shippingfee" varStatus="loop">
 																									<tr>
 																										<td><select class="form-control selected"
-																											name="nr-shippingFeeWeightVariable${loop.index}-criteria">
+																											name="nr-shippingfeeWeightVariable${loop.index}-criteria">
 																												<c:choose>
 																													<c:when
 																														test="${shippingfee.criteria eq 'Upto'}">
@@ -910,7 +905,7 @@ input + label {
 																										<td><div class="form-group ">
 																												<div class=" content-rgt">
 																													<input type="text"
-																														name="nr-shippingFeeWeightVariable${loop.index}-range"
+																														name="nr-shippingfeeWeightVariable${loop.index}-range"
 																														class="form-control number"
 																														value="${shippingfee.range}">
 																												</div>
@@ -918,26 +913,26 @@ input + label {
 																										<td><div class="form-group ">
 																												<div class=" content-rgt">
 																													<input type="text"
-																														name="nr-shippingFeeWeightVariable${loop.index}-localValue"
+																														name="nr-shippingfeeWeightVariable${loop.index}-localValue"
 																														class="form-control number"
 																														value="${shippingfee.localValue}">
 																												</div>
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
-																													name="nr-shippingFeeWeightVariable${loop.index}-zonalValue"
+																													name="nr-shippingfeeWeightVariable${loop.index}-zonalValue"
 																													class="form-control number"
 																													value="${shippingfee.zonalValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
-																													name="nr-shippingFeeWeightVariable${loop.index}-nationalValue"
+																													name="nr-shippingfeeWeightVariable${loop.index}-nationalValue"
 																													class="form-control"
 																													value="${shippingfee.nationalValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
-																													name="nr-shippingFeeWeightVariable${loop.index}-metroValue"
+																													name="nr-shippingfeeWeightVariable${loop.index}-metroValue"
 																													class="form-control number"
 																													value="${shippingfee.metroValue}">
 																											</div></td>
@@ -952,35 +947,35 @@ input + label {
 																							<c:otherwise>
 																								<tr>
 																									<td><select class="form-control selected"
-																										name="nr-shippingFeeWeightVariable0-criteria">
+																										name="nr-shippingfeeWeightVariable0-criteria">
 																											<option value="Upto">Upto</option>
 																											<option value="Additional">Additional</option>
 																									</select></td>
 																									<td><div class="form-group ">
 																											<div class=" content-rgt">
 																												<input type="text"
-																													name="nr-shippingFeeWeightVariable0-range"
+																													name="nr-shippingfeeWeightVariable0-range"
 																													class="form-control number">
 																											</div>
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeWeightVariable0-localValue"
+																												name="nr-shippingfeeWeightVariable0-localValue"
 																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeWeightVariable0-zonalValue"
+																												name="nr-shippingfeeWeightVariable0-zonalValue"
 																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeWeightVariable0-nationalValue"
+																												name="nr-shippingfeeWeightVariable0-nationalValue"
 																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
-																												name="nr-shippingFeeWeightVariable0-metroValue"
+																												name="nr-shippingfeeWeightVariable0-metroValue"
 																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
@@ -1021,7 +1016,7 @@ input + label {
 																									var="shippingfee" varStatus="loop">
 																									<tr>
 																										<td><select class="form-control selected"
-																											name="nr-shippingFeeWeightFixed${loop.index}-criteria">
+																											name="nr-shippingfeeWeightFixed${loop.index}-criteria">
 																												<c:choose>
 																													<c:when
 																														test="${shippingfee.criteria eq 'Upto'}">
@@ -1037,7 +1032,7 @@ input + label {
 																										<td><div class="form-group ">
 																												<div class=" content-rgt">
 																													<input type="text"
-																														name="nr-shippingFeeWeightFixed${loop.index}-range"
+																														name="nr-shippingfeeWeightFixed${loop.index}-range"
 																														class="form-control number"
 																														value="${shippingfee.range}">
 																												</div>
@@ -1045,7 +1040,7 @@ input + label {
 																										<td><div class="form-group ">
 																												<div class=" content-rgt">
 																													<input type="text"
-																														name="nr-shippingFeeWeightFixed${loop.index}-value"
+																														name="nr-shippingfeeWeightFixed${loop.index}-value"
 																														class="form-control number"
 																														value="${shippingfee.value}">
 																												</div>
@@ -1061,7 +1056,7 @@ input + label {
 																							<c:otherwise>
 																								<tr>
 																									<td><select class="form-control selected"
-																										name="nr-shippingFeeWeightFixed0-criteria">
+																										name="nr-shippingfeeWeightFixed0-criteria">
 																											<option value="Upto">Upto</option>
 																											<option value="Additional">Additional</option>
 																									</select></td>
@@ -1069,7 +1064,7 @@ input + label {
 																										<div class="form-group ">
 																											<div class=" content-rgt">
 																												<input type="text"
-																													name="nr-shippingFeeWeightFixed0-range"
+																													name="nr-shippingfeeWeightFixed0-range"
 																													class="form-control number">
 																											</div>
 																										</div>
@@ -1078,7 +1073,7 @@ input + label {
 																										<div class="form-group ">
 																											<div class=" content-rgt">
 																												<input type="text"
-																													name="nr-shippingFeeWeightFixed0-value"
+																													name="nr-shippingfeeWeightFixed0-value"
 																													class="form-control number">
 																											</div>
 																										</div>
@@ -1112,7 +1107,7 @@ input + label {
 																									var="shippingfee" varStatus="loop">
 																									<tr>
 																										<td><select class="form-control selected"
-																											name="nr-shippingFeeVolumeFixed${loop.index}-criteria">
+																											name="nr-shippingfeeVolumeFixed${loop.index}-criteria">
 																												<c:choose>
 																													<c:when
 																														test="${shippingfee.criteria eq 'Upto'}">
@@ -1128,7 +1123,7 @@ input + label {
 																										<td><div class="form-group ">
 																												<div class=" content-rgt">
 																													<input type="text"
-																														name="nr-shippingFeeVolumeFixed${loop.index}-range"
+																														name="nr-shippingfeeVolumeFixed${loop.index}-range"
 																														class="form-control number"
 																														value="${shippingfee.range}">
 																												</div>
@@ -1136,7 +1131,7 @@ input + label {
 																										<td><div class="form-group ">
 																												<div class=" content-rgt">
 																													<input type="text"
-																														name="nr-shippingFeeVolumeFixed${loop.index}-value"
+																														name="nr-shippingfeeVolumeFixed${loop.index}-value"
 																														class="form-control number"
 																														value="${shippingfee.value}">
 																												</div>
@@ -1152,18 +1147,18 @@ input + label {
 																							<c:otherwise>
 																								<tr>
 																									<td><select class="form-control selected"
-																										name="nr-shippingFeeVolumeFixed0-criteria">
+																										name="nr-shippingfeeVolumeFixed0-criteria">
 																											<option value="Upto">Upto</option>
 																											<option value="Additional">Additional</option>
 																									</select></td>
 																									<td><input type="text"
-																										name="nr-shippingFeeVolumeFixed0-range"
+																										name="nr-shippingfeeVolumeFixed0-range"
 																										class="form-control number"></td>
 																									<td>
 																										<div class="form-group ">
 																											<div class=" content-rgt">
 																												<input type="text"
-																													name="nr-shippingFeeVolumeFixed0-value"
+																													name="nr-shippingfeeVolumeFixed0-value"
 																													class="form-control number">
 																											</div>
 																										</div>
@@ -1193,8 +1188,7 @@ input + label {
 																		<div class="form-group col-md-12">
 																			<div class="col-md-4 input-group m-b">
 																				<input type="text" placeholder=""
-																					class="form-control number"
-																					name="nr-serviceTax"
+																					class="form-control number" name="nr-serviceTax"
 																					value="${chargeMap.serviceTax}" id="serviceTax" />
 																				<span class="input-group-addon">%</span>
 																			</div>
@@ -1272,8 +1266,7 @@ input + label {
 																						<label>Enter Fix Charges</label>
 																					</div>
 																					<div class="col-md-3 content-rgt">
-																						<input type="text"
-																							class="form-control number"
+																						<input type="text" class="form-control number"
 																							name="nr-retCharSFFixedAmt"
 																							value="${chargeMap.retCharSFFixedAmt}">
 																					</div>
@@ -1403,8 +1396,7 @@ input + label {
 																						<label>Enter Fix Charges</label>
 																					</div>
 																					<div class="col-md-3 content-rgt">
-																						<input type="text"
-																							class="form-control number"
+																						<input type="text" class="form-control number"
 																							name="nr-retCharBRFixedAmt"
 																							value="${chargeMap.retCharBRFixedAmt}">
 																					</div>
@@ -1523,8 +1515,7 @@ input + label {
 																						<label>Enter Fix Charges</label>
 																					</div>
 																					<div class="col-md-3 content-rgt">
-																						<input type="text"
-																							class="form-control number"
+																						<input type="text" class="form-control number"
 																							name="nr-RTOCharSFFixedAmt"
 																							value="${chargeMap.RTOCharSFFixedAmt}">
 																					</div>
@@ -1652,8 +1643,7 @@ input + label {
 																						<label>Enter Fix Charges</label>
 																					</div>
 																					<div class="col-md-3 content-rgt">
-																						<input type="text"
-																							class="form-control number"
+																						<input type="text" class="form-control number"
 																							name="nr-RTOCharBRFixedAmt"
 																							value="${chargeMap.RTOCharBRFixedAmt}">
 																					</div>
@@ -1774,8 +1764,7 @@ input + label {
 																						<label>Enter Fix Charges</label>
 																					</div>
 																					<div class="col-md-3 content-rgt">
-																						<input type="text"
-																							class="form-control number"
+																						<input type="text" class="form-control number"
 																							name="nr-repCharSFFixedAmt"
 																							value="${chargeMap.repCharSFFixedAmt}">
 																					</div>
@@ -1903,8 +1892,7 @@ input + label {
 																							<label>Enter Fix Charges</label>
 																						</div>
 																						<div class="col-md-3 content-rgt">
-																							<input type="text"
-																								class="form-control number"
+																							<input type="text" class="form-control number"
 																								name="nr-repCharBRFixedAmt"
 																								value="${chargeMap.repCharBRFixedAmt}">
 																						</div>
@@ -2024,8 +2012,7 @@ input + label {
 																						<label>Enter Fix Charges</label>
 																					</div>
 																					<div class="col-md-3 content-rgt">
-																						<input type="text"
-																							class="form-control number"
+																						<input type="text" class="form-control number"
 																							name="nr-PDCharSFFixedAmt"
 																							value="${chargeMap.PDCharSFFixedAmt}">
 																					</div>
@@ -2153,8 +2140,7 @@ input + label {
 																						<label>Enter Fix Charges</label>
 																					</div>
 																					<div class="col-md-3 content-rgt">
-																						<input type="text"
-																							class="form-control number"
+																						<input type="text" class="form-control number"
 																							name="nr-PDCharBRFixedAmt"
 																							value="${chargeMap.PDCharBRFixedAmt}">
 																					</div>
@@ -2278,8 +2264,7 @@ input + label {
 																						<label>Enter Fix Charges</label>
 																					</div>
 																					<div class="col-md-3 content-rgt">
-																						<input type="text"
-																							class="form-control number"
+																						<input type="text" class="form-control number"
 																							name="nr-canCharSFBFRTDFixedAmt"
 																							value="${chargeMap.canCharSFBFRTDFixedAmt}">
 																					</div>
@@ -2412,8 +2397,7 @@ input + label {
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text"
-																						class="form-control number"
+																					<input type="text" class="form-control number"
 																						name="nr-canCharSFFixedAmt"
 																						value="${chargeMap.canCharSFFixedAmt}">
 																				</div>
@@ -2542,8 +2526,7 @@ input + label {
 																					<label>Enter Fix Charges</label>
 																				</div>
 																				<div class="col-md-3 content-rgt">
-																					<input type="text"
-																						class="form-control number"
+																					<input type="text" class="form-control number"
 																						name="nr-canCharBRFixedAmt"
 																						value="${chargeMap.canCharSFPercentPCC}">
 																				</div>
@@ -2641,8 +2624,7 @@ input + label {
 																		<div class="col-sm-6">
 																			<div class="input-group m-b">
 																				<input type="text" placeholder=""
-																					class="form-control number"
-																					name="nr-revShipFeePCC"
+																					class="form-control number" name="nr-revShipFeePCC"
 																					value="${chargeMap.revShipFeePCC}"> <span
 																					class="input-group-addon">%</span>
 																			</div>
@@ -2712,8 +2694,7 @@ input + label {
 																		<div class="col-sm-6">
 																			<div class="input-group m-b" style="width: 96%;">
 																				<input type="text" placeholder=""
-																					class="form-control number"
-																					name="nr-revShipFeeFF"
+																					class="form-control number" name="nr-revShipFeeFF"
 																					value="${chargeMap.revShipFeeFF}">
 																			</div>
 																		</div>
@@ -2920,8 +2901,9 @@ input + label {
 	<script src="/O2R/seller/js/plugins/iCheck/icheck.min.js"></script>
 	<!-- Switchery -->
 	<script src="/O2R/seller/js/plugins/switchery/switchery.js"></script>
-	<script src="/O2R/seller/js/jquery.steps.min.js"></script>
+
 	<script src="/O2R/seller/js/plugins/validate/jquery.validate.min.js"></script>
+	<script src="/O2R/seller/js/jquery.steps.min.js"></script>
 	<script src="/O2R/seller/js/pickList.js"></script>
 
 	<script type="text/javascript">
@@ -2957,7 +2939,6 @@ input + label {
 					+ "<option>Greater Than</option>"
 					+ "</select>"
 					+
-
 					"</div>"
 					+ "<div class='col-md-3 content-rgt'>"
 					+ "<input type='text' name='nr-fixedfee"+index+"-range' placeholder='' class='form-control' id='txt_name"+index+"' multiple>"
@@ -2974,78 +2955,61 @@ input + label {
 			var myTable = document.getElementById("myTable");
 			var currentIndex = myTable.rows.length;
 			var currentRow = myTable.insertRow(-1);
-
 			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "nr-shippingFeeVolumeVariable"
+			linksBox.setAttribute("name", "nr-shippingfeeVolumeVariable"
 					+ currentIndex + "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
 			linksBox.setAttribute("path", "");
-
 			linksBox.setAttribute("type", "button");
 			linksBox.setAttribute("class", "form-control");
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Upto");
 			theOption.setAttribute("value", "Upto");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Additional");
 			theOption.setAttribute("value", "Additional");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "nr-shippingFeeVolumeVariable"
+			linksBox1.setAttribute("name", "nr-shippingfeeVolumeVariable"
 					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control validateNumber");
-
 			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "nr-shippingFeeVolumeVariable"
+			linksBox2.setAttribute("name", "nr-shippingfeeVolumeVariable"
 					+ currentIndex + "-localValue");
 			linksBox2.setAttribute("class", "form-control validateNumber");
-
 			var linksBox3 = document.createElement("input");
-			linksBox3.setAttribute("name", "nr-shippingFeeVolumeVariable"
+			linksBox3.setAttribute("name", "nr-shippingfeeVolumeVariable"
 					+ currentIndex + "-zonalValue");
 			linksBox3.setAttribute("class", "form-control validateNumber");
-
 			var keywordsBox = document.createElement("input");
-			keywordsBox.setAttribute("name", "nr-shippingFeeVolumeVariable"
+			keywordsBox.setAttribute("name", "nr-shippingfeeVolumeVariable"
 					+ currentIndex + "-nationalValue");
 			keywordsBox.setAttribute("class", "form-control validateNumber");
-
 			var violationsBox = document.createElement("input");
-			violationsBox.setAttribute("name", "nr-shippingFeeVolumeVariable"
+			violationsBox.setAttribute("name", "nr-shippingfeeVolumeVariable"
 					+ currentIndex + "-metroValue");
 			violationsBox.setAttribute("class", "form-control validateNumber");
-
 			var addRowBox = document.createElement("input");
 			addRowBox.setAttribute("type", "button");
 			addRowBox.setAttribute("value", "+");
 			addRowBox.setAttribute("onclick", "addField();");
 			addRowBox.setAttribute("class", "button btn btn-primary");
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox1);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox2);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox3);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(keywordsBox);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(violationsBox);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(addRowBox);
 		}
@@ -3053,77 +3017,60 @@ input + label {
 			var myTable = document.getElementById("myTable2");
 			var currentIndex = myTable.rows.length;
 			var currentRow = myTable.insertRow(-1);
-
 			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "nr-shippingFeeWeightVariable"
+			linksBox.setAttribute("name", "nr-shippingfeeWeightVariable"
 					+ currentIndex + "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
-
 			linksBox.setAttribute("type", "button");
 			linksBox.setAttribute("class", "form-control");
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Upto");
 			theOption.setAttribute("value", "Upto");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Additional");
 			theOption.setAttribute("value", "Additional");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "nr-shippingFeeWeightVariable"
+			linksBox1.setAttribute("name", "nr-shippingfeeWeightVariable"
 					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control validateNumber");
-
 			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "nr-shippingFeeWeightVariable"
+			linksBox2.setAttribute("name", "nr-shippingfeeWeightVariable"
 					+ currentIndex + "-localValue");
 			linksBox2.setAttribute("class", "form-control validateNumber");
-
 			var linksBox3 = document.createElement("input");
-			linksBox3.setAttribute("name", "nr-shippingFeeWeightVariable"
+			linksBox3.setAttribute("name", "nr-shippingfeeWeightVariable"
 					+ currentIndex + "-zonalValue");
 			linksBox3.setAttribute("class", "form-control");
-
 			var keywordsBox = document.createElement("input");
-			keywordsBox.setAttribute("name", "nr-shippingFeeWeightVariable"
+			keywordsBox.setAttribute("name", "nr-shippingfeeWeightVariable"
 					+ currentIndex + "-nationalValue");
 			keywordsBox.setAttribute("class", "form-control validateNumber");
-
 			var violationsBox = document.createElement("input");
-			violationsBox.setAttribute("name", "nr-shippingFeeWeightVariable"
+			violationsBox.setAttribute("name", "nr-shippingfeeWeightVariable"
 					+ currentIndex + "-metroValue");
 			violationsBox.setAttribute("class", "form-control validateNumber");
-
 			var addRowBox = document.createElement("input");
 			addRowBox.setAttribute("type", "button");
 			addRowBox.setAttribute("value", "+");
 			addRowBox.setAttribute("onclick", "addField2();");
 			addRowBox.setAttribute("class", "button btn btn-primary");
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox1);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox2);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox3);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(keywordsBox);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(violationsBox);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(addRowBox);
 		}
@@ -3131,53 +3078,42 @@ input + label {
 			var myTable = document.getElementById("myTable3");
 			var currentIndex = myTable.rows.length;
 			var currentRow = myTable.insertRow(-1);
-
 			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "nr-shippingFeeWeightFixed"
+			linksBox.setAttribute("name", "nr-shippingfeeWeightFixed"
 					+ currentIndex + "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
-
 			linksBox.setAttribute("type", "button");
 			linksBox.setAttribute("class", "form-control");
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Upto");
 			theOption.setAttribute("value", "Upto");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Additional");
 			theOption.setAttribute("value", "Additional");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "nr-shippingFeeWeightFixed"
+			linksBox1.setAttribute("name", "nr-shippingfeeWeightFixed"
 					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control validateNumber");
-
 			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "nr-shippingFeeWeightFixed"
+			linksBox2.setAttribute("name", "nr-shippingfeeWeightFixed"
 					+ currentIndex + "-value");
 			linksBox2.setAttribute("class", "form-control validateNumber");
-
 			var addRowBox = document.createElement("input");
 			addRowBox.setAttribute("type", "button");
 			addRowBox.setAttribute("value", "+");
 			addRowBox.setAttribute("onclick", "addField3();");
 			addRowBox.setAttribute("class", "button btn btn-primary");
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox1);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox2);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(addRowBox);
 		}
@@ -3185,52 +3121,42 @@ input + label {
 			var myTable = document.getElementById("myTable4");
 			var currentIndex = myTable.rows.length;
 			var currentRow = myTable.insertRow(-1);
-
 			var linksBox = document.createElement("select");
-			linksBox.setAttribute("name", "nr-shippingFeeVolumeFixed"
+			linksBox.setAttribute("name", "nr-shippingfeeVolumeFixed"
 					+ currentIndex + "-criteria");
 			linksBox.setAttribute("option", "");
 			linksBox.setAttribute("value", "");
 			linksBox.setAttribute("type", "button");
 			linksBox.setAttribute("class", "form-control");
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Upto");
 			theOption.setAttribute("value", "Upto");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			theOption = document.createElement("OPTION");
 			theText = document.createTextNode("Additional");
 			theOption.setAttribute("value", "Additional");
 			theOption.appendChild(theText);
 			linksBox.appendChild(theOption);
-
 			var linksBox1 = document.createElement("input");
-			linksBox1.setAttribute("name", "nr-shippingFeeVolumeFixed"
+			linksBox1.setAttribute("name", "nr-shippingfeeVolumeFixed"
 					+ currentIndex + "-range");
 			linksBox1.setAttribute("class", "form-control validateNumber");
-
 			var linksBox2 = document.createElement("input");
-			linksBox2.setAttribute("name", "nr-shippingFeeVolumeFixed"
+			linksBox2.setAttribute("name", "nr-shippingfeeVolumeFixed"
 					+ currentIndex + "-value");
 			linksBox2.setAttribute("class", "form-control validateNumber");
-
 			var addRowBox = document.createElement("input");
 			addRowBox.setAttribute("type", "button");
 			addRowBox.setAttribute("value", "+");
 			addRowBox.setAttribute("onclick", "addField4();");
 			addRowBox.setAttribute("class", "button btn btn-primary");
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox1);
-
 			var currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(linksBox2);
-
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(addRowBox);
 		}
@@ -3240,7 +3166,6 @@ input + label {
 			var v = $("#txt_name" + x + "").val();
 			$("#txt_name" + (x + 1) + "").val(v);
 			document.getElementById("myBtn").disabled = true;
-
 		}
 		function upto() {
 			document.getElementById("myBtn").disabled = false;
@@ -3262,16 +3187,13 @@ input + label {
 													if (currentIndex > newIndex) {
 														return true;
 													}
-
 													// Forbid suppressing "Warning" step if the user is to young
 													if (newIndex === 3
 															&& Number($("#age")
 																	.val()) < 18) {
 														return false;
 													}
-
 													var form = $(this);
-
 													// Clean up if user went backward before
 													if (currentIndex < newIndex) {
 														// To remove error styles
@@ -3288,10 +3210,8 @@ input + label {
 																.removeClass(
 																		"error");
 													}
-
 													// Disable validation on fields that are disabled or hidden.
 													form.validate().settings.ignore = ":disabled,:hidden";
-
 													// Start validation; Prevent going forward if false
 													return form.valid();
 												},
@@ -3304,7 +3224,6 @@ input + label {
 																	.val()) >= 18) {
 														$(this).steps("next");
 													}
-
 													// Suppress (skip) "Warning" step if the user is old enough and wants to the previous step.
 													if (currentIndex === 3
 															&& priorIndex === 3) {
@@ -3315,11 +3234,9 @@ input + label {
 												onFinishing : function(event,
 														currentIndex) {
 													var form = $(this);
-
 													// Disable validation on fields that are disabled.
 													// At this point it's recommended to do an overall check (mean ignoring only disabled fields)
 													form.validate().settings.ignore = ":disabled";
-
 													// Start validation; Prevent form submission if false
 													return form.valid();
 												},
@@ -3342,11 +3259,9 @@ input + label {
 													}
 												}
 											});
-
 							$("#text1").keyup(function() {
 								$("#label1").text($(this).val()); //OR $("#label1").html($(this).val());
 							});
-
 							$('.i-checks').iCheck({
 								checkboxClass : 'icheckbox_square-green',
 								radioClass : 'iradio_square-green',
@@ -3355,28 +3270,22 @@ input + label {
 							var switchery = new Switchery(elem, {
 								color : '#1AB394'
 							});
-
 							var elem_2 = document.querySelector('.js-switch_2');
 							var switchery_2 = new Switchery(elem_2, {
 								color : '#ED5565'
 							});
-
 							var elem_3 = document.querySelector('.js-switch_3');
 							var switchery_3 = new Switchery(elem_3, {
 								color : '#1AB394'
 							});
-
 							$("#nr-switch").change(function() {
 								if (this.checked) {
-
 									$('.radio5').hide();
 									$("#nr-switch-sec").slideDown();
 								} else {
 									$("#nr-switch-sec").slideUp();
-
 								}
 							});
-
 							$(".commissionType").click(function() {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
@@ -3433,7 +3342,6 @@ input + label {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
 							});
-
 							$(".pccValue").click(function() {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
@@ -3442,7 +3350,6 @@ input + label {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
 							});
-
 							$("[name=paymentType]").click(function() {
 								$('.radio1').hide();
 								$("#blk-" + $(this).val()).slideDown();
@@ -3462,7 +3369,6 @@ input + label {
 								calendarWeeks : true,
 								autoclose : true
 							});
-
 							if ('${partner.paymentType}' == 'paymentcycle')
 								$("#paymentcycle").prop("checked", true)
 										.trigger("click");
@@ -3478,30 +3384,25 @@ input + label {
 							} else if ('${partner.paymentType}' == 'monthly')
 								$('#monthly').prop("checked", true).trigger(
 										"click");
-
 							if ('${partner.tdsApplicable}' == 'true')
 								$("#tdsApplicable").prop("checked", true);
-
 							$("#submitButton").click(function() {
 								submitForm();
 							});
 							if ('${partner.nrnReturnConfig.nrCalculator}' == 'true')
 								$('input.js-switch_2').click();
-
 							if ('${partner.nrnReturnConfig.commissionType}' == 'fixed')
 								$("#commisionType-fixed").prop("checked", true)
 										.trigger("click");
 							else if ('${partner.nrnReturnConfig.commissionType}' == 'categoryWise')
 								$("#commisionType-categoryWise").prop(
 										"checked", true).trigger("click");
-
 							if ('${partner.nrnReturnConfig.whicheverGreaterPCC}' == 'true')
 								$("#pccHigher").prop("checked", true).trigger(
 										"click");
 							else if ('${partner.nrnReturnConfig.whicheverGreaterPCC}' == 'false')
 								$("#pccValue").prop("checked", true).trigger(
 										"click");
-
 							if ('${partner.nrnReturnConfig.shippingFeeType}' == 'fixed')
 								$("#shippingfee-fixed").prop("checked", true)
 										.trigger("click");
@@ -3517,7 +3418,6 @@ input + label {
 							} else if ('${partner.nrnReturnConfig.retCharSFType}' == 'noCharges')
 								$("#retrun-sf-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.retCharBRType}' == 'fixed')
 								$("#retrun-br-fix").prop("checked", true)
 										.trigger("click");
@@ -3527,7 +3427,6 @@ input + label {
 							else if ('${partner.nrnReturnConfig.retCharBRType}' == 'noCharges')
 								$("#retrun-br-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.RTOCharSFType}' == 'fixed')
 								$("#RTO-sf-fix").prop("checked", true).trigger(
 										"click");
@@ -3537,7 +3436,6 @@ input + label {
 							else if ('${partner.nrnReturnConfig.RTOCharSFType}' == 'noCharges')
 								$("#RTO-sf-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.RTOCharBRType}' == 'fixed')
 								$("#RTO-br-fix").prop("checked", true).trigger(
 										"click");
@@ -3547,7 +3445,6 @@ input + label {
 							else if ('${partner.nrnReturnConfig.RTOCharBRType}' == 'noCharges')
 								$("#RTO-br-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.repCharSFType}' == 'fixed')
 								$("#rep-sf-fix").prop("checked", true).trigger(
 										"click");
@@ -3557,7 +3454,6 @@ input + label {
 							else if ('${partner.nrnReturnConfig.repCharSFType}' == 'noCharges')
 								$("#rep-sf-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.repCharBRType}' == 'fixed')
 								$("#rep-br-fix").prop("checked", true).trigger(
 										"click");
@@ -3567,7 +3463,6 @@ input + label {
 							else if ('${partner.nrnReturnConfig.repCharBRType}' == 'noCharges')
 								$("#rep-br-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.PDCharSFType}' == 'fixed')
 								$("#PD-sf-fix").prop("checked", true).trigger(
 										"click");
@@ -3577,7 +3472,6 @@ input + label {
 							else if ('${partner.nrnReturnConfig.PDCharSFType}' == 'noCharges')
 								$("#PD-sf-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.PDCharBRType}' == 'fixed')
 								$("#PD-br-fix").prop("checked", true).trigger(
 										"click");
@@ -3587,7 +3481,6 @@ input + label {
 							else if ('${partner.nrnReturnConfig.PDCharBRType}' == 'noCharges')
 								$("#PD-br-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.canCharSFBFRTDType}' == 'fixed')
 								$("#can-sfbfrtd-fix").prop("checked", true)
 										.trigger("click");
@@ -3597,7 +3490,6 @@ input + label {
 							else if ('${partner.nrnReturnConfig.canCharSFBFRTDType}' == 'noCharges')
 								$("#can-sfbfrtd-nocharges").prop("checked",
 										true).trigger("click");
-
 							if ('${partner.nrnReturnConfig.canCharSFARTDType}' == 'fixed')
 								$("#can-sfartd-fix").prop("checked", true)
 										.trigger("click");
@@ -3607,7 +3499,6 @@ input + label {
 							else if ('${partner.nrnReturnConfig.canCharSFARTDType}' == 'noCharges')
 								$("#can-sfartd-nocharges")
 										.prop("checked", true).trigger("click");
-
 							if ('${partner.nrnReturnConfig.canCharBRType}' == 'fixed')
 								$("#can-br-fix").prop("checked", true).trigger(
 										"click");
@@ -3617,7 +3508,6 @@ input + label {
 							else if ('${partner.nrnReturnConfig.canCharBRType}' == 'noCharges')
 								$("#can-br-nocharges").prop("checked", true)
 										.trigger("click");
-
 							if ('${partner.nrnReturnConfig.whicheverGreaterPCC}' == 'true') {
 								$('#whicheverGreaterPCC').iCheck('check');
 							}
@@ -3627,106 +3517,73 @@ input + label {
 								$('#retCharSFShipFee').iCheck('check');
 							if ('${partner.nrnReturnConfig.retCharBRFF}' == 'true')
 								$('#retCharBRFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.retCharBRShipFee}' == 'true')
 								$('#retCharBRShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.RTOCharSFRevShipFee}' == 'true')
 								$('#RTOCharSFRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.RTOCharSFFF}' == 'true')
 								$('#RTOCharSFFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.RTOCharSFShipFee}' == 'true')
 								$('#RTOCharSFShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.RTOCharSFRevShipFee}' == 'true')
 								$('#RTOCharSFRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.RTOCharBRFF}' == 'true')
 								$('#RTOCharBRFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.RTOCharBRShipFee}' == 'true')
 								$('#RTOCharBRShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.repCharSFRevShipFee}' == 'true')
 								$('#repCharSFRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.repCharSFFF}' == 'true')
 								$('#repCharSFFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.repCharSFShipFee}' == 'true')
 								$('#repCharSFShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.repCharSFRevShipFee}' == 'true')
 								$('#repCharSFRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.repCharBRFF}' == 'true')
 								$('#repCharBRFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.repCharBRShipFee}' == 'true')
 								$('#repCharBRShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.PDCharSFRevShipFee}' == 'true')
 								$('#PDCharSFRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.PDCharSFFF}' == 'true')
 								$('#PDCharSFFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.PDCharSFShipFee}' == 'true')
 								$('#PDCharSFShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.PDCharSFRevShipFee}' == 'true')
 								$('#PDCharSFRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.PDCharBRFF}' == 'true')
 								$('#PDCharBRFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.PDCharBRShipFee}' == 'true')
 								$('#PDCharBRShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFBRTDRevShipFee}' == 'true')
 								$('#canCharSFBRTDRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFBRTDFF}' == 'true')
 								$('#canCharSFBRTDFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFBRTDShipFee}' == 'true')
 								$('#canCharSFBRTDShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFBRTDRevShipFee}' == 'true')
 								$('#canCharSFBRTDRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFARTDRevShipFee}' == 'true')
 								$('#canCharSFARTDRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFFF}' == 'true')
 								$('#canCharSFFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFShipFee}' == 'true')
 								$('#canCharSFShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharSFARTDRevShipFee}' == 'true')
 								$('#canCharSFARTDRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharBRFF}' == 'true')
 								$('#canCharBRFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharBRFF}' == 'true')
 								$('#canCharBRFF').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharBRShipFee}' == 'true')
 								$('#canCharBRShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.canCharBRRevShipFee}' == 'true')
 								$('#canCharBRRevShipFee').iCheck('check');
-
 							if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeVar')
 								$('#revShippingFeeType_revShipFeeVar').iCheck(
 										'check');
 							if ('${partner.nrnReturnConfig.retCharSFFF}' == 'true')
 								$('#retCharSFFF').iCheck('check');
-
 							else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeShipFee')
 								$('#revShippingFeeType_revShipFeeShipFee')
 										.iCheck('check');
@@ -3739,7 +3596,6 @@ input + label {
 							else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeePCC')
 								$('#revShippingFeeType_revShipFeePCC').iCheck(
 										'check');
-
 							if ('${partner.nrnReturnConfig.retCharSFPCC}' == 'true') 
 								$('#retCharSFPCC').iCheck('check');
 							if ('${partner.nrnReturnConfig.RTOCharSFPCC}' == 'true')
@@ -3764,15 +3620,11 @@ input + label {
 										}
 									});
 							/*  $("#shippingfee-variable").click(function() {
-
 								    alert($('#pickListResult :selected').text());
-
 								   }); */
-
 							/*    $(".validateNumber").rules("add", { 
 										number : true
 									}); */
-
 							var val = {
 								01 : {
 									id : 01,
@@ -3931,15 +3783,11 @@ input + label {
 									text : 'Chennai'
 								}
 							};
-
 							var pick = $("#pickList").pickList({
 								data : val
 							});
-
 						});
-
 		var nameAvailability = true;
-
 		function checkOnBlur() {
 			var partner = document.getElementById("partnerName").value;
 			$.ajax({
@@ -3964,7 +3812,6 @@ input + label {
 			});
 		}
 		function submitForm() {
-
 			var validator = $("#addpartnerform")
 					.validate(
 							{
@@ -3995,7 +3842,6 @@ input + label {
 										number : true,
 										min : 1,
 										max : 31,
-
 									},
 									paycycleduration : {
 										required : function(element) {
@@ -4004,7 +3850,6 @@ input + label {
 										number : true,
 										min : 1,
 										max : 31,
-
 									},
 									paydaysfromstartday : {
 										required : function(element) {
@@ -4013,7 +3858,6 @@ input + label {
 										number : true,
 										min : 1,
 										max : 31,
-
 									},
 									monthlypaydate : {
 										required : function(element) {
@@ -4022,7 +3866,6 @@ input + label {
 										number : true,
 										min : 1,
 										max : 31,
-
 									}
 								},
 								errorElement : "span",
@@ -4032,16 +3875,13 @@ input + label {
 									maxRTOAcceptance : "RTO acceptance required between 1 and 100",
 									toggler : "Please select any Payment Cycle"
 								}
-
 							});
-
 			$(".commissionType").rules("add", {
 				required : function(element) {
 					var clickCheckbox = document.querySelector('.js-switch_2');
 					return clickCheckbox.checked;
 				}
 			});
-
 			$("#fixedCommissionPercent").rules("add", {
 				required : function(element) {
 					if (getRole('commissionType') == 'fixed')
@@ -4071,7 +3911,6 @@ input + label {
 				},
 				number : true
 			});
-
 			if (validator.form() && nameAvailability) {
 				$('form#addpartnerform').submit();
 			} else {

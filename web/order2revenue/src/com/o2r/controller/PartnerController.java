@@ -190,7 +190,7 @@ public class PartnerController {
 										.add(nrnReturncharge);
 
 							}
-						} else if (entry.getKey().contains("shippingFeeVolume")
+						} else if (entry.getKey().contains("shippingfeeVolume")
 								&& partnerBean.getNrnReturnConfig()
 										.getShippingFeeType() != null) {
 
@@ -198,7 +198,7 @@ public class PartnerController {
 									.getShippingFeeType()
 									.equalsIgnoreCase("variable")
 									&& entry.getKey().contains(
-											"shippingFeeVolumeVariable")) {
+											"shippingfeeVolumeVariable")) {
 								String param = entry.getKey().substring(0,
 										entry.getKey().lastIndexOf('-') + 1);
 								if (!shippingfeeVolumeParams.contains(param)) {
@@ -296,7 +296,7 @@ public class PartnerController {
 
 								}
 							} else if (entry.getKey().contains(
-									"shippingFeeVolumeFixed")) {
+									"shippingfeeVolumeFixed")) {
 								String param = entry.getKey().substring(0,
 										entry.getKey().lastIndexOf('-') + 1);
 								if (!shippingfeeVolumeParams.contains(param)) {
@@ -323,7 +323,7 @@ public class PartnerController {
 											.getCharges().add(nrnReturncharge);
 								}
 							}
-						} else if (entry.getKey().contains("shippingFeeWeight")
+						} else if (entry.getKey().contains("shippingfeeWeight")
 								&& partnerBean.getNrnReturnConfig()
 										.getShippingFeeType() != null) {
 
@@ -331,7 +331,7 @@ public class PartnerController {
 									.getShippingFeeType()
 									.equalsIgnoreCase("variable")
 									&& entry.getKey().contains(
-											"shippingFeeWeightVariable")) {
+											"shippingfeeWeightVariable")) {
 								String param = entry.getKey().substring(0,
 										entry.getKey().lastIndexOf('-') + 1);
 								if (!shippingfeeVolumeParams.contains(param)) {
@@ -476,7 +476,7 @@ public class PartnerController {
 						if (entry.getKey().contains("nr-")) {
 
 							if (entry.getKey().contains("fixedfee")
-									|| entry.getKey().contains("shippingFee")) {
+									|| entry.getKey().contains("shippingfee")) {
 
 							} else {
 								log.debug(" Key : " + entry.getKey());
@@ -1999,7 +1999,7 @@ public class PartnerController {
 										.add(nrnReturncharge);
 
 							}
-						} else if (entry.getKey().contains("shippingFeeVolume")
+						} else if (entry.getKey().contains("shippingfeeVolume")
 								&& partnerBean.getNrnReturnConfig()
 										.getShippingFeeType() != null) {
 
@@ -2007,7 +2007,7 @@ public class PartnerController {
 									.getShippingFeeType()
 									.equalsIgnoreCase("variable")
 									&& entry.getKey().contains(
-											"shippingFeeVolumeVariable")) {
+											"shippingfeeVolumeVariable")) {
 								String param = entry.getKey().substring(0,
 										entry.getKey().lastIndexOf('-') + 1);
 								if (!shippingfeeVolumeParams.contains(param)) {
@@ -2105,7 +2105,7 @@ public class PartnerController {
 
 								}
 							} else if (entry.getKey().contains(
-									"shippingFeeVolumeFixed")) {
+									"shippingfeeVolumeFixed")) {
 								String param = entry.getKey().substring(0,
 										entry.getKey().lastIndexOf('-') + 1);
 								if (!shippingfeeVolumeParams.contains(param)) {
@@ -2132,7 +2132,7 @@ public class PartnerController {
 											.getCharges().add(nrnReturncharge);
 								}
 							}
-						} else if (entry.getKey().contains("shippingFeeWeight")
+						} else if (entry.getKey().contains("shippingfeeWeight")
 								&& partnerBean.getNrnReturnConfig()
 										.getShippingFeeType() != null) {
 
@@ -2140,7 +2140,7 @@ public class PartnerController {
 									.getShippingFeeType()
 									.equalsIgnoreCase("variable")
 									&& entry.getKey().contains(
-											"shippingFeeWeightVariable")) {
+											"shippingfeeWeightVariable")) {
 								String param = entry.getKey().substring(0,
 										entry.getKey().lastIndexOf('-') + 1);
 								if (!shippingfeeVolumeParams.contains(param)) {
@@ -2285,7 +2285,7 @@ public class PartnerController {
 						if (entry.getKey().contains("nr-")) {
 
 							if (entry.getKey().contains("fixedfee")
-									|| entry.getKey().contains("shippingFee")) {
+									|| entry.getKey().contains("shippingfee")) {
 
 							} else {
 								log.debug(" Key : " + entry.getKey());
