@@ -100,6 +100,7 @@ public class Seller {
 	// Seller to upload Report OneToMany
 	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
 	private List<UploadReport> uploadReportList = new ArrayList<UploadReport>();
+	
 
 	public SellerAccount getSellerAccount() {
 		return sellerAccount;
@@ -308,4 +309,6 @@ public class Seller {
 	public void setUploadReportList(List<UploadReport> uploadReportList) {
 		this.uploadReportList = uploadReportList;
 	}
+
+
 }

@@ -24,8 +24,12 @@ import com.o2r.bean.EmployeeBean;
 import com.o2r.bean.OrderBean;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.HelperClass;
+import com.o2r.helper.GlobalConstant;
+import com.o2r.model.ChannelUploadMapping;
+import com.o2r.model.ColumMap;
 import com.o2r.model.Employee;
 import com.o2r.service.AdminService;
+import com.o2r.service.UploadMappingService;
 
 /**
  * @author Deep Mehrotra
@@ -40,7 +44,9 @@ public class AdminController {
 	private HelperClass helperClass;
 	
 	private int sellerId=0;
-	 
+
+	private UploadMappingService uploadMappingService;
+	
 	static Logger log = Logger.getLogger(AdminController.class.getName());
 
 	@RequestMapping(value = "/seller/save", method = RequestMethod.POST)
@@ -143,8 +149,50 @@ public class AdminController {
 		log.info("$$$ listEmployeesJtable Ends : AdminController $$$");
 		return jsonArray;
 	}
+	
+	@RequestMapping(value = "/seller/savemappingdetails", method = RequestMethod.POST)
+	public ModelAndView savemappingdetails(HttpServletRequest request,
+			@ModelAttribute("command") ChannelUploadMapping channeluploadmapping, BindingResult result) {
 
-	@RequestMapping(value = "/seller/add", method = RequestMethod.GET)
+		log.info("$$$ savemappingdetails admin Starts : AdminController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			ColumMap colmap=null;
+			Map<String, String[]> parameters = request.getParameterMap();
+			for (String header : GlobalConstant.paymentHeaderList) {
+				colmap=new ColumMap();
+				colmap.setO2rColumName(header);
+				String temp="map-"+header;
+				if(parameters.containsKey(temp))
+				{
+					colmap.setChannelColumName(parameters.get(temp)[0]);
+				}
+				else
+				{
+					continue;
+				}
+				System.out.println(channeluploadmapping.getChannelName()+" File name : "+
+				channeluploadmapping.getFileName());
+				colmap.setUploadMapping(channeluploadmapping);
+				channeluploadmapping.getColumMap().add(colmap);
+			}
+			uploadMappingService.addChannelUploadMapping(channeluploadmapping);
+		} catch (CustomException ce) {
+			log.error("savemappingdetails exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			log.error("Failed!",e);
+		}
+		
+		log.info("$$$ addManualPayment Ends : UploadController $$$");
+		return new ModelAndView("redirect:/seller/uploadmappings.html?filename=something", model);
+	}
+
+/*	@RequestMapping(value = "/seller/add", method = RequestMethod.GET)
 	public ModelAndView addEmployee(@RequestParam(value = "page") int page,
 			@ModelAttribute("command") EmployeeBean employeeBean,
 			BindingResult result) {
@@ -162,8 +210,63 @@ public class AdminController {
 		}
 		log.info("$$$ addEmployee Ends : AdminController $$$");
 		return new ModelAndView("addEmployee", model);
-	}
+	}*/
 
+	/*
+	 * Method to view Channel Upload Sheets Mapping
+	 * 
+	 */
+	@RequestMapping(value = "/seller/uploadmappings", method = RequestMethod.GET)
+		public ModelAndView uploadmappingsDetails(HttpServletRequest request) {
+
+			log.info("$$$ uploadmappingsDetails Starts : AdminController $$$");
+			String channelName = request.getParameter("channelName");
+			String fileName = request.getParameter("fileName");
+			Map<String, Object> model = new HashMap<String, Object>();
+			ChannelUploadMapping cum=null;
+			try {
+				System.out.println("fileName : "+fileName+"channelName  "+channelName);
+				if (fileName != null && channelName!=null) {
+					cum=uploadMappingService.getChannelUploadMapping(channelName, fileName);
+					if(cum!=null&&cum.getColumMap()!=null&&cum.getColumMap().size()!=0)
+					{
+						System.out.println(" Cum is not null");
+					model.put("mapping", cum);
+					}
+					else
+					{
+						switch(fileName)
+						{
+						case "payment":
+							System.out.println(" Stting [ayment headers"+GlobalConstant.paymentHeaderList);
+							model.put("o2rheaders", GlobalConstant.paymentHeaderList);
+							
+						}
+					}
+					model.put("fileName", fileName);
+					model.put("channelName",channelName);
+				} 
+				
+				model.put("partnerNames", GlobalConstant.channelMappingList);
+				model.put("fileNames", GlobalConstant.filesMappingList);
+			} catch (CustomException ce) {
+				log.error("uploadmappings exception : "+ ce.toString());
+				model.put("errorMessage", ce.getLocalMessage());
+				model.put("errorTime", ce.getErrorTime());
+				model.put("errorCode", ce.getErrorCode());
+				return new ModelAndView("globalErorPage", model);
+			} catch (Throwable e) {
+				e.printStackTrace();
+				log.error("Failed! - Admin "+e);
+				model.put("errorMessage", e.getCause());
+				return new ModelAndView("globalErorPage", model);
+			}
+			log.info("$$$ uploadmappingsDetails Ends : AdminController $$$");
+			return new ModelAndView("admin/uploadmapping", model);
+		}
+	
+	
+	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public ModelAndView welcome() {
 		

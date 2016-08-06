@@ -41,6 +41,7 @@ import com.o2r.service.ManualChargesService;
 import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.PaymentUploadService;
+import com.o2r.service.UploadMappingService;
 
 /**
  * @author Deep Mehrotra
@@ -61,6 +62,8 @@ public class UploadController {
 	private PartnerService partnerService;
 	@Autowired
 	private ManualChargesService manualChargesService;
+	@Autowired
+	private UploadMappingService uploadMappingService;
 	@Autowired
 	private HelperClass helperClass;
 
@@ -348,5 +351,9 @@ public class UploadController {
 		return new ModelAndView("dailyactivities/dailyactivities");
 
 	}
+	
+	
+	
+	 
 
 }

@@ -26,7 +26,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -70,16 +69,13 @@ import com.o2r.service.ProductService;
 import com.o2r.service.ReportGeneratorService;
 import com.o2r.service.SellerService;
 import com.o2r.service.TaxDetailService;
+import com.o2r.service.UploadMappingService;
 
 @Service("saveContents")
 @Transactional
 public class SaveContents {
 
-	/*
-	 * @Resource(name="sessionFactory") private SessionFactory sessionFactory;
-	 */
-	@Autowired
-	private SessionFactory sessionFactory;
+	
 	@Autowired
 	private OrderService orderService;
 	@Autowired
@@ -104,6 +100,8 @@ public class SaveContents {
 	private AreaConfigDao areaConfigDao;
 	@Autowired
 	private ManualChargesService manualChargesService;
+	@Autowired
+	private UploadMappingService uploadMappingService;
 
 	private static final String UPLOAD_DIR = "UploadReport";
 
@@ -2777,4 +2775,7 @@ public class SaveContents {
 		log.info("$$$ saveGatePassDetails ends : SaveContents $$$");
 		return returnlist;
 	}
+	
+	
+	
 }
