@@ -146,7 +146,7 @@ public class SaveMappedFiles {
 					if(entry.getCell(index) != null
 							&& HSSFDateUtil.isCellDateFormatted(entry.getCell(index)))
 							{
-						orderPayment.setDateofPayment(entry.getCell(5)
+						orderPayment.setDateofPayment(entry.getCell(index)
 								.getDateCellValue());
 							}
 					else
@@ -307,8 +307,8 @@ public class SaveMappedFiles {
 
 				if (errorMessage.length() > 5) {
 					isError = true;
-					row = worksheet.getRow(errorRow + 2);
-					cell = row.createCell(colNumber+1);
+					row = worksheet.getRow(errorRow+1);
+					cell = row.createCell(colNumber);
 					cell.setCellValue(errorMessage);
 					cell.setCellStyle(errorCellStyle);
 				}
