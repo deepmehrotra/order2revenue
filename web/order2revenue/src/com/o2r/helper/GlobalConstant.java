@@ -103,6 +103,22 @@ public class GlobalConstant {
 
 		}
 	};
+	
+	public static final ArrayList<String> amazonPaymentHeaderList = new ArrayList<String>() {
+		/**
+	 *
+	 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("ChannelOrderId");			
+			add("Recieved Amount");
+			add("Payment Detail");
+			add("Payment Date");
+			add("Seller SKU");
+
+		}
+	};
 
 	public final ArrayList<String> inventoryHeaderList = new ArrayList<String>() {
 		/**

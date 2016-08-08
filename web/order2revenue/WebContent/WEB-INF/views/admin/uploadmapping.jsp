@@ -45,13 +45,13 @@
                                             </select>
 								</div>
 								<div class="col-lg-3" style="margin: 0px;padding: 0px;">
-                                      <a href="uploadmappings.html?fileName=payment&channelName=Flipkart" class="btn btn-white pull-left" ><i class="fa fa-search"></i></a>
+                                      <a href="uploadmappings.html?fileName=payment&channelName=Amazon" class="btn btn-white pull-left" ><i class="fa fa-search"></i></a>
                                 </div>
 							</div>
 							<div class="col-lg-12 m-t-xs">
 									<div class="col-lg-3">
 									</div>
-									<form:form method="POST" action="savemappingdetails.html"	id="savemappingdetailsForm" 
+									<form:form method="POST" action="savemappingdetails.html?channelName=Amazon" id="savemappingdetailsForm" 
 									 modelAttribute="mapping" role="form" class="form-horizontal">
 					
 									<div class="col-lg-6">
@@ -59,9 +59,9 @@
 										<tbody>
 										<c:choose>
 										<c:when test="${mapping != null}">
-										<form:hidden path="channelName" value="${mapping.channelName}"/>
-										<form:hidden path="channelName" value="${mapping.channelName}"/>
-										<form:hidden path="mapId" value="${mapping.mapId}"/>
+										<input type="hidden" name="channelName" value="${channelName}"/>
+										<input type="hidden" name="fileName" value="${fileName}"/>
+										<input type="hidden" name="mapId" value="${mapping.mapId}"/>
 										<c:forEach items="${mapping.columMap}" var="columMap" varStatus="status">
 											<tr>
 												<td style="width:70%;padding: 4px;">

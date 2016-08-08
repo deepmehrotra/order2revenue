@@ -44,7 +44,7 @@ public class AdminController {
 	private HelperClass helperClass;
 	
 	private int sellerId=0;
-
+	@Autowired
 	private UploadMappingService uploadMappingService;
 	
 	static Logger log = Logger.getLogger(AdminController.class.getName());
@@ -156,10 +156,18 @@ public class AdminController {
 
 		log.info("$$$ savemappingdetails admin Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
+		String channelName=request.getParameter("channelName");
 		try {
 			ColumMap colmap=null;
 			Map<String, String[]> parameters = request.getParameterMap();
-			for (String header : GlobalConstant.paymentHeaderList) {
+			ArrayList<String> headers= new ArrayList<String>();
+			if(channelName.equalsIgnoreCase("Amazon")){
+				headers=GlobalConstant.amazonPaymentHeaderList;
+			}else{
+				headers=GlobalConstant.paymentHeaderList;
+			}
+			
+			for (String header : headers) {
 				colmap=new ColumMap();
 				colmap.setO2rColumName(header);
 				String temp="map-"+header;
@@ -232,17 +240,28 @@ public class AdminController {
 					{
 						System.out.println(" Cum is not null");
 					model.put("mapping", cum);
-					}
-					else
-					{
-						switch(fileName)
-						{
+				} else {
+					if (channelName.equalsIgnoreCase("Amazon")) {
+						switch (fileName) {
 						case "payment":
-							System.out.println(" Stting [ayment headers"+GlobalConstant.paymentHeaderList);
-							model.put("o2rheaders", GlobalConstant.paymentHeaderList);
-							
+							System.out.println(" Stting [ayment headers"
+									+ GlobalConstant.amazonPaymentHeaderList);
+							model.put("o2rheaders",
+									GlobalConstant.amazonPaymentHeaderList);
+
+						}
+					} else {
+						switch (fileName) {
+						case "payment":
+							System.out.println(" Stting [ayment headers"
+									+ GlobalConstant.paymentHeaderList);
+							model.put("o2rheaders",
+									GlobalConstant.paymentHeaderList);
+
 						}
 					}
+
+				}
 					model.put("fileName", fileName);
 					model.put("channelName",channelName);
 				} 

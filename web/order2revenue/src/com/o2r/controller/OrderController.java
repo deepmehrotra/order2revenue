@@ -358,8 +358,19 @@ public class OrderController {
 							files.get(0), sellerId, applicationPath,
 							uploadReport));
 					model.put("mapType", "skuMappingMap");
+					break;
 				case "Flipkart_Payment":
 					saveMappedFiles.saveFlipkartPaymentContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport);
+					break;
+				case "PayTM_Payment":
+					saveMappedFiles.savePayTMPaymentContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport);
+						break;
+				case "Amazon_Payment":
+					saveMappedFiles.saveAmazonPaymentContents(
 							files.get(0), sellerId, applicationPath,
 							uploadReport);
 						break;
