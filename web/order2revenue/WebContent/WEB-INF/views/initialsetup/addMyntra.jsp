@@ -50,7 +50,7 @@ span .#error {
 			<div class="wrapper wrapper-content animated fadeInRight"
 				id="centerpane">
 				<div class="ibox-title">
-					<img src="/O2R/partnerimages/Myntra.jpg" alt="logo">
+					<img src="/O2R/partnerimages/myntra.jpg" alt="logo">
 				</div>
 				<div class="ibox-content add-company">
 					<form:form method="POST" action="saveMyntra.html"

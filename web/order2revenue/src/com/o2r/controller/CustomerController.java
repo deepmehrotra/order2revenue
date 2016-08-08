@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.o2r.bean.ConsolidatedOrderBean;
 import com.o2r.bean.CustomerBean;
 import com.o2r.bean.CustomerDBaseBean;
 import com.o2r.helper.CustomException;
@@ -34,19 +33,17 @@ public class CustomerController {
 	private CustomerService customerService;	
 	@Autowired
 	private OrderService orderService;
-	private int sellerId=0;
+
 	static Logger log = Logger.getLogger(EventsController.class.getName());
 	
 	@RequestMapping(value = "/seller/customerList", method = RequestMethod.GET)
 	public ModelAndView listCustomer(HttpServletRequest request,@ModelAttribute("command") CustomerBean customerBean, BindingResult result){
 		
 		log.info("$$$ listCustomer Ends : CustomerController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
-		List<Order> orderList=null;
-		CustomerDBaseBean bean=null;
 		int pageNo = request.getParameter("page") != null ? Integer
 				.parseInt(request.getParameter("page")) : 0;
-		Map<String, CustomerDBaseBean> customerBeanMap=new HashMap<String, CustomerDBaseBean>();
 		List<CustomerDBaseBean> customerBeanList=new ArrayList<CustomerDBaseBean>();
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);
@@ -67,6 +64,7 @@ public class CustomerController {
 	public ModelAndView listCustomerOrders(HttpServletRequest request,@ModelAttribute("command") CustomerBean customerBean, BindingResult result){
 		
 		log.info("$$$ listCustomerOrders Strats : CustomerController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<Order> orderList=null;
 		

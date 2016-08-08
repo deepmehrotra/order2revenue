@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.o2r.bean.BusinessDetails;
 import com.o2r.bean.ChargesBean;
 import com.o2r.bean.ChargesBean.SortByCriteriaRange;
 import com.o2r.bean.ChargesBean.SortByCriteria;
@@ -44,7 +43,6 @@ import com.o2r.model.Category;
 import com.o2r.model.MetaNRnReturnCharges;
 import com.o2r.model.MetaPartner;
 import com.o2r.model.NRnReturnCharges;
-import com.o2r.model.NRnReturnConfig;
 import com.o2r.model.Partner;
 import com.o2r.model.TaxCategory;
 import com.o2r.service.CategoryService;
@@ -66,11 +64,9 @@ public class PartnerController {
 	private HelperClass helperClass;
 	@Autowired
 	private TaxDetailService taxDetailService;
-	
-	private int sellerId=0;
-	
 	@Autowired
 	ServletContext context;
+	
 	Properties props = null;
 	org.springframework.core.io.Resource resource = new ClassPathResource(
 			"database.properties");
@@ -126,6 +122,7 @@ public class PartnerController {
 		log.info(partnerBean.getshippingfeeVolumeVariableList().size());
 		log.info(partnerBean.getshippingfeeWeightVariableList().size());
 
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Partner existPartner = null;
 		try {
@@ -603,6 +600,7 @@ public class PartnerController {
 	public ModelAndView listAllPartners(HttpServletRequest request) {
 
 		log.info("$$$ listAllPartners Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<PartnerBean> addedlist = null;
 		try {
@@ -629,6 +627,7 @@ public class PartnerController {
 	public ModelAndView listPartners(HttpServletRequest request) {
 
 		log.info("$$$ listPartners Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<PartnerBean> toAddPartner = new ArrayList<PartnerBean>();
 		List<PartnerBean> addedlist = null;
@@ -671,6 +670,7 @@ public class PartnerController {
 			BindingResult result) {
 
 		log.info("$$$ addPartner Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
@@ -900,6 +900,7 @@ public class PartnerController {
 
 		log.info("$$$ saveJabong Starts : OrderController $$$");
 
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		log.debug(" Nr calculayor value from bean : "
 				+ partnerBean.getNrnReturnConfig().isNrCalculator());
@@ -1001,6 +1002,7 @@ public class PartnerController {
 			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		log.info("$$$ saveMyntra Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		log.debug(" Nr calculayor value from bean : "
 				+ partnerBean.getNrnReturnConfig().isNrCalculator());
@@ -1099,6 +1101,7 @@ public class PartnerController {
 			BindingResult result) {
 
 		log.info("$$$ addJabong Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
@@ -1153,6 +1156,7 @@ public class PartnerController {
 			BindingResult result) {
 
 		log.info("$$$ addMyntra Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
@@ -1215,6 +1219,7 @@ public class PartnerController {
 			BindingResult result) {
 
 		log.info("$$$ addPartnertest Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		PartnerBean partner = new PartnerBean();
 		String id = request.getParameter("pid");
@@ -1251,6 +1256,7 @@ public class PartnerController {
 			BindingResult result) {
 
 		log.info("$$$ deletePartner Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		try {
@@ -1283,6 +1289,7 @@ public class PartnerController {
 			BindingResult result) {
 
 		log.info("$$$ viewPartner Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
 		PartnerBean pbean = null;
@@ -1528,6 +1535,7 @@ public class PartnerController {
 			BindingResult result) {
 
 		log.info("$$$ editPartner Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
 		PartnerBean pbean = null;
@@ -1714,6 +1722,7 @@ public class PartnerController {
 			BindingResult result) {
 
 		log.info("$$$ editMyntra Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
 		PartnerBean pbean = null;
@@ -1813,6 +1822,7 @@ public class PartnerController {
 			BindingResult result) {
 
 		log.info("$$$ editJabong Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new HashMap<String, Object>();
 		PartnerBean pbean = null;
@@ -1907,6 +1917,7 @@ public class PartnerController {
 
 		log.info("$$$ getCheckPartner Starts : OrderController $$$");
 		log.debug(request.getParameter("partner"));
+		int sellerId = 0;
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);
 			Partner parner = partnerService.getPartner(
@@ -1935,6 +1946,7 @@ public class PartnerController {
 		log.info("$$$ saveMetaPartner Starts : OrderController $$$");
 		log.info(partnerBean.getFixedfeeList().size());
 
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Partner existPartner = null;
 		try {

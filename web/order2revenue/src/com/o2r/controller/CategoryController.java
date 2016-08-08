@@ -41,14 +41,12 @@ public class CategoryController {
 
 	@Autowired
 	private CategoryService categoryService;
-
 	@Autowired
 	private TaxDetailService taxDetailService;
 	@Autowired
 	private SellerService sellerService;
 	@Autowired
 	private HelperClass helperClass;
-	private int sellerId=0;
 	@Resource(name = "downloadService")
 	private DownloadService downloadService;
 	@Resource(name = "saveContents")
@@ -65,6 +63,7 @@ public class CategoryController {
 		log.info("$$$ changeInventorygroup Starts : CategoryController $$$");
 		log.debug(" Category ID in changeInventorygroup: " + catId);
 		log.debug(" Category ID in changeInventorygroup: " + catId);
+		int sellerId = 0;
 		List<CategoryBean> categorylist = null;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, String> catageorymap = new HashMap<String, String>();
@@ -109,11 +108,12 @@ public class CategoryController {
 		
 		log.info("$$$ deleteInventoryGroup Starts : CategoryController $$$");
 		log.debug(" Category  to delete :" + categoryBean.getId());
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);
 			if (categoryBean.getId() != 0) {
-				int sellerId = helperClass.getSellerIdfromSession(request);
+				sellerId = helperClass.getSellerIdfromSession(request);
 				int deleted = categoryService.deleteCategory(
 						ConverterClass.prepareCategoryModel(categoryBean),
 						sellerId);
@@ -159,11 +159,12 @@ public class CategoryController {
 		
 		log.info("$$$ deleteProductCategory Starts : CategoryController $$$");
 		log.debug(" Category  to delete :" + categoryBean.getId());
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);
 			if (categoryBean.getId() != 0) {
-				int sellerId = helperClass.getSellerIdfromSession(request);
+				sellerId = helperClass.getSellerIdfromSession(request);
 				int deleted = categoryService.deleteCategory(
 						ConverterClass.prepareCategoryModel(categoryBean),
 						sellerId);
@@ -216,6 +217,7 @@ public class CategoryController {
 		log.info("$$$ viewsingleInventorygroup Starts : CategoryController $$$");
 		log.debug(" Category  to view  :" + categoryBean.getId());
 		log.debug(" Category  to view  :" + categoryBean.getId());
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);
@@ -262,7 +264,8 @@ public class CategoryController {
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
 		
-		log.info("$$$ inventorygroups Starts : CategoryController $$$");		
+		log.info("$$$ inventorygroups Starts : CategoryController $$$");	
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {			
 			sellerId = helperClass.getSellerIdfromSession(request);
@@ -305,6 +308,7 @@ public class CategoryController {
 		
 		log.info("$$$ saveInventoryGroup Starts : CategoryController $$$");
 		log.debug(" category id :" + categoryBean.getCatName());
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);
@@ -339,6 +343,7 @@ public class CategoryController {
 		log.info("$$$ saveCatInventory Starts : CategoryController $$$");
 		log.debug(" ********* parent category name :"
 				+ categoryBean.getParentCatName());
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		String parentcatid = request.getParameter("parentid");
 		if (result.hasErrors()) {
@@ -382,7 +387,7 @@ public class CategoryController {
 			BindingResult result) {
 		
 		log.info("$$$ checkInventoryGroup Starts : CategoryController $$$");
-		Map<String, Object> model = new HashMap<String, Object>();
+		int sellerId = 0;
 		log.debug(" *********checkInventoryGroup name :"+ categoryBean.getParentCatName());
 		String name = request.getParameter("name");
 		try {
@@ -413,6 +418,7 @@ public class CategoryController {
 		
 		log.info("$$$ saveTaxCategory Starts : CategoryController $$$");
 		log.debug("category id :" + taxCategoryBean.getTaxCatName());
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);
@@ -442,6 +448,7 @@ public class CategoryController {
 		
 		log.info("$$$ listTaxCategory Starts : CategoryController $$$");
 		log.debug("category id :" + taxCategoryBean.getTaxCatName());
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);
@@ -477,6 +484,7 @@ public class CategoryController {
 		
 		log.info("$$$ checkTaxCategory Starts : CategoryController $$$");
 		log.debug("tax category name : " + request.getParameter("name"));
+		int sellerId = 0;
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);
 			TaxCategory taxCategory = taxDetailService.getTaxCategory(

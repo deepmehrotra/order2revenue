@@ -2354,7 +2354,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	@Override
 	public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
 			throws CustomException {
-		log.info("***addUploadReport Start****");
+		log.info("***addUploadReport Start for : " + sellerId + "****");
 		Seller seller = null;
 		try {
 			Session session = sessionFactory.openSession();

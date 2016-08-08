@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Controller;
@@ -94,7 +94,7 @@ public class OrderController {
 	EventsService eventsService;
 	@Autowired
 	DataConfig dataConfig;
-	private int sellerId=0;
+	//private int sellerId=0;
 	private static final String UPLOAD_DIR = "upload";
 	
 	private int listSize=500;
@@ -231,11 +231,13 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/seller/saveSheet", method = RequestMethod.POST)
+	@Scope("session")
 	@SuppressWarnings("rawtypes")
 	public ModelAndView save(MultipartHttpServletRequest request,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
 		log.info("$$$ save() Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		double starttime = System.currentTimeMillis();
 		log.debug(" **StartTime : " + starttime);
@@ -422,6 +424,7 @@ public class OrderController {
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
 		log.info("$$$ searchOrder() Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<OrderBean> orderList = new ArrayList<>();
 		String channelOrderID = request.getParameter("channelOrderID");
@@ -476,6 +479,7 @@ public class OrderController {
 			BindingResult result) {
 
 		log.info("$$$ poOrderDetails Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);			
@@ -512,6 +516,7 @@ public class OrderController {
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
 		log.info("$$$ orderListDailyAct Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		String savedOrder = request.getParameter("savedOrder");
 		List<OrderBean> returnlist = new ArrayList<OrderBean>();
@@ -609,6 +614,7 @@ public class OrderController {
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
 		log.info("$$$ viewOrderDailyAct Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Product product = null;
 		Events event = null;
@@ -647,6 +653,7 @@ public class OrderController {
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
 		log.info("$$$ viewPOOrderDailyAct Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
@@ -688,6 +695,7 @@ public class OrderController {
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
 		log.info("$$$ editOrderDA Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);	
@@ -715,6 +723,7 @@ public class OrderController {
 
 		log.info("$$$ deleteOrderDA Starts : OrderController $$$");
 		log.debug(" Order bean id todelete :" + orderBean.getOrderId());
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);	
@@ -743,6 +752,7 @@ public class OrderController {
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
 		log.info("$$$ saveOrderDA Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<Order> orderlist=new ArrayList<Order>();
 
@@ -774,6 +784,7 @@ public class OrderController {
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
 		log.info("$$$ addOrderDA Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);	
@@ -833,6 +844,7 @@ public class OrderController {
 			BindingResult result, Model model) {
 
 		log.info("$$$ getCheckPartner Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> mode = new HashMap<String, Object>();
 		List parner = new ArrayList();
 		try {
@@ -863,6 +875,7 @@ public class OrderController {
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
 		log.info("$$$ gatepasslistDA Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);	
@@ -892,6 +905,7 @@ public class OrderController {
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
 		log.info("$$$ disputedGPList Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);	
@@ -922,6 +936,7 @@ public class OrderController {
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
 		log.info("$$$ poOrderListDailyAct Starts : OrderController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<OrderBean> poOrderlist = new ArrayList<OrderBean>();
 		try {
@@ -1009,6 +1024,7 @@ public class OrderController {
 			throws ClassNotFoundException {
 
 		log.info("$$$ getUploadLog Starts : OrderController $$$");
+		int sellerId = 0;
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);	
 			log.debug(" Downloading the Log: " + id);
