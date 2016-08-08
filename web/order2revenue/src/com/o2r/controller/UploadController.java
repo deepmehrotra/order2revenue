@@ -82,7 +82,8 @@ public class UploadController {
 			if (payuploadbeanlist != null) {
 
 				for (PaymentUploadBean bean : payuploadbeanlist) {
-					log.debug(" Positive paymein in controller : "+bean.getTotalpositivevalue());
+					log.debug(" Positive paymein in controller : "
+							+ bean.getTotalpositivevalue());
 					bean.setManualCharges(manualChargesService.getMCforPaymentID(
 							bean.getUploadDesc(),
 							helperClass.getSellerIdfromSession(request)));
@@ -134,7 +135,7 @@ public class UploadController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			model.put("errorMessage", e.getCause());
 			return new ModelAndView("globalErorPage", model);
 		}
@@ -163,7 +164,7 @@ public class UploadController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("FAiled!",e);
+			log.error("FAiled!", e);
 		}
 		model.put("Result", "OK");
 		model.put("Records", orderlist);
@@ -211,9 +212,9 @@ public class UploadController {
 			int sellerId = helperClass.getSellerIdfromSession(request);
 			List<Order> orderlist = orderService.listOrders(sellerId);
 			for (Order order : orderlist) {
-				if(!order.isPoOrder())
-				{
-				orderIdmap.put(order.getOrderId(), order.getChannelOrderID());
+				if (!order.isPoOrder()) {
+					orderIdmap.put(order.getOrderId(),
+							order.getChannelOrderID());
 				}
 			}
 			List<Partner> partnerList = partnerService.listPartners(sellerId);
@@ -228,7 +229,7 @@ public class UploadController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 		model.put("orderIdmap", orderIdmap);
 		model.put("partnermap", partnermap);
@@ -266,7 +267,7 @@ public class UploadController {
 					+ orderBean.getOrderId());
 			order = orderService.addOrderPayment(orderBean.getOrderId(),
 					payment, sellerId);
-			
+
 			paymentUpload = paymentUploadService.getManualPayment(sellerId);
 			if (paymentUpload == null) {
 				paymentUpload = new PaymentUpload();
@@ -303,7 +304,7 @@ public class UploadController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 
 		log.info("$$$ saveManualPayment Ends : UploadController $$$");
@@ -338,7 +339,7 @@ public class UploadController {
 						applicationPath, uploadReport);
 			} catch (Exception e) {
 				e.printStackTrace();
-				log.error("Failed!",e);
+				log.error("Failed!", e);
 				log.debug("Inside exception , filetype not accepted "
 						+ e.getLocalizedMessage());
 

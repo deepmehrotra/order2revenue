@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +69,7 @@ public class ProductController {
 	private CategoryService categoryService;
 	@Autowired
 	private HelperClass helperClass;
-	private int sellerId=0;
+
 	static Logger log = Logger.getLogger(ProductController.class.getName());
 
 	private static final String UPLOAD_DIR = "upload";
@@ -81,6 +80,7 @@ public class ProductController {
 			BindingResult result) {
 
 		log.info("$$$ searchProduct Starts : ProductController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<ProductBean> productList = new ArrayList<>();
 		String skuCode = request.getParameter("skuCode");
@@ -126,6 +126,7 @@ public class ProductController {
 			BindingResult result) {
 
 		log.info("$$$ searchProductConfig Starts : ProductController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<ProductConfig> productConfigList = new ArrayList<>();		
 		String value = request.getParameter("value");		
@@ -151,6 +152,7 @@ public class ProductController {
 			BindingResult result) {
 
 		log.info("$$$ searchProductMapping Starts : ProductController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<ProductConfig> productConfigList = new ArrayList<>();		
 		String value = request.getParameter("value");		
@@ -176,6 +178,7 @@ public class ProductController {
 			BindingResult result) {
 
 		log.info("$$$ productList Starts : ProductController $$$");
+		int sellerId = 0;
 		List<Product> products = null;
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<List<ProductConfig>> productConfigs = new ArrayList<List<ProductConfig>>();
@@ -231,9 +234,8 @@ public class ProductController {
 			BindingResult result) {
 
 		log.info("$$$ productMappingList Starts : ProductController $$$");
-		List<Product> products = null;
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
-		List<ProductConfig> productMappings = new ArrayList<ProductConfig>();
 
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
@@ -277,9 +279,8 @@ public class ProductController {
 			BindingResult result) {
 
 		log.info("$$$ productConfigList Starts : ProductController $$$");
-		List<Product> products = null;
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
-		List<ProductConfig> productConfigs = new ArrayList<ProductConfig>();
 
 		try {	
 			sellerId = helperClass.getSellerIdfromSession(request);
@@ -308,11 +309,10 @@ public class ProductController {
 			BindingResult result) {
 		
 		log.info("$$$ saveDeleteProduct Starts : ProductController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		if (productBean.getProductSkuCode() != null) {
 			productBean.setProductDate(new Date());
-			int productId = request.getParameter("productId") != null ? Integer
-					.parseInt(request.getParameter("productId")) : 0;
 			String productSkuCode = productBean.getProductSkuCode();
 			int quantityToAdd = (request.getParameter("quantityToAdd") != null && request
 					.getParameter("quantityToAdd").toString().length() != 0) ? Integer
@@ -352,6 +352,7 @@ public class ProductController {
 			BindingResult result) {
 
 		log.info("$$$ saveProduct Starts : ProductController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<Product> productList=new ArrayList<Product>();
 		log.debug(" Product Id :" + productBean.getProductId());
@@ -400,6 +401,7 @@ public class ProductController {
 			@RequestParam("value") String value) {
 
 		log.info("$$$ removeProductMapping Starts : ProductController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
@@ -432,6 +434,7 @@ public class ProductController {
 			BindingResult result) {
 
 		log.info("$$$ saveProductConfig Starts : ProductController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
@@ -464,6 +467,7 @@ public class ProductController {
 			BindingResult result) {
 
 		log.info("$$$ addProductConfig Starts : ProductController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, String> productSkuCodeMap = new LinkedHashMap<>();
 		try {
@@ -515,6 +519,7 @@ public class ProductController {
 			BindingResult result) {
 
 		log.info("$$$ addProduct Starts : ProductController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, String> categoryMap = new LinkedHashMap<>();
 		try {
@@ -550,6 +555,7 @@ public class ProductController {
 			BindingResult result) {
 		
 		log.info("$$$ editProduct Starts : ProductController $$$");
+		int sellerId = 0;
 		Product product = null;
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -580,6 +586,7 @@ public class ProductController {
 			BindingResult result) {
 		
 		log.info("$$$ deleteProduct Starts : ProductController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		String status="";
 		try {
@@ -615,6 +622,7 @@ public class ProductController {
 	public @ResponseBody String saveProductJson(HttpServletRequest request) {
 		
 		log.info("$$$ saveProductJson Starts : ProductController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		Product product = new Product();
@@ -728,6 +736,7 @@ public class ProductController {
 	public @ResponseBody String listProductsJSON(HttpServletRequest request) {
 
 		log.info("$$$ listProductsJSON Starts : ProductController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
@@ -753,6 +762,7 @@ public class ProductController {
 	public @ResponseBody String inventoryList(HttpServletRequest request) {
 
 		log.info("$$$ inventoryList Starts : ProductController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String action = request.getParameter("action");
@@ -810,6 +820,7 @@ public class ProductController {
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
 		log.info("$$$ save() Starts : ProductController $$$");
+		int sellerId = 0;
 		List<MultipartFile> files = uploadForm.getFiles();
 
 		List<String> fileNames = new ArrayList<String>();
@@ -863,6 +874,7 @@ public class ProductController {
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
 		log.info("$$$ saveInventories Starts : ProductController $$$");
+		int sellerId = 0;
 		// gets absolute path of the web application
 		String applicationPath = request.getServletContext().getRealPath("");
 		UploadReport uploadReport = new UploadReport();
@@ -912,6 +924,7 @@ public class ProductController {
 
 		log.info("$$$ checkSKUAvailability Starts : ProductController $$$");
 		Product product = null;
+		int sellerId = 0;
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			product = productService.getProduct(request.getParameter("sku"),

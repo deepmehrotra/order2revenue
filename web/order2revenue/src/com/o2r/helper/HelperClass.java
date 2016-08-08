@@ -3,6 +3,7 @@ package com.o2r.helper;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.o2r.model.Seller;
@@ -16,6 +17,8 @@ public class HelperClass {
 	Seller seller =null;
 	public int getSellerIdfromSession(HttpServletRequest request)
 			throws Exception {
+		
+		System.out.println("&&&&&&& Sessoin ID : " + request.getSession().getId());
 		int sellerId = 0;
 		System.out.println(" Inside seller id from session :"
 				+ request.getUserPrincipal().getName());

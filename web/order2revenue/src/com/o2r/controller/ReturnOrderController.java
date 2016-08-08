@@ -55,7 +55,6 @@ public class ReturnOrderController {
 	private SaveContents saveContents;
 	@Autowired
 	private HelperClass helperClass;
-	Map<String, Object> model = new HashMap<String, Object>();
 
 	static Logger log = Logger.getLogger(ReturnOrderController.class.getName());
 
@@ -90,7 +89,7 @@ public class ReturnOrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 		log.info("$$$ saveReturnOrder Ends : ReturnOrderController $$$");
 		return new ModelAndView("redirect:/seller/returnOrRTOlist.html");
@@ -99,22 +98,18 @@ public class ReturnOrderController {
 	@RequestMapping(value = "/seller/searchReturnOrder", method = RequestMethod.POST)
 	public ModelAndView searchReturnOrder(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
-		
+
 		log.info("$$$ searchReturnOrder Starts : ReturnOrderController $$$");
-		OrderRTOorReturn orderReturn = null;
 		List<OrderBean> orderlist = null;
 		List<Order> temporaryorderlist = null;
-		Order order = null;
 		Map<String, Object> model = new HashMap<String, Object>();
-		int sellerId;
 		String searchColumn = request.getParameter("searchCriteria");
 		String searchString = request.getParameter("searchString");
 		String searchType = request.getParameter("toggler");
 		String searchDateCriteria = request.getParameter("searchDateCriteria");
-		String action = request.getParameter("action");
 
 		try {
-			sellerId = helperClass.getSellerIdfromSession(request);
+
 			if (searchType.equals("searchByProperty") && searchColumn != null) {
 				if (searchColumn.equals("customerName")
 						|| searchColumn.equals("customerCity")
@@ -129,8 +124,10 @@ public class ReturnOrderController {
 				else {
 					orderlist = ConverterClass
 							.prepareListofBean(orderService.findOrders(
-									searchColumn, searchString,
-									helperClass.getSellerIdfromSession(request), false,true));
+									searchColumn,
+									searchString,
+									helperClass.getSellerIdfromSession(request),
+									false, true));
 				}
 			} else {
 				orderlist = new ArrayList<OrderBean>();
@@ -161,7 +158,7 @@ public class ReturnOrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 		model.put("searchOrderList", orderlist);
 		log.info("$$$ searchReturnOrder Ends : ReturnOrderController $$$");
@@ -206,12 +203,13 @@ public class ReturnOrderController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			log.error(e);
 		}
 		log.debug(" Returnorders list : " + orderlist);
 		log.info("$$$ saveReturnorRTO Ends : ReturnOrderController $$$");
-		return new ModelAndView("redirect:/seller/orderList.html?savedOrder="+ orderBean.getChannelOrderID());
+		return new ModelAndView("redirect:/seller/orderList.html?savedOrder="
+				+ orderBean.getChannelOrderID());
 	}
 
 	/*
@@ -245,8 +243,7 @@ public class ReturnOrderController {
 				+ " startdate :" + request.getParameter("startDate")
 				+ " enddate :" + request.getParameter("endDate"));
 
-		log.debug("*** Returnid  : "
-				+ request.getParameter("returnId"));
+		log.debug("*** Returnid  : " + request.getParameter("returnId"));
 
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
@@ -273,7 +270,8 @@ public class ReturnOrderController {
 						temporaryorderlist = new ArrayList<Order>();
 						temporaryorderlist = orderService.findOrders(
 								searchColumn, searchString,
-								helperClass.getSellerIdfromSession(request), false,true);
+								helperClass.getSellerIdfromSession(request),
+								false, true);
 						if (temporaryorderlist != null) {
 							for (Order ordertemp : temporaryorderlist) {
 								if (ordertemp.getOrderReturnOrRTO()
@@ -432,18 +430,18 @@ public class ReturnOrderController {
 			return errors;
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 		model.put("Result", "OK");
 		model.put("Records", orderlist);
 
 		// Convert Java Object to Json
 		String jsonArray = gson.toJson(model);
-		
+
 		log.info("$$$ findOrderDA Ends : ReturnOrderController $$$");
 		return jsonArray;
 	}
-	
+
 	@RequestMapping(value = "/seller/download/Returnxls", method = RequestMethod.GET)
 	public void getXLS(HttpServletResponse response)
 			throws ClassNotFoundException {
@@ -462,7 +460,7 @@ public class ReturnOrderController {
 	@RequestMapping(value = "/seller/saveReturnSheet", method = RequestMethod.POST)
 	public String save(HttpServletRequest request,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
-		
+
 		log.info("$$$ save() Starts : ReturnOrderController $$$");
 		String applicationPath = request.getServletContext().getRealPath("");
 		UploadReport uploadReport = new UploadReport();
@@ -475,8 +473,7 @@ public class ReturnOrderController {
 			fileNames.add(files.get(0).getOriginalFilename());
 			try {
 				sellerId = helperClass.getSellerIdfromSession(request);
-				log.debug(" Filename : "
-						+ files.get(0).getOriginalFilename());
+				log.debug(" Filename : " + files.get(0).getOriginalFilename());
 				log.debug(" Filename : " + files.get(0).getName());
 				ValidateUpload.validateOfficeData(files.get(0));
 				log.debug(" fileinput " + fileinput.getName());
@@ -484,7 +481,7 @@ public class ReturnOrderController {
 						applicationPath, uploadReport);
 			} catch (Exception e) {
 				e.printStackTrace();
-				log.error("Failed!",e);
+				log.error("Failed!", e);
 				log.debug("Inside exception , filetype not accepted "
 						+ e.getLocalizedMessage());
 			}

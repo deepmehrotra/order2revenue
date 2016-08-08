@@ -38,8 +38,6 @@ public class AdminController {
 	private AdminService adminService;
 	@Autowired
 	private HelperClass helperClass;
-	
-	private int sellerId=0;
 	 
 	static Logger log = Logger.getLogger(AdminController.class.getName());
 
@@ -49,6 +47,7 @@ public class AdminController {
 			BindingResult result) {
 		
 		log.info("$$$ saveEmployee() Starts : AdminController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try{
 			sellerId=helperClass.getSellerIdfromSession(request);					
@@ -72,6 +71,7 @@ public class AdminController {
 	public ModelAndView listEmployees(HttpServletRequest request) {
 
 		log.info("$$$ listEmployees Starts : AdminController $$$");
+		int sellerId = 0;
 		Map<String, String> model = new HashMap<String, String>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try{
@@ -95,6 +95,7 @@ public class AdminController {
 	public ModelAndView listQueries(HttpServletRequest request) {
 
 		log.info("$$$ listQueries Starts : AdminController $$$");
+		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			sellerId=helperClass.getSellerIdfromSession(request);
