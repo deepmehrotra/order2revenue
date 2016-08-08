@@ -23,7 +23,7 @@
                         </div>
                         <div class="ibox-content report-links">
 							<div class="col-lg-12 text-center">
-								<h1>Tax Category</h1>
+								<h1>Map Channel Upload Files Directly </h1>
 							</div>
 							<div class="col-lg-12">
 								<div class="col-lg-3">
@@ -59,9 +59,9 @@
 										<tbody>
 										<c:choose>
 										<c:when test="${mapping != null}">
-										<form:hidden path="channelName" value="${mapping.channelName}"/>
-										<form:hidden path="channelName" value="${mapping.channelName}"/>
-										<form:hidden path="mapId" value="${mapping.mapId}"/>
+										<input type="hidden" name="channelName" value="${channelName}"/>
+                                        <input type="hidden" name="fileName" value="${fileName}"/>
+                                        <input type="hidden" name="mapId" value="${mapping.mapId}"/>
 										<c:forEach items="${mapping.columMap}" var="columMap" varStatus="status">
 											<tr>
 												<td style="width:70%;padding: 4px;">

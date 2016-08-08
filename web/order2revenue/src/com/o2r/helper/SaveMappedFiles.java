@@ -169,7 +169,7 @@ public class SaveMappedFiles {
 							orderPayment.setPositiveAmount(amount);
 							totalpositive = totalpositive+amount;
 						}
-						else if (amount<0)
+						else
 						{
 							orderPayment.setNegativeAmount(Math.abs(amount));
 							totalnegative=totalnegative+Math.abs(amount);
@@ -198,6 +198,11 @@ public class SaveMappedFiles {
 							}
 					
 					
+					}
+					else if(entry.getCell(indexfulfilmentType)!=null&&
+							entry.getCell(indexfulfilmentType).toString().equalsIgnoreCase("null"))
+					{
+						
 					}
 					else
 					{

@@ -44,7 +44,7 @@ public class AdminController {
 	private HelperClass helperClass;
 	
 	private int sellerId=0;
-
+	@Autowired
 	private UploadMappingService uploadMappingService;
 	
 	static Logger log = Logger.getLogger(AdminController.class.getName());
