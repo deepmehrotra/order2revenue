@@ -85,7 +85,7 @@ hgroup h2 {
 }
 
 .wrapper-content {
-	padding: 20px 10px 50px;
+	padding: 20px 10px 20px;
 }
 
 input:required, textarea:required {
@@ -2848,37 +2848,17 @@ input+label {
 									</div>
 								</div>
 							</fieldset>
-							<h1>Tax Category</h1>
-							<fieldset>
-								<div class="row">
-									<div class="ibox float-e-margins">
-										<h1 class="text-center"
-											style="position: relative; top: -24px;">Tax Category</h1>
-										<div class="hr-line-dashed"
-											style="margin: -11px 0px 34px 19px;"></div>
-										<div class="add-company text-center">
-											<div class="col-lg-3"></div>
-											<div class="col-lg-6">
-												Comming Soon...
-												<!-- <table class="table" border="1"
-													style="border: 1px solid #ccc;">
-													<tbody>
-														<tr>
-															<td>This is label</td>
-															<td><select class="form-control">
-																	<option value="1">Select Option</option>
-																	<option value="2">Another One</option>
-															</select></td>
-														</tr>
-													</tbody>
-												</table> -->
-											</div>
-											<div class="col-lg-3"></div>
-										</div>
-									</div>
-								</div>
-							</fieldset>
 						</form:form>
+						<div style="visibility: hidden;">
+							<input class="btn btn-primary pull-right" id="submitButton"
+								type="submit" value="Save">
+						</div>
+						<!-- <div>
+							<div class="ibox-content add-company" style="visibility: hidden;">
+								<input class="btn btn-primary pull-right" id="submitButton"
+									type="submit" value="Save">
+							</div>
+						</div> -->
 					</div>
 				</div>
 			</div>
@@ -2903,8 +2883,9 @@ input+label {
 	<script src="/O2R/seller/js/plugins/switchery/switchery.js"></script>
 
 	<script src="/O2R/seller/js/plugins/validate/jquery.validate.min.js"></script>
-	<script src="/O2R/seller/js/jquery.steps.min.js"></script>
+
 	<script src="/O2R/seller/js/pickList.js"></script>
+	<script src="/O2R/seller/js/jquery.steps.min.js"></script>
 
 	<script type="text/javascript">
 		div = {
@@ -2938,8 +2919,7 @@ input+label {
 					+ "<option>Upto</option>"
 					+ "<option>Greater Than</option>"
 					+ "</select>"
-					+
-					"</div>"
+					+ "</div>"
 					+ "<div class='col-md-3 content-rgt'>"
 					+ "<input type='text' name='nr-fixedfee"+index+"-range' placeholder='' class='form-control' id='txt_name"+index+"' multiple>"
 					+ "</div>"
@@ -3244,7 +3224,9 @@ input+label {
 														currentIndex) {
 													var form = $(this);
 													// Submit form input
-													submitForm();
+													$("#submitButton").trigger(
+															"click");
+													//submitForm();
 													//$('form#addpartnerform').submit();
 												}
 											}).validate(
@@ -3596,7 +3578,7 @@ input+label {
 							else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeePCC')
 								$('#revShippingFeeType_revShipFeePCC').iCheck(
 										'check');
-							if ('${partner.nrnReturnConfig.retCharSFPCC}' == 'true') 
+							if ('${partner.nrnReturnConfig.retCharSFPCC}' == 'true')
 								$('#retCharSFPCC').iCheck('check');
 							if ('${partner.nrnReturnConfig.RTOCharSFPCC}' == 'true')
 								$('#RTOCharSFPCC').iCheck('check');
@@ -3608,7 +3590,7 @@ input+label {
 								$('#canCharSFPCC').iCheck('check');
 							if ('${partner.nrnReturnConfig.canCharSFBRTDPCC}' == 'true')
 								$('#canCharSFBRTDPCC').iCheck('check');
-							
+
 							$('#whicheverGreaterPCC').on(
 									"ifChecked",
 									function() {
@@ -3914,9 +3896,9 @@ input+label {
 			if (validator.form() && nameAvailability) {
 				$('form#addpartnerform').submit();
 			} else {
-				 $('html, body').animate({
-			            scrollTop: $(validator.errorList[0].element).offset().top
-			        }, 2000);
+				$('html, body').animate({
+					scrollTop : $(validator.errorList[0].element).offset().top
+				}, 2000);
 			}
 		}
 		function getRole(radioclassname) {
