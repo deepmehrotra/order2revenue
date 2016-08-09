@@ -1435,6 +1435,7 @@ public class SaveContents {
 		Date todaydat = new Date();
 		List<ManualCharges> manualChargesList=new ArrayList<ManualCharges>();
 		Map<String, Object> returnPaymentMap = new LinkedHashMap<>();
+		Map<String, String> channelOrderIdCheck=new HashMap<String, String>();
 		StringBuffer errorMessage = null;
 		boolean validaterow = true;
 		boolean generatePaymentUpload = false;
@@ -1456,8 +1457,7 @@ public class SaveContents {
 				// Product product=new Product();
 				OrderPayment payment = new OrderPayment();
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
-				log.debug(" channelOrderId " + channelOrderId);
-				Map<String, String> channelOrderIdCheck=new HashMap<String, String>();
+				log.debug(" channelOrderId " + channelOrderId);				
 				try
 				{
 				if(entry.getCell(0) != null

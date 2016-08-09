@@ -125,9 +125,8 @@ input+label {
 									<div class="col-lg-12">
 										<div class="ibox float-e-margins">
 											<div class="add-company">
-												<h1 class="text-center"
-													style="position: relative; top: -24px;">Channel
-													Details</h1>
+												<h1 class="text-center"	style="position: relative; top: -24px;">													
+												Channel	Details</h1>
 												<div class="hr-line-dashed"
 													style="margin: -11px 0px 34px 19px;"></div>
 
@@ -181,7 +180,7 @@ input+label {
 																<label title="Upload image file" for="image"
 																	class="btn btn-white btn-block"> <i
 																	class="fa fa-upload"></i>
-																	<input type="file" id="file" name="image" id="image" class="hide" onchange="checkfile(this);" />
+																	<input type="file" name="image" id="image" class="hide" onchange="checkfile(this);" />
 																	Upload Logo
 																</label>
 																<c:if test="${partner.pcLogoUrl != null}">
