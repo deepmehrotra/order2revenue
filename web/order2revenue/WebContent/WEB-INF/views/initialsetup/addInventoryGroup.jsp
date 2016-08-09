@@ -53,8 +53,11 @@ function checkOnBlur()
                     type: 'post',
                     data:$("#addInventoryGroupForm").serialize(),
                     success : function(res) {
-                                  
-                        $("#centerpane").html(res);
+                    	if($(data).find('#j_username').length > 0){
+                    		window.location.href = "orderindex.html";
+                    	}else{
+                        	$('#centerpane').html(data);
+                    	}
                    
              	   }
             	 });

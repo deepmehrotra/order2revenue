@@ -151,7 +151,11 @@
             type: 'post',
 			data:$("#selectReportForm").serialize(),
 			success : function(res) {
-				$("#centerpane").html(res);
+				if($(res).find('#j_username').length > 0){
+	        		window.location.href = "orderindex.html";
+	        	}else{
+	            	$('#centerpane').html(res);
+	        	}
            	}
 		});
 	}

@@ -12,7 +12,11 @@
        $.ajax({
             url : 'viewExpenseGroup.html?expcategoryId='+id,
             success : function(data) {
-                $('#centerpane').html(data);
+            	if($(data).find('#j_username').length > 0){
+            		window.location.href = "orderindex.html";
+            	}else{
+                	$('#centerpane').html(data);
+            	}
             }
         });
     }
@@ -20,7 +24,11 @@
     	  $.ajax({
             url : 'addExpenseCategory.html',
             success : function(data) {
-                $('#centerpane').html(data);
+            	if($(data).find('#j_username').length > 0){
+            		window.location.href = "orderindex.html";
+            	}else{
+                	$('#centerpane').html(data);
+            	}
             }
         });
     }
@@ -28,7 +36,11 @@
   	  $.ajax({
           url : 'deleteExpenseCategory.html?expcategoryId='+id,
           success : function(data) {
-              $('#centerpane').html(data);
+        	  if($(data).find('#j_username').length > 0){
+          		window.location.href = "orderindex.html";
+          	}else{
+              	$('#centerpane').html(data);
+          	}
           }
       });
   }

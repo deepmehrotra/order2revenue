@@ -115,7 +115,11 @@ public boolean empty(String s)
        $.ajax({
             url : 'viewExpenseGroup.html?expcategoryId='+id,
             success : function(data) {
-                $('#centerpane').html(data);
+            	if($(data).find('#j_username').length > 0){
+            		window.location.href = "orderindex.html";
+            	}else{
+                	$('#centerpane').html(data);
+            	}
             }
         });
     }
@@ -123,7 +127,11 @@ public boolean empty(String s)
     	  $.ajax({
             url : 'addTaxCategory.html',
             success : function(data) {
-                $('#centerpane').html(data);
+            	if($(data).find('#j_username').length > 0){
+            		window.location.href = "orderindex.html";
+            	}else{
+                	$('#centerpane').html(data);
+            	}
             }
         });
     }

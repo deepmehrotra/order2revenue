@@ -227,7 +227,11 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
                         $.ajax({
                             url: 'addProduct.html',
                             success: function(data) {
-                                $('#centerpane').html(data);
+                            	if($(data).find('#j_username').length > 0){
+                            		window.location.href = "orderindex.html";
+                            	}else{
+                                	$('#centerpane').html(data);
+                            	}
                             }
                         });
                     }
@@ -236,7 +240,11 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
                         $.ajax({
                             url: 'editProduct.html?id=' + id,
                             success: function(data) {
-                                $('#centerpane').html(data);
+                            	if($(data).find('#j_username').length > 0){
+                            		window.location.href = "orderindex.html";
+                            	}else{
+                                	$('#centerpane').html(data);
+                            	}
                             }
                         });
                     }
@@ -255,7 +263,11 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
                         $.ajax({
                             url: 'uploadOrderDA.html?value=productConfigSummary',
                             success: function(data) {
-                                $('#centerpane').html(data);
+                            	if($(data).find('#j_username').length > 0){
+                            		window.location.href = "orderindex.html";
+                            	}else{
+                                	$('#centerpane').html(data);
+                            	}
                             }
                         });
                     });
@@ -264,7 +276,11 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
                		 $.ajax({
                	            url : 'downloadOrderDA.html?value=productConfigSummary',
                	            success : function(data) {
-               	            	 $('#centerpane').html(data);
+               	            	if($(data).find('#j_username').length > 0){
+               	         		window.location.href = "orderindex.html";
+	               	         	}else{
+	               	             	$('#centerpane').html(data);
+	               	         	}
                	            }
                	        });
                		});

@@ -13,7 +13,11 @@
         $.ajax({
             url : 'initialsetup.html',
             success : function(data) {
-                $('#centerpane').html(data);
+            	if($(data).find('#j_username').length > 0){
+            		window.location.href = "orderindex.html";
+            	}else{
+                	$('#centerpane').html(data);
+            	}
             }
         });
     }
@@ -23,7 +27,11 @@ function onclickdailyactivity() {
         $.ajax({
             url : 'dailyactivities.html',
             success : function(data) {
-                $('#centerpane').html(data);
+            	if($(data).find('#j_username').length > 0){
+            		window.location.href = "orderindex.html";
+            	}else{
+                	$('#centerpane').html(data);
+            	}
             }
         });
     }

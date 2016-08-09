@@ -224,8 +224,11 @@
 			$.ajax({
 				url : 'downloadOrderDA.html?value=productSummary',
 				success : function(data) {
-					alert(data);
-					$('#centerpane').html(data);
+					if($(data).find('#j_username').length > 0){
+		        		window.location.href = "orderindex.html";
+		        	}else{
+		            	$('#centerpane').html(data);
+		        	}
 				}
 			});
 		});
@@ -233,7 +236,11 @@
 			$.ajax({
 				url : 'uploadOrderDA.html?value=productSummary',
 				success : function(data) {
-					$('#centerpane').html(data);
+					if($(data).find('#j_username').length > 0){
+		        		window.location.href = "orderindex.html";
+		        	}else{
+		            	$('#centerpane').html(data);
+		        	}
 				},
 				error : function(data) {
 					alert(" Failing to get the data");
@@ -270,7 +277,11 @@
 		$.ajax({
 			url : 'addProduct.html',
 			success : function(data) {
-				$('#centerpane').html(data);
+				if($(data).find('#j_username').length > 0){
+	        		window.location.href = "orderindex.html";
+	        	}else{
+	            	$('#centerpane').html(data);
+	        	}
 			}
 		});
 	}
@@ -278,7 +289,11 @@
 		$.ajax({
 			url : 'editProduct.html?id=' + id,
 			success : function(data) {
-				$('#centerpane').html(data);
+				if($(data).find('#j_username').length > 0){
+	        		window.location.href = "orderindex.html";
+	        	}else{
+	            	$('#centerpane').html(data);
+	        	}
 			}
 		});
 	}

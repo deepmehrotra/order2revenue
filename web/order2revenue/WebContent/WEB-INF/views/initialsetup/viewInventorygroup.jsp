@@ -22,7 +22,11 @@ $(document).ready(function() {
          $.ajax({
              url : 'changeInventorygroup.html?catId='+val,
              success : function(data) {
-                 $('#centerpane').html(data);
+            	 if($(data).find('#j_username').length > 0){
+             		window.location.href = "orderindex.html";
+             	}else{
+                 	$('#centerpane').html(data);
+             	}
              }
          });
      });
@@ -54,7 +58,11 @@ function checkOnBlur()
         $.ajax({
             url : 'deleteProductCategory.html?id='+catId+'&parentId='+parentId,
             success : function(data) {
-                $('#centerpane').html(data);
+            	if($(data).find('#j_username').length > 0){
+            		window.location.href = "orderindex.html";
+            	}else{
+                	$('#centerpane').html(data);
+            	}
             }
         });
     }
@@ -77,9 +85,11 @@ function checkOnBlur()
                type: 'post',
                data:$("#addCategoryForm").serialize(),
                success : function(res) {
-                             
-                   $("#centerpane").html(res);
-              
+            	   if($(data).find('#j_username').length > 0){
+               		window.location.href = "orderindex.html";
+               	}else{
+                   	$('#centerpane').html(data);
+               	}
            }
         });
  	   	 }

@@ -17,7 +17,11 @@
     	   $.ajax({
             url : 'addExpense.html',
             success : function(data) {
-                $('#centerpane').html(data);
+            	if($(data).find('#j_username').length > 0){
+            		window.location.href = "orderindex.html";
+            	}else{
+                	$('#centerpane').html(data);
+            	}
             }
         });
     }
@@ -25,8 +29,11 @@
         $.ajax({
             url : 'downloadOrderDA.html?value=expenseSummary',
             success : function(data) {
-            	alert(data);
-                $('#centerpane').html("Got response from backend");
+            	if($(data).find('#j_username').length > 0){
+            		window.location.href = "orderindex.html";
+            	}else{
+                	$('#centerpane').html("Got response from Backend");
+            	}
             }
         });
     }
