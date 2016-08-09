@@ -45,7 +45,7 @@
                                             </select>
 								</div>
 								<div class="col-lg-3" style="margin: 0px;padding: 0px;">
-                                      <a href="uploadmappings.html?fileName=payment&channelName=Amazon" class="btn btn-white pull-left" ><i class="fa fa-search"></i></a>
+                                      <a href="uploadmappings.html?fileName=payment&channelName=PayTM" class="btn btn-white pull-left" ><i class="fa fa-search"></i></a>
                                 </div>
 							</div>
 							<div class="col-lg-12 m-t-xs">

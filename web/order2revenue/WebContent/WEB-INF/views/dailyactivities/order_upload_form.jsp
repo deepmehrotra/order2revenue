@@ -136,7 +136,7 @@
 								<option value="MP_SKU_Mapping">MP SKU Mapping</option>
 								<option value="PO_Product_Config">PO Product Config</option>
 								<option value="inventorysummary">Inventory Upload</option>
-								<option value="Expense_Upload">Expense Upload</option>
+								<option value="Expense_Upload">Expense Upload</option>								
 							</select>
 						</div>						
 						<div class="col-md-4">
@@ -173,6 +173,9 @@
 											<option value="poPaymentSummary">PO Payment Upload</option>
 											<option value="expenseSummary">Expense Upload</option>
 											<option value="Flipkart_Payment">Flipkart Payment</option>
+											<option value="PayTM_Payment">PayTM Payment Upload</option>
+											<option value="Amazon_Payment">Amazon Payment Upload</option>
+											<option value="Limeroad_Payment">Limeroad Payment Upload</option>
 										</select>
 									</div>
 									<div class="col-md-4">															

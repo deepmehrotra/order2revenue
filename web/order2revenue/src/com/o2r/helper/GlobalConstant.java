@@ -54,7 +54,7 @@ public class GlobalConstant {
 			add("Flipkart");
 			add("SnapDeal");
 			add("PayTM");
-
+			add("Limeroad");
 		}
 	};
 	public static final ArrayList<String> filesMappingList = new ArrayList<String>() {
@@ -117,6 +117,18 @@ public class GlobalConstant {
 			add("Payment Date");
 			add("Seller SKU");
 
+		}
+	};
+	
+	public static final ArrayList<String> limeroadPaymentHeaderList = new ArrayList<String>() {		
+		private static final long serialVersionUID = 1L;
+		{
+			add("ChannelOrderId");
+			add("SKU");			
+			add("Invoice ID");
+			add("Recieved Amount");
+			add("Payment Date");
+			add("Particular");
 		}
 	};
 

@@ -163,6 +163,8 @@ public class AdminController {
 			ArrayList<String> headers= new ArrayList<String>();
 			if(channelName.equalsIgnoreCase("Amazon")){
 				headers=GlobalConstant.amazonPaymentHeaderList;
+			}else if(channelName.equalsIgnoreCase("Limeroad")){
+				headers=GlobalConstant.limeroadPaymentHeaderList;
 			}else{
 				headers=GlobalConstant.paymentHeaderList;
 			}
@@ -239,29 +241,36 @@ public class AdminController {
 					if(cum!=null&&cum.getColumMap()!=null&&cum.getColumMap().size()!=0)
 					{
 						System.out.println(" Cum is not null");
-					model.put("mapping", cum);
-				} else {
-					if (channelName.equalsIgnoreCase("Amazon")) {
-						switch (fileName) {
-						case "payment":
-							System.out.println(" Stting [ayment headers"
-									+ GlobalConstant.amazonPaymentHeaderList);
-							model.put("o2rheaders",
-									GlobalConstant.amazonPaymentHeaderList);
-
-						}
+						model.put("mapping", cum);
 					} else {
-						switch (fileName) {
-						case "payment":
-							System.out.println(" Stting [ayment headers"
-									+ GlobalConstant.paymentHeaderList);
-							model.put("o2rheaders",
-									GlobalConstant.paymentHeaderList);
-
+						if (channelName.equalsIgnoreCase("Amazon")) {
+							switch (fileName) {
+							case "payment":
+								System.out.println(" Stting [payment headers"
+										+ GlobalConstant.amazonPaymentHeaderList);
+								model.put("o2rheaders",
+										GlobalConstant.amazonPaymentHeaderList);
+	
+							}
+						} else if (channelName.equalsIgnoreCase("Limeroad")) {
+							switch (fileName) {
+							case "payment":								
+								model.put("o2rheaders",
+										GlobalConstant.limeroadPaymentHeaderList);
+	
+							}
+						} else {
+							switch (fileName) {
+							case "payment":
+								System.out.println(" Stting [ayment headers"
+										+ GlobalConstant.paymentHeaderList);
+								model.put("o2rheaders",
+										GlobalConstant.paymentHeaderList);
+	
+							}
 						}
+	
 					}
-
-				}
 					model.put("fileName", fileName);
 					model.put("channelName",channelName);
 				} 

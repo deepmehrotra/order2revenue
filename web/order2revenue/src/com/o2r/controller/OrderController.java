@@ -374,6 +374,11 @@ public class OrderController {
 							files.get(0), sellerId, applicationPath,
 							uploadReport);
 						break;
+				case "Limeroad_Payment":
+					saveMappedFiles.saveLimeroadPaymentContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport);
+						break;
 
 				}
 				inputStream = files.get(0).getInputStream();
