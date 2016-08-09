@@ -180,8 +180,8 @@ input+label {
 															<div class="col-sm-8">
 																<label title="Upload image file" for="image"
 																	class="btn btn-white btn-block"> <i
-																	class="fa fa-upload"></i> <input type="file"
-																	accept="image/*" name="image" id="image" class="hide">
+																	class="fa fa-upload"></i>
+																	<input type="file" id="file" name="image" id="image" class="hide" onchange="checkfile(this);" />
 																	Upload Logo
 																</label>
 																<c:if test="${partner.pcLogoUrl != null}">
@@ -3872,6 +3872,19 @@ input+label {
 		function getRole(radioclassname) {
 			return $("#addpartnerform").find(
 					"input." + radioclassname + ":checked").val();
+		}
+	</script>
+	<script type="text/javascript" language="javascript">
+		function checkfile(sender) {
+		    var validExts = new Array(".jpg",".jpeg",".png");
+		    var fileExt = sender.value;
+		    fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+		    if (validExts.indexOf(fileExt) < 0) {
+		      alert("Invalid file selected, valid files are of " +
+		               validExts.toString() + " types.");
+		      return false;
+		    }
+		    else return true;
 		}
 	</script>
 
