@@ -1438,6 +1438,7 @@ public class SaveContents {
 		StringBuffer errorMessage = null;
 		boolean validaterow = true;
 		boolean generatePaymentUpload = false;
+		String channelName=null;
 		
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -1565,7 +1566,8 @@ public class SaveContents {
 					ManualCharges manualCharges=new ManualCharges();
 					if (entry.getCell(6) != null
 							&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						manualCharges.setPartner(entry.getCell(6).toString());					
+						manualCharges.setPartner(entry.getCell(6).toString());	
+						channelName=entry.getCell(6).toString();
 					} else {
 						errorMessage.append(" Channel is null ");					
 					}
@@ -1660,7 +1662,8 @@ public class SaveContents {
 					try
 					{
 					manuals.setChargesDesc(uploadPaymentId);
-					expenseService.addExpense(new Expenses("Manual Charges", uploadPaymentId, "Manual Charges", new Date(), manuals.getDateOfPayment(), manuals.getPaidAmount(), sellerId), sellerId);
+					expenseService.addExpense(new Expenses("Manual Charges", uploadPaymentId, "Manual Charges",
+							new Date(), manuals.getDateOfPayment(), manuals.getPaidAmount(),channelName, sellerId), sellerId);
 					}
 					catch(Exception e)
 					{
@@ -1889,12 +1892,12 @@ public class SaveContents {
 								orderReturn.setReturnDate(entry.getCell(5)
 										.getDateCellValue());
 							} else {
-								errorMessage.append(" Return Date formate is wrong ,enter mm/dd/yyyy,");
+								errorMessage.append(" Return Date format is wrong ,enter mm/dd/yyyy,");
 								validaterow = false;
 							}
 						} catch (Exception e) {
 							log.error("Failed! by SellerId : "+sellerId,e);
-							errorMessage.append(" Return Date formate is wrong ,enter mm/dd/yyyy,");
+							errorMessage.append(" Return Date format is wrong ,enter mm/dd/yyyy,");
 							validaterow = false;
 						}
 						

@@ -311,8 +311,10 @@ public class SaveMappedFiles {
 				for(ManualCharges manuals:manualChargesList){
 					try
 					{
-					manuals.setChargesDesc(uploadPaymentId);
-					expenseService.addExpense(new Expenses("Manual Charges", uploadPaymentId, "Manual Charges", new Date(), manuals.getDateOfPayment(), manuals.getPaidAmount(), sellerId), sellerId);
+						manuals.setChargesDesc(uploadPaymentId);
+					manuals.setPartner("Flipkart");;
+					expenseService.addExpense(new Expenses("Manual Charges", uploadPaymentId, "Manual Charges",
+							new Date(), manuals.getDateOfPayment(), manuals.getPaidAmount(),"Flipkart", sellerId), sellerId);
 					}
 					catch(Exception e)
 					{
@@ -395,9 +397,8 @@ public class SaveMappedFiles {
 						index=cellIndexMap.get(channelheader);
 					if(entry.getCell(index)!=null)
 					{
-						System.out.println(" channelorder id: "+entry.getCell(index).toString());
-						System.out.println(StringUtils.isNumeric(entry.getCell(index).toString()));
-						System.out.println(StringUtils.isAlphanumeric(entry.getCell(index).toString()));
+						log.info(" channelorder id: "+entry.getCell(index).toString());
+						;
 					if(StringUtils.isNumeric(entry.getCell(index).toString()))
 					{
 					List<Order> onj = orderService
@@ -494,10 +495,10 @@ public class SaveMappedFiles {
 						System.out.println(" Reading manual charge : "+entry.getCell(index));
 							newmanualCharge=new ManualCharges();
 							index=cellIndexMap.get(columHeaderMap.get("Payment Date"));
-							if(entry.getCell(index) != null
-									)
+							System.out.println("Payment Date : "+entry.getCell(index));
+							if(entry.getCell(index) != null)
 									{
-								orderPayment.setDateofPayment(new Date(entry.getCell(index).toString()));
+								newmanualCharge.setDateOfPayment(new Date(entry.getCell(index).toString()));
 									}
 							else
 							{
@@ -583,7 +584,8 @@ public class SaveMappedFiles {
 						System.out.println(" Payment Upload list created : "+uploadPaymentId);
 					manuals.setChargesDesc(uploadPaymentId);
 					manuals.setPartner("Snapdeal");
-					expenseService.addExpense(new Expenses("Manual Charges", uploadPaymentId, "Manual Charges", new Date(), manuals.getDateOfPayment(), manuals.getPaidAmount(), sellerId), sellerId);
+					expenseService.addExpense(new Expenses("Manual Charges", uploadPaymentId, "Manual Charges", new Date(), 
+							manuals.getDateOfPayment(), manuals.getPaidAmount(),"Snapdeal", sellerId), sellerId);
 					}
 					catch(Exception e)
 					{
