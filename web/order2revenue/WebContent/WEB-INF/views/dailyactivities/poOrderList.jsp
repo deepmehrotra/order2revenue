@@ -136,7 +136,7 @@
 										</button>
 										<div class="search-more-wrp">
 											<form role="search" class="form-inline" method="post"
-												action="searchOrder.html">
+												action="searchPOOrder.html">
 												<div class="form-group">
 													<select class="form-control" name="searchOrder"
 														id="searchOrders">

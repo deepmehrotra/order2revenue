@@ -5178,8 +5178,8 @@ public class OrderDaoImpl implements OrderDao {
 			dateString = "31 December " + year;
 			Date endDate = format.parse(dateString);
 
-			poOrderlist = findOrdersbyDate("orderDate", startDate, endDate,
-					sellerId, true);
+			poOrderlist = findPOOrdersbyDate("orderDate", startDate, endDate,
+					sellerId);
 
 			for (int month = 0; month < 13; month++) {
 				PoPaymentDetailsBean poPaymentBean = new PoPaymentDetailsBean();

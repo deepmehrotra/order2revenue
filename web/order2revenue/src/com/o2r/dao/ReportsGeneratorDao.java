@@ -46,7 +46,7 @@ public interface ReportsGeneratorDao {
 	public UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
 			throws CustomException;
 
-	public List<UploadReport> listUploadReport(int sellerId) throws CustomException;
+	public List<UploadReport> listUploadReport(int sellerId, boolean doSort) throws CustomException;
 
 	public UploadReport getUploadLog(int id, int sellerId) throws CustomException;
 

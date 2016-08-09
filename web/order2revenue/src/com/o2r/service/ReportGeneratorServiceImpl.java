@@ -143,9 +143,9 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 	}
 
 	@Override
-	public List<UploadReport> listUploadReport(int sellerId)
+	public List<UploadReport> listUploadReport(int sellerId, boolean doSort)
 			throws CustomException {
-		return reportGeneratorDao.listUploadReport(sellerId);
+		return reportGeneratorDao.listUploadReport(sellerId, doSort);
 	}
 
 	@Override

@@ -162,7 +162,7 @@ public class GenericController {
 			List<UploadReportBean> uploadReports = ConverterClass
 					.prepareUploadReportListBean(reportGeneratorService
 							.listUploadReport(helperClass
-									.getSellerIdfromSession(request)));
+									.getSellerIdfromSession(request), false));
 			if (uploadReports != null && uploadReports.size() > 3) {
 				uploadReports = uploadReports.subList(uploadReports.size() - 3,
 						uploadReports.size());
@@ -201,7 +201,7 @@ public class GenericController {
 			uploadReports = ConverterClass
 					.prepareUploadReportListBean(reportGeneratorService
 							.listUploadReport(helperClass
-									.getSellerIdfromSession(request)));
+									.getSellerIdfromSession(request), false));
 			if (uploadReports != null && uploadReports.size() > 3) {
 				uploadReports = uploadReports.subList(uploadReports.size() - 3,
 						uploadReports.size());
@@ -230,7 +230,7 @@ public class GenericController {
 			uploadReports = ConverterClass
 					.prepareUploadReportListBean(reportGeneratorService
 							.listUploadReport(helperClass
-									.getSellerIdfromSession(request)));
+									.getSellerIdfromSession(request), true));
 			model.put("uploadlist", uploadReports);
 		} catch (Exception e) {
 			e.printStackTrace();

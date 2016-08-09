@@ -777,21 +777,17 @@ input+label {
 																													</c:otherwise>
 																												</c:choose>
 																										</select></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeVolumeVariable${loop.index}-range"
-																														class="form-control number"
-																														value="${shippingfee.range}">
-																												</div>
+																										<td><div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeVolumeVariable${loop.index}-range"
+																													class="form-control number"
+																													value="${shippingfee.range}">
 																											</div></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeVolumeVariable${loop.index}-localValue"
-																														class="form-control number"
-																														value="${shippingfee.localValue}">
-																												</div>
+																										<td><div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeVolumeVariable${loop.index}-localValue"
+																													class="form-control number"
+																													value="${shippingfee.localValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
@@ -826,19 +822,15 @@ input+label {
 																											<option value="Upto">Upto</option>
 																											<option value="Additional">Additional</option>
 																									</select></td>
-																									<td><div class="form-group ">
-																											<div class=" content-rgt">
-																												<input type="text"
-																													name="nr-shippingfeeVolumeVariable0-range"
-																													class="form-control number">
-																											</div>
+																									<td><div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingfeeVolumeVariable0-range"
+																												class="form-control number">
 																										</div></td>
-																									<td><div class="form-group ">
-																											<div class=" content-rgt">
-																												<input type="text"
-																													name="nr-shippingfeeVolumeVariable0-localValue"
-																													class="form-control number">
-																											</div>
+																									<td><div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingfeeVolumeVariable0-localValue"
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
@@ -902,21 +894,17 @@ input+label {
 																													</c:otherwise>
 																												</c:choose>
 																										</select></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeWeightVariable${loop.index}-range"
-																														class="form-control number"
-																														value="${shippingfee.range}">
-																												</div>
+																										<td><div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeWeightVariable${loop.index}-range"
+																													class="form-control number"
+																													value="${shippingfee.range}">
 																											</div></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeWeightVariable${loop.index}-localValue"
-																														class="form-control number"
-																														value="${shippingfee.localValue}">
-																												</div>
+																										<td><div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeWeightVariable${loop.index}-localValue"
+																													class="form-control number"
+																													value="${shippingfee.localValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
@@ -951,12 +939,10 @@ input+label {
 																											<option value="Upto">Upto</option>
 																											<option value="Additional">Additional</option>
 																									</select></td>
-																									<td><div class="form-group ">
-																											<div class=" content-rgt">
-																												<input type="text"
-																													name="nr-shippingfeeWeightVariable0-range"
-																													class="form-control number">
-																											</div>
+																									<td><div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingfeeWeightVariable0-range"
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
@@ -1029,21 +1015,17 @@ input+label {
 																													</c:otherwise>
 																												</c:choose>
 																										</select></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeWeightFixed${loop.index}-range"
-																														class="form-control number"
-																														value="${shippingfee.range}">
-																												</div>
+																										<td><div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeWeightFixed${loop.index}-range"
+																													class="form-control number"
+																													value="${shippingfee.range}">
 																											</div></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeWeightFixed${loop.index}-value"
-																														class="form-control number"
-																														value="${shippingfee.value}">
-																												</div>
+																										<td><div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeWeightFixed${loop.index}-value"
+																													class="form-control number"
+																													value="${shippingfee.value}">
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="button"
@@ -1060,24 +1042,16 @@ input+label {
 																											<option value="Upto">Upto</option>
 																											<option value="Additional">Additional</option>
 																									</select></td>
-																									<td>
-																										<div class="form-group ">
-																											<div class=" content-rgt">
-																												<input type="text"
-																													name="nr-shippingfeeWeightFixed0-range"
-																													class="form-control number">
-																											</div>
-																										</div>
-																									</td>
-																									<td>
-																										<div class="form-group ">
-																											<div class=" content-rgt">
-																												<input type="text"
-																													name="nr-shippingfeeWeightFixed0-value"
-																													class="form-control number">
-																											</div>
-																										</div>
-																									</td>
+																									<td><div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingfeeWeightFixed0-range"
+																												class="form-control number">
+																										</div></td>
+																									<td><div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingfeeWeightFixed0-value"
+																												class="form-control number">
+																										</div></td>
 																									<td><input type="button" name=""
 																										class="button btn btn-primary"
 																										onclick="addField3()" value="+"></td>
@@ -1120,22 +1094,20 @@ input+label {
 																													</c:otherwise>
 																												</c:choose>
 																										</select></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeVolumeFixed${loop.index}-range"
-																														class="form-control number"
-																														value="${shippingfee.range}">
-																												</div>
+																										<td><div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeVolumeFixed${loop.index}-range"
+																													class="form-control number"
+																													value="${shippingfee.range}">
 																											</div></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeVolumeFixed${loop.index}-value"
-																														class="form-control number"
-																														value="${shippingfee.value}">
-																												</div>
-																											</div></td>
+																										<td>
+																											<div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeVolumeFixed${loop.index}-value"
+																													class="form-control number"
+																													value="${shippingfee.value}">
+																											</div>
+																										</td>
 																										<td><div class=" content-rgt">
 																												<input type="button"
 																													class="button btn btn-primary" value="+"
@@ -1154,15 +1126,11 @@ input+label {
 																									<td><input type="text"
 																										name="nr-shippingfeeVolumeFixed0-range"
 																										class="form-control number"></td>
-																									<td>
-																										<div class="form-group ">
-																											<div class=" content-rgt">
-																												<input type="text"
-																													name="nr-shippingfeeVolumeFixed0-value"
-																													class="form-control number">
-																											</div>
-																										</div>
-																									</td>
+																									<td><div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingfeeVolumeFixed0-value"
+																												class="form-control number">
+																										</div></td>
 																									<td><input type="button" name=""
 																										class="button btn btn-primary" value="+"
 																										onclick="addField4()"></td>

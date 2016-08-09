@@ -2382,14 +2382,19 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	}
 	
 	@Override
-	public List<UploadReport> listUploadReport(int sellerId) throws CustomException {
+	public List<UploadReport> listUploadReport(int sellerId, boolean doSort) throws CustomException {
 		List<UploadReport> returnlist = null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			Seller seller = (Seller) session.get(Seller.class, sellerId);
 			if (seller.getUploadReportList() != null && seller.getUploadReportList().size() != 0) {
+				
 				returnlist = seller.getUploadReportList();
+				
+				if (doSort) {
+					Collections.sort(returnlist, new UploadReport.OrderByDate());
+				}
 			}
 			session.getTransaction().commit();
 			session.close();

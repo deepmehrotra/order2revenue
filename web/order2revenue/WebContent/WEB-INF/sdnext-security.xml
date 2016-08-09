@@ -17,10 +17,10 @@
 		<logout logout-success-url="/" invalidate-session="true"
 			delete-cookies="JSESSIONID" />
 
-		<session-management>
+		<!-- <session-management>
 			<concurrency-control max-sessions="1"
 				error-if-maximum-exceeded="true" />
-		</session-management>
+		</session-management> -->
 
 	</http>
 

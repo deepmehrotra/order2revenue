@@ -267,10 +267,11 @@ public class DownloadService {
 		FileInputStream file = new FileInputStream(new File(pathvalue));
 		HSSFWorkbook workbook = new HSSFWorkbook(file);
 		
-		HSSFSheet worksheet = workbook.getSheet("UploadReport");
+		HSSFSheet worksheet = workbook.getSheetAt(0);
+		/*HSSFSheet worksheet = workbook.getSheet("UploadReport");
 		if (worksheet == null) {
 			worksheet = workbook.createSheet("UploadReport");
-		} 
+		} */
 		String fileName = pathvalue.substring(pathvalue.lastIndexOf(File.separator) + File.separator.length());
 		response.setHeader("Content-Disposition", "inline; filename="
 				+ fileName);

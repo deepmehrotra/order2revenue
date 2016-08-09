@@ -66,7 +66,7 @@ public interface ReportGeneratorService {
 	public List<PartnerReportDetails> getDebtorsReportDetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException;
 
-	public List<UploadReport> listUploadReport(int sellerId)
+	public List<UploadReport> listUploadReport(int sellerId, boolean doSort)
 			throws CustomException;
 
 	public UploadReport getUploadLog(int id, int sellerId)

@@ -399,7 +399,7 @@ public class OrderController {
 						uploadReport, sellerId);
 				
 				List<UploadReportBean> uploadReports = ConverterClass.prepareUploadReportListBean(
-						reportGeneratorService.listUploadReport(helperClass.getSellerIdfromSession(request)));
+						reportGeneratorService.listUploadReport(helperClass.getSellerIdfromSession(request), false));
 				if (uploadReports != null && uploadReports.size() > 3) {
 					uploadReports = uploadReports.subList(uploadReports.size() - 3, uploadReports.size());
 				}
@@ -441,7 +441,7 @@ public class OrderController {
 					|| searchOrder.equals("status") && channelOrderID != null) {
 				orderList = ConverterClass.prepareListofBean(orderService
 						.findOrders(searchOrder, channelOrderID, sellerId,
-								true, true));
+								false, true));
 			} else if (searchOrder != null
 					&& searchOrder.equals("customerName")
 					&& channelOrderID != null) {
@@ -468,6 +468,55 @@ public class OrderController {
 		request.getSession().setAttribute("orderSearchObject", orderList);
 		log.info("$$$ searchOrder() Ends : OrderController $$$");
 		return new ModelAndView("redirect:/seller/orderList.html");
+
+	}
+	
+	@RequestMapping(value = "/seller/searchPOOrder", method = RequestMethod.POST)
+	public ModelAndView searchPOOrder(HttpServletRequest request,
+			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
+
+		log.info("$$$ searchPOOrder() Starts : OrderController $$$");
+		int sellerId = 0;
+		Map<String, Object> model = new HashMap<String, Object>();
+		List<OrderBean> orderList = new ArrayList<>();
+		String channelOrderID = request.getParameter("channelOrderID");
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
+		String searchOrder = request.getParameter("searchOrder");
+		System.out.println(channelOrderID + "**********" + searchOrder);
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			if (searchOrder != null && searchOrder.equals("channelOrderID")
+					|| searchOrder.equals("invoiceID")
+					|| searchOrder.equals("subOrderID")
+					|| searchOrder.equals("pcName")
+					|| searchOrder.equals("status") && channelOrderID != null) {
+				orderList = ConverterClass.prepareListofBean(orderService
+						.findOrders(searchOrder, channelOrderID, sellerId,
+								true, true));
+			} else if (searchOrder != null && startDate != null
+					&& endDate != null) {
+				orderList = ConverterClass.prepareListofBean(orderService
+						.findPOOrdersbyDate("orderDate", new Date(startDate),
+								new Date(endDate), sellerId));
+
+			}
+			model.put("poOrders", orderList);
+			model.put("listSize", (listSize + (listSize*0)));
+			model.put("PoOrdersCount", orderService.poOrdersCount(sellerId));
+		} catch (CustomException ce) {
+			log.error("searchPOOrder exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			log.error("Failed! by Seller ID : "+sellerId, e);
+		}
+		request.getSession().setAttribute("orderSearchObject", orderList);
+		log.info("$$$ searchPOOrder() Ends : OrderController $$$");
+		return new ModelAndView("dailyactivities/poOrderList", model);
 
 	}
 

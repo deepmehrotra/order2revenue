@@ -1,5 +1,6 @@
 package com.o2r.model;
 
+import java.util.Comparator;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -10,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.o2r.bean.ChannelReportDetails;
 
 @Entity
 @Table(name = "upload_log")
@@ -96,5 +99,15 @@ public class UploadReport {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public static class OrderByDate implements Comparator<UploadReport> {
+		@Override
+		public int compare(UploadReport report1, UploadReport report2) {
+			if (report1.uploadDate == null || report2.uploadDate == null)
+				return -1;
+			return report1.uploadDate.before(report2.uploadDate) ? 1
+					: (report1.uploadDate.after(report2.uploadDate) ? -1 : 0);
+		}
 	}
 }
