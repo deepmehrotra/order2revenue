@@ -23,7 +23,7 @@ public class Expenses {
 	
 	public Expenses(String expenseName, String expenseDescription,
 			String expenseCatName, Date createdOn, Date expenseDate,
-			double amount, int sellerId) {
+			double amount,String paidTo, int sellerId) {
 		super();
 		this.expenseName = expenseName;
 		this.expenseDescription = expenseDescription;
@@ -31,6 +31,7 @@ public class Expenses {
 		this.createdOn = createdOn;
 		this.expenseDate = expenseDate;
 		this.amount = amount;
+		this.paidTo = paidTo;
 		this.sellerId = sellerId;
 	}
 	@Id

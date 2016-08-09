@@ -457,11 +457,6 @@ public class OrderDaoImpl implements OrderDao {
 								- (product.getProductPrice() * order
 										.getQuantity()));
 
-						// Setting order status if return limit is crossed
-						if (order.getReturnLimitCrossed().compareTo(
-								java.util.Calendar.getInstance().getTime()) < 0) {
-							order.setStatus("Return Limit Crossed");
-						}
 						if (order.getOrderId() != 0) {
 							System.out.println(" Saving edited order");
 							// Code for order timeline

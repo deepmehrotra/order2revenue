@@ -139,14 +139,15 @@ window.onload = function() {
 					<li><a href="#" onclick="onclickSideNavigation('Tax')">Tax</a></li>
 					<li><a href="#" onclick="onclickSideNavigation('TDS')">TDS</a></li>
 					<li><a href="eventsList.html">Events</a></li>
-					<li><a href="customerList.html">Customers</a></li>
+					<li><a href="customerList.html">Customers</a></li>					
 				</ul></li>
 				
 			<c:if test='<%= SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equals("[ROLE_ADMIN, ROLE_MODERATOR]") %>'>	
 				<li><a href="minor.html"><i class="fa fa-wrench"></i> <span
 						class="nav-label">Admin Control</span> <span class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">					
-						<li class="active"><a href="sellerList.html">Seller List</a></li>
+						<li ><a href="sellerList.html">Seller List</a></li>
+						<li><a href="uploadmappings.html">Channel Upload Mappings</a></li>
 					</ul>
 				</li>
 			</c:if>	

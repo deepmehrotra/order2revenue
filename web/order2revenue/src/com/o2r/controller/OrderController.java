@@ -49,6 +49,7 @@ import com.o2r.helper.CustomException;
 import com.o2r.helper.FileUploadForm;
 import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
+import com.o2r.helper.SaveMappedFiles;
 import com.o2r.model.Events;
 import com.o2r.model.GatePass;
 import com.o2r.model.Order;
@@ -93,8 +94,10 @@ public class OrderController {
 	@Autowired
 	EventsService eventsService;
 	@Autowired
-	DataConfig dataConfig;
-	//private int sellerId=0;
+	DataConfig dataConfig;	
+	@Resource(name = "saveMappedFiles")
+	private SaveMappedFiles saveMappedFiles;
+
 	private static final String UPLOAD_DIR = "upload";
 	
 	private int listSize=500;
@@ -359,6 +362,31 @@ public class OrderController {
 							uploadReport));
 					model.put("mapType", "skuMappingMap");
 					break;
+				case "Flipkart_Payment":
+					saveMappedFiles.saveFlipkartPaymentContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport);
+					break;
+				case "PayTM_Payment":
+					saveMappedFiles.savePayTMPaymentContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport);
+						break;
+				case "Amazon_Payment":
+					saveMappedFiles.saveAmazonPaymentContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport);
+						break;
+				case "Limeroad_Payment":
+					saveMappedFiles.saveLimeroadPaymentContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport);
+						break;
+				case "Snapdeal_Payment":
+					saveMappedFiles.saveSnapDealPaymentContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport);
+						break;
 
 				}
 				inputStream = files.get(0).getInputStream();

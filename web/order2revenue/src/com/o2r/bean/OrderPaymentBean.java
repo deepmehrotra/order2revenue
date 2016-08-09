@@ -6,6 +6,7 @@ public class OrderPaymentBean {
 
 
 	private int orderpayId;
+	private String channelOrderId;
 	private String paymentdesc;
 	private Date dateofPayment;
 	private Date uploadDate;
@@ -106,6 +107,36 @@ public class OrderPaymentBean {
 	}
 	public void setPositiveAmount(double positiveAmount) {
 		this.positiveAmount = positiveAmount;
+	}
+	public String getChannelOrderId() {
+		return channelOrderId;
+	}
+	public void setChannelOrderId(String channelOrderId) {
+		this.channelOrderId = channelOrderId;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((channelOrderId == null) ? 0 : channelOrderId.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		OrderPaymentBean other = (OrderPaymentBean) obj;
+		if (channelOrderId == null) {
+			if (other.channelOrderId != null)
+				return false;
+		} else if (!channelOrderId.equals(other.channelOrderId))
+			return false;
+		return true;
 	}
 
 }

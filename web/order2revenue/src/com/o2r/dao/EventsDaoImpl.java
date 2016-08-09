@@ -150,8 +150,7 @@ public class EventsDaoImpl implements EventsDao {
 		Session session=null; 		
 		try {
 			session = sessionFactory.openSession();
-			session.beginTransaction();
-			
+			session.beginTransaction();			
 			Criteria criteria = session.createCriteria(Events.class).add(Restrictions.eq("sellerId", sellerId));			
 			returnlist=criteria.list();			
 			session.getTransaction().commit();			

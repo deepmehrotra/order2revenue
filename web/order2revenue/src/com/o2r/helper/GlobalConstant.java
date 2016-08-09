@@ -43,6 +43,31 @@ public class GlobalConstant {
 
 		}
 	};
+	public static final ArrayList<String> channelMappingList = new ArrayList<String>() {
+		/**
+ *
+ */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Amazon");
+			add("Flipkart");
+			add("Snapdeal");
+			add("PayTM");
+			add("Limeroad");
+		}
+	};
+	public static final ArrayList<String> filesMappingList = new ArrayList<String>() {
+		/**
+ *
+ */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("payment");
+
+		}
+	};
 
 	public final ArrayList<String> productHeaderList = new ArrayList<String>() {
 		/**
@@ -62,7 +87,7 @@ public class GlobalConstant {
 		}
 	};
 
-	public final ArrayList<String> paymentHeaderList = new ArrayList<String>() {
+	public static final ArrayList<String> paymentHeaderList = new ArrayList<String>() {
 		/**
 	 *
 	 */
@@ -71,11 +96,55 @@ public class GlobalConstant {
 		{
 			add("ChannelOrderId");
 			add("InvoiceId");
-			add("SkUCode");
 			add("Recieved Amount");
-			add("Negative Charges");
+			add("Fulfilment Type");
 			add("Payment Date");
+			add("Seller SKU");
 
+		}
+	};
+	
+
+	public static final ArrayList<String> snapdealpaymentHeaderList = new ArrayList<String>() {
+		/**
+	 *
+	 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("ChannelOrderId");
+			add("Recieved Amount");
+			add("Type");
+			add("Payment Date");
+			add("Seller SKU");
+
+		}
+	};
+	public static final ArrayList<String> amazonPaymentHeaderList = new ArrayList<String>() {
+		/**
+	 *
+	 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("ChannelOrderId");			
+			add("Recieved Amount");
+			add("Payment Detail");
+			add("Payment Date");
+			add("Seller SKU");
+
+		}
+	};
+	
+	public static final ArrayList<String> limeroadPaymentHeaderList = new ArrayList<String>() {		
+		private static final long serialVersionUID = 1L;
+		{
+			add("ChannelOrderId");
+			add("SKU");			
+			add("Invoice ID");
+			add("Recieved Amount");
+			add("Payment Date");
+			add("Particular");
 		}
 	};
 
@@ -415,6 +484,14 @@ public class GlobalConstant {
 
 	public static final String deleteTaxCategoryError = "Error while deleting Tax Category. Either try again  or contact admin with the error details.";
 	public static final String deleteTaxCategoryErrorCode = "#00079";
+	
+	public static final String addChannelUploadMappingError = "Error while adding Channel Mapping of  the seller. Either try again with correct values or contact admin with the error details.";
+	public static final String addChannelUploadMappingErrorCode = "#00212";
+	
+	public static final String getChannelUploadMappingError = "Error while get Channel Mapping of  the seller. Either try again with correct values or contact admin with the error details.";
+	public static final String getChannelUploadMappingErrorCode = "#00213";
+
+
 
 	// Error Codes
 	public static final String addCategoryErrorCode = "#00061";

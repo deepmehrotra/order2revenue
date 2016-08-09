@@ -26,7 +26,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -70,16 +69,13 @@ import com.o2r.service.ProductService;
 import com.o2r.service.ReportGeneratorService;
 import com.o2r.service.SellerService;
 import com.o2r.service.TaxDetailService;
+import com.o2r.service.UploadMappingService;
 
 @Service("saveContents")
 @Transactional
 public class SaveContents {
 
-	/*
-	 * @Resource(name="sessionFactory") private SessionFactory sessionFactory;
-	 */
-	@Autowired
-	private SessionFactory sessionFactory;
+	
 	@Autowired
 	private OrderService orderService;
 	@Autowired
@@ -104,6 +100,8 @@ public class SaveContents {
 	private AreaConfigDao areaConfigDao;
 	@Autowired
 	private ManualChargesService manualChargesService;
+	@Autowired
+	private UploadMappingService uploadMappingService;
 
 	private static final String UPLOAD_DIR = "UploadReport";
 
@@ -247,9 +245,7 @@ public class SaveContents {
 				if (entry.getCell(6) != null
 						&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					order.setAwbNum(entry.getCell(6).toString());
-				} else {
-					errorMessage.append(" AWBNUM is null;");					
-				}
+				} 
 				if (entry.getCell(7) != null
 						&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					order.setInvoiceID(entry.getCell(7).toString());
@@ -1442,6 +1438,7 @@ public class SaveContents {
 		StringBuffer errorMessage = null;
 		boolean validaterow = true;
 		boolean generatePaymentUpload = false;
+		String channelName=null;
 		
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -1569,7 +1566,8 @@ public class SaveContents {
 					ManualCharges manualCharges=new ManualCharges();
 					if (entry.getCell(6) != null
 							&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						manualCharges.setPartner(entry.getCell(6).toString());					
+						manualCharges.setPartner(entry.getCell(6).toString());	
+						channelName=entry.getCell(6).toString();
 					} else {
 						errorMessage.append(" Channel is null ");					
 					}
@@ -1664,7 +1662,8 @@ public class SaveContents {
 					try
 					{
 					manuals.setChargesDesc(uploadPaymentId);
-					expenseService.addExpense(new Expenses("Manual Charges", uploadPaymentId, "Manual Charges", new Date(), manuals.getDateOfPayment(), manuals.getPaidAmount(), sellerId), sellerId);
+					expenseService.addExpense(new Expenses("Manual Charges", uploadPaymentId, "Manual Charges",
+							new Date(), manuals.getDateOfPayment(), manuals.getPaidAmount(),channelName, sellerId), sellerId);
 					}
 					catch(Exception e)
 					{
@@ -1893,12 +1892,12 @@ public class SaveContents {
 								orderReturn.setReturnDate(entry.getCell(5)
 										.getDateCellValue());
 							} else {
-								errorMessage.append(" Return Date formate is wrong ,enter mm/dd/yyyy,");
+								errorMessage.append(" Return Date format is wrong ,enter mm/dd/yyyy,");
 								validaterow = false;
 							}
 						} catch (Exception e) {
 							log.error("Failed! by SellerId : "+sellerId,e);
-							errorMessage.append(" Return Date formate is wrong ,enter mm/dd/yyyy,");
+							errorMessage.append(" Return Date format is wrong ,enter mm/dd/yyyy,");
 							validaterow = false;
 						}
 						
@@ -2777,4 +2776,7 @@ public class SaveContents {
 		log.info("$$$ saveGatePassDetails ends : SaveContents $$$");
 		return returnlist;
 	}
+	
+	
+	
 }
