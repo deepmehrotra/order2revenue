@@ -119,7 +119,7 @@
 								<option value="MP_SKU_Mapping">MP SKU Mapping</option>
 								<option value="PO_Product_Config">PO Product Config</option>
 								<option value="inventorysummary">Inventory Upload</option>
-								<option value="Expense_Upload">Expense Upload</option>
+								<option value="Expense_Upload">Expense Upload</option>								
 							</select>
 						</div>						
 						<div class="col-md-4">
@@ -155,9 +155,11 @@
 											<option value="inventorySummary">Inventory Upload</option>
 											<option value="poPaymentSummary">PO Payment Upload</option>
 											<option value="expenseSummary">Expense Upload</option>
-											 <option value="Flipkart_Payment">Flipkart Payment</option>
-                                            <option value="Snapdeal_Payment">Snapdeal Payment</option>
-											
+											<option value="Snapdeal_Payment">Snapdeal Payment</option>
+											<option value="Flipkart_Payment">Flipkart Payment</option>
+											<option value="PayTM_Payment">PayTM Payment Upload</option>
+											<option value="Amazon_Payment">Amazon Payment Upload</option>
+											<option value="Limeroad_Payment">Limeroad Payment Upload</option>
 										</select>
 									</div>
 									<div class="col-md-4">															
@@ -172,14 +174,14 @@
 								</form:form>
 							</div>
 						</div>
-						<h3 class="text-center heading">
+						<!-- <h3 class="text-center heading">
             		<div class="hr-line left">      
                     </div>
                     OR
                     <div class="hr-line right">
                     </div>
             	</h3>
-	            <div class="col-lg-12">
+	            <div class="col-lg-12"> 
 	                <div class="ibox float-e-margins">
 	                    <div class="ibox-title">
 	                        <h5>Channel Upload</h5>
@@ -212,7 +214,7 @@
 		                </div>
 		            </div>
 		        </div>
-					
+			-->		
 				</div>
 			</div>
 		</div>

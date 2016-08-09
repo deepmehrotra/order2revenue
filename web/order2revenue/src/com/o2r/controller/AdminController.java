@@ -170,6 +170,12 @@ public class AdminController {
 				tempList=GlobalConstant.paymentHeaderList;
 			case "Snapdeal":
 				tempList=GlobalConstant.snapdealpaymentHeaderList;
+			case "Amazon":
+				tempList=GlobalConstant.amazonPaymentHeaderList;
+			case "Limeroad":
+				tempList=GlobalConstant.limeroadPaymentHeaderList;
+			case "PayTM":
+				tempList=GlobalConstant.paymentHeaderList;
 			}
 			System.out.println("getting bvalues" +parameters);
 			for (Map.Entry<String, String[]> entry : parameters.entrySet())
@@ -257,13 +263,20 @@ public class AdminController {
 						switch(channelName)
 						{
 						case "Flipkart":
-							System.out.println(" Stting [ayment headers"+GlobalConstant.paymentHeaderList);
 							if(fileName.equalsIgnoreCase("payment"))
 							model.put("o2rheaders", GlobalConstant.paymentHeaderList);
 						case "Snapdeal":
-							System.out.println(" Stting [ayment headers"+GlobalConstant.paymentHeaderList);
 							if(fileName.equalsIgnoreCase("payment"))
 							model.put("o2rheaders", GlobalConstant.snapdealpaymentHeaderList);
+						case "Amazon":
+							if(fileName.equalsIgnoreCase("payment"))
+							model.put("o2rheaders", GlobalConstant.amazonPaymentHeaderList);
+						case "Limeroad":
+							if(fileName.equalsIgnoreCase("payment"))
+							model.put("o2rheaders", GlobalConstant.limeroadPaymentHeaderList);
+						case "PayTM":
+							if(fileName.equalsIgnoreCase("payment"))
+							model.put("o2rheaders", GlobalConstant.paymentHeaderList);
 							
 						}
 					}
