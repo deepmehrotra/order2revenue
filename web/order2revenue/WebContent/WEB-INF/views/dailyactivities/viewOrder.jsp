@@ -134,16 +134,7 @@
                                     <tr>
                                         <td>Gross Profit</td>
                                         <td>
-                                        	<c:if test="${(order.quantity- order.orderReturnOrRTO.returnorrtoQty) != 0 }">
-                                        		<fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${(order.grossProfit / (order.quantity- order.orderReturnOrRTO.returnorrtoQty)) * order.quantity}" />                                        	
-                                        	</c:if>
-                                        	<c:if test="${(order.quantity- order.orderReturnOrRTO.returnorrtoQty) == 0 }">
-                                        		<fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${(order.grossProfit / 1) * order.quantity}" />
-                                        	</c:if>                                  
+                                        	<fmt:formatNumber type="number" maxFractionDigits="2" value="${order.pr - (productCost * order.quantity)}" />                                       
                                         </td>  
                                     </tr>
                                     </tbody>
@@ -678,6 +669,7 @@
 		</div>
 		<jsp:include page="../globalfooter.jsp"></jsp:include>
 	</div>
+	
 	<script>
 		$(document).ready(function() {			
 			$("#form").validate({

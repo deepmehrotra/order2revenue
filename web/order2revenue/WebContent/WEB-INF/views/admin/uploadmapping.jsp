@@ -119,9 +119,8 @@ function getmappings()
 	                </div>
 	           	</div>
 	        </div>
- <jsp:include page="../globalfooter.jsp"></jsp:include>
-
     </div>
+    <jsp:include page="../globalfooter.jsp"></jsp:include>
 </div>
 </div>
 
