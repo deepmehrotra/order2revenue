@@ -104,6 +104,7 @@ public class SaveMappedFiles {
 		ManualCharges newmanualCharge=null;
 		boolean generatePaymentUpload = false;
 		String uploadPaymentId=null;
+		Map<String,String> duplicateKey=new HashMap<String, String>();
 		
 		try {
 			chanupload=uploadMappingService.getChannelUploadMapping("Flipkart", "Payment");
@@ -130,7 +131,7 @@ public class SaveMappedFiles {
 				
 			}
 			indexfulfilmentType=cellIndexMap.get(columHeaderMap.get("Fulfilment Type"));
-			for (int rowIndex = 0; rowIndex < noOfEntries; rowIndex++) {
+			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				int index=0; 
@@ -139,6 +140,7 @@ public class SaveMappedFiles {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				//Code for fetching right colum
 				orderPayment=new OrderPayment();
+				order=null;
 				
 					try
 					{
@@ -224,19 +226,32 @@ public class SaveMappedFiles {
 						errorSet.add(errorMessage.toString());
 						
 					}
-					if (order != null) {
-						
+					if (order != null&validaterow) {
+						if(!duplicateKey.containsKey(channelOrderId))
+						{
+						System.out.println(" Setting payment upload");
 						order.setPaymentUpload(paymentUpload);
 						paymentUpload.getOrders().add(order);
 						generatePaymentUpload = true;
+						duplicateKey.put(channelOrderId, channelOrderId);
+						}
+						
 					}	
 					
 					}
 					else if(entry.getCell(indexfulfilmentType)!=null&&
 							entry.getCell(indexfulfilmentType).toString().equalsIgnoreCase("null"))
 					{
+						index=cellIndexMap.get(columHeaderMap.get("Seller SKU"));
+						if(entry.getCell(index) != null
+								&& StringUtils.isNotBlank(entry.getCell(index)
+										.toString()))
+								{
+							skucode=entry.getCell(index).toString();
+								}
 						if(skucode!=null&&skucode.equalsIgnoreCase("null"))
 						{
+							System.out.println(" Setting manula charges ");
 							newmanualCharge=new ManualCharges();
 							index=cellIndexMap.get(columHeaderMap.get("Payment Date"));
 							if(entry.getCell(index) != null
@@ -279,8 +294,15 @@ public class SaveMappedFiles {
 								validaterow = false;
 							}
 						}
+						else
+						{
+							errorMessage
+							.append("SKU value should be present SKU or null.");
+							validaterow = false;
+						}
 						
 						if (validaterow) {
+							System.out.println(" Adding manul charges to list");
 							manualChargesList.add(newmanualCharge);
 						} else {
 							errorSet.add(errorMessage.toString());
@@ -291,6 +313,7 @@ public class SaveMappedFiles {
 						errorMessage
 						.append("Fulfilment Type is not accepted.Only NON-FA is valid.");
 						validaterow = false;
+						errorSet.add(errorMessage.toString());
 					}
 					
 					
@@ -312,14 +335,17 @@ public class SaveMappedFiles {
 				paymentUpload.setUploadDesc("PAYU" + sellerId + ""
 						+ new Date().getTime());
 				paymentUpload.setUploadStatus("Success");
-				uploadPaymentId=paymentUploadService.addPaymentUpload(paymentUpload, sellerId);				
+				uploadPaymentId=paymentUploadService.addPaymentUpload(paymentUpload, sellerId);		
+				System.out.println(" Saving payment upload : "+uploadPaymentId);
 			}
 			if(manualChargesList != null && manualChargesList.size() != 0){
 				for(ManualCharges manuals:manualChargesList){
 					try
 					{
+						System.out.println(" Seting manual charges uploadPaymentId "+uploadPaymentId);
+						if(uploadPaymentId!=null)
 						manuals.setChargesDesc(uploadPaymentId);
-					manuals.setPartner("Flipkart");;
+					manuals.setPartner("Flipkart");
 					expenseService.addExpense(new Expenses("Manual Charges", uploadPaymentId, "Manual Charges",
 							new Date(), manuals.getDateOfPayment(), manuals.getPaidAmount(),"Flipkart", sellerId), sellerId);
 					}
@@ -389,7 +415,7 @@ public class SaveMappedFiles {
 				}
 				
 			}
-			for (int rowIndex = 0; rowIndex < noOfEntries; rowIndex++) {
+			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				int index=0; 
@@ -398,6 +424,7 @@ public class SaveMappedFiles {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				//Code for fetching right colum
 				orderPayment=new OrderPayment();
+				order=null;
 					try
 					{
 						channelheader=columHeaderMap.get("ChannelOrderId");
@@ -610,6 +637,7 @@ public class SaveMappedFiles {
 			log.error("Failed by seller: "+sellerId, e);
 		}
 	}
+	
 	
 	public void savePayTMPaymentContents(MultipartFile file, int sellerId,
 			String path, UploadReport uploadReport) throws IOException {
@@ -1213,7 +1241,7 @@ public class SaveMappedFiles {
 
 				if (errorMessage.length() > 5) {
 					isError = true;
-					row = worksheet.getRow(errorRow+1);
+					row = worksheet.getRow(errorRow);
 					cell = row.createCell(colNumber);
 					cell.setCellValue(errorMessage);
 					cell.setCellStyle(errorCellStyle);
@@ -1264,7 +1292,7 @@ public class SaveMappedFiles {
 	{
 		if(text!=null&&!StringUtils.isBlank(text))
 		{
-			return text.substring(text.indexOf(delimeter), text.length());
+			return text.substring(text.indexOf(delimeter)+1, text.length());
 		}
 		else 
 			return "";
