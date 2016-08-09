@@ -159,12 +159,31 @@ public class AdminController {
 		try {
 			ColumMap colmap=null;
 			Map<String, String[]> parameters = request.getParameterMap();
-			for (String header : GlobalConstant.paymentHeaderList) {
+			List<String> tempList=null;
+			System.out.println(" ChannleNAme : "+request.getParameter("channelName"));
+			System.out.println(" CN : "+channeluploadmapping.getChannelName());
+			String channelName=request.getParameter("channelName")!=null?
+					request.getParameter("channelName"):"";
+			switch(channelName)
+			{
+			case "Flipkart":
+				tempList=GlobalConstant.paymentHeaderList;
+			case "Snapdeal":
+				tempList=GlobalConstant.snapdealpaymentHeaderList;
+			}
+			System.out.println("getting bvalues" +parameters);
+			for (Map.Entry<String, String[]> entry : parameters.entrySet())
+			{
+				System.out.println(" Key : "+entry.getKey()+" value : "+entry.getValue()[0]);
+			}
+			for (String header : tempList) {
 				colmap=new ColumMap();
 				colmap.setO2rColumName(header);
+				System.out.println(" Header : "+header);
 				String temp="map-"+header;
 				if(parameters.containsKey(temp))
 				{
+					System.out.println(" Value : "+parameters.get(temp)[0]);
 					colmap.setChannelColumName(parameters.get(temp)[0]);
 				}
 				else
@@ -235,11 +254,16 @@ public class AdminController {
 					}
 					else
 					{
-						switch(fileName)
+						switch(channelName)
 						{
-						case "payment":
+						case "Flipkart":
 							System.out.println(" Stting [ayment headers"+GlobalConstant.paymentHeaderList);
+							if(fileName.equalsIgnoreCase("payment"))
 							model.put("o2rheaders", GlobalConstant.paymentHeaderList);
+						case "Snapdeal":
+							System.out.println(" Stting [ayment headers"+GlobalConstant.paymentHeaderList);
+							if(fileName.equalsIgnoreCase("payment"))
+							model.put("o2rheaders", GlobalConstant.snapdealpaymentHeaderList);
 							
 						}
 					}

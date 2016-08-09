@@ -52,7 +52,7 @@ public class GlobalConstant {
 		{
 			add("Amazon");
 			add("Flipkart");
-			add("SnapDeal");
+			add("Snapdeal");
 			add("PayTM");
 
 		}
@@ -64,7 +64,7 @@ public class GlobalConstant {
 		private static final long serialVersionUID = 1L;
 
 		{
-			add("Payment");
+			add("payment");
 
 		}
 	};
@@ -98,6 +98,22 @@ public class GlobalConstant {
 			add("InvoiceId");
 			add("Recieved Amount");
 			add("Fulfilment Type");
+			add("Payment Date");
+			add("Seller SKU");
+
+		}
+	};
+	
+	public static final ArrayList<String> snapdealpaymentHeaderList = new ArrayList<String>() {
+		/**
+	 *
+	 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("ChannelOrderId");
+			add("Recieved Amount");
+			add("Type");
 			add("Payment Date");
 			add("Seller SKU");
 

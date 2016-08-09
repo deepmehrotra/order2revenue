@@ -103,24 +103,7 @@
 					<div class="col-lg-12">
 						<div class="hr-line-dashed"></div>
 						<div class="col-md-4">
-							<!-- <select class="form-control" id="downloadreporttype"
-								name="downloadreporttype">
-								<option value="">Select file to download</option>
-								<option value="ordersummary">Order Summary</option>
-								<option value="orderposummary">Order PO Summary</option>
-								<option value="paymentsummary">Payment Summary</option>
-								<option value="popaymentsummary">PO Payment Summary</option>
-								<option value="returnsummary">Return Summary</option>
-								<option value="gatepasssummary">GatePass Summary</option>
-								<option value="debitnotesummary">Debit Note</option>
-								<option value="productsummary">Product Summary</option>
-								<option value="editproductsummary">Edit Product Summary</option>
-								<option value="skumappingsummary">MP Channels SKU Mapping</option>
-								<option value="productconfigsummary">Product Config
-									Summary</option>
-								<option value="inventorysummary">Inventory Summary</option>
-								<option value="expensesummary">Expense Summary</option>
-							</select> -->
+			
 							<iframe id="my_iframe" style="display:none;"></iframe>
 							<select class="form-control" id="downloadreporttype"
 								name="downloadreporttype">
@@ -172,7 +155,9 @@
 											<option value="inventorySummary">Inventory Upload</option>
 											<option value="poPaymentSummary">PO Payment Upload</option>
 											<option value="expenseSummary">Expense Upload</option>
-											<option value="Flipkart_Payment">Flipkart Payment</option>
+											 <option value="Flipkart_Payment">Flipkart Payment</option>
+                                            <option value="Snapdeal_Payment">Snapdeal Payment</option>
+											
 										</select>
 									</div>
 									<div class="col-md-4">															
@@ -187,6 +172,46 @@
 								</form:form>
 							</div>
 						</div>
+						<h3 class="text-center heading">
+            		<div class="hr-line left">      
+                    </div>
+                    OR
+                    <div class="hr-line right">
+                    </div>
+            	</h3>
+	            <div class="col-lg-12">
+	                <div class="ibox float-e-margins">
+	                    <div class="ibox-title">
+	                        <h5>Channel Upload</h5>
+	                    </div>
+	                    <div class="ibox-content overflow-h">
+	                        <div class="form-group">
+                                <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                                    <div class="col-md-4">
+                                        <select class="form-control" id="" name="" required="" autocomplete="off">
+                                            <option value="">UPLOAD</option>
+                                           <option value="Flipkart_Payment">Flipkart Payment</option>
+                                            <option value="Snapdeal_Payment">Snapdeal Payment</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="file" class="form-control" required="">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-success " type="submit" id="upload">
+                                            <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Upload</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-lg-12">
+                                <p class="para m-t-sm">
+                                <b>Note</b>Upload Channel files with 1st row as headers.
+                            </p>
+                            </div>
+		                </div>
+		            </div>
+		        </div>
 					
 				</div>
 			</div>

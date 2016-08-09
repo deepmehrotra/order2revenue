@@ -245,9 +245,7 @@ public class SaveContents {
 				if (entry.getCell(6) != null
 						&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					order.setAwbNum(entry.getCell(6).toString());
-				} else {
-					errorMessage.append(" AWBNUM is null;");					
-				}
+				} 
 				if (entry.getCell(7) != null
 						&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					order.setInvoiceID(entry.getCell(7).toString());

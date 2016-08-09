@@ -165,6 +165,8 @@ public class ExpenseDaoImpl implements ExpenseDao {
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Expenses.class).add(
 					Restrictions.eq("sellerId", sellerId));
+			criteria.addOrder(org.hibernate.criterion.Order
+					.desc("createdOn"));
 			returnlist = criteria.list();
 			session.getTransaction().commit();
 			session.close();

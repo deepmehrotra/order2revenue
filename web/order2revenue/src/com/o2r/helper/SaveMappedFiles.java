@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -32,10 +33,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.o2r.bean.DataConfig;
 import com.o2r.model.ChannelUploadMapping;
 import com.o2r.model.ColumMap;
+import com.o2r.model.Expenses;
+import com.o2r.model.ManualCharges;
 import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
 import com.o2r.model.PaymentUpload;
 import com.o2r.model.UploadReport;
+import com.o2r.service.ExpenseService;
+import com.o2r.service.ManualChargesService;
 import com.o2r.service.OrderService;
 import com.o2r.service.PaymentUploadService;
 import com.o2r.service.ReportGeneratorService;
@@ -59,6 +64,10 @@ public class SaveMappedFiles {
 	private SellerService sellerService;
 	@Autowired
 	private ReportGeneratorService reportGeneratorService;
+	@Autowired
+	private ExpenseService expenseService;
+	@Autowired
+	private ManualChargesService manualChargesService;
 	private static final String UPLOAD_DIR = "UploadReport";
 	
 	static Logger log = Logger.getLogger(SaveMappedFiles.class.getName());
@@ -84,7 +93,10 @@ public class SaveMappedFiles {
 		double totalnegative=0;
 		Set<String>  errorSet=new HashSet<String>();
 		PaymentUpload paymentUpload = new PaymentUpload();
+		List<ManualCharges> manualChargesList=new ArrayList<ManualCharges>();
+		ManualCharges newmanualCharge=null;
 		boolean generatePaymentUpload = false;
+		String uploadPaymentId=null;
 		
 		try {
 			chanupload=uploadMappingService.getChannelUploadMapping("Flipkart", "Payment");
@@ -131,12 +143,14 @@ public class SaveMappedFiles {
 					channelheader=columHeaderMap.get("ChannelOrderId");
 					index=cellIndexMap.get(channelheader);
 					List<Order> onj = orderService
-							.findOrders("channelOrderID", entry.getCell(index)
-									.toString(), sellerId, false, false);
+							.findOrders("channelOrderID", getSubstringValue(':',entry.getCell(index)
+									.toString()), sellerId, false, false);
 					if (onj != null && onj.size() != 0) {
-						channelOrderId = entry.getCell(index).toString();
+						channelOrderId = getSubstringValue(':',entry.getCell(index)
+								.toString());
 							} else {
-						channelOrderId = entry.getCell(index).toString();
+						channelOrderId = getSubstringValue(':',entry.getCell(index)
+								.toString());
 						errorMessage
 								.append(" Channel OrderId not present ");
 						validaterow = false;
@@ -196,20 +210,6 @@ public class SaveMappedFiles {
 							{
 						skucode=entry.getCell(index).toString();
 							}
-					
-					
-					}
-					else if(entry.getCell(indexfulfilmentType)!=null&&
-							entry.getCell(indexfulfilmentType).toString().equalsIgnoreCase("null"))
-					{
-						
-					}
-					else
-					{
-						errorMessage
-						.append("Fulfilment Type is not accepted.Only NON-FA is valid.");
-						validaterow = false;
-					}
 					if (validaterow) {
 						order =orderService.addOrderPayment(skucode, channelOrderId,
 								orderPayment, sellerId);
@@ -223,6 +223,69 @@ public class SaveMappedFiles {
 						paymentUpload.getOrders().add(order);
 						generatePaymentUpload = true;
 					}	
+					
+					}
+					else if(entry.getCell(indexfulfilmentType)!=null&&
+							entry.getCell(indexfulfilmentType).toString().equalsIgnoreCase("null"))
+					{
+						if(skucode!=null&&skucode.equalsIgnoreCase("null"))
+						{
+							newmanualCharge=new ManualCharges();
+							index=cellIndexMap.get(columHeaderMap.get("Payment Date"));
+							if(entry.getCell(index) != null
+									&& HSSFDateUtil.isCellDateFormatted(entry.getCell(index)))
+									{
+								newmanualCharge.setDateOfPayment(entry.getCell(index)
+										.getDateCellValue());
+									}
+							else
+							{
+								errorMessage
+								.append(" Payment Date format is wrong or null");
+								validaterow = false;
+							}
+							
+							index=cellIndexMap.get(columHeaderMap.get("Recieved Amount"));
+							if(entry.getCell(index) != null
+									&& StringUtils.isNotBlank(entry.getCell(index)
+											.toString()))
+									{
+								try
+								{
+								double amount=entry.getCell(index).getNumericCellValue();
+									newmanualCharge.setPaidAmount((-amount));
+								
+								
+								}catch(Exception e)
+								{
+									log.error("Failed by seller "+sellerId,e);
+									errorMessage
+									.append(" Payment Amount cell is corrupted");
+									validaterow = false;
+									
+								}
+									}
+							else
+							{
+								errorMessage
+								.append("Amount format is wrong or null.");
+								validaterow = false;
+							}
+						}
+						
+						if (validaterow) {
+							manualChargesList.add(newmanualCharge);
+						} else {
+							errorSet.add(errorMessage.toString());
+						}
+					}
+					else
+					{
+						errorMessage
+						.append("Fulfilment Type is not accepted.Only NON-FA is valid.");
+						validaterow = false;
+					}
+					
 					
 				
 			}catch(Exception e)
@@ -242,10 +305,294 @@ public class SaveMappedFiles {
 				paymentUpload.setUploadDesc("PAYU" + sellerId + ""
 						+ new Date().getTime());
 				paymentUpload.setUploadStatus("Success");
-				paymentUploadService.addPaymentUpload(paymentUpload, sellerId);				
+				uploadPaymentId=paymentUploadService.addPaymentUpload(paymentUpload, sellerId);				
 			}
-			
+			if(manualChargesList != null && manualChargesList.size() != 0){
+				for(ManualCharges manuals:manualChargesList){
+					try
+					{
+					manuals.setChargesDesc(uploadPaymentId);
+					expenseService.addExpense(new Expenses("Manual Charges", uploadPaymentId, "Manual Charges", new Date(), manuals.getDateOfPayment(), manuals.getPaidAmount(), sellerId), sellerId);
+					}
+					catch(Exception e)
+					{
+						log.error("Failed! by SellerId : "+sellerId, e);
+					}
+				}
+				manualChargesService.addListManualCharges(manualChargesList, sellerId);
+			}
 			uploadResultXLS(offices, "Flipkart_Payment", errorSet,
+					path, sellerId, uploadReport);
+		}
+				
+		catch(Exception e)
+		{
+			log.error("Failed by seller: "+sellerId, e);
+		}
+	}
+	
+	
+	public void saveSnapDealPaymentContents(MultipartFile file,
+			int sellerId, String path, UploadReport uploadReport)
+			throws IOException {
+		log.info("$$$ saveSnapDealPaymentContents starts : SaveMappedFiles $$$");
+		
+		ChannelUploadMapping chanupload=null;
+		Map<String, String> columHeaderMap = new LinkedHashMap<String, String>();
+		Map<String,Integer> cellIndexMap = new LinkedHashMap<String,Integer>();
+		OrderPayment orderPayment=null;
+		StringBuffer errorMessage = null;
+		String channelOrderId=null;
+		String skucode=null;
+		Order order=null;
+		int noOfEntries = 1;
+		HSSFRow entry;
+		boolean validaterow = true;
+		double totalpositive=0;
+		double totalnegative=0;
+		Set<String>  errorSet=new HashSet<String>();
+		PaymentUpload paymentUpload = new PaymentUpload();
+		List<ManualCharges> manualChargesList=new ArrayList<ManualCharges>();
+		ManualCharges newmanualCharge=null;
+		boolean generatePaymentUpload = false;
+		String uploadPaymentId=null;
+		try {
+			chanupload=uploadMappingService.getChannelUploadMapping("Snapdeal", "Payment");
+			if(chanupload!=null&&chanupload.getColumMap()!=null)
+			{
+				for(ColumMap colums:chanupload.getColumMap())
+				{
+					columHeaderMap.put(colums.getO2rColumName(),colums.getChannelColumName());
+				}
+			}
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			entry = worksheet.getRow(0);
+			for(int cellIndex=0;cellIndex<entry.getPhysicalNumberOfCells();cellIndex++)
+			{
+				if(columHeaderMap.containsValue(entry.getCell(cellIndex).toString()))
+				{
+					cellIndexMap.put(entry.getCell(cellIndex).toString(),cellIndex );
+				}
+				
+			}
+			for (int rowIndex = 0; rowIndex < noOfEntries; rowIndex++) {
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;
+				int index=0; 
+				String channelheader=null;
+				channelOrderId=null;
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
+				//Code for fetching right colum
+				orderPayment=new OrderPayment();
+					try
+					{
+						channelheader=columHeaderMap.get("ChannelOrderId");
+						index=cellIndexMap.get(channelheader);
+					if(entry.getCell(index)!=null)
+					{
+						System.out.println(" channelorder id: "+entry.getCell(index).toString());
+						System.out.println(StringUtils.isNumeric(entry.getCell(index).toString()));
+						System.out.println(StringUtils.isAlphanumeric(entry.getCell(index).toString()));
+					if(StringUtils.isNumeric(entry.getCell(index).toString()))
+					{
+					List<Order> onj = orderService
+							.findOrders("channelOrderID", entry.getCell(index)
+									.toString(), sellerId, false, false);
+					if (onj != null && onj.size() != 0&&onj.size()<2) {
+						channelOrderId = entry.getCell(index).toString();
+							} else {
+						channelOrderId = entry.getCell(index).toString();
+						errorMessage
+								.append(" Order with channel OrderId not present ");
+						validaterow = false;
+					}
+					
+					index=cellIndexMap.get(columHeaderMap.get("Payment Date"));
+					try
+					{
+					if(entry.getCell(index) != null
+							)
+							{
+						orderPayment.setDateofPayment(new Date(entry.getCell(index).toString()));
+							}
+					else
+					{
+						errorMessage
+						.append(" Payment Date format is wrong or null");
+						validaterow = false;
+					}
+					}
+					catch(Exception e)
+					{
+						log.error("Failed by selled ID "+sellerId,e);
+						errorMessage
+						.append(" Payment Date format is wrong or null");
+						validaterow = false;
+					}
+					index=cellIndexMap.get(columHeaderMap.get("Recieved Amount"));
+					if(entry.getCell(index) != null
+							&& StringUtils.isNotBlank(entry.getCell(index)
+									.toString()))
+							{
+						try
+						{
+						double amount=entry.getCell(index).getNumericCellValue();
+						if(amount>0)
+						{
+							orderPayment.setPositiveAmount(amount);
+							totalpositive = totalpositive+amount;
+						}
+						else
+						{
+							orderPayment.setNegativeAmount(Math.abs(amount));
+							totalnegative=totalnegative+Math.abs(amount);
+						}
+						}catch(Exception e)
+						{
+							log.error("Failed by seller "+sellerId,e);
+							errorMessage
+							.append(" Payment Amount cell is corrupted");
+							validaterow = false;
+							
+						}
+							}
+					else
+					{
+						errorMessage
+						.append("Amount format is wrong or null.");
+						validaterow = false;
+					}
+					index=cellIndexMap.get(columHeaderMap.get("Seller SKU"));
+					if(entry.getCell(index) != null
+							&& StringUtils.isNotBlank(entry.getCell(index)
+									.toString()))
+							{
+						skucode=entry.getCell(index).toString();
+							}
+					if (validaterow) {
+						order =orderService.addOrderPayment(skucode, channelOrderId,
+								orderPayment, sellerId);
+					} else {
+						errorSet.add(errorMessage.toString());
+						
+					}
+					if (order != null) {
+						
+						order.setPaymentUpload(paymentUpload);
+						paymentUpload.getOrders().add(order);
+						generatePaymentUpload = true;
+					}	
+					
+					}
+					else
+					{
+						System.out.println(" Reading manual charge : "+entry.getCell(index));
+							newmanualCharge=new ManualCharges();
+							index=cellIndexMap.get(columHeaderMap.get("Payment Date"));
+							if(entry.getCell(index) != null
+									)
+									{
+								orderPayment.setDateofPayment(new Date(entry.getCell(index).toString()));
+									}
+							else
+							{
+								errorMessage
+								.append(" Payment Date format is wrong or null");
+								validaterow = false;
+							}
+							
+							index=cellIndexMap.get(columHeaderMap.get("Recieved Amount"));
+							if(entry.getCell(index) != null
+									&& StringUtils.isNotBlank(entry.getCell(index)
+											.toString()))
+									{
+								try
+								{
+								double amount=entry.getCell(index).getNumericCellValue();
+									newmanualCharge.setPaidAmount((-amount));
+								
+								
+								}catch(Exception e)
+								{
+									log.error("Failed by seller "+sellerId,e);
+									errorMessage
+									.append(" Payment Amount cell is corrupted");
+									validaterow = false;
+									
+								}
+									}
+							else
+							{
+								errorMessage
+								.append("Amount format is wrong or null.");
+								validaterow = false;
+							}
+							index=cellIndexMap.get(columHeaderMap.get("Type"));
+							if(entry.getCell(index) != null
+									&& !StringUtils.isBlank(entry.getCell(index).toString()))
+									{
+								newmanualCharge.setParticular(entry.getCell(index).toString());
+									}
+							
+							
+						if (validaterow) {
+							manualChargesList.add(newmanualCharge);
+						} else {
+							errorSet.add(errorMessage.toString());
+						}
+					}
+					
+					}
+					else
+					{
+						errorMessage
+						.append("Order ID is empty or null.");
+						validaterow = false;
+					}
+					
+					
+				
+			}catch(Exception e)
+					{
+				log.error("Failed by seller: "+sellerId, e);
+				errorMessage.append("Invalid Input !");
+				errorSet.add(errorMessage.toString());
+					}
+		}
+			if (generatePaymentUpload) {
+				log.info("Updating payment Upload with positive amount " + totalpositive);
+				log.info("Updating payment Upload with negative amount " + totalnegative);
+				paymentUpload.setTotalpositivevalue(totalpositive);
+				paymentUpload.setTotalnegativevalue(totalnegative);
+				paymentUpload.setNetRecievedAmount(totalpositive
+						- totalnegative);
+				paymentUpload.setUploadDesc("PAYU" + sellerId + ""
+						+ new Date().getTime());
+				paymentUpload.setUploadStatus("Success");
+				uploadPaymentId=paymentUploadService.addPaymentUpload(paymentUpload, sellerId);				
+			}
+			if(manualChargesList != null && manualChargesList.size() != 0){
+				for(ManualCharges manuals:manualChargesList){
+					try
+					{
+						System.out.println(" Payment Upload list created : "+uploadPaymentId);
+					manuals.setChargesDesc(uploadPaymentId);
+					manuals.setPartner("Snapdeal");
+					expenseService.addExpense(new Expenses("Manual Charges", uploadPaymentId, "Manual Charges", new Date(), manuals.getDateOfPayment(), manuals.getPaidAmount(), sellerId), sellerId);
+					}
+					catch(Exception e)
+					{
+						log.error("Failed! by SellerId : "+sellerId, e);
+					}
+				}
+				manualChargesService.addListManualCharges(manualChargesList, sellerId);
+			}
+			uploadResultXLS(offices, "Snapdeal_Payment", errorSet,
 					path, sellerId, uploadReport);
 		}
 				
@@ -260,7 +607,7 @@ public class SaveMappedFiles {
 			String path, int sellerId, UploadReport uploadReport)
 			throws ClassNotFoundException, CustomException {
 
-		log.info("$$$ downloadUploadReportXLS starts : SaveContents $$$");
+		log.info("$$$ uploadResultXLS starts : SaveContents $$$");
 		String errorMessage;
 		boolean isError = false;
 		HSSFSheet worksheet = workbook.getSheetAt(0);
@@ -294,7 +641,7 @@ public class SaveMappedFiles {
 		// Create the column headers
 		HSSFRow rowHeader = worksheet.getRow(0);
 
-		HSSFCell cell1 = rowHeader.createCell(colNumber+1);
+		HSSFCell cell1 = rowHeader.createCell(colNumber);
 		cell1.setCellValue("Error Message");
 		cell1.setCellStyle(headerCellStyle);
 
@@ -358,6 +705,15 @@ public class SaveMappedFiles {
 			e.printStackTrace();
 			log.error("Failed! by SellerId : "+sellerId, e);
 		}
+	}
+	public String getSubstringValue(char delimeter,String text)
+	{
+		if(text!=null&&!StringUtils.isBlank(text))
+		{
+			return text.substring(text.indexOf(delimeter), text.length());
+		}
+		else 
+			return "";
 	}
 }
 
