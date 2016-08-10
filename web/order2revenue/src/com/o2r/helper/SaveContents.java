@@ -1467,6 +1467,7 @@ public class SaveContents {
 					
 					if (entry.getCell(1) != null
 							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						entry.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
 						if(channelOrderIdCheck.containsKey(entry.getCell(1).toString())){
 							errorMessage.append("Duplicate Channel OrderId ");
 							validaterow = false;
@@ -1843,10 +1844,12 @@ public class SaveContents {
 						
 						System.out.println(entry
 								.getCell(1).toString());
+						entry.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
 						orderlist = orderService.findOrders(column, entry
 								.getCell(1).toString(), sellerId, false, false);
 						if(orderlist != null && orderlist.size() != 0){
 							if(orderlist.size() == 1 && orderlist.get(0).getOrderReturnOrRTO().getReturnDate() == null){
+								
 								order.setChannelOrderID(orderlist.get(0)
 										.getChannelOrderID());
 								id=order.getChannelOrderID();
