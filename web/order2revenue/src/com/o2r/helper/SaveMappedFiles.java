@@ -488,14 +488,14 @@ public class SaveMappedFiles {
 						+ "failed due to internal server error. Please contact admin.!", null);
 			}
 			errorSet = returnOrderMap.keySet();
-			uploadResultXLS(offices, "MP_Order_Upload", errorSet,
+			uploadResultXLS(offices, "Flipkart_Order_Upload", errorSet,
 					path, sellerId, uploadReport);
 
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
-			addErrorUploadReport("MP_Order_Upload", sellerId, uploadReport);
+			addErrorUploadReport("Flipkart_Order_Upload", sellerId, uploadReport);
 			log.error("Failed! by SellerId : "+sellerId, e);
 		}
 	}
