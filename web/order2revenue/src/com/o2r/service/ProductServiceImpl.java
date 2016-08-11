@@ -155,4 +155,9 @@ public class ProductServiceImpl implements ProductService {
 		productDao.addSKUMapping(productConfigList, sellerId);
 		
 	}
+	
+	@Override
+	public List<String> listProductSKU(int sellerId) {
+		return productDao.listProductSKU(sellerId);
+	}
 }

@@ -367,6 +367,11 @@ public class OrderController {
 							files.get(0), sellerId, applicationPath,
 							uploadReport);
 					break;
+				case "Flipkart_Order":
+					saveMappedFiles.saveFlipkartOrderContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport);
+					break;
 				case "PayTM_Payment":
 					saveMappedFiles.savePayTMPaymentContents(
 							files.get(0), sellerId, applicationPath,

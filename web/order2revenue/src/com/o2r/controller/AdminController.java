@@ -164,18 +164,25 @@ public class AdminController {
 			List<String> tempList=null;
 			System.out.println(" ChannleNAme : "+request.getParameter("channelName"));
 			System.out.println(" CN : "+channeluploadmapping.getChannelName());
-			String channelName=request.getParameter("channelName")!=null?
-					request.getParameter("channelName"):"";
+			String channelName=request.getParameter("channelName")!=null?request.getParameter("channelName"):"";
+			String fileName=request.getParameter("fileName")!=null?request.getParameter("fileName"):"";
 			switch(channelName)
 			{
 			case "Flipkart":
-				tempList=GlobalConstant.paymentHeaderList;
+				if(fileName.equalsIgnoreCase("payment"))
+					tempList=GlobalConstant.paymentHeaderList;
+				else
+					tempList=GlobalConstant.flipkartOrderHeaderList;
+				break;
 			case "Snapdeal":
 				tempList=GlobalConstant.snapdealpaymentHeaderList;
+				break;
 			case "Amazon":
 				tempList=GlobalConstant.amazonPaymentHeaderList;
+				break;
 			case "Limeroad":
 				tempList=GlobalConstant.limeroadPaymentHeaderList;
+				break;
 			case "PayTM":
 				tempList=GlobalConstant.paymentHeaderList;
 			}
@@ -266,7 +273,9 @@ public class AdminController {
 						{
 						case "Flipkart":
 							if(fileName.equalsIgnoreCase("payment"))
-							model.put("o2rheaders", GlobalConstant.paymentHeaderList);
+								model.put("o2rheaders", GlobalConstant.paymentHeaderList);
+							else
+								model.put("o2rheaders", GlobalConstant.flipkartOrderHeaderList);
 						case "Snapdeal":
 							if(fileName.equalsIgnoreCase("payment"))
 							model.put("o2rheaders", GlobalConstant.snapdealpaymentHeaderList);

@@ -125,4 +125,6 @@ public interface OrderDao {
 	public int mpOrdersCount(int sellerId);
 	
 	public int poOrdersCount(int sellerId);
+	
+	public List<String> listOrderIds(String criteria,int sellerId);
 }

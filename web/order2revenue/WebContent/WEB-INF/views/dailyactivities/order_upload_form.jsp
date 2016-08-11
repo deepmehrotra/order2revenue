@@ -8,6 +8,39 @@
 <script src="/O2R/seller/js/jquery.ui.widget.js"></script>
 <script src="/O2R/seller/js/jquery.iframe-transport.js"></script>
 <script src="/O2R/seller/js/jquery.fileupload.js"></script>
+<style type="text/css">
+        .para
+        {
+            text-align: justify;
+        }
+        .left
+        {
+            float: left;
+            width: 24%;
+            margin: 0px;
+            position: relative;
+            left: 24%;
+            top: 8px;
+            color:#fff;
+            border: 1px dashed #fff;
+        }
+        .right
+        {
+            float: right;
+            width: 24%;
+            margin: 0px;
+            position: relative;
+            right: 24%;
+            top: 8px;
+            color:#fff;
+            border: 1px dashed #fff;
+        }
+        .heading
+        {
+            position: relative;
+            top: -7px;
+        }
+    </style>
 <script type="text/javascript">
 	$(function() {
 		var downloadValue = '${downloadValue}';
@@ -17,7 +50,7 @@
 		else
 			$("#downloadreporttype").val(downloadValue);
 	});
-	$("#fileupload1").submit(
+	$('#fileupload1,#fileupload2').submit(
 			function() {
 				$.ajax({
 					xhr : function() {
@@ -53,7 +86,7 @@
 						return xhr;
 					},
 					url : 'saveSheet.html',
-					data : $("#fileupload1").serialize(),
+					data : $('#fileupload1,#fileupload2').serialize(),
 					processData : false,
 					contentType : false,
 					type : 'POST',
@@ -67,8 +100,8 @@
 	$(document).ready(function() {
 		var downloadValue = '${downloadValue}';
 		var uploadValue = '${uploadValue}';
-		if (uploadValue != null && uploadValue.length != 0)
-			$("#sheetValue").val(uploadValue);
+		if (uploadValue != null && uploadValue.length != 0)			
+			$('#sheetValue').val(uploadValue);			
 		else
 			$("#downloadreporttype").val(downloadValue);
 	});
@@ -106,7 +139,7 @@
 			
 							<iframe id="my_iframe" style="display:none;"></iframe>
 							<select class="form-control" id="downloadreporttype"
-								name="downloadreporttype">
+								name="downloadreporttype" required	autocomplete="off" >
 								<option value="">Select file to download</option>
 								<option value="MP_Order_Upload">MP Order Upload</option>
 								<option value="PO_Order_Upload">PO Order Upload</option>
@@ -142,7 +175,7 @@
 									<!-- 	<input id="addFile" type="button" value="Add File" /> -->
 									<div class="col-md-4">
 										<select class="form-control" id="sheetValue" name="sheetValue" required	autocomplete="off" >
-											<option value="">Select file to download</option>
+											<option value="">Select file to upload</option>
 											<option value="ordersummary">MP Order Upload</option>
 											<option value="orderPoSummary">PO Order Upload</option>
 											<option value="paymentSummary">MP Payment Upload</option>
@@ -154,16 +187,11 @@
 											<option value="productConfigSummary">PO Product Config</option>
 											<option value="inventorySummary">Inventory Upload</option>
 											<option value="poPaymentSummary">PO Payment Upload</option>
-											<option value="expenseSummary">Expense Upload</option>
-											<option value="Snapdeal_Payment">Snapdeal Payment</option>
-											<option value="Flipkart_Payment">Flipkart Payment</option>
-											<option value="PayTM_Payment">PayTM Payment Upload</option>
-											<option value="Amazon_Payment">Amazon Payment Upload</option>
-											<option value="Limeroad_Payment">Limeroad Payment Upload</option>
+											<option value="expenseSummary">Expense Upload</option>											
 										</select>
 									</div>
 									<div class="col-md-4">															
-										<input name="files[0]" type="file"	class="form-control" required/>											
+										<input name="files[0]" type="file"	class="form-control" required onchange="checkfile(this);"/>											
 									</div>
 									<div class="col-md-2">
 										
@@ -173,51 +201,79 @@
 									</div>
 								</form:form>
 							</div>
-						</div>
-						<!-- <h3 class="text-center heading">
-            		<div class="hr-line left">      
-                    </div>
-                    OR
-                    <div class="hr-line right">
-                    </div>
-            	</h3>
-	            <div class="col-lg-12"> 
-	                <div class="ibox float-e-margins">
-	                    <div class="ibox-title">
-	                        <h5>Channel Upload</h5>
-	                    </div>
-	                    <div class="ibox-content overflow-h">
-	                        <div class="form-group">
-                                <form class="form-horizontal" method="post" enctype="multipart/form-data">
-                                    <div class="col-md-4">
-                                        <select class="form-control" id="" name="" required="" autocomplete="off">
-                                            <option value="">UPLOAD</option>
-                                           <option value="Flipkart_Payment">Flipkart Payment</option>
-                                            <option value="Snapdeal_Payment">Snapdeal Payment</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="file" class="form-control" required="">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button class="btn btn-success " type="submit" id="upload">
-                                            <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Upload</span>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-lg-12">
-                                <p class="para m-t-sm">
-                                <b>Note</b>Upload Channel files with 1st row as headers.
-                            </p>
-                            </div>
-		                </div>
-		            </div>
-		        </div>
-			-->		
+						</div>						
+					</div>
 				</div>
 			</div>
-		</div>
+						
+		            	<div class="col-lg-12">
+		            		<h3 class="text-center heading">
+			            		<div class="hr-line left">      
+			                    </div>
+			                    OR
+			                    <div class="hr-line right">
+		                    </div>
+            				</h3>
+		            	</div>	
+		            	
+			            <div class="col-lg-12">
+			                <div class="ibox float-e-margins">
+			                    <div class="ibox-title">
+			                        <h5>Channel Upload</h5>
+			                    </div>
+			                    <div class="ibox-content overflow-h">
+			                        <div class="form-group">
+		                                <form:form id="fileupload2" method="post"
+											action="saveSheet.html" modelAttribute="uploadForm"
+												enctype="multipart/form-data" class="form-horizontal">
+		                                    <div class="col-md-4">
+		                                        <select class="form-control" id="sheetValue" name="sheetValue" required autocomplete="off">
+		                                            <option value="">Upload</option>
+		                                            <option value="Snapdeal_Payment">Snapdeal Payment</option>
+													<option value="Flipkart_Payment">Flipkart Payment</option>
+													<option value="Flipkart_Order">Flipkart Order Upload</option>
+													<option value="PayTM_Payment">PayTM Payment Upload</option>
+													<option value="Amazon_Payment">Amazon Payment Upload</option>
+													<option value="Limeroad_Payment">Limeroad Payment Upload</option>
+		                                        </select>
+		                                    </div>
+		                                    <div class="col-md-4">
+		                                        <input name="files[0]" type="file" id="file" class="form-control" required onchange="checkfile(this);"/>	
+		                                    </div>
+		                                    <div class="col-md-2">
+		                                        <button class="btn btn-success " type="submit" id="upload4Channel">
+		                                            <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Upload</span>
+		                                        </button>
+		                                    </div>
+		                                </form:form>
+		                            </div>
+		                            <div class="col-lg-12">
+		                                <p class="m-t-sm">
+		                                <b>Note : </b><font color="green">Upload Channel files with 1st row as headers</font>
+		                            </p>
+		                            </div>
+				                </div>
+				            </div>
+				        </div>
+						
+
+		
+		
+		
 	</div>
+<script type="text/javascript" language="javascript">
+function checkfile(sender) {
+    var validExts = new Array(".xls");
+    var fileExt = sender.value;
+    fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+    if (validExts.indexOf(fileExt) < 0) {
+      alert("Invalid file selected, valid files are of " +
+               validExts.toString() + " types.");
+      return false;
+    }
+    else return true;
+}
+</script>
+
 </body>
 </html>

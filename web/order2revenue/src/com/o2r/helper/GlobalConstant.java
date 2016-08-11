@@ -65,7 +65,7 @@ public class GlobalConstant {
 
 		{
 			add("payment");
-
+			add("order");
 		}
 	};
 
@@ -100,6 +100,7 @@ public class GlobalConstant {
 			add("Fulfilment Type");
 			add("Payment Date");
 			add("Seller SKU");
+			add("Particulars");
 
 		}
 	};
@@ -145,6 +146,40 @@ public class GlobalConstant {
 			add("Recieved Amount");
 			add("Payment Date");
 			add("Particular");
+		}
+	};
+	
+	public static final ArrayList<String> flipkartOrderHeaderList = new ArrayList<String>() {
+		/**
+	 *
+	 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Order Recieved Date");
+			add("Secondary OrderID");
+			add("Channel Order ID");
+			add("SkUCode");			
+			add("Quantity");
+			add("InvoiceID");
+			add("Order SP");
+			add("Shipping PinCode");
+			add("Order Shipped Date");
+			add("Sales Channel");
+			add("Payment Type");
+			add("Tax Category");
+			add("AWB No");
+			add("PIreferenceNo");
+			add("Logistic Partner");
+			add("Order MRP");
+			add("Net Rate");
+			add("Customer Name");
+			add("Customer Address");
+			add("Customer City");
+			add("Customer Phone No");			
+			add("Customer Email");
+			add("Seller Note");
+			
 		}
 	};
 

@@ -67,5 +67,6 @@ public interface ProductDao {
 
 	public void addSKUMapping(List<ProductConfig> productConfigList, int sellerId)
 			throws CustomException;
-
+	
+	public List<String> listProductSKU(int sellerId);
 }

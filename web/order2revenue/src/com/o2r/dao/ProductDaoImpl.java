@@ -16,7 +16,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -1188,6 +1190,33 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		log.info("$$$ deleteProduct Ends : ProductDaoImpl $$$");
 		return "Server Issue";
+	}
+	
+	@Override
+	public List<String> listProductSKU(int sellerId) {
+		List<String> SKUList = null; 
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Product.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId));
+			criteria.setProjection(Projections.projectionList()				      
+				      .add(Projections.property("productSkuCode"), "productSkuCode"))
+				    .setResultTransformer(Transformers.aliasToBean(Order.class));	
+			if(criteria != null && criteria.list().size() != 0){
+				SKUList=criteria.list();
+			}
+			System.out.println(SKUList.size());
+		} catch (Exception e) {
+			log.error("Failed! by sellerId : "+sellerId, e);
+		} finally{
+			if(session != null)
+				session.close();
+		}
+		return null;
 	}
 
 }

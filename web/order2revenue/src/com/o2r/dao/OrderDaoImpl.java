@@ -25,6 +25,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -5360,6 +5361,34 @@ public class OrderDaoImpl implements OrderDao {
 			log.error("Failed! by sellerId : "+sellerId+" In POORDER Count", e);			
 		}
 		return noOfPoOrders;
+	}
+	
+	@Override
+	public List<String> listOrderIds(String OrderCriteria, int sellerId) {
+		List<String> idsList = null; 
+		Session session = null;
+		try{
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId));
+			criteria.setProjection(Projections.projectionList()				      
+				      .add(Projections.property(OrderCriteria), OrderCriteria))
+				    .setResultTransformer(Transformers.aliasToBean(Order.class));	
+			if(criteria != null && criteria.list().size() != 0){
+				idsList=criteria.list();
+			}
+			System.out.println(idsList.size());
+		}catch(Exception e){
+			log.error("Failed by Seller ID : "+sellerId, e);
+			e.printStackTrace();
+		}finally{
+			if(session != null)
+				session.close();
+		}		
+		return idsList;
 	}
 
 }

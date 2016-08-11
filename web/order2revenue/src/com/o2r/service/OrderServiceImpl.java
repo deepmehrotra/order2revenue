@@ -267,4 +267,9 @@ public class OrderServiceImpl implements OrderService {
 	public int poOrdersCount(int sellerId) {
 		return orderDao.poOrdersCount(sellerId);
 	}
+	
+	@Override
+	public List<String> listOrderIds(String criteria, int sellerId) {		
+		return orderDao.listOrderIds(criteria, sellerId);
+	}
 }
