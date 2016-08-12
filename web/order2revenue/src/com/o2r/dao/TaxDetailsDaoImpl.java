@@ -298,8 +298,9 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		log.debug("addTaxCategory : cat : " + taxCategory.getTaxCatName()
 				+ " Amount :" + taxCategory.getTaxPercent());
 		Seller seller = null;
+		Session session=null;
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			session.beginTransaction();
 			if (taxCategory.getTaxCatId() == 0) {
 				Criteria criteria = session.createCriteria(Seller.class).add(
@@ -311,10 +312,9 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 				session.saveOrUpdate(seller);
 			} else {
 				taxCategory.setUploadDate(new Date());
-				session.saveOrUpdate(taxCategory);
+				session.merge(taxCategory);
 			}
-			session.getTransaction().commit();
-			session.close();
+			session.getTransaction().commit();			
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("**Error Code : "
@@ -324,7 +324,11 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.getTaxDetailListErrorCode, e);
 
+		} finally{
+			if(session != null)
+				session.close();
 		}
+		
 		log.info("*** addTaxCategory Ends : TaxDetailsDaoImpl ****");
 		return taxCategory;
 
@@ -478,12 +482,14 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 	public TaxCategory getTaxCategory(Product product, int sellerId, String zipcode) throws CustomException {
 		log.info("*** getTaxCategory Starts : TaxDetailsDaoImpl ****");
 		TaxCategory taxCategory = null;
+		String sellerState=null;
 		try {
 			Category category = categoryService.getCategory(product.getCategoryName(), sellerId);
 			Seller seller = sellerService.getSeller(sellerId);
-			String sellerState = areaConfigDao.getStateFromZipCode(seller.getZipcode());
+			if(seller != null)
+				sellerState = areaConfigDao.getStateFromZipCode(seller.getZipcode());
 			String customerState = areaConfigDao.getStateFromZipCode(zipcode);
-			if (sellerState.equalsIgnoreCase(customerState)) {
+			if (sellerState != null && sellerState.equalsIgnoreCase(customerState) && category != null) {
 				taxCategory = category.getLST();
 			} else {
 				taxCategory = category.getCST();

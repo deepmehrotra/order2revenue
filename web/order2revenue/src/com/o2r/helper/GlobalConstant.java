@@ -169,6 +169,7 @@ public class GlobalConstant {
 			add("Payment Type");
 			add("Tax Category");
 			add("AWB No");
+			add("Gross NR");
 			add("PIreferenceNo");
 			add("Logistic Partner");
 			add("Order MRP");

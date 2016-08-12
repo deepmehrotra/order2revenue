@@ -171,7 +171,7 @@ public class AdminController {
 			case "Flipkart":
 				if(fileName.equalsIgnoreCase("payment"))
 					tempList=GlobalConstant.paymentHeaderList;
-				else
+				else if(fileName.equalsIgnoreCase("order"))
 					tempList=GlobalConstant.flipkartOrderHeaderList;
 				break;
 			case "Snapdeal":
@@ -274,7 +274,7 @@ public class AdminController {
 						case "Flipkart":
 							if(fileName.equalsIgnoreCase("payment"))
 								model.put("o2rheaders", GlobalConstant.paymentHeaderList);
-							else
+							else if(fileName.equalsIgnoreCase("order"))
 								model.put("o2rheaders", GlobalConstant.flipkartOrderHeaderList);
 						case "Snapdeal":
 							if(fileName.equalsIgnoreCase("payment"))

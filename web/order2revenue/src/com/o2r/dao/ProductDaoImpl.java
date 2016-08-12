@@ -1203,12 +1203,10 @@ public class ProductDaoImpl implements ProductDao {
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId));
-			criteria.setProjection(Projections.projectionList()				      
-				      .add(Projections.property("productSkuCode"), "productSkuCode"))
-				    .setResultTransformer(Transformers.aliasToBean(Order.class));	
+			criteria.setProjection(Projections.property("productSkuCode"));	
 			if(criteria != null && criteria.list().size() != 0){
 				SKUList=criteria.list();
-			}
+			}			
 			System.out.println(SKUList.size());
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId, e);
@@ -1216,7 +1214,7 @@ public class ProductDaoImpl implements ProductDao {
 			if(session != null)
 				session.close();
 		}
-		return null;
+		return SKUList;
 	}
 
 }
