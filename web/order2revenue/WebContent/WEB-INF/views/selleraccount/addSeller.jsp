@@ -11,14 +11,15 @@ span .#error {
 	color: red;
 	font-weight: bold;
 }
+
 #sellerImage img {
-        height: 80px;
-        width: 80px;
-        object-fit: contain;
-        position: relative;
-    	top: -25px;
-    	left: 50px;
-    }
+	height: 80px;
+	width: 80px;
+	object-fit: contain;
+	position: relative;
+	top: -25px;
+	left: 50px;
+}
 </style>
 <script type="text/javascript">
 	function submitSeller() {
@@ -71,40 +72,51 @@ span .#error {
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
 								<h5>Seller Info</h5>
-								<c:if test="${passwordStatus != null }"><div align="center" style="width: 82%;float: left;">${passwordStatus}</div></c:if>
+								<c:if test="${passwordStatus != null }">
+									<div align="center" style="width: 82%; float: left;">${passwordStatus}</div>
+								</c:if>
 								<div class="ibox-tools pull-right">
-									<a href="#"	class="btn btn-primary btn-xs password">Change Password</a>
+									<a href="#" class="btn btn-primary btn-xs password">Change
+										Password</a>
 								</div>
 							</div>
-							<div id="showChangeBox" class="col-lg-12" style="padding: 11px 0px 8px 0px;">
-								<form:form method="POST" action="changePassword.html" role="form" id="changePassword">
-									<div class="col-sm-3" style="display: inline-flex;">							
-										<label style="width: 35%;">Old Password</label>
-										<input type="password" name="oldPass" class="form-control" style="width: 65%;" required />
+							<div id="showChangeBox" class="col-lg-12"
+								style="padding: 11px 0px 8px 0px;">
+								<form:form method="POST" action="changePassword.html"
+									role="form" id="changePassword">
+									<div class="col-sm-3" style="display: inline-flex;">
+										<label style="width: 35%;">Old Password</label> <input
+											type="password" name="oldPass" class="form-control"
+											style="width: 65%;" required />
 									</div>
 									<div class="col-sm-3" style="display: inline-flex;">
-										<label style="width: 35%;">New Password</label>
-										<input type="password" name="newPass" class="form-control" style="width: 65%;" required />
+										<label style="width: 35%;">New Password</label> <input
+											type="password" name="newPass" class="form-control"
+											style="width: 65%;" required />
 									</div>
 									<div class="col-sm-3" style="display: inline-flex;">
-										<label style="width: 35%;">Re-Type Password</label>
-										<input type="password" class="form-control" style="width: 65%;" required />
+										<label style="width: 35%;">Re-Type Password</label> <input
+											type="password" class="form-control" style="width: 65%;"
+											required />
 									</div>
 									<div class="col-sm-3">
-										<button type="submit" class="btn btn-primary btn-xs" style="margin-top: 6px;margin-left: 139px;">Save Changes</button>
+										<button type="submit" class="btn btn-primary btn-xs"
+											style="margin-top: 6px; margin-left: 139px;">Save
+											Changes</button>
 									</div>
 								</form:form>
 							</div>
 							<div class="ibox-content add-company">
 								<form:form method="POST" action="saveSeller.html" role="form"
-									class="form-horizontal" id="addSellerForm" enctype="multipart/form-data">
+									class="form-horizontal" id="addSellerForm"
+									enctype="multipart/form-data">
 									<div class="col-sm-6">
 										<div class="form-group">
 											<label class="col-sm-4 control-label">Seller Name</label>
 											<c:if test="${!empty seller.id}">
 												<form:input type="hidden" class="form-control"
 													value="${seller.id}" path="id" />
-												<form:input type="hidden" class="form-control" 
+												<form:input type="hidden" class="form-control"
 													value="${seller.email}" path="email" />
 												<form:input type="hidden" class="form-control"
 													value="${seller.password}" path="password" />
@@ -115,7 +127,7 @@ span .#error {
 											</c:if>
 											<div class="col-sm-8">
 												<form:input type="text" class="form-control"
-													value="${seller.name}" path="name" />													
+													value="${seller.name}" path="name" />
 											</div>
 										</div>
 										<div class="form-group">
@@ -127,12 +139,19 @@ span .#error {
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-sm-4 control-label required">Phone
-												No. *</label>
+											<label class="col-sm-4 control-label">Address</label>
+
+											<div class="col-sm-8">
+												<form:textarea class="form-control"
+													path="address" rows="3" cols="30" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-4 control-label required">Zip Code *</label>
 
 											<div class="col-sm-8">
 												<form:input type="text" class="form-control"
-													value="${seller.contactNo}" path="contactNo" />
+													value="${seller.zipcode}" path="zipcode" required="true" />
 											</div>
 										</div>
 										<div class="hr-line-dashed"></div>
@@ -155,12 +174,26 @@ span .#error {
 											</div>
 										</div>
 										<div class="form-group">
+											<label class="col-sm-4 control-label required">Phone
+												No. *</label>
+
+											<div class="col-sm-8">
+												<form:input type="text" class="form-control"
+													value="${seller.contactNo}" path="contactNo" />
+											</div>
+										</div>
+										<div class="form-group">
 											<label class="col-sm-4 control-label required">Email
 												*</label>
 
 											<div class="col-sm-8">
-												<label class="form-control">${seller.email}</label>																								
+												<label class="form-control">${seller.email}</label>
 											</div>
+										</div>
+										<div class="form-group" style="height:20px;">
+											<label class="col-sm-4 control-label"></label>
+
+											<div class="col-sm-8"></div>
 										</div>
 										<div class="hr-line-dashed"></div>
 									</div>
@@ -171,27 +204,27 @@ span .#error {
 										<div class="col-md-2" id="sellerImage">
 											<c:choose>
 												<c:when test="${seller.logoUrl != null}">
-	        											<img alt="image" class="img-circle" src="${seller.logoUrl}" />
-	    										</c:when>
-	    										<c:otherwise>
-	        											<img alt="image" class="img-circle" src="/O2R/sellerimages/defaultSeller.jpg" />
-	    										</c:otherwise>	
-    										</c:choose>
+													<img alt="image" class="img-circle" src="${seller.logoUrl}" />
+												</c:when>
+												<c:otherwise>
+													<img alt="image" class="img-circle"
+														src="/O2R/sellerimages/defaultSeller.jpg" />
+												</c:otherwise>
+											</c:choose>
 										</div>
-										<div class="col-md-4">
-										</div>
-										<div class="col-md-6" >
+										<div class="col-md-4"></div>
+										<div class="col-md-6">
 											<label title="Upload image file" for="image"
-													class="btn btn-white btn-block"> <i
-													class="fa fa-upload"></i> <input type="file"
-													accept="image/*" name="image" id="image" class="hide">
-													Upload Logo
+												class="btn btn-white btn-block"> <i
+												class="fa fa-upload"></i> <input type="file"
+												accept="image/*" name="image" id="image" class="hide">
+												Upload Logo
 											</label>
-											<div class="hr-line-dashed"></div>										
-										</div>	
-																
+											<div class="hr-line-dashed"></div>
+										</div>
+
 									</div>
-								
+
 
 									<h4 style="text-align: center;">Expected Delivery Time</h4>
 									<p>
@@ -226,10 +259,10 @@ span .#error {
 													</div>
 												</c:forEach> --%>
 												<c:if test="${!empty stateTimes}">
-												<c:forEach var="stateDeliveryTime"
-													items="${stateTimes}" varStatus="status">
-													<div class="form-group">
-														<%-- <input type="hidden" class="form-control"
+													<c:forEach var="stateDeliveryTime" items="${stateTimes}"
+														varStatus="status">
+														<div class="form-group">
+															<%-- <input type="hidden" class="form-control"
 															name="stateDeliveryTime[${status.index}].seller.id"
 															value="${seller.id}" /> <input type="hidden"
 															class="form-control"
@@ -237,17 +270,16 @@ span .#error {
 															value="${stateDeliveryTime.state.id}" /> <input
 															type="hidden" class="form-control"
 															name="stateDeliveryTime[${status.index}].state.stateName"
-															value="${stateDeliveryTime.state.stateName}" /> --%> 
-															<label
-															class="col-sm-4 control-label">${stateDeliveryTime.key}
-														</label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control"
-																name="sdt-${stateDeliveryTime.key}" 
-																value="${stateDeliveryTime.value}" />
+															value="${stateDeliveryTime.state.stateName}" /> --%>
+															<label class="col-sm-4 control-label">${stateDeliveryTime.key}
+															</label>
+															<div class="col-sm-8">
+																<input type="text" class="form-control"
+																	name="sdt-${stateDeliveryTime.key}"
+																	value="${stateDeliveryTime.value}" />
+															</div>
 														</div>
-													</div>
-												</c:forEach>
+													</c:forEach>
 												</c:if>
 											</div>
 											<div class="col-lg-4 m-l-n"></div>
@@ -255,7 +287,7 @@ span .#error {
 									</div>
 									<div class="col-lg-6 ">
 										<img src="/O2R/seller/img/india_map.jpg" alt="india_map"
-											style="width: 71%;margin-left:100px;">
+											style="width: 71%; margin-left: 100px;">
 									</div>
 
 									<div class="col-sm-12">
@@ -270,13 +302,13 @@ span .#error {
 				</div>
 			</div>
 			<jsp:include page="../globalfooter.jsp"></jsp:include>
-			
+
 
 		</div>
 	</div>
 
 	<!-- Mainly scripts -->
-<jsp:include page="../globaljslinks.jsp"></jsp:include>
+	<jsp:include page="../globaljslinks.jsp"></jsp:include>
 	<script>
 		$(document).ready(function() {
 			

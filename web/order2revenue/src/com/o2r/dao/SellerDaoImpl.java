@@ -85,6 +85,7 @@ public class SellerDaoImpl implements SellerDao {
 		String brandName = null;
 		String logoUrl = null;
 		String verCode=null;
+		String zipcode=null;
 		String verificationLink=null;
 		Random random=new Random();	
 		if (seller != null && seller.getId() != 0) {
@@ -99,6 +100,7 @@ public class SellerDaoImpl implements SellerDao {
              brandName = seller.getBrandName();
              logoUrl = seller.getLogoUrl();
              verCode = seller.getVerCode();
+             zipcode = seller.getZipcode();
 		}		
 		try {
 			Session session = sessionFactory.openSession();
@@ -117,6 +119,7 @@ public class SellerDaoImpl implements SellerDao {
 		                    sellerNew.setTinNumber(tinNumber);
 		                    sellerNew.setTanNumber(tanNumber);
 		                    sellerNew.setBrandName(brandName);
+		                    sellerNew.setZipcode(zipcode);
 		                    if(logoUrl != null){
 		                    	sellerNew.setLogoUrl(logoUrl);		                    	
 		                    }

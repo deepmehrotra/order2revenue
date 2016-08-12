@@ -1,5 +1,6 @@
 package com.o2r.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,7 @@ public class CategoryController {
 			@RequestParam("catId") String catId,
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ changeInventorygroup Starts : CategoryController $$$");
 		log.debug(" Category ID in changeInventorygroup: " + catId);
 		log.debug(" Category ID in changeInventorygroup: " + catId);
@@ -70,7 +71,7 @@ public class CategoryController {
 		Category category = null;
 		if (catId != null) {
 			try {
-				sellerId=helperClass.getSellerIdfromSession(request);
+				sellerId = helperClass.getSellerIdfromSession(request);
 				categorylist = ConverterClass
 						.prepareListofCategoryBean(categoryService
 								.listParentCategories(helperClass
@@ -88,7 +89,7 @@ public class CategoryController {
 				model.put("errorCode", ce.getErrorCode());
 				return new ModelAndView("globalErorPage", model);
 			} catch (Throwable e) {
-				log.error("Failed! by Seller ID : "+sellerId,e);
+				log.error("Failed! by Seller ID : " + sellerId, e);
 				e.printStackTrace();
 				return new ModelAndView("globalErorPage", model);
 			}
@@ -105,13 +106,13 @@ public class CategoryController {
 	public ModelAndView deleteInventoryGroup(HttpServletRequest request,
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ deleteInventoryGroup Starts : CategoryController $$$");
 		log.debug(" Category  to delete :" + categoryBean.getId());
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (categoryBean.getId() != 0) {
 				sellerId = helperClass.getSellerIdfromSession(request);
 				int deleted = categoryService.deleteCategory(
@@ -144,7 +145,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId,e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ deleteInventoryGroup Ends : CategoryController $$$");
@@ -156,13 +157,13 @@ public class CategoryController {
 			@RequestParam("parentId") String parentCatId,
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ deleteProductCategory Starts : CategoryController $$$");
 		log.debug(" Category  to delete :" + categoryBean.getId());
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (categoryBean.getId() != 0) {
 				sellerId = helperClass.getSellerIdfromSession(request);
 				int deleted = categoryService.deleteCategory(
@@ -181,7 +182,8 @@ public class CategoryController {
 				Category category = categoryService.getCategory(Integer
 						.parseInt(parentCatId));
 				if (category.getSubCategory() != null)
-					log.debug("No of subcat :"	+ category.getSubCategory().size());
+					log.debug("No of subcat :"
+							+ category.getSubCategory().size());
 				for (CategoryBean bean : categorylist) {
 					catageorymap.put(String.valueOf(bean.getId()),
 							bean.getCatName());
@@ -201,7 +203,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId,e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 			return new ModelAndView("globalErorPage", model);
 		}
 
@@ -213,20 +215,20 @@ public class CategoryController {
 	public ModelAndView viewsingleInventorygroup(HttpServletRequest request,
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ viewsingleInventorygroup Starts : CategoryController $$$");
 		log.debug(" Category  to view  :" + categoryBean.getId());
 		log.debug(" Category  to view  :" + categoryBean.getId());
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (categoryBean.getId() != 0) {
 				List<CategoryBean> categorylist = ConverterClass
 						.prepareListofCategoryBean(categoryService
 								.listParentCategories(helperClass
 										.getSellerIdfromSession(request)));
-				log.debug(" Parent catgeories : "+categorylist.get(0));
+				log.debug(" Parent catgeories : " + categorylist.get(0));
 				Map<String, String> catageorymap = new HashMap<String, String>();
 				Category category = categoryService.getCategory(categoryBean
 						.getId());
@@ -252,7 +254,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId,e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ viewsingleInventorygroup Ends : CategoryController $$$");
@@ -263,11 +265,11 @@ public class CategoryController {
 	public ModelAndView inventorygroups(HttpServletRequest request,
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
-		
-		log.info("$$$ inventorygroups Starts : CategoryController $$$");	
+
+		log.info("$$$ inventorygroups Starts : CategoryController $$$");
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
-		try {			
+		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			List<CategoryBean> categorylist = ConverterClass
 					.prepareListofCategoryBean(categoryService
@@ -294,7 +296,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId,e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ inventorygroups Ends : CategoryController $$$");
@@ -305,13 +307,13 @@ public class CategoryController {
 	public ModelAndView saveInventoryGroup(HttpServletRequest request,
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ saveInventoryGroup Starts : CategoryController $$$");
 		log.debug(" category id :" + categoryBean.getCatName());
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (result.hasErrors()) {
 				return new ModelAndView("initialsetup/addInventoryGroup");
 			}
@@ -328,7 +330,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId,e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ saveInventoryGroup Ends : CategoryController $$$");
@@ -339,7 +341,7 @@ public class CategoryController {
 	public ModelAndView saveCatInventory(
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result, HttpServletRequest request) {
-		
+
 		log.info("$$$ saveCatInventory Starts : CategoryController $$$");
 		log.debug(" ********* parent category name :"
 				+ categoryBean.getParentCatName());
@@ -353,7 +355,7 @@ public class CategoryController {
 							+ parentcatid);
 		}
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			categoryBean.setSubCategory(true);
 			Category category = ConverterClass
 					.prepareCategoryModel(categoryBean);
@@ -367,11 +369,12 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId,e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ saveCatInventory Ends : CategoryController $$$");
-		return new ModelAndView("redirect:/seller/viewInventorygroup.html?id="+ parentcatid);
+		return new ModelAndView("redirect:/seller/viewInventorygroup.html?id="
+				+ parentcatid);
 	}
 
 	@RequestMapping(value = "/seller/addInventoryGroup", method = RequestMethod.GET)
@@ -385,13 +388,14 @@ public class CategoryController {
 	public @ResponseBody String checkInventoryGroup(HttpServletRequest request,
 			@ModelAttribute("command") CategoryBean categoryBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ checkInventoryGroup Starts : CategoryController $$$");
 		int sellerId = 0;
-		log.debug(" *********checkInventoryGroup name :"+ categoryBean.getParentCatName());
+		log.debug(" *********checkInventoryGroup name :"
+				+ categoryBean.getParentCatName());
 		String name = request.getParameter("name");
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (name != null && name.length() != 0) {
 				Category cat = categoryService.getCategory(name,
 						helperClass.getSellerIdfromSession(request));
@@ -402,7 +406,7 @@ public class CategoryController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId,e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 			return "false";
 		}
 		log.info("$$$ checkInventoryGroup Ends : CategoryController $$$");
@@ -415,15 +419,34 @@ public class CategoryController {
 	public ModelAndView saveTaxCategory(HttpServletRequest request,
 			@ModelAttribute("command") TaxCategoryBean taxCategoryBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ saveTaxCategory Starts : CategoryController $$$");
 		log.debug("category id :" + taxCategoryBean.getTaxCatName());
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			TaxCategory category = ConverterClass
 					.prepareTaxCategoryModel(taxCategoryBean);
+			List<Category> categoryList = new ArrayList<Category>();
+			String[] catList = request.getParameterValues("multiSku");
+			if (catList != null && catList.length != 0) {
+				for (int i = 0; i < catList.length; i++) {
+					Category productCat = categoryService.getSubCategory(
+							catList[i], sellerId);
+					if (category.getTaxCatType().equalsIgnoreCase("LST")) {
+						productCat.setLST(category);
+					} else {
+						productCat.setCST(category);
+					}
+					categoryList.add(productCat);
+				}
+			}
+			if (category.getTaxCatType().equalsIgnoreCase("LST")) {
+				category.setProductCategoryLST(categoryList);
+			} else {
+				category.setProductCategoryCST(categoryList);
+			}
 			taxDetailService.addTaxCategory(category,
 					helperClass.getSellerIdfromSession(request));
 		} catch (CustomException ce) {
@@ -434,7 +457,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId,e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ saveTaxCategory Ends : CategoryController $$$");
@@ -445,13 +468,13 @@ public class CategoryController {
 	public ModelAndView listTaxCategory(HttpServletRequest request,
 			@ModelAttribute("command") TaxCategoryBean taxCategoryBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ listTaxCategory Starts : CategoryController $$$");
 		log.debug("category id :" + taxCategoryBean.getTaxCatName());
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			model.put("taxCategories", ConverterClass
 					.prepareListofTaxCategoryBean(taxDetailService
 							.listTaxCategories(helperClass
@@ -464,7 +487,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId,e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 			return new ModelAndView("globalErorPage", model);
 		}
 		log.info("$$$ listTaxCategory Ends : CategoryController $$$");
@@ -472,21 +495,106 @@ public class CategoryController {
 	}
 
 	@RequestMapping(value = "/seller/addTaxCategory", method = RequestMethod.GET)
-	public String addTaxCategory(HttpServletRequest request,
+	public ModelAndView addTaxCategory(HttpServletRequest request,
 			@ModelAttribute("command") TaxCategoryBean categoryBean,
 			BindingResult result) {
-		return "initialsetup/addTaxCategory";
+
+		int sellerId = 0;
+		Map<String, Object> model = new HashMap<String, Object>();
+		List<String> categoryList = new ArrayList<String>();
+		List<String> categoryLSTList = new ArrayList<String>();
+		List<String> categoryCSTList = new ArrayList<String>();
+		List<Category> categoryObjects = null;
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			categoryObjects = categoryService.listCategories(sellerId);
+			if (categoryObjects != null && categoryObjects.size() > 0) {
+				for (Category cat : categoryObjects) {
+					categoryList.add(cat.getCatName());
+					if (cat.getCST() == null) {
+						categoryCSTList.add(cat.getCatName());
+					}
+					if (cat.getLST() == null) {
+						categoryLSTList.add(cat.getCatName());
+					}
+				}
+			}
+			model.put("categoryList", categoryList);
+			model.put("categoryLSTList", categoryLSTList);
+			model.put("categoryCSTList", categoryCSTList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by Seller ID : " + sellerId, e);
+		}
+		return new ModelAndView("initialsetup/addTaxCategory", model);
+	}
+
+	@RequestMapping(value = "/seller/editTaxCategory", method = RequestMethod.GET)
+	public ModelAndView editTaxCategory(HttpServletRequest request,
+			@ModelAttribute("command") TaxCategoryBean categoryBean,
+			@RequestParam(value = "taxCategoryId") int taxCategoryId,
+			BindingResult result) {
+
+		int sellerId = 0;
+		Map<String, Object> model = new HashMap<String, Object>();
+		List<String> categoryList = new ArrayList<String>();
+		List<String> categoryLSTList = new ArrayList<String>();
+		List<String> categoryCSTList = new ArrayList<String>();
+		List<String> prodCategoryList = new ArrayList<String>();
+		List<Category> prodCategory = null;
+		List<Category> categoryObjects = null;
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			categoryObjects = categoryService.listCategories(sellerId);
+			if (categoryObjects != null && categoryObjects.size() > 0) {
+				for (Category cat : categoryObjects) {
+					categoryList.add(cat.getCatName());
+					if (cat.getCST() == null) {
+						categoryCSTList.add(cat.getCatName());
+					}
+					if (cat.getLST() == null) {
+						categoryLSTList.add(cat.getCatName());
+					}
+				}
+			}
+
+			TaxCategoryBean taxCategory = ConverterClass
+					.prepareTaxCategoryBean(taxDetailService
+							.getTaxCategory(taxCategoryId));
+			if (taxCategory.getTaxCatType() != null) {
+				if (taxCategory.getTaxCatType().equalsIgnoreCase("LST")) {
+					prodCategory = taxCategory.getProductCategoryLST();
+				} else {
+					prodCategory = taxCategory.getProductCategoryCST();
+				}
+			}
+			if (prodCategory != null && prodCategory.size() > 0) {
+				for (Category cat : prodCategory) {
+					prodCategoryList.add(cat.getCatName());
+				}
+			}
+			categoryList.removeAll(prodCategoryList);
+			model.put("categoryList", categoryList);
+			model.put("prodCategoryList", prodCategoryList);
+			model.put("categoryLSTList", categoryLSTList);
+			model.put("categoryCSTList", categoryCSTList);
+			model.put("taxCategory", taxCategory);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by Seller ID : " + sellerId, e);
+		}
+		return new ModelAndView("initialsetup/addTaxCategory", model);
 	}
 
 	@RequestMapping(value = "/seller/checkTaxCategory", method = RequestMethod.GET)
 	public @ResponseBody String checkTaxCategory(HttpServletRequest request,
 			@ModelAttribute("command") FormBean formBean, BindingResult result) {
-		
+
 		log.info("$$$ checkTaxCategory Starts : CategoryController $$$");
 		log.debug("tax category name : " + request.getParameter("name"));
 		int sellerId = 0;
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			TaxCategory taxCategory = taxDetailService.getTaxCategory(
 					request.getParameter("name"),
 					helperClass.getSellerIdfromSession(request));
@@ -498,14 +606,14 @@ public class CategoryController {
 				return "true";
 			}
 		} catch (CustomException ce) {
-			log.error("saveTaxCategory exception : ",ce);
+			log.error("saveTaxCategory exception : ", ce);
 			return "false";
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId,e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 			return "false";
 		}
-		
+
 	}
 
 }

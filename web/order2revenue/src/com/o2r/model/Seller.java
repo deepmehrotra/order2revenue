@@ -46,6 +46,8 @@ public class Seller {
 	private String logoUrl;
 	@Column
 	private String verCode;
+	@Column
+	private String zipcode;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "seller_roles", joinColumns = { @JoinColumn(name = "seller_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "role_id", referencedColumnName = "id") })
@@ -308,6 +310,14 @@ public class Seller {
 
 	public void setUploadReportList(List<UploadReport> uploadReportList) {
 		this.uploadReportList = uploadReportList;
+	}
+
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
 	}
 
 

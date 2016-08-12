@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,9 +17,14 @@ import org.springframework.stereotype.Repository;
 
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
+import com.o2r.model.Category;
+import com.o2r.model.ChannelUploadMapping;
+import com.o2r.model.Product;
 import com.o2r.model.Seller;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.TaxDetail;
+import com.o2r.service.CategoryService;
+import com.o2r.service.SellerService;
 
 /**
  * @author Deep Mehrotra
@@ -33,13 +39,19 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	@Autowired
+	private CategoryService categoryService;
+	@Autowired
+	private SellerService sellerService;
+	@Autowired
+	private AreaConfigDao areaConfigDao;
 
 	static Logger log = Logger.getLogger(TaxDetailsDaoImpl.class.getName());
 	private final SimpleDateFormat formatter = new SimpleDateFormat("MMMM,yy");
 
 	@Override
 	public TaxDetail addTaxDetail(TaxDetail taxDetail, int sellerId) {
-		
+
 		log.info("*** addTaxDetail starts : TaxDetailsDaoImpl ****");
 		Seller seller = null;
 		try {
@@ -61,8 +73,9 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.addTaxDetailErrorCode));
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.addTaxDetailErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
 
 		}
 		log.info("*** addTaxDetail Ends : TaxDetailsDaoImpl ****");
@@ -70,21 +83,20 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 
 	}
 
-	
 	@Override
 	public TaxDetail addMonthlyTaxDetail(Session session, TaxDetail taxDetail,
 			int sellerId) {
 
-
 		log.info("*** addMonthlyTaxDetail Starts : TaxDetailsDaoImpl ****");
-		log.debug("***Add Monthly Tax : cat : " + taxDetail.getParticular()+ " Amoun :" + taxDetail.getBalanceRemaining());
+		log.debug("***Add Monthly Tax : cat : " + taxDetail.getParticular()
+				+ " Amoun :" + taxDetail.getBalanceRemaining());
 
 		List<Integer> taxIds = null;
 
 		Seller seller = null;
 		TaxDetail existingObj = null;
 		double amount = taxDetail.getBalanceRemaining();
-		Date uploadDate=(Date)taxDetail.getUploadDate().clone();
+		Date uploadDate = (Date) taxDetail.getUploadDate().clone();
 		boolean status = false;
 		try {
 			if (session != null) {
@@ -94,22 +106,20 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 				session = sessionFactory.getCurrentSession();
 				session.beginTransaction();
 			}
-			Query gettingTaxId = session
-					.createSQLQuery(taxTdRetriveQuery)
+			Query gettingTaxId = session.createSQLQuery(taxTdRetriveQuery)
 					.setParameter("sellerId", sellerId)
-					.setParameter("month",
-							uploadDate.getMonth() + 1)
+					.setParameter("month", uploadDate.getMonth() + 1)
 					.setParameter("particular", taxDetail.getParticular());
-			
+
 			taxIds = gettingTaxId.list();
 
-			
 			if (taxIds != null && taxIds.size() != 0 && taxIds.get(0) != null) {
 
 				Integer taxId = taxIds.get(0);
 				existingObj = (TaxDetail) session.get(TaxDetail.class, taxId);
 
-				existingObj.setBalanceRemaining(existingObj.getBalanceRemaining() + amount);
+				existingObj.setBalanceRemaining(existingObj
+						.getBalanceRemaining() + amount);
 				existingObj.setUploadDate(uploadDate);
 				session.saveOrUpdate(existingObj);
 
@@ -126,14 +136,13 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 				session.saveOrUpdate(seller);
 			}
 
-			if (!status)
-			{
+			if (!status) {
 				session.getTransaction().commit();
 				session.close();
 			}
-			} catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw e;
 		}
 		log.info("*** addMonthlyTaxDetail Ends : TaxDetailsDaoImpl ****");
@@ -144,53 +153,55 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 	@Override
 	public TaxDetail addMonthlyTDSDetail(Session session, TaxDetail taxDetail,
 			int sellerId) {
-		
+
 		log.info("*** addMonthlyTDSDetail Starts : TaxDetailsDaoImpl ****");
-		log.debug("Add Monthly TDS : cat : " + taxDetail.getParticular()+ " Amoun :" + taxDetail.getBalanceRemaining());
+		log.debug("Add Monthly TDS : cat : " + taxDetail.getParticular()
+				+ " Amoun :" + taxDetail.getBalanceRemaining());
 		Seller seller = null;
 		List<Integer> taxIds = null;
 		TaxDetail existingObj = null;
 		double amount = taxDetail.getBalanceRemaining();
-		Date tempDate=(Date)taxDetail.getUploadDate().clone();
-		String particular=taxDetail.getParticular();
+		Date tempDate = (Date) taxDetail.getUploadDate().clone();
+		String particular = taxDetail.getParticular();
 		boolean sessionState = false;
 		try {
 			if (session != null) {
 				sessionState = true;
-			} else{
+			} else {
 				session = sessionFactory.getCurrentSession();
-				
+
 			}
 			session.beginTransaction();
-				Query gettingTaxId = session
-						.createSQLQuery(taxTdRetriveQuery)
-						.setParameter("sellerId", sellerId)
-						.setParameter("month",tempDate.getMonth() + 1)
-						.setParameter("particular", particular);
-		
-				taxIds = gettingTaxId.list();
-				
-				if (taxIds != null && taxIds.size() != 0 && taxIds.get(0) != null) {
-					Integer taxId = taxIds.get(0);
-					existingObj = (TaxDetail) session.get(TaxDetail.class, taxId);
+			Query gettingTaxId = session.createSQLQuery(taxTdRetriveQuery)
+					.setParameter("sellerId", sellerId)
+					.setParameter("month", tempDate.getMonth() + 1)
+					.setParameter("particular", particular);
 
-					existingObj.setBalanceRemaining(existingObj.getBalanceRemaining() + amount);
-					existingObj.setUploadDate(tempDate);
-					session.saveOrUpdate(existingObj);
-				}else {
-					seller = (Seller) session.get(Seller.class, sellerId);
-					System.out.println(" saving new TDS object ");
-	
-					taxDetail.setStatus("Due");
-					taxDetail.setDescription("TDS for "
-							+ formatter.format(taxDetail.getUploadDate()));
-					taxDetail.setTaxortds("TDS");
-					taxDetail.setParticular("TDS");
-					taxDetail.setTaxortdsCycle(formatter.format(taxDetail.getUploadDate()));
-					seller.getTaxDetails().add(taxDetail);
-	
-					session.saveOrUpdate(seller);
-				}
+			taxIds = gettingTaxId.list();
+
+			if (taxIds != null && taxIds.size() != 0 && taxIds.get(0) != null) {
+				Integer taxId = taxIds.get(0);
+				existingObj = (TaxDetail) session.get(TaxDetail.class, taxId);
+
+				existingObj.setBalanceRemaining(existingObj
+						.getBalanceRemaining() + amount);
+				existingObj.setUploadDate(tempDate);
+				session.saveOrUpdate(existingObj);
+			} else {
+				seller = (Seller) session.get(Seller.class, sellerId);
+				System.out.println(" saving new TDS object ");
+
+				taxDetail.setStatus("Due");
+				taxDetail.setDescription("TDS for "
+						+ formatter.format(taxDetail.getUploadDate()));
+				taxDetail.setTaxortds("TDS");
+				taxDetail.setParticular("TDS");
+				taxDetail.setTaxortdsCycle(formatter.format(taxDetail
+						.getUploadDate()));
+				seller.getTaxDetails().add(taxDetail);
+
+				session.saveOrUpdate(seller);
+			}
 
 			if (!sessionState) {
 				session.getTransaction().commit();
@@ -199,7 +210,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("Inside exception in add monthly tdsdetails  ");
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw e;
 		}
 		log.info("*** addMonthlyTDSDetail Ends : TaxDetailsDaoImpl ****");
@@ -208,8 +219,9 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 	}
 
 	@Override
-	public void addPaymentTaxDetail(TaxDetail taxDetail, int sellerId)throws CustomException {
-		
+	public void addPaymentTaxDetail(TaxDetail taxDetail, int sellerId)
+			throws CustomException {
+
 		log.info("*** addPaymentTaxDetail Starts : TaxDetailsDaoImpl ****");
 		log.debug("addPaymentTaxDetail : cat : " + taxDetail.getParticular()
 				+ " Amoun :" + taxDetail.getBalanceRemaining());
@@ -230,8 +242,9 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.addTaxPaymentDetailErrorCode));
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.addTaxPaymentDetailErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.addTaxPaymentDetailError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.addTaxPaymentDetailErrorCode, e);
@@ -263,8 +276,9 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.addTDSPaymentDetailErrorCode));
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.addTDSPaymentDetailErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.addTDSPaymentDetailError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.addTDSPaymentDetailErrorCode, e);
@@ -303,8 +317,9 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.getTaxDetailListErrorCode));
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.getTaxDetailListErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.getTaxDetailListError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.getTaxDetailListErrorCode, e);
@@ -317,7 +332,6 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 
 	@Override
 	public List<TaxDetail> listTaxDetails(int sellerId) throws CustomException {
-
 
 		log.info("*** listTaxDetails Starts : TaxDetailsDaoImpl ****");
 		List<TaxDetail> returnlist = null;
@@ -332,8 +346,9 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.getTaxDetailListErrorCode2));
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.getTaxDetailListErrorCode2));
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.getTaxDetailListError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.getTaxDetailListErrorCode2, e);
@@ -346,9 +361,9 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 	@Override
 	public List<TaxDetail> listTaxDetails(int sellerId, String taxortds)
 			throws CustomException {
-		
+
 		log.info("*** listTaxDetails by TaxorTds Starts : TaxDetailsDaoImpl ****");
-		log.debug("***listTaxDetails taxortds****:"+taxortds);
+		log.debug("***listTaxDetails taxortds****:" + taxortds);
 		List<TaxDetail> returnlist = null;
 		Seller seller = null;
 		try {
@@ -366,18 +381,19 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 					.setResultTransformer(
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			if (criteria.list() != null && criteria.list().size() != 0) {
-				
+
 				seller = (Seller) criteria.list().get(0);
 				returnlist = seller.getTaxDetails();
-				log.debug(" Getting return list : "+returnlist);
+				log.debug(" Getting return list : " + returnlist);
 
 			}
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("**Error Code : "+ (sellerId + "-" + GlobalConstant.getTaxDetailListErrorCode));
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.error("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.getTaxDetailListErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.getTaxDetailListError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.getTaxDetailListErrorCode, e);
@@ -389,7 +405,8 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 	}
 
 	@Override
-	public List<TaxCategory> listTaxCategories(int sellerId)throws CustomException {
+	public List<TaxCategory> listTaxCategories(int sellerId)
+			throws CustomException {
 
 		log.info("*** listTaxCategories Starts : TaxDetailsDaoImpl ****");
 		List<TaxCategory> returnlist = null;
@@ -400,12 +417,21 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			if (seller.getTaxCategories() != null
 					&& seller.getTaxCategories().size() != 0)
 				returnlist = seller.getTaxCategories();
+
+			if (returnlist != null && returnlist.size() != 0) {
+				
+				for (TaxCategory returnObj : returnlist) {
+					Hibernate.initialize(returnObj.getProductCategoryCST());
+					Hibernate.initialize(returnObj.getProductCategoryLST());
+				}				
+			}
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.getTaxCatListErrorCode));
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.getTaxCatListErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.getTaxCatListError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.getTaxCatListErrorCode, e);
@@ -419,12 +445,13 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 	public TaxDetail getTaxDetail(int mcId) {
 
 		log.info("*** getTaxDetail Starts : TaxDetailsDaoImpl ****");
-		TaxDetail taxDetail=null;
+		TaxDetail taxDetail = null;
 		try {
-			taxDetail = (TaxDetail) sessionFactory.getCurrentSession().get(TaxDetail.class, mcId);
+			taxDetail = (TaxDetail) sessionFactory.getCurrentSession().get(
+					TaxDetail.class, mcId);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
 		log.info("*** getTaxDetail Ends : TaxDetailsDaoImpl ****");
 		return taxDetail;
@@ -433,13 +460,42 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 	@Override
 	public TaxCategory getTaxCategory(int tcId) {
 		log.info("*** getTaxCategory Starts : TaxDetailsDaoImpl ****");
-		TaxCategory taxCategory=null;
+		TaxCategory taxCategory = null;
 		try {
 			taxCategory = (TaxCategory) sessionFactory.getCurrentSession().get(
 					TaxCategory.class, tcId);
+			Hibernate.initialize(taxCategory.getProductCategoryCST());
+			Hibernate.initialize(taxCategory.getProductCategoryLST());
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
+		}
+		log.info("*** getTaxCategory Ends : TaxDetailsDaoImpl ****");
+		return taxCategory;
+	}
+	
+	@Override
+	public TaxCategory getTaxCategory(Product product, int sellerId, String zipcode) throws CustomException {
+		log.info("*** getTaxCategory Starts : TaxDetailsDaoImpl ****");
+		TaxCategory taxCategory = null;
+		try {
+			Category category = categoryService.getCategory(product.getCategoryName(), sellerId);
+			Seller seller = sellerService.getSeller(sellerId);
+			String sellerState = areaConfigDao.getStateFromZipCode(seller.getZipcode());
+			String customerState = areaConfigDao.getStateFromZipCode(zipcode);
+			if (sellerState.equalsIgnoreCase(customerState)) {
+				taxCategory = category.getLST();
+			} else {
+				taxCategory = category.getCST();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.getTaxCatListErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(GlobalConstant.getTaxCatListError,
+					new Date(), 1, sellerId + "-"
+							+ GlobalConstant.getTaxCatListErrorCode, e);
 		}
 		log.info("*** getTaxCategory Ends : TaxDetailsDaoImpl ****");
 		return taxCategory;
@@ -448,7 +504,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 	@Override
 	public TaxCategory getTaxCategory(String catName, int sellerId)
 			throws CustomException {
-		
+
 		log.info("*** getTaxCategory by Category NAme Starts : TaxDetailsDaoImpl ****");
 		TaxCategory returnObject = null;
 		Seller seller = null;
@@ -471,8 +527,9 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.getTaxCategoryErrorCode));
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.getTaxCategoryErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.getTaxCategoryError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.getTaxCategoryErrorCode, e);
@@ -484,7 +541,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 
 	@Override
 	public void deleteTaxDetail(TaxDetail taxDetail, int sellerId) {
-		
+
 		log.info("*** deleteTaxDetail Starts : TaxDetailsDaoImpl ****");
 		log.debug("In Tax Detail delete cid " + taxDetail.getTaxId());
 		try {
@@ -508,9 +565,9 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			session.close();
 
 		} catch (Exception e) {
-			log.debug("Inside delleting taxdetail"+ e.getLocalizedMessage());
+			log.debug("Inside delleting taxdetail" + e.getLocalizedMessage());
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 		}
 		log.info("*** deleteTaxDetail Ends : TaxDetailsDaoImpl ****");
 	}
@@ -518,7 +575,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 	@Override
 	public void deleteTaxCategory(TaxCategory taxCategory, int sellerId)
 			throws CustomException {
-		
+
 		log.info("*** deleteTaxCategory Starts : TaxDetailsDaoImpl ****");
 		log.info("***deleteTaxCategory Start*****" + taxCategory.getTaxCatId());
 		try {
@@ -536,14 +593,16 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 					"DELETE FROM TaxCategory WHERE taxCatId = "
 							+ taxCategory.getTaxCatId()).executeUpdate();
 
-			log.debug("Deleteing manual charges updated:" + updated+ " catdelete :" + catdelete);
+			log.debug("Deleteing manual charges updated:" + updated
+					+ " catdelete :" + catdelete);
 			session.getTransaction().commit();
 			session.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.deleteTaxCategoryErrorCode));
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.deleteTaxCategoryErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.deleteTaxCategoryError,
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.deleteTaxCategoryErrorCode, e);

@@ -56,6 +56,7 @@ import com.o2r.model.Partner;
 import com.o2r.model.PaymentUpload;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
+import com.o2r.model.Seller;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
 import com.o2r.service.CategoryService;
@@ -191,9 +192,11 @@ public class SaveContents {
 					errorMessage.append(" Order Recieved Date is null;");
 					validaterow = false;
 				}
+				
+				Product product = null;
 				if (entry.getCell(2) != null
 						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					Product product = productService.getProduct(entry
+					product = productService.getProduct(entry
 							.getCell(2).toString(), sellerId);
 					if (product == null) {
 						order.setProductSkuCode(entry.getCell(2).toString());
@@ -289,7 +292,7 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				if (entry.getCell(13) != null
+				/*if (entry.getCell(13) != null
 						&& entry.getCell(13).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					TaxCategory taxcat = taxDetailService.getTaxCategory(entry
 							.getCell(13).toString(), sellerId);
@@ -303,7 +306,8 @@ public class SaveContents {
 				} else {
 					errorMessage.append("Tax Category is null ");
 					validaterow = false;
-				}
+				}*/
+				
 				if (entry.getCell(14) != null
 						&& entry.getCell(14).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try
@@ -437,6 +441,16 @@ public class SaveContents {
 					validaterow = false;
 				}
 
+				TaxCategory taxcat = taxDetailService.getTaxCategory(
+						product, sellerId, customerBean.getZipcode());
+				if (taxcat != null)
+					otb.setTaxCategtory(entry.getCell(13).toString());
+				else {
+					otb.setTaxCategtory(entry.getCell(13).toString());
+					errorMessage.append("Tax Category does not exist ");
+					validaterow = false;
+				}
+				
 				if (entry.getCell(22) != null
 						&& StringUtils.isNotBlank(entry.getCell(22).toString())) {
 					order.setSellerNote(entry.getCell(22).toString());
