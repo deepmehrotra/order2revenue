@@ -359,7 +359,7 @@ public class SaveMappedFiles {
 					validaterow = false;
 				}
 				
-				/*if (partner != null) {
+				if (partner != null) {
 					event = eventsService.isEventActiive(order.getOrderDate(),
 							partner.getPcName(),order.getProductSkuCode(), sellerId);
 					if (event != null) {
@@ -400,7 +400,7 @@ public class SaveMappedFiles {
 						}
 
 					}
-				}*/
+				}
 				index=cellIndexMap.get(columHeaderMap.get("Customer Email"));
 				if (entry.getCell(index) != null
 						&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {

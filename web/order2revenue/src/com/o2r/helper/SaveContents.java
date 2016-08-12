@@ -1466,13 +1466,7 @@ public class SaveContents {
 					
 					
 					if (entry.getCell(1) != null
-							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						if(channelOrderIdCheck.containsKey(entry.getCell(1).toString())){
-							errorMessage.append("Duplicate Channel OrderId ");
-							validaterow = false;
-						}else{
-							channelOrderIdCheck.put(entry.getCell(1).toString(), entry.getCell(0).toString());
-												
+							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {																	
 						List<Order> onj = orderService
 								.findOrders("channelOrderID", entry.getCell(1)
 										.toString(), sellerId, false, false);
@@ -1480,10 +1474,8 @@ public class SaveContents {
 							channelOrderId = entry.getCell(1).toString();
 						} else {
 							channelOrderId = entry.getCell(1).toString();
-							errorMessage
-									.append(" Channel OrderId not present ");
+							errorMessage.append(" Channel OrderId not present ");
 							validaterow = false;
-						}
 						}
 					} else {
 						errorMessage.append(" Channel OrderId is null ");
@@ -1555,9 +1547,12 @@ public class SaveContents {
 								ConverterClass.prepareOrderBean(order));
 					}
 					if (order != null) {
-						order.setPaymentUpload(paymentUpload);
-						paymentUpload.getOrders().add(order);
-						generatePaymentUpload = true;
+						if(!channelOrderIdCheck.containsKey(channelOrderId)){					
+							channelOrderIdCheck.put(channelOrderId, channelOrderId);
+							order.setPaymentUpload(paymentUpload);
+							paymentUpload.getOrders().add(order);
+							generatePaymentUpload = true;
+						}
 					}	
 				
 				}else if(entry.getCell(0) != null
