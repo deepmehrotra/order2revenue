@@ -107,13 +107,13 @@ public class SaveMappedFiles {
 		ChannelUploadMapping chanupload = null;
 		Map<String, String> columHeaderMap = new LinkedHashMap<String, String>();
 		Map<String, Integer> cellIndexMap = new LinkedHashMap<String, Integer>();		
-		StringBuffer errorMessage = null;
+		StringBuffer errorMessage = new StringBuffer();
 		String channelOrderId = null;
 		String skucode = null;
 		CustomerBean customerBean = null;
 		Partner partner = null;		
 		Events event = null;
-		List<Order> saveList=null;
+		List<Order> saveList=new ArrayList<Order>();
 		List<String> SKUList=new ArrayList<String>();
 		List<String> idsList=new ArrayList<String>();		
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
@@ -158,19 +158,20 @@ public class SaveMappedFiles {
 				order = new OrderBean();
 				customerBean = new CustomerBean();
 				otb = new OrderTaxBean();
-				int index=0; 
-				String channelheader=null;
+				int index=0; 				
 				channelOrderId=null;
+				Product product=null;
+				TaxCategory taxcat=null;
 				try
 				{		
 
 				index=cellIndexMap.get(columHeaderMap.get("Channel Order ID"));
 				if (entry.getCell(index) != null
-						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {				
+						&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {				
 					
 					if ((!idsList.contains(entry.getCell(index).toString())) 
-							&& !duplicateKey.containsKey(entry.getCell(0).toString())) {						
-						order.setChannelOrderID(entry.getCell(0).toString());
+							&& !duplicateKey.containsKey(entry.getCell(index).toString())) {						
+						order.setChannelOrderID(entry.getCell(index).toString());
 						duplicateKey.put(entry.getCell(index).toString(), "");
 					} else {
 						order.setChannelOrderID(entry.getCell(index).toString());
@@ -301,22 +302,7 @@ public class SaveMappedFiles {
 				} else {
 					errorMessage.append(" Order SP is null ");
 					validaterow = false;
-				}
-				index=cellIndexMap.get(columHeaderMap.get("Tax Category"));
-				if (entry.getCell(index) != null
-						&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					TaxCategory taxcat = taxDetailService.getTaxCategory(entry.getCell(index).toString(), sellerId);
-					if (taxcat != null)
-						otb.setTaxCategtory(entry.getCell(index).toString());
-					else {
-						otb.setTaxCategtory(entry.getCell(index).toString());
-						errorMessage.append("Tax Category does not exist ");
-						validaterow = false;
-					}
-				} else {
-					errorMessage.append("Tax Category is null ");
-					validaterow = false;
-				}
+				}				
 				index=cellIndexMap.get(columHeaderMap.get("Order Shipped Date"));
 				if (entry.getCell(index) != null
 						&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -362,15 +348,16 @@ public class SaveMappedFiles {
 				if (partner != null) {
 					event = eventsService.isEventActiive(order.getOrderDate(),
 							partner.getPcName(),order.getProductSkuCode(), sellerId);
+					index=cellIndexMap.get(columHeaderMap.get("Gross NR"));
 					if (event != null) {
 						if (event.getNrnReturnConfig().getNrCalculatorEvent()
 								.equalsIgnoreCase("fixed")) {
 
-							if (entry.getCell(16) != null
-									&& entry.getCell(16).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 
 								try {
-									order.setGrossNetRate(Double.parseDouble(entry.getCell(16).toString()));
+									order.setGrossNetRate(Double.parseDouble(entry.getCell(index).toString()));
 								} catch (NumberFormatException e) {
 									log.error("Failed! by SellerId : "+sellerId, e);
 									errorMessage.append(" Net Rate should be number ");
@@ -385,10 +372,10 @@ public class SaveMappedFiles {
 						if (partner != null
 								&& partner.getNrnReturnConfig() != null
 								&& !partner.getNrnReturnConfig().isNrCalculator()) {
-							if (entry.getCell(16) != null
-									&& entry.getCell(16).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								try {
-									order.setGrossNetRate(Double.parseDouble(entry.getCell(16).toString()));
+									order.setGrossNetRate(Double.parseDouble(entry.getCell(index).toString()));
 								} catch (NumberFormatException e) {
 									log.error("Failed! by SellerId : "+sellerId, e);
 									errorMessage.append(" Net Rate should be number ");
@@ -444,6 +431,16 @@ public class SaveMappedFiles {
 					errorMessage.append("Customer zipcode is blank ");
 					validaterow = false;
 				}
+				product=productService.getProduct(order.getProductSkuCode(), sellerId);
+				if(product != null){
+					taxcat = taxDetailService.getTaxCategory(product, sellerId, customerBean.getZipcode());
+				}					
+				if (taxcat != null)
+					otb.setTaxCategtory(taxcat.getTaxCatName());
+				else {					
+					errorMessage.append("Tax Category does not exist ");
+					validaterow = false;
+				}			
 				index=cellIndexMap.get(columHeaderMap.get("Seller Note"));
 				if (entry.getCell(index) != null
 						&& StringUtils.isNotBlank(entry.getCell(index).toString())) {
@@ -1677,7 +1674,7 @@ public class SaveMappedFiles {
 			for (String key : errorSet) {
 
 				errorMessage = key.substring(key.indexOf(':') + 1);
-				int errorRow = Integer.parseInt(errorMessage.substring(0,
+				int errorRow = Integer.parseInt(errorMessage.substring(1,
 						errorMessage.indexOf(':')));
 				errorMessage = errorMessage
 						.substring(errorMessage.indexOf(':') + 1);
