@@ -28,6 +28,7 @@ public class SellerBean {
 	private String logoUrl;
 	private Role role;
 	private String verCode;
+	private String zipcode;
 	private Plan plan;
 	private SellerAccount sellerAccount;
 	private List<OrderBean> orders = new ArrayList<OrderBean>();
@@ -214,6 +215,14 @@ public class SellerBean {
 
 	public void setSellerAccount(SellerAccount sellerAccount) {
 		this.sellerAccount = sellerAccount;
+	}
+
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
 	}
 
 }

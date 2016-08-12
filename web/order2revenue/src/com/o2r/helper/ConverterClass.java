@@ -42,7 +42,6 @@ import com.o2r.bean.PartnerBean;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.PaymentUploadBean;
 import com.o2r.bean.PlanBean;
-import com.o2r.bean.PoPaymentDetailsBean;
 import com.o2r.bean.ProductBean;
 import com.o2r.bean.ProductConfigBean;
 import com.o2r.bean.SellerAccountBean;
@@ -259,7 +258,8 @@ public class ConverterClass {
 				bean.setEossValue(order.getEossValue());
 				bean.setEventName(order.getEventName());
 				if (order.getProductConfig() != null)
-					bean.setProductConfig(prepareProductConfigBean(order.getProductConfig()));
+					bean.setProductConfig(prepareProductConfigBean(order
+							.getProductConfig()));
 				beans.add(bean);
 			}
 		}
@@ -338,14 +338,16 @@ public class ConverterClass {
 			seller.setTanNumber(sellerBean.getTanNumber());
 			seller.setRole(sellerBean.getRole());
 			seller.setVerCode(sellerBean.getVerCode());
+			seller.setZipcode(sellerBean.getZipcode());
 			seller.setPlan(sellerBean.getPlan());
 			seller.setSellerAccount(sellerBean.getSellerAccount());
 			seller.setStateDeliveryTime(sellerBean.getStateDeliveryTime());
 		}
 		return seller;
 	}
-	
-	public static List<StateDeliveryTime> prepareStateDeliveryTimeModel(List<StateDeliveryTimeBean> stateDeliveryTimeBean) {
+
+	public static List<StateDeliveryTime> prepareStateDeliveryTimeModel(
+			List<StateDeliveryTimeBean> stateDeliveryTimeBean) {
 		List<StateDeliveryTime> models = null;
 		if (stateDeliveryTimeBean != null && !stateDeliveryTimeBean.isEmpty()) {
 			models = new ArrayList<StateDeliveryTime>();
@@ -353,14 +355,16 @@ public class ConverterClass {
 			for (StateDeliveryTimeBean aStateDeliveryTimeBean : stateDeliveryTimeBean) {
 				model = new StateDeliveryTime();
 				model.setDeliveryTime(aStateDeliveryTimeBean.getDeliveryTime());
-				model.setState(prepareStateModel(aStateDeliveryTimeBean.getState()));
-				model.setSeller(prepareSellerModel(aStateDeliveryTimeBean.getSeller()));
+				model.setState(prepareStateModel(aStateDeliveryTimeBean
+						.getState()));
+				model.setSeller(prepareSellerModel(aStateDeliveryTimeBean
+						.getSeller()));
 				models.add(model);
 			}
 		}
 		return models;
 	}
-	
+
 	public static State prepareStateModel(StateBean stateBean) {
 		State state = new State();
 		if (stateBean != null) {
@@ -369,7 +373,7 @@ public class ConverterClass {
 		}
 		return state;
 	}
-	
+
 	public static List<SellerBean> prepareListofSellerBean(List<Seller> sellers) {
 		List<SellerBean> beans = null;
 		if (sellers != null && !sellers.isEmpty()) {
@@ -388,6 +392,7 @@ public class ConverterClass {
 				bean.setBrandName(seller.getBrandName());
 				bean.setLogoUrl(seller.getLogoUrl());
 				bean.setVerCode(seller.getVerCode());
+				bean.setZipcode(seller.getZipcode());
 				bean.setTinNumber(seller.getTinNumber());
 				bean.setTanNumber(seller.getTanNumber());
 				beans.add(bean);
@@ -414,6 +419,7 @@ public class ConverterClass {
 			bean.setTanNumber(seller.getTanNumber());
 			bean.setRole(seller.getRole());
 			bean.setVerCode(seller.getVerCode());
+			bean.setZipcode(seller.getZipcode());
 			bean.setPlan(seller.getPlan());
 			bean.setSellerAccount(seller.getSellerAccount());
 			bean.setStateDeliveryTime(seller.getStateDeliveryTime());
@@ -421,19 +427,20 @@ public class ConverterClass {
 		return bean;
 	}
 
-	public static StateDeliveryTimeBean prepareStateDeliveryTimeBean(StateDeliveryTime stateDeliveryTime) {
+	public static StateDeliveryTimeBean prepareStateDeliveryTimeBean(
+			StateDeliveryTime stateDeliveryTime) {
 		StateDeliveryTimeBean bean = null;
-		if(stateDeliveryTime!=null)
-		{
-				bean = new StateDeliveryTimeBean();
-				bean.setDeliveryTime(stateDeliveryTime.getDeliveryTime());
-				bean.setState(prepareStateBean(stateDeliveryTime.getState()));
+		if (stateDeliveryTime != null) {
+			bean = new StateDeliveryTimeBean();
+			bean.setDeliveryTime(stateDeliveryTime.getDeliveryTime());
+			bean.setState(prepareStateBean(stateDeliveryTime.getState()));
 		}
-				
+
 		return bean;
 	}
-	
-	public static List<StateDeliveryTimeBean> prepareStateDeliveryTimeBeanList(List<StateDeliveryTime> stateDeliveryTime) {
+
+	public static List<StateDeliveryTimeBean> prepareStateDeliveryTimeBeanList(
+			List<StateDeliveryTime> stateDeliveryTime) {
 		List<StateDeliveryTimeBean> beans = null;
 		if (stateDeliveryTime != null && !stateDeliveryTime.isEmpty()) {
 			beans = new ArrayList<StateDeliveryTimeBean>();
@@ -447,7 +454,7 @@ public class ConverterClass {
 		}
 		return beans;
 	}
-	
+
 	public static StateBean prepareStateBean(State state) {
 		StateBean stateBean = new StateBean();
 		if (state != null) {
@@ -456,7 +463,7 @@ public class ConverterClass {
 		}
 		return stateBean;
 	}
-	
+
 	public static Partner preparePartnerModel(PartnerBean partnerBean) {
 
 		Partner partner = new Partner();
@@ -485,8 +492,9 @@ public class ConverterClass {
 		}
 		return partner;
 	}
-	
-	public static MetaPartner prepareMetaPartnerModel(MetaPartnerBean partnerBean) {
+
+	public static MetaPartner prepareMetaPartnerModel(
+			MetaPartnerBean partnerBean) {
 
 		MetaPartner partner = new MetaPartner();
 		if (partnerBean != null) {
@@ -513,7 +521,7 @@ public class ConverterClass {
 		}
 		return partner;
 	}
-	
+
 	public static Partner convertPartner(MetaPartner metaPartner) {
 
 		Partner partner = new Partner();
@@ -536,112 +544,181 @@ public class ConverterClass {
 			partner.setPaycyclefromshipordel(metaPartner
 					.isPaycyclefromshipordel());
 			partner.setMonthlypaydate(metaPartner.getMonthlypaydate());
-			partner.setNrnReturnConfig(convertNRnReturnConfig(metaPartner.getNrnReturnConfig()));
+			partner.setNrnReturnConfig(convertNRnReturnConfig(metaPartner
+					.getNrnReturnConfig()));
 		}
 		return partner;
 	}
-	
-	public static NRnReturnConfig convertNRnReturnConfig(MetaNRnReturnConfig metaNRnReturnConfig) {
+
+	public static NRnReturnConfig convertNRnReturnConfig(
+			MetaNRnReturnConfig metaNRnReturnConfig) {
 
 		NRnReturnConfig nRnReturnConfig = new NRnReturnConfig();
 		if (metaNRnReturnConfig != null) {
-			nRnReturnConfig.setNrCalculator(metaNRnReturnConfig.isNrCalculator());
-			nRnReturnConfig.setCommissionType(metaNRnReturnConfig.getCommissionType());
-			nRnReturnConfig.setCategoryWiseCommsion(metaNRnReturnConfig.getCategoryWiseCommsion());
-			nRnReturnConfig.setWhicheverGreaterPCC(metaNRnReturnConfig.isWhicheverGreaterPCC());
-			nRnReturnConfig.setShippingFeeType(metaNRnReturnConfig.getShippingFeeType()); 
-			nRnReturnConfig.setRetCharSFType(metaNRnReturnConfig.getRetCharSFType());
-			nRnReturnConfig.setRetCharBRType(metaNRnReturnConfig.getRetCharBRType());
+			nRnReturnConfig.setNrCalculator(metaNRnReturnConfig
+					.isNrCalculator());
+			nRnReturnConfig.setCommissionType(metaNRnReturnConfig
+					.getCommissionType());
+			nRnReturnConfig.setCategoryWiseCommsion(metaNRnReturnConfig
+					.getCategoryWiseCommsion());
+			nRnReturnConfig.setWhicheverGreaterPCC(metaNRnReturnConfig
+					.isWhicheverGreaterPCC());
+			nRnReturnConfig.setShippingFeeType(metaNRnReturnConfig
+					.getShippingFeeType());
+			nRnReturnConfig.setRetCharSFType(metaNRnReturnConfig
+					.getRetCharSFType());
+			nRnReturnConfig.setRetCharBRType(metaNRnReturnConfig
+					.getRetCharBRType());
 			nRnReturnConfig.setRetCharSFFF(metaNRnReturnConfig.isRetCharSFFF());
-			nRnReturnConfig.setRetCharSFShipFee(metaNRnReturnConfig.isRetCharSFShipFee());
-			nRnReturnConfig.setRetCharSFSerTax(metaNRnReturnConfig.isRetCharSFSerTax());
-			nRnReturnConfig.setRetCharSFPCC(metaNRnReturnConfig.isRetCharSFPCC());
+			nRnReturnConfig.setRetCharSFShipFee(metaNRnReturnConfig
+					.isRetCharSFShipFee());
+			nRnReturnConfig.setRetCharSFSerTax(metaNRnReturnConfig
+					.isRetCharSFSerTax());
+			nRnReturnConfig.setRetCharSFPCC(metaNRnReturnConfig
+					.isRetCharSFPCC());
 			nRnReturnConfig.setRetCharBRFF(metaNRnReturnConfig.isRetCharBRFF());
-			nRnReturnConfig.setRetCharBRShipFee(metaNRnReturnConfig.isRetCharBRShipFee());
-			nRnReturnConfig.setRetCharBRSerTax(metaNRnReturnConfig.isRetCharBRSerTax());
-			nRnReturnConfig.setRetCharBRPCC(metaNRnReturnConfig.isRetCharBRPCC());
-			nRnReturnConfig.setRTOCharSFType(metaNRnReturnConfig.getRTOCharSFType());
-			nRnReturnConfig.setRTOCharBRType(metaNRnReturnConfig.getRTOCharBRType());
+			nRnReturnConfig.setRetCharBRShipFee(metaNRnReturnConfig
+					.isRetCharBRShipFee());
+			nRnReturnConfig.setRetCharBRSerTax(metaNRnReturnConfig
+					.isRetCharBRSerTax());
+			nRnReturnConfig.setRetCharBRPCC(metaNRnReturnConfig
+					.isRetCharBRPCC());
+			nRnReturnConfig.setRTOCharSFType(metaNRnReturnConfig
+					.getRTOCharSFType());
+			nRnReturnConfig.setRTOCharBRType(metaNRnReturnConfig
+					.getRTOCharBRType());
 			nRnReturnConfig.setRTOCharSFFF(metaNRnReturnConfig.isRTOCharSFFF());
-			nRnReturnConfig.setRTOCharSFShipFee(metaNRnReturnConfig.isRTOCharSFShipFee());
-			nRnReturnConfig.setRTOCharSFSerTax(metaNRnReturnConfig.isRTOCharSFSerTax());
-			nRnReturnConfig.setRTOCharSFPCC(metaNRnReturnConfig.isRTOCharSFPCC());
+			nRnReturnConfig.setRTOCharSFShipFee(metaNRnReturnConfig
+					.isRTOCharSFShipFee());
+			nRnReturnConfig.setRTOCharSFSerTax(metaNRnReturnConfig
+					.isRTOCharSFSerTax());
+			nRnReturnConfig.setRTOCharSFPCC(metaNRnReturnConfig
+					.isRTOCharSFPCC());
 			nRnReturnConfig.setRTOCharBRFF(metaNRnReturnConfig.isRTOCharBRFF());
-			nRnReturnConfig.setRTOCharBRShipFee(metaNRnReturnConfig.isRTOCharBRShipFee());
-			nRnReturnConfig.setRTOCharBRSerTax(metaNRnReturnConfig.isRTOCharBRSerTax());
-			nRnReturnConfig.setRTOCharBRPCC(metaNRnReturnConfig.isRTOCharBRPCC());
-			nRnReturnConfig.setRepCharSFType(metaNRnReturnConfig.getRepCharSFType());
-			nRnReturnConfig.setRepCharBRType(metaNRnReturnConfig.getRepCharBRType());
+			nRnReturnConfig.setRTOCharBRShipFee(metaNRnReturnConfig
+					.isRTOCharBRShipFee());
+			nRnReturnConfig.setRTOCharBRSerTax(metaNRnReturnConfig
+					.isRTOCharBRSerTax());
+			nRnReturnConfig.setRTOCharBRPCC(metaNRnReturnConfig
+					.isRTOCharBRPCC());
+			nRnReturnConfig.setRepCharSFType(metaNRnReturnConfig
+					.getRepCharSFType());
+			nRnReturnConfig.setRepCharBRType(metaNRnReturnConfig
+					.getRepCharBRType());
 			nRnReturnConfig.setRepCharSFFF(metaNRnReturnConfig.isRepCharSFFF());
-			nRnReturnConfig.setRepCharSFShipFee(metaNRnReturnConfig.isRepCharSFShipFee());
-			nRnReturnConfig.setRepCharSFSerTax(metaNRnReturnConfig.isRepCharSFSerTax());
-			nRnReturnConfig.setRepCharSFPCC(metaNRnReturnConfig.isRepCharSFPCC());
+			nRnReturnConfig.setRepCharSFShipFee(metaNRnReturnConfig
+					.isRepCharSFShipFee());
+			nRnReturnConfig.setRepCharSFSerTax(metaNRnReturnConfig
+					.isRepCharSFSerTax());
+			nRnReturnConfig.setRepCharSFPCC(metaNRnReturnConfig
+					.isRepCharSFPCC());
 			nRnReturnConfig.setRepCharBRFF(metaNRnReturnConfig.isRepCharBRFF());
-			nRnReturnConfig.setRepCharBRShipFee(metaNRnReturnConfig.isRepCharBRShipFee());
-			nRnReturnConfig.setRepCharBRSerTax(metaNRnReturnConfig.isRepCharBRSerTax());
-			nRnReturnConfig.setRepCharBRPCC(metaNRnReturnConfig.isRepCharBRPCC());
-			nRnReturnConfig.setPDCharSFType(metaNRnReturnConfig.getPDCharSFType());
-			nRnReturnConfig.setPDCharBRType(metaNRnReturnConfig.getPDCharBRType());
+			nRnReturnConfig.setRepCharBRShipFee(metaNRnReturnConfig
+					.isRepCharBRShipFee());
+			nRnReturnConfig.setRepCharBRSerTax(metaNRnReturnConfig
+					.isRepCharBRSerTax());
+			nRnReturnConfig.setRepCharBRPCC(metaNRnReturnConfig
+					.isRepCharBRPCC());
+			nRnReturnConfig.setPDCharSFType(metaNRnReturnConfig
+					.getPDCharSFType());
+			nRnReturnConfig.setPDCharBRType(metaNRnReturnConfig
+					.getPDCharBRType());
 			nRnReturnConfig.setPDCharSFFF(metaNRnReturnConfig.isPDCharSFFF());
-			nRnReturnConfig.setPDCharSFShipFee(metaNRnReturnConfig.isPDCharSFShipFee());
-			nRnReturnConfig.setPDCharSFSerTax(metaNRnReturnConfig.isPDCharSFSerTax());
+			nRnReturnConfig.setPDCharSFShipFee(metaNRnReturnConfig
+					.isPDCharSFShipFee());
+			nRnReturnConfig.setPDCharSFSerTax(metaNRnReturnConfig
+					.isPDCharSFSerTax());
 			nRnReturnConfig.setPDCharSFPCC(metaNRnReturnConfig.isPDCharSFPCC());
 			nRnReturnConfig.setPDCharBRFF(metaNRnReturnConfig.isPDCharBRFF());
-			nRnReturnConfig.setPDCharBRShipFee(metaNRnReturnConfig.isPDCharBRShipFee());
-			nRnReturnConfig.setPDCharBRSerTax(metaNRnReturnConfig.isPDCharBRSerTax());
+			nRnReturnConfig.setPDCharBRShipFee(metaNRnReturnConfig
+					.isPDCharBRShipFee());
+			nRnReturnConfig.setPDCharBRSerTax(metaNRnReturnConfig
+					.isPDCharBRSerTax());
 			nRnReturnConfig.setPDCharBRPCC(metaNRnReturnConfig.isPDCharBRPCC());
-			nRnReturnConfig.setCanCharSFARTDType(metaNRnReturnConfig.getCanCharSFARTDType());
-			nRnReturnConfig.setCanCharSFBFRTDType(metaNRnReturnConfig.getCanCharSFBFRTDType());
-			nRnReturnConfig.setCanCharBRType(metaNRnReturnConfig.getCanCharBRType());
+			nRnReturnConfig.setCanCharSFARTDType(metaNRnReturnConfig
+					.getCanCharSFARTDType());
+			nRnReturnConfig.setCanCharSFBFRTDType(metaNRnReturnConfig
+					.getCanCharSFBFRTDType());
+			nRnReturnConfig.setCanCharBRType(metaNRnReturnConfig
+					.getCanCharBRType());
 			nRnReturnConfig.setCanCharSFFF(metaNRnReturnConfig.isCanCharSFFF());
-			nRnReturnConfig.setCanCharSFShipFee(metaNRnReturnConfig.isCanCharSFShipFee());
-			nRnReturnConfig.setCanCharSFSerTax(metaNRnReturnConfig.isCanCharSFSerTax());
-			nRnReturnConfig.setCanCharSFPCC(metaNRnReturnConfig.isCanCharSFPCC());
-			nRnReturnConfig.setCanCharSFBRTDFF(metaNRnReturnConfig.isCanCharSFBRTDFF());
-			nRnReturnConfig.setCanCharSFBRTDShipFee(metaNRnReturnConfig.isCanCharSFBRTDShipFee());
-			nRnReturnConfig.setCanCharSFBRTDSerTax(metaNRnReturnConfig.isCanCharSFBRTDSerTax());
-			nRnReturnConfig.setCanCharSFBRTDPCC(metaNRnReturnConfig.isCanCharSFBRTDPCC());
+			nRnReturnConfig.setCanCharSFShipFee(metaNRnReturnConfig
+					.isCanCharSFShipFee());
+			nRnReturnConfig.setCanCharSFSerTax(metaNRnReturnConfig
+					.isCanCharSFSerTax());
+			nRnReturnConfig.setCanCharSFPCC(metaNRnReturnConfig
+					.isCanCharSFPCC());
+			nRnReturnConfig.setCanCharSFBRTDFF(metaNRnReturnConfig
+					.isCanCharSFBRTDFF());
+			nRnReturnConfig.setCanCharSFBRTDShipFee(metaNRnReturnConfig
+					.isCanCharSFBRTDShipFee());
+			nRnReturnConfig.setCanCharSFBRTDSerTax(metaNRnReturnConfig
+					.isCanCharSFBRTDSerTax());
+			nRnReturnConfig.setCanCharSFBRTDPCC(metaNRnReturnConfig
+					.isCanCharSFBRTDPCC());
 			nRnReturnConfig.setCanCharBRFF(metaNRnReturnConfig.isCanCharBRFF());
-			nRnReturnConfig.setCanCharBRShipFee(metaNRnReturnConfig.isCanCharBRShipFee());
-			nRnReturnConfig.setCanCharBRSerTax(metaNRnReturnConfig.isCanCharBRSerTax());
-			nRnReturnConfig.setCanCharBRPCC(metaNRnReturnConfig.isCanCharBRPCC());
-			nRnReturnConfig.setRevShippingFeeType(metaNRnReturnConfig.getRevShippingFeeType());
-			nRnReturnConfig.setRetCharSFRevShipFee(metaNRnReturnConfig.isRetCharSFRevShipFee());
-			nRnReturnConfig.setRepCharSFRevShipFee(metaNRnReturnConfig.isRepCharSFRevShipFee());
-			nRnReturnConfig.setPDCharSFRevShipFee(metaNRnReturnConfig.isPDCharSFRevShipFee());
-			nRnReturnConfig.setRTOCharSFRevShipFee(metaNRnReturnConfig.isRTOCharSFRevShipFee());
-			nRnReturnConfig.setCanCharSFBRTDRevShipFee(metaNRnReturnConfig.isCanCharSFBRTDRevShipFee());
-			nRnReturnConfig.setCanCharSFARTDRevShipFee(metaNRnReturnConfig.isCanCharSFARTDRevShipFee());
-			nRnReturnConfig.setRetCharBRRevShipFee(metaNRnReturnConfig.isRetCharBRRevShipFee());
-			nRnReturnConfig.setRepCharBRRevShipFee(metaNRnReturnConfig.isRepCharBRRevShipFee());
-			nRnReturnConfig.setPDCharBRRevShipFee(metaNRnReturnConfig.isPDCharBRRevShipFee());
-			nRnReturnConfig.setRTOCharBRRevShipFee(metaNRnReturnConfig.isRTOCharBRRevShipFee());
-			nRnReturnConfig.setCanCharBRRevShipFee(metaNRnReturnConfig.isCanCharBRRevShipFee());
-			nRnReturnConfig.setNrCalculatorEvent(metaNRnReturnConfig.getNrCalculatorEvent());
-			nRnReturnConfig.setReturnCalculatorEvent(metaNRnReturnConfig.getReturnCalculatorEvent());
+			nRnReturnConfig.setCanCharBRShipFee(metaNRnReturnConfig
+					.isCanCharBRShipFee());
+			nRnReturnConfig.setCanCharBRSerTax(metaNRnReturnConfig
+					.isCanCharBRSerTax());
+			nRnReturnConfig.setCanCharBRPCC(metaNRnReturnConfig
+					.isCanCharBRPCC());
+			nRnReturnConfig.setRevShippingFeeType(metaNRnReturnConfig
+					.getRevShippingFeeType());
+			nRnReturnConfig.setRetCharSFRevShipFee(metaNRnReturnConfig
+					.isRetCharSFRevShipFee());
+			nRnReturnConfig.setRepCharSFRevShipFee(metaNRnReturnConfig
+					.isRepCharSFRevShipFee());
+			nRnReturnConfig.setPDCharSFRevShipFee(metaNRnReturnConfig
+					.isPDCharSFRevShipFee());
+			nRnReturnConfig.setRTOCharSFRevShipFee(metaNRnReturnConfig
+					.isRTOCharSFRevShipFee());
+			nRnReturnConfig.setCanCharSFBRTDRevShipFee(metaNRnReturnConfig
+					.isCanCharSFBRTDRevShipFee());
+			nRnReturnConfig.setCanCharSFARTDRevShipFee(metaNRnReturnConfig
+					.isCanCharSFARTDRevShipFee());
+			nRnReturnConfig.setRetCharBRRevShipFee(metaNRnReturnConfig
+					.isRetCharBRRevShipFee());
+			nRnReturnConfig.setRepCharBRRevShipFee(metaNRnReturnConfig
+					.isRepCharBRRevShipFee());
+			nRnReturnConfig.setPDCharBRRevShipFee(metaNRnReturnConfig
+					.isPDCharBRRevShipFee());
+			nRnReturnConfig.setRTOCharBRRevShipFee(metaNRnReturnConfig
+					.isRTOCharBRRevShipFee());
+			nRnReturnConfig.setCanCharBRRevShipFee(metaNRnReturnConfig
+					.isCanCharBRRevShipFee());
+			nRnReturnConfig.setNrCalculatorEvent(metaNRnReturnConfig
+					.getNrCalculatorEvent());
+			nRnReturnConfig.setReturnCalculatorEvent(metaNRnReturnConfig
+					.getReturnCalculatorEvent());
 			nRnReturnConfig.setTaxSpType(metaNRnReturnConfig.getTaxSpType());
 			nRnReturnConfig.setTaxPoType(metaNRnReturnConfig.getTaxPoType());
 			List<NRnReturnCharges> nRnReturnChargeList = new ArrayList<NRnReturnCharges>();
-			for (MetaNRnReturnCharges metaNRnReturnCharges : metaNRnReturnConfig.getCharges()) {
-				nRnReturnChargeList.add(convertNRnReturnCharges(metaNRnReturnCharges));
+			for (MetaNRnReturnCharges metaNRnReturnCharges : metaNRnReturnConfig
+					.getCharges()) {
+				nRnReturnChargeList
+						.add(convertNRnReturnCharges(metaNRnReturnCharges));
 			}
 			nRnReturnConfig.setCharges(nRnReturnChargeList);
 		}
 		return nRnReturnConfig;
 	}
-	
-	public static NRnReturnCharges convertNRnReturnCharges(MetaNRnReturnCharges metaNRnReturnCharges) {
+
+	public static NRnReturnCharges convertNRnReturnCharges(
+			MetaNRnReturnCharges metaNRnReturnCharges) {
 
 		NRnReturnCharges nRnReturnCharges = new NRnReturnCharges();
 		if (metaNRnReturnCharges != null) {
-			nRnReturnCharges.setChargeName(metaNRnReturnCharges.getChargeName());
-			nRnReturnCharges.setChargeAmount(metaNRnReturnCharges.getChargeAmount());
+			nRnReturnCharges
+					.setChargeName(metaNRnReturnCharges.getChargeName());
+			nRnReturnCharges.setChargeAmount(metaNRnReturnCharges
+					.getChargeAmount());
 			nRnReturnCharges.setCriteria(metaNRnReturnCharges.getCriteria());
-			nRnReturnCharges.setCriteriaRange(metaNRnReturnCharges.getCriteriaRange());
+			nRnReturnCharges.setCriteriaRange(metaNRnReturnCharges
+					.getCriteriaRange());
 		}
 		return nRnReturnCharges;
 	}
-	
 
 	public static List<PartnerBean> prepareListofPartnerBean(
 			List<Partner> partners) {
@@ -768,7 +845,7 @@ public class ConverterClass {
 	public static ProductBean prepareProductBean(Product product) {
 		ProductBean bean = null;
 		if (product != null) {
-			bean =new ProductBean();
+			bean = new ProductBean();
 			bean.setCategoryName(product.getCategoryName());
 			bean.setProductDate(product.getProductDate());
 			bean.setProductId(product.getProductId());
@@ -872,7 +949,7 @@ public class ConverterClass {
 
 		return customerBean;
 	}
-	
+
 	public static List<CustomerBean> prepareListofCusomerBean(
 			List<Customer> customers) {
 		List<CustomerBean> beans = null;
@@ -893,7 +970,6 @@ public class ConverterClass {
 		}
 		return beans;
 	}
-	
 
 	public static ExpenseCategoryBean prepareExpenseCategoryBean(
 			ExpenseCategory category) {
@@ -1000,12 +1076,11 @@ public class ConverterClass {
 
 				beans.add(bean);
 			}
-		}else
-		{
+		} else {
 			beans = new ArrayList<ExpenseBean>();
 			beans.add(new ExpenseBean());
 		}
-		
+
 		return beans;
 	}
 
@@ -1066,7 +1141,7 @@ public class ConverterClass {
 			orderPayment.setPaymentCycle(bean.getPaymentCycle());
 			orderPayment.setPaymentDifference(bean.getPaymentDifference());
 			orderPayment.setPaymentCycleStart(bean.getPaymentCycleStart());
-			orderPayment.setPaymentCycleEnd(bean.getPaymentCycleEnd());			
+			orderPayment.setPaymentCycleEnd(bean.getPaymentCycleEnd());
 		}
 		return orderPayment;
 	}
@@ -1086,7 +1161,7 @@ public class ConverterClass {
 			orderPayment.setPaymentCycle(bean.getPaymentCycle());
 			orderPayment.setPaymentDifference(bean.getPaymentDifference());
 			orderPayment.setPaymentCycleStart(bean.getPaymentCycleStart());
-			orderPayment.setPaymentCycleEnd(bean.getPaymentCycleEnd());			
+			orderPayment.setPaymentCycleEnd(bean.getPaymentCycleEnd());
 		}
 		return orderPayment;
 	}
@@ -1108,7 +1183,7 @@ public class ConverterClass {
 			orderReturn.setType(bean.getType());
 			orderReturn.setCancelType(bean.getCancelType());
 			orderReturn.setReturnCategory(bean.getReturnCategory());
-			
+
 			orderReturn.setNetNR(bean.getNetNR());
 			orderReturn.setTaxPOAmt(bean.getTaxPOAmt());
 			orderReturn.setNetPR(bean.getNetPR());
@@ -1136,7 +1211,7 @@ public class ConverterClass {
 			orderReturn.setType(bean.getType());
 			orderReturn.setCancelType(bean.getCancelType());
 			orderReturn.setReturnCategory(bean.getReturnCategory());
-			
+
 			orderReturn.setNetNR(bean.getNetNR());
 			orderReturn.setTaxPOAmt(bean.getTaxPOAmt());
 			orderReturn.setNetPR(bean.getNetPR());
@@ -1328,6 +1403,9 @@ public class ConverterClass {
 			bean.setTaxCatName(category.getTaxCatName());
 			bean.setUploadDate(category.getUploadDate());
 			bean.setTaxPercent(category.getTaxPercent());
+			bean.setTaxCatType(category.getTaxCatType());
+			bean.setProductCategoryCST(category.getProductCategoryCST());
+			bean.setProductCategoryLST(category.getProductCategoryLST());
 		}
 		return bean;
 	}
@@ -1341,6 +1419,9 @@ public class ConverterClass {
 			category.setTaxCatName(bean.getTaxCatName());
 			category.setUploadDate(bean.getUploadDate());
 			category.setTaxPercent(bean.getTaxPercent());
+			category.setTaxCatType(bean.getTaxCatType());
+			category.setProductCategoryCST(bean.getProductCategoryCST());
+			category.setProductCategoryLST(bean.getProductCategoryLST());
 		}
 		return category;
 
@@ -1353,6 +1434,7 @@ public class ConverterClass {
 			beans = new ArrayList<TaxCategoryBean>();
 			TaxCategoryBean bean = null;
 			for (TaxCategory category : categories) {
+				String productCategoryStr = "";
 				bean = new TaxCategoryBean();
 				bean.setPartner(category.getPartner());
 				bean.setTaxCatDescription(category.getTaxCatDescription());
@@ -1360,7 +1442,32 @@ public class ConverterClass {
 				bean.setTaxCatName(category.getTaxCatName());
 				bean.setUploadDate(category.getUploadDate());
 				bean.setTaxPercent(category.getTaxPercent());
-
+				bean.setTaxCatType(category.getTaxCatType());
+				bean.setProductCategoryCST(category.getProductCategoryCST());
+				bean.setProductCategoryLST(category.getProductCategoryLST());
+				if (category.getTaxCatType() != null) {
+					if (category.getTaxCatType().equalsIgnoreCase("LST")) {
+						if (category.getProductCategoryLST() != null) {
+							for (Category prodCat : category
+									.getProductCategoryLST()) {
+								productCategoryStr += prodCat.getCatName()
+										+ ",";
+							}
+						}
+					} else {
+						if (category.getProductCategoryCST() != null) {
+							for (Category prodCat : category
+									.getProductCategoryCST()) {
+								productCategoryStr += prodCat.getCatName()
+										+ ",";
+							}
+						}
+					}
+				}
+				if (productCategoryStr.length() > 1) {
+					bean.setProductCategoryStr(productCategoryStr.substring(0,
+							productCategoryStr.length() - 1));
+				}
 				beans.add(bean);
 			}
 		}
@@ -1502,10 +1609,10 @@ public class ConverterClass {
 		}
 		return beanArray;
 	}
-	
-	public static Events prepareEventsModel(EventsBean eventsBean){
-		
-		Events events=new Events();
+
+	public static Events prepareEventsModel(EventsBean eventsBean) {
+
+		Events events = new Events();
 		events.setEventId(eventsBean.getEventId());
 		events.setSellerId(eventsBean.getSellerId());
 		events.setEventName(eventsBean.getEventName());
@@ -1524,39 +1631,40 @@ public class ConverterClass {
 		events.setStatus(eventsBean.getStatus());
 		events.setSelectAll(eventsBean.getSelectAll());
 		return events;
-		
+
 	}
-	public static EventsBean prepareEventsBean(Events events){
-		
-		EventsBean eventsBean=new EventsBean();
-		if(events!=null)
-		{
-		eventsBean.setEventId(events.getEventId());
-		eventsBean.setSellerId(events.getSellerId());
-		eventsBean.setEventName(events.getEventName());
-		eventsBean.setChannelName(events.getChannelName());
-		eventsBean.setStartDate(events.getStartDate());
-		eventsBean.setEndDate(events.getEndDate());
-		eventsBean.setProductCategories(events.getProductCategories());
-		eventsBean.setNrType(events.getNrType());
-		eventsBean.setReturnCharges(events.getReturnCharges());
-		eventsBean.setNrnReturnConfig(events.getNrnReturnConfig());
-		eventsBean.setPartner(events.getPartner());
-		eventsBean.setCreatedDate(events.getCreatedDate());
-		eventsBean.setNetSalesQuantity(events.getNetSalesQuantity());
-		eventsBean.setNetSalesAmount(events.getNetSalesAmount());
-		eventsBean.setSkuList(events.getSkuList());
-		eventsBean.setStatus(events.getStatus());
-		eventsBean.setSelectAll(events.getSelectAll());
+
+	public static EventsBean prepareEventsBean(Events events) {
+
+		EventsBean eventsBean = new EventsBean();
+		if (events != null) {
+			eventsBean.setEventId(events.getEventId());
+			eventsBean.setSellerId(events.getSellerId());
+			eventsBean.setEventName(events.getEventName());
+			eventsBean.setChannelName(events.getChannelName());
+			eventsBean.setStartDate(events.getStartDate());
+			eventsBean.setEndDate(events.getEndDate());
+			eventsBean.setProductCategories(events.getProductCategories());
+			eventsBean.setNrType(events.getNrType());
+			eventsBean.setReturnCharges(events.getReturnCharges());
+			eventsBean.setNrnReturnConfig(events.getNrnReturnConfig());
+			eventsBean.setPartner(events.getPartner());
+			eventsBean.setCreatedDate(events.getCreatedDate());
+			eventsBean.setNetSalesQuantity(events.getNetSalesQuantity());
+			eventsBean.setNetSalesAmount(events.getNetSalesAmount());
+			eventsBean.setSkuList(events.getSkuList());
+			eventsBean.setStatus(events.getStatus());
+			eventsBean.setSelectAll(events.getSelectAll());
 		}
 		return eventsBean;
 	}
-	public static List<EventsBean> prepareListOfEventsBean(List<Events> events){
+
+	public static List<EventsBean> prepareListOfEventsBean(List<Events> events) {
 		List<EventsBean> beans = null;
 		if (events != null && !events.isEmpty()) {
 			beans = new ArrayList<EventsBean>();
 			EventsBean bean = null;
-			for (Events event: events) {
+			for (Events event : events) {
 				bean = new EventsBean();
 				bean.setEventId(event.getEventId());
 				bean.setSellerId(event.getSellerId());
@@ -1577,14 +1685,16 @@ public class ConverterClass {
 				bean.setSelectAll(event.getSelectAll());
 				beans.add(bean);
 			}
-		}		
+		}
 		return beans;
 	}
-	
-	public static ProductConfigBean prepareProductConfigBean(ProductConfig productConfig){
-		
-		ProductConfigBean productConfigBean=new ProductConfigBean();
-		productConfigBean.setProductConfigId(productConfig.getProductConfigId());
+
+	public static ProductConfigBean prepareProductConfigBean(
+			ProductConfig productConfig) {
+
+		ProductConfigBean productConfigBean = new ProductConfigBean();
+		productConfigBean
+				.setProductConfigId(productConfig.getProductConfigId());
 		productConfigBean.setProductId(productConfig.getProductId());
 		productConfigBean.setProductName(productConfig.getProductName());
 		productConfigBean.setProductSkuCode(productConfig.getProductSkuCode());
@@ -1598,18 +1708,22 @@ public class ConverterClass {
 		productConfigBean.setMrp(productConfig.getMrp());
 		productConfigBean.setSp(productConfig.getSp());
 		productConfigBean.setProductPrice(productConfig.getProductPrice());
-		productConfigBean.setSuggestedPOPrice(productConfig.getSuggestedPOPrice());
-		productConfigBean.setEossDiscountValue(productConfig.getEossDiscountValue());
+		productConfigBean.setSuggestedPOPrice(productConfig
+				.getSuggestedPOPrice());
+		productConfigBean.setEossDiscountValue(productConfig
+				.getEossDiscountValue());
 		productConfigBean.setGrossNR(productConfig.getGrossNR());
 		productConfigBean.setProduct(productConfig.getProduct());
 		return productConfigBean;
 	}
-	
-	public static ProductConfig prepareProductConfigModel(ProductConfigBean productConfigBean){
-		
-		ProductConfig productConfig=new ProductConfig();
-		
-		productConfig.setProductConfigId(productConfigBean.getProductConfigId());
+
+	public static ProductConfig prepareProductConfigModel(
+			ProductConfigBean productConfigBean) {
+
+		ProductConfig productConfig = new ProductConfig();
+
+		productConfig
+				.setProductConfigId(productConfigBean.getProductConfigId());
 		productConfig.setProductId(productConfigBean.getProductId());
 		productConfig.setProductName(productConfigBean.getProductName());
 		productConfig.setProductSkuCode(productConfigBean.getProductSkuCode());
@@ -1623,17 +1737,21 @@ public class ConverterClass {
 		productConfig.setMrp(productConfigBean.getMrp());
 		productConfig.setSp(productConfigBean.getSp());
 		productConfig.setProductPrice(productConfigBean.getProductPrice());
-		productConfig.setSuggestedPOPrice(productConfigBean.getSuggestedPOPrice());
-		productConfig.setEossDiscountValue(productConfigBean.getEossDiscountValue());
+		productConfig.setSuggestedPOPrice(productConfigBean
+				.getSuggestedPOPrice());
+		productConfig.setEossDiscountValue(productConfigBean
+				.getEossDiscountValue());
 		productConfig.setGrossNR(productConfigBean.getGrossNR());
 		return productConfig;
 	}
-	public static List<ProductConfigBean> prepareListOfProductConfigBean(List<ProductConfig> productConfigs){
+
+	public static List<ProductConfigBean> prepareListOfProductConfigBean(
+			List<ProductConfig> productConfigs) {
 		List<ProductConfigBean> beans = null;
 		if (productConfigs != null && !productConfigs.isEmpty()) {
 			beans = new ArrayList<ProductConfigBean>();
 			ProductConfigBean bean = null;
-			for (ProductConfig productConfig: productConfigs) {
+			for (ProductConfig productConfig : productConfigs) {
 				bean = new ProductConfigBean();
 				bean.setProductConfigId(productConfig.getProductConfigId());
 				bean.setProductId(productConfig.getProductId());
@@ -1653,7 +1771,7 @@ public class ConverterClass {
 				bean.setGrossNR(productConfig.getGrossNR());
 				beans.add(bean);
 			}
-		}		
+		}
 		return beans;
 	}
 
@@ -1669,17 +1787,22 @@ public class ConverterClass {
 		Map<String, BusinessDetails> partnerBusinessGraphMap = new HashMap<String, BusinessDetails>();
 		for (PartnerReportDetails partnerBusiness : partnerBusinessList) {
 			String key = "";
-			switch(criteria){
-				case "partner":key = partnerBusiness.getPcName();break;
-				case "category":
-					key = partnerBusiness.getParentCategory();
-					if(StringUtils.isEmpty(key))
-						key = "B2B";
-					break;
-				default: break;
+			switch (criteria) {
+			case "partner":
+				key = partnerBusiness.getPcName();
+				break;
+			case "category":
+				key = partnerBusiness.getParentCategory();
+				if (StringUtils.isEmpty(key))
+					key = "B2B";
+				break;
+			default:
+				break;
 			}
-			BusinessDetails partnerBusinessGraph = partnerBusinessGraphMap.get(key);
-			double netPartnerCommissionPaid = partnerBusiness.getNetPartnerCommissionPaid();
+			BusinessDetails partnerBusinessGraph = partnerBusinessGraphMap
+					.get(key);
+			double netPartnerCommissionPaid = partnerBusiness
+					.getNetPartnerCommissionPaid();
 			int netSaleQty = partnerBusiness.getNetSaleQuantity();
 			double netTDSToBeDeposited = partnerBusiness.getTdsToBeDeposited();
 			double netTDS2 = partnerBusiness.getTdsToBeDeducted2();
@@ -1695,68 +1818,81 @@ public class ConverterClass {
 			double netProductCost = 0;
 			double netPrSale = 0;
 			double netActualSale = 0;
-			if(partnerBusiness.isPoOrder()){
-				if(partnerBusiness.getShippedDate() != null){
+			if (partnerBusiness.isPoOrder()) {
+				if (partnerBusiness.getShippedDate() != null) {
 					netSP = partnerBusiness.getNetSP();
 					netProductCost = partnerBusiness.getProductPrice();
 					grossProfit = partnerBusiness.getGrossProfit();
 					netRate = partnerBusiness.getNetRate();
 					netActualSale = partnerBusiness.getNetRate();
 					netPrSale = partnerBusiness.getNetPr();
-					System.out.println(partnerBusiness.getChannelOrderID() + ":" + netSP + ":" + netProductCost + ":" + netRate);
+					System.out.println(partnerBusiness.getChannelOrderID()
+							+ ":" + netSP + ":" + netProductCost + ":"
+							+ netRate);
 				}
-				if(partnerBusiness.getReturnDate() != null){
+				if (partnerBusiness.getReturnDate() != null) {
 					netSP -= partnerBusiness.getReturnSP();
 					netProductCost -= partnerBusiness.getProductPrice();
 					grossProfit -= partnerBusiness.getGrossProfit();
 					netRate -= partnerBusiness.getTotalReturnCharges();
 					netActualSale -= partnerBusiness.getTotalReturnCharges();
 					netPrSale -= partnerBusiness.getNetReturnPr();
-					System.out.println(partnerBusiness.getChannelOrderID() + ":" + netSP + ":" + netProductCost + ":" + netRate);
+					System.out.println(partnerBusiness.getChannelOrderID()
+							+ ":" + netSP + ":" + netProductCost + ":"
+							+ netRate);
 				}
-			} else{
+			} else {
 				netSP = partnerBusiness.getNetSP();
 				netProductCost = partnerBusiness.getProductPrice();
 				grossProfit = partnerBusiness.getGrossProfit();
-				if(partnerBusiness.getShippedDate() != null){
+				if (partnerBusiness.getShippedDate() != null) {
 					netActualSale = partnerBusiness.getNetRate();
 					netRate = partnerBusiness.getNetRate();
 				}
-				if(partnerBusiness.getReturnDate() != null){
+				if (partnerBusiness.getReturnDate() != null) {
 					netActualSale -= partnerBusiness.getTotalReturnCharges();
 					netRate -= partnerBusiness.getTotalReturnCharges();
 				}
-				netPrSale = partnerBusiness.getNetPr() - partnerBusiness.getNetPr()*(partnerBusiness.getReturnQuantity()/((partnerBusiness.getGrossSaleQuantity() == 0) ? 1 : partnerBusiness.getGrossSaleQuantity()));
+				netPrSale = partnerBusiness.getNetPr()
+						- partnerBusiness.getNetPr()
+						* (partnerBusiness.getReturnQuantity() / ((partnerBusiness
+								.getGrossSaleQuantity() == 0) ? 1
+								: partnerBusiness.getGrossSaleQuantity()));
 			}
-			if(partnerBusiness.getShippedDate() != null){
+			if (partnerBusiness.getShippedDate() != null) {
 				netEossDiscountPaid = partnerBusiness.getNetEossValue();
 			}
-			if(partnerBusiness.getReturnDate() != null){
+			if (partnerBusiness.getReturnDate() != null) {
 				netEossDiscountPaid -= partnerBusiness.getNetEossValue();
 			}
 			if (partnerBusinessGraph == null) {
 				partnerBusinessGraph = new BusinessDetails();
 			} else {
-				netPartnerCommissionPaid += partnerBusinessGraph.getNetPartnerCommissionPaid();
-				netSP += partnerBusinessGraph.getNetSP(); 
+				netPartnerCommissionPaid += partnerBusinessGraph
+						.getNetPartnerCommissionPaid();
+				netSP += partnerBusinessGraph.getNetSP();
 				netSaleQty += partnerBusinessGraph.getNetSaleQty();
-				netTDSToBeDeposited += partnerBusinessGraph.getNetTDSToBeDeposited();
+				netTDSToBeDeposited += partnerBusinessGraph
+						.getNetTDSToBeDeposited();
 				netTDS2 += partnerBusinessGraph.getNetTDS2();
 				netTDS10 += partnerBusinessGraph.getNetTDS10();
 				netPaymentResult += partnerBusinessGraph.getNetPaymentResult();
-				paymentDifference += partnerBusinessGraph.getPaymentDifference();
+				paymentDifference += partnerBusinessGraph
+						.getPaymentDifference();
 				netTaxableSale += partnerBusinessGraph.getNetTaxableSale();
 				netActualSale += partnerBusinessGraph.getNetActualSale();
 				netPrSale += partnerBusinessGraph.getNetPrSale();
 				netTaxToBePaid += partnerBusinessGraph.getNetTaxToBePaid();
-				netEossDiscountPaid += partnerBusinessGraph.getNetEossDiscountPaid();
+				netEossDiscountPaid += partnerBusinessGraph
+						.getNetEossDiscountPaid();
 				netRate += partnerBusinessGraph.getNetNetRate();
 				netProductCost += partnerBusinessGraph.getNetProductCost();
 				grossProfit += partnerBusinessGraph.getGrossProfit();
 			}
 			partnerBusinessGraph.setPartner(key);
 			partnerBusinessGraph.setCategoryName(key);
-			partnerBusinessGraph.setNetPartnerCommissionPaid(netPartnerCommissionPaid);
+			partnerBusinessGraph
+					.setNetPartnerCommissionPaid(netPartnerCommissionPaid);
 			partnerBusinessGraph.setNetSaleQty(netSaleQty);
 			partnerBusinessGraph.setNetSP(netSP);
 			partnerBusinessGraph.setNetTDSToBeDeposited(netTDSToBeDeposited);
@@ -1786,7 +1922,7 @@ public class ConverterClass {
 
 		return partnerBusinessGraphList;
 	}
-	
+
 	/**
 	 * Transform to List of PartnerBusinessGraph objects
 	 * 
@@ -1799,14 +1935,17 @@ public class ConverterClass {
 		Map<String, CommissionAnalysis> commAGraphMap = new HashMap<String, CommissionAnalysis>();
 		for (PartnerReportDetails partnerBusiness : partnerBusinessList) {
 			String key = "";
-			switch(criteria){
-				case "partner":key = partnerBusiness.getPcName();break;
-				case "category":
-					key = partnerBusiness.getParentCategory();
-					if(StringUtils.isEmpty(key))
-						key = "B2B";
-					break;
-				default: break;
+			switch (criteria) {
+			case "partner":
+				key = partnerBusiness.getPcName();
+				break;
+			case "category":
+				key = partnerBusiness.getParentCategory();
+				if (StringUtils.isEmpty(key))
+					key = "B2B";
+				break;
+			default:
+				break;
 			}
 			CommissionAnalysis commAGraph = commAGraphMap.get(key);
 			double fixedFee = partnerBusiness.getFixedfee();
@@ -1815,20 +1954,21 @@ public class ConverterClass {
 			double shippingCharges = partnerBusiness.getShippingCharges();
 			double taxSP = 0;
 			double sellingFee = 0;
-			if(partnerBusiness.isPoOrder()){
-				if(partnerBusiness.getShippedDate() != null){
+			if (partnerBusiness.isPoOrder()) {
+				if (partnerBusiness.getShippedDate() != null) {
 					taxSP = partnerBusiness.getTaxSP();
 					sellingFee = partnerBusiness.getGrossPartnerCommission();
 				}
-				if(partnerBusiness.getReturnDate() != null){
+				if (partnerBusiness.getReturnDate() != null) {
 					taxSP -= partnerBusiness.getTaxSP();
 					sellingFee -= partnerBusiness.getGrossPartnerCommission();
 				}
-			} else{
+			} else {
 				taxSP = partnerBusiness.getTaxSP();
 				sellingFee = partnerBusiness.getGrossPartnerCommission();
 			}
-			double additionalCharges = partnerBusiness.getAdditionalReturnCharges();
+			double additionalCharges = partnerBusiness
+					.getAdditionalReturnCharges();
 			if (commAGraph == null) {
 				commAGraph = new CommissionAnalysis();
 			} else {
@@ -1871,46 +2011,59 @@ public class ConverterClass {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List<CommissionDetails> transformCommissionPaid(
-			List<PartnerReportDetails> partnerCommissionList, Date startDate, Date endDate, String criteria) {
+			List<PartnerReportDetails> partnerCommissionList, Date startDate,
+			Date endDate, String criteria) {
 		Map<String, CommissionDetails> partnerCommissionGraphMap = new HashMap<String, CommissionDetails>();
 		for (PartnerReportDetails partnerBusiness : partnerCommissionList) {
 			String key = "";
-			switch(criteria){
-				case "partner":key = partnerBusiness.getPcName();break;
-				case "category":
-					key = partnerBusiness.getParentCategory();
-					if(StringUtils.isEmpty(key))
-						key = "B2B";
-					break;
-				default: break;
+			switch (criteria) {
+			case "partner":
+				key = partnerBusiness.getPcName();
+				break;
+			case "category":
+				key = partnerBusiness.getParentCategory();
+				if (StringUtils.isEmpty(key))
+					key = "B2B";
+				break;
+			default:
+				break;
 			}
-			CommissionDetails partnerCommissionGraph = partnerCommissionGraphMap.get(key);
+			CommissionDetails partnerCommissionGraph = partnerCommissionGraphMap
+					.get(key);
 			Date shippedDate = partnerBusiness.getShippedDate();
 			double grossPartnerCommissionPaid = 0;
-			if(shippedDate!=null && shippedDate.after(startDate) && shippedDate.before(endDate)){
-				grossPartnerCommissionPaid = partnerBusiness.getGrossCommissionQty();
+			if (shippedDate != null && shippedDate.after(startDate)
+					&& shippedDate.before(endDate)) {
+				grossPartnerCommissionPaid = partnerBusiness
+						.getGrossCommissionQty();
 			}
 			Date returnDate = partnerBusiness.getReturnDate();
 			double additionalReturnCharges = 0;
 			double netReturnCommission = 0;
-			if(returnDate!=null && returnDate.after(startDate) && returnDate.before(endDate)){
-				additionalReturnCharges = partnerBusiness.getAdditionalReturnCharges();
+			if (returnDate != null && returnDate.after(startDate)
+					&& returnDate.before(endDate)) {
+				additionalReturnCharges = partnerBusiness
+						.getAdditionalReturnCharges();
 				netReturnCommission = partnerBusiness.getReturnCommision();
 			}
 			int netSaleQty = 0;
-			if(partnerBusiness.isPoOrder()){
-				if(shippedDate!=null && shippedDate.after(startDate) && shippedDate.before(endDate))
+			if (partnerBusiness.isPoOrder()) {
+				if (shippedDate != null && shippedDate.after(startDate)
+						&& shippedDate.before(endDate))
 					netSaleQty = partnerBusiness.getGrossSaleQuantity();
-				if(returnDate!=null && returnDate.after(startDate) && returnDate.before(endDate))
+				if (returnDate != null && returnDate.after(startDate)
+						&& returnDate.before(endDate))
 					netSaleQty -= partnerBusiness.getReturnQuantity();
-				 
-			} else{
+
+			} else {
 				netSaleQty = partnerBusiness.getNetSaleQuantity();
 			}
-			
+
 			double netTDSToBeDeposited = partnerBusiness.getTdsToBeDeposited();
-			double netSrCommission = netReturnCommission - additionalReturnCharges;
-			double netChannelCommissionToBePaid = grossPartnerCommissionPaid - netReturnCommission + additionalReturnCharges;
+			double netSrCommission = netReturnCommission
+					- additionalReturnCharges;
+			double netChannelCommissionToBePaid = grossPartnerCommissionPaid
+					- netReturnCommission + additionalReturnCharges;
 			double netPartnerCommissionPaid = netChannelCommissionToBePaid;
 			if (partnerCommissionGraph == null) {
 				partnerCommissionGraph = new CommissionDetails();
@@ -1920,22 +2073,30 @@ public class ConverterClass {
 				netSaleQty += partnerCommissionGraph.getNetSaleQty();
 				netTDSToBeDeposited += partnerCommissionGraph
 						.getNetTDSToBeDeposited();
-				grossPartnerCommissionPaid += partnerCommissionGraph.getGrossPartnerCommissionPaid();
-				additionalReturnCharges += partnerCommissionGraph.getAdditionalReturnCharges();
-				netReturnCommission += partnerCommissionGraph.getNetReturnCommission();
+				grossPartnerCommissionPaid += partnerCommissionGraph
+						.getGrossPartnerCommissionPaid();
+				additionalReturnCharges += partnerCommissionGraph
+						.getAdditionalReturnCharges();
+				netReturnCommission += partnerCommissionGraph
+						.getNetReturnCommission();
 				netSrCommission += partnerCommissionGraph.getNetSrCommisison();
-				netChannelCommissionToBePaid += partnerCommissionGraph.getNetChannelCommissionToBePaid();
+				netChannelCommissionToBePaid += partnerCommissionGraph
+						.getNetChannelCommissionToBePaid();
 			}
 			partnerCommissionGraph.setPartner(key);
 			partnerCommissionGraph.setCategoryName(key);
-			partnerCommissionGraph.setNetPartnerCommissionPaid(netPartnerCommissionPaid);
+			partnerCommissionGraph
+					.setNetPartnerCommissionPaid(netPartnerCommissionPaid);
 			partnerCommissionGraph.setNetSaleQty(netSaleQty);
 			partnerCommissionGraph.setNetTDSToBeDeposited(netTDSToBeDeposited);
-			partnerCommissionGraph.setGrossPartnerCommissionPaid(grossPartnerCommissionPaid);
-			partnerCommissionGraph.setAdditionalReturnCharges(additionalReturnCharges);
+			partnerCommissionGraph
+					.setGrossPartnerCommissionPaid(grossPartnerCommissionPaid);
+			partnerCommissionGraph
+					.setAdditionalReturnCharges(additionalReturnCharges);
 			partnerCommissionGraph.setNetReturnCommission(netReturnCommission);
 			partnerCommissionGraph.setNetSrCommisison(netSrCommission);
-			partnerCommissionGraph.setNetChannelCommissionToBePaid(netChannelCommissionToBePaid);
+			partnerCommissionGraph
+					.setNetChannelCommissionToBePaid(netChannelCommissionToBePaid);
 			partnerCommissionGraphMap.put(key, partnerCommissionGraph);
 		}
 
@@ -1950,21 +2111,24 @@ public class ConverterClass {
 
 		return partnerCommissionGraphList;
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List<ChannelReportDetails> transformChannelReport(
 			List<ChannelReportDetails> channelReportDetailsList, String criteria) {
 		Map<String, ChannelReportDetails> categoryReportMap = new HashMap<String, ChannelReportDetails>();
-		for(ChannelReportDetails currChannelReport: channelReportDetailsList){
+		for (ChannelReportDetails currChannelReport : channelReportDetailsList) {
 			String key = "";
-			switch(criteria){
-				case "partner":key = currChannelReport.getPartner();break;
-				case "category":
-					key = currChannelReport.getParentCategory();
-					if(StringUtils.isEmpty(key))
-						key = "B2B";
-					break;
-				default: break;
+			switch (criteria) {
+			case "partner":
+				key = currChannelReport.getPartner();
+				break;
+			case "category":
+				key = currChannelReport.getParentCategory();
+				if (StringUtils.isEmpty(key))
+					key = "B2B";
+				break;
+			default:
+				break;
 			}
 			ChannelReportDetails channelReport = categoryReportMap.get(key);
 			double gpVsProductCost = currChannelReport.getGpVsProductCost();
@@ -1984,26 +2148,27 @@ public class ConverterClass {
 			double saleRetNrAmount = currChannelReport.getSaleRetNrAmount();
 			double saleRetQty = currChannelReport.getSaleRetQty();
 			double saleRetSpAmount = currChannelReport.getSaleRetSpAmount();
-			double saleRetVsGrossSale = currChannelReport.getSaleRetVsGrossSale();
+			double saleRetVsGrossSale = currChannelReport
+					.getSaleRetVsGrossSale();
 			double netProductCost = currChannelReport.getNetProductCost();
-			
+
 			double netEOSSValue = currChannelReport.getNetEOSSValue();
-			
+
 			double grossTaxableSale = currChannelReport.getGrossTaxableSale();
 			double returnTaxableSale = currChannelReport.getReturnTaxableSale();
 			double netTaxableSale = currChannelReport.getNetTaxableSale();
-			
+
 			double grossActualSale = currChannelReport.getGrossActualSale();
 			double returnActualSale = currChannelReport.getReturnActualSale();
 			double netActualSale = currChannelReport.getNetActualSale();
-			
+
 			double grossTaxfreeSale = currChannelReport.getGrossTaxfreeSale();
 			double returnTaxfreeSale = currChannelReport.getReturnTaxfreeSale();
 			double netTaxfreeSale = currChannelReport.getNetTaxfreeSale();
-			
-			if(channelReport == null){
+
+			if (channelReport == null) {
 				channelReport = new ChannelReportDetails();
-			} else{
+			} else {
 				gpVsProductCost += channelReport.getGpVsProductCost();
 				grossNrAmount += channelReport.getGrossNrAmount();
 				grossProfit += channelReport.getGrossProfit();
@@ -2023,17 +2188,17 @@ public class ConverterClass {
 				saleRetSpAmount += channelReport.getSaleRetSpAmount();
 				saleRetVsGrossSale += channelReport.getSaleRetVsGrossSale();
 				netProductCost += channelReport.getNetProductCost();
-				
+
 				netEOSSValue += channelReport.getNetEOSSValue();
-				
+
 				grossTaxableSale += channelReport.getGrossTaxableSale();
 				returnTaxableSale += channelReport.getReturnTaxableSale();
 				netTaxableSale += channelReport.getNetTaxableSale();
-				
+
 				grossActualSale += channelReport.getGrossActualSale();
 				returnActualSale += channelReport.getReturnActualSale();
 				netActualSale += channelReport.getNetActualSale();
-				
+
 				grossTaxfreeSale += channelReport.getGrossTaxfreeSale();
 				returnTaxfreeSale += channelReport.getReturnTaxfreeSale();
 				netTaxfreeSale += channelReport.getNetTaxfreeSale();
@@ -2057,29 +2222,29 @@ public class ConverterClass {
 			channelReport.setSaleRetSpAmount(saleRetSpAmount);
 			channelReport.setSaleRetVsGrossSale(saleRetVsGrossSale);
 			channelReport.setNetProductCost(netProductCost);
-			
+
 			channelReport.setNetEOSSValue(netEOSSValue);
-			
+
 			channelReport.setGrossTaxableSale(grossTaxableSale);
 			channelReport.setReturnTaxableSale(returnTaxableSale);
 			channelReport.setNetTaxableSale(netTaxableSale);
-			
+
 			channelReport.setGrossActualSale(grossActualSale);
 			channelReport.setReturnActualSale(returnActualSale);
 			channelReport.setNetActualSale(netActualSale);
-			
+
 			channelReport.setGrossTaxfreeSale(grossTaxfreeSale);
 			channelReport.setReturnTaxfreeSale(returnTaxfreeSale);
 			channelReport.setNetTaxfreeSale(netTaxfreeSale);
-			
-			channelReport.setRetActualPercent(
-					returnActualSale * 100 / grossActualSale);
-			
+
+			channelReport.setRetActualPercent(returnActualSale * 100
+					/ grossActualSale);
+
 			channelReport.setCategory(key);
 			channelReport.setPartner(key);
 			categoryReportMap.put(key, channelReport);
 		}
-		
+
 		List<ChannelReportDetails> categoryReportList = new ArrayList<ChannelReportDetails>();
 		Iterator entries = categoryReportMap.entrySet().iterator();
 		while (entries.hasNext()) {
@@ -2088,34 +2253,38 @@ public class ConverterClass {
 			ChannelReportDetails value = thisEntry.getValue();
 			categoryReportList.add(value);
 		}
-		
+
 		return categoryReportList;
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List<ChannelReportDetails> transformChannelReportST(
 			List<ChannelReportDetails> channelReportDetailsList, String criteria) {
 		Map<String, ChannelReportDetails> categoryReportMap = new HashMap<String, ChannelReportDetails>();
-		for(ChannelReportDetails currChannelReport: channelReportDetailsList){
+		for (ChannelReportDetails currChannelReport : channelReportDetailsList) {
 			String key = "";
-			switch(criteria){
-				case "partner":key = currChannelReport.getPartner();break;
-				case "category":
-					key = currChannelReport.getParentCategory();
-					if(StringUtils.isEmpty(key))
-						key = "B2B";
-					break;
-				case "category1":
-					key = currChannelReport.getCategory();
-					if(StringUtils.isEmpty(key))
-						key = "B2B";
-					break;
-				default: break;
+			switch (criteria) {
+			case "partner":
+				key = currChannelReport.getPartner();
+				break;
+			case "category":
+				key = currChannelReport.getParentCategory();
+				if (StringUtils.isEmpty(key))
+					key = "B2B";
+				break;
+			case "category1":
+				key = currChannelReport.getCategory();
+				if (StringUtils.isEmpty(key))
+					key = "B2B";
+				break;
+			default:
+				break;
 			}
 			String taxCategory = currChannelReport.getTaxCategory();
-			if(StringUtils.isBlank(taxCategory))
+			if (StringUtils.isBlank(taxCategory))
 				taxCategory = "Mix";
-			ChannelReportDetails channelReport = categoryReportMap.get(key + taxCategory);
+			ChannelReportDetails channelReport = categoryReportMap.get(key
+					+ taxCategory);
 			double gpVsProductCost = currChannelReport.getGpVsProductCost();
 			double grossNrAmount = currChannelReport.getGrossNrAmount();
 			double grossProfit = currChannelReport.getGrossProfit();
@@ -2132,10 +2301,10 @@ public class ConverterClass {
 			double saleRetNrAmount = currChannelReport.getSaleRetNrAmount();
 			double saleRetQty = currChannelReport.getSaleRetQty();
 			double saleRetSpAmount = currChannelReport.getSaleRetSpAmount();
-			
-			if(channelReport == null){
+
+			if (channelReport == null) {
 				channelReport = new ChannelReportDetails();
-			} else{
+			} else {
 				gpVsProductCost += channelReport.getGpVsProductCost();
 				grossNrAmount += channelReport.getGrossNrAmount();
 				grossProfit += channelReport.getGrossProfit();
@@ -2172,12 +2341,13 @@ public class ConverterClass {
 			channelReport.setCategory(key);
 			channelReport.setPartner(key);
 			channelReport.setTaxCategory(taxCategory);
-			channelReport.setRetActualPercent(
-					channelReport.getSaleRetNrAmount() * 100 / 
-					channelReport.getGrossNrAmount());
+			channelReport.setRetActualPercent(channelReport
+					.getSaleRetNrAmount()
+					* 100
+					/ channelReport.getGrossNrAmount());
 			categoryReportMap.put(key + taxCategory, channelReport);
 		}
-		
+
 		List<ChannelReportDetails> categoryReportList = new ArrayList<ChannelReportDetails>();
 		Iterator entries = categoryReportMap.entrySet().iterator();
 		while (entries.hasNext()) {
@@ -2185,37 +2355,39 @@ public class ConverterClass {
 					.next();
 			ChannelReportDetails value = thisEntry.getValue();
 			double saleRetVsGrossSale = 0;
-			if(value.getGrossQty() != 0)
-				saleRetVsGrossSale = value.getSaleRetQty()/value.getGrossQty()*100;
+			if (value.getGrossQty() != 0)
+				saleRetVsGrossSale = value.getSaleRetQty()
+						/ value.getGrossQty() * 100;
 			value.setSaleRetVsGrossSale(saleRetVsGrossSale);
 			categoryReportList.add(value);
 		}
-		
+
 		return categoryReportList;
 	}
-	
-/*	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List<PaymentReceivedDetails> transformPayReceivedReport(
-			List<PartnerReportDetails> channelReportDetailsList, String criteria) {
-		List<PaymentReceivedDetails> reportList = new ArrayList<PaymentReceivedDetails>();
-		for(PartnerReportDetails currChannelReport: channelReportDetailsList){
-			PaymentReceivedDetails channelReport = new PaymentReceivedDetails();
-			channelReport.setPaymentReceived(currChannelReport.getDateofPayment());
-			channelReport.setUploadedDate(currChannelReport.getPaymentUploadedDate());
-			channelReport.setPaymentType(currChannelReport.getPaymentType());
-			channelReport.setPartner(currChannelReport.getPcName());
-			double negativeAmount = currChannelReport.getNegativeAmount();
-			double positiveAmount = currChannelReport.getPositiveAmount();
-			channelReport.setNegativeAmount(negativeAmount);
-			channelReport.setPositiveAmount(positiveAmount);
-			double netAmountReceived = positiveAmount + negativeAmount; 
-			channelReport.setNetAmountReceived(netAmountReceived);
-			reportList.add(channelReport);
-		}
-		
-		return reportList;
-	}
-*/	/**
+
+	/*
+	 * @SuppressWarnings({ "rawtypes", "unchecked" }) public static
+	 * List<PaymentReceivedDetails> transformPayReceivedReport(
+	 * List<PartnerReportDetails> channelReportDetailsList, String criteria) {
+	 * List<PaymentReceivedDetails> reportList = new
+	 * ArrayList<PaymentReceivedDetails>(); for(PartnerReportDetails
+	 * currChannelReport: channelReportDetailsList){ PaymentReceivedDetails
+	 * channelReport = new PaymentReceivedDetails();
+	 * channelReport.setPaymentReceived(currChannelReport.getDateofPayment());
+	 * channelReport
+	 * .setUploadedDate(currChannelReport.getPaymentUploadedDate());
+	 * channelReport.setPaymentType(currChannelReport.getPaymentType());
+	 * channelReport.setPartner(currChannelReport.getPcName()); double
+	 * negativeAmount = currChannelReport.getNegativeAmount(); double
+	 * positiveAmount = currChannelReport.getPositiveAmount();
+	 * channelReport.setNegativeAmount(negativeAmount);
+	 * channelReport.setPositiveAmount(positiveAmount); double netAmountReceived
+	 * = positiveAmount + negativeAmount;
+	 * channelReport.setNetAmountReceived(netAmountReceived);
+	 * reportList.add(channelReport); }
+	 * 
+	 * return reportList; }
+	 *//**
 	 * Merge BusinessGraph objects after 5th Iteration
 	 * 
 	 * @param businessGraphList
@@ -2223,80 +2395,101 @@ public class ConverterClass {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List getBusinessSortedList(
-			List businessGraphList, String string) {
+	public static List getBusinessSortedList(List businessGraphList,
+			String string) {
 		int maxLength = 5;
-		if(businessGraphList.size()<=maxLength)
+		if (businessGraphList.size() <= maxLength)
 			return businessGraphList;
 		int index = 1;
 		List newBusinessGraphList = new ArrayList();
 		BusinessDetails consolidated = new BusinessDetails();
 		consolidated.setCategoryName("Others");
 		consolidated.setPartner("Others");
-		for(Object businessGraphObj: businessGraphList){
-			if(index++ >= 5){
-				BusinessDetails businessGraph = (BusinessDetails)businessGraphObj;
-				switch(string){
-					case "NetSP":
-						double netSP = businessGraph.getNetSP();
-						double netSPTotal = consolidated.getNetSP();
-						consolidated.setNetSP(netSP + netSPTotal);
-						double netPartnerCommissionPaid = businessGraph.getNetPartnerCommissionPaid();
-						double netPartnerCommissionPaidTotal = consolidated.getNetPartnerCommissionPaid();
-						consolidated.setNetPartnerCommissionPaid(netPartnerCommissionPaid + netPartnerCommissionPaidTotal);
-						double netNetRate = businessGraph.getNetNetRate();
-						double netNetRateTotal = consolidated.getNetNetRate();
-						consolidated.setNetNetRate(netNetRate + netNetRateTotal);
-						double netTaxToBePaid = businessGraph.getNetTaxToBePaid();
-						double netTaxToBePaidTotal = consolidated.getNetTaxToBePaid();
-						consolidated.setNetTaxToBePaid(netTaxToBePaid + netTaxToBePaidTotal);
-						double netPrSale = businessGraph.getNetPrSale();
-						double netPrSaleTotal = consolidated.getNetPrSale();
-						consolidated.setNetPrSale(netPrSale + netPrSaleTotal);						
-						double netTDSToBeDeposited = businessGraph.getNetTDSToBeDeposited();
-						double netTDSToBeDepositedTotal = consolidated.getNetTDSToBeDeposited();
-						consolidated.setNetTDSToBeDeposited(netTDSToBeDeposited + netTDSToBeDepositedTotal);						
-						double netProductCost = businessGraph.getNetProductCost();
-						double netProductCostTotal = consolidated.getNetProductCost();
-						consolidated.setNetProductCost(netProductCost + netProductCostTotal);						
-						double grossProfit = businessGraph.getGrossProfit();
-						double grossProfitTotal = consolidated.getGrossProfit();
-						consolidated.setGrossProfit(grossProfit + grossProfitTotal);						
-						break;
-					case "NetCommission": 
-						double netCommission = businessGraph.getNetPartnerCommissionPaid();
-						double netCommissionTotal = consolidated.getNetPartnerCommissionPaid();
-						consolidated.setNetPartnerCommissionPaid(netCommission + netCommissionTotal);
-						break;
-					case "NetTax": 
-						double netTaxToBePaid2 = businessGraph.getNetTaxToBePaid();
-						double netTaxToBePaidTotal2 = consolidated.getNetTaxToBePaid();
-						consolidated.setNetTaxToBePaid(netTaxToBePaid2 + netTaxToBePaidTotal2);
-						break;
-					case "NetTDS": 
-						double netTDSToBeDeposited2 = businessGraph.getNetTDSToBeDeposited();
-						double netTDSToBeDepositedTotal2 = consolidated.getNetTDSToBeDeposited();
-						consolidated.setNetTDSToBeDeposited(netTDSToBeDeposited2 + netTDSToBeDepositedTotal2);
-						break;
-					case "EOSS": 
-						double netEoss = businessGraph.getNetEossDiscountPaid();
-						double netEossTotal = consolidated.getNetEossDiscountPaid();
-						consolidated.setNetEossDiscountPaid(netEoss + netEossTotal);
-						break;
-					case "NetTaxable": 
-						double netTaxableSale = businessGraph.getNetSP();
-						double netActualSale = businessGraph.getNetActualSale();
-						double netPrSale2 = businessGraph.getNetPrSale();
-						double netTaxableSaleTotal = consolidated.getNetSP();
-						consolidated.setNetSP(netTaxableSale + netTaxableSaleTotal);
-						double netActualSaleTotal = consolidated.getNetActualSale();
-						consolidated.setNetActualSale(netActualSale + netActualSaleTotal);
-						double netPrSale2Total = consolidated.getNetPrSale();
-						consolidated.setNetPrSale(netPrSale2 + netPrSale2Total);
-						break;
-					default: break;
+		for (Object businessGraphObj : businessGraphList) {
+			if (index++ >= 5) {
+				BusinessDetails businessGraph = (BusinessDetails) businessGraphObj;
+				switch (string) {
+				case "NetSP":
+					double netSP = businessGraph.getNetSP();
+					double netSPTotal = consolidated.getNetSP();
+					consolidated.setNetSP(netSP + netSPTotal);
+					double netPartnerCommissionPaid = businessGraph
+							.getNetPartnerCommissionPaid();
+					double netPartnerCommissionPaidTotal = consolidated
+							.getNetPartnerCommissionPaid();
+					consolidated
+							.setNetPartnerCommissionPaid(netPartnerCommissionPaid
+									+ netPartnerCommissionPaidTotal);
+					double netNetRate = businessGraph.getNetNetRate();
+					double netNetRateTotal = consolidated.getNetNetRate();
+					consolidated.setNetNetRate(netNetRate + netNetRateTotal);
+					double netTaxToBePaid = businessGraph.getNetTaxToBePaid();
+					double netTaxToBePaidTotal = consolidated
+							.getNetTaxToBePaid();
+					consolidated.setNetTaxToBePaid(netTaxToBePaid
+							+ netTaxToBePaidTotal);
+					double netPrSale = businessGraph.getNetPrSale();
+					double netPrSaleTotal = consolidated.getNetPrSale();
+					consolidated.setNetPrSale(netPrSale + netPrSaleTotal);
+					double netTDSToBeDeposited = businessGraph
+							.getNetTDSToBeDeposited();
+					double netTDSToBeDepositedTotal = consolidated
+							.getNetTDSToBeDeposited();
+					consolidated.setNetTDSToBeDeposited(netTDSToBeDeposited
+							+ netTDSToBeDepositedTotal);
+					double netProductCost = businessGraph.getNetProductCost();
+					double netProductCostTotal = consolidated
+							.getNetProductCost();
+					consolidated.setNetProductCost(netProductCost
+							+ netProductCostTotal);
+					double grossProfit = businessGraph.getGrossProfit();
+					double grossProfitTotal = consolidated.getGrossProfit();
+					consolidated.setGrossProfit(grossProfit + grossProfitTotal);
+					break;
+				case "NetCommission":
+					double netCommission = businessGraph
+							.getNetPartnerCommissionPaid();
+					double netCommissionTotal = consolidated
+							.getNetPartnerCommissionPaid();
+					consolidated.setNetPartnerCommissionPaid(netCommission
+							+ netCommissionTotal);
+					break;
+				case "NetTax":
+					double netTaxToBePaid2 = businessGraph.getNetTaxToBePaid();
+					double netTaxToBePaidTotal2 = consolidated
+							.getNetTaxToBePaid();
+					consolidated.setNetTaxToBePaid(netTaxToBePaid2
+							+ netTaxToBePaidTotal2);
+					break;
+				case "NetTDS":
+					double netTDSToBeDeposited2 = businessGraph
+							.getNetTDSToBeDeposited();
+					double netTDSToBeDepositedTotal2 = consolidated
+							.getNetTDSToBeDeposited();
+					consolidated.setNetTDSToBeDeposited(netTDSToBeDeposited2
+							+ netTDSToBeDepositedTotal2);
+					break;
+				case "EOSS":
+					double netEoss = businessGraph.getNetEossDiscountPaid();
+					double netEossTotal = consolidated.getNetEossDiscountPaid();
+					consolidated.setNetEossDiscountPaid(netEoss + netEossTotal);
+					break;
+				case "NetTaxable":
+					double netTaxableSale = businessGraph.getNetSP();
+					double netActualSale = businessGraph.getNetActualSale();
+					double netPrSale2 = businessGraph.getNetPrSale();
+					double netTaxableSaleTotal = consolidated.getNetSP();
+					consolidated.setNetSP(netTaxableSale + netTaxableSaleTotal);
+					double netActualSaleTotal = consolidated.getNetActualSale();
+					consolidated.setNetActualSale(netActualSale
+							+ netActualSaleTotal);
+					double netPrSale2Total = consolidated.getNetPrSale();
+					consolidated.setNetPrSale(netPrSale2 + netPrSale2Total);
+					break;
+				default:
+					break;
 				}
-			} else{
+			} else {
 				newBusinessGraphList.add(businessGraphObj);
 			}
 		}
@@ -2312,420 +2505,545 @@ public class ConverterClass {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List getCommissionSortedList(
-			List commissionGraphList,
+	public static List getCommissionSortedList(List commissionGraphList,
 			String string) {
 		int maxLength = 5;
-		if(commissionGraphList.size()<=maxLength)
+		if (commissionGraphList.size() <= maxLength)
 			return commissionGraphList;
 		int index = 1;
 		List newCommissionGraphList = new ArrayList();
 		CommissionDetails consolidated = new CommissionDetails();
 		consolidated.setCategoryName("Others");
 		consolidated.setPartner("Others");
-		for(Object commissionGraphObj: commissionGraphList){
-			if(index++ >= 5){
-				CommissionDetails commissionGraph = (CommissionDetails)commissionGraphObj;
-				switch(string){
-					case "GrossComm": 
-						double grossCommission = commissionGraph.getGrossPartnerCommissionPaid();
-						double returnCommission = commissionGraph.getNetReturnCommission();
-						double addRetCharges = commissionGraph.getAdditionalReturnCharges();
-						double grossCommissionTotal = consolidated.getGrossPartnerCommissionPaid();
-						consolidated.setGrossPartnerCommissionPaid(grossCommission + grossCommissionTotal);
-						double returnCommissionTotal = consolidated.getNetReturnCommission();
-						consolidated.setNetReturnCommission(returnCommission + returnCommissionTotal);
-						double addRetChargesTotal = consolidated.getAdditionalReturnCharges();
-						consolidated.setAdditionalReturnCharges(addRetCharges + addRetChargesTotal);
-						break;
-					case "NetChann": 
-						double netChannComm = commissionGraph.getNetChannelCommissionToBePaid();
-						double netChannCommTotal = consolidated.getNetChannelCommissionToBePaid();
-						consolidated.setNetChannelCommissionToBePaid(netChannComm + netChannCommTotal);
-						break;
-					default: break;
+		for (Object commissionGraphObj : commissionGraphList) {
+			if (index++ >= 5) {
+				CommissionDetails commissionGraph = (CommissionDetails) commissionGraphObj;
+				switch (string) {
+				case "GrossComm":
+					double grossCommission = commissionGraph
+							.getGrossPartnerCommissionPaid();
+					double returnCommission = commissionGraph
+							.getNetReturnCommission();
+					double addRetCharges = commissionGraph
+							.getAdditionalReturnCharges();
+					double grossCommissionTotal = consolidated
+							.getGrossPartnerCommissionPaid();
+					consolidated.setGrossPartnerCommissionPaid(grossCommission
+							+ grossCommissionTotal);
+					double returnCommissionTotal = consolidated
+							.getNetReturnCommission();
+					consolidated.setNetReturnCommission(returnCommission
+							+ returnCommissionTotal);
+					double addRetChargesTotal = consolidated
+							.getAdditionalReturnCharges();
+					consolidated.setAdditionalReturnCharges(addRetCharges
+							+ addRetChargesTotal);
+					break;
+				case "NetChann":
+					double netChannComm = commissionGraph
+							.getNetChannelCommissionToBePaid();
+					double netChannCommTotal = consolidated
+							.getNetChannelCommissionToBePaid();
+					consolidated.setNetChannelCommissionToBePaid(netChannComm
+							+ netChannCommTotal);
+					break;
+				default:
+					break;
 				}
-			} else{
+			} else {
 				newCommissionGraphList.add(commissionGraphObj);
 			}
 		}
 		newCommissionGraphList.add(consolidated);
 		return newCommissionGraphList;
 	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+
+	@SuppressWarnings({ "rawtypes" })
 	public static List getChannelNPRSortedList(List<ChannelNPR> channelGraphList) {
 		int maxLength = 5;
-		if(channelGraphList.size()<=maxLength)
+		if (channelGraphList.size() <= maxLength)
 			return channelGraphList;
 		List<ChannelNPR> newChannelReportList = new ArrayList<>();
 		int index = 1;
 		boolean initialize = false;
 		ChannelNPR consolidated = new ChannelNPR();
-		for(ChannelNPR channelGraph: channelGraphList){
-			if(index++ >= 5){
-				if(!initialize){
+		for (ChannelNPR channelGraph : channelGraphList) {
+			if (index++ >= 5) {
+				if (!initialize) {
 					initialize = true;
 					consolidated.setCategory("Others");
 					consolidated.setPartner("Others");
 					consolidated.setCodNPR(channelGraph.getCodNPR());
 					consolidated.setPrepaidNPR(channelGraph.getPrepaidNPR());
 					consolidated.setNetNPR(channelGraph.getNetNPR());
-				}else{
-					consolidated.setCodNPR(consolidated.getCodNPR() + channelGraph.getCodNPR());
-					consolidated.setPrepaidNPR(consolidated.getPrepaidNPR() + channelGraph.getPrepaidNPR());
-					consolidated.setNetNPR(consolidated.getNetNPR() + channelGraph.getNetNPR());
+				} else {
+					consolidated.setCodNPR(consolidated.getCodNPR()
+							+ channelGraph.getCodNPR());
+					consolidated.setPrepaidNPR(consolidated.getPrepaidNPR()
+							+ channelGraph.getPrepaidNPR());
+					consolidated.setNetNPR(consolidated.getNetNPR()
+							+ channelGraph.getNetNPR());
 				}
-			} else{
+			} else {
 				newChannelReportList.add(channelGraph);
 			}
 		}
 		newChannelReportList.add(consolidated);
 		return newChannelReportList;
 	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List getCommASortedList(List<CommissionAnalysis> channelGraphList) {
+
+	@SuppressWarnings({ "rawtypes" })
+	public static List getCommASortedList(
+			List<CommissionAnalysis> channelGraphList) {
 		int maxLength = 5;
-		if(channelGraphList.size()<=maxLength)
+		if (channelGraphList.size() <= maxLength)
 			return channelGraphList;
 		List<CommissionAnalysis> newChannelReportList = new ArrayList<>();
 		int index = 1;
 		boolean initialize = false;
 		CommissionAnalysis consolidated = new CommissionAnalysis();
-		for(CommissionAnalysis channelGraph: channelGraphList){
-			if(index++ >= 5){
-				if(!initialize){
+		for (CommissionAnalysis channelGraph : channelGraphList) {
+			if (index++ >= 5) {
+				if (!initialize) {
 					initialize = true;
 					consolidated.setKey("Others");
 					consolidated.setSellingFee(channelGraph.getSellingFee());
 					consolidated.setPcc(channelGraph.getPcc());
 					consolidated.setFixedFee(channelGraph.getFixedFee());
-					consolidated.setShippingCharges(channelGraph.getShippingCharges());
+					consolidated.setShippingCharges(channelGraph
+							.getShippingCharges());
 					consolidated.setServiceTax(channelGraph.getServiceTax());
 					consolidated.setTaxSP(channelGraph.getTaxSP());
-					consolidated.setAdditionalCharges(channelGraph.getAdditionalCharges());
-				}else{
-					consolidated.setSellingFee(consolidated.getSellingFee() + channelGraph.getSellingFee());
-					consolidated.setPcc(consolidated.getPcc() + channelGraph.getPcc());
-					consolidated.setFixedFee(consolidated.getFixedFee() + channelGraph.getFixedFee());
-					consolidated.setShippingCharges(consolidated.getShippingCharges() + channelGraph.getShippingCharges());
-					consolidated.setServiceTax(consolidated.getServiceTax() + channelGraph.getServiceTax());
-					consolidated.setTaxSP(consolidated.getTaxSP() + channelGraph.getTaxSP());
-					consolidated.setAdditionalCharges(consolidated.getAdditionalCharges() + channelGraph.getAdditionalCharges());
+					consolidated.setAdditionalCharges(channelGraph
+							.getAdditionalCharges());
+				} else {
+					consolidated.setSellingFee(consolidated.getSellingFee()
+							+ channelGraph.getSellingFee());
+					consolidated.setPcc(consolidated.getPcc()
+							+ channelGraph.getPcc());
+					consolidated.setFixedFee(consolidated.getFixedFee()
+							+ channelGraph.getFixedFee());
+					consolidated.setShippingCharges(consolidated
+							.getShippingCharges()
+							+ channelGraph.getShippingCharges());
+					consolidated.setServiceTax(consolidated.getServiceTax()
+							+ channelGraph.getServiceTax());
+					consolidated.setTaxSP(consolidated.getTaxSP()
+							+ channelGraph.getTaxSP());
+					consolidated.setAdditionalCharges(consolidated
+							.getAdditionalCharges()
+							+ channelGraph.getAdditionalCharges());
 				}
-			} else{
+			} else {
 				newChannelReportList.add(channelGraph);
 			}
 		}
 		newChannelReportList.add(consolidated);
 		return newChannelReportList;
 	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List getChannelCatNPRSortedList(List<ChannelCatNPR> channelGraphList) {
+
+	@SuppressWarnings({ "rawtypes" })
+	public static List getChannelCatNPRSortedList(
+			List<ChannelCatNPR> channelGraphList) {
 		int maxLength = 5;
-		if(channelGraphList.size()<=maxLength)
+		if (channelGraphList.size() <= maxLength)
 			return channelGraphList;
 		List<ChannelCatNPR> newChannelReportList = new ArrayList<>();
 		int index = 1;
 		boolean initialize = false;
 		ChannelCatNPR consolidated = new ChannelCatNPR();
-		for(ChannelCatNPR channelGraph: channelGraphList){
-			if(index++ >= 5){
-				if(!initialize){
+		for (ChannelCatNPR channelGraph : channelGraphList) {
+			if (index++ >= 5) {
+				if (!initialize) {
 					initialize = true;
 					consolidated.setPartner("Others");
 					consolidated.setTotalNPR(channelGraph.getTotalNPR());
 					consolidated.setNetNPR(channelGraph.getNetNPR());
-				}else{
+				} else {
 					List<Double> existingNPRList = consolidated.getNetNPR();
 					List<Double> newNPRList = channelGraph.getNetNPR();
-					for(int i=0; i<existingNPRList.size(); i++){
+					for (int i = 0; i < existingNPRList.size(); i++) {
 						Double existingNPR = existingNPRList.get(i);
 						Double newNPR = newNPRList.get(i);
 						existingNPRList.set(i, existingNPR + newNPR);
 					}
 					consolidated.setNetNPR(existingNPRList);
-					consolidated.setTotalNPR(consolidated.getTotalNPR() + channelGraph.getTotalNPR());
+					consolidated.setTotalNPR(consolidated.getTotalNPR()
+							+ channelGraph.getTotalNPR());
 				}
-			} else{
+			} else {
 				newChannelReportList.add(channelGraph);
 			}
 		}
 		newChannelReportList.add(consolidated);
 		return newChannelReportList;
 	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List getChannelNetNrSortedList(List<ChannelNR> channelGraphList) {
+
+	@SuppressWarnings({ "rawtypes" })
+	public static List getChannelNetNrSortedList(
+			List<ChannelNR> channelGraphList) {
 		int maxLength = 5;
-		if(channelGraphList.size()<=maxLength)
+		if (channelGraphList.size() <= maxLength)
 			return channelGraphList;
 		List<ChannelNR> newChannelReportList = new ArrayList<>();
 		int index = 1;
 		boolean initialize = false;
 		ChannelNR consolidated = new ChannelNR();
-		for(ChannelNR channelGraph: channelGraphList){
-			if(index++ >= 5){
-				if(!initialize){
+		for (ChannelNR channelGraph : channelGraphList) {
+			if (index++ >= 5) {
+				if (!initialize) {
 					initialize = true;
 					consolidated.setKey("Others");
 					consolidated.setTotalNR(channelGraph.getTotalNR());
-					consolidated.setActionableNR(channelGraph.getActionableNR());
+					consolidated
+							.setActionableNR(channelGraph.getActionableNR());
 					consolidated.setSettledNR(channelGraph.getSettledNR());
 					consolidated.setInProcessNR(channelGraph.getInProcessNR());
-				}else{
-					consolidated.setTotalNR(consolidated.getTotalNR() + channelGraph.getTotalNR());
-					consolidated.setActionableNR(consolidated.getActionableNR() + channelGraph.getActionableNR());
-					consolidated.setSettledNR(consolidated.getSettledNR() + channelGraph.getSettledNR());
-					consolidated.setInProcessNR(consolidated.getInProcessNR() + channelGraph.getInProcessNR());
+				} else {
+					consolidated.setTotalNR(consolidated.getTotalNR()
+							+ channelGraph.getTotalNR());
+					consolidated.setActionableNR(consolidated.getActionableNR()
+							+ channelGraph.getActionableNR());
+					consolidated.setSettledNR(consolidated.getSettledNR()
+							+ channelGraph.getSettledNR());
+					consolidated.setInProcessNR(consolidated.getInProcessNR()
+							+ channelGraph.getInProcessNR());
 				}
-			} else{
+			} else {
 				newChannelReportList.add(channelGraph);
 			}
 		}
 		newChannelReportList.add(consolidated);
 		return newChannelReportList;
 	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List getChannelNetQtySortedList(List<ChannelNetQty> channelGraphList) {
+
+	@SuppressWarnings({ "rawtypes" })
+	public static List getChannelNetQtySortedList(
+			List<ChannelNetQty> channelGraphList) {
 		int maxLength = 5;
-		if(channelGraphList.size()<=maxLength)
+		if (channelGraphList.size() <= maxLength)
 			return channelGraphList;
 		List<ChannelNetQty> newChannelReportList = new ArrayList<>();
 		int index = 1;
 		boolean initialize = false;
 		ChannelNetQty consolidated = new ChannelNetQty();
-		for(ChannelNetQty channelGraph: channelGraphList){
-			if(index++ >= 5){
-				if(!initialize){
+		for (ChannelNetQty channelGraph : channelGraphList) {
+			if (index++ >= 5) {
+				if (!initialize) {
 					initialize = true;
 					consolidated.setKey("Others");
 					consolidated.setTotalQty(channelGraph.getTotalQty());
-					consolidated.setActionableQty(channelGraph.getActionableQty());
+					consolidated.setActionableQty(channelGraph
+							.getActionableQty());
 					consolidated.setSettledQty(channelGraph.getSettledQty());
-					consolidated.setInProcessQty(channelGraph.getInProcessQty());
-				}else{
-					consolidated.setTotalQty(consolidated.getTotalQty() + channelGraph.getTotalQty());
-					consolidated.setActionableQty(consolidated.getActionableQty() + channelGraph.getActionableQty());
-					consolidated.setSettledQty(consolidated.getSettledQty() + channelGraph.getSettledQty());
-					consolidated.setInProcessQty(consolidated.getInProcessQty() + channelGraph.getInProcessQty());
+					consolidated
+							.setInProcessQty(channelGraph.getInProcessQty());
+				} else {
+					consolidated.setTotalQty(consolidated.getTotalQty()
+							+ channelGraph.getTotalQty());
+					consolidated.setActionableQty(consolidated
+							.getActionableQty()
+							+ channelGraph.getActionableQty());
+					consolidated.setSettledQty(consolidated.getSettledQty()
+							+ channelGraph.getSettledQty());
+					consolidated.setInProcessQty(consolidated.getInProcessQty()
+							+ channelGraph.getInProcessQty());
 				}
-			} else{
+			} else {
 				newChannelReportList.add(channelGraph);
 			}
 		}
 		newChannelReportList.add(consolidated);
 		return newChannelReportList;
 	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List getChannelNetGPSortedList(List<ChannelGP> channelGraphList) {
+
+	@SuppressWarnings({ "rawtypes" })
+	public static List getChannelNetGPSortedList(
+			List<ChannelGP> channelGraphList) {
 		int maxLength = 5;
-		if(channelGraphList.size()<=maxLength)
+		if (channelGraphList.size() <= maxLength)
 			return channelGraphList;
 		List<ChannelGP> newChannelReportList = new ArrayList<>();
 		int index = 1;
 		boolean initialize = false;
 		ChannelGP consolidated = new ChannelGP();
-		for(ChannelGP channelGraph: channelGraphList){
-			if(index++ >= 5){
-				if(!initialize){
+		for (ChannelGP channelGraph : channelGraphList) {
+			if (index++ >= 5) {
+				if (!initialize) {
 					initialize = true;
 					consolidated.setKey("Others");
 					consolidated.setTotalGP(channelGraph.getTotalGP());
-					consolidated.setActionableGP(channelGraph.getActionableGP());
+					consolidated
+							.setActionableGP(channelGraph.getActionableGP());
 					consolidated.setSettledGP(channelGraph.getSettledGP());
 					consolidated.setInProcessGP(channelGraph.getInProcessGP());
-				}else{
-					consolidated.setTotalGP(consolidated.getTotalGP() + channelGraph.getTotalGP());
-					consolidated.setActionableGP(consolidated.getActionableGP() + channelGraph.getActionableGP());
-					consolidated.setSettledGP(consolidated.getSettledGP() + channelGraph.getSettledGP());
-					consolidated.setInProcessGP(consolidated.getInProcessGP() + channelGraph.getInProcessGP());
+				} else {
+					consolidated.setTotalGP(consolidated.getTotalGP()
+							+ channelGraph.getTotalGP());
+					consolidated.setActionableGP(consolidated.getActionableGP()
+							+ channelGraph.getActionableGP());
+					consolidated.setSettledGP(consolidated.getSettledGP()
+							+ channelGraph.getSettledGP());
+					consolidated.setInProcessGP(consolidated.getInProcessGP()
+							+ channelGraph.getInProcessGP());
 				}
-			} else{
+			} else {
 				newChannelReportList.add(channelGraph);
 			}
 		}
 		newChannelReportList.add(consolidated);
 		return newChannelReportList;
 	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+
+	@SuppressWarnings({ "rawtypes" })
 	public static List getChannelSortedList(
 			List<ChannelReportDetails> channelGraphList, String criteria) {
 		int maxLength = 6;
-		if(channelGraphList.size()<=maxLength)
+		if (channelGraphList.size() <= maxLength)
 			return channelGraphList;
 		List<ChannelReportDetails> newChannelReportList = new ArrayList<>();
 		int index = 1;
 		boolean initialize = false;
 		ChannelReportDetails consolidated = new ChannelReportDetails();
-		for(ChannelReportDetails channelGraph: channelGraphList){
-			if(index++ >= maxLength){
-				if(!initialize){
+		for (ChannelReportDetails channelGraph : channelGraphList) {
+			if (index++ >= maxLength) {
+				if (!initialize) {
 					initialize = true;
 					consolidated.setGrossProfit(channelGraph.getGrossProfit());
-					consolidated.setGpVsProductCost(channelGraph.getGpVsProductCost());
+					consolidated.setGpVsProductCost(channelGraph
+							.getGpVsProductCost());
 					consolidated.setNetPr(channelGraph.getNetPr());
-					consolidated.setNetProductCost(channelGraph.getNetProductCost());
+					consolidated.setNetProductCost(channelGraph
+							.getNetProductCost());
 					consolidated.setNetNrAmount(channelGraph.getNetNrAmount());
-					consolidated.setGrossSpAmount(channelGraph.getGrossSpAmount());
-					consolidated.setSaleRetSpAmount(channelGraph.getSaleRetSpAmount());
+					consolidated.setGrossSpAmount(channelGraph
+							.getGrossSpAmount());
+					consolidated.setSaleRetSpAmount(channelGraph
+							.getSaleRetSpAmount());
 					consolidated.setNetSpAmount(channelGraph.getNetSpAmount());
 					consolidated.setNetAr(channelGraph.getNetAr());
-					consolidated.setNetToBeReceived(channelGraph.getNetToBeReceived());
+					consolidated.setNetToBeReceived(channelGraph
+							.getNetToBeReceived());
 					consolidated.setGrossQty(channelGraph.getGrossQty());
 					consolidated.setSaleRetQty(channelGraph.getSaleRetQty());
 					consolidated.setNetQty(channelGraph.getNetQty());
-					consolidated.setGrossNrAmount(channelGraph.getGrossNrAmount());
-					
-					consolidated.setNetEOSSValue(channelGraph.getNetEOSSValue());
-					consolidated.setGrossTaxableSale(channelGraph.getGrossTaxableSale());
-					consolidated.setReturnTaxableSale(channelGraph.getReturnTaxableSale());
-					consolidated.setNetTaxableSale(channelGraph.getNetTaxableSale());
-					
-					consolidated.setGrossActualSale(channelGraph.getGrossActualSale());
-					consolidated.setReturnActualSale(channelGraph.getReturnActualSale());
-					consolidated.setNetActualSale(channelGraph.getNetActualSale());
-					
-					consolidated.setGrossTaxfreeSale(channelGraph.getGrossTaxfreeSale());
-					consolidated.setReturnTaxfreeSale(channelGraph.getReturnTaxfreeSale());
-					consolidated.setNetTaxfreeSale(channelGraph.getNetTaxfreeSale());
-					
+					consolidated.setGrossNrAmount(channelGraph
+							.getGrossNrAmount());
+
+					consolidated
+							.setNetEOSSValue(channelGraph.getNetEOSSValue());
+					consolidated.setGrossTaxableSale(channelGraph
+							.getGrossTaxableSale());
+					consolidated.setReturnTaxableSale(channelGraph
+							.getReturnTaxableSale());
+					consolidated.setNetTaxableSale(channelGraph
+							.getNetTaxableSale());
+
+					consolidated.setGrossActualSale(channelGraph
+							.getGrossActualSale());
+					consolidated.setReturnActualSale(channelGraph
+							.getReturnActualSale());
+					consolidated.setNetActualSale(channelGraph
+							.getNetActualSale());
+
+					consolidated.setGrossTaxfreeSale(channelGraph
+							.getGrossTaxfreeSale());
+					consolidated.setReturnTaxfreeSale(channelGraph
+							.getReturnTaxfreeSale());
+					consolidated.setNetTaxfreeSale(channelGraph
+							.getNetTaxfreeSale());
+
 					consolidated.setCategory("Others");
 					consolidated.setPartner("Others");
-				} else{
-					switch(criteria){
-						case "NetSaleSP":
-							consolidated.setNetSpAmount(consolidated.getNetSpAmount() + channelGraph.getNetSpAmount());
-							consolidated.setNetNrAmount(consolidated.getNetNrAmount() + channelGraph.getNetNrAmount());
-							consolidated.setNetPr(consolidated.getNetPr() + channelGraph.getNetPr());
-							break;
-						case "NetAR":
-							consolidated.setNetToBeReceived(consolidated.getNetToBeReceived() + channelGraph.getNetToBeReceived());
-							consolidated.setNetAr(consolidated.getNetAr() + channelGraph.getNetAr());
-							break;
-						case "GSvSR":
-							consolidated.setGrossQty(consolidated.getGrossQty() + channelGraph.getGrossQty());
-							consolidated.setSaleRetQty(consolidated.getSaleRetQty() + channelGraph.getSaleRetQty());
-							consolidated.setNetQty(consolidated.getNetQty() + channelGraph.getNetQty());
-							break;
-						case "GSAvRA":
-							consolidated.setGrossSpAmount(consolidated.getGrossSpAmount() + channelGraph.getGrossSpAmount());
-							consolidated.setSaleRetSpAmount(consolidated.getSaleRetSpAmount() + channelGraph.getSaleRetSpAmount());
-							break;
-						case "GrossProfit":
-							consolidated.setGrossProfit(consolidated.getGrossProfit() + channelGraph.getGrossProfit());
-							break;
-						case "GPCP": 
-							consolidated.setGpVsProductCost(consolidated.getGpVsProductCost() + channelGraph.getGpVsProductCost());
-							break;
-						case "PR": 
-							consolidated.setNetPr(consolidated.getNetPr() + channelGraph.getNetPr());
-							consolidated.setNetProductCost(consolidated.getNetProductCost() + channelGraph.getNetProductCost());
-							break;
-						case "NR": 
-							consolidated.setGrossProfit(consolidated.getGrossProfit() + channelGraph.getGrossProfit());
-							consolidated.setNetNrAmount(consolidated.getNetNrAmount() + channelGraph.getNetNrAmount());
-							break;
-						case "GNR": 
-							consolidated.setGrossProfit(consolidated.getGrossProfit() + channelGraph.getGrossProfit());
-							consolidated.setGrossNrAmount(consolidated.getGrossNrAmount() + channelGraph.getGrossNrAmount());
-							break;
-						case "EOSS": 
-							consolidated.setNetEOSSValue(consolidated.getNetEOSSValue() + channelGraph.getNetEOSSValue());
-							break;
-						case "TaxableSale":
-							consolidated.setGrossTaxableSale(consolidated.getGrossTaxableSale() + channelGraph.getGrossTaxableSale());
-							consolidated.setReturnTaxableSale(consolidated.getReturnTaxableSale() + channelGraph.getReturnTaxableSale());
-							consolidated.setNetTaxableSale(consolidated.getNetTaxableSale() + channelGraph.getNetTaxableSale());
-							break;
-						case "ActualSale":
-							consolidated.setGrossActualSale(consolidated.getGrossActualSale() + channelGraph.getGrossActualSale());
-							consolidated.setReturnActualSale(consolidated.getReturnActualSale() + channelGraph.getReturnActualSale());
-							consolidated.setNetActualSale(consolidated.getNetActualSale() + channelGraph.getNetActualSale());
-							break;
-						case "TaxfreeSale":
-							consolidated.setGrossTaxfreeSale(consolidated.getGrossTaxfreeSale() + channelGraph.getGrossTaxfreeSale());
-							consolidated.setReturnTaxfreeSale(consolidated.getReturnTaxfreeSale() + channelGraph.getReturnTaxfreeSale());
-							consolidated.setNetTaxfreeSale(consolidated.getNetTaxfreeSale() + channelGraph.getNetTaxfreeSale());
-							break;
-						default: break;
+				} else {
+					switch (criteria) {
+					case "NetSaleSP":
+						consolidated.setNetSpAmount(consolidated
+								.getNetSpAmount()
+								+ channelGraph.getNetSpAmount());
+						consolidated.setNetNrAmount(consolidated
+								.getNetNrAmount()
+								+ channelGraph.getNetNrAmount());
+						consolidated.setNetPr(consolidated.getNetPr()
+								+ channelGraph.getNetPr());
+						break;
+					case "NetAR":
+						consolidated.setNetToBeReceived(consolidated
+								.getNetToBeReceived()
+								+ channelGraph.getNetToBeReceived());
+						consolidated.setNetAr(consolidated.getNetAr()
+								+ channelGraph.getNetAr());
+						break;
+					case "GSvSR":
+						consolidated.setGrossQty(consolidated.getGrossQty()
+								+ channelGraph.getGrossQty());
+						consolidated.setSaleRetQty(consolidated.getSaleRetQty()
+								+ channelGraph.getSaleRetQty());
+						consolidated.setNetQty(consolidated.getNetQty()
+								+ channelGraph.getNetQty());
+						break;
+					case "GSAvRA":
+						consolidated.setGrossSpAmount(consolidated
+								.getGrossSpAmount()
+								+ channelGraph.getGrossSpAmount());
+						consolidated.setSaleRetSpAmount(consolidated
+								.getSaleRetSpAmount()
+								+ channelGraph.getSaleRetSpAmount());
+						break;
+					case "GrossProfit":
+						consolidated.setGrossProfit(consolidated
+								.getGrossProfit()
+								+ channelGraph.getGrossProfit());
+						break;
+					case "GPCP":
+						consolidated.setGpVsProductCost(consolidated
+								.getGpVsProductCost()
+								+ channelGraph.getGpVsProductCost());
+						break;
+					case "PR":
+						consolidated.setNetPr(consolidated.getNetPr()
+								+ channelGraph.getNetPr());
+						consolidated.setNetProductCost(consolidated
+								.getNetProductCost()
+								+ channelGraph.getNetProductCost());
+						break;
+					case "NR":
+						consolidated.setGrossProfit(consolidated
+								.getGrossProfit()
+								+ channelGraph.getGrossProfit());
+						consolidated.setNetNrAmount(consolidated
+								.getNetNrAmount()
+								+ channelGraph.getNetNrAmount());
+						break;
+					case "GNR":
+						consolidated.setGrossProfit(consolidated
+								.getGrossProfit()
+								+ channelGraph.getGrossProfit());
+						consolidated.setGrossNrAmount(consolidated
+								.getGrossNrAmount()
+								+ channelGraph.getGrossNrAmount());
+						break;
+					case "EOSS":
+						consolidated.setNetEOSSValue(consolidated
+								.getNetEOSSValue()
+								+ channelGraph.getNetEOSSValue());
+						break;
+					case "TaxableSale":
+						consolidated.setGrossTaxableSale(consolidated
+								.getGrossTaxableSale()
+								+ channelGraph.getGrossTaxableSale());
+						consolidated.setReturnTaxableSale(consolidated
+								.getReturnTaxableSale()
+								+ channelGraph.getReturnTaxableSale());
+						consolidated.setNetTaxableSale(consolidated
+								.getNetTaxableSale()
+								+ channelGraph.getNetTaxableSale());
+						break;
+					case "ActualSale":
+						consolidated.setGrossActualSale(consolidated
+								.getGrossActualSale()
+								+ channelGraph.getGrossActualSale());
+						consolidated.setReturnActualSale(consolidated
+								.getReturnActualSale()
+								+ channelGraph.getReturnActualSale());
+						consolidated.setNetActualSale(consolidated
+								.getNetActualSale()
+								+ channelGraph.getNetActualSale());
+						break;
+					case "TaxfreeSale":
+						consolidated.setGrossTaxfreeSale(consolidated
+								.getGrossTaxfreeSale()
+								+ channelGraph.getGrossTaxfreeSale());
+						consolidated.setReturnTaxfreeSale(consolidated
+								.getReturnTaxfreeSale()
+								+ channelGraph.getReturnTaxfreeSale());
+						consolidated.setNetTaxfreeSale(consolidated
+								.getNetTaxfreeSale()
+								+ channelGraph.getNetTaxfreeSale());
+						break;
+					default:
+						break;
 					}
 				}
-			} else{
+			} else {
 				newChannelReportList.add(channelGraph);
 			}
 		}
 		newChannelReportList.add(consolidated);
 		return newChannelReportList;
 	}
-	
-	@SuppressWarnings({ "rawtypes" })
+
 	public static List<ChannelReportDetails> getChannelMonthlyList(
-			List<ChannelReportDetails> channelGraphList, Date startDate, Date endDate) {
-		
+			List<ChannelReportDetails> channelGraphList, Date startDate,
+			Date endDate) {
+
 		DateFormatSymbols dfs = new DateFormatSymbols();
 		String[] months = dfs.getMonths();
-		
+
 		Map<String, ChannelReportDetails> newChannelReportMap = new HashMap<String, ChannelReportDetails>();
-		
+
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(startDate);
 		cal.set(Calendar.DAY_OF_MONTH, 1);
 		int monthIndex = 1;
 		while (cal.getTime().before(endDate)) {
 			ChannelReportDetails consolidated = new ChannelReportDetails();
-			consolidated.setMonth(months[cal.get(Calendar.MONTH)].substring(0, 3) + " " + cal.get(Calendar.YEAR));
+			consolidated.setMonth(months[cal.get(Calendar.MONTH)].substring(0,
+					3) + " " + cal.get(Calendar.YEAR));
 			consolidated.setMonthIndex(monthIndex);
 			newChannelReportMap.put(consolidated.getMonth(), consolidated);
 			cal.add(Calendar.MONTH, 1);
 			monthIndex++;
 		}
-		
-		for(ChannelReportDetails channelGraph: channelGraphList){
-			
+
+		for (ChannelReportDetails channelGraph : channelGraphList) {
+
 			if (channelGraph.getShippedDate() != null) {
 				Calendar orderCal = Calendar.getInstance();
 				orderCal.setTime(channelGraph.getShippedDate());
 				orderCal.set(Calendar.DAY_OF_MONTH, 1);
-				
-				ChannelReportDetails consolidated = newChannelReportMap.get(
-						months[orderCal.get(Calendar.MONTH)].substring(0, 3) + " " + orderCal.get(Calendar.YEAR));
+
+				ChannelReportDetails consolidated = newChannelReportMap
+						.get(months[orderCal.get(Calendar.MONTH)].substring(0,
+								3) + " " + orderCal.get(Calendar.YEAR));
 				if (consolidated != null) {
-					consolidated.setNetTaxableSale(
-							consolidated.getNetTaxableSale() + channelGraph.getGrossTaxableSale());
-					consolidated.setNetActualSale(
-							consolidated.getNetActualSale() + channelGraph.getGrossActualSale());
-					consolidated.setNetTaxfreeSale(
-							consolidated.getNetTaxfreeSale() + channelGraph.getGrossTaxfreeSale());
+					consolidated.setNetTaxableSale(consolidated
+							.getNetTaxableSale()
+							+ channelGraph.getGrossTaxableSale());
+					consolidated.setNetActualSale(consolidated
+							.getNetActualSale()
+							+ channelGraph.getGrossActualSale());
+					consolidated.setNetTaxfreeSale(consolidated
+							.getNetTaxfreeSale()
+							+ channelGraph.getGrossTaxfreeSale());
 				}
 			}
-			
+
 			if (channelGraph.getReturnDate() != null) {
 				Calendar orderCal = Calendar.getInstance();
 				orderCal.setTime(channelGraph.getReturnDate());
 				orderCal.set(Calendar.DAY_OF_MONTH, 1);
-				
-				ChannelReportDetails consolidated = newChannelReportMap.get(
-						months[orderCal.get(Calendar.MONTH)].substring(0, 3) + " " + orderCal.get(Calendar.YEAR));
+
+				ChannelReportDetails consolidated = newChannelReportMap
+						.get(months[orderCal.get(Calendar.MONTH)].substring(0,
+								3) + " " + orderCal.get(Calendar.YEAR));
 				if (consolidated != null) {
-					consolidated.setNetTaxableSale(
-							consolidated.getNetTaxableSale() - channelGraph.getReturnTaxableSale());
-					consolidated.setNetActualSale(
-							consolidated.getNetActualSale() - channelGraph.getReturnActualSale());
-					consolidated.setNetTaxfreeSale(
-							consolidated.getNetTaxfreeSale() - channelGraph.getReturnTaxfreeSale());
+					consolidated.setNetTaxableSale(consolidated
+							.getNetTaxableSale()
+							- channelGraph.getReturnTaxableSale());
+					consolidated.setNetActualSale(consolidated
+							.getNetActualSale()
+							- channelGraph.getReturnActualSale());
+					consolidated.setNetTaxfreeSale(consolidated
+							.getNetTaxfreeSale()
+							- channelGraph.getReturnTaxfreeSale());
 				}
 			}
 
 		}
-		
+
 		List<ChannelReportDetails> newChannelReportList = new ArrayList<>();
-		for (String key: newChannelReportMap.keySet()) {
+		for (String key : newChannelReportMap.keySet()) {
 			newChannelReportList.add(newChannelReportMap.get(key));
 		}
 		return newChannelReportList;
@@ -2737,14 +3055,17 @@ public class ConverterClass {
 		Map<String, DebtorsGraph1> debtorsGraph1Map = new HashMap<String, DebtorsGraph1>();
 		for (PartnerReportDetails partnerBusiness : debtorsList) {
 			String key = "";
-			switch(criteria){
-				case "partner":key = partnerBusiness.getPcName();break;
-				case "category":
-					key = partnerBusiness.getParentCategory();
-					if(StringUtils.isEmpty(key))
-						key = "B2B";
-					break;
-				default: break;
+			switch (criteria) {
+			case "partner":
+				key = partnerBusiness.getPcName();
+				break;
+			case "category":
+				key = partnerBusiness.getParentCategory();
+				if (StringUtils.isEmpty(key))
+					key = "B2B";
+				break;
+			default:
+				break;
 			}
 			DebtorsGraph1 debtorsGraph1 = debtorsGraph1Map.get(key);
 
@@ -2752,31 +3073,33 @@ public class ConverterClass {
 			int actionableNetQty = 0;
 			double upcomingPD = 0;
 			int upcomingNetQty = 0;
-			double netPaymentDifference = partnerBusiness.getPaymentDifference();
+			double netPaymentDifference = partnerBusiness
+					.getPaymentDifference();
 			int netSaleQty = partnerBusiness.getNetSaleQuantity();
 			Date paymentDueDate = partnerBusiness.getPaymentDueDate();
-			
+
 			double netPaymentResult = partnerBusiness.getNetPaymentResult();
 			actionablePD = partnerBusiness.getPaymentDifference();
-			if(partnerBusiness.isPoOrder()){
+			if (partnerBusiness.isPoOrder()) {
 				actionableNetQty = partnerBusiness.getGrossSaleQuantity();
-				if(partnerBusiness.getReturnDate() != null)
+				if (partnerBusiness.getReturnDate() != null)
 					actionableNetQty -= partnerBusiness.getReturnQuantity();
-			} else{
+			} else {
 				actionableNetQty = partnerBusiness.getNetSaleQuantity();
 			}
-			if(paymentDueDate!=null && paymentDueDate.after(currDate)){
+			if (paymentDueDate != null && paymentDueDate.after(currDate)) {
 				upcomingPD = partnerBusiness.getPaymentDifference();
-				if(partnerBusiness.isPoOrder()){
+				if (partnerBusiness.isPoOrder()) {
 					upcomingNetQty = partnerBusiness.getGrossSaleQuantity();
-					if(partnerBusiness.getReturnDate() != null)
+					if (partnerBusiness.getReturnDate() != null)
 						upcomingNetQty -= partnerBusiness.getReturnQuantity();
-				} else{
-					upcomingNetQty = partnerBusiness.getGrossSaleQuantity() - partnerBusiness.getReturnQuantity();
+				} else {
+					upcomingNetQty = partnerBusiness.getGrossSaleQuantity()
+							- partnerBusiness.getReturnQuantity();
 				}
 			}
 			double netRate = 0;
-			if(paymentDueDate!=null && paymentDueDate.after(new Date()))
+			if (paymentDueDate != null && paymentDueDate.after(new Date()))
 				netRate = partnerBusiness.getNetRate();
 			if (debtorsGraph1 == null) {
 				debtorsGraph1 = new DebtorsGraph1();
@@ -2798,7 +3121,7 @@ public class ConverterClass {
 			debtorsGraph1.setNetSaleQty(netSaleQty);
 			debtorsGraph1.setPartner(key);
 			debtorsGraph1.setCategory(key);
-					
+
 			debtorsGraph1Map.put(key, debtorsGraph1);
 		}
 
@@ -2816,35 +3139,51 @@ public class ConverterClass {
 	public static Object getDebtorsGraph1SortedList(
 			List<DebtorsGraph1> debtorsGraph1List) {
 		int maxLength = 5;
-		if(debtorsGraph1List.size()<=maxLength)
+		if (debtorsGraph1List.size() <= maxLength)
 			return debtorsGraph1List;
 		List<DebtorsGraph1> newdDebtorsGraph1List = new ArrayList<>();
 		int index = 1;
 		boolean initialize = false;
 		DebtorsGraph1 consolidated = new DebtorsGraph1();
-		for(DebtorsGraph1 debtorsGraph1: debtorsGraph1List){
-			if(index++ >= 5){
-				if(!initialize){
+		for (DebtorsGraph1 debtorsGraph1 : debtorsGraph1List) {
+			if (index++ >= 5) {
+				if (!initialize) {
 					initialize = true;
-					consolidated.setNetPaymentResult(debtorsGraph1.getNetPaymentResult());
-					consolidated.setActionablePD(debtorsGraph1.getActionablePD());
-					consolidated.setActionableNetQty(debtorsGraph1.getActionableNetQty());
+					consolidated.setNetPaymentResult(debtorsGraph1
+							.getNetPaymentResult());
+					consolidated.setActionablePD(debtorsGraph1
+							.getActionablePD());
+					consolidated.setActionableNetQty(debtorsGraph1
+							.getActionableNetQty());
 					consolidated.setUpcomingPD(debtorsGraph1.getUpcomingPD());
-					consolidated.setUpcomingNetQty(debtorsGraph1.getUpcomingNetQty());
-					consolidated.setNetPaymentDifference(debtorsGraph1.getNetPaymentDifference());
+					consolidated.setUpcomingNetQty(debtorsGraph1
+							.getUpcomingNetQty());
+					consolidated.setNetPaymentDifference(debtorsGraph1
+							.getNetPaymentDifference());
 					consolidated.setNetSaleQty(debtorsGraph1.getNetSaleQty());
 					consolidated.setCategory("Others");
 					consolidated.setPartner("Others");
-				} else{
-					consolidated.setNetPaymentResult(consolidated.getNetPaymentResult() + debtorsGraph1.getNetPaymentResult());
-					consolidated.setActionablePD(consolidated.getActionablePD() + debtorsGraph1.getActionablePD());
-					consolidated.setActionableNetQty(consolidated.getActionableNetQty() + debtorsGraph1.getActionableNetQty());
-					consolidated.setUpcomingPD(consolidated.getUpcomingPD() + debtorsGraph1.getUpcomingPD());
-					consolidated.setUpcomingNetQty(consolidated.getUpcomingNetQty() + debtorsGraph1.getUpcomingNetQty());
-					consolidated.setNetPaymentDifference(consolidated.getNetPaymentDifference() + debtorsGraph1.getNetPaymentDifference());
-					consolidated.setNetSaleQty(consolidated.getNetSaleQty() + debtorsGraph1.getNetSaleQty());
+				} else {
+					consolidated.setNetPaymentResult(consolidated
+							.getNetPaymentResult()
+							+ debtorsGraph1.getNetPaymentResult());
+					consolidated.setActionablePD(consolidated.getActionablePD()
+							+ debtorsGraph1.getActionablePD());
+					consolidated.setActionableNetQty(consolidated
+							.getActionableNetQty()
+							+ debtorsGraph1.getActionableNetQty());
+					consolidated.setUpcomingPD(consolidated.getUpcomingPD()
+							+ debtorsGraph1.getUpcomingPD());
+					consolidated.setUpcomingNetQty(consolidated
+							.getUpcomingNetQty()
+							+ debtorsGraph1.getUpcomingNetQty());
+					consolidated.setNetPaymentDifference(consolidated
+							.getNetPaymentDifference()
+							+ debtorsGraph1.getNetPaymentDifference());
+					consolidated.setNetSaleQty(consolidated.getNetSaleQty()
+							+ debtorsGraph1.getNetSaleQty());
 				}
-			} else{
+			} else {
 				newdDebtorsGraph1List.add(debtorsGraph1);
 			}
 		}
@@ -2879,27 +3218,30 @@ public class ConverterClass {
 		return uploadReportBeans;
 	}
 
-	public static List<YearlyStockList> combineStockList(List<YearlyStockList> stockList) {
+	public static List<YearlyStockList> combineStockList(
+			List<YearlyStockList> stockList) {
 		Map<String, YearlyStockList> stockMap = new HashMap<String, YearlyStockList>();
-		for(YearlyStockList stock: stockList){
+		for (YearlyStockList stock : stockList) {
 			String key = stock.getMonthStr();
 			YearlyStockList newStock = stockMap.get(key);
 			double openStock = stock.getOpenStock();
 			double openStockValuation = stock.getOpenStockValuation();
 			double closeStock = stock.getCloseStock();
 			double closeStockValuation = stock.getCloseStockValuation();
-			if(newStock == null){
+			if (newStock == null) {
 				newStock = new YearlyStockList();
 				newStock.setMonth(stock.getMonth());
 				newStock.setMonthStr(stock.getMonthStr());
 			}
 			newStock.setOpenStock(openStock + newStock.getOpenStock());
-			newStock.setOpenStockValuation(openStockValuation + newStock.getOpenStockValuation());
+			newStock.setOpenStockValuation(openStockValuation
+					+ newStock.getOpenStockValuation());
 			newStock.setCloseStock(closeStock + newStock.getCloseStock());
-			newStock.setCloseStockValuation(closeStockValuation + newStock.getCloseStockValuation());
+			newStock.setCloseStockValuation(closeStockValuation
+					+ newStock.getCloseStockValuation());
 			stockMap.put(key, newStock);
 		}
-		
+
 		Iterator entries = stockMap.entrySet().iterator();
 		List<YearlyStockList> finalStockList = new ArrayList<YearlyStockList>();
 		while (entries.hasNext()) {
@@ -2908,7 +3250,7 @@ public class ConverterClass {
 			YearlyStockList stock = thisEntry.getValue();
 			finalStockList.add(stock);
 		}
-		Collections.sort(finalStockList, new YearlyStockList.OrderByMonth());		
+		Collections.sort(finalStockList, new YearlyStockList.OrderByMonth());
 		return finalStockList;
 	}
 
@@ -2917,65 +3259,66 @@ public class ConverterClass {
 		return null;
 	}
 
-	public static List<Expenses> combineExpenses(int selectedYearInt, List<YearlyStockList> stockList) {
+	public static List<Expenses> combineExpenses(int selectedYearInt,
+			List<YearlyStockList> stockList) {
 		List<Map<String, String>> dateRangeList = getDateRanges(selectedYearInt);
-		for(Map<String, String> dateMap: dateRangeList){
-			
+		for (Map<String, String> dateMap : dateRangeList) {
+
 		}
 		return null;
 	}
-	
+
 	public static List<Map<String, String>> getDateRanges(int year) {
 		List<Map<String, String>> dateRangeList = new ArrayList<Map<String, String>>();
-		for(int i=4;i<=12;i++){
+		for (int i = 4; i <= 12; i++) {
 			Map<String, String> dateMap = new HashMap<String, String>();
 			dateMap.put("startDate", year + "-" + addZero(i) + "-01");
-			if(i==12){
-				dateMap.put("endDate", (year+1) + "-01-01");
-			} else{
-				dateMap.put("endDate", year + "-" + addZero(i+1) + "-01");
-			}			
+			if (i == 12) {
+				dateMap.put("endDate", (year + 1) + "-01-01");
+			} else {
+				dateMap.put("endDate", year + "-" + addZero(i + 1) + "-01");
+			}
 			dateRangeList.add(dateMap);
 		}
-		for(int i=1;i<=3;i++){
+		for (int i = 1; i <= 3; i++) {
 			Map<String, String> dateMap = new HashMap<String, String>();
-			dateMap.put("startDate", (year+1) + "-" + addZero(i) + "-01");
-			dateMap.put("endDate", (year+1) + "-" + addZero(i+1) + "-01");
+			dateMap.put("startDate", (year + 1) + "-" + addZero(i) + "-01");
+			dateMap.put("endDate", (year + 1) + "-" + addZero(i + 1) + "-01");
 			dateRangeList.add(dateMap);
 		}
-		
+
 		return dateRangeList;
 	}
-	
+
 	private static String addZero(int i) {
-		if(i<10)
+		if (i < 10)
 			return "0" + i;
 		return i + "";
 	}
 
 	public static List<NetProfitabilityST> combineForShortTable(
 			List<YearlyStockList> combinedStockList,
-			List<NetPaymentResult> nprList,
-			List<ChannelNR> nrList,
+			List<NetPaymentResult> nprList, List<ChannelNR> nrList,
 			List<ExpensesDetails> expensesCatList, List<String> catList) {
 		Map<String, NetProfitabilityST> npMap = new HashMap<String, NetProfitabilityST>();
 		List<NetProfitabilityST> npList = new ArrayList<NetProfitabilityST>();
-		
-		int counter = catList.size(); 
-		for(YearlyStockList stock: combinedStockList){
+
+		int counter = catList.size();
+		for (YearlyStockList stock : combinedStockList) {
 			NetProfitabilityST npST = new NetProfitabilityST();
-			String key = stock.getMonthStr(); 
+			String key = stock.getMonthStr();
 			npST.setKey(key);
 			npST.setOpenStock(stock.getOpenStockValuation());
 			npST.setCloseStock(stock.getCloseStockValuation());
 			npST.setCatExpenses(getDoubleList(counter));
-			npST.setNetProfit(stock.getOpenStockValuation() - stock.getCloseStockValuation());
+			npST.setNetProfit(stock.getOpenStockValuation()
+					- stock.getCloseStockValuation());
 			npMap.put(key, npST);
 		}
-		for(ChannelNR netRate: nrList){
+		for (ChannelNR netRate : nrList) {
 			String key = netRate.getKey();
 			NetProfitabilityST npST = npMap.get(key);
-			if(npST == null){
+			if (npST == null) {
 				npST = new NetProfitabilityST();
 				npST.setKey(key);
 				npST.setCatExpenses(getDoubleList(counter));
@@ -2984,10 +3327,10 @@ public class ConverterClass {
 			npST.setNetProfit(npST.getNetProfit() + npST.getNetRate());
 			npMap.put(key, npST);
 		}
-		for(NetPaymentResult npr: nprList){
+		for (NetPaymentResult npr : nprList) {
 			String key = npr.getKey();
 			NetProfitabilityST npST = npMap.get(key);
-			if(npST == null){
+			if (npST == null) {
 				npST = new NetProfitabilityST();
 				npST.setKey(key);
 				npST.setCatExpenses(getDoubleList(counter));
@@ -2996,17 +3339,17 @@ public class ConverterClass {
 			npST.setNetProfit(npST.getNetProfit() + npST.getNpr());
 			npMap.put(key, npST);
 		}
-		for(ExpensesDetails expenseCat: expensesCatList){
+		for (ExpensesDetails expenseCat : expensesCatList) {
 			String key = expenseCat.getKey();
 			NetProfitabilityST npST = npMap.get(key);
-			if(npST == null){
+			if (npST == null) {
 				npST = new NetProfitabilityST();
 				npST.setKey(key);
 			}
 			List<Double> expenseList = npST.getCatExpenses();
-			for(int index =0; index<catList.size(); index++){
+			for (int index = 0; index < catList.size(); index++) {
 				String category = catList.get(index);
-				if(category.equals(expenseCat.getExpenseCatName())){
+				if (category.equals(expenseCat.getExpenseCatName())) {
 					double expense = expenseCat.getAmount();
 					expenseList.set(index, expense);
 					npST.setNetProfit(npST.getNetProfit() - expense);
@@ -3025,14 +3368,13 @@ public class ConverterClass {
 		}
 		return npList;
 	}
-	
-	public static List<Double> getDoubleList(int counter){
+
+	public static List<Double> getDoubleList(int counter) {
 		List<Double> doubleList = new ArrayList<Double>();
-		for(int i=0; i<counter; i++){
+		for (int i = 0; i < counter; i++) {
 			doubleList.add(new Double(0));
 		}
 		return doubleList;
 	}
-
 
 }

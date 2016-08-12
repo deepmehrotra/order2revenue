@@ -51,6 +51,11 @@ public class Category {
 	@Column
 	private long productCount;
 	
+	@ManyToOne(cascade=CascadeType.ALL)
+	private TaxCategory CST;
+	@ManyToOne(cascade=CascadeType.ALL)
+	private TaxCategory LST;
+	
 	public String getCatName() {
 		return catName;
 	}
@@ -131,6 +136,18 @@ public class Category {
 	}
 	public void setOsUpdate(Date osUpdate) {
 		this.osUpdate = osUpdate;
+	}
+	public TaxCategory getCST() {
+		return CST;
+	}
+	public void setCST(TaxCategory cST) {
+		CST = cST;
+	}
+	public TaxCategory getLST() {
+		return LST;
+	}
+	public void setLST(TaxCategory lST) {
+		LST = lST;
 	}
 
 }
