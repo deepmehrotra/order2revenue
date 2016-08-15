@@ -2,6 +2,7 @@ package com.o2r.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -429,6 +430,23 @@ public class CategoryController {
 			TaxCategory category = ConverterClass
 					.prepareTaxCategoryModel(taxCategoryBean);
 			List<Category> categoryList = new ArrayList<Category>();
+			TaxCategory tmpCat = taxDetailService.getTaxCategory(category.getTaxCatId());
+			if (tmpCat != null) {
+				/*categoryList = tmpCat.getProductCategoryCST();
+				if (categoryList != null && !categoryList.isEmpty()) {
+					Iterator<Category> categoryListIterator = categoryList.iterator();
+					while (categoryListIterator.hasNext()) {
+						Category productCat = categoryListIterator.next();
+						if (category.getTaxCatType().equalsIgnoreCase("LST")) {
+							productCat.setLST(null);
+						} else {
+							productCat.setCST(null);
+						}
+					}
+				}*/
+				taxDetailService.removeProductMapping(tmpCat.getTaxCatId(), sellerId);
+			}
+			
 			String[] catList = request.getParameterValues("multiSku");
 			if (catList != null && catList.length != 0) {
 				for (int i = 0; i < catList.length; i++) {

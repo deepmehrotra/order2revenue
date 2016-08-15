@@ -54,53 +54,79 @@
 		categoryStr = categoryStr.replace("[", "");
 		categoryStr = categoryStr.replace("]", "");
 		var categoryLSTList = categoryStr.split(',');
+		//alert("LST : " + categoryLSTList);
 		
 		categoryStr = "${categoryCSTList}";
 		categoryStr = categoryStr.replace("[", "");
 		categoryStr = categoryStr.replace("]", "");
 		var categoryCSTList = categoryStr.split(',');
+		//alert("CST : " + categoryCSTList);
 		
 		categoryStr = "${prodCategoryList}";
 		categoryStr = categoryStr.replace("[", "");
 		categoryStr = categoryStr.replace("]", "");
 		var catList = categoryStr.split(',');
+		//alert("Cat : " + catList);
 		
 		//categoryStr = document.getElementById("multiSku").value;
 		categoryStr = String($("#multiSku").chosen().val());
 		var selectedList = categoryStr.split(',');
+		//alert("selected : " + selectedList);
+		if (selectedList == "null"  || selectedList.length > 0) {
+			selectedList = null;
+			//alert(!selectedList);
+		}
 		
-		if(catList.length > 0 && catList[0] != "") { 
+		taxType = String($("#taxCatType2").val());
+		//alert("Type : " + taxType);
+		if (taxType == 'undefined') {
 			taxType = String($("#taxCatType1").val());
-			if (taxType == "LST") {
-				categoryLSTList.push.apply(categoryLSTList, catList);
-			} else {
-				categoryCSTList.push.apply(categoryCSTList, catList);
-			}
-		}else{
-			taxType = String($("#taxCatType2").val());
+			//alert("Type : " + taxType);
 		}
 		
-		var isProdCatEmpty = false;
-		var count = 0;
-		for (var i = 0; i < selectedList.length; i++) {
-			var prodCat = String(selectedList[i]).trim();
-		    if (taxType == "LST") {
-		    	for (var j = 0; j < categoryLSTList.length; j++) {
-		    		var cat = String(categoryLSTList[j]).trim();
-		    		if (prodCat == cat) {
-		    			count++;
-		    		}
-		    	}
-		    } else {
-		    	for (var j = 0; j < categoryCSTList.length; j++) {
-		    		var cat = String(categoryCSTList[j]).trim();
-		    		if (prodCat == cat) {
-		    			count++;
-		    		}
-		    	}
-		    }
-		}
-		if (count == selectedList.length) {
+		if (selectedList) {
+			if(catList.length > 0 && catList[0] != "") { 
+				
+				if (taxType == "LST") {
+					//alert("IN LST");
+					categoryLSTList.push.apply(categoryLSTList, catList);
+				} else {
+					//alert("IN CST");
+					categoryCSTList.push.apply(categoryCSTList, catList);
+				}
+			}
+			//alert("LST : " + categoryLSTList);
+			//alert("CST : " + categoryCSTList);
+			
+			
+			var isProdCatEmpty = false;
+			var count = 0;
+			for (var i = 0; i < selectedList.length; i++) {
+				var prodCat = String(selectedList[i]).trim();
+			    if (taxType == "LST") {
+			    	//alert("IN LST");
+			    	for (var j = 0; j < categoryLSTList.length; j++) {
+			    		var cat = String(categoryLSTList[j]).trim();
+			    		//alert(prodCat);
+			    		//alert(cat);
+			    		if (prodCat == cat) {
+			    			count++;
+			    		}
+			    		//alert(count);
+			    	}
+			    } else {
+			    	for (var j = 0; j < categoryCSTList.length; j++) {
+			    		var cat = String(categoryCSTList[j]).trim();
+			    		if (prodCat == cat) {
+			    			count++;
+			    		}
+			    	}
+			    }
+			}
+			if (count >= selectedList.length) {
+				isProdCatEmpty = true;
+			}
+		} else {
 			isProdCatEmpty = true;
 		}
 		

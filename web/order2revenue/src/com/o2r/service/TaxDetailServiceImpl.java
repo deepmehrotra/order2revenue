@@ -114,4 +114,10 @@ public class TaxDetailServiceImpl implements TaxDetailService {
 			throws CustomException {
 		return taxDetailDao.listTaxDetails(sellerId, taxOrTds);
 	}
+	
+	@Override
+	public void removeProductMapping(int tcId, int sellerId)
+			throws CustomException {
+		taxDetailDao.removeProductMapping(tcId, sellerId);
+	}
 }

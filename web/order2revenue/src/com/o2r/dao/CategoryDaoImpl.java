@@ -20,8 +20,8 @@ import org.springframework.stereotype.Repository;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Category;
+import com.o2r.model.ManualCharges;
 import com.o2r.model.Seller;
-
 
 /**
  * @author Deep Mehrotra
@@ -30,195 +30,211 @@ import com.o2r.model.Seller;
 @Repository("categoryDao")
 public class CategoryDaoImpl implements CategoryDao {
 
- @Autowired
- private SessionFactory sessionFactory;
+	@Autowired
+	private SessionFactory sessionFactory;
 
- static Logger log = Logger.getLogger(CategoryDaoImpl.class.getName());
+	static Logger log = Logger.getLogger(CategoryDaoImpl.class.getName());
 
-@Override
-public void addCategory(Category category,int sellerId) throws CustomException {
+	@Override
+	public void addCategory(Category category, int sellerId)
+			throws CustomException {
 
-	log.info("***addCategory Start****");
-	Seller seller=null;
-	Category parentcategory=null;
-	   try
-	   {
-		   Session session=sessionFactory.openSession();
-		   session.beginTransaction();
-		   Criteria criteria=session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
+		log.info("***addCategory Start****");
+		Seller seller = null;
+		Category parentcategory = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
 
-		   if(category.isSubCategory())
-		   {
-			   List<Category> listparents=listParentCategories(sellerId);
-			   for(Category cat:listparents)
-			   {
-				  if(cat.getCatName().equalsIgnoreCase(category.getParentCatName()))
-				   {
-					  parentcategory=cat;
-				   }
-			   }
-			   if(parentcategory.getSubCategory()!=null)
-			   parentcategory.getSubCategory().add(category);
-			 category.setParent(parentcategory);
-			 category.setCreatedOn(new Date());
-			   }
-		   category.setCreatedOn(new Date());
-		   seller=(Seller)criteria.list().get(0);
-		   if(seller.getCategories()!=null)
-		   seller.getCategories().add(category);
-		   session.saveOrUpdate(seller);
+			if (category.isSubCategory()) {
+				List<Category> listparents = listParentCategories(sellerId);
+				for (Category cat : listparents) {
+					if (cat.getCatName().equalsIgnoreCase(
+							category.getParentCatName())) {
+						parentcategory = cat;
+					}
+				}
+				if (parentcategory.getSubCategory() != null)
+					parentcategory.getSubCategory().add(category);
+				category.setParent(parentcategory);
+				category.setCreatedOn(new Date());
+			}
+			category.setCreatedOn(new Date());
+			seller = (Seller) criteria.list().get(0);
+			if (seller.getCategories() != null)
+				seller.getCategories().add(category);
+			session.saveOrUpdate(seller);
 
-	   session.getTransaction().commit();
-	   session.close();
-	   }
-	   catch (Exception e) {
-		   e.printStackTrace();
-		   log.equals("**Error Code : "+(sellerId+"-"+GlobalConstant.addCategoryErrorCode));
-		   log.error("Failed! by sellerId : "+sellerId,e);
-		   throw new CustomException(GlobalConstant.addCategoryError, new Date(),1,sellerId+"-"+GlobalConstant.addCategoryErrorCode, e);
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.addCategoryErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(GlobalConstant.addCategoryError,
+					new Date(), 1, sellerId + "-"
+							+ GlobalConstant.addCategoryErrorCode, e);
 
-	   }
-	   log.info("***addCategory Exit****");
-
-}
-
-@Override
-public List<Category> listCategories(int sellerId) throws CustomException {
-	
-	log.info("***listCategories Start****");
-	List<Category> returnlist=null;
-	Seller seller=null;
-	try
-	{
-	Session session=sessionFactory.openSession();
-	   session.beginTransaction();
-	   Criteria criteria=session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
-	   criteria.createAlias("categories", "category",CriteriaSpecification.LEFT_JOIN)
-	   .add(Restrictions.eq("category.isSubCategory",true))
-	   .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-	   if(criteria.list()!=null&&criteria.list().size()!=0)
-	   {
-	   seller=(Seller)criteria.list().get(0);
-	   System.out.println(" Size of parent category list :"+seller.getCategories().size());
-	   if(seller.getCategories()!=null&&seller.getCategories().size()!=0)
-		   returnlist=seller.getCategories();
-	   session.getTransaction().commit();
-	   session.close();
-	}
-	}
-	catch(Exception e)
-	{
-		e.printStackTrace();
-		log.equals("**Error Code : "+(sellerId+"-"+GlobalConstant.listCategoryErrorCode));
-		log.error("Failed! by sellerId : "+sellerId,e);
-		throw new CustomException(GlobalConstant.listCategoryError, new Date(),3,(sellerId+"-"+GlobalConstant.listCategoryErrorCode), e);
-	}
-	log.info("***listCategories Exit****");
-	return returnlist;
-}
-
-@Override
-public List<Category> listParentCategories(int sellerId) throws CustomException {
-
-	log.info("***listParentCategories Start****");
-	List<Category> returnlist=null;
-	Seller seller=null;
-	List tempList=null;
-	try
-	{
-	Session session=sessionFactory.openSession();
-	   session.beginTransaction();
-	   Criteria criteria=session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
-	   criteria.createAlias("categories", "category",CriteriaSpecification.LEFT_JOIN)
-	   .add(Restrictions.eq("category.isSubCategory",false))
-	   .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-	   tempList=criteria.list();
-	   if(tempList!=null&&tempList.size()!=0)
-	   {
-	   seller=(Seller)tempList.get(0);
-	   if(seller.getCategories()!=null&&seller.getCategories().size()!=0)
-		   returnlist=seller.getCategories();
-	   }
-	   session.getTransaction().commit();
-	   session.close();
-	}
-	catch(Exception e)
-	{
-		e.printStackTrace();
-		log.equals("**Error Code : "+(sellerId+"-"+GlobalConstant.listInventoryGroupErrorCode));
-		log.error("Failed! by sellerId : "+sellerId,e);
-		throw new CustomException(GlobalConstant.listInventoryGroupError, new Date(),3, (sellerId+"-"+GlobalConstant.listInventoryGroupErrorCode),e);
-	}
-	log.info("***listParentCategories End****");
-	return returnlist;
-}
-
-@Override
-public List<Long> getSKuCount(String catname ,int catId ,int sellerId) throws CustomException {
-	List<Long> returnlist=null;
-	Session session=null;
-	log.info("***getSKuCount Start****");
-	try
-	{
-		session=sessionFactory.openSession();
-		session.beginTransaction();
-		returnlist=new ArrayList<Long>();
-		 /*
-		  * Code for caluclating sku count
-		  */
-		 Criteria criteriaforSkuCount=session.createCriteria(Seller.class);
-		 criteriaforSkuCount.createAlias("categories", "category", CriteriaSpecification.LEFT_JOIN)
-		 .add(Restrictions.eq("id", sellerId))
-		 .add(Restrictions.eq("category.isSubCategory",true))
-		 .add(Restrictions.eq("category.parentCatName", catname));
-		 criteriaforSkuCount.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-		 ProjectionList projList = Projections.projectionList();
-		 projList.add(Projections.sum("category.skuCount"));
-		 projList.add(Projections.sum("category.productCount"));
-		 projList.add(Projections.sum("category.openingStock"));
-		 criteriaforSkuCount.setProjection(projList);
-		 List<Object[]> catSKUCount = criteriaforSkuCount.list();
-		 Iterator catIterator = catSKUCount.iterator();
-		 if(catSKUCount != null){
-			 while(catIterator.hasNext()){
-				 Object[] recordsRow = (Object[])catIterator.next();				 
-				 if(recordsRow!=null&&recordsRow.length!=0&&recordsRow[0]!=null&&recordsRow[1]!=null)
-				 {				 
-					 returnlist.add(Long.parseLong(recordsRow[0].toString()));
-					 returnlist.add(Long.parseLong(recordsRow[1].toString()));
-					 returnlist.add(Long.parseLong(recordsRow[2].toString()));
-				 }
-			 }
-		 }
-
+		}
+		log.info("***addCategory Exit****");
 
 	}
-	catch(Exception e)
-	{
-		e.printStackTrace();
-		log.equals("**Error Code : "+(sellerId+"-"+GlobalConstant.getSKUCountErrorCode));
-		log.error("Failed! by sellerId : "+sellerId,e);
-		throw new CustomException(GlobalConstant.getSKUCountError, new Date(),3,(sellerId+"-"+GlobalConstant.getSKUCountErrorCode), e);
+
+	@Override
+	public List<Category> listCategories(int sellerId) throws CustomException {
+
+		log.info("***listCategories Start****");
+		List<Category> returnlist = null;
+		Seller seller = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
+			criteria.createAlias("categories", "category",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("category.isSubCategory", true))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			if (criteria.list() != null && criteria.list().size() != 0) {
+				seller = (Seller) criteria.list().get(0);
+				System.out.println(" Size of parent category list :"
+						+ seller.getCategories().size());
+				if (seller.getCategories() != null
+						&& seller.getCategories().size() != 0)
+					returnlist = seller.getCategories();
+				session.getTransaction().commit();
+				session.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.listCategoryErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(GlobalConstant.listCategoryError,
+					new Date(), 3,
+					(sellerId + "-" + GlobalConstant.listCategoryErrorCode), e);
+		}
+		log.info("***listCategories Exit****");
+		return returnlist;
 	}
-	finally
-	{
-		session.getTransaction().commit();
-		session.close();
+
+	@Override
+	public List<Category> listParentCategories(int sellerId)
+			throws CustomException {
+
+		log.info("***listParentCategories Start****");
+		List<Category> returnlist = null;
+		Seller seller = null;
+		List tempList = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
+			criteria.createAlias("categories", "category",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("category.isSubCategory", false))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			tempList = criteria.list();
+			if (tempList != null && tempList.size() != 0) {
+				seller = (Seller) tempList.get(0);
+				if (seller.getCategories() != null
+						&& seller.getCategories().size() != 0)
+					returnlist = seller.getCategories();
+			}
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.listInventoryGroupErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(
+					GlobalConstant.listInventoryGroupError,
+					new Date(),
+					3,
+					(sellerId + "-" + GlobalConstant.listInventoryGroupErrorCode),
+					e);
+		}
+		log.info("***listParentCategories End****");
+		return returnlist;
 	}
-	log.info("***getSKuCount End****");
-	return returnlist;
-}
 
-@Override
-public Category getCategory(int categoryId) {
-	log.info("***getCategory Start****");
-	return (Category) sessionFactory.getCurrentSession().get(Category.class, categoryId);
-}
+	@Override
+	public List<Long> getSKuCount(String catname, int catId, int sellerId)
+			throws CustomException {
+		List<Long> returnlist = null;
+		Session session = null;
+		log.info("***getSKuCount Start****");
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			returnlist = new ArrayList<Long>();
+			/*
+			 * Code for caluclating sku count
+			 */
+			Criteria criteriaforSkuCount = session.createCriteria(Seller.class);
+			criteriaforSkuCount
+					.createAlias("categories", "category",
+							CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("id", sellerId))
+					.add(Restrictions.eq("category.isSubCategory", true))
+					.add(Restrictions.eq("category.parentCatName", catname));
+			criteriaforSkuCount
+					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			ProjectionList projList = Projections.projectionList();
+			projList.add(Projections.sum("category.skuCount"));
+			projList.add(Projections.sum("category.productCount"));
+			projList.add(Projections.sum("category.openingStock"));
+			criteriaforSkuCount.setProjection(projList);
+			List<Object[]> catSKUCount = criteriaforSkuCount.list();
+			Iterator catIterator = catSKUCount.iterator();
+			if (catSKUCount != null) {
+				while (catIterator.hasNext()) {
+					Object[] recordsRow = (Object[]) catIterator.next();
+					if (recordsRow != null && recordsRow.length != 0
+							&& recordsRow[0] != null && recordsRow[1] != null) {
+						returnlist
+								.add(Long.parseLong(recordsRow[0].toString()));
+						returnlist
+								.add(Long.parseLong(recordsRow[1].toString()));
+						returnlist
+								.add(Long.parseLong(recordsRow[2].toString()));
+					}
+				}
+			}
 
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.getSKUCountErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(GlobalConstant.getSKUCountError,
+					new Date(), 3,
+					(sellerId + "-" + GlobalConstant.getSKUCountErrorCode), e);
+		} finally {
+			session.getTransaction().commit();
+			session.close();
+		}
+		log.info("***getSKuCount End****");
+		return returnlist;
+	}
 
-@Override
-public Category getCategory(String catname ,int sellerId) throws CustomException
- {
+	@Override
+	public Category getCategory(int categoryId) {
+		log.info("***getCategory Start****");
+		return (Category) sessionFactory.getCurrentSession().get(
+				Category.class, categoryId);
+	}
+
+	@Override
+	public Category getCategory(String catname, int sellerId)
+			throws CustomException {
 		log.info("***getCategory Start****");
 		Category returnObject = null;
 		Seller seller = null;
@@ -243,17 +259,23 @@ public Category getCategory(String catname ,int sellerId) throws CustomException
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.getCategorywithNameErrorCode));
-			log.error("Failed! by sellerId : "+sellerId,e);
-			throw new CustomException(GlobalConstant.getCategorywithNameError,new Date(),3,(sellerId + "-" + GlobalConstant.getCategorywithNameErrorCode),e);
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.getCategorywithNameErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(
+					GlobalConstant.getCategorywithNameError,
+					new Date(),
+					3,
+					(sellerId + "-" + GlobalConstant.getCategorywithNameErrorCode),
+					e);
 		}
 		log.info("***getCategory Exit****");
 		return returnObject;
 	}
 
-@Override
-public Category getSubCategory(String catname ,int sellerId) throws CustomException
- {
+	@Override
+	public Category getSubCategory(String catname, int sellerId)
+			throws CustomException {
 		log.info("***getCategory Start****");
 		Category returnObject = null;
 		Seller seller = null;
@@ -280,31 +302,36 @@ public Category getSubCategory(String catname ,int sellerId) throws CustomExcept
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.equals("**Error Code : "+ (sellerId + "-" + GlobalConstant.getCategorywithNameErrorCode));
-			log.error("Failed! by sellerId : "+sellerId,e);
-			throw new CustomException(GlobalConstant.getCategorywithNameError,new Date(),3,(sellerId + "-" + GlobalConstant.getCategorywithNameErrorCode),e);
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.getCategorywithNameErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(
+					GlobalConstant.getCategorywithNameError,
+					new Date(),
+					3,
+					(sellerId + "-" + GlobalConstant.getCategorywithNameErrorCode),
+					e);
 		}
 		log.info("***getCategory Exit****");
 		return returnObject;
 
 	}
 
-@Override
-public int deleteCategory(Category category,int sellerId) throws CustomException {
+	@Override
+	public int deleteCategory(Category category, int sellerId)
+			throws CustomException {
 
-	 log.info("***deleteCategory Start****");
-	 log.debug("In Category delete cid "+category.getCategoryId());
-	 int catId=category.getCategoryId();
-	 int catdelete=0;
-	 int updated=0;
-	 Session session=null;
-	 try
-	 {
-		 session=sessionFactory.openSession();
-		 session.beginTransaction();
-		 Object obj=session.get(Category.class, catId);
-		 if(obj!=null)
-		 {
+		log.info("***deleteCategory Start****");
+		log.debug("In Category delete cid " + category.getCategoryId());
+		int catId = category.getCategoryId();
+		int catdelete = 0;
+		int updated = 0;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Object obj = session.get(Category.class, catId);
+			if (obj != null) {
 				Category cat = (Category) obj;
 				if (cat.isSubCategory() || cat.getSubCategory().size() == 0) {
 					if (cat.isSubCategory()) {
@@ -324,20 +351,20 @@ public int deleteCategory(Category category,int sellerId) throws CustomException
 				}
 
 			}
-	 }
-	 catch(Exception e)
-	 {
-		 e.printStackTrace();
-		 log.equals("**Error Code : "+(sellerId+"-"+GlobalConstant.deleteCategoryErrorCode));
-		 log.error("Failed! by sellerId : "+sellerId,e);
-		 throw new CustomException(GlobalConstant.deleteCategoryError, new Date(),2,(sellerId+"-"+GlobalConstant.deleteCategoryErrorCode), e);
-	 }
-	 finally
-	 {
-		 session.getTransaction().commit();
-		 session.close();
-	 }
-	 log.info("***deleteCategory Exit****");
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.deleteCategoryErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(GlobalConstant.deleteCategoryError,
+					new Date(), 2,
+					(sellerId + "-" + GlobalConstant.deleteCategoryErrorCode),
+					e);
+		} finally {
+			session.getTransaction().commit();
+			session.close();
+		}
+		log.info("***deleteCategory Exit****");
 		if (updated != 0 && catdelete != 0)
 			return 1;
 		else

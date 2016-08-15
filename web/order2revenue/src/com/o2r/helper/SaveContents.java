@@ -444,9 +444,8 @@ public class SaveContents {
 				TaxCategory taxcat = taxDetailService.getTaxCategory(
 						product, sellerId, customerBean.getZipcode());
 				if (taxcat != null)
-					otb.setTaxCategtory(entry.getCell(13).toString());
-				else {
-					otb.setTaxCategtory(entry.getCell(13).toString());
+					otb.setTaxCategtory(taxcat.getTaxCatName());
+				else {			
 					errorMessage.append("Tax Category does not exist ");
 					validaterow = false;
 				}

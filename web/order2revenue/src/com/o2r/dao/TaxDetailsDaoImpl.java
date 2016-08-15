@@ -19,6 +19,7 @@ import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Category;
 import com.o2r.model.ChannelUploadMapping;
+import com.o2r.model.ManualCharges;
 import com.o2r.model.Product;
 import com.o2r.model.Seller;
 import com.o2r.model.TaxCategory;
@@ -81,6 +82,35 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		log.info("*** addTaxDetail Ends : TaxDetailsDaoImpl ****");
 		return taxDetail;
 
+	}
+	
+	@Override
+	public void removeProductMapping(int tcId, int sellerId)
+			throws CustomException {
+		log.info("*** removeProductMapping start ***");
+		try {
+
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			Query updateQuery = session
+					.createSQLQuery("UPDATE category set LST_taxCatId = null where LST_taxCatId=?");
+			updateQuery.setInteger(0, tcId);
+
+			int updated = updateQuery.executeUpdate();
+
+			log.debug("removeProductMapping updated:" + updated);
+			session.getTransaction().commit();
+			session.close();
+
+		} catch (Exception e) {
+			log.error("Failed! by sellerId : "+sellerId,e);
+			e.printStackTrace();
+			throw new CustomException(GlobalConstant.deleteManualChargesError,
+					new Date(), 3, GlobalConstant.deleteManualChargesErrorCode,
+					e);
+		}
+		log.info("*** deleteManualCharges exit ***");
 	}
 
 	@Override
@@ -311,6 +341,10 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 					seller.getTaxCategories().add(taxCategory);
 				session.saveOrUpdate(seller);
 			} else {
+				/*Criteria criteria = session.createCriteria(Seller.class).add(
+						Restrictions.eq("id", sellerId));
+				seller = (Seller) criteria.list().get(0);
+				seller.getTaxCategories().add(taxCategory);*/
 				taxCategory.setUploadDate(new Date());
 				session.merge(taxCategory);
 			}

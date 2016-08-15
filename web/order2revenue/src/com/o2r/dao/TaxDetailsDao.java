@@ -55,4 +55,7 @@ public interface TaxDetailsDao {
 	public TaxCategory getTaxCategory(Product product, int sellerId,
 			String zipcode) throws CustomException;
 
+	public void removeProductMapping(int tcId, int sellerId)
+			throws CustomException;
+
 }
