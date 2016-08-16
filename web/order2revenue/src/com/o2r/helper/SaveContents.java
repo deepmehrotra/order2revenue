@@ -1479,7 +1479,8 @@ public class SaveContents {
 					
 					
 					if (entry.getCell(1) != null
-							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {																	
+							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						entry.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
 						List<Order> onj = orderService
 								.findOrders("channelOrderID", entry.getCell(1)
 										.toString(), sellerId, false, false);
@@ -1849,7 +1850,9 @@ public class SaveContents {
 					if (entry.getCell(1) != null
 						&& StringUtils.isNotBlank(entry.getCell(1).toString()) && column != null) {
 						
-						System.out.println(entry
+						
+						entry.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
+						log.info("Channel Order ID for Return : "+entry								
 								.getCell(1).toString());
 						orderlist = orderService.findOrders(column, entry
 								.getCell(1).toString(), sellerId, false, false);
