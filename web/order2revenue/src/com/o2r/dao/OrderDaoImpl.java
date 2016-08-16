@@ -299,9 +299,7 @@ public class OrderDaoImpl implements OrderDao {
 
 						calculateDeliveryDate(order, sellerId);
 
-						float taxpercent = taxDetailService
-								.getTaxCategory(
-										order.getOrderTax().getTaxCategtory(),
+						float taxpercent = taxDetailService.getTaxCategory(order.getOrderTax().getTaxCategtory(),
 										sellerId).getTaxPercent();
 
 						reconciledate = getreconciledate(order, seller

@@ -184,7 +184,11 @@ public class AdminController {
 				tempList=GlobalConstant.limeroadPaymentHeaderList;
 				break;
 			case "PayTM":
-				tempList=GlobalConstant.paymentHeaderList;
+				if(fileName.equalsIgnoreCase("payment"))
+					tempList=GlobalConstant.paymentHeaderList;
+				else if(fileName.equalsIgnoreCase("order"))
+					tempList=GlobalConstant.flipkartOrderHeaderList;
+				break;
 			}
 			System.out.println("getting bvalues" +parameters);
 			for (Map.Entry<String, String[]> entry : parameters.entrySet())

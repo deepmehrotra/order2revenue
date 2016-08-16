@@ -377,6 +377,11 @@ public class OrderController {
 							files.get(0), sellerId, applicationPath,
 							uploadReport);
 						break;
+				case "PayTM_Order":
+					saveMappedFiles.savePayTMOrderContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport);
+						break;
 				case "Amazon_Payment":
 					saveMappedFiles.saveAmazonPaymentContents(
 							files.get(0), sellerId, applicationPath,
