@@ -183,6 +183,42 @@ public class GlobalConstant {
 			
 		}
 	};
+	
+	public static final ArrayList<String> PayTMOrderHeaderList = new ArrayList<String>() {
+		/**
+	 *
+	 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Order Recieved Date");
+			add("Secondary OrderID");
+			add("Channel Order ID");
+			add("SkUCode");			
+			add("Quantity");
+			add("InvoiceID");
+			add("OrderSP Component A");
+			add("OrderSP Component B");
+			add("Shipping PinCode");
+			add("Order Shipped Date");
+			add("Sales Channel");
+			add("Payment Type");			
+			add("AWB No");
+			add("Gross NR");
+			add("PIreferenceNo");
+			add("Logistic Partner");
+			add("Order MRP");
+			add("Net Rate");
+			add("Customer_Fname");
+			add("Customer_Lname");
+			add("Customer Address");
+			add("Customer City");
+			add("Customer Phone No");			
+			add("Customer Email");
+			add("Seller Note");
+			
+		}
+	};
 
 	public final ArrayList<String> inventoryHeaderList = new ArrayList<String>() {
 		/**

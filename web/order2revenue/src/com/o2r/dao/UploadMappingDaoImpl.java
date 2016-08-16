@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.ChannelUploadMapping;
+import com.o2r.model.ColumMap;
 
 
 @Repository("uploadMappingDao")
@@ -36,21 +37,26 @@ public class UploadMappingDaoImpl implements UploadMappingDao {
 	 throws CustomException{
 		 
 		 log.info("*** addChannelUploadMapping starts : UploadMappingDaoImpl ****");
-			try {
-				Session session = sessionFactory.openSession();
+		 ChannelUploadMapping returnObj=null;
+		 Session session=null;
+		 try {
+				session = sessionFactory.openSession();
 				session.beginTransaction();
-				if (uploadMapping.getMapId() == 0) {
-					
-						session.saveOrUpdate(uploadMapping);
-				} else {
-					Query gettingTaxId = session
-							.createSQLQuery(columMapDeleteQuery)
-							.setParameter("mapId", uploadMapping.getMapId());
-					gettingTaxId.executeUpdate();
+				if (uploadMapping.getMapId() == 0) {					
 					session.saveOrUpdate(uploadMapping);
+				} else {					
+					returnObj=(ChannelUploadMapping)session.get(ChannelUploadMapping.class, uploadMapping.getMapId());
+					Hibernate.initialize(returnObj.getColumMap());
+					for(ColumMap columMap:uploadMapping.getColumMap()){
+						for(ColumMap colMap:returnObj.getColumMap()){
+							if(colMap.getO2rColumName().equals(columMap.getO2rColumName())){
+								colMap.setChannelColumName(columMap.getChannelColumName());
+							}
 						}
-				session.getTransaction().commit();
-				session.close();
+					}					
+					session.saveOrUpdate(returnObj);
+				}
+				session.getTransaction().commit();				
 			} catch (Exception e) {
 				e.printStackTrace();
 				log.equals("**Error Code : Admin: -" + GlobalConstant.addChannelUploadMappingError);
@@ -58,6 +64,9 @@ public class UploadMappingDaoImpl implements UploadMappingDao {
 				throw new CustomException(GlobalConstant.addChannelUploadMappingError,
 						new Date(), 1, "Admin-"
 								+ GlobalConstant.addChannelUploadMappingErrorCode, e);
+			} finally {
+				if(session != null)
+					session.close();
 			}
 	}
 	 

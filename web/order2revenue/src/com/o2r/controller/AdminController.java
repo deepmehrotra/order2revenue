@@ -187,7 +187,7 @@ public class AdminController {
 				if(fileName.equalsIgnoreCase("payment"))
 					tempList=GlobalConstant.paymentHeaderList;
 				else if(fileName.equalsIgnoreCase("order"))
-					tempList=GlobalConstant.flipkartOrderHeaderList;
+					tempList=GlobalConstant.PayTMOrderHeaderList;
 				break;
 			}
 			System.out.println("getting bvalues" +parameters);
@@ -291,8 +291,9 @@ public class AdminController {
 							model.put("o2rheaders", GlobalConstant.limeroadPaymentHeaderList);
 						case "PayTM":
 							if(fileName.equalsIgnoreCase("payment"))
-							model.put("o2rheaders", GlobalConstant.paymentHeaderList);
-							
+								model.put("o2rheaders", GlobalConstant.paymentHeaderList);
+							else if(fileName.equalsIgnoreCase("order"))
+								model.put("o2rheaders", GlobalConstant.PayTMOrderHeaderList);
 						}
 					}
 					model.put("fileName", fileName);
