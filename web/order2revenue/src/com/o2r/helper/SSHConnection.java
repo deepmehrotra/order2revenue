@@ -2,15 +2,15 @@ package com.o2r.helper;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
 
 public class SSHConnection {
 	
-private Session sesion; //represents each ssh session
+private com.jcraft.jsch.Session sesion; //represents each ssh session
 org.springframework.core.io.Resource resource = new ClassPathResource(
 		"database.properties");
 static Logger log = Logger.getLogger(SSHConnection.class.getName());

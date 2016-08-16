@@ -5,7 +5,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 
-@WebListener
+/*@WebListener*/
 public class DBListener implements ServletContextListener{
 	
 	private SSHConnection conexionssh;
