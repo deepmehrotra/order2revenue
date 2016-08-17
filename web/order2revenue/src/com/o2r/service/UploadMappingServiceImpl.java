@@ -17,27 +17,25 @@ import com.o2r.model.ChannelUploadMapping;
 public class UploadMappingServiceImpl implements UploadMappingService {
 
 	@Autowired
-	 private UploadMappingDao uploadMappingDao;
-	
+	private UploadMappingDao uploadMappingDao;
+
 	@Override
-	public void addChannelUploadMapping(ChannelUploadMapping uploadMapping
-			) throws CustomException
-			{
+	public void addChannelUploadMapping(ChannelUploadMapping uploadMapping)
+			throws CustomException {
 		uploadMappingDao.addChannelUploadMapping(uploadMapping);
-			}
-	
+	}
+
 	@Override
 	public ChannelUploadMapping getChannelUploadMapping(long mapId)
-			throws CustomException
-			{
+			throws CustomException {
 		return uploadMappingDao.getChannelUploadMapping(mapId);
-			}
+	}
+
 	@Override
 	public ChannelUploadMapping getChannelUploadMapping(String channelName,
-			String fileName) throws CustomException
-			{
-		return uploadMappingDao.getChannelUploadMapping(channelName,fileName);
-		
-			}
+			String fileName) throws CustomException {
+		return uploadMappingDao.getChannelUploadMapping(channelName, fileName);
+
+	}
 
 }

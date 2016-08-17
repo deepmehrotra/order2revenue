@@ -41,10 +41,9 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	@Autowired
-	private HelperClass helperClass;	
+	private HelperClass helperClass;
 	@Autowired
 	private UploadMappingService uploadMappingService;
-	
 
 	static Logger log = Logger.getLogger(AdminController.class.getName());
 
@@ -52,28 +51,28 @@ public class AdminController {
 	public ModelAndView saveEmployee(HttpServletRequest request,
 			@ModelAttribute("command") EmployeeBean employeeBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ saveEmployee() Starts : AdminController $$$");
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
-		try{
-			sellerId=helperClass.getSellerIdfromSession(request);					
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
 			Employee employee = prepareModel(employeeBean);
 			adminService.addEmployee(employee);
-		}catch(CustomException ce){
+		} catch (CustomException ce) {
 			log.error("saveEmployee exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
-		}catch (Exception e) {
-			log.error("Failed by seller ID : "+sellerId,e);
+		} catch (Exception e) {
+			log.error("Failed by seller ID : " + sellerId, e);
 			e.printStackTrace();
 		}
 		log.info("$$$ saveEmployee() Ends : AdminController $$$");
 		return new ModelAndView("redirect:/seller/add.html?page=1");
 	}
-	
+
 	@RequestMapping(value = "/seller/employees", method = RequestMethod.GET)
 	public ModelAndView listEmployees(HttpServletRequest request) {
 
@@ -81,17 +80,18 @@ public class AdminController {
 		int sellerId = 0;
 		Map<String, String> model = new HashMap<String, String>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		try{
-			sellerId=helperClass.getSellerIdfromSession(request);
-			String jsonArray = gson.toJson(prepareListofBean(adminService.listEmployeess(1)));
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			String jsonArray = gson.toJson(prepareListofBean(adminService
+					.listEmployeess(1)));
 			model.put("employees", jsonArray);
-		}catch(CustomException ce){
+		} catch (CustomException ce) {
 			log.error("listEmployee exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
-		}catch (Exception e) {
-			log.error("Failed by Seller Id : "+sellerId,e);
+		} catch (Exception e) {
+			log.error("Failed by Seller Id : " + sellerId, e);
 			e.printStackTrace();
 		}
 		log.info("$$$ listEmployees Ends : AdminController $$$");
@@ -105,18 +105,18 @@ public class AdminController {
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);
+			sellerId = helperClass.getSellerIdfromSession(request);
 			model.put("queries", adminService.listQueries());
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by seller Id : "+sellerId,e);
+			log.error("Failed! by seller Id : " + sellerId, e);
 			return new ModelAndView("admin/queryList", model);
 		}
 
 		log.info("$$$ listQueries Ends : AdminController $$$");
 		return new ModelAndView("admin/queryList", model);
 	}
-	
+
 	@RequestMapping(value = "/admin/reverseOrderList", method = RequestMethod.GET)
 	public ModelAndView returnOrRTOlist() {
 
@@ -136,84 +136,93 @@ public class AdminController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String jsonArray;
-		try{
-		model.put("Result", "OK");
-		model.put("Records", prepareListofBean(adminService.listEmployeess(1)));
+		try {
+			model.put("Result", "OK");
+			model.put("Records",
+					prepareListofBean(adminService.listEmployeess(1)));
 
-		// Convert Java Object to Json
-		jsonArray = gson.toJson(model);
-		}catch(CustomException ce){
-			log.error("Failed!",ce);
+			// Convert Java Object to Json
+			jsonArray = gson.toJson(model);
+		} catch (CustomException ce) {
+			log.error("Failed!", ce);
 			model.put("error", ce.getMessage());
-			String errors=gson.toJson(model);
+			String errors = gson.toJson(model);
 			return errors;
 		}
 		log.info("$$$ listEmployeesJtable Ends : AdminController $$$");
 		return jsonArray;
 	}
-	
+
 	@RequestMapping(value = "/seller/savemappingdetails", method = RequestMethod.POST)
-	public ModelAndView savemappingdetails(HttpServletRequest request,
-			@ModelAttribute("command") ChannelUploadMapping channeluploadmapping, BindingResult result) {
+	public ModelAndView savemappingdetails(
+			HttpServletRequest request,
+			@ModelAttribute("command") ChannelUploadMapping channeluploadmapping,
+			BindingResult result) {
 
 		log.info("$$$ savemappingdetails admin Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			ColumMap colmap=null;
+			ColumMap colmap = null;
 			Map<String, String[]> parameters = request.getParameterMap();
-			List<String> tempList=null;
-			System.out.println(" ChannleNAme : "+request.getParameter("channelName"));
-			System.out.println(" CN : "+channeluploadmapping.getChannelName());
-			String channelName=request.getParameter("channelName")!=null?request.getParameter("channelName"):"";
-			String fileName=request.getParameter("fileName")!=null?request.getParameter("fileName"):"";
-			switch(channelName)
-			{
+			List<String> tempList = null;
+			System.out.println(" ChannleNAme : "
+					+ request.getParameter("channelName"));
+			System.out
+					.println(" CN : " + channeluploadmapping.getChannelName());
+			String channelName = request.getParameter("channelName") != null ? request
+					.getParameter("channelName") : "";
+			String fileName = request.getParameter("fileName") != null ? request
+					.getParameter("fileName") : "";
+			switch (channelName) {
 			case "Flipkart":
-				if(fileName.equalsIgnoreCase("payment"))
-					tempList=GlobalConstant.paymentHeaderList;
-				else if(fileName.equalsIgnoreCase("order"))
-					tempList=GlobalConstant.flipkartOrderHeaderList;
+				if (fileName.equalsIgnoreCase("payment"))
+					tempList = GlobalConstant.paymentHeaderList;
+				else if (fileName.equalsIgnoreCase("order"))
+					tempList = GlobalConstant.flipkartOrderHeaderList;
 				break;
 			case "Snapdeal":
-				tempList=GlobalConstant.snapdealpaymentHeaderList;
+				if (fileName.equalsIgnoreCase("payment"))
+					tempList = GlobalConstant.snapdealpaymentHeaderList;
+				else if (fileName.equalsIgnoreCase("order"))
+					tempList = GlobalConstant.snapdealOrderHeaderList;
 				break;
 			case "Amazon":
-				tempList=GlobalConstant.amazonPaymentHeaderList;
+				if (fileName.equalsIgnoreCase("payment"))
+					tempList = GlobalConstant.amazonPaymentHeaderList;
+				else if (fileName.equalsIgnoreCase("order"))
+					tempList = GlobalConstant.amazonOrderHeaderList;
 				break;
 			case "Limeroad":
-				if(fileName.equalsIgnoreCase("payment"))
-					tempList=GlobalConstant.limeroadPaymentHeaderList;
-				else if(fileName.equalsIgnoreCase("order"))
-					tempList=GlobalConstant.LimeroadOrderHeaderList;
+				if (fileName.equalsIgnoreCase("payment"))
+					tempList = GlobalConstant.limeroadPaymentHeaderList;
+				else if (fileName.equalsIgnoreCase("order"))
+					tempList = GlobalConstant.LimeroadOrderHeaderList;
 				break;
 			case "PayTM":
-				if(fileName.equalsIgnoreCase("payment"))
-					tempList=GlobalConstant.paymentHeaderList;
-				else if(fileName.equalsIgnoreCase("order"))
-					tempList=GlobalConstant.PayTMOrderHeaderList;
+				if (fileName.equalsIgnoreCase("payment"))
+					tempList = GlobalConstant.paymentHeaderList;
+				else if (fileName.equalsIgnoreCase("order"))
+					tempList = GlobalConstant.PayTMOrderHeaderList;
 				break;
 			}
-			System.out.println("getting bvalues" +parameters);
-			for (Map.Entry<String, String[]> entry : parameters.entrySet())
-			{
-				System.out.println(" Key : "+entry.getKey()+" value : "+entry.getValue()[0]);
+			System.out.println("getting bvalues" + parameters);
+			for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+				System.out.println(" Key : " + entry.getKey() + " value : "
+						+ entry.getValue()[0]);
 			}
 			for (String header : tempList) {
-				colmap=new ColumMap();
+				colmap = new ColumMap();
 				colmap.setO2rColumName(header);
-				System.out.println(" Header : "+header);
-				String temp="map-"+header;
-				if(parameters.containsKey(temp))
-				{
-					System.out.println(" Value : "+parameters.get(temp)[0]);
+				System.out.println(" Header : " + header);
+				String temp = "map-" + header;
+				if (parameters.containsKey(temp)) {
+					System.out.println(" Value : " + parameters.get(temp)[0]);
 					colmap.setChannelColumName(parameters.get(temp)[0]);
-				}
-				else
-				{
+				} else {
 					continue;
 				}
-				System.out.println(channeluploadmapping.getChannelName()+" File name : "+
-				channeluploadmapping.getFileName());
+				System.out.println(channeluploadmapping.getChannelName()
+						+ " File name : " + channeluploadmapping.getFileName());
 				colmap.setUploadMapping(channeluploadmapping);
 				channeluploadmapping.getColumMap().add(colmap);
 			}
@@ -226,112 +235,123 @@ public class AdminController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 		}
-		
+
 		log.info("$$$ addManualPayment Ends : UploadController $$$");
-		return new ModelAndView("redirect:/seller/uploadmappings.html?filename=something", model);
+		return new ModelAndView(
+				"redirect:/seller/uploadmappings.html?filename=something",
+				model);
 	}
 
-/*	@RequestMapping(value = "/seller/add", method = RequestMethod.GET)
-	public ModelAndView addEmployee(@RequestParam(value = "page") int page,
-			@ModelAttribute("command") EmployeeBean employeeBean,
-			BindingResult result) {
+	/*
+	 * @RequestMapping(value = "/seller/add", method = RequestMethod.GET) public
+	 * ModelAndView addEmployee(@RequestParam(value = "page") int page,
+	 * 
+	 * @ModelAttribute("command") EmployeeBean employeeBean, BindingResult
+	 * result) {
+	 * 
+	 * log.info("$$$ addEmployee Starts : AdminController $$$"); Map<String,
+	 * Object> model = new HashMap<String, Object>(); try{
+	 * model.put("employees",
+	 * prepareListofBean(adminService.listEmployeess(page)));
+	 * }catch(CustomException ce){ log.error("addEmployee exception : " +
+	 * ce.toString()); model.put("errorMessage", ce.getLocalMessage());
+	 * model.put("errorTime", ce.getErrorTime()); model.put("errorCode",
+	 * ce.getErrorCode()); return new ModelAndView("globalErorPage", model); }
+	 * log.info("$$$ addEmployee Ends : AdminController $$$"); return new
+	 * ModelAndView("addEmployee", model); }
+	 */
 
-		log.info("$$$ addEmployee Starts : AdminController $$$");
+	/*
+	 * Method to view Channel Upload Sheets Mapping
+	 */
+	@RequestMapping(value = "/seller/uploadmappings", method = RequestMethod.GET)
+	public ModelAndView uploadmappingsDetails(HttpServletRequest request) {
+
+		log.info("$$$ uploadmappingsDetails Starts : AdminController $$$");
+		String channelName = request.getParameter("channelName");
+		String fileName = request.getParameter("fileName");
 		Map<String, Object> model = new HashMap<String, Object>();
-		try{		
-		model.put("employees",prepareListofBean(adminService.listEmployeess(page)));
-		}catch(CustomException ce){
-			log.error("addEmployee exception : " + ce.toString());
+		ChannelUploadMapping cum = null;
+		try {
+			System.out.println("fileName : " + fileName + "channelName  "
+					+ channelName);
+			if (fileName != null && channelName != null) {
+				cum = uploadMappingService.getChannelUploadMapping(channelName,
+						fileName);
+				if (cum != null && cum.getColumMap() != null
+						&& cum.getColumMap().size() != 0) {
+					System.out.println(" Cum is not null");
+					model.put("mapping", cum);
+				} else {
+					switch (channelName) {
+					case "Flipkart":
+						if (fileName.equalsIgnoreCase("payment"))
+							model.put("o2rheaders",
+									GlobalConstant.paymentHeaderList);
+						else if (fileName.equalsIgnoreCase("order"))
+							model.put("o2rheaders",
+									GlobalConstant.flipkartOrderHeaderList);
+						break;
+					case "Snapdeal":
+						if (fileName.equalsIgnoreCase("payment"))
+							model.put("o2rheaders",
+									GlobalConstant.snapdealpaymentHeaderList);
+						else if (fileName.equalsIgnoreCase("order"))
+							model.put("o2rheaders",
+									GlobalConstant.snapdealOrderHeaderList);
+						break;
+					case "Amazon":
+						if (fileName.equalsIgnoreCase("payment"))
+							model.put("o2rheaders",
+									GlobalConstant.amazonPaymentHeaderList);
+						else if (fileName.equalsIgnoreCase("order"))
+							model.put("o2rheaders",
+									GlobalConstant.amazonOrderHeaderList);
+						break;
+					case "Limeroad":
+						if (fileName.equalsIgnoreCase("payment"))
+							model.put("o2rheaders",
+									GlobalConstant.limeroadPaymentHeaderList);
+						else if (fileName.equalsIgnoreCase("order"))
+							model.put("o2rheaders",
+									GlobalConstant.LimeroadOrderHeaderList);
+						break;
+					case "PayTM":
+						if (fileName.equalsIgnoreCase("payment"))
+							model.put("o2rheaders",
+									GlobalConstant.paymentHeaderList);
+						else if (fileName.equalsIgnoreCase("order"))
+							model.put("o2rheaders",
+									GlobalConstant.PayTMOrderHeaderList);
+					}
+				}
+				model.put("fileName", fileName);
+				model.put("channelName", channelName);
+			}
+
+			model.put("partnerNames", GlobalConstant.channelMappingList);
+			model.put("fileNames", GlobalConstant.filesMappingList);
+		} catch (CustomException ce) {
+			log.error("uploadmappings exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			log.error("Failed! - Admin " + e);
+			model.put("errorMessage", e.getCause());
+			return new ModelAndView("globalErorPage", model);
 		}
-		log.info("$$$ addEmployee Ends : AdminController $$$");
-		return new ModelAndView("addEmployee", model);
-	}*/
+		log.info("$$$ uploadmappingsDetails Ends : AdminController $$$");
+		return new ModelAndView("admin/uploadmapping", model);
+	}
 
-	/*
-	 * Method to view Channel Upload Sheets Mapping
-	 * 
-	 */
-	@RequestMapping(value = "/seller/uploadmappings", method = RequestMethod.GET)
-		public ModelAndView uploadmappingsDetails(HttpServletRequest request) {
-
-			log.info("$$$ uploadmappingsDetails Starts : AdminController $$$");
-			String channelName = request.getParameter("channelName");
-			String fileName = request.getParameter("fileName");
-			Map<String, Object> model = new HashMap<String, Object>();
-			ChannelUploadMapping cum=null;
-			try {
-				System.out.println("fileName : "+fileName+"channelName  "+channelName);
-				if (fileName != null && channelName!=null) {
-					cum=uploadMappingService.getChannelUploadMapping(channelName, fileName);
-					if(cum!=null&&cum.getColumMap()!=null&&cum.getColumMap().size()!=0)
-					{
-						System.out.println(" Cum is not null");
-					model.put("mapping", cum);
-					}
-					else
-					{
-						switch(channelName)
-						{
-						case "Flipkart":
-							if(fileName.equalsIgnoreCase("payment"))
-								model.put("o2rheaders", GlobalConstant.paymentHeaderList);
-							else if(fileName.equalsIgnoreCase("order"))
-								model.put("o2rheaders", GlobalConstant.flipkartOrderHeaderList);
-							break;
-						case "Snapdeal":
-							if(fileName.equalsIgnoreCase("payment"))
-								model.put("o2rheaders", GlobalConstant.snapdealpaymentHeaderList);
-							break;
-						case "Amazon":
-							if(fileName.equalsIgnoreCase("payment"))
-								model.put("o2rheaders", GlobalConstant.amazonPaymentHeaderList);
-							break;
-						case "Limeroad":
-							if(fileName.equalsIgnoreCase("payment"))
-								model.put("o2rheaders", GlobalConstant.limeroadPaymentHeaderList);
-							else if(fileName.equalsIgnoreCase("order"))
-								model.put("o2rheaders", GlobalConstant.LimeroadOrderHeaderList);
-							break;
-						case "PayTM":
-							if(fileName.equalsIgnoreCase("payment"))
-								model.put("o2rheaders", GlobalConstant.paymentHeaderList);
-							else if(fileName.equalsIgnoreCase("order"))
-								model.put("o2rheaders", GlobalConstant.PayTMOrderHeaderList);
-						}
-					}
-					model.put("fileName", fileName);
-					model.put("channelName",channelName);
-				} 
-				
-				model.put("partnerNames", GlobalConstant.channelMappingList);
-				model.put("fileNames", GlobalConstant.filesMappingList);
-			} catch (CustomException ce) {
-				log.error("uploadmappings exception : "+ ce.toString());
-				model.put("errorMessage", ce.getLocalMessage());
-				model.put("errorTime", ce.getErrorTime());
-				model.put("errorCode", ce.getErrorCode());
-				return new ModelAndView("globalErorPage", model);
-			} catch (Throwable e) {
-				e.printStackTrace();
-				log.error("Failed! - Admin "+e);
-				model.put("errorMessage", e.getCause());
-				return new ModelAndView("globalErorPage", model);
-			}
-			log.info("$$$ uploadmappingsDetails Ends : AdminController $$$");
-			return new ModelAndView("admin/uploadmapping", model);
-		}
-	
-	
-	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public ModelAndView welcome() {
-		
+
 		return new ModelAndView("redirect:/landing/home.html");
 	}
 
@@ -339,14 +359,15 @@ public class AdminController {
 	public ModelAndView editEmployee(@RequestParam(value = "page") int page,
 			@ModelAttribute("command") EmployeeBean employeeBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ editEmployee Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		try{
-		adminService.deleteEmployee(prepareModel(employeeBean));		
-		model.put("employee", null);
-		model.put("employees",prepareListofBean(adminService.listEmployeess(page)));
-		}catch(CustomException ce){
+		try {
+			adminService.deleteEmployee(prepareModel(employeeBean));
+			model.put("employee", null);
+			model.put("employees",
+					prepareListofBean(adminService.listEmployeess(page)));
+		} catch (CustomException ce) {
 			log.error("editEmployee exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
@@ -361,13 +382,15 @@ public class AdminController {
 	public ModelAndView deleteEmployee(@RequestParam(value = "page") int page,
 			@ModelAttribute("command") EmployeeBean employeeBean,
 			BindingResult result) {
-		
+
 		log.info("$$$ deleteEmployee Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		try{
-		model.put("employee", prepareEmployeeBean(adminService.getEmployee(employeeBean.getId())));
-		model.put("employees", prepareListofBean(adminService.listEmployeess(page)));
-		}catch(CustomException ce){
+		try {
+			model.put("employee", prepareEmployeeBean(adminService
+					.getEmployee(employeeBean.getId())));
+			model.put("employees",
+					prepareListofBean(adminService.listEmployeess(page)));
+		} catch (CustomException ce) {
 			log.error("deleteEmployee exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
 			model.put("errorTime", ce.getErrorTime());
