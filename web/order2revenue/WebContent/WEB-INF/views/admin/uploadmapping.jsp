@@ -13,8 +13,8 @@ function getmappings()
 	
 	var channelName=document.getElementById('channelName').value;
 	var fileName=document.getElementById('fileName').value;
-	alert("Inside upload");
-	alert("fileName="+fileName+"&channelName="+channelName);
+	//alert("Inside upload");
+	//alert("fileName="+fileName+"&channelName="+channelName);
 	window.location='uploadmappings.html?fileName='+fileName+'&channelName='+channelName;
 	
 	

@@ -104,7 +104,6 @@ public class GlobalConstant {
 
 		}
 	};
-	
 
 	public static final ArrayList<String> snapdealpaymentHeaderList = new ArrayList<String>() {
 		/**
@@ -128,7 +127,7 @@ public class GlobalConstant {
 		private static final long serialVersionUID = 1L;
 
 		{
-			add("ChannelOrderId");			
+			add("ChannelOrderId");
 			add("Recieved Amount");
 			add("Payment Detail");
 			add("Payment Date");
@@ -136,19 +135,19 @@ public class GlobalConstant {
 
 		}
 	};
-	
-	public static final ArrayList<String> limeroadPaymentHeaderList = new ArrayList<String>() {		
+
+	public static final ArrayList<String> limeroadPaymentHeaderList = new ArrayList<String>() {
 		private static final long serialVersionUID = 1L;
 		{
 			add("ChannelOrderId");
-			add("SKU");			
+			add("SKU");
 			add("Invoice ID");
 			add("Recieved Amount");
 			add("Payment Date");
 			add("Particular");
 		}
 	};
-	
+
 	public static final ArrayList<String> flipkartOrderHeaderList = new ArrayList<String>() {
 		/**
 	 *
@@ -159,7 +158,7 @@ public class GlobalConstant {
 			add("Order Recieved Date");
 			add("Secondary OrderID");
 			add("Channel Order ID");
-			add("SkUCode");			
+			add("SkUCode");
 			add("Quantity");
 			add("InvoiceID");
 			add("Order SP");
@@ -177,13 +176,79 @@ public class GlobalConstant {
 			add("Customer Name");
 			add("Customer Address");
 			add("Customer City");
-			add("Customer Phone No");			
+			add("Customer Phone No");
 			add("Customer Email");
 			add("Seller Note");
-			
+
 		}
 	};
-	
+
+	public static final ArrayList<String> amazonOrderHeaderList = new ArrayList<String>() {
+
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Channel Order ID");
+			add("Secondary OrderID");
+			add("Order Recieved Date");
+			add("Customer Email");
+			add("Customer Name");
+			add("Customer Phone No");
+			add("SkUCode");
+			add("Quantity");
+			add("OrderSP Component A");
+			add("OrderSP Component B");
+			add("Customer Address 1");
+			add("Customer Address 2");
+			add("Customer Address 3");
+			add("Customer City");
+			add("Shipping PinCode");
+			add("Payment Type");
+			add("Logistic Partner");
+			add("Sales Channel");
+			add("InvoiceID");
+			add("Tax Category");
+			add("Order Shipped Date");
+			add("Net Rate");
+			add("Seller Note");
+			add("AWB No");
+			add("PIreferenceNo");
+			add("Order MRP");
+			add("Gross NR");
+		}
+	};
+
+	public static final ArrayList<String> snapdealOrderHeaderList = new ArrayList<String>() {
+
+		private static final long serialVersionUID = 1L;
+		{
+			add("Logistic Partner");
+			add("PIreferenceNo");
+			add("Channel Order ID");
+			add("SkUCode");
+			add("AWB No");
+			add("Order Recieved Date");
+			add("Customer Name");
+			add("Customer City");
+			add("Shipping PinCode");
+			add("Order SP");
+			add("Order MRP");
+			add("InvoiceID");
+			add("Customer Phone No");
+			add("Customer Email");
+			add("Payment Type");
+			add("Order Shipped Date");
+			add("Customer Address");
+			add("Sales Channel");
+			add("Tax Category");
+			add("Quantity");
+			add("Net Rate");
+			add("Seller Note");
+			add("Secondary OrderID");
+			add("Gross NR");
+		}
+	};
+
 	public static final ArrayList<String> PayTMOrderHeaderList = new ArrayList<String>() {
 		/**
 	 *
@@ -194,7 +259,7 @@ public class GlobalConstant {
 			add("Order Recieved Date");
 			add("Secondary OrderID");
 			add("Channel Order ID");
-			add("SkUCode");			
+			add("SkUCode");
 			add("Quantity");
 			add("InvoiceID");
 			add("OrderSP Component A");
@@ -202,7 +267,7 @@ public class GlobalConstant {
 			add("Shipping PinCode");
 			add("Order Shipped Date");
 			add("Sales Channel");
-			add("Payment Type");			
+			add("Payment Type");
 			add("AWB No");
 			add("Gross NR");
 			add("PIreferenceNo");
@@ -213,10 +278,10 @@ public class GlobalConstant {
 			add("Customer_Lname");
 			add("Customer Address");
 			add("Customer City");
-			add("Customer Phone No");			
+			add("Customer Phone No");
 			add("Customer Email");
 			add("Seller Note");
-			
+
 		}
 	};
 
@@ -252,22 +317,23 @@ public class GlobalConstant {
 
 		}
 	};
-	
 
-	public static final HashMap<String, String> preDefinedExpenseCategoryMap = new HashMap<String, String>() {/**
+	public static final HashMap<String, String> preDefinedExpenseCategoryMap = new HashMap<String, String>() {
+		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 
-	{
-		put("Petty","Petty");
-		put("Assets","Not included in Net Profit");
-		put("Salaries","Salaries");
-		put("Overheads","Overheads");
-		put("Taxable Purchases","Taxable Purchases");
-	    put("Tax/TDS","Tax/TDS");
-	    put("Manual Charges","Manual Charges");
-	}};
+		{
+			put("Petty", "Petty");
+			put("Assets", "Not included in Net Profit");
+			put("Salaries", "Salaries");
+			put("Overheads", "Overheads");
+			put("Taxable Purchases", "Taxable Purchases");
+			put("Tax/TDS", "Tax/TDS");
+			put("Manual Charges", "Manual Charges");
+		}
+	};
 
 	/* Null Area */
 	public static final String nullException = "NullException !";
@@ -425,7 +491,7 @@ public class GlobalConstant {
 	public static final String getExpenseByCategoryError = "Error while retriving Expenses By Category. Either try again with correct Data or contact admin with the error details.";
 	public static final String getExpenseByDateError = "Error while retriving Expenses By Date. Either try again with correct Data or contact admin with the error details.";
 
-	// Error codes 
+	// Error codes
 	public static final String addExpenseErrorCode = "#00080";
 	public static final String addExpenseCategoryErrorCode = "#00081";
 	public static final String listExpensesErrorCode = "#00082";
@@ -439,7 +505,7 @@ public class GlobalConstant {
 	public static final String getExpenseByDateErrorCode = "#00090";
 
 	public static final String addStateDeliveryTimeErrorCode = "#00011";
-	
+
 	/** Expense Area **/
 
 	/** Partner Area **/
@@ -457,21 +523,20 @@ public class GlobalConstant {
 	public static final String deletePartnerErrorCode = "#00044";
 
 	/** Partner Area **/
-	
+
 	/** Event Area **/
 
 	// Constants for Error messages
 	public static String addEventError = "Error while Adding the Event. Either try again with correct data or contact admin with the error details.";
 	public static final String listEventError = "Error while Getting Events. Either try again with correct data or contact admin with the error details.";
 	public static final String getEventError = "Error while retriving Events. Either try again with correct (ID/Name) or contact admin with the error details.";
-	
+
 	// Error codes
 	public static final String addEventErrorCode = "#00111";
 	public static final String listEventErrorCode = "#00112";
 	public static final String getEventErrorCode = "#00113";
-	
+
 	/** Event Area **/
-	
 
 	/** Plan Area **/
 
@@ -556,14 +621,12 @@ public class GlobalConstant {
 
 	public static final String deleteTaxCategoryError = "Error while deleting Tax Category. Either try again  or contact admin with the error details.";
 	public static final String deleteTaxCategoryErrorCode = "#00079";
-	
+
 	public static final String addChannelUploadMappingError = "Error while adding Channel Mapping of  the seller. Either try again with correct values or contact admin with the error details.";
 	public static final String addChannelUploadMappingErrorCode = "#00212";
-	
+
 	public static final String getChannelUploadMappingError = "Error while get Channel Mapping of  the seller. Either try again with correct values or contact admin with the error details.";
 	public static final String getChannelUploadMappingErrorCode = "#00213";
-
-
 
 	// Error Codes
 	public static final String addCategoryErrorCode = "#00061";
@@ -575,7 +638,7 @@ public class GlobalConstant {
 
 	// NRnReturn Configuration Constants
 	public static final String fixedCommissionPercent = "fixedCommissionPercent";
-	
+
 	public static final String percentSPPCCValue = "pccpercentSPValue";
 	public static final String percentSPPCCHigher = "pccpercentSPHigher";
 	public static final String fixedAmtPCC = "pccfixedAmt";
@@ -597,7 +660,7 @@ public class GlobalConstant {
 	public static final String ReturnChargesBuyerReturnFixedAmount = "retCharBRFixedAmt";
 	public static final String ReturnChargesBuyerReturnVariableFixedAmt = "retCharBRVarFixedAmt";
 	public static final String ReturnChargesBuyerReturnVariablePercentSP = "retCharBRPercentSP";
-	
+
 	// RTO Charges Configuration
 	public static final String RTOChargesSellerFaultVariablePercentSP = "RTOCharSFPercentSP";
 	public static final String RTOChargesSellerFaultFixedAmount = "RTOCharSFFixedAmt";
@@ -618,12 +681,12 @@ public class GlobalConstant {
 	public static final String CancellationChargesSellerFaultFixedAmount = "canCharSFFixedAmt";
 	public static final String CancellationChargesSellerFaultVariableFixedAmt = "canCharSFVarFixedAmt";
 	public static final String CancellationChargesSellerFaultVariablePercentPCC = "canCharSFPercentPCC";
-	
+
 	public static final String CancellationChargesSellerFaultBRTDVariablePercentSP = "canCharSFBFRTDPercentSP";
 	public static final String CancellationChargesSellerFaultBRTDFixedAmount = "canCharSFBFRTDFixedAmt";
 	public static final String CancellationChargesSellerFaultBRTDVariableFixedAmt = "canCharSFBFRTDVarFixedAmt";
 	public static final String CancellationChargesSellerFaultBRTDVariablePercentPCC = "canCharSFBFRTDPercentPCC";
-	
+
 	// Cancellation Chager Buyer Return Configuration Strings
 	public static final String CancellationChargesBuyerReturnFixedAmount = "canCharBRFixedAmt";
 	public static final String CancellationChargesBuyerReturnVariableFixedAmt = "canCharBRVarFixedAmt";
@@ -634,7 +697,7 @@ public class GlobalConstant {
 	public static final String ReplacementChargesSellerFaultFixedAmount = "repCharSFFixedAmt";
 	public static final String ReplacementChargesSellerFaultVariableFixedAmt = "repCharSFVarFixedAmt";
 	public static final String ReplacementChargesSellerFaultVariablePercentPCC = "repCharSFPercentPCC";
-	
+
 	// Replacement Chages Buyer Return Configuration Strings
 	public static final String ReplacementChargesBuyerReturnFixedAmount = "repCharBRFixedAmt";
 	public static final String ReplacementChargesBuyerReturnVariableFixedAmt = "repCharBRVarFixedAmt";
@@ -650,7 +713,7 @@ public class GlobalConstant {
 	public static final String PartialDelChargesBuyerReturnFixedAmount = "PDCharBRFixedAmt";
 	public static final String PartialDelChargesBuyerReturnVariableFixedAmt = "PDCharBRVarFixedAmt";
 	public static final String PartialDelChargesBuyerReturnVariablePercentSP = "PDCharBRPercentSP";
-	
+
 	// Reverse Shipping Fee Configuration
 	public static final String ReverseShippingFeePercentShipFee = "revShipFeePCC";
 	public static final String ReverseShippingFeeFlatAmt = "revShipFeeFlatAmt";
@@ -662,16 +725,16 @@ public class GlobalConstant {
 	public static final String ReverseShippingFeeVolumeWeightAmt = "revShipFeeVWAmt";
 	public static final String ReverseShippingFeeVolumeWeightPerWeight = "revShipFeeVWPW";
 	public static final String ReverseShippingFeeVolumeWeightMinWeight = "revShipFeeVWMW";
-	
+
 	// Product Config Prefix
 	public static final String TaxSPPrefix = "taxSp-";
 	public static final String TaxPOPrefix = "taxPo-";
 	public static final String CommPOPrefix = "comm-";
 	public static final String fixedtaxSPPercent = "fixedTaxSpPercent";
 	public static final String fixedtaxPOPercent = "fixedTaxPoPercent";
-	
+
 	public static final String TaxCategoryPrefix = "-taxCat-";
-	
+
 	// Channel Name
 	public static final String PCMYNTRA = "myntra";
 	public static final String PCJABONG = "jabong";
@@ -686,7 +749,7 @@ public class GlobalConstant {
 
 	/**
 	 * Map of header names required for reports
-	 *  
+	 * 
 	 */
 	public static final Map<String, String> headerMap = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
@@ -704,13 +767,13 @@ public class GlobalConstant {
 			put("getPaymentDueDate", "Expected Date of Payment");
 			put("getDateofPayment", "Actual Date of Payment");
 			put("getReturnDate", "Date of Return/RTO");
-			put("getProductCategory", "Product Category");			
+			put("getProductCategory", "Product Category");
 			put("getGrossSaleQuantity", "Gross Sale Qty");
 			put("getReturnQuantity", "Return/RTO Qty");
 			put("getNetSaleQuantity", "Net Sale Qty");
 			put("getOrderSP", "Gross SP");
 			put("getNetRate", "Net N/R");
-			put("getGrossNetRate", "Net N/R");			
+			put("getGrossNetRate", "Net N/R");
 			put("getNetReturnCharges", "Net Return Charges");
 			put("getNetPaymentResult", "Net Payment Result");
 			put("getPaymentDifference", "Net Payment Difference");
@@ -744,7 +807,7 @@ public class GlobalConstant {
 			put("getGrossSpAmount", "Gross SP Amount");
 			put("getSaleRetQty", "Sale Return Qty");
 			put("getSaleRetNrAmount", "Sale Return N/R Amount");
-			put("getRetAmountToBeReversed", "Return Charges to be reversed");			
+			put("getRetAmountToBeReversed", "Return Charges to be reversed");
 			put("getSaleRetSpAmount", "Sale Return SP Amount");
 			put("getNetQty", "Net Sale Qty");
 			put("getNetNrAmount", "Net Sale N/R Amount");
@@ -767,7 +830,7 @@ public class GlobalConstant {
 			put("getReturnGrossProfit", "Return Gross Profit");
 			put("getGpVsProductCost", "%GP vs Product Cost");
 			put("getNetEOSSValue", "Net EOSS Value");
-			
+
 			// For Debtors Report
 			put("getAwb", "AWB");
 			put("getSubOrderId", "Sub Order Id");
@@ -781,24 +844,25 @@ public class GlobalConstant {
 			put("getCustomerCity", "Customer City");
 			put("getReturnSP", "Return SP");
 			put("getNetSP", "Net SP");
-			put("getGrossReturnChargesReversed", "Gross Return Charges Reversed");
+			put("getGrossReturnChargesReversed",
+					"Gross Return Charges Reversed");
 			put("getTotalReturnCharges", "Total Return Charges");
 			put("getGrossTds", "Total Gross TDS");
 			put("getReturnTds", "Total Return TDS");
 			put("getNetActualSale", "Net Actual Sale");
 			put("getPaymentId", "Payment Id");
 			put("getPaymentType", "Payment Type");
-			
+
 			// For Total Payments Received
 			put("getPaymentDate", "Expected Date of Payment");
 			put("getReceivedDate", "Order Received Date");
-			
+
 			// For Expense Report
 			put("getExpenseDate", "Expense Date");
 			put("getExpenseName", "Expense Name");
 			put("getExpenseCatName", "Expense Category");
 			put("getAmount", "Amount");
-			
+
 			// For Stock Report
 			put("getMonthStr", "Month");
 			put("getOpenStock", "Opening Stock");
@@ -807,7 +871,7 @@ public class GlobalConstant {
 			put("getCloseStockValuation", "Closing Stock Valuation");
 		}
 	};
-	
+
 	/**
 	 * Map of Report Names for display
 	 * 
@@ -815,46 +879,46 @@ public class GlobalConstant {
 	public static final Map<String, String> reportNameMap = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 		{
-			put("totalShippedOrders", "Total Shipped Orders"); 
-			put("paymentDifferenceOrders", "Payment Difference Orders"); 
+			put("totalShippedOrders", "Total Shipped Orders");
+			put("paymentDifferenceOrders", "Payment Difference Orders");
 			put("returnRTOReasonAnalysis", "Return/RTO reason Analysis");
-			put("saleReturnOrders", "Sale return Orders"); 
+			put("saleReturnOrders", "Sale return Orders");
 			put("actionableOrders", "Actionable Orders");
-			put("disputedOrders", "Disputed Orders"); 
+			put("disputedOrders", "Disputed Orders");
 			put("returnRTOLimitCrossed", "Return/RTO limit crossed Orders");
 			put("settledOrders", "Settled Orders");
 			put("channelSaleReport", "Channel Wise Sales Order");
 			put("categoryWiseSaleReport", "Category Wise Sales Order");
 			put("paymentsReceievedReport", "Total Payments Receieved");
 			put("orderwiseGPReport", "Orderwise GP Report");
-			put("productSaleReport", "Product Shipped Orders"); 
-			put("productSaleReport", "Payment Difference Orders"); 
+			put("productSaleReport", "Product Shipped Orders");
+			put("productSaleReport", "Payment Difference Orders");
 			put("productSaleReport", "Return/RTO limit crossed Orders");
 			put("productSaleReport", "Settled Orders");
-			put("partnerCommissionReport", "Partner Commission Paid Report"); 
+			put("partnerCommissionReport", "Partner Commission Paid Report");
 			put("partnerBusinessReport", "Partner Business Report");
-			put("debtorsReport", "Debtors Report");				  
+			put("debtorsReport", "Debtors Report");
 			put("expenditureReport", "Expenditure Report");
-			put("inventoryUploadHistory", "Inventory Upload History"); 
-			put("inventoryMovementDetails", "Inventory Movement Details"); 
+			put("inventoryUploadHistory", "Inventory Upload History");
+			put("inventoryMovementDetails", "Inventory Movement Details");
 			put("inventoryThresholdReport", "Inventory Threshold Report");
 			put("closingStockReport", "Closing stock report");
-			put("customerDatabase", "Customer Database"); 
-			put("bestSellingSKUreport", "Best Selling SKU"); 
+			put("customerDatabase", "Customer Database");
+			put("bestSellingSKUreport", "Best Selling SKU");
 			put("bestSellingRegionReport", "Best Selling Region Report");
-			put("netSaleReport", "Net Sale Report"); 
+			put("netSaleReport", "Net Sale Report");
 			put("productSaleReport", "Product Sale Report");
 			put("channelSaleReport", "Channel Sale Report");
-			put("netDebtors", "Net Debtors"); 
-			put("grossProfitabilityReport", "Gross Profitability Report");
-			put("netProfitabilityReport", "Net Profitability Report"); 
 			put("netDebtors", "Net Debtors");
-			put("performanceAnalysis", "Performance Analysis"); 
+			put("grossProfitabilityReport", "Gross Profitability Report");
+			put("netProfitabilityReport", "Net Profitability Report");
+			put("netDebtors", "Net Debtors");
+			put("performanceAnalysis", "Performance Analysis");
 			put("totalTurnover", "Total Turnover");
 			put("totalPaymentsReceived", "Total Payments Received");
 		}
 	};
-	
+
 	/**
 	 * Map of Month Names for display
 	 * 
@@ -876,30 +940,29 @@ public class GlobalConstant {
 			put("12", "December");
 		}
 	};
-	
+
 	public static final List<Long> times = Arrays.asList(
-	        TimeUnit.DAYS.toMillis(365),
-	        TimeUnit.DAYS.toMillis(30),
-	        TimeUnit.DAYS.toMillis(1),
-	        TimeUnit.HOURS.toMillis(1),
-	        TimeUnit.MINUTES.toMillis(1),
-	        TimeUnit.SECONDS.toMillis(1) );
-	public static final List<String> timesString = Arrays.asList("year","month","day","hour","minute","second");
+			TimeUnit.DAYS.toMillis(365), TimeUnit.DAYS.toMillis(30),
+			TimeUnit.DAYS.toMillis(1), TimeUnit.HOURS.toMillis(1),
+			TimeUnit.MINUTES.toMillis(1), TimeUnit.SECONDS.toMillis(1));
+	public static final List<String> timesString = Arrays.asList("year",
+			"month", "day", "hour", "minute", "second");
 
 	public static String toDuration(long duration) {
 
-	    StringBuffer res = new StringBuffer();
-	    for(int i=0;i< times.size(); i++) {
-	        Long current = times.get(i);
-	        long temp = duration/current;
-	        if(temp>0) {
-	            res.append(temp).append(" ").append( timesString.get(i) ).append(temp > 1 ? "s" : "").append(" ago");
-	            break;
-	        }
-	    }
-	    if("".equals(res.toString()))
-	        return "0 second ago";
-	    else
-	        return res.toString();
+		StringBuffer res = new StringBuffer();
+		for (int i = 0; i < times.size(); i++) {
+			Long current = times.get(i);
+			long temp = duration / current;
+			if (temp > 0) {
+				res.append(temp).append(" ").append(timesString.get(i))
+						.append(temp > 1 ? "s" : "").append(" ago");
+				break;
+			}
+		}
+		if ("".equals(res.toString()))
+			return "0 second ago";
+		else
+			return res.toString();
 	}
 }
