@@ -191,7 +191,7 @@
 										</select>
 									</div>
 									<div class="col-md-4">															
-										<input name="files[0]" type="file"	class="form-control" required onchange="checkfile(this);"/>											
+										<input name="files[0]" type="file"	class="form-control" required onChange="extCheck()"/>											
 									</div>
 									<div class="col-md-2">
 										
@@ -233,13 +233,14 @@
 													<option value="Flipkart_Payment">Flipkart Payment</option>
 													<option value="Flipkart_Order">Flipkart Order Upload</option>
 													<option value="PayTM_Payment">PayTM Payment Upload</option>
-													<option value="PayTM_Order">PayTM Order Upload</option>
+													<option value="PayTM_Order">PayTM Order Upload</option>													
 													<option value="Amazon_Payment">Amazon Payment Upload</option>
 													<option value="Limeroad_Payment">Limeroad Payment Upload</option>
+													<option value="Limeroad_Order">Limeroad Order Upload</option>
 		                                        </select>
 		                                    </div>
 		                                    <div class="col-md-4">
-		                                        <input name="files[0]" type="file" id="file" class="form-control" required onchange="checkfile(this);"/>	
+		                                        <input name="files[0]" type="file" id="file" class="form-control" required onChange="extCheck()"/>	
 		                                    </div>
 		                                    <div class="col-md-2">
 		                                        <button class="btn btn-success " type="submit" id="upload4Channel">
@@ -274,6 +275,18 @@ function checkfile(sender) {
     }
     else return true;
 }
+</script>
+<script type="text/javascript">
+	function extCheck(){
+		var elem= document.getElementById("file");
+		var re_text = /\.xls/i;
+		if (elem.value.search(re_text) == -1){
+			alert ("Incorrect File extension\n Should be xls ");       
+			file.form.reset();
+	        return false;
+	    } else
+	    	return true;
+	}
 </script>
 
 </body>

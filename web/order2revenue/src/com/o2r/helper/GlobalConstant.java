@@ -219,6 +219,40 @@ public class GlobalConstant {
 			
 		}
 	};
+	
+	public static final ArrayList<String> LimeroadOrderHeaderList = new ArrayList<String>() {
+		/**
+	 *
+	 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Channel Order ID");
+			add("SkUCode");	
+			add("Order Recieved Date");
+			add("Secondary OrderID");
+			add("Quantity");
+			add("InvoiceID");
+			add("Order SP");
+			add("Shipping PinCode");
+			add("Order Shipped Date");
+			add("Sales Channel");
+			add("Payment Type");			
+			add("AWB No");
+			add("Gross NR");
+			add("PIreferenceNo");
+			add("Logistic Partner");
+			add("Order MRP");
+			add("Net Rate");
+			add("Customer Name");
+			add("Customer Address");
+			add("Customer City");
+			add("Customer Phone No");			
+			add("Customer Email");
+			add("Seller Note");
+			
+		}
+	};
 
 	public final ArrayList<String> inventoryHeaderList = new ArrayList<String>() {
 		/**

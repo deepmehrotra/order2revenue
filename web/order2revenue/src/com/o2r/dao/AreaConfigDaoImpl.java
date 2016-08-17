@@ -1,5 +1,6 @@
 package com.o2r.dao;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -131,12 +132,19 @@ public class AreaConfigDaoImpl implements AreaConfigDao {
 
 		log.info("***isZipCodeValid starts*** ");
 		List<String> stateNames = null;
-		boolean returnObject = false;
+		boolean returnObject = false;	
+		String zip=null;
 		try {
+			if(zipcode.contains(".")){
+				zip=zipcode.substring(0, zipcode.indexOf("."));				
+			} else {
+				zip=zipcode;
+			}
+			System.out.println(zip);
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			Query gettingStates = session.createSQLQuery(zipcodeValidQuery)
-					.setParameter("zipcode", zipcode);
+					.setParameter("zipcode", zip);
 			stateNames = gettingStates.list();
 			if (stateNames != null && stateNames.size() != 0)
 				returnObject = true;
