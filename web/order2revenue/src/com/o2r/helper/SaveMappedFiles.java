@@ -158,6 +158,7 @@ public class SaveMappedFiles {
 				int index = 0;
 				Product product = null;
 				TaxCategory taxcat = null;
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				try {
 
 					try {
@@ -755,6 +756,7 @@ public class SaveMappedFiles {
 				int index = 0;
 				Product product = null;
 				TaxCategory taxcat = null;
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				try {
 
 					try {
@@ -806,8 +808,8 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
-								String date = entry.getCell(index).toString();
-								order.setOrderDate(new Date(date));
+								//String date = entry.getCell(index).toString();
+								order.setOrderDate(entry.getCell(index).getDateCellValue());
 							} catch (Exception e) {
 								errorMessage
 										.append(" Order Received Date format is wrong ,enter mm/dd/yyyy,");
@@ -1355,6 +1357,7 @@ public class SaveMappedFiles {
 				int index = 0;
 				Product product = null;
 				TaxCategory taxcat = null;
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				try {
 
 					if (columHeaderMap.containsKey("Logistic Partner")) {
@@ -2623,6 +2626,7 @@ public class SaveMappedFiles {
 				int index = 0;
 				Product product = null;
 				TaxCategory taxcat = null;
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				try {
 
 					try {
@@ -3741,6 +3745,7 @@ public class SaveMappedFiles {
 				int index = 0;
 				Product product = null;
 				TaxCategory taxcat = null;
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				try {
 
 					try {
