@@ -387,6 +387,11 @@ public class OrderController {
 							files.get(0), sellerId, applicationPath,
 							uploadReport);
 						break;
+				case "Amazon_Order":
+					saveMappedFiles.saveAmzonOrderContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport);
+						break;
 				case "Limeroad_Payment":
 					saveMappedFiles.saveLimeroadPaymentContents(
 							files.get(0), sellerId, applicationPath,
@@ -399,6 +404,11 @@ public class OrderController {
 						break;
 				case "Snapdeal_Payment":
 					saveMappedFiles.saveSnapDealPaymentContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport);
+						break;
+				case "Snapdeal_Order":
+					saveMappedFiles.saveSnapdealOrderContents(
 							files.get(0), sellerId, applicationPath,
 							uploadReport);
 						break;

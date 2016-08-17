@@ -230,11 +230,13 @@
 		                                        <select class="form-control" id="sheetValue" name="sheetValue" required autocomplete="off">
 		                                            <option value="">Upload</option>
 		                                            <option value="Snapdeal_Payment">Snapdeal Payment</option>
+		                                            <option value="Snapdeal_Order">Snapdeal Order Upload</option>
 													<option value="Flipkart_Payment">Flipkart Payment</option>
 													<option value="Flipkart_Order">Flipkart Order Upload</option>
 													<option value="PayTM_Payment">PayTM Payment Upload</option>
 													<option value="PayTM_Order">PayTM Order Upload</option>													
 													<option value="Amazon_Payment">Amazon Payment Upload</option>
+													<option value="Amazon_Order">Amazon Order Upload</option>
 													<option value="Limeroad_Payment">Limeroad Payment Upload</option>
 													<option value="Limeroad_Order">Limeroad Order Upload</option>
 		                                        </select>

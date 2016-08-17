@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -150,6 +151,7 @@ public class SaveMappedFiles {
 			log.info(noOfEntries);
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				order = new OrderBean();
@@ -169,8 +171,7 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 							if (!idsList.contains(entry.getCell(index)
 									.toString()
 									+ "-"
@@ -562,6 +563,7 @@ public class SaveMappedFiles {
 								.get("Customer Phone No"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 							customerBean.setCustomerPhnNo(entry.getCell(index)
 									.toString());
 						}
@@ -706,6 +708,7 @@ public class SaveMappedFiles {
 		CustomerBean customerBean = null;
 		Partner partner = null;
 		Events event = null;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		List<Order> saveList = new ArrayList<Order>();
 		List<String> SKUList = new ArrayList<String>();
 		List<String> idsList = new ArrayList<String>();
@@ -747,6 +750,7 @@ public class SaveMappedFiles {
 			log.info(noOfEntries);
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				order = new OrderBean();
@@ -789,9 +793,8 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					if (columHeaderMap.containsKey("Secondary OrderID")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Secondary OrderID"));
+					if (cellIndexMap.get(columHeaderMap.get("Secondary OrderID")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Secondary OrderID"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(
@@ -806,8 +809,8 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
-								String date = entry.getCell(index).toString();
-								order.setOrderDate(new Date(date));
+								String date = entry.getCell(index).toString().substring(0, entry.getCell(index).toString().indexOf("T"));
+								order.setOrderDate(format.parse(date));
 							} catch (Exception e) {
 								errorMessage
 										.append(" Order Received Date format is wrong ,enter mm/dd/yyyy,");
@@ -825,9 +828,8 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					if (columHeaderMap.containsKey("Customer Email")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Customer Email"));
+					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Customer Email"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							log.debug(" Email from sheet ************ "
@@ -848,11 +850,11 @@ public class SaveMappedFiles {
 					} catch (NullPointerException e) {
 
 					}
-					if (columHeaderMap.containsKey("Customer Phone No")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Customer Phone No"));
+					if (cellIndexMap.get(columHeaderMap.get("Customer Phone No")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Customer Phone No"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 							customerBean.setCustomerPhnNo(entry.getCell(index)
 									.toString());
 						}
@@ -966,9 +968,8 @@ public class SaveMappedFiles {
 
 					}
 
-					if (columHeaderMap.containsKey("Customer City")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Customer City"));
+					if (cellIndexMap.get(columHeaderMap.get("Customer City")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Customer City"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							customerBean.setCustomerCity(entry.getCell(index)
@@ -1041,9 +1042,8 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					if (columHeaderMap.containsKey("Logistic Partner")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Logistic Partner"));
+					if (cellIndexMap.get(columHeaderMap.get("Logistic Partner")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Logistic Partner"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							order.setLogisticPartner(entry.getCell(index)
@@ -1094,7 +1094,7 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					if (columHeaderMap.containsKey("AWB No")) {
+					if (cellIndexMap.get(columHeaderMap.get("AWB No")) != null) {
 						index = cellIndexMap.get(columHeaderMap.get("AWB No"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -1104,9 +1104,8 @@ public class SaveMappedFiles {
 						}
 					}
 
-					if (columHeaderMap.containsKey("PIreferenceNo")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("PIreferenceNo"));
+					if (cellIndexMap.get(columHeaderMap.get("PIreferenceNo")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("PIreferenceNo"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							order.setPIreferenceNo(entry.getCell(index)
@@ -1114,9 +1113,8 @@ public class SaveMappedFiles {
 						}
 					}
 
-					if (columHeaderMap.containsKey("Order MRP")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Order MRP"));
+					if (cellIndexMap.get(columHeaderMap.get("Order MRP")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Order MRP"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
@@ -1232,9 +1230,8 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					if (columHeaderMap.containsKey("Seller Note")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Seller Note"));
+					if (cellIndexMap.get(columHeaderMap.get("Seller Note")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Seller Note"));
 						if (entry.getCell(index) != null
 								&& StringUtils.isNotBlank(entry.getCell(index)
 										.toString())) {
@@ -1347,6 +1344,7 @@ public class SaveMappedFiles {
 			log.info(noOfEntries);
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				order = new OrderBean();
@@ -1357,18 +1355,16 @@ public class SaveMappedFiles {
 				TaxCategory taxcat = null;
 				try {
 
-					if (columHeaderMap.containsKey("Logistic Partner")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Logistic Partner"));
+					if (cellIndexMap.get(columHeaderMap.get("Logistic Partner")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Logistic Partner"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							order.setLogisticPartner(entry.getCell(index)
 									.toString());
 						}
 					}
-					if (columHeaderMap.containsKey("PIreferenceNo")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("PIreferenceNo"));
+					if (cellIndexMap.get(columHeaderMap.get("PIreferenceNo")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("PIreferenceNo"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							order.setPIreferenceNo(entry.getCell(index)
@@ -1433,7 +1429,7 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					if (columHeaderMap.containsKey("AWB No")) {
+					if (cellIndexMap.get(columHeaderMap.get("AWB No")) != null) {
 						index = cellIndexMap.get(columHeaderMap.get("AWB No"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -1480,9 +1476,8 @@ public class SaveMappedFiles {
 
 					}
 
-					if (columHeaderMap.containsKey("Customer City")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Customer City"));
+					if (cellIndexMap.get(columHeaderMap.get("Customer City")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Customer City"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							customerBean.setCustomerCity(entry.getCell(index)
@@ -1548,9 +1543,8 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					if (columHeaderMap.containsKey("Order MRP")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Order MRP"));
+					if (cellIndexMap.get(columHeaderMap.get("Order MRP")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Order MRP"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
@@ -1584,18 +1578,17 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					if (columHeaderMap.containsKey("Customer Phone No")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Customer Phone No"));
+					if (cellIndexMap.get(columHeaderMap.get("Customer Phone No")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Customer Phone No"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 							customerBean.setCustomerPhnNo(entry.getCell(index)
 									.toString());
 						}
 					}
-					if (columHeaderMap.containsKey("Customer Email")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Customer Email"));
+					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Customer Email"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							log.debug(" Email from sheet ************ "
@@ -1659,9 +1652,8 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					if (columHeaderMap.containsKey("Customer Address")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Customer Address"));
+					if (cellIndexMap.get(columHeaderMap.get("Customer Address")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Customer Address"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							customerBean.setCustomerAddress(entry
@@ -1804,9 +1796,8 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					if (columHeaderMap.containsKey("Seller Note")) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Seller Note"));
+					if (cellIndexMap.get(columHeaderMap.get("Seller Note")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Seller Note"));
 						if (entry.getCell(index) != null
 								&& StringUtils.isNotBlank(entry.getCell(index)
 										.toString())) {
@@ -1924,6 +1915,7 @@ public class SaveMappedFiles {
 				indexfulfilmentType = cellIndexMap.get(columHeaderMap
 						.get("Fulfilment Type"));
 				for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+					errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 					entry = worksheet.getRow(rowIndex);
 					validaterow = true;
 					int index = 0;
@@ -2103,8 +2095,7 @@ public class SaveMappedFiles {
 															.getCell(index))) {
 										String date = entry.getCell(index)
 												.toString();
-										orderPayment.setDateofPayment(new Date(
-												date));
+										orderPayment.setDateofPayment(new Date(date));
 									} else {
 										errorMessage
 												.append(" Payment Date format is wrong or null");
@@ -2293,6 +2284,7 @@ public class SaveMappedFiles {
 
 			}
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				int index = 0;
@@ -2444,8 +2436,7 @@ public class SaveMappedFiles {
 								System.out.println("Payment Date : "
 										+ entry.getCell(index));
 								if (entry.getCell(index) != null) {
-									newmanualCharge.setDateOfPayment(new Date(
-											entry.getCell(index).toString()));
+									newmanualCharge.setDateOfPayment(new Date(entry.getCell(index).toString()));
 								} else {
 									errorMessage
 											.append(" Payment Date format is wrong or null");
@@ -2615,6 +2606,7 @@ public class SaveMappedFiles {
 			log.info(noOfEntries);
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				order = new OrderBean();
@@ -3022,6 +3014,7 @@ public class SaveMappedFiles {
 								.get("Customer Phone No"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 							customerBean.setCustomerPhnNo(entry.getCell(index)
 									.toString());
 						}
@@ -3201,6 +3194,7 @@ public class SaveMappedFiles {
 			}
 
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				int index = 0;
@@ -3391,6 +3385,7 @@ public class SaveMappedFiles {
 				}
 			}
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				int index = 0;
@@ -3733,6 +3728,7 @@ public class SaveMappedFiles {
 			log.info(noOfEntries);
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				order = new OrderBean();
@@ -4147,6 +4143,7 @@ public class SaveMappedFiles {
 								.get("Customer Phone No"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 							customerBean.setCustomerPhnNo(entry.getCell(index)
 									.toString());
 						}
@@ -4334,6 +4331,7 @@ public class SaveMappedFiles {
 				}
 			}
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
 				int index = 0;
@@ -4382,8 +4380,7 @@ public class SaveMappedFiles {
 													.getCell(index).toString())) {
 										String date = entry.getCell(index)
 												.toString();
-										paymentBean.setDateofPayment(new Date(
-												date));
+										paymentBean.setDateofPayment(new Date(date));
 									} else {
 										errorMessage
 												.append(" Payment Date format is wrong or null");
