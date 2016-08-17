@@ -206,7 +206,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'ORDER ITEM ID' doesn't exists");
+								.append("The column 'ORDER ITEM ID' doesn't exist");
 						validaterow = false;
 					}
 
@@ -231,7 +231,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Ordered On' doesn't exists");
+								.append("The column 'Ordered On' doesn't exist");
 						validaterow = false;
 					}
 
@@ -256,7 +256,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'SKU Code' doesn't exists");
+								.append("The column 'SKU Code' doesn't exist");
 						validaterow = false;
 					}
 
@@ -280,7 +280,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Sales Channel' doesn't exists");
+								.append("The column 'Sales Channel' doesn't exist");
 						validaterow = false;
 					}
 
@@ -323,7 +323,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Payment Type' doesn't exists");
+								.append("The column 'Payment Type' doesn't exist");
 						validaterow = false;
 					}
 
@@ -352,7 +352,7 @@ public class SaveMappedFiles {
 						}
 					} catch (Exception e) {
 						errorMessage
-								.append("The column 'Invoice No.' doesn't exists");
+								.append("The column 'Invoice No.' doesn't exist");
 						validaterow = false;
 					}
 
@@ -422,7 +422,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Invoice Amount' doesn't exists");
+								.append("The column 'Invoice Amount' doesn't exist");
 						validaterow = false;
 					}
 
@@ -445,7 +445,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Ready to Ship by date' doesn't exists");
+								.append("The column 'Ready to Ship by date' doesn't exist");
 						validaterow = false;
 					}
 
@@ -478,7 +478,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Quantity' doesn't exists");
+								.append("The column 'Quantity' doesn't exist");
 						validaterow = false;
 					}
 
@@ -543,7 +543,7 @@ public class SaveMappedFiles {
 							}
 						} catch (NullPointerException e) {
 							errorMessage
-									.append("The column 'Gross NR' doesn't exists");
+									.append("The column 'Gross NR' doesn't exist");
 						}
 					}
 					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
@@ -618,7 +618,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'PIN Code' doesn't exists");
+								.append("The column 'PIN Code' doesn't exist");
 						validaterow = false;
 					}
 					product = productService.getProduct(
@@ -811,11 +811,17 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
-								String date = entry.getCell(index).toString().substring(0, entry.getCell(index).toString().indexOf("T"));
+								String dateStr = entry.getCell(index).toString();
+								String date = "";
+								if (dateStr.contains("T")) {
+									date = entry.getCell(index).toString().substring(0, entry.getCell(index).toString().indexOf("T"));
+								} else {
+									date = entry.getCell(index).toString();
+								}
 								order.setOrderDate(format.parse(date));
 							} catch (Exception e) {
 								errorMessage
-										.append(" Order Received Date format is wrong ,enter mm/dd/yyyy,");
+										.append(" Order Received Date format is wrong,");
 								validaterow = false;
 							}
 
@@ -1028,15 +1034,10 @@ public class SaveMappedFiles {
 								order.setPaymentType(entry.getCell(index)
 										.toString());
 							else {
-								order.setPaymentType(entry.getCell(index)
-										.toString());
-								errorMessage
-										.append(" Payment type should be COD or Prepaid or Others");
-								validaterow = false;
+								order.setPaymentType("Others");								
 							}
 						} else {
-							errorMessage.append(" Payment type is null");
-							validaterow = false;
+							order.setPaymentType("Others");		
 						}
 					} catch (NullPointerException e) {
 						errorMessage
@@ -1137,7 +1138,13 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
-								String date = entry.getCell(index).toString();
+								String dateStr = entry.getCell(index).toString();
+								String date = "";
+								if (dateStr.contains("T")) {
+									date = entry.getCell(index).toString().substring(0, entry.getCell(index).toString().indexOf("T"));
+								} else {
+									date = entry.getCell(index).toString();
+								}
 								order.setShippedDate(new Date(date));
 							} catch (Exception e) {
 								errorMessage
@@ -1214,8 +1221,7 @@ public class SaveMappedFiles {
 
 							}
 						} catch (NullPointerException e) {
-							errorMessage
-									.append("The column 'Gross NR' doesn't exist");
+							//errorMessage.append("The column 'Gross NR' doesn't exist");
 						}
 					}
 
@@ -1301,6 +1307,7 @@ public class SaveMappedFiles {
 		ChannelUploadMapping chanupload = null;
 		Map<String, String> columHeaderMap = new LinkedHashMap<String, String>();
 		Map<String, Integer> cellIndexMap = new LinkedHashMap<String, Integer>();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		StringBuffer errorMessage = new StringBuffer();
 		CustomerBean customerBean = null;
 		Partner partner = null;
@@ -1448,11 +1455,17 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
-								String date = entry.getCell(index).toString();
-								order.setOrderDate(new Date(date));
+								String dateStr = entry.getCell(index).toString();
+								String date = "";
+								if (dateStr.contains(" ")) {
+									date = entry.getCell(index).toString().substring(0, entry.getCell(index).toString().indexOf(" "));
+								} else {
+									date = entry.getCell(index).toString();
+								}
+								order.setOrderDate(format.parse(date));
 							} catch (Exception e) {
 								errorMessage
-										.append(" Order Received Date format is wrong ,enter mm/dd/yyyy,");
+										.append(" Order Received Date format is wrong ,");
 								validaterow = false;
 							}
 
@@ -1608,19 +1621,11 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							if (entry.getCell(index).toString()
-									.equalsIgnoreCase("COD")
-									|| entry.getCell(index).toString()
-											.equalsIgnoreCase("Prepaid")
-									|| entry.getCell(index).toString()
-											.equalsIgnoreCase("Others"))
+									.equalsIgnoreCase("COD"))
 								order.setPaymentType(entry.getCell(index)
 										.toString());
 							else {
-								order.setPaymentType(entry.getCell(index)
-										.toString());
-								errorMessage
-										.append(" Payment type should be COD or Prepaid or Others");
-								validaterow = false;
+								order.setPaymentType("Others");
 							}
 						} else {
 							errorMessage.append(" Payment type is null");
@@ -1638,11 +1643,17 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
-								String date = entry.getCell(index).toString();
-								order.setShippedDate(new Date(date));
+								String dateStr = entry.getCell(index).toString();
+								String date = "";
+								if (dateStr.contains(" ")) {
+									date = entry.getCell(index).toString().substring(0, entry.getCell(index).toString().indexOf(" "));
+								} else {
+									date = entry.getCell(index).toString();
+								}
+								order.setShippedDate(format.parse(date));
 							} catch (Exception e) {
 								errorMessage
-										.append(" Shipped Date formate is wrong ,enter mm/dd/yyyy,");
+										.append(" Shipped Date formate is wrong ,");
 								validaterow = false;
 							}
 						} else {
@@ -1781,8 +1792,7 @@ public class SaveMappedFiles {
 
 							}
 						} catch (NullPointerException e) {
-							errorMessage
-									.append("The column 'Gross NR' doesn't exist");
+							//errorMessage.append("The column 'Gross NR' doesn't exist");
 						}
 					}
 
@@ -1972,7 +1982,7 @@ public class SaveMappedFiles {
 								}
 							} catch (NullPointerException e) {
 								errorMessage
-										.append("This Column 'Order item ID' or 'SKU' doesn't exists");
+										.append("This Column 'Order item ID' or 'SKU' doesn't exist");
 								validaterow = false;
 							}
 
@@ -1994,7 +2004,7 @@ public class SaveMappedFiles {
 								}
 							} catch (NullPointerException e) {
 								errorMessage
-										.append("This Column 'Settlement Date' doesn't exists");
+										.append("This Column 'Settlement Date' doesn't exist");
 								validaterow = false;
 							}
 
@@ -2033,7 +2043,7 @@ public class SaveMappedFiles {
 								}
 							} catch (NullPointerException e) {
 								errorMessage
-										.append("This Column 'Settlement Value (Rs.)' doesn't exists");
+										.append("This Column 'Settlement Value (Rs.)' doesn't exist");
 								validaterow = false;
 							}
 
@@ -2047,7 +2057,7 @@ public class SaveMappedFiles {
 								}
 							} catch (NullPointerException e) {
 								errorMessage
-										.append("This Column 'Seller SKU' doesn't exists");
+										.append("This Column 'Seller SKU' doesn't exist");
 							}
 
 							if (validaterow) {
@@ -2083,7 +2093,7 @@ public class SaveMappedFiles {
 								}
 							} catch (NullPointerException e) {
 								errorMessage
-										.append("This Column 'Seller SKU' doesn't exists");
+										.append("This Column 'Seller SKU' doesn't exist");
 							}
 							if (skucode != null
 									&& skucode.equalsIgnoreCase("null")) {
@@ -2106,7 +2116,7 @@ public class SaveMappedFiles {
 									}
 								} catch (NullPointerException e) {
 									errorMessage
-											.append("This Column 'Settlement Date' doesn't exists");
+											.append("This Column 'Settlement Date' doesn't exist");
 									validaterow = false;
 								}
 
@@ -2121,7 +2131,7 @@ public class SaveMappedFiles {
 									}
 								} catch (NullPointerException e) {
 									errorMessage
-											.append("This Column 'Order Type' doesn't exists");
+											.append("This Column 'Order Type' doesn't exist");
 								}
 
 								try {
@@ -2152,7 +2162,7 @@ public class SaveMappedFiles {
 									}
 								} catch (Exception e) {
 									errorMessage
-											.append("This Column 'Settlement Value (Rs.)' doesn't exists");
+											.append("This Column 'Settlement Value (Rs.)' doesn't exist");
 									validaterow = false;
 								}
 
@@ -2184,7 +2194,7 @@ public class SaveMappedFiles {
 				}
 			} catch (Exception e) {
 				errorMessage
-						.append("The Column 'Fulfilment Type' doesn't exists");
+						.append("The Column 'Fulfilment Type' doesn't exist");
 				validaterow = false;
 			}
 
@@ -2305,7 +2315,7 @@ public class SaveMappedFiles {
 								HSSFCell.CELL_TYPE_STRING);
 					} else {
 						errorMessage
-								.append("The column 'Transaction ID' doesn't exists");
+								.append("The column 'Transaction ID' doesn't exist");
 						validaterow = false;
 					}
 					if (entry.getCell(index) != null) {
@@ -2354,7 +2364,7 @@ public class SaveMappedFiles {
 								}
 							} catch (NullPointerException e) {
 								errorMessage
-										.append("The column 'Payment Date' doesn't exists");
+										.append("The column 'Payment Date' doesn't exist");
 								validaterow = false;
 							}
 
@@ -2393,7 +2403,7 @@ public class SaveMappedFiles {
 								}
 							} catch (NullPointerException e) {
 								errorMessage
-										.append("The column 'Net Payable' doesn't exists");
+										.append("The column 'Net Payable' doesn't exist");
 								validaterow = false;
 							}
 
@@ -2407,7 +2417,7 @@ public class SaveMappedFiles {
 								}
 							} catch (NullPointerException e) {
 								errorMessage
-										.append("The column 'SKU' doesn't exists");
+										.append("The column 'SKU' doesn't exist");
 							}
 
 							if (validaterow) {
@@ -2447,7 +2457,7 @@ public class SaveMappedFiles {
 								}
 							} catch (NullPointerException e) {
 								errorMessage
-										.append("The column 'Payment Date' doesn't exists");
+										.append("The column 'Payment Date' doesn't exist");
 								validaterow = false;
 							}
 
@@ -2478,7 +2488,7 @@ public class SaveMappedFiles {
 								}
 							} catch (NullPointerException e) {
 								errorMessage
-										.append("The column 'Net  Payable' doesn't exists");
+										.append("The column 'Net  Payable' doesn't exist");
 								validaterow = false;
 							}
 
@@ -2493,7 +2503,7 @@ public class SaveMappedFiles {
 								}
 							} catch (NullPointerException e) {
 								errorMessage
-										.append("The column 'Type' doesn't exists");
+										.append("The column 'Type' doesn't exist");
 							}
 
 							if (validaterow) {
@@ -2649,7 +2659,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'item_id' doesn't exists");
+								.append("The column 'item_id' doesn't exist");
 						validaterow = false;
 					}
 
@@ -2674,7 +2684,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'creation date' doesn't exists");
+								.append("The column 'creation date' doesn't exist");
 						validaterow = false;
 					}
 
@@ -2699,7 +2709,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'item.sku' doesn't exists");
+								.append("The column 'item.sku' doesn't exist");
 						validaterow = false;
 					}
 
@@ -2723,7 +2733,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Sales Channel' doesn't exists");
+								.append("The column 'Sales Channel' doesn't exist");
 						validaterow = false;
 					}
 
@@ -2772,7 +2782,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Payment Type' doesn't exists");
+								.append("The column 'Payment Type' doesn't exist");
 						validaterow = false;
 					}
 
@@ -2801,7 +2811,7 @@ public class SaveMappedFiles {
 						}
 					} catch (Exception e) {
 						errorMessage
-								.append("The column 'invoice_id' doesn't exists");
+								.append("The column 'invoice_id' doesn't exist");
 						validaterow = false;
 					}
 
@@ -2877,7 +2887,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'item_price' or 'shipping_amount' doesn't exists");
+								.append("The column 'item_price' or 'shipping_amount' doesn't exist");
 						validaterow = false;
 					}
 
@@ -2900,7 +2910,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Order Shipped Date' doesn't exists");
+								.append("The column 'Order Shipped Date' doesn't exist");
 						validaterow = false;
 					}
 
@@ -2932,7 +2942,7 @@ public class SaveMappedFiles {
 							validaterow = false;
 						}
 					} catch (NullPointerException e) {
-						errorMessage.append("The column 'qty' doesn't exists");
+						errorMessage.append("The column 'qty' doesn't exist");
 						validaterow = false;
 					}
 
@@ -2997,7 +3007,7 @@ public class SaveMappedFiles {
 							}
 						} catch (NullPointerException e) {
 							errorMessage
-									.append("The column 'Gross NR' doesn't exists");
+									.append("The column 'Gross NR' doesn't exist");
 						}
 					}
 					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
@@ -3072,7 +3082,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'pincode' doesn't exists");
+								.append("The column 'pincode' doesn't exist");
 						validaterow = false;
 					}
 					product = productService.getProduct(
@@ -3214,7 +3224,7 @@ public class SaveMappedFiles {
 						index = cellIndexMap.get(channelheader);
 					} else {
 						errorMessage
-								.append("The column 'Order Item ID' doesn't exists");
+								.append("The column 'Order Item ID' doesn't exist");
 						validaterow = false;
 					}
 					if (entry.getCell(index) != null
@@ -3249,7 +3259,7 @@ public class SaveMappedFiles {
 							}
 						} catch (NullPointerException e) {
 							errorMessage
-									.append("The column 'Payment Date' doesn't exists");
+									.append("The column 'Payment Date' doesn't exist");
 							validaterow = false;
 						}
 
@@ -3285,7 +3295,7 @@ public class SaveMappedFiles {
 							}
 						} catch (NullPointerException e) {
 							errorMessage
-									.append("The column 'Payable Amount' doesn't exists");
+									.append("The column 'Payable Amount' doesn't exist");
 							validaterow = false;
 						}
 
@@ -3404,7 +3414,7 @@ public class SaveMappedFiles {
 						index = cellIndexMap.get(channelheader);
 					} else {
 						errorMessage
-								.append("The column 'Order ID' doesn't exists");
+								.append("The column 'Order ID' doesn't exist");
 						validaterow = false;
 					}
 					if (entry.getCell(index) != null
@@ -3456,7 +3466,7 @@ public class SaveMappedFiles {
 							}
 						} catch (NullPointerException e) {
 							errorMessage
-									.append("The column 'Date' doesn't exists");
+									.append("The column 'Date' doesn't exist");
 							validaterow = false;
 						}
 
@@ -3505,7 +3515,7 @@ public class SaveMappedFiles {
 							}
 						} catch (NullPointerException e) {
 							errorMessage
-									.append("The column 'Amount' doesn't exists");
+									.append("The column 'Amount' doesn't exist");
 							validaterow = false;
 						}
 
@@ -3523,7 +3533,7 @@ public class SaveMappedFiles {
 									.get("Payment Detail"));
 						} else {
 							errorMessage
-									.append("The column 'Payment Detail' doesn't exists");
+									.append("The column 'Payment Detail' doesn't exist");
 							validaterow = false;
 						}
 						if (entry.getCell(index) != null
@@ -3581,7 +3591,7 @@ public class SaveMappedFiles {
 								}
 							} catch (NullPointerException e) {
 								errorMessage
-										.append("The column 'Amount' doesn't exists");
+										.append("The column 'Amount' doesn't exist");
 								validaterow = false;
 							}
 
@@ -3608,7 +3618,7 @@ public class SaveMappedFiles {
 								}
 							} catch (NullPointerException e) {
 								errorMessage
-										.append("The column 'Date' doesn't exists");
+										.append("The column 'Date' doesn't exist");
 								validaterow = false;
 							}
 
@@ -3788,7 +3798,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'ORDER ITEM ID' or 'Vendor Code' doesn't exists");
+								.append("The column 'ORDER ITEM ID' or 'Vendor Code' doesn't exist");
 						validaterow = false;
 					}
 
@@ -3813,7 +3823,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Ordered On' doesn't exists");
+								.append("The column 'Ordered On' doesn't exist");
 						validaterow = false;
 					}
 
@@ -3838,7 +3848,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'SKU Code' doesn't exists");
+								.append("The column 'SKU Code' doesn't exist");
 						validaterow = false;
 					}
 
@@ -3862,7 +3872,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Sales Channel' doesn't exists");
+								.append("The column 'Sales Channel' doesn't exist");
 						validaterow = false;
 					}
 
@@ -3907,7 +3917,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Payment Type' doesn't exists");
+								.append("The column 'Payment Type' doesn't exist");
 						validaterow = false;
 					}
 
@@ -3936,7 +3946,7 @@ public class SaveMappedFiles {
 						}
 					} catch (Exception e) {
 						errorMessage
-								.append("The column 'Invoice No.' doesn't exists");
+								.append("The column 'Invoice No.' doesn't exist");
 						validaterow = false;
 					}
 
@@ -4006,7 +4016,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Invoice Amount' doesn't exists");
+								.append("The column 'Invoice Amount' doesn't exist");
 						validaterow = false;
 					}
 
@@ -4029,7 +4039,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Ready to Ship by date' doesn't exists");
+								.append("The column 'Ready to Ship by date' doesn't exist");
 						validaterow = false;
 					}
 
@@ -4062,7 +4072,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Quantity' doesn't exists");
+								.append("The column 'Quantity' doesn't exist");
 						validaterow = false;
 					}
 
@@ -4127,7 +4137,7 @@ public class SaveMappedFiles {
 							}
 						} catch (NullPointerException e) {
 							errorMessage
-									.append("The column 'Gross NR' doesn't exists");
+									.append("The column 'Gross NR' doesn't exist");
 						}
 					}
 					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
@@ -4210,7 +4220,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'PIN Code' doesn't exists");
+								.append("The column 'PIN Code' doesn't exist");
 						validaterow = false;
 					}
 					product = productService.getProduct(
@@ -4354,7 +4364,7 @@ public class SaveMappedFiles {
 						skuIndex = cellIndexMap.get(columHeaderMap.get("SKU"));
 					} else {
 						errorMessage
-								.append("The column 'Order ID' or 'Style Code' doesn't exists");
+								.append("The column 'Order ID' or 'Style Code' doesn't exist");
 						validaterow = false;
 					}
 					if (entry.getCell(index) != null
@@ -4393,7 +4403,7 @@ public class SaveMappedFiles {
 									}
 								} catch (NullPointerException e) {
 									errorMessage
-											.append("The column 'Payment Date' doesn't exists");
+											.append("The column 'Payment Date' doesn't exist");
 									validaterow = false;
 								}
 
@@ -4437,7 +4447,7 @@ public class SaveMappedFiles {
 									}
 								} catch (NullPointerException e) {
 									errorMessage
-											.append("The column 'Outstanding Payable to Vendors (Final)' doesn't exists");
+											.append("The column 'Outstanding Payable to Vendors (Final)' doesn't exist");
 									validaterow = false;
 								}
 
