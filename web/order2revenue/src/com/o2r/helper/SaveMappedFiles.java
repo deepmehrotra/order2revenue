@@ -160,6 +160,7 @@ public class SaveMappedFiles {
 				int index = 0;
 				Product product = null;
 				TaxCategory taxcat = null;
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				try {
 
 					try {
@@ -759,6 +760,7 @@ public class SaveMappedFiles {
 				int index = 0;
 				Product product = null;
 				TaxCategory taxcat = null;
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				try {
 
 					try {
@@ -1353,6 +1355,7 @@ public class SaveMappedFiles {
 				int index = 0;
 				Product product = null;
 				TaxCategory taxcat = null;
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				try {
 
 					if (cellIndexMap.get(columHeaderMap.get("Logistic Partner")) != null) {
@@ -2615,6 +2618,7 @@ public class SaveMappedFiles {
 				int index = 0;
 				Product product = null;
 				TaxCategory taxcat = null;
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				try {
 
 					try {
@@ -3737,6 +3741,7 @@ public class SaveMappedFiles {
 				int index = 0;
 				Product product = null;
 				TaxCategory taxcat = null;
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				try {
 
 					try {
