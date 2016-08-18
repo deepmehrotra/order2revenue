@@ -790,8 +790,7 @@ public class SaveMappedFiles {
 							validaterow = false;
 						}
 					} catch (NullPointerException e) {
-						errorMessage
-								.append("The column 'order-id' doesn't exist");
+						errorMessage.append("The column 'order-id' doesn't exist");
 						validaterow = false;
 					}
 
