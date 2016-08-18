@@ -96,10 +96,15 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			Query updateQuery = session
 					.createSQLQuery("UPDATE category set LST_taxCatId = null where LST_taxCatId=?");
 			updateQuery.setInteger(0, tcId);
+			
+			Query updateQuery1 = session
+					.createSQLQuery("UPDATE category set CST_taxCatId = null where CST_taxCatId=?");
+			updateQuery1.setInteger(0, tcId);
 
 			int updated = updateQuery.executeUpdate();
+			int updated1 = updateQuery1.executeUpdate();
 
-			log.debug("removeProductMapping updated:" + updated);
+			log.debug("removeProductMapping updated:" + updated + " & " + + updated);
 			session.getTransaction().commit();
 			session.close();
 
@@ -339,7 +344,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 				taxCategory.setUploadDate(new Date());
 				if (seller.getTaxCategories() != null)
 					seller.getTaxCategories().add(taxCategory);
-				session.saveOrUpdate(seller);
+				session.merge(seller);
 			} else {
 				/*Criteria criteria = session.createCriteria(Seller.class).add(
 						Restrictions.eq("id", sellerId));

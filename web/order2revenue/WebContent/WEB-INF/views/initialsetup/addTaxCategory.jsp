@@ -72,7 +72,7 @@
 		categoryStr = String($("#multiSku").chosen().val());
 		var selectedList = categoryStr.split(',');
 		//alert("selected : " + selectedList);
-		if (selectedList == "null"  || selectedList.length > 0) {
+		if (selectedList == "null"  || selectedList.length < 0) {
 			selectedList = null;
 			//alert(!selectedList);
 		}
