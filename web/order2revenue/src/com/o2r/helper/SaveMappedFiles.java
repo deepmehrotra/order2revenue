@@ -1023,17 +1023,17 @@ public class SaveMappedFiles {
 					try {
 						index = cellIndexMap.get(columHeaderMap
 								.get("Payment Type"));
-						if (entry.getCell(index) != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							if (entry.getCell(index).toString()
-									.equalsIgnoreCase("COD")
-									|| entry.getCell(index).toString()
-											.equalsIgnoreCase("Prepaid")
-									|| entry.getCell(index).toString()
-											.equalsIgnoreCase("Others"))
-								order.setPaymentType(entry.getCell(index)
-										.toString());
-							else {
+						if (entry.getCell(index) != null) {
+							if (entry.getCell(index).toString().toUpperCase()
+									.contains("PREPAID") || entry.getCell(index).getCellType() == HSSFCell.CELL_TYPE_BLANK) {
+								order.setPaymentType("Prepaid");
+							} else if (entry.getCell(index).toString()
+									.toUpperCase().contains("COD")) {
+								order.setPaymentType("COD");
+							} else if (entry.getCell(index).toString()
+									.toUpperCase().contains("OTHERS")) {
+								order.setPaymentType("Others");
+							} else {
 								order.setPaymentType("Others");								
 							}
 						} else {
@@ -1047,10 +1047,12 @@ public class SaveMappedFiles {
 
 					if (cellIndexMap.get(columHeaderMap.get("Logistic Partner")) != null) {
 						index = cellIndexMap.get(columHeaderMap.get("Logistic Partner"));
-						if (entry.getCell(index) != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							order.setLogisticPartner(entry.getCell(index)
-									.toString());
+						if (entry.getCell(index) != null) {
+							if(entry.getCell(index).getCellType() == HSSFCell.CELL_TYPE_BLANK){
+								order.setLogisticPartner("Self Shift");
+							} else {
+								order.setLogisticPartner(entry.getCell(index).toString());
+							}
 						}
 					}
 
@@ -1643,14 +1645,8 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
-								String dateStr = entry.getCell(index).toString();
-								String date = "";
-								if (dateStr.contains(" ")) {
-									date = entry.getCell(index).toString().substring(0, entry.getCell(index).toString().indexOf(" "));
-								} else {
-									date = entry.getCell(index).toString();
-								}
-								order.setShippedDate(format.parse(date));
+								String date = entry.getCell(index).toString();
+								order.setShippedDate(new Date(date));
 							} catch (Exception e) {
 								errorMessage
 										.append(" Shipped Date formate is wrong ,");
