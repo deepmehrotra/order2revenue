@@ -1,6 +1,5 @@
 package com.o2r.dao;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -157,4 +156,32 @@ public class AreaConfigDaoImpl implements AreaConfigDao {
 		log.info("***isZipCodeValid ends*** ");
 		return returnObject;
 	}
+	
+	@Override
+	public String getMetroFromZipCode(String zipcode) {
+		log.info("*** getCityFromZipCode starts***");
+		List<String> cityNames = null;
+		String returnCity = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query gettingStates = session.createSQLQuery(
+					cityRetriveFromZipCodeQuery).setParameter("zipcode",
+					zipcode);
+			cityNames = gettingStates.list();
+			if (cityNames != null)
+				returnCity = cityNames.get(0);
+			if (returnCity != null && returnCity.contains("Delhi")) {
+				returnCity = "Delhi";
+			}
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed!", e);
+		}
+		log.info("*** getCityFromZipCode starts***");
+		return returnCity;
+	}
+	
 }

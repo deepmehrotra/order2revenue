@@ -173,7 +173,7 @@ public class SaveMappedFiles {
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
-							if (idsList!=null&&!idsList.contains(entry.getCell(index)
+							if (idsList == null || !idsList.contains(entry.getCell(index)
 									.toString()
 									+ "-"
 									+ entry.getCell(skuIndex).toString())
@@ -593,11 +593,13 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							log.debug(" getting zipcode ");
-							if (areaConfigDao.isZipCodeValid(entry.getCell(
-									index).toString())) {
+							String zipCode=entry.getCell(index).toString();
+							if(zipCode.contains(".")){
+								zipCode=zipCode.substring(0, zipCode.indexOf("."));				
+							}
+							if (areaConfigDao.isZipCodeValid(zipCode)) {
 								try {
-									customerBean.setZipcode(entry
-											.getCell(index).toString());
+									customerBean.setZipcode(zipCode);
 								} catch (Exception e) {
 									log.error("Failed! by SellerId : "
 											+ sellerId, e);
@@ -772,7 +774,7 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							if (idsList!=null&&(!idsList.contains(entry.getCell(index)
+							if (idsList == null ||  (!idsList.contains(entry.getCell(index)
 									.toString()))
 									&& !duplicateKey.containsKey(entry.getCell(
 											index).toString())) {
@@ -997,11 +999,13 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							log.debug(" getting zipcode ");
-							if (areaConfigDao.isZipCodeValid(entry.getCell(
-									index).toString())) {
+							String zipCode=entry.getCell(index).toString();
+							if(zipCode.contains(".")){
+								zipCode=zipCode.substring(0, zipCode.indexOf("."));				
+							}				
+							if (areaConfigDao.isZipCodeValid(zipCode)) {
 								try {
-									customerBean.setZipcode(entry
-											.getCell(index).toString());
+									customerBean.setZipcode(zipCode);
 								} catch (Exception e) {
 									log.error("Failed! by SellerId : "
 											+ sellerId, e);
@@ -1397,7 +1401,7 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							if (idsList!=null&&(!idsList.contains(entry.getCell(index)
+							if (idsList == null || (!idsList.contains(entry.getCell(index)
 									.toString()))
 									&& !duplicateKey.containsKey(entry.getCell(
 											index).toString())) {
@@ -1516,11 +1520,13 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							log.debug(" getting zipcode ");
-							if (areaConfigDao.isZipCodeValid(entry.getCell(
-									index).toString())) {
+							String zipCode=entry.getCell(index).toString();
+							if(zipCode.contains(".")){
+								zipCode=zipCode.substring(0, zipCode.indexOf("."));				
+							}
+							if (areaConfigDao.isZipCodeValid(zipCode)) {
 								try {
-									customerBean.setZipcode(entry
-											.getCell(index).toString());
+									customerBean.setZipcode(zipCode);
 								} catch (Exception e) {
 									log.error("Failed! by SellerId : "
 											+ sellerId, e);
@@ -2650,7 +2656,7 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							if (idsList!=null&&(!idsList.contains(entry.getCell(index)
+							if (idsList == null || (!idsList.contains(entry.getCell(index)
 									.toString()))
 									&& !duplicateKey.containsKey(entry.getCell(
 											index).toString())) {
@@ -3069,11 +3075,13 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							log.debug(" getting zipcode ");
-							if (areaConfigDao.isZipCodeValid(entry.getCell(
-									index).toString())) {
+							String zipCode=entry.getCell(index).toString();
+							if(zipCode.contains(".")){
+								zipCode=zipCode.substring(0, zipCode.indexOf("."));				
+							}
+							if (areaConfigDao.isZipCodeValid(zipCode)) {
 								try {
-									customerBean.setZipcode(entry
-											.getCell(index).toString());
+									customerBean.setZipcode(zipCode);
 								} catch (Exception e) {
 									log.error("Failed! by SellerId : "
 											+ sellerId, e);
@@ -3777,7 +3785,7 @@ public class SaveMappedFiles {
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 							String id=entry.getCell(index).toString().substring(3, entry.getCell(index).toString().indexOf("S"));
-							if (idsList!=null&&!idsList.contains(id
+							if (idsList == null || !idsList.contains(id
 									+ "-"
 									+ entry.getCell(skuIndex).toString())
 									&& !duplicateKey.containsKey(id
@@ -4192,19 +4200,13 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							log.debug(" getting zipcode ");
-							System.out.println(entry.getCell(index).toString());
-							System.out.println(entry
-									.getCell(index)
-									.toString()
-									.substring(
-											0,
-											entry.getCell(index).toString()
-													.indexOf(".")));
-							if (areaConfigDao.isZipCodeValid(entry.getCell(
-									index).toString())) {
+							String zipCode=entry.getCell(index).toString();
+							if(zipCode.contains(".")){
+								zipCode=zipCode.substring(0, zipCode.indexOf("."));				
+							}
+							if (areaConfigDao.isZipCodeValid(zipCode)) {
 								try {
-									customerBean.setZipcode(entry
-											.getCell(index).toString());
+									customerBean.setZipcode(zipCode);
 								} catch (Exception e) {
 									log.error("Failed! by SellerId : "
 											+ sellerId, e);

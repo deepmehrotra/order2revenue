@@ -18,4 +18,6 @@ public interface AreaConfigDao {
 	public String getStateFromCity(String city);
 
 	boolean isZipCodeValid(String zipcode);
+
+	public String getMetroFromZipCode(String zipcode);
 }

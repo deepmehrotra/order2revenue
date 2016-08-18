@@ -2208,12 +2208,12 @@ public class OrderDaoImpl implements OrderDao {
 			if (partner.getNrnReturnConfig() != null
 					&& partner.getNrnReturnConfig().getMetroList() != null
 					&& partner.getNrnReturnConfig().getMetroList().length() != 0) {
-				state = areaConfigDao.getCityFromZipCode(order.getCustomer()
+				state = areaConfigDao.getMetroFromZipCode(order.getCustomer()
 						.getZipcode());
 				log.debug(" City from zipcode : " + state);
 			}
 			if (state == null
-					|| !(state.equalsIgnoreCase("New Delhi")
+					|| !(state.equalsIgnoreCase("Delhi")
 							|| state.equalsIgnoreCase("Chennai")
 							|| state.equalsIgnoreCase("Mumbai") || state
 								.equalsIgnoreCase("Kolkata"))) {
@@ -2362,7 +2362,7 @@ public class OrderDaoImpl implements OrderDao {
 						.get(GlobalConstant.fixedCommissionPercent);
 
 			} else {
-				comission = chargesMap.get(prodCat);
+				comission = chargesMap.containsKey(prodCat) ? chargesMap.get(prodCat) : 0;
 			}
 
 			// Add partner new changes:
