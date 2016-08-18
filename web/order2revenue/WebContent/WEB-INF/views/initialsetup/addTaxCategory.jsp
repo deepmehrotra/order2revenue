@@ -170,6 +170,7 @@
 							<input type="hidden" name="taxCatId" id="taxCatId"
 								value="${taxCategory.taxCatId}" />
 						</c:if>
+						<div class="col-lg-12">
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label class="col-sm-5 control-label">Tax Category Name</label>
@@ -200,6 +201,7 @@
 								</div>
 							</div>
 						</div>
+						
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label class="col-sm-4 control-label">Tax Type</label>
@@ -233,6 +235,8 @@
 								</div>
 							</div>
 						</div>
+						</div>
+						<div class="col-lg-12">
 						<div class="col-sm-6" id="multiSelect">
 							<label class="col-sm-5 control-label">Map Product
 								Category</label>
@@ -265,6 +269,9 @@
 									</c:choose>
 								</select>
 							</div>
+						</div>
+						<div class="col-sm-6">
+						</div>
 						</div>
 
 						<div class="col-sm-12">
