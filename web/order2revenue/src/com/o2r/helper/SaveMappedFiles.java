@@ -173,7 +173,7 @@ public class SaveMappedFiles {
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
-							if (!idsList.contains(entry.getCell(index)
+							if (idsList!=null&&!idsList.contains(entry.getCell(index)
 									.toString()
 									+ "-"
 									+ entry.getCell(skuIndex).toString())
@@ -239,7 +239,7 @@ public class SaveMappedFiles {
 						index = cellIndexMap.get(columHeaderMap.get("SkUCode"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							if (SKUList.contains(entry.getCell(index)
+							if (SKUList!=null&&SKUList.contains(entry.getCell(index)
 									.toString())) {
 								order.setProductSkuCode(entry.getCell(index)
 										.toString());
@@ -730,6 +730,7 @@ public class SaveMappedFiles {
 							colums.getChannelColumName());
 				}
 			}
+			log.info("columHeaderMap for Amazon Order : "+columHeaderMap);
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -746,6 +747,7 @@ public class SaveMappedFiles {
 				}
 
 			}
+			log.info("cellIndexMap for Amazon Order : "+cellIndexMap);
 			SKUList = productService.listProductSKU(sellerId);
 			idsList = orderService.listOrderIds("channelOrderID", sellerId);
 			log.info(noOfEntries);
@@ -770,7 +772,7 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							if ((!idsList.contains(entry.getCell(index)
+							if (idsList!=null&&(!idsList.contains(entry.getCell(index)
 									.toString()))
 									&& !duplicateKey.containsKey(entry.getCell(
 											index).toString())) {
@@ -786,10 +788,12 @@ public class SaveMappedFiles {
 								validaterow = false;
 							}
 						} else {
+							
 							errorMessage.append(" Channel OrderId is null ");
 							validaterow = false;
 						}
 					} catch (NullPointerException e) {
+						log.error("Failed in getting channel order id : ", e);
 						errorMessage
 								.append("The column 'order-id' doesn't exist");
 						validaterow = false;
@@ -872,7 +876,7 @@ public class SaveMappedFiles {
 						index = cellIndexMap.get(columHeaderMap.get("SkUCode"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							if (SKUList.contains(entry.getCell(index)
+							if (SKUList!=null&&SKUList.contains(entry.getCell(index)
 									.toString())) {
 								order.setProductSkuCode(entry.getCell(index)
 										.toString());
@@ -1391,7 +1395,7 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							if ((!idsList.contains(entry.getCell(index)
+							if (idsList!=null&&(!idsList.contains(entry.getCell(index)
 									.toString()))
 									&& !duplicateKey.containsKey(entry.getCell(
 											index).toString())) {
@@ -1420,7 +1424,7 @@ public class SaveMappedFiles {
 						index = cellIndexMap.get(columHeaderMap.get("SkUCode"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							if (SKUList.contains(entry.getCell(index)
+							if (SKUList!=null&&SKUList.contains(entry.getCell(index)
 									.toString())) {
 								order.setProductSkuCode(entry.getCell(index)
 										.toString());
@@ -2644,7 +2648,7 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							if ((!idsList.contains(entry.getCell(index)
+							if (idsList!=null&&(!idsList.contains(entry.getCell(index)
 									.toString()))
 									&& !duplicateKey.containsKey(entry.getCell(
 											index).toString())) {
@@ -2698,7 +2702,7 @@ public class SaveMappedFiles {
 						index = cellIndexMap.get(columHeaderMap.get("SkUCode"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							if (SKUList.contains(entry.getCell(index)
+							if (SKUList!=null&&SKUList.contains(entry.getCell(index)
 									.toString())) {
 								order.setProductSkuCode(entry.getCell(index)
 										.toString());
@@ -3771,7 +3775,7 @@ public class SaveMappedFiles {
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 							String id=entry.getCell(index).toString().substring(3, entry.getCell(index).toString().indexOf("S"));
-							if (!idsList.contains(id
+							if (idsList!=null&&!idsList.contains(id
 									+ "-"
 									+ entry.getCell(skuIndex).toString())
 									&& !duplicateKey.containsKey(id
@@ -3830,7 +3834,7 @@ public class SaveMappedFiles {
 						index = cellIndexMap.get(columHeaderMap.get("SkUCode"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							if (SKUList.contains(entry.getCell(index)
+							if (SKUList!=null&&SKUList.contains(entry.getCell(index)
 									.toString())) {
 								order.setProductSkuCode(entry.getCell(index)
 										.toString());

@@ -5373,11 +5373,9 @@ public class OrderDaoImpl implements OrderDao {
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId));
 			criteria.setProjection(Projections.property(OrderCriteria));	
-			if(criteria != null && criteria.list().size() != 0){
 				idsList=criteria.list();
-			}
-			System.out.println(idsList.get(2));
-			System.out.println(idsList.size());
+			
+			
 		}catch(Exception e){
 			log.error("Failed by Seller ID : "+sellerId, e);
 			e.printStackTrace();
