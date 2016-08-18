@@ -1457,14 +1457,15 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
-								String dateStr = entry.getCell(index).toString();
+								/*String dateStr = entry.getCell(index).toString();
 								String date = "";
 								if (dateStr.contains(" ")) {
 									date = entry.getCell(index).toString().substring(0, entry.getCell(index).toString().indexOf(" "));
 								} else {
 									date = entry.getCell(index).toString();
 								}
-								order.setOrderDate(format.parse(date));
+								order.setOrderDate(format.parse(date));*/
+								order.setOrderDate(entry.getCell(index).getDateCellValue());
 							} catch (Exception e) {
 								errorMessage
 										.append(" Order Received Date format is wrong ,");
@@ -1647,6 +1648,15 @@ public class SaveMappedFiles {
 							try {
 								String date = entry.getCell(index).toString();
 								order.setShippedDate(new Date(date));
+								/*String dateStr = entry.getCell(index).toString();
+								String date = "";
+								if (dateStr.contains(" ")) {
+									date = entry.getCell(index).toString().substring(0, entry.getCell(index).toString().indexOf(" "));
+								} else {
+									date = entry.getCell(index).toString();
+								}
+								order.setShippedDate(format.parse(date));*/
+								//order.setShippedDate(entry.getCell(index).getDateCellValue());
 							} catch (Exception e) {
 								errorMessage
 										.append(" Shipped Date formate is wrong ,");

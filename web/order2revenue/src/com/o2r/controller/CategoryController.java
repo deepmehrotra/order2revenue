@@ -430,21 +430,24 @@ public class CategoryController {
 			TaxCategory category = ConverterClass
 					.prepareTaxCategoryModel(taxCategoryBean);
 			List<Category> categoryList = new ArrayList<Category>();
-			TaxCategory tmpCat = taxDetailService.getTaxCategory(category.getTaxCatId());
-			if (tmpCat != null) {
-				/*categoryList = tmpCat.getProductCategoryCST();
-				if (categoryList != null && !categoryList.isEmpty()) {
-					Iterator<Category> categoryListIterator = categoryList.iterator();
-					while (categoryListIterator.hasNext()) {
-						Category productCat = categoryListIterator.next();
-						if (category.getTaxCatType().equalsIgnoreCase("LST")) {
-							productCat.setLST(null);
-						} else {
-							productCat.setCST(null);
+			
+			if (category.getTaxCatId() > 0) {
+				TaxCategory tmpCat = taxDetailService.getTaxCategory(category.getTaxCatId());
+				if (tmpCat != null) {
+					/*categoryList = tmpCat.getProductCategoryCST();
+					if (categoryList != null && !categoryList.isEmpty()) {
+						Iterator<Category> categoryListIterator = categoryList.iterator();
+						while (categoryListIterator.hasNext()) {
+							Category productCat = categoryListIterator.next();
+							if (category.getTaxCatType().equalsIgnoreCase("LST")) {
+								productCat.setLST(null);
+							} else {
+								productCat.setCST(null);
+							}
 						}
-					}
-				}*/
-				taxDetailService.removeProductMapping(tmpCat.getTaxCatId(), sellerId);
+					}*/
+					taxDetailService.removeProductMapping(tmpCat.getTaxCatId(), sellerId);
+				}
 			}
 			
 			String[] catList = request.getParameterValues("multiSku");
