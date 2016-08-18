@@ -3759,29 +3759,22 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							if (!idsList.contains(entry.getCell(index)
-									.toString()
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							String id=entry.getCell(index).toString().substring(3, entry.getCell(index).toString().indexOf("S"));
+							if (!idsList.contains(id
 									+ "-"
 									+ entry.getCell(skuIndex).toString())
-									&& !duplicateKey.containsKey(entry.getCell(
-											index).toString()
+									&& !duplicateKey.containsKey(id
 											+ "-"
 											+ entry.getCell(skuIndex)
 													.toString())) {
-								order.setChannelOrderID(entry.getCell(index)
-										.toString()
-										+ "-"
-										+ entry.getCell(skuIndex).toString());
-								duplicateKey.put(
-										entry.getCell(index).toString()
+								order.setChannelOrderID(id+ "-" + entry.getCell(skuIndex).toString());
+								duplicateKey.put(id
 												+ "-"
 												+ entry.getCell(skuIndex)
 														.toString(), "");
 							} else {
-								order.setChannelOrderID(entry.getCell(index)
-										.toString()
+								order.setChannelOrderID(id
 										+ "-"
 										+ entry.getCell(skuIndex).toString());
 								errorMessage
