@@ -793,9 +793,11 @@ public class SaveMappedFiles {
 							validaterow = false;
 						}
 					} catch (NullPointerException e) {
+
 						log.error("Failed in getting channel order id : ", e);
 						errorMessage
 								.append("The column 'order-id' doesn't exist");
+
 						validaterow = false;
 					}
 

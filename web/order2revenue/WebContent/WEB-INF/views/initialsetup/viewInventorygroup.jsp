@@ -10,7 +10,7 @@
 <title>Inventory Group</title>
 
 <script type="text/javascript">
-var nameAvailability=true;
+var nameAvailability=false;
 $(document).ready(function() {
 	
 	var inventorygroup='${category.id}';
@@ -84,7 +84,7 @@ function checkOnBlur()
                context: document.body,
                type: 'post',
                data:$("#addCategoryForm").serialize(),
-               success : function(res) {
+               success : function(data) {
             	   if($(data).find('#j_username').length > 0){
                		window.location.href = "orderindex.html";
                	}else{

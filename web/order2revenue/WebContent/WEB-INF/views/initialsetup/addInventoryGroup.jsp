@@ -10,7 +10,7 @@
 <title>Add Inventory Group</title>
 
 <script type="text/javascript">
-var nameAvailability=true;
+var nameAvailability=false;
 
 function checkOnBlur()
 {
@@ -33,7 +33,7 @@ function checkOnBlur()
        
  	   }
 	 });
-	}
+}
     function submitInventoryGroup(){
     	 	 var validator = $("#addInventoryGroupForm").validate({
 	    		  rules: {
@@ -47,20 +47,22 @@ function checkOnBlur()
 	    	     }
 	    	 });
 	    	 if(validator.form()&&nameAvailability){ // validation perform
-	    		     $.ajax({
+	    		   
+	    		/*  $('form#addInventoryGroupForm').submit(); */
+	    		$.ajax({
                     url: $("#addInventoryGroupForm").attr("action"),
                     context: document.body,
                     type: 'post',
                     data:$("#addInventoryGroupForm").serialize(),
-                    success : function(res) {
+                    success : function(data) {
                     	if($(data).find('#j_username').length > 0){
                     		window.location.href = "orderindex.html";
                     	}else{
                         	$('#centerpane').html(data);
-                    	}
-                   
-             	   }
+                    	}                  
+             	   	}
             	 });
+            	 
 	    	 }
  	   };
 </script>
