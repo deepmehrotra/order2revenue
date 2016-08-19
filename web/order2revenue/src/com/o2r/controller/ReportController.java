@@ -872,14 +872,14 @@ public class ReportController {
 			orderlist = orderService
 					.findOrdersbyDate("shippedDate", startDate, endDate,
 							helperClass.getSellerIdfromSession(request), false);
-			System.out.println(orderlist.size());
+			
 			reportDownloadService.downloadReport(response, status, orderlist,
 					reportheaders, reportName,
 					helperClass.getSellerIdfromSession(request));
 		} catch (ClassNotFoundException e) {
 			System.out.println(" Class castexception in download report");
 			e.printStackTrace();
-			log.error(e);
+			log.error("Failed ! in ReportContrller ",e);
 		} catch (CustomException ce) {
 			ce.printStackTrace();
 			log.error("downloadReport exception : " + ce.toString());
