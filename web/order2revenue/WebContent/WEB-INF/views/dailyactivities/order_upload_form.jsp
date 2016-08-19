@@ -191,7 +191,7 @@
 										</select>
 									</div>
 									<div class="col-md-4">															
-										<input name="files[0]" type="file"	class="form-control" required onChange="extCheck()"/>											
+										<input name="files[0]" type="file" id="file1" class="form-control" required accept="application/vnd.ms-excel" onchange="checkfile1(this);"/>											
 									</div>
 									<div class="col-md-2">
 										
@@ -242,7 +242,7 @@
 		                                        </select>
 		                                    </div>
 		                                    <div class="col-md-4">
-		                                        <input name="files[0]" type="file" id="file" class="form-control" required onChange="extCheck()"/>	
+		                                        <input name="files[0]" type="file" id="file" class="form-control" required accept="application/vnd.ms-excel" onchange="checkfile(this);"/>	
 		                                    </div>
 		                                    <div class="col-md-2">
 		                                        <button class="btn btn-success " type="submit" id="upload4Channel">
@@ -267,18 +267,31 @@
 	</div>
 <script type="text/javascript" language="javascript">
 function checkfile(sender) {
-    var validExts = new Array(".xls");
+	var validExts = new Array(".xls");
     var fileExt = sender.value;
     fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
     if (validExts.indexOf(fileExt) < 0) {
       alert("Invalid file selected, valid files are of " +
                validExts.toString() + " types.");
+      file.form.reset();
+      return false;
+    }
+    else return true;
+}
+function checkfile1(sender) {
+	var validExts = new Array(".xls");
+    var fileExt = sender.value;
+    fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+    if (validExts.indexOf(fileExt) < 0) {
+      alert("Invalid file selected, valid files are of " +
+               validExts.toString() + " types.");
+      file1.form.reset();
       return false;
     }
     else return true;
 }
 </script>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 	function extCheck(){
 		var elem= document.getElementById("file");
 		var re_text = /\.xls/i;
@@ -289,7 +302,7 @@ function checkfile(sender) {
 	    } else
 	    	return true;
 	}
-</script>
+</script> -->
 
 </body>
 </html>

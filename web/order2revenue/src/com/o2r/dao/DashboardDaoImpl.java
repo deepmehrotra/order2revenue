@@ -184,8 +184,13 @@ public class DashboardDaoImpl implements DashboardDao {
 		thisYearSatrt.setMonth(0);
 		thisYearSatrt.setHours(0);
 		lastYearSatrt.setDate(1);
-		lastYearSatrt.setMonth(0);
+		lastYearSatrt.setMonth(0);	
+		System.out.println(" Checking Year & Month "+thisFinancialYearStart.getYear()+"-"+thisFinancialYearStart.getMonth());
+		if(thisFinancialYearStart.getMonth() < 3){
+			thisFinancialYearStart.setYear(thisFinancialYearStart.getYear()-1);
+		}
 		thisFinancialYearStart.setMonth(3);
+		System.out.println(" Checking Date "+thisFinancialYearStart);
 		thisFinancialYearStart.setDate(1);
 		lastFinancialYearStart.setDate(1);
 		lastFinancialYearStart.setMonth(3);
@@ -1293,6 +1298,7 @@ public class DashboardDaoImpl implements DashboardDao {
 	public double grossProfitForDuration(Session session, Date startDate,Date endDate, int sellerId) {
 
 		log.info("***amountForDuration starts***");
+		System.out.println("Gross Profit for Duration START at : "+new Date());
 		List<Double> results = null;
 		double gpforMP = 0;
 		double gpforMPReturn = 0;
@@ -1355,6 +1361,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			log.debug("Inside pcount exception  "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
+		System.out.println("Gross Profit for Duration END at : "+new Date());
 		log.info("***amountForDuration ends***");
 		return sum;
 	}

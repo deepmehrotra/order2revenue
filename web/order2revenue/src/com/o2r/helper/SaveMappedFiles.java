@@ -486,65 +486,63 @@ public class SaveMappedFiles {
 						event = eventsService.isEventActiive(
 								order.getOrderDate(), partner.getPcName(),
 								order.getProductSkuCode(), sellerId);
-						try {
-							index = cellIndexMap.get(columHeaderMap
-									.get("Gross NR"));
+													
 							if (event != null) {
 								if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("fixed")) {
+									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+										if (entry.getCell(index) != null
+												&& entry.getCell(index)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 
-									if (entry.getCell(index) != null
-											&& entry.getCell(index)
-													.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-
-										try {
-											order.setGrossNetRate(Double
-													.parseDouble(entry.getCell(
-															index).toString()));
-										} catch (NumberFormatException e) {
-											log.error("Failed! by SellerId : "
-													+ sellerId, e);
+											try {
+												order.setGrossNetRate(Double
+														.parseDouble(entry.getCell(
+																index).toString()));
+											} catch (NumberFormatException e) {
+												log.error("Failed! by SellerId : "
+														+ sellerId, e);
+												errorMessage
+														.append(" Net Rate should be number ");
+												validaterow = false;
+											}
+										} else {
 											errorMessage
-													.append(" Net Rate should be number ");
+													.append(" Net Rate is null and ongoing event on the order with fixed price.");
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event on the order with fixed price.");
-
-									}
+										errorMessage.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}									
 								}
 							} else {
 								if (partner != null
 										&& partner.getNrnReturnConfig() != null
 										&& !partner.getNrnReturnConfig()
 												.isNrCalculator()) {
-									if (entry.getCell(index) != null
-											&& entry.getCell(index)
-													.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-										try {
-											order.setGrossNetRate(Double
-													.parseDouble(entry.getCell(
-															index).toString()));
-										} catch (NumberFormatException e) {
-											log.error("Failed! by SellerId : "
-													+ sellerId, e);
-											errorMessage
-													.append(" Net Rate should be number ");
+									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+										if (entry.getCell(index) != null
+												&& entry.getCell(index)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+											try {
+												order.setGrossNetRate(Double
+														.parseDouble(entry.getCell(
+																index).toString()));
+											} catch (NumberFormatException e) {
+												log.error("Failed! by SellerId : "
+														+ sellerId, e);
+												errorMessage
+														.append(" Net Rate should be number ");
 
+											}
 										}
-									} else {
-										errorMessage
-												.append(" Net Rate is null ");
-									}
+									}									 
 								}
-
-							}
-						} catch (NullPointerException e) {
-							errorMessage
-									.append("The column 'Gross NR' doesn't exist");
-						}
+							}						
 					}
 					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
 						index = cellIndexMap.get(columHeaderMap
@@ -1177,64 +1175,63 @@ public class SaveMappedFiles {
 						event = eventsService.isEventActiive(
 								order.getOrderDate(), partner.getPcName(),
 								order.getProductSkuCode(), sellerId);
-						try {
-							index = cellIndexMap.get(columHeaderMap
-									.get("Gross NR"));
+													
 							if (event != null) {
 								if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("fixed")) {
+									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+										if (entry.getCell(index) != null
+												&& entry.getCell(index)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 
-									if (entry.getCell(index) != null
-											&& entry.getCell(index)
-													.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-
-										try {
-											order.setGrossNetRate(Double
-													.parseDouble(entry.getCell(
-															index).toString()));
-										} catch (NumberFormatException e) {
-											log.error("Failed! by SellerId : "
-													+ sellerId, e);
+											try {
+												order.setGrossNetRate(Double
+														.parseDouble(entry.getCell(
+																index).toString()));
+											} catch (NumberFormatException e) {
+												log.error("Failed! by SellerId : "
+														+ sellerId, e);
+												errorMessage
+														.append(" Net Rate should be number ");
+												validaterow = false;
+											}
+										} else {
 											errorMessage
-													.append(" Net Rate should be number ");
+													.append(" Net Rate is null and ongoing event on the order with fixed price.");
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event on the order with fixed price.");
-
-									}
+										errorMessage.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}									
 								}
 							} else {
 								if (partner != null
 										&& partner.getNrnReturnConfig() != null
 										&& !partner.getNrnReturnConfig()
 												.isNrCalculator()) {
-									if (entry.getCell(index) != null
-											&& entry.getCell(index)
-													.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-										try {
-											order.setGrossNetRate(Double
-													.parseDouble(entry.getCell(
-															index).toString()));
-										} catch (NumberFormatException e) {
-											log.error("Failed! by SellerId : "
-													+ sellerId, e);
-											errorMessage
-													.append(" Net Rate should be number ");
+									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+										if (entry.getCell(index) != null
+												&& entry.getCell(index)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+											try {
+												order.setGrossNetRate(Double
+														.parseDouble(entry.getCell(
+																index).toString()));
+											} catch (NumberFormatException e) {
+												log.error("Failed! by SellerId : "
+														+ sellerId, e);
+												errorMessage
+														.append(" Net Rate should be number ");
 
+											}
 										}
-									} else {
-										errorMessage
-												.append(" Net Rate is null ");
-									}
+									}									 
 								}
-
-							}
-						} catch (NullPointerException e) {
-							//errorMessage.append("The column 'Gross NR' doesn't exist");
-						}
+							}						
 					}
 
 					product = productService.getProduct(
@@ -1754,64 +1751,63 @@ public class SaveMappedFiles {
 						event = eventsService.isEventActiive(
 								order.getOrderDate(), partner.getPcName(),
 								order.getProductSkuCode(), sellerId);
-						try {
-							index = cellIndexMap.get(columHeaderMap
-									.get("Gross NR"));
+													
 							if (event != null) {
 								if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("fixed")) {
+									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+										if (entry.getCell(index) != null
+												&& entry.getCell(index)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 
-									if (entry.getCell(index) != null
-											&& entry.getCell(index)
-													.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-
-										try {
-											order.setGrossNetRate(Double
-													.parseDouble(entry.getCell(
-															index).toString()));
-										} catch (NumberFormatException e) {
-											log.error("Failed! by SellerId : "
-													+ sellerId, e);
+											try {
+												order.setGrossNetRate(Double
+														.parseDouble(entry.getCell(
+																index).toString()));
+											} catch (NumberFormatException e) {
+												log.error("Failed! by SellerId : "
+														+ sellerId, e);
+												errorMessage
+														.append(" Net Rate should be number ");
+												validaterow = false;
+											}
+										} else {
 											errorMessage
-													.append(" Net Rate should be number ");
+													.append(" Net Rate is null and ongoing event on the order with fixed price.");
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event on the order with fixed price.");
-
-									}
+										errorMessage.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}									
 								}
 							} else {
 								if (partner != null
 										&& partner.getNrnReturnConfig() != null
 										&& !partner.getNrnReturnConfig()
 												.isNrCalculator()) {
-									if (entry.getCell(index) != null
-											&& entry.getCell(index)
-													.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-										try {
-											order.setGrossNetRate(Double
-													.parseDouble(entry.getCell(
-															index).toString()));
-										} catch (NumberFormatException e) {
-											log.error("Failed! by SellerId : "
-													+ sellerId, e);
-											errorMessage
-													.append(" Net Rate should be number ");
+									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+										if (entry.getCell(index) != null
+												&& entry.getCell(index)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+											try {
+												order.setGrossNetRate(Double
+														.parseDouble(entry.getCell(
+																index).toString()));
+											} catch (NumberFormatException e) {
+												log.error("Failed! by SellerId : "
+														+ sellerId, e);
+												errorMessage
+														.append(" Net Rate should be number ");
 
+											}
 										}
-									} else {
-										errorMessage
-												.append(" Net Rate is null ");
-									}
+									}									 
 								}
-
-							}
-						} catch (NullPointerException e) {
-							//errorMessage.append("The column 'Gross NR' doesn't exist");
-						}
+							}						
 					}
 
 					product = productService.getProduct(
@@ -2968,65 +2964,63 @@ public class SaveMappedFiles {
 						event = eventsService.isEventActiive(
 								order.getOrderDate(), partner.getPcName(),
 								order.getProductSkuCode(), sellerId);
-						try {
-							index = cellIndexMap.get(columHeaderMap
-									.get("Gross NR"));
+													
 							if (event != null) {
 								if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("fixed")) {
+									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+										if (entry.getCell(index) != null
+												&& entry.getCell(index)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 
-									if (entry.getCell(index) != null
-											&& entry.getCell(index)
-													.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-
-										try {
-											order.setGrossNetRate(Double
-													.parseDouble(entry.getCell(
-															index).toString()));
-										} catch (NumberFormatException e) {
-											log.error("Failed! by SellerId : "
-													+ sellerId, e);
+											try {
+												order.setGrossNetRate(Double
+														.parseDouble(entry.getCell(
+																index).toString()));
+											} catch (NumberFormatException e) {
+												log.error("Failed! by SellerId : "
+														+ sellerId, e);
+												errorMessage
+														.append(" Net Rate should be number ");
+												validaterow = false;
+											}
+										} else {
 											errorMessage
-													.append(" Net Rate should be number ");
+													.append(" Net Rate is null and ongoing event on the order with fixed price.");
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event on the order with fixed price.");
-
-									}
+										errorMessage.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}									
 								}
 							} else {
 								if (partner != null
 										&& partner.getNrnReturnConfig() != null
 										&& !partner.getNrnReturnConfig()
 												.isNrCalculator()) {
-									if (entry.getCell(index) != null
-											&& entry.getCell(index)
-													.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-										try {
-											order.setGrossNetRate(Double
-													.parseDouble(entry.getCell(
-															index).toString()));
-										} catch (NumberFormatException e) {
-											log.error("Failed! by SellerId : "
-													+ sellerId, e);
-											errorMessage
-													.append(" Net Rate should be number ");
+									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+										if (entry.getCell(index) != null
+												&& entry.getCell(index)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+											try {
+												order.setGrossNetRate(Double
+														.parseDouble(entry.getCell(
+																index).toString()));
+											} catch (NumberFormatException e) {
+												log.error("Failed! by SellerId : "
+														+ sellerId, e);
+												errorMessage
+														.append(" Net Rate should be number ");
 
+											}
 										}
-									} else {
-										errorMessage
-												.append(" Net Rate is null ");
-									}
+									}									 
 								}
-
-							}
-						} catch (NullPointerException e) {
-							errorMessage
-									.append("The column 'Gross NR' doesn't exist");
-						}
+							}						
 					}
 					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
 						index = cellIndexMap.get(columHeaderMap
@@ -3811,7 +3805,10 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'ORDER ITEM ID' or 'Vendor Code' doesn't exist");
+								.append("The column 'Order id' or 'Vendor Code' doesn't exist");
+						validaterow = false;
+					} catch (Exception e) {
+						errorMessage.append("Invalid Order ID..");
 						validaterow = false;
 					}
 
@@ -3822,6 +3819,8 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
 								String date = entry.getCell(index).toString();
+								if(date.contains(" "))
+									date=date.substring(0, date.indexOf(" "));
 								order.setOrderDate(new Date(date));
 							} catch (Exception e) {
 								errorMessage
@@ -3836,7 +3835,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Ordered On' doesn't exist");
+								.append("The column 'Date Time' doesn't exist");
 						validaterow = false;
 					}
 
@@ -3861,7 +3860,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'SKU Code' doesn't exist");
+								.append("The column 'Vendor Code' doesn't exist");
 						validaterow = false;
 					}
 
@@ -3930,7 +3929,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Payment Type' doesn't exist");
+								.append("The column 'Order Type' doesn't exist");
 						validaterow = false;
 					}
 
@@ -4029,7 +4028,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Invoice Amount' doesn't exist");
+								.append("The column 'Order SP' doesn't exist");
 						validaterow = false;
 					}
 
@@ -4052,7 +4051,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Ready to Ship by date' doesn't exist");
+								.append("The column 'Order Shipped Date' doesn't exist");
 						validaterow = false;
 					}
 
@@ -4085,7 +4084,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Quantity' doesn't exist");
+								.append("The column 'Qty' doesn't exist");
 						validaterow = false;
 					}
 
@@ -4093,65 +4092,63 @@ public class SaveMappedFiles {
 						event = eventsService.isEventActiive(
 								order.getOrderDate(), partner.getPcName(),
 								order.getProductSkuCode(), sellerId);
-						try {
-							index = cellIndexMap.get(columHeaderMap
-									.get("Gross NR"));
+													
 							if (event != null) {
 								if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("fixed")) {
+									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+										if (entry.getCell(index) != null
+												&& entry.getCell(index)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 
-									if (entry.getCell(index) != null
-											&& entry.getCell(index)
-													.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-
-										try {
-											order.setGrossNetRate(Double
-													.parseDouble(entry.getCell(
-															index).toString()));
-										} catch (NumberFormatException e) {
-											log.error("Failed! by SellerId : "
-													+ sellerId, e);
+											try {
+												order.setGrossNetRate(Double
+														.parseDouble(entry.getCell(
+																index).toString()));
+											} catch (NumberFormatException e) {
+												log.error("Failed! by SellerId : "
+														+ sellerId, e);
+												errorMessage
+														.append(" Net Rate should be number ");
+												validaterow = false;
+											}
+										} else {
 											errorMessage
-													.append(" Net Rate should be number ");
+													.append(" Net Rate is null and ongoing event on the order with fixed price.");
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event on the order with fixed price.");
-
-									}
+										errorMessage.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}									
 								}
 							} else {
 								if (partner != null
 										&& partner.getNrnReturnConfig() != null
 										&& !partner.getNrnReturnConfig()
 												.isNrCalculator()) {
-									if (entry.getCell(index) != null
-											&& entry.getCell(index)
-													.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-										try {
-											order.setGrossNetRate(Double
-													.parseDouble(entry.getCell(
-															index).toString()));
-										} catch (NumberFormatException e) {
-											log.error("Failed! by SellerId : "
-													+ sellerId, e);
-											errorMessage
-													.append(" Net Rate should be number ");
+									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+										if (entry.getCell(index) != null
+												&& entry.getCell(index)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+											try {
+												order.setGrossNetRate(Double
+														.parseDouble(entry.getCell(
+																index).toString()));
+											} catch (NumberFormatException e) {
+												log.error("Failed! by SellerId : "
+														+ sellerId, e);
+												errorMessage
+														.append(" Net Rate should be number ");
 
+											}
 										}
-									} else {
-										errorMessage
-												.append(" Net Rate is null ");
-									}
+									}									 
 								}
-
-							}
-						} catch (NullPointerException e) {
-							errorMessage
-									.append("The column 'Gross NR' doesn't exist");
-						}
+							}						
 					}
 					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
 						index = cellIndexMap.get(columHeaderMap
@@ -4227,7 +4224,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'PIN Code' doesn't exist");
+								.append("The column 'Pincode' doesn't exist");
 						validaterow = false;
 					}
 					product = productService.getProduct(
