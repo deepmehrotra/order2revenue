@@ -161,6 +161,7 @@ public class SaveContents {
 									.toString(), sellerId, false, false);
 					if ((onj == null || onj.size() == 0)&&!duplicateKey.containsKey(entry.getCell(0)
 									.toString())) {
+						
 						order.setChannelOrderID(entry.getCell(0).toString());
 						duplicateKey.put(entry.getCell(0).toString(), "");
 					} else {
@@ -408,6 +409,7 @@ public class SaveContents {
 				}
 				if (entry.getCell(18) != null
 						&& entry.getCell(18).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					entry.getCell(18).setCellType(HSSFCell.CELL_TYPE_STRING);
 					customerBean.setCustomerPhnNo(entry.getCell(18).toString());
 				}
 				if (entry.getCell(19) != null
