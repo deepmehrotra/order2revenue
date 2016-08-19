@@ -132,18 +132,13 @@ public class AreaConfigDaoImpl implements AreaConfigDao {
 		log.info("***isZipCodeValid starts*** ");
 		List<String> stateNames = null;
 		boolean returnObject = false;	
-		String zip=null;
-		try {
-			if(zipcode.contains(".")){
-				zip=zipcode.substring(0, zipcode.indexOf("."));				
-			} else {
-				zip=zipcode;
-			}
-			System.out.println(zip);
+		
+		try {			
+			
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			Query gettingStates = session.createSQLQuery(zipcodeValidQuery)
-					.setParameter("zipcode", zip);
+					.setParameter("zipcode", zipcode);
 			stateNames = gettingStates.list();
 			if (stateNames != null && stateNames.size() != 0)
 				returnObject = true;

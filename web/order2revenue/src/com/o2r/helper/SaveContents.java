@@ -422,9 +422,14 @@ public class SaveContents {
 				if (entry.getCell(21) != null
 						&& entry.getCell(21).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					log.debug(" getting zipcode ");
-					if (areaConfigDao.isZipCodeValid(entry.getCell(21).toString())) {
+					String zipCode=entry.getCell(21).toString();
+					if(zipCode.contains(".")){
+						zipCode=zipCode.substring(0, zipCode.indexOf("."));				
+					}	
+					System.out.println(zipCode);
+					if (areaConfigDao.isZipCodeValid(zipCode)) {
 						try {
-							customerBean.setZipcode(entry.getCell(21).toString());
+							customerBean.setZipcode(zipCode);
 						} catch (Exception e) {
 							log.error("Failed! by SellerId : "+sellerId, e);
 							errorMessage
@@ -434,7 +439,7 @@ public class SaveContents {
 					} else {
 						errorMessage.append("Customer zipcode is not valid ");
 						validaterow = false;
-						customerBean.setZipcode(entry.getCell(21).toString());
+						customerBean.setZipcode(zipCode);
 					}
 				} else {
 					errorMessage.append("Customer zipcode is blank ");
