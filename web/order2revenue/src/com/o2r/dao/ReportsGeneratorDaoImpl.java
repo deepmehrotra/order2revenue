@@ -186,8 +186,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			List<Object[]> results = criteria.list();
 			log.debug("results.size()  " + results.size());
 			ttso = new TotalShippedOrder[results.size()];
-			log.debug(" Array size :" + ttso.length);
-			log.debug("ttso  Object " + ttso[0]);
+
 			Iterator iterator1 = results.iterator();
 			int iteratorCount = 0;
 			if (results != null) {
@@ -268,13 +267,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				while (DOiterator.hasNext()) {
 					System.out.println("\n");
 					Object[] recordsRow = (Object[]) DOiterator.next();
-					log.debug(" Delivered order partner :"
-							+ recordsRow[0].toString() + " coumt :"
-							+ recordsRow[1].toString());
+					if(recordsRow[1]!=null)
+					{
 					totalNoofDO = totalNoofDO
 							+ Integer.parseInt(recordsRow[1].toString());
 					ttso[iteratorCount++].setNoOfDeliveredOrder(Integer
 							.parseInt(recordsRow[1].toString()));
+					}
 				}
 			}
 
@@ -302,14 +301,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				iteratorCount = 0;
 				while (ROiterator.hasNext()) {
 					Object[] recordsRow = (Object[]) ROiterator.next();
-					log.debug(" Return order partner :"
-							+ recordsRow[0].toString() + " coumt :"
-							+ recordsRow[1].toString());
-
+					if(recordsRow[1]!=null)
+					{
 					totalNoofRO = totalNoofRO
 							+ Integer.parseInt(recordsRow[1].toString());
 					ttso[iteratorCount++].setNoOfReturnOrder(Integer
 							.parseInt(recordsRow[1].toString()));
+					}
 
 				}
 			}
@@ -338,14 +336,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				iteratorCount = 0;
 				while (AOiterator.hasNext()) {
 					Object[] recordsRow = (Object[]) AOiterator.next();
-					log.debug(" Actionable order partner :"
-							+ recordsRow[0].toString() + " coumt :"
-							+ recordsRow[1].toString());
-
+					if(recordsRow[1]!=null)
+					{
 					totalNoofAO = totalNoofAO
 							+ Integer.parseInt(recordsRow[1].toString());
 					ttso[iteratorCount++].setNoOfActionableOrders(Integer
 							.parseInt(recordsRow[1].toString()));
+					}
 
 				}
 			}
@@ -374,13 +371,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				iteratorCount = 0;
 				while (SOiterator.hasNext()) {
 					Object[] recordsRow = (Object[]) SOiterator.next();
-					log.debug(" Settled order partner :"
-							+ recordsRow[0].toString() + " coumt :"
-							+ recordsRow[1].toString());
+					if(recordsRow[1]!=null)
+					{
 					totalNoofSO = totalNoofSO
 							+ Integer.parseInt(recordsRow[1].toString());
 					ttso[iteratorCount++].setNoOfSettledOrders(Integer
 							.parseInt(recordsRow[1].toString()));
+					}
 
 				}
 			}
@@ -411,14 +408,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				iteratorCount = 0;
 				while (rtoOiterator.hasNext()) {
 					Object[] recordsRow = (Object[]) rtoOiterator.next();
-					log.debug(" Rto limit partner :"
-							+ recordsRow[0].toString() + " coumt :"
-							+ recordsRow[1].toString());
-
+					if(recordsRow[1]!=null)
+					{
 					totalNoofRTOCross = totalNoofRTOCross
 							+ Integer.parseInt(recordsRow[1].toString());
 					ttso[iteratorCount++].setNoOfRTOLimitCrossed(Integer
 							.parseInt(recordsRow[1].toString()));
+					}
 
 				}
 			}
@@ -448,14 +444,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				while (returniterator.hasNext()) {
 					iteratorCount = 0;
 					Object[] recordsRow = (Object[]) returniterator.next();
-					log.debug(" Return limit partner :"
-							+ recordsRow[0].toString() + " coumt :"
-							+ recordsRow[1].toString());
-
+					if(recordsRow[1]!=null)
+					{
 					totalNoofreturnCross = totalNoofreturnCross
 							+ Integer.parseInt(recordsRow[1].toString());
 					ttso[iteratorCount++].setNoOfReturnLimitCrossed(Integer
 							.parseInt(recordsRow[1].toString()));
+					}
 
 				}
 			}
@@ -486,12 +481,12 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					
 					Object[] recordsRow = (Object[]) cityIterator.next();
 					log.debug(" Cities row length "+ recordsRow.length);
-					if (recordsRow.length > 0) {
+					if (recordsRow.length > 0&&recordsRow[0]!=null&&recordsRow[1]!=null) {
 						if (!cityMap.containsKey(recordsRow[0].toString())) {
 							cityMap.put(recordsRow[0].toString(), Double
 									.parseDouble(recordsRow[1].toString()));
 						}
-						log.debug("city " + recordsRow[0]+ " count : " + recordsRow[1]);
+						//log.debug("city " + recordsRow[0]+ " count : " + recordsRow[1]);
 						cityTotalQuantity = cityTotalQuantity
 								+ Integer.parseInt(recordsRow[1].toString());
 					}
@@ -499,11 +494,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				}
 			}
 			log.debug(" ***cityTotalQuantity " + cityTotalQuantity);
+			if(ttso!=null&&ttso.length!=0)
+			{
 			ttso[0].setCityQuantity(cityMap);
 			for (Map.Entry<String, Double> entry : cityMap.entrySet()) {
-				log.debug("for city : " + entry.getKey()
+				/*log.debug("for city : " + entry.getKey()
 						+ " count is :" + entry.getValue() + " percent is :"
-						+ (entry.getValue()) / cityTotalQuantity * 100);
+						+ (entry.getValue()) / cityTotalQuantity * 100);*/
 				cityPercentMap.put(entry.getKey(), (entry.getValue())
 						/ cityTotalQuantity * 100);
 			}
@@ -548,7 +545,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 							.getNoOfSettledOrders() * 100 / totalNoofSO);
 
 			}
-
+		}
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
@@ -594,8 +591,12 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			temp = criteria.list();
 			if (temp != null && temp.size() != 0) {				
 				orderlistGpReturn = temp;
-			}			
-			orderList.addAll(orderlistGpReturn);			
+			}
+			if(orderList!=null&&orderlistGpReturn!=null)			
+			orderList.addAll(orderlistGpReturn);
+			else if(orderList==null&&orderlistGpReturn!=null)
+				orderList=orderlistGpReturn;
+			
 			if(orderList != null && orderList.size() != 0){
 				for (Order order:orderList) {
 					if(consolidatedMap.containsKey(order.getPcName())){

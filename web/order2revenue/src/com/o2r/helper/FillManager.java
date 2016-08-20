@@ -44,13 +44,15 @@ public class FillManager {
 		bodyCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
 		bodyCellStyle.setWrapText(true);
 				
-		System.out.println(" Insidee fill manage : datasource size : "+datasource.size());
+		/*System.out.println(" Insidee fill manage : datasource size : "+datasource);
 		System.out.println(" Start ro index : "+startRowIndex);
 		System.out.println(" header length  : "+headers.length);
-		System.out.println(" headers  : "+headers);
+		System.out.println(" headers  : "+headers);*/
 		int rowIndex=startRowIndex-1;
 		// Create body
 		try{
+			if(datasource!=null&&datasource.size()!=0)
+			{
 		for (int i=startRowIndex; i+startRowIndex-2< datasource.size()+2; i++) {
 			
 			rowIndex++;
@@ -498,6 +500,7 @@ public class FillManager {
 				rowIndex-=1;
 			}
 		}
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
