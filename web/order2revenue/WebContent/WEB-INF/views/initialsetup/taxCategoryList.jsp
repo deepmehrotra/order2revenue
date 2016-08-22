@@ -47,6 +47,14 @@
 		});
 	}
 </script>
+<style type="text/css">
+#taxCatTable td
+{    
+	max-width: 80px;
+  	overflow-y: hidden;
+}
+
+</style>
 </head>
 <body>
 	<div id="wrapper">
@@ -66,7 +74,7 @@
 								</div>
 							</div>
 							<div class="ibox-content">
-								<table class="table table-bordered custom-table">
+								<table class="table table-bordered custom-table" id="taxCatTable">
 									<thead>
 										<tr>
 											<th>#</th>

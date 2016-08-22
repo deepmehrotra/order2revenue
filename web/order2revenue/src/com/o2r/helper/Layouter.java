@@ -253,45 +253,45 @@ public class Layouter {
 		cell13.setCellValue("Order SP");
 		cell13.setCellStyle(headerCellStyle);
 
-		HSSFCell cell14 = rowHeader.createCell(startColIndex + 13);
+		/*HSSFCell cell14 = rowHeader.createCell(startColIndex + 13);
 		cell14.setCellValue("Tax Category");
+		cell14.setCellStyle(headerCellStyle);*/
+
+		HSSFCell cell14 = rowHeader.createCell(startColIndex + 13);
+		cell14.setCellValue("Shipped Date");
 		cell14.setCellStyle(headerCellStyle);
 
 		HSSFCell cell15 = rowHeader.createCell(startColIndex + 14);
-		cell15.setCellValue("Shipped Date");
+		cell15.setCellValue("Quantity");
 		cell15.setCellStyle(headerCellStyle);
 
 		HSSFCell cell16 = rowHeader.createCell(startColIndex + 15);
-		cell16.setCellValue("Quantity");
+		cell16.setCellValue("Net Rate");
 		cell16.setCellStyle(headerCellStyle);
 
 		HSSFCell cell17 = rowHeader.createCell(startColIndex + 16);
-		cell17.setCellValue("Net Rate");
+		cell17.setCellValue("Customer Email");
 		cell17.setCellStyle(headerCellStyle);
 
 		HSSFCell cell18 = rowHeader.createCell(startColIndex + 17);
-		cell18.setCellValue("Customer Email");
+		cell18.setCellValue("Customer Phone No");
 		cell18.setCellStyle(headerCellStyle);
 
 		HSSFCell cell19 = rowHeader.createCell(startColIndex + 18);
-		cell19.setCellValue("Customer Phone No");
+		cell19.setCellValue("Customer City");
 		cell19.setCellStyle(headerCellStyle);
 
 		HSSFCell cell20 = rowHeader.createCell(startColIndex + 19);
-		cell20.setCellValue("Customer City");
+		cell20.setCellValue("Customer Address");
 		cell20.setCellStyle(headerCellStyle);
 
 		HSSFCell cell21 = rowHeader.createCell(startColIndex + 20);
-		cell21.setCellValue("Customer Address");
+		cell21.setCellValue("PinCode");
 		cell21.setCellStyle(headerCellStyle);
 
 		HSSFCell cell22 = rowHeader.createCell(startColIndex + 21);
-		cell22.setCellValue("PinCode");
+		cell22.setCellValue("Seller Notes");
 		cell22.setCellStyle(headerCellStyle);
-
-		HSSFCell cell23 = rowHeader.createCell(startColIndex + 22);
-		cell23.setCellValue("Seller Notes");
-		cell23.setCellStyle(headerCellStyle);
 
 	}
 

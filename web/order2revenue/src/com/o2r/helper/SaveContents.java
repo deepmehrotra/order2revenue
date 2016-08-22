@@ -14,8 +14,6 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
-import net.sf.ehcache.distribution.EventMessage;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -39,7 +37,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.o2r.bean.CustomerBean;
 import com.o2r.bean.DebitNoteBean;
-import com.o2r.bean.EventsBean;
 import com.o2r.bean.ExpenseBean;
 import com.o2r.bean.OrderBean;
 import com.o2r.bean.OrderTaxBean;
@@ -60,7 +57,6 @@ import com.o2r.model.Partner;
 import com.o2r.model.PaymentUpload;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
-import com.o2r.model.Seller;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
 import com.o2r.service.CategoryService;
@@ -107,6 +103,8 @@ public class SaveContents {
 	private ManualChargesService manualChargesService;
 	@Autowired
 	private UploadMappingService uploadMappingService;
+	@Autowired
+	SaveMappedFiles saveMappedFiles;
 
 	private static final String UPLOAD_DIR = "UploadReport";
 
@@ -313,12 +311,12 @@ public class SaveContents {
 					validaterow = false;
 				}*/
 				
-				if (entry.getCell(14) != null
-						&& entry.getCell(14).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+				if (entry.getCell(13) != null
+						&& entry.getCell(13).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try
 					{
-						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(14))) {
-							order.setShippedDate(entry.getCell(14)
+						if (HSSFDateUtil.isCellDateFormatted(entry.getCell(13))) {
+							order.setShippedDate(entry.getCell(13)
 									.getDateCellValue());
 						} else {
 							errorMessage
@@ -337,13 +335,13 @@ public class SaveContents {
 					validaterow = false;
 				}
 
-				if (entry.getCell(15) != null
-						&& entry.getCell(15).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+				if (entry.getCell(14) != null
+						&& entry.getCell(14).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					try {
 						if ((int) Float
-								.parseFloat(entry.getCell(15).toString()) != 0) {
+								.parseFloat(entry.getCell(14).toString()) != 0) {
 							order.setQuantity((int) Float.parseFloat(entry
-									.getCell(15).toString()));
+									.getCell(14).toString()));
 						} else {
 							errorMessage.append(" Quantity can not be 0 ");
 							validaterow = false;
@@ -365,12 +363,12 @@ public class SaveContents {
 						if (event.getNrnReturnConfig().getNrCalculatorEvent()
 								.equalsIgnoreCase("fixed")) {
 
-							if (entry.getCell(16) != null
-									&& entry.getCell(16).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							if (entry.getCell(15) != null
+									&& entry.getCell(15).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 
 								try {
 									order.setGrossNetRate(Double
-											.parseDouble(entry.getCell(16)
+											.parseDouble(entry.getCell(15)
 													.toString()));
 								} catch (NumberFormatException e) {
 									log.error("Failed! by SellerId : "+sellerId, e);
@@ -387,11 +385,11 @@ public class SaveContents {
 								&& partner.getNrnReturnConfig() != null
 								&& !partner.getNrnReturnConfig()
 										.isNrCalculator()) {
-							if (entry.getCell(16) != null
-									&& entry.getCell(16).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							if (entry.getCell(15) != null
+									&& entry.getCell(15).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								try {
 									order.setGrossNetRate(Double
-											.parseDouble(entry.getCell(16)
+											.parseDouble(entry.getCell(15)
 													.toString()));
 								} catch (NumberFormatException e) {
 									log.error("Failed! by SellerId : "+sellerId, e);
@@ -405,30 +403,30 @@ public class SaveContents {
 
 					}
 				}
+				if (entry.getCell(16) != null
+						&& entry.getCell(16).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					log.debug(" Email from sheet ************ " + rowIndex
+							+ ":" + entry.getCell(16).toString());
+					customerBean.setCustomerEmail(entry.getCell(16).toString());
+				}
 				if (entry.getCell(17) != null
 						&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					log.debug(" Email from sheet ************ " + rowIndex
-							+ ":" + entry.getCell(17).toString());
-					customerBean.setCustomerEmail(entry.getCell(17).toString());
+					entry.getCell(17).setCellType(HSSFCell.CELL_TYPE_STRING);
+					customerBean.setCustomerPhnNo(entry.getCell(17).toString());
 				}
 				if (entry.getCell(18) != null
 						&& entry.getCell(18).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					entry.getCell(18).setCellType(HSSFCell.CELL_TYPE_STRING);
-					customerBean.setCustomerPhnNo(entry.getCell(18).toString());
+					customerBean.setCustomerCity(entry.getCell(18).toString());
 				}
 				if (entry.getCell(19) != null
 						&& entry.getCell(19).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					customerBean.setCustomerCity(entry.getCell(19).toString());
+					customerBean.setCustomerAddress(entry.getCell(19)
+							.toString());
 				}
 				if (entry.getCell(20) != null
 						&& entry.getCell(20).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					customerBean.setCustomerAddress(entry.getCell(20)
-							.toString());
-				}
-				if (entry.getCell(21) != null
-						&& entry.getCell(21).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					log.debug(" getting zipcode ");
-					String zipCode=entry.getCell(21).toString();
+					String zipCode=entry.getCell(20).toString();
 					if(zipCode.contains(".")){
 						zipCode=zipCode.substring(0, zipCode.indexOf("."));				
 					}	
@@ -461,9 +459,9 @@ public class SaveContents {
 					validaterow = false;
 				}
 				
-				if (entry.getCell(22) != null
-						&& StringUtils.isNotBlank(entry.getCell(22).toString())) {
-					order.setSellerNote(entry.getCell(22).toString());
+				if (entry.getCell(21) != null
+						&& StringUtils.isNotBlank(entry.getCell(21).toString())) {
+					order.setSellerNote(entry.getCell(21).toString());
 
 				}
 				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
@@ -505,7 +503,7 @@ public class SaveContents {
 						+ "failed due to internal server error. Please contact admin.!", null);
 			}
 			Set<String> errorSet = returnOrderMap.keySet();
-			downloadUploadReportXLS(offices, "MP_Order_Upload", 24, errorSet,
+			downloadUploadReportXLS(offices, "MP_Order_Upload", 23, errorSet,
 					path, sellerId, uploadReport);
 
 		} catch (Exception e) {
@@ -2463,11 +2461,9 @@ public class SaveContents {
 		HSSFRow entry;
 		Integer noOfEntries = 1;
 		StringBuffer errorMessage = null;
-		boolean validaterow = true;
-		ExpenseBean expensebean = null;
+		boolean validaterow = true;		
 		Map<String, Events> returnlist = new LinkedHashMap<>();
-		Events event=null;
-		SaveMappedFiles saveMapping = new SaveMappedFiles();
+		Events event=null;		
 		Map<String, Events> eventsMap= new HashMap<String, Events>();
 		
 		try {
@@ -2493,12 +2489,23 @@ public class SaveContents {
 							} else {
 								event=eventsService.getEvent(entry.getCell(0).toString(), sellerId);
 							}
-							if (!event.getSkuList().contains(entry.getCell(1).toString())) {
-								StringBuffer skuBuffer = new StringBuffer(event.getSkuList());
-								event.setSkuList(skuBuffer.append(entry.getCell(1).toString()).toString());
+							if(event != null){
+								if(event.getSkuList() == null){
+									event.setSkuList(entry.getCell(1).toString()+",");
+								} else if (!event.getSkuList().contains(entry.getCell(1).toString())) {
+									StringBuffer skuBuffer = new StringBuffer(event.getSkuList());
+									event.setSkuList(skuBuffer.append(entry.getCell(1).toString()).toString()+",");
+								} else {
+									errorMessage.append(" Duplicate SKU ");
+									validaterow = false;
+								}
+							} else{
+								errorMessage.append(" Invalid Event Name ");
+								validaterow = false;
 							}
 						} else {
 							errorMessage.append(" Invalid SKU ");
+							validaterow = false;
 						}						
 					} else {
 						errorMessage.append(" Invalid Event Name ");
@@ -2523,7 +2530,7 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			saveMapping.uploadResultXLS(offices, "Event_SKU_Upload", errorSet, path,
+			saveMappedFiles.uploadResultXLS(offices, "Event_SKU_Upload", errorSet, path,
 					sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : "+sellerId, e);
