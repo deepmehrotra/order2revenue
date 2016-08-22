@@ -168,7 +168,6 @@ public class GlobalConstant {
 			add("Payment Type");
 			add("Tax Category");
 			add("AWB No");
-			add("Gross NR");
 			add("PIreferenceNo");
 			add("Logistic Partner");
 			add("Order MRP");
@@ -214,7 +213,6 @@ public class GlobalConstant {
 			add("AWB No");
 			add("PIreferenceNo");
 			add("Order MRP");
-			add("Gross NR");
 		}
 	};
 
@@ -245,7 +243,6 @@ public class GlobalConstant {
 			add("Net Rate");
 			add("Seller Note");
 			add("Secondary OrderID");
-			add("Gross NR");
 		}
 	};
 
@@ -269,7 +266,6 @@ public class GlobalConstant {
 			add("Sales Channel");
 			add("Payment Type");
 			add("AWB No");
-			add("Gross NR");
 			add("PIreferenceNo");
 			add("Logistic Partner");
 			add("Order MRP");
@@ -304,7 +300,6 @@ public class GlobalConstant {
 			add("Sales Channel");
 			add("Payment Type");			
 			add("AWB No");
-			add("Gross NR");
 			add("PIreferenceNo");
 			add("Logistic Partner");
 			add("Order MRP");

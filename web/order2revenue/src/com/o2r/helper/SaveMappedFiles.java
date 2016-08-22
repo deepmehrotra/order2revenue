@@ -491,8 +491,8 @@ public class SaveMappedFiles {
 								if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("fixed")) {
-									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
-										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+									if(cellIndexMap.get(columHeaderMap.get("Net Rate")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Net Rate"));
 										if (entry.getCell(index) != null
 												&& entry.getCell(index)
 														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -523,8 +523,8 @@ public class SaveMappedFiles {
 										&& partner.getNrnReturnConfig() != null
 										&& !partner.getNrnReturnConfig()
 												.isNrCalculator()) {
-									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
-										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+									if(cellIndexMap.get(columHeaderMap.get("Net Rate")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Net Rate"));
 										if (entry.getCell(index) != null
 												&& entry.getCell(index)
 														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -1180,8 +1180,8 @@ public class SaveMappedFiles {
 								if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("fixed")) {
-									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
-										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+									if(cellIndexMap.get(columHeaderMap.get("Net Rate")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Net Rate"));
 										if (entry.getCell(index) != null
 												&& entry.getCell(index)
 														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -1212,8 +1212,8 @@ public class SaveMappedFiles {
 										&& partner.getNrnReturnConfig() != null
 										&& !partner.getNrnReturnConfig()
 												.isNrCalculator()) {
-									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
-										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+									if(cellIndexMap.get(columHeaderMap.get("Net Rate")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Net Rate"));
 										if (entry.getCell(index) != null
 												&& entry.getCell(index)
 														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -1756,8 +1756,8 @@ public class SaveMappedFiles {
 								if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("fixed")) {
-									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
-										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+									if(cellIndexMap.get(columHeaderMap.get("Net Rate")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Net Rate"));
 										if (entry.getCell(index) != null
 												&& entry.getCell(index)
 														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -1788,8 +1788,8 @@ public class SaveMappedFiles {
 										&& partner.getNrnReturnConfig() != null
 										&& !partner.getNrnReturnConfig()
 												.isNrCalculator()) {
-									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
-										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+									if(cellIndexMap.get(columHeaderMap.get("Net Rate")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Net Rate"));
 										if (entry.getCell(index) != null
 												&& entry.getCell(index)
 														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -2969,8 +2969,8 @@ public class SaveMappedFiles {
 								if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("fixed")) {
-									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
-										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+									if(cellIndexMap.get(columHeaderMap.get("Net Rate")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Net Rate"));
 										if (entry.getCell(index) != null
 												&& entry.getCell(index)
 														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -3001,8 +3001,8 @@ public class SaveMappedFiles {
 										&& partner.getNrnReturnConfig() != null
 										&& !partner.getNrnReturnConfig()
 												.isNrCalculator()) {
-									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
-										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+									if(cellIndexMap.get(columHeaderMap.get("Net Rate")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Net Rate"));
 										if (entry.getCell(index) != null
 												&& entry.getCell(index)
 														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -3618,8 +3618,7 @@ public class SaveMappedFiles {
 									try {
 										String date = entry.getCell(index)
 												.toString();
-										manualCharge.setDateOfPayment(new Date(
-												date));
+										manualCharge.setDateOfPayment(new Date(date));
 									} catch (Exception e) {
 										errorMessage
 												.append("Date May Be Wrong Format");
@@ -4097,8 +4096,8 @@ public class SaveMappedFiles {
 								if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("fixed")) {
-									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
-										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+									if(cellIndexMap.get(columHeaderMap.get("Net Rate")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Net Rate"));
 										if (entry.getCell(index) != null
 												&& entry.getCell(index)
 														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -4129,8 +4128,8 @@ public class SaveMappedFiles {
 										&& partner.getNrnReturnConfig() != null
 										&& !partner.getNrnReturnConfig()
 												.isNrCalculator()) {
-									if(cellIndexMap.get(columHeaderMap.get("Gross NR")) != null){
-										index = cellIndexMap.get(columHeaderMap.get("Gross NR"));
+									if(cellIndexMap.get(columHeaderMap.get("Net Rate")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Net Rate"));
 										if (entry.getCell(index) != null
 												&& entry.getCell(index)
 														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {

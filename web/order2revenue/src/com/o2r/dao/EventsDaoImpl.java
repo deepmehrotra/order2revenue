@@ -34,8 +34,9 @@ public class EventsDaoImpl implements EventsDao {
 	public void addEvent(Events events, int sellerId)throws CustomException  {
 		
 		log.info("$$$ addEvent Starts.... $$$");
+		Session session = null;
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			session.beginTransaction();			
 			Partner partner = null;
 			Seller seller = null;
@@ -75,13 +76,15 @@ public class EventsDaoImpl implements EventsDao {
 				}
 			}
 			session.getTransaction().commit();
-			session.flush();
-			session.close();
+			session.flush();			
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.addEventError,new Date(), 1, GlobalConstant.addEventErrorCode, e);
-		}		
+		} finally {
+			if(session != null)
+				session.close();
+		}
 		log.info("$$$ addEvent Exit...");
 	}	
 	
