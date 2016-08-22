@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -33,11 +34,11 @@
                                                     <option value="">Select Report Category</option>
                                                     <option value="OrderRelatedReport">Order Related Reports</option>
                                                     <option value="ChannelRelatedReport">Channel Related Report</option>
-                                                    <option value="ProductRelatedReport">Product Related Report</option>
+                                                    <!-- <option value="ProductRelatedReport">Product Related Report</option> -->
                                                     <option value="PartnerRelated">Partner Related Reports</option>
-                                                    <option value="ExpenseReports">Expense Reports</option>
+                                                    <!-- <option value="ExpenseReports">Expense Reports</option>
                                                     <option value="InventoryReports">Inventory Reports</option>
-                                                    <option value="GeneralReports">General Reports</option>
+                                                    <option value="GeneralReports">General Reports</option> -->
                                                     <option value="RevenueReports">Revenue Reports</option>
                                                 </select>
                                             </div>
@@ -52,23 +53,67 @@
                                     </div>
                                 </div>
                     
-                        </div>
-                        <div class="col-sm-12">
+                        </div>       
+                        
+                        
+                        <div class="col-sm-12">                        
                         <div class="hr-line-dashed"></div>
                             <h2><small>Order Related</small></h2>
                             <div class="col-md-4">
-                                <a href=""><i class="fa fa-arrow-right"></i> Consolidated Orders</a>
+                                <a href=""><i class="fa fa-arrow-right"></i> Consolidated Orders</a>                                
+                            </div>
+                            <div class="col-md-4">                                
+                            </div>
+                            <div class="col-md-4">                                
+                            </div>
+                        </div>
+                        
+
+                        <div class="col-sm-12">
+                        <div class="hr-line-dashed"></div>
+                            <h2><small>Partner Related</small></h2>
+                            <div class="col-md-4">
+                                <a href=""><i class="fa fa-arrow-right"></i> Partner Commission Paid Report</a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href=""><i class="fa fa-arrow-right"></i> Partner Business Report</a>
+                            </div>
+                        </div>         
+
+                        <div class="col-sm-12">
+                        <div class="hr-line-dashed"></div>
+                            <h2><small>Revenue Reports</small></h2>
+                            <div class="col-md-4">                                
+                                <a href=""><i class="fa fa-arrow-right"></i> Net Debtors</a>                                
+                            </div>
+                            <div class="col-md-4">
+                            	<a href=""><i class="fa fa-arrow-right"></i> Total Payments Received</a>
+                            </div>
+                            <div class="col-md-4">
+                            	<a href=""><i class="fa fa-arrow-right"></i> Net Profitability Report</a> 
+                            </div>
+                        </div>                
+                        
+                        <div class="col-sm-12">
+                        <div class="hr-line-dashed"></div>
+                        	<h3 align="center">UPCOMING REPORTS</h3>
+                        </div>                     
+                        
+                        <div class="col-sm-12">                        
+                        <div class="hr-line-dashed"></div>
+                            <h2><small>Order Related</small></h2>
+                            <div class="col-md-4">
+                                <a href=""><i class="fa fa-arrow-right"></i> Settled Orders</a>
                                 <a href=""><i class="fa fa-arrow-right"></i> Payment Difference Orders</a>
                                 <a href=""><i class="fa fa-arrow-right"></i> Return/RTO reason Analysis</a>
                             </div>
                             <div class="col-md-4">
-                                <a href=""><i class="fa fa-arrow-right"></i> Settled Orders</a>
+                                <a href=""><i class="fa fa-arrow-right"></i> Return/RTO limit crossed Orders</a>
                                 <a href=""><i class="fa fa-arrow-right"></i> Sale return Orders</a>
                                 <a href=""><i class="fa fa-arrow-right"></i> Actionable Orders</a>
                             </div>
                             <div class="col-md-4">
-                                <a href=""><i class="fa fa-arrow-right"></i> Disputed Orders</a>
-                                <a href=""><i class="fa fa-arrow-right"></i> Return/RTO limit crossed Orders</a>
+                                <a href=""><i class="fa fa-arrow-right"></i> Disputed Orders</a>                                
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -84,19 +129,7 @@
                                 <a href=""><i class="fa fa-arrow-right"></i> List of Invoices</a>
                             </div>
                         </div>
-
-                        <div class="col-sm-12">
-                        <div class="hr-line-dashed"></div>
-                            <h2><small>Partner Related</small></h2>
-                            <div class="col-md-4">
-                                <a href=""><i class="fa fa-arrow-right"></i> Partner Commission Paid Report</a>
-                            </div>
-                            <div class="col-md-4">
-                                <a href=""><i class="fa fa-arrow-right"></i> Partner Business Report</a>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12">
+                       <div class="col-sm-12">
                         <div class="hr-line-dashed"></div>
                             <h2><small>Expense</small></h2>
                             <div class="col-md-4">
@@ -138,16 +171,13 @@
                             <h2><small>Revenue Reports</small></h2>
                             <div class="col-md-4">
                                 <a href=""><i class="fa fa-arrow-right"></i> Net Sale Report</a>
-                                <a href=""><i class="fa fa-arrow-right"></i> Net Debtors</a>
-                                <a href=""><i class="fa fa-arrow-right"></i> Total Payments Received</a>
+                                <a href=""><i class="fa fa-arrow-right"></i> Total Turnover</a>                                
                             </div>
                             <div class="col-md-4">
                                 <a href=""><i class="fa fa-arrow-right"></i> Gross Profitability Report</a>
                                 <a href=""><i class="fa fa-arrow-right"></i> Performance Analysis</a>
                             </div>
-                            <div class="col-md-4">
-                                <a href=""><i class="fa fa-arrow-right"></i> Net Profitability Report</a>
-                                <a href=""><i class="fa fa-arrow-right"></i> Total Turnover</a>
+                            <div class="col-md-4">                                                               
                             </div>
                         </div>
                                 
@@ -167,19 +197,17 @@
 
 $(document).ready(function(){
 var OrderRelatedReport = [
-                  {display: "Consolidated Orders", value: "consolidatedOrders" }, 
+                  {display: "Consolidated Orders", value: "consolidatedOrders" }/* , 
                   {display: "Payment Difference Orders", value: "paymentDifferenceOrders" }, 
                   {display: "Return/RTO reason Analysis", value: "returnRTOReasonAnalysis" },
                   {display: "Sale return Orders", value: "saleReturnOrders" }, 
                   {display: "Actionable Orders", value: "actionableOrders" },
                   {display: "Disputed Orders", value: "disputedOrders" }, 
                   {display: "Return/RTO limit crossed Orders", value: "returnRTOLimitCrossed" },
-                  {display: "Settled Orders", value: "settledOrders" }];
+                  {display: "Settled Orders", value: "settledOrders" } */];
 var ChannelRelatedReport = [
                   {display: "Channel Wise Sales Order", value: "channelSaleReport" },
-                  {display: "Category Wise Sales Order", value: "categoryWiseSaleReport" },
-                  {display: "Total Payments Receieved", value: "paymentsReceievedReport" },
-                  {display: "Orderwise GP Report", value: "orderwiseGPReport" }];
+                  {display: "Category Wise Sales Order", value: "categoryWiseSaleReport" }];
 var ProductRelatedReport = [
                   {display: "Product Shipped Orders", value: "productSaleReport" }, 
                   {display: "Payment Difference Orders", value: "productSaleReport" }, 
@@ -202,15 +230,16 @@ var GeneralReports = [
                  {display: "Best Selling SKU", value: "bestSellingSKUreport" }, 
                  {display: "Best Selling Region Report", value: "bestSellingRegionReport" }];
 var RevenueReports = [
-                 {display: "Net Sale Report", value: "netSaleReport" }, 
+                 /* {display: "Net Sale Report", value: "netSaleReport" }, 
                  {display: "Product Sale Report", value: "productSaleReport" },
                  {display: "Channel Sale Report", value: "channelSaleReport" },
                  {display: "Net Debtors", value: "netDebtors" }, 
-                 {display: "Gross Profitability Report", value: "grossProfitabilityReport" },
-                 {display: "Net Profitability Report", value: "netProfitabilityReport" }, 
+                 {display: "Gross Profitability Report", value: "grossProfitabilityReport" }, */
+                 {display: "Net Profitability Report", value: "netProfitabilityReport" },/* 
                  {display: "Net Debtors", value: "netDebtors" },
                  {display: "Performance Analysis", value: "performanceAnalysis" }, 
-                 {display: "Total Turnover", value: "totalTurnover" },
+                 {display: "Total Turnover", value: "totalTurnover" }, */                                  
+                 {display: "Orderwise GP Report", value: "orderwiseGPReport" },
                  {display: "Total Payments Received", value: "totalPaymentsReceived" }];
                  
 $("#reportGroup").change(function() {
@@ -273,11 +302,9 @@ function submitReport(value){
 	     $.ajax({
                 url: targeturl,
                 success : function(res) {
-                	if($(res).find('#j_username').length > 0){
-                		window.location.href = "orderindex.html";
-                	}else{
-                    	$('#centerpane').html(res);
-                	}
+                              
+                    $("#centerpane").html(res);
+               
             }
          });
 }

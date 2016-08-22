@@ -766,29 +766,24 @@ public class SaveMappedFiles {
 				try {
 
 					try {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Channel Order ID"));
+						index = cellIndexMap.get(columHeaderMap.get("Channel Order ID"));
+						int skuIndex=cellIndexMap.get(columHeaderMap.get("SkUCode"));
 						if (entry.getCell(index) != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK
+								&& entry.getCell(skuIndex) != null
+								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							if (idsList == null ||  (!idsList.contains(entry.getCell(index)
-									.toString()))
-									&& !duplicateKey.containsKey(entry.getCell(
-											index).toString())) {
-								order.setChannelOrderID(entry.getCell(index)
-										.toString());
-								duplicateKey.put(entry.getCell(index)
-										.toString(), "");
+							if (idsList == null ||  (!idsList.contains(entry.getCell(index).toString()))
+									&& !duplicateKey.containsKey(entry.getCell(index).toString()+"-"+entry.getCell(skuIndex).toString())) {
+								order.setChannelOrderID(entry.getCell(index).toString()+"-"+entry.getCell(skuIndex).toString());
+								duplicateKey.put(entry.getCell(index).toString()+"-"+entry.getCell(skuIndex).toString(), "");
 							} else {
-								order.setChannelOrderID(entry.getCell(index)
-										.toString());
-								errorMessage
-										.append(" Channel OrderId is already present ");
+								order.setChannelOrderID(entry.getCell(index).toString()+"-"+entry.getCell(skuIndex).toString());
+								errorMessage.append(" Channel OrderId is already present ");
 								validaterow = false;
 							}
-						} else {
-							
+						} else {							
 							errorMessage.append(" Channel OrderId is null ");
 							validaterow = false;
 						}

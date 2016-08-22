@@ -1418,6 +1418,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				double existGC = 0;
 				int existSQ = 0;
 				double existTDS = 0;
+				int netSaleQty=0;
+				double grossCommissionPaid=0;
+				double tdsToDeduct=0;
 				if(commDetails!=null){
 					existGC = commDetails.getGrossPartnerCommissionPaid();
 					existSQ = commDetails.getNetSaleQty();
@@ -1429,9 +1432,12 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					commDetails.setCategoryName(key);
 				else
 					commDetails.setPartner(key);
-				int netSaleQty = Integer.parseInt(order[2].toString());
-				double grossCommissionPaid = Double.parseDouble(order[1].toString());
-				double tdsToDeduct = Double.parseDouble(order[3].toString());
+				if(order[2] != null)
+					netSaleQty = Integer.parseInt(order[2].toString());
+				if(order[1] != null)
+					grossCommissionPaid = Double.parseDouble(order[1].toString());
+				if(order[3] != null)
+					tdsToDeduct = Double.parseDouble(order[3].toString());
 				commDetails.setNetSaleQty(existSQ + netSaleQty);
 				commDetails.setGrossPartnerCommissionPaid(existGC + grossCommissionPaid);
 				commDetails.setNetTDSToBeDeposited(existTDS + tdsToDeduct);
