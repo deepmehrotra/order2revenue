@@ -10,8 +10,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+
+import net.sf.ehcache.distribution.EventMessage;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -36,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.o2r.bean.CustomerBean;
 import com.o2r.bean.DebitNoteBean;
+import com.o2r.bean.EventsBean;
 import com.o2r.bean.ExpenseBean;
 import com.o2r.bean.OrderBean;
 import com.o2r.bean.OrderTaxBean;
@@ -2450,6 +2454,89 @@ public class SaveContents {
 		log.info("$$$ saveExpenseDetails ends : SaveContents $$$");
 		return returnlist;
 	}
+	
+	
+	public Map<String, Events> saveEventSKUDetails(MultipartFile file,
+			int sellerId, String path, UploadReport uploadReport)
+			throws IOException {
+		log.info("$$$ saveEventSKUDetails starts : SaveContents $$$");
+		HSSFRow entry;
+		Integer noOfEntries = 1;
+		StringBuffer errorMessage = null;
+		boolean validaterow = true;
+		ExpenseBean expensebean = null;
+		Map<String, Events> returnlist = new LinkedHashMap<>();
+		Events event=null;
+		SaveMappedFiles saveMapping = new SaveMappedFiles();
+		Map<String, Events> eventsMap= new HashMap<String, Events>();
+		
+		try {
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			log.info(noOfEntries.toString());
+			log.debug("After getting no of rows" + noOfEntries);
+			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;
+				log.debug(entry.getCell(0));
+				log.debug(entry.getCell(1));
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
+				try {
+					if (entry.getCell(0) != null
+							&& StringUtils.isNotBlank(entry.getCell(0).toString())) {
+						if(entry.getCell(1) != null && StringUtils.isNotBlank(entry.getCell(1).toString())){
+							if(eventsMap.containsKey(entry.getCell(0).toString())){
+								event=eventsMap.get(entry.getCell(0).toString());
+							} else {
+								event=eventsService.getEvent(entry.getCell(0).toString(), sellerId);
+							}
+							if (!event.getSkuList().contains(entry.getCell(1).toString())) {
+								StringBuffer skuBuffer = new StringBuffer(event.getSkuList());
+								event.setSkuList(skuBuffer.append(entry.getCell(1).toString()).toString());
+							}
+						} else {
+							errorMessage.append(" Invalid SKU ");
+						}						
+					} else {
+						errorMessage.append(" Invalid Event Name ");
+						validaterow = false;
+					}
+					log.debug("Validaterow : " + validaterow
+							+ "  error message: " + errorMessage);
+					if (validaterow)
+						eventsMap.put(entry.getCell(0).toString(), event);
+					else {
+						returnlist.put(errorMessage.toString(), event);
+					}
+				} catch (Exception e) {
+					log.error("Failed! by SellerId : " + sellerId, e);
+					errorMessage.append(" Invalid Input!");
+					returnlist.put(errorMessage.toString(), event);
+				}
+			}
+			if(eventsMap.size() != 0){
+				for(Entry<String, Events> eventEntry : eventsMap.entrySet()){
+					eventsService.addEvent(eventEntry.getValue(), sellerId);
+				}
+			}
+			Set<String> errorSet = returnlist.keySet();
+			saveMapping.uploadResultXLS(offices, "Event_SKU_Upload", errorSet, path,
+					sellerId, uploadReport);
+		} catch (Exception e) {
+			log.error("Failed! by SellerId : "+sellerId, e);
+			e.printStackTrace();
+			addErrorUploadReport("Event_SKU_Upload", sellerId, uploadReport);
+			throw new MultipartException("Constraints Violated");
+		}
+		log.info("$$$ saveEventSKUDetails ends : SaveContents $$$");
+		return returnlist;
+	}
+	
+	
+	
 
 	public boolean validateRowForNull(HSSFRow entry, int cellcount) {
 		log.info("$$$ validateRowForNull starts : SaveContents $$$");

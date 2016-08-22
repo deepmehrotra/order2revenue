@@ -39,14 +39,14 @@
 				},
 				taxPercent : {
 					required : true,
-					min : 1,
+					min : 0,
 					max : 100,
 					number : true,
 				}
 			},
 			messages : {
 				taxCatName : "Tax Category Name Required",
-				taxPercent : "Tax percentage is required from 1% to 100%"
+				taxPercent : "Tax percentage is required from 0% to 100%"
 			}
 		});
 		
