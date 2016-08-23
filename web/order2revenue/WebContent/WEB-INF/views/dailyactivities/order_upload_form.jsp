@@ -238,15 +238,15 @@
 		                                        	style="width: 97%;margin-left: 14px">
 		                                            <option value="" data-show=".upload">Upload</option>
 		                                            <option value="Snapdeal_Order" data-show=".snapdealorderupload">Snapdeal Order Upload</option>
-		                                            <option value="Snapdeal_Payment">Snapdeal Payment</option>
+		                                            <option value="Snapdeal_Payment" data-show=".snapdealpaymentupload">Snapdeal Payment</option>
 													<option value="Flipkart_Order" data-show=".flipkartorderupload">Flipkart Order Upload</option>
-													<option value="Flipkart_Payment">Flipkart Payment</option>
+													<option value="Flipkart_Payment" data-show=".flipkartpaymentupload">Flipkart Payment</option>
 													<option value="PayTM_Order" data-show=".paytmorderupload">PayTM Order Upload</option>
-													<option value="PayTM_Payment">PayTM Payment Upload</option>
+													<option value="PayTM_Payment" data-show=".paytmpaymentupload">PayTM Payment Upload</option>
 													<option value="Amazon_Order" data-show=".amazonorderupload">Amazon Order Upload</option>											
-													<option value="Amazon_Payment">Amazon Payment Upload</option>
+													<option value="Amazon_Payment" data-show=".amazonepaymentupload">Amazon Payment Upload</option>
 													<option value="Limeroad_Order" data-show=".limeroadorderupload">Limeroad Order Upload</option>
-													<option value="Limeroad_Payment">Limeroad Payment Upload</option>
+													<option value="Limeroad_Payment" data-show=".limeroadpaymentupload">Limeroad Payment Upload</option>
 		                                        </select>
 		                                    </div>
 		                                    <div class="col-md-4">
@@ -532,6 +532,150 @@
                                                     Customer City : It helps to create customer database.
                                                 </li>   
                                         </ol>
+                                    </div>
+                                    <div class="amazonpaymentupload">
+                                        <h2 class="text-center">
+                                            <b>Follow These Instructions</b>
+                                        </h2>
+                                        <ol>
+                                            <li>
+                                                Upload the payment sheet from Amazon but <b>only in xls format</b>.  
+                                            </li>
+                                            <li>
+                                                Row with the colum headers is the first row of sheet.Make sure to keep the spelling of all colum header according to instructions.
+                                            </li>
+                                            <li>
+                                                Do not change the formatting of colums.
+                                            </li>
+                                            <li>
+                                                Excel sheet should have these colums with exact same heading as downloaded form panel : 
+                                                Mandatory Colums : Date,Order ID,Transaction type,Payment Detail,Amount,SKU
+												Non mandatory Colums:
+                                            </li>
+                                            <li>
+                                                Other mandatory colums to be added manually with respective values for each transactions : 
+                                                InvoiceId : Put invoice number for order search.
+                                            </li>
+                                            <li>
+                                                No non mandatory colums to be added.
+                                            </li>                                            
+                                        </ol>
+
+                                    </div>
+                                    <div class="flipkartpaymentupload">
+                                        <h2 class="text-center">
+                                            <b>Follow These Instructions</b>
+                                        </h2>
+                                        <ol>
+                                            <li>
+                                                Upload the payment sheet from Flipkart but <b>only in .xls format</b>. 
+                                            </li>
+                                            <li>
+                                                Row with the colum headers is the first row of sheet.Make sure to keep the spelling of all colum header according to instructions.
+                                            </li>
+                                            <li>
+                                                Do not change the formatting of columns.
+                                            </li>
+                                            <li>
+                                                Excel sheet should have these colums with exact same heading as downloaded form panel : 
+													Mandatory Colums : Order Type,Fulfilment Type,Order item ID,Order item ID,Settlement Date,Settlement Value (Rs.),Seller SKU
+													Non mandatory Colums:Order ID/FSN
+                                            </li>
+                                            <li>
+                                                Other mandatory colums to be added manually with respective values for each transactions : 
+												InvoiceId : Put invoice number for order search.
+                                            </li>
+                                            <li>
+                                                No non mandatory colums to be added.
+                                            </li>                                            
+                                        </ol>
+
+                                    </div>
+                                    <div class="paytmpaymentupload">
+                                        <h2 class="text-center">
+                                            <b>Follow These Instructions</b>
+                                        </h2>
+                                        <ol>
+                                            <li>
+                                                 Upload the payment sheet from Paytm but <b>only in .xls format</b>. 
+                                            </li>
+                                            <li>
+                                                Row with the colum headers is the first row of sheet.Make sure to keep the spelling of all colum header according to instructions.
+                                            </li>
+                                            <li>
+                                                Do not change the formatting of columns.
+                                            </li>
+                                            <li>
+                                                Excel sheet should have these colums with exact same heading as downloaded form panel : 
+													Mandatory Colums : Order ID,Order Item ID,Payable Amount
+													Non mandatory Colums:Order ID/FSN
+											</li>
+                                            <li>
+                                                Other mandatory colums to be added manually with respective values for each transactions : 
+													Payment Date : Date of Payment. Enter value in mm-DD-yyyy format.
+                                            </li>
+                                            <li>
+                                                No non mandatory colums to be added.
+                                            </li>                                           
+                                        </ol>
+
+                                    </div>
+                                    <div class="snapdealpaymentupload">
+                                        <h2 class="text-center">
+                                            <b>Follow These Instructions</b>
+                                        </h2>
+                                        <ol>
+                                            <li>
+                                                 Upload the payment sheet from Paytm but <b>only in .xls format</b>. 
+                                            </li>
+                                            <li>
+                                                Row with the colum headers is the first row of sheet.Make sure to keep the spelling of all colum header according to instructions.
+                                            </li>
+                                            <li>
+                                                Do not change the formatting of columns.
+                                            </li>
+                                            <li>
+                                                 Excel sheet should have these colums with exact same heading as downloaded form panel : 
+													Mandatory Colums : Type,Transaction ID,Reason,SKU,Invoice Number,Net  Payable,Payment Date,
+													Non mandatory Colums:
+                                            </li>
+                                            <li>
+                                                No mandatory colums to be added.
+                                            </li>
+                                            <li>
+                                                No non mandatory colums to be added.
+                                            </li>
+                                         </ol>
+
+                                    </div>
+                                    <div class="limeroadpaymentupload">
+                                        <h2 class="text-center">
+                                            <b>Follow These Instructions</b>
+                                        </h2>
+                                        <ol>
+                                            <li>
+                                                Upload the payment sheet from Paytm but <b>only in .xls format</b>. 
+                                            </li>
+                                            <li>
+                                                Row with the colum headers is the first row of sheet.Make sure to keep the spelling of all colum header according to instructions.
+                                            </li>
+                                            <li>
+                                                Do not change the formatting of columns.
+                                            </li>
+                                            <li>
+                                                Excel sheet should have these colums with exact same heading as downloaded form panel : 
+													Mandatory Colums : Sales / Sales Return,Order ID,Vendor Invoice Number,Outstanding Payable to Vendors (Final)
+													Non mandatory Colums:
+                                            </li>
+                                            <li>
+                                                Other mandatory colums to be added manually with respective values for each transactions : 
+													Payment Date : Date of Payment. Enter value in mm-DD-yyyy format.
+                                            </li>
+                                            <li>
+                                                No non mandatory colums to be added.
+                                            </li>
+                                        </ol>
+
                                     </div>
                                 </div>
                             </div>

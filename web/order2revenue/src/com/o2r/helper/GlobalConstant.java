@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 
 public class GlobalConstant {
 
+	public static final String orderUniqueSymbol = "$";
+	
 	public final ArrayList<String> orderList = new ArrayList<String>() {
 		/**
 		 *
@@ -55,6 +57,7 @@ public class GlobalConstant {
 			add("Snapdeal");
 			add("PayTM");
 			add("Limeroad");
+			add("Unicommerce");
 		}
 	};
 	public static final ArrayList<String> filesMappingList = new ArrayList<String>() {
@@ -137,6 +140,18 @@ public class GlobalConstant {
 	};
 
 	public static final ArrayList<String> limeroadPaymentHeaderList = new ArrayList<String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			add("ChannelOrderId");
+			add("SKU");
+			add("Invoice ID");
+			add("Recieved Amount");
+			add("Payment Date");
+			add("Particular");
+		}
+	};
+	
+	public static final ArrayList<String> UnicommercePaymentHeaderList = new ArrayList<String>() {
 		private static final long serialVersionUID = 1L;
 		{
 			add("ChannelOrderId");
@@ -306,6 +321,40 @@ public class GlobalConstant {
 			add("Net Rate");
 			add("Customer Name");
 			add("Customer Address");
+			add("Customer City");
+			add("Customer Phone No");			
+			add("Customer Email");
+			add("Seller Note");
+			
+		}
+	};
+	
+	public static final ArrayList<String> UnicommerceOrderHeaderList = new ArrayList<String>() {
+		/**
+	 *
+	 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Channel Order ID");
+			add("SkUCode");	
+			add("Order Recieved Date");
+			add("Secondary OrderID");
+			add("Quantity");
+			add("InvoiceID");
+			add("Order SP");
+			add("Shipping PinCode");
+			add("Order Shipped Date");
+			add("Sales Channel");
+			add("Payment Type");			
+			add("AWB No");
+			add("PIreferenceNo");
+			add("Logistic Partner");
+			add("Order MRP");
+			add("Net Rate");
+			add("Customer Name");
+			add("Customer Address A");
+			add("Customer Address B");
 			add("Customer City");
 			add("Customer Phone No");			
 			add("Customer Email");

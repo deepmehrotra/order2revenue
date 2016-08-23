@@ -155,12 +155,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		int totalNoofAO = 0;
 		int totalNoofRTOCross = 0;
 		int totalNoofreturnCross = 0;
+		int iteratorCount = 0;
 		TotalShippedOrder ttsoTemp = null;
 		Map<String, Double> cityMap = new HashMap<>();
 		Map<String, Double> cityPercentMap = new HashMap<>();
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
+			
 			Criteria criteria = session.createCriteria(Order.class);
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN);
@@ -183,18 +185,21 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			projList.add(Projections.sum("orderPayment.positiveAmount"));
 			criteria.setProjection(projList);
 			criteria.addOrder(org.hibernate.criterion.Order.asc("pcName"));
-			List<Object[]> results = criteria.list();
-			log.debug("results.size()  " + results.size());
-			ttso = new TotalShippedOrder[results.size()];
+			
+			
+			try
+			{
+				List<Object[]> results = criteria.list();
+				/*log.debug("results.size()  " + results.size());*/
+				ttso = new TotalShippedOrder[results.size()];
 
-			Iterator iterator1 = results.iterator();
-			int iteratorCount = 0;
+				Iterator iterator1 = results.iterator();
 			if (results != null) {
 				while (iterator1.hasNext()) {
 					System.out.println("\n");
 					ttsoTemp = new TotalShippedOrder();
 					Object[] recordsRow = (Object[]) iterator1.next();
-					log.debug("recordsRow.length  "+ recordsRow.length);
+					/*log.debug("recordsRow.length  "+ recordsRow.length);*/
 					log.debug(" Quantity  NR ReturnQty  Return Amount SaleAmount  PositiveAmount");
 					for (int i = 0; i < recordsRow.length; i++) {
 						if (i == 0) {
@@ -244,7 +249,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					iteratorCount++;
 				}
 			}
-
+			}catch(Exception e)
+			{
+				log.info("Failed! Error in getting "+e.getMessage());
+			}
 			Criteria criteriaforDeliveredOrder = session.createCriteria(Order.class);
 			criteriaforDeliveredOrder
 					.createAlias("seller", "seller",
@@ -260,6 +268,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			criteriaforDeliveredOrder.setProjection(DOprojList);
 			// Object deliveredOrderCount =
 			// criteriaforDeliveredOrder.list().get(0);
+			try
+			{
 			List<Object[]> deliveredOrderCount = criteriaforDeliveredOrder.list();
 			Iterator DOiterator = deliveredOrderCount.iterator();
 			if (deliveredOrderCount != null) {
@@ -276,7 +286,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					}
 				}
 			}
-
+			}catch(Exception e)
+			{
+				log.info("Failed! Error in getting Delivered Order Count"+e.getMessage());
+			}
 			Criteria criteriaforReturnOrder = session
 					.createCriteria(Order.class);
 			criteriaforReturnOrder.createAlias("seller", "seller",
@@ -294,7 +307,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			ROprojList.add(Projections.groupProperty("pcName"));
 			ROprojList.add(Projections.rowCount());
 			criteriaforReturnOrder.setProjection(ROprojList);
-
+			try
+			{
 			List<Object[]> returnOrderCount = criteriaforReturnOrder.list();
 			Iterator ROiterator = returnOrderCount.iterator();
 			if (returnOrderCount != null) {
@@ -311,7 +325,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 
 				}
 			}
-
+			}catch(Exception e)
+			{
+				log.info("Failed! Error in getting Return Order Count"+e.getMessage());
+			}
 			/*
 			 * Code for caluclating no of actionalble orders
 			 */
@@ -329,7 +346,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			AOprojList.add(Projections.groupProperty("pcName"));
 			AOprojList.add(Projections.rowCount());
 			criteriaforActionalbleOrder.setProjection(AOprojList);
-
+			try
+			{
 			List<Object[]> actionableOrderCount = criteriaforActionalbleOrder.list();
 			Iterator AOiterator = actionableOrderCount.iterator();
 			if (actionableOrderCount != null) {
@@ -345,6 +363,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					}
 
 				}
+			}
+			}catch(Exception e)
+			{
+				log.info("Failed! Error in getting Actionable Order Count"+e.getMessage());
 			}
 
 			/*
@@ -365,6 +387,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			SOprojList.add(Projections.rowCount());
 			criteriaforSettledOrder.setProjection(SOprojList);
 
+			try
+			{
 			List<Object[]> settledOrderCount = criteriaforSettledOrder.list();
 			Iterator SOiterator = settledOrderCount.iterator();
 			if (settledOrderCount != null) {
@@ -380,6 +404,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					}
 
 				}
+			}
+			}catch(Exception e)
+			{
+				log.info("Failed! Error in getting Settled Order Count"+e.getMessage());
 			}
 
 			/*
@@ -401,7 +429,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			RTOprojList.add(Projections.groupProperty("pcName"));
 			RTOprojList.add(Projections.rowCount());
 			criteriaRTOlimitCross.setProjection(RTOprojList);
-
+			try
+			{
 			List<Object[]> RTOlimitCrossOrderCount = criteriaRTOlimitCross.list();
 			Iterator rtoOiterator = RTOlimitCrossOrderCount.iterator();
 			if (RTOlimitCrossOrderCount != null) {
@@ -417,6 +446,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					}
 
 				}
+			}
+			}catch(Exception e)
+			{
+				log.info("Failed! Error in getting RTO Limit Crossed Order Count"+e.getMessage());
 			}
 
 			/*
@@ -438,6 +471,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			returnprojList.add(Projections.groupProperty("pcName"));
 			returnprojList.add(Projections.rowCount());
 			criteriaReturnlimitCross.setProjection(returnprojList);
+			try
+			{
 			List<Object[]> returnlimitCrossOrderCount = criteriaReturnlimitCross.list();
 			Iterator returniterator = returnlimitCrossOrderCount.iterator();
 			if (returnlimitCrossOrderCount != null) {
@@ -453,6 +488,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					}
 
 				}
+			}
+			}catch(Exception e)
+			{
+				log.info("Failed! Error in getting Return Limit Order Count"+e.getMessage());
 			}
 			/*
 			 * Code for caluclating cities wise distribution of orders
@@ -474,6 +513,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			ccprojList.add(Projections.groupProperty("customer.customerCity"));
 			ccprojList.add(Projections.rowCount());
 			criteriaforCitiesOrder.setProjection(ccprojList);
+			try
+			{
 			List<Object[]> cityresults = criteriaforCitiesOrder.list();
 			Iterator cityIterator = cityresults.iterator();
 			if (cityresults != null) {
@@ -492,6 +533,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					}
 
 				}
+			}
+			}catch(Exception e)
+			{
+				log.info("Failed! Error in getting City wise Order Count"+e.getMessage());
 			}
 			log.debug(" ***cityTotalQuantity " + cityTotalQuantity);
 			if(ttso!=null&&ttso.length!=0)
@@ -553,10 +598,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(
 					GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3,
-					GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
-			
-		}
-		
+					GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);			
+		}		
 		log.info("*** getAllPartnerTSOdetails Starts : ReportsGeneratorDaoImpl ****");
 		return Arrays.asList(ttso);
 	}
@@ -566,7 +609,6 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			Date startDate, Date endDate, String status, int sellerId) {
 		List<Order> orderList=null;
 		List<Order> orderlistGpReturn=null;
-		Seller seller = null;
 		List temp=null;
 		List<ConsolidatedOrderBean> consolidatedList=new ArrayList<ConsolidatedOrderBean>();
 		Date currentDate=new Date();
@@ -1437,7 +1479,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				if(order[1] != null)
 					grossCommissionPaid = Double.parseDouble(order[1].toString());
 				if(order[3] != null)
-					tdsToDeduct = Double.parseDouble(order[3].toString());
+				tdsToDeduct = Double.parseDouble(order[3].toString());
 				commDetails.setNetSaleQty(existSQ + netSaleQty);
 				commDetails.setGrossPartnerCommissionPaid(existGC + grossCommissionPaid);
 				commDetails.setNetTDSToBeDeposited(existTDS + tdsToDeduct);

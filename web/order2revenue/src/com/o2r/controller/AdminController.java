@@ -204,6 +204,12 @@ public class AdminController {
 				else if (fileName.equalsIgnoreCase("order"))
 					tempList = GlobalConstant.PayTMOrderHeaderList;
 				break;
+			case "Unicommerce":
+				if (fileName.equalsIgnoreCase("payment"))
+					tempList = GlobalConstant.UnicommercePaymentHeaderList;
+				else if (fileName.equalsIgnoreCase("order"))
+					tempList = GlobalConstant.UnicommerceOrderHeaderList;
+				break;
 			}
 			System.out.println("getting bvalues" + parameters);
 			for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
@@ -317,6 +323,14 @@ public class AdminController {
 						else if (fileName.equalsIgnoreCase("order"))
 							model.put("o2rheaders",
 									GlobalConstant.LimeroadOrderHeaderList);
+						break;
+					case "Unicommerce":
+						if (fileName.equalsIgnoreCase("payment"))
+							model.put("o2rheaders",
+									GlobalConstant.UnicommercePaymentHeaderList);
+						else if (fileName.equalsIgnoreCase("order"))
+							model.put("o2rheaders",
+									GlobalConstant.UnicommerceOrderHeaderList);
 						break;
 					case "PayTM":
 						if (fileName.equalsIgnoreCase("payment"))

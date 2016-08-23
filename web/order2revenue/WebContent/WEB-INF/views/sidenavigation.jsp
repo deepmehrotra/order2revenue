@@ -33,27 +33,8 @@
 	object-fit: contain;
 }
 </style>
-<script type="text/javascript">
-
-window.onload = function() {
-			$.ajax({
-				url : "getSellerName.html",
-				success : function(res) {
-					if (res != "true") {
-						var values = res.split(",");
-						if(values[0]!="null"){
-							document.getElementById("logoUrl").src=values[0];
-						}
-						document.getElementById("sellerName").textContent=values[1];						
-					} else {
-						
-					}
-				}
-			});
-		}
-</script>
 </head>
-<body >
+<body>
 
 	<nav class="navbar-default navbar-static-side" role="navigation">
 	<div class="sidebar-collapse">
@@ -65,9 +46,9 @@ window.onload = function() {
 							<c:when test='<%= session.getAttribute("logoUrl") != null %>'>
 								<img alt="image" class="img-circle" id="logoUrl"
 									src='<%= session.getAttribute("logoUrl") %>' />
-							</c:when>
+							</c:when>							
 							<c:otherwise>
-								<img alt="image" class="img-circle"
+								<img alt="image" class="img-circle" id="logoUrl1"
 									src="/O2R/sellerimages/defaultSeller.jpg" />
 							</c:otherwise>
 						</c:choose>
@@ -163,7 +144,24 @@ window.onload = function() {
 
 	</div>
 	</nav>
-
-		
+<script type="text/javascript">
+window.onload = function() {
+	$.ajax({				
+		url : "getSellerName.html",				
+		success : function(res) {					
+			if (res != "true") {
+				var values = res.split(",");				
+				document.getElementById("sellerName").textContent = values[1];				
+				if(values[0] != "null"){					
+					document.getElementById("logoUrl1").src = values[0];							
+				}						
+										
+			} else {
+				
+			}
+		}
+	});			
+}
+</script>		
 </body>
 </html>

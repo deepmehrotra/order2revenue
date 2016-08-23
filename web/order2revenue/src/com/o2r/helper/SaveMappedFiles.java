@@ -175,26 +175,26 @@ public class SaveMappedFiles {
 							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 							if (idsList == null || !idsList.contains(entry.getCell(index)
 									.toString()
-									+ "-"
+									+ GlobalConstant.orderUniqueSymbol
 									+ entry.getCell(skuIndex).toString())
 									&& !duplicateKey.containsKey(entry.getCell(
 											index).toString()
-											+ "-"
+											+ GlobalConstant.orderUniqueSymbol
 											+ entry.getCell(skuIndex)
 													.toString())) {
 								order.setChannelOrderID(entry.getCell(index)
 										.toString()
-										+ "-"
+										+ GlobalConstant.orderUniqueSymbol
 										+ entry.getCell(skuIndex).toString());
 								duplicateKey.put(
 										entry.getCell(index).toString()
-												+ "-"
+												+ GlobalConstant.orderUniqueSymbol
 												+ entry.getCell(skuIndex)
 														.toString(), "");
 							} else {
 								order.setChannelOrderID(entry.getCell(index)
 										.toString()
-										+ "-"
+										+ GlobalConstant.orderUniqueSymbol
 										+ entry.getCell(skuIndex).toString());
 								errorMessage
 										.append(" Channel OrderId is already present ");
@@ -774,12 +774,12 @@ public class SaveMappedFiles {
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							if (idsList == null ||  (!idsList.contains(entry.getCell(index).toString()))
-									&& !duplicateKey.containsKey(entry.getCell(index).toString()+"-"+entry.getCell(skuIndex).toString())) {
-								order.setChannelOrderID(entry.getCell(index).toString()+"-"+entry.getCell(skuIndex).toString());
-								duplicateKey.put(entry.getCell(index).toString()+"-"+entry.getCell(skuIndex).toString(), "");
+							if (idsList == null ||  (!idsList.contains(entry.getCell(index).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(skuIndex).toString()))
+									&& !duplicateKey.containsKey(entry.getCell(index).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(skuIndex).toString())) {
+								order.setChannelOrderID(entry.getCell(index).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(skuIndex).toString());
+								duplicateKey.put(entry.getCell(index).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(skuIndex).toString(), "");
 							} else {
-								order.setChannelOrderID(entry.getCell(index).toString()+"-"+entry.getCell(skuIndex).toString());
+								order.setChannelOrderID(entry.getCell(index).toString());
 								errorMessage.append(" Channel OrderId is already present ");
 								validaterow = false;
 							}
@@ -1387,20 +1387,18 @@ public class SaveMappedFiles {
 					}
 
 					try {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Channel Order ID"));
+						index = cellIndexMap.get(columHeaderMap.get("Channel Order ID"));
+						int skuIndex=cellIndexMap.get(columHeaderMap.get("SkUCode"));
 						if (entry.getCell(index) != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK
+								&& entry.getCell(skuIndex) != null
+								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							if (idsList == null || (!idsList.contains(entry.getCell(index)
-									.toString()))
-									&& !duplicateKey.containsKey(entry.getCell(
-											index).toString())) {
-								order.setChannelOrderID(entry.getCell(index)
-										.toString());
-								duplicateKey.put(entry.getCell(index)
-										.toString(), "");
+							if (idsList == null || (!idsList.contains(entry.getCell(index).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(skuIndex).toString()))
+									&& !duplicateKey.containsKey(entry.getCell(index).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(skuIndex).toString())) {
+								order.setChannelOrderID(entry.getCell(index).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(skuIndex).toString());
+								duplicateKey.put(entry.getCell(index).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(skuIndex).toString(), "");
 							} else {
 								order.setChannelOrderID(entry.getCell(index)
 										.toString());
@@ -1962,27 +1960,27 @@ public class SaveMappedFiles {
 										.get("Seller SKU"));
 								entry.getCell(index).setCellType(
 										HSSFCell.CELL_TYPE_STRING);
-								List<Order> onj = orderService
-										.findOrders(
+								Order onj = orderService
+										.searchAsIsOrder(
 												"channelOrderID",
 												getSubstringValue(':', entry
 														.getCell(index)
 														.toString())
-														+ "-"
+														+ GlobalConstant.orderUniqueSymbol
 														+ entry.getCell(
 																skuIndex)
 																.toString(),
-												sellerId, false, false);
-								if (onj != null && onj.size() != 0) {
+												sellerId);
+								if (onj != null) {
 									channelOrderId = getSubstringValue(':',
 											entry.getCell(index).toString())
-											+ "-"
+											+ GlobalConstant.orderUniqueSymbol
 											+ entry.getCell(skuIndex)
 													.toString();
 								} else {
 									channelOrderId = getSubstringValue(':',
 											entry.getCell(index).toString())
-											+ "-"
+											+ GlobalConstant.orderUniqueSymbol
 											+ entry.getCell(skuIndex)
 													.toString();
 									errorMessage
@@ -2329,23 +2327,19 @@ public class SaveMappedFiles {
 					}
 					if (entry.getCell(index) != null) {
 						log.info(" channelorder id: "
-								+ entry.getCell(index).toString());
-						;
+								+ entry.getCell(index).toString());						
 						if (StringUtils.isNumeric(entry.getCell(index)
 								.toString())) {
-							List<Order> onj = orderService
-									.findOrders("channelOrderID", entry
+							Order onj = orderService
+									.searchAsIsOrder("channelOrderID", entry
 											.getCell(index).toString(),
-											sellerId, false, false);
-							if (onj != null && onj.size() != 0
-									&& onj.size() < 2) {
+											sellerId);
+							if (onj != null) {
 								channelOrderId = entry.getCell(index)
 										.toString();
 							} else {
-								channelOrderId = entry.getCell(index)
-										.toString();
-								errorMessage
-										.append(" Order with channel OrderId not present ");
+								channelOrderId = entry.getCell(index).toString();
+								errorMessage.append(" Order with channel OrderId not present ");
 								validaterow = false;
 							}
 
@@ -2641,25 +2635,20 @@ public class SaveMappedFiles {
 				try {
 
 					try {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Channel Order ID"));
+						index = cellIndexMap.get(columHeaderMap.get("Channel Order ID"));
+						int skuIndex = cellIndexMap.get(columHeaderMap.get("SkUCode"));
 						if (entry.getCell(index) != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							if (idsList == null || (!idsList.contains(entry.getCell(index)
-									.toString()))
-									&& !duplicateKey.containsKey(entry.getCell(
-											index).toString())) {
-								order.setChannelOrderID(entry.getCell(index)
-										.toString());
-								duplicateKey.put(entry.getCell(index)
-										.toString(), "");
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK
+								&& entry.getCell(skuIndex) != null
+								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							if (idsList == null || (!idsList.contains(entry.getCell(index).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(skuIndex).toString()))
+									&& !duplicateKey.containsKey(entry.getCell(index).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(skuIndex).toString())) {
+								order.setChannelOrderID(entry.getCell(index).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(skuIndex).toString());
+								duplicateKey.put(entry.getCell(index).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(skuIndex).toString(), "");
 							} else {
-								order.setChannelOrderID(entry.getCell(index)
-										.toString());
-								errorMessage
-										.append(" Channel OrderId is already present ");
+								order.setChannelOrderID(entry.getCell(index).toString());
+								errorMessage.append(" Channel OrderId is already present ");
 								validaterow = false;
 							}
 						} else {
@@ -3241,15 +3230,14 @@ public class SaveMappedFiles {
 									.toString())) {
 						entry.getCell(index).setCellType(
 								HSSFCell.CELL_TYPE_STRING);
-						List<Order> onj = orderService.findOrders(
+						Order onj = orderService.searchAsIsOrder(
 								"channelOrderID", entry.getCell(index)
-										.toString(), sellerId, false, false);
-						if (onj != null && onj.size() != 0) {
+										.toString(), sellerId);
+						if (onj != null) {
 							channelOrderId = entry.getCell(index).toString();
 						} else {
 							channelOrderId = entry.getCell(index).toString();
-							errorMessage
-									.append(" Channel OrderId not present ");
+							errorMessage.append(" Channel OrderId not present ");
 							validaterow = false;
 						}
 
@@ -3310,7 +3298,7 @@ public class SaveMappedFiles {
 
 					} else {
 						errorMessage
-								.append(" ChannelOrderId & SKU May be Blank or Null");
+								.append(" ChannelOrderId May be Blank or Null");
 						validaterow = false;
 					}
 					if (validaterow) {
@@ -3318,7 +3306,6 @@ public class SaveMappedFiles {
 								channelOrderId, orderPayment, sellerId);
 					} else {
 						errorSet.add(errorMessage.toString());
-
 					}
 					if (order != null) {
 						if (!duplicateKey.containsKey(channelOrderId)) {
@@ -3429,14 +3416,11 @@ public class SaveMappedFiles {
 					if (entry.getCell(index) != null
 							&& StringUtils.isNotBlank(entry.getCell(index)
 									.toString())) {
-						entry.getCell(index).setCellType(
-								HSSFCell.CELL_TYPE_STRING);
-						List<Order> onj = orderService.findOrders("subOrderID",
-								entry.getCell(index).toString(), sellerId,
-								false, false);
+						entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+						Order onj = orderService.searchAsIsOrder("subOrderID",
+								entry.getCell(index).toString(), sellerId);
 						System.out.println(entry.getCell(index).toString());
-						if (onj != null && onj.size() != 0) {
-							if (onj.size() == 1) {
+						if (onj != null) {							
 								if (paymentMap.containsKey(entry.getCell(index)
 										.toString())) {
 									paymentBean = paymentMap.get(entry.getCell(
@@ -3445,18 +3429,11 @@ public class SaveMappedFiles {
 									paymentBean = new OrderPaymentBean();
 								}
 								key = entry.getCell(index).toString();
-								paymentBean.setChannelOrderId(onj.get(0)
-										.getChannelOrderID());
-							} else {
-								errorMessage
-										.append(" Multiple Order on this ID ");
-								validaterow = false;
-							}
+								paymentBean.setChannelOrderId(onj.getChannelOrderID());							
 
 						} else {
-							channelOrderId = onj.get(0).getChannelOrderID();
-							errorMessage
-									.append(" Channel OrderId not present ");
+							channelOrderId = entry.getCell(index).toString();
+							errorMessage.append("Channel OrderId not present OR Duplicate OrderId Present");
 							validaterow = false;
 						}
 
@@ -3774,20 +3751,20 @@ public class SaveMappedFiles {
 							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 							String id=entry.getCell(index).toString().substring(3, entry.getCell(index).toString().indexOf("S"));
 							if (idsList == null || !idsList.contains(id
-									+ "-"
+									+ GlobalConstant.orderUniqueSymbol
 									+ entry.getCell(skuIndex).toString())
 									&& !duplicateKey.containsKey(id
-											+ "-"
+											+ GlobalConstant.orderUniqueSymbol
 											+ entry.getCell(skuIndex)
 													.toString())) {
-								order.setChannelOrderID(id+ "-" + entry.getCell(skuIndex).toString());
+								order.setChannelOrderID(id+ GlobalConstant.orderUniqueSymbol + entry.getCell(skuIndex).toString());
 								duplicateKey.put(id
-												+ "-"
+												+ GlobalConstant.orderUniqueSymbol
 												+ entry.getCell(skuIndex)
 														.toString(), "");
 							} else {
 								order.setChannelOrderID(id
-										+ "-"
+										+ GlobalConstant.orderUniqueSymbol
 										+ entry.getCell(skuIndex).toString());
 								errorMessage
 										.append(" Channel OrderId is already present ");
@@ -4366,25 +4343,20 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 					if (entry.getCell(index) != null
-							&& StringUtils.isNotBlank(entry.getCell(index)
-									.toString())
+							&& StringUtils.isNotBlank(entry.getCell(index).toString())
 							&& entry.getCell(skuIndex) != null
-							&& StringUtils.isNotBlank(entry.getCell(skuIndex)
-									.toString())) {
+							&& StringUtils.isNotBlank(entry.getCell(skuIndex).toString())) {
 						entry.getCell(index).setCellType(
 								HSSFCell.CELL_TYPE_STRING);
-						List<Order> onj = orderService.findOrders(
+						Order onj = orderService.searchAsIsOrder(
 								"channelOrderID",
-								entry.getCell(index).toString() + "-"
-										+ entry.getCell(skuIndex).toString(),
-								sellerId, false, false);
+								entry.getCell(index).toString() + GlobalConstant.orderUniqueSymbol
+										+ entry.getCell(skuIndex).toString(),sellerId);
 						System.out.println(entry.getCell(index).toString()
-								+ "-" + entry.getCell(skuIndex).toString());
-						if (onj != null && onj.size() != 0) {
-							if (onj.size() == 1) {
+								+ GlobalConstant.orderUniqueSymbol + entry.getCell(skuIndex).toString());
+						if (onj != null) {							
 								paymentBean = new OrderPaymentBean();
-								channelOrderId = onj.get(0).getChannelOrderID();
-
+								channelOrderId = onj.getChannelOrderID();
 								try {
 									index = cellIndexMap.get(columHeaderMap
 											.get("Payment Date"));
@@ -4447,27 +4419,17 @@ public class SaveMappedFiles {
 									errorMessage
 											.append("The column 'Outstanding Payable to Vendors (Final)' doesn't exist");
 									validaterow = false;
-								}
-
-							} else {
-								errorMessage
-										.append(" Multiple Order on this ID ");
-								validaterow = false;
-							}
+								}							
 
 						} else {
-							channelOrderId = entry.getCell(index).toString()
-									+ "-" + entry.getCell(skuIndex).toString();
-							errorMessage
-									.append(" Channel OrderId not present ");
+							channelOrderId = entry.getCell(index).toString();
+							errorMessage.append(" Channel OrderId not present ");
 							validaterow = false;
 						}
 
 					} else {
-						channelOrderId = entry.getCell(index).toString() + "-"
-								+ entry.getCell(skuIndex).toString();
-						errorMessage
-								.append(" ChannelOrderId & SKU May be Blank or Null");
+						channelOrderId = entry.getCell(index).toString();
+						errorMessage.append(" ChannelOrderId & SKU May be Blank or Null");
 						validaterow = false;
 					}
 					if (validaterow) {

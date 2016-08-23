@@ -5385,5 +5385,41 @@ public class OrderDaoImpl implements OrderDao {
 		}		
 		return idsList;
 	}
+	
+	@Override
+	public Order searchAsIsOrder(String searchCriteria, String ID, int sellerId) {
+		List<Order> orderList = null; 
+		Session session = null;
+		String channelOrderId = "";
+		if(ID.contains(GlobalConstant.orderUniqueSymbol))
+			channelOrderId = ID.substring(0, ID.indexOf(GlobalConstant.orderUniqueSymbol));
+		else
+			channelOrderId = ID;
+		try{
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions.like(searchCriteria, channelOrderId+"%"));
+			orderList=criteria.list();
+			if(orderList != null && orderList.size() != 0 && orderList.size() == 1){
+				return orderList.get(0);
+			} else if(orderList != null && orderList.size() != 0){
+				for(Order order : orderList){
+					if(order.getChannelOrderID().equals(ID))
+						return order;
+				}
+			}
+		}catch(Exception e){
+			log.error("Failed by Seller ID : "+sellerId, e);
+			e.printStackTrace();
+		}finally{
+			if(session != null)
+				session.close();
+		}		
+		return null;
+	}
 
 }

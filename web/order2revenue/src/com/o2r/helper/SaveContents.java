@@ -129,6 +129,7 @@ public class SaveContents {
 		Partner partner = null;
 		Events event = null;
 		List<Order> saveList=null;
+		List<String> idsList = new ArrayList<String>();
 		Map<String,String> duplicateKey=new HashMap<String, String>();
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -139,6 +140,7 @@ public class SaveContents {
 			}
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
+			idsList = orderService.listOrderIds("channelOrderID", sellerId);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				try
 				{
@@ -154,26 +156,24 @@ public class SaveContents {
 				customerBean = new CustomerBean();
 				otb = new OrderTaxBean();
 				if (entry.getCell(0) != null
-						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK
+						&& entry.getCell(2) != null
+						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
-					log.debug(" Getting string value form : "
-							+ entry.getCell(0));
-					List<Order> onj = orderService
-							.findOrders("channelOrderID", entry.getCell(0)
-									.toString(), sellerId, false, false);
-					if ((onj == null || onj.size() == 0)&&!duplicateKey.containsKey(entry.getCell(0)
-									.toString())) {
+					log.debug(" Getting string value form : "+ entry.getCell(0));
+					
+					if (!idsList.contains(entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(2).toString()) 
+							&& !duplicateKey.containsKey(entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(2).toString())) {
 						
-						order.setChannelOrderID(entry.getCell(0).toString());
-						duplicateKey.put(entry.getCell(0).toString(), "");
+						order.setChannelOrderID(entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(2).toString());
+						duplicateKey.put(entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(2).toString(), "");
 					} else {
 						order.setChannelOrderID(entry.getCell(0).toString());
-						errorMessage
-								.append(" Channel OrderId is already present;");
+						errorMessage.append(" Channel OrderId is already present;");
 						validaterow = false;
 					}
 				} else {
-					errorMessage.append(" Channel OrderId is null ");
+					errorMessage.append(" Channel OrderId is Null");
 					validaterow = false;
 				}
 				if (entry.getCell(1) != null
@@ -250,6 +250,7 @@ public class SaveContents {
 				}
 				if (entry.getCell(6) != null
 						&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					entry.getCell(6).setCellType(HSSFCell.CELL_TYPE_STRING);
 					order.setAwbNum(entry.getCell(6).toString());
 				} 
 				if (entry.getCell(7) != null
@@ -1490,10 +1491,10 @@ public class SaveContents {
 					if (entry.getCell(1) != null
 							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						entry.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
-						List<Order> onj = orderService
-								.findOrders("channelOrderID", entry.getCell(1)
-										.toString(), sellerId, false, false);
-						if (onj != null && onj.size() != 0) {
+						Order onj = orderService
+								.searchAsIsOrder("channelOrderID", entry.getCell(1)
+										.toString(), sellerId);
+						if (onj != null) {
 							channelOrderId = entry.getCell(1).toString();
 						} else {
 							channelOrderId = entry.getCell(1).toString();
@@ -1835,7 +1836,7 @@ public class SaveContents {
 				validaterow = true;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				orderReturn = new OrderRTOorReturn();				
-				
+				Order ord=null;
 				String criteria="";
 				String column=null;
 				String id = null;
@@ -1863,9 +1864,22 @@ public class SaveContents {
 						entry.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
 						log.info("Channel Order ID for Return : "+entry								
 								.getCell(1).toString());
-						orderlist = orderService.findOrders(column, entry
-								.getCell(1).toString(), sellerId, false, false);
-						if(orderlist != null && orderlist.size() != 0){
+						if(column.equals("channelOrderID")){
+							String channelID=null;
+							if(entry.getCell(2) != null
+									&& StringUtils.isNotBlank(entry.getCell(2).toString()))
+								channelID=entry.getCell(1).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(2).toString();
+							else
+								channelID=entry.getCell(1).toString();
+							ord=orderService.searchAsIsOrder(column, channelID, sellerId);
+						} else {
+							orderlist = orderService.findOrders(column, entry
+									.getCell(1).toString(), sellerId, false, false);
+						}						
+						if(ord != null){
+							order.setChannelOrderID(ord.getChannelOrderID());
+							id=order.getChannelOrderID();
+						} else if(orderlist != null && orderlist.size() != 0){
 							if(orderlist.size() == 1 && orderlist.get(0).getOrderReturnOrRTO().getReturnDate() == null){
 								order.setChannelOrderID(orderlist.get(0)
 										.getChannelOrderID());
