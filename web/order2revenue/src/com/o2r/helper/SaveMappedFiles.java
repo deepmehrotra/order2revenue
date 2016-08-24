@@ -270,17 +270,17 @@ public class SaveMappedFiles {
 							if (partner != null)
 								order.setPcName(partner.getPcName());
 							else {
-								order.setPcName(partner.getPcName());
-								errorMessage.append(" Partner do not exist;");
+
+								errorMessage.append(" Sales Channel do not exist;");
 								validaterow = false;
 							}
 						} else {
-							errorMessage.append(" Partner Name is null;");
+							errorMessage.append(" Sales Channel is null;");
 							validaterow = false;
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Sales Channel' doesn't exist");
+								.append("Column 'Sales Channel' doesn't exist");
 						validaterow = false;
 					}
 

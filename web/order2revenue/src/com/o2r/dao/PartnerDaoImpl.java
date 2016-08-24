@@ -9,8 +9,6 @@ import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.CriteriaSpecification;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -159,17 +157,21 @@ public class PartnerDaoImpl implements PartnerDao {
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Seller.class).add(
+			seller=(Seller)session.get(Seller.class, sellerId);
+			/*Criteria criteria = session.createCriteria(Seller.class).add(
 					Restrictions.eq("id", sellerId));
 			criteria.createAlias("partners", "partner",CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.like("partner.pcName", partnername, MatchMode.EXACT))
 				//	.add(Restrictions.eq("partner.pcName", partnername).ignoreCase())
-					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-
-			if (criteria.list() != null && criteria.list().size() != 0) {
-				seller = (Seller) criteria.list().get(0);
-				returnpartner = seller.getPartners().get(0);
-				if(returnpartner.getNrnReturnConfig()!=null)
+					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);*/
+			List<Partner> partnerList=seller.getPartners();
+			if (partnerList != null && partnerList.size() != 0) {
+				for(Partner partner:partnerList)
+				{
+					if(partner.getPcName().equals(partnername))
+				returnpartner = partner;
+				}
+				if(returnpartner!=null&&returnpartner.getNrnReturnConfig()!=null)
 				Hibernate.initialize(returnpartner.getNrnReturnConfig().getCharges());
 			}
 			session.getTransaction().commit();
