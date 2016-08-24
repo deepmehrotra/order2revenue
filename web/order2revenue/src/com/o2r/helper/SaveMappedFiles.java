@@ -4313,7 +4313,11 @@ public class SaveMappedFiles {
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
-							String id=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol + entry.getCell(skuIndex).toString();
+							String id="";
+							if(entry.getCell(index).toString().contains("S"))
+								id=entry.getCell(index).toString().substring(0, entry.getCell(index).toString().indexOf("S"))+ GlobalConstant.orderUniqueSymbol + entry.getCell(skuIndex).toString();
+							else
+								id=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol + entry.getCell(skuIndex).toString();
 							if (idsList == null || !idsList.contains(id)
 									&& !duplicateKey.containsKey(id)) {
 								order.setChannelOrderID(id);
