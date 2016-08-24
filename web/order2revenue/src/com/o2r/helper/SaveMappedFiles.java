@@ -160,6 +160,7 @@ public class SaveMappedFiles {
 				int index = 0;
 				Product product = null;
 				TaxCategory taxcat = null;
+				String channelorderid=null;
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				try {
 
@@ -173,40 +174,26 @@ public class SaveMappedFiles {
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
-							if (idsList == null || !idsList.contains(entry.getCell(index)
+							channelorderid=entry.getCell(index)
 									.toString()
 									+ GlobalConstant.orderUniqueSymbol
-									+ entry.getCell(skuIndex).toString())
-									&& !duplicateKey.containsKey(entry.getCell(
-											index).toString()
-											+ GlobalConstant.orderUniqueSymbol
-											+ entry.getCell(skuIndex)
-													.toString())) {
-								order.setChannelOrderID(entry.getCell(index)
-										.toString()
-										+ GlobalConstant.orderUniqueSymbol
-										+ entry.getCell(skuIndex).toString());
-								duplicateKey.put(
-										entry.getCell(index).toString()
-												+ GlobalConstant.orderUniqueSymbol
-												+ entry.getCell(skuIndex)
-														.toString(), "");
+									+ entry.getCell(skuIndex).toString();
+							if (idsList == null || !idsList.contains(channelorderid)
+									&& !duplicateKey.containsKey(channelorderid)) {
+								order.setChannelOrderID(channelorderid);
+								duplicateKey.put(channelorderid, "");
 							} else {
-								order.setChannelOrderID(entry.getCell(index)
-										.toString()
-										+ GlobalConstant.orderUniqueSymbol
-										+ entry.getCell(skuIndex).toString());
 								errorMessage
 										.append(" Channel OrderId is already present ");
 								validaterow = false;
 							}
 						} else {
-							errorMessage.append(" Channel OrderId is null ");
+							errorMessage.append(" Channel OrderId or SKU code is null ");
 							validaterow = false;
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'ORDER ITEM ID' doesn't exist");
+								.append("The column 'ORDER ID' doesn't exist");
 						validaterow = false;
 					}
 
@@ -549,9 +536,7 @@ public class SaveMappedFiles {
 								.get("Customer Email"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							log.debug(" Email from sheet ************ "
-									+ rowIndex + ":"
-									+ entry.getCell(index).toString());
+						
 							customerBean.setCustomerEmail(entry.getCell(index)
 									.toString());
 						}
@@ -1941,7 +1926,7 @@ public class SaveMappedFiles {
 					int index = 0;
 					String channelheader = null;
 					channelOrderId = null;
-					errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
+					//errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 					// Code for fetching right colum
 					orderPayment = new OrderPayment();
 					order = null;
@@ -1960,29 +1945,16 @@ public class SaveMappedFiles {
 										.get("Seller SKU"));
 								entry.getCell(index).setCellType(
 										HSSFCell.CELL_TYPE_STRING);
+								channelOrderId=entry
+										.getCell(index)
+										.toString()+ GlobalConstant.orderUniqueSymbol
+										+ entry.getCell(skuIndex).toString();
 								Order onj = orderService
 										.searchAsIsOrder(
-												"channelOrderID",
-												getSubstringValue(':', entry
-														.getCell(index)
-														.toString())
-														+ GlobalConstant.orderUniqueSymbol
-														+ entry.getCell(
-																skuIndex)
-																.toString(),
+												"channelOrderID",channelOrderId ,
 												sellerId);
-								if (onj != null) {
-									channelOrderId = getSubstringValue(':',
-											entry.getCell(index).toString())
-											+ GlobalConstant.orderUniqueSymbol
-											+ entry.getCell(skuIndex)
-													.toString();
-								} else {
-									channelOrderId = getSubstringValue(':',
-											entry.getCell(index).toString())
-											+ GlobalConstant.orderUniqueSymbol
-											+ entry.getCell(skuIndex)
-													.toString();
+								if (onj == null) {
+									
 									errorMessage
 											.append(" Channel OrderId not present ");
 									validaterow = false;
@@ -2206,10 +2178,8 @@ public class SaveMappedFiles {
 			}
 
 			if (generatePaymentUpload) {
-				log.info("Updating payment Upload with positive amount "
-						+ totalpositive);
 				log.info("Updating payment Upload with negative amount "
-						+ totalnegative);
+						+ totalnegative+" totalpositive : "+totalpositive);
 				paymentUpload.setTotalpositivevalue(totalpositive);
 				paymentUpload.setTotalnegativevalue(totalnegative);
 				paymentUpload.setNetRecievedAmount(totalpositive
@@ -2219,15 +2189,13 @@ public class SaveMappedFiles {
 				paymentUpload.setUploadStatus("Success");
 				uploadPaymentId = paymentUploadService.addPaymentUpload(
 						paymentUpload, sellerId);
-				System.out.println(" Saving payment upload : "
+				log.info(" Saving payment upload : "
 						+ uploadPaymentId);
 			}
 			if (manualChargesList != null && manualChargesList.size() != 0) {
 				for (ManualCharges manuals : manualChargesList) {
 					try {
-						System.out
-								.println(" Seting manual charges uploadPaymentId "
-										+ uploadPaymentId);
+						
 						if (uploadPaymentId != null)
 							manuals.setChargesDesc(uploadPaymentId);
 						manuals.setPartner("Flipkart");
