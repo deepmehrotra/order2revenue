@@ -180,8 +180,7 @@ public class GlobalConstant {
 			add("Shipping PinCode");
 			add("Order Shipped Date");
 			add("Sales Channel");
-			add("Payment Type");
-			add("Tax Category");
+			add("Payment Type");			
 			add("AWB No");
 			add("PIreferenceNo");
 			add("Logistic Partner");
@@ -220,8 +219,7 @@ public class GlobalConstant {
 			add("Payment Type");
 			add("Logistic Partner");
 			add("Sales Channel");
-			add("InvoiceID");
-			add("Tax Category");
+			add("InvoiceID");			
 			add("Order Shipped Date");
 			add("Net Rate");
 			add("Seller Note");
@@ -252,8 +250,7 @@ public class GlobalConstant {
 			add("Payment Type");
 			add("Order Shipped Date");
 			add("Customer Address");
-			add("Sales Channel");
-			add("Tax Category");
+			add("Sales Channel");			
 			add("Quantity");
 			add("Net Rate");
 			add("Seller Note");

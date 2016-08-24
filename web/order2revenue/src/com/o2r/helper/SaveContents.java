@@ -130,6 +130,7 @@ public class SaveContents {
 		Events event = null;
 		List<Order> saveList=null;
 		List<String> idsList = new ArrayList<String>();
+		List<String> SKUList = new ArrayList<String>();
 		Map<String,String> duplicateKey=new HashMap<String, String>();
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -141,6 +142,7 @@ public class SaveContents {
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			idsList = orderService.listOrderIds("channelOrderID", sellerId);
+			SKUList = productService.listProductSKU(sellerId);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				try
 				{
@@ -151,7 +153,7 @@ public class SaveContents {
 				log.debug(entry.getCell(0));
 				log.debug(entry.getCell(1));
 				log.debug(entry.getCell(2));
-
+				TaxCategory taxcat=null;
 				order = new OrderBean();
 				customerBean = new CustomerBean();
 				otb = new OrderTaxBean();
@@ -161,14 +163,13 @@ public class SaveContents {
 						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
 					log.debug(" Getting string value form : "+ entry.getCell(0));
-					
-					if (!idsList.contains(entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(2).toString()) 
-							&& !duplicateKey.containsKey(entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(2).toString())) {
+					String channelID=entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(2).toString();
+					if (!idsList.contains(channelID) 
+							&& !duplicateKey.containsKey(channelID)) {
 						
-						order.setChannelOrderID(entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(2).toString());
-						duplicateKey.put(entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(2).toString(), "");
-					} else {
-						order.setChannelOrderID(entry.getCell(0).toString());
+						order.setChannelOrderID(channelID);
+						duplicateKey.put(channelID, "");
+					} else {						
 						errorMessage.append(" Channel OrderId is already present;");
 						validaterow = false;
 					}
@@ -198,15 +199,12 @@ public class SaveContents {
 				
 				Product product = null;
 				if (entry.getCell(2) != null
-						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					product = productService.getProduct(entry
-							.getCell(2).toString(), sellerId);
-					if (product == null) {
-						order.setProductSkuCode(entry.getCell(2).toString());
+						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {					
+					if (SKUList != null && SKUList.contains(entry.getCell(2).toString())) {
+						order.setProductSkuCode(entry.getCell(2).toString());						
+					} else {
 						errorMessage.append(" Product SKU does not exist;");
 						validaterow = false;
-					} else {
-						order.setProductSkuCode(product.getProductSkuCode());
 					}
 				} else {
 					errorMessage.append(" Product SKU is null;");
@@ -451,8 +449,14 @@ public class SaveContents {
 					validaterow = false;
 				}
 				
-				TaxCategory taxcat = taxDetailService.getTaxCategory(
-						product, sellerId, customerBean.getZipcode());
+				if(order.getProductSkuCode() != null){
+					product = productService.getProduct(
+							order.getProductSkuCode(), sellerId);
+					if (product != null) {
+						taxcat = taxDetailService.getTaxCategory(product,
+								sellerId, customerBean.getZipcode());
+					}
+				}
 				if (taxcat != null)
 					otb.setTaxCategtory(taxcat.getTaxCatName());
 				else {			
