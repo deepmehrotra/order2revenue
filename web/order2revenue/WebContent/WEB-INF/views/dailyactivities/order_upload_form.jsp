@@ -237,6 +237,7 @@
 		                                        <select class="form-control div-toggle" data-target=".my-info" id="sheetValue" name="sheetValue" required autocomplete="off" 
 		                                        	style="width: 97%;margin-left: 14px">
 		                                            <option value="" data-show=".upload">Upload</option>
+		                                            <option value="Unicommerce_Order" data-show=".snapdealorderupload">Unicommerce Order Upload</option>
 		                                            <option value="Snapdeal_Order" data-show=".snapdealorderupload">Snapdeal Order Upload</option>
 		                                            <option value="Snapdeal_Payment" data-show=".snapdealpaymentupload">Snapdeal Payment</option>
 													<option value="Flipkart_Order" data-show=".flipkartorderupload">Flipkart Order Upload</option>
@@ -533,7 +534,7 @@
                                                 </li>   
                                         </ol>
                                     </div>
-                                    <div class="amazonpaymentupload">
+                                    <div class="amazonepaymentupload">
                                         <h2 class="text-center">
                                             <b>Follow These Instructions</b>
                                         </h2>
@@ -549,12 +550,12 @@
                                             </li>
                                             <li>
                                                 Excel sheet should have these colums with exact same heading as downloaded form panel : 
-                                                Mandatory Colums : Date,Order ID,Transaction type,Payment Detail,Amount,SKU
-												Non mandatory Colums:
+                                                <br><b>Mandatory Colums :</b>Date,Order ID,Transaction type,Payment Detail,Amount,SKU
+												<br><b>Non mandatory Colums:</b>
                                             </li>
                                             <li>
                                                 Other mandatory colums to be added manually with respective values for each transactions : 
-                                                InvoiceId : Put invoice number for order search.
+                                                <br><b>InvoiceId :</b>Put invoice number for order search.
                                             </li>
                                             <li>
                                                 No non mandatory colums to be added.

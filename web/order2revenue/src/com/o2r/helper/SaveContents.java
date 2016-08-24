@@ -450,7 +450,7 @@ public class SaveContents {
 					errorMessage.append("Customer zipcode is blank ");
 					validaterow = false;
 				}
-
+				
 				TaxCategory taxcat = taxDetailService.getTaxCategory(
 						product, sellerId, customerBean.getZipcode());
 				if (taxcat != null)
