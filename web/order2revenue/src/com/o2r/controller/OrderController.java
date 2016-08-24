@@ -368,6 +368,11 @@ public class OrderController {
 							uploadReport));
 					model.put("mapType", "skuMappingMap");
 					break;
+				case "Unicommerce_Order":
+					saveMappedFiles.saveUnicommerceOrderContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport);
+					break;
 				case "Flipkart_Payment":
 					saveMappedFiles.saveFlipkartPaymentContents(
 							files.get(0), sellerId, applicationPath,

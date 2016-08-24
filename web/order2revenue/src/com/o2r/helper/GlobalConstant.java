@@ -346,6 +346,7 @@ public class GlobalConstant {
 			add("Shipping PinCode");
 			add("Order Shipped Date");
 			add("Sales Channel");
+			add("O2R Channel");
 			add("Payment Type");			
 			add("AWB No");
 			add("PIreferenceNo");
