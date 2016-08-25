@@ -416,6 +416,12 @@ public class GlobalConstant {
 	public static final String nullValuesError = "Field Should Not Be Empty!";
 	public static final String nullValuesErrorCode = "#00999";
 
+	
+	public static final String volShipping="Volumetric Shipping";
+	public static final String dwShipping="Deadweight Shipping";
+	
+	
+	
 	/*
 	 * log.error("searchExpense exception : " + GlobalConstant.nullException);
 	 * model.put("errorMessage", GlobalConstant.nullValuesError);

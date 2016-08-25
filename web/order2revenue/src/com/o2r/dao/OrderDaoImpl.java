@@ -2457,7 +2457,7 @@ public class OrderDaoImpl implements OrderDao {
 			} else {
 				valueType = "fixed";
 			}
-
+			order.setVolShippingString(valueType);
 			if (partner.getNrnReturnConfig().getShippingFeeType() != null
 					&& partner.getNrnReturnConfig().getShippingFeeType()
 							.equals("variable")) {
@@ -2729,11 +2729,13 @@ public class OrderDaoImpl implements OrderDao {
 				}
 			}
 
-			if (vwchargetemp > dwchargetemp)
+			if (vwchargetemp > dwchargetemp){
 				shippingCharges = vwchargetemp;
-			else
+				order.setDwShippingString(GlobalConstant.volShipping);
+			} else {
 				shippingCharges = dwchargetemp;
-
+				order.setDwShippingString(GlobalConstant.dwShipping);
+			}
 			// End
 
 			/*
@@ -3722,7 +3724,7 @@ public class OrderDaoImpl implements OrderDao {
 			} else {
 				valueType = "fixed";
 			}
-
+			order.setVolShippingString(valueType);
 			if (partner.getNrnReturnConfig().getShippingFeeType() != null
 					&& partner.getNrnReturnConfig().getShippingFeeType()
 							.equals("variable")) {
@@ -3994,10 +3996,13 @@ public class OrderDaoImpl implements OrderDao {
 				}
 			}
 
-			if (vwchargetemp > dwchargetemp)
+			if (vwchargetemp > dwchargetemp){
 				shippingCharges = vwchargetemp;
-			else
+				order.setDwShippingString(GlobalConstant.volShipping);
+			} else {
 				shippingCharges = dwchargetemp;
+				order.setDwShippingString(GlobalConstant.dwShipping);
+			}
 
 			// End
 

@@ -47,6 +47,7 @@ public class OrderBean {
 	private double fixedfee;
 	private double pccAmount;
 	private String  eventName;
+	private String  volShippingString;
 	private List<OrderTimeline> orderTimeline = new ArrayList<>();
 	private CustomerBean customer = new CustomerBean();
 	private OrderPaymentBean orderPayment = new OrderPaymentBean();
@@ -452,5 +453,13 @@ public class OrderBean {
 
 	public void setGrossProfit(double grossProfit) {
 		this.grossProfit = grossProfit;
+	}
+
+	public String getVolShippingString() {
+		return volShippingString;
+	}
+
+	public void setVolShippingString(String volShippingString) {
+		this.volShippingString = volShippingString;
 	}
 }
