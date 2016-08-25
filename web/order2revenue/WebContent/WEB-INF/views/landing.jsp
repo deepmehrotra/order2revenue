@@ -16,6 +16,7 @@
 
 </head>
 <body>
+<!-- Time Taken: ${timeTaken} ms %> ... -->
 <div id="wrapper">
 <jsp:include page="sidenavigation.jsp"></jsp:include>
     <div id="page-wrapper" class="gray-bg">

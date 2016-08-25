@@ -27,6 +27,10 @@ public class NRnReturnConfig {
 	@Column
 	private boolean whicheverGreaterPCC;
 	@Column
+	private boolean pccfixedAmt;
+	@Column
+	private boolean pccpercentSP;
+	@Column
 	private String shippingFeeType; // - variable or fixed
 
 	@Column
@@ -856,6 +860,22 @@ public class NRnReturnConfig {
 
 	public void setTaxPoType(String taxPoType) {
 		this.taxPoType = taxPoType;
+	}
+
+	public boolean isPccfixedAmt() {
+		return pccfixedAmt;
+	}
+
+	public void setPccfixedAmt(boolean pccfixedAmt) {
+		this.pccfixedAmt = pccfixedAmt;
+	}
+
+	public boolean isPccpercentSP() {
+		return pccpercentSP;
+	}
+
+	public void setPccpercentSP(boolean pccpercentSP) {
+		this.pccpercentSP = pccpercentSP;
 	}
 
 }

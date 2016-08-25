@@ -566,6 +566,9 @@ public class ConverterClass {
 					.getCategoryWiseCommsion());
 			nRnReturnConfig.setWhicheverGreaterPCC(metaNRnReturnConfig
 					.isWhicheverGreaterPCC());
+			nRnReturnConfig.setPccfixedAmt(metaNRnReturnConfig.isPccfixedAmt());
+			nRnReturnConfig.setPccpercentSP(metaNRnReturnConfig
+					.isPccpercentSP());
 			nRnReturnConfig.setShippingFeeType(metaNRnReturnConfig
 					.getShippingFeeType());
 			nRnReturnConfig.setRetCharSFType(metaNRnReturnConfig

@@ -25,7 +25,6 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.transform.Transformers;
 import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -55,11 +54,13 @@ import com.o2r.model.Partner;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
+import com.o2r.model.SellerAccount;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.TaxDetail;
 import com.o2r.service.EventsService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.ProductService;
+import com.o2r.service.SellerAccountService;
 import com.o2r.service.TaxDetailService;
 
 /**
@@ -79,6 +80,8 @@ public class OrderDaoImpl implements OrderDao {
 	private PartnerService partnerService;
 	@Autowired
 	private EventsService eventsService;
+	@Autowired
+	private SellerAccountService sellerAccountService;
 
 	@Autowired
 	private AreaConfigDao areaConfigDao;
@@ -276,11 +279,13 @@ public class OrderDaoImpl implements OrderDao {
 		Product product;
 		boolean status = true;
 		StringBuffer erroneousOrders = null;
+		int orderCount = 0;
 		try {
 
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			if (orderList != null && orderList.size() != 0) {
+				orderCount = orderList.size();
 				Criteria criteria = session.createCriteria(Seller.class).add(
 						Restrictions.eq("id", sellerId));
 				seller = (Seller) criteria.list().get(0);
@@ -299,7 +304,9 @@ public class OrderDaoImpl implements OrderDao {
 
 						calculateDeliveryDate(order, sellerId);
 
-						float taxpercent = taxDetailService.getTaxCategory(order.getOrderTax().getTaxCategtory(),
+						float taxpercent = taxDetailService
+								.getTaxCategory(
+										order.getOrderTax().getTaxCategtory(),
 										sellerId).getTaxPercent();
 
 						reconciledate = getreconciledate(order, seller
@@ -499,15 +506,27 @@ public class OrderDaoImpl implements OrderDao {
 						status = false;
 						erroneousOrders.append(order.getChannelOrderID() + ",");
 						e.printStackTrace();
-						log.error("Failed! by sellerId : "+sellerId, e);
-
+						log.error("Failed! by sellerId : " + sellerId, e);
+						orderCount--;
 					}
 				}
+			}
+			try {
+				SellerAccount sellerAcc = seller.getSellerAccount();
+				if (sellerAcc != null) {
+					sellerAcc.setOrderBucket(sellerAcc.getOrderBucket()
+							- orderCount);
+					sellerAcc.setSellerId(sellerId);
+					sellerAccountService.saveSellerAccount(sellerAcc);
+				}
+			} catch (Exception e) {
+				log.error("Failed to Update Bucket ! SellerController ", e);
+				e.printStackTrace();
 			}
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(erroneousOrders.toString(), new Date(),
@@ -663,7 +682,7 @@ public class OrderDaoImpl implements OrderDao {
 					session.getTransaction().commit();
 
 				} catch (Exception e) {
-					log.error("Failed! by sellerId : "+sellerId, e);
+					log.error("Failed! by sellerId : " + sellerId, e);
 					log.debug("Inside exception in add order "
 							+ e.getLocalizedMessage() + " message: "
 							+ e.getMessage());
@@ -671,12 +690,24 @@ public class OrderDaoImpl implements OrderDao {
 				} finally {
 					session.close();
 				}
+				
+				try {
+					SellerAccount sellerAcc = seller.getSellerAccount();
+					if (sellerAcc != null) {
+						sellerAcc.setOrderBucket(sellerAcc.getOrderBucket() - 1);
+						sellerAcc.setSellerId(sellerId);
+						sellerAccountService.saveSellerAccount(sellerAcc);
+					}
+				} catch (Exception e) {
+					log.error("Failed to Update Bucket ! SellerController ", e);
+					e.printStackTrace();
+				}
 			}
 			log.info("*** addPO ends ***");
 			return order;
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
@@ -700,7 +731,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.listOrderError,
 					new Date(), 3, GlobalConstant.listOrderErrorCode, e);
 		}
@@ -733,7 +764,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.listOrdersError,
 					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
 
@@ -760,7 +791,7 @@ public class OrderDaoImpl implements OrderDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.listOrdersError,
 					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
 		}
@@ -797,7 +828,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.listOrdersError,
 					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
 		}
@@ -903,7 +934,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.getOrderError, new Date(),
 					3, GlobalConstant.getOrderErrorCode, e);
 		}
@@ -950,7 +981,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.findOrdersError,
 					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 		}
@@ -983,7 +1014,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.findOrdersError,
 					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 		}
@@ -1014,7 +1045,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.deleteOrderError,
 					new Date(), 3, GlobalConstant.deleteOrderErrorCode, e);
 		}
@@ -1228,7 +1259,7 @@ public class OrderDaoImpl implements OrderDao {
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.addReturnOrderError,
 					new Date(), 1, GlobalConstant.addReturnOrderErrorCode, e);
 
@@ -1312,7 +1343,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.findOrdersError,
 					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 
@@ -1364,7 +1395,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.findOrdersbyDateError,
 					new Date(), 2, GlobalConstant.findOrdersbyDateErrorCode, e);
 
@@ -1404,7 +1435,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(
 					GlobalConstant.findOrdersbyPaymentDateError, new Date(), 2,
 					GlobalConstant.findOrdersbyPaymentDateErrorCode, e);
@@ -1446,7 +1477,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			e.printStackTrace();
 			throw new CustomException(
 					GlobalConstant.findOrdersbyReturnDateError, new Date(), 2,
@@ -1489,7 +1520,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(
 					GlobalConstant.findOrdersbyCustomerDetailsError,
 					new Date(), 2,
@@ -1667,7 +1698,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.addOrderPaymentError,
 					new Date(), 1, GlobalConstant.addOrderPaymentErrorCode, e);
 
@@ -1853,7 +1884,7 @@ public class OrderDaoImpl implements OrderDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.addOrderPaymentError,
 					new Date(), 1, GlobalConstant.addOrderPaymentErrorCode, e);
 
@@ -1926,7 +1957,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.addDebitNoteError,
 					new Date(), 1, GlobalConstant.addDebitNoteErrorCode, e);
 		}
@@ -2042,7 +2073,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.addPOPaymentError,
 					new Date(), 1, GlobalConstant.addPOPaymentErrorCode, e);
 		}
@@ -2250,7 +2281,8 @@ public class OrderDaoImpl implements OrderDao {
 
 					if (partner.getNrnReturnConfig().getShippingFeeType()
 							.equalsIgnoreCase("variable")
-								&& charge.getChargeName().contains("shippingfeeVolumeVariable")) {
+							&& charge.getChargeName().contains(
+									"shippingfeeVolumeVariable")) {
 
 						ChargesBean chargeBean = pbean
 								.getChargesBean("shippingfeeVolumeVariable",
@@ -2277,7 +2309,8 @@ public class OrderDaoImpl implements OrderDao {
 							chargeBean.setMetroValue(charge.getChargeAmount());
 						}
 
-					} else if (charge.getChargeName().contains("shippingfeeVolumeFixed")) {
+					} else if (charge.getChargeName().contains(
+							"shippingfeeVolumeFixed")) {
 						ChargesBean chargeBean = new ChargesBean();
 						chargeBean.setChargeType("shippingfeeVolumeFixed");
 						chargeBean.setCriteria(charge.getCriteria());
@@ -2292,7 +2325,8 @@ public class OrderDaoImpl implements OrderDao {
 
 					if (partner.getNrnReturnConfig().getShippingFeeType()
 							.equalsIgnoreCase("variable")
-								&& charge.getChargeName().contains("shippingfeeWeightVariable")) {
+							&& charge.getChargeName().contains(
+									"shippingfeeWeightVariable")) {
 
 						ChargesBean chargeBean = pbean
 								.getChargesBean("shippingfeeWeightVariable",
@@ -2319,7 +2353,8 @@ public class OrderDaoImpl implements OrderDao {
 							chargeBean.setMetroValue(charge.getChargeAmount());
 						}
 
-					} else if (charge.getChargeName().contains("shippingfeeWeightFixed")) {
+					} else if (charge.getChargeName().contains(
+							"shippingfeeWeightFixed")) {
 						ChargesBean chargeBean = new ChargesBean();
 						chargeBean.setChargeType("shippingfeeWeightFixed");
 						chargeBean.setCriteria(charge.getCriteria());
@@ -2362,7 +2397,8 @@ public class OrderDaoImpl implements OrderDao {
 						.get(GlobalConstant.fixedCommissionPercent);
 
 			} else {
-				comission = chargesMap.containsKey(prodCat) ? chargesMap.get(prodCat) : 0;
+				comission = chargesMap.containsKey(prodCat) ? chargesMap
+						.get(prodCat) : 0;
 			}
 
 			// Add partner new changes:
@@ -2390,7 +2426,8 @@ public class OrderDaoImpl implements OrderDao {
 			if (partner.getNrnReturnConfig().isWhicheverGreaterPCC()) {
 				double percentAmount = chargesMap
 						.containsKey(GlobalConstant.percentSPPCCHigher) ? chargesMap
-						.get(GlobalConstant.percentSPPCCHigher) * SP / 100 : 0;
+						.get(GlobalConstant.percentSPPCCHigher) * SP / 100
+						: 0;
 				if (chargesMap.containsKey(GlobalConstant.fixedAmtPCC)
 						&& percentAmount > chargesMap
 								.get(GlobalConstant.fixedAmtPCC)) {
@@ -2415,8 +2452,9 @@ public class OrderDaoImpl implements OrderDao {
 					} else {
 						pccAmount = chargesMap
 								.containsKey(GlobalConstant.percentSPPCCValue) ? chargesMap
-								.get(GlobalConstant.percentSPPCCValue) * SP / 100
-								: 0;
+								.get(GlobalConstant.percentSPPCCValue)
+								* SP
+								/ 100 : 0;
 					}
 				}
 			}
@@ -2729,7 +2767,7 @@ public class OrderDaoImpl implements OrderDao {
 				}
 			}
 
-			if (vwchargetemp > dwchargetemp){
+			if (vwchargetemp > dwchargetemp) {
 				shippingCharges = vwchargetemp;
 				order.setDwShippingString(GlobalConstant.volShipping);
 			} else {
@@ -3288,7 +3326,7 @@ public class OrderDaoImpl implements OrderDao {
 				totalcharge = totalcharge + (totalcharge * serviceTax) / 100;
 			}
 		} catch (Exception e) {
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 		}
 		log.info("*** calculateReturnCharges ends : OrderDaoImpl ***");
 		return totalcharge;
@@ -3525,7 +3563,8 @@ public class OrderDaoImpl implements OrderDao {
 
 				if (pbean.getNrnReturnConfig().getShippingFeeType()
 						.equalsIgnoreCase("variable")
-							&& charge.getChargeName().contains("shippingfeeVolumeVariable")) {
+						&& charge.getChargeName().contains(
+								"shippingfeeVolumeVariable")) {
 
 					ChargesBean chargeBean = pbean.getChargesBean(
 							"shippingfeeVolumeVariable", charge.getCriteria(),
@@ -3535,7 +3574,8 @@ public class OrderDaoImpl implements OrderDao {
 						chargeBean.setChargeType("shippingfeeVolumeVariable");
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
-						pbean.getshippingfeeVolumeVariableList().add(chargeBean);
+						pbean.getshippingfeeVolumeVariableList()
+								.add(chargeBean);
 					}
 
 					if (charge.getChargeName().contains("Local")) {
@@ -3548,7 +3588,8 @@ public class OrderDaoImpl implements OrderDao {
 						chargeBean.setMetroValue(charge.getChargeAmount());
 					}
 
-				} else if (charge.getChargeName().contains("shippingfeeVolumeFixed")) {
+				} else if (charge.getChargeName().contains(
+						"shippingfeeVolumeFixed")) {
 					ChargesBean chargeBean = new ChargesBean();
 					chargeBean.setChargeType("shippingfeeVolumeFixed");
 					chargeBean.setCriteria(charge.getCriteria());
@@ -3563,7 +3604,8 @@ public class OrderDaoImpl implements OrderDao {
 
 				if (pbean.getNrnReturnConfig().getShippingFeeType()
 						.equalsIgnoreCase("variable")
-							&& charge.getChargeName().contains("shippingfeeWeightVariable")) {
+						&& charge.getChargeName().contains(
+								"shippingfeeWeightVariable")) {
 
 					ChargesBean chargeBean = pbean.getChargesBean(
 							"shippingfeeWeightVariable", charge.getCriteria(),
@@ -3573,7 +3615,8 @@ public class OrderDaoImpl implements OrderDao {
 						chargeBean.setChargeType("shippingfeeWeightVariable");
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
-						pbean.getshippingfeeWeightVariableList().add(chargeBean);
+						pbean.getshippingfeeWeightVariableList()
+								.add(chargeBean);
 					}
 
 					if (charge.getChargeName().contains("Local")) {
@@ -3586,7 +3629,8 @@ public class OrderDaoImpl implements OrderDao {
 						chargeBean.setMetroValue(charge.getChargeAmount());
 					}
 
-				} else if (charge.getChargeName().contains("shippingfeeWeightFixed")) {
+				} else if (charge.getChargeName().contains(
+						"shippingfeeWeightFixed")) {
 					ChargesBean chargeBean = new ChargesBean();
 					chargeBean.setChargeType("shippingfeeWeightFixed");
 					chargeBean.setCriteria(charge.getCriteria());
@@ -3657,7 +3701,8 @@ public class OrderDaoImpl implements OrderDao {
 			if (partner.getNrnReturnConfig().isWhicheverGreaterPCC()) {
 				double percentAmount = chargesMap
 						.containsKey(GlobalConstant.percentSPPCCHigher) ? chargesMap
-						.get(GlobalConstant.percentSPPCCHigher) * SP / 100 : 0;
+						.get(GlobalConstant.percentSPPCCHigher) * SP / 100
+						: 0;
 				if (chargesMap.containsKey(GlobalConstant.fixedAmtPCC)
 						&& percentAmount > chargesMap
 								.get(GlobalConstant.fixedAmtPCC)) {
@@ -3682,8 +3727,9 @@ public class OrderDaoImpl implements OrderDao {
 					} else {
 						pccAmount = chargesMap
 								.containsKey(GlobalConstant.percentSPPCCValue) ? chargesMap
-								.get(GlobalConstant.percentSPPCCValue) * SP / 100
-								: 0;
+								.get(GlobalConstant.percentSPPCCValue)
+								* SP
+								/ 100 : 0;
 					}
 				}
 			}
@@ -3996,7 +4042,7 @@ public class OrderDaoImpl implements OrderDao {
 				}
 			}
 
-			if (vwchargetemp > dwchargetemp){
+			if (vwchargetemp > dwchargetemp) {
 				shippingCharges = vwchargetemp;
 				order.setDwShippingString(GlobalConstant.volShipping);
 			} else {
@@ -4608,7 +4654,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.debug("Inside exception in add order "
 					+ e.getLocalizedMessage() + " message: " + e.getMessage());
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
@@ -4697,7 +4743,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.findOrdersError,
 					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 
@@ -4752,7 +4798,7 @@ public class OrderDaoImpl implements OrderDao {
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.addReturnOrderError,
 					new Date(), 1, GlobalConstant.addReturnOrderErrorCode, e);
 		} finally {
@@ -4796,7 +4842,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.listOrdersError,
 					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
 		}
@@ -4839,7 +4885,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.listOrdersError,
 					new Date(), 3, GlobalConstant.listOrdersErrorCode, e);
 		}
@@ -5009,7 +5055,7 @@ public class OrderDaoImpl implements OrderDao {
 			log.debug("Inside exception in generateConsolidatedReturn "
 					+ e.getLocalizedMessage() + " message: " + e.getMessage());
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			log.info("Error : " + GlobalConstant.addOrderError);
 			log.info("Error : " + GlobalConstant.addOrderErrorCode);
 			throw new CustomException(GlobalConstant.addOrderError, new Date(),
@@ -5094,7 +5140,7 @@ public class OrderDaoImpl implements OrderDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.findOrdersError,
 					new Date(), 2, GlobalConstant.findOrdersErrorcode, e);
 
@@ -5146,7 +5192,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.findOrdersbyDateError,
 					new Date(), 2, GlobalConstant.findOrdersbyDateErrorCode, e);
 
@@ -5305,7 +5351,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId, e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.getOrderError, new Date(),
 					3, GlobalConstant.getOrderErrorCode, e);
 
@@ -5313,11 +5359,11 @@ public class OrderDaoImpl implements OrderDao {
 		log.info("*** isPOOrderUploaded ends ***");
 		return false;
 	}
-	
+
 	@Override
 	public int mpOrdersCount(int sellerId) {
-		
-		int noOfMpOrders=0;
+
+		int noOfMpOrders = 0;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -5326,22 +5372,24 @@ public class OrderDaoImpl implements OrderDao {
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
 					.add(Restrictions.eq("poOrder", false));
-			criteria.setProjection(Projections.rowCount());			
-			
-			if(criteria != null)
+			criteria.setProjection(Projections.rowCount());
+
+			if (criteria != null)
 				noOfMpOrders = (int) criteria.uniqueResult();
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId+" In MPORDER Count" , e);			
+			log.error(
+					"Failed! by sellerId : " + sellerId + " In MPORDER Count",
+					e);
 		}
 		return noOfMpOrders;
 	}
-	
+
 	@Override
 	public int poOrdersCount(int sellerId) {
-		int noOfPoOrders=0;
+		int noOfPoOrders = 0;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -5354,76 +5402,80 @@ public class OrderDaoImpl implements OrderDao {
 					.add(Restrictions.disjunction()
 							.add(Restrictions.isNotNull("shippedDate"))
 							.add(Restrictions.isNotNull("orderReturnOrRTO")));
-			criteria.setProjection(Projections.rowCount());			
-			if(criteria != null)
+			criteria.setProjection(Projections.rowCount());
+			if (criteria != null)
 				noOfPoOrders = (int) criteria.uniqueResult();
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId+" In POORDER Count", e);			
+			log.error(
+					"Failed! by sellerId : " + sellerId + " In POORDER Count",
+					e);
 		}
 		return noOfPoOrders;
 	}
-	
+
 	@Override
 	public List<String> listOrderIds(String OrderCriteria, int sellerId) {
-		List<String> idsList = null; 
+		List<String> idsList = null;
 		Session session = null;
-		try{
+		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Order.class);
 			criteria.createAlias("seller", "seller",
-					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("seller.id", sellerId));
-			criteria.setProjection(Projections.property(OrderCriteria));	
-				idsList=criteria.list();
-			
-			
-		}catch(Exception e){
-			log.error("Failed by Seller ID : "+sellerId, e);
+					CriteriaSpecification.LEFT_JOIN).add(
+					Restrictions.eq("seller.id", sellerId));
+			criteria.setProjection(Projections.property(OrderCriteria));
+			idsList = criteria.list();
+
+		} catch (Exception e) {
+			log.error("Failed by Seller ID : " + sellerId, e);
 			e.printStackTrace();
-		}finally{
-			if(session != null)
+		} finally {
+			if (session != null)
 				session.close();
-		}		
+		}
 		return idsList;
 	}
-	
+
 	@Override
 	public Order searchAsIsOrder(String searchCriteria, String ID, int sellerId) {
-		List<Order> orderList = null; 
+		List<Order> orderList = null;
 		Session session = null;
 		String channelOrderId = "";
-		if(ID.contains(GlobalConstant.orderUniqueSymbol))
-			channelOrderId = ID.substring(0, ID.indexOf(GlobalConstant.orderUniqueSymbol));
+		if (ID.contains(GlobalConstant.orderUniqueSymbol))
+			channelOrderId = ID.substring(0,
+					ID.indexOf(GlobalConstant.orderUniqueSymbol));
 		else
 			channelOrderId = ID;
-		try{
+		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Order.class);
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.like(searchCriteria, channelOrderId+"%"));
-			orderList=criteria.list();
-			if(orderList != null && orderList.size() != 0 && orderList.size() == 1){
+					.add(Restrictions
+							.like(searchCriteria, channelOrderId + "%"));
+			orderList = criteria.list();
+			if (orderList != null && orderList.size() != 0
+					&& orderList.size() == 1) {
 				return orderList.get(0);
-			} else if(orderList != null && orderList.size() != 0){
-				for(Order order : orderList){
-					if(order.getChannelOrderID().equals(ID))
+			} else if (orderList != null && orderList.size() != 0) {
+				for (Order order : orderList) {
+					if (order.getChannelOrderID().equals(ID))
 						return order;
 				}
 			}
-		}catch(Exception e){
-			log.error("Failed by Seller ID : "+sellerId, e);
+		} catch (Exception e) {
+			log.error("Failed by Seller ID : " + sellerId, e);
 			e.printStackTrace();
-		}finally{
-			if(session != null)
+		} finally {
+			if (session != null)
 				session.close();
-		}		
+		}
 		return null;
 	}
 
