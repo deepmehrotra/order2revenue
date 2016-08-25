@@ -511,18 +511,6 @@ public class OrderDaoImpl implements OrderDao {
 					}
 				}
 			}
-			try {
-				SellerAccount sellerAcc = seller.getSellerAccount();
-				if (sellerAcc != null) {
-					sellerAcc.setOrderBucket(sellerAcc.getOrderBucket()
-							- orderCount);
-					sellerAcc.setSellerId(sellerId);
-					sellerAccountService.saveSellerAccount(sellerAcc);
-				}
-			} catch (Exception e) {
-				log.error("Failed to Update Bucket ! SellerController ", e);
-				e.printStackTrace();
-			}
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -533,6 +521,18 @@ public class OrderDaoImpl implements OrderDao {
 					1, GlobalConstant.addOrderErrorCode, e);
 		} finally {
 			session.close();
+		}
+		try {
+			SellerAccount sellerAcc = seller.getSellerAccount();
+			if (sellerAcc != null) {
+				sellerAcc.setOrderBucket(sellerAcc.getOrderBucket()
+						- orderCount);
+				sellerAcc.setSellerId(sellerId);
+				sellerAccountService.saveSellerAccount(sellerAcc);
+			}
+		} catch (Exception e) {
+			log.error("Failed to Update Bucket ! SellerController ", e);
+			e.printStackTrace();
 		}
 		if (!status)
 			throw new CustomException(erroneousOrders.toString(), new Date(),
