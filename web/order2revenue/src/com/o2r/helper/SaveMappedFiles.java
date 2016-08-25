@@ -165,7 +165,6 @@ public class SaveMappedFiles {
 				String channelID="";
 				Product product = null;
 				TaxCategory taxcat = null;
-				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				try {
 
 					try {				
@@ -183,7 +182,7 @@ public class SaveMappedFiles {
 								order.setChannelOrderID(channelID);
 								duplicateKey.put(channelID, "");
 							} else {
-								order.setChannelOrderID(entry.getCell(idIndex).toString());
+								
 								errorMessage.append(" Channel OrderId is already present ");
 								validaterow = false;
 							}
@@ -239,14 +238,12 @@ public class SaveMappedFiles {
 						index = cellIndexMap.get(columHeaderMap.get("Customer Email"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							log.debug(" Email from sheet ************ "
-									+ rowIndex + ":"
-									+ entry.getCell(index).toString());
+							
 							customerBean.setCustomerEmail(entry.getCell(index)
 									.toString());
 						}
 					}
-					try {
+					if (cellIndexMap.get(columHeaderMap.get("Customer Name")) != null) {
 						index = cellIndexMap.get(columHeaderMap
 								.get("Customer Name"));
 						if (entry.getCell(index) != null
@@ -254,8 +251,6 @@ public class SaveMappedFiles {
 							customerBean.setCustomerName(entry.getCell(index)
 									.toString());
 						}
-					} catch (NullPointerException e) {
-
 					}
 					if (cellIndexMap.get(columHeaderMap.get("Customer Phone No")) != null) {
 						index = cellIndexMap.get(columHeaderMap.get("Customer Phone No"));
