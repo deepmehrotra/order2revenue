@@ -32,6 +32,7 @@ import com.o2r.helper.HelperClass;
 import com.o2r.model.GenericQuery;
 import com.o2r.model.Order;
 import com.o2r.model.Seller;
+import com.o2r.model.SellerAccount;
 import com.o2r.service.AdminService;
 import com.o2r.service.CategoryService;
 import com.o2r.service.DashboardService;
@@ -40,6 +41,7 @@ import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.ProductService;
 import com.o2r.service.ReportGeneratorService;
+import com.o2r.service.SellerAccountService;
 import com.o2r.service.SellerService;
 import com.o2r.service.TaxDetailService;
 
@@ -52,6 +54,8 @@ public class GenericController {
 
 	@Autowired
 	private SellerService sellerService;
+	@Autowired
+	private SellerAccountService sellerAccountService;
 
 	@Autowired
 	private DashboardService dashboardService;
@@ -151,9 +155,13 @@ public class GenericController {
 		DashboardBean dbean = null;
 		Seller seller = null;
 		try {
+			long start = System.currentTimeMillis();
 			sellerId = helperClass.getSellerIdfromSession(request);
 			seller = sellerService.getSeller(helperClass
 					.getSellerIdfromSession(request));
+			SellerAccount sellerAcc = seller.getSellerAccount();
+			sellerAcc.setLastLogin(new Date());
+			sellerAccountService.saveSellerAccount(sellerAcc);
 			SellerBean sellerBean = ConverterClass.prepareSellerBean(seller);
 			dbean = dashboardService.getDashboardDetails(helperClass
 					.getSellerIdfromSession(request));
@@ -168,6 +176,8 @@ public class GenericController {
 						uploadReports.size());
 			}
 			model.put("uploadReportList", uploadReports);
+			long end = System.currentTimeMillis();
+			model.put("timeTaken", end - start);
 
 		} catch (CustomException ce) {
 			logger.error("displayDashboard exception : " + ce.toString());

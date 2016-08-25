@@ -125,8 +125,9 @@ input+label {
 									<div class="col-lg-12">
 										<div class="ibox float-e-margins">
 											<div class="add-company">
-												<h1 class="text-center"	style="position: relative; top: -24px;">													
-												Channel	Details</h1>
+												<h1 class="text-center"
+													style="position: relative; top: -24px;">Channel
+													Details</h1>
 												<div class="hr-line-dashed"
 													style="margin: -11px 0px 34px 19px;"></div>
 
@@ -179,9 +180,9 @@ input+label {
 															<div class="col-sm-8">
 																<label title="Upload image file" for="image"
 																	class="btn btn-white btn-block"> <i
-																	class="fa fa-upload"></i>
-																	<input type="file" name="image" id="image" class="hide" onchange="checkfile(this);" />
-																	Upload Logo
+																	class="fa fa-upload"></i> <input type="file"
+																	name="image" id="image" class="hide"
+																	onchange="checkfile(this);" /> Upload Logo
 																</label>
 																<c:if test="${partner.pcLogoUrl != null}">
 																	<input type="hidden" name="pcLogoUrl" id="pcLogoUrl"
@@ -675,7 +676,12 @@ input+label {
 																			<div class="col-sm-12 radio1" id="blk-pccHigher">
 																				<div class="col-sm-12">
 																					<div class="col-sm-6">
-																						<label> Percentage of SP </label>
+																						<div class="checkbox i-checks">
+																							<label> <form:checkbox
+																									path="nrnReturnConfig.pccpercentSP"
+																									id="pccpercentSP" /> <i></i> Percentage of SP
+																							</label>
+																						</div>
 																					</div>
 																					<div class="col-sm-6">
 																						<div class="input-group m-b">
@@ -688,7 +694,12 @@ input+label {
 																				</div>
 																				<div class="col-sm-12">
 																					<div class="col-sm-6">
-																						<label> Fixed Amount </label>
+																						<div class="checkbox i-checks">
+																							<label> <form:checkbox
+																									path="nrnReturnConfig.pccfixedAmt"
+																									id="pccfixedAmt" /> <i></i> Fixed Amount
+																							</label>
+																						</div>
 																					</div>
 																					<div class="col-sm-6">
 																						<div class="input-group m-b">
@@ -3325,10 +3336,12 @@ input+label {
 								$("#datewisepay").prop("checked", true)
 										.trigger("click");
 								$('#paymentField1').trigger('change');
-								if ('${partner.isshippeddatecalc}' != true) {
+								if ('${partner.isshippeddatecalc}' != 'true') {
 									$("#noofdaysfromdeliverydate")
 											.val(
 													'${partner.noofdaysfromshippeddate}');
+								} else {
+									$('#paymentField1').val('${partner.isshippeddatecalc}');
 								}
 							} else if ('${partner.paymentType}' == 'monthly')
 								$('#monthly').prop("checked", true).trigger(
@@ -3557,6 +3570,11 @@ input+label {
 								$('#canCharSFPCC').iCheck('check');
 							if ('${partner.nrnReturnConfig.canCharSFBRTDPCC}' == 'true')
 								$('#canCharSFBRTDPCC').iCheck('check');
+							
+							if ('${partner.nrnReturnConfig.pccpercentSP}' == 'true')
+								$('#pccpercentSP').iCheck('check');
+							if ('${partner.nrnReturnConfig.pccfixedAmt}' == 'true')
+								$('#pccfixedAmt').iCheck('check');
 
 							$('#whicheverGreaterPCC').on(
 									"ifChecked",

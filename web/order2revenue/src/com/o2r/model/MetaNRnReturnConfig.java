@@ -27,6 +27,10 @@ public class MetaNRnReturnConfig {
 	@Column
 	private boolean whicheverGreaterPCC;
 	@Column
+	private boolean pccfixedAmt;
+	@Column
+	private boolean pccpercentSP;
+	@Column
 	private String shippingFeeType; // - variable or fixed
 
 	@Column
@@ -156,17 +160,17 @@ public class MetaNRnReturnConfig {
 	private boolean canCharBRSerTax;
 	@Column
 	private boolean canCharBRPCC;
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String nationalList;
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String zonalList;
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String metroList;
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String localList;
 	@Column
 	private String revShippingFeeType; // - variable or fixed
-	
+
 	@Column
 	private boolean retCharSFRevShipFee;
 	@Column
@@ -179,7 +183,7 @@ public class MetaNRnReturnConfig {
 	private boolean canCharSFBRTDRevShipFee;
 	@Column
 	private boolean canCharSFARTDRevShipFee;
-	
+
 	@Column
 	private boolean retCharBRRevShipFee;
 	@Column
@@ -198,7 +202,7 @@ public class MetaNRnReturnConfig {
 	private String taxSpType;
 	@Column
 	private String taxPoType;
-	
+
 	@OneToMany(mappedBy = "config", cascade = CascadeType.ALL)
 	private List<MetaNRnReturnCharges> charges = new ArrayList<>();
 
@@ -481,7 +485,7 @@ public class MetaNRnReturnConfig {
 	public void setRevShippingFeeType(String revShippingFeeType) {
 		this.revShippingFeeType = revShippingFeeType;
 	}
-	
+
 	public String getCategoryWiseCommsion() {
 		return categoryWiseCommsion;
 	}
@@ -856,6 +860,22 @@ public class MetaNRnReturnConfig {
 
 	public void setCharges(List<MetaNRnReturnCharges> metaCharges) {
 		this.charges = metaCharges;
+	}
+
+	public boolean isPccfixedAmt() {
+		return pccfixedAmt;
+	}
+
+	public void setPccfixedAmt(boolean pccfixedAmt) {
+		this.pccfixedAmt = pccfixedAmt;
+	}
+
+	public boolean isPccpercentSP() {
+		return pccpercentSP;
+	}
+
+	public void setPccpercentSP(boolean pccpercentSP) {
+		this.pccpercentSP = pccpercentSP;
 	}
 
 }
