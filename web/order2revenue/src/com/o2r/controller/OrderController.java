@@ -44,6 +44,7 @@ import com.o2r.bean.DataConfig;
 import com.o2r.bean.OrderBean;
 import com.o2r.bean.PoPaymentDetailsBean;
 import com.o2r.bean.UploadReportBean;
+import com.o2r.dao.AreaConfigDao;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.FileUploadForm;
@@ -94,7 +95,10 @@ public class OrderController {
 	@Autowired
 	EventsService eventsService;
 	@Autowired
-	DataConfig dataConfig;	
+	DataConfig dataConfig;
+	@Autowired
+	AreaConfigDao areaConfigDao;
+	
 	@Resource(name = "saveMappedFiles")
 	private SaveMappedFiles saveMappedFiles;
 
@@ -733,8 +737,7 @@ public class OrderController {
 		Events event = null;
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-			Order order = orderService.getOrder(orderBean.getOrderId(),
-					sellerId);
+			Order order = orderService.getOrder(orderBean.getOrderId(),sellerId);			
 			product = productService.getProduct(order.getProductSkuCode(),
 					sellerId);
 			log.debug(" Payment difference :"

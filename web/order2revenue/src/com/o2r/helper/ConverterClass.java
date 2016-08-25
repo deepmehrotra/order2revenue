@@ -134,6 +134,7 @@ public class ConverterClass {
 			order.setServiceTax(orderBean.getServiceTax());
 			order.setFixedfee(orderBean.getFixedfee());
 			order.setEventName(orderBean.getEventName());
+			order.setVolShippingString(orderBean.getVolShippingString());
 		}
 		return order;
 	}
@@ -194,7 +195,7 @@ public class ConverterClass {
 				order.setServiceTax(orderBean.getServiceTax());
 				order.setFixedfee(orderBean.getFixedfee());
 				order.setEventName(orderBean.getEventName());
-
+				order.setVolShippingString(orderBean.getVolShippingString());
 				orders.add(order);
 			}
 		}
@@ -257,6 +258,7 @@ public class ConverterClass {
 				bean.setFixedfee(order.getFixedfee());
 				bean.setEossValue(order.getEossValue());
 				bean.setEventName(order.getEventName());
+				bean.setVolShippingString(order.getVolShippingString());
 				if (order.getProductConfig() != null)
 					bean.setProductConfig(prepareProductConfigBean(order
 							.getProductConfig()));
@@ -314,6 +316,7 @@ public class ConverterClass {
 			bean.setSealNo(order.getSealNo());
 			bean.setPoPrice(order.getPoPrice());
 			bean.setEventName(order.getEventName());
+			bean.setVolShippingString(order.getVolShippingString());
 			bean.setPccAmount(order.getPccAmount());
 			bean.setFixedfee(order.getFixedfee());
 			bean.setServiceTax(order.getServiceTax());

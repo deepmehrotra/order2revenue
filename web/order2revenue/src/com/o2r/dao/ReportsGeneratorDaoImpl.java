@@ -122,6 +122,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 
 			session.getTransaction().commit();
 			session.close();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed! by sellerId : "+sellerId,e);
@@ -593,6 +596,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		}
 			session.getTransaction().commit();
 			session.close();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed! by sellerId : "+sellerId,e);
@@ -685,6 +691,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				}
 			}
 			
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -707,6 +716,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					partnerBusinessList.add(partnerBusiness);
 			}
 			log.info("Total Orders" + partnerBusinessList.size());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed! by sellerId : "+sellerId,e);
@@ -734,6 +746,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				partnerBusinessList.add(partnerBusiness);
 			}
 			log.info("Total Orders" + partnerBusinessList.size());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed! by sellerId : "+sellerId,e);
@@ -1033,6 +1048,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			partnerBusiness.setNetRate(currOrder.getNetRate());
 			partnerBusiness.setFinalStatus(currOrder.getFinalStatus());
 			partnerBusiness.setGrossProfit(currOrder.getGrossProfit());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed!",e);					
 		} catch (Exception e) {
 			log.error("Failed ", e);
 			e.printStackTrace();
@@ -1063,7 +1081,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			 for (Order currOrder : orders) {
 				 ChannelReportDetails channelReport = transformChannelReport(currOrder, session, sellerId);
 				 channelReportDetailsList.add(channelReport);
-			 }
+			 }	 
+		 } catch (NullPointerException e) {
+				e.printStackTrace();
+				log.error("Failed! by sellerId : "+sellerId,e);					
 		 } catch (Exception e) {
 			 log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(
@@ -1282,11 +1303,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					channelReport.getReturnActualSale());
 			channelReport.setNetTaxfreeSale(channelReport.getGrossTaxfreeSale() - 
 					channelReport.getReturnTaxfreeSale());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			log.error("Failed by SellerID : "+sellerId, e);
 			e.printStackTrace();
-		}
-		
+		}		
 		return channelReport;
 	}
 
@@ -1340,11 +1363,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			criteria.addOrder(org.hibernate.criterion.Order.asc("shippedDate"));
 			orderList.addAll(criteria.list());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed by SellerID : "+sellerId, e);
 		}
-
 		return orderList;
 	}
 	
@@ -1394,6 +1419,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			criteria.addOrder(org.hibernate.criterion.Order.asc("shippedDate"));
 			orderList.addAll(criteria.list());
 			
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed by SellerID : "+sellerId, e);
@@ -1410,12 +1438,12 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		try {
 			Session session=sessionFactory.openSession();
 			session.getTransaction().begin();
-			String mpOrderQueryStr = "select ot.pcName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * ot.quantity * 1.145) " +
+			String mpOrderQueryStr = "select ot.pcName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * ot.quantity * 1.15) " +
 					"as grossComm, sum(ot.quantity) as netSaleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx " +
 					"where ot.orderTax_taxId = otx.taxId and ot.poOrder = 0  and ot.seller_Id=:sellerId and ot.shippedDate " +
 					"between :startDate AND :endDate group by ot.pcName";
 			if("category".equalsIgnoreCase(criteria))
-				mpOrderQueryStr = "select cat.parentCatName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * ot.quantity * 1.145) " +
+				mpOrderQueryStr = "select cat.parentCatName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * ot.quantity * 1.15) " +
 					"as grossComm, sum(ot.quantity) as netSaleQty, sum(otx.tdsToDeduct) as tdsToDeduct from order_table ot, ordertax otx " +
 					", product pr, category cat where pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and ot.orderTax_taxId = otx.taxId and ot.poOrder = 0  and " +
 					"ot.seller_Id=:sellerId and ot.seller_id=pr.seller_Id and ot.shippedDate between :startDate AND :endDate group by cat.parentCatName";
@@ -1485,12 +1513,12 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				commDetails.setNetTDSToBeDeposited(existTDS + tdsToDeduct);
 				commDetailsMap.put(key, commDetails);
 			}
-			String mpReturnQueryStr = "select ot.pcName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty * 1.145) as returnComm, " +
+			String mpReturnQueryStr = "select ot.pcName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty * 1.15) as returnComm, " +
 					"sum(estimateddeduction) as addRetCharges, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn - otx.tdsonReturnAmt) as tdsToReturn from order_table ot, " +
 					"orderreturn orr, ordertax otx where ot.orderTax_taxId = otx.taxId and ot.orderReturnOrRTO_returnId = orr.returnId and poOrder = 0 " +
 					"and ot.seller_Id=:sellerId and orr.returnDate between :startDate AND :endDate group by ot.pcName";
 			if("category".equalsIgnoreCase(criteria))
-				mpReturnQueryStr = "select cat.parentCatName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty * 1.145) as returnComm, " +
+				mpReturnQueryStr = "select cat.parentCatName, sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * orr.returnorrtoQty * 1.15) as returnComm, " +
 						"sum(estimateddeduction) as addRetCharges, sum(orr.returnorrtoQty) as returnQty, sum(otx.tdsToReturn - otx.tdsonReturnAmt) as tdsToReturn from order_table ot, " +
 						"orderreturn orr, ordertax otx, product pr, category cat where pr.category_categoryId = cat.categoryId and ot.productSkuCode = pr.productSkuCode and " +
 						"ot.orderTax_taxId = otx.taxId and ot.orderReturnOrRTO_returnId = orr.returnId and poOrder = 0 and ot.seller_Id=:sellerId and " +
@@ -1585,6 +1613,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				commDetails.setNetPartnerCommissionPaid(gc - rc + arc);
 				commDetailsList.add(commDetails);
 			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			log.error("Failed by SellerID : "+sellerId, e);
 			e.printStackTrace();
@@ -1673,6 +1704,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				Entry<String, ChannelNR> thisEntry = (Entry<String, ChannelNR>) entries.next();
 				channelNRList.add(thisEntry.getValue());
 			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			log.error("Failed by SellerID : "+sellerId, e);
 		}
@@ -1688,7 +1722,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			Session session=sessionFactory.openSession();
 			session.getTransaction().begin();
 			String queryStr = "select concat(monthname(ot.shippedDate), ' ', year(ot.shippedDate)) as Month, " +
-					"sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * ot.quantity * 1.145) " +
+					"sum((ot.partnerCommission+ot.pccAmount+ot.fixedFee+ot.shippingCharges) * ot.quantity * 1.15) " +
 					"as grossComm from order_table ot " +
 					"where ot.poOrder = 0  and ot.seller_Id=:sellerId and ot.shippedDate " +
 					"between :startDate AND :endDate group by Month";
@@ -1787,6 +1821,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				Entry<String, MonthlyCommission> thisEntry = (Entry<String, MonthlyCommission>) entries.next();
 				monthlyList.add(thisEntry.getValue());
 			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			log.error("Failed by SellerID : "+sellerId, e);
 			e.printStackTrace();
@@ -1881,6 +1918,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				Entry<String, ChannelNetQty> thisEntry = (Entry<String, ChannelNetQty>) entries.next();
 				channelNRList.add(thisEntry.getValue());
 			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			log.error("Failed by SellerID : "+sellerId, e);
 			e.printStackTrace();
@@ -1963,6 +2003,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				Entry<String, ChannelGP> thisEntry = (Entry<String, ChannelGP>) entries.next();
 				channelNRList.add(thisEntry.getValue());
 			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			log.error("Failed by Seller ID : "+sellerId, e);
 			e.printStackTrace();
@@ -1989,6 +2032,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				channelMC.setManualCharges(new Double(order[1].toString()));
 				channelMCList.add(channelMC);
 			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			log.error("Failed By Seller Id : "+sellerId, e);
 		}
@@ -2095,6 +2141,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				ChannelCatNPR commDetails = thisEntry.getValue();
 				channelNPRList.add(commDetails);
 			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed by Seller ID : "+sellerId, e);
@@ -2182,6 +2231,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				ChannelNPR channelNPR = thisEntry.getValue();
 				channelNPRList.add(channelNPR);
 			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			log.error("Failed By Seller Id : "+sellerId, e);
 			e.printStackTrace();
@@ -2229,6 +2281,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				ChannelMCNPR channelNPR = thisEntry.getValue();
 				channelNPRList.add(channelNPR);
 			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			log.error("Failed by Seller ID : "+sellerId, e);
 			e.printStackTrace();
@@ -2282,6 +2337,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			criteria.addOrder(org.hibernate.criterion.Order.asc("shippedDate"));
 			orderList.addAll(criteria.list());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			log.error("Failed By Seller ID : "+sellerId, e);
 			e.printStackTrace();
@@ -2359,6 +2417,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				prStockList.add(channelNPR);
 			}
 			Collections.sort(prStockList, new YearlyStockList.OrderByMonthCat());		
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed!",e);					
 		} catch (Exception e) {
 			log.error("Failed",e);
 			e.printStackTrace();
@@ -2389,6 +2450,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				npr.setNetPaymentResult(Double.parseDouble(order[1].toString()));
 				nprList.add(npr);
 			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			log.error("Failed by seller ID : "+sellerId, e);
 			e.printStackTrace();
@@ -2470,6 +2534,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				ChannelNR netRate = thisEntry.getValue();
 				netRateList.add(netRate);
 			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			log.error("Failed By Seller ID : "+sellerId, e);
 			e.printStackTrace();
