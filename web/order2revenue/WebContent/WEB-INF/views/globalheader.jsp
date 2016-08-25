@@ -211,10 +211,10 @@
 				</ol></li>
 
 			<li class="dropdown"><a class="dropdown-toggle count-info"
-				id="dropdown" data-toggle="dropdown" href="#"> <i
+				id="progrssDropdown" data-toggle="dropdown" href="#"> <i
 					class="fa fa-exchange"></i>
 			</a>
-				<ul class="dropdown-menu dropdown-messages animated fadeInRight">
+				<ul class="dropdown-menu dropdown-messages animated fadeInRight" id="uploadReport">
 					<li>
 						<div id="uploadReport-div-3" class="dropdown-messages-box"
 							style="display: none;">

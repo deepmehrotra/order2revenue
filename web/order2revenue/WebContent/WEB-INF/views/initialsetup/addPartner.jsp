@@ -3341,7 +3341,9 @@ input+label {
 											.val(
 													'${partner.noofdaysfromshippeddate}');
 								} else {
-									$('#paymentField1').val('${partner.isshippeddatecalc}');
+									$('#paymentField1').val(
+											'${partner.isshippeddatecalc}');
+									$('#paymentField1').trigger('change');
 								}
 							} else if ('${partner.paymentType}' == 'monthly')
 								$('#monthly').prop("checked", true).trigger(
@@ -3570,7 +3572,7 @@ input+label {
 								$('#canCharSFPCC').iCheck('check');
 							if ('${partner.nrnReturnConfig.canCharSFBRTDPCC}' == 'true')
 								$('#canCharSFBRTDPCC').iCheck('check');
-							
+
 							if ('${partner.nrnReturnConfig.pccpercentSP}' == 'true')
 								$('#pccpercentSP').iCheck('check');
 							if ('${partner.nrnReturnConfig.pccfixedAmt}' == 'true')
@@ -3893,15 +3895,15 @@ input+label {
 	</script>
 	<script type="text/javascript" language="javascript">
 		function checkfile(sender) {
-		    var validExts = new Array(".jpg",".jpeg",".png");
-		    var fileExt = sender.value;
-		    fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
-		    if (validExts.indexOf(fileExt) < 0) {
-		      alert("Invalid file selected, valid files are of " +
-		               validExts.toString() + " types.");
-		      return false;
-		    }
-		    else return true;
+			var validExts = new Array(".jpg", ".jpeg", ".png");
+			var fileExt = sender.value;
+			fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+			if (validExts.indexOf(fileExt) < 0) {
+				alert("Invalid file selected, valid files are of "
+						+ validExts.toString() + " types.");
+				return false;
+			} else
+				return true;
 		}
 	</script>
 
