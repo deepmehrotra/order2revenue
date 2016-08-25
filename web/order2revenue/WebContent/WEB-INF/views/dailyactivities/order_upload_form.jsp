@@ -341,8 +341,8 @@
                                         </li>
                                         <li>
                                             Excel sheet should have these columns with exact same heading as downloaded form panel or mention here : 
-                                            Mandatory columns : ORDER ITEM ID,SKU Code,Quantity,Invoice No.,Invoice Amount,PIN Code,Ready to Ship by date
-                                            Non mandatory columns:Order Id,Ship to name,Address Line 1,Address Line 2,City,Phone No,
+                                            Mandatory columns : Order Id,SKU Code,Quantity,Invoice No.,Invoice Amount,PIN Code,Ready to Ship by date
+                                            Non mandatory columns:ORDER ITEM ID,Ship to name,Address Line 1,Address Line 2,City,Phone No,
                                         </li>
                                         <li>
                                             Other mandatory columns to be added manually with respective values for each transactions : 
@@ -434,8 +434,8 @@
                                             </li>
                                             <li>
                                                 Excel sheet should have these columns with exact same heading as downloaded form panel : 
-                                                Mandatory columns : creation date,pincode,item_id,item.sku,item_price,qty,shipping_amount,invoice_id
-                                                Non mandatory columns:order_id,customer_firstname,customer_lastname,customer_email,phone,address,city,item_mrp,awb,shipper
+                                                Mandatory columns :order_id, creation date,pincode,item.sku,item_price,qty,shipping_amount,invoice_id
+                                                Non mandatory columns:item_id,customer_firstname,customer_lastname,customer_email,phone,address,city,item_mrp,awb,shipper
                                             </li>
                                             </ol>
                                             <h3 class="text-center">
@@ -459,6 +459,54 @@
                                                 <li>
                                                     Seller Notes : Any remarks about order.
                                                     PIreferenceNo : Another identifier to search for the order.
+                                                </li>
+
+                                        </ol>
+                                    </div>
+                                    <div class="unicommerceorderupload">
+                                        <h2 class="text-center">
+                                            <b>Follow These Instructions</b>
+                                        </h2>
+                                        <ol>
+                                            <li>
+                                                Upload the order sheet downloaded form Unicommerce panel but only in xls format.
+                                            </li>
+                                            <li>
+                                                Row with the column headers is the first row of sheet. Make sure to keep the spelling of all column header according to instructions.
+                                            </li>
+                                            <li>
+                                                Do not change the formatting of columns. 
+                                            </li>
+                                            <li>
+                                                Excel sheet should have these columns with exact same heading as downloaded form panel : 
+                                                Mandatory columns :Display Order Code,COD,Invoice Code,Shipping Address Pincode,Item SKU Code,Channel Name,Total Price,Packet Number,Order Date as dd/mm/yyyy hh:MM:ss,Dispatch Date,
+                                                Non mandatory columns:Sale Order Item Code,Notification Email,Shipping Address Name,Shipping Address Line 1,Shipping Address Line 2,Shipping Address City,Shipping Address Phone,Shipping provider,Tracking Number,
+                                                
+                                                
+                                            </li>
+                                            </ol>
+                                            <h3 class="text-center">
+                                                Other mandatory columns to be added manually with respective values for each transactions : 
+                                            </h3>
+                                            <ol>
+                                                <li>
+                                                    O2R Channel : Channel name for which file is being upload.It should be same(case-sensistive) as the name of sales channel configured.
+                                                </li>
+                                                <li>
+                                                    Quantity: Number of pieces of each order.
+                                                </li>
+                                                <li>
+                                                    Payment Type: Its value should be Prepaid or COD.
+                                                    Order Shipped Date :Mention shipped date in mm-dd-yyyy format.
+                                                </li>
+                                                <li>
+                                                    Some non mandatory columns to be added : 
+                                                    Net Rate: Manadatory when NR switch for particular channel is off or Event is implemented on that channel and SKU with fixed TP.
+                                                </li>
+                                                <li>
+                                                    Seller Notes : Any remarks about order.
+                                                    PIreferenceNo : Another identifier to search for the order.
+                                                    Order MRP: Used to calculate discount.
                                                 </li>
 
                                         </ol>
@@ -554,11 +602,12 @@
 												<br><b>Non mandatory Colums:</b>
                                             </li>
                                             <li>
-                                                Other mandatory colums to be added manually with respective values for each transactions : 
-                                                <br><b>InvoiceId :</b>Put invoice number for order search.
-                                            </li>
+                                                No mandatory colums to be added manually. 
+                                                   </li>
                                             <li>
-                                                No non mandatory colums to be added.
+                                                Other non mandatory colums to be added.
+                                                 <br><b>InvoiceId :</b>Put invoice number for order search.
+                                        
                                             </li>                                            
                                         </ol>
 
@@ -579,15 +628,16 @@
                                             </li>
                                             <li>
                                                 Excel sheet should have these colums with exact same heading as downloaded form panel : 
-													Mandatory Colums : Order Type,Fulfilment Type,Order item ID,Order item ID,Settlement Date,Settlement Value (Rs.),Seller SKU
-													Non mandatory Colums:Order ID/FSN
+													Mandatory Colums : Order ID/FSN,Order Type,Fulfilment Type,Settlement Date,Settlement Value (Rs.),Seller SKU
+													Non mandatory Colums:Order item ID
                                             </li>
+                                           <li>
+                                                No mandatory colums to be added manually. 
+                                                   </li>
                                             <li>
-                                                Other mandatory colums to be added manually with respective values for each transactions : 
-												InvoiceId : Put invoice number for order search.
-                                            </li>
-                                            <li>
-                                                No non mandatory colums to be added.
+                                                Other non mandatory colums to be added.
+                                                 <br><b>InvoiceId :</b>Put invoice number for order search.
+                                        
                                             </li>                                            
                                         </ol>
 
@@ -608,8 +658,8 @@
                                             </li>
                                             <li>
                                                 Excel sheet should have these colums with exact same heading as downloaded form panel : 
-													Mandatory Colums : Order ID,Order Item ID,Payable Amount
-													Non mandatory Colums:Order ID/FSN
+													Mandatory Colums : Order ID,Payable Amount
+													Non mandatory Colums:Order Item ID
 											</li>
                                             <li>
                                                 Other mandatory colums to be added manually with respective values for each transactions : 
