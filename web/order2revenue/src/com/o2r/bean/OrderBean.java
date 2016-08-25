@@ -48,6 +48,7 @@ public class OrderBean {
 	private double pccAmount;
 	private String  eventName;
 	private String  volShippingString;
+	private String  dwShippingString;
 	private List<OrderTimeline> orderTimeline = new ArrayList<>();
 	private CustomerBean customer = new CustomerBean();
 	private OrderPaymentBean orderPayment = new OrderPaymentBean();
@@ -461,5 +462,13 @@ public class OrderBean {
 
 	public void setVolShippingString(String volShippingString) {
 		this.volShippingString = volShippingString;
+	}
+
+	public String getDwShippingString() {
+		return dwShippingString;
+	}
+
+	public void setDwShippingString(String dwShippingString) {
+		this.dwShippingString = dwShippingString;
 	}
 }

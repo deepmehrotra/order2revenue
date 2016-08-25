@@ -470,7 +470,7 @@
                             <h4 class="panel-title ibox-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapsecustomer">Event Info <i class="glyphicon glyphicon-minus" style="float: right;"></i> </a></h4>
                           </div>
                           <div id="collapsecustomer" class="panel-collapse collapse in">
-                            <div class="panel-body" style="height: 340px;">
+                            <div class="panel-body" style="overflow-x: hidden;overflow-y: scroll;height: 345px;">
                               <div class="ibox-content add-company view-order">                                
                                 <table class="table table table-striped">
                                     <tbody>
@@ -503,7 +503,7 @@
                             <h4 class="panel-title ibox-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapsepayment">Payment Info <i class="glyphicon glyphicon-minus" style="float: right;"></i> </a></h4>
                           </div>
                           <div id="collapsepayment" class="panel-collapse collapse in">
-                            <div class="panel-body" style="height: 340px;">
+                            <div class="panel-body" style="overflow-x: hidden;overflow-y: scroll;height: 345px;">
                               <div class="ibox-content add-company view-order">        
                                 <table class="table table table-striped">
                                     <tbody>
@@ -561,7 +561,7 @@
                           <h4 class="panel-title ibox-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapseshipping">Shipping Info <i class="glyphicon glyphicon-minus" style="float: right;"></i> </a></span> </h4>
                         </div>
                         <div id="collapseshipping" class="panel-collapse collapse in">
-                          <div class="panel-body" style="height: 340px;">
+                          <div class="panel-body" style="overflow-x: hidden;overflow-y: scroll;height: 345px;">
                             <div class="ibox-content add-company view-order">      
                               <table class="table table table-striped">
                                     <tbody>
@@ -594,6 +594,10 @@
                                     <tr>
                                         <td>Shipping Zone</td>
                                         <td>${order.volShippingString}</td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Weight Calculation</td>
+                                        <td>${order.dwShippingString}</td>  
                                     </tr> 
                                    </tbody>
                                 </table>
