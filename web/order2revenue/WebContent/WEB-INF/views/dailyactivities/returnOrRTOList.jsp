@@ -94,25 +94,23 @@
 									name="searchDateCriteria">
 									<option value="orderDate">Order Received Date</option>
 									<option value="shippedDate">Order Shipped Date</option>
-									<option value="deliveryDate">Order Delivery Expected
-										Date</option>
+									<option value="deliveryDate">Order Delivery Expected Date</option>
 									<option value="paymentDueDate">Payment Due Date</option>
 									<option value="dateofPayment">Actual Date of Payment</option>
-
 								</select>
 							</div>
 							<div class="col-md-3" id="data_1">
 								<div class="input-group date">
 									<span class="input-group-addon"><i
 										class="fa fa-calendar"></i></span><input type="text" name="startDate"
-										id="startDate" class="form-control" value="Start Date">
+										id="startDate_1" class="{validate:{required:true, date:true}} form-control" >
 								</div>
 							</div>
 							<div class="col-md-3" id="data_2">
 								<div class="input-group date">
 									<span class="input-group-addon"><i
 										class="fa fa-calendar"></i></span><input type="text" name="endDate"
-										id="endDate" class="form-control" value="End Date">
+										id="endDate_1" class="{validate:{required:true, date:true}} form-control" >
 								</div>
 							</div>
 
@@ -121,7 +119,7 @@
 						<div class="col-md-2">
 	                         	<br><button class="btn btn-success " type="submit"><i class="fa fa-search"></i>&nbsp;&nbsp;<span class="bold">Search</span></button>
 	                   	</div>
-	                   	 </form>
+	                </form>
 	                   	<c:if test="${!empty searchOrderList}">
 		                   	<div class="ibox-content">
 								<table class="table table-bordered custom-table">
@@ -374,6 +372,15 @@ $(document).ready(function () {
         autoclose: true
     });
     
+    
+    $("#findOrderForm").validate();
+    $("#searchString").rules("add", {
+        required:true,
+        messages: {
+               required: "Please Enter ID!"
+        }
+     });
+    
     $("#returnOrderListForm1").validate();
     $("#returnOrRTOId1").rules("add", {
         required:true,
@@ -394,6 +401,7 @@ $(document).ready(function () {
                
         }
      });
+    
     $("#reason1").rules("add", {
         required:true,
         messages: {

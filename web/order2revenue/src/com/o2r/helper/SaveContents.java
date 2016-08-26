@@ -1500,13 +1500,34 @@ public class SaveContents {
 										.toString(), sellerId);
 						if (onj != null) {
 							channelOrderId = entry.getCell(1).toString();
+						} else if(entry.getCell(2) != null
+								&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK){
+							onj = orderService
+									.searchAsIsOrder("subOrderID", entry.getCell(2)
+											.toString(), sellerId);
+							if(onj != null){
+								channelOrderId = onj.getChannelOrderID();
+							} else {
+								errorMessage.append(" No Orders with Channel OrderId And Secondary Order ID");
+								validaterow = false;
+							}
 						} else {
-							channelOrderId = entry.getCell(1).toString();
-							errorMessage.append(" Channel OrderId not present ");
+							errorMessage.append(" Channel OrderId not present, Enter Secondary Order ID");
+							validaterow = false;
+						}
+					} else if(entry.getCell(2) != null
+							&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK){
+						Order onj = orderService
+								.searchAsIsOrder("subOrderID", entry.getCell(2)
+										.toString(), sellerId);
+						if(onj != null){
+							channelOrderId = onj.getChannelOrderID();
+						} else {
+							errorMessage.append(" No Orders with Secondary Order ID, Enter Channel Order ID");
 							validaterow = false;
 						}
 					} else {
-						errorMessage.append(" Channel OrderId is null ");
+						errorMessage.append(" Channel OrderId And Secondary Order ID is null");
 						validaterow = false;
 					}					
 					try {

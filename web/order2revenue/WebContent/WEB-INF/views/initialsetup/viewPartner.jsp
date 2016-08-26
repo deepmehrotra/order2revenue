@@ -276,6 +276,12 @@ span .#error {
 													<h4 class="panel-title ibox-title">
 														<a data-toggle="collapse" data-parent="#accordion"
 															href="#collapseship">N/R Config</a>
+														<c:if test="${partner.nrnReturnConfig.nrCalculator == 'true' }">
+															<font color="green" class="pull-right">ENABLED</font>
+														</c:if>
+														<c:if test="${partner.nrnReturnConfig.nrCalculator == 'false' }">
+															<font color="red" class="pull-right">DISABLED</font>
+														</c:if>														
 													</h4>
 												</div>
 												<div id="collapseship" class="panel-collapse collapse in">

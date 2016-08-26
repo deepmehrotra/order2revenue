@@ -110,7 +110,7 @@ public class ReturnOrderController {
 
 		try {
 
-			if (searchType.equals("searchByProperty") && searchColumn != null) {
+			if (searchType.equals("searchByProperty") && searchColumn != null && searchString != null) {
 				if (searchColumn.equals("customerName")
 						|| searchColumn.equals("customerCity")
 						|| searchColumn.equals("customerEmail")
@@ -129,21 +129,40 @@ public class ReturnOrderController {
 									helperClass.getSellerIdfromSession(request),
 									false, true));
 				}
-			} else {
+			} else if(searchType.equals("searchByDate")){
 				orderlist = new ArrayList<OrderBean>();
-				Date startDate = new Date(request.getParameter("startDate"));
-				Date endDate = new Date(request.getParameter("endDate"));
-				if (searchDateCriteria.equalsIgnoreCase("returnDate")) {
-					temporaryorderlist = orderService.findOrdersbyReturnDate(
-							searchDateCriteria, startDate, endDate,
-							helperClass.getSellerIdfromSession(request));
-				} else if (searchColumn.equals("dateofPayment")) {
-					temporaryorderlist = orderService.findOrdersbyPaymentDate(
-							searchDateCriteria, startDate, endDate,
-							helperClass.getSellerIdfromSession(request));
+				System.out.println("request.getParameter(startDate)  "
+						+ request.getParameter("startDate"));
+				System.out.println("request.getParameter(endDate)  "
+						+ request.getParameter("endDate"));
+				if (request.getParameter("startDate") != null
+						&& request.getParameter("endDate") != null) {
+					Date startDate = new Date(request.getParameter("startDate"));
+					Date endDate = new Date(request.getParameter("endDate"));
+					if (searchDateCriteria.equalsIgnoreCase("returnDate")) {
+						temporaryorderlist = orderService
+								.findOrdersbyReturnDate(
+										searchDateCriteria,
+										startDate,
+										endDate,
+										helperClass
+												.getSellerIdfromSession(request));
+					} else if (searchColumn.equals("dateofPayment")) {
+						temporaryorderlist = orderService
+								.findOrdersbyPaymentDate(
+										searchDateCriteria,
+										startDate,
+										endDate,
+										helperClass
+												.getSellerIdfromSession(request));
 
+					} else {
+						temporaryorderlist = orderService.findOrdersbyDate(
+								searchDateCriteria, startDate, endDate,
+								helperClass.getSellerIdfromSession(request),
+								false);
+					}
 				}
-
 				if (temporaryorderlist != null
 						&& temporaryorderlist.size() != 0)
 					orderlist = ConverterClass
