@@ -136,7 +136,9 @@ public class ReturnOrderController {
 				System.out.println("request.getParameter(endDate)  "
 						+ request.getParameter("endDate"));
 				if (request.getParameter("startDate") != null
-						&& request.getParameter("endDate") != null) {
+						&& request.getParameter("endDate") != null
+						&& request.getParameter("startDate") != ""
+						&& request.getParameter("endDate") != "") {
 					Date startDate = new Date(request.getParameter("startDate"));
 					Date endDate = new Date(request.getParameter("endDate"));
 					if (searchDateCriteria.equalsIgnoreCase("returnDate")) {

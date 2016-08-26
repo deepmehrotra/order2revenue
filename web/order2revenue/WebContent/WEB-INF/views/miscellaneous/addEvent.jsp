@@ -218,11 +218,26 @@ span .#error {
 												<label class="col-sm-4 control-label" >Select SKU </label>
 												<div class="col-sm-8">	                                       
 			                                        <select data-placeholder="Click To Select" name="multiSku" id="multiSku" class="chosen-select" multiple="multiple" style="width:350px;" tabindex="4" required>
-			                                            <c:if test="${!empty skus}">			                                            		
-			                                            	<c:forEach items="${skus}" var="sku" varStatus="loop">
-			                                            		<option value="${sku}">${sku}</option>
-			                                            	</c:forEach>
-			                                            </c:if>
+			                                            <c:choose>
+															<c:when test="${!empty skuList}">
+																<c:forEach items="${skuList}" var="sk"
+																	varStatus="loop">
+																	<option value="${sk}" selected>${sk}</option>
+																</c:forEach>
+																<c:if test="${!empty skus}">			                                            		
+					                                            	<c:forEach items="${skus}" var="sku" varStatus="loop">
+					                                            		<option value="${sku}">${sku}</option>
+					                                            	</c:forEach>
+					                                            </c:if>
+															</c:when>
+															<c:otherwise>
+																<c:if test="${!empty skus}">			                                            		
+					                                            	<c:forEach items="${skus}" var="sku" varStatus="loop">
+					                                            		<option value="${sku}">${sku}</option>
+					                                            	</c:forEach>
+					                                            </c:if>
+															</c:otherwise>
+														</c:choose>                                        
 			                                        </select>
 		                                        </div>
 		                                    </div>                                  		
@@ -3558,11 +3573,7 @@ Custom and plugin javascript
 		};
 	</script>	
 	<script type="text/javascript">	
-	$("#selectAllSku").click(function()
-	{		
-	  	alert(document.getElementById("selectAllSku").val);	   
-	   	alert("Yaa... Working");
-	});
+	
 	
 	</script>
 

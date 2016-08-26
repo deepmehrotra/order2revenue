@@ -238,7 +238,7 @@
 		                                        <select class="form-control div-toggle" data-target=".my-info" id="sheetValue" name="sheetValue" required autocomplete="off" 
 		                                        	style="width: 97%;margin-left: 14px">
 		                                            <option value="" data-show=".upload">Upload</option>
-		                                            <option value="Unicommerce_Order" data-show=".snapdealorderupload">Unicommerce Order Upload</option>
+		                                            <option value="Unicommerce_Order" data-show=".unicommerceorderupload">Unicommerce Order Upload</option>
 		                                            <option value="Snapdeal_Order" data-show=".snapdealorderupload">Snapdeal Order Upload</option>
 		                                            <option value="Snapdeal_Payment" data-show=".snapdealpaymentupload">Snapdeal Payment</option>
 													<option value="Flipkart_Order" data-show=".flipkartorderupload">Flipkart Order Upload</option>

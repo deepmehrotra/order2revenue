@@ -103,18 +103,16 @@
 								<div class="input-group date">
 									<span class="input-group-addon"><i
 										class="fa fa-calendar"></i></span><input type="text" name="startDate"
-										id="startDate_1" class="{validate:{required:true, date:true}} form-control" >
+										id="startDate_1" class="form-control" >
 								</div>
 							</div>
 							<div class="col-md-3" id="data_2">
 								<div class="input-group date">
 									<span class="input-group-addon"><i
 										class="fa fa-calendar"></i></span><input type="text" name="endDate"
-										id="endDate_1" class="{validate:{required:true, date:true}} form-control" >
+										id="endDate_1" class="form-control" >
 								</div>
 							</div>
-
-
 						</div>
 						<div class="col-md-2">
 	                         	<br><button class="btn btn-success " type="submit"><i class="fa fa-search"></i>&nbsp;&nbsp;<span class="bold">Search</span></button>
@@ -329,6 +327,25 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
+	
+	$("#endDate_1")
+	.change(
+			function() {
+				var startDate = document
+						.getElementById("startDate_1").value;
+				var endDate = document
+						.getElementById("endDate_1").value;
+
+				if ((Date.parse(startDate) > Date
+						.parse(endDate))) {
+					alert("End Date Should Be Greater Than Start Date !");
+					document
+							.getElementById("endDate_1").value = "";
+				}
+			});
+	
+	
+	
 	$('#badQuantityDiv').hide();
 	$('#inventoryType').click(function(){		
 	    if(($('#inventoryType :selected').val())=='badInventory'){
@@ -378,6 +395,18 @@ $(document).ready(function () {
         required:true,
         messages: {
                required: "Please Enter ID!"
+        }
+     });
+    $("#startDate_1").rules("add", {
+        required:true,
+        messages: {
+               required: "Please Enter Start Date !"
+        }
+     });
+    $("#endDate_1").rules("add", {
+        required:true,
+        messages: {
+               required: "Please Enter End Date !"
         }
      });
     

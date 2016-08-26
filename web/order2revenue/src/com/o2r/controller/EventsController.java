@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.extractor.EventBasedExcelExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -643,6 +644,7 @@ public class EventsController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Float> chargeMap = new HashMap<String, Float>();
 		Events event = null;
+		List<String> skuList=null;
 		Map<String, Float> categoryMap = new HashMap<String, Float>();
 		eventsBean
 				.setEventId(Integer.parseInt(request.getParameter("eventId")));
@@ -651,6 +653,9 @@ public class EventsController {
 			if (eventsBean.getEventId() != 0) {
 				event = eventsService.getEvent(eventsBean.getEventId());
 				eventsBean = ConverterClass.prepareEventsBean(event);
+				if(eventsBean.getSkuList() != null)
+					skuList = Arrays.asList(eventsBean.getSkuList().split(",")); 
+				model.put("skuList", skuList);
 				model.put("eventsBean", eventsBean);
 				log.debug("************ "
 						+ (eventsBean.getNrnReturnConfig()
