@@ -295,6 +295,9 @@ public class OrderDaoImpl implements OrderDao {
 					try {
 						product = productService.getProduct(
 								order.getProductSkuCode(), sellerId);
+						if(product != null){
+							order.setProductSkuCode(product.getProductSkuCode());
+						}
 						partner = partnerService.getPartner(order.getPcName(),
 								sellerId);
 

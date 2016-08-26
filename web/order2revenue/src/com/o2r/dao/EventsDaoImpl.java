@@ -1,5 +1,6 @@
 package com.o2r.dao;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -39,10 +40,7 @@ public class EventsDaoImpl implements EventsDao {
 			session = sessionFactory.openSession();
 			session.beginTransaction();			
 			Partner partner = null;
-			Seller seller = null;
-			List<Events> event = null;
-			
-					
+			Seller seller = null;					
 			String currentPartnerName = events.getChannelName();
 			if(events.getEventId() != 0){
 				session.merge(events);
@@ -65,14 +63,7 @@ public class EventsDaoImpl implements EventsDao {
 						partner = seller.getPartners().get(0);
 						partner.getEvents().add(events);
 						session.saveOrUpdate(partner);
-					} else {
-						events.setSellerId(sellerId);
-						event.add(events);
-						partner.setEvents(event);
-						seller.getPartners().add(partner);
-						session.saveOrUpdate(seller);
 					}
-
 				}
 			}
 			session.getTransaction().commit();
@@ -224,7 +215,7 @@ public class EventsDaoImpl implements EventsDao {
 				{
 					eventList=criteria.list();
 					Events event=(Events)eventList.get(0);					
-					if(event != null && (event.getSelectAll().equals("true") 
+					if(event != null && ((event.getSelectAll() != null && event.getSelectAll().equals("true")) 
 							|| (sku != null && event.getSkuList() != null && event.getSkuList().contains(sku)))
 							&& event.getStatus().equals("Active")){	
 						log.info("$$$ isEventActive Exit $$$");

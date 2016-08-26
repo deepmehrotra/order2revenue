@@ -169,10 +169,10 @@ public class SaveMappedFiles {
 
 					try {				
 							
-						if(cellIndexMap.get(columHeaderMap.get("O2R Channel")) != null){
-							index = cellIndexMap.get(columHeaderMap.get("O2R Channel"));
+						if(cellIndexMap.get(columHeaderMap.get("Sales Channel")) != null){
+							index = cellIndexMap.get(columHeaderMap.get("Sales Channel"));
 						} else {
-							errorMessage.append("The column 'O2R Channel' doesn't exist");
+							errorMessage.append("The column 'Sales Channel' doesn't exist");
 							validaterow = false;
 						}
 						
@@ -183,7 +183,7 @@ public class SaveMappedFiles {
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(idIndex).setCellType(HSSFCell.CELL_TYPE_STRING);
-							if(entry.getCell(index).toString().equalsIgnoreCase("limeroad") && entry.getCell(idIndex).toString().contains("S")){
+							if(entry.getCell(index).toString().contains("limeroad") && entry.getCell(idIndex).toString().contains("S")){
 								channelID=entry.getCell(idIndex).toString().substring(0, entry.getCell(idIndex).toString().indexOf("S"))
 										+ GlobalConstant.orderUniqueSymbol + entry.getCell(skuIndex).toString();
 							} else {
