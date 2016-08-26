@@ -1196,22 +1196,44 @@ public class ProductDaoImpl implements ProductDao {
 	public List<String> listProductSKU(int sellerId) {
 		List<String> SKUList = null; 
 		Session session = null;
+		List<String> criterialist=null;
 		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Product.class);
 			criteria.createAlias("seller", "seller",
-					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("seller.id", sellerId));
-			criteria.setProjection(Projections.property("productSkuCode"));	
-			if(criteria != null && criteria.list().size() != 0){
-				SKUList=criteria.list();
-			}			
+					CriteriaSpecification.LEFT_JOIN).add(
+					Restrictions.eq("seller.id", sellerId));
+			criteria.createAlias("productConfig", "productConfig",
+					CriteriaSpecification.LEFT_JOIN);
+			criteria.setProjection(Projections.property("productSkuCode"));
+			criterialist = criteria.list();
+			if (criterialist != null && criteria.list().size() != 0) {
+				SKUList = criterialist;
+			}
+			System.out.println("Product Lit : " + SKUList.size());
+			criterialist = null;
+			Criteria criteriaformappingsku = session
+					.createCriteria(Product.class);
+			criteriaformappingsku.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN).add(
+					Restrictions.eq("seller.id", sellerId));
+			criteriaformappingsku.createAlias("productConfig", "productConfig",
+					CriteriaSpecification.LEFT_JOIN);
+			criteriaformappingsku.setProjection(Projections
+					.property("productConfig.channelSkuRef"));
+			criterialist = criteriaformappingsku.list();
+			if (criterialist != null && criteria.list().size() != 0) {
+				SKUList.addAll(criterialist);
+			}
 			System.out.println(SKUList.size());
 		} catch (Exception e) {
-			log.error("Failed! by sellerId : "+sellerId, e);
-		} finally{
-			if(session != null)
+			log.error("Failed! by sellerId : " + sellerId, e);
+		} finally {
+			if (session != null)
 				session.close();
 		}
 		return SKUList;

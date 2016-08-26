@@ -168,7 +168,14 @@ public class SaveMappedFiles {
 				try {
 
 					try {				
-												
+							
+						if(cellIndexMap.get(columHeaderMap.get("O2R Channel")) != null){
+							index = cellIndexMap.get(columHeaderMap.get("O2R Channel"));
+						} else {
+							errorMessage.append("The column 'O2R Channel' doesn't exist");
+							validaterow = false;
+						}
+						
 						int idIndex = cellIndexMap.get(columHeaderMap.get("Channel Order ID"));
 						int skuIndex=cellIndexMap.get(columHeaderMap.get("SkUCode"));
 						if (entry.getCell(idIndex) != null
@@ -176,7 +183,12 @@ public class SaveMappedFiles {
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(idIndex).setCellType(HSSFCell.CELL_TYPE_STRING);
-							channelID=entry.getCell(idIndex).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(skuIndex).toString();
+							if(entry.getCell(index).toString().equalsIgnoreCase("limeroad") && entry.getCell(idIndex).toString().contains("S")){
+								channelID=entry.getCell(idIndex).toString().substring(0, entry.getCell(idIndex).toString().indexOf("S"))
+										+ GlobalConstant.orderUniqueSymbol + entry.getCell(skuIndex).toString();
+							} else {
+								channelID=entry.getCell(idIndex).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(skuIndex).toString();
+							}
 							if (idsList == null ||  (!idsList.contains(channelID))
 									&& !duplicateKey.containsKey(channelID)) {
 								order.setChannelOrderID(channelID);
@@ -265,7 +277,7 @@ public class SaveMappedFiles {
 					try {
 						index = cellIndexMap.get(columHeaderMap.get("SkUCode"));
 						if (entry.getCell(index) != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {							
 							if (SKUList!=null&&SKUList.contains(entry.getCell(index)
 									.toString())) {
 								order.setProductSkuCode(entry.getCell(index)
