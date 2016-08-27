@@ -26,7 +26,7 @@ public class ManualCharges {
 	@Column
 	private String particular;
 	@Column
-	private Double paidAmount;
+	private double paidAmount;
 	@Column
 	private Date dateOfPayment;
 	@Column
@@ -63,10 +63,10 @@ public class ManualCharges {
 	public void setParticular(String particular) {
 		this.particular = particular;
 	}
-	public Double getPaidAmount() {
+	public double getPaidAmount() {
 		return paidAmount;
 	}
-	public void setPaidAmount(Double paidAmount) {
+	public void setPaidAmount(double paidAmount) {
 		this.paidAmount = paidAmount;
 	}
 	public Date getDateOfPayment() {

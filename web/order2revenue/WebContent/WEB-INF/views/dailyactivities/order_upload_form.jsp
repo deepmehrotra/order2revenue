@@ -156,6 +156,7 @@
 								<option value="Create_Parent_Product">Create Parent Product</option>
 								<option value="Product_Edit">Edit Product Upload</option>
 								<option value="MP_SKU_Mapping">MP SKU Mapping</option>
+								<option value="MP_Vendor_SKU_Mapping">Vendor SKU Mapping</option>
 								<option value="PO_Product_Config">PO Product Config</option>
 								<option value="inventorysummary">Inventory Upload</option>
 								<option value="Expense_Upload">Expense Upload</option>	
@@ -191,6 +192,7 @@
 											<option value="productSummary">Create Parent Product</option>
 											<option value="editProductSummary">Edit Product Upload</option>
 											<option value="skuMapping">MP SKU Mapping</option>
+											<option value="vendorSKUMapping">Vendor SKU Mapping</option>
 											<option value="productConfigSummary">PO Product Config</option>
 											<option value="inventorySummary">Inventory Upload</option>
 											<option value="poPaymentSummary">PO Payment Upload</option>

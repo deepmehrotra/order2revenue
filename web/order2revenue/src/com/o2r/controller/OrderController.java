@@ -372,6 +372,12 @@ public class OrderController {
 							uploadReport));
 					model.put("mapType", "skuMappingMap");
 					break;
+				case "vendorSKUMapping":
+					model.put("vendorSKUMapping", saveContents.saveVendorSKUMappingContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport));
+					model.put("mapType", "vendorSKUMappingMap");
+					break;
 				case "Unicommerce_Order":
 					saveMappedFiles.saveUnicommerceOrderContents(
 							files.get(0), sellerId, applicationPath,
