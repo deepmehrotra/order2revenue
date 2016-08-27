@@ -27,11 +27,11 @@ public class TaxDetail {
 	//used as tax category
 	private String particular;
 	@Column
-	private Double paidAmount;
+	private double paidAmount;
 	@Column
 	private Date dateOfPayment;
 	@Column
-	private Double balanceRemaining;
+	private double balanceRemaining;
 	@Column
 	private Date uploadDate;
 	public int getTaxId() {
@@ -70,10 +70,10 @@ public class TaxDetail {
 	public void setParticular(String particular) {
 		this.particular = particular;
 	}
-	public Double getPaidAmount() {
+	public double getPaidAmount() {
 		return paidAmount;
 	}
-	public void setPaidAmount(Double paidAmount) {
+	public void setPaidAmount(double paidAmount) {
 		this.paidAmount = paidAmount;
 	}
 	public Date getDateOfPayment() {
@@ -82,10 +82,10 @@ public class TaxDetail {
 	public void setDateOfPayment(Date dateOfPayment) {
 		this.dateOfPayment = dateOfPayment;
 	}
-	public Double getBalanceRemaining() {
+	public double getBalanceRemaining() {
 		return balanceRemaining;
 	}
-	public void setBalanceRemaining(Double balanceRemaining) {
+	public void setBalanceRemaining(double balanceRemaining) {
 		this.balanceRemaining = balanceRemaining;
 	}
 	public Date getUploadDate() {
