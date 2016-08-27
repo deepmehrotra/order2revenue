@@ -68,4 +68,7 @@ public interface ProductService {
 			throws CustomException;
 	
 	public List<String> listProductSKU(int sellerId);
+
+	public ProductConfig getProductConfigByAnySKU(String childSKUCode, String channel,
+			int sellerId) throws CustomException;
 }

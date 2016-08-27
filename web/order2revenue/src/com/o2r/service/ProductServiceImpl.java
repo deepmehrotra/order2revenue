@@ -112,6 +112,12 @@ public class ProductServiceImpl implements ProductService {
 			String channel, int sellerId) throws CustomException {
 		return productDao.getProductConfig(channelSKUCode, channel, sellerId);
 	}
+	
+	@Override
+	public ProductConfig getProductConfigByAnySKU(String childSKUCode, String channel,
+			int sellerId) throws CustomException {
+		return productDao.getProductConfigByAnySKU(childSKUCode, channel, sellerId);
+	}
 
 	@Override
 	public List<Product> getProductwithCreatedDate(Date startDate,

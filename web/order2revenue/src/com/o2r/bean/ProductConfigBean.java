@@ -10,6 +10,7 @@ public class ProductConfigBean {
 	private String productName;
 	private String productSkuCode;
 	private String channelSkuRef;
+	private String vendorSkuRef;
 	private float commision;
 	private float taxSp;
 	private float taxPo;
@@ -152,5 +153,11 @@ public class ProductConfigBean {
 	}
 	public void setTaxPoAmt(double taxPoAmt) {
 		this.taxPoAmt = taxPoAmt;
+	}
+	public String getVendorSkuRef() {
+		return vendorSkuRef;
+	}
+	public void setVendorSkuRef(String vendorSkuRef) {
+		this.vendorSkuRef = vendorSkuRef;
 	}
 }

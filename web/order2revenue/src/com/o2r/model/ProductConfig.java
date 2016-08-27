@@ -27,6 +27,8 @@ public class ProductConfig {
 	@Column
 	private String channelSkuRef;
 	@Column
+	private String vendorSkuRef;
+	@Column
 	private String taxSpCategory;
 	@Column
 	private String taxPoCategory;
@@ -254,5 +256,13 @@ public class ProductConfig {
 
 	public void setTaxPoCategory(String taxPoCategory) {
 		this.taxPoCategory = taxPoCategory;
+	}
+
+	public String getVendorSkuRef() {
+		return vendorSkuRef;
+	}
+
+	public void setVendorSkuRef(String vendorSkuRef) {
+		this.vendorSkuRef = vendorSkuRef;
 	}
 }
