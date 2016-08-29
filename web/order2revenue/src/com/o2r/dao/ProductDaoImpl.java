@@ -817,30 +817,27 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public ProductConfig getProductConfig(String channelSKUCode,
+	public ProductConfig getProductConfig(String SKUCode,
 			String channel, int sellerId) throws CustomException {
 
 		log.info("*** getProductConfig Starts : ProductDaoImpl ****");
 		ProductConfig returnObject = null;
 		List returnlist = null;
 		log.debug(" ***Insid get product config from sku and channel ***"
-				+ channelSKUCode + " - " + channel);
+				+ SKUCode + " - " + channel);
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(ProductConfig.class);
-			criteria.createAlias("product", "product",
-					CriteriaSpecification.LEFT_JOIN);
+			criteria.createAlias("product", "product",CriteriaSpecification.LEFT_JOIN);
+			Criterion res1 = Restrictions.or(Restrictions.eq("channelSkuRef", SKUCode).ignoreCase(),Restrictions.eq("vendorSkuRef", SKUCode).ignoreCase());
+			
 			criteria.add(Restrictions.eq("channelName", channel).ignoreCase())
-					.add(Restrictions.eq("channelSkuRef", channelSKUCode)
-							.ignoreCase())
-					.setResultTransformer(
-							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			criteria.createAlias("product.seller", "seller",
-					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.or(Restrictions.eq("productSkuCode", SKUCode).ignoreCase(),res1))
+					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			criteria.createAlias("product.seller", "seller",CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
-					.setResultTransformer(
-							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
 			returnlist = criteria.list();
 
@@ -848,7 +845,7 @@ public class ProductDaoImpl implements ProductDao {
 
 				returnObject = (ProductConfig) returnlist.get(0);
 			} else {
-				log.debug("Product sku " + channelSKUCode + " not found");
+				log.debug("Product sku " + SKUCode + " not found");
 			}
 			log.debug(" Return object :#### " + returnObject);
 			session.getTransaction().commit();

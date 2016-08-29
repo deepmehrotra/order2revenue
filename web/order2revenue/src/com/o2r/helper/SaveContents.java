@@ -125,8 +125,7 @@ public class SaveContents {
 		OrderBean order = null;
 		StringBuffer errorMessage = null;
 		CustomerBean customerBean = null;
-		OrderTaxBean otb = null;
-		Partner partner = null;
+		OrderTaxBean otb = null;		
 		Events event = null;
 		List<Order> saveList=null;
 		List<String> idsList = new ArrayList<String>();
@@ -147,6 +146,8 @@ public class SaveContents {
 				try
 				{
 				validaterow = true;
+				Partner partner = null;
+				ProductConfig productConfig=null;
 				entry = worksheet.getRow(rowIndex);
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				log.debug(" Row index : " + (rowIndex - 2));
@@ -154,20 +155,50 @@ public class SaveContents {
 				log.debug(entry.getCell(1));
 				log.debug(entry.getCell(2));
 				TaxCategory taxcat=null;
+				String channelID="";
+				Product product = null;
 				order = new OrderBean();
 				customerBean = new CustomerBean();
 				otb = new OrderTaxBean();
+				if (entry.getCell(3) != null
+						&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					partner = partnerService.getPartner(entry.getCell(3)
+							.toString(), sellerId);
+					if (partner != null)
+						order.setPcName(entry.getCell(3).toString());
+					else {
+						order.setPcName(entry.getCell(3).toString());
+						errorMessage.append(" Partner do not exist;");
+						validaterow = false;
+					}
+				} else {
+					errorMessage.append(" Partner Name is null;");
+					validaterow = false;
+				}
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK
 						&& entry.getCell(2) != null
 						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
 					log.debug(" Getting string value form : "+ entry.getCell(0));
-					String channelID=entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(2).toString();
+					if(partner !=null){
+						productConfig= productService.getProductConfig(entry.getCell(2).toString(), partner.getPcName(), sellerId);
+						if(productConfig != null){
+							if(productConfig.getChannelSkuRef() != null){
+								channelID=entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+productConfig.getChannelSkuRef();
+							} else {
+								channelID=entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(2).toString();
+							}
+						} else {
+							errorMessage.append(" No Product with this Channel And SKU");
+							validaterow = false;
+						}
+					} 
 					if (!idsList.contains(channelID) 
-							&& !duplicateKey.containsKey(channelID)) {
+							&& !duplicateKey.containsKey(channelID) && productConfig != null) {
 						
 						order.setChannelOrderID(channelID);
+						order.setProductSkuCode(productConfig.getProductSkuCode());
 						duplicateKey.put(channelID, "");
 					} else {						
 						errorMessage.append(" Channel OrderId is already present;");
@@ -195,10 +226,9 @@ public class SaveContents {
 				} else {
 					errorMessage.append(" Order Recieved Date is null;");
 					validaterow = false;
-				}
+				}				
 				
-				Product product = null;
-				if (entry.getCell(2) != null
+				/*if (entry.getCell(2) != null
 						&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {					
 					if (SKUList != null && SKUList.contains(entry.getCell(2).toString())) {
 						order.setProductSkuCode(entry.getCell(2).toString());						
@@ -209,22 +239,8 @@ public class SaveContents {
 				} else {
 					errorMessage.append(" Product SKU is null;");
 					validaterow = false;
-				}
-				if (entry.getCell(3) != null
-						&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-					partner = partnerService.getPartner(entry.getCell(3)
-							.toString(), sellerId);
-					if (partner != null)
-						order.setPcName(entry.getCell(3).toString());
-					else {
-						order.setPcName(entry.getCell(3).toString());
-						errorMessage.append(" Partner do not exist;");
-						validaterow = false;
-					}
-				} else {
-					errorMessage.append(" Partner Name is null;");
-					validaterow = false;
-				}
+				}*/
+				 
 				if (entry.getCell(4) != null
 						&& entry.getCell(4).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 					customerBean.setCustomerName(entry.getCell(4).toString());
