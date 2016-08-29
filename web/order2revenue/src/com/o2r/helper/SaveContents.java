@@ -2135,7 +2135,18 @@ public class SaveContents {
 				String criteria = "";
 				String column = null;
 				String id = null;
+				Partner partner = null;
+				ProductConfig productConfig=null;
 				try {
+					if (entry.getCell(12) != null
+							&& StringUtils.isNotBlank(entry.getCell(12)
+									.toString())) {
+						partner = partnerService.getPartner(entry.getCell(12).toString(), sellerId);						
+					} else {
+						validaterow = false;
+						errorMessage.append("Column O2R Channel is null");
+					}
+					
 					if (entry.getCell(0) != null
 							&& StringUtils.isNotBlank(entry.getCell(0)
 									.toString())) {
@@ -2162,16 +2173,30 @@ public class SaveContents {
 									+ entry.getCell(1).toString());
 							if (column.equals("channelOrderID")) {
 								String channelID = null;
-								if (entry.getCell(2) != null
-										&& StringUtils.isNotBlank(entry
-												.getCell(2).toString()))
-									channelID = entry.getCell(1).toString()
-											+ GlobalConstant.orderUniqueSymbol
-											+ entry.getCell(2).toString();
-								else
-									channelID = entry.getCell(1).toString();
-								ord = orderService.searchAsIsOrder(column,
-										channelID, sellerId);
+								if(partner != null){
+									if (entry.getCell(2) != null
+											&& StringUtils.isNotBlank(entry
+													.getCell(2).toString())){
+										productConfig = productService.getProductConfig(entry.getCell(2).toString(), partner.getPcName(), sellerId);
+										if(productConfig != null){
+											if(productConfig.getVendorSkuRef() != null){
+												channelID = entry.getCell(1).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getVendorSkuRef();
+											} else {
+												channelID = entry.getCell(1).toString()+ GlobalConstant.orderUniqueSymbol+ entry.getCell(2).toString();
+											}
+										} else {
+											validaterow = false;
+											errorMessage.append("No product with this Channel & Sku");
+										}
+										
+									} else {
+										channelID = entry.getCell(1).toString();
+									}
+									ord = orderService.searchAsIsOrder(column, channelID, sellerId);									
+								} else {
+									validaterow = false;
+									errorMessage.append("Invalid Partner Name");
+								}								
 							} else {
 								orderlist = orderService.findOrders(column,
 										entry.getCell(1).toString(), sellerId,
@@ -2316,8 +2341,7 @@ public class SaveContents {
 								&& StringUtils.isNotBlank(entry.getCell(11)
 										.toString())) {
 							orderReturn.setBadReturnQty((int) Float
-									.parseFloat(entry.getCell(11).toString()));
-							;
+									.parseFloat(entry.getCell(11).toString()));							
 						}
 
 					} else {
