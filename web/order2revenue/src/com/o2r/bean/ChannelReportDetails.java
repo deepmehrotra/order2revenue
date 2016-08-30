@@ -3,9 +3,8 @@ package com.o2r.bean;
 import java.util.Comparator;
 import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
-
 public class ChannelReportDetails {
+	
 	private String orderId;
 	private boolean isPoOrder;
 	private String invoiceId;
@@ -37,6 +36,7 @@ public class ChannelReportDetails {
 	private double netSpAmount;
 	private double saleRetVsGrossSale;
 	private String taxCategory;
+	private float taxPercent;
 	private double netTaxLiability;
 	private double netAr;
 	private double netToBeReceived;
@@ -549,6 +549,14 @@ public class ChannelReportDetails {
 		this.returnGrossProfit = returnGrossProfit;
 	}
 
+	public float getTaxPercent() {
+		return taxPercent;
+	}
+
+	public void setTaxPercent(float taxPercent) {
+		this.taxPercent = taxPercent;
+	}
+
 	public static class OrderByShippedDate implements
 		Comparator<ChannelReportDetails> {
 		@Override
@@ -573,18 +581,9 @@ public class ChannelReportDetails {
 	Comparator<ChannelReportDetails> {
 		@Override
 		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
-			String taxCategory1 = graph1.taxCategory;
-			float tcPer1 = 0;
-			if(StringUtils.isNotBlank(taxCategory1) && taxCategory1.indexOf("@")>-1){
-				tcPer1 = Float.parseFloat(taxCategory1.split("@")[1]);
-			}
-			String taxCategory2 = graph2.taxCategory;
-			float tcPer2 = 0;
-			if(StringUtils.isNotBlank(taxCategory2) && taxCategory2.indexOf("@")>-1){
-				tcPer2 = Float.parseFloat(taxCategory2.split("@")[1]);
-			}
-			return tcPer1 < tcPer2 ? -1
-					: (tcPer1 > tcPer2 ? 1 : 0);
+
+			return graph1.getTaxPercent() < graph2.getTaxPercent() ? -1
+					: (graph1.getTaxPercent() > graph2.getTaxPercent() ? 1 : 0);
 		}
 	}
 	

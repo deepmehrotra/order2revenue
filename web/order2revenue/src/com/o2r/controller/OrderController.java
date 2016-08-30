@@ -478,6 +478,7 @@ public class OrderController {
 					uploadReports = uploadReports.subList(uploadReports.size() - 3, uploadReports.size());
 				}
 				model.put("uploadReportList", uploadReports);
+				model.put("isProgress", false);
 			} catch (Exception e) {
 				log.debug("Inside exception , filetype not accepted "
 						+ e.getLocalizedMessage());
@@ -488,7 +489,7 @@ public class OrderController {
 		}
 		log.info("$$$ save() Ends : OrderController $$$");
 		// return new ModelAndView("dailyactivities/orderList", model);
-		return new ModelAndView("redirect:/seller/dashboard.html");
+		return new ModelAndView("redirect:/seller/dashboard.html", model);
 
 	}
 
