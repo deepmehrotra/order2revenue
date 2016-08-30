@@ -160,7 +160,9 @@
 								<option value="PO_Product_Config">PO Product Config</option>
 								<option value="inventorysummary">Inventory Upload</option>
 								<option value="Expense_Upload">Expense Upload</option>	
-								<option value="Event_SKU_Upload">Event SKU Upload</option>															
+								<option value="Event_SKU_Upload">Event SKU Upload</option>
+								<option value="Create_Inventory_Groups">Create Inventory Groups</option>
+								<option value="Create_Product_Category">Create Product Category</option>															
 							</select>
 						</div>						
 						<div class="col-md-4">
@@ -197,7 +199,10 @@
 											<option value="inventorySummary">Inventory Upload</option>
 											<option value="poPaymentSummary">PO Payment Upload</option>
 											<option value="expenseSummary">Expense Upload</option>	
-											<option value="EventSKUSummary">Event SKU Upload</option>										
+											<option value="EventSKUSummary">Event SKU Upload</option>
+											<option value="CreateInventoryGroups">Create Inventory Groups</option>
+											<option value="CreateProCat">Create Product Category</option>															
+																
 										</select>
 									</div>
 									<div class="col-md-4">															
