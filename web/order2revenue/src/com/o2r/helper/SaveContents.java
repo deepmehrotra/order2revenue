@@ -51,6 +51,7 @@ import com.o2r.model.ExpenseCategory;
 import com.o2r.model.Expenses;
 import com.o2r.model.GatePass;
 import com.o2r.model.ManualCharges;
+import com.o2r.model.NRnReturnCharges;
 import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
 import com.o2r.model.OrderRTOorReturn;
@@ -192,14 +193,13 @@ public class SaveContents {
 								channelID=entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+skuCode;
 								}
 						else {
-							errorMessage.append(" No Product with this Channel and SKU");
+							errorMessage.append("VendorSKU code is not mapped.");
 							validaterow = false;
 						}
 					} else
 					{
 						errorMessage.append(" No Mapping present for this Channel And SKU");
 						validaterow = false;
-					}
 					}
 					
 					System.out.println(" Channel id wiht parent sku : "+channelID);
@@ -217,7 +217,8 @@ public class SaveContents {
 
 						validaterow = false;
 					}
-				} else {
+				} 
+				}else {
 					errorMessage.append(" Channel OrderId or SKU is NULL");
 					validaterow = false;
 				}
@@ -567,7 +568,7 @@ public class SaveContents {
 		log.info("$$$ saveOrderContents ends : SaveContents $$$");
 		return returnOrderMap;
 	}
-
+	
 	public Map<String, OrderBean> saveOrderPOContents(MultipartFile file,
 			int sellerId, String path, UploadReport uploadReport)
 			throws IOException {
@@ -3456,5 +3457,116 @@ public class SaveContents {
 		log.info("$$$ saveGatePassDetails ends : SaveContents $$$");
 		return returnlist;
 	}
+	
+	public boolean saveProdCatCommissionContents(MultipartFile file,
+            int sellerId, String path, UploadReport uploadReport)
+            throws IOException {
+        log.info("$$$ saveProdCatCommissionContents starts : SaveContents $$$");
+        boolean validaterow = true;
+        StringBuffer errorMessage = null;
+        try {
+            Map<String, String> returnlist = new LinkedHashMap<>();
+            HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+            HSSFSheet worksheet = offices.getSheetAt(0);
+            HSSFRow entry;
+            Integer noOfEntries = 1;
+            while (worksheet.getRow(noOfEntries) != null) {
+                noOfEntries++;
+            }
+            log.info(noOfEntries.toString());
+            log.debug("After getting no of rows" + noOfEntries);
+            for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+                Partner partner = null;
+                entry = worksheet.getRow(rowIndex);
+                validaterow = true;
+                errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
+                try {
+                    if (entry.getCell(0) != null
+                            && entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+                        partner = partnerService.getPartner(entry.getCell(0)
+                                .toString(), sellerId);
+                        if (partner != null) {
+                            List<NRnReturnCharges> chargesList = partner
+                                    .getNrnReturnConfig().getCharges();
+                            if (entry.getCell(1) != null
+                                    && entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+                                Category prodcat = categoryService.getCategory(
+                                        entry.getCell(1).toString(), sellerId);
+                                if (prodcat != null) {
+                                    for (NRnReturnCharges charge : chargesList) {
+                                        if (charge.getChargeName()
+                                                .equalsIgnoreCase(
+                                                        prodcat.getCatName())) {
+                                            errorMessage
+                                                    .append(" Commission percent is already set for the category ");
+                                            validaterow = false;
+                                        }
+                                    }
+                                    
+                                    if (entry.getCell(2) != null
+                                            && entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+                                        float commPercent = (float) entry
+                                                .getCell(2)
+                                                .getNumericCellValue();
+                                        NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+                                        nrnReturncharge
+                                                .setChargeAmount(commPercent);
+                                        nrnReturncharge.setChargeName(prodcat
+                                                .getCatName());
+                                        nrnReturncharge.setConfig(partner
+                                                .getNrnReturnConfig());
+                                        partner.getNrnReturnConfig()
+                                                .getCharges()
+                                                .add(nrnReturncharge);
+                                    } else {
+                                        errorMessage
+                                                .append(" Commission percent is null ");
+                                        validaterow = false;
+                                    }
+                                } else {
+                                    errorMessage
+                                            .append(" Product Category does not exist ");
+                                    validaterow = false;
+                                }
+                            } else {
+                                errorMessage
+                                        .append(" Procduct Category is null ");
+                                validaterow = false;
+                            }
+                        } else {
+                            errorMessage.append(" Partner does not exist ");
+                            validaterow = false;
+                        }
+                    } else {
+                        errorMessage.append(" Partner Name is null ");
+                        validaterow = false;
+                    }
+                    if (validaterow) {
+                        partnerService.editPartner(partner, sellerId);
+                    } else {
+                        returnlist.put(errorMessage.toString(), "");
+                    }
+                } catch (Exception e) {
+                    log.error("Failed! by SellerId : " + sellerId, e);
+                    if (partner != null) {
+                        errorMessage.append("Invalid Input! ");
+                        returnlist.put(errorMessage.toString(), "");
+                    }
+                }
+                log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
+                        + entry.getCell(2) + " 3 :" + entry.getCell(3));
+                // Pre save to generate id for use in hierarchy
+            }
+            Set<String> errorSet = returnlist.keySet();
+            downloadUploadReportXLS(offices, "ProdCat_Comm_Mapping", 3,
+                    errorSet, path, sellerId, uploadReport);
+        } catch (Exception e) {
+            log.error("Failed! by SellerId : " + sellerId, e);
+            addErrorUploadReport("ProdCat_Comm_Mapping", sellerId, uploadReport);
+            throw new MultipartException("Constraints Violated");
+        }
+        log.info("$$$ saveVendorSKUMappingContents ends : SaveContents $$$");
+        return validaterow;
+    }
 
 }

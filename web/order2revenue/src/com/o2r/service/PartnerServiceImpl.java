@@ -29,6 +29,13 @@ public class PartnerServiceImpl implements PartnerService {
 		partnerDao.addPartner(partner, sellerId);
 	}
 	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public void editPartner(Partner partner, int sellerId)
+			throws CustomException {
+		partnerDao.editPartner(partner, sellerId);
+	}
+	
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void addMetaPartner(MetaPartner partner)
 			throws CustomException {
