@@ -382,16 +382,31 @@
 								p1 = false;
 							}
 							
-							if (((isProgress == 'undefined' || isProgress == '')
+							if (isProgress == 'false') {
+								//alert("dddd");
+								p1 = false;
+								Cookies.set("setProgress", "false");
+							}
+							
+							/* if (((isProgress == 'undefined' || isProgress == '')
 									&& p1 == false) || isProgress ==  false
 									) {
-								//alert("done");
+								alert("done");
 								$("#bar1").hide();
 								
 							} else {
+								alert("IN");
+								$('#progressSpiner').attr('class', 'fa fa-refresh fa-spin');
+								$('#progressSpiner').attr('style', 'color:#1ab394;');
+							} */
+							
+							if (p1 == true) {
 								//alert("IN");
 								$('#progressSpiner').attr('class', 'fa fa-refresh fa-spin');
 								$('#progressSpiner').attr('style', 'color:#1ab394;');
+							} else {
+								//alert("done");
+								$("#bar1").hide();
 							}
 
 							$.ajax({

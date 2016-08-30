@@ -151,6 +151,7 @@
 				xhr.upload.onloadend = function (e) {
 				    //progressBar.value = e.loaded;
 				    NProgress.set(e.loaded);
+				    //$('#uploadReport').hide();
 				    //$("#bar1").hide();
 				}
 				xhr.send(new FormData());
@@ -219,6 +220,7 @@
 								<option value="inventorysummary">Inventory Upload</option>
 								<option value="Expense_Upload">Expense Upload</option>
 								<option value="Event_SKU_Upload">Event SKU Upload</option>
+								<option value="ProdCat_Comm_Mapping">Category wise Commission Upload</option>
 							</select>
 						</div>
 						<div class="col-md-4">
@@ -258,6 +260,7 @@
 										<option value="poPaymentSummary">PO Payment Upload</option>
 										<option value="expenseSummary">Expense Upload</option>
 										<option value="EventSKUSummary">Event SKU Upload</option>
+										<option value="prodCat_Comm_Mapping">Category wise Commission Upload</option>
 									</select>
 								</div>
 								<div class="col-md-4">

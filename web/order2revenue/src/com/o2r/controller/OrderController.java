@@ -433,6 +433,12 @@ public class OrderController {
 							files.get(0), sellerId, applicationPath,
 							uploadReport);
 						break;
+				case "prodCat_Comm_Mapping":
+					model.put("prodCat_Comm_Mapping", saveContents.saveProdCatCommissionContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport));
+					model.put("mapType", "prodCat_Comm_Mapping");
+					break;
 
 				}
 				inputStream = files.get(0).getInputStream();
@@ -478,7 +484,6 @@ public class OrderController {
 					uploadReports = uploadReports.subList(uploadReports.size() - 3, uploadReports.size());
 				}
 				model.put("uploadReportList", uploadReports);
-				model.put("isProgress", false);
 			} catch (Exception e) {
 				log.debug("Inside exception , filetype not accepted "
 						+ e.getLocalizedMessage());
@@ -489,7 +494,8 @@ public class OrderController {
 		}
 		log.info("$$$ save() Ends : OrderController $$$");
 		// return new ModelAndView("dailyactivities/orderList", model);
-		return new ModelAndView("redirect:/seller/dashboard.html", model);
+		return new ModelAndView("redirect:/seller/dashboard.html?isProgress=false");
+		//return new ModelAndView("seller/dashboard.html", model);
 
 	}
 

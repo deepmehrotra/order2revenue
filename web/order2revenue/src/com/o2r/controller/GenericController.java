@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -146,6 +147,7 @@ public class GenericController {
 
 	@RequestMapping(value = "/seller/dashboard", method = RequestMethod.GET)
 	public ModelAndView displayDashboard(HttpServletRequest request,
+			@RequestParam(value = "isProgress", required = false) Boolean isProgress,
 			@ModelAttribute("command") DashboardBean dashboardBean,
 			BindingResult result) {
 
@@ -178,6 +180,7 @@ public class GenericController {
 			model.put("uploadReportList", uploadReports);
 			long end = System.currentTimeMillis();
 			model.put("timeTaken", end - start);
+			model.put("isProgress", isProgress);
 
 		} catch (CustomException ce) {
 			logger.error("displayDashboard exception : " + ce.toString());
