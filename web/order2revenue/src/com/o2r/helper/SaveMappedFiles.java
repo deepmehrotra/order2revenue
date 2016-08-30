@@ -460,7 +460,7 @@ public class SaveMappedFiles {
 						index = cellIndexMap.get(columHeaderMap.get("Logistic Partner"));
 						if (entry.getCell(index) != null) {
 							if(entry.getCell(index).getCellType() == HSSFCell.CELL_TYPE_BLANK){
-								order.setLogisticPartner("Self Shift");
+								order.setLogisticPartner("Self Shipped");
 							} else {
 								order.setLogisticPartner(entry.getCell(index).toString());
 							}
