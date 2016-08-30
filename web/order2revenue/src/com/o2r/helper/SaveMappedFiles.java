@@ -212,19 +212,21 @@ public class SaveMappedFiles {
 							entry.getCell(idIndex).setCellType(HSSFCell.CELL_TYPE_STRING);							
 							productConfig = productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
 							if(productConfig != null){
-								if(productConfig.getChannelSkuRef() != null){
-									sku=productConfig.getChannelSkuRef();
+								if(productConfig.getVendorSkuRef()== null){
+									
+									errorMessage.append(" Corresponding vendor SKU code is not present.");
+									validaterow = false;
 								} else {
-									sku=entry.getCell(skuIndex).toString();
-								}
+									sku=productConfig.getVendorSkuRef();
+								
 								if(entry.getCell(index).toString().contains("limeroad") && entry.getCell(idIndex).toString().contains("S")){
 									channelID=entry.getCell(idIndex).toString().substring(0, entry.getCell(idIndex).toString().indexOf("S"))
 											+ GlobalConstant.orderUniqueSymbol + sku;
 								} else {
 									channelID=entry.getCell(idIndex).toString()+GlobalConstant.orderUniqueSymbol+sku;
 								}
-								if (idsList == null ||  (!idsList.contains(channelID))
-										&& !duplicateKey.containsKey(channelID) && productConfig != null) {
+								if ((channelID!=null)&&(idsList == null ||  (!idsList.contains(channelID))
+										&& !duplicateKey.containsKey(channelID) && productConfig != null)) {
 									order.setChannelOrderID(channelID);
 									order.setProductSkuCode(productConfig.getProductSkuCode());
 									duplicateKey.put(channelID, "");
@@ -232,6 +234,7 @@ public class SaveMappedFiles {
 									errorMessage.append(" Channel OrderId is already present ");
 									validaterow = false;
 								}
+							}
 							} else {
 								errorMessage.append(" No product with this Channel & SKU ");
 								validaterow = false;
@@ -620,14 +623,14 @@ public class SaveMappedFiles {
 							taxcat = taxDetailService.getTaxCategory(product,
 									sellerId, customerBean.getZipcode());
 						}
-					}
+					
 					if (taxcat != null)
 						otb.setTaxCategtory(taxcat.getTaxCatName());
 					else {
 						errorMessage.append("Tax Category does not exist ");
 						validaterow = false;
 					}
-
+					}
 					if (cellIndexMap.get(columHeaderMap.get("Seller Note")) != null) {
 						index = cellIndexMap.get(columHeaderMap.get("Seller Note"));
 						if (entry.getCell(index) != null
@@ -793,13 +796,14 @@ public class SaveMappedFiles {
 							if(partner != null){
 								productConfig=productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
 								if(productConfig != null){
-									if(productConfig.getChannelSkuRef() != null){
-										channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getChannelSkuRef();
+									if(productConfig.getVendorSkuRef() != null){
+										channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getVendorSkuRef();
 									} else {
-										channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ entry.getCell(skuIndex).toString();
+										errorMessage.append(" Vendor SKU mapping not present");
+										validaterow = false;
 									}
-									if (idsList == null || !idsList.contains(channelorderid)
-											&& !duplicateKey.containsKey(channelorderid) && productConfig != null) {
+									if ((channelorderid!=null)&&(idsList == null || !idsList.contains(channelorderid)
+											&& !duplicateKey.containsKey(channelorderid) && productConfig != null)) {
 										order.setChannelOrderID(channelorderid);
 										order.setProductSkuCode(productConfig.getProductSkuCode());
 										duplicateKey.put(channelorderid, "");
@@ -1390,13 +1394,14 @@ public class SaveMappedFiles {
 							if(partner != null){
 								productConfig=productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
 								if(productConfig != null){
-									if(productConfig.getChannelSkuRef() != null){
+									if(productConfig.getVendorSkuRef() != null){
 										channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getChannelSkuRef();
 									} else {
-										channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ entry.getCell(skuIndex).toString();
-									}
-									if (idsList == null || !idsList.contains(channelorderid)
-											&& !duplicateKey.containsKey(channelorderid) && productConfig != null) {
+										errorMessage.append(" Vendor SKU code not mapped.");
+										validaterow = false;
+										}
+									if ((channelorderid!=null)&&(idsList == null || !idsList.contains(channelorderid)
+											&& !duplicateKey.containsKey(channelorderid) && productConfig != null)) {
 										order.setChannelOrderID(channelorderid);
 										order.setProductSkuCode(productConfig.getProductSkuCode());
 										duplicateKey.put(channelorderid, "");
@@ -2024,13 +2029,14 @@ public class SaveMappedFiles {
 							if(partner != null){
 								productConfig=productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
 								if(productConfig != null){
-									if(productConfig.getChannelSkuRef() != null){
-										channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getChannelSkuRef();
+									if(productConfig.getVendorSkuRef() != null){
+										channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getVendorSkuRef();
 									} else {
-										channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ entry.getCell(skuIndex).toString();
+										errorMessage.append(" Vendor SKU code not mapped.");
+										validaterow = false;
 									}
-									if (idsList == null || !idsList.contains(channelorderid)
-											&& !duplicateKey.containsKey(channelorderid) && productConfig != null) {
+									if ((channelorderid!=null)&&(idsList == null || !idsList.contains(channelorderid)
+											&& !duplicateKey.containsKey(channelorderid) && productConfig != null)) {
 										order.setChannelOrderID(channelorderid);
 										order.setProductSkuCode(productConfig.getProductSkuCode());
 										duplicateKey.put(channelorderid, "");
@@ -3269,13 +3275,14 @@ public class SaveMappedFiles {
 							if(partner != null){
 								productConfig=productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
 								if(productConfig != null){
-									if(productConfig.getChannelSkuRef() != null){
-										channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getChannelSkuRef();
+									if(productConfig.getVendorSkuRef() != null){
+										channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getVendorSkuRef();
 									} else {
-										channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ entry.getCell(skuIndex).toString();
+										errorMessage.append(" Vendor SKU code not mapped.");
+										validaterow = false;
 									}
-									if (idsList == null || !idsList.contains(channelorderid)
-											&& !duplicateKey.containsKey(channelorderid) && productConfig != null) {
+									if ((channelorderid!=null)&&(idsList == null || !idsList.contains(channelorderid)
+											&& !duplicateKey.containsKey(channelorderid) && productConfig != null)) {
 										order.setChannelOrderID(channelorderid);
 										order.setProductSkuCode(productConfig.getProductSkuCode());
 										duplicateKey.put(channelorderid, "");

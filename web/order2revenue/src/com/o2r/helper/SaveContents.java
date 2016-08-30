@@ -157,7 +157,7 @@ public class SaveContents {
 				log.debug(entry.getCell(1));
 				log.debug(entry.getCell(2));
 				TaxCategory taxcat=null;
-				String channelID="";
+				String channelID=null;
 				Product product = null;
 				order = new OrderBean();
 				customerBean = new CustomerBean();
@@ -177,6 +177,7 @@ public class SaveContents {
 					errorMessage.append(" Partner Name is null;");
 					validaterow = false;
 				}
+				String skuCode=null;
 				if (entry.getCell(0) != null
 						&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK
 						&& entry.getCell(2) != null
@@ -186,21 +187,30 @@ public class SaveContents {
 					if(partner !=null){
 						productConfig= productService.getProductConfig(entry.getCell(2).toString(), partner.getPcName(), sellerId);
 						if(productConfig != null){
-							if(productConfig.getChannelSkuRef() != null){
-								channelID=entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+productConfig.getChannelSkuRef();
-							} else {
-								channelID=entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+entry.getCell(2).toString();
-							}
-						} else {
-							errorMessage.append(" No Product with this Channel And SKU");
+							if(productConfig.getVendorSkuRef() != null){
+								skuCode=productConfig.getVendorSkuRef();
+								channelID=entry.getCell(0).toString()+GlobalConstant.orderUniqueSymbol+skuCode;
+								}
+						else {
+							errorMessage.append(" No Product with this Channel and SKU");
 							validaterow = false;
 						}
-					} 
-					if (!idsList.contains(channelID) 
-							&& !duplicateKey.containsKey(channelID) && productConfig != null) {
+					} else
+					{
+						errorMessage.append(" No Mapping present for this Channel And SKU");
+						validaterow = false;
+					}
+					}
+					
+					System.out.println(" Channel id wiht parent sku : "+channelID);
+					if (channelID!=null&&!idsList.contains(channelID) 
+							&& !duplicateKey.containsKey(channelID)) {
 						
 						order.setChannelOrderID(channelID);
-						order.setProductSkuCode(productConfig.getProductSkuCode());
+						if(productConfig!=null)
+							order.setProductSkuCode(productConfig.getProductSkuCode());
+						else
+						order.setProductSkuCode(skuCode);
 						duplicateKey.put(channelID, "");
 					} else {						
 						errorMessage.append(" Channel OrderId is already present;");

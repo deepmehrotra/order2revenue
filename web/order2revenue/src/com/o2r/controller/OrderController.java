@@ -667,10 +667,19 @@ public class OrderController {
 							.prepareListofBean(orderService.findOrders(
 									"status", "Return Limit Crossed", sellerId,
 									false, false));
-					if (orderList != null) {
+					if (orderList != null&&returnlist!=null) {
 						returnlist.addAll(orderList);
+						model.put("orders", returnlist);
 					}
-					model.put("orders", returnlist);
+					else if(orderList==null&&returnlist!=null)
+					{
+						model.put("orders", returnlist);
+					}
+					else if(returnlist==null&&orderList!=null)
+					{
+						model.put("orders", orderList);
+					}
+					
 
 					poOrderlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Return Recieved", sellerId,

@@ -91,15 +91,15 @@
 								<c:if test="${MpOrdersCount != 0 }">
 									<c:choose>
 										<c:when test="${MpOrdersCount >= listSize}">
-											<label class="m-l-lg">Showing ${listSize-499} to ${listSize} of ${MpOrdersCount} entries</label>
+											<label class="m-l-lg">${listSize-499} - ${listSize} of ${MpOrdersCount}</label>
 										</c:when>
 										<c:when test="${MpOrdersCount < listSize}">
-											<label class="m-l-lg">Showing ${listSize-499} to ${MpOrdersCount} of ${MpOrdersCount} entries</label>
+											<label class="m-l-lg">${listSize-499}-${MpOrdersCount} of ${MpOrdersCount}</label>
 										</c:when>																			
 									</c:choose>									
 								</c:if>
 								<c:if test="${MpOrdersCount == 0 }">
-									<label class="m-l-lg">Showing 0 to 0 of 0 entries</label>
+									<label class="m-l-lg">0 - 0 of 0</label>
 								</c:if>
 								<div class="ibox-tools">
 									<button class="btn btn-white table-menu-search search-dd">

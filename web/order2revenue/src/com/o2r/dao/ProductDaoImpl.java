@@ -1261,15 +1261,15 @@ public class ProductDaoImpl implements ProductDao {
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN).add(
 					Restrictions.eq("seller.id", sellerId));
-			criteria.createAlias("productConfig", "productConfig",
-					CriteriaSpecification.LEFT_JOIN);
+			/*criteria.createAlias("productConfig", "productConfig",
+					CriteriaSpecification.LEFT_JOIN);*/
 			criteria.setProjection(Projections.property("productSkuCode"));
 			criterialist = criteria.list();
 			if (criterialist != null && criteria.list().size() != 0) {
 				SKUList = criterialist;
 			}
 			System.out.println("Product Lit : " + SKUList.size());
-			criterialist = null;
+			/*criterialist = null;
 			Criteria criteriaformappingsku = session
 					.createCriteria(Product.class);
 			criteriaformappingsku.createAlias("seller", "seller",
@@ -1282,7 +1282,7 @@ public class ProductDaoImpl implements ProductDao {
 			criterialist = criteriaformappingsku.list();
 			if (criterialist != null && criteria.list().size() != 0) {
 				SKUList.addAll(criterialist);
-			}
+			}*/
 			System.out.println(SKUList.size());
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : " + sellerId, e);

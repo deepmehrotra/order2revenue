@@ -528,6 +528,8 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			if(seller != null)
 				sellerState = areaConfigDao.getStateFromZipCode(seller.getZipcode());
 			String customerState = areaConfigDao.getStateFromZipCode(zipcode);
+			System.out.println(" Customer state : "+customerState);
+			System.out.println(" sellerState state : "+sellerState);
 			if (sellerState != null && sellerState.equalsIgnoreCase(customerState) && category != null) {
 				taxCategory = category.getLST();
 			} else {
