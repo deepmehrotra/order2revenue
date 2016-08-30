@@ -433,6 +433,12 @@ public class OrderController {
 							files.get(0), sellerId, applicationPath,
 							uploadReport);
 						break;
+				case "CreateInventoryGroups":
+					saveContents.saveInventoryGroups(files.get(0), sellerId, applicationPath, uploadReport);
+						break;
+				case "CreateProCat":
+					saveContents.saveProductCategory(files.get(0), sellerId, applicationPath, uploadReport);
+						break;
 
 				}
 				inputStream = files.get(0).getInputStream();

@@ -185,12 +185,10 @@ public class DashboardDaoImpl implements DashboardDao {
 		thisYearSatrt.setHours(0);
 		lastYearSatrt.setDate(1);
 		lastYearSatrt.setMonth(0);	
-		System.out.println(" Checking Year & Month "+thisFinancialYearStart.getYear()+"-"+thisFinancialYearStart.getMonth());
 		if(thisFinancialYearStart.getMonth() < 3){
 			thisFinancialYearStart.setYear(thisFinancialYearStart.getYear()-1);
 		}
 		thisFinancialYearStart.setMonth(3);
-		System.out.println(" Checking Date "+thisFinancialYearStart);
 		thisFinancialYearStart.setDate(1);
 		lastFinancialYearStart.setDate(1);
 		lastFinancialYearStart.setMonth(3);
@@ -321,7 +319,6 @@ public class DashboardDaoImpl implements DashboardDao {
 			session.close();
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);
-			System.out.println("Inside exception  " + e.getLocalizedMessage());
 			e.printStackTrace();
 		}
 		long endTime = System.currentTimeMillis();
@@ -367,7 +364,6 @@ public class DashboardDaoImpl implements DashboardDao {
 			
 			netSaleQty=quantity.longValue()-returnQty.longValue();
 			log.debug("Final Net sale Qty : quantity "+quantity+" returnQty "+returnQty);
-			System.out.println("Final Net sale Qty : quantity "+quantity+" returnQty "+returnQty);
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
@@ -518,7 +514,6 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
 				while (iterator1.hasNext()) {
-					System.out.println("\n");
 					Object[] recordsRow = (Object[]) iterator1.next();
 					if (recordsRow[0] != null && recordsRow[1] != null) {
 						log.debug(" record Payment length:"+ recordsRow.length);
@@ -568,7 +563,6 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
 				while (iterator1.hasNext()) {
-					System.out.println("\n");
 					Object[] recordsRow = (Object[]) iterator1.next();
 					log.debug(" record order length:"
 							+ recordsRow.length);
@@ -623,7 +617,6 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
 				while (iterator1.hasNext()) {
-					System.out.println(" row\n");
 					Object[] recordsRow = (Object[]) iterator1.next();
 					if (recordsRow[0] != null && recordsRow[1] != null) {
 						totalUpcomingPayments.put(
@@ -631,9 +624,7 @@ public class DashboardDaoImpl implements DashboardDao {
 										recordsRow[1].toString()).getTime()),
 								Double.parseDouble(recordsRow[0].toString()));
 						log.debug(" record length:"+ recordsRow.length);
-						for (int i = 0; i < recordsRow.length; i++) {
-							System.out.print("\t" + recordsRow[i]);
-						}
+						
 					}
 				}
 			}			
@@ -677,14 +668,11 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
 				while (iterator1.hasNext()) {
-					System.out.println(" Out standing : \n");
 					Object[] recordsRow = (Object[]) iterator1.next();					
 					if (recordsRow[0] != null && recordsRow[1] != null) {
 						totalOutStandingPayments.put(recordsRow[1].toString(),
 								Double.parseDouble(recordsRow[0].toString()));
-						for (int i = 0; i < recordsRow.length; i++) {
-							System.out.print("\t" + recordsRow[i]);
-						}
+						
 					}
 				}
 			}
@@ -727,12 +715,8 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator mpiterator1 = results.iterator();
 			if (results != null) {
 				while (mpiterator1.hasNext()) {
-					System.out.println("grossp ro : row\n");
 					Object[] recordsRow = (Object[]) mpiterator1.next();
-					System.out.println(" Inside Gp : recordsRow[0] : "
-							+ recordsRow[0] + " recordsRow[1] :"
-							+ recordsRow[1] + " recordsRow[2] :"
-							+ recordsRow[2]);
+					
 					if (recordsRow[0] != null && recordsRow[1] != null
 							&& recordsRow[2] != null) {
 
@@ -749,12 +733,8 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator mpreturniterator1 = results.iterator();
 			if (results != null) {
 				while (mpreturniterator1.hasNext()) {
-					System.out.println("grossp ro : row\n");
 					Object[] recordsRow = (Object[]) mpreturniterator1.next();
-					System.out.println(" Inside Gp : recordsRow[0] : "
-							+ recordsRow[0] + " recordsRow[1] :"
-							+ recordsRow[1] + " recordsRow[2] :"
-							+ recordsRow[2]);
+					
 					if (recordsRow[0] != null && recordsRow[1] != null
 							&& recordsRow[2] != null) {
 
@@ -775,12 +755,8 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator poiterator1 = results.iterator();
 			if (results != null) {
 				while (poiterator1.hasNext()) {
-					System.out.println("grossp ro : row\n");
 					Object[] recordsRow = (Object[]) poiterator1.next();
-					System.out.println(" Inside Gp : recordsRow[0] : "
-							+ recordsRow[0] + " recordsRow[1] :"
-							+ recordsRow[1] + " recordsRow[2] :"
-							+ recordsRow[2]);
+					
 					if (recordsRow[0] != null && recordsRow[1] != null
 							&& recordsRow[2] != null) {
 
@@ -801,12 +777,8 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator gpiterator1 = results.iterator();
 			if (results != null) {
 				while (gpiterator1.hasNext()) {
-					System.out.println("grossp ro : row\n");
 					Object[] recordsRow = (Object[]) gpiterator1.next();
-					System.out.println(" Inside Gp : recordsRow[0] : "
-							+ recordsRow[0] + " recordsRow[1] :"
-							+ recordsRow[1] + " recordsRow[2] :"
-							+ recordsRow[2]);
+					
 					if (recordsRow[0] != null && recordsRow[1] != null
 							&& recordsRow[2] != null) {
 
@@ -959,9 +931,7 @@ public class DashboardDaoImpl implements DashboardDao {
 						expenseMonthly.put(dateString,
 								Double.parseDouble(recordsRow[0].toString()));
 						log.debug("Expenses" + recordsRow.length);
-						for (int i = 0; i < recordsRow.length; i++) {
-							System.out.print("\t" + recordsRow[i]);
-						}
+						
 					}
 				}
 			}
@@ -1002,14 +972,11 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
 				while (iterator1.hasNext()) {
-					System.out.println("\n");
 					Object[] recordsRow = (Object[]) iterator1.next();
 					if (recordsRow[0] != null && recordsRow[1] != null) {
 						topSellingRegion.put(recordsRow[1].toString(),
 								Long.parseLong(recordsRow[0].toString()));						
-						for (int i = 0; i < recordsRow.length; i++) {
-							System.out.print("\t" + recordsRow[i]);
-						}
+						
 					}
 				}
 			}			
@@ -1055,19 +1022,12 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
 				while (iterator1.hasNext()) {
-					System.out.println("\n");
 					Object[] recordsRow = (Object[]) iterator1.next();
 					if (recordsRow[0] != null && recordsRow[1] != null) {
-						System.out.println("Top selling sku:"
-								+ recordsRow.length);
-						System.out.println(" record 1 : "
-								+ recordsRow[0].toString() + " record 2 : "
-								+ recordsRow[1].toString());
+						
 						topSKU.put(recordsRow[0].toString(),
 								Long.parseLong(recordsRow[1].toString()));
-						for (int i = 0; i < recordsRow.length; i++) {
-							System.out.print("\t" + recordsRow[i]);
-						}
+						
 					}
 				}
 			}			
@@ -1101,16 +1061,11 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
 				while (iterator1.hasNext()) {
-					System.out.println(" row\n");
 					Object[] recordsRow = (Object[]) iterator1.next();
 					if (recordsRow[0] != null && recordsRow[1] != null) {
 						expenseCatWise.put(recordsRow[1].toString(),
 								Double.parseDouble(recordsRow[0].toString()));
-						System.out.println("Expense sthis month :"
-								+ recordsRow.length);
-						for (int i = 0; i < recordsRow.length; i++) {
-							System.out.print("\t" + recordsRow[i]);
-						}
+						
 					}
 				}
 			}
@@ -1171,7 +1126,6 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
 				while (iterator1.hasNext()) {
-					System.out.println("row\n");
 					Object[] recordsRow = (Object[]) iterator1.next();					
 					if (recordsRow[0] != null && recordsRow[1] != null
 							&& recordsRow[2] != null) {
@@ -1183,9 +1137,7 @@ public class DashboardDaoImpl implements DashboardDao {
 						orderDate.setDate(1);
 						orderCount.put(orderDate,
 								Long.parseLong(recordsRow[0].toString()));
-						for (int i = 0; i < recordsRow.length; i++) {
-							System.out.print("\t" + recordsRow[i]);
-						}
+						
 					}
 				}
 			}
@@ -1215,7 +1167,6 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
 				while (iterator1.hasNext()) {
-					System.out.println("row\n");
 					Object[] recordsRow = (Object[]) iterator1.next();					
 					if (recordsRow[0] != null && recordsRow[1] != null
 							&& recordsRow[2] != null) {
@@ -1225,9 +1176,7 @@ public class DashboardDaoImpl implements DashboardDao {
 						paymentDate.setDate(1);
 						paymentCount.put(paymentDate,
 								Long.parseLong(recordsRow[0].toString()));
-						for (int i = 0; i < recordsRow.length; i++) {
-							System.out.print("\t" + recordsRow[i]);
-						}
+						
 					}
 				}
 			}
@@ -1298,7 +1247,7 @@ public class DashboardDaoImpl implements DashboardDao {
 	public double grossProfitForDuration(Session session, Date startDate,Date endDate, int sellerId) {
 
 		log.info("***amountForDuration starts***");
-		System.out.println("Gross Profit for Duration START at : "+new Date());
+		log.info("Gross Profit for Duration START at : "+new Date());
 		List<Double> results = null;
 		double gpforMP = 0;
 		double gpforMPReturn = 0;
@@ -1319,7 +1268,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			if (results != null && results.size() != 0
 					&& results.get(0) != null) {
 				gpforMP = results.get(0);
-				System.out.println("gpforMP "+gpforMP);
+				
 			}
 			Query gpquerryforMPReturn = session.createSQLQuery(grossProfitForMPReturnDurationQuery)
 					.setParameter("startDate", startDate)
@@ -1350,10 +1299,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			
 			sum=gpforMP-gpforMPReturn+gpforPO-gpforGP;
 			
-			System.out.println(" Calculating gp for duration : startdate "+startDate+" endDate : "+endDate);
-			System.out.println(" Calculating gp MP : gpforMP "+gpforMP+" gpforMPReturn : "+gpforMPReturn);
-			System.out.println(" Calculating gp PO : gpforPO "+gpforPO+" gpforGP : "+gpforGP);
-				log.debug(results.get(0));
+			log.debug(results.get(0));
 				log.debug("Double" + sum);
 			
 		} catch (Exception e) {
@@ -1361,7 +1307,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			log.debug("Inside pcount exception  "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
-		System.out.println("Gross Profit for Duration END at : "+new Date());
+		log.info("Gross Profit for Duration END at : "+new Date());
 		log.info("***amountForDuration ends***");
 		return sum;
 	}
@@ -1392,11 +1338,8 @@ public class DashboardDaoImpl implements DashboardDao {
 								+ "," + recordsRow[3].toString();
 						nrMAp.put(dateString,
 								Double.parseDouble(recordsRow[0].toString()));
-						System.out.println("dateString : "+dateString+"value :  "+recordsRow[0].toString());
 						quantityMAp.put(dateString,
 								Long.parseLong(recordsRow[1].toString()));
-						System.out.println("dateString : "+dateString+"value :  "+recordsRow[0].toString());
-						System.out.println("dateString : "+dateString+"value :  "+recordsRow[1].toString());
 						
 					}
 				}
@@ -1442,7 +1385,6 @@ public class DashboardDaoImpl implements DashboardDao {
 				while (iterator1.hasNext()) {
 					if (resultsMP != null && resultsMP.size() != 0
 							&& resultsMP.get(0) != null) {
-						System.out.println("Return Maount  : row\n");
 						Object[] recordsRow = (Object[]) iterator1.next();
 						if (recordsRow[0] != null && recordsRow[1] != null
 								&& recordsRow[2] != null
@@ -1455,16 +1397,11 @@ public class DashboardDaoImpl implements DashboardDao {
 									.parseDouble(recordsRow[0].toString()));
 							quantityMAp.put(dateString,
 									Long.parseLong(recordsRow[1].toString()));
-							System.out.println("MP dateString:"
-									+ dateString+" MP return Amount : "+recordsRow[0]+
-									" MP return qty : "+recordsRow[1]);
-							
-
+						
 						}
 					}
 				}
 			}
-			System.out.println(" MP returnAMountMAp : "+returnAMountMAp+" MP quantityMAp : "+quantityMAp);
 			Iterator poIterator = resultsPO.iterator();
 			if (resultsPO != null) {
 				while (poIterator.hasNext()) {
@@ -1475,13 +1412,7 @@ public class DashboardDaoImpl implements DashboardDao {
 								&& recordsRow[2] != null
 								&& recordsRow[3] != null) {
 							String dateString = recordsRow[2].toString().substring(0, 3)+ "," + recordsRow[3].toString();
-							System.out.println("PO dateString:"
-									+ dateString+" PO return Amount : "+recordsRow[0]+
-									" PO return qty : "+recordsRow[1]+" returnAMountMAp.get "
-									+returnAMountMAp.get(dateString)
-									+"add amount : "+Double
-									.parseDouble(recordsRow[0]
-											.toString()));
+							
 							if(returnAMountMAp.containsKey(dateString))
 							returnAMountMAp.put(dateString, returnAMountMAp.get(dateString)+Double
 									.parseDouble(recordsRow[0]
@@ -1510,7 +1441,6 @@ public class DashboardDaoImpl implements DashboardDao {
 								.put(dateString,Long
 												.parseLong(recordsRow[1]
 														.toString()));
-							System.out.println(" PO+MP returnAMountMAp : "+returnAMountMAp+"PO+ MP quantityMAp : "+quantityMAp);
 
 						}
 					}

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +104,8 @@ public class SaveContents {
 	@Autowired
 	private UploadMappingService uploadMappingService;
 	@Autowired
-	SaveMappedFiles saveMappedFiles;
+	private SaveMappedFiles saveMappedFiles;
+	
 
 	private static final String UPLOAD_DIR = "UploadReport";
 
@@ -1376,6 +1378,179 @@ public class SaveContents {
 		log.info("$$$ saveSKUMappingContents ends : SaveContents $$$");
 		return returnProductConfigMap;
 	}
+	
+	
+	// My coding Product Config *********
+
+		public Set<String> saveInventoryGroups(
+				MultipartFile file, int sellerId, String path,
+				UploadReport uploadReport) throws IOException {
+			log.info("$$$ saveInventoryGroups starts : SaveContents $$$");
+			boolean validaterow = true;
+			Set<String> errorSet = new HashSet<>();
+			StringBuffer errorMessage = null;
+			Category category = null;
+		try {
+				HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+				HSSFSheet worksheet = offices.getSheetAt(0);
+				HSSFRow entry;
+				Integer noOfEntries = 1;
+				while (worksheet.getRow(noOfEntries) != null) {
+					noOfEntries++;
+				}
+				log.info(noOfEntries.toString());
+				log.debug("After getting no of rows" + noOfEntries);
+				for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+					
+					entry = worksheet.getRow(rowIndex);
+					validaterow = true;
+					errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
+					category=new Category();
+					try {
+						if (entry.getCell(0) != null
+								&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							Category catexist = categoryService.getCategory(entry.getCell(0).toString(), sellerId);
+							if (catexist == null) {
+								category.setCatName(entry.getCell(0).toString());
+						} else 
+						{
+								errorMessage
+										.append(" Inventory group already Exists. ");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append(" Inventory Group is null ");
+							validaterow = false;
+						}
+						if (entry.getCell(1) != null
+								&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							category.setCatDescription(entry.getCell(0).toString());
+						}
+
+						if (validaterow) {
+							// productService.addSKUMapping(productConfig,
+							// sellerId);
+							category.setSubCategory(false);
+							categoryService.addCategory(category, sellerId);
+						}
+						else
+						{
+							errorSet.add(errorMessage.toString());
+						}
+					} catch (Exception e) {
+						log.error("Failed! by SellerId : " + sellerId, e);
+						
+
+					}
+						}
+			
+				saveMappedFiles.uploadResultXLS(offices, "Create_Inventory_Group",
+						errorSet, path, sellerId, uploadReport);
+			} catch (Exception e) {
+
+				log.error("Failed! by SellerId : " + sellerId, e);
+				addErrorUploadReport("Create_Inventory_Group", sellerId, uploadReport);
+				throw new MultipartException("Constraints Violated");
+			}
+			log.info("$$$ saveInventoryGroups ends : SaveContents $$$");
+			return errorSet;
+		}
+		
+		public Set<String> saveProductCategory(
+				MultipartFile file, int sellerId, String path,
+				UploadReport uploadReport) throws IOException {
+			log.info("$$$ saveInventoryGroups starts : SaveContents $$$");
+			boolean validaterow = true;
+			Set<String> errorSet = new HashSet<>();
+			StringBuffer errorMessage = null;
+			Category category = null;
+		try {
+				HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+				HSSFSheet worksheet = offices.getSheetAt(0);
+				HSSFRow entry;
+				Integer noOfEntries = 1;
+				while (worksheet.getRow(noOfEntries) != null) {
+					noOfEntries++;
+				}
+				log.info(noOfEntries.toString());
+				log.debug("After getting no of rows" + noOfEntries);
+				for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+					
+					entry = worksheet.getRow(rowIndex);
+					validaterow = true;
+					errorMessage = new StringBuffer("Row :" + (rowIndex ) + ":");
+					category=new Category();
+					try {
+						if (entry.getCell(0) != null
+								&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							Category catexist = categoryService.getCategory(entry.getCell(0).toString(), sellerId);
+							if (catexist == null) {
+								category.setCatName(entry.getCell(0).toString());
+								if (entry.getCell(1) != null
+										&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+									Category inventexist = categoryService.getCategory(entry.getCell(1).toString(), sellerId);
+									if(inventexist!=null)
+									{
+										category.setParentCatName(inventexist.getCatName());
+									}
+									else
+									{
+										errorMessage
+										.append(" Inventory group doesnt exist. ");
+								validaterow = false;
+									}
+									
+								}
+								else 
+								{
+										errorMessage
+												.append(" Inventory group is null. ");
+										validaterow = false;
+									}
+								
+						} else 
+						{
+								errorMessage
+										.append(" Product Category already Exists. ");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append(" Product Category is null ");
+							validaterow = false;
+						}
+						if (entry.getCell(2) != null
+								&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							category.setCatDescription(entry.getCell(0).toString());
+						}
+
+						if (validaterow) {
+							// productService.addSKUMapping(productConfig,
+							// sellerId);
+							category.setSubCategory(true);
+							categoryService.addCategory(category, sellerId);
+						}
+						else
+						{
+							errorSet.add(errorMessage.toString());
+						}
+					} catch (Exception e) {
+						log.error("Failed! by SellerId : " + sellerId, e);
+						errorSet.add("Invalid input!");
+
+					}
+						}
+			
+				saveMappedFiles.uploadResultXLS(offices, "Create_Product_Category",
+						errorSet, path, sellerId, uploadReport);
+			} catch (Exception e) {
+
+				log.error("Failed! by SellerId : " + sellerId, e);
+				addErrorUploadReport("Create_Product_Category", sellerId, uploadReport);
+				throw new MultipartException("Constraints Violated");
+			}
+			log.info("$$$ saveInventoryGroups ends : SaveContents $$$");
+			return errorSet;
+		}
 
 	public Map<String, ProductConfigBean> saveVendorSKUMappingContents(
 			MultipartFile file, int sellerId, String path,

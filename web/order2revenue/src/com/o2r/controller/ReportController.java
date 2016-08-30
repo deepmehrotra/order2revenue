@@ -107,15 +107,15 @@ public class ReportController {
 		String reportName = request.getParameter("reportName");
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-			partners = partnerService.listPartners(helperClass
+			/*partners = partnerService.listPartners(helperClass
 					.getSellerIdfromSession(request));
 			for (Partner partner : partners)
-				partnerlist.add(partner.getPcName());
+				partnerlist.add(partner.getPcName());*/
 
 			model.put("reportName", reportName);
 			model.put("reportNameStr",
 					GlobalConstant.reportNameMap.get(reportName));
-			model.put("partnerlist", partnerlist);
+			//model.put("partnerlist", partnerlist);
 		} catch (CustomException ce) {
 			log.error("addManualPayment exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
