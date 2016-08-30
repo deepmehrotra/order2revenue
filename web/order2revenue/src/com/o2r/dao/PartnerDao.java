@@ -27,4 +27,6 @@ public interface PartnerDao {
 	void addMetaPartner(MetaPartner partner) throws CustomException;
 
 	public MetaPartner getMetaPartner(String partnerName) throws CustomException;
+
+	public void editPartner(Partner partner, int sellerId) throws CustomException;
 }

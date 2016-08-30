@@ -3304,8 +3304,14 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
-								String date = entry.getCell(index).toString();
-								order.setOrderDate(new Date(date));
+								if (HSSFDateUtil.isCellDateFormatted(entry
+										.getCell(index))) {
+									order.setOrderDate(entry.getCell(index)
+											.getDateCellValue());
+								} else {
+									String date = entry.getCell(index).toString();
+									order.setOrderDate(new Date(date));
+								}
 							} catch (Exception e) {
 								errorMessage
 										.append(" Order Received Date format is wrong ,enter mm/dd/yyyy,");
@@ -3416,7 +3422,7 @@ public class SaveMappedFiles {
 									HSSFCell.CELL_TYPE_STRING);
 							order.setInvoiceID(entry.getCell(index).toString());
 						} else {
-							order.setInvoiceID(entry.getCell(index).toString());
+							//order.setInvoiceID(entry.getCell(index).toString());
 							errorMessage.append(" Invoice ID is null;");
 							validaterow = false;
 						}
@@ -3508,8 +3514,14 @@ public class SaveMappedFiles {
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
-								String date = entry.getCell(index).toString();
-								order.setShippedDate(new Date(date));
+								if (HSSFDateUtil.isCellDateFormatted(entry
+										.getCell(index))) {
+									order.setOrderDate(entry.getCell(index)
+											.getDateCellValue());
+								} else {
+									String date = entry.getCell(index).toString();
+									order.setShippedDate(new Date(date));
+								}
 							} catch (Exception e) {
 								errorMessage
 										.append(" Shipped Date formate is wrong ,enter mm/dd/yyyy,");

@@ -67,6 +67,33 @@ public class PartnerDaoImpl implements PartnerDao {
 		}
 		log.info("*** AddPArtner Ends : partnerDaoImpl****");
 	}
+	
+	@Override
+	public void editPartner(Partner partner, int sellerId)
+			throws CustomException {
+		
+
+		log.info("*** editPartner Starts : partnerDaoImpl****");
+		log.debug("******* Inside PartnerDaoIMpl partner id :"+ partner.getPcId()+"******* ConfigId : "+partner.getNrnReturnConfig().getConfigId());
+		long id=partner.getPcId();
+		
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			if (id != 0) {				
+				
+				session.merge(partner);
+			} 
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);
+			throw new CustomException(GlobalConstant.addPartnerError,
+					new Date(), 1, GlobalConstant.addPartnerErrorCode, e);			
+		}
+		log.info("*** editPartner Ends : partnerDaoImpl****");
+	}
 
 	@Override
 	public List<Partner> listPartner(int sellerId) throws CustomException {

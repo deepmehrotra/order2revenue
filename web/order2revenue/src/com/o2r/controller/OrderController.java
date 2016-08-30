@@ -439,6 +439,12 @@ public class OrderController {
 				case "CreateProCat":
 					saveContents.saveProductCategory(files.get(0), sellerId, applicationPath, uploadReport);
 						break;
+				case "prodCat_Comm_Mapping":
+					model.put("prodCat_Comm_Mapping", saveContents.saveProdCatCommissionContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport));
+					model.put("mapType", "prodCat_Comm_Mapping");
+					break;
 
 				}
 				inputStream = files.get(0).getInputStream();
@@ -494,7 +500,8 @@ public class OrderController {
 		}
 		log.info("$$$ save() Ends : OrderController $$$");
 		// return new ModelAndView("dailyactivities/orderList", model);
-		return new ModelAndView("redirect:/seller/dashboard.html");
+		return new ModelAndView("redirect:/seller/dashboard.html?isProgress=false");
+		//return new ModelAndView("seller/dashboard.html", model);
 
 	}
 
