@@ -400,7 +400,7 @@
 								$('#progressSpiner').attr('style', 'color:#1ab394;');
 							} */
 							
-							if (p1 == true) {
+							if (p1 == 'true') {
 								//alert("IN");
 								$('#progressSpiner').attr('class', 'fa fa-refresh fa-spin');
 								$('#progressSpiner').attr('style', 'color:#1ab394;');
