@@ -2290,7 +2290,7 @@ public class ConverterClass {
 			default:
 				break;
 			}
-			String taxCategory = currChannelReport.getTaxCategory();
+			String taxCategory = currChannelReport.getTaxCategory();			
 			if (StringUtils.isBlank(taxCategory))
 				taxCategory = "Mix";
 			ChannelReportDetails channelReport = categoryReportMap.get(key
@@ -2311,6 +2311,7 @@ public class ConverterClass {
 			double saleRetNrAmount = currChannelReport.getSaleRetNrAmount();
 			double saleRetQty = currChannelReport.getSaleRetQty();
 			double saleRetSpAmount = currChannelReport.getSaleRetSpAmount();
+			float taxCatPercent = currChannelReport.getTaxPercent();
 
 			if (channelReport == null) {
 				channelReport = new ChannelReportDetails();
@@ -2351,6 +2352,7 @@ public class ConverterClass {
 			channelReport.setCategory(key);
 			channelReport.setPartner(key);
 			channelReport.setTaxCategory(taxCategory);
+			channelReport.setTaxPercent(taxCatPercent);
 			channelReport.setRetActualPercent(channelReport
 					.getSaleRetNrAmount()
 					* 100

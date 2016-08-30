@@ -920,15 +920,15 @@ public class SaveContents {
 					if (entry.getCell(4) != null
 							&& entry.getCell(4).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						try {
-							if ((int) Float.parseFloat(entry.getCell(4)
-									.toString()) != 0) {
+							/*if ((int) Float.parseFloat(entry.getCell(4)
+									.toString()) != 0) {*/
 								product.setQuantity(Float.valueOf(
 										entry.getCell(4).toString())
 										.longValue());
-							} else {
+							/*} else {
 								errorMessage.append(" Quantity can not be 0 ");
 								validaterow = false;
-							}
+							}*/
 						} catch (NumberFormatException e) {
 							log.error("Failed! by SellerId : " + sellerId, e);
 							errorMessage
@@ -949,9 +949,9 @@ public class SaveContents {
 							errorMessage
 									.append(" Threshold limit should be a number ");
 						}
-					} else {
+					}/* else {
 						errorMessage.append(" Threshold limit is null ");
-					}
+					}*/
 					if (entry.getCell(6) != null
 							&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						try {

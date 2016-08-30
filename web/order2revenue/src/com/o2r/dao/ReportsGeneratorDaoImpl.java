@@ -1223,6 +1223,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					try {
 						TaxCategory	taxCategoryDetails = taxDetailService.getTaxCategory(taxCategory, sellerId);
 						taxCatPercent = taxCategoryDetails.getTaxPercent();
+						channelReport.setTaxPercent((float) taxCatPercent);
 					} catch (CustomException e) {
 						log.error("Tax Category Not found for " + taxCategory);
 					}

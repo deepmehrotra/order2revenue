@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="/O2R/landing/css/fixednav.css">
 <script src="/O2R/landing/js/modernizr.js"></script>
 <script src="/O2R/seller/js/jquery-2.1.1.js"></script>
-
+<script src="/O2R/seller/js/js.cookie.js"></script>
 
 <style type="text/css">
 .progress {
@@ -84,6 +84,7 @@
 		<nav class="navbar navbar-static-top white-bg" role="navigation"
 			style="margin-bottom: 0">
 		<div class="navbar-header">
+			<input type="hidden" name="isProgress" id="isProgress" value="${isProgress}" />
 			<a class="navbar-minimalize minimalize-styl-2 btn btn-primary "
 				href="#"><i class="fa fa-bars"></i> </a>
 			<form role="search" class="navbar-form-new" method="post"
@@ -211,7 +212,7 @@
 				</ol></li>
 
 			<li class="dropdown"><a class="dropdown-toggle count-info"
-				id="progrssDropdown" data-toggle="dropdown" href="#"> <i
+				id="progrssDropdown" data-toggle="dropdown" href="#"> <i id="progressSpiner"
 					class="fa fa-exchange"></i>
 			</a>
 				<ul class="dropdown-menu dropdown-messages animated fadeInRight" id="uploadReport">
@@ -339,6 +340,7 @@
                 </nav> 
 	
 	<script type="text/javascript">
+		//var setProgress;
 		function onclickNavigate(value, id) {
 			var targeturl = "";
 			switch (value) {
@@ -360,10 +362,37 @@
 				}
 			});
 		}
+		
+		function setProgress1() {
+			Cookies.set("setProgress", "true");
+			//setProgress = true;
+			//alert("SET- FC");
+		}
 
 		$(document)
 				.ready(
 						function() {
+							
+							isProgress = $("#isProgress").val();
+							//alert(isProgress);
+							p1 = Cookies.get("setProgress");
+							//alert(p1);
+							
+							if (p1 == 'undefined' || p1 == '') {
+								p1 = false;
+							}
+							
+							if (((isProgress == 'undefined' || isProgress == '')
+									&& p1 == false) || isProgress ==  false
+									) {
+								//alert("done");
+								$("#bar1").hide();
+								
+							} else {
+								//alert("IN");
+								$('#progressSpiner').attr('class', 'fa fa-refresh fa-spin');
+								$('#progressSpiner').attr('style', 'color:#1ab394;');
+							}
 
 							$.ajax({
 										url : "getUploadReports.html",
