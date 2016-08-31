@@ -163,6 +163,16 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	@Override
+	public int productCount(int sellerId) {		
+		return productDao.productCount(sellerId);
+	}
+	
+	@Override
+	public long productMappingCount(int sellerId) {
+		return productDao.productMappingCount(sellerId);
+	}
+	
+	@Override
 	public List<String> listProductSKU(int sellerId) {
 		return productDao.listProductSKU(sellerId);
 	}

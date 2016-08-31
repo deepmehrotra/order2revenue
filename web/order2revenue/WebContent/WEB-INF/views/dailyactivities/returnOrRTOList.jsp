@@ -213,7 +213,7 @@
 																<label class="col-sm-4 control-label">Inventory Type</label>
 																<div class="col-sm-8">
 																	<form:select path="orderReturnOrRTO.inventoryType" class="form-control"	id="inventoryType">
-																		<form:option value="goodInventory" selected="true">Goog Inventory</form:option>
+																		<form:option value="goodInventory" selected="true">Good Inventory</form:option>
 																		<form:option value="badInventory">Bad Inventory</form:option>																		
 																	</form:select>
 																</div>

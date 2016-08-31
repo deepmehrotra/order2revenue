@@ -1,5 +1,6 @@
 package com.o2r.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -66,6 +67,10 @@ public class ProductDaoImpl implements ProductDao {
 	private final String listProductMapping = "select pc.productSkuCode,pc.channelName,"
 			+ "pc.channelSkuRef,pc.vendorSkuRef,pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,"
 			+ "pc.eossDiscountValue,pc.grossNR,pc.productConfigId from productconfig pc,"
+			+ "product p,product_productconfig pp where p.seller_id=? and pp.Product_productId="
+			+ "p.productId and pp.productConfig_productConfigId=pc.productConfigId and pc.mrp=0";
+	
+	private final String listProductMappingCount = "select count(*) from productconfig pc,"
 			+ "product p,product_productconfig pp where p.seller_id=? and pp.Product_productId="
 			+ "p.productId and pp.productConfig_productConfigId=pc.productConfigId and pc.mrp=0";
 
@@ -1293,5 +1298,51 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		return SKUList;
 	}
+	
+	@Override
+	public int productCount(int sellerId) {
+		int noOfProduct = 0;
+		Session session=null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Product.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN).add(
+					Restrictions.eq("seller.id", sellerId));
+			criteria.setProjection(Projections.rowCount());
+			if (criteria != null)
+				noOfProduct = (int) criteria.uniqueResult();
+			session.getTransaction().commit();
+			System.out.println(noOfProduct);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : " + sellerId + " In Product Count",e);
+		} finally {
+			if(session != null)
+				session.close();
+		}
+		return noOfProduct;
+	}
 
+	@Override
+	public long productMappingCount(int sellerId) {
+		BigInteger noOfProductMappings = new BigInteger("0");
+		Session session=null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query listQuery = session.createSQLQuery(listProductMappingCount);
+			listQuery.setInteger(0, sellerId);				
+			noOfProductMappings=(BigInteger) listQuery.uniqueResult();
+			System.out.println(noOfProductMappings);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : " + sellerId + " In Product Count",e);
+		} finally {
+			if(session != null)
+				session.close();
+		}
+		return noOfProductMappings.longValue();
+	}
 }

@@ -94,7 +94,7 @@
 											<label class="m-l-lg">${listSize-499} - ${listSize} of ${MpOrdersCount}</label>
 										</c:when>
 										<c:when test="${MpOrdersCount < listSize}">
-											<label class="m-l-lg">${listSize-499}-${MpOrdersCount} of ${MpOrdersCount}</label>
+											<label class="m-l-lg">${listSize-499} - ${MpOrdersCount} of ${MpOrdersCount}</label>
 										</c:when>																			
 									</c:choose>									
 								</c:if>

@@ -25,7 +25,20 @@
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>SKUs(${productList.size()})</h5>
+                            <h5>SKUs(${productCount})</h5>
+                            <c:if test="${productCount != 0 }">
+									<c:choose>
+										<c:when test="${productCount >= listSize}">
+											<label class="m-l-lg">${listSize-499} - ${listSize} of ${productCount}</label>
+										</c:when>
+										<c:when test="${productCount < listSize}">
+											<label class="m-l-lg">${listSize-499} - ${productCount} of ${productCount}</label>
+										</c:when>																			
+									</c:choose>									
+								</c:if>
+								<c:if test="${productCount == 0 }">
+									<label class="m-l-lg">0 - 0 of 0</label>
+								</c:if>
                             <div class="ibox-tools">
                              <button class="btn btn-white table-menu-search search-dd">
                                 <i class="fa fa-search"></i>

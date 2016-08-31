@@ -70,6 +70,8 @@ public class ProductController {
 	@Autowired
 	private HelperClass helperClass;
 
+	private int listSize=500;
+	
 	static Logger log = Logger.getLogger(ProductController.class.getName());
 
 	private static final String UPLOAD_DIR = "upload";
@@ -203,6 +205,8 @@ public class ProductController {
 						.prepareListofProductBean(productService.listProducts(
 								helperClass.getSellerIdfromSession(request),
 								pageNo)));
+				model.put("listSize", (listSize + (listSize*pageNo)));
+				model.put("productCount", productService.productCount(sellerId));
 			}
 			products = productService.listProducts(helperClass
 					.getSellerIdfromSession(request));
@@ -255,7 +259,9 @@ public class ProductController {
 			}
 			int pageNo = request.getParameter("page") != null ? Integer
 						.parseInt(request.getParameter("page")) : 0;
+			model.put("listSize", (listSize + (listSize*pageNo)));						
 			model.put("productMappingList", productService.listProductConfig(helperClass.getSellerIdfromSession(request), pageNo, "mapping"));
+			model.put("productMappingCount", productService.productMappingCount(sellerId));
 			
 		} catch (CustomException ce) {
 			log.error("productList exception : " + ce.toString());

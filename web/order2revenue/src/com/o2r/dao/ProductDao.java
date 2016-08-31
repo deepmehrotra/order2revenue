@@ -69,6 +69,10 @@ public interface ProductDao {
 			throws CustomException;
 	
 	public List<String> listProductSKU(int sellerId);
+	
+	public int productCount(int sellerId);
+	
+	public long productMappingCount(int sellerId);
 
 	public ProductConfig getProductConfigByAnySKU(String childSKUCode, String channel,
 			int sellerId) throws CustomException;

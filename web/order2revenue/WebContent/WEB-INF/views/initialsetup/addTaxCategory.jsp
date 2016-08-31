@@ -269,8 +269,9 @@
 									</c:choose>
 								</select>
 							</div>
-						</div>
+						</div>						
 						<div class="col-sm-6">
+							<!-- <input type="button" id="select_all" name="select_all" value="Select All"> -->
 						</div>
 						</div>
 
@@ -306,5 +307,17 @@
 			$(selector).chosen(config[selector]);
 		};
 	</script>
+	<script type="text/javascript">
+		$('#select_all').click(function() {	 
+			var list = "${categoryList}";
+			/*alert(list);
+			$('#multiSku').val(list); */
+			$.each(list.split(","), function(i,e){
+				alert(e);
+			    $("#multiSku option[value='" + e + "']").attr("selected", true);
+			});			
+		});
+	</script>
+	
 </body>
 </html>

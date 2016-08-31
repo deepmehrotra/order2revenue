@@ -317,11 +317,12 @@ public boolean empty(String s)
 												<img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${myAccount.plan.planPrice}"/> per Order
 											</p>
 											<p>
-												MIN AMOUNT = <span><img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${myAccount.plan.orderCount}"/>/-</span>
+												MIN ORDER COUNT = <fmt:formatNumber type="number" maxFractionDigits="0" value="${myAccount.plan.orderCount}" />
 											</p>
 											<p>
-												ORDER COUNT = <fmt:formatNumber type="number" maxFractionDigits="0" value="${myAccount.plan.orderCount/myAccount.plan.planPrice}" />
+												MIN AMOUNT = <span><img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${myAccount.plan.orderCount*myAccount.plan.planPrice}"/>/-</span>
 											</p>
+											
 										</div>
 									</c:otherwise>
 								</c:choose>
@@ -335,12 +336,12 @@ public boolean empty(String s)
 								<div align="center">
 									<p>								
 										<img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${up.planPrice}"/> per Order
+									</p>									
+									<p>
+										ORDER COUNT =  <c:out value="${up.orderCount}"/>
 									</p>
 									<p>
-										MIN AMOUNT = <span><img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${up.orderCount}"/>/-</span>
-									</p>
-									<p>
-										ORDER COUNT = <fmt:formatNumber type="number" maxFractionDigits="0" value="${up.orderCount/up.planPrice}" />
+										MIN AMOUNT =<span><img src="/O2R/seller/img/rupee.png" alt="rupee"> <fmt:formatNumber type="number" maxFractionDigits="0" value="${up.orderCount*up.planPrice}" />/-</span>
 									</p>
 								</div>
 							</div>
@@ -373,11 +374,11 @@ public boolean empty(String s)
 									</tr>
 									<tr>
 										<td>
-											Desired Amount	
+											Desired Order	
 										</td>
 										<td>
 											<input type="number" class="form-control currAmount" name="amount" oninput="updatePrices(this)">
-											<small>Minimum Recharge Amount</small>
+											<small>Minimum Order</small>
 										</td>
 
 									</tr>
@@ -392,8 +393,7 @@ public boolean empty(String s)
 									</tr>
 									<tr>
 										<td>
-											Order Count<br>
-											<small>that will be added through <br>this transaction</small>
+											Order Count<br>											
 										</td>
 										<td>
 											<input type="text" class="form-control currOrderCount" name="orderCount" style="width: 60%; float: left;" readonly="true">Orders
