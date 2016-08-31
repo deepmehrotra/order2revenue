@@ -147,7 +147,6 @@ public class GenericController {
 
 	@RequestMapping(value = "/seller/dashboard", method = RequestMethod.GET)
 	public ModelAndView displayDashboard(HttpServletRequest request,
-			@RequestParam(value = "isProgress", required = false) Boolean isProgress,
 			@ModelAttribute("command") DashboardBean dashboardBean,
 			BindingResult result) {
 
@@ -180,7 +179,6 @@ public class GenericController {
 			model.put("uploadReportList", uploadReports);
 			long end = System.currentTimeMillis();
 			model.put("timeTaken", end - start);
-			model.put("isProgress", isProgress);
 
 		} catch (CustomException ce) {
 			logger.error("displayDashboard exception : " + ce.toString());

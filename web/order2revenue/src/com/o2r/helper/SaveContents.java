@@ -3513,14 +3513,18 @@ public class SaveContents {
 									&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								Category prodcat = categoryService.getCategory(
 										entry.getCell(1).toString(), sellerId);
+								NRnReturnCharges nrnReturncharge = null;
 								if (prodcat != null) {
 									for (NRnReturnCharges charge : chargesList) {
 										if (charge.getChargeName()
 												.equalsIgnoreCase(
 														prodcat.getCatName())) {
-											errorMessage
-													.append(" Commission percent is already set for the category ");
-											validaterow = false;
+											nrnReturncharge = charge;
+											/*
+											 * errorMessage .append(
+											 * " Commission percent is already set for the category "
+											 * ); validaterow = false;
+											 */
 										}
 									}
 
@@ -3531,17 +3535,24 @@ public class SaveContents {
 											float commPercent = Float
 													.valueOf(entry.getCell(2)
 															.toString());
-											NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
-											nrnReturncharge
-													.setChargeAmount(commPercent);
-											nrnReturncharge
-													.setChargeName(prodcat
-															.getCatName());
-											nrnReturncharge.setConfig(partner
-													.getNrnReturnConfig());
-											partner.getNrnReturnConfig()
-													.getCharges()
-													.add(nrnReturncharge);
+
+											if (nrnReturncharge == null) {
+												nrnReturncharge = new NRnReturnCharges();
+												nrnReturncharge
+														.setChargeAmount(commPercent);
+												nrnReturncharge
+														.setChargeName(prodcat
+																.getCatName());
+												nrnReturncharge
+														.setConfig(partner
+																.getNrnReturnConfig());
+												partner.getNrnReturnConfig()
+														.getCharges()
+														.add(nrnReturncharge);
+											} else {
+												nrnReturncharge
+														.setChargeAmount(commPercent);
+											}
 
 										} catch (NumberFormatException e) {
 											errorMessage

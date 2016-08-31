@@ -84,7 +84,7 @@
 		<nav class="navbar navbar-static-top white-bg" role="navigation"
 			style="margin-bottom: 0">
 		<div class="navbar-header">
-			<input type="hidden" name="isProgress" id="isProgress" value="${isProgress}" />
+			<input type="hidden" name="isProgress" id="isProgress" value="${sessionScope.isProgress}" />
 			<a class="navbar-minimalize minimalize-styl-2 btn btn-primary "
 				href="#"><i class="fa fa-bars"></i> </a>
 			<form role="search" class="navbar-form-new" method="post"
