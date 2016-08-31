@@ -20,6 +20,7 @@ import java.util.Properties;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -244,6 +245,10 @@ public class OrderController {
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
 		log.info("$$$ save() Starts : OrderController $$$");
+		
+		HttpSession session = request.getSession(true);
+		session.setAttribute("isProgress", true);
+		
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		double starttime = System.currentTimeMillis();
@@ -499,9 +504,8 @@ public class OrderController {
 
 		}
 		log.info("$$$ save() Ends : OrderController $$$");
-		// return new ModelAndView("dailyactivities/orderList", model);
-		return new ModelAndView("redirect:/seller/dashboard.html?isProgress=false");
-		//return new ModelAndView("seller/dashboard.html", model);
+		session.setAttribute("isProgress", false);
+		return new ModelAndView("redirect:/seller/dashboard.html");
 
 	}
 
