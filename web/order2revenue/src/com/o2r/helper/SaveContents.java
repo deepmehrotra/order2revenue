@@ -1605,6 +1605,10 @@ public class SaveContents {
 									&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK
 									&& entry.getCell(3) != null
 									&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								
+								String mapKey = entry.getCell(1).toString().trim() + "$" +
+										entry.getCell(3).toString().trim();
+								
 								ProductConfig procon = productService
 										.getProductConfig(entry.getCell(1)
 												.toString(), entry.getCell(3)
@@ -1612,13 +1616,10 @@ public class SaveContents {
 								if (procon != null) {
 									productConfig = procon;
 								} else if (procon == null
-										&& !uniqueProductMap.containsKey(entry
-												.getCell(1).toString())) {
+										&& !uniqueProductMap.containsKey(mapKey)) {
 									productConfig.setChannelSkuRef(entry
 											.getCell(1).toString());
-									uniqueProductMap.put(entry.getCell(1)
-											.toString(), entry.getCell(1)
-											.toString());
+									uniqueProductMap.put(mapKey, mapKey);
 								} else {
 									errorMessage
 											.append(" Channel Reference Code already present for that SKU ");
@@ -1649,6 +1650,9 @@ public class SaveContents {
 									&& entry.getCell(3) != null
 									&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 
+								String mapKey = entry.getCell(2).toString().trim() + "$" +
+										entry.getCell(3).toString().trim();
+								
 								ProductConfig procon = productService
 										.getProductConfigByAnySKU(entry
 												.getCell(2).toString(), entry
@@ -1656,13 +1660,10 @@ public class SaveContents {
 												sellerId);
 								if (procon == null
 										&& !uniqueVendorSKUMap
-												.containsKey(entry.getCell(2)
-														.toString())) {
+												.containsKey(mapKey)) {
 									productConfig.setVendorSkuRef(entry
 											.getCell(2).toString());
-									uniqueVendorSKUMap.put(entry.getCell(2)
-											.toString(), entry.getCell(2)
-											.toString());
+									uniqueVendorSKUMap.put(mapKey, mapKey);
 								} else {
 									errorMessage
 											.append(" Vendor SKU Code already present for that SKU ");
@@ -1721,7 +1722,7 @@ public class SaveContents {
 								null);
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
-			downloadUploadReportXLS(offices, "MP_Vendor_SKU_Mapping", 3,
+			downloadUploadReportXLS(offices, "MP_Vendor_SKU_Mapping", 4,
 					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 
