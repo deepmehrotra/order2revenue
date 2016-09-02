@@ -1934,7 +1934,7 @@ public class SaveContents {
 									"channelOrderID", entry.getCell(1)
 											.toString(), sellerId);
 							if (onj != null) {
-								channelOrderId = entry.getCell(1).toString();
+								channelOrderId = onj.getChannelOrderID();
 							} else if (entry.getCell(2) != null
 									&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								onj = orderService.searchAsIsOrder(

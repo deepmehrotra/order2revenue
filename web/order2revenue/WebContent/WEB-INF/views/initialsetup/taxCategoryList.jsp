@@ -98,7 +98,7 @@
 													<td>${category.uploadDate}</td>
 													<td>${category.taxPercent}</td>
 													<td>${category.taxCatType}</td>
-													<td>${category.productCategoryStr}</td>
+													<td><div style="overflow-y: scroll;height: 300px;">${category.productCategoryStr}</div></td>
 													<td class="tooltip-demo"><a href="#"
 														onclick="onclickEditTaxCategory(${category.taxCatId})"> <i
 															class="fa fa-edit text-navy" data-toggle="tooltip"
