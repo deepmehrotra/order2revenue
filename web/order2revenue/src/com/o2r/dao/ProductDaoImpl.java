@@ -75,13 +75,13 @@ public class ProductDaoImpl implements ProductDao {
 			+ "p.productId and pp.productConfig_productConfigId=pc.productConfigId and pc.mrp=0";
 
 	private final String searchProductConfig = "select pc.productSkuCode,pc.channelName,pc.channelSkuRef,"
-			+ "pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,pc.eossDiscountValue,pc.grossNR,"
+			+ "pc.vendorSkuRef,pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,pc.eossDiscountValue,pc.grossNR,"
 			+ "pc.productConfigId from productconfig pc,product p,product_productconfig pp where "
 			+ "p.seller_id=? and pp.Product_productId=p.productId and pp.productConfig_productConfigId=pc.productConfigId "
 			+ "and pc.mrp <> 0 and pc.";
 
 	private final String searchProductMapping = "select pc.productSkuCode,"
-			+ "pc.channelName,pc.channelSkuRef,pc.discount,pc.mrp,pc.productPrice,"
+			+ "pc.channelName,pc.channelSkuRef,pc.vendorSkuRef,pc.discount,pc.mrp,pc.productPrice,"
 			+ "pc.suggestedPOPrice,pc.eossDiscountValue,pc.grossNR,pc.productConfigId "
 			+ "from productconfig pc,product p,product_productconfig pp where p.seller_id=? "
 			+ "and pp.Product_productId=p.productId and pp.productConfig_productConfigId=pc.productConfigId"
@@ -699,13 +699,14 @@ public class ProductDaoImpl implements ProductDao {
 					productConfig.setProductSkuCode((String) object[0]);
 					productConfig.setChannelName((String) object[1]);
 					productConfig.setChannelSkuRef((String) object[2]);
-					productConfig.setDiscount((float) object[3]);
-					productConfig.setMrp((double) object[4]);
-					productConfig.setProductPrice((double) object[5]);
-					productConfig.setSuggestedPOPrice((double) object[6]);
-					productConfig.setEossDiscountValue((double) object[7]);
-					productConfig.setGrossNR((double) object[8]);
-					productConfig.setProductConfigId((int) object[9]);
+					productConfig.setVendorSkuRef((String) object[3]);
+					productConfig.setDiscount((float) object[4]);
+					productConfig.setMrp((double) object[5]);
+					productConfig.setProductPrice((double) object[6]);
+					productConfig.setSuggestedPOPrice((double) object[7]);
+					productConfig.setEossDiscountValue((double) object[8]);
+					productConfig.setGrossNR((double) object[9]);
+					productConfig.setProductConfigId((int) object[10]);
 					productConfigList.add(productConfig);
 				}
 			}
