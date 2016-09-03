@@ -88,7 +88,7 @@
 										href="#" id="paymentOrders">Payment</a> <a href="#"
 										id="actionableOrders">Actionable</a>
 								</div>
-								<c:if test="${MpOrdersCount != 0 }">
+								<c:if test="${MpOrdersCount > 0 }">
 									<c:choose>
 										<c:when test="${MpOrdersCount >= listSize}">
 											<label class="m-l-lg">${listSize-499} - ${listSize} of ${MpOrdersCount}</label>

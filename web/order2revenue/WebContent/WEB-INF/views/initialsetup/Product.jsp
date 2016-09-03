@@ -26,7 +26,7 @@
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <h5>SKUs(${productCount})</h5>
-                            <c:if test="${productCount != 0 }">
+                            <c:if test="${productCount > 0 }">
 									<c:choose>
 										<c:when test="${productCount >= listSize}">
 											<label class="m-l-lg">${listSize-499} - ${listSize} of ${productCount}</label>
