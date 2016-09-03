@@ -2360,9 +2360,7 @@ public class SaveContents {
 						if (entry.getCell(1) != null
 								&& StringUtils.isNotBlank(entry.getCell(1)
 										.toString()) && column != null) {
-
-							entry.getCell(1).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
+							entry.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
 							log.info("Channel Order ID for Return : "
 									+ entry.getCell(1).toString());
 							if (column.equals("channelOrderID")) {
@@ -2399,8 +2397,7 @@ public class SaveContents {
 									} else {
 										channelID = entry.getCell(1).toString();
 									}
-									ord = orderService.searchAsIsOrder(column,
-											channelID, sellerId);
+									ord = orderService.searchAsIsOrder(column, channelID, sellerId);
 								} else {
 									validaterow = false;
 									errorMessage.append("Invalid Partner Name");
