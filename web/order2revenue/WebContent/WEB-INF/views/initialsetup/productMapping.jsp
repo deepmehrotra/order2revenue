@@ -68,7 +68,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
 								<h5>SKU Mappings(${productMappingCount})</h5>
-								<c:if test="${productMappingCount != 0 }">
+								<c:if test="${productMappingCount > 0 }">
 									<c:choose>
 										<c:when test="${productMappingCount >= listSize}">
 											<label class="m-l-lg">${listSize-499} - ${listSize} of ${productMappingCount}</label>
