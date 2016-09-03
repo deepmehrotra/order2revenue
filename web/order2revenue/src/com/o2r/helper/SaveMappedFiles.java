@@ -2805,8 +2805,7 @@ public class SaveMappedFiles {
 					}
 				}
 			} catch (Exception e) {
-				errorMessage
-						.append("The Column 'Fulfilment Type' doesn't exist");
+				errorMessage.append("The Column 'Fulfilment Type' doesn't exist");
 				validaterow = false;
 			}
 

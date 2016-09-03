@@ -135,16 +135,20 @@ public boolean empty(String s)
             }
         });
     }
-	function updateFields(obj){
+    
+    function select(obj) {		
+		$(".selectPlanField").val($(obj).val()).trigger('change');	
+	}   
+    
+	function updateFields(obj){		
 		if($(obj).val() && "notSelected" != $(obj).val()){
 			var serviceTax = parseFloat('${serviceTax}');
-			var minAmount = parseInt($(obj).find(':selected').data('minamount'));
-			var planPrice = $(obj).find(':selected').data('planprice');
-			var orderCount = parseInt(Math.ceil(minAmount/planPrice));
+			var orderCount = parseInt($(obj).find(':selected').data('ordercount'));			
+			var planPrice = $(obj).find(':selected').data('planprice');			
+			var minAmount = parseInt(Math.ceil(orderCount*planPrice));			
 			var taxAmount = parseFloat(parseFloat(minAmount*serviceTax/100).toFixed(2));
 			var totalAmount = minAmount + taxAmount;
-			$(".currPlanPriceTxt").html(planPrice);
-			$(".currAmount").val(minAmount);
+			$(".currPlanPriceTxt").html(planPrice);			
 			$(".currTotalAmount").val(totalAmount);
 			$(".currOrderCount").val(orderCount);
 			localStorage.setItem("totalAmount", totalAmount);
@@ -171,18 +175,18 @@ public boolean empty(String s)
 	function updatePrices(obj){
 		var currObjVal = $(obj).val();
 		if(currObjVal && "" != currObjVal){
-			var minAmount = parseInt($(".selectPlanField").find(':selected').data('minamount'));
-			var currAmount = parseInt(currObjVal);
-			if(currAmount >= minAmount){
+			var orderCount = parseInt($(".selectPlanField").find(':selected').data('ordercount'));
+			var currOrder = parseInt(currObjVal);			
+			if(currOrder >= orderCount){
 				var serviceTax = parseFloat('${serviceTax}');
 				$(".checkoutButton").removeAttr('disabled');
 				var planPrice = $(".selectPlanField").find(':selected').data('planprice');
-				var orderCount = parseInt(Math.ceil(currAmount/planPrice));
-				var taxAmount = parseFloat(parseFloat(currAmount*serviceTax/100).toFixed(2));
-				var totalAmount = currAmount + taxAmount;
+				var minAmount = parseInt(Math.ceil(currOrder*planPrice));
+				var taxAmount = parseFloat(parseFloat(minAmount*serviceTax/100).toFixed(2));
+				var totalAmount = parseFloat(minAmount + taxAmount).toFixed(2);
 				$(".currTotalAmount").val(totalAmount);
-				$(".currOrderCount").val(orderCount);
-				$(".currAmountText").html(currAmount);
+				$(".currOrderCount").val(currOrder);
+				$(".currAmountText").html(minAmount);
 				$(".currTaxAmountText").html(taxAmount);
 				$(".currTotalAmountText").html(totalAmount);
 				$(".payuAmount").val(totalAmount);
@@ -190,8 +194,7 @@ public boolean empty(String s)
 				localStorage.setItem("orderCount", orderCount);
 				localStorage.setItem("pid", $(".selectPlanField").val());				
 			} else{
-				$(".currTotalAmount").val(0);
-				$(".currOrderCount").val(0);
+				$(".currTotalAmount").val(0);				
 				$(".currAmountText").html(0);
 				$(".currTaxAmountText").html(0);
 				$(".currTotalAmountText").html(0);
@@ -199,8 +202,7 @@ public boolean empty(String s)
 				localStorage.clear();
 			}
 		} else{
-			$(".currTotalAmount").val(0);
-			$(".currOrderCount").val(0);
+			$(".currTotalAmount").val(0);			
 			$(".currAmountText").html(0);
 			$(".currTaxAmountText").html(0);
 			$(".currTotalAmountText").html(0);
@@ -307,7 +309,7 @@ public boolean empty(String s)
 								<h3>Current Plan</h3>
 								<c:choose>
 									<c:when test="${myAccount.plan == null}">
-										No Plan subscribed yet.
+										No Plan subscribed yet !										
 									</c:when>
 									<c:otherwise>
 										<button class="btn btn-block"><c:out value="${myAccount.plan.planName}"/></button>
@@ -329,23 +331,25 @@ public boolean empty(String s)
 							</div>
 						</div>
 						<c:forEach items="${upgrade}" var="up">
-						<div class="col-md-4">
-							<div class="column1 text-center">
-								<button class="btn btn-block"><c:out value="${up.planName}"/></button>
-								<br>
-								<div align="center">
-									<p>								
-										<img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${up.planPrice}"/> per Order
-									</p>									
-									<p>
-										ORDER COUNT =  <c:out value="${up.orderCount}"/>
-									</p>
-									<p>
-										MIN AMOUNT =<span><img src="/O2R/seller/img/rupee.png" alt="rupee"> <fmt:formatNumber type="number" maxFractionDigits="0" value="${up.orderCount*up.planPrice}" />/-</span>
-									</p>
+							<c:if test="${up.planName != myAccount.plan.planName}">
+								<div class="col-md-4">
+									<div class="column1 text-center">
+										<button class="btn btn-block" onclick="select(this)" value="${up.pid}">${up.planName}</button>
+										<br>
+										<div align="center">
+											<p>								
+												<img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${up.planPrice}"/> per Order
+											</p>									
+											<p>
+												ORDER COUNT =  <c:out value="${up.orderCount}"/>
+											</p>
+											<p>
+												MIN AMOUNT =<span><img src="/O2R/seller/img/rupee.png" alt="rupee"> <fmt:formatNumber type="number" maxFractionDigits="0" value="${up.orderCount*up.planPrice}" />/-</span>
+											</p>
+										</div>
+									</div>
 								</div>
-							</div>
-						</div>
+							</c:if>
 						</c:forEach>
 					</div>
 					<div class="col-lg-3">
@@ -365,7 +369,7 @@ public boolean empty(String s)
 												<c:forEach items="${upgrade}" var="up">
 													<option value='<c:out value="${up.pid}"/>' 
 														data-planprice='<c:out value="${up.planPrice}"/>'
-														data-minamount='<c:out value="${up.orderCount}"/>'>
+														data-ordercount='<c:out value="${up.orderCount}"/>'>
 														<c:out value="${up.planName}"/>
 													</option>
 												</c:forEach>
@@ -377,7 +381,7 @@ public boolean empty(String s)
 											Desired Order	
 										</td>
 										<td>
-											<input type="number" class="form-control currAmount" name="amount" oninput="updatePrices(this)">
+											<input type="number" class="form-control currOrderCount" name="orderCount" oninput="updatePrices(this)">
 											<small>Minimum Order</small>
 										</td>
 
@@ -391,29 +395,33 @@ public boolean empty(String s)
 											<img src="/O2R/seller/img/rupee.png" alt="rupee"> <span class="currPlanPriceTxt"></span> per Order
 										</td>
 									</tr>
-									<tr>
+									<!-- <tr>
 										<td>
 											Order Count<br>											
 										</td>
 										<td>
-											<input type="text" class="form-control currOrderCount" name="orderCount" style="width: 60%; float: left;" readonly="true">Orders
+											<input type="text" class="form-control " name="" style="width: 60%; float: left;" readonly="true">Orders
 										</td>
-									</tr>
+									</tr> -->
 									<tr style="border-top: 2px solid #ccc;">
 										<td></td>
 										<td></td>
 									</tr>
 									<tr>
-										<td></td>
-										<td>
-											<p>Amount : &#8377; <span class="span currAmountText">0</span>/-</p>
+										<td style="text-align: right;">
+											Amount : 
+										</td>
+										<td style="text-align: left;">
+											&#8377; <span class="span currAmountText">0</span>/-
 										</td>
 
 									</tr>
 									<tr>
-										<td></td>
-										<td>
-											<p>Service Tax : &#8377; <span class="span currTaxAmountText">0</span>/-</p>
+										<td style="text-align: right;font-size: 12px;">
+											Service Tax :
+										</td>
+										<td style="text-align: left;">
+											&#8377; <span class="span currTaxAmountText">0</span>/-
 										</td>
 									</tr>
 									<tr>
@@ -423,10 +431,12 @@ public boolean empty(String s)
 										</td>
 									</tr>
 									<tr>
-										<td></td>
-										<td>
+										<td style="text-align: right;">
+											Total :
+										</td>
+										<td style="text-align: left;">
 											<input type="hidden" class="currTotalAmount" name="totalAmount" >
-											<p>Total: &#8377; <span class="span currTotalAmountText">0</span>/-</p>
+											&#8377; <span class="span currTotalAmountText">0</span>/-
 										</td>
 									</tr>
 								</tbody>

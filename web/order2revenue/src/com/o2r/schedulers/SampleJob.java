@@ -84,21 +84,23 @@ public class SampleJob {
             }else{
             	log.info("No orders....!!!!");
             }
-            session.getTransaction().commit();
-            if(session != null)
-            	session.close();
+            session.getTransaction().commit();            
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed!",e);
-		}	
+		} finally{
+			if(session != null)
+            	session.close();
+		}
 		log.info("$$$ executeJobPaymentDueDate() Exits : SampleJob $$$");
 	}
 	
 	public void executeJobProductStockList(){
 		
 		Date currentDate=new Date();
+		Session session=null;
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			if(session != null)
 				session.beginTransaction(); 
 			Criteria criteria = session.createCriteria(Product.class);
@@ -134,6 +136,9 @@ public class SampleJob {
 			log.debug("ProductStockList Updated !!!! No of new Entries : "+count);
 		} catch (Exception e) {
 			log.error("Failed!",e);
+		} finally {
+			if(session != null)
+            	session.close();
 		}
 	}
 	
