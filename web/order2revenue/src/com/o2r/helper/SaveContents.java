@@ -2407,7 +2407,7 @@ public class SaveContents {
 										entry.getCell(1).toString(), sellerId,
 										false, false);
 							}
-							if (ord != null) {
+							if (ord != null && ord.getOrderReturnOrRTO().getReturnDate() == null) {
 								order.setChannelOrderID(ord.getChannelOrderID());
 								id = order.getChannelOrderID();
 							} else if (orderlist != null
@@ -2428,7 +2428,7 @@ public class SaveContents {
 
 							} else {
 								validaterow = false;
-								errorMessage.append("Order doesnt exist");
+								errorMessage.append("Order doesnt exist or Return Already Recieved. ");
 							}
 						} else {
 							validaterow = false;
@@ -2552,7 +2552,7 @@ public class SaveContents {
 					} else {
 						validaterow = false;
 						errorMessage.append("Value of " + criteria
-								+ " is Null or Invalid.. ");
+								+ " is Invalid for Return.. ");
 					}
 					if (validaterow)
 						orderService.addReturnOrder(order.getChannelOrderID(),
