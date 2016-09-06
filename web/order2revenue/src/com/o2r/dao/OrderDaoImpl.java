@@ -1562,7 +1562,7 @@ public class OrderDaoImpl implements OrderDao {
 										.getOrderReturnOrRTO()
 										.getReturnorrtoQty()));
 					}
-					if (((int) orderPayment.getPositiveAmount()) != 0) {
+					if (orderPayment.getPositiveAmount() > 0) {
 
 						order.getOrderPayment().setPositiveAmount(
 								order.getOrderPayment().getPositiveAmount()
@@ -1619,7 +1619,7 @@ public class OrderDaoImpl implements OrderDao {
 					}
 				} else {
 
-					if (((int) orderPayment.getPositiveAmount()) != 0) {
+					if (orderPayment.getPositiveAmount() > 0) {
 
 						order.getOrderPayment().setPositiveAmount(
 								order.getOrderPayment().getPositiveAmount()
@@ -1747,7 +1747,7 @@ public class OrderDaoImpl implements OrderDao {
 										.getOrderReturnOrRTO()
 										.getReturnorrtoQty()));
 					}
-					if (((int) orderPayment.getPositiveAmount()) != 0) {
+					if (orderPayment.getPositiveAmount() > 0) {
 
 						order.getOrderPayment().setPositiveAmount(
 								order.getOrderPayment().getPositiveAmount()
@@ -1805,7 +1805,7 @@ public class OrderDaoImpl implements OrderDao {
 					}
 				} else {
 
-					if (((int) orderPayment.getPositiveAmount()) != 0) {
+					if (orderPayment.getPositiveAmount() > 0) {
 
 						order.getOrderPayment().setPositiveAmount(
 								order.getOrderPayment().getPositiveAmount()

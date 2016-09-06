@@ -36,10 +36,11 @@ public class PaymentUploadDaoImpl implements PaymentUploadDao{
 	
 	 log.info("*** addPaymentUpload Starts : PaymentUploadDaoImpl ****");
 		Seller seller=null;
+		Session session=null;
 		String paymentUploadId=null;
 		   try
 		   {
-			   Session session=sessionFactory.openSession();
+			   session=sessionFactory.openSession();
 			   session.beginTransaction();
 			   Criteria criteria=session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
 			   seller=(Seller)criteria.list().get(0);
@@ -55,15 +56,15 @@ public class PaymentUploadDaoImpl implements PaymentUploadDao{
 				   session.saveOrUpdate(upload);
 				   paymentUploadId=upload.getUploadDesc();
 			   }
-		    session.getTransaction().commit();
-		    session.close();
-		   }
-		   catch (Exception e) {
+		    session.getTransaction().commit();		    
+		   } catch (Exception e) {
 			   log.error("Failed! by sellerId : "+sellerId,e);
 			   e.printStackTrace();
-			   throw new CustomException(GlobalConstant.addPaymentUploadError, new Date(), 1, GlobalConstant.addPaymentUploadErrorCode, e);
-			   
-		}
+			   throw new CustomException(GlobalConstant.addPaymentUploadError, new Date(), 1, GlobalConstant.addPaymentUploadErrorCode, e);			   
+		   } finally {
+			   if(session != null)
+				   session.close();
+		   }
 		
 	log.info("*** addPaymentUpload Ends : PaymentUploadDaoImpl ****");
 	return paymentUploadId;

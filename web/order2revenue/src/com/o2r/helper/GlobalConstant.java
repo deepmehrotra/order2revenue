@@ -102,6 +102,7 @@ public class GlobalConstant {
 			add("Recieved Amount");
 			add("Fulfilment Type");
 			add("Payment Date");
+			add("Sales Channel");
 			add("Seller SKU");
 			add("Particulars");
 
@@ -146,7 +147,7 @@ public class GlobalConstant {
 			add("SKU");
 			add("Invoice ID");
 			add("Recieved Amount");
-			add("Payment Date");
+			add("Payment Date");			
 			add("Particular");
 		}
 	};

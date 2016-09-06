@@ -34,7 +34,7 @@ public class PaymentUpload {
 	@Column
 	private String uploadStatus;
 	
-	@OneToMany(mappedBy = "paymentUpload", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "paymentUpload")
 	private List<Order> orders =new ArrayList<Order>();
 	
 	public int getUploadId() {

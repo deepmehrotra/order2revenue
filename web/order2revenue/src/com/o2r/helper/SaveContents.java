@@ -1885,7 +1885,7 @@ public class SaveContents {
 			int sellerId, String path, UploadReport uploadReport)
 			throws IOException {
 		log.info("$$$ savePaymentContents starts : SaveContents $$$");
-		PaymentUpload paymentUpload = new PaymentUpload();
+		PaymentUpload paymentUpload = new PaymentUpload();		
 		double totalpositive = 0;
 		double totalnegative = 0;
 		String channelOrderId = null;
@@ -1915,7 +1915,8 @@ public class SaveContents {
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
-
+				double positiveAmount = 0;
+				double negativeAmount = 0;
 				// Product product=new Product();
 				OrderPayment payment = new OrderPayment();
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
@@ -1979,8 +1980,7 @@ public class SaveContents {
 								payment.setNegativeAmount(Math.abs(Double
 										.parseDouble(entry.getCell(4)
 												.toString())));
-								totalnegative = totalnegative
-										+ Math.abs(Double.parseDouble(entry
+								negativeAmount = Math.abs(Double.parseDouble(entry
 												.getCell(4).toString()));
 
 							} else if (entry.getCell(3) != null
@@ -1992,8 +1992,7 @@ public class SaveContents {
 								payment.setPositiveAmount(Double
 										.parseDouble(entry.getCell(3)
 												.toString()));
-								totalpositive = totalpositive
-										+ Double.parseDouble(entry.getCell(3)
+								positiveAmount = Double.parseDouble(entry.getCell(3)
 												.toString());
 								log.debug(" ******toatal psitive :"
 										+ totalpositive);
@@ -2131,6 +2130,8 @@ public class SaveContents {
 							validaterow = false;
 						}
 						if (validaterow) {
+							totalpositive = totalpositive + positiveAmount;
+							totalnegative = totalnegative + negativeAmount;
 							manualChargesList.add(manualCharges);
 						} else {
 							returnPaymentMap
@@ -2397,7 +2398,9 @@ public class SaveContents {
 									} else {
 										channelID = entry.getCell(1).toString();
 									}
-									ord = orderService.searchAsIsOrder(column, channelID, sellerId);
+									if(channelID != null){
+										ord = orderService.searchAsIsOrder(column, channelID, sellerId);
+									}
 								} else {
 									validaterow = false;
 									errorMessage.append("Invalid Partner Name");
@@ -2569,7 +2572,7 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "MP_Return_Upload", 12, errorSet,
+			downloadUploadReportXLS(offices, "MP_Return_Upload", 13, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			e.printStackTrace();
