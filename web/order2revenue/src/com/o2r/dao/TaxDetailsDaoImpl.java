@@ -569,6 +569,10 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			if (criteria.list() != null && criteria.list().size() != 0) {
 				seller = (Seller) criteria.list().get(0);
 				returnObject = seller.getTaxCategories().get(0);
+				if(returnObject != null){
+					Hibernate.initialize(returnObject.getProductCategoryCST());
+					Hibernate.initialize(returnObject.getProductCategoryLST());
+				}
 			}
 			session.getTransaction().commit();
 			session.close();
