@@ -132,21 +132,28 @@ public class AreaConfigDaoImpl implements AreaConfigDao {
 		log.info("***isZipCodeValid starts*** ");
 		List<String> stateNames = null;
 		boolean returnObject = false;	
-		
+		Session session = null;
 		try {			
 			
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			session.beginTransaction();
 			Query gettingStates = session.createSQLQuery(zipcodeValidQuery)
 					.setParameter("zipcode", zipcode);
 			stateNames = gettingStates.list();
 			if (stateNames != null && stateNames.size() != 0)
 				returnObject = true;
-			session.getTransaction().commit();
-			session.close();
+			session.getTransaction().commit();	
+			if(returnObject != true)
+				throw new NullPointerException();
+		} catch (NullPointerException ne) {			
+			log.error("Invalid Zipcode ! : "+zipcode, ne);			
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.error("Failed ! ", e);
 			log.equals(e);
+		} finally {
+			if(session != null)
+				session.close();
 		}
 		log.info("***isZipCodeValid ends*** ");
 		return returnObject;

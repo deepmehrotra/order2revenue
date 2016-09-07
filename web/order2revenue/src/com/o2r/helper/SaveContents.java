@@ -487,15 +487,12 @@ public class SaveContents {
 							try {
 								customerBean.setZipcode(zipCode);
 							} catch (Exception e) {
-								log.error("Failed! by SellerId : " + sellerId,
-										e);
-								errorMessage
-										.append("Customer zipcode is corrupted ");
+								log.error("Failed! by SellerId : " + sellerId,e);
+								errorMessage.append("Customer zipcode is corrupted.");
 								validaterow = false;
 							}
 						} else {
-							errorMessage
-									.append("Customer zipcode is not valid ");
+							errorMessage.append("Either invalid zipcode or try after some time while admin will add this to database.");
 							validaterow = false;
 							customerBean.setZipcode(zipCode);
 						}
@@ -2410,28 +2407,32 @@ public class SaveContents {
 										entry.getCell(1).toString(), sellerId,
 										false, false);
 							}
-							if (ord != null && ord.getOrderReturnOrRTO().getReturnDate() == null) {
-								order.setChannelOrderID(ord.getChannelOrderID());
-								id = order.getChannelOrderID();
-							} else if (orderlist != null
-									&& orderlist.size() != 0) {
-								if (orderlist.size() == 1
-										&& orderlist.get(0)
-												.getOrderReturnOrRTO()
-												.getReturnDate() == null) {
-									order.setChannelOrderID(orderlist.get(0)
-											.getChannelOrderID());
+							if (ord != null) {
+								if(ord.getOrderReturnOrRTO().getReturnDate() == null){
+									order.setChannelOrderID(ord.getChannelOrderID());
 									id = order.getChannelOrderID();
 								} else {
 									validaterow = false;
-									errorMessage
-											.append("Many Orders or Return accepted With this "
-													+ criteria);
+									errorMessage.append("Return Already Recieved. ");
+								}
+							} else if (orderlist != null
+									&& orderlist.size() != 0) {
+								if (orderlist.size() == 1) {
+									if(orderlist.get(0).getOrderReturnOrRTO().getReturnDate() == null){
+										order.setChannelOrderID(orderlist.get(0).getChannelOrderID());
+										id = order.getChannelOrderID();
+									} else {
+										validaterow = false;
+										errorMessage.append("Return accepted With this "+ criteria);
+									}
+								} else {
+									validaterow = false;
+									errorMessage.append("Many Orders With this "+ criteria);
 								}
 
 							} else {
 								validaterow = false;
-								errorMessage.append("Order doesnt exist or Return Already Recieved. ");
+								errorMessage.append("Order doesnt exist.");
 							}
 						} else {
 							validaterow = false;

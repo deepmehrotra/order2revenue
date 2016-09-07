@@ -416,8 +416,7 @@ public class SaveMappedFiles {
 									validaterow = false;
 								}
 							} else {
-								errorMessage
-										.append("Customer zipcode is not valid ");
+								errorMessage.append("Either invalid zipcode or try after some time while admin will add this to database.");
 								validaterow = false;
 								customerBean.setZipcode(entry.getCell(index)
 										.toString());
@@ -1194,8 +1193,7 @@ public class SaveMappedFiles {
 									validaterow = false;
 								}
 							} else {
-								errorMessage
-										.append("Customer zipcode is not valid ");
+								errorMessage.append("Either invalid zipcode or try after some time while admin will add this to database.");
 								validaterow = false;
 								customerBean.setZipcode(entry.getCell(index)
 										.toString());
@@ -1633,8 +1631,7 @@ public class SaveMappedFiles {
 									validaterow = false;
 								}
 							} else {
-								errorMessage
-										.append("Customer zipcode is not valid ");
+								errorMessage.append("Either invalid zipcode or try after some time while admin will add this to database.");
 								validaterow = false;
 								customerBean.setZipcode(entry.getCell(index)
 										.toString());
@@ -2166,8 +2163,7 @@ public class SaveMappedFiles {
 									validaterow = false;
 								}
 							} else {
-								errorMessage
-										.append("Customer zipcode is not valid ");
+								errorMessage.append("Either invalid zipcode or try after some time while admin will add this to database.");
 								validaterow = false;
 								customerBean.setZipcode(entry.getCell(index)
 										.toString());
@@ -3758,8 +3754,7 @@ public class SaveMappedFiles {
 									validaterow = false;
 								}
 							} else {
-								errorMessage
-										.append("Customer zipcode is not valid ");
+								errorMessage.append("Either invalid zipcode or try after some time while admin will add this to database.");
 								validaterow = false;
 								customerBean.setZipcode(entry.getCell(index)
 										.toString());
@@ -4955,8 +4950,7 @@ public class SaveMappedFiles {
 									validaterow = false;
 								}
 							} else {
-								errorMessage
-										.append("Customer zipcode is not valid ");
+								errorMessage.append("Either invalid zipcode or try after some time while admin will add this to database.");
 								validaterow = false;
 								customerBean.setZipcode(entry.getCell(index)
 										.toString());
