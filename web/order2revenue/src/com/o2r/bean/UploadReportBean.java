@@ -12,6 +12,7 @@ public class UploadReportBean {
 	private int sellerId;
 	private String sellerName;
 	private double timeTaken;
+	private long noOfErrors;
 	private Date uploadDate;
 	private String uploadedAt;
 	
@@ -74,5 +75,11 @@ public class UploadReportBean {
 	}
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+	public long getNoOfErrors() {
+		return noOfErrors;
+	}
+	public void setNoOfErrors(long noOfErrors) {
+		this.noOfErrors = noOfErrors;
 	}
 }
