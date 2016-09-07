@@ -70,8 +70,8 @@
 		e.parentNode.insertBefore($, e)
 	})(document, "script");
 </script>
-<!--End of Zopim Live Chat Script-->						
-		
+<!--End of Zopim Live Chat Script-->
+
 </head>
 
 <body>
@@ -84,8 +84,9 @@
 		<nav class="navbar navbar-static-top white-bg" role="navigation"
 			style="margin-bottom: 0">
 		<div class="navbar-header">
-			<input type="hidden" name="isProgress" id="isProgress" value="${sessionScope.isProgress}" />
-			<a class="navbar-minimalize minimalize-styl-2 btn btn-primary "
+			<input type="hidden" name="isProgress" id="isProgress"
+				value="${sessionScope.isProgress}" /> <a
+				class="navbar-minimalize minimalize-styl-2 btn btn-primary "
 				href="#"><i class="fa fa-bars"></i> </a>
 			<form role="search" class="navbar-form-new" method="post"
 				action="findGlobalOrders.html" id="findGlobalOrderForm"
@@ -95,12 +96,14 @@
 						<select class="form-control" name="searchCriteria" required
 							autocomplete="off" / id="searchCriteriaGlobal">
 							<option value="">Select Criteria</option>
-							<option id="1" value="channelOrderID">Channel OrderID/PO ID</option>
+							<option id="1" value="channelOrderID">Channel OrderID/PO
+								ID</option>
 							<option id="2" value="awbNum">AWB</option>
 							<option id="3" value="invoiceID">Invoice ID</option>
 							<option id="4" value="subOrderID">Sub Order ID</option>
 							<option id="5" value="PIreferenceNo">PI Reference No</option>
-							<option id="7" value="returnOrRTOId">Sale ReturnID/Debit Note No</option>
+							<option id="7" value="returnOrRTOId">Sale ReturnID/Debit
+								Note No</option>
 							<option id="8" value="pcName">Partner</option>
 							<option id="9" value="productSkuCode">Product SKU</option>
 							<option id="10" value="customerName">Customer Name</option>
@@ -111,9 +114,11 @@
 							<option id="15" value="sellerNote">Seller Notes</option>
 							<option id="17" value="orderDate">Order Received Date</option>
 							<option id="18" value="shippedDate">Order Shipped Date</option>
-							<option id="19" value="deliveryDate">Order Delivery	Expected Date</option>
+							<option id="19" value="deliveryDate">Order Delivery
+								Expected Date</option>
 							<option id="20" value="paymentDueDate">Payment Due Date</option>
-							<option id="21" value="dateofPayment">Actual Date of Payment</option>
+							<option id="21" value="dateofPayment">Actual Date of
+								Payment</option>
 						</select>
 					</div>
 					<div class="top-search-60 f-left TopSearch-box1" id="newdiv">
@@ -124,13 +129,15 @@
 						<div class="input-group f-left" style="width: 150px;">
 							<div class="input-group date">
 								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-								<input type="text" name="startDate" id="startDate"  class="form-control">
+								<input type="text" name="startDate" id="startDate"
+									class="form-control">
 							</div>
 						</div>
 						<div class="input-group f-left" style="width: 150px;">
 							<div class="input-group date">
 								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-								<input type="text" name="endDate" id="endDate" 	class="form-control">
+								<input type="text" name="endDate" id="endDate"
+									class="form-control">
 							</div>
 						</div>
 					</div>
@@ -212,10 +219,11 @@
 				</ol></li>
 
 			<li class="dropdown"><a class="dropdown-toggle count-info"
-				id="progrssDropdown" data-toggle="dropdown" href="#"> <i id="progressSpiner"
-					class="fa fa-exchange"></i>
+				id="progrssDropdown" data-toggle="dropdown" href="#"> <i
+					id="progressSpiner" class="fa fa-exchange"></i>
 			</a>
-				<ul class="dropdown-menu dropdown-messages animated fadeInRight" id="uploadReport">
+				<ul class="dropdown-menu dropdown-messages animated fadeInRight"
+					id="uploadReport">
 					<li>
 						<div id="uploadReport-div-3" class="dropdown-messages-box"
 							style="display: none;">
@@ -289,9 +297,10 @@
 					</li>
 					<li class="divider" id="uploadReport-line-1" style="display: none;"></li>
 					<li>
-						<div class="text-center link-block" id="uploadReport-div-0" style="display: none;" >
-							<a href="getUploadReportList.html"> <i class="fa fa-envelope"></i> <strong>Read
-									All Updates</strong>
+						<div class="text-center link-block" id="uploadReport-div-0"
+							style="display: none;">
+							<a href="getUploadReportList.html"> <i class="fa fa-envelope"></i>
+								<strong>Read All Updates</strong>
 							</a>
 						</div>
 					</li>
@@ -330,15 +339,16 @@
 		</nav>
 	</div>
 	<nav class="cd-vertical-nav">
-                    <ul>
-                        <li><a href="#" onclick="onclickNavigate('upload',0)" ><span class="label">Export</span></a></li>
-                        <li><a href="orderList.html"><span class="label">Order</span></a></li>
-                        <li><a href="paymentUploadList.html"><span class="label">Payment</span></a></li>
-                         <li><a href="poOrderList.html?value="><span class="label">PoList</span></a></li>
-                        <li><a href="returnOrderList.html"><span class="label">Return</span></a></li>
-                    </ul>
-                </nav> 
-	
+	<ul>
+		<li><a href="#" onclick="onclickNavigate('upload',0)"><span
+				class="label">Export</span></a></li>
+		<li><a href="orderList.html"><span class="label">Order</span></a></li>
+		<li><a href="paymentUploadList.html"><span class="label">Payment</span></a></li>
+		<li><a href="poOrderList.html?value="><span class="label">PoList</span></a></li>
+		<li><a href="returnOrderList.html"><span class="label">Return</span></a></li>
+	</ul>
+	</nav>
+
 	<script type="text/javascript">
 		//var setProgress;
 		function onclickNavigate(value, id) {
@@ -482,9 +492,17 @@
 																document
 																		.getElementById("uploadReport-uploadDate-"
 																				+ i).innerHTML = arrayItem.uploadDate;
-																document
+																
+																
+																if (arrayItem.status == "Error" || arrayItem.status == "Failed") {
+																	document
 																		.getElementById("uploadReport-status-"
-																				+ i).innerHTML = arrayItem.status;
+																			+ i).innerHTML = arrayItem.noOfErrors + " Errors";
+																} else {
+																	document
+																		.getElementById("uploadReport-status-"
+																			+ i).innerHTML = arrayItem.status;
+																}
 	
 																i++;						
 															});

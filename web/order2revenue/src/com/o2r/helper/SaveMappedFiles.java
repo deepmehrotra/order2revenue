@@ -2882,7 +2882,7 @@ public class SaveMappedFiles {
 		String skucode = null;
 		Order order = null;
 		int noOfEntries = 1;
-		HSSFRow entry;
+		HSSFRow entry; 
 		boolean validaterow = true;
 		double totalpositive = 0;
 		double totalnegative = 0;
@@ -2935,8 +2935,6 @@ public class SaveMappedFiles {
 					if (cellIndexMap.get(columHeaderMap.get("ChannelOrderId")) != null) {
 						channelheader = columHeaderMap.get("ChannelOrderId");
 						index = cellIndexMap.get(channelheader);
-						entry.getCell(index).setCellType(
-								HSSFCell.CELL_TYPE_STRING);
 					} else {
 						errorMessage
 								.append("The column 'Transaction ID' doesn't exist");
@@ -2945,6 +2943,8 @@ public class SaveMappedFiles {
 					if (entry.getCell(index) != null) {
 						log.info(" channelorder id: "
 								+ entry.getCell(index).toString());
+						entry.getCell(index).setCellType(
+								HSSFCell.CELL_TYPE_STRING);
 						if (StringUtils.isNumeric(entry.getCell(index)
 								.toString())) {
 							
@@ -2952,13 +2952,18 @@ public class SaveMappedFiles {
 									.get("Seller SKU"));
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							channelOrderId = entry.getCell(index)
-									.toString()
-									+ GlobalConstant.orderUniqueSymbol
-									+ entry.getCell(skuIndex).toString();
-							Order onj = orderService.searchAsIsOrder(
-									"channelOrderID", channelOrderId,
-									sellerId);
+							
+							Order onj = null;
+							if (entry.getCell(skuIndex) != null
+									&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								channelOrderId = entry.getCell(index)
+										.toString()
+										+ GlobalConstant.orderUniqueSymbol
+										+ entry.getCell(skuIndex).toString();
+								onj = orderService.searchAsIsOrder(
+										"channelOrderID", channelOrderId,
+										sellerId);
+							}
 							
 							if (onj == null
 									|| !onj.getChannelOrderID().equals(
@@ -4109,6 +4114,8 @@ public class SaveMappedFiles {
 				for (ColumMap colums : chanupload.getColumMap()) {
 					columHeaderMap.put(colums.getO2rColumName(),
 							colums.getChannelColumName());
+			
+				
 				}
 			}
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -5333,6 +5340,7 @@ public class SaveMappedFiles {
 			out.close();
 			uploadReport.setFileType(worksheetName);
 			uploadReport.setFilePath(filePath);
+			uploadReport.setNoOfErrors(errorSet.size());
 			uploadReport.setDescription("Imported");
 			uploadReport.setSeller(sellerService.getSeller(sellerId));
 			if (isError) {

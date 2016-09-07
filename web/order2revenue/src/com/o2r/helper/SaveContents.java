@@ -3376,6 +3376,8 @@ public class SaveContents {
 			uploadReport.setFilePath(filePath);
 			uploadReport.setDescription("Imported");
 			uploadReport.setSeller(sellerService.getSeller(sellerId));
+			uploadReport.setNoOfErrors(errorSet.size());
+			
 			if (isError) {
 				uploadReport.setStatus("Failed");
 			} else {

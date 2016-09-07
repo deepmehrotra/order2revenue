@@ -33,6 +33,8 @@ public class UploadReport {
 	@Column
 	private float timeTaken;
 	@Column
+	private long noOfErrors;
+	@Column
 	private Date uploadDate;
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Seller seller;
@@ -99,6 +101,14 @@ public class UploadReport {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public long getNoOfErrors() {
+		return noOfErrors;
+	}
+
+	public void setNoOfErrors(long noOfErrors) {
+		this.noOfErrors = noOfErrors;
 	}
 
 	public static class OrderByDate implements Comparator<UploadReport> {
