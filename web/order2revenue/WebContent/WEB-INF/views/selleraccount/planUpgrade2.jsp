@@ -9,33 +9,7 @@
  <jsp:include page="../globalcsslinks.jsp"></jsp:include>
   <script type="text/javascript"
     src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script type="text/javascript">
-    function onclickviewExpCat(id) {
-       $.ajax({
-            url : 'viewExpenseGroup.html?expcategoryId='+id,
-            success : function(data) {
-            	if($(data).find('#j_username').length > 0){
-            		window.location.href = "orderindex.html";
-            	}else{
-                	$('#centerpane').html(data);
-            	}
-            }
-        });
-    }
-    function onclickAddTaxCategory() {
-    	  $.ajax({
-            url : 'addTaxCategory.html',
-            success : function(data) {
-            	if($(data).find('#j_username').length > 0){
-            		window.location.href = "orderindex.html";
-            	}else{
-                	$('#centerpane').html(data);
-            	}
-            }
-        });
-    }
- 
-</script>
+
 <style type="text/css">
 	.column
 	{
@@ -73,7 +47,15 @@
 											Invoice ID:
 										</td>
 										<td>
-											<c:out value="${accountTransaction.invoiceId}"/>
+											${accountTransaction.invoiceId}
+										</td>
+									</tr>
+									<tr>
+										<td>
+											Status:
+										</td>
+										<td>
+											<c:out value="${accountTransaction.status}"/>
 										</td>
 									</tr>
 									<tr>

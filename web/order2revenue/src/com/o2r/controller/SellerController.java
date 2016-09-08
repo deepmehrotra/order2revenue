@@ -554,11 +554,12 @@ public class SellerController {
 			@ModelAttribute("command") PlanBean planBean, BindingResult result) {
 
 		log.info("$$$ thankyou Starts : SellerController $$$");
+		Map<String, Object> model =null;
 		try {
 		Double currTotalAmount = new Double(request.getParameter("totalAmount"));
 		Long currOrderCount = new Long(request.getParameter("orderCount"));
 		String txnId=request.getParameter("returntxnid");
-		Map<String, Object> model = new HashMap<String, Object>();
+		model =new HashMap<String, Object>();
 		String status=request.getParameter("payusuccessful")!=null?request.getParameter("payusuccessful"):"";
 		String txnStat="";
 		log.info(" seller :"+helperClass.getSellerIdfromSession(request)+"status "+status+" txnId "+txnId);
@@ -571,14 +572,12 @@ public class SellerController {
 			else
 				txnStat="Failure";
 		}
-		
-	
-		
 			model.put("currTotalAmount", currTotalAmount);
 			model.put("currOrderCount", currOrderCount);
 			AccountTransaction at = sellerService.planUpgrade(txnStat,txnId,
 					planBean.getPid(), currTotalAmount, currOrderCount,
 					helperClass.getSellerIdfromSession(request));
+			System.out.println(" At invoice id : "+at.getInvoiceId());
 			model.put("accountTransaction", at);
 		} catch (CustomException ce) {
 			log.error("planUpgrade2 exception : " + ce.toString());

@@ -511,7 +511,7 @@ public boolean empty(String s)
 				<div class="col-lg-12 text-center">
 					<br>
 					<p style="font-weight:bolder;">
-						<a href="#">Plz note</a> the above mentioned charges are subjected to additional service tax @ <c:out value="${serviceTax}" />% over and above the stated charges. No additional or hidden charges<br>
+						<a href="#">Plz note</a> the above mentioned charges are subjected to additional service tax @ 15% over and above the stated charges. No additional or hidden charges<br>
 						<a href="#">Order Count</a> is the number of orders purchased by the seller. The seller can choose to recharge his account with any amount equal to greater than the stated minimum amounts.<br>
 						<a href="#">Purchased Orders</a> have unlimited time validity. They can used as per the consumption levels without any fixed monthly.liability.<br>
 						The seller will receive reminders to recharge his account when only 10% of purchased order count.are left in the order bucket.

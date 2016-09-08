@@ -264,8 +264,9 @@ public class SellerDaoImpl implements SellerDao {
 			if (seller.getSellerAccount() == null) {
 				throw new Exception();
 			}
-			log.info(" Current ORDER BUCKET : "+ seller.getSellerAccount().getOrderBucket());
-			System.out.println(" txnid : "+txnid);
+			log.info(" Current ORDER BUCKET : "+ seller.getSellerAccount().getOrderBucket()+"txnid : "+txnid);
+			if(txnStat.equals("Success"))
+			{
 			seller.getSellerAccount().setOrderBucket(
 					seller.getSellerAccount().getOrderBucket()
 							+ orderCount);
@@ -275,6 +276,7 @@ public class SellerDaoImpl implements SellerDao {
 			seller.getSellerAccount().setPlanId(
 					plan.getPid());
 			seller.setPlan(plan);
+			}
 			if (seller.getSellerAccount().getLastLogin() == null
 					|| seller.getSellerAccount().isAccountStatus() == false) {
 				seller.getSellerAccount().setAccountStatus(true);
