@@ -626,7 +626,7 @@ public class SaveMappedFiles {
 					if (taxcat != null)
 						otb.setTaxCategtory(taxcat.getTaxCatName());
 					else {
-						errorMessage.append("Tax Category does not exist ");
+						errorMessage.append("No Tax Category mapped for this product ");
 						validaterow = false;
 					}
 					}
@@ -1218,7 +1218,7 @@ public class SaveMappedFiles {
 					if (taxcat != null)
 						otb.setTaxCategtory(taxcat.getTaxCatName());
 					else {
-						errorMessage.append("Tax Category does not exist ");
+						errorMessage.append("No Tax Category mapped for this product ");
 						validaterow = false;
 					}
 
@@ -1839,7 +1839,7 @@ public class SaveMappedFiles {
 					if (taxcat != null)
 						otb.setTaxCategtory(taxcat.getTaxCatName());
 					else {
-						errorMessage.append("Tax Category does not exist ");
+						errorMessage.append("No Tax Category mapped for this product ");
 						validaterow = false;
 					}
 
@@ -2094,16 +2094,16 @@ public class SaveMappedFiles {
 								.get("Order Recieved Date"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							
 							try {
-								/*String dateStr = entry.getCell(index).toString();
-								String date = "";
-								if (dateStr.contains(" ")) {
-									date = entry.getCell(index).toString().substring(0, entry.getCell(index).toString().indexOf(" "));
+								if (HSSFDateUtil.isCellDateFormatted(entry
+										.getCell(index))) {
+									order.setOrderDate(entry.getCell(index)
+											.getDateCellValue());
 								} else {
-									date = entry.getCell(index).toString();
+									String date = entry.getCell(index).toString();
+									order.setOrderDate(new Date(date));
 								}
-								order.setOrderDate(format.parse(date));*/
-								order.setOrderDate(entry.getCell(index).getDateCellValue());
 							} catch (Exception e) {
 								errorMessage
 										.append(" Order Received Date format is wrong ,");
@@ -2284,18 +2284,16 @@ public class SaveMappedFiles {
 								.get("Order Shipped Date"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							
 							try {
-								String date = entry.getCell(index).toString();
-								order.setShippedDate(new Date(date));
-								/*String dateStr = entry.getCell(index).toString();
-								String date = "";
-								if (dateStr.contains(" ")) {
-									date = entry.getCell(index).toString().substring(0, entry.getCell(index).toString().indexOf(" "));
+								if (HSSFDateUtil.isCellDateFormatted(entry
+										.getCell(index))) {
+									order.setShippedDate(entry.getCell(index)
+											.getDateCellValue());
 								} else {
-									date = entry.getCell(index).toString();
+									String date = entry.getCell(index).toString();
+									order.setShippedDate(new Date(date));
 								}
-								order.setShippedDate(format.parse(date));*/
-								//order.setShippedDate(entry.getCell(index).getDateCellValue());
 							} catch (Exception e) {
 								errorMessage
 										.append(" Shipped Date formate is wrong ,");
@@ -2426,7 +2424,7 @@ public class SaveMappedFiles {
 					if (taxcat != null)
 						otb.setTaxCategtory(taxcat.getTaxCatName());
 					else {
-						errorMessage.append("Tax Category does not exist ");
+						errorMessage.append("No Tax Category mapped for this product ");
 						validaterow = false;
 					}
 
@@ -3582,7 +3580,7 @@ public class SaveMappedFiles {
 							try {
 								if (HSSFDateUtil.isCellDateFormatted(entry
 										.getCell(index))) {
-									order.setOrderDate(entry.getCell(index)
+									order.setShippedDate(entry.getCell(index)
 											.getDateCellValue());
 								} else {
 									String date = entry.getCell(index).toString();
@@ -3784,7 +3782,7 @@ public class SaveMappedFiles {
 					if (taxcat != null)
 						otb.setTaxCategtory(taxcat.getTaxCatName());
 					else {
-						errorMessage.append("Tax Category does not exist ");
+						errorMessage.append("No Tax Category mapped for this product ");
 						validaterow = false;
 					}
 
@@ -4982,7 +4980,7 @@ public class SaveMappedFiles {
 					if (taxcat != null)
 						otb.setTaxCategtory(taxcat.getTaxCatName());
 					else {
-						errorMessage.append("Tax Category does not exist ");
+						errorMessage.append("No Tax Category mapped for this product ");
 						validaterow = false;
 					}
 
