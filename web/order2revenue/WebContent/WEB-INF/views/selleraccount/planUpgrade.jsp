@@ -50,7 +50,7 @@ public boolean empty(String s)
       		String paramName = (String)paramNames.nextElement();
       
       		String paramValue = request.getParameter(paramName);
-
+System.out.println();
 		params.put(paramName,paramValue);
 	}
 	String txnid ="";
@@ -153,6 +153,7 @@ public boolean empty(String s)
 			$(".currOrderCount").val(orderCount);
 			localStorage.setItem("totalAmount", totalAmount);
 			localStorage.setItem("orderCount", orderCount);
+			localStorage.setItem("txnid", '<%= txnid %>');
 			localStorage.setItem("pid", $(".selectPlanField").val());
 			$(".currAmountText").html(minAmount);
 			$(".currTaxAmountText").html(taxAmount);
@@ -192,7 +193,8 @@ public boolean empty(String s)
 				$(".payuAmount").val(totalAmount);
 				localStorage.setItem("totalAmount", totalAmount);
 				localStorage.setItem("orderCount", orderCount);
-				localStorage.setItem("pid", $(".selectPlanField").val());				
+				localStorage.setItem("pid", $(".selectPlanField").val());	
+				localStorage.setItem("txnid", '<%= txnid %>');
 			} else{
 				$(".currTotalAmount").val(0);				
 				$(".currAmountText").html(0);
@@ -355,6 +357,8 @@ public boolean empty(String s)
 					<div class="col-lg-3">
 						<div class="column text-center">
 							<form id="selectPlan" action="thankyou.html" method="post" >
+							<input type="hidden" id='returntxnid' name="returntxnid" value="" />
+							<input type="hidden" id='payusuccessful' name="payusuccessful" value="" />
 							<table class="table"cellspacing="0"cellpadding="0" border="0">
 								<tbody>
 									<tr>
@@ -487,18 +491,20 @@ public boolean empty(String s)
 	var payUParam = window.location.search.split("?");
 	if(payUParam.length > 1){
 		var payUSuccess = payUParam[1].split("=")[1];
-		if(payUSuccess == "true"){
+		
 			var totalAmount = localStorage.getItem("totalAmount");
 			var orderCount = localStorage.getItem("orderCount");
 			var pid = localStorage.getItem("pid");
+			var txnid = localStorage.getItem("txnid");
+			//alert("txnid : "+txnid);
 			$(".currTotalAmount").val(totalAmount);
 			$(".currOrderCount").val(orderCount);
 			$(".selectPlanField").val(pid);
+			$("#returntxnid").val(txnid);
+			$("#payusuccessful").val(payUSuccess);
 			$("#selectPlan").submit();
 			localStorage.clear();
-		} else{
-			console.log("PayU Failure");
-		}
+		
 	} else{
 		if (hash == '')
 			console.log("Initial Call");

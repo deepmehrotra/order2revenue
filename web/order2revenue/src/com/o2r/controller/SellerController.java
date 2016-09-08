@@ -513,6 +513,9 @@ public class SellerController {
 
 		log.info("$$$ planUpgrade Starts : SellerController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
+		String status=request.getParameter("payusuccessful");
+		
+		System.out.println(" Upgraevalue payusuccessful: "+request.getParameter("payusuccessful"));
 		try {
 			model.put("upgrade", ConverterClass
 					.prepareListofPlanBean(planService.listPlans()));
@@ -536,6 +539,7 @@ public class SellerController {
 	@RequestMapping("/seller/payumoney.html")
 	public ModelAndView payuMoney(HttpServletRequest request,
 			@ModelAttribute("command") PlanBean planBean, BindingResult result) {
+		System.out.println(" payumoney .html called");
 		return new ModelAndView("selleraccount/payuform");
 	}
 
@@ -543,14 +547,32 @@ public class SellerController {
 	public ModelAndView planUpgrade2(HttpServletRequest request,
 			@ModelAttribute("command") PlanBean planBean, BindingResult result) {
 
-		log.info("$$$ planUpgrade2 Starts : SellerController $$$");
+		log.info("$$$ thankyou Starts : SellerController $$$");
 		Double currTotalAmount = new Double(request.getParameter("totalAmount"));
 		Long currOrderCount = new Long(request.getParameter("orderCount"));
+		String txnId=request.getParameter("returntxnid");
 		Map<String, Object> model = new HashMap<String, Object>();
+		System.out.println(" Order count in thank you page : "+currOrderCount);
+		System.out.println(" Amount in thank you page : "+currTotalAmount);
+		System.out.println(" txnId in thank you page : "+txnId);
+		String status=request.getParameter("payusuccessful");
+		String txnStat="";
+		System.out.println(" Upgraevalue payusuccessful thank you: "+request.getParameter("payusuccessful"));
+		
+		if(status!=null)
+		{
+			model.put("status", status);
+			if(status.equals("true"))
+				txnStat="Success";
+			else
+				txnStat="Failure";
+		}
+		
+	
 		try {
 			model.put("currTotalAmount", currTotalAmount);
 			model.put("currOrderCount", currOrderCount);
-			AccountTransaction at = sellerService.planUpgrade(
+			AccountTransaction at = sellerService.planUpgrade(txnStat,txnId,
 					planBean.getPid(), currTotalAmount, currOrderCount,
 					helperClass.getSellerIdfromSession(request));
 			model.put("accountTransaction", at);

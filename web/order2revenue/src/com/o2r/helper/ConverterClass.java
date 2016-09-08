@@ -1517,7 +1517,6 @@ public class ConverterClass {
 				bean.setPlanId(plan.getPlanId());
 				bean.setPlanPrice(plan.getPlanPrice());
 				beans.add(bean);
-				System.out.println(beans);
 			}
 		}
 		return beans;

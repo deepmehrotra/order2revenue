@@ -249,7 +249,7 @@ public class SellerDaoImpl implements SellerDao {
 	}
 
 	@Override
-	public AccountTransaction planUpgrade(int pid, double totalAmount, long orderCount, int sellerid)throws CustomException {
+	public AccountTransaction planUpgrade(String txnStat,String txnid,int pid, double totalAmount, long orderCount, int sellerid)throws CustomException {
 		
 
 		log.info("*** planUpgrade Starts : SellerDaoImpl ****");
@@ -264,7 +264,8 @@ public class SellerDaoImpl implements SellerDao {
 			if (seller.getSellerAccount() == null) {
 				throw new Exception();
 			}
-			log.debug(" Current ORDER BUCKET : "+ seller.getSellerAccount().getOrderBucket());
+			log.info(" Current ORDER BUCKET : "+ seller.getSellerAccount().getOrderBucket());
+			System.out.println(" txnid : "+txnid);
 			seller.getSellerAccount().setOrderBucket(
 					seller.getSellerAccount().getOrderBucket()
 							+ orderCount);
@@ -287,15 +288,15 @@ public class SellerDaoImpl implements SellerDao {
 
 			Random r = new Random();
 			int randomId = r.nextInt(9999999);
-			String invoiceId = "O2R" + randomId;
+			String invoiceId = "O2R" +sellerid+"-"+ randomId;
 
 			at = new AccountTransaction();
 			at.setTransactionDate(new Date());
 			at.setTransactionAmount(totalAmount);
 			at.setCurrentOrderCount(orderCount);
-			at.setStatus("Done");
+			at.setStatus(txnStat);
 			at.setInvoiceId(invoiceId);
-			at.setTransactionId("Received From Third Party: PayUMoney");
+			at.setTransactionId(txnid);
 			seller.getSellerAccount().getAccountTransactions().add(at);
 			session.saveOrUpdate(seller);
 

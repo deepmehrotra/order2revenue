@@ -56,7 +56,15 @@
                 <div class="col-lg-12">
 					<div class="col-lg-6 text-center" style="margin-top: 50px;">
 						<img src="/O2R/seller/img/check.png" alt="check" style="float: left; width: 20%;">
-						<h1>Payment Successful</h1>
+						<c:choose>
+							<c:when test='${status =="true"}'>
+							<h1>Payment Successful</h1>
+							</c:when>
+							<c:otherwise>
+							<h1>Sorry! Your payment failed.</h1>
+							</c:otherwise>
+						</c:choose>
+						
 						<div>
 							<table cellpadding="0" cellspacing="0" border="1" width="50%" style="position: relative;left: 86px;top: 23px;">
 								<tbody>
@@ -112,7 +120,10 @@
 							<br>
 							<img src="/O2R/seller/img/pdf.png" alt="pdf">
 							<figcaption>Download Invoice</figcaption>
+							<c:choose>
+							<c:when test='${status =="true"}'>
 							<h1>
+							
 								Thank You 
 							</h1>
 							<h3>
@@ -124,7 +135,17 @@
 								"Print Record" Button.<br>
 								For any other query feel free to contact us @ Customer Care.
 							</p>
-
+					</c:when>
+					<c:otherwise>
+					<h1>
+							
+								Sorry for the inconvenience!
+							</h1>
+							<h3>
+								Contact admin and know status about your payment!
+							</h3>
+							</c:otherwise>
+					</c:choose>
 						</div>
 					</div>
                 </div>

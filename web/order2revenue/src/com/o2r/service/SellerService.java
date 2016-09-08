@@ -26,7 +26,7 @@ public interface SellerService {
  
  public Seller getSeller(String email)throws CustomException;
  
- public AccountTransaction planUpgrade(int pid, double totalAmount, long orderCount, int sellerid)throws CustomException;
+ public AccountTransaction planUpgrade(String txnStat,String txnid,int pid, double totalAmount, long orderCount, int sellerid)throws CustomException;
  
  public List<State> listStates();
  public State getStateByName(String statename) throws CustomException;

@@ -1,7 +1,6 @@
 package com.o2r.dao;
 
 import java.util.List;
-import java.util.Properties;
 
 import com.o2r.helper.CustomException;
 import com.o2r.model.AccountTransaction;
@@ -26,7 +25,7 @@ public interface SellerDao {
  
  public Seller getSeller(String email)throws CustomException;
  
- public AccountTransaction planUpgrade(int pid, double totalAmount, long orderCount, int sellerid)throws CustomException;
+ public AccountTransaction planUpgrade(String txcStat,String txnid,int pid, double totalAmount, long orderCount, int sellerid)throws CustomException;
 
  public List<State> listStates();
 
@@ -45,5 +44,6 @@ public Seller getSellerVerCode(String verCode);
 public boolean sendMail(String to, String subject, String body);
 
 public List<AccountTransaction> getAccountTransactions(int sellerId);
+
 
 }

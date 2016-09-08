@@ -63,8 +63,8 @@ public class SellerServiceImpl implements SellerService,ServletContextAware {
 		return sellerDao.getSeller(email);
 	}
 
-	public AccountTransaction planUpgrade(int pid, double totalAmount, long orderCount, int sellerid) throws CustomException {
-		return sellerDao.planUpgrade(pid, totalAmount,orderCount, sellerid);
+	public AccountTransaction planUpgrade(String txnStat,String txnid,int pid, double totalAmount, long orderCount, int sellerid) throws CustomException {
+		return sellerDao.planUpgrade(txnStat,txnid,pid, totalAmount,orderCount, sellerid);
 	}
 	
 	public void updateProcessedOrdersCount(int sellerId, int processedOrderCount) throws CustomException {
