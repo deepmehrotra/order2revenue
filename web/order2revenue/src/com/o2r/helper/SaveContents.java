@@ -296,6 +296,7 @@ public class SaveContents {
 					}
 					if (entry.getCell(7) != null
 							&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						entry.getCell(7).setCellType(HSSFCell.CELL_TYPE_STRING);
 						order.setInvoiceID(entry.getCell(7).toString());
 					} else {
 						errorMessage.append(" Invoice ID is null;");
@@ -303,6 +304,7 @@ public class SaveContents {
 					}
 					if (entry.getCell(8) != null
 							&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						entry.getCell(8).setCellType(HSSFCell.CELL_TYPE_STRING);
 						order.setSubOrderID(entry.getCell(8).toString());
 					}
 					if (entry.getCell(9) != null
@@ -1430,7 +1432,7 @@ public class SaveContents {
 					if (entry.getCell(0) != null
 							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						Category productCategory = categoryService.getSubCategory(entry.getCell(0).toString(), sellerId);
-						if(productCategory != null){
+						if(productCategory != null){							
 							if (entry.getCell(1) != null
 									&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								if (entry.getCell(2) != null
@@ -1442,49 +1444,49 @@ public class SaveContents {
 									}
 									if(taxCategory != null){
 										if(entry.getCell(2).toString().equalsIgnoreCase("LST")){
-											categoryList = taxCategory.getProductCategoryLST();
-											if(categoryList != null){
-												boolean check = true;
-												for(Category category : categoryList){
-													if(category.getCatName().equalsIgnoreCase(productCategory.getCatName())){
-														errorMessage.append("Product Category is Already Mapped.");
-														check = false;
-														validaterow = false;
+											if(taxCategory.getTaxCatType().equalsIgnoreCase("LST")){
+												if(productCategory.getLST() == null){
+													categoryList = taxCategory.getProductCategoryLST();
+													if(categoryList != null){
+														productCategory.setLST(taxCategory);
+														categoryList.add(productCategory);
+														taxCategory.setProductCategoryLST(categoryList);
+													} else {
+														categoryList = new ArrayList<Category>();	
+														productCategory.setLST(taxCategory);
+														categoryList.add(productCategory);
+														taxCategory.setProductCategoryLST(categoryList);
 													}
-												}
-												if(check == true){
-													productCategory.setLST(taxCategory);
-													categoryList.add(productCategory);
-													taxCategory.setProductCategoryLST(categoryList);
-												}
+												} else {
+													errorMessage.append("Product Is Already Mapped.");
+													validaterow = false;
+												}												
 											} else {
-												categoryList = new ArrayList<Category>();	
-												productCategory.setLST(taxCategory);
-												categoryList.add(productCategory);
-												taxCategory.setProductCategoryLST(categoryList);
-											}
+												errorMessage.append("Tax Type is Invalid For This Tax Category.");
+												validaterow = false;
+											}																						
 										} else if(entry.getCell(2).toString().equalsIgnoreCase("CST")){
-											categoryList = taxCategory.getProductCategoryCST();
-											if(categoryList != null){
-												boolean check = true;
-												for(Category category : categoryList){
-													if(category.getCatName().equalsIgnoreCase(productCategory.getCatName())){
-														errorMessage.append("Product Category is Already Mapped.");
-														check = false;
-														validaterow = false;
+											if(taxCategory.getTaxCatType().equalsIgnoreCase("CST")){
+												if(productCategory.getCST() == null){
+													categoryList = taxCategory.getProductCategoryCST();
+													if(categoryList != null){
+														productCategory.setCST(taxCategory);
+														categoryList.add(productCategory);
+														taxCategory.setProductCategoryCST(categoryList);
+													} else {
+														categoryList = new ArrayList<Category>();	
+														productCategory.setCST(taxCategory);
+														categoryList.add(productCategory);
+														taxCategory.setProductCategoryCST(categoryList);
 													}
-												}
-												if(check == true){
-													productCategory.setCST(taxCategory);
-													categoryList.add(productCategory);
-													taxCategory.setProductCategoryCST(categoryList);
-												}
+												} else {
+													errorMessage.append("Product Is Already Mapped.");
+													validaterow = false;
+												}												
 											} else {
-												categoryList = new ArrayList<Category>();	
-												productCategory.setCST(taxCategory);
-												categoryList.add(productCategory);
-												taxCategory.setProductCategoryCST(categoryList);
-											}
+												errorMessage.append("Tax Type is Invalid For This Tax Category.");
+												validaterow = false;
+											}																						
 										} else {
 											errorMessage.append("Tax Type is Not Valid.");
 											validaterow = false;
@@ -2070,38 +2072,53 @@ public class SaveContents {
 								&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(1).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							Order onj = orderService.searchAsIsOrder(
+							List<Order> onj = orderService.searchAsIsOrder(
 									"channelOrderID", entry.getCell(1)
 											.toString(), sellerId);
 							if (onj != null) {
-								channelOrderId = onj.getChannelOrderID();
+								if(onj.size() == 1){
+									channelOrderId = onj.get(0).getChannelOrderID();
+								} else {
+									errorMessage.append("Multiple Orders With Channel Order ID.");
+									validaterow = false;
+								}								
 							} else if (entry.getCell(2) != null
 									&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								onj = orderService.searchAsIsOrder(
 										"subOrderID", entry.getCell(2)
 												.toString(), sellerId);
 								if (onj != null) {
-									channelOrderId = onj.getChannelOrderID();
+									if(onj.size() == 1){
+										channelOrderId = onj.get(0).getChannelOrderID();
+									} else {
+										errorMessage.append("Multiple Orders With Secondary Order ID.");
+										validaterow = false;
+									}
 								} else {
 									errorMessage
-											.append(" No Orders with Channel OrderId And Secondary Order ID");
+											.append(" No Orders with Channel OrderId And Secondary Order ID.");
 									validaterow = false;
 								}
 							} else {
 								errorMessage
-										.append(" Channel OrderId not present, Enter Secondary Order ID");
+										.append(" Channel OrderId not present, Enter Secondary Order ID.");
 								validaterow = false;
 							}
 						} else if (entry.getCell(2) != null
 								&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							Order onj = orderService.searchAsIsOrder(
+							List<Order> onj = orderService.searchAsIsOrder(
 									"subOrderID", entry.getCell(2).toString(),
 									sellerId);
 							if (onj != null) {
-								channelOrderId = onj.getChannelOrderID();
+								if(onj.size() == 1){
+									channelOrderId = onj.get(0).getChannelOrderID();
+								} else {
+									errorMessage.append("Multiple Orders With Secondary Order ID.");
+									validaterow = false;
+								}
 							} else {
 								errorMessage
-										.append(" No Orders with Secondary Order ID, Enter Channel Order ID");
+										.append(" No Orders with Secondary Order ID, Enter Channel Order ID.");
 								validaterow = false;
 							}
 						} else {
@@ -2464,7 +2481,7 @@ public class SaveContents {
 				validaterow = true;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				orderReturn = new OrderRTOorReturn();
-				Order ord = null;
+				List<Order> ord = null;
 				String criteria = "";
 				String column = null;
 				String id = null;
@@ -2550,13 +2567,18 @@ public class SaveContents {
 										false, false);
 							}
 							if (ord != null) {
-								if(ord.getOrderReturnOrRTO().getReturnDate() == null){
-									order.setChannelOrderID(ord.getChannelOrderID());
-									id = order.getChannelOrderID();
+								if(ord.size() == 1){
+									if(ord.get(0).getOrderReturnOrRTO().getReturnDate() == null){
+										order.setChannelOrderID(ord.get(0).getChannelOrderID());
+										id = order.getChannelOrderID();
+									} else {
+										validaterow = false;
+										errorMessage.append("Return Already Recieved. ");
+									}
 								} else {
 									validaterow = false;
-									errorMessage.append("Return Already Recieved. ");
-								}
+									errorMessage.append("Multiple Orders With This ID.");
+								}								
 							} else if (orderlist != null
 									&& orderlist.size() != 0) {
 								if (orderlist.size() == 1) {
