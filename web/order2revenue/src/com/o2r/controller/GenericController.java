@@ -113,7 +113,7 @@ public class GenericController {
 
 		logger.info("$$$ welcome Starts : GenericController $$$");
 		logger.info("catalina.base : " + System.getProperty("catalina.base"));
-		logger.info("&&&&&&& Sessoin ID : " + request.getSession().getId());
+		//logger.info("&&&&&&& Sessoin ID : " + request.getSession().getId());
 
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();

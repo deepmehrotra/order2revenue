@@ -18,7 +18,7 @@ public class HelperClass {
 	public int getSellerIdfromSession(HttpServletRequest request)
 			throws Exception {
 		
-		System.out.println("&&&&&&& Sessoin ID : " + request.getSession().getId());
+		//System.out.println("&&&&&&& Sessoin ID : " + request.getSession().getId());
 		int sellerId = 0;
 		System.out.println(" Inside seller id from session :"
 				+ request.getUserPrincipal().getName());
