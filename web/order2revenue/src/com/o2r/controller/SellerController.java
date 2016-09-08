@@ -3,6 +3,7 @@ package com.o2r.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -520,7 +521,6 @@ public class SellerController {
 			model.put("upgrade", ConverterClass
 					.prepareListofPlanBean(planService.listPlans()));
 			int sellerId = helperClass.getSellerIdfromSession(request);
-			System.out.println(" Dataconfig : "+dataConfig.getPayuMerchantKey());
 			model.put("myAccount", sellerService.getSeller(sellerId));
 			model.put("serviceTax", dataConfig.getServiceTax());
 			model.put("failurl", dataConfig.getFailurl());
@@ -554,18 +554,16 @@ public class SellerController {
 			@ModelAttribute("command") PlanBean planBean, BindingResult result) {
 
 		log.info("$$$ thankyou Starts : SellerController $$$");
+		try {
 		Double currTotalAmount = new Double(request.getParameter("totalAmount"));
 		Long currOrderCount = new Long(request.getParameter("orderCount"));
 		String txnId=request.getParameter("returntxnid");
 		Map<String, Object> model = new HashMap<String, Object>();
-		System.out.println(" Order count in thank you page : "+currOrderCount);
-		System.out.println(" Amount in thank you page : "+currTotalAmount);
-		System.out.println(" txnId in thank you page : "+txnId);
-		String status=request.getParameter("payusuccessful");
+		String status=request.getParameter("payusuccessful")!=null?request.getParameter("payusuccessful"):"";
 		String txnStat="";
-		System.out.println(" Upgraevalue payusuccessful thank you: "+request.getParameter("payusuccessful"));
-		
-		if(status!=null)
+		log.info(" seller :"+helperClass.getSellerIdfromSession(request)+"status "+status+" txnId "+txnId);
+		log.info("currOrderCount : "+currOrderCount);
+		if(status!=null&&!StringUtils.isEmpty(status))
 		{
 			model.put("status", status);
 			if(status.equals("true"))
@@ -575,7 +573,7 @@ public class SellerController {
 		}
 		
 	
-		try {
+		
 			model.put("currTotalAmount", currTotalAmount);
 			model.put("currOrderCount", currOrderCount);
 			AccountTransaction at = sellerService.planUpgrade(txnStat,txnId,
@@ -588,8 +586,15 @@ public class SellerController {
 			model.put("errorTime", ce.getErrorTime());
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
-		} catch (Throwable e) {
-			e.printStackTrace();
+		} catch (NullPointerException e) {
+			//e.printStackTrace();
+			log.error("Failed!", e);
+			model.put("errorMessage", "Got invalid response from payment gateway!If your money is deducted contact admin");
+			model.put("errorTime", new Date());
+			model.put("errorCode", "#400400");
+			return new ModelAndView("globalErorPage", model);
+		}
+		catch (Throwable e) {
 			log.error("Failed!", e);
 		}
 
