@@ -225,6 +225,7 @@
 									Category</option>
 								<option value="ProdCat_Comm_Mapping">Category wise
 									Commission Upload</option>
+								<option value="Tax_Category_Mapping">Tax Category Upload</option>
 							</select>
 						</div>
 						<div class="col-md-4">
@@ -266,8 +267,8 @@
 										<option value="CreateInventoryGroups">Create
 											Inventory Groups</option>
 										<option value="CreateProCat">Create Product Category</option>
-										<option value="prodCat_Comm_Mapping">Category wise
-											Commission Upload</option>
+										<option value="prodCat_Comm_Mapping">Category wise Commission Upload</option>
+										<option value="product_Tax_Mapping">Tax Category Upload</option>
 									</select>
 								</div>
 								<div class="col-md-4">

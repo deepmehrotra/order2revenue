@@ -96,16 +96,16 @@
 		}
 	}
 	function show_sidebar1(){
-		$("#box1").show();		
+		document.getElementById('box1').style.visibility="visible";		
 	}
 	function hide_sidebar1(){
-		$("#box1").hide();		
+		document.getElementById('box1').style.visibility="hidden";	
 	}
 	function show_sidebar(){
-		$("#box").show();		
+		document.getElementById('box').style.visibility="visible";		
 	}
 	function hide_sidebar(){
-		$("#box").hide();		
+		document.getElementById('box').style.visibility="hidden";		
 	}
 </script>
 <style type="text/css">
@@ -116,25 +116,29 @@
 	margin-top: 20px;
 }
 
-#box {
-	width: 81%;
-	height: 100px;
-	background-color: #232728;
-	color: #fff;
-	padding: 5px 0px 11px 6px;
-	text-align: left;
-	margin: 8px 0px 0px -47px;
-}
+#box
+    {
+        width: 55%;
+        background-color: #232728;
+        color: #fff;
+        padding: 7px 0px 5px 8px;
+        text-align: left;
+        float: left;
+        position: relative;
+        top: -36px;
+        right: 49px;
+    }
 
-#box1 {
-	width: 81%;
-	height: 100px;
-	background-color: #232728;
-	color: #fff;
-	padding: 5px 0px 11px 6px;
-	text-align: left;
-	margin: 8px 0px 0px -47px;
-}
+#box1
+    {
+        width: 100%;
+        height: 82px;
+        background-color: #232728;
+        color: #fff;
+        padding: 6px 11px 0px 12px;
+        text-align: left;
+        text-align: justify;
+    }
 
 .heading {
 	color: #00a1f1;
@@ -245,7 +249,7 @@ label.star:before {
 									<c:out value="${myAccount.sellerAccount.orderBucket}" />
 								</p>
 
-								<p id="box" style="display: none;position: relative; left: 20%;">All balance credited
+								<p id="box" style="visibility: hidden;">All balance credited
 									into O2R account is non refundable & can only be used towards
 									processing of orders & purchase of products/services from
 									Uniware.</p>
@@ -287,7 +291,7 @@ label.star:before {
 												<b>Complete Cycle</b>
 											</p>
 										</div>
-										<p id="box1" style="position: relative; left: 25%; display: none;">These bar represent
+										<p id="box1" style="visibility: hidden;">These bar represent
 											the number of order purchased,consumed,remaining during the
 											current cycle and the whole life period</p>
 									</c:when>
@@ -296,7 +300,7 @@ label.star:before {
 									</c:otherwise>
 								</c:choose>						
 							</div>
-							<div class="col-md-12" style="margin-top: -25px;">
+							<div class="col-md-12" style="margin-top: -137px;">
 								<h1 class="heading">Account Summary</h1>
 								<div class="col-md-6 text-center">
 									<p>

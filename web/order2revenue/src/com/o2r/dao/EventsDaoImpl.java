@@ -66,8 +66,7 @@ public class EventsDaoImpl implements EventsDao {
 					}
 				}
 			}
-			session.getTransaction().commit();
-			session.flush();			
+			session.getTransaction().commit();						
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();

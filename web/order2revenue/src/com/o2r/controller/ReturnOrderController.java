@@ -75,7 +75,7 @@ public class ReturnOrderController {
 
 		log.info("$$$ saveReturnOrder Starts : ReturnOrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		int sellerId;
+		int sellerId = 0;
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			orderService.addReturnOrder(orderBean.getChannelOrderID(),
@@ -89,7 +89,7 @@ public class ReturnOrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by seller : "+sellerId, e);
 		}
 		log.info("$$$ saveReturnOrder Ends : ReturnOrderController $$$");
 		return new ModelAndView("redirect:/seller/returnOrRTOlist.html");
@@ -107,9 +107,9 @@ public class ReturnOrderController {
 		String searchString = request.getParameter("searchString");
 		String searchType = request.getParameter("toggler");
 		String searchDateCriteria = request.getParameter("searchDateCriteria");
-
+		int sellerId=0;
 		try {
-
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (searchType.equals("searchByProperty") && searchColumn != null && searchString != null) {
 				if (searchColumn.equals("customerName")
 						|| searchColumn.equals("customerCity")
@@ -117,8 +117,7 @@ public class ReturnOrderController {
 						|| searchColumn.equals("customerPhnNo")) {
 					orderlist = ConverterClass
 							.prepareListofBean(orderService.findOrdersbyCustomerDetails(
-									searchColumn, searchString,
-									helperClass.getSellerIdfromSession(request)));
+									searchColumn, searchString, sellerId));
 				}
 
 				else {
@@ -154,15 +153,11 @@ public class ReturnOrderController {
 								.findOrdersbyPaymentDate(
 										searchDateCriteria,
 										startDate,
-										endDate,
-										helperClass
-												.getSellerIdfromSession(request));
+										endDate, sellerId);
 
 					} else {
 						temporaryorderlist = orderService.findOrdersbyDate(
-								searchDateCriteria, startDate, endDate,
-								helperClass.getSellerIdfromSession(request),
-								false);
+								searchDateCriteria, startDate, endDate, sellerId, false);
 					}
 				}
 				if (temporaryorderlist != null
@@ -179,7 +174,7 @@ public class ReturnOrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by seller : "+sellerId, e);
 		}
 		model.put("searchOrderList", orderlist);
 		log.info("$$$ searchReturnOrder Ends : ReturnOrderController $$$");
@@ -198,6 +193,7 @@ public class ReturnOrderController {
 		log.info("$$$ saveReturnorRTO Starts : ReturnOrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		List<OrderBean> orderlist = null;
+		int sellerId = 0;
 		log.debug("Inside savereturn order : channelordrid : "
 				+ orderBean.getChannelOrderID());
 		log.debug(" orderid : "
@@ -209,12 +205,12 @@ public class ReturnOrderController {
 						.getReturnOrRTOChargestoBeDeducted() + "return date : "
 				+ orderBean.getOrderReturnOrRTO().getReturnDate());
 		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
 			if (orderBean.getChannelOrderID() != null
 					&& orderBean.getOrderReturnOrRTO().getReturnOrRTOId() != null) {
 				orderService.addReturnOrder(orderBean.getChannelOrderID(),
 						ConverterClass.prepareOrderRTOorReturnModel(orderBean
-								.getOrderReturnOrRTO()), helperClass
-								.getSellerIdfromSession(request));
+								.getOrderReturnOrRTO()), sellerId);
 
 			}
 		} catch (CustomException ce) {
@@ -224,7 +220,7 @@ public class ReturnOrderController {
 			model.put("errorCode", ce.getErrorCode());
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
-			log.error("Failed!", e);
+			log.error("Failed! by seller : "+sellerId, e);
 			log.error(e);
 		}
 		log.debug(" Returnorders list : " + orderlist);
@@ -249,7 +245,7 @@ public class ReturnOrderController {
 		List<OrderBean> orderlist = null;
 		List<Order> temporaryorderlist = null;
 		Order order = null;
-		int sellerId;
+		int sellerId = 0;
 		OrderRTOorReturn orderReturn = null;
 		String searchColumn = request.getParameter("searchCriteria");
 		String searchString = request.getParameter("searchString");
@@ -325,17 +321,13 @@ public class ReturnOrderController {
 								.findOrdersbyReturnDate(
 										searchDateCriteria,
 										startDate,
-										endDate,
-										helperClass
-												.getSellerIdfromSession(request));
+										endDate, sellerId);
 					} else if (searchColumn.equals("dateofPayment")) {
 						temporaryorderlist = orderService
 								.findOrdersbyPaymentDate(
 										searchDateCriteria,
 										startDate,
-										endDate,
-										helperClass
-												.getSellerIdfromSession(request));
+										endDate, sellerId);
 
 					} else {
 
@@ -451,7 +443,7 @@ public class ReturnOrderController {
 			return errors;
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed!", e);
+			log.error("Failed! by Seller : "+sellerId, e);
 		}
 		model.put("Result", "OK");
 		model.put("Records", orderlist);
@@ -489,7 +481,7 @@ public class ReturnOrderController {
 		List<MultipartFile> files = uploadForm.getFiles();
 		List<String> fileNames = new ArrayList<String>();
 		MultipartFile fileinput = files.get(0);
-		int sellerId;
+		int sellerId = 0;
 		if (null != files && files.size() > 0) {
 			fileNames.add(files.get(0).getOriginalFilename());
 			try {
@@ -502,7 +494,7 @@ public class ReturnOrderController {
 						applicationPath, uploadReport);
 			} catch (Exception e) {
 				e.printStackTrace();
-				log.error("Failed!", e);
+				log.error("Failed! by Seller : "+sellerId, e);
 				log.debug("Inside exception , filetype not accepted "
 						+ e.getLocalizedMessage());
 			}

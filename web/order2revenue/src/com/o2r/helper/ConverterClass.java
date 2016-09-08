@@ -3220,6 +3220,7 @@ public class ConverterClass {
 				bean.setStatus(uploadReport.getStatus());
 				bean.setTimeTaken(uploadReport.getTimeTaken());
 				bean.setUploadDate(uploadReport.getUploadDate());
+				bean.setNoOfErrors(uploadReport.getNoOfErrors());
 				bean.setUploadedAt(GlobalConstant.toDuration(new Date()
 						.getTime() - uploadReport.getUploadDate().getTime()));
 				uploadReportBeans.add(bean);

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -276,8 +277,10 @@ public class GenericController {
 	}
 
 	@RequestMapping(value = "/login-form", method = RequestMethod.GET)
-	public String redirectlogin() {
+	public String redirectlogin(HttpServletRequest request) {
 		logger.debug(" Inside login-form ");
+		HttpSession session = request.getSession(true);
+		session.setAttribute("isProgress", false);
 		return "login_register";
 	}
 

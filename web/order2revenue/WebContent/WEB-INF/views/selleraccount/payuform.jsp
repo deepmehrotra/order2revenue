@@ -81,7 +81,7 @@ public boolean empty(String s)
 			|| empty(params.get("surl"))
 			|| empty(params.get("furl"))
 			|| empty(params.get("service_provider"))
-	)
+		)
 			
 			error=1;
 		else{
@@ -125,7 +125,7 @@ function submitPayuForm() {
 
 
 <form action="<%= action1 %>" method="post" name="payuForm">
-<input type="hidden" name="key" value="<%= merchant_key %>" />
+	  <input type="hidden" name="key" value="<%= merchant_key %>" />
       <input type="hidden" name="hash" value="<%= hash %>"/>
       <input type="hidden" name="txnid" value="<%= txnid %>" />
       <input type="hidden" name="udf2" value="<%= txnid %>" />

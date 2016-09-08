@@ -487,15 +487,12 @@ public class SaveContents {
 							try {
 								customerBean.setZipcode(zipCode);
 							} catch (Exception e) {
-								log.error("Failed! by SellerId : " + sellerId,
-										e);
-								errorMessage
-										.append("Customer zipcode is corrupted ");
+								log.error("Failed! by SellerId : " + sellerId,e);
+								errorMessage.append("Customer zipcode is corrupted.");
 								validaterow = false;
 							}
 						} else {
-							errorMessage
-									.append("Customer zipcode is not valid ");
+							errorMessage.append("Either invalid zipcode or try after some time while admin will add this to database.");
 							validaterow = false;
 							customerBean.setZipcode(zipCode);
 						}
@@ -1401,7 +1398,149 @@ public class SaveContents {
 		log.info("$$$ saveSKUMappingContents ends : SaveContents $$$");
 		return returnProductConfigMap;
 	}
+	
+	public Map<String, TaxCategory> saveTaxCategoryContents(
+			MultipartFile file, int sellerId, String path,
+			UploadReport uploadReport) throws IOException {
+		log.info("$$$ saveTaxCategoryContents starts : SaveContents $$$");
+		boolean validaterow = true;
+		Map<String, TaxCategory> returnTaxCategoryMap = new HashMap<>();
+		Map<String, TaxCategory> returnTaxCatMap = new LinkedHashMap<String, TaxCategory>();
+		StringBuffer errorMessage = null;		
+		
+		try {
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			HSSFRow entry;
+			Integer noOfEntries = 1;
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			log.info(noOfEntries.toString());
+			log.debug("After getting no of rows" + noOfEntries);
+			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {				
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;
+				TaxCategory taxCategory = null;
+				List<Category> categoryList = null;
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
+				log.debug("Product 1" + entry.getCell(1));
+				log.debug("Product  2" + entry.getCell(2));				
+				try {
+					if (entry.getCell(0) != null
+							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						Category productCategory = categoryService.getSubCategory(entry.getCell(0).toString(), sellerId);
+						if(productCategory != null){
+							if (entry.getCell(1) != null
+									&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								if (entry.getCell(2) != null
+										&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+									if(returnTaxCategoryMap.containsKey(entry.getCell(1).toString())){
+										taxCategory = returnTaxCategoryMap.get(entry.getCell(1).toString());
+									} else {
+										taxCategory = taxDetailService.getTaxCategory(entry.getCell(1).toString(), sellerId);
+									}
+									if(taxCategory != null){
+										if(entry.getCell(2).toString().equalsIgnoreCase("LST")){
+											categoryList = taxCategory.getProductCategoryLST();
+											if(categoryList != null){
+												boolean check = true;
+												for(Category category : categoryList){
+													if(category.getCatName().equalsIgnoreCase(productCategory.getCatName())){
+														errorMessage.append("Product Category is Already Mapped.");
+														check = false;
+														validaterow = false;
+													}
+												}
+												if(check == true){
+													productCategory.setLST(taxCategory);
+													categoryList.add(productCategory);
+													taxCategory.setProductCategoryLST(categoryList);
+												}
+											} else {
+												categoryList = new ArrayList<Category>();	
+												productCategory.setLST(taxCategory);
+												categoryList.add(productCategory);
+												taxCategory.setProductCategoryLST(categoryList);
+											}
+										} else if(entry.getCell(2).toString().equalsIgnoreCase("CST")){
+											categoryList = taxCategory.getProductCategoryCST();
+											if(categoryList != null){
+												boolean check = true;
+												for(Category category : categoryList){
+													if(category.getCatName().equalsIgnoreCase(productCategory.getCatName())){
+														errorMessage.append("Product Category is Already Mapped.");
+														check = false;
+														validaterow = false;
+													}
+												}
+												if(check == true){
+													productCategory.setCST(taxCategory);
+													categoryList.add(productCategory);
+													taxCategory.setProductCategoryCST(categoryList);
+												}
+											} else {
+												categoryList = new ArrayList<Category>();	
+												productCategory.setCST(taxCategory);
+												categoryList.add(productCategory);
+												taxCategory.setProductCategoryCST(categoryList);
+											}
+										} else {
+											errorMessage.append("Tax Type is Not Valid.");
+											validaterow = false;
+										}									
+									} else {
+										errorMessage.append("Tax Category is Not Valid.");
+										validaterow = false;
+									}
+								} else {
+									errorMessage.append("Tax Type is null. ");
+									validaterow = false;
+								}
+							} else {
+								errorMessage.append(" Tax Category is null. ");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append("Product Category Not Exist.");
+							validaterow = false;
+						}						
+					} else {
+						errorMessage.append(" Product Category is null. ");
+						validaterow = false;
+					}
+					if (validaterow) {
+						returnTaxCategoryMap.put(entry.getCell(1).toString(), taxCategory);
+					} else {
+						returnTaxCatMap.put(errorMessage.toString(), taxCategory);
+					}
+				} catch (Exception e) {
+					log.error("Failed! by SellerId : " + sellerId, e);					
+				}				
+			}
+			try {
+				if(returnTaxCategoryMap != null){
+					for(Entry<String, TaxCategory> entryz : returnTaxCategoryMap.entrySet()){
+						taxDetailService.removeProductMapping(entryz.getValue().getTaxCatId(), sellerId);
+						taxDetailService.addTaxCategory(entryz.getValue() , sellerId);
+					}
+				}
+			} catch (Exception ce) {
+				log.error("Failed ! in Saving And Removing TaxCategory By : "+sellerId, ce);
+			}
+			Set<String> errorSet = returnTaxCatMap.keySet();
+			downloadUploadReportXLS(offices, "product_Tax_Mapping", 3, errorSet,
+					path, sellerId, uploadReport);
+		} catch (Exception e) {
 
+			log.error("Failed! by SellerId : " + sellerId, e);
+			addErrorUploadReport("product_Tax_Mapping", sellerId, uploadReport);
+			throw new MultipartException("Constraints Violated");
+		}
+		log.info("$$$ saveTaxCategoryContents ends : SaveContents $$$");
+		return returnTaxCatMap;
+	}
+	
 	// My coding Product Config *********
 
 	public Set<String> saveInventoryGroups(MultipartFile file, int sellerId,
@@ -2410,28 +2549,32 @@ public class SaveContents {
 										entry.getCell(1).toString(), sellerId,
 										false, false);
 							}
-							if (ord != null && ord.getOrderReturnOrRTO().getReturnDate() == null) {
-								order.setChannelOrderID(ord.getChannelOrderID());
-								id = order.getChannelOrderID();
-							} else if (orderlist != null
-									&& orderlist.size() != 0) {
-								if (orderlist.size() == 1
-										&& orderlist.get(0)
-												.getOrderReturnOrRTO()
-												.getReturnDate() == null) {
-									order.setChannelOrderID(orderlist.get(0)
-											.getChannelOrderID());
+							if (ord != null) {
+								if(ord.getOrderReturnOrRTO().getReturnDate() == null){
+									order.setChannelOrderID(ord.getChannelOrderID());
 									id = order.getChannelOrderID();
 								} else {
 									validaterow = false;
-									errorMessage
-											.append("Many Orders or Return accepted With this "
-													+ criteria);
+									errorMessage.append("Return Already Recieved. ");
+								}
+							} else if (orderlist != null
+									&& orderlist.size() != 0) {
+								if (orderlist.size() == 1) {
+									if(orderlist.get(0).getOrderReturnOrRTO().getReturnDate() == null){
+										order.setChannelOrderID(orderlist.get(0).getChannelOrderID());
+										id = order.getChannelOrderID();
+									} else {
+										validaterow = false;
+										errorMessage.append("Return accepted With this "+ criteria);
+									}
+								} else {
+									validaterow = false;
+									errorMessage.append("Many Orders With this "+ criteria);
 								}
 
 							} else {
 								validaterow = false;
-								errorMessage.append("Order doesnt exist or Return Already Recieved. ");
+								errorMessage.append("Order doesnt exist.");
 							}
 						} else {
 							validaterow = false;
@@ -3233,6 +3376,8 @@ public class SaveContents {
 			uploadReport.setFilePath(filePath);
 			uploadReport.setDescription("Imported");
 			uploadReport.setSeller(sellerService.getSeller(sellerId));
+			uploadReport.setNoOfErrors(errorSet.size());
+			
 			if (isError) {
 				uploadReport.setStatus("Failed");
 			} else {

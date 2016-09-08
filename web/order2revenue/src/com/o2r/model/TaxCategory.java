@@ -32,12 +32,13 @@ public class TaxCategory {
 	@Column
 	private Date uploadDate;
 	@Column
-	private float taxPercent;
-	
+	private float taxPercent;	
 	@Column
 	private String taxCatType;
+	
 	@OneToMany(mappedBy="CST", cascade=CascadeType.ALL)
 	private List<Category> productCategoryCST = new ArrayList<Category>();
+	
 	@OneToMany(mappedBy="LST", cascade=CascadeType.ALL)
 	private List<Category> productCategoryLST = new ArrayList<Category>();
 	
