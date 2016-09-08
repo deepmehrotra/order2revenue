@@ -4,6 +4,11 @@ public class DataConfig {
 	private Double serviceTax;
 	private String xlsPath;
 	public String uploadReportPath;
+	private String payuMerchantKey;
+	private String payuSalt;
+	private String payubaseurl;
+	private String successurl;
+	private String failurl;
 
 	public Double getServiceTax() {
 		return serviceTax;
@@ -27,5 +32,45 @@ public class DataConfig {
 
 	public void setUploadReportPath(String uploadReportPath) {
 		this.uploadReportPath = uploadReportPath;
+	}
+
+	public String getPayuMerchantKey() {
+		return payuMerchantKey;
+	}
+
+	public void setPayuMerchantKey(String payuMerchantKey) {
+		this.payuMerchantKey = payuMerchantKey;
+	}
+
+	public String getPayuSalt() {
+		return payuSalt;
+	}
+
+	public void setPayuSalt(String payuSalt) {
+		this.payuSalt = payuSalt;
+	}
+
+	public String getPayubaseurl() {
+		return payubaseurl;
+	}
+
+	public void setPayubaseurl(String payubaseurl) {
+		this.payubaseurl = payubaseurl;
+	}
+
+	public String getSuccessurl() {
+		return successurl;
+	}
+
+	public void setSuccessurl(String successurl) {
+		this.successurl = successurl;
+	}
+
+	public String getFailurl() {
+		return failurl;
+	}
+
+	public void setFailurl(String failurl) {
+		this.failurl = failurl;
 	}	
 }

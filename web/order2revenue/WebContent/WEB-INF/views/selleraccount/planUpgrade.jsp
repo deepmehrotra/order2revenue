@@ -36,10 +36,14 @@ public boolean empty(String s)
 	}
 %>
 <% 	
-	String merchant_key="rKhu3pp4";
+	/* String merchant_key="rKhu3pp4";
 	String salt="r28k5UA4t1";
 	String action1 ="";
-	String base_url="https://test.payu.in";
+	String base_url="https://test.payu.in"; */
+	String merchant_key=request.getAttribute("payuMerchantKey").toString();
+	String salt=request.getAttribute("payuSalt").toString();
+	String action1 ="";
+	String base_url=request.getAttribute("payubaseurl").toString();
 	int error=0;
 	String hashString="";
 	
@@ -50,7 +54,6 @@ public boolean empty(String s)
       		String paramName = (String)paramNames.nextElement();
       
       		String paramValue = request.getParameter(paramName);
-System.out.println();
 		params.put(paramName,paramValue);
 	}
 	String txnid ="";
@@ -142,12 +145,17 @@ System.out.println();
     
 	function updateFields(obj){		
 		if($(obj).val() && "notSelected" != $(obj).val()){
-			var serviceTax = parseFloat('${serviceTax}');
+			/* var serviceTax = parseFloat('${serviceTax}'); */
+			var serviceTax =14;
+			var kktax =.5;
+			var educationcess =.5;
 			var orderCount = parseInt($(obj).find(':selected').data('ordercount'));			
 			var planPrice = $(obj).find(':selected').data('planprice');			
 			var minAmount = parseInt(Math.ceil(orderCount*planPrice));			
 			var taxAmount = parseFloat(parseFloat(minAmount*serviceTax/100).toFixed(2));
-			var totalAmount = minAmount + taxAmount;
+			var kktaxAmount = parseFloat(parseFloat(minAmount*kktax/100).toFixed(2));
+			var educessAmount = parseFloat(parseFloat(minAmount*educationcess/100).toFixed(2));
+			var totalAmount = minAmount + taxAmount+kktaxAmount+educessAmount;
 			$(".currPlanPriceTxt").html(planPrice);			
 			$(".currTotalAmount").val(totalAmount);
 			$(".currOrderCount").val(orderCount);
@@ -159,6 +167,8 @@ System.out.println();
 			$(".currTaxAmountText").html(taxAmount);
 			$(".currTotalAmountText").html(totalAmount);
 			$(".payuAmount").val(totalAmount);
+			$(".kkTaxAmountText").html(kktaxAmount);
+			$(".educessTaxAmountText").html(educessAmount);
 			$(".checkoutButton").removeAttr('disabled');
 		}else{
 			$(".currPlanPriceTxt").html(0);
@@ -179,17 +189,24 @@ System.out.println();
 			var orderCount = parseInt($(".selectPlanField").find(':selected').data('ordercount'));
 			var currOrder = parseInt(currObjVal);			
 			if(currOrder >= orderCount){
-				var serviceTax = parseFloat('${serviceTax}');
+				//var serviceTax = parseFloat('${serviceTax}');
+				var serviceTax =14;
+				var kktax =.5;
+				var educationcess =.5;
 				$(".checkoutButton").removeAttr('disabled');
 				var planPrice = $(".selectPlanField").find(':selected').data('planprice');
 				var minAmount = parseInt(Math.ceil(currOrder*planPrice));
 				var taxAmount = parseFloat(parseFloat(minAmount*serviceTax/100).toFixed(2));
-				var totalAmount = parseFloat(minAmount + taxAmount).toFixed(2);
+				var kktaxAmount = parseFloat(parseFloat(minAmount*kktax/100).toFixed(2));
+				var educessAmount = parseFloat(parseFloat(minAmount*educationcess/100).toFixed(2));
+				var totalAmount = minAmount + taxAmount+kktaxAmount+educessAmount;
 				$(".currTotalAmount").val(totalAmount);
 				$(".currOrderCount").val(currOrder);
 				$(".currAmountText").html(minAmount);
 				$(".currTaxAmountText").html(taxAmount);
 				$(".currTotalAmountText").html(totalAmount);
+				$(".kkTaxAmountText").html(kktaxAmount);
+				$(".educessTaxAmountText").html(educessAmount);
 				$(".payuAmount").val(totalAmount);
 				localStorage.setItem("totalAmount", totalAmount);
 				localStorage.setItem("orderCount", orderCount);
@@ -200,6 +217,8 @@ System.out.println();
 				$(".currAmountText").html(0);
 				$(".currTaxAmountText").html(0);
 				$(".currTotalAmountText").html(0);
+				$(".kkTaxAmountText").html(0);
+				$(".educessTaxAmountText").html(0);
 				$(".checkoutButton").prop('disabled', true);
 				localStorage.clear();
 			}
@@ -208,6 +227,8 @@ System.out.println();
 			$(".currAmountText").html(0);
 			$(".currTaxAmountText").html(0);
 			$(".currTotalAmountText").html(0);
+			$(".kkTaxAmountText").html(0);
+			$(".educessTaxAmountText").html(0);
 			$(".checkoutButton").prop('disabled', true);
 			localStorage.clear();
 		}			
@@ -429,6 +450,22 @@ System.out.println();
 										</td>
 									</tr>
 									<tr>
+										<td style="text-align: right;font-size: 12px;">
+											Krishi Kalyan Cess :
+										</td>
+										<td style="text-align: left;">
+											&#8377; <span class="span kkTaxAmountText">0</span>/-
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: right;font-size: 12px;">
+											Education cess :
+										</td>
+										<td style="text-align: left;">
+											&#8377; <span class="span educessTaxAmountText">0</span>/-
+										</td>
+									</tr>
+									<tr>
 										<td></td>
 										<td class="tabltd">
 											
@@ -458,12 +495,12 @@ System.out.println();
 							    <input type="hidden" name="udf2" value="<%= txnid %>" />
 								<input type="hidden" name="service_provider" value="payu_paisa" />
 							    <input type="hidden" name="amount" class="payuAmount" value="<%= (empty(params.get("amount"))) ? "" : params.get("amount") %>" />
-							    <input type="hidden" name="firstname" id="firstname" value="Test" />
-							    <input type="hidden" name="email" id="email" value="Test44@test.com" />
-								<input type="hidden" name="phone" value="9867921659" />
-								<input type="hidden" name="productinfo" value="Dummy"/>
-								<input type="hidden" name="surl" class="successUrl" value="http://localhost:8080/seller/upgrade.html?payusuccessful=true"/>
-								<input type="hidden" name="furl" class="failureUrl" value="http://localhost:8080/seller/upgrade.html?payusuccessful=false" />
+							    <input type="hidden" name="firstname" id="firstname" value="${myAccount.name}" />
+							    <input type="hidden" name="email" id="email" value="${myAccount.email}" />
+								<input type="hidden" name="phone" value="${myAccount.contactNo}" />
+								<input type="hidden" name="productinfo" value="${myAccount.email}"/>
+								<input type="hidden" name="surl" class="successUrl" value="${successurl}"/>
+								<input type="hidden" name="furl" class="failureUrl" value="${failurl}" />
 					         	<% if(empty(hash)){ %>
 					            	<input type="submit" style="display:none;" value="Submit" />
 					          	<% } %>

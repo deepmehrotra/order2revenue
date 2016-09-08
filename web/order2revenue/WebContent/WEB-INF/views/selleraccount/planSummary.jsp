@@ -170,7 +170,7 @@ h1 span {
 }
 
 div.stars {
-	width: 270px;
+	width: 213px;
 	display: inline-block;
 }
 
@@ -180,8 +180,8 @@ input.star {
 
 label.star {
 	float: right;
-	padding: 10px;
-	font-size: 36px;
+	padding: 7px;
+	font-size: 29px;
 	color: #444;
 	transition: all .2s;
 }
@@ -245,7 +245,7 @@ label.star:before {
 								<p>
 									<b>Orders</b>
 								</p>
-								<p class="para black-color">
+								<p class="para black-color" style="padding: 9px 0px 4px 2px;font-size: 11px;">
 									<c:out value="${myAccount.sellerAccount.orderBucket}" />
 								</p>
 
@@ -341,7 +341,7 @@ label.star:before {
 									</h1>
 									<a href="upgrade.html"><button class="btn"
 											style="background-color: #00a1f1; color: #fff;">Upgrade</button></a>
-									<br> <br> <br>
+									<br> <br>
 									<h3 style="margin-top: 16px;">Last Plan Upgrade Date</h3>
 									<p>
 										<b><fmt:formatDate type="date"
@@ -352,7 +352,7 @@ label.star:before {
 						</div>
 
 						<div class="col-lg-6 text-center">
-							<div class="col-lg-12" style="background: #f5f5f5;">
+							<div class="col-lg-12" style="background: #f5f5f5;overflow:scroll;height: 500px;">
 								<h1 class="heading">Payment History</h1>
 								<table class="table">
 									<thead style="background-color: #e5e7e6;">
@@ -380,7 +380,7 @@ label.star:before {
 								</table>
 							</div>
 							<div class="col-lg-12"
-								style="background: #f5f5f5; margin-top: 20px;">
+								style="background: #f5f5f5; margin-top: 20px;overflow-x: scroll;overflow-y: scroll;">
 								<h1 class="heading">Usage History</h1>
 								<table class="table">
 									<thead style="background-color: #e5e7e6;">

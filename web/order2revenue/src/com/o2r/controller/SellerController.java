@@ -513,15 +513,21 @@ public class SellerController {
 
 		log.info("$$$ planUpgrade Starts : SellerController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		String status=request.getParameter("payusuccessful");
+		/*String status=request.getParameter("payusuccessful");
 		
-		System.out.println(" Upgraevalue payusuccessful: "+request.getParameter("payusuccessful"));
+		System.out.println(" Upgraevalue payusuccessful: "+request.getParameter("payusuccessful"));*/
 		try {
 			model.put("upgrade", ConverterClass
 					.prepareListofPlanBean(planService.listPlans()));
 			int sellerId = helperClass.getSellerIdfromSession(request);
+			System.out.println(" Dataconfig : "+dataConfig.getPayuMerchantKey());
 			model.put("myAccount", sellerService.getSeller(sellerId));
 			model.put("serviceTax", dataConfig.getServiceTax());
+			model.put("failurl", dataConfig.getFailurl());
+			model.put("successurl", dataConfig.getSuccessurl());
+			model.put("payubaseurl", dataConfig.getPayubaseurl());
+			model.put("payuSalt", dataConfig.getPayuSalt());
+			model.put("payuMerchantKey", dataConfig.getPayuMerchantKey());
 		} catch (CustomException ce) {
 			log.error("planUpgrade exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
