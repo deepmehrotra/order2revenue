@@ -153,7 +153,7 @@
 	                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getCategory" name="headers"> Product Category </label></div>
     	                        </div>
 							</c:if>
-							<c:if test="${reportName eq 'paymentsReceievedReport'}">
+							<c:if test="${reportName eq 'totalPaymentsReceived'}">
 		                            <div class="col-md-3">
 		     	                        <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="SelectAll"  id="selectall" name="headers">Select All</label></div>
 		                                <div class="checkbox"><label> <input type="checkbox" class="checkbox1" value="getPaymentId" name="headers"> Payment Id </label></div>
