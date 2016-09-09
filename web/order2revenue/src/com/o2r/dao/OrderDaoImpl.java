@@ -465,6 +465,8 @@ public class OrderDaoImpl implements OrderDao {
 						order.setGrossProfit(order.getPr()
 								- (product.getProductPrice() * order
 										.getQuantity()));
+						order.setGrossMargin(order.getGrossProfit());
+						order.setProductCost(product.getProductPrice());
 
 						if (order.getOrderId() != 0) {
 							System.out.println(" Saving edited order");

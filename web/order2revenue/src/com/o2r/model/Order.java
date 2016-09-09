@@ -106,6 +106,10 @@ public class Order {
 	private String  eventName;
 	@Column
 	private double pccAmount;
+	@Column
+	private double productCost;
+	@Column
+	private double grossMargin;
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<OrderTimeline> orderTimeline=new ArrayList<>();
 	@ManyToOne(cascade=CascadeType.ALL)
@@ -585,5 +589,21 @@ public class Order {
 
 	public void setPoOrder(boolean poOrder) {
 		this.poOrder = poOrder;
+	}
+
+	public double getProductCost() {
+		return productCost;
+	}
+
+	public void setProductCost(double productCost) {
+		this.productCost = productCost;
+	}
+
+	public double getGrossMargin() {
+		return grossMargin;
+	}
+
+	public void setGrossMargin(double grossMargin) {
+		this.grossMargin = grossMargin;
 	}
 }

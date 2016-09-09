@@ -49,6 +49,8 @@ public class OrderBean {
 	private String  eventName;
 	private String  volShippingString;
 	private String  dwShippingString;
+	private double productCost;
+	private double grossMargin;
 	private List<OrderTimeline> orderTimeline = new ArrayList<>();
 	private CustomerBean customer = new CustomerBean();
 	private OrderPaymentBean orderPayment = new OrderPaymentBean();
@@ -470,5 +472,21 @@ public class OrderBean {
 
 	public void setDwShippingString(String dwShippingString) {
 		this.dwShippingString = dwShippingString;
+	}
+
+	public double getProductCost() {
+		return productCost;
+	}
+
+	public void setProductCost(double productCost) {
+		this.productCost = productCost;
+	}
+
+	public double getGrossMargin() {
+		return grossMargin;
+	}
+
+	public void setGrossMargin(double grossMargin) {
+		this.grossMargin = grossMargin;
 	}
 }

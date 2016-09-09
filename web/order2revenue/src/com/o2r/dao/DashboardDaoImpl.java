@@ -80,17 +80,11 @@ public class DashboardDaoImpl implements DashboardDao {
 			+ "(ot.poOrder =0 OR (ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL )) and ot.seller_Id=:sellerId";
 	/*private static final String grossProfitForDurationQuery = "Select sum(grossProfit) from Order_Table ot where "
 			+ "ot.orderDate between :startDate AND :endDate and ot.seller_Id=:sellerId";
-	*/private static final String grossProfitForMPDurationQuery = "select sum((ot.pr-(prd.productPrice*ot.quantity)))"
-			+ " from order_table ot , Product prd where ot.productSkuCode=prd.productSkuCode "
-			+ "and ot.shippedDate between :startDate AND :endDate and "
-			+ "ot.poOrder =0 and prd.seller_id=ot.seller_Id "
-			+ "and ot.seller_Id=:sellerId";
-	private static final String grossProfitForMPReturnDurationQuery = "select sum(((ot.pr-(prd.productPrice*ot.quantity))/ot.quantity)"
-			+ "*orr.returnorrtoQty + orr.estimateddeduction) "
-			+ "from order_table ot , Product prd , orderreturn orr where ot.productSkuCode=prd.productSkuCode "
-			+ "and ot.orderReturnOrRTO_returnId=orr.returnId and orr.returnDate between :startDate AND :endDate "
-			+ "and ot.poOrder =0 and prd.seller_id=ot.seller_Id "
-			+ "and ot.seller_Id=:sellerId";
+	*/private static final String grossProfitForMPDurationQuery = "select sum(ot.grossMargin) from order_table ot  where ot.shippedDate "
+			+ "between :startDate AND :endDate and ot.poOrder =0  and ot.seller_Id=:sellerId";
+	private static final String grossProfitForMPReturnDurationQuery = "select sum(ot.grossMargin-ot.grossProfit) from "
+			+ "order_table ot,orderreturn orr where ot.orderReturnOrRTO_returnId=orr.returnId and"
+			+ " orr.returnDate between :startDate AND :endDate and ot.poOrder =0 and ot.seller_Id=:sellerId";
 	private static final String grossProfitPODurationQuery = "Select sum(ot.grossProfit) as grossProfit"
 			+ " from Order_Table ot where ot.shippedDate "
 			+ "between  :startDate AND :endDate and ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL "
@@ -111,21 +105,20 @@ public class DashboardDaoImpl implements DashboardDao {
 			+ "ort.returnDate between :startDate AND :endDate and ort.returnId=ot.orderReturnOrRTO_returnId "
 			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId GROUP BY YEAR(ort.returnDate), MONTH(ort.returnDate) "
 			+ "order by YEAR(ort.returnDate), MONTH(ort.returnDate)";
-	private static final String grossProfitMPMonthlyQuery = "Select sum((ot.pr-(prd.productPrice*ot.quantity))) as grossProfit,"
-			+ "Monthname(ot.shippedDate) as month ,YEAR(ot.shippedDate) as year from Order_Table ot,Product prd where ot.shippedDate "
-			+ "between  :startDate AND :endDate and ot.productSkuCode=prd.productSkuCode and ot.poOrder =0 "
-			+ "and prd.seller_id=ot.seller_Id and"
-			+ " ot.seller_Id=:id GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate) "
-			+ "ORDER BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
+	private static final String grossProfitMPMonthlyQuery = "Select sum(ot.grossMargin) as grossProfit,"
+			+ "Monthname(ot.shippedDate) as month ,YEAR(ot.shippedDate) as year from Order_Table ot where "
+			+ "ot.shippedDate is not null and ot.shippedDate between "
+			+ ":startDate AND :endDate  and  ot.poOrder =0 and  ot.seller_Id=:sellerId"
+					+ " GROUP BY YEAR(ot.shippedDate), MONTH(ot.shippedDate) "
+					+ " ORDER BY YEAR(ot.shippedDate), MONTH(ot.shippedDate)";
 
-	private static final String grossProfitMPReturnMonthlyQuery = "Select sum(((ot.pr-(prd.productPrice*ot.quantity))/ot.quantity)*orr.returnorrtoQty + orr.estimateddeduction)"
+	private static final String grossProfitMPReturnMonthlyQuery = " Select sum(ot.grossMargin-ot.grossProfit)"
 			+ ",Monthname(orr.returnDate) as month,YEAR(orr.returnDate) as year from "
-			+ "Order_Table ot,orderreturn orr,Product prd where orr.returnDate between "
-			+ ":startDate AND :endDate and ot.productSkuCode=prd.productSkuCode and ot.orderReturnOrRTO_returnId=orr.returnId"
-			+ " and ot.poOrder =0 "
-			+ "and prd.seller_id=ot.seller_Id and ot.seller_Id=:rtid "
-			+ "GROUP BY YEAR(orr.returnDate), MONTH(orr.returnDate)"
-			+ "ORDER BY YEAR(orr.returnDate), MONTH(orr.returnDate)";
+			+ "Order_Table ot,orderreturn orr where orr.returnDate is not null and orr.returnDate between "
+			+ ":startDate AND :endDate and ot.orderReturnOrRTO_returnId=orr.returnId "
+					+ "and ot.poOrder =0 and ot.seller_Id=:sellerId"
+					+ " GROUP BY YEAR(orr.returnDate), MONTH(orr.returnDate) "
+					+ "ORDER BY YEAR(orr.returnDate), MONTH(orr.returnDate)";
 	private static final String grossProfitPOMonthlyQuery = "Select sum(ot.grossProfit) as grossProfit, "
 			+ "Monthname(ot.shippedDate) as month ,"
 			+ "YEAR(ot.shippedDate) as year from Order_Table ot where ot.shippedDate "
@@ -689,6 +682,8 @@ public class DashboardDaoImpl implements DashboardDao {
 			Date startDate, Date endDate, int sellerId) {
 
 		log.info("***grossProfitMonthly starts***");
+		long gpmonthlystarttime=System.currentTimeMillis();
+
 		List<Object[]> results = null;
 		Map<String, Double> gpMonthly = new LinkedHashMap<>();
 		Date gpDate = null;
@@ -697,21 +692,25 @@ public class DashboardDaoImpl implements DashboardDao {
 			Query mpquery = session.createSQLQuery(grossProfitMPMonthlyQuery)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
-					.setParameter("id", sellerId);
+					.setParameter("sellerId", sellerId);
 			Query mpReturnquery = session
 					.createSQLQuery(grossProfitMPReturnMonthlyQuery)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
-					.setParameter("rtid", sellerId);
+					.setParameter("sellerId", sellerId);
 			Query poquery = session.createSQLQuery(grossProfitPOMonthlyQuery)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
 					.setParameter("sellerId", sellerId);
+			
 			Query gpquery = session.createSQLQuery(grossProfitGPMonthlyQuery)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
 					.setParameter("sellerId", sellerId);
+			long mpqueryGPstarttime=System.currentTimeMillis();
 			results = mpquery.list();
+			
+			
 			Iterator mpiterator1 = results.iterator();
 			if (results != null) {
 				while (mpiterator1.hasNext()) {
@@ -729,7 +728,11 @@ public class DashboardDaoImpl implements DashboardDao {
 					}
 				}
 			}
+			long gpqmonthlyGPendtime=System.currentTimeMillis();
+			System.out.println(" time taken for gpqmonthlyGPendtime MP : "+(gpqmonthlyGPendtime-mpqueryGPstarttime));
+			long mpReturnqueryGPstarttime=System.currentTimeMillis();
 			results = mpReturnquery.list();
+			
 			Iterator mpreturniterator1 = results.iterator();
 			if (results != null) {
 				while (mpreturniterator1.hasNext()) {
@@ -751,7 +754,12 @@ public class DashboardDaoImpl implements DashboardDao {
 					}
 				}
 			}
+			long mpReturnqueryGPendtime=System.currentTimeMillis();
+			System.out.println(" time taken for gpqmonthlyGPendtime MP : "+(mpReturnqueryGPendtime-mpReturnqueryGPstarttime));
+			long poqueryGPstarttime=System.currentTimeMillis();
+
 			results = poquery.list();
+			
 			Iterator poiterator1 = results.iterator();
 			if (results != null) {
 				while (poiterator1.hasNext()) {
@@ -773,6 +781,10 @@ public class DashboardDaoImpl implements DashboardDao {
 					}
 				}
 			}
+			long poqueryendtime=System.currentTimeMillis();
+			System.out.println(" time taken for poqueryendtime MP : "+(poqueryendtime-poqueryGPstarttime));
+			long gpquerystarttime=System.currentTimeMillis();
+
 			results = gpquery.list();
 			Iterator gpiterator1 = results.iterator();
 			if (results != null) {
@@ -795,12 +807,18 @@ public class DashboardDaoImpl implements DashboardDao {
 					}
 				}
 			}
+			long gpqueryendtime=System.currentTimeMillis();
+			System.out.println(" time taken for gpquerystarttime MP : "+(gpqueryendtime-gpquerystarttime));
+			
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);
 			log.debug("Inside exception  " + e.getLocalizedMessage());
 			e.printStackTrace();
 		}
 		log.debug(" Monthly gpMonthly : " + gpMonthly);
+		long gpqmonthlyGPendtime=System.currentTimeMillis();
+		System.out.println(" time taken for gpqmonthlyGPendtime MP : "+(gpqmonthlyGPendtime-gpmonthlystarttime));
+		
 		log.info("***grossProfitMonthly ends***");
 		return gpMonthly;
 	}
@@ -1246,8 +1264,8 @@ public class DashboardDaoImpl implements DashboardDao {
 	
 	public double grossProfitForDuration(Session session, Date startDate,Date endDate, int sellerId) {
 
-		log.info("***amountForDuration starts***");
-		log.info("Gross Profit for Duration START at : "+new Date());
+		log.info("***grossProfitForDuration starts***");
+		long gpstarttime=System.currentTimeMillis();
 		List<Double> results = null;
 		double gpforMP = 0;
 		double gpforMPReturn = 0;
@@ -1257,6 +1275,7 @@ public class DashboardDaoImpl implements DashboardDao {
 		try {
 			session.beginTransaction();
 			session.flush();
+			long gpquerryforMPstarttime=System.currentTimeMillis();
 			Query gpquerryforMP = session.createSQLQuery(grossProfitForMPDurationQuery)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
@@ -1265,11 +1284,14 @@ public class DashboardDaoImpl implements DashboardDao {
 					.setParameter("endDate", format.format(endDate))
 					.setParameter("sellerId", sellerId);*/
 			results = gpquerryforMP.list();
+			long gpquerryforMPendtime=System.currentTimeMillis();
+			System.out.println(" time taken for querryfor MP : "+(gpquerryforMPendtime-gpquerryforMPstarttime));
 			if (results != null && results.size() != 0
 					&& results.get(0) != null) {
 				gpforMP = results.get(0);
 				
 			}
+			long gpquerryforMPReturnstarttime=System.currentTimeMillis();
 			Query gpquerryforMPReturn = session.createSQLQuery(grossProfitForMPReturnDurationQuery)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
@@ -1278,7 +1300,10 @@ public class DashboardDaoImpl implements DashboardDao {
 			if (results != null && results.size() != 0
 					&& results.get(0) != null) 
 				gpforMPReturn = results.get(0);
-				
+			long gpquerryforMPReturnendtime=System.currentTimeMillis();
+			System.out.println(" time taken for gpquerryforMPReturn MP : "+(gpquerryforMPReturnendtime-gpquerryforMPReturnstarttime));
+			
+			long gpquerryforPOstarttime=System.currentTimeMillis();
 			Query gpquerryforPO = session.createSQLQuery(grossProfitPODurationQuery)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
@@ -1287,7 +1312,11 @@ public class DashboardDaoImpl implements DashboardDao {
 			if (results != null && results.size() != 0
 					&& results.get(0) != null) 
 				gpforPO = results.get(0);
+			long gpquerryforPOendtime=System.currentTimeMillis();
+			System.out.println(" time taken for gpquerryforPOstarttime MP : "+(gpquerryforPOendtime-gpquerryforPOstarttime));
 			
+			long gpquerryforGPstarttime=System.currentTimeMillis();
+
 			Query gpquerryforGP = session.createSQLQuery(grossProfitGPDurationQuery)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
@@ -1296,6 +1325,8 @@ public class DashboardDaoImpl implements DashboardDao {
 			if (results != null && results.size() != 0
 					&& results.get(0) != null) 
 				gpforGP = results.get(0);
+			long gpquerryforGPendtime=System.currentTimeMillis();
+			System.out.println(" time taken for gpquerryforGP MP : "+(gpquerryforGPendtime-gpquerryforGPstarttime));
 			
 			sum=gpforMP-gpforMPReturn+gpforPO-gpforGP;
 			
@@ -1307,8 +1338,9 @@ public class DashboardDaoImpl implements DashboardDao {
 			log.debug("Inside pcount exception  "+ e.getLocalizedMessage());
 			e.printStackTrace();
 		}
-		log.info("Gross Profit for Duration END at : "+new Date());
-		log.info("***amountForDuration ends***");
+		long gpendtime=System.currentTimeMillis();
+		log.info("time take for grossProfitForDuration calculation : "+(gpendtime-gpstarttime));
+		log.info("***grossProfitForDuration ends***");
 		return sum;
 	}
 
