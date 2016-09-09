@@ -296,7 +296,7 @@ function submitReport(value){
 		{
 		value=$("#reportName").val();
 		}
-	
+	alert(value);
 	targeturl="getReportsFilter.html?reportName="+value;
 	
 	     $.ajax({
