@@ -707,8 +707,8 @@ public class DashboardDaoImpl implements DashboardDao {
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
 					.setParameter("sellerId", sellerId);
-			long mpqueryGPstarttime=System.currentTimeMillis();
-			results = mpquery.list();
+/*			long mpqueryGPstarttime=System.currentTimeMillis();
+*/			results = mpquery.list();
 			
 			
 			Iterator mpiterator1 = results.iterator();
@@ -728,8 +728,8 @@ public class DashboardDaoImpl implements DashboardDao {
 					}
 				}
 			}
-			long gpqmonthlyGPendtime=System.currentTimeMillis();
-			long mpReturnqueryGPstarttime=System.currentTimeMillis();
+			/*long gpqmonthlyGPendtime=System.currentTimeMillis();
+			long mpReturnqueryGPstarttime=System.currentTimeMillis();*/
 			results = mpReturnquery.list();
 			
 			Iterator mpreturniterator1 = results.iterator();
@@ -753,8 +753,8 @@ public class DashboardDaoImpl implements DashboardDao {
 					}
 				}
 			}
-			long mpReturnqueryGPendtime=System.currentTimeMillis();
-			long poqueryGPstarttime=System.currentTimeMillis();
+			/*long mpReturnqueryGPendtime=System.currentTimeMillis();
+			long poqueryGPstarttime=System.currentTimeMillis();*/
 
 			results = poquery.list();
 			
@@ -779,8 +779,8 @@ public class DashboardDaoImpl implements DashboardDao {
 					}
 				}
 			}
-			long poqueryendtime=System.currentTimeMillis();
-			long gpquerystarttime=System.currentTimeMillis();
+			/*long poqueryendtime=System.currentTimeMillis();
+			long gpquerystarttime=System.currentTimeMillis();*/
 
 			results = gpquery.list();
 			Iterator gpiterator1 = results.iterator();
@@ -804,16 +804,16 @@ public class DashboardDaoImpl implements DashboardDao {
 					}
 				}
 			}
-			long gpqueryendtime=System.currentTimeMillis();
-			
+/*			long gpqueryendtime=System.currentTimeMillis();
+*/			
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);
 			log.debug("Inside exception  " + e.getLocalizedMessage());
 			e.printStackTrace();
 		}
-		log.debug(" Monthly gpMonthly : " + gpMonthly);
 		long gpqmonthlyGPendtime=System.currentTimeMillis();
-		
+		log.info(" grossProfitMonthly time  : " + (gpqmonthlyGPendtime-gpmonthlystarttime));
+
 		log.info("***grossProfitMonthly ends***");
 		return gpMonthly;
 	}
