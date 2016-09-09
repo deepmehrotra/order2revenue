@@ -729,7 +729,6 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}
 			long gpqmonthlyGPendtime=System.currentTimeMillis();
-			System.out.println(" time taken for gpqmonthlyGPendtime MP : "+(gpqmonthlyGPendtime-mpqueryGPstarttime));
 			long mpReturnqueryGPstarttime=System.currentTimeMillis();
 			results = mpReturnquery.list();
 			
@@ -755,7 +754,6 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}
 			long mpReturnqueryGPendtime=System.currentTimeMillis();
-			System.out.println(" time taken for gpqmonthlyGPendtime MP : "+(mpReturnqueryGPendtime-mpReturnqueryGPstarttime));
 			long poqueryGPstarttime=System.currentTimeMillis();
 
 			results = poquery.list();
@@ -782,7 +780,6 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}
 			long poqueryendtime=System.currentTimeMillis();
-			System.out.println(" time taken for poqueryendtime MP : "+(poqueryendtime-poqueryGPstarttime));
 			long gpquerystarttime=System.currentTimeMillis();
 
 			results = gpquery.list();
@@ -808,7 +805,6 @@ public class DashboardDaoImpl implements DashboardDao {
 				}
 			}
 			long gpqueryendtime=System.currentTimeMillis();
-			System.out.println(" time taken for gpquerystarttime MP : "+(gpqueryendtime-gpquerystarttime));
 			
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);
@@ -817,7 +813,6 @@ public class DashboardDaoImpl implements DashboardDao {
 		}
 		log.debug(" Monthly gpMonthly : " + gpMonthly);
 		long gpqmonthlyGPendtime=System.currentTimeMillis();
-		System.out.println(" time taken for gpqmonthlyGPendtime MP : "+(gpqmonthlyGPendtime-gpmonthlystarttime));
 		
 		log.info("***grossProfitMonthly ends***");
 		return gpMonthly;
@@ -1285,7 +1280,6 @@ public class DashboardDaoImpl implements DashboardDao {
 					.setParameter("sellerId", sellerId);*/
 			results = gpquerryforMP.list();
 			long gpquerryforMPendtime=System.currentTimeMillis();
-			System.out.println(" time taken for querryfor MP : "+(gpquerryforMPendtime-gpquerryforMPstarttime));
 			if (results != null && results.size() != 0
 					&& results.get(0) != null) {
 				gpforMP = results.get(0);
@@ -1301,7 +1295,6 @@ public class DashboardDaoImpl implements DashboardDao {
 					&& results.get(0) != null) 
 				gpforMPReturn = results.get(0);
 			long gpquerryforMPReturnendtime=System.currentTimeMillis();
-			System.out.println(" time taken for gpquerryforMPReturn MP : "+(gpquerryforMPReturnendtime-gpquerryforMPReturnstarttime));
 			
 			long gpquerryforPOstarttime=System.currentTimeMillis();
 			Query gpquerryforPO = session.createSQLQuery(grossProfitPODurationQuery)
@@ -1313,7 +1306,6 @@ public class DashboardDaoImpl implements DashboardDao {
 					&& results.get(0) != null) 
 				gpforPO = results.get(0);
 			long gpquerryforPOendtime=System.currentTimeMillis();
-			System.out.println(" time taken for gpquerryforPOstarttime MP : "+(gpquerryforPOendtime-gpquerryforPOstarttime));
 			
 			long gpquerryforGPstarttime=System.currentTimeMillis();
 
@@ -1326,7 +1318,6 @@ public class DashboardDaoImpl implements DashboardDao {
 					&& results.get(0) != null) 
 				gpforGP = results.get(0);
 			long gpquerryforGPendtime=System.currentTimeMillis();
-			System.out.println(" time taken for gpquerryforGP MP : "+(gpquerryforGPendtime-gpquerryforGPstarttime));
 			
 			sum=gpforMP-gpforMPReturn+gpforPO-gpforGP;
 			
