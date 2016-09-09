@@ -2577,15 +2577,29 @@ public class SaveMappedFiles {
 										.getCell(index)
 										.toString()+ GlobalConstant.orderUniqueSymbol
 										+ entry.getCell(skuIndex).toString();
-								Order onj = orderService
+								List<Order> onj = orderService
 										.searchAsIsOrder(
 												"channelOrderID",channelOrderId ,
 												sellerId);
-								if (onj == null||!onj.getChannelOrderID().equals(channelOrderId)) {
-									
-									errorMessage
-											.append(" Channel OrderId not present ");
+								if (onj == null) {									
+									errorMessage.append(" Channel OrderId not present ");
 									validaterow = false;
+								} else {
+									if(onj.size() == 1 && onj.get(0).getChannelOrderID().equals(channelOrderId)){
+										channelOrderId = onj.get(0).getChannelOrderID();
+									} else {
+										boolean check = false;
+										for(Order eachOrder : onj){
+											if(eachOrder.getChannelOrderID().equalsIgnoreCase(channelOrderId)){
+												channelOrderId = eachOrder.getChannelOrderID();
+												check = true;
+											}
+										}
+										if(check != true){
+											errorMessage.append("Multiple Orders With Channel Order ID.");
+											validaterow = false;
+										}
+									}
 								}
 								
 							} catch (NullPointerException e) {
@@ -2951,7 +2965,7 @@ public class SaveMappedFiles {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
 							
-							Order onj = null;
+							List<Order> onj = null;
 							if (entry.getCell(skuIndex) != null
 									&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								channelOrderId = entry.getCell(index)
@@ -2963,17 +2977,25 @@ public class SaveMappedFiles {
 										sellerId);
 							}
 							
-							if (onj == null
-									|| !onj.getChannelOrderID().equals(
-											channelOrderId)) {
-
-								errorMessage
-										.append(" Channel OrderId not present ");
+							if (onj == null) {
+								errorMessage.append(" Channel OrderId not present ");
 								validaterow = false;
 							} else {
-								if (onj.getOrderPayment() != null) {
-									orderPayment = onj.getOrderPayment();
-								}
+								if(onj.size() == 1 && onj.get(0).getChannelOrderID().equals(channelOrderId)){
+									channelOrderId = onj.get(0).getChannelOrderID();
+								} else {
+									boolean check = false;
+									for(Order eachOrder : onj){
+										if(eachOrder.getChannelOrderID().equalsIgnoreCase(channelOrderId)){
+											channelOrderId = eachOrder.getChannelOrderID();
+											check = true;
+										}
+									}
+									if(check != true){
+										errorMessage.append("Multiple Orders With Channel Order ID.");
+										validaterow = false;
+									}
+								}								
 							}
 
 							try {
@@ -3948,12 +3970,25 @@ public class SaveMappedFiles {
 										channelOrderId = entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ entry.getCell(skuIndex).toString();
 									}
 									
-									Order onj = orderService.searchAsIsOrder(
+									List<Order> onj = orderService.searchAsIsOrder(
 											"channelOrderID", channelOrderId, sellerId);
-									if (onj != null ) {
-										channelOrderId = onj.getChannelOrderID();
-									} else {
-										channelOrderId = entry.getCell(index).toString();
+									if (onj != null) {
+										if(onj.size() == 1){
+											channelOrderId = onj.get(0).getChannelOrderID();
+										} else {
+											boolean check = false;
+											for(Order eachOrder : onj){
+												if(eachOrder.getChannelOrderID().equalsIgnoreCase(channelOrderId)){
+													channelOrderId = eachOrder.getChannelOrderID();
+													check = true;
+												}
+											}
+											if(check != true){
+												errorMessage.append("Multiple Orders With Channel Order ID.");
+												validaterow = false;
+											}
+										}
+									} else {										
 										errorMessage.append("Order Item ID not present.");
 										validaterow = false;
 									}
@@ -4156,25 +4191,26 @@ public class SaveMappedFiles {
 									.toString())) {
 						entry.getCell(index).setCellType(
 								HSSFCell.CELL_TYPE_STRING);
-						Order onj = orderService.searchAsIsOrder("subOrderID",
+						List<Order> onj = orderService.searchAsIsOrder("subOrderID",
 								entry.getCell(index).toString(), sellerId);
 						System.out.println(entry.getCell(index).toString());
 						if (onj != null) {
-							if (paymentMap.containsKey(entry.getCell(index)
-									.toString())) {
-								paymentBean = paymentMap.get(entry.getCell(
-										index).toString());
+							if(onj.size() == 1){
+								if (paymentMap.containsKey(entry.getCell(index)
+										.toString())) {
+									paymentBean = paymentMap.get(entry.getCell(
+											index).toString());
+								} else {
+									paymentBean = new OrderPaymentBean();
+								}
+								key = entry.getCell(index).toString();
+								paymentBean.setChannelOrderId(onj.get(0).getChannelOrderID());
 							} else {
-								paymentBean = new OrderPaymentBean();
-							}
-							key = entry.getCell(index).toString();
-							paymentBean.setChannelOrderId(onj
-									.getChannelOrderID());
-
-						} else {
-							channelOrderId = entry.getCell(index).toString();
-							errorMessage
-									.append("Channel OrderId not present OR Duplicate OrderId Present");
+								errorMessage.append("Multiple Orders With This Channel Order ID.");
+								validaterow = false;
+							}	
+						} else {							
+							errorMessage.append("Channel OrderId not present.");
 							validaterow = false;
 						}
 
@@ -5124,70 +5160,84 @@ public class SaveMappedFiles {
 								HSSFCell.CELL_TYPE_STRING);
 						channelOrderId = entry.getCell(index).toString() + GlobalConstant.orderUniqueSymbol
 								+ entry.getCell(skuIndex).toString();
-						Order onj = orderService.searchAsIsOrder(
+						List<Order> onj = orderService.searchAsIsOrder(
 								"channelOrderID", channelOrderId, sellerId);						
-						if (onj != null && onj.getChannelOrderID().equals(channelOrderId)) {							
-								paymentBean = new OrderPaymentBean();
-								channelOrderId = onj.getChannelOrderID();
-								try {
-									index = cellIndexMap.get(columHeaderMap
-											.get("Payment Date"));
-									if (entry.getCell(index) != null
-											&& StringUtils.isNotBlank(entry
-													.getCell(index).toString())) {
-										String date = entry.getCell(index)
-												.toString();
-										paymentBean.setDateofPayment(new Date(date));
-									} else {
-										errorMessage
-												.append(" Payment Date format is wrong or null");
-										validaterow = false;
+						if (onj != null) {
+							if(onj.size() == 1 && onj.get(0).getChannelOrderID().equals(channelOrderId)){
+								channelOrderId = onj.get(0).getChannelOrderID();
+							} else {
+								boolean check = false;
+								for(Order eachOrder : onj){
+									if(eachOrder.getChannelOrderID().equalsIgnoreCase(channelOrderId)){
+										channelOrderId = eachOrder.getChannelOrderID();
+										check = true;
 									}
-								} catch (NullPointerException e) {
-									errorMessage
-											.append("The column 'Payment Date' doesn't exist");
+								}
+								if(check != true){
+									errorMessage.append("Multiple Orders With Channel Order ID.");
 									validaterow = false;
 								}
+							}
+							paymentBean = new OrderPaymentBean();								
+							try {
+								index = cellIndexMap.get(columHeaderMap
+										.get("Payment Date"));
+								if (entry.getCell(index) != null
+										&& StringUtils.isNotBlank(entry
+												.getCell(index).toString())) {
+									String date = entry.getCell(index)
+											.toString();
+									paymentBean.setDateofPayment(new Date(date));
+								} else {
+									errorMessage
+											.append(" Payment Date format is wrong or null");
+									validaterow = false;
+								}
+							} catch (NullPointerException e) {
+								errorMessage
+										.append("The column 'Payment Date' doesn't exist");
+								validaterow = false;
+							}
 
-								try {
-									index = cellIndexMap.get(columHeaderMap
-											.get("Recieved Amount"));
-									if (entry.getCell(index) != null
-											&& StringUtils.isNotBlank(entry
-													.getCell(index).toString())) {
-										try {
-											amount = entry
-													.getCell(index)
-													.getNumericCellValue();
-											System.out.println(amount);
-											if (amount > 0) {
-												paymentBean
-														.setPositiveAmount(paymentBean
-																.getPositiveAmount()
-																+ amount);												
-											} else if (amount < 0) {
-												paymentBean
-														.setNegativeAmount(Math.abs(paymentBean
-																.getNegativeAmount()
-																+ amount));
-											}
-										} catch (Exception e) {
-											log.error("Failed by seller "
-													+ sellerId, e);
-											errorMessage
-													.append(" Payment Amount cell is corrupted");
-											validaterow = false;
+							try {
+								index = cellIndexMap.get(columHeaderMap
+										.get("Recieved Amount"));
+								if (entry.getCell(index) != null
+										&& StringUtils.isNotBlank(entry
+												.getCell(index).toString())) {
+									try {
+										amount = entry
+												.getCell(index)
+												.getNumericCellValue();
+										System.out.println(amount);
+										if (amount > 0) {
+											paymentBean
+													.setPositiveAmount(paymentBean
+															.getPositiveAmount()
+															+ amount);												
+										} else if (amount < 0) {
+											paymentBean
+													.setNegativeAmount(Math.abs(paymentBean
+															.getNegativeAmount()
+															+ amount));
 										}
-									} else {
+									} catch (Exception e) {
+										log.error("Failed by seller "
+												+ sellerId, e);
 										errorMessage
-												.append("Amount format is wrong or null.");
+												.append(" Payment Amount cell is corrupted");
 										validaterow = false;
 									}
-								} catch (NullPointerException e) {
+								} else {
 									errorMessage
-											.append("The column 'Outstanding Payable to Vendors (Final)' doesn't exist");
+											.append("Amount format is wrong or null.");
 									validaterow = false;
-								}							
+								}
+							} catch (NullPointerException e) {
+								errorMessage
+										.append("The column 'Outstanding Payable to Vendors (Final)' doesn't exist");
+								validaterow = false;
+							}							
 
 						} else {
 							channelOrderId = entry.getCell(index).toString();

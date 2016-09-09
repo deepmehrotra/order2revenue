@@ -274,7 +274,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-	public Order searchAsIsOrder(String criteria, String ID, int sellerId) {
+	public List<Order> searchAsIsOrder(String criteria, String ID, int sellerId) {
 		return orderDao.searchAsIsOrder(criteria, ID, sellerId);
 	}
 }

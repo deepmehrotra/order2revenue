@@ -5444,7 +5444,7 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	@Override
-	public Order searchAsIsOrder(String searchCriteria, String ID, int sellerId) {
+	public List<Order> searchAsIsOrder(String searchCriteria, String ID, int sellerId) {
 		List<Order> orderList = null;
 		Session session = null;
 		String channelOrderId = "";
@@ -5463,14 +5463,8 @@ public class OrderDaoImpl implements OrderDao {
 					.add(Restrictions
 							.like(searchCriteria, channelOrderId + "%"));
 			orderList = criteria.list();
-			if (orderList != null && orderList.size() != 0
-					&& orderList.size() == 1) {
-				return orderList.get(0);
-			} else if (orderList != null && orderList.size() != 0) {
-				for (Order order : orderList) {
-					if (order.getChannelOrderID().equals(ID))
-						return order;
-				}
+			if (orderList != null && orderList.size() != 0) {
+				return orderList;
 			}
 		} catch (Exception e) {
 			log.error("Failed by Seller ID : " + sellerId, e);

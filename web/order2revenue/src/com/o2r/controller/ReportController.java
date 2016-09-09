@@ -130,7 +130,7 @@ public class ReportController {
 		if (reportName.equals("channelSaleReport")
 				|| reportName.equals("categoryWiseSaleReport"))
 			return new ModelAndView("reports/channelSaleReport", model);
-		else if (reportName.equals("paymentsReceievedReport")
+		else if (reportName.equals("totalPaymentsReceived")
 				|| reportName.equals("orderwiseGPReport"))
 			return new ModelAndView("reports/channelSaleReport", model);
 		else if (reportName.equals("partnerBusinessReport")
@@ -140,7 +140,7 @@ public class ReportController {
 		else if (reportName.equals("consolidatedOrders"))
 			return new ModelAndView("reports/filterReports", model);
 		else if (reportName.equals("netProfitabilityReport"))
-			return new ModelAndView("reports/revenueReport", model);
+			return new ModelAndView("reports/revenueReport", model);		
 		else
 			return new ModelAndView("reports/comingSoon", model);
 	}

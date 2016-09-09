@@ -128,5 +128,5 @@ public interface OrderDao {
 	
 	public List<String> listOrderIds(String criteria,int sellerId);
 	
-	public Order searchAsIsOrder(String criteria, String ID, int sellerId);
+	public List<Order> searchAsIsOrder(String criteria, String ID, int sellerId);
 }
