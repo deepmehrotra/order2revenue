@@ -295,8 +295,7 @@ function submitReport(value){
 	if(value=='SelectBox')
 		{
 		value=$("#reportName").val();
-		}
-	alert(value);
+		}	
 	targeturl="getReportsFilter.html?reportName="+value;
 	
 	     $.ajax({

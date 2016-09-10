@@ -70,8 +70,9 @@ public void addCustomer(Customer customer,int sellerId) {
 	 List projObj=null;
 	 CustomerDBaseBean custmerDBean=null;
 	 List<CustomerDBaseBean> customerDbeanList=new ArrayList<CustomerDBaseBean>();
+	 Session session = null;
 	 try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Order.class);
 			criteria.createAlias("customer", "customer",CriteriaSpecification.LEFT_JOIN);
@@ -79,6 +80,7 @@ public void addCustomer(Customer customer,int sellerId) {
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions.isNotNull("customer.customerPhnNo"))
 					.add(Restrictions.eq("poOrder", false));
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			ProjectionList projList = Projections.projectionList();			
@@ -92,7 +94,7 @@ public void addCustomer(Customer customer,int sellerId) {
 			projList.add(Projections.sum("orderReturnOrRTO.returnorrtoQty"));
 			projList.add(Projections.sqlProjection("(sum( grossNetRate * (quantity-returnorrtoQty) )) as netNR",new String[] { "netNR" },
 					new Type[] { Hibernate.DOUBLE }));
-			projList.add(Projections.groupProperty("customer.customerEmail"));
+			projList.add(Projections.groupProperty("customer.customerPhnNo"));
 			criteria.setProjection(projList);
 			criteria.setFirstResult(pageNo * pageSize);
 			criteria.setMaxResults(pageSize);
@@ -116,12 +118,13 @@ public void addCustomer(Customer customer,int sellerId) {
 					}
 				}
 			}
-			session.getTransaction().commit();
-			session.close();
-			
+			session.getTransaction().commit();		
 		} catch (Exception e) {
 			log.error("Error in listCustomer !",e);
 			e.printStackTrace();
+		} finally {
+			if(session != null)
+				session.close();
 		}
 	 	log.info("$$$ listCustomer Ends : CustomerDaoImpl $$$");
 		return customerDbeanList;

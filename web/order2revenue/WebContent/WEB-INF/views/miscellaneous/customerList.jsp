@@ -107,6 +107,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
                         <tbody>
                         <c:if test="${!empty customers}">
                         	<c:forEach items="${customers}" var="customer" varStatus="loop">
+                        		<c:if test="${customer.customerPhnNo != null}">
 		                            <tr>
 		                                <td>${loop.index+1}</td>		                                
 		                                <td style="color: blue;">
@@ -129,7 +130,8 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 		                                    ${customer.customerPhnNo}
 		                                </td>
 		                                <td><a href="#"><img src="/O2R/seller/img/edit.png" alt="edit"></a></td>		
-		                            </tr>		                            		                            
+		                            </tr>
+		                        </c:if>		                            		                            
 		                     </c:forEach>       
                         </c:if>
                         </tbody>                        
