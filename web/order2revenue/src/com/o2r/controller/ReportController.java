@@ -645,7 +645,7 @@ public class ReportController {
 				model.put("categoryByNetGP", ConverterClass
 						.getChannelNetGPSortedList(categoryGPList));
 				break;
-			case "paymentsReceievedReport":
+			case "totalPaymentsReceived":
 				List<ChannelNPR> partnerChannelNprList = reportGeneratorService
 						.fetchChannelNPR(sellerId, startDate, endDate,
 								"partner");
