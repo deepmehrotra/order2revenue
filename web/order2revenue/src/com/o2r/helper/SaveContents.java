@@ -2079,8 +2079,17 @@ public class SaveContents {
 								if(onj.size() == 1){
 									channelOrderId = onj.get(0).getChannelOrderID();
 								} else {
-									errorMessage.append("Multiple Orders With Channel Order ID.");
-									validaterow = false;
+									boolean check = false;
+									for(Order eachOrder : onj){
+										if(eachOrder.getChannelOrderID().equalsIgnoreCase(channelOrderId)){
+											channelOrderId = eachOrder.getChannelOrderID();
+											check = true;
+										}
+									}
+									if(check != true){
+										errorMessage.append("Multiple Orders With Channel Order ID.");
+										validaterow = false;
+									}
 								}								
 							} else if (entry.getCell(2) != null
 									&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -2091,8 +2100,17 @@ public class SaveContents {
 									if(onj.size() == 1){
 										channelOrderId = onj.get(0).getChannelOrderID();
 									} else {
-										errorMessage.append("Multiple Orders With Secondary Order ID.");
-										validaterow = false;
+										boolean check = false;
+										for(Order eachOrder : onj){
+											if(eachOrder.getChannelOrderID().equalsIgnoreCase(channelOrderId)){
+												channelOrderId = eachOrder.getChannelOrderID();
+												check = true;
+											}
+										}
+										if(check != true){
+											errorMessage.append("Multiple Orders With Channel Order ID.");
+											validaterow = false;
+										}
 									}
 								} else {
 									errorMessage
@@ -2113,8 +2131,17 @@ public class SaveContents {
 								if(onj.size() == 1){
 									channelOrderId = onj.get(0).getChannelOrderID();
 								} else {
-									errorMessage.append("Multiple Orders With Secondary Order ID.");
-									validaterow = false;
+									boolean check = false;
+									for(Order eachOrder : onj){
+										if(eachOrder.getChannelOrderID().equalsIgnoreCase(channelOrderId)){
+											channelOrderId = eachOrder.getChannelOrderID();
+											check = true;
+										}
+									}
+									if(check != true){
+										errorMessage.append("Multiple Orders With Channel Order ID.");
+										validaterow = false;
+									}
 								}
 							} else {
 								errorMessage
@@ -2485,6 +2512,7 @@ public class SaveContents {
 				String criteria = "";
 				String column = null;
 				String id = null;
+				String channelID = null;
 				Partner partner = null;
 				ProductConfig productConfig = null;
 				try {
@@ -2520,8 +2548,7 @@ public class SaveContents {
 							entry.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
 							log.info("Channel Order ID for Return : "
 									+ entry.getCell(1).toString());
-							if (column.equals("channelOrderID")) {
-								String channelID = null;
+							if (column.equals("channelOrderID")) {								
 								if (partner != null) {
 									if (entry.getCell(2) != null
 											&& StringUtils.isNotBlank(entry
@@ -2576,8 +2603,23 @@ public class SaveContents {
 										errorMessage.append("Return Already Recieved. ");
 									}
 								} else {
-									validaterow = false;
-									errorMessage.append("Multiple Orders With This ID.");
+									boolean check = false;
+									for(Order eachOrder : ord){
+										if(eachOrder.getChannelOrderID().equalsIgnoreCase(channelID)){
+											if(eachOrder.getOrderReturnOrRTO().getReturnDate() == null){
+												order.setChannelOrderID(eachOrder.getChannelOrderID());
+												check = true;
+											} else {
+												check = true;
+												validaterow = false;
+												errorMessage.append("Return Already Recieved. ");
+											}
+										}
+									}
+									if(check != true){
+										errorMessage.append("Multiple Orders With Channel Order ID.");
+										validaterow = false;
+									}
 								}								
 							} else if (orderlist != null
 									&& orderlist.size() != 0) {
