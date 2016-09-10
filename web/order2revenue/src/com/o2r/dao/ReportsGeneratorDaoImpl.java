@@ -613,6 +613,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	@Override
 	public List<ConsolidatedOrderBean> getConsolidatedOrdersReport(
 			Date startDate, Date endDate, String status, int sellerId) {
+		log.info("*** getConsolidatedOrdersReport Starts : ReportsGeneratorDaoImpl ****");
+
 		List<Order> orderList=null;
 		List<Order> orderlistGpReturn=null;
 		List temp=null;
@@ -697,6 +699,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		log.info("*** getConsolidatedOrdersReport ends : ReportsGeneratorDaoImpl ****");
 
 		return consolidatedList;
 	}
@@ -705,6 +708,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	@Override
 	public List<PartnerReportDetails> getDebtorsReportDetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException {
+		log.info("*** getDebtorsReportDetails Starts : ReportsGeneratorDaoImpl ****");
+
 		List<PartnerReportDetails> partnerBusinessList = new ArrayList<PartnerReportDetails>();
 		try {
 			Session session = sessionFactory.openSession();
@@ -727,13 +732,18 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
 
 		}
+		log.info("*** getDebtorsReportDetails Starts : ReportsGeneratorDaoImpl ****");
+
 		return partnerBusinessList;
+		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PartnerReportDetails> getPartnerReportDetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException {
+		log.info("*** getPartnerReportDetails Starts : ReportsGeneratorDaoImpl ****");
+
 		List<PartnerReportDetails> partnerBusinessList = new ArrayList<PartnerReportDetails>();
 		try {
 			Session session = sessionFactory.openSession();
@@ -757,12 +767,15 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
 
 		}
+		log.info("*** getPartnerReportDetails ends : ReportsGeneratorDaoImpl ****");
+
 		return partnerBusinessList;
 	}
 
 	private PartnerReportDetails transformPartnerDetail(Order currOrder, Session session, Date startDate,
 			Date endDate) {
-		
+		log.info("*** transformPartnerDetail Starts : ReportsGeneratorDaoImpl ****");
+
 		PartnerReportDetails partnerBusiness = new PartnerReportDetails();
 		try {			
 			boolean isPoOrder = currOrder.isPoOrder();
@@ -1055,7 +1068,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.error("Failed ", e);
 			e.printStackTrace();
 		}		
-		
+		log.info("*** transformPartnerDetail Starts : ReportsGeneratorDaoImpl ****");
+
 		return partnerBusiness;
 	}
 
@@ -1066,6 +1080,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		
 		log.info("*** getChannelReportDetails Starts : ReportsGeneratorDaoImpl ****");
 		List<ChannelReportDetails> channelReportDetailsList = new ArrayList<ChannelReportDetails>();
+		 Map<String, Float> taxCatPercentMap =null;
 		 
 		 try
 		 {
@@ -1077,11 +1092,17 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			 } else{
 				 orders = fetchOrders(session, sellerId, startDate, endDate);
 			 }
+			 taxCatPercentMap=taxDetailService.getTaxCategoryMap(sellerId);
 			 Map<String, ChannelReportDetails> poOrderMap = new HashMap<String, ChannelReportDetails>();
+			 if(taxCatPercentMap!=null)
+			 {
 			 for (Order currOrder : orders) {
-				 ChannelReportDetails channelReport = transformChannelReport(currOrder, session, sellerId);
+				 float percent=taxCatPercentMap.containsKey(currOrder.getOrderTax().getTaxCategtory())?
+					 taxCatPercentMap.get(currOrder.getOrderTax().getTaxCategtory()):0;
+				 ChannelReportDetails channelReport = transformChannelReport(currOrder,percent, session, sellerId);
 				 channelReportDetailsList.add(channelReport);
-			 }	 
+			 }
+			 }
 		 } catch (NullPointerException e) {
 				e.printStackTrace();
 				log.error("Failed! by sellerId : "+sellerId,e);					
@@ -1092,12 +1113,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
 
 		}
-			 
+			log.info("*** getChannelReportDetails ends : ReportsGeneratorDaoImpl ****");
+ 
 		return channelReportDetailsList;	 
 	}
 
-	private ChannelReportDetails transformChannelReport(Order currOrder, Session session, int sellerId) {
-		
+	private ChannelReportDetails transformChannelReport(Order currOrder,float taxpercent, Session session, int sellerId) {
+		log.info("*** transformChannelReport Starts : ReportsGeneratorDaoImpl ****");
+
 		ChannelReportDetails channelReport = new ChannelReportDetails();
 		try {
 			boolean isPoOrder = currOrder.isPoOrder();
@@ -1219,15 +1242,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				} 
 				String taxCategory = currOrderTax.getTaxCategtory();
 				channelReport.setTaxCategory(taxCategory);
-				if(StringUtils.isNotBlank(taxCategory)){
-					try {
-						TaxCategory	taxCategoryDetails = taxDetailService.getTaxCategory(taxCategory, sellerId);
-						taxCatPercent = taxCategoryDetails.getTaxPercent();
-						channelReport.setTaxPercent((float) taxCatPercent);
-					} catch (CustomException e) {
-						log.error("Tax Category Not found for " + taxCategory);
-					}
-				}
+				channelReport.setTaxPercent(taxpercent);
+				taxCatPercent=taxpercent;
 			}
 			if(taxCatPercent != 0)
 				netTaxLiability = netSpAmount - netSpAmount*(100/(100 + taxCatPercent));
@@ -1310,7 +1326,9 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		} catch (Exception e) {
 			log.error("Failed by SellerID : "+sellerId, e);
 			e.printStackTrace();
-		}		
+		}
+		log.info("*** transformChannelReport ends : ReportsGeneratorDaoImpl ****");
+
 		return channelReport;
 	}
 
@@ -1325,6 +1343,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	 */
 	@SuppressWarnings("unchecked")
 	private List<Order> fetchOrders(Session session, int sellerId, Date startDate, Date endDate) {
+		log.info("*** fetchOrders Starts : ReportsGeneratorDaoImpl ****");
+
 		List<Order> orderList = new ArrayList<>();
 		
 		try {
@@ -1371,6 +1391,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			e.printStackTrace();
 			log.error("Failed by SellerID : "+sellerId, e);
 		}
+		log.info("*** fetchOrders ends : ReportsGeneratorDaoImpl ****");
+
 		return orderList;
 	}
 	
@@ -1385,6 +1407,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	 */
 	@SuppressWarnings("unchecked")
 	private List<Order> fetchOrdersByPayment(Session session, int sellerId, Date startDate, Date endDate) {
+		log.info("*** fetchOrdersByPayment starts : ReportsGeneratorDaoImpl ****");
+
 		List<Order> orderList = new ArrayList<>();
 		try {
 			Criteria criteria = session.createCriteria(Order.class);
@@ -1427,6 +1451,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			e.printStackTrace();
 			log.error("Failed by SellerID : "+sellerId, e);
 		}
+		log.info("*** fetchOrdersByPayment ends : ReportsGeneratorDaoImpl ****");
 
 		return orderList;
 	}
@@ -1434,6 +1459,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<CommissionDetails> fetchPC(int sellerId, Date startDate, Date endDate, String criteria) {
+		log.info("*** fetchPC starts : ReportsGeneratorDaoImpl ****");
+
 		Map<String, CommissionDetails> commDetailsMap = new HashMap<String, CommissionDetails>(); 
 		List<CommissionDetails> commDetailsList = new ArrayList<CommissionDetails>();
 		try {
@@ -1620,13 +1647,17 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		} catch (Exception e) {
 			log.error("Failed by SellerID : "+sellerId, e);
 			e.printStackTrace();
-		}		
+		}
+		log.info("*** fetchPC ends : ReportsGeneratorDaoImpl ****");
+
 		return commDetailsList;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChannelNR> fetchChannelNR(int sellerId, Date startDate, Date endDate, String criteria) {
+		log.info("*** fetchChannelNR starts : ReportsGeneratorDaoImpl ****");
+
 		List<ChannelNR> channelNRList = new ArrayList<ChannelNR>();
 		Map<String, ChannelNR> channelNRMap = new HashMap<String, ChannelNR>();
 		try {
@@ -1711,12 +1742,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		} catch (Exception e) {
 			log.error("Failed by SellerID : "+sellerId, e);
 		}
+		log.info("*** fetchChannelNR ends : ReportsGeneratorDaoImpl ****");
+
 		return channelNRList;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<MonthlyCommission> fetchMonthlyComm(int sellerId, Date startDate, Date endDate) {
+		log.info("*** fetchMonthlyComm starts : ReportsGeneratorDaoImpl ****");
+
 		List<MonthlyCommission> monthlyList = new ArrayList<MonthlyCommission>();
 		Map<String, MonthlyCommission> monthlyMap = new HashMap<String, MonthlyCommission>();
 		try {
@@ -1829,12 +1864,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.error("Failed by SellerID : "+sellerId, e);
 			e.printStackTrace();
 		}
+		log.info("*** fetchMonthlyComm end : ReportsGeneratorDaoImpl ****");
+
 		return monthlyList;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChannelNetQty> fetchChannelNetQty(int sellerId, Date startDate, Date endDate, String criteria) {
+		log.info("*** fetchChannelNetQty start : ReportsGeneratorDaoImpl ****");
+
 		List<ChannelNetQty> channelNRList = new ArrayList<ChannelNetQty>();
 		Map<String, ChannelNetQty> channelNRMap = new HashMap<String, ChannelNetQty>();
 		try {
@@ -1926,12 +1965,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.error("Failed by SellerID : "+sellerId, e);
 			e.printStackTrace();
 		}
+		log.info("*** fetchChannelNetQty end : ReportsGeneratorDaoImpl ****");
+
 		return channelNRList;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChannelGP> fetchChannelGP(int sellerId, Date startDate, Date endDate, String criteria) {
+		log.info("*** fetchChannelGP start : ReportsGeneratorDaoImpl ****");
+
 		List<ChannelGP> channelNRList = new ArrayList<ChannelGP>();
 		Map<String, ChannelGP> channelNRMap = new HashMap<String, ChannelGP>();
 		try {
@@ -2011,12 +2054,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.error("Failed by Seller ID : "+sellerId, e);
 			e.printStackTrace();
 		}
+		log.info("*** fetchChannelGP end : ReportsGeneratorDaoImpl ****");
+
 		return channelNRList;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChannelMC> fetchChannelMC(int sellerId, Date startDate, Date endDate, String criteria) {
+		log.info("*** fetchChannelMC start : ReportsGeneratorDaoImpl ****");
+
 		List<ChannelMC> channelMCList = new ArrayList<ChannelMC>();
 		try {
 			Session session=sessionFactory.openSession();
@@ -2039,12 +2086,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		} catch (Exception e) {
 			log.error("Failed By Seller Id : "+sellerId, e);
 		}
+		log.info("*** fetchChannelMC end : ReportsGeneratorDaoImpl ****");
+
 		return channelMCList;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChannelCatNPR> fetchChannelCatNPR(int sellerId, Date startDate, Date endDate, String criteria) {
+		log.info("*** fetchChannelCatNPR start : ReportsGeneratorDaoImpl ****");
+
 		List<ChannelCatNPR> channelNPRList = new ArrayList<ChannelCatNPR>();
 		try {
 			Session session=sessionFactory.openSession();
@@ -2148,13 +2199,17 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed by Seller ID : "+sellerId, e);
-		}		
+		}
+		log.info("*** fetchChannelMC end : ReportsGeneratorDaoImpl ****");
+
 		return channelNPRList;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChannelNPR> fetchChannelNPR(int sellerId, Date startDate, Date endDate, String criteria) {
+		log.info("*** fetchChannelNPR start : ReportsGeneratorDaoImpl ****");
+
 		List<ChannelNPR> channelNPRList = new ArrayList<ChannelNPR>();
 		Map<String, ChannelNPR> channelNprMap = new HashMap<String, ChannelNPR>(); 
 		try {
@@ -2239,12 +2294,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.error("Failed By Seller Id : "+sellerId, e);
 			e.printStackTrace();
 		}
+		log.info("*** fetchChannelNPR start : ReportsGeneratorDaoImpl ****");
+
 		return channelNPRList;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChannelMCNPR> fetchChannelMCNPR(int sellerId, Date startDate, Date endDate, String criteria) {
+		log.info("*** fetchChannelMCNPR start : ReportsGeneratorDaoImpl ****");
+
 		List<ChannelMCNPR> channelNPRList = new ArrayList<ChannelMCNPR>();
 		Map<String, ChannelMCNPR> channelNprMap = new HashMap<String, ChannelMCNPR>(); 
 		try {
@@ -2289,6 +2348,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.error("Failed by Seller ID : "+sellerId, e);
 			e.printStackTrace();
 		}
+		log.info("*** fetchChannelMCNPR ends : ReportsGeneratorDaoImpl ****");
+
 		return channelNPRList;
 	}
 	
@@ -2303,6 +2364,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	 */
 	@SuppressWarnings("unchecked")
 	private List<Order> fetchDebtorsOrders(Session session, int sellerId, Date startDate, Date endDate) {
+		log.info("*** fetchDebtorsOrders start : ReportsGeneratorDaoImpl ****");
+
 		List<Order> orderList = new ArrayList<>();
 		try {
 			Criterion lhs = Restrictions.or(Restrictions.ge("orderPayment.paymentDifference", 1.0), 
@@ -2345,12 +2408,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.error("Failed By Seller ID : "+sellerId, e);
 			e.printStackTrace();
 		}
+		log.info("*** fetchDebtorsOrders ends : ReportsGeneratorDaoImpl ****");
+
 		return orderList;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<YearlyStockList> fetchStockList(int year) {
+		log.info("*** fetchStockList start : ReportsGeneratorDaoImpl ****");
+
 		List<YearlyStockList> prStockList = new ArrayList<YearlyStockList>();
 		try {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -2425,12 +2492,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.error("Failed",e);
 			e.printStackTrace();
 		}
+		log.info("*** fetchStockList ends : ReportsGeneratorDaoImpl ****");
+
 		return prStockList;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<NetPaymentResult> fetchNPR(int sellerId, Date startDate, Date endDate) {
+		log.info("*** fetchNPR start : ReportsGeneratorDaoImpl ****");
+
 		List<NetPaymentResult> nprList = new ArrayList<NetPaymentResult>();
 		try {
 			Session session=sessionFactory.openSession();
@@ -2458,12 +2529,16 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.error("Failed by seller ID : "+sellerId, e);
 			e.printStackTrace();
 		}
+		log.info("*** fetchNPR ends : ReportsGeneratorDaoImpl ****");
+
 		return nprList;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChannelNR> fetchNetRate(int sellerId, Date startDate, Date endDate) {
+		log.info("*** fetchNetRate start : ReportsGeneratorDaoImpl ****");
+
 		List<ChannelNR> netRateList = new ArrayList<ChannelNR>();
 		Map<String, ChannelNR> netRateMap = new HashMap<String, ChannelNR>();
 		try {
@@ -2542,7 +2617,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.error("Failed By Seller ID : "+sellerId, e);
 			e.printStackTrace();
 		}
-		
+		log.info("*** fetchNetRate ends : ReportsGeneratorDaoImpl ****");
+
 		return netRateList;
 	}
 	
@@ -2586,6 +2662,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	
 	@Override
 	public List<UploadReport> listUploadReport(int sellerId, boolean doSort) throws CustomException {
+		log.info("*** listUploadReport start : ReportsGeneratorDaoImpl ****");
+
 		List<UploadReport> returnlist = null;
 		try {
 			Session session = sessionFactory.openSession();
@@ -2601,16 +2679,21 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			}
 			session.getTransaction().commit();
 			session.close();
+			log.info("*** listUploadReport ends : ReportsGeneratorDaoImpl ****");
+
 			return returnlist;
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);
 			throw new CustomException(GlobalConstant.listReportError,
 					new Date(), 3, GlobalConstant.listReportsErrorCode, e);
 		}
+
 	}
 
 	@Override
 	public UploadReport getUploadLog(int id, int sellerId) throws CustomException {
+		log.info("*** getUploadLog start : ReportsGeneratorDaoImpl ****");
+
 		List<UploadReport> returnlist = null;
 		try {
 			Session session = sessionFactory.openSession();
@@ -2631,6 +2714,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			}
 			session.getTransaction().commit();
 			session.close();
+			log.info("*** getUploadLog ends : ReportsGeneratorDaoImpl ****");
+
 			return returnlist.get(0);
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);

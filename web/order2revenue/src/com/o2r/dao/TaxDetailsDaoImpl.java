@@ -2,7 +2,9 @@ package com.o2r.dao;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -482,6 +484,44 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		}
 		log.info("*** listTaxCategories Ends : TaxDetailsDaoImpl ****");
 		return returnlist;
+	}
+	
+	@Override
+	public Map<String,Float> getTaxCategoryMap(int sellerId)
+			throws CustomException {
+
+		log.info("*** getTaxCategoryMap Starts : TaxDetailsDaoImpl ****");
+		Map<String,Float> returnMap = new HashMap<String,Float>();
+		List<TaxCategory> returnlist=null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Seller seller = (Seller) session.get(Seller.class, sellerId);
+			if (seller.getTaxCategories() != null
+					&& seller.getTaxCategories().size() != 0)
+				returnlist = seller.getTaxCategories();
+
+			if (returnlist != null && returnlist.size() != 0) {
+				
+				for (TaxCategory returnObj : returnlist) {
+					if(!returnMap.containsKey(returnObj.getTaxCatName()))
+					returnMap.put(returnObj.getTaxCatName(), returnObj.getTaxPercent());
+				}				
+			}
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.getTaxCatListErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(GlobalConstant.getTaxCatListError,
+					new Date(), 1, sellerId + "-"
+							+ GlobalConstant.getTaxCatListErrorCode, e);
+
+		}
+		log.info("*** getTaxCategoryMap Ends : TaxDetailsDaoImpl ****");
+		return returnMap;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.o2r.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Session;
 
@@ -57,5 +58,7 @@ public interface TaxDetailsDao {
 
 	public void removeProductMapping(int tcId, int sellerId)
 			throws CustomException;
+
+	public Map<String, Float> getTaxCategoryMap(int sellerId) throws CustomException;
 
 }

@@ -46,6 +46,11 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 	<bean id="dataConfig" class="com.o2r.bean.DataConfig">
 		<property name="serviceTax" value="${serviceTax}" />
 		<property name="uploadReportPath" value="${uploadreport.path}" />
+		<property name="payuMerchantKey" value="${payuMerchantKey}" />
+		<property name="payuSalt" value="${payuSalt}" />
+		<property name="payubaseurl" value="${payubaseurl}" />
+		<property name="successurl" value="${successurl}" />
+		<property name="failurl" value="${failurl}" />
 		<!-- <property name="xlsPath" value="${xlsPath}" /> -->
 	</bean>
 

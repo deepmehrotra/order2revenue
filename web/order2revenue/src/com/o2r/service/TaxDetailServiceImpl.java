@@ -1,6 +1,7 @@
 package com.o2r.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,5 +120,10 @@ public class TaxDetailServiceImpl implements TaxDetailService {
 	public void removeProductMapping(int tcId, int sellerId)
 			throws CustomException {
 		taxDetailDao.removeProductMapping(tcId, sellerId);
+	}
+	@Override
+	public Map<String, Float> getTaxCategoryMap(int sellerId) throws CustomException
+	{
+		return taxDetailDao.getTaxCategoryMap(sellerId);
 	}
 }

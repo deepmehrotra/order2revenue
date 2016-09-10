@@ -1,6 +1,7 @@
 package com.o2r.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Session;
 
@@ -57,4 +58,6 @@ public interface TaxDetailService {
 
 	public void removeProductMapping(int tcId, int sellerId)
 			throws CustomException;
+
+	public Map<String, Float> getTaxCategoryMap(int sellerId) throws CustomException;
 }
