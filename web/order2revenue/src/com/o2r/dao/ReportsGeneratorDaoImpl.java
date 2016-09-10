@@ -2269,7 +2269,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					channelNPR.setCategory(key);
 					channelNPR.setPartner(key);
 					String paymentType = order[1].toString();
-					double npr = Double.parseDouble(order[2].toString());
+					double npr = Double.parseDouble(order[2]!=null?order[2].toString():"0");
 					switch(paymentType){
 						case "Prepaid": channelNPR.setPrepaidNPR(npr); break;
 						case "COD": channelNPR.setCodNPR(npr); break;
