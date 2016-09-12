@@ -881,7 +881,78 @@ public class GlobalConstant {
 			put("getReturnId", "Return Id/ GP ID");
 			put("getReturnChargesDesciption", "Return Charges Description");
 			put("getTdsToBeDeposited", "TDS to be deposited");
-
+			
+			//For Consolidated Report
+			put("orderId", "OrderId");
+			put("Partner", "Channel");
+			put("subOrderId", "Secondary OrderId");
+			put("returnId", "ReturnId");
+			put("recievedDate", "Order RecievedDate");
+			put("shippedDate", "Order shipped Date");
+			put("deliveryDate", "Expected Delivery Date");
+			put("returnDate", "Return Received Date");
+			put("dateofPayment", "Expected date of Payment");
+			put("payDate", "Actual payment Date");
+			put("invoiceId", "InvoiceId");
+			put("PIreferenceNo", "PIreferenceNo");
+			put("productCategory", "ProductCategory");
+			put("sku", "Vendor  SKU");
+			put("quantity", "Qty");
+			put("returnQuantity", "Return Qty");
+			put("netSaleQuantity", "Net Sale Qty");
+			put("totalMRP", "MRP");
+			put("grossSp", "Gross Taxable Sale");
+			put("returnSp", "Return Taxable Sale");
+			put("netSp", "Net Taxable Sale");
+			put("netRate", "netRate");
+			put("grossNR", "Gross Actual Sale");
+			put("returnChargesReversed", "Reversed Actual Sale");
+			put("addReturnCharges", "Add. Return Charges");
+			put("totalReturnCharges", "Total Return Actual Sale");
+			put("netNR", "Net Actual Sale");
+			put("netPayment", "Net Payment Result");
+			put("payDiff", "Net Payment Diff.");
+			put("grossPR", "Gross Tax-free Sale");
+			put("returnPR", "Return Tax free Sale");
+			put("netPR", "Net Tax Free Sale");
+			put("taxCategory", "Tax Category");
+			put("grossTax", "Gross Tax Dues");
+			put("returnTax", "Reversed Tax Dues");
+			put("netTax", "Net Tax Dues");
+			put("grossTDS", "Gross TDS Dues");
+			put("returnTDS", "Reversed TDS Dues");
+			put("netTDS", "Net TDS Dues");
+			put("grossCommission", "Gross Commission Paid");
+			put("returnCommission", "Reversed Commission");
+			put("netCommission", "Net Commission Paid");
+			put("netSellingFee", "Net Selling Fee");
+			put("netPCC", "Net PCC Paid");
+			put("netFixedFee", "Net Fixed Fee Paid");
+			put("netShippingCharges", "Net Shipping Charges Paid");
+			put("serviceTax", "Net Service Tax Paid");
+			put("eossDiscount", "Gross EOSS Disc");
+			put("totalReturnEossDiscount", "Reversed ROSS Disc");
+			put("netReturnEossDiscount", "Net EOSS Disc");
+			put("grossCostProduct", "Gross Product Cost");
+			put("returnCostProduct", "Return Product Cost");
+			put("netCostProduct", "Net Product Cost");
+			put("grossProfit", "Gross Margin");
+			put("paymentType", "Payment Type");
+			put("customerName", "Customer Name");
+			put("customerCity", "Customer City");
+			put("logicalPartner", "Logisitic Partner");
+			put("awbNo", "AWB no");
+			put("returnType", "Return Type");
+			put("faultType", "Fault Type");
+			put("returnStage", "Return Stage");
+			put("shippingZone", "Shipping Zone");
+			put("returnReason", "Return Reason");
+			put("sellerNote", "Seller Notes");
+			put("status", "Last Updated Status");
+			put("finalStatus", "Action");
+			
+			
+			
 			// For Channel Report
 			put("getCategory", "Product Category");
 			put("getProductSku", "Product SKU");

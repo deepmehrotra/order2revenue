@@ -151,13 +151,6 @@ public class FillManager {
 						cell.setCellValue(datasource.get(i-2).getNetRate());
 						cell.setCellStyle(bodyCellStyle);
 					}
-					else if(headers[j].equals("returnCharges"))
-					{
-						HSSFCell cell = row.createCell(startColIndex+j);
-						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
-							cell.setCellValue(datasource.get(i-2).getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted());
-						cell.setCellStyle(bodyCellStyle);
-					}
 					else if(headers[j].equals("PIreferenceNo"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
@@ -418,6 +411,34 @@ public class FillManager {
 						cell.setCellValue(datasource.get(i-2).getOrderTax().getNetTax());
 						cell.setCellStyle(bodyCellStyle);
 					}
+					else if(headers[j].equals("returnType"))
+					{
+						HSSFCell cell = row.createCell(startColIndex+j);
+						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
+							cell.setCellValue(datasource.get(i-2).getOrderReturnOrRTO().getType());
+						cell.setCellStyle(bodyCellStyle);
+					}
+					else if(headers[j].equals("faultType"))
+					{
+						HSSFCell cell = row.createCell(startColIndex+j);
+						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
+							cell.setCellValue(datasource.get(i-2).getOrderReturnOrRTO().getReturnCategory());
+						cell.setCellStyle(bodyCellStyle);
+					}
+					else if(headers[j].equals("returnStage"))
+					{
+						HSSFCell cell = row.createCell(startColIndex+j);
+						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
+							cell.setCellValue(datasource.get(i-2).getOrderReturnOrRTO().getCancelType());
+						cell.setCellStyle(bodyCellStyle);
+					}
+					else if(headers[j].equals("shippingZone"))
+					{
+						HSSFCell cell = row.createCell(startColIndex+j);
+						if(datasource.get(i-2).getCustomer() != null)
+							cell.setCellValue(datasource.get(i-2).getCustomer().getZipcode());
+						cell.setCellStyle(bodyCellStyle);
+					}
 					else if(headers[j].equals("returnReason"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
@@ -450,12 +471,6 @@ public class FillManager {
 						HSSFCell cell = row.createCell(startColIndex+j);
 						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
 							cell.setCellValue((datasource.get(i-2).getDiscount())-((datasource.get(i-2).getDiscount()/datasource.get(i-2).getQuantity())*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()));
-						cell.setCellStyle(bodyCellStyle);
-					}
-					else if(headers[j].equals("paymentDifference"))
-					{
-						HSSFCell cell = row.createCell(startColIndex+j);
-						cell.setCellValue(datasource.get(i-2).getOrderPayment().getPaymentDifference());
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("netSellingFee"))

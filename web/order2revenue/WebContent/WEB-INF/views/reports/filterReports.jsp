@@ -115,32 +115,64 @@
 										All
 									</label>
 								</div>
-
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
 										value="orderId" name="headers"> Order Id
 									</label>
 								</div>
-
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="invoiceId" name="headers"> Invoice Id
-									</label>
-								</div>
-
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="returnCharges" name="headers"> Return Charges
+										value="Partner" name="headers"> Channel
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="PIreferenceNo" name="headers"> PI Reference No
+										value="subOrderId" name="headers"> Secondary OrderId
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="logicalPartner" name="headers"> Logistic Partner
+										value="returnId" name="headers"> ReturnId
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="recievedDate" name="headers"> Order RecievedDate
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="shippedDate" name="headers"> Order shipped Date
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="deliveryDate" name="headers"> Expected Delivery Date
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="returnDate" name="headers"> Return Received Date
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="dateofPayment" name="headers"> Expected date of Payment
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="payDate" name="headers"> Actual payment Date
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="invoiceId" name="headers"> InvoiceId
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="PIreferenceNo" name="headers"> PIreferenceNo
 									</label>
 								</div>
 								<div class="checkbox">
@@ -150,120 +182,102 @@
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="totalMRP" name="headers"> Total MRP
+										value="sku" name="headers"> Vendor  SKU
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="grossNR" name="headers"> Gross N/R
+										value="quantity" name="headers"> Sale Quantity
+									</label>
+								</div>	
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="returnQuantity" name="headers"> Return Quantity
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="netNR" name="headers"> Net N/R
+										value="netSaleQuantity" name="headers"> Net Sale Quantity
 									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="grossPR" name="headers"> Gross P/R
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="returnPR" name="headers"> Return P/R
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="netPCC" name="headers"> Net PCC
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="netFixedFee" name="headers"> Net Fixed Fee
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="returnTDS" name="headers"> Return TDS
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="netTDS" name="headers"> Net TDS To Deposited
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="customerCity" name="headers"> Customer City
-									</label>
-								</div>
+								</div>								
 
 							</div>
 
-							<div class="col-md-3">
-
+							<div class="col-md-3">									
+								
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="Partner" name="headers"> Partner
-									</label>
-								</div>
-
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="recievedDate" name="headers"> Received Date
-									</label>
-								</div>
-
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="status" name="headers"> Status
-									</label>
-								</div>
-
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="netRate" name="headers"> Net Receivable
+										value="totalMRP" name="headers"> MRP
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="returnId" name="headers"> Return ID
+										value="grossSp" name="headers"> Gross Taxable Sale
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="deliveryDate" name="headers"> Delivery Date
+										value="returnSp" name="headers"> Return Taxable Sale
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="quantity" name="headers">Sale Quantity
+										value="netSp" name="headers"> Net Taxable Sale
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="grossSp" name="headers"> Total Gross SP
+										value="netRate" name="headers"> Net Rate
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="addReturnCharges" name="headers"> Additional Return Charges
+										value="grossNR" name="headers"> Gross Actual Sale
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="returnChargesReversed" name="headers"> Gross Return Charges Reversed
+										value="returnChargesReversed" name="headers"> Reversed Actual Sale
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="totalReturnCharges" name="headers"> Total Return Charges
+										value="addReturnCharges" name="headers"> Add. Return Charges
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="netPR" name="headers"> Net P/R
+										value="totalReturnCharges" name="headers"> Total Return Actual Sale
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="netNR" name="headers"> Net Actual Sale
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="netPayment" name="headers"> Net Payment Result
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="payDiff" name="headers"> Net Payment Diff.
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="grossPR" name="headers"> Gross Tax-free Sale
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="returnPR" name="headers"> Return Tax free Sale
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="netPR" name="headers"> Net Tax Free Sale
 									</label>
 								</div>
 								<div class="checkbox">
@@ -273,175 +287,52 @@
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="netShippingCharges" name="headers"> Net Shipping Charges
+										value="grossTax" name="headers"> Gross Tax Dues
 									</label>
 								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="serviceTax" name="headers"> Service Tax
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="grossCostProduct" name="headers"> Gross Cost Of Product
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="returnCostProduct" name="headers"> Return Cost Of Product
-									</label>
-								</div>
+								
 							</div>
 
-							<div class="col-md-3">
-
+							<div class="col-md-3">								
+								
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="shippedDate" name="headers"> Shipped Date
-									</label>
-								</div>
-
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="payCycle" name="headers"> Payment Cycle
-									</label>
-								</div>
-
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="finalStatus" name="headers"> Final Status
+										value="returnTax" name="headers"> Reversed Tax Dues
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="awbNo" name="headers"> AWB
+										value="netTax" name="headers"> Net Tax Dues
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="paymentType" name="headers"> Payment Type
+										value="grossTDS" name="headers"> Gross TDS Dues
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="dateofPayment" name="headers"> Actual Payment Date
+										value="returnTDS" name="headers"> Reversed TDS Dues
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="returnQuantity" name="headers"> Return Quantity
+										value="netTDS" name="headers"> Net TDS Dues
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="returnSp" name="headers"> Return SP
+										value="grossCommission" name="headers"> Gross Commission Paid
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="paymentDifference" name="headers"> Payment Difference Amount
+										value="returnCommission" name="headers"> Reversed Commission
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="eossDiscount" name="headers"> Total Gross/EOSS Discount
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="grossTax" name="headers"> Gross Tax
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="returnTax" name="headers"> Return Tax
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="grossCommission" name="headers"> Gross Commission
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="returnCommission" name="headers"> Return Commission Reversed
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="netCostProduct" name="headers"> Net Cost Of Product
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="grossProfit" name="headers"> Gross Profit
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="sellerNote" name="headers"> Seller Note
-									</label>
-								</div>
-
-							</div>
-
-							<div class="col-md-3">
-
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="payDate" name="headers"> Payment Date
-									</label>
-								</div>
-
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="netPayment" name="headers"> Net Payment
-									</label>
-								</div>
-
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="payDiff" name="headers"> Payment Difference
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="subOrderId" name="headers"> Sub Order ID
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="sku" name="headers"> SKU
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="returnDate" name="headers"> Return Date
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="netSaleQuantity" name="headers"> Net Sale Quantity
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="netSp" name="headers"> Net SP
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="totalReturnEossDiscount" name="headers"> Total Return/EOSS Discount
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="netReturnEossDiscount" name="headers"> Total Net Return/EOSS Discount
-									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="netTax" name="headers"> Net Tax
+										value="netCommission" name="headers"> Net Commission Paid
 									</label>
 								</div>
 								<div class="checkbox">
@@ -451,12 +342,107 @@
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="netCommission" name="headers"> Net Commission
+										value="netPCC" name="headers"> Net PCC Paid
 									</label>
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="grossTDS" name="headers"> Gross TDS
+										value="netFixedFee" name="headers"> Net Fixed Fee Paid
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="netShippingCharges" name="headers"> Net Shipping Charges Paid
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="serviceTax" name="headers"> Net Service Tax Paid
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="eossDiscount" name="headers"> Gross EOSS Disc
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="totalReturnEossDiscount" name="headers"> Reversed ROSS Disc
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="netReturnEossDiscount" name="headers"> Net EOSS Disc
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="grossCostProduct" name="headers"> Gross Product Cost
+									</label>
+								</div>							
+
+							</div>
+
+							<div class="col-md-3">
+								
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="returnCostProduct" name="headers"> Return Product Cost
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="netCostProduct" name="headers"> Net Product Cost
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="grossProfit" name="headers"> Gross Margin
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="paymentType" name="headers"> Payment Type
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="customerName" name="headers"> Customer Name
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="customerCity" name="headers"> Customer City
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="logicalPartner" name="headers"> Logistic Partner
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="awbNo" name="headers"> AWB no
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="returnType" name="headers"> Return Type
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="faultType" name="headers"> Fault Type
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="returnStage" name="headers"> Return Stage
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="shippingZone" name="headers"> Shipping Zone
 									</label>
 								</div>
 								<div class="checkbox">
@@ -466,7 +452,17 @@
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="customerName" name="headers"> Customer Name
+										value="sellerNote" name="headers"> Seller Notes
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="status" name="headers"> Last Updated Status
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" class="checkbox1"
+										value="finalStatus" name="headers"> Action
 									</label>
 								</div>
 

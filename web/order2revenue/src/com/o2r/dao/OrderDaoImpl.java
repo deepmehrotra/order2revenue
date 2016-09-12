@@ -5449,24 +5449,32 @@ public class OrderDaoImpl implements OrderDao {
 	public List<Order> searchAsIsOrder(String searchCriteria, String ID, int sellerId) {
 		List<Order> orderList = null;
 		Session session = null;
-		String channelOrderId = "";
-		if (ID.contains(GlobalConstant.orderUniqueSymbol))
-			channelOrderId = ID.substring(0,
-					ID.indexOf(GlobalConstant.orderUniqueSymbol));
-		else
-			channelOrderId = ID;
+		String channelOrderId = "";	
+		Criteria criteria=null;
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Order.class);
+			criteria = session.createCriteria(Order.class);
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions
-							.like(searchCriteria, channelOrderId + "%"));
+					.add(Restrictions.eq(searchCriteria, ID));
 			orderList = criteria.list();
 			if (orderList != null && orderList.size() != 0) {
 				return orderList;
+			} else if (ID.contains(GlobalConstant.orderUniqueSymbol)){
+				channelOrderId = ID.substring(0,
+						ID.indexOf(GlobalConstant.orderUniqueSymbol));	
+				criteria = session.createCriteria(Order.class);
+				criteria.createAlias("seller", "seller",
+						CriteriaSpecification.LEFT_JOIN)
+						.add(Restrictions.eq("seller.id", sellerId))
+						.add(Restrictions
+								.like(searchCriteria, channelOrderId + "%"));
+				orderList = criteria.list();
+				if (orderList != null && orderList.size() != 0) {
+					return orderList;
+				}
 			}
 		} catch (Exception e) {
 			log.error("Failed by Seller ID : " + sellerId, e);
