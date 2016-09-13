@@ -369,37 +369,93 @@
 								<b>Follow These Instructions</b>
 							</h2>
 							<ol>
-								<li>Upload the order sheet downloaded form Amazon seller
-									panel but <b>only in .xls format</b>.
-								</li>
-								<li>Row with the column headers is the first row of sheet.
-									Make sure to keep the spelling of all column header according
-									to instructions.</li>
-								<li>Do not change the formatting of columns.</li>
-								<li>Excel sheet should have these columns with exact same
-									heading as downloaded form panel : Mandatory Columns :
-									order-id,purchase-date,sku,quantity-purchased,item-price,shipping-price,ship-postal-code,payment-method,
-									Non mandatory
-									Columns:order-item-id,buyer-email,buyer-name,buyer-phone-number,ship-address-1,ship-address-2,ship-address-3,ship-city,fulfilled-by
-								</li>
-								<li>Other mandatory columns to be added manually with
-									respective values for each transactions : Sales Channel :
-									Channel name for which file is being upload. It should be
-									same(case-sensitive) as the name of sales channel configured.</li>
-								<li>InvoiceID : Mention invoice id for each order.</li>
-								<li>Order Shipped Date :Mention shipped date in mm-DD-yyyy
-									format.</li>
-								<li>Some non mandatory columns to be added :</li>
-								<li>Net Rate: Mandatory when NR switch for particular
-									channel is off or Event is implemented on that channel and SKU
-									with fixed TP.</li>
-								<li>Seller Notes : Any remarks about order.</li>
-								<li>AWB No.:Airway bill number. It is used to track order
-									during return and to track order delivery status.</li>
-								<li>PIreferenceNo: Another Identifier to find order.</li>
-								<li>Order MRP: Used to find discount values on order, enter
-									MRP per quantity.</li>
-							</ol>
+                        <li>
+                            Bulk Download pending orders from Amazon Seller Panel,by
+                            <ol class="d">
+                                <li>
+                                    Visiting Orders->Order Reports Tab
+                                    </li>
+                                    <li>
+                                        Selecting No of Days for which orders need to be downloaded
+                                    </li>
+
+                                    <li>
+                                        Click on Request Report
+                                    </li>
+                                    <li>
+                                        The requested report will be displayed in the below list.
+                                    </li>
+                                    
+                                </ol>
+                            </li>
+                            <li>
+                               Open the .txt downloaded file
+                            </li>
+                             <li>
+                                Copy and paste all contents to a new Excel File
+                            </li>
+                            <li>
+                                Ensure that the 1st row of file is the “headers”
+                            </li>
+                            <li>
+                                Do not change the formatting of columns or any headers.
+                            </li>
+                            <li>
+                                Add the following "Case Sensitive" headers (without “ ”) at the end of 1st row of the file and input its corresponding value against every row 
+                                <ol class="d">
+                                    <li>
+                                        <b>Mandatory Values (to be added manually by seller)</b>
+                                        <ol class="c">
+                                            <li>
+                                               <b class="color">Sales Channel</b> -
+                                               Channel name for which file is being uploaded.It should be same(case-sensitive) as the name of sales channel configured.
+                                            </li>
+                                            <li>
+                                                <b class="color">InvoiceID</b> -
+                                               Mention invoice id for each order
+                                            </li>
+                                            <li>
+                                                <b class="color">Order Shipped Date</b> – Mention shipped date in "MM-DD-YYYY" format.
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        <b>Non-Mandatory (scenario specific or good to have attributes)</b>
+                                        <ol class="c">
+                                            <li>
+                                                <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU’s at fixed Transfer Price.
+                                            </li>
+                                            <li>
+                                                <b class="color">Seller Notes</b> - "Any customized remarks about order."
+                                            </li>
+                                            <li>
+                                                <b class="color">AWB No</b> - "Airway bill number. It is used to track order during return and to track order delivery status."
+                                            </li>
+                                            <li>
+                                                <b class="color">Order MRP</b> - "Used to find discount values on order,enter MRP per quantity."
+                                            </li>
+                                        </ol>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                Save the file in ".xls" (97-2003) format
+                            </li>
+                            <li>
+                                Import the file by selecting "Amazon Order Upload" from the dropdown list
+                            </li>
+                            <li>
+                                Make sure to keep the spelling & spacing of all column headers exactly as stated in the instructions.   
+                            </li>
+                            <li>
+                                The file to be imported should have the following columns by default
+                                order-id,purchase-date, sku,quantity-purchased, item-price,shipping-price,ship-postal-code,payment-method
+                            </li>
+                            <li>
+                                Watch Tutorial
+                            </li>
+                        </li>
+                    </ol>
 
 						</div>
 						<div class="flipkartorderupload">
@@ -407,311 +463,621 @@
 								<b>Follow These Instructions</b>
 							</h2>
 							<ol>
-								<li>Upload the order sheet downloaded form Flipkart seller
-									panel but only in xls format</li>
-								<li>Row with the column headers is the first row of sheet.
-									Make sure to keep the spelling of all column header according
-									to instructions.</li>
-								<li>Do not change the formatting of columns.</li>
-								<li>Excel sheet should have these columns with exact same
-									heading as downloaded form panel or mention here : Mandatory
-									columns : Order Id,SKU Code,Quantity,Invoice No.,Invoice
-									Amount,PIN Code,Ready to Ship by date Non mandatory
-									columns:ORDER ITEM ID,Ship to name,Address Line 1,Address Line
-									2,City,Phone No,</li>
-								<li>Other mandatory columns to be added manually with
-									respective values for each transactions : Sales Channel :
-									Channel name for which file is being upload. It should be
-									same(case-sensitive) as the name of sales channel configured.
-									Payment Type: Its value should be Prepaid or COD.</li>
-								<li>Some non mandatory columns to be added :</li>
-								<li>Net Rate: Mandatory when NR switch for particular
-									channel is off or Event is implemented on that channel and SKU
-									with fixed TP.</li>
-								<li>Seller Notes : Any remarks about order.</li>
-								<li>AWB No.:Airway bill number. It is used to track order
-									during return and to track order delivery status.</li>
-								<li>PIreferenceNo: Another Identifier to find order.</li>
-								<li>Order MRP: Used to find discount values on order ,
-									enter MRP per quantity.</li>
-								<li>Logistic Partner:It makes O2R easy to track deliveries.</li>
-								<li>Customer Email: It helps to create customer database.</li>
-							</ol>
+                        <li>
+                            Bulk Download pending orders from Flipkart Seller Panel,before generating shipping label 
+                        </li>
+                        <li>
+                            Open the downloaded file
+                        </li>
+                        <li>
+                            Ensure that the 1st row of file is the "headers"
+                        </li>
+                        <li>
+                            Do not change the formatting of columns or any headers.
+                        </li>
+                        <li>
+                                Add the following "Case Sensitive" headers (without “ ”) at the end of 1st row of the file and input its corresponding value against every row 
+                                <ol class="d">
+                                    <li>
+                                        <b>Mandatory Values (to be added manually by seller)</b>
+                                        <ol class="c">
+                                            <li>
+                                               <b class="color">Sales Channel</b> -
+                                               Channel name for which file is being uploaded.It should be same(case-sensitive) as the name of sales channel configured.
+                                            </li>
+                                            <li>
+                                                <b class="color">Payment Type</b> -
+                                               Valid values PREPAID,COD or OTHERS
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        <b>Non-Mandatory (scenario specific or good to have attributes)</b>
+                                        <ol class="c">
+                                            <li>
+                                                <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU’s at fixed Transfer Price.
+                                            </li>
+                                            <li>
+                                                <b class="color">Seller Notes</b> - Any customized remarks about order.
+                                            </li>
+                                            <li>
+                                                <b class="color">AWB No</b> - Airway bill number. It is used to track order during return and to track order delivery status.
+                                            </li>
+                                            <li>
+                                                <b class="color">Order MRP</b> - Used to find discount values on order,enter MRP per quantity.
+                                            </li>
+                                            <li>
+                                                <b class="color">Logistic Partner</b> - Shipping Provider
+                                            </li>
+                                            <li>
+                                                <b class="color">Customer Email</b> - If provided, adds to the customer database.
+                                            </li>
+                                        </ol>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                Save the file in ".xls" (97-2003) format.
+                            </li>   
+                            <li>
+                                Import the file by selecting "Flipkart Order Upload" from the dropdown list
+                            </li> 
+                            <li>
+                                Make sure to keep the spelling & spacing of all column headers exactly as stated in the instructions
+                            </li>
+                            <li>
+                                The file to be imported should have the following columns by default ORDER ITEM ID,SKU Code,Quantity,Invoice No.,Invoice Amount,PIN Code,Ready to Ship by date.
+                            </li>
+                            <li>
+                                Watch Tutorial.
+                            </li>
+                        </ol>
 						</div>
 						<div class="snapdealorderupload">
 							<h2 class="text-center">
 								<b>Follow These Instructions</b>
 							</h2>
-							<ol>
-								<li>Upload the order sheet downloaded form Snapdeal seller
-									panel but only in xls format.</li>
-								<li>Row with the column headers is the first row of sheet.
-									Make sure to keep the spelling of all column header according
-									to instructions.</li>
-								<li>Do not change the formatting of columns.</li>
-								<li>Excel sheet should have these columns with exact same
-									heading as downloaded form panel : Mandatory columns : Suborder
-									Id,SKU Code,Order Created Date,Pin Code,Selling Price Per
-									Item,Invoice Code,Payment Mode. Non mandatory
-									columns:Courier,Reference Code,AWB Number,Customer
-									Name,City,MRP,Mobile No.,Email ID,Handover Date,Address.</li>
-								<li>Other mandatory columns to be added manually with
-									respective values for each transactions :</li>
-								<li>Sales Channel : Channel name for which file is being
-									upload. It should be same(case-sensitive) as the name of sales
-									channel configured.</li>
-								<li>Quantity: Number of pieces of each order.</li>
-								<li>Some non mandatory columns to be added :</li>
-								<li>Net Rate: Mandatory when NR switch for particular
-									channel is off or Event is implemented on that channel and SKU
-									with fixed TP.</li>
-								<li>Seller Notes : Any remarks about order.</li>
-								<li>Secondary OrderID: Another identifier to search for the
-									order.</li>
-
-							</ol>
+						  <ol>
+                            <li>
+                                Bulk Download pending orders from snapdeal Seller Panel, before generating shipping label 
+                            </li>
+                            <li>
+                                Open the downloaded file
+                            </li>
+                            <li>
+                                Ensure that the 1st row of file is the “headers”
+                            </li>
+                            <li>
+                                Do not change the formatting of columns or any headers.
+                            </li>
+                            <li>
+                                Add the following "Case Sensitive" headers (without “ ”) at the end of 1st row of the file and input its corresponding value against every row 
+                                <ol class="d">
+                                    <li>
+                                        <b>Mandatory Values (to be added manually by seller)</b>
+                                        <ol class="c">
+                                            <li>
+                                               <b class="color">Sales Channel</b> -
+                                               Channel name for which file is being uploaded.It should be same(case-sensitive) as the name of sales channel configured.
+                                            </li>
+                                            <li>
+                                                <b class="color">Quantity</b> -
+                                               Quantity of orders.In most cases it is 1.
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        <b>Non-Mandatory (scenario specific or good to have attributes)</b>
+                                            <ol class="c">
+                                                <li>
+                                                    <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU’s at fixed Transfer Price.
+                                                </li>
+                                                <li>
+                                                    <b class="color">Seller Notes</b> - Any customized remarks about order.
+                                                </li>
+                                                <li>
+                                                    <b class="color">AWB No</b> - Airway bill number.It is used to track order during return and to track order delivery status.
+                                                </li>
+                                                <li>
+                                                    <b class="color">Secondary Order ID </b> - any secondary order reference ID.
+                                                </li>
+                                            </ol>
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    Save the file in ".xls" (97-2003) format
+                                </li>
+                                <li>
+                                    Import the file by selecting "Snapdeal Order Upload" from the dropdown list
+                                </li>
+                                <li>
+                                    Make sure to keep the spelling & spacing of all column headers exactly as stated in the instructions.
+                                </li>
+                                <li>
+                                    The file to be imported should have the following columns by default
+                                    Suborder Id,SKU Code,Order Created Date,Pin Code,Selling Price Per Item,Invoice Code,Payment Mode
+                                </li>
+                                <li>
+                                    Watch Tutorial
+                                </li>
+                            </ol>
 						</div>
 						<div class="paytmorderupload">
 							<h2 class="text-center">
 								<b>Follow These Instructions</b>
 							</h2>
-							<ol>
-								<li>Upload the order sheet downloaded form Paytm seller
-									panel but only in xls format.</li>
-								<li>Row with the column headers is the first row of sheet.
-									Make sure to keep the spelling of all column header according
-									to instructions.</li>
-								<li>Do not change the formatting of columns.</li>
-								<li>Excel sheet should have these columns with exact same
-									heading as downloaded form panel : Mandatory columns :order_id,
-									creation
-									date,pincode,item.sku,item_price,qty,shipping_amount,invoice_id
-									Non mandatory
-									columns:item_id,customer_firstname,customer_lastname,customer_email,phone,address,city,item_mrp,awb,shipper
-								</li>
-							</ol>
-							<h3 class="text-center">Other mandatory columns to be added
-								manually with respective values for each transactions :</h3>
-							<ol>
-								<li>Sales Channel : Channel name for which file is being
-									upload.It should be same(case-sensistive) as the name of sales
-									channel configured.</li>
-								<li>Quantity: Number of pieces of each order.</li>
-								<li>Payment Type: Its value should be Prepaid or COD. Order
-									Shipped Date :Mention shipped date in mm-dd-yyyy format.</li>
-								<li>Some non mandatory columns to be added : Net Rate:
-									Manadatory when NR switch for particular channel is off or
-									Event is implemented on that channel and SKU with fixed TP.</li>
-								<li>Seller Notes : Any remarks about order. PIreferenceNo :
-									Another identifier to search for the order.</li>
-
-							</ol>
+							  <ol>
+                            <li>
+                                Bulk Download pending orders from paytm Seller Panel,before generating shipping label 
+                            </li>
+                            <li>
+                                Open the downloaded file
+                            </li>
+                            <li>
+                                Ensure that the 1st row of file is the "headers"
+                            </li>
+                            <li>
+                                Do not change the formatting of columns or any headers.
+                            </li>
+                            <li>
+                                Add the following "Case Sensitive" headers (without “ ”) at the end of 1st row of the file and input its corresponding value against every row 
+                                <ol class="d">
+                                    <li>
+                                        <b>Mandatory Values (to be added manually by seller)</b>
+                                        <ol class="c">
+                                            <li>
+                                               <b class="color">Sales Channel</b> -
+                                               Channel name for which file is being uploaded.It should be same(case-sensitive) as the name of sales channel configured.
+                                            </li>
+                                            <li>
+                                                <b class="color">Payment Type</b>Valid Values, PREPAID,COD or OTHERS
+                                            </li>
+                                            <li>
+                                                <b class="color">Order Shipped Date</b> -
+                                               Mention shipped date in “MM-DD-YYYY” format.
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        <b>Non-Mandatory (scenario specific or good to have attributes)</b>
+                                            <ol class="c">
+                                                <li>
+                                                    <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU’s at fixed Transfer Price.
+                                                </li>
+                                                <li>
+                                                    <b class="color">Seller Notes</b> - Any customized remarks about order.
+                                                </li>
+                                            </ol>
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    Save the file in ".xls" (97-2003) format
+                                </li>
+                                <li>
+                                    Import the file by selecting "Paytm Order Upload" from the dropdown list
+                                </li>
+                                <li>
+                                    Make sure to keep the spelling & spacing of all column headers exactly as stated in the instructions.
+                                </li>
+                                <li>
+                                    The file to be imported should have the following columns by default
+                                    creation date,pincode,item_id,item.sku,item_price,qty, shipping_amount,invoice_id
+                                </li>
+                                <li>
+                                    Watch Tutorial
+                                </li>
+                            </ol>
 						</div>
 						<div class="unicommerceorderupload">
 							<h2 class="text-center">
 								<b>Follow These Instructions</b>
 							</h2>
 							<ol>
-								<li>Upload the order sheet downloaded form Unicommerce
-									panel but only in xls format.</li>
-								<li>Row with the column headers is the first row of sheet.
-									Make sure to keep the spelling of all column header according
-									to instructions.</li>
-								<li>Do not change the formatting of columns.</li>
-								<li>Excel sheet should have these columns with exact same
-									heading as downloaded form panel : Mandatory columns :Display
-									Order Code,COD,Invoice Code,Shipping Address Pincode,Item SKU
-									Code,Channel Name,Total Price,Packet Number,Order Date as
-									dd/mm/yyyy hh:MM:ss,Dispatch Date, Non mandatory columns:Sale
-									Order Item Code,Notification Email,Shipping Address
-									Name,Shipping Address Line 1,Shipping Address Line 2,Shipping
-									Address City,Shipping Address Phone,Shipping provider,Tracking
-									Number,</li>
-							</ol>
-							<h3 class="text-center">Other mandatory columns to be added
-								manually with respective values for each transactions :</h3>
-							<ol>
-								<li>O2R Channel : Channel name for which file is being
-									upload.It should be same(case-sensistive) as the name of sales
-									channel configured.</li>
-								<li>Quantity: Number of pieces of each order.</li>
-								<li>Payment Type: Its value should be Prepaid or COD. Order
-									Shipped Date :Mention shipped date in mm-dd-yyyy format.</li>
-								<li>Some non mandatory columns to be added : Net Rate:
-									Manadatory when NR switch for particular channel is off or
-									Event is implemented on that channel and SKU with fixed TP.</li>
-								<li>Seller Notes : Any remarks about order. PIreferenceNo :
-									Another identifier to search for the order. Order MRP: Used to
-									calculate discount.</li>
-
-							</ol>
+                                <li>
+                                    Bulk Download Sale Orders report from Unicommerce Panel for all shipped orders
+                                </li>
+                                <li>
+                                    Open the downloaded file
+                                </li>
+                                <li>
+                                    Ensure that the 1st row of file is the "headers"
+                                </li>
+                                <li>
+                                    Do not change the formatting of columns or any headers.
+                                </li>
+                                <li>
+                                    Add the following "Case Sensitive" headers (without “ ”) at the end of 1st row of the file and input its corresponding value against every row 
+                                    <ol class="d">
+                                        <li>
+                                            <b>Mandatory Values (to be added manually by seller)</b>
+                                            <ol class="c">
+                                                <li>
+                                                   <b class="color">O2R Channel</b> -
+                                                   Channel name for which orders are uploaded. It should be exactly the same(case-sensitive) as the name of sales channel configured with Order2Revenue. 
+                                                </li>
+                                            </ol>
+                                        </li>
+                                        <li>
+                                            <b>Non-Mandatory (scenario specific or good to have attributes)</b>
+                                                <ol class="c">
+                                                    <li>
+                                                        <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU’s at fixed Transfer Price.
+                                                    </li>
+                                                    <li>
+                                                        <b class="color">Seller Notes</b> - Any customized remarks about order.
+                                                    </li>
+                                                    <li>
+                                                        <b class="color">Order MRP </b> - 
+                                                        Used to find discount values on order, enter MRP per quantity
+                                                    </li>
+                                                    <li>
+                                                        <b class="color">PIreferenceNo</b> - 
+                                                        Additional identifier for order search
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        Save the file in ".xls" (97-2003) format
+                                    </li>
+                                    <li>
+                                        Import the file by selecting "Unicommerce Order Upload" from the dropdown list
+                                    </li>
+                                    <li>
+                                        Make sure to keep the spelling & spacing of all column headers exactly as stated in the instructions.
+                                    </li>
+                                    <li>
+                                        The file to be imported should have the following columns by default
+                                        Display Order Code, COD, Invoice Code, Shipping Address Pincode, Item SKU Code, Channel Name, Total Price, Packet Number, Order Date as dd/mm/yyyy hh:MM:ss, Dispatch Date
+                                    </li>
+                                    <li>
+                                        Watch Tutorial
+                                    </li>
+                                </ol>
 						</div>
 						<div class="limeroadorderupload">
 							<h2 class="text-center">
 								<b>Follow These Instructions</b>
 							</h2>
-							<ol>
-								<li>Upload the order sheet downloaded form Limeroad seller
-									panel but only in xls format.</li>
-								<li>Row with the column headers is the first row of sheet.
-									Make sure to keep the spelling of all column header according
-									to instructions.</li>
-								<li>Do not change the formatting of columns.</li>
-								<li>Excel sheet should have these columns with exact same
-									heading as downloaded form panel : Mandatory columns : Order
-									Id,Date Time,Vendor Code,Qty,Order Type Non mandatory
-									columns:Customer Name,Number,Address,AWB,</li>
-							</ol>
-							<h3 class="text-center">
-								<b>Other mandatory columns to be added manually with
-									respective values for each transactions : </b>
-							</h3>
-							<ol>
-								<li>Sales Channel : Channel name for which file is being
-									upload.It should be same(case-sensistive) as the name of sales
-									channel configured.</li>
-								<li>Pincode : Get Zipcode value from address colum in file.</li>
-								<li>Quantity: Number of pieces of each order.</li>
-								<li>InvoiceID: Input invoice number for each order
-									transaction.</li>
-								<li>Order Shipped Date :Mention shipped date in mm-dd-yyyy
-									format.</li>
-								<li>Order SP : Enter SP per quantity . If any extra charges
-									like shipping charges add in SP value.</li>
-							</ol>
-							<h3 class="text-center">
-								<b>Some non mandatory columns to be added :</b>
-							</h3>
-							<ol>
-								<li>Net Rate: Manadatory when NR switch for particular
-									channel is off or Event is implemented on that channel and SKU
-									with fixed TP</li>
-								<li>Seller Notes : Any remarks about order.</li>
-								<li>PIreferenceNo : Another identifier to search for the
-									order.</li>
-								<li>Order MRP: Used to find discount values on order ,
-									enter MRP per quantity.</li>
-								<li>Secondary OrderID : Identifier to search order during
-									return and payment.</li>
-								<li>Logistic Partner : It is used to track order during
-									return and to track order delivery status.</li>
-								<li>Customer Email: It helps to create customer database.</li>
-								<li>Customer City : It helps to create customer database.</li>
-							</ol>
+							 <ol>
+                                <li>
+                                    Bulk Download pending orders from limeroad Seller Panel, before generating shipping label 
+                                </li>
+                                <li>
+                                    Open the downloaded file
+                                </li>
+                                <li>
+                                    Ensure that the 1st row of file is the "headers"
+                                </li>
+                                <li>
+                                    Do not change the formatting of columns or any headers.
+                                </li>
+                                <li>
+                                    Add the following "Case Sensitive" headers (without “ ”) at the end of 1st row of the file and input its corresponding value against every row 
+                                    <ol class="d">
+                                        <li>
+                                            <b>Mandatory Values (to be added manually by seller)</b>
+                                            <ol class="c">
+                                                <li>
+                                                   <b class="color">Sales Channel</b> -
+                                                   Channel name for which file is being upoaded.It should be same(case-sensitive) as the name of sales channel configured.
+                                                </li>
+                                                <li>
+                                                    <b class="color">InvoiceID</b>Input invoice ID for each order transaction.
+                                                </li>
+                                                <li>
+                                                    <b class="color">Order Shipped Date</b> -
+                                                   Mention shipped date in “MM-DD-YYYY” format.
+                                                </li>
+                                                <li>
+                                                    <b class="color">Pincode</b>Shipping Pin Code.The same is available in address column.The seller can easily use the RIGHT formula to extract pin code values into this column. 
+                                                </li>
+                                            </ol>
+                                        </li>
+                                        <li>
+                                            <b>Non-Mandatory (scenario specific or good to have attributes)</b>
+                                                <ol class="c">
+                                                    <li>
+                                                        <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU’s at fixed Transfer Price.
+                                                    </li>
+                                                    <li>
+                                                        <b class="color">Seller Notes</b> - Any customized remarks about order.
+                                                    </li>
+                                                    <li>
+                                                        <b class="color">Secondary OrderID </b> - Additional Order Search Identifier
+                                                    </li>
+                                                    <li>
+                                                        <b class="color">Order MRP </b> - Used to find discount values on order,enter MRP per quantity.
+                                                    </li>
+                                                    <li>
+                                                        <b class="color">Logistic Partner </b> - Shipping Provider
+                                                    </li>
+                                                    <li>
+                                                        <b class="color"> Customer Email</b> - If provided, adds to the customer database.
+                                                    </li>
+                                                    <li>
+                                                        <b class="color">Customer City</b> - City where the order is shipped
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        Save the file in ".xls" (97-2003) format
+                                    </li>
+                                    <li>
+                                        Import the file by selecting "limeroad Order Upload" from the dropdown list
+                                    </li>
+                                    <li>
+                                        Make sure to keep the spelling & spacing of all column headers exactly as stated in the instructions.
+                                    </li>
+                                    <li>
+                                        The file to be imported should have the following columns by default
+                                        Order Id, Date Time, Vendor Code,Price,Qty,Customer Name, Number,Address,Order Type,AWB 
+                                    </li>
+                                    <li>
+                                        Watch Tutorial
+                                    </li>
+                                </ol>
 						</div>
 						<div class="amazonepaymentupload">
 							<h2 class="text-center">
 								<b>Follow These Instructions</b>
 							</h2>
-							<ol>
-								<li>Upload the payment sheet from Amazon but <b>only in
-										xls format</b>.
-								</li>
-								<li>Row with the colum headers is the first row of
-									sheet.Make sure to keep the spelling of all colum header
-									according to instructions.</li>
-								<li>Do not change the formatting of colums.</li>
-								<li>Excel sheet should have these colums with exact same
-									heading as downloaded form panel : <br> <b>Mandatory
-										Colums :</b>Date,Order ID,Transaction type,Payment
-									Detail,Amount,SKU <br> <b>Non mandatory Colums:</b>
-								</li>
-								<li>No mandatory colums to be added manually.</li>
-								<li>Other non mandatory colums to be added. <br> <b>InvoiceId
-										:</b>Put invoice number for order search.
-
-								</li>
-							</ol>
+						  <ol>
+                                    <li>
+                                        Download Payment Detail File from Amazon Seller Panel.
+                                    </li>
+                                    <li>
+                                        Ensure that the 1st row of file is the "headers"
+                                    </li>
+                                    <li>
+                                        Do not change the formatting of columns or any headers.
+                                    </li>
+                                    <li>
+                                        The downloaded excel file will by default have the following columns with exact same heading. Ensure      the same are present.<br>
+                                        •   Mandatory Column (Already present in downloaded file)
+                                        <ol class="d">
+                                            <li>
+                                                  Date
+                                            </li>
+                                            <li>
+                                                Order ID
+                                            </li>
+                                            <li>
+                                                SKU
+                                            </li>
+                                            <li>
+                                                Transaction type
+                                            </li>
+                                            <li>
+                                                Payment Detail
+                                            </li>
+                                            <li>
+                                                Amount
+                                            </li>
+                                            
+                                        </ol>
+                                    </li>
+                                    <li>
+                                         Save the file in <b>.xls(97-2003)</b> format. 
+                                    </li>
+                                    <li>
+                                        Simply Upload the file after selecting <b>"Amazon Payment Upload"</b> from the dropdown list on the Import Page.
+                                    </li>
+                                    <li>
+                                        Watch Tutorial
+                                    </li>
+                                </ol>
 
 						</div>
 						<div class="flipkartpaymentupload">
 							<h2 class="text-center">
 								<b>Follow These Instructions</b>
 							</h2>
-							<ol>
-								<li>Upload the payment sheet from Flipkart but <b>only
-										in .xls format</b>.
-								</li>
-								<li>Row with the colum headers is the first row of
-									sheet.Make sure to keep the spelling of all colum header
-									according to instructions.</li>
-								<li>Do not change the formatting of columns.</li>
-								<li>Excel sheet should have these colums with exact same
-									heading as downloaded form panel : Mandatory Colums : Order
-									ID/FSN,Order Type,Fulfilment Type,Settlement Date,Settlement
-									Value (Rs.),Seller SKU Non mandatory Colums:Order item ID</li>
-								<li>No mandatory colums to be added manually.</li>
-								<li>Other non mandatory colums to be added. <br> <b>InvoiceId
-										:</b>Put invoice number for order search.
-
-								</li>
-							</ol>
+							 <ol>
+                                    <li>
+                                        Download Payment Detail File from Flipkart Seller Panel.
+                                    </li>
+                                    <li>
+                                        Ensure that the 1st row of file is the "headers"
+                                    </li>
+                                    <li>
+                                        Do not change the formatting of columns or any headers.
+                                    </li>
+                                    <li>
+                                        The downloaded excel file will by default have the following columns with exact same heading. Ensure      the same are present.<br>
+                                        •   Mandatory Column (Already present in downloaded file)
+                                        <ol class="d">
+                                            <li>
+                                                Order Type
+                                            </li>
+                                            <li>
+                                                Fulfilment Type
+                                            </li>
+                                            <li>
+                                                Seller SKU 
+                                            </li>
+                                            <li>
+                                                 Order ID/FSN
+                                            </li>
+                                            <li>
+                                                Order item ID
+                                            </li>
+                                            <li>    
+                                               Settlement Date
+                                            </li>
+                                            <li>
+                                             Settlement Value (Rs.)
+                                            </li>
+                                            
+                                        </ol>
+                                    </li>
+                                    <li>
+                                         Save the file in <b>.xls(97-2003)</b> format. 
+                                    </li>
+                                    <li>
+                                        Simply Upload the file after selecting <b>"Amazon Payment Upload"</b> from the dropdown list on the Import Page.
+                                    </li>
+                                    <li>
+                                        Watch Tutorial
+                                    </li>
+                                </ol>
 
 						</div>
 						<div class="paytmpaymentupload">
 							<h2 class="text-center">
 								<b>Follow These Instructions</b>
 							</h2>
-							<ol>
-								<li>Upload the payment sheet from Paytm but <b>only in
-										.xls format</b>.
-								</li>
-								<li>Row with the colum headers is the first row of
-									sheet.Make sure to keep the spelling of all colum header
-									according to instructions.</li>
-								<li>Do not change the formatting of columns.</li>
-								<li>Excel sheet should have these colums with exact same
-									heading as downloaded form panel : Mandatory Colums : Order
-									ID,Payable Amount Non mandatory Colums:Order Item ID</li>
-								<li>Other mandatory colums to be added manually with
-									respective values for each transactions : Payment Date : Date
-									of Payment. Enter value in mm-DD-yyyy format.</li>
-								<li>No non mandatory colums to be added.</li>
-							</ol>
+						 <ol>
+                                    <li>
+                                        Download Payment Detail File from Flipkart Seller Panel.
+                                    </li>
+                                    <li>
+                                        Ensure that the 1st row of file is the "headers"
+                                    </li>
+                                    <li>
+                                        Do not change the formatting of columns or any headers.
+                                    </li>
+                                    <li>
+                                        The downloaded excel file will by default have the following columns with exact same heading. Ensure      the same are present.<br>
+                                        •   Mandatory Column (Already present in downloaded file)
+                                        <ol class="d">
+                                            <li>
+                                                Order ID
+                                            </li>
+                                            <li>
+                                                Order Item ID
+                                            </li>
+                                            <li>
+                                                Merchant SKU
+                                            </li>
+                                            <li>
+                                                Payment Date
+                                            </li>
+                                            <li>
+                                               Payable Amount
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                         Save the file in <b>.xls(97-2003) </b>format. 
+                                    </li>
+                                    <li>
+                                        Simply Upload the file after selecting <b>"Paytm Payment Upload"</b> from the dropdown list on the Import Page.
+                                    </li>
+                                    <li>
+                                        Watch Tutorial
+                                    </li>
+                                </ol>
 
 						</div>
 						<div class="snapdealpaymentupload">
 							<h2 class="text-center">
 								<b>Follow These Instructions</b>
 							</h2>
-							<ol>
-								<li>Upload the payment sheet from Paytm but <b>only in
-										.xls format</b>.
-								</li>
-								<li>Row with the colum headers is the first row of
-									sheet.Make sure to keep the spelling of all colum header
-									according to instructions.</li>
-								<li>Do not change the formatting of columns.</li>
-								<li>Excel sheet should have these colums with exact same
-									heading as downloaded form panel : Mandatory Colums :
-									Type,Transaction ID,Reason,SKU,Invoice Number,Net
-									Payable,Payment Date, Non mandatory Colums:</li>
-								<li>No mandatory colums to be added.</li>
-								<li>No non mandatory colums to be added.</li>
-							</ol>
+							 <ol>
+                                    <li>
+                                        Download Payment Detail File from Snapdeal Seller Panel.
+                                    </li>
+                                    <li>
+                                        Ensure that the 1st row of file is the "headers"
+                                    </li>
+                                    <li>
+                                        Do not change the formatting of columns or any headers.
+                                    </li>
+                                    <li>
+                                        The downloaded excel file will by default have the following columns with exact same heading. Ensure      the same are present.<br>
+                                        •   Mandatory Column (Already present in downloaded file)
+                                        <ol class="d">
+                                            <li>
+                                                Type
+                                            </li>
+                                            <li>
+                                                Transaction ID
+                                            </li>
+                                            <li>
+                                                Reason
+                                            </li>
+                                            <li>
+                                                SKU
+                                            </li>
+                                            <li>
+                                               Invoice Number
+                                            </li>
+                                            <li>
+                                                Net  Payable
+                                            </li>
+                                            <li>
+                                                Payment Date
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                         Save the file in<b> .xls(97-2003) </b>format. 
+                                    </li>
+                                    <li>
+                                        Simply Upload the file after selecting <b>"Snapdeal Payment Upload" </b>from the dropdown list on the Import Page.
+                                    </li>
+                                    <li>
+                                        Watch Tutorial
+                                    </li>
+                                </ol>
 
 						</div>
 						<div class="limeroadpaymentupload">
 							<h2 class="text-center">
 								<b>Follow These Instructions</b>
 							</h2>
-							<ol>
-								<li>Upload the payment sheet from Paytm but <b>only in
-										.xls format</b>.
-								</li>
-								<li>Row with the colum headers is the first row of
-									sheet.Make sure to keep the spelling of all colum header
-									according to instructions.</li>
-								<li>Do not change the formatting of columns.</li>
-								<li>Excel sheet should have these colums with exact same
-									heading as downloaded form panel : Mandatory Colums : Sales /
-									Sales Return,Order ID,Vendor Invoice Number,Outstanding Payable
-									to Vendors (Final) Non mandatory Colums:</li>
-								<li>Other mandatory colums to be added manually with
-									respective values for each transactions : Payment Date : Date
-									of Payment. Enter value in mm-DD-yyyy format.</li>
-								<li>No non mandatory colums to be added.</li>
-							</ol>
+							 <ol>
+                                    <li>
+                                        Open the file received via mail from Limeroad for the payments received
+                                    </li>
+                                    <li>
+                                        Ensure that the 1st row of file is the "headers"
+                                    </li>
+                                    <li>
+                                        Do not change the formatting of columns or any headers.
+                                    </li>
+                                    <li>
+                                        The downloaded excel file will by default have the following columns with exact same heading. Ensure      the same are present.<br>
+                                        •   Mandatory Column (Already present in downloaded file)
+                                        <ol class="d">
+                                            <li>
+                                                Sales / Sales Return
+                                            </li>
+                                            <li>
+                                                Order ID
+                                            </li>
+                                            <li>
+                                                Vendor Invoice Number
+                                            </li>
+                                            <li>
+                                                Style Code
+                                            </li>
+                                            <li>
+                                               Outstanding Payable to Vendors (Final)
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        At the end of the 1st row.Add the following: 
+                                        "Payment Date": Date of Payment received.Ensure to enter the value as <b>"MM-DD-YYYY"</b> format
+
+                                    </li>
+                                    <li>
+                                        Save the file in <b>.xls(97-2003)</b> format
+                                    </li>
+                                    <li>
+                                        Simply Upload the file after selecting <b> "Limeroad Payment Upload" </b>from the dropdown list on the Import Page.
+                                    </li>
+                                    <li>
+                                        Watch Tutorial
+                                    </li>
+                                </ol>
 
 						</div>
 					</div>
