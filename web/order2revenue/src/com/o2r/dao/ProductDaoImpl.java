@@ -518,7 +518,7 @@ public class ProductDaoImpl implements ProductDao {
 						product.getProductConfig().add(productConfig);
 						session.saveOrUpdate(product);
 					} else {
-						session.saveOrUpdate(productConfig);
+						session.merge(productConfig);
 					}
 				}
 

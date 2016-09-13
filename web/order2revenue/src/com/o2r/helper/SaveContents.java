@@ -1740,8 +1740,7 @@ public class SaveContents {
 						Product product = productService.getProduct(entry
 								.getCell(0).toString(), sellerId);
 						if (product != null) {
-							productConfig.setProductSkuCode(entry.getCell(0)
-									.toString());
+							productConfig.setProductSkuCode(product.getProductSkuCode());
 							if (entry.getCell(1) != null
 									&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK
 									&& entry.getCell(3) != null
@@ -1774,10 +1773,12 @@ public class SaveContents {
 							if (entry.getCell(3) != null
 									&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								if (!entry.getCell(3).toString()
-										.equalsIgnoreCase("Myntra"))
-									productConfig.setChannelName(entry.getCell(
-											3).toString());
-								else {
+										.equalsIgnoreCase("Myntra")) {
+									if (productConfig.getChannelName() == null) {
+										productConfig.setChannelName(entry.getCell(
+												3).toString());
+									}
+								} else {
 									errorMessage
 											.append("Enter only Market Place Channels ");
 									validaterow = false;
@@ -1811,9 +1812,6 @@ public class SaveContents {
 									validaterow = false;
 								}
 
-							} else {
-								errorMessage.append(" Vendor SKU is null ");
-								validaterow = false;
 							}
 
 						} else {
