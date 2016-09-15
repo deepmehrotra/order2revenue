@@ -91,7 +91,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			throws CustomException {
 		log.info("*** removeProductMapping start ***");
 		try {
-
+			System.out.println(tcId);
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 
@@ -337,6 +337,8 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		Seller seller = null;
 		Session session=null;
 		try {
+			System.out.println(taxCategory.getProductCategoryCST());
+			System.err.println(taxCategory.getProductCategoryLST());
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			if (taxCategory.getTaxCatId() == 0) {

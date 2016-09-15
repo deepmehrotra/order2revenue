@@ -55,8 +55,10 @@ import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
 import com.o2r.model.SellerAccount;
+import com.o2r.model.SellerAlerts;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.TaxDetail;
+import com.o2r.service.AlertsService;
 import com.o2r.service.EventsService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.ProductService;
@@ -82,7 +84,8 @@ public class OrderDaoImpl implements OrderDao {
 	private EventsService eventsService;
 	@Autowired
 	private SellerAccountService sellerAccountService;
-
+	@Autowired
+	private AlertsService alertService;
 	@Autowired
 	private AreaConfigDao areaConfigDao;
 	@Autowired
@@ -702,6 +705,14 @@ public class OrderDaoImpl implements OrderDao {
 						sellerAcc.setOrderBucket(sellerAcc.getOrderBucket() - 1);
 						sellerAcc.setSellerId(sellerId);
 						sellerAccountService.saveSellerAccount(sellerAcc);
+						if(sellerAcc.getOrderBucket() < 1){
+							SellerAlerts sellerAlert = new SellerAlerts();
+							sellerAlert.setAlertDate(new Date());
+							sellerAlert.setAlertType("Order");
+							sellerAlert.setMessage(GlobalConstant.OrderMsg);
+							sellerAlert.setStatus("unread");
+							alertService.saveAlerts(sellerAlert, sellerId);
+						}
 					}
 				} catch (Exception e) {
 					log.error("Failed to Update Bucket ! SellerController ", e);

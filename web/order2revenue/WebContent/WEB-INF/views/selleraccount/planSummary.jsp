@@ -107,6 +107,7 @@
 	function hide_sidebar(){
 		document.getElementById('box').style.visibility="hidden";		
 	}
+	
 </script>
 <style type="text/css">
 .column {
@@ -415,4 +416,11 @@ label.star:before {
 	</div>
 
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
+	<script type="text/javascript">
+	$(document).ready(function() {		
+		var starId=${myAccount.plan.planId};		
+		document.getElementById("star-"+starId).checked="checked";
+	});
+	</script>
+</body>
 </html>

@@ -57,6 +57,7 @@ import com.o2r.model.GatePass;
 import com.o2r.model.Order;
 import com.o2r.model.Partner;
 import com.o2r.model.Product;
+import com.o2r.model.SellerAccount;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
 import com.o2r.service.DownloadService;
@@ -84,7 +85,7 @@ public class OrderController {
 	@Autowired
 	private PartnerService partnerService;
 	@Autowired
-	private SellerService serviceService;
+	private SellerService sellerService;
 	@Autowired
 	private ProductService productService;
 	@Autowired
@@ -196,14 +197,19 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/seller/uploadOrderDA", method = RequestMethod.GET)
-	public ModelAndView displayUploadForm(@RequestParam("value") String value,
+	public ModelAndView displayUploadForm(HttpServletRequest request, @RequestParam("value") String value,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
 		log.info("$$$ displayUploadForm Starts : OrderController $$$");
-		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();		
 		System.out.println("Inside Payment orders  viewpayments uploadId"
 				+ value);
 		model.put("uploadValue", value);
+		try {
+			model.put("seller", sellerService.getSeller(helperClass.getSellerIdfromSession(request)));
+		} catch (Exception e) {
+			log.error("Failed to get Seller !", e);
+		}		
 		log.info("$$$ displayUploadForm Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/order_upload_form", model);
 	}
@@ -286,7 +292,7 @@ public class OrderController {
 
 					if (orderProcessedMap != null
 							&& !orderProcessedMap.isEmpty())
-						serviceService.updateProcessedOrdersCount(sellerId,
+						sellerService.updateProcessedOrdersCount(sellerId,
 								orderProcessedMap.size());
 					else
 						System.out
@@ -300,7 +306,7 @@ public class OrderController {
 							uploadReport);
 					if (orderProcessedMap != null
 							&& !orderProcessedMap.isEmpty())
-						serviceService.updateProcessedOrdersCount(sellerId,
+						sellerService.updateProcessedOrdersCount(sellerId,
 								orderProcessedMap.size());
 					else
 						log.debug("No Orders processed, so not updating the totalProcessedOrder");

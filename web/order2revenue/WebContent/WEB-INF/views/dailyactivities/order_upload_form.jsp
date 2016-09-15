@@ -1,4 +1,5 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
 <link rel='stylesheet' href='/O2R/seller/css/nprogress.css' />
@@ -188,8 +189,9 @@
 </script>
 
 </head>
-<body >
-	<div class="row">
+<body >		
+	<c:if test="${seller.sellerAccount.orderBucket > 0}">
+		<div class="row">
 		<div class="col-lg-12">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
@@ -1091,6 +1093,24 @@
 
 
 	</div>
+	</c:if>
+	<c:if test="${seller.sellerAccount.orderBucket < 1}">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title text-center">
+						<h3 style="color: red;" >Access Restricted !</h3>
+					</div>
+					<div class="ibox-content overflow-h">
+						<div class="col-lg-12 text-center">
+							<img alt="" src="/O2R/seller/img/AccessDenied.jpg">
+						</div>							
+					</div>
+				</div>
+			</div>
+		</div>
+	</c:if>
+		
 	<script type="text/javascript" language="javascript">
 function checkfile(sender) {
 	var validExts = new Array(".xls");

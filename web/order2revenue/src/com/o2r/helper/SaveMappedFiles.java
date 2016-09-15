@@ -706,8 +706,7 @@ public class SaveMappedFiles {
 		CustomerBean customerBean = null;
 		Partner partner = null;
 		Events event = null;
-		List<Order> saveList = new ArrayList<Order>();
-		List<String> SKUList = new ArrayList<String>();
+		List<Order> saveList = new ArrayList<Order>();		
 		List<String> idsList = new ArrayList<String>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
@@ -742,7 +741,7 @@ public class SaveMappedFiles {
 				}
 
 			}
-			SKUList = productService.listProductSKU(sellerId);
+			//SKUList = productService.listProductSKU(sellerId);
 			idsList = orderService.listOrderIds("channelOrderID", sellerId);
 			log.info(noOfEntries);
 			log.debug("After getting no of rows" + noOfEntries);
@@ -1298,8 +1297,7 @@ public class SaveMappedFiles {
 		Partner partner = null;
 		Events event = null;
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		List<Order> saveList = new ArrayList<Order>();
-		List<String> SKUList = new ArrayList<String>();
+		List<Order> saveList = new ArrayList<Order>();		
 		List<String> idsList = new ArrayList<String>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
@@ -1336,7 +1334,7 @@ public class SaveMappedFiles {
 
 			}
 			log.info("cellIndexMap for Amazon Order : "+cellIndexMap);
-			SKUList = productService.listProductSKU(sellerId);
+			//SKUList = productService.listProductSKU(sellerId);
 			idsList = orderService.listOrderIds("channelOrderID", sellerId);
 			log.info(noOfEntries);
 			log.debug("After getting no of rows" + noOfEntries);
@@ -1917,8 +1915,7 @@ public class SaveMappedFiles {
 		CustomerBean customerBean = null;
 		Partner partner = null;
 		Events event = null;
-		List<Order> saveList = new ArrayList<Order>();
-		List<String> SKUList = new ArrayList<String>();
+		List<Order> saveList = new ArrayList<Order>();		
 		List<String> idsList = new ArrayList<String>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
@@ -1953,7 +1950,7 @@ public class SaveMappedFiles {
 				}
 
 			}
-			SKUList = productService.listProductSKU(sellerId);
+			//SKUList = productService.listProductSKU(sellerId);
 			idsList = orderService.listOrderIds("channelOrderID", sellerId);
 			log.info(noOfEntries);
 			log.debug("After getting no of rows" + noOfEntries);
@@ -3261,8 +3258,7 @@ public class SaveMappedFiles {
 		CustomerBean customerBean = null;
 		Partner partner = null;
 		Events event = null;
-		List<Order> saveList = new ArrayList<Order>();
-		List<String> SKUList = new ArrayList<String>();
+		List<Order> saveList = new ArrayList<Order>();		
 		List<String> idsList = new ArrayList<String>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
@@ -3297,7 +3293,7 @@ public class SaveMappedFiles {
 				}
 
 			}
-			SKUList = productService.listProductSKU(sellerId);
+			//SKUList = productService.listProductSKU(sellerId);
 			idsList = orderService.listOrderIds("channelOrderID", sellerId);
 			log.info(noOfEntries);
 			log.debug("After getting no of rows" + noOfEntries);
@@ -4487,8 +4483,7 @@ public class SaveMappedFiles {
 		CustomerBean customerBean = null;
 		Partner partner = null;
 		Events event = null;
-		List<Order> saveList = new ArrayList<Order>();
-		List<String> SKUList = new ArrayList<String>();
+		List<Order> saveList = new ArrayList<Order>();		
 		List<String> idsList = new ArrayList<String>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
@@ -4523,7 +4518,7 @@ public class SaveMappedFiles {
 				}
 
 			}
-			SKUList = productService.listProductSKU(sellerId);
+			/*SKUList = productService.listProductSKU(sellerId);*/
 			idsList = orderService.listOrderIds("channelOrderID", sellerId);
 			log.info(noOfEntries);
 			log.debug("After getting no of rows" + noOfEntries);
@@ -4643,7 +4638,7 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					try {
+					/*try {
 						index = cellIndexMap.get(columHeaderMap.get("SkUCode"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -4663,7 +4658,7 @@ public class SaveMappedFiles {
 						errorMessage
 								.append("The column 'Vendor Code' doesn't exist");
 						validaterow = false;
-					}
+					}*/
 
 					
 

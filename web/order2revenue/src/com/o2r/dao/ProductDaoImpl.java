@@ -35,7 +35,9 @@ import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.ProductStockList;
 import com.o2r.model.Seller;
+import com.o2r.model.SellerAlerts;
 import com.o2r.model.TaxCategory;
+import com.o2r.service.AlertsService;
 import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.TaxDetailService;
@@ -55,7 +57,9 @@ public class ProductDaoImpl implements ProductDao {
 	private TaxDetailService taxDetailService;
 	@Autowired
 	private OrderService orderService;
-
+	@Autowired
+	private AlertsService alertService;
+	
 	private final int pageSize = 500;
 
 	private final String listProductConfig = "select pc.productSkuCode,pc.channelName,pc.channelSkuRef,"
@@ -794,8 +798,7 @@ public class ProductDaoImpl implements ProductDao {
 					CriteriaSpecification.LEFT_JOIN).add(
 					Restrictions.eq("seller.id", sellerId));
 			Criterion rest1 = Restrictions.eq("productSkuCode", skuCode);
-			Criterion rest2 = Restrictions.eq("productConfig.channelSkuRef",
-					skuCode);
+			Criterion rest2 = Restrictions.eq("productConfig.channelSkuRef", skuCode);					
 			criteria.add(Restrictions.or(rest1, rest2)).setResultTransformer(
 					CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
@@ -1161,6 +1164,16 @@ public class ProductDaoImpl implements ProductDao {
 					session.saveOrUpdate(productcat);
 				}
 				session.saveOrUpdate(product);
+				if(product != null){
+					if(product.getThreholdLimit() > product.getQuantity()){
+						SellerAlerts sellerAlert = new SellerAlerts();
+						sellerAlert.setAlertDate(new Date());
+						sellerAlert.setAlertType("Inventory");
+						sellerAlert.setMessage(GlobalConstant.InventoryMsg+" : "+product.getCategoryName());
+						sellerAlert.setStatus("unread");
+						alertService.saveAlerts(sellerAlert, sellerId);
+					}
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

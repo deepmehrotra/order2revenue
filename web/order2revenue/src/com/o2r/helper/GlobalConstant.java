@@ -422,6 +422,13 @@ public class GlobalConstant {
 	public static final String dwShipping="Deadweight Shipping";
 	
 	
+	//Alerts Message
+	public static final String InventoryMsg = "Product Quantity is Under Limit !";
+	public static final String OrderMsg = "Order Bucket Is Low !";
+	
+	
+	
+	
 	
 	/*
 	 * log.error("searchExpense exception : " + GlobalConstant.nullException);
