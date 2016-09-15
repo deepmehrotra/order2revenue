@@ -92,6 +92,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 												<select class="form-control" name="searchProduct"
 													id="searchProduct">
 													<option value="productSkuCode">Product SKU Code</option>
+													<option value="vendorSkuRef">Vendor SKU Code</option>
 													<option value="channelName">Channel Name</option>
 													<option value="channelSkuRef">Channel SKU Ref.</option>													
 												</select>

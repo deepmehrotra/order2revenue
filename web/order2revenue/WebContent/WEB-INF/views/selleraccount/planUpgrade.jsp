@@ -3,6 +3,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@page import="org.springframework.security.core.context.SecurityContextHolder" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.security.*" %>
 
@@ -354,7 +355,7 @@ public boolean empty(String s)
 							</div>
 						</div>
 						<c:forEach items="${upgrade}" var="up">
-							<c:if test="${up.planName != myAccount.plan.planName}">
+							<c:if test="${up.planName != myAccount.plan.planName && up.planName != 'Admin_Demo'}">
 								<div class="col-md-4">
 									<div class="column1 text-center">
 										<button class="btn btn-block" onclick="select(this)" value="${up.pid}">${up.planName}</button>
@@ -372,6 +373,27 @@ public boolean empty(String s)
 										</div>
 									</div>
 								</div>
+							</c:if>
+							<c:if test="${up.planName == 'Admin_Demo'}">
+								<c:if test='<%= SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equals("[ROLE_ADMIN, ROLE_MODERATOR]") %>'>
+									<div class="col-md-4">
+										<div class="column1 text-center">
+											<button class="btn btn-block" onclick="select(this)" value="${up.pid}">${up.planName}</button>
+											<br>
+											<div align="center">
+												<p>								
+													<img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${up.planPrice}"/> per Order
+												</p>									
+												<p>
+													ORDER COUNT =  <c:out value="${up.orderCount}"/>
+												</p>
+												<p>
+													MIN AMOUNT =<span><img src="/O2R/seller/img/rupee.png" alt="rupee"> <fmt:formatNumber type="number" maxFractionDigits="0" value="${up.orderCount*up.planPrice}" />/-</span>
+												</p>
+											</div>
+										</div>
+									</div>
+								</c:if>								
 							</c:if>
 						</c:forEach>
 					</div>
@@ -459,7 +481,7 @@ public boolean empty(String s)
 									</tr>
 									<tr>
 										<td style="text-align: right;font-size: 12px;">
-											Education cess :
+											Swachh bharat Cess :
 										</td>
 										<td style="text-align: left;">
 											&#8377; <span class="span educessTaxAmountText">0</span>/-
