@@ -20,6 +20,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.log4j.lf5.viewer.categoryexplorer.CategoryPath;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -61,7 +62,9 @@ import com.o2r.model.OrderTax;
 import com.o2r.model.Product;
 import com.o2r.model.Seller;
 import com.o2r.model.UploadReport;
+import com.o2r.service.CategoryService;
 import com.o2r.service.OrderService;
+import com.o2r.service.ProductService;
 import com.o2r.service.TaxDetailService;
 
 /**
@@ -81,6 +84,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private ProductService productService;
+	@Autowired
+	private CategoryService categoryService;
 	
 	@Resource(name="taxDetailService")
 	private TaxDetailService taxDetailService;
@@ -751,35 +758,45 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		List<PartnerReportDetails> partnerBusinessList = new ArrayList<PartnerReportDetails>();
 		Map<String, Object> returnmap = new HashMap<String, Object>();
 		try {
+			Map<String, String> productCatMap =productService.getSKUCategoryMap(sellerId);
+			Map<String, String> categoryParentMap = categoryService.getCategoryParentMap(sellerId);
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();			
 			List<Order> results = fetchDebtorsOrders(session, sellerId, startDate, endDate);
 			Map<String, DebtorsGraph1> debtorgraphpartnermap = new HashMap<String, DebtorsGraph1>();
 			Map<String, DebtorsGraph1> debtorgraphcategorymap = new HashMap<String, DebtorsGraph1>();
 
-			/*for (Order currOrder : results) {
-				PartnerReportDetails partnerBusiness = transformPartnerDetail(currOrder, session, startDate, endDate);
-					partnerBusinessList.add(partnerBusiness);
-				
-					transformDebtorsGraph1Graph(debtorgraphpartnermap, partnerBusiness, "partner");
-					transformDebtorsGraph1Graph(debtorgraphcategorymap, partnerBusiness, "category");
-			}*/
-			int i=0;
-			ExecutorService executor = Executors.newFixedThreadPool(100);
+			int loopcount=0;
+			int threadsize=0;
+			if(results.size()>1000)
+			{
+				threadsize=(int)Math.nextUp(results.size()/100);
+				loopcount=100;
+			}
+			else
+			{
+				threadsize=10;
+				loopcount=10;
+			}
+			ExecutorService executor = Executors.newFixedThreadPool(threadsize);
 			 
 			/*Collections.synchronizedList(results);
 			Collections.synchronizedMap(debtorgraphpartnermap);
+			Collections.synchronizedMap(debtorgraphcategorymap);
+			Collections.synchronizedMap(debtorgraphcategorymap);
 			Collections.synchronizedMap(debtorgraphcategorymap);*/
-			for (int x=0; x<results.size(); x=x+100)
+			for (int x=0; x<results.size(); x=x+loopcount)
 		    {
-				DebtorsListModify newthread= new DebtorsListModify(
+				/*DebtorsListModify newthread= new DebtorsListModify(
 						partnerBusinessList,results,debtorgraphpartnermap,
-						debtorgraphcategorymap,x,100,
-						startDate,endDate);
-				executor.execute(newthread);
+						debtorgraphcategorymap,productCatMap,categoryParentMap,x,100,
+						startDate,endDate);*/
+				executor.execute( new DebtorsListModify(
+						partnerBusinessList,results,debtorgraphpartnermap,
+						debtorgraphcategorymap,productCatMap,categoryParentMap,x,loopcount,
+						startDate,endDate));
 				//newthread.start();
-				if(x%10==0)
-		        System.out.println("Started Thread:" + (i++));
+				
 		    }
 			executor.shutdown();
 	        while (!executor.isTerminated()) {
@@ -815,15 +832,46 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 
 		List<PartnerReportDetails> partnerBusinessList = new ArrayList<PartnerReportDetails>();
 		try {
+			Map<String, String> productCatMap =productService.getSKUCategoryMap(sellerId);
+			Map<String, String> categoryParentMap = categoryService.getCategoryParentMap(sellerId);
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			log.info("Service Tax: " + dataConfig.getServiceTax());
 			List<Order> results = fetchOrders(session, sellerId, startDate, endDate);
-			Map<String, PartnerReportDetails> poOrderMap = new HashMap<String, PartnerReportDetails>();
-			for (Order currOrder : results) {
-			/*	PartnerReportDetails partnerBusiness = transformPartnerDetail(currOrder, session, startDate, endDate);
-				partnerBusinessList.add(partnerBusiness);*/
+			int loopcount=0;
+			int threadsize=0;
+			if(results.size()>1000)
+			{
+				threadsize=(int)Math.nextUp(results.size()/100);
+				loopcount=100;
 			}
+			else
+			{
+				threadsize=10;
+				loopcount=10;
+			}
+			ExecutorService executor = Executors.newFixedThreadPool(threadsize);
+			 
+			/*Collections.synchronizedList(results);
+			Collections.synchronizedMap(debtorgraphpartnermap);
+			Collections.synchronizedMap(debtorgraphcategorymap);
+			Collections.synchronizedMap(debtorgraphcategorymap);
+			Collections.synchronizedMap(debtorgraphcategorymap);*/
+			for (int x=0; x<results.size(); x=x+loopcount)
+		    {
+				/*DebtorsListModify newthread= new DebtorsListModify(
+						partnerBusinessList,results,debtorgraphpartnermap,
+						debtorgraphcategorymap,productCatMap,categoryParentMap,x,100,
+						startDate,endDate);*/
+				executor.execute( new DebtorsListModify(
+						partnerBusinessList,results,productCatMap,categoryParentMap,x,loopcount,
+						startDate,endDate));
+				//newthread.start();
+				
+		    }
+			executor.shutdown();
+	        while (!executor.isTerminated()) {
+	        }
 			log.info("Total Orders" + partnerBusinessList.size());
 		} catch (NullPointerException e) {
 			e.printStackTrace();
@@ -841,7 +889,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		return partnerBusinessList;
 	}
 
-	private PartnerReportDetails transformPartnerDetail(Order currOrder,Product currProduct,Date startDate,
+	private PartnerReportDetails transformPartnerDetail(Order currOrder,Map<String,String> prodCatMap,Map<String,String> catParentMap,Date startDate,
 			Date endDate) {
 		log.info("*** transformPartnerDetail Starts : ReportsGeneratorDaoImpl ****");
 
@@ -884,12 +932,11 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				productCost = currProduct.getProductPrice();
 			}*/
 			double productCost = 0;
-			if(currProduct!=null)
-			{
-			partnerBusiness.setProductCategory(currProduct.getCategory().getParentCatName());
-			partnerBusiness.setParentCategory(currProduct.getCategory().getParentCatName());
-			productCost = currProduct.getProductPrice();
-			}
+			
+			partnerBusiness.setProductCategory(prodCatMap.get(currOrder.getProductSkuCode()));
+			partnerBusiness.setParentCategory(catParentMap.get(prodCatMap.get(currOrder.getProductSkuCode())));
+			productCost = currOrder.getProductCost();
+			
 			double tdsToBeDeposited = 0;
 			double taxToBePaid = 0;
 			double taxSP = 0;
@@ -2887,10 +2934,13 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		Map<String, DebtorsGraph1> categorymap;
 		Date startdate=null;
 		Date enddate=null;
+		Map<String, String> productCatMap=null;
+		Map<String, String> categoryParentMap=null;
 		
 
 		  public DebtorsListModify(List<PartnerReportDetails> ltp,List<Order> ltr,Map<String, DebtorsGraph1> debtorgraphpartnermap,
-				  Map<String, DebtorsGraph1> debtorgraphcategorymap,int startindex,int range,
+				  Map<String, DebtorsGraph1> debtorgraphcategorymap,
+				  Map<String, String> pcm,Map<String, String> cpm,int startindex,int range,
 				  Date sd,Date ed) { 
 			  partnermap=debtorgraphpartnermap;
 			  categorymap=debtorgraphcategorymap;
@@ -2900,6 +2950,21 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			  ran=range;
 			  startdate=sd;
 			  enddate=ed;
+			  productCatMap=pcm;
+			  categoryParentMap=cpm;
+		  }
+		  public DebtorsListModify(List<PartnerReportDetails> ltp,List<Order> ltr,
+				  Map<String, String> pcm,Map<String, String> cpm,int startindex,int range,
+				  Date sd,Date ed) { 
+			 
+			  listtorun=ltr;
+			  listtopopulate=ltp;
+			  start=startindex;
+			  ran=range;
+			  startdate=sd;
+			  enddate=ed;
+			  productCatMap=pcm;
+			  categoryParentMap=cpm;
 		  }
 
 		  public void run() { 
@@ -2927,11 +2992,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				localsession.close();
 				if(productList!=null&&productList.size()>0)
 				{
-		    	PartnerReportDetails partnerBusiness = transformPartnerDetail(currOrder,productList.get(0), startdate, enddate);
+		    	PartnerReportDetails partnerBusiness =
+		    			transformPartnerDetail(currOrder,productCatMap,categoryParentMap, startdate, enddate);
 		    	listtopopulate.add(partnerBusiness);
-				
+				if(partnermap!=null&&categorymap!=null)
+				{
 					transformDebtorsGraph1Graph(partnermap, partnerBusiness, "partner");
 					transformDebtorsGraph1Graph(categorymap, partnerBusiness, "category");
+				}
 				}
 			}
 		    

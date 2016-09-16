@@ -1,6 +1,7 @@
 package com.o2r.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.o2r.helper.CustomException;
 import com.o2r.model.Category;
@@ -26,5 +27,8 @@ public interface CategoryDao {
 	public Category getCategory(String catname ,int sellerId )  throws CustomException;
 
 	public Category getSubCategory(String catname, int sellerId)
+			throws CustomException;
+
+	public Map<String, String> getCategoryParentMap(int sellerId)
 			throws CustomException;
 }

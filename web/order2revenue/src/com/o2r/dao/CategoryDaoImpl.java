@@ -2,8 +2,10 @@ package com.o2r.dao;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -20,7 +22,7 @@ import org.springframework.stereotype.Repository;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Category;
-import com.o2r.model.ManualCharges;
+import com.o2r.model.Product;
 import com.o2r.model.Seller;
 
 /**
@@ -370,5 +372,47 @@ public class CategoryDaoImpl implements CategoryDao {
 		else
 			return 0;
 
+	}
+	
+	@Override
+	public Map<String,String> getCategoryParentMap(int sellerId) throws CustomException {
+
+		log.info("*** getSKUCategoryMap Starts : ProductDaoImpl ****");
+		Map<String,String> returnMap = new HashMap<String, String>();
+		Seller seller=null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
+			criteria.createAlias("categories", "category",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("category.isSubCategory", true))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			List templist=criteria.list();
+			if (templist != null && templist.size() != 0) {
+				seller = (Seller) templist.get(0);
+				
+				if (seller.getCategories() != null
+						&& seller.getCategories().size() != 0)
+				{
+					for(Category cat:seller.getCategories())
+					{
+						returnMap.put(cat.getCatName(), cat.getParentCatName());
+					}
+				}
+				session.getTransaction().commit();
+				session.close();
+		}
+		}catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(
+					GlobalConstant.getProductwithCreatedDateError, new Date(),
+					3, GlobalConstant.getProductwithCreatedDateErrorCode, e);
+		}
+		log.info("*** getSKUCategoryMap Ends : ProductDaoImpl ****");
+		return returnMap;
 	}
 }

@@ -17,16 +17,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.o2r.bean.ProductConfigBean;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
-import com.o2r.helper.HelperClass;
 import com.o2r.model.Category;
 import com.o2r.model.NRnReturnCharges;
 import com.o2r.model.Order;
@@ -1358,5 +1357,48 @@ public class ProductDaoImpl implements ProductDao {
 				session.close();
 		}
 		return noOfProductMappings.longValue();
+	}
+	
+	@Override
+	public Map<String,String> getSKUCategoryMap(int sellerId) throws CustomException {
+
+		log.info("*** getSKUCategoryMap Starts : ProductDaoImpl ****");
+		Map<String,String> returnMap = new HashMap<String, String>();
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria crit = session.createCriteria(Product.class);
+			crit.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN);
+			crit.add(Restrictions.eq("seller.id", sellerId));
+			ProjectionList projList = Projections.projectionList();
+			projList.add(Projections.property("productSkuCode"));
+			projList.add(Projections.property("categoryName"));
+			crit.setProjection(projList);
+			List result=crit.list();
+			if(result!=null)
+			{
+				Iterator it=result.iterator();
+				 
+				while(it.hasNext())
+				{
+					Object ob[] = (Object[])it.next();
+					if(ob[0]!=null&&ob[1]!=null)
+						returnMap.put(ob[0].toString(), ob[1].toString());
+					
+				}
+			}
+			System.out.println("returnMap size : "+returnMap.size());
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(
+					GlobalConstant.getProductwithCreatedDateError, new Date(),
+					3, GlobalConstant.getProductwithCreatedDateErrorCode, e);
+		}
+		log.info("*** getSKUCategoryMap Ends : ProductDaoImpl ****");
+		return returnMap;
 	}
 }

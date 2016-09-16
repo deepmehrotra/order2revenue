@@ -2,6 +2,7 @@ package com.o2r.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.o2r.helper.CustomException;
 import com.o2r.model.Product;
@@ -75,4 +76,6 @@ public interface ProductService {
 
 	public ProductConfig getProductConfigByAnySKU(String childSKUCode, String channel,
 			int sellerId) throws CustomException;
+
+	public Map<String, String> getSKUCategoryMap(int sellerId) throws CustomException;
 }

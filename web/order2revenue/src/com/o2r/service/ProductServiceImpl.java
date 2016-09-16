@@ -2,6 +2,7 @@ package com.o2r.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -176,4 +177,11 @@ public class ProductServiceImpl implements ProductService {
 	public List<String> listProductSKU(int sellerId) {
 		return productDao.listProductSKU(sellerId);
 	}
+	
+	@Override
+	public Map<String, String> getSKUCategoryMap(int sellerId) throws CustomException
+	{
+		return productDao.getSKUCategoryMap(sellerId);
+	}
+
 }

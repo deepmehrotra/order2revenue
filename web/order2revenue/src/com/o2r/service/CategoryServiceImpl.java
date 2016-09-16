@@ -1,6 +1,7 @@
 package com.o2r.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,5 +68,12 @@ public Category getSubCategory(String catname, int sellerId)
 		throws CustomException
 		{
 	return categoryDao.getSubCategory(catname,sellerId);
+		}
+
+@Override
+public Map<String, String> getCategoryParentMap(int sellerId)
+		throws CustomException
+		{
+	return categoryDao.getCategoryParentMap(sellerId);
 		}
 }
