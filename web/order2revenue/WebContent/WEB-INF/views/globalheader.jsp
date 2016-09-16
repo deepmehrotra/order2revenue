@@ -69,6 +69,11 @@
 		$.type = "text/javascript";
 		e.parentNode.insertBefore($, e)
 	})(document, "script");
+	
+	$zopim(function(){
+        $zopim.livechat.setName('<%=request.getUserPrincipal().getName()%>');
+        
+        });
 </script>
 <!--End of Zopim Live Chat Script-->
 

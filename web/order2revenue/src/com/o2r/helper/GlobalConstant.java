@@ -58,6 +58,7 @@ public class GlobalConstant {
 			add("PayTM");
 			add("Limeroad");
 			add("Unicommerce");
+			add("Jabong");
 		}
 	};
 	public static final ArrayList<String> filesMappingList = new ArrayList<String>() {
@@ -160,6 +161,18 @@ public class GlobalConstant {
 			add("Invoice ID");
 			add("Recieved Amount");
 			add("Payment Date");
+			add("Particular");
+		}
+	};
+	
+	public static final ArrayList<String> JabongPaymentHeaderList = new ArrayList<String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			add("Payment Date");			
+			add("ChannelOrderId");
+			add("Recieved Amount");
+			add("Invoice ID");
+			add("SKU");
 			add("Particular");
 		}
 	};
@@ -359,6 +372,39 @@ public class GlobalConstant {
 			add("Customer Email");
 			add("Seller Note");
 			
+		}
+	};
+	
+	public static final ArrayList<String> JabongOrderHeaderList = new ArrayList<String>() {
+		/**
+	 *
+	 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Secondary OrderID");
+			add("SkUCode");
+			add("Order Recieved Date");
+			add("Channel Order ID");
+			add("Customer Email");
+			add("Customer Name");
+			add("Customer Address");
+			add("Customer Phone No");
+			add("Customer City");
+			add("Shipping PinCode");
+			add("Payment Type");			
+			add("Order SP");
+			add("Order MRP");
+			add("Logistic Partner");
+			add("AWB No");
+			add("Sales Channel");
+			add("InvoiceID");
+			add("Order Shipped Date");
+			add("Quantity");
+			add("PIreferenceNo");
+			add("Net Rate");
+			add("Seller Note");
+
 		}
 	};
 

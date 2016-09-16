@@ -800,15 +800,6 @@ public class SaveMappedFiles {
 										errorMessage.append(" Vendor SKU mapping not present");
 										validaterow = false;
 									}
-									if ((channelorderid!=null)&&(idsList == null || !idsList.contains(channelorderid)
-											&& !duplicateKey.containsKey(channelorderid) && productConfig != null)) {
-										order.setChannelOrderID(channelorderid);
-										order.setProductSkuCode(productConfig.getProductSkuCode());
-										duplicateKey.put(channelorderid, "");
-									} else {
-										errorMessage.append(" Channel OrderId is already present ");
-										validaterow = false;
-									}
 								} else {
 									errorMessage.append("No Product with this Channel & SKU");
 									validaterow = false;
@@ -821,6 +812,37 @@ public class SaveMappedFiles {
 					} catch (NullPointerException e) {
 						errorMessage
 								.append("The column 'ORDER ID' doesn't exist");
+						validaterow = false;
+					}
+					
+					try {
+						if (cellIndexMap.get(columHeaderMap
+								.get("Secondary OrderID")) != null) {
+							index = cellIndexMap.get(columHeaderMap
+									.get("Secondary OrderID"));
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								entry.getCell(index).setCellType(
+										HSSFCell.CELL_TYPE_STRING);
+								order.setSubOrderID(entry.getCell(index).toString());
+								channelorderid = channelorderid + GlobalConstant.orderUniqueSymbol+ order.getSubOrderID();
+								if ((channelorderid!=null)&&(idsList == null || !idsList.contains(channelorderid)
+										&& !duplicateKey.containsKey(channelorderid) && productConfig != null)) {
+									order.setChannelOrderID(channelorderid);
+									order.setProductSkuCode(productConfig.getProductSkuCode());
+									duplicateKey.put(channelorderid, "");
+								} else {
+									errorMessage.append(" Channel OrderId is already present ");
+									validaterow = false;
+								}
+							}
+						} else {
+							errorMessage.append(" ORDER ITEM ID is null ");
+							validaterow = false;
+						}
+					} catch (NullPointerException e) {
+						errorMessage
+								.append("The column 'ORDER ITEM ID' doesn't exist");
 						validaterow = false;
 					}
 
@@ -944,17 +966,6 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					if (cellIndexMap.get(columHeaderMap
-							.get("Secondary OrderID")) != null) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Secondary OrderID"));
-						if (entry.getCell(index) != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							order.setSubOrderID(entry.getCell(index).toString());
-						}
-					}
 					if (cellIndexMap.get(columHeaderMap.get("PIreferenceNo")) != null) {
 						index = cellIndexMap.get(columHeaderMap
 								.get("PIreferenceNo"));
@@ -2570,10 +2581,19 @@ public class SaveMappedFiles {
 										.get("Seller SKU"));
 								entry.getCell(index).setCellType(
 										HSSFCell.CELL_TYPE_STRING);
+								
+								int secOrderIndex = cellIndexMap.get(columHeaderMap
+										.get("Secondary OrderID"));
+								entry.getCell(secOrderIndex).setCellType(
+										HSSFCell.CELL_TYPE_STRING);
+								
 								channelOrderId=entry
 										.getCell(index)
 										.toString()+ GlobalConstant.orderUniqueSymbol
-										+ entry.getCell(skuIndex).toString();
+										+ entry.getCell(skuIndex).toString()
+										+ GlobalConstant.orderUniqueSymbol
+										+ entry.getCell(secOrderIndex).toString();
+								
 								List<Order> onj = orderService
 										.searchAsIsOrder(
 												"channelOrderID",channelOrderId ,
@@ -3356,15 +3376,6 @@ public class SaveMappedFiles {
 										errorMessage.append(" Vendor SKU code not mapped.");
 										validaterow = false;
 									}
-									if ((channelorderid!=null)&&(idsList == null || !idsList.contains(channelorderid)
-											&& !duplicateKey.containsKey(channelorderid) && productConfig != null)) {
-										order.setChannelOrderID(channelorderid);
-										order.setProductSkuCode(productConfig.getProductSkuCode());
-										duplicateKey.put(channelorderid, "");
-									} else {
-										errorMessage.append(" Channel OrderId is already present ");
-										validaterow = false;
-									}
 								} else {
 									errorMessage.append("No Product with this Channel & SKU");
 									validaterow = false;
@@ -3376,7 +3387,38 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'item id' doesn't exist");
+								.append("The column 'order_id' doesn't exist");
+						validaterow = false;
+					}	
+					
+					try {
+						if (cellIndexMap.get(columHeaderMap
+								.get("Secondary OrderID")) != null) {
+							index = cellIndexMap.get(columHeaderMap
+									.get("Secondary OrderID"));
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								entry.getCell(index).setCellType(
+										HSSFCell.CELL_TYPE_STRING);
+								order.setSubOrderID(entry.getCell(index).toString());
+								channelorderid = channelorderid + GlobalConstant.orderUniqueSymbol+ order.getSubOrderID();
+								if ((channelorderid!=null)&&(idsList == null || !idsList.contains(channelorderid)
+										&& !duplicateKey.containsKey(channelorderid) && productConfig != null)) {
+									order.setChannelOrderID(channelorderid);
+									order.setProductSkuCode(productConfig.getProductSkuCode());
+									duplicateKey.put(channelorderid, "");
+								} else {
+									errorMessage.append(" Channel OrderId is already present ");
+									validaterow = false;
+								}
+							}
+						} else {
+							errorMessage.append(" item_id is null ");
+							validaterow = false;
+						}
+					} catch (NullPointerException e) {
+						errorMessage
+								.append("The column 'item_id' doesn't exist");
 						validaterow = false;
 					}
 
@@ -3514,17 +3556,6 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					if (cellIndexMap.get(columHeaderMap
-							.get("Secondary OrderID")) != null) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Secondary OrderID"));
-						if (entry.getCell(index) != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							order.setSubOrderID(entry.getCell(index).toString());
-						}
-					}
 					if (cellIndexMap.get(columHeaderMap.get("PIreferenceNo")) != null) {
 						index = cellIndexMap.get(columHeaderMap
 								.get("PIreferenceNo"));
@@ -3945,10 +3976,12 @@ public class SaveMappedFiles {
 					}
 					
 					if (cellIndexMap.get(columHeaderMap.get("ChannelOrderId")) != null
-							&& cellIndexMap.get(columHeaderMap.get("Seller SKU")) != null) {
+							&& cellIndexMap.get(columHeaderMap.get("Seller SKU")) != null
+							&& cellIndexMap.get(columHeaderMap.get("Secondary OrderID")) != null) {
 						channelheader = columHeaderMap.get("ChannelOrderId");
 						index = cellIndexMap.get(channelheader);
 						int skuIndex = cellIndexMap.get(columHeaderMap.get("Seller SKU"));
+						int secOrderIndex = cellIndexMap.get(columHeaderMap.get("Secondary OrderID"));
 						
 						if (entry.getCell(index) != null
 								&& StringUtils.isNotBlank(entry.getCell(index).toString())
@@ -3956,14 +3989,23 @@ public class SaveMappedFiles {
 								&& StringUtils.isNotBlank(entry.getCell(skuIndex).toString())) {
 							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 							entry.getCell(skuIndex).setCellType(HSSFCell.CELL_TYPE_STRING);
+							entry.getCell(secOrderIndex).setCellType(HSSFCell.CELL_TYPE_STRING);
 							
 							if (partner != null){								
 								productConfig=productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
 								if(productConfig != null){
 									if(productConfig.getVendorSkuRef() != null){
-										channelOrderId = entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getVendorSkuRef();
+										channelOrderId = entry.getCell(index).toString()
+												+ GlobalConstant.orderUniqueSymbol
+												+ productConfig.getVendorSkuRef()
+												+ GlobalConstant.orderUniqueSymbol
+												+ entry.getCell(secOrderIndex).toString();
 									} else {
-										channelOrderId = entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ entry.getCell(skuIndex).toString();
+										channelOrderId = entry.getCell(index).toString()
+												+ GlobalConstant.orderUniqueSymbol
+												+ entry.getCell(skuIndex).toString()
+												+ GlobalConstant.orderUniqueSymbol
+												+ entry.getCell(secOrderIndex).toString();
 									}
 									
 									List<Order> onj = orderService.searchAsIsOrder(
@@ -4052,7 +4094,7 @@ public class SaveMappedFiles {
 							}
 						} else {
 							errorMessage
-									.append(" 'Order Item ID' or 'Product ID' May be Blank or Null");
+									.append(" 'Order Item ID' or 'Product ID'  or ' 'May be Blank or Null");
 							validaterow = false;
 						}					
 						
@@ -5289,6 +5331,987 @@ public class SaveMappedFiles {
 			uploadResultXLS(offices, "Limeroad_Payment", errorSet, path,
 					sellerId, uploadReport);
 		} catch (Exception e) {
+			log.error("Failed by seller: " + sellerId, e);
+		}
+	}
+	
+	public void saveJabongOrderContents(MultipartFile file, int sellerId,
+			String path, UploadReport uploadReport) throws IOException {
+		log.info("$$$ saveJabongOrderContents starts : SaveMappedFiles $$$");
+
+		ChannelUploadMapping chanupload = null;
+		Map<String, String> columHeaderMap = new LinkedHashMap<String, String>();
+		Map<String, Integer> cellIndexMap = new LinkedHashMap<String, Integer>();
+		StringBuffer errorMessage = new StringBuffer();
+		CustomerBean customerBean = null;
+		Partner partner = null;
+		Events event = null;
+		List<Order> saveList = new ArrayList<Order>();
+		List<String> SKUList = new ArrayList<String>();
+		List<String> idsList = new ArrayList<String>();
+		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
+		OrderBean order = null;
+		int noOfEntries = 1;
+		OrderTaxBean otb = null;
+		HSSFRow entry;
+		boolean validaterow = true;
+		Set<String> errorSet = new HashSet<String>();
+		Map<String, String> duplicateKey = new HashMap<String, String>();
+		try {
+			chanupload = uploadMappingService.getChannelUploadMapping(
+					"Jabong", "order");
+			if (chanupload != null && chanupload.getColumMap() != null) {
+				for (ColumMap colums : chanupload.getColumMap()) {
+					columHeaderMap.put(colums.getO2rColumName(),
+							colums.getChannelColumName());
+				}
+			}
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			entry = worksheet.getRow(0);
+			for (int cellIndex = 0; cellIndex < entry
+					.getPhysicalNumberOfCells(); cellIndex++) {
+				if (columHeaderMap.containsValue(entry.getCell(cellIndex)
+						.toString())) {
+					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+							cellIndex);
+				}
+
+			}
+			SKUList = productService.listProductSKU(sellerId);
+			idsList = orderService.listOrderIds("channelOrderID", sellerId);
+			log.info(noOfEntries);
+			log.debug("After getting no of rows" + noOfEntries);
+			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;
+				order = new OrderBean();
+				customerBean = new CustomerBean();
+				otb = new OrderTaxBean();
+				int index = 0;
+				Product product = null;
+				ProductConfig productConfig=null;
+				TaxCategory taxcat = null;
+				String channelorderid=null;
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
+				try {
+					
+					try {
+						index = cellIndexMap.get(columHeaderMap.get("Sales Channel"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							partner = partnerService.getPartner(entry.getCell(index).toString(), sellerId);
+							if (partner != null)
+								order.setPcName(partner.getPcName());
+							else {
+								order.setPcName(entry.getCell(index).toString());
+								errorMessage.append(" Partner do not exist;");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append(" Sales Channel is null;");
+							validaterow = false;
+						}
+					} catch (NullPointerException e) {
+						errorMessage.append("Column 'Sales Channel' doesn't exist");
+						validaterow = false;
+					}
+					
+					try {
+						index = cellIndexMap.get(columHeaderMap
+								.get("Channel Order ID"));
+						int skuIndex = cellIndexMap.get(columHeaderMap
+								.get("SkUCode"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK
+								&& entry.getCell(skuIndex) != null
+								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							if(partner != null){
+								productConfig=productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
+								if(productConfig != null){
+									if(productConfig.getVendorSkuRef() != null){
+										channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getVendorSkuRef();
+									} else {
+										errorMessage.append(" Vendor SKU mapping not present");
+										validaterow = false;
+									}
+									if ((channelorderid!=null)&&(idsList == null || !idsList.contains(channelorderid)
+											&& !duplicateKey.containsKey(channelorderid) && productConfig != null)) {
+										order.setChannelOrderID(channelorderid);
+										order.setProductSkuCode(productConfig.getProductSkuCode());
+										duplicateKey.put(channelorderid, "");
+									} else {
+										errorMessage.append(" Channel OrderId is already present ");
+										validaterow = false;
+									}
+								} else {
+									errorMessage.append("No Product with this Channel & SKU");
+									validaterow = false;
+								}
+							}						
+						} else {
+							errorMessage.append(" Channel OrderId or SKU code is null ");
+							validaterow = false;
+						}
+					} catch (NullPointerException e) {
+						errorMessage
+								.append("The column 'ORDER ID' doesn't exist");
+						validaterow = false;
+					}
+
+					try {
+						index = cellIndexMap.get(columHeaderMap
+								.get("Order Recieved Date"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							try {
+								String date = entry.getCell(index).toString();
+								order.setOrderDate(new Date(date));
+							} catch (Exception e) {
+								errorMessage
+										.append(" Order Received Date format is wrong ,enter mm/dd/yyyy,");
+								validaterow = false;
+							}
+
+						} else {
+							errorMessage
+									.append(" Order Recieved Date is null;");
+							validaterow = false;
+						}
+					} catch (NullPointerException e) {
+						errorMessage
+								.append("The column 'Ordered On' doesn't exist");
+						validaterow = false;
+					}
+
+					/*try {
+						index = cellIndexMap.get(columHeaderMap.get("SkUCode"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							if (SKUList!=null&&SKUList.contains(entry.getCell(index)
+									.toString())) {
+								order.setProductSkuCode(entry.getCell(index)
+										.toString());
+							} else {								
+								errorMessage
+										.append(" Product SKU does not exist;");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append(" Product SKU is null;");
+							validaterow = false;
+						}
+					} catch (NullPointerException e) {
+						errorMessage
+								.append("The column 'SKU Code' doesn't exist");
+						validaterow = false;
+					}*/					
+
+					try {
+						index = cellIndexMap.get(columHeaderMap
+								.get("Customer Name"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							customerBean.setCustomerName(entry.getCell(index)
+									.toString());
+						}
+					} catch (NullPointerException e) {
+
+					}
+
+					try {
+						index = cellIndexMap.get(columHeaderMap
+								.get("Payment Type"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							if (entry.getCell(index).toString().toUpperCase()
+									.contains("PREPAID")) {
+								order.setPaymentType("Prepaid");
+							} else if (entry.getCell(index).toString()
+									.toUpperCase().contains("COD")) {
+								order.setPaymentType("COD");
+							} else if (entry.getCell(index).toString()
+									.toUpperCase().contains("OTHERS")) {
+								order.setPaymentType("Others");
+							} else {
+								order.setPaymentType(entry.getCell(index)
+										.toString());
+								errorMessage
+										.append(" Payment type should be COD or Prepaid or Others");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append(" Payment type is null");
+							validaterow = false;
+						}
+					} catch (NullPointerException e) {
+						errorMessage
+								.append("The column 'Payment Type' doesn't exist");
+						validaterow = false;
+					}
+
+					if (cellIndexMap.get(columHeaderMap.get("AWB No")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("AWB No"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							entry.getCell(index).setCellType(
+									HSSFCell.CELL_TYPE_STRING);
+							order.setAwbNum(entry.getCell(index).toString());
+						}
+					}
+
+					try {
+						index = cellIndexMap.get(columHeaderMap
+								.get("InvoiceID"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							entry.getCell(index).setCellType(
+									HSSFCell.CELL_TYPE_STRING);
+							order.setInvoiceID(entry.getCell(index).toString());
+						} else {
+							order.setInvoiceID(entry.getCell(index).toString());
+							errorMessage.append(" Invoice ID is null;");
+							validaterow = false;
+						}
+					} catch (Exception e) {
+						errorMessage
+								.append("The column 'Invoice No.' doesn't exist");
+						validaterow = false;
+					}
+
+					if (cellIndexMap.get(columHeaderMap
+							.get("Secondary OrderID")) != null) {
+						index = cellIndexMap.get(columHeaderMap
+								.get("Secondary OrderID"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							entry.getCell(index).setCellType(
+									HSSFCell.CELL_TYPE_STRING);
+							order.setSubOrderID(entry.getCell(index).toString());
+						}
+					}
+					if (cellIndexMap.get(columHeaderMap.get("PIreferenceNo")) != null) {
+						index = cellIndexMap.get(columHeaderMap
+								.get("PIreferenceNo"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							order.setPIreferenceNo(entry.getCell(index)
+									.toString());
+						}
+					}
+					if (cellIndexMap
+							.get(columHeaderMap.get("Logistic Partner")) != null) {
+						index = cellIndexMap.get(columHeaderMap
+								.get("Logistic Partner"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							order.setLogisticPartner(entry.getCell(index)
+									.toString());
+						}
+					}
+					if (cellIndexMap.get(columHeaderMap.get("Order MRP")) != null) {
+						index = cellIndexMap.get(columHeaderMap
+								.get("Order MRP"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							try {
+								order.setOrderMRP(Double.parseDouble(entry
+										.getCell(index).toString()));
+							} catch (NumberFormatException e) {
+								log.error("Failed! by SellerId : " + sellerId,
+										e);
+								errorMessage
+										.append(" Order MRP should be a number ");
+							}
+						}
+					}
+
+					try {
+						index = cellIndexMap
+								.get(columHeaderMap.get("Order SP"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							try {
+								order.setOrderSP(Double.parseDouble(entry
+										.getCell(index).toString()));
+							} catch (NumberFormatException e) {
+								errorMessage
+										.append(" Order SP should be a number ");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append(" Order SP is null ");
+							validaterow = false;
+						}
+					} catch (NullPointerException e) {
+						errorMessage
+								.append("The column 'Invoice Amount' doesn't exist");
+						validaterow = false;
+					}
+
+					try {
+						index = cellIndexMap.get(columHeaderMap
+								.get("Order Shipped Date"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							try {
+								String date = entry.getCell(index).toString();
+								order.setShippedDate(new Date(date));
+							} catch (Exception e) {
+								errorMessage
+										.append(" Shipped Date formate is wrong ,enter mm/dd/yyyy,");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append(" Shipping Date is null ");
+							validaterow = false;
+						}
+					} catch (NullPointerException e) {
+						errorMessage
+								.append("The column 'Ready to Ship by date' doesn't exist");
+						validaterow = false;
+					}
+
+					try {
+						index = cellIndexMap
+								.get(columHeaderMap.get("Quantity"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							try {
+								if ((int) Float.parseFloat(entry.getCell(index)
+										.toString()) != 0) {
+									order.setQuantity((int) Float
+											.parseFloat(entry.getCell(index)
+													.toString()));
+								} else {
+									errorMessage
+											.append(" Quantity can not be 0 ");
+									validaterow = false;
+								}
+							} catch (NumberFormatException e) {
+								log.error("Failed! by SellerId : " + sellerId,
+										e);
+								errorMessage
+										.append(" Quantity should be a number ");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append(" Quantity can not be null ");
+							validaterow = false;
+						}
+					} catch (NullPointerException e) {
+						errorMessage
+								.append("The column 'Quantity' doesn't exist");
+						validaterow = false;
+					}
+
+					if (partner != null) {
+						event = eventsService.isEventActiive(
+								order.getOrderDate(), partner.getPcName(),
+								order.getProductSkuCode(), sellerId);
+													
+							if (event != null) {
+								if (event.getNrnReturnConfig()
+										.getNrCalculatorEvent()
+										.equalsIgnoreCase("fixed")) {
+									if(cellIndexMap.get(columHeaderMap.get("Net Rate")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Net Rate"));
+										if (entry.getCell(index) != null
+												&& entry.getCell(index)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+
+											try {
+												order.setGrossNetRate(Double
+														.parseDouble(entry.getCell(
+																index).toString()));
+											} catch (NumberFormatException e) {
+												log.error("Failed! by SellerId : "
+														+ sellerId, e);
+												errorMessage
+														.append(" Net Rate should be number ");
+												validaterow = false;
+											}
+										} else {
+											errorMessage
+													.append(" Net Rate is null and ongoing event on the order with fixed price.");
+											validaterow = false;
+										}
+									} else {
+										errorMessage.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}									
+								}
+							} else {
+								if (partner != null
+										&& partner.getNrnReturnConfig() != null
+										&& !partner.getNrnReturnConfig()
+												.isNrCalculator()) {
+									if(cellIndexMap.get(columHeaderMap.get("Net Rate")) != null){
+										index = cellIndexMap.get(columHeaderMap.get("Net Rate"));
+										if (entry.getCell(index) != null
+												&& entry.getCell(index)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+											try {
+												order.setGrossNetRate(Double
+														.parseDouble(entry.getCell(
+																index).toString()));
+											} catch (NumberFormatException e) {
+												log.error("Failed! by SellerId : "
+														+ sellerId, e);
+												errorMessage
+														.append(" Net Rate should be number ");
+
+											}
+										}
+									}									 
+								}
+							}						
+					}
+					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
+						index = cellIndexMap.get(columHeaderMap
+								.get("Customer Email"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						
+							customerBean.setCustomerEmail(entry.getCell(index)
+									.toString());
+						}
+					}
+					if (cellIndexMap.get(columHeaderMap
+							.get("Customer Phone No")) != null) {
+						index = cellIndexMap.get(columHeaderMap
+								.get("Customer Phone No"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							customerBean.setCustomerPhnNo(entry.getCell(index)
+									.toString());
+						}
+					}
+					if (cellIndexMap.get(columHeaderMap.get("Customer City")) != null) {
+						index = cellIndexMap.get(columHeaderMap
+								.get("Customer City"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							customerBean.setCustomerCity(entry.getCell(index)
+									.toString());
+						}
+					}
+					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
+						index = cellIndexMap.get(columHeaderMap
+								.get("Customer Email"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							customerBean.setCustomerAddress(entry
+									.getCell(index).toString());
+						}
+					}
+					try {
+						index = cellIndexMap.get(columHeaderMap
+								.get("Shipping PinCode"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							log.debug(" getting zipcode ");
+							String zipCode=entry.getCell(index).toString();
+							if(zipCode.contains(".")){
+								zipCode=zipCode.substring(0, zipCode.indexOf("."));				
+							}
+							if (areaConfigDao.isZipCodeValid(zipCode)) {
+								try {
+									customerBean.setZipcode(zipCode);
+								} catch (Exception e) {
+									log.error("Failed! by SellerId : "
+											+ sellerId, e);
+									errorMessage
+											.append("Customer zipcode is corrupted ");
+									validaterow = false;
+								}
+							} else {
+								errorMessage.append("Either invalid zipcode or try after some time while admin will add this to database.");
+								validaterow = false;
+								customerBean.setZipcode(entry.getCell(index)
+										.toString());
+							}
+						} else {
+							errorMessage.append("Customer zipcode is blank ");
+							validaterow = false;
+						}
+					} catch (NullPointerException e) {
+						errorMessage
+								.append("The column 'PIN Code' doesn't exist");
+						validaterow = false;
+					}
+					if(order.getProductSkuCode() != null){
+						product = productService.getProduct(
+								order.getProductSkuCode(), sellerId);
+						if (product != null) {
+							taxcat = taxDetailService.getTaxCategory(product,
+									sellerId, customerBean.getZipcode());
+						}
+					}
+					if (taxcat != null)
+						otb.setTaxCategtory(taxcat.getTaxCatName());
+					else {
+						errorMessage.append("No Tax Category mapped for this product ");
+						validaterow = false;
+					}
+
+					if (cellIndexMap.get(columHeaderMap.get("Seller Note")) != null) {
+						index = cellIndexMap.get(columHeaderMap
+								.get("Seller Note"));
+						if (entry.getCell(index) != null
+								&& StringUtils.isNotBlank(entry.getCell(index)
+										.toString())) {
+							order.setSellerNote(entry.getCell(index).toString());
+
+						}
+					}
+
+					// Pre save to generate id for use in hierarchy
+					if (validaterow) {
+						order.setCustomer(customerBean);
+						order.setOrderTax(otb);
+						/*
+						 * orderService.addOrder(ConverterClass.prepareModel(order
+						 * ), sellerId);
+						 */
+						System.out.println(" Adding order to save list : "
+								+ order.getChannelOrderID());
+						saveList.add(ConverterClass.prepareModel(order));
+					} else {
+						order.setCustomer(customerBean);
+						order.setOrderTax(otb);
+						log.debug(" Error while saving order : "
+								+ order.getChannelOrderID()
+								+ " errorMessage : " + errorMessage);
+						returnOrderMap.put(errorMessage.toString(), order);
+					}
+				} catch (Exception e) {
+
+					log.error("Failed! by SellerId : " + sellerId, e);
+					errorMessage.append("Invalid Input! ");
+					returnOrderMap.put(errorMessage.toString(), order);
+				}
+			}
+
+			try {
+				System.out.println(" SaveList Size : " + saveList.size());
+				if (saveList != null && saveList.size() != 0)
+					orderService.addOrder(saveList, sellerId);
+			} catch (CustomException ce) {
+				returnOrderMap
+						.put("Row :1:Note-Some orders("
+								+ ce.getLocalMessage()
+								+ " ) with valid input "
+								+ "failed due to internal server error. Please contact admin.!",
+								null);
+			}
+			errorSet = returnOrderMap.keySet();
+			uploadResultXLS(offices, "Jabong_Order_Upload", errorSet, path,
+					sellerId, uploadReport);
+
+		} catch (Exception e) {
+			log.debug("Inside save contents exception :"
+					+ e.getLocalizedMessage());
+			e.printStackTrace();
+			addErrorUploadReport("Jabong_Order_Upload", sellerId,
+					uploadReport);
+			log.error("Failed! by SellerId : " + sellerId, e);
+		}
+	}
+	
+	public void saveJabongPaymentContents(MultipartFile file, int sellerId,
+			String path, UploadReport uploadReport) throws IOException {
+		log.info("$$$ saveJabongPaymentContents starts : SaveMappedFiles $$$");
+
+		ChannelUploadMapping chanupload = null;
+		Map<String, String> columHeaderMap = new LinkedHashMap<String, String>();
+		Map<String, Integer> cellIndexMap = new LinkedHashMap<String, Integer>();
+		OrderPayment orderPayment = null;
+		StringBuffer errorMessage = null;
+		String channelOrderId = null;
+		String skucode = null;
+		Order order = null;
+		int noOfEntries = 1;
+		HSSFRow entry;
+		boolean validaterow = true;
+		int indexfulfilmentType = 0;
+		double totalpositive = 0;
+		double totalnegative = 0;
+		Set<String> errorSet = new HashSet<String>();
+		PaymentUpload paymentUpload = new PaymentUpload();
+		List<ManualCharges> manualChargesList = new ArrayList<ManualCharges>();
+		ManualCharges newmanualCharge = null;
+		boolean generatePaymentUpload = false;
+		String uploadPaymentId = null;
+		Map<String, String> duplicateKey = new HashMap<String, String>();
+
+		try {
+			chanupload = uploadMappingService.getChannelUploadMapping(
+					"Jabong", "Payment");
+			if (chanupload != null && chanupload.getColumMap() != null) {
+				for (ColumMap colums : chanupload.getColumMap()) {
+					columHeaderMap.put(colums.getO2rColumName(),
+							colums.getChannelColumName());
+				}
+			}
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			entry = worksheet.getRow(0);
+			for (int cellIndex = 0; cellIndex < entry
+					.getPhysicalNumberOfCells(); cellIndex++) {
+				if (columHeaderMap.containsValue(entry.getCell(cellIndex)
+						.toString())) {
+					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+							cellIndex);
+				}
+
+			}
+
+			try {
+				indexfulfilmentType = cellIndexMap.get(columHeaderMap
+						.get("Fulfilment Type"));
+				for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+					errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
+					entry = worksheet.getRow(rowIndex);
+					validaterow = true;
+					int index = 0;
+					String channelheader = null;
+					channelOrderId = null;
+					//errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
+					// Code for fetching right colum
+					orderPayment = new OrderPayment();
+					order = null;
+					double amount =0;
+
+					try {
+
+						if (entry.getCell(indexfulfilmentType) != null
+								&& entry.getCell(indexfulfilmentType)
+										.toString().equalsIgnoreCase("NON-FA")) {
+
+							try {
+								channelheader = columHeaderMap
+										.get("ChannelOrderId");
+								index = cellIndexMap.get(channelheader);
+								int skuIndex = cellIndexMap.get(columHeaderMap
+										.get("Seller SKU"));
+								entry.getCell(index).setCellType(
+										HSSFCell.CELL_TYPE_STRING);
+								channelOrderId=entry
+										.getCell(index)
+										.toString()+ GlobalConstant.orderUniqueSymbol
+										+ entry.getCell(skuIndex).toString();
+								List<Order> onj = orderService
+										.searchAsIsOrder(
+												"channelOrderID",channelOrderId ,
+												sellerId);
+								if (onj == null) {									
+									errorMessage.append(" Channel OrderId not present ");
+									validaterow = false;
+								} else {
+									if(onj.size() == 1 && onj.get(0).getChannelOrderID().equals(channelOrderId)){
+										channelOrderId = onj.get(0).getChannelOrderID();
+									} else {
+										boolean check = false;
+										for(Order eachOrder : onj){
+											if(eachOrder.getChannelOrderID().equalsIgnoreCase(channelOrderId)){
+												channelOrderId = eachOrder.getChannelOrderID();
+												check = true;
+											}
+										}
+										if(check != true){
+											errorMessage.append("Multiple Orders With Channel Order ID.");
+											validaterow = false;
+										}
+									}
+								}
+								
+							} catch (NullPointerException e) {
+								errorMessage
+										.append("This Column 'Order item ID' or 'SKU' doesn't exist");
+								validaterow = false;
+							}
+
+							try {
+								index = cellIndexMap.get(columHeaderMap
+										.get("Payment Date"));
+								if (entry.getCell(index) != null
+										&& HSSFDateUtil
+												.isCellDateFormatted(entry
+														.getCell(index))) {
+									String date = entry.getCell(index)
+											.toString();
+									orderPayment
+											.setDateofPayment(new Date(date));
+								} else {
+									errorMessage
+											.append(" Payment Date format is wrong or null");
+									validaterow = false;
+								}
+							} catch (NullPointerException e) {
+								errorMessage
+										.append("This Column 'Settlement Date' doesn't exist");
+								validaterow = false;
+							}
+
+							try {
+								index = cellIndexMap.get(columHeaderMap
+										.get("Recieved Amount"));
+								if (entry.getCell(index) != null
+										&& StringUtils.isNotBlank(entry
+												.getCell(index).toString())) {
+									try {
+										amount= entry.getCell(index)
+												.getNumericCellValue();
+										if (amount > 0) {
+											orderPayment
+													.setPositiveAmount(amount);
+											/*totalpositive = totalpositive
+													+ amount;*/
+										} else {
+											orderPayment.setNegativeAmount(Math
+													.abs(amount));
+											/*totalnegative = totalnegative
+													+ Math.abs(amount);*/
+										}
+									} catch (Exception e) {
+										log.error("Failed by seller "
+												+ sellerId, e);
+										errorMessage
+												.append(" Payment Amount cell is corrupted");
+										validaterow = false;
+
+									}
+								} else {
+									errorMessage
+											.append("Amount format is wrong or null.");
+									validaterow = false;
+								}
+							} catch (NullPointerException e) {
+								errorMessage
+										.append("This Column 'Settlement Value (Rs.)' doesn't exist");
+								validaterow = false;
+							}
+
+							try {
+								index = cellIndexMap.get(columHeaderMap
+										.get("Seller SKU"));
+								if (entry.getCell(index) != null
+										&& StringUtils.isNotBlank(entry
+												.getCell(index).toString())) {
+									skucode = entry.getCell(index).toString();
+								}
+							} catch (NullPointerException e) {
+								errorMessage
+										.append("This Column 'Seller SKU' doesn't exist");
+							}
+
+							if (validaterow) {
+								if (amount > 0) {
+									totalpositive = totalpositive + amount;
+								} else {
+									totalnegative = totalnegative + Math.abs(amount);
+								}
+								order = orderService.addOrderPayment(skucode,
+										channelOrderId, orderPayment, sellerId);
+							} else {
+								errorSet.add(errorMessage.toString());
+
+							}
+							if (order != null & validaterow) {
+								if (!duplicateKey.containsKey(channelOrderId)) {
+									System.out
+											.println(" Setting payment upload");
+									order.setPaymentUpload(paymentUpload);
+									paymentUpload.getOrders().add(order);
+									generatePaymentUpload = true;
+									duplicateKey.put(channelOrderId,
+											channelOrderId);
+								}
+
+							}
+
+						} else if (entry.getCell(indexfulfilmentType) != null
+								&& entry.getCell(indexfulfilmentType)
+										.toString().equalsIgnoreCase("null")) {
+							try {
+								index = cellIndexMap.get(columHeaderMap
+										.get("Seller SKU"));
+								if (entry.getCell(index) != null
+										&& StringUtils.isNotBlank(entry
+												.getCell(index).toString())) {
+									skucode = entry.getCell(index).toString();
+								}
+							} catch (NullPointerException e) {
+								errorMessage
+										.append("This Column 'Seller SKU' doesn't exist");
+							}
+							if (skucode != null
+									&& skucode.equalsIgnoreCase("null")) {
+								System.out.println(" Setting manula charges ");
+								newmanualCharge = new ManualCharges();
+								try {
+									index = cellIndexMap.get(columHeaderMap
+											.get("Payment Date"));
+									if (entry.getCell(index) != null
+											&& HSSFDateUtil
+													.isCellDateFormatted(entry
+															.getCell(index))) {
+										String date = entry.getCell(index)
+												.toString();
+										newmanualCharge.setDateOfPayment(new Date(date));
+									} else {
+										errorMessage
+												.append(" Payment Date format is wrong or null");
+										validaterow = false;
+									}
+								} catch (NullPointerException e) {
+									errorMessage
+											.append("This Column 'Settlement Date' doesn't exist");
+									validaterow = false;
+								}
+
+								try {
+									index = cellIndexMap.get(columHeaderMap
+											.get("Particulars"));
+									if (entry.getCell(index) != null
+											&& StringUtils.isNotBlank(entry
+													.getCell(index).toString())) {
+										newmanualCharge.setParticular(entry
+												.getCell(index).toString());
+									}
+								} catch (NullPointerException e) {
+									errorMessage
+											.append("This Column 'Order Type' doesn't exist");
+								}
+
+								try {
+									index = cellIndexMap.get(columHeaderMap
+											.get("Recieved Amount"));
+									if (entry.getCell(index) != null
+											&& StringUtils.isNotBlank(entry
+													.getCell(index).toString())) {
+										try {
+											amount = entry
+													.getCell(index)
+													.getNumericCellValue();
+											newmanualCharge
+													.setPaidAmount((-amount));
+
+										} catch (Exception e) {
+											log.error("Failed by seller "
+													+ sellerId, e);
+											errorMessage
+													.append(" Payment Amount cell is corrupted");
+											validaterow = false;
+
+										}
+									} else {
+										errorMessage
+												.append("Amount format is wrong or null.");
+										validaterow = false;
+									}
+								} catch (Exception e) {
+									errorMessage
+											.append("This Column 'Settlement Value (Rs.)' doesn't exist");
+									validaterow = false;
+								}
+
+							} else {
+								errorMessage
+										.append("SKU value should be present SKU or null.");
+								validaterow = false;
+							}
+							if(cellIndexMap.get(columHeaderMap.get("Sales Channel"))!=null)
+							{
+								int indexchannel=cellIndexMap.get(columHeaderMap.get("Sales Channel"));
+								newmanualCharge.setPartner(entry.getCell(indexchannel).toString());
+							}
+							else
+							{
+								errorMessage
+								.append("O2R channel is not present.");
+								validaterow = false;
+							}
+
+							if (validaterow) {
+								
+								System.out
+										.println(" Adding manul charges to list");
+								newmanualCharge.setUploadDate(new Date());
+								manualChargesList.add(newmanualCharge);
+							} else {
+								errorSet.add(errorMessage.toString());
+							}
+						} else {
+							errorMessage
+									.append("Fulfilment Type is not accepted.Only NON-FA or null is valid.");
+							validaterow = false;
+							errorSet.add(errorMessage.toString());
+						}
+
+					} catch (Exception e) {
+						log.error("Failed by seller: " + sellerId, e);
+						errorMessage.append("Invalid Input !");
+						errorSet.add(errorMessage.toString());
+					}
+				}
+			} catch (Exception e) {
+				errorMessage.append("The Column 'Fulfilment Type' doesn't exist");
+				validaterow = false;
+			}
+
+			if (generatePaymentUpload) {
+				log.info("Updating payment Upload with negative amount "
+						+ totalnegative+" totalpositive : "+totalpositive);
+				paymentUpload.setTotalpositivevalue(totalpositive);
+				paymentUpload.setTotalnegativevalue(totalnegative);
+				paymentUpload.setNetRecievedAmount(totalpositive
+						- totalnegative);
+				paymentUpload.setUploadDesc("PAYU" + sellerId + ""
+						+ new Date().getTime());
+				paymentUpload.setUploadStatus("Success");
+				uploadPaymentId = paymentUploadService.addPaymentUpload(
+						paymentUpload, sellerId);
+				log.info(" Saving payment upload : "
+						+ uploadPaymentId);
+			}
+			if (manualChargesList != null && manualChargesList.size() != 0) {
+				for (ManualCharges manuals : manualChargesList) {
+					try {
+						
+						if (uploadPaymentId != null)
+							manuals.setChargesDesc(uploadPaymentId);
+						//manuals.setPartner("Jabong");
+						expenseService.addExpense(
+								new Expenses("Manual Charges", uploadPaymentId,
+										"Manual Charges", new Date(), manuals
+												.getDateOfPayment(), manuals
+												.getPaidAmount(), manuals.getPartner()!=null?manuals.getPartner():"",
+										sellerId), sellerId);
+					} catch (Exception e) {
+						log.error("Failed! by SellerId : " + sellerId, e);
+					}
+				}
+				manualChargesService.addListManualCharges(manualChargesList,
+						sellerId);
+			}
+			uploadResultXLS(offices, "Jabong_Payment", errorSet, path,
+					sellerId, uploadReport);
+		}
+
+		catch (Exception e) {
 			log.error("Failed by seller: " + sellerId, e);
 		}
 	}
