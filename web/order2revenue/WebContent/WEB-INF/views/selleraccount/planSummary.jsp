@@ -107,6 +107,7 @@
 	function hide_sidebar(){
 		document.getElementById('box').style.visibility="hidden";		
 	}
+	
 </script>
 <style type="text/css">
 .column {
@@ -441,7 +442,6 @@ tbody td:last-child, thead th:last-child {
 	</div>
 
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
-
 	<script type="text/javascript">
 	var $table = $('table.scroll'),
     $bodyCells = $table.find('tbody tr:first').children(),
@@ -455,4 +455,12 @@ $(window).resize(function() {
     });    
 }).resize();
 </script>
+
+	<script type="text/javascript">
+	$(document).ready(function() {		
+		var starId=${myAccount.plan.planId};		
+		document.getElementById("star-"+starId).checked="checked";
+	});
+	</script>
+</body>
 </html>
