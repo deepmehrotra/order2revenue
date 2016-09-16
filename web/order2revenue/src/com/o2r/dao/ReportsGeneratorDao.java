@@ -2,6 +2,10 @@ package com.o2r.dao;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.bean.ChannelCatNPR;
 import com.o2r.bean.ChannelGP;
@@ -26,6 +30,7 @@ import com.o2r.model.UploadReport;
  * @author Deep Mehrotra
  *
  */
+@Transactional(propagation=Propagation.REQUIRED)
 public interface ReportsGeneratorDao {
 
 	public TotalShippedOrder getPartnerTSOdetails(String pcName,
@@ -39,7 +44,7 @@ public interface ReportsGeneratorDao {
 
 	public List<ChannelReportDetails> getChannelReportDetails(Date startDate, Date endDate, int sellerId, String reportName) throws CustomException;
 
-	public List<PartnerReportDetails> getDebtorsReportDetails(Date startDate, Date endDate, int sellerId) throws CustomException;
+	public Map<String, Object> getDebtorsReportDetails(Date startDate, Date endDate, int sellerId) throws CustomException;
 
 	public List<CommissionDetails> fetchPC(int sellerId, Date startDate, Date endDate, String criteria);
 

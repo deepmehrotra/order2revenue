@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.annotation.Resource;
 
@@ -29,6 +31,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.bean.ChannelCatNPR;
 import com.o2r.bean.ChannelGP;
@@ -41,6 +44,7 @@ import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.CommissionDetails;
 import com.o2r.bean.ConsolidatedOrderBean;
 import com.o2r.bean.DataConfig;
+import com.o2r.bean.DebtorsGraph1;
 import com.o2r.bean.MonthlyCommission;
 import com.o2r.bean.NetPaymentResult;
 import com.o2r.bean.PartnerReportDetails;
@@ -56,7 +60,6 @@ import com.o2r.model.OrderRTOorReturn;
 import com.o2r.model.OrderTax;
 import com.o2r.model.Product;
 import com.o2r.model.Seller;
-import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
 import com.o2r.service.OrderService;
 import com.o2r.service.TaxDetailService;
@@ -67,6 +70,7 @@ import com.o2r.service.TaxDetailService;
  */
 
 @Repository("reportGeneratorDao")
+@Transactional
 public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 
 	@Autowired
@@ -704,7 +708,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		return consolidatedList;
 	}
 	
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public List<PartnerReportDetails> getDebtorsReportDetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException {
@@ -736,6 +740,71 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 
 		return partnerBusinessList;
 		
+	}*/
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> getDebtorsReportDetails(Date startDate,
+			Date endDate, int sellerId) throws CustomException {
+		log.info("*** getDebtorsReportDetails Starts : ReportsGeneratorDaoImpl ****");
+
+		List<PartnerReportDetails> partnerBusinessList = new ArrayList<PartnerReportDetails>();
+		Map<String, Object> returnmap = new HashMap<String, Object>();
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();			
+			List<Order> results = fetchDebtorsOrders(session, sellerId, startDate, endDate);
+			Map<String, DebtorsGraph1> debtorgraphpartnermap = new HashMap<String, DebtorsGraph1>();
+			Map<String, DebtorsGraph1> debtorgraphcategorymap = new HashMap<String, DebtorsGraph1>();
+
+			/*for (Order currOrder : results) {
+				PartnerReportDetails partnerBusiness = transformPartnerDetail(currOrder, session, startDate, endDate);
+					partnerBusinessList.add(partnerBusiness);
+				
+					transformDebtorsGraph1Graph(debtorgraphpartnermap, partnerBusiness, "partner");
+					transformDebtorsGraph1Graph(debtorgraphcategorymap, partnerBusiness, "category");
+			}*/
+			int i=0;
+			ExecutorService executor = Executors.newFixedThreadPool(100);
+			 
+			/*Collections.synchronizedList(results);
+			Collections.synchronizedMap(debtorgraphpartnermap);
+			Collections.synchronizedMap(debtorgraphcategorymap);*/
+			for (int x=0; x<results.size(); x=x+100)
+		    {
+				DebtorsListModify newthread= new DebtorsListModify(
+						partnerBusinessList,results,debtorgraphpartnermap,
+						debtorgraphcategorymap,x,100,
+						startDate,endDate);
+				executor.execute(newthread);
+				//newthread.start();
+				if(x%10==0)
+		        System.out.println("Started Thread:" + (i++));
+		    }
+			executor.shutdown();
+	        while (!executor.isTerminated()) {
+	        }
+	        System.out.println("Finished all threads");
+			returnmap.put("list", partnerBusinessList);
+			returnmap.put("partnermap", debtorgraphpartnermap);
+			returnmap.put("categorymap", debtorgraphcategorymap);
+
+			log.info("Total Orders" + partnerBusinessList.size());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);
+			throw new CustomException(
+					GlobalConstant.getAllPartnerTSOdetailsError, new Date(), 3,
+					GlobalConstant.getAllPartnerTSOdetailsErrorCode, e);
+
+		}
+		log.info("*** getDebtorsReportDetails ends : ReportsGeneratorDaoImpl ****");
+
+		return returnmap;
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -752,8 +821,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			List<Order> results = fetchOrders(session, sellerId, startDate, endDate);
 			Map<String, PartnerReportDetails> poOrderMap = new HashMap<String, PartnerReportDetails>();
 			for (Order currOrder : results) {
-				PartnerReportDetails partnerBusiness = transformPartnerDetail(currOrder, session, startDate, endDate);
-				partnerBusinessList.add(partnerBusiness);
+			/*	PartnerReportDetails partnerBusiness = transformPartnerDetail(currOrder, session, startDate, endDate);
+				partnerBusinessList.add(partnerBusiness);*/
 			}
 			log.info("Total Orders" + partnerBusinessList.size());
 		} catch (NullPointerException e) {
@@ -772,7 +841,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		return partnerBusinessList;
 	}
 
-	private PartnerReportDetails transformPartnerDetail(Order currOrder, Session session, Date startDate,
+	private PartnerReportDetails transformPartnerDetail(Order currOrder,Product currProduct,Date startDate,
 			Date endDate) {
 		log.info("*** transformPartnerDetail Starts : ReportsGeneratorDaoImpl ****");
 
@@ -803,7 +872,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				partnerBusiness.setCustomerPhone(currCustomer.getCustomerPhnNo());
 				partnerBusiness.setCustomerCity(currCustomer.getCustomerCity());
 			}
-			Criteria prodcriteria = session.createCriteria(Product.class);
+			/*Criteria prodcriteria = session.createCriteria(Product.class);
 			prodcriteria.add(Restrictions.eq("productSkuCode",
 					currOrder.getProductSkuCode()));
 			List<Product> productList = prodcriteria.list();
@@ -813,8 +882,14 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				partnerBusiness.setProductCategory(currProduct.getCategory().getParentCatName());
 				partnerBusiness.setParentCategory(currProduct.getCategory().getParentCatName());
 				productCost = currProduct.getProductPrice();
+			}*/
+			double productCost = 0;
+			if(currProduct!=null)
+			{
+			partnerBusiness.setProductCategory(currProduct.getCategory().getParentCatName());
+			partnerBusiness.setParentCategory(currProduct.getCategory().getParentCatName());
+			productCost = currProduct.getProductPrice();
 			}
-			
 			double tdsToBeDeposited = 0;
 			double taxToBePaid = 0;
 			double taxSP = 0;
@@ -1068,7 +1143,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.error("Failed ", e);
 			e.printStackTrace();
 		}		
-		log.info("*** transformPartnerDetail Starts : ReportsGeneratorDaoImpl ****");
+		log.info("*** transformPartnerDetail ends : ReportsGeneratorDaoImpl ****");
 
 		return partnerBusiness;
 	}
@@ -2723,4 +2798,144 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					new Date(), 3, GlobalConstant.listReportsErrorCode, e);
 		}
 	}
+	
+	public static void transformDebtorsGraph1Graph(
+			Map<String, DebtorsGraph1> debtorsGraph1Map,PartnerReportDetails partnerBusiness,String criteria) {
+		log.info("*** transformDebtorsGraph1Graph start : ReportsGeneratorDaoImpl ****");
+
+			String key = "";
+			switch (criteria) {
+			case "partner":
+				key = partnerBusiness.getPcName();
+				break;
+			case "category":
+				key = partnerBusiness.getParentCategory();
+				if (StringUtils.isEmpty(key))
+					key = "B2B";
+				break;
+			default:
+				break;
+			}
+			Date currDate = new Date();
+			DebtorsGraph1 debtorsGraph1 = debtorsGraph1Map.get(key);
+
+			double actionablePD = 0;
+			int actionableNetQty = 0;
+			double upcomingPD = 0;
+			int upcomingNetQty = 0;
+			double netPaymentDifference = partnerBusiness
+					.getPaymentDifference();
+			int netSaleQty = partnerBusiness.getNetSaleQuantity();
+			Date paymentDueDate = partnerBusiness.getPaymentDueDate();
+
+			double netPaymentResult = partnerBusiness.getNetPaymentResult();
+			actionablePD = partnerBusiness.getPaymentDifference();
+			if (partnerBusiness.isPoOrder()) {
+				actionableNetQty = partnerBusiness.getGrossSaleQuantity();
+				if (partnerBusiness.getReturnDate() != null)
+					actionableNetQty -= partnerBusiness.getReturnQuantity();
+			} else {
+				actionableNetQty = partnerBusiness.getNetSaleQuantity();
+			}
+			if (paymentDueDate != null && paymentDueDate.after(currDate)) {
+				upcomingPD = partnerBusiness.getPaymentDifference();
+				if (partnerBusiness.isPoOrder()) {
+					upcomingNetQty = partnerBusiness.getGrossSaleQuantity();
+					if (partnerBusiness.getReturnDate() != null)
+						upcomingNetQty -= partnerBusiness.getReturnQuantity();
+				} else {
+					upcomingNetQty = partnerBusiness.getGrossSaleQuantity()
+							- partnerBusiness.getReturnQuantity();
+				}
+			}
+			double netRate = 0;
+			if (paymentDueDate != null && paymentDueDate.after(new Date()))
+				netRate = partnerBusiness.getNetRate();
+			if (debtorsGraph1 == null) {
+				debtorsGraph1 = new DebtorsGraph1();
+			} else {
+				netPaymentResult += debtorsGraph1.getNetPaymentResult();
+				actionablePD += debtorsGraph1.getActionablePD();
+				actionableNetQty += debtorsGraph1.getActionableNetQty();
+				upcomingPD += debtorsGraph1.getUpcomingPD();
+				upcomingNetQty += debtorsGraph1.getUpcomingNetQty();
+				netPaymentDifference += debtorsGraph1.getNetPaymentDifference();
+				netSaleQty += debtorsGraph1.getNetSaleQty();
+			}
+			debtorsGraph1.setNetPaymentResult(netPaymentResult);
+			debtorsGraph1.setActionablePD(actionablePD);
+			debtorsGraph1.setActionableNetQty(actionableNetQty);
+			debtorsGraph1.setUpcomingPD(upcomingPD);
+			debtorsGraph1.setUpcomingNetQty(upcomingNetQty);
+			debtorsGraph1.setNetPaymentDifference(netPaymentDifference);
+			debtorsGraph1.setNetSaleQty(netSaleQty);
+			debtorsGraph1.setPartner(key);
+			debtorsGraph1.setCategory(key);
+
+			debtorsGraph1Map.put(key, debtorsGraph1);
+		
+			log.info("*** transformDebtorsGraph1Graph ends : ReportsGeneratorDaoImpl ****");
+
+	}
+	
+	public class DebtorsListModify  implements Runnable { 
+		int start=0;
+		int ran=0;
+		List<PartnerReportDetails> listtopopulate;
+		List<Order> listtorun;
+		Map<String, DebtorsGraph1> partnermap;
+		Map<String, DebtorsGraph1> categorymap;
+		Date startdate=null;
+		Date enddate=null;
+		
+
+		  public DebtorsListModify(List<PartnerReportDetails> ltp,List<Order> ltr,Map<String, DebtorsGraph1> debtorgraphpartnermap,
+				  Map<String, DebtorsGraph1> debtorgraphcategorymap,int startindex,int range,
+				  Date sd,Date ed) { 
+			  partnermap=debtorgraphpartnermap;
+			  categorymap=debtorgraphcategorymap;
+			  listtorun=ltr;
+			  listtopopulate=ltp;
+			  start=startindex;
+			  ran=range;
+			  startdate=sd;
+			  enddate=ed;
+		  }
+
+		  public void run() { 
+		    System.out.println("size: "+ listtorun.size()
+		    		+" start : "+start+" ran : "+ran);
+		    int last=0;
+		    if(start<listtorun.size())
+		    {
+		    	if((start+ran)<listtorun.size())
+		    	{
+		    		last=start+ran;
+		    	}
+		    	else
+		    		last=listtorun.size();
+		    	
+		    }
+		    for (int i=start;i<last;i++) {
+		    	Order currOrder=listtorun.get(i);
+		    	Session localsession=sessionFactory.openSession();
+		    	Criteria prodcriteria = localsession.createCriteria(Product.class);
+				prodcriteria.add(Restrictions.eq("productSkuCode",
+						currOrder.getProductSkuCode()));
+				List<Product> productList = prodcriteria.list();
+				
+				localsession.close();
+				if(productList!=null&&productList.size()>0)
+				{
+		    	PartnerReportDetails partnerBusiness = transformPartnerDetail(currOrder,productList.get(0), startdate, enddate);
+		    	listtopopulate.add(partnerBusiness);
+				
+					transformDebtorsGraph1Graph(partnermap, partnerBusiness, "partner");
+					transformDebtorsGraph1Graph(categorymap, partnerBusiness, "category");
+				}
+			}
+		    
+		    
+		  } 
+		}
 }

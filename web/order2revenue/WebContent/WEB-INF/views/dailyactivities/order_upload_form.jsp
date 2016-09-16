@@ -35,15 +35,21 @@
 	color: #fff;
 	border: 1px dashed #fff;
 }
-
 .heading {
 	position: relative;
 	top: -7px;
 }
-
 .hide {
 	display: none;
 }
+ol.c {list-style-type: upper-roman;}
+            ol.d {list-style-type: lower-alpha;}
+            .color
+            {
+                color: green;
+            }
+
+
 </style>
 <!-- <script type="text/javascript">
 	$(function() {
@@ -188,7 +194,7 @@
 </script>
 
 </head>
-<body >
+<body>
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="ibox float-e-margins">
@@ -246,29 +252,29 @@
 
 								<!-- 	<input id="addFile" type="button" value="Add File" /> -->
 								<div class="col-md-4">
-									<select class="form-control" id="sheetValue" name="sheetValue"
+									<select class="form-control div-toggle" data-target=".my-info-mp" id="sheetValue" name="sheetValue"
 										required autocomplete="off">
-										<option value="">Select file to upload</option>
-										<option value="ordersummary">MP Order Upload</option>
-										<option value="orderPoSummary">PO Order Upload</option>
-										<option value="paymentSummary">MP Payment Upload</option>
-										<option value="returnSummary">MP Return Upload</option>
-										<option value="gatepassSummary">PO GatePass Upload</option>
-										<option value="productSummary">Create Parent Product</option>
-										<option value="editProductSummary">Edit Product
+										<option value="" data-show="">Select file to upload</option>
+										<option value="ordersummary" data-show=".mporderupload">MP Order Upload</option>
+										<option value="orderPoSummary" >PO Order Upload</option>
+										<option value="paymentSummary" data-show=".mppaymentupload">MP Payment Upload</option>
+										<option value="returnSummary" data-show=".mpreturnupload">MP Return Upload</option>
+										<option value="gatepassSummary" >PO GatePass Upload</option>
+										<option value="productSummary" data-show=".createparentproduct">Create Parent Product</option>
+										<option value="editProductSummary" data-show=".editproductupload">Edit Product
 											Upload</option>
-										<option value="vendorSKUMapping">Vendor SKU Mapping</option>
+										<option value="vendorSKUMapping" data-show=".vendorskumapping">Vendor SKU Mapping</option>
 										<option value="productConfigSummary">PO Product
 											Config</option>
-										<option value="inventorySummary">Inventory Upload</option>
+										<option value="inventorySummary" data-show=".inventoryupload">Inventory Upload</option>
 										<option value="poPaymentSummary">PO Payment Upload</option>
-										<option value="expenseSummary">Expense Upload</option>
-										<option value="EventSKUSummary">Event SKU Upload</option>
-										<option value="CreateInventoryGroups">Create
+										<option value="expenseSummary" data-show=".expenseupload">Expense Upload</option>
+										<option value="EventSKUSummary" data-show="">Event SKU Upload</option>
+										<option value="CreateInventoryGroups" data-show=".createinventorygroup">Create
 											Inventory Groups</option>
-										<option value="CreateProCat">Create Product Category</option>
-										<option value="prodCat_Comm_Mapping">Category wise Commission Upload</option>
-										<option value="product_Tax_Mapping">Tax Category Upload</option>
+										<option value="CreateProCat" data-show=".unicommerceorderupload">Create Product Category</option>
+										<option value="prodCat_Comm_Mapping" data-show=".categorywisecommission">Category wise Commission Upload</option>
+										<option value="product_Tax_Mapping" data-show=".taxcategoryupload">Tax Category Upload</option>
 									</select>
 								</div>
 								<div class="col-md-4">
@@ -285,6 +291,441 @@
 							</form:form>
 						</div>
 				</div>
+				<div class="col-lg-12">
+					<div class="my-info-mp">
+						
+						<div class="mporderupload">
+							<h2 class="text-center">
+								<b>Follow These Instructions</b>
+							</h2>
+							<ol>
+                        <li>
+                            When using bulk upload feature
+                        </li>
+                        <ol class="d">
+                            <li>
+                                Ensure that the following columns formatting is as <b>"Text"</b> before uploading
+                            </li>
+                            <ol class="c">
+                                <li>
+                                    SkUCode,Sales Channel,Customer Name,AWB No.,InvoiceID, PIreferenceNo,Logistic Partner,Customer Email,Customer Phone No,Customer City,Customer Address,Shipping PinCode,Seller Notes
+                                </li>
+                            </ol>
+                            <li>
+                                Ensure that the following columns formatting is as <b>"Number"</b>before uploading
+                                <ol class="c">
+                                    <li>
+                                        ChannelOrderID,Secondary OrderID,Order MRP,Order SP, Quantity,Net Rate
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                Ensure that the following columns formatting is as <b>"Date"</b> in <b>"MM-DD-YYYY"</b> format before uploading
+                                <ol class="c">
+                                    <li>
+                                        OrderRecievedDate,Order Shipped Date 
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                Ensure that the following columns is a selection from <b>"dropdowns"</b> available before uploading
+                                <ol class="c">
+                                    <li>
+                                        Payment Type
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                Ensure that file is saved in <b>".xls"</b>(97-2003) format
+                            </li>
+                            <li>
+                                Sales Channel Name needs to be stated in exactly the manner as configured @ O2R.
+                            </li>
+                            <li>
+                                SKU Code needs to be stated in exactly the manner as configured @ O2R.
+                            </li>
+                        </ol>
+                    </ol>
+
+						</div>
+						<div class="mppaymentupload">
+							<h2 class="text-center">
+								<b>Follow These Instructions</b>
+							</h2>
+							 <ol>
+                        <li>
+                            When using bulk upload feature
+                        </li>
+                        <ol class="d">
+                            <li>
+                                Ensure that the following columns formatting is as <b>"Text"</b> before uploading
+                            </li>
+                            <ol class="c">
+                                <li>
+                                    Channel,SKU,Particular
+                                </li>
+                            </ol>
+                            <li>
+                                Ensure that the following columns formatting is as <b>"Number"</b>before uploading
+                                <ol class="c">
+                                    <li>
+                                        ChannelOrderID,Recieved Amount,Deducted Amount
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                Ensure that the following columns formatting is as <b>"Date"</b> in <b>"MM-DD-YYYY"</b> format before uploading
+                                <ol class="c">
+                                    <li>
+                                        Payment Date  
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                Ensure that the following columns is a selection from <b>"dropdowns"</b> available before uploading
+                                <ol class="c">
+                                    <li>
+                                        Criteria
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                Ensure that file is saved in <b>".xls"</b>(97-2003) format
+                            </li>
+                            <li>
+                                Sales Channel Name needs to be stated in exactly the manner as configured @ O2R.
+                            </li>
+                            <li>
+                                SKU Code needs to be stated in exactly the manner as configured @ O2R.
+                            </li>
+                        </ol>
+                    </ol>
+						</div>
+						<div class="mpreturnupload">
+							<h2 class="text-center">
+								<b>Follow These Instructions</b>
+							</h2>
+						   <ol>
+                        <li>
+                            When using bulk upload feature
+                        </li>
+                        <ol class="d">
+                            <li>
+                                Ensure that the following columns formatting is as <b>"Text"</b> before uploading
+                            </li>
+                            <ol class="c">
+                                <li>
+                                   SKU Code,Return/RTO Id,Return Reason
+                                </li>
+                            </ol>
+                            <li>
+                                Ensure that the following columns formatting is as <b>"Number"</b>before uploading
+                                <ol class="c">
+                                    <li>
+                                        Value, Quantity, Bad Inventory Quantity
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                Ensure that the following columns formatting is as <b>"Date"</b> in <b>"MM-DD-YYYY"</b> format before uploading
+                                <ol class="c">
+                                    <li>
+                                        Date  
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                Ensure that the following columns is a selection from <b>"dropdowns"</b> available before uploading
+                                <ol class="c">
+                                    <li>
+                                        Criteria
+                                    </li>
+                                    <li>
+                                        Return Type
+                                    </li>
+                                    <li>
+                                        Fault Type
+                                    </li>
+                                    <li>
+                                        Stage
+                                    </li>
+                                    <li>
+                                        Inventory Type
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                Ensure that file is saved in <b>".xls"</b>(97-2003) format
+                            </li>
+                            <li>
+                                Sales Channel Name needs to be stated in exactly the manner as configured @ O2R.
+                            </li>
+                            <li>
+                                SKU Code needs to be stated in exactly the manner as configured @ O2R.
+                            </li>
+                            <li>
+                                In case Return/RTO ID is not available,create a manual series of your choice and try inputting in sequential order
+                            </li>
+                            <li>
+                                Value is value of the selected criteria
+                            </li>
+                        </ol>
+                    </ol>
+						</div>
+						<div class="createparentproduct">
+							<h2 class="text-center">
+								<b>Follow These Instructions</b>
+							</h2>
+							  <ol>
+                        <li>
+                            The Parent SKU's created here will have to stated exactly,wherever their input is required.
+                        </li>
+                        <li>
+                            When using bulk upload feature
+                            <ol class="d">
+                                <li>
+                                    Ensure that the following columns formatting is as <b>"Text" </b>before uploading
+                                    <ol class="c">
+                                        <li>
+                                            SKU Name,Parent SKU,Product Category
+                                        </li>
+                                        
+                                    </ol>
+                                </li>
+                                <li>
+                                   Ensure that the following columns formatting is as <b>"Number"</b> before uploading
+                                    <ol class="c">
+                                        <li>
+                                            Direct Product Cost (Rs),Quantity,Threshold Limit, Length (cm),Breadth (cm),Height (cm),Dead Weight (grams)
+                                        </li>
+                                        
+                                    </ol>
+                                </li>
+                                <li>
+                                    Ensure that file is saved in <b>".xls"</b>(97-2003) format
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+						</div>
+						<div class="editproductupload">
+							<h2 class="text-center">
+								<b>Follow These Instructions</b>
+							</h2>
+							 <ol>
+                        <li>
+                            When using bulk upload feature
+                            <ol class="d">
+                                <li>
+                                    Ensure that the following columns formatting is as <b>"Text" </b>before uploading
+                                    <ol class="c">
+                                        <li>
+                                            productSkuCode,Title
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li>
+                                   Ensure that the following columns formatting is as <b>"Number"</b> before uploading
+                                    <ol class="c">
+                                        <li>
+                                            ProductPrice,Threshold Limit,Length,Breadth,Height,Dead Weight
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    Ensure that file is saved in <b>".xls"</b>(97-2003) format
+                                </li>
+                                <li>
+                                    Sales Channel Name needs to be stated in exactly the manner as configured @ O2R.
+                                </li>
+                                <li>
+                                    SKU Code needs to be stated in exactly the manner as configured @ O2R.
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+						</div>
+						<div class="vendorskumapping">
+							<h2 class="text-center">
+								<b>Follow These Instructions</b>
+							</h2>
+							<ol>
+                        <li>
+                            When using bulk upload feature
+                            <ol class="d">
+                                <li>
+                                    Ensure that all columns formatting is as <b>"Text"</b> before uploading
+                                </li>
+                                <li>
+                                   Sales Channel Name needs to be stated in exactly the manner as configured @ O2R.
+                                </li>
+                                <li>
+                                   Parent SKU Code needs to be stated in exactly the manner as configured @ O2R. 
+                                </li>
+                                <li>
+                                    Ensure that file is saved in ".xls"(97-2003) format
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+						</div>
+						<div class="inventoryupload">
+							<h2 class="text-center">
+								<b>Follow These Instructions</b>
+							</h2>
+						   <ol>
+                        <li>
+                            When using bulk upload feature
+                            <ol class="d">
+                                <li>
+                                    Ensure that following columns formatting is as <b>"Text"</b> before uploading
+                                    <ol class="c">
+                                        <li>
+                                            SkUCode
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li>
+                                   Ensure that the following columns formatting is as <b>"Number"</b>before uploading
+                                   <ol class="c">
+                                       <li>
+                                           CurrentQuantity,Quantity to Add,Quantity to Substract
+                                       </li>
+                                   </ol>
+                                </li>
+                                <li>
+                                    Ensure that file is saved in <b>".xls"</b>(97-2003) format
+                                </li>
+                                <li>
+                                    SKU Code needs to be stated in exactly the manner as configured @ O2R.
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+
+						</div>
+						<div class="expenseupload">
+							<h2 class="text-center">
+								<b>Follow These Instructions</b>
+							</h2>
+							 <ol>
+                        <li>
+                            When using bulk upload feature
+                            <ol class="d">
+                                <li>
+                                    Ensure that following columns formatting is as <b>"Text"</b> before uploading
+                                    <ol class="c">
+                                        <li>
+                                            Expense Name,Description,Expense Category,Expenditure By,Paid To
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    Ensure that following column formatting is as <b>"Number"</b> before uploading
+                                    <ol class="c">
+                                        <li>
+                                            Expense Amount
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    Ensure that the following column formatting is as <b>"Date"</b> in <b>"MM-DD-YYYY"</b> format before uploading
+                                    <ol class="c">
+                                        <li>
+                                            Expense Date 
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    Ensure that file is saved in <b>".xls"</b>(97-2003) format
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+
+						</div>
+						<div class="createinventorygroup">
+							<h2 class="text-center">
+								<b>Follow These Instructions</b>
+							</h2>
+						 <ol>
+                        <li>
+                            The Inventory groups created here will have to stated exactly, wherever their input is required.
+                        </li>
+                        <li>
+                            When using bulk upload feature
+                            <ol class="d">
+                                <li>
+                                    Ensure that all columns formatting is as <b>"Text"</b> before uploading
+                                </li>
+                                <li>
+                                    Ensure that file is saved in <b>".xls"</b>(97-2003) format
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+
+						</div>
+						<div class="categorywisecommission">
+							<h2 class="text-center">
+								<b>Follow These Instructions</b>
+							</h2>
+							 <ol>
+                        <li>
+                            When using bulk upload feature
+                            <ol class="d">
+                                <li>
+                                    Ensure that following columns formatting is as <b>"Text"</b> before uploading
+                                    <ol class="c">
+                                        <li>
+                                            Channel Name,Product Category
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    Ensure that following columns formatting is as <b><b>"Number"</b></b> before uploading
+                                    <ol class="c">
+                                        <li>
+                                            Commission Percent (without % sign)
+                                        </li>
+                                    </ol>
+                                    <li>
+                                        Channel Name and Product Categories need to be stated as configured @ O2R.
+                                    </li>
+                                    <li>
+                                        Ensure that file is saved in <b>".xls"</b>(97-2003) format
+                                    </li>
+                                </li>
+                            </ol>
+
+						</div>
+						<div class="taxcategoryupload">
+							<h2 class="text-center">
+								<b>Follow These Instructions</b>
+							</h2>
+							  <ol>
+                        <li>
+                            The seller needs to MAP all product categories into a tax category otherwise orders for SKU's that belong to such category fail to upload
+                        </li>
+                        <li>
+                            The Parent SKU's created here will have to stated exactly,wherever their input is required.
+                        </li>
+                        <li>
+                            When using bulk upload feature
+                            <ol class="d">
+                                <li>
+                                    Ensure that all columns formatting is as <b>"Text" </b>before uploading
+                                </li>
+                                <li>
+                                    Ensure that file is saved in <b>".xls"</b>(97-2003) format
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+
+						</div>
+					</div>
+					</div>
 			</div>
 		</div>
 	</div>
@@ -395,13 +836,13 @@
                                 Copy and paste all contents to a new Excel File
                             </li>
                             <li>
-                                Ensure that the 1st row of file is the “headers”
+                                Ensure that the 1st row of file is the "headers"
                             </li>
                             <li>
                                 Do not change the formatting of columns or any headers.
                             </li>
                             <li>
-                                Add the following "Case Sensitive" headers (without “ ”) at the end of 1st row of the file and input its corresponding value against every row 
+                                Add the following "Case Sensitive" headers (without " ") at the end of 1st row of the file and input its corresponding value against every row 
                                 <ol class="d">
                                     <li>
                                         <b>Mandatory Values (to be added manually by seller)</b>
@@ -423,13 +864,13 @@
                                         <b>Non-Mandatory (scenario specific or good to have attributes)</b>
                                         <ol class="c">
                                             <li>
-                                                <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU’s at fixed Transfer Price.
+                                                <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU's at fixed Transfer Price.
                                             </li>
                                             <li>
                                                 <b class="color">Seller Notes</b> - "Any customized remarks about order."
                                             </li>
                                             <li>
-                                                <b class="color">AWB No</b> - "Airway bill number. It is used to track order during return and to track order delivery status."
+                                                <b class="color">AWB No</b> - "Airway bill number.It is used to track order during return and to track order delivery status."
                                             </li>
                                             <li>
                                                 <b class="color">Order MRP</b> - "Used to find discount values on order,enter MRP per quantity."
@@ -449,7 +890,7 @@
                             </li>
                             <li>
                                 The file to be imported should have the following columns by default
-                                order-id,purchase-date, sku,quantity-purchased, item-price,shipping-price,ship-postal-code,payment-method
+                                order-id,purchase-date,sku,quantity-purchased, item-price,shipping-price,ship-postal-code,payment-method
                             </li>
                             <li>
                                 Watch Tutorial
@@ -476,7 +917,7 @@
                             Do not change the formatting of columns or any headers.
                         </li>
                         <li>
-                                Add the following "Case Sensitive" headers (without “ ”) at the end of 1st row of the file and input its corresponding value against every row 
+                                Add the following "Case Sensitive" headers (without " ") at the end of 1st row of the file and input its corresponding value against every row 
                                 <ol class="d">
                                     <li>
                                         <b>Mandatory Values (to be added manually by seller)</b>
@@ -495,7 +936,7 @@
                                         <b>Non-Mandatory (scenario specific or good to have attributes)</b>
                                         <ol class="c">
                                             <li>
-                                                <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU’s at fixed Transfer Price.
+                                                <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU's at fixed Transfer Price.
                                             </li>
                                             <li>
                                                 <b class="color">Seller Notes</b> - Any customized remarks about order.
@@ -510,7 +951,7 @@
                                                 <b class="color">Logistic Partner</b> - Shipping Provider
                                             </li>
                                             <li>
-                                                <b class="color">Customer Email</b> - If provided, adds to the customer database.
+                                                <b class="color">Customer Email</b> - If provided,adds to the customer database.
                                             </li>
                                         </ol>
                                     </li>
@@ -539,19 +980,19 @@
 							</h2>
 						  <ol>
                             <li>
-                                Bulk Download pending orders from snapdeal Seller Panel, before generating shipping label 
+                                Bulk Download pending orders from snapdeal Seller Panel,before generating shipping label 
                             </li>
                             <li>
                                 Open the downloaded file
                             </li>
                             <li>
-                                Ensure that the 1st row of file is the “headers”
+                                Ensure that the 1st row of file is the "headers"
                             </li>
                             <li>
                                 Do not change the formatting of columns or any headers.
                             </li>
                             <li>
-                                Add the following "Case Sensitive" headers (without “ ”) at the end of 1st row of the file and input its corresponding value against every row 
+                                Add the following "Case Sensitive" headers (without " ") at the end of 1st row of the file and input its corresponding value against every row 
                                 <ol class="d">
                                     <li>
                                         <b>Mandatory Values (to be added manually by seller)</b>
@@ -570,7 +1011,7 @@
                                         <b>Non-Mandatory (scenario specific or good to have attributes)</b>
                                             <ol class="c">
                                                 <li>
-                                                    <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU’s at fixed Transfer Price.
+                                                    <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU's at fixed Transfer Price.
                                                 </li>
                                                 <li>
                                                     <b class="color">Seller Notes</b> - Any customized remarks about order.
@@ -621,7 +1062,7 @@
                                 Do not change the formatting of columns or any headers.
                             </li>
                             <li>
-                                Add the following "Case Sensitive" headers (without “ ”) at the end of 1st row of the file and input its corresponding value against every row 
+                                Add the following "Case Sensitive" headers (without " ") at the end of 1st row of the file and input its corresponding value against every row 
                                 <ol class="d">
                                     <li>
                                         <b>Mandatory Values (to be added manually by seller)</b>
@@ -635,7 +1076,7 @@
                                             </li>
                                             <li>
                                                 <b class="color">Order Shipped Date</b> -
-                                               Mention shipped date in “MM-DD-YYYY” format.
+                                               Mention shipped date in "MM-DD-YYYY" format.
                                             </li>
                                         </ol>
                                     </li>
@@ -643,7 +1084,7 @@
                                         <b>Non-Mandatory (scenario specific or good to have attributes)</b>
                                             <ol class="c">
                                                 <li>
-                                                    <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU’s at fixed Transfer Price.
+                                                    <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU's at fixed Transfer Price.
                                                 </li>
                                                 <li>
                                                     <b class="color">Seller Notes</b> - Any customized remarks about order.
@@ -688,7 +1129,7 @@
                                     Do not change the formatting of columns or any headers.
                                 </li>
                                 <li>
-                                    Add the following "Case Sensitive" headers (without “ ”) at the end of 1st row of the file and input its corresponding value against every row 
+                                    Add the following "Case Sensitive" headers (without " ") at the end of 1st row of the file and input its corresponding value against every row 
                                     <ol class="d">
                                         <li>
                                             <b>Mandatory Values (to be added manually by seller)</b>
@@ -703,7 +1144,7 @@
                                             <b>Non-Mandatory (scenario specific or good to have attributes)</b>
                                                 <ol class="c">
                                                     <li>
-                                                        <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU’s at fixed Transfer Price.
+                                                        <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU's at fixed Transfer Price.
                                                     </li>
                                                     <li>
                                                         <b class="color">Seller Notes</b> - Any customized remarks about order.
@@ -731,7 +1172,7 @@
                                     </li>
                                     <li>
                                         The file to be imported should have the following columns by default
-                                        Display Order Code, COD, Invoice Code, Shipping Address Pincode, Item SKU Code, Channel Name, Total Price, Packet Number, Order Date as dd/mm/yyyy hh:MM:ss, Dispatch Date
+                                        Display Order Code,COD,Invoice Code,Shipping Address Pincode, Item SKU Code,Channel Name,Total Price, Packet Number,Order Date as dd/mm/yyyy hh:MM:ss,Dispatch Date
                                     </li>
                                     <li>
                                         Watch Tutorial
@@ -756,7 +1197,7 @@
                                     Do not change the formatting of columns or any headers.
                                 </li>
                                 <li>
-                                    Add the following "Case Sensitive" headers (without “ ”) at the end of 1st row of the file and input its corresponding value against every row 
+                                    Add the following "Case Sensitive" headers (without " ") at the end of 1st row of the file and input its corresponding value against every row 
                                     <ol class="d">
                                         <li>
                                             <b>Mandatory Values (to be added manually by seller)</b>
@@ -770,7 +1211,7 @@
                                                 </li>
                                                 <li>
                                                     <b class="color">Order Shipped Date</b> -
-                                                   Mention shipped date in “MM-DD-YYYY” format.
+                                                   Mention shipped date in "MM-DD-YYYY" format.
                                                 </li>
                                                 <li>
                                                     <b class="color">Pincode</b>Shipping Pin Code.The same is available in address column.The seller can easily use the RIGHT formula to extract pin code values into this column. 
@@ -781,7 +1222,7 @@
                                             <b>Non-Mandatory (scenario specific or good to have attributes)</b>
                                                 <ol class="c">
                                                     <li>
-                                                        <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU’s at fixed Transfer Price.
+                                                        <b class="color">Net Rate</b> - Mandatory when N/R switch is off,or an Event is configured for all or any particular SKU's at fixed Transfer Price.
                                                     </li>
                                                     <li>
                                                         <b class="color">Seller Notes</b> - Any customized remarks about order.
@@ -796,7 +1237,7 @@
                                                         <b class="color">Logistic Partner </b> - Shipping Provider
                                                     </li>
                                                     <li>
-                                                        <b class="color"> Customer Email</b> - If provided, adds to the customer database.
+                                                        <b class="color">Customer Email</b> - If provided,adds to the customer database.
                                                     </li>
                                                     <li>
                                                         <b class="color">Customer City</b> - City where the order is shipped
@@ -816,7 +1257,7 @@
                                     </li>
                                     <li>
                                         The file to be imported should have the following columns by default
-                                        Order Id, Date Time, Vendor Code,Price,Qty,Customer Name, Number,Address,Order Type,AWB 
+                                        Order Id, Date Time,Vendor Code,Price,Qty,Customer Name, Number,Address,Order Type,AWB 
                                     </li>
                                     <li>
                                         Watch Tutorial
@@ -838,8 +1279,12 @@
                                         Do not change the formatting of columns or any headers.
                                     </li>
                                     <li>
-                                        The downloaded excel file will by default have the following columns with exact same heading. Ensure      the same are present.<br>
-                                        •   Mandatory Column (Already present in downloaded file)
+                                        The downloaded excel file will by default have the following columns with exact same heading.Ensure      the same are present.<br>
+                                        <ul>
+                                            <li style="list-style-type: initial;">
+                                                 Mandatory Column (Already present in downloaded file)
+                                            </li>
+                                        </ul>
                                         <ol class="d">
                                             <li>
                                                   Date
@@ -890,7 +1335,11 @@
                                     </li>
                                     <li>
                                         The downloaded excel file will by default have the following columns with exact same heading. Ensure      the same are present.<br>
-                                        •   Mandatory Column (Already present in downloaded file)
+                                        <ul>
+                                            <li style="list-style-type: initial;">
+                                                 Mandatory Column (Already present in downloaded file)
+                                            </li>
+                                        </ul>
                                         <ol class="d">
                                             <li>
                                                 Order Type
@@ -934,7 +1383,7 @@
 							</h2>
 						 <ol>
                                     <li>
-                                        Download Payment Detail File from Flipkart Seller Panel.
+                                        Download Payment Detail File from Paytm Seller Panel.
                                     </li>
                                     <li>
                                         Ensure that the 1st row of file is the "headers"
@@ -944,7 +1393,11 @@
                                     </li>
                                     <li>
                                         The downloaded excel file will by default have the following columns with exact same heading. Ensure      the same are present.<br>
-                                        •   Mandatory Column (Already present in downloaded file)
+                                        <ul>
+                                            <li style="list-style-type: initial;">
+                                                 Mandatory Column (Already present in downloaded file)
+                                            </li>
+                                        </ul>
                                         <ol class="d">
                                             <li>
                                                 Order ID
@@ -990,8 +1443,12 @@
                                         Do not change the formatting of columns or any headers.
                                     </li>
                                     <li>
-                                        The downloaded excel file will by default have the following columns with exact same heading. Ensure      the same are present.<br>
-                                        •   Mandatory Column (Already present in downloaded file)
+                                        The downloaded excel file will by default have the following columns with exact same heading.Ensure      the same are present.<br>
+                                        <ul>
+                                            <li style="list-style-type: initial;">
+                                                 Mandatory Column (Already present in downloaded file)
+                                            </li>
+                                        </ul>
                                         <ol class="d">
                                             <li>
                                                 Type
@@ -1017,10 +1474,10 @@
                                         </ol>
                                     </li>
                                     <li>
-                                         Save the file in<b> .xls(97-2003) </b>format. 
+                                         Save the file in<b>.xls(97-2003)</b>format. 
                                     </li>
                                     <li>
-                                        Simply Upload the file after selecting <b>"Snapdeal Payment Upload" </b>from the dropdown list on the Import Page.
+                                        Simply Upload the file after selecting <b>"Snapdeal Payment Upload"</b>from the dropdown list on the Import Page.
                                     </li>
                                     <li>
                                         Watch Tutorial
@@ -1044,7 +1501,11 @@
                                     </li>
                                     <li>
                                         The downloaded excel file will by default have the following columns with exact same heading. Ensure      the same are present.<br>
-                                        •   Mandatory Column (Already present in downloaded file)
+                                        <ul>
+                                            <li style="list-style-type: initial;">
+                                                 Mandatory Column (Already present in downloaded file)
+                                            </li>
+                                        </ul>
                                         <ol class="d">
                                             <li>
                                                 Sales / Sales Return
@@ -1072,7 +1533,7 @@
                                         Save the file in <b>.xls(97-2003)</b> format
                                     </li>
                                     <li>
-                                        Simply Upload the file after selecting <b> "Limeroad Payment Upload" </b>from the dropdown list on the Import Page.
+                                        Simply Upload the file after selecting <b> "Limeroad Payment Upload"</b>from the dropdown list on the Import Page.
                                     </li>
                                     <li>
                                         Watch Tutorial
@@ -1085,11 +1546,6 @@
 			</div>
 		</div>
 	</div>
-
-
-
-
-
 	</div>
 	<script type="text/javascript" language="javascript">
 function checkfile(sender) {
