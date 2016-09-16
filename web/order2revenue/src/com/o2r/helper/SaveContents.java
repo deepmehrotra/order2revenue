@@ -1264,7 +1264,6 @@ public class SaveContents {
 	}
 
 	// My coding Product Config *********
-
 	public Map<String, ProductConfigBean> saveSKUMappingContents(
 			MultipartFile file, int sellerId, String path,
 			UploadReport uploadReport) throws IOException {

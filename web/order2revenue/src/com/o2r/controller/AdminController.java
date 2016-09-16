@@ -339,6 +339,14 @@ public class AdminController {
 						else if (fileName.equalsIgnoreCase("order"))
 							model.put("o2rheaders",
 									GlobalConstant.PayTMOrderHeaderList);
+					case "Jabong":
+						if (fileName.equalsIgnoreCase("payment"))
+							model.put("o2rheaders",
+									GlobalConstant.JabongPaymentHeaderList);
+						else if (fileName.equalsIgnoreCase("order"))
+							model.put("o2rheaders",
+									GlobalConstant.JabongOrderHeaderList);
+						break;
 					}
 				}
 				model.put("fileName", fileName);
