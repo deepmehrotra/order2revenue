@@ -2,6 +2,7 @@ package com.o2r.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -123,7 +124,7 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public List<PartnerReportDetails> getDebtorsReportDetails(Date startDate,
+	public Map<String, Object> getDebtorsReportDetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException {
 		return reportGeneratorDao.getDebtorsReportDetails(startDate, endDate,
 				sellerId);

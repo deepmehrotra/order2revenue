@@ -148,7 +148,9 @@ public class ReportController {
 	@RequestMapping(value = "/seller/getRevenueReport", method = RequestMethod.POST)
 	public ModelAndView getRevenueReport(HttpServletRequest request)
 			throws Exception {
-		log.info("$$$ getPartnerReport Starts : ReportController $$$");
+		log.info("$$$ getRevenueReport Starts : ReportController $$$");
+		long startreportCalc=System.currentTimeMillis();
+		long endreportCalc=0;
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
@@ -192,6 +194,9 @@ public class ReportController {
 							expensesCatList, catList);
 			model.put("shortTable", npList);
 			model.put("catList", catList);
+			endreportCalc=System.currentTimeMillis();
+			log.info("Time take to generate report : "+(endreportCalc-startreportCalc));
+			log.info("$$$ getRevenueReport end : ReportController $$$");
 			return new ModelAndView("reports/viewBusinessProfitReport", model);
 
 		} catch (Exception ex) {
@@ -199,6 +204,8 @@ public class ReportController {
 			log.error("Failed! By Seller ID : " + sellerId, ex);
 			model.put("errorMessage", ex.getMessage());
 		}
+		log.info("$$$ getRevenueReport end : ReportController $$$");
+
 		return new ModelAndView("globalErorPage", model);
 	}
 
@@ -206,6 +213,8 @@ public class ReportController {
 	public ModelAndView getPartnerReport(HttpServletRequest request)
 			throws Exception {
 		log.info("$$$ getPartnerReport Starts : ReportController $$$");
+		long startreportCalc=System.currentTimeMillis();
+		long endreportCalc=0;
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
@@ -223,12 +232,15 @@ public class ReportController {
 					GlobalConstant.reportNameMap.get(reportName));
 
 			if ("debtorsReport".equalsIgnoreCase(reportName)) {
-				List<PartnerReportDetails> debtorsList = reportGeneratorService
+				Map<String,Object> objMap=reportGeneratorService
 						.getDebtorsReportDetails(startDate, endDate, sellerId);
+				List<PartnerReportDetails> debtorsList =(List<PartnerReportDetails>) objMap.get("list");
+				
+				System.out.println(" Size of debtors list : "+debtorsList.size());
 				List<DebtorsGraph1> debtorsGraph1PartnerList = ConverterClass
-						.transformDebtorsGraph1Graph(debtorsList, "partner");
+						.transformDebtorsGraph1Graph((Map<String,DebtorsGraph1> )objMap.get("partnermap"));
 				List<DebtorsGraph1> debtorsGraph1CategoryList = ConverterClass
-						.transformDebtorsGraph1Graph(debtorsList, "category");
+						.transformDebtorsGraph1Graph( (Map<String,DebtorsGraph1> )objMap.get("categorymap"));
 				model.put("shortTablePartner", debtorsGraph1PartnerList);
 				model.put("shortTableCategory", debtorsGraph1CategoryList);
 
@@ -257,7 +269,9 @@ public class ReportController {
 						new DebtorsGraph1.OrderByACNS());
 				model.put("categoryByACNS", ConverterClass
 						.getDebtorsGraph1SortedList(debtorsGraph1CategoryList));
-
+				endreportCalc=System.currentTimeMillis();
+				log.info("Time take to generate debtorsReport : "+(endreportCalc-startreportCalc));
+				log.info("$$$ getPartnerReport end : ReportController $$$");
 				return new ModelAndView("reports/viewDebtorsGraphReport", model);
 			}
 			List<PartnerReportDetails> partnerBusinessList = reportGeneratorService
@@ -338,6 +352,10 @@ public class ReportController {
 				model.put("channelMC", channelMCList);
 
 				model.put("partnerBusiness", partnerBusinessList);
+				endreportCalc=System.currentTimeMillis();
+				log.info("Time take to generate partnerBusinessReport : "+(endreportCalc-startreportCalc));
+				log.info("$$$ getPartnerReport end : ReportController $$$");
+
 				return new ModelAndView("reports/viewBRGraphReport", model);
 			}
 
@@ -385,6 +403,9 @@ public class ReportController {
 				List<MonthlyCommission> monthlyGraph = reportGeneratorService
 						.fetchMonthlyComm(sellerId, startDate, endDate);
 				model.put("monthlyGraph", monthlyGraph);
+				endreportCalc=System.currentTimeMillis();
+				log.info("Time take to generate partnerCommissionReport : "+(endreportCalc-startreportCalc));
+				log.info("$$$ getPartnerReport end : ReportController $$$");
 				return new ModelAndView("reports/viewCommGraphReport", model);
 			}
 		} catch (CustomException ce) {
@@ -397,6 +418,10 @@ public class ReportController {
 			log.error("Failed! By Seller ID : " + sellerId, ex);
 			model.put("errorMessage", ex.getMessage());
 		}
+		endreportCalc=System.currentTimeMillis();
+		log.info("Time take to generate report : "+(endreportCalc-startreportCalc));
+		log.info("$$$ getPartnerReport end : ReportController $$$");
+
 		return new ModelAndView("globalErorPage", model);
 	}
 
@@ -732,6 +757,7 @@ public class ReportController {
 			String reportName = request.getParameter("reportName");
 			String startDateStr = request.getParameter("startdate");
 			String endDateStr = request.getParameter("enddate");
+			Map<String,Object> obj=null;
 			Date startDate = null;
 			if (StringUtils.isNotBlank(startDateStr))
 				startDate = new Date(startDateStr);
@@ -743,8 +769,10 @@ public class ReportController {
 
 			List<PartnerReportDetails> partnerBusinessList = new ArrayList<PartnerReportDetails>();
 			if ("debtorsReport".equalsIgnoreCase(reportName)) {
-				partnerBusinessList = reportGeneratorService
+				
+						obj=reportGeneratorService
 						.getDebtorsReportDetails(startDate, endDate, sellerId);
+						partnerBusinessList =(List<PartnerReportDetails>)obj.get("list");
 			} else {
 				partnerBusinessList = reportGeneratorService
 						.getPartnerReportDetails(startDate, endDate, sellerId);

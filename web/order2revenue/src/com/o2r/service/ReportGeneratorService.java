@@ -2,6 +2,7 @@ package com.o2r.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.o2r.bean.ChannelCatNPR;
 import com.o2r.bean.ChannelGP;
@@ -63,7 +64,7 @@ public interface ReportGeneratorService {
 	public List<ChannelSalesDetails> getOrderwiseGPDetails(Date startDate,
 			Date endDate, int sellerIdfromSession) throws CustomException;
 
-	public List<PartnerReportDetails> getDebtorsReportDetails(Date startDate,
+	public Map<String, Object> getDebtorsReportDetails(Date startDate,
 			Date endDate, int sellerId) throws CustomException;
 
 	public List<UploadReport> listUploadReport(int sellerId, boolean doSort)

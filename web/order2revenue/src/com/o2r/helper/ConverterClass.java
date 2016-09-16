@@ -3069,7 +3069,7 @@ public class ConverterClass {
 		return newChannelReportList;
 	}
 
-	public static List<DebtorsGraph1> transformDebtorsGraph1Graph(
+	/*public static List<DebtorsGraph1> transformDebtorsGraph1Graph(
 			List<PartnerReportDetails> debtorsList, String criteria) {
 		Date currDate = new Date();
 		Map<String, DebtorsGraph1> debtorsGraph1Map = new HashMap<String, DebtorsGraph1>();
@@ -3144,6 +3144,7 @@ public class ConverterClass {
 
 			debtorsGraph1Map.put(key, debtorsGraph1);
 		}
+		System.out.println("debtorsGraph1Map :  "+debtorsGraph1Map.size());
 
 		List<DebtorsGraph1> debtorsGraph1List = new ArrayList<DebtorsGraph1>();
 		Iterator entries = debtorsGraph1Map.entrySet().iterator();
@@ -3153,6 +3154,25 @@ public class ConverterClass {
 			DebtorsGraph1 value = thisEntry.getValue();
 			debtorsGraph1List.add(value);
 		}
+		System.out.println("debtorsGraph1List :  "+debtorsGraph1List.size());
+		return debtorsGraph1List;
+	}*/
+	
+	public static List<DebtorsGraph1> transformDebtorsGraph1Graph(
+			Map<String, DebtorsGraph1> debtorsGraph1Map) {
+		
+		List<DebtorsGraph1> debtorsGraph1List = new ArrayList<DebtorsGraph1>();
+		if(debtorsGraph1Map!=null)
+		{
+		Iterator entries = debtorsGraph1Map.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, DebtorsGraph1> thisEntry = (Entry<String, DebtorsGraph1>) entries
+					.next();
+			DebtorsGraph1 value = thisEntry.getValue();
+			debtorsGraph1List.add(value);
+		}
+		}
+		System.out.println("debtorsGraph1List :  "+debtorsGraph1List.size());
 		return debtorsGraph1List;
 	}
 
