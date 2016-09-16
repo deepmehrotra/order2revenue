@@ -346,9 +346,9 @@
 		} else {
     	   	document.getElementById('selectReportForm').action = "getPartnerReport.html";
    	   	}
-       	$("#selectReportForm").submit();
-
-        $.ajax({
+    	 	$("#selectReportForm").submit();
+    	
+       /*  $.ajax({
 			url:$("#selectReportForm").attr("action"),
             context: document.body,
             type: 'post',
@@ -360,7 +360,7 @@
 	            	$('#centerpane').html(res);
 	        	}
            	}
-		});
+		}); */
 	}
 
 </script>

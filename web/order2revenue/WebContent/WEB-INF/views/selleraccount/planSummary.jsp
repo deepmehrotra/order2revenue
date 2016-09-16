@@ -218,6 +218,32 @@ label.star:before {
 	width: auto !important;
 	height: auto !important;
 }
+.scroll
+{
+	width: 100%;
+}
+thead tr th { 
+    height: 30px;
+    line-height: 30px;
+     text-align: center; 
+}
+
+table.scroll tbody {
+    height: 100px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+tbody { border-top: 2px solid black; }
+
+tbody td, thead th {
+    border-right: 1px solid black;
+}
+
+tbody td:last-child, thead th:last-child {
+    border-right: none;
+}
+
 </style>
 </head>
 <body>
@@ -352,9 +378,9 @@ label.star:before {
 						</div>
 
 						<div class="col-lg-6 text-center">
-							<div class="col-lg-12" style="background: #f5f5f5;overflow:scroll;height: 500px;">
+							<div class="col-lg-12" style="background: #f5f5f5;overflow:scroll;height:330px;">
 								<h1 class="heading">Payment History</h1>
-								<table class="table">
+								<table class="table scroll">
 									<thead style="background-color: #e5e7e6;">
 										<tr>
 											<th>Invoice ID</th>
@@ -380,9 +406,9 @@ label.star:before {
 								</table>
 							</div>
 							<div class="col-lg-12"
-								style="background: #f5f5f5; margin-top: 20px;overflow-x: scroll;overflow-y: scroll;">
+								style="background: #f5f5f5; margin-top: 20px;overflow:scroll;height:330px;">
 								<h1 class="heading">Usage History</h1>
-								<table class="table">
+								<table class="table scroll">
 									<thead style="background-color: #e5e7e6;">
 										<tr>
 											<th>Date</th>
@@ -415,4 +441,18 @@ label.star:before {
 	</div>
 
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
+
+	<script type="text/javascript">
+	var $table = $('table.scroll'),
+    $bodyCells = $table.find('tbody tr:first').children(),
+    colWidth;
+$(window).resize(function() {
+    colWidth = $bodyCells.map(function() {
+        return $(this).width();
+    }).get();
+    $table.find('thead tr').children().each(function(i, v) {
+        $(v).width(colWidth[i]);
+    });    
+}).resize();
+</script>
 </html>
