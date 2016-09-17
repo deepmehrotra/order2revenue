@@ -155,7 +155,7 @@
 					src="/O2R/landing/img/notification.png" alt="notification">
 			</a>
 				<ol class="dropdown-menu animated fadeInRight m-t-xs"
-					style="background: #333; border-left: none !important; border: 2px solid #fff; width: 480%; padding-bottom: 14px;">
+					style="background: #333; border-left: none !important; border: 2px solid #fff;padding-bottom: 14px;width: 290px;">
 					<h3 style="color: #fff; padding: 11px 0px 0px 17px;">Getting
 						Started</h3>
 					<hr class="line-dashed">
@@ -216,8 +216,116 @@
 								class="pull-right"> More Info</a>
 						</p>
 					</li>
-				</ol></li>
-
+				</ol>
+			</li>
+			
+			
+					<li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" 
+                        	style="padding: 0px;min-height: 0px;position: relative;top: 4px;" onclick="Alerts();">
+                            <i class="fa fa-bell" id="bellimg" style="font-size:20px;color:#1ab394"></i>
+                            <span id="spanid" style="position: relative;right: 23px;color: #fff;font-size: 9px;top: -4px;"></span>
+                        </a>
+                        <ol class="dropdown-menu dropdown-messages animated fadeInRight" style="background:#fff;border-left: none !important;border: 2px solid #fff;margin-top: 20px;">
+                            <li>
+                               <div id="alert-div-1" class="dropdown-messages-box" style="display: none;">
+                               		<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
+                               		<div class="media-body">                               			
+                               			<label id="alert-msg-1"
+											style="font-size: smaller; font-weight: normal !important;"></label><br>
+                               			<label id="alert-type-1"
+											style="font-size: smaller; font-weight: normal !important;"
+											class=""></label>
+										<label
+											id="alert-date-1"
+											style="font-size: smaller; font-weight: normal !important;"
+											class="text-muted pull-right">
+										</label>
+                               		</div>
+                               </div>
+                            </li>
+                            <li class="divider" id="alert-line-1" style="display: none;"></li>
+                            <li>
+                                <div id="alert-div-2" class="dropdown-messages-box" style="display: none;">                                	
+                                	<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
+                                	<div class="media-body">  
+                                		<label id="alert-msg-2"
+											style="font-size: smaller; font-weight: normal !important;">
+										</label><br>                           		
+                               			<label id="alert-type-2"
+											style="font-size: smaller; font-weight: normal !important;">
+										</label>
+										<label
+											id="alert-date-2"
+											style="font-size: smaller; font-weight: normal !important;"
+											class="text-muted pull-right">
+										</label>
+                               		</div>
+                                </div>
+                            </li>
+                            <li class="divider" id="alert-line-2" style="display: none;"></li>
+                            <li>
+                                <div id="alert-div-3" class="dropdown-messages-box" style="display: none;">                                	
+                                	<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
+                                	<div class="media-body">
+                                		<label id="alert-msg-3"
+											style="font-size: smaller; font-weight: normal !important;">
+										</label><br>
+                                		<label id="alert-type-3"
+											style="font-size: smaller; font-weight: normal !important;">
+										</label>
+										<label
+											id="alert-date-3"
+											style="font-size: smaller; font-weight: normal !important;"
+											class="text-muted pull-right">
+										</label>
+                               		</div>
+                                </div>
+                            </li>
+                            <li class="divider" id="alert-line-3" style="display: none;"></li>
+                            <li>
+                                <div id="alert-div-4" class="dropdown-messages-box" style="display: none;">                                	
+                                	<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
+                                	<div class="media-body">
+                                		<label id="alert-msg-4"
+											style="font-size: smaller; font-weight: normal !important;"></label><br>
+											<label id="alert-type-4" style="font-size: smaller; font-weight: normal !important;"></label>
+											<label id="alert-date-4" style="font-size: smaller; font-weight: normal !important;" class="text-muted pull-right">
+										</label>
+                               		</div>
+                                </div>
+                            </li>
+                            <li class="divider" id="alert-line-4" style="display: none;"></li>
+                            <li>
+                                <div id="alert-div-5" class="dropdown-messages-box" style="display: none;">
+                                	<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
+                                	<div class="media-body">
+                                		<label id="alert-msg-5"
+											style="font-size: smaller; font-weight: normal !important;">
+										</label><br>
+                                		<label id="alert-type-5"
+											style="font-size: smaller; font-weight: normal !important;">
+										</label>											
+										<label
+											id="alert-date-5"
+											style="font-size: smaller; font-weight: normal !important;"
+											class="text-muted pull-right">
+										</label>
+                               		</div>
+                                </div>
+                            </li>
+                            <li class="divider" id="alert-line-5" style="display: none;"></li>
+                            <li>
+                            	<div id="alert-div-0" class="text-center link-block">
+                            		<a href="getAlertsList.html">
+                            		<i class="fa fa-envelope"></i><strong> See All Alerts</strong></a>
+                            	</div>                            	
+                            </li>                            
+                        </ol>
+                    </li>
+			
+			
+			
 			<li class="dropdown"><a class="dropdown-toggle count-info"
 				id="progrssDropdown" data-toggle="dropdown" href="#"> <i
 					id="progressSpiner" class="fa fa-exchange"></i>
@@ -424,7 +532,7 @@
 										dataType : "json"
 									})
 									.success(
-											function(data) {
+											function(data) {												
 												var i = 1;
 												if (data) {
 													data.forEach(function(
@@ -509,6 +617,42 @@
 												}
 											});
 
+							$.ajax({								
+								url : "getRecentAlerts.html",
+								dataType : "json",
+								success : function(data) {										
+									if(data){
+										console.log(data);
+										document.getElementById("alert-div-0").style.display = "inherit";										
+										var i=1;
+										for(var index=0; index < data.length; index++){	
+											var obj = data[index];											
+											document.getElementById("alert-div-"+ i).style.display = "inherit";
+											document.getElementById("alert-line-"+ i).style.display = "inherit";
+											document.getElementById("alert-type-"+i).innerHTML = obj.alertType;
+											document.getElementById("alert-msg-"+i).innerHTML = obj.alertMessage;
+											document.getElementById("alert-date-"+i).innerHTML = obj.alertDate;																				
+											i++;
+										}
+									}
+								}							
+							});
+							
+							$.ajax({								
+								url : "getUnreadCount.html",
+								dataType : "json",
+								success : function(data) {	
+									if(data.unreadCount == '0'){										
+										document.getElementById('bellimg').style.color = '#1ab394';								        
+									} else {
+										document.getElementById('bellimg').style.color = 'red';
+										document.getElementById("spanid").innerHTML = data.unreadCount;
+									}									
+								}							
+							});
+							
+							
+							
 							$('#searchCriteriaGlobal').change(
 									function() {
 										var thisValue = $(this).children(
@@ -536,6 +680,17 @@
 										}
 									});
 							});
+	
+		function Alerts(){
+	        document.getElementById('bellimg').style.color = '#1ab394';
+	        document.getElementById('spanid').innerHTML = "";
+	        $.ajax({								
+				url : "markRead.html",				
+				success : function(data) {															
+				}							
+			});
+	    }
+		
 	</script>
 </body>
 

@@ -6,7 +6,7 @@ public class SellerAlertsBean {
 	private int alertId;
 	private String alertType;
 	private Date alertDate;
-	private String message;
+	private String alertMessage;
 	private String status;
 	private int sellerId;
 	
@@ -28,12 +28,6 @@ public class SellerAlertsBean {
 	public void setAlertDate(Date alertDate) {
 		this.alertDate = alertDate;
 	}
-	public String getMessage() {
-		return message;
-	}
-	public void setMessage(String message) {
-		this.message = message;
-	}
 	public String getStatus() {
 		return status;
 	}
@@ -45,6 +39,12 @@ public class SellerAlertsBean {
 	}
 	public void setSellerId(int sellerId) {
 		this.sellerId = sellerId;
+	}
+	public String getAlertMessage() {
+		return alertMessage;
+	}
+	public void setAlertMessage(String alertMessage) {
+		this.alertMessage = alertMessage;
 	}
 	
 	
