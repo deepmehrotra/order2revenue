@@ -25,4 +25,8 @@ public class AlertsServiceImpl implements AlertsService{
 	public List<SellerAlerts> getAlerts(int sellerId) {		
 		return alertsDao.getAlerts(sellerId);
 	}
+	@Override
+	public int unreadCount(int sellerId) {
+		return alertsDao.unreadCount(sellerId);
+	}	
 }

@@ -228,7 +228,7 @@ ol.d {
 								<option value="PO_Product_Config">PO Product Config</option>
 								<option value="inventorysummary">Inventory Upload</option>
 								<option value="Expense_Upload">Expense Upload</option>
-								<option value="Event_SKU_Upload">Event SKU Upload</option>
+								<option value="Event_SKU">Event SKU Upload</option>
 								<option value="Create_Inventory_Groups">Create
 									Inventory Groups</option>
 								<option value="Create_Product_Category">Create Product

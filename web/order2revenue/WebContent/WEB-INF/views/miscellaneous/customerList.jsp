@@ -99,7 +99,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
                                     Contact 
                                 </th>
                                 <th>
-                                    Blacklist Customer
+                                    Action
                                 </th>
                             </tr>
                         </thead>
@@ -129,7 +129,12 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 		                                <td>${customer.customerEmail}<br>
 		                                    ${customer.customerPhnNo}
 		                                </td>
-		                                <td><a href="#"><img src="/O2R/seller/img/edit.png" alt="edit"></a></td>		
+		                                <c:if test="${customer.status == 'Active'}">
+		                                	<td><a href="customerBlacklist.html?id=${customer.customerId}"><img style="height: 100%; width: 60%;" src="/O2R/seller/img/ActiveCustomer.png" alt="edit"></a></td>
+		                                </c:if>
+		                                <c:if test="${customer.status == 'Inactive'}">
+		                                	<td><a href="customerBlacklist.html?id=${customer.customerId}"><img style="height: 100%; width: 60%;" src="/O2R/seller/img/InactiveCustomer.png" alt="edit"></a></td>
+		                                </c:if>		                                		
 		                            </tr>
 		                        </c:if>		                            		                            
 		                     </c:forEach>       

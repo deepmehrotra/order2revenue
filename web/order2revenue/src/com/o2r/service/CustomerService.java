@@ -8,4 +8,6 @@ import com.o2r.model.Customer;
 public interface CustomerService {
 	public List<Customer> listCustomers(int sellerId);
 	public List<CustomerDBaseBean> listCustomerDB(int sellerId, int pageNo);
+	public void changeStatus(int id, int sellerId);
+	public boolean isBlackList(String phone, int sellerId);
 }
