@@ -2983,7 +2983,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		    }
 		    for (int i=start;i<last;i++) {
 		    	Order currOrder=listtorun.get(i);
-		    	Session localsession=sessionFactory.openSession();
+		    	/*Session localsession=sessionFactory.openSession();
 		    	Criteria prodcriteria = localsession.createCriteria(Product.class);
 				prodcriteria.add(Restrictions.eq("productSkuCode",
 						currOrder.getProductSkuCode()));
@@ -2991,7 +2991,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				
 				localsession.close();
 				if(productList!=null&&productList.size()>0)
-				{
+				{*/
 		    	PartnerReportDetails partnerBusiness =
 		    			transformPartnerDetail(currOrder,productCatMap,categoryParentMap, startdate, enddate);
 		    	listtopopulate.add(partnerBusiness);
@@ -3000,7 +3000,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					transformDebtorsGraph1Graph(partnermap, partnerBusiness, "partner");
 					transformDebtorsGraph1Graph(categorymap, partnerBusiness, "category");
 				}
-				}
+				//}
 			}
 		    
 		    

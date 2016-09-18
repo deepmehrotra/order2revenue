@@ -556,6 +556,7 @@ public class SellerController {
 		log.info("$$$ thankyou Starts : SellerController $$$");
 		Map<String, Object> model =null;
 		try {
+			
 		Double currTotalAmount = new Double(request.getParameter("totalAmount"));
 		Long currOrderCount = new Long(request.getParameter("orderCount"));
 		String txnId=request.getParameter("returntxnid");
