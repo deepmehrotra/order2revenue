@@ -900,6 +900,8 @@ public class SaveContents {
 					}
 					if (entry.getCell(1) != null
 							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						entry.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
+
 						Product obj = productService.getProduct(entry
 								.getCell(1).toString(), sellerId);
 						if (obj == null
@@ -1750,6 +1752,8 @@ public class SaveContents {
 				try {
 					if (entry.getCell(0) != null
 							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
+
 						Product product = productService.getProduct(entry
 								.getCell(0).toString(), sellerId);
 						if (product != null) {
@@ -1758,7 +1762,9 @@ public class SaveContents {
 									&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK
 									&& entry.getCell(3) != null
 									&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-								
+								entry.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
+								entry.getCell(3).setCellType(HSSFCell.CELL_TYPE_STRING);
+
 								String mapKey = entry.getCell(1).toString().trim() + "$" +
 										entry.getCell(3).toString().trim();
 								
@@ -1804,6 +1810,8 @@ public class SaveContents {
 									&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK
 									&& entry.getCell(3) != null
 									&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+
+								entry.getCell(2).setCellType(HSSFCell.CELL_TYPE_STRING);
 
 								String mapKey = entry.getCell(2).toString().trim() + "$" +
 										entry.getCell(3).toString().trim();
