@@ -20,7 +20,6 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.log4j.lf5.viewer.categoryexplorer.CategoryPath;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -1216,6 +1215,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		 
 		 try
 		 {
+			 
+			Map<String, String> productCatMap =productService.getSKUCategoryMap(sellerId);
+			Map<String, String> categoryParentMap = categoryService.getCategoryParentMap(sellerId);
+				
 			 Session session=sessionFactory.openSession();
 			 session.getTransaction().begin();
 			 List<Order> orders;
@@ -1225,13 +1228,12 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				 orders = fetchOrders(session, sellerId, startDate, endDate);
 			 }
 			 taxCatPercentMap=taxDetailService.getTaxCategoryMap(sellerId);
-			 Map<String, ChannelReportDetails> poOrderMap = new HashMap<String, ChannelReportDetails>();
 			 if(taxCatPercentMap!=null)
 			 {
 			 for (Order currOrder : orders) {
 				 float percent=taxCatPercentMap.containsKey(currOrder.getOrderTax().getTaxCategtory())?
 					 taxCatPercentMap.get(currOrder.getOrderTax().getTaxCategtory()):0;
-				 ChannelReportDetails channelReport = transformChannelReport(currOrder,percent, session, sellerId);
+				 ChannelReportDetails channelReport = transformChannelReport(currOrder,percent, productCatMap,categoryParentMap, sellerId);
 				 channelReportDetailsList.add(channelReport);
 			 }
 			 }
@@ -1250,7 +1252,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		return channelReportDetailsList;	 
 	}
 
-	private ChannelReportDetails transformChannelReport(Order currOrder,float taxpercent, Session session, int sellerId) {
+	private ChannelReportDetails transformChannelReport(Order currOrder,float taxpercent,Map<String, String> productCatMap,
+			Map<String, String> catParentMap,int sellerId) {
 		log.info("*** transformChannelReport Starts : ReportsGeneratorDaoImpl ****");
 
 		ChannelReportDetails channelReport = new ChannelReportDetails();
@@ -1395,7 +1398,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			
 			double productCost = 0;
 			double gpVsProductCost = 0;
-			Criteria prodcriteria = session.createCriteria(Product.class);
+			/*Criteria prodcriteria = session.createCriteria(Product.class);
 			prodcriteria.add(Restrictions.eq("productSkuCode",
 					currOrder.getProductSkuCode()));
 			List<Product> productList = prodcriteria.list();
@@ -1404,11 +1407,17 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				if(!channelReport.isPoOrder()){
 					productCost = currProduct.getProductPrice();
 				} else{
-					System.out.println(currProduct.getCategoryName() + "--" + currProduct.getCategory().getParentCatName());
+					log.info(currProduct.getCategoryName() + "--" + currProduct.getCategory().getParentCatName());
 				}
 				channelReport.setCategory(currProduct.getCategoryName());
 				channelReport.setParentCategory(currProduct.getCategory().getParentCatName());
-			}
+			}*/
+			
+
+			channelReport.setCategory(productCatMap.get(currOrder.getProductSkuCode()));
+			channelReport.setParentCategory(catParentMap.get(productCatMap.get(currOrder.getProductSkuCode())));
+			productCost = currOrder.getProductCost();
+			
 			if(productCost != 0){
 				double grossProductCost = productCost*grossSaleQty;
 				double returnProductCost = productCost*saleRetQty;
