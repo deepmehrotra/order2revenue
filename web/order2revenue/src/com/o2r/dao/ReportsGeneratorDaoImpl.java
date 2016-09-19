@@ -1214,6 +1214,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			 } else{
 				 orders = fetchOrders(session, sellerId, startDate, endDate);
 			 }
+			 log.info(" |||||| Order Count : " + orders.size());
 			 taxCatPercentMap=taxDetailService.getTaxCategoryMap(sellerId);
 			 Map<String, ChannelReportDetails> poOrderMap = new HashMap<String, ChannelReportDetails>();
 			 if(taxCatPercentMap!=null)
@@ -2983,7 +2984,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		    }
 		    for (int i=start;i<last;i++) {
 		    	Order currOrder=listtorun.get(i);
-		    	Session localsession=sessionFactory.openSession();
+		    	/*Session localsession=sessionFactory.openSession();
 		    	Criteria prodcriteria = localsession.createCriteria(Product.class);
 				prodcriteria.add(Restrictions.eq("productSkuCode",
 						currOrder.getProductSkuCode()));
@@ -2991,7 +2992,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				
 				localsession.close();
 				if(productList!=null&&productList.size()>0)
-				{
+				{*/
 		    	PartnerReportDetails partnerBusiness =
 		    			transformPartnerDetail(currOrder,productCatMap,categoryParentMap, startdate, enddate);
 		    	listtopopulate.add(partnerBusiness);
@@ -3000,7 +3001,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					transformDebtorsGraph1Graph(partnermap, partnerBusiness, "partner");
 					transformDebtorsGraph1Graph(categorymap, partnerBusiness, "category");
 				}
-				}
+				//}
 			}
 		    
 		    
