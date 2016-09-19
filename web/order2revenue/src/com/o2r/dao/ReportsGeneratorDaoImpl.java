@@ -1300,6 +1300,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			 } else{
 				 orders = fetchOrders(session, sellerId, startDate, endDate);
 			 }
+			 log.info(" |||||| Order Count : " + orders.size());
 			 taxCatPercentMap=taxDetailService.getTaxCategoryMap(sellerId);
 			 Map<String, ChannelReportDetails> poOrderMap = new HashMap<String, ChannelReportDetails>();
 			 if(taxCatPercentMap!=null)
