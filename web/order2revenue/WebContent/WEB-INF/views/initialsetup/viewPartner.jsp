@@ -96,8 +96,8 @@ span .#error {
 		<jsp:include page="../sidenavigation.jsp"></jsp:include>
 		<div id="page-wrapper" class="gray-bg">
 			<jsp:include page="../globalheader.jsp"></jsp:include>
-			<div class="wrapper wrapper-content animated fadeInRight">
-
+			<div class="wrapper wrapper-content animated fadeInRight"
+					id="centerpane">
 				<div class="row">
 					<div class="col-lg-12">
 						<div id="myCarousel" class="carousel slide" data-ride="carousel">

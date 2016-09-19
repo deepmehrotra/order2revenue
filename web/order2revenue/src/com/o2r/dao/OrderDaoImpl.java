@@ -2427,9 +2427,10 @@ public class OrderDaoImpl implements OrderDao {
 						.getFixedfeeList().iterator();
 				while (fixedfeeIterator.hasNext()) {
 					ChargesBean cBean = fixedfeeIterator.next();
-					if (SP < cBean.getRange()) {
+					if (SP <= cBean.getRange()) {
 						fixedfee = (float) cBean.getValue();
 						inRange = true;
+						break;
 					}
 				}
 				if (!inRange) {
@@ -2517,13 +2518,14 @@ public class OrderDaoImpl implements OrderDao {
 							.equals("variable")) {
 
 				if (pbean.getshippingfeeWeightVariableList() != null
-						&& pbean.getshippingfeeWeightVariableList().size() != 0) {
+						&& pbean.getshippingfeeWeightVariableList().size() != 0
+						&& deadWeight > volWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
 							.getshippingfeeWeightVariableList().iterator();
 					while (shippingfeeWeightIterator.hasNext()) {
 						ChargesBean cBean = shippingfeeWeightIterator.next();
-						if (deadWeight < cBean.getRange()) {
+						if (deadWeight <= cBean.getRange()) {
 							if (valueType.equalsIgnoreCase("metro"))
 								dwchargetemp = (float) cBean.getMetroValue();
 							else if (valueType.equalsIgnoreCase("national"))
@@ -2533,6 +2535,7 @@ public class OrderDaoImpl implements OrderDao {
 							else if (valueType.equalsIgnoreCase("zonal"))
 								dwchargetemp = (float) cBean.getZonalValue();
 							inRange = true;
+							break;
 						}
 					}
 					if (!inRange) {
@@ -2604,13 +2607,14 @@ public class OrderDaoImpl implements OrderDao {
 				}
 
 				if (pbean.getshippingfeeVolumeVariableList() != null
-						&& pbean.getshippingfeeVolumeVariableList().size() != 0) {
+						&& pbean.getshippingfeeVolumeVariableList().size() != 0
+						&& volWeight > deadWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeVolumeIterator = pbean
 							.getshippingfeeVolumeVariableList().iterator();
 					while (shippingfeeVolumeIterator.hasNext()) {
 						ChargesBean cBean = shippingfeeVolumeIterator.next();
-						if (volWeight < cBean.getRange()) {
+						if (volWeight <= cBean.getRange()) {
 							if (valueType.equalsIgnoreCase("metro"))
 								vwchargetemp = (float) cBean.getMetroValue();
 							else if (valueType.equalsIgnoreCase("national"))
@@ -2620,6 +2624,7 @@ public class OrderDaoImpl implements OrderDao {
 							else if (valueType.equalsIgnoreCase("zonal"))
 								vwchargetemp = (float) cBean.getZonalValue();
 							inRange = true;
+							break;
 						}
 					}
 					if (!inRange) {
@@ -2694,16 +2699,18 @@ public class OrderDaoImpl implements OrderDao {
 							.equals("fixed")) {
 
 				if (pbean.getshippingfeeWeightFixedList() != null
-						&& pbean.getshippingfeeWeightFixedList().size() != 0) {
+						&& pbean.getshippingfeeWeightFixedList().size() != 0
+						&& deadWeight > volWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
 							.getshippingfeeWeightFixedList().iterator();
 					while (shippingfeeWeightIterator.hasNext()) {
 						ChargesBean cBean = shippingfeeWeightIterator.next();
-						if (deadWeight < cBean.getRange()) {
+						if (deadWeight <= cBean.getRange()) {
 							if (valueType.equalsIgnoreCase("fixed"))
 								dwchargetemp = (float) cBean.getValue();
 							inRange = true;
+							break;
 						}
 					}
 					if (!inRange) {
@@ -2738,17 +2745,19 @@ public class OrderDaoImpl implements OrderDao {
 				}
 
 				if (pbean.getshippingfeeVolumeFixedList() != null
-						&& pbean.getshippingfeeVolumeFixedList().size() != 0) {
+						&& pbean.getshippingfeeVolumeFixedList().size() != 0
+						&& volWeight > deadWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeVolumeIterator = pbean
 							.getshippingfeeVolumeFixedList().iterator();
 					while (shippingfeeVolumeIterator.hasNext()) {
 						ChargesBean cBean = shippingfeeVolumeIterator.next();
-						if (volWeight < cBean.getRange()) {
+						if (volWeight <= cBean.getRange()) {
 							if (valueType.equalsIgnoreCase("fixed"))
 								vwchargetemp = (float) cBean.getValue();
 
 							inRange = true;
+							break;
 						}
 					}
 					if (!inRange) {
@@ -3702,9 +3711,10 @@ public class OrderDaoImpl implements OrderDao {
 						.getFixedfeeList().iterator();
 				while (fixedfeeIterator.hasNext()) {
 					ChargesBean cBean = fixedfeeIterator.next();
-					if (SP < cBean.getRange()) {
+					if (SP <= cBean.getRange()) {
 						fixedfee = (float) cBean.getValue();
 						inRange = true;
+						break;
 					}
 				}
 				if (!inRange) {
@@ -3792,13 +3802,14 @@ public class OrderDaoImpl implements OrderDao {
 							.equals("variable")) {
 
 				if (pbean.getshippingfeeWeightVariableList() != null
-						&& pbean.getshippingfeeWeightVariableList().size() != 0) {
+						&& pbean.getshippingfeeWeightVariableList().size() != 0
+						&& deadWeight > volWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
 							.getshippingfeeWeightVariableList().iterator();
 					while (shippingfeeWeightIterator.hasNext()) {
 						ChargesBean cBean = shippingfeeWeightIterator.next();
-						if (deadWeight < cBean.getRange()) {
+						if (deadWeight <= cBean.getRange()) {
 							if (valueType.equalsIgnoreCase("metro"))
 								dwchargetemp = (float) cBean.getMetroValue();
 							else if (valueType.equalsIgnoreCase("national"))
@@ -3808,6 +3819,7 @@ public class OrderDaoImpl implements OrderDao {
 							else if (valueType.equalsIgnoreCase("zonal"))
 								dwchargetemp = (float) cBean.getZonalValue();
 							inRange = true;
+							break;
 						}
 					}
 					if (!inRange) {
@@ -3879,13 +3891,14 @@ public class OrderDaoImpl implements OrderDao {
 				}
 
 				if (pbean.getshippingfeeVolumeVariableList() != null
-						&& pbean.getshippingfeeVolumeVariableList().size() != 0) {
+						&& pbean.getshippingfeeVolumeVariableList().size() != 0
+						&& volWeight > deadWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeVolumeIterator = pbean
 							.getshippingfeeVolumeVariableList().iterator();
 					while (shippingfeeVolumeIterator.hasNext()) {
 						ChargesBean cBean = shippingfeeVolumeIterator.next();
-						if (volWeight < cBean.getRange()) {
+						if (volWeight <= cBean.getRange()) {
 							if (valueType.equalsIgnoreCase("metro"))
 								vwchargetemp = (float) cBean.getMetroValue();
 							else if (valueType.equalsIgnoreCase("national"))
@@ -3895,6 +3908,7 @@ public class OrderDaoImpl implements OrderDao {
 							else if (valueType.equalsIgnoreCase("zonal"))
 								vwchargetemp = (float) cBean.getZonalValue();
 							inRange = true;
+							break;
 						}
 					}
 					if (!inRange) {
@@ -3969,16 +3983,18 @@ public class OrderDaoImpl implements OrderDao {
 							.equals("fixed")) {
 
 				if (pbean.getshippingfeeWeightFixedList() != null
-						&& pbean.getshippingfeeWeightFixedList().size() != 0) {
+						&& pbean.getshippingfeeWeightFixedList().size() != 0
+						&& deadWeight > volWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
 							.getshippingfeeWeightFixedList().iterator();
 					while (shippingfeeWeightIterator.hasNext()) {
 						ChargesBean cBean = shippingfeeWeightIterator.next();
-						if (deadWeight < cBean.getRange()) {
+						if (deadWeight <= cBean.getRange()) {
 							if (valueType.equalsIgnoreCase("fixed"))
 								dwchargetemp = (float) cBean.getValue();
 							inRange = true;
+							break;
 						}
 					}
 					if (!inRange) {
@@ -4013,17 +4029,19 @@ public class OrderDaoImpl implements OrderDao {
 				}
 
 				if (pbean.getshippingfeeVolumeFixedList() != null
-						&& pbean.getshippingfeeVolumeFixedList().size() != 0) {
+						&& pbean.getshippingfeeVolumeFixedList().size() != 0
+						&& volWeight > deadWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeVolumeIterator = pbean
 							.getshippingfeeVolumeFixedList().iterator();
 					while (shippingfeeVolumeIterator.hasNext()) {
 						ChargesBean cBean = shippingfeeVolumeIterator.next();
-						if (volWeight < cBean.getRange()) {
+						if (volWeight <= cBean.getRange()) {
 							if (valueType.equalsIgnoreCase("fixed"))
 								vwchargetemp = (float) cBean.getValue();
 
 							inRange = true;
+							break;
 						}
 					}
 					if (!inRange) {
