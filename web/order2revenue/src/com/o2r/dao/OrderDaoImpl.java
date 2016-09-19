@@ -403,6 +403,7 @@ public class OrderDaoImpl implements OrderDao {
 							eventsService.addEvent(event, sellerId);
 						}
 
+						if(order.getOrderMRP()>order.getOrderSP())
 						order.setDiscount((Math.abs(order.getOrderMRP()
 								- order.getOrderSP())));
 						log.debug(" Tax cal SP:"
@@ -2428,6 +2429,9 @@ public class OrderDaoImpl implements OrderDao {
 				while (fixedfeeIterator.hasNext()) {
 					ChargesBean cBean = fixedfeeIterator.next();
 					if (SP < cBean.getRange()) {
+						System.out.println(" fixed fee : "+cBean.getValue());
+
+						System.out.println(" cBean.getRange() : "+cBean.getRange()+" SP "+SP);
 						fixedfee = (float) cBean.getValue();
 						inRange = true;
 					}

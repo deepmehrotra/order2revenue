@@ -768,15 +768,20 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 
 			int loopcount=0;
 			int threadsize=0;
-			if(results.size()>1000)
-			{
-				threadsize=(int)Math.nextUp(results.size()/100);
-				loopcount=100;
-			}
-			else
+			if(results.size()>10000&&results.size()<100000)
 			{
 				threadsize=10;
-				loopcount=10;
+				loopcount=100;
+			}
+			else if(results.size()<10000)
+			{
+				threadsize=5;
+				loopcount=100;
+			}
+			else if(results.size()>100000)
+			{
+				threadsize=20;
+				loopcount=100;
 			}
 			ExecutorService executor = Executors.newFixedThreadPool(threadsize);
 			 
@@ -840,15 +845,20 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			List<Order> results = fetchOrders(session, sellerId, startDate, endDate);
 			int loopcount=0;
 			int threadsize=0;
-			if(results.size()>1000)
-			{
-				threadsize=(int)Math.nextUp(results.size()/100);
-				loopcount=100;
-			}
-			else
+			if(results.size()>10000&&results.size()<100000)
 			{
 				threadsize=10;
-				loopcount=10;
+				loopcount=100;
+			}
+			else if(results.size()<10000)
+			{
+				threadsize=5;
+				loopcount=100;
+			}
+			else if(results.size()>100000)
+			{
+				threadsize=20;
+				loopcount=100;
 			}
 			ExecutorService executor = Executors.newFixedThreadPool(threadsize);
 			 
