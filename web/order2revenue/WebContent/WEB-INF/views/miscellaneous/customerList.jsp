@@ -56,6 +56,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 
 				<div class="wrapper wrapper-content animated">
             <div class="row">
+            <div class="ibox float-e-margins">
                 <div class="col-lg-12">
                     <div class="col-sm-6" style="padding: 0px;">
                     	<h2><b>CUSTOMER DATABASE</b></h2>
@@ -142,6 +143,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
                         </tbody>                        
                     </table>
 
+                </div>
                 </div>
             </div>
             </div>
