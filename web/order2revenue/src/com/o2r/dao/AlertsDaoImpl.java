@@ -15,12 +15,12 @@ import org.springframework.stereotype.Repository;
 import com.o2r.model.SellerAlerts;
 
 @Repository("alertDao")
-public class AlertsDaoImpl implements AlertsDao{
-	
-	@Autowired	
+public class AlertsDaoImpl implements AlertsDao {
+
+	@Autowired
 	private SessionFactory sessionFactory;
 	static Logger log = Logger.getLogger(AlertsDaoImpl.class.getName());
-	
+
 	@Override
 	public void saveAlerts(SellerAlerts alerts, int sellerId) {
 		Session session = null;
@@ -32,33 +32,35 @@ public class AlertsDaoImpl implements AlertsDao{
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed By seller ID : "+sellerId, e);
+			log.error("Failed By seller ID : " + sellerId, e);
 		} finally {
-			if(session != null)
+			if (session != null)
 				session.close();
 		}
 	}
+
 	@Override
-	public List<SellerAlerts> getAlerts(int sellerId) {		
+	public List<SellerAlerts> getAlerts(int sellerId) {
 		List<SellerAlerts> alertsList = null;
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(SellerAlerts.class).add(Restrictions.eq("sellerId", sellerId));
-				criteria.addOrder(Order.desc("alertDate"));
+			Criteria criteria = session.createCriteria(SellerAlerts.class).add(
+					Restrictions.eq("sellerId", sellerId));
+			criteria.addOrder(Order.desc("alertDate"));
 			alertsList = criteria.list();
 			System.out.println(alertsList.size());
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed by Seller ID : "+sellerId, e);
+			log.error("Failed by Seller ID : " + sellerId, e);
 		} finally {
-			if(session != null)
+			if (session != null)
 				session.close();
 		}
 		return alertsList;
 	}
-	
+
 	@Override
 	public int unreadCount(int sellerId) {
 		int unreadSize = 0;
@@ -66,15 +68,18 @@ public class AlertsDaoImpl implements AlertsDao{
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(SellerAlerts.class).add(Restrictions.eq("sellerId", sellerId));
-				criteria.add(Restrictions.eq("status", "unread"));
-				criteria.setProjection(Projections.rowCount());
-			unreadSize = (int)criteria.uniqueResult();
+			Criteria criteria = session.createCriteria(SellerAlerts.class).add(
+					Restrictions.eq("sellerId", sellerId));
+			criteria.add(Restrictions.eq("status", "unread"));
+			criteria.setProjection(Projections.rowCount());
+			if (criteria.uniqueResult() != null) {
+				unreadSize = (int) criteria.uniqueResult();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed By seller ID : "+sellerId, e);
-		} finally{
-			if(session != null)
+			log.error("Failed By seller ID : " + sellerId, e);
+		} finally {
+			if (session != null)
 				session.close();
 		}
 		return unreadSize;
