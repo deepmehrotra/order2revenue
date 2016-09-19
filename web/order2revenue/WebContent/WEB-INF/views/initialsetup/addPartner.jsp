@@ -111,7 +111,8 @@ input+label {
 		<jsp:include page="../sidenavigation.jsp"></jsp:include>
 		<div id="page-wrapper" class="gray-bg">
 			<jsp:include page="../globalheader.jsp"></jsp:include>
-			<div class="wrapper wrapper-content animated fadeInRight">
+			<div class="wrapper wrapper-content animated fadeInRight"
+					id="centerpane">
 				<div class="row">
 					<div class="col-lg-12">
 						<form:form method="POST" action="savePartner.html"
@@ -3737,18 +3738,14 @@ input+label {
 								},
 								36 : {
 									id : 36,
-									text : 'New Delhi'
+									text : 'Kolkata'
 								},
 								37 : {
 									id : 37,
-									text : 'Kolkata'
+									text : 'Mumbai'
 								},
 								38 : {
 									id : 38,
-									text : 'Mumbai'
-								},
-								39 : {
-									id : 39,
 									text : 'Chennai'
 								}
 							};
