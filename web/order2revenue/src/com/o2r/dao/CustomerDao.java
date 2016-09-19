@@ -22,6 +22,10 @@ public interface CustomerDao {
 	public Customer getCustomer(int customerId);
 
 	public Customer getCustomer(String customerEmail, int sellerId,	Session session);
+	
+	public void changeStatus(int id, int sellerId);
+	
+	public boolean isBlackList(String phone, int sellerId);
 	// public Customer getCustomer(String customerEmail, int sellerId,Session
 	// session);
 

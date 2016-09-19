@@ -18,6 +18,7 @@ public class CustomerDBaseBean {
 	private long productPurchased;
 	private long productReturned;
 	private double netRevenue;
+	private String status;
 	private List<Order> orders = new ArrayList<Order>();
 		
 	public int getCustomerId() {
@@ -85,5 +86,11 @@ public class CustomerDBaseBean {
 	}
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

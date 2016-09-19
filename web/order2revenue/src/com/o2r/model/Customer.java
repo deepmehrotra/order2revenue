@@ -34,6 +34,9 @@ public class Customer {
 	private String zipcode;
 	@Column
 	private int sellerId;
+	@Column
+	private String status;
+	
 	@OneToMany(mappedBy="customer", cascade=CascadeType.ALL)  
 	private List<Order> orders =new ArrayList<Order>();
 	
@@ -90,5 +93,11 @@ public class Customer {
 	}
 	public void setZipcode(String zipcode) {
 		this.zipcode = zipcode;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

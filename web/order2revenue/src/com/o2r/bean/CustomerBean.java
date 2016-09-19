@@ -17,6 +17,8 @@ public class CustomerBean {
 	private String customerAddress;
 	private String zipcode;
 	private int sellerId;
+	private String status;
+	
 	private List<Order> orders =new ArrayList<Order>();
 	
 	public String getCustomerName() {
@@ -72,5 +74,11 @@ public class CustomerBean {
 	}
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

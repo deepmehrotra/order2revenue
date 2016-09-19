@@ -567,8 +567,8 @@
 			var timeDiff = Math.abs(new Date(startDate).getTime()
 					- new Date(endDate).getTime());
 			var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-			if (diffDays > 90) {
-				alert("Download Report cannnot be generated for more than 90 days! Kindly change your date selection!");
+			if (diffDays > 93) {
+				alert("Download Report cannnot be generated for more than 3 months! Kindly change your date selection!");
 				return;
 			}
 

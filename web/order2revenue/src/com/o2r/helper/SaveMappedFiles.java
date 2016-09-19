@@ -3021,9 +3021,7 @@ public class SaveMappedFiles {
 								try {
 									if (entry.getCell(index) != null) {
 										orderPayment
-												.setDateofPayment(new Date(
-														entry.getCell(index)
-																.toString()));
+												.setDateofPayment(new Date(entry.getCell(index).toString()));
 									} else {
 										errorMessage
 												.append(" Payment Date format is wrong or null");
@@ -4242,7 +4240,76 @@ public class SaveMappedFiles {
 									paymentBean = new OrderPaymentBean();
 								}
 								key = entry.getCell(index).toString();
-								paymentBean.setChannelOrderId(onj.get(0).getChannelOrderID());
+								paymentBean.setChannelOrderId(onj.get(0).getChannelOrderID());								
+								
+								try {
+									index = cellIndexMap.get(columHeaderMap.get("Payment Date"));
+									if (entry.getCell(index) != null
+											&& StringUtils.isNotBlank(entry.getCell(
+													index).toString())) {
+										String date = entry.getCell(index).toString();
+										paymentBean.setDateofPayment(new Date(date));
+									} else {
+										errorMessage
+												.append(" Payment Date format is wrong or null");
+										validaterow = false;
+									}
+								} catch (NullPointerException e) {
+									errorMessage
+											.append("The column 'Date' doesn't exist");
+									validaterow = false;
+								}
+
+								try {
+									index = cellIndexMap.get(columHeaderMap
+											.get("Recieved Amount"));
+									if (entry.getCell(index) != null
+											&& StringUtils.isNotBlank(entry.getCell(
+													index).toString())) {
+										try {
+											String amt = entry
+													.getCell(index)
+													.toString()
+													.substring(
+															entry.getCell(index)
+																	.toString()
+																	.indexOf(".") + 1)
+													.trim();
+											System.out.println(amt);
+											amount = Double.parseDouble(amt);
+											System.out.println(amount);
+											if (amount > 0) {
+												paymentBean
+														.setPositiveAmount(paymentBean
+																.getPositiveAmount()
+																+ amount);
+												//totalpositive = totalpositive + amount;
+											} else if (amount < 0) {
+												paymentBean.setNegativeAmount(Math
+														.abs(paymentBean
+																.getNegativeAmount()
+																+ amount));
+												/*totalnegative = totalnegative
+														+ Math.abs(amount);*/
+											}
+										} catch (Exception e) {
+											log.error("Failed by seller " + sellerId, e);
+											errorMessage
+													.append(" Payment Amount cell is corrupted");
+											validaterow = false;
+										}
+									} else {
+										errorMessage
+												.append("Amount format is wrong or null.");
+										validaterow = false;
+									}
+								} catch (NullPointerException e) {
+									errorMessage
+											.append("The column 'Amount' doesn't exist");
+									validaterow = false;
+								}						
+								
+								
 							} else {
 								errorMessage.append("Multiple Orders With This Channel Order ID.");
 								validaterow = false;
@@ -4252,73 +4319,7 @@ public class SaveMappedFiles {
 							validaterow = false;
 						}
 
-						try {
-							index = cellIndexMap.get(columHeaderMap
-									.get("Payment Date"));
-							if (entry.getCell(index) != null
-									&& StringUtils.isNotBlank(entry.getCell(
-											index).toString())) {
-								String date = entry.getCell(index).toString();
-								paymentBean.setDateofPayment(new Date(date));
-							} else {
-								errorMessage
-										.append(" Payment Date format is wrong or null");
-								validaterow = false;
-							}
-						} catch (NullPointerException e) {
-							errorMessage
-									.append("The column 'Date' doesn't exist");
-							validaterow = false;
-						}
-
-						try {
-							index = cellIndexMap.get(columHeaderMap
-									.get("Recieved Amount"));
-							if (entry.getCell(index) != null
-									&& StringUtils.isNotBlank(entry.getCell(
-											index).toString())) {
-								try {
-									String amt = entry
-											.getCell(index)
-											.toString()
-											.substring(
-													entry.getCell(index)
-															.toString()
-															.indexOf(".") + 1)
-											.trim();
-									System.out.println(amt);
-									amount = Double.parseDouble(amt);
-									System.out.println(amount);
-									if (amount > 0) {
-										paymentBean
-												.setPositiveAmount(paymentBean
-														.getPositiveAmount()
-														+ amount);
-										//totalpositive = totalpositive + amount;
-									} else if (amount < 0) {
-										paymentBean.setNegativeAmount(Math
-												.abs(paymentBean
-														.getNegativeAmount()
-														+ amount));
-										/*totalnegative = totalnegative
-												+ Math.abs(amount);*/
-									}
-								} catch (Exception e) {
-									log.error("Failed by seller " + sellerId, e);
-									errorMessage
-											.append(" Payment Amount cell is corrupted");
-									validaterow = false;
-								}
-							} else {
-								errorMessage
-										.append("Amount format is wrong or null.");
-								validaterow = false;
-							}
-						} catch (NullPointerException e) {
-							errorMessage
-									.append("The column 'Amount' doesn't exist");
-							validaterow = false;
-						}
+						
 
 						if (validaterow) {
 							if (amount > 0) {
@@ -4348,11 +4349,11 @@ public class SaveMappedFiles {
 										.toString())
 								&& (!entry
 										.getCell(index)
-										.toString()
+										.toString().trim()
 										.equalsIgnoreCase(
 												"Current Reserve Amount") && !entry
 										.getCell(index)
-										.toString()
+										.toString().trim()
 										.equalsIgnoreCase(
 												"Previous Reserve Amount Balance"))) {
 
@@ -4411,8 +4412,7 @@ public class SaveMappedFiles {
 									try {
 										String date = entry.getCell(index)
 												.toString();
-										manualCharge.setDateOfPayment(new Date(
-												date));
+										manualCharge.setDateOfPayment(new Date(date));
 									} catch (Exception e) {
 										errorMessage
 												.append("Date May Be Wrong Format");
@@ -4431,10 +4431,9 @@ public class SaveMappedFiles {
 
 						} else {
 							errorMessage
-									.append("Payment Details May Be Null Or Blank Or Not In Condition");
+									.append("Payment Details May Be Null Or Blank Or Not In Condition .");
 							validaterow = false;
-						}
-						
+						}						
 						if (cellIndexMap.get(columHeaderMap
 								.get("Sales Channel")) != null) {
 							int indexchannel = cellIndexMap
@@ -4443,14 +4442,12 @@ public class SaveMappedFiles {
 							manualCharge.setPartner(entry.getCell(
 									indexchannel).toString());
 							manualCharge.setUploadDate(new Date());
-						} else {
-							errorMessage
-									.append("O2R channel is not present.");
-							validaterow = false;
 						}
 						
 						if (validaterow) {
 							manualChargesList.add(manualCharge);
+						} else {
+							errorSet.add(errorMessage.toString());
 						}
 					}
 				} catch (Exception e) {
@@ -4504,6 +4501,7 @@ public class SaveMappedFiles {
 						log.error("Failed! by SellerId : " + sellerId, e);
 					}
 				}
+				System.out.println(manualChargesList.size());
 				manualChargesService.addListManualCharges(manualChargesList,
 						sellerId);
 			}

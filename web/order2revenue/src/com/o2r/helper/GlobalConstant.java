@@ -137,6 +137,7 @@ public class GlobalConstant {
 			add("Payment Detail");
 			add("Payment Date");
 			add("Seller SKU");
+			add("Sales Channel");
 
 		}
 	};
