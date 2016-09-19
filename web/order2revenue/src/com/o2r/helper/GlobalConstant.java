@@ -119,9 +119,10 @@ public class GlobalConstant {
 		{
 			add("ChannelOrderId");
 			add("Recieved Amount");
-			add("Type");
+			add("Particular");
 			add("Payment Date");
 			add("Seller SKU");
+			add("Sales Channel");
 
 		}
 	};

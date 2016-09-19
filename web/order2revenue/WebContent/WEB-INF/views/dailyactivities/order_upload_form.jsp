@@ -1104,6 +1104,8 @@ ol.d {
 									<li>Ensure that the 1st row of file is the "headers"</li>
 									<li>Do not change the formatting of columns or any
 										headers.</li>
+									<li>Add Colum with header name as<b> "O2R Channel"</b>. Non Mandatory. </li>
+										
 									<li>The downloaded excel file will by default have the
 										following columns with exact same heading.Ensure the same are
 										present.<br>
@@ -1211,6 +1213,7 @@ ol.d {
 									<li>Ensure that the 1st row of file is the "headers"</li>
 									<li>Do not change the formatting of columns or any
 										headers.</li>
+									<li>Add Colum with header name as <b> "O2R Channel"</b>. Non Mandatory. </li>
 									<li>The downloaded excel file will by default have the
 										following columns with exact same heading.Ensure the same are
 										present.<br>

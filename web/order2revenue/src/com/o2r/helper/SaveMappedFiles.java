@@ -3123,7 +3123,7 @@ public class SaveMappedFiles {
 							System.out.println(" Reading manual charge : "
 									+ entry.getCell(index));
 							newmanualCharge = new ManualCharges();
-							newmanualCharge.setPartner("Snapdeal");
+							//newmanualCharge.setPartner("Snapdeal");
 
 							try {
 								index = cellIndexMap.get(columHeaderMap
@@ -3197,11 +3197,7 @@ public class SaveMappedFiles {
 								newmanualCharge.setPartner(entry.getCell(
 										indexchannel).toString());
 								newmanualCharge.setUploadDate(new Date());
-							} else {
-								errorMessage
-										.append("O2R channel is not present.");
-								validaterow = false;
-							}
+							} 
 
 							if (validaterow) {
 								manualChargesList.add(newmanualCharge);
