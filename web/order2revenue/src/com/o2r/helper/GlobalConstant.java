@@ -472,6 +472,7 @@ public class GlobalConstant {
 	//Alerts Message
 	public static final String InventoryMsg = "Product Quantity is Under Limit !";
 	public static final String OrderMsg = "Order Bucket Is Low !";
+	public static final String CustomerMsg = "Customer Is Blacklisted with Contact No";
 	
 	
 	

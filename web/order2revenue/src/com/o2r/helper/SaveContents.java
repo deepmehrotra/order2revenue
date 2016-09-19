@@ -46,6 +46,7 @@ import com.o2r.bean.ProductBean;
 import com.o2r.bean.ProductConfigBean;
 import com.o2r.dao.AreaConfigDao;
 import com.o2r.model.Category;
+import com.o2r.model.Customer;
 import com.o2r.model.Events;
 import com.o2r.model.ExpenseCategory;
 import com.o2r.model.Expenses;
@@ -59,9 +60,12 @@ import com.o2r.model.Partner;
 import com.o2r.model.PaymentUpload;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
+import com.o2r.model.SellerAlerts;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
+import com.o2r.service.AlertsService;
 import com.o2r.service.CategoryService;
+import com.o2r.service.CustomerService;
 import com.o2r.service.EventsService;
 import com.o2r.service.ExpenseService;
 import com.o2r.service.ManualChargesService;
@@ -106,6 +110,10 @@ public class SaveContents {
 	private UploadMappingService uploadMappingService;
 	@Autowired
 	private SaveMappedFiles saveMappedFiles;
+	@Autowired
+	private CustomerService customerService;
+	@Autowired
+	private AlertsService alertService;
 
 	private static final String UPLOAD_DIR = "UploadReport";
 
@@ -463,8 +471,25 @@ public class SaveContents {
 							&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						entry.getCell(17)
 								.setCellType(HSSFCell.CELL_TYPE_STRING);
-						customerBean.setCustomerPhnNo(entry.getCell(17)
-								.toString());
+						customerBean.setCustomerPhnNo(entry.getCell(17).toString());
+						try{
+							boolean isBlackList = customerService.isBlackList(entry.getCell(17).toString(), sellerId);
+							if(isBlackList == true){
+								SellerAlerts sellerAlert = new SellerAlerts();
+								sellerAlert.setAlertDate(new Date());
+								sellerAlert.setAlertType("Customer");
+								sellerAlert.setAlertMessage(GlobalConstant.CustomerMsg+" : "+entry.getCell(17).toString());
+								sellerAlert.setStatus("unread");
+								alertService.saveAlerts(sellerAlert, sellerId);
+								customerBean.setStatus("Inactive");
+							} else {
+								customerBean.setStatus("Active");
+							}
+						} catch (Exception e){
+							e.printStackTrace();
+							log.error("Error In saveOrderContents on set Customer BlackList Alert : Seller ID : "+ sellerId, e);
+							customerBean.setStatus("Active");
+						}
 					}
 					if (entry.getCell(18) != null
 							&& entry.getCell(18).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -527,7 +552,7 @@ public class SaveContents {
 					log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
 							+ entry.getCell(2) + " 3 :" + entry.getCell(3));
 					// Pre save to generate id for use in hierarchy
-					if (validaterow) {
+					if (validaterow) {						
 						order.setCustomer(customerBean);
 						order.setOrderTax(otb);
 						/*
