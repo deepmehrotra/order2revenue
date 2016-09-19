@@ -28,4 +28,14 @@ public class CustomerServiceImpl implements CustomerService{
 		return customerDao.listCustomerDB(sellerId, pageNo);
 	}
 	
+	@Override
+	public void changeStatus(int id, int sellerId) {
+		customerDao.changeStatus(id, sellerId);
+	}
+	
+	@Override
+	public boolean isBlackList(String phone, int sellerId) {		
+		return customerDao.isBlackList(phone, sellerId);
+	}
+	
 }

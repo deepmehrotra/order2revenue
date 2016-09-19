@@ -89,6 +89,7 @@ public void addCustomer(Customer customer,int sellerId) {
 			projList.add(Projections.property("customer.customerEmail"));
 			projList.add(Projections.property("customer.customerName"));
 			projList.add(Projections.property("customer.customerPhnNo"));
+			projList.add(Projections.property("customer.status"));
 			projList.add(Projections.property("customer.zipcode"));
 			projList.add(Projections.sum("quantity"));
 			projList.add(Projections.sum("orderReturnOrRTO.returnorrtoQty"));
@@ -110,10 +111,11 @@ public void addCustomer(Customer customer,int sellerId) {
 						custmerDBean.setCustomerEmail((String)eachObj[2]);
 						custmerDBean.setCustomerName((String)eachObj[3]);
 						custmerDBean.setCustomerPhnNo((String)eachObj[4]);
-						custmerDBean.setZipcode((String)eachObj[5]);
-						custmerDBean.setProductPurchased((int)eachObj[6]);
-						custmerDBean.setProductReturned((int)eachObj[7]);
-						custmerDBean.setNetRevenue((double)eachObj[8]);
+						custmerDBean.setStatus((String)eachObj[5]);
+						custmerDBean.setZipcode((String)eachObj[6]);
+						custmerDBean.setProductPurchased((int)eachObj[7]);
+						custmerDBean.setProductReturned((int)eachObj[8]);
+						custmerDBean.setNetRevenue((double)eachObj[9]);
 						customerDbeanList.add(custmerDBean);
 					}
 				}
@@ -225,6 +227,64 @@ public Customer getCustomer(String customerEmail,int sellerId,Session session) {
 	log.info("*** getCustomer ends ***");
 	return returncustomer;
 }
+
+@Override
+	public void changeStatus(int id, int sellerId) {
+		
+		Session session = null;
+		Customer customer = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Customer.class);
+				criteria.add(Restrictions.eq("sellerId", sellerId))
+						.add(Restrictions.eq("customerId", id));
+			customer = (Customer)criteria.list().get(0);
+			if(customer != null){
+				if(customer.getStatus().equals("Active")){
+					customer.setStatus("Inactive");
+				} else {
+					customer.setStatus("Active");
+				}
+			}
+			session.saveOrUpdate(customer);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed By Seller ID : "+sellerId, e);
+		} finally {
+			if(session != null)
+				session.close();
+		}
+	}
+
+@Override
+	public boolean isBlackList(String phone, int sellerId) {
+		Session session = null;
+		List<Customer> customers = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Customer.class);
+				criteria.add(Restrictions.eq("sellerId", sellerId))
+						.add(Restrictions.eq("customerPhnNo", phone));
+			customers = criteria.list();
+			if(customers != null && customers.size() != 0){
+				for(Customer customer : customers){
+					if(customer.getStatus().equals("Inactive")){
+						return true;
+					}
+				}
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed By Seller ID : "+sellerId, e);
+		} finally {
+			if(session != null)
+				session.close();
+		}
+		return false;
+	}
 
 /*@Override
 public void deleteCategory(Category category,int sellerId) {

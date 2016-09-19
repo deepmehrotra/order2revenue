@@ -710,7 +710,7 @@ public class OrderDaoImpl implements OrderDao {
 							SellerAlerts sellerAlert = new SellerAlerts();
 							sellerAlert.setAlertDate(new Date());
 							sellerAlert.setAlertType("Order");
-							sellerAlert.setMessage(GlobalConstant.OrderMsg);
+							sellerAlert.setAlertMessage(GlobalConstant.OrderMsg);
 							sellerAlert.setStatus("unread");
 							alertService.saveAlerts(sellerAlert, sellerId);
 						}

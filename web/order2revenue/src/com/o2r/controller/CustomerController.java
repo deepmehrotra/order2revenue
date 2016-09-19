@@ -95,4 +95,30 @@ public class CustomerController {
 		log.info("$$$ listCustomerOrders Ends : CustomerController $$$");
 		return new ModelAndView("miscellaneous/viewCustomerOrder",model);
 	}
+	
+	@RequestMapping(value = "/seller/customerBlacklist", method = RequestMethod.GET)
+	public ModelAndView blackListCustomer(HttpServletRequest request,@ModelAttribute("command") CustomerBean customerBean, BindingResult result){
+		
+		log.info("$$$ listCustomer Ends : CustomerController $$$");
+		int sellerId = 0;
+		int id=Integer.parseInt(request.getParameter("id"));
+		Map<String, Object> model = new HashMap<String, Object>();
+		int pageNo = request.getParameter("page") != null ? Integer
+				.parseInt(request.getParameter("page")) : 0;
+		List<CustomerDBaseBean> customerBeanList=new ArrayList<CustomerDBaseBean>();
+		try {
+			sellerId=helperClass.getSellerIdfromSession(request);
+			customerService.changeStatus(id, sellerId);
+			customerBeanList=customerService.listCustomerDB(helperClass.getSellerIdfromSession(request),pageNo);
+			if(customerBeanList != null)
+			{
+				model.put("customers", customerBeanList);
+			}
+		} catch (Exception e) {
+			log.error("Failed by sellerId : "+sellerId, e);
+			e.printStackTrace();
+		}
+		log.info("$$$ listCustomer Ends : CustomerController $$$");
+		return new ModelAndView("miscellaneous/customerList",model);
+	}
 }

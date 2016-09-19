@@ -138,6 +138,7 @@ public class GlobalConstant {
 			add("Payment Detail");
 			add("Payment Date");
 			add("Seller SKU");
+			add("Sales Channel");
 
 		}
 	};
@@ -472,6 +473,7 @@ public class GlobalConstant {
 	//Alerts Message
 	public static final String InventoryMsg = "Product Quantity is Under Limit !";
 	public static final String OrderMsg = "Order Bucket Is Low !";
+	public static final String CustomerMsg = "Customer Is Blacklisted with Contact No";
 	
 	
 	

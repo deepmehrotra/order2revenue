@@ -22,7 +22,7 @@ public class SellerAlerts {
 	@Column
 	private Date alertDate;
 	@Column
-	private String message;
+	private String alertMessage;
 	@Column
 	private int sellerId;
 	@Column
@@ -46,13 +46,7 @@ public class SellerAlerts {
 	}
 	public void setAlertDate(Date alertDate) {
 		this.alertDate = alertDate;
-	}
-	public String getMessage() {
-		return message;
-	}
-	public void setMessage(String message) {
-		this.message = message;
-	}
+	}	
 	public String getStatus() {
 		return status;
 	}
@@ -64,5 +58,11 @@ public class SellerAlerts {
 	}
 	public void setSellerId(int sellerId) {
 		this.sellerId = sellerId;
+	}
+	public String getAlertMessage() {
+		return alertMessage;
+	}
+	public void setAlertMessage(String alertMessage) {
+		this.alertMessage = alertMessage;
 	}
 }

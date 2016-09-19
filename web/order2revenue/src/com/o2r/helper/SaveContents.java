@@ -46,6 +46,7 @@ import com.o2r.bean.ProductBean;
 import com.o2r.bean.ProductConfigBean;
 import com.o2r.dao.AreaConfigDao;
 import com.o2r.model.Category;
+import com.o2r.model.Customer;
 import com.o2r.model.Events;
 import com.o2r.model.ExpenseCategory;
 import com.o2r.model.Expenses;
@@ -59,9 +60,12 @@ import com.o2r.model.Partner;
 import com.o2r.model.PaymentUpload;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
+import com.o2r.model.SellerAlerts;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
+import com.o2r.service.AlertsService;
 import com.o2r.service.CategoryService;
+import com.o2r.service.CustomerService;
 import com.o2r.service.EventsService;
 import com.o2r.service.ExpenseService;
 import com.o2r.service.ManualChargesService;
@@ -106,6 +110,10 @@ public class SaveContents {
 	private UploadMappingService uploadMappingService;
 	@Autowired
 	private SaveMappedFiles saveMappedFiles;
+	@Autowired
+	private CustomerService customerService;
+	@Autowired
+	private AlertsService alertService;
 
 	private static final String UPLOAD_DIR = "UploadReport";
 
@@ -463,8 +471,25 @@ public class SaveContents {
 							&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						entry.getCell(17)
 								.setCellType(HSSFCell.CELL_TYPE_STRING);
-						customerBean.setCustomerPhnNo(entry.getCell(17)
-								.toString());
+						customerBean.setCustomerPhnNo(entry.getCell(17).toString());
+						try{
+							boolean isBlackList = customerService.isBlackList(entry.getCell(17).toString(), sellerId);
+							if(isBlackList == true){
+								SellerAlerts sellerAlert = new SellerAlerts();
+								sellerAlert.setAlertDate(new Date());
+								sellerAlert.setAlertType("Customer");
+								sellerAlert.setAlertMessage(GlobalConstant.CustomerMsg+" : "+entry.getCell(17).toString());
+								sellerAlert.setStatus("unread");
+								alertService.saveAlerts(sellerAlert, sellerId);
+								customerBean.setStatus("Inactive");
+							} else {
+								customerBean.setStatus("Active");
+							}
+						} catch (Exception e){
+							e.printStackTrace();
+							log.error("Error In saveOrderContents on set Customer BlackList Alert : Seller ID : "+ sellerId, e);
+							customerBean.setStatus("Active");
+						}
 					}
 					if (entry.getCell(18) != null
 							&& entry.getCell(18).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -527,7 +552,7 @@ public class SaveContents {
 					log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
 							+ entry.getCell(2) + " 3 :" + entry.getCell(3));
 					// Pre save to generate id for use in hierarchy
-					if (validaterow) {
+					if (validaterow) {						
 						order.setCustomer(customerBean);
 						order.setOrderTax(otb);
 						/*
@@ -2090,9 +2115,9 @@ public class SaveContents {
 							&& entry.getCell(0).toString()
 									.equalsIgnoreCase("payment")) {
 						
-						if(entry.getCell(7) != null
-							&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK){
-							partner = partnerService.getPartner(entry.getCell(7).toString(), sellerId);
+						if(entry.getCell(6) != null
+							&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK){
+							partner = partnerService.getPartner(entry.getCell(6).toString(), sellerId);
 							if(partner != null){
 								if (entry.getCell(1) != null
 										&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -2102,7 +2127,7 @@ public class SaveContents {
 										productConfig=productService.getProductConfig(entry.getCell(2).toString(), partner.getPcName(), sellerId);
 										if(productConfig != null){
 											if(productConfig.getVendorSkuRef() != null){
-												channelId = entry.getCell(0).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getVendorSkuRef();
+												channelId = entry.getCell(1).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getVendorSkuRef();
 											} else {
 												errorMessage.append("Vendor Sku Is Not Present.");
 												validaterow = false;
@@ -2112,7 +2137,7 @@ public class SaveContents {
 											validaterow = false;
 										}
 									} else {
-										channelId = entry.getCell(0).toString();
+										channelId = entry.getCell(1).toString();
 									}
 									List<Order> onj = orderService.searchAsIsOrder(
 											"channelOrderID", channelId, sellerId);
@@ -2155,12 +2180,12 @@ public class SaveContents {
 											}
 										} else {
 											errorMessage
-													.append(" No Orders with Channel OrderId And Secondary Order ID.");
+													.append(" No Orders with Channel OrderId. No Order With Secondary Order ID.");
 											validaterow = false;
 										}
 									} else {
 										errorMessage
-												.append(" Channel OrderId not present, Enter Secondary Order ID.");
+												.append(" No Orders with Channel OrderId, Secondary Order ID is Null.");
 										validaterow = false;
 									}
 								} else if (entry.getCell(3) != null
@@ -2180,13 +2205,13 @@ public class SaveContents {
 												}
 											}
 											if(check != true){
-												errorMessage.append("Multiple Orders With Channel Order ID.");
+												errorMessage.append("Multiple Orders With Secondary Order ID.");
 												validaterow = false;
 											}
 										}
 									} else {
 										errorMessage
-												.append(" No Orders with Secondary Order ID, Enter Channel Order ID.");
+												.append("Channel Order ID is Null. No Orders with Secondary Order ID.");
 										validaterow = false;
 									}
 								} else {
@@ -2195,32 +2220,25 @@ public class SaveContents {
 									validaterow = false;
 								}
 								try {
-									if (entry.getCell(5) != null
-											&& StringUtils.isNotBlank(entry.getCell(5)
-													.toString())
-											&& (int) entry.getCell(5)
-													.getNumericCellValue() != 0) {
-
-										payment.setNegativeAmount(Math.abs(Double
-												.parseDouble(entry.getCell(5)
-														.toString())));
-										negativeAmount = Math.abs(Double.parseDouble(entry
-														.getCell(5).toString()));
-
-									} else if (entry.getCell(4) != null
+									if (entry.getCell(4) != null
 											&& StringUtils.isNotBlank(entry.getCell(4)
 													.toString())
 											&& (int) Float.parseFloat(entry.getCell(4)
 													.toString()) != 0) {
-
-										payment.setPositiveAmount(Double
-												.parseDouble(entry.getCell(4)
-														.toString()));
-										positiveAmount = Double.parseDouble(entry.getCell(4)
-														.toString());
-										log.debug(" ******toatal psitive :"
-												+ totalpositive);
-
+										
+										if((int) Float.parseFloat(entry.getCell(4).toString()) < 0){
+											payment.setNegativeAmount(Math.abs(Double
+													.parseDouble(entry.getCell(4)
+															.toString())));
+											negativeAmount = Math.abs(Double.parseDouble(entry
+															.getCell(4).toString()));
+										} else {
+											payment.setPositiveAmount(Double
+													.parseDouble(entry.getCell(4)
+															.toString()));
+											positiveAmount = Double.parseDouble(entry.getCell(4)
+															.toString());
+										}										
 									} else {
 										errorMessage.append(" Amount should be given ");
 										validaterow = false;
@@ -2231,14 +2249,14 @@ public class SaveContents {
 											.append(" Recieved amount should be number ");
 									validaterow = false;
 								}
-								if (entry.getCell(6) != null
-										&& StringUtils.isNotBlank(entry.getCell(6)
+								if (entry.getCell(5) != null
+										&& StringUtils.isNotBlank(entry.getCell(5)
 												.toString())) {
 
 									try {
 										if (HSSFDateUtil.isCellDateFormatted(entry
-												.getCell(6))) {
-											payment.setDateofPayment(entry.getCell(6)
+												.getCell(5))) {
+											payment.setDateofPayment(entry.getCell(5)
 													.getDateCellValue());
 										} else {
 											errorMessage
@@ -2288,45 +2306,33 @@ public class SaveContents {
 							&& entry.getCell(0).toString()
 									.equalsIgnoreCase("manual charges")) {
 						ManualCharges manualCharges = new ManualCharges();
+						if (entry.getCell(6) != null
+								&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							manualCharges.setPartner(entry.getCell(6)
+									.toString());
+							channelName = entry.getCell(6).toString();
+						}
 						if (entry.getCell(7) != null
 								&& entry.getCell(7).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							manualCharges.setPartner(entry.getCell(7)
+							manualCharges.setParticular(entry.getCell(7)
 									.toString());
-							channelName = entry.getCell(7).toString();
-						} else {
-							errorMessage.append(" Channel is null ");
-						}
-						if (entry.getCell(8) != null
-								&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							manualCharges.setParticular(entry.getCell(8)
-									.toString());
-						} else {
-							errorMessage.append(" Particulars is null ");
 						}
 						try {
-							if (entry.getCell(5) != null
-									&& StringUtils.isNotBlank(entry.getCell(5)
-											.toString())
-									&& (int) entry.getCell(5)
-											.getNumericCellValue() != 0) {
-
-								manualCharges.setPaidAmount(Math.abs(Double
-										.parseDouble(entry.getCell(5)
-												.toString())));
-
-							} else if (entry.getCell(4) != null
+							if (entry.getCell(4) != null
 									&& StringUtils.isNotBlank(entry.getCell(4)
 											.toString())
 									&& (int) Float.parseFloat(entry.getCell(4)
 											.toString()) != 0) {
-
-								manualCharges.setPaidAmount(-Double
-										.parseDouble(entry.getCell(4)
-												.toString()));
-
-								log.debug(" ******toatal psitive :"
-										+ totalpositive);
-
+								
+								if((int) Float.parseFloat(entry.getCell(4).toString()) < 0){
+									payment.setNegativeAmount(Math.abs(Double
+											.parseDouble(entry.getCell(4)
+													.toString())));									
+								} else {
+									payment.setPositiveAmount(Double
+											.parseDouble(entry.getCell(4)
+													.toString()));									
+								}										
 							} else {
 								errorMessage.append(" Amount should be given ");
 								validaterow = false;
@@ -2337,15 +2343,15 @@ public class SaveContents {
 									.append(" Recieved amount should be number ");
 							validaterow = false;
 						}
-						if (entry.getCell(6) != null
-								&& StringUtils.isNotBlank(entry.getCell(6)
+						if (entry.getCell(5) != null
+								&& StringUtils.isNotBlank(entry.getCell(5)
 										.toString())) {
 
 							try {
 								if (HSSFDateUtil.isCellDateFormatted(entry
-										.getCell(6))) {
+										.getCell(5))) {
 									manualCharges.setDateOfPayment(entry
-											.getCell(6).getDateCellValue());
+											.getCell(5).getDateCellValue());
 								} else {
 									errorMessage
 											.append(" Payment Date format is wrong ,enter mm/dd/yyyy ");

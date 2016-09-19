@@ -1168,7 +1168,7 @@ public class ProductDaoImpl implements ProductDao {
 						SellerAlerts sellerAlert = new SellerAlerts();
 						sellerAlert.setAlertDate(new Date());
 						sellerAlert.setAlertType("Inventory");
-						sellerAlert.setMessage(GlobalConstant.InventoryMsg+" : "+product.getCategoryName());
+						sellerAlert.setAlertMessage(GlobalConstant.InventoryMsg+" : "+product.getCategoryName());
 						sellerAlert.setStatus("unread");
 						alertService.saveAlerts(sellerAlert, sellerId);
 					}

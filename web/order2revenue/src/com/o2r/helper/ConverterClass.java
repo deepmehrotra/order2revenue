@@ -45,6 +45,7 @@ import com.o2r.bean.PlanBean;
 import com.o2r.bean.ProductBean;
 import com.o2r.bean.ProductConfigBean;
 import com.o2r.bean.SellerAccountBean;
+import com.o2r.bean.SellerAlertsBean;
 import com.o2r.bean.SellerBean;
 import com.o2r.bean.StateBean;
 import com.o2r.bean.StateDeliveryTimeBean;
@@ -75,6 +76,7 @@ import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
 import com.o2r.model.SellerAccount;
+import com.o2r.model.SellerAlerts;
 import com.o2r.model.State;
 import com.o2r.model.StateDeliveryTime;
 import com.o2r.model.TaxCategory;
@@ -946,6 +948,7 @@ public class ConverterClass {
 			customer.setCustomerName(customerBean.getCustomerName());
 			customer.setCustomerPhnNo(customerBean.getCustomerPhnNo());
 			customer.setZipcode(customerBean.getZipcode());
+			customer.setStatus(customerBean.getStatus());
 
 		}
 
@@ -963,10 +966,37 @@ public class ConverterClass {
 			customerBean.setCustomerName(customer.getCustomerName());
 			customerBean.setCustomerPhnNo(customer.getCustomerPhnNo());
 			customerBean.setZipcode(customer.getZipcode());
+			customerBean.setStatus(customer.getStatus());
 
 		}
 
 		return customerBean;
+	}
+	
+	public static SellerAlertsBean prepareSellerAlertsBean(SellerAlerts sellerAlerts) {
+		SellerAlertsBean sellerAlertsBean = new SellerAlertsBean();
+		if(sellerAlerts != null){
+			sellerAlertsBean.setAlertId(sellerAlerts.getSellerId());
+			sellerAlertsBean.setAlertType(sellerAlerts.getAlertType());
+			sellerAlertsBean.setAlertMessage(sellerAlerts.getAlertMessage());
+			sellerAlertsBean.setAlertDate(sellerAlerts.getAlertDate());
+			sellerAlertsBean.setSellerId(sellerAlerts.getSellerId());
+			sellerAlertsBean.setStatus(sellerAlerts.getStatus());
+		}
+		return sellerAlertsBean;
+	}
+	
+	public static SellerAlerts prepareSellerAlertsModel(SellerAlertsBean sellerAlertsBean) {
+		SellerAlerts sellerAlerts = new SellerAlerts();
+		if(sellerAlertsBean != null){
+			sellerAlerts.setAlertId(sellerAlertsBean.getSellerId());
+			sellerAlerts.setAlertType(sellerAlertsBean.getAlertType());
+			sellerAlerts.setAlertMessage(sellerAlertsBean.getAlertMessage());
+			sellerAlerts.setAlertDate(sellerAlertsBean.getAlertDate());
+			sellerAlerts.setSellerId(sellerAlertsBean.getSellerId());
+			sellerAlerts.setStatus(sellerAlertsBean.getStatus());
+		}
+		return sellerAlerts;
 	}
 
 	public static List<CustomerBean> prepareListofCusomerBean(
