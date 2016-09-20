@@ -624,7 +624,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	public List<ConsolidatedOrderBean> getConsolidatedOrdersReport(
 			Date startDate, Date endDate, String status, int sellerId) {
 		log.info("*** getConsolidatedOrdersReport Starts : ReportsGeneratorDaoImpl ****");
-
+		
+		Date sdate = new Date();
 		List<Order> orderList=null;
 		List<Order> orderlistGpReturn=null;
 		List temp=null;
@@ -632,7 +633,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		Date currentDate=new Date();
 		Map<String, Object> consolidatedMap=new HashMap<String, Object>();
 		ConsolidatedOrderBean bean=null;
-		try {
+		try {			
 			orderList=orderService.findOrdersbyDate("shippedDate", startDate, endDate, sellerId, false);
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -653,12 +654,84 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				orderlistGpReturn = temp;
 			}
 			if(orderList!=null&&orderlistGpReturn!=null)			
-			orderList.addAll(orderlistGpReturn);
+				orderList.addAll(orderlistGpReturn);
 			else if(orderList==null&&orderlistGpReturn!=null)
 				orderList=orderlistGpReturn;
+			int loopcount=0;
+			int threadsize=0;
+			if (orderList.size() > 1000) {
+				threadsize = (int) Math.nextUp(orderList.size() / 100);
+				loopcount = 100;
+			} else {
+				threadsize = 10;
+				loopcount = 10;
+			}
+			ExecutorService executor = Executors.newFixedThreadPool(threadsize);			
+			for (int x = 0; x < orderList.size(); x = x + loopcount) {
+
+				executor.execute(new Consolidated(x, loopcount, orderList, currentDate, consolidatedMap, bean, sellerId));
+
+			}			
+			executor.shutdown();
+			while (!executor.isTerminated()) {
+	        }
+			if(consolidatedMap != null){
+				for (Map.Entry<String, Object> entry : consolidatedMap.entrySet())
+				{
+				    consolidatedList.add((ConsolidatedOrderBean)entry.getValue());
+				}
+			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerId,e);					
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.info("*** getConsolidatedOrdersReport ends : ReportsGeneratorDaoImpl ****");
+		Date edate = new Date();
+		System.out.println("Time Taken to execute : "+(edate.getTime() - sdate.getTime()));
+		return consolidatedList;
+	}
+	
+	/*@Override
+	public List<ConsolidatedOrderBean> getConsolidatedOrdersReport(
+			Date startDate, Date endDate, String status, int sellerId) {
+		log.info("*** getConsolidatedOrdersReport Starts : ReportsGeneratorDaoImpl ****");
+		
+		Date sdate = new Date();
+		List<Order> orderList=null;
+		List<Order> orderlistGpReturn=null;
+		List temp=null;
+		List<ConsolidatedOrderBean> consolidatedList=new ArrayList<ConsolidatedOrderBean>();
+		Date currentDate=new Date();
+		Map<String, Object> consolidatedMap=new HashMap<String, Object>();
+		ConsolidatedOrderBean bean=null;
+		try {			
+			orderList=orderService.findOrdersbyDate("shippedDate", startDate, endDate, sellerId, false);
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
 			
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",CriteriaSpecification.LEFT_JOIN);
+			criteria.createAlias("seller", "seller",CriteriaSpecification.LEFT_JOIN);
+			criteria.add(Restrictions.eq("seller.id", sellerId));			
+			criteria.add(Restrictions.between("orderReturnOrRTO.returnDate", startDate, endDate))
+					.add(Restrictions.and(    
+                    Restrictions.eq("poOrder", true),
+                    Restrictions.isNull("consolidatedOrder")))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);						
+			
+			temp = criteria.list();
+			if (temp != null && temp.size() != 0) {				
+				orderlistGpReturn = temp;
+			}
+			if(orderList!=null&&orderlistGpReturn!=null)			
+				orderList.addAll(orderlistGpReturn);
+			else if(orderList==null&&orderlistGpReturn!=null)
+				orderList=orderlistGpReturn;
 			if(orderList != null && orderList.size() != 0){
-				for (Order order:orderList) {
+				for (Order order : orderList) {					
 					if(consolidatedMap.containsKey(order.getPcName())){
 						bean=(ConsolidatedOrderBean)consolidatedMap.get(order.getPcName());						
 					}else{
@@ -703,6 +776,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				}
 			}
 			
+			
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 			log.error("Failed! by sellerId : "+sellerId,e);					
@@ -710,9 +784,11 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			e.printStackTrace();
 		}
 		log.info("*** getConsolidatedOrdersReport ends : ReportsGeneratorDaoImpl ****");
-
+		Date edate = new Date();
+		System.out.println("Time Taken to execute : "+(edate.getTime() - sdate.getTime()));
 		return consolidatedList;
-	}
+	}*/
+	
 	
 	/*@SuppressWarnings("unchecked")
 	@Override
@@ -1227,6 +1303,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			 } else{
 				 orders = fetchOrders(session, sellerId, startDate, endDate);
 			 }
+			 log.info(" |||||| Order Count : " + orders.size());
 			 taxCatPercentMap=taxDetailService.getTaxCategoryMap(sellerId);
 			 if(taxCatPercentMap!=null)
 			 {
@@ -2943,7 +3020,82 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			log.info("*** transformDebtorsGraph1Graph ends : ReportsGeneratorDaoImpl ****");
 
 	}
-	
+	public class Consolidated  implements Runnable { 
+		int start = 0;
+		int ran = 0;
+		List<Order> orderList; 		
+		Date currentDate; 
+		Map<String, Object> consolidatedMap; 
+		ConsolidatedOrderBean bean; 
+		int sellerId;		
+		
+		public Consolidated(int start, int ran, List<Order> orderList, Date currentDate,
+				Map<String, Object> consolidatedMap,
+				ConsolidatedOrderBean bean, int sellerId) {
+			super();
+			this.start = start;
+			this.ran = ran;
+			this.orderList = orderList;			
+			this.currentDate = currentDate;
+			this.consolidatedMap = consolidatedMap;
+			this.bean = bean;
+			this.sellerId = sellerId;
+		}
+		
+		@Override
+		public void run() {		
+			int last=0;
+		    if(start < orderList.size())
+		    {
+		    	if((start+ran) < orderList.size())
+		    	{
+		    		last=start+ran;
+		    	}
+		    	else
+		    		last=orderList.size();		    	
+		    }
+		    if(orderList != null && orderList.size() != 0){
+				for (int i=start; i < last; i++) {
+					Order order = orderList.get(i);
+					if(consolidatedMap.containsKey(order.getPcName())){
+						bean=(ConsolidatedOrderBean)consolidatedMap.get(order.getPcName());						
+					}else{
+						bean=new ConsolidatedOrderBean();
+						bean.setPcName(order.getPcName());
+					}
+					bean.setNetPaymentResult(bean.getNetPaymentResult()+order.getOrderPayment().getNetPaymentResult());
+					bean.setSaleQuantity(bean.getSaleQuantity()+order.getQuantity());
+					
+					if(order.getOrderReturnOrRTO() != null){
+						bean.setReturnQuantiy(bean.getReturnQuantiy()+order.getOrderReturnOrRTO().getReturnorrtoQty());
+						if(order.getOrderReturnOrRTO().getReturnDate() != null){
+							bean.setReturnOrder(bean.getReturnOrder()+1);
+						}
+						if(order.getOrderReturnOrRTO().getReturnDate() != null && order.getReturnLimitCrossed() != null 
+								&& order.getOrderReturnOrRTO().getReturnDate().after(order.getReturnLimitCrossed())){
+							bean.setReturnLimitCrossed(bean.getReturnLimitCrossed()+1);						
+						}
+						if(order.getOrderReturnOrRTO().getReturnDate() != null && order.getrTOLimitCrossed() != null 
+								&& order.getOrderReturnOrRTO().getReturnDate().after(order.getrTOLimitCrossed())){
+							bean.setRtoLimitCrossed(bean.getRtoLimitCrossed()+1);						
+						}
+					}
+					
+					if(order.getDeliveryDate() != null && order.getDeliveryDate().before(currentDate)){
+						bean.setDeliveredOrder(bean.getDeliveredOrder()+1);						
+					}				
+					bean.setPaymentDifferenceAmount(bean.getPaymentDifferenceAmount()+order.getOrderPayment().getPaymentDifference());
+					if(order.getOrderPayment().getPaymentDifference() < 1 && order.getOrderPayment().getPaymentDifference() > -1){
+						bean.setSettledOrder(bean.getSettledOrder()+1);
+					}
+					if(order.getOrderPayment().getPaymentDifference() < -1 || order.getOrderPayment().getPaymentDifference() > 1){
+						bean.setActionableOrder(bean.getActionableOrder()+1);
+					}										
+					consolidatedMap.put(order.getPcName(), bean);
+				}				
+			}		    
+		}
+	}
 	public class DebtorsListModify  implements Runnable { 
 		int start=0;
 		int ran=0;

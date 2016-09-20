@@ -35,7 +35,9 @@ import com.o2r.model.GenericQuery;
 import com.o2r.model.Order;
 import com.o2r.model.Seller;
 import com.o2r.model.SellerAccount;
+import com.o2r.model.SellerAlerts;
 import com.o2r.service.AdminService;
+import com.o2r.service.AlertsService;
 import com.o2r.service.CategoryService;
 import com.o2r.service.DashboardService;
 import com.o2r.service.ExpenseService;
@@ -79,6 +81,8 @@ public class GenericController {
 	private PartnerService partnerService;
 	@Autowired
 	private ExpenseService expenseService;
+	@Autowired
+	private AlertsService alertsService;
 
 	private Logger logger = Logger.getLogger(GenericController.class);
 
@@ -250,6 +254,71 @@ public class GenericController {
 		}
 		logger.info("$$$ getUploadReportList Ends : GenericController $$$");
 		return new ModelAndView("allUploadList", model);
+	}
+	
+	
+	@RequestMapping(value = "/seller/getRecentAlerts", method = RequestMethod.GET)
+	public @ResponseBody String getRecentAlerts(HttpServletRequest request) {
+
+		logger.info("$$$ getRecentAlerts Starts : GenericController $$$");
+		int sellerId = 0;		
+		List<SellerAlerts> alertsList = new ArrayList<SellerAlerts>();
+		Gson gson = null;
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
+			gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer());
+			gson = gsonBuilder.setPrettyPrinting().create();			
+			alertsList = alertsService.getAlerts(sellerId);	
+			if(alertsList != null && alertsList.size() > 5){
+				alertsList = alertsList.subList(0, 5);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Failed! by seller ID : " + sellerId, e);
+		}
+		logger.info("$$$ getRecentAlerts Ends : GenericController $$$");
+		return gson.toJson(alertsList);
+	}
+	
+	@RequestMapping(value = "/seller/getUnreadCount", method = RequestMethod.GET)
+	public @ResponseBody String getUnreadCount(HttpServletRequest request) {
+
+		logger.info("$$$ getUnreadCount Starts : GenericController $$$");
+		int sellerId = 0;		
+		Map<String, Integer> unreadSize = new HashMap<String, Integer>();		
+		Gson gson = null;
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			GsonBuilder gsonBuilder = new GsonBuilder();			
+			gson = gsonBuilder.setPrettyPrinting().create();		
+			unreadSize.put("unreadCount", alertsService.unreadCount(sellerId));			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Failed! by seller ID : " + sellerId, e);
+		}
+		logger.info("$$$ getUnreadCount Ends : GenericController $$$");
+		return gson.toJson(unreadSize);
+	}
+	
+	@RequestMapping(value = "/seller/getAlertsList", method = RequestMethod.GET)
+	public ModelAndView getAlertsList(HttpServletRequest request) {
+
+		logger.info("$$$ getAlertsList Starts : GenericController $$$");
+		int sellerId = 0;		
+		List<SellerAlerts> alertsList = new ArrayList<SellerAlerts>();
+		Map<String, Object> model = new HashMap<String, Object>();		
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			alertsList = alertsService.getAlerts(sellerId);
+			model.put("alertslist", alertsList);			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Failed! by seller ID : " + sellerId, e);
+		}
+		logger.info("$$$ getAlertsList Ends : GenericController $$$");
+		return new ModelAndView("Alerts", model);
 	}
 
 	@RequestMapping(value = "/seller/initialsetup", method = RequestMethod.GET)
