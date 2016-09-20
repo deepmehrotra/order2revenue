@@ -1,4 +1,3 @@
-
 package com.o2r.helper;
 
 import java.io.File;
@@ -340,6 +339,24 @@ public class SaveContents {
 							&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						entry.getCell(8).setCellType(HSSFCell.CELL_TYPE_STRING);
 						order.setSubOrderID(entry.getCell(8).toString());
+
+						if (partner.getPcName().contains(
+								GlobalConstant.PCFLIPKART)
+								|| partner.getPcName().contains(
+										GlobalConstant.PCPAYTM)) {
+							order.setChannelOrderID(order.getChannelOrderID()
+									+ GlobalConstant.orderUniqueSymbol
+									+ order.getSubOrderID());
+						}
+					} else {
+						if (partner.getPcName().contains(
+								GlobalConstant.PCFLIPKART)
+								|| partner.getPcName().contains(
+										GlobalConstant.PCPAYTM)) {
+							errorMessage
+									.append(" Secondary OrderID is mandatory for Flipkart & PayTM;");
+							validaterow = false;
+						}
 					}
 					if (entry.getCell(9) != null
 							&& entry.getCell(9).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -1847,12 +1864,11 @@ public class SaveContents {
 									uniqueProductMap.put(mapKey, mapKey);
 								} else {
 									errorMessage
-											.append(" Channel Reference Code already present for that SKU ");
+											.append(" Child SKU already present for that SKU ");
 									validaterow = false;
 								}
 							} else {
-								errorMessage
-										.append(" Channel Reference Code is null ");
+								errorMessage.append(" Child SKU is null ");
 								validaterow = false;
 							}
 							if (entry.getCell(3) != null
@@ -2221,6 +2237,31 @@ public class SaveContents {
 									} else {
 										channelId = entry.getCell(1).toString();
 									}
+
+									if (partner
+											.getPcName()
+											.toLowerCase()
+											.contains(GlobalConstant.PCFLIPKART)
+											|| partner
+													.getPcName()
+													.toLowerCase()
+													.contains(
+															GlobalConstant.PCPAYTM)) {
+
+										if (entry.getCell(3) != null
+												&& entry.getCell(3)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+											channelId = channelId
+													+ GlobalConstant.orderUniqueSymbol
+													+ entry.getCell(3).toString();
+
+										} else {
+											errorMessage
+													.append(" Secondary Order ID is Null, it is mandatory for Flipkart and Paytm;");
+											validaterow = false;
+										}
+									}
+
 									List<Order> onj = orderService
 											.searchAsIsOrder("channelOrderID",
 													channelId, sellerId);
@@ -2229,9 +2270,22 @@ public class SaveContents {
 											channelOrderId = onj.get(0)
 													.getChannelOrderID();
 										} else {
-											errorMessage
-											.append("Multiple Orders With Channel Order ID.");
-											validaterow = false;
+											boolean check = false;
+											for (Order eachOrder : onj) {
+												if (eachOrder
+														.getChannelOrderID()
+														.equalsIgnoreCase(
+																channelOrderId)) {
+													channelOrderId = eachOrder
+															.getChannelOrderID();
+													check = true;
+												}
+											}
+											if (check != true) {
+												errorMessage
+														.append("Multiple Orders With Channel Order ID.");
+												validaterow = false;
+											}
 										}
 									} else if (entry.getCell(3) != null
 											&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -2243,8 +2297,22 @@ public class SaveContents {
 												channelOrderId = onj.get(0)
 														.getChannelOrderID();
 											} else {
-												errorMessage.append("Multiple Orders With Channel Order ID.");
-												validaterow = false;
+												boolean check = false;
+												for (Order eachOrder : onj) {
+													if (eachOrder
+															.getChannelOrderID()
+															.equalsIgnoreCase(
+																	channelOrderId)) {
+														channelOrderId = eachOrder
+																.getChannelOrderID();
+														check = true;
+													}
+												}
+												if (check != true) {
+													errorMessage
+															.append("Multiple Orders With Channel Order ID.");
+													validaterow = false;
+												}
 											}
 										} else {
 											errorMessage
@@ -2268,9 +2336,22 @@ public class SaveContents {
 											channelOrderId = onj.get(0)
 													.getChannelOrderID();
 										} else {
-											errorMessage
-											.append("Multiple Orders With Secondary Order ID.");
-											validaterow = false;
+											boolean check = false;
+											for (Order eachOrder : onj) {
+												if (eachOrder
+														.getChannelOrderID()
+														.equalsIgnoreCase(
+																channelOrderId)) {
+													channelOrderId = eachOrder
+															.getChannelOrderID();
+													check = true;
+												}
+											}
+											if (check != true) {
+												errorMessage
+														.append("Multiple Orders With Secondary Order ID.");
+												validaterow = false;
+											}
 										}
 									} else {
 										errorMessage
@@ -2766,9 +2847,28 @@ public class SaveContents {
 												.append("Return Already Recieved. ");
 									}
 								} else {
-									errorMessage
-									.append("Multiple Orders With Channel Order ID.");
-									validaterow = false;
+									boolean check = false;
+									for (Order eachOrder : ord) {
+										if (eachOrder.getChannelOrderID()
+												.equalsIgnoreCase(channelID)) {
+											if (eachOrder.getOrderReturnOrRTO()
+													.getReturnDate() == null) {
+												order.setChannelOrderID(eachOrder
+														.getChannelOrderID());
+												check = true;
+											} else {
+												check = true;
+												validaterow = false;
+												errorMessage
+														.append("Return Already Recieved. ");
+											}
+										}
+									}
+									if (check != true) {
+										errorMessage
+												.append("Multiple Orders With Channel Order ID.");
+										validaterow = false;
+									}
 								}
 							} else if (orderlist != null
 									&& orderlist.size() != 0) {
@@ -3998,4 +4098,3 @@ public class SaveContents {
 	}
 
 }
-

@@ -33,6 +33,7 @@ import org.springframework.stereotype.Repository;
 
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.ChargesBean;
+import com.o2r.bean.DataConfig;
 import com.o2r.bean.DebitNoteBean;
 import com.o2r.bean.PartnerBean;
 import com.o2r.bean.PoPaymentBean;
@@ -90,6 +91,8 @@ public class OrderDaoImpl implements OrderDao {
 	private AreaConfigDao areaConfigDao;
 	@Autowired
 	private SellerDao sellerDao;
+	@Autowired
+	private DataConfig dataConfig;
 
 	org.springframework.core.io.Resource resource = new ClassPathResource(
 			"database.properties");
@@ -4546,8 +4549,10 @@ public class OrderDaoImpl implements OrderDao {
 
 		totalcharge = totalcharge + revShippingFee;
 
-		float serviceTax = chargesMap.containsKey("serviceTax") ? chargesMap
-				.get("serviceTax") : 0;
+		/*float serviceTax = chargesMap.containsKey("serviceTax") ? chargesMap
+				.get("serviceTax") : 0;*/
+		
+		float serviceTax = (float) dataConfig.getServiceTax();
 
 		log.debug(" Total return charge calculated : " + totalcharge
 				+ "Reverse shiping fee : " + revShippingFee
@@ -5494,7 +5499,7 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.eq(searchCriteria, ID));
+					.add(Restrictions.like(searchCriteria, ID  + "%"));
 			orderList = criteria.list();
 			if (orderList != null && orderList.size() != 0) {
 				return orderList;
