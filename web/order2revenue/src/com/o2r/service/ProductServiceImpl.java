@@ -109,7 +109,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ProductConfig getProductConfig(String channelSKUCode,
+	public List<ProductConfig> getProductConfig(String channelSKUCode,
 			String channel, int sellerId) throws CustomException {
 		return productDao.getProductConfig(channelSKUCode, channel, sellerId);
 	}
