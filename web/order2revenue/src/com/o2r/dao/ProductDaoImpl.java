@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -825,12 +827,12 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public ProductConfig getProductConfig(String SKUCode,
+	public List<ProductConfig> getProductConfig(String SKUCode,
 			String channel, int sellerId) throws CustomException {
 
 		log.info("*** getProductConfig Starts : ProductDaoImpl ****");
 		ProductConfig returnObject = null;
-		List returnlist = null;
+		List<ProductConfig> returnlist = null;
 		log.debug(" ***Insid get product config from sku and channel ***"
 				+ SKUCode + " - " + channel);
 		try {
@@ -848,11 +850,26 @@ public class ProductDaoImpl implements ProductDao {
 					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
 			returnlist = criteria.list();
-
 			if (returnlist != null && returnlist.size() != 0) {
-
-				returnObject = (ProductConfig) returnlist.get(0);
+				
+				return returnlist;
+				/*if(returnlist.size() == 1){
+					returnObject = (ProductConfig) returnlist.get(0);
+				} else {	
+					ProductConfig pc = null;
+					Set<String> parent = new HashSet<String>();
+					for(Object PCo : returnlist){
+						pc = (ProductConfig)PCo;
+						parent.add(pc.getProductSkuCode());
+					}
+					if(parent.size() == 1){
+						returnObject = (ProductConfig) returnlist.get(0);
+					} else {
+						returnObject = null;
+					}
+				}*/				
 			} else {
+				returnlist = null;
 				log.debug("Product sku " + SKUCode + " not found");
 			}
 			log.debug(" Return object :#### " + returnObject);
@@ -866,7 +883,7 @@ public class ProductDaoImpl implements ProductDao {
 
 		}
 		log.info("*** getProductConfig Ends : ProductDaoImpl ****");
-		return returnObject;
+		return returnlist;
 
 	}
 	

@@ -562,11 +562,14 @@ public class OrderDaoImpl implements OrderDao {
 		Session session = null;
 		Partner partner = null;
 		Product product = null;
+		ProductConfig productConfig = null;
+		List<ProductConfig> productConfigs = null;
 		try {
 
-			ProductConfig productConfig = productService.getProductConfig(
+			productConfigs = productService.getProductConfig(
 					order.getProductSkuCode(), order.getPcName(), sellerId);
-			if (productConfig != null) {
+			if (productConfigs != null && productConfigs.size() == 1) {
+				productConfig = productConfigs.get(0);
 				order.setProductConfig(productConfig);
 				product = productService.getProduct(
 						productConfig.getProductSkuCode(), sellerId);
@@ -4965,6 +4968,8 @@ public class OrderDaoImpl implements OrderDao {
 		Seller seller = null;
 		Session session = null;
 		Partner partner = null;
+		List<ProductConfig> productConfigs = null;
+		ProductConfig productConfig = null;
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -4980,10 +4985,11 @@ public class OrderDaoImpl implements OrderDao {
 
 			for (GatePass gatepass : gatepasslist) {
 
-				ProductConfig productConfig = productService.getProductConfig(
+				productConfigs = productService.getProductConfig(
 						gatepass.getChannelSkuRef(), gatepass.getPcName(),
 						sellerId);
-				if (productConfig != null) {
+				if (productConfigs != null && productConfigs.size() == 1) {
+					productConfig = productConfigs.get(0);
 					quantity += gatepass.getQuantity();
 					totalReturnCharges += gatepass.getTotalReturnCharges();
 					if (gatepass.getPcName().equalsIgnoreCase(

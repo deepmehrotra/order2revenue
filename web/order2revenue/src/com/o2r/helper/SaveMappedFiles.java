@@ -164,6 +164,7 @@ public class SaveMappedFiles {
 				String sku = "";
 				Product product = null;
 				ProductConfig productConfig = null;
+				List<ProductConfig> productConfigs = null;
 				TaxCategory taxcat = null;
 				try {
 
@@ -214,57 +215,55 @@ public class SaveMappedFiles {
 								&& entry.getCell(idIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK
-								&& partner != null) {
-							entry.getCell(idIndex).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							productConfig = productService.getProductConfig(
-									entry.getCell(skuIndex).toString(),
-									partner.getPcName(), sellerId);
-							if (productConfig != null) {
-								if (productConfig.getVendorSkuRef() == null) {
 
-									errorMessage
-											.append(" Corresponding vendor SKU code is not present.");
-									validaterow = false;
-								} else {
-									sku = productConfig.getVendorSkuRef();
+								&& partner != null) {							
+							entry.getCell(idIndex).setCellType(HSSFCell.CELL_TYPE_STRING);							
+							productConfigs = productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
+							if(productConfigs != null){
+								if(productConfigs.size() == 1){
+									productConfig = (ProductConfig) productConfigs.get(0);
+								} else {	
+									ProductConfig pc = null;
+									Set<String> parent = new HashSet<String>();
+									for(Object PCo : productConfigs){
+										pc = (ProductConfig)PCo;
+										parent.add(pc.getProductSkuCode());
 
-									if (entry.getCell(index).toString()
-											.contains("limeroad")
-											&& entry.getCell(idIndex)
-													.toString().contains("S")) {
-										channelID = entry
-												.getCell(idIndex)
-												.toString()
-												.substring(
-														0,
-														entry.getCell(idIndex)
-																.toString()
-																.indexOf("S"))
-												+ GlobalConstant.orderUniqueSymbol
-												+ sku;
-									} else {
-										channelID = entry.getCell(idIndex)
-												.toString()
-												+ GlobalConstant.orderUniqueSymbol
-												+ sku;
 									}
-									if ((channelID != null)
-											&& (idsList == null || (!idsList
-													.contains(channelID))
-													&& !duplicateKey
-															.containsKey(channelID)
-													&& productConfig != null)) {
-										order.setChannelOrderID(channelID);
-										order.setProductSkuCode(productConfig
-												.getProductSkuCode());
-										duplicateKey.put(channelID, "");
+
+									if(parent.size() == 1){
+										productConfig = (ProductConfig) productConfigs.get(0);
 									} else {
-										errorMessage
-												.append(" Channel OrderId is already present ");
+										errorMessage.append(" Multiple Mapping present for this Channel And SKU.");
 										validaterow = false;
 									}
 								}
+								try {
+									if(productConfig.getVendorSkuRef()== null){									
+										errorMessage.append(" Corresponding vendor SKU code is not present.");
+										validaterow = false;
+									} else {
+										sku=productConfig.getVendorSkuRef();
+									
+										if(entry.getCell(index).toString().contains("limeroad") && entry.getCell(idIndex).toString().contains("S")){
+											channelID=entry.getCell(idIndex).toString().substring(0, entry.getCell(idIndex).toString().indexOf("S"))
+													+ GlobalConstant.orderUniqueSymbol + sku;
+										} else {
+											channelID=entry.getCell(idIndex).toString()+GlobalConstant.orderUniqueSymbol+sku;
+										}
+										if ((channelID!=null)&&(idsList == null ||  (!idsList.contains(channelID))
+												&& !duplicateKey.containsKey(channelID) && productConfig != null)) {
+											order.setChannelOrderID(channelID);
+											order.setProductSkuCode(productConfig.getProductSkuCode());
+											duplicateKey.put(channelID, "");
+										} else {									
+											errorMessage.append(" Channel OrderId is already present ");
+											validaterow = false;
+										}
+									}
+								} catch (Exception e) {
+									
+								}								
 							} else {
 								errorMessage
 										.append(" No product with this Channel & SKU ");
@@ -817,7 +816,8 @@ public class SaveMappedFiles {
 				otb = new OrderTaxBean();
 				int index = 0;
 				Product product = null;
-				ProductConfig productConfig = null;
+				ProductConfig productConfig=null;
+				List<ProductConfig> productConfigs=null;
 				TaxCategory taxcat = null;
 				String channelorderid = null;
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
@@ -856,26 +856,38 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							if (partner != null) {
-								productConfig = productService
-										.getProductConfig(
-												entry.getCell(skuIndex)
-														.toString(), partner
-														.getPcName(), sellerId);
-								if (productConfig != null) {
-									if (productConfig.getVendorSkuRef() != null) {
-										channelorderid = entry.getCell(index)
-												.toString()
-												+ GlobalConstant.orderUniqueSymbol
-												+ productConfig
-														.getVendorSkuRef();
-									} else {
-										errorMessage
-												.append(" Vendor SKU mapping not present");
-										validaterow = false;
+
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							if(partner != null){
+								productConfigs = productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
+								if(productConfigs != null){
+									if(productConfigs.size() == 1){
+										productConfig = (ProductConfig) productConfigs.get(0);
+									} else {	
+										ProductConfig pc = null;
+										Set<String> parent = new HashSet<String>();
+										for(Object PCo : productConfigs){
+											pc = (ProductConfig)PCo;
+											parent.add(pc.getProductSkuCode());
+										}
+										if(parent.size() == 1){
+											productConfig = (ProductConfig) productConfigs.get(0);
+										} else {
+											errorMessage.append(" Multiple Mapping present for this Channel And SKU.");
+											validaterow = false;
+										}
 									}
+									try {
+										if(productConfig.getVendorSkuRef() != null){
+											channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getVendorSkuRef();
+										} else {
+											errorMessage.append(" Vendor SKU mapping not present");
+											validaterow = false;
+										}
+									} catch (Exception e) {
+										
+									}
+									
 								} else {
 									errorMessage
 											.append("No Product with this Channel & SKU");
@@ -1454,7 +1466,8 @@ public class SaveMappedFiles {
 				customerBean = new CustomerBean();
 				otb = new OrderTaxBean();
 				int index = 0;
-				ProductConfig productConfig = null;
+				ProductConfig productConfig = null;				
+				List<ProductConfig> productConfigs=null;
 				Product product = null;
 				TaxCategory taxcat = null;
 				String channelorderid = "";
@@ -1494,41 +1507,48 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							if (partner != null) {
-								productConfig = productService
-										.getProductConfig(
-												entry.getCell(skuIndex)
-														.toString(), partner
-														.getPcName(), sellerId);
-								if (productConfig != null) {
-									if (productConfig.getVendorSkuRef() != null) {
-										channelorderid = entry.getCell(index)
-												.toString()
-												+ GlobalConstant.orderUniqueSymbol
-												+ productConfig
-														.getChannelSkuRef();
-									} else {
-										errorMessage
-												.append(" Vendor SKU code not mapped.");
-										validaterow = false;
+
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							if(partner != null){
+								productConfigs = productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
+								if(productConfigs != null){
+									
+									if(productConfigs.size() == 1){
+										productConfig = (ProductConfig) productConfigs.get(0);
+									} else {	
+										ProductConfig pc = null;
+										Set<String> parent = new HashSet<String>();
+										for(Object PCo : productConfigs){
+											pc = (ProductConfig)PCo;
+											parent.add(pc.getProductSkuCode());
+										}
+										if(parent.size() == 1){
+											productConfig = (ProductConfig) productConfigs.get(0);
+										} else {
+											errorMessage.append(" Multiple Mapping present for this Channel And SKU.");
+											validaterow = false;
+										}
 									}
-									if ((channelorderid != null)
-											&& (idsList == null || !idsList
-													.contains(channelorderid)
-													&& !duplicateKey
-															.containsKey(channelorderid)
-													&& productConfig != null)) {
-										order.setChannelOrderID(channelorderid);
-										order.setProductSkuCode(productConfig
-												.getProductSkuCode());
-										duplicateKey.put(channelorderid, "");
-									} else {
-										errorMessage
-												.append(" Channel OrderId is already present ");
-										validaterow = false;
-									}
+									
+									try {
+										if(productConfig.getVendorSkuRef() != null){
+											channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getVendorSkuRef();
+										} else {
+											errorMessage.append(" Vendor SKU code not mapped.");
+											validaterow = false;
+										}
+										if ((channelorderid!=null)&&(idsList == null || !idsList.contains(channelorderid)
+												&& !duplicateKey.containsKey(channelorderid) && productConfig != null)) {
+											order.setChannelOrderID(channelorderid);
+											order.setProductSkuCode(productConfig.getProductSkuCode());
+											duplicateKey.put(channelorderid, "");
+										} else {
+											errorMessage.append(" Channel OrderId is already present ");
+											validaterow = false;
+										}
+									} catch (Exception e) {
+										
+									}									
 								} else {
 									errorMessage
 											.append("No Product with this Channel & SKU");
@@ -2122,8 +2142,9 @@ public class SaveMappedFiles {
 				customerBean = new CustomerBean();
 				otb = new OrderTaxBean();
 				int index = 0;
-				ProductConfig productConfig = null;
-				String channelorderid = "";
+				ProductConfig productConfig=null;
+				List<ProductConfig> productConfigs=null;
+				String channelorderid="";
 				Product product = null;
 				TaxCategory taxcat = null;
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
@@ -2182,41 +2203,48 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							if (partner != null) {
-								productConfig = productService
-										.getProductConfig(
-												entry.getCell(skuIndex)
-														.toString(), partner
-														.getPcName(), sellerId);
-								if (productConfig != null) {
-									if (productConfig.getVendorSkuRef() != null) {
-										channelorderid = entry.getCell(index)
-												.toString()
-												+ GlobalConstant.orderUniqueSymbol
-												+ productConfig
-														.getVendorSkuRef();
-									} else {
-										errorMessage
-												.append(" Vendor SKU code not mapped.");
-										validaterow = false;
+
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							if(partner != null){
+								productConfigs = productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
+								if(productConfigs != null){
+									
+									if(productConfigs.size() == 1){
+										productConfig = (ProductConfig) productConfigs.get(0);
+									} else {	
+										ProductConfig pc = null;
+										Set<String> parent = new HashSet<String>();
+										for(Object PCo : productConfigs){
+											pc = (ProductConfig)PCo;
+											parent.add(pc.getProductSkuCode());
+										}
+										if(parent.size() == 1){
+											productConfig = (ProductConfig) productConfigs.get(0);
+										} else {
+											errorMessage.append(" Multiple Mapping present for this Channel And SKU.");
+											validaterow = false;
+										}
 									}
-									if ((channelorderid != null)
-											&& (idsList == null || !idsList
-													.contains(channelorderid)
-													&& !duplicateKey
-															.containsKey(channelorderid)
-													&& productConfig != null)) {
-										order.setChannelOrderID(channelorderid);
-										order.setProductSkuCode(productConfig
-												.getProductSkuCode());
-										duplicateKey.put(channelorderid, "");
-									} else {
-										errorMessage
-												.append(" Channel OrderId is already present ");
-										validaterow = false;
-									}
+									try {
+										if(productConfig.getVendorSkuRef() != null){
+											channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getVendorSkuRef();
+										} else {
+											errorMessage.append(" Vendor SKU code not mapped.");
+											validaterow = false;
+										}
+										if ((channelorderid!=null)&&(idsList == null || !idsList.contains(channelorderid)
+												&& !duplicateKey.containsKey(channelorderid) && productConfig != null)) {
+											order.setChannelOrderID(channelorderid);
+											order.setProductSkuCode(productConfig.getProductSkuCode());
+											duplicateKey.put(channelorderid, "");
+										} else {
+											errorMessage.append(" Channel OrderId is already present ");
+											validaterow = false;
+										}
+									} catch (Exception e) {
+										
+									}							
+
 								} else {
 									errorMessage
 											.append("No Product with this Channel & SKU");
@@ -2799,12 +2827,12 @@ public class SaveMappedFiles {
 										+ GlobalConstant.orderUniqueSymbol
 										+ itemId;
 
-								List<Order> onj = orderService.searchAsIsOrder(
-										"channelOrderID", channelOrderId,
-										sellerId);
-								if (onj == null) {
-									errorMessage
-											.append(" Channel OrderId not present ");
+								List<Order> onj = orderService
+										.searchAsIsOrder(
+												"channelOrderID",channelOrderId ,
+												sellerId);
+								if (onj == null) {									
+									errorMessage.append("No Orders With Channel OrderId.");
 									validaterow = false;
 								} else {
 									if (onj.size() == 1
@@ -2813,21 +2841,8 @@ public class SaveMappedFiles {
 										channelOrderId = onj.get(0)
 												.getChannelOrderID();
 									} else {
-										boolean check = false;
-										for (Order eachOrder : onj) {
-											if (eachOrder.getChannelOrderID()
-													.equalsIgnoreCase(
-															channelOrderId)) {
-												channelOrderId = eachOrder
-														.getChannelOrderID();
-												check = true;
-											}
-										}
-										if (check != true) {
-											errorMessage
-													.append("Multiple Orders With Channel Order ID.");
-											validaterow = false;
-										}
+										errorMessage.append("Multiple Orders With Channel Order ID.");
+										validaterow = false;
 									}
 								}
 
@@ -3222,24 +3237,11 @@ public class SaveMappedFiles {
 									channelOrderId = onj.get(0)
 											.getChannelOrderID();
 								} else {
-									boolean check = false;
-									for (Order eachOrder : onj) {
-										if (eachOrder.getChannelOrderID()
-												.equalsIgnoreCase(
-														channelOrderId)) {
-											channelOrderId = eachOrder
-													.getChannelOrderID();
-											check = true;
-										}
-									}
-									if (check != true) {
-										errorMessage
-												.append("Multiple Orders With Channel Order ID.");
-										validaterow = false;
-									}
+
+									errorMessage.append("Multiple Orders With Channel Order ID.");
+									validaterow = false;
 								}
 							}
-
 							try {
 								index = cellIndexMap.get(columHeaderMap
 										.get("Payment Date"));
@@ -3551,8 +3553,9 @@ public class SaveMappedFiles {
 				otb = new OrderTaxBean();
 				int index = 0;
 				Product product = null;
-				ProductConfig productConfig = null;
-				String channelorderid = "";
+				ProductConfig productConfig=null;
+				List<ProductConfig> productConfigs=null;
+				String channelorderid="";
 				TaxCategory taxcat = null;
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				try {
@@ -3590,26 +3593,49 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							if (partner != null) {
-								productConfig = productService
-										.getProductConfig(
-												entry.getCell(skuIndex)
-														.toString(), partner
-														.getPcName(), sellerId);
-								if (productConfig != null) {
-									if (productConfig.getVendorSkuRef() != null) {
-										channelorderid = entry.getCell(index)
-												.toString()
-												+ GlobalConstant.orderUniqueSymbol
-												+ productConfig
-														.getVendorSkuRef();
-									} else {
-										errorMessage
-												.append(" Vendor SKU code not mapped.");
-										validaterow = false;
+
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							if(partner != null){
+								productConfigs = productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
+								if(productConfigs != null){
+									
+									if(productConfigs.size() == 1){
+										productConfig = (ProductConfig) productConfigs.get(0);
+									} else {	
+										ProductConfig pc = null;
+										Set<String> parent = new HashSet<String>();
+										for(Object PCo : productConfigs){
+											pc = (ProductConfig)PCo;
+											parent.add(pc.getProductSkuCode());
+										}
+										if(parent.size() == 1){
+											productConfig = (ProductConfig) productConfigs.get(0);
+										} else {
+											errorMessage.append(" Multiple Mapping present for this Channel And SKU.");
+											validaterow = false;
+										}
 									}
+									
+									try {
+										if(productConfig.getVendorSkuRef() != null){
+											channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getVendorSkuRef();
+										} else {
+											errorMessage.append(" Vendor SKU code not mapped.");
+											validaterow = false;
+										}
+									} catch (Exception e) {
+										
+									}
+									if ((channelorderid!=null)&&(idsList == null || !idsList.contains(channelorderid)
+											&& !duplicateKey.containsKey(channelorderid) && productConfig != null)) {
+										order.setChannelOrderID(channelorderid);
+										order.setProductSkuCode(productConfig.getProductSkuCode());
+										duplicateKey.put(channelorderid, "");
+									} else {
+										errorMessage.append(" Channel OrderId is already present ");
+										validaterow = false;
+									}																
+									
 								} else {
 									errorMessage
 											.append("No Product with this Channel & SKU");
@@ -4204,6 +4230,7 @@ public class SaveMappedFiles {
 				channelOrderId = null;
 				Partner partner = null;
 				ProductConfig productConfig = null;
+				List<ProductConfig> productConfigs = null;
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				// Code for fetching right colum
 				orderPayment = new OrderPayment();
@@ -4242,131 +4269,119 @@ public class SaveMappedFiles {
 								&& StringUtils.isNotBlank(entry.getCell(index)
 										.toString())
 								&& entry.getCell(skuIndex) != null
-								&& StringUtils.isNotBlank(entry.getCell(
-										skuIndex).toString())) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							entry.getCell(skuIndex).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							entry.getCell(secOrderIndex).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
 
-							if (partner != null) {
-								productConfig = productService
-										.getProductConfig(
-												entry.getCell(skuIndex)
-														.toString(), partner
-														.getPcName(), sellerId);
-								if (productConfig != null) {
-									if (productConfig.getVendorSkuRef() != null) {
-										channelOrderId = entry.getCell(index)
-												.toString()
-												+ GlobalConstant.orderUniqueSymbol
-												+ productConfig
-														.getVendorSkuRef()
-												+ GlobalConstant.orderUniqueSymbol
-												+ entry.getCell(secOrderIndex)
-														.toString();
-									} else {
-										channelOrderId = entry.getCell(index)
-												.toString()
-												+ GlobalConstant.orderUniqueSymbol
-												+ entry.getCell(skuIndex)
-														.toString()
-												+ GlobalConstant.orderUniqueSymbol
-												+ entry.getCell(secOrderIndex)
-														.toString();
-									}
-
-									List<Order> onj = orderService
-											.searchAsIsOrder("channelOrderID",
-													channelOrderId, sellerId);
-									if (onj != null) {
-										if (onj.size() == 1) {
-											channelOrderId = onj.get(0)
-													.getChannelOrderID();
-										} else {
-											boolean check = false;
-											for (Order eachOrder : onj) {
-												if (eachOrder
-														.getChannelOrderID()
-														.equalsIgnoreCase(
-																channelOrderId)) {
-													channelOrderId = eachOrder
-															.getChannelOrderID();
-													check = true;
-												}
-											}
-											if (check != true) {
-												errorMessage
-														.append("Multiple Orders With Channel Order ID.");
-												validaterow = false;
-											}
+								&& StringUtils.isNotBlank(entry.getCell(skuIndex).toString())) {
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							entry.getCell(skuIndex).setCellType(HSSFCell.CELL_TYPE_STRING);
+							entry.getCell(secOrderIndex).setCellType(HSSFCell.CELL_TYPE_STRING);
+							
+							if (partner != null){								
+								productConfigs = productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
+								if(productConfigs != null){
+									
+									if(productConfigs.size() == 1){
+										productConfig = (ProductConfig) productConfigs.get(0);
+									} else {	
+										ProductConfig pc = null;
+										Set<String> parent = new HashSet<String>();
+										for(Object PCo : productConfigs){
+											pc = (ProductConfig)PCo;
+											parent.add(pc.getProductSkuCode());
 										}
-									} else {
-										errorMessage
-												.append("Order Item ID not present.");
-										validaterow = false;
-									}
-
-									try {
-										index = cellIndexMap.get(columHeaderMap
-												.get("Payment Date"));
-										if (entry.getCell(index) != null
-												&& StringUtils.isNotBlank(entry
-														.getCell(index)
-														.toString())) {
-											String date = entry.getCell(index)
-													.toString();
-											orderPayment
-													.setDateofPayment(new Date(
-															date));
+										if(parent.size() == 1){
+											productConfig = (ProductConfig) productConfigs.get(0);
 										} else {
-											errorMessage
-													.append(" Payment Date format is wrong or null");
+											errorMessage.append(" Multiple Mapping present for this Channel And SKU.");
 											validaterow = false;
 										}
-									} catch (NullPointerException e) {
-										errorMessage
-												.append("The column 'Payment Date' doesn't exist");
-										validaterow = false;
+
 									}
-
+									
 									try {
-										index = cellIndexMap.get(columHeaderMap
-												.get("Recieved Amount"));
-										if (entry.getCell(index) != null
-												&& StringUtils.isNotBlank(entry
-														.getCell(index)
-														.toString())) {
-											try {
-												amount = entry.getCell(index)
-														.getNumericCellValue();
-												if (amount > 0) {
-													orderPayment
-															.setPositiveAmount(amount);
-												} else if (amount < 0) {
-													orderPayment
-															.setNegativeAmount(Math
-																	.abs(amount));
-												}
-											} catch (Exception e) {
-												log.error("Failed by seller "
-														+ sellerId, e);
-												errorMessage
-														.append(" Payment Amount cell is corrupted");
-												validaterow = false;
+										if(productConfig.getVendorSkuRef() != null){
+											channelOrderId = entry.getCell(index).toString()
+													+ GlobalConstant.orderUniqueSymbol
+													+ productConfig.getVendorSkuRef()
+													+ GlobalConstant.orderUniqueSymbol
+													+ entry.getCell(secOrderIndex).toString();
 
-											}
 										} else {
-											errorMessage
-													.append("Amount format is wrong or null.");
+											channelOrderId = entry.getCell(index).toString()
+													+ GlobalConstant.orderUniqueSymbol
+													+ entry.getCell(skuIndex).toString()
+													+ GlobalConstant.orderUniqueSymbol
+													+ entry.getCell(secOrderIndex).toString();
+										}
+										
+										List<Order> onj = orderService.searchAsIsOrder(
+												"channelOrderID", channelOrderId, sellerId);
+										if (onj != null) {
+											if(onj.size() == 1){
+												channelOrderId = onj.get(0).getChannelOrderID();
+											} else {
+												errorMessage.append("Multiple Orders With Channel Order ID.");
+												validaterow = false;
+											}								
+									
+										} else {										
+											errorMessage.append("Order Item ID not present.");
 											validaterow = false;
 										}
-									} catch (NullPointerException e) {
-										errorMessage
-												.append("The column 'Payable Amount' doesn't exist");
-										validaterow = false;
+
+
+										try {
+											index = cellIndexMap.get(columHeaderMap
+													.get("Payment Date"));
+											if (entry.getCell(index) != null
+													&& StringUtils.isNotBlank(entry.getCell(
+															index).toString())) {
+												String date = entry.getCell(index).toString();
+												orderPayment.setDateofPayment(new Date(date));
+											} else {
+												errorMessage
+														.append(" Payment Date format is wrong or null");
+												validaterow = false;
+											}
+										} catch (NullPointerException e) {
+											errorMessage
+													.append("The column 'Payment Date' doesn't exist");
+											validaterow = false;
+										}
+
+										try {
+											index = cellIndexMap.get(columHeaderMap
+													.get("Recieved Amount"));
+											if (entry.getCell(index) != null
+													&& StringUtils.isNotBlank(entry.getCell(
+															index).toString())) {
+												try {
+													amount = entry.getCell(index)
+															.getNumericCellValue();
+													if (amount > 0) {
+														orderPayment.setPositiveAmount(amount);										
+													} else if (amount < 0) {
+														orderPayment.setNegativeAmount(Math
+																.abs(amount));										
+													}
+												} catch (Exception e) {
+													log.error("Failed by seller " + sellerId, e);
+													errorMessage
+															.append(" Payment Amount cell is corrupted");
+													validaterow = false;
+
+												}
+											} else {
+												errorMessage
+														.append("Amount format is wrong or null.");
+												validaterow = false;
+											}
+										} catch (NullPointerException e) {
+											errorMessage
+													.append("The column 'Payable Amount' doesn't exist");
+											validaterow = false;
+										}
+									} catch (Exception e) {
+										
 									}
 
 								} else {
@@ -4869,7 +4884,8 @@ public class SaveMappedFiles {
 				otb = new OrderTaxBean();
 				int index = 0;
 				Product product = null;
-				ProductConfig productConfig = null;
+				ProductConfig productConfig=null;
+				List<ProductConfig> productConfigs = null;
 				TaxCategory taxcat = null;
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				try {
@@ -4907,56 +4923,43 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							String id = "";
-							if (partner != null) {
-								productConfig = productService
-										.getProductConfig(
-												entry.getCell(skuIndex)
-														.toString(), partner
-														.getPcName(), sellerId);
-								if (productConfig != null) {
-									if (entry.getCell(index).toString()
-											.contains("S")
-											&& productConfig.getChannelSkuRef() != null)
-										id = entry
-												.getCell(index)
-												.toString()
-												.substring(
-														0,
-														entry.getCell(index)
-																.toString()
-																.indexOf("S"))
-												+ GlobalConstant.orderUniqueSymbol
-												+ productConfig
-														.getChannelSkuRef();
-									else if (entry.getCell(index).toString()
-											.contains("S")
-											&& productConfig.getChannelSkuRef() == null)
-										id = entry
-												.getCell(index)
-												.toString()
-												.substring(
-														0,
-														entry.getCell(index)
-																.toString()
-																.indexOf("S"))
-												+ GlobalConstant.orderUniqueSymbol
-												+ entry.getCell(skuIndex)
-														.toString();
-									else if (!entry.getCell(index).toString()
-											.contains("S")
-											&& productConfig.getChannelSkuRef() != null)
-										id = entry.getCell(index).toString()
-												+ GlobalConstant.orderUniqueSymbol
-												+ productConfig
-														.getChannelSkuRef();
-									else
-										id = entry.getCell(index).toString()
-												+ GlobalConstant.orderUniqueSymbol
-												+ entry.getCell(skuIndex)
-														.toString();
+
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							String id="";
+							if(partner != null){
+								productConfigs = productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
+								if(productConfigs != null){
+									
+									if(productConfigs.size() == 1){
+										productConfig = (ProductConfig) productConfigs.get(0);
+									} else {	
+										ProductConfig pc = null;
+										Set<String> parent = new HashSet<String>();
+										for(Object PCo : productConfigs){
+											pc = (ProductConfig)PCo;
+											parent.add(pc.getProductSkuCode());
+										}
+										if(parent.size() == 1){
+											productConfig = (ProductConfig) productConfigs.get(0);
+										} else {
+											errorMessage.append(" Multiple Mapping present for this Channel And SKU.");
+											validaterow = false;
+										}
+									}
+									
+									try {
+										if(entry.getCell(index).toString().contains("S") && productConfig.getChannelSkuRef() != null)
+											id=entry.getCell(index).toString().substring(0, entry.getCell(index).toString().indexOf("S"))+ GlobalConstant.orderUniqueSymbol + productConfig.getChannelSkuRef();
+										else if(entry.getCell(index).toString().contains("S") && productConfig.getChannelSkuRef() == null)
+											id=entry.getCell(index).toString().substring(0, entry.getCell(index).toString().indexOf("S"))+ GlobalConstant.orderUniqueSymbol + entry.getCell(skuIndex).toString();
+										else if(!entry.getCell(index).toString().contains("S") && productConfig.getChannelSkuRef() != null)
+											id=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol + productConfig.getChannelSkuRef();
+										else
+											id=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol + entry.getCell(skuIndex).toString();
+									} catch (Exception e) {
+										
+									}								
+
 								} else {
 									errorMessage
 											.append("No Product with this Channel & SKU");
@@ -5549,20 +5552,8 @@ public class SaveMappedFiles {
 											.equals(channelOrderId)) {
 								channelOrderId = onj.get(0).getChannelOrderID();
 							} else {
-								boolean check = false;
-								for (Order eachOrder : onj) {
-									if (eachOrder.getChannelOrderID()
-											.equalsIgnoreCase(channelOrderId)) {
-										channelOrderId = eachOrder
-												.getChannelOrderID();
-										check = true;
-									}
-								}
-								if (check != true) {
-									errorMessage
-											.append("Multiple Orders With Channel Order ID.");
-									validaterow = false;
-								}
+								errorMessage.append("Multiple Orders With Channel Order ID.");
+								validaterow = false;
 							}
 							paymentBean = new OrderPaymentBean();
 							try {
@@ -5746,7 +5737,8 @@ public class SaveMappedFiles {
 				otb = new OrderTaxBean();
 				int index = 0;
 				Product product = null;
-				ProductConfig productConfig = null;
+				ProductConfig productConfig=null;
+				List<ProductConfig> productConfigs=null;
 				TaxCategory taxcat = null;
 				String channelorderid = null;
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
@@ -5785,41 +5777,50 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK
 								&& entry.getCell(skuIndex) != null
 								&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							if (partner != null) {
-								productConfig = productService
-										.getProductConfig(
-												entry.getCell(skuIndex)
-														.toString(), partner
-														.getPcName(), sellerId);
-								if (productConfig != null) {
-									if (productConfig.getVendorSkuRef() != null) {
-										channelorderid = entry.getCell(index)
-												.toString()
-												+ GlobalConstant.orderUniqueSymbol
-												+ productConfig
-														.getVendorSkuRef();
-									} else {
-										errorMessage
-												.append(" Vendor SKU mapping not present");
-										validaterow = false;
+
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							if(partner != null){
+								productConfigs = productService.getProductConfig(entry.getCell(skuIndex).toString(), partner.getPcName(), sellerId);
+								if(productConfigs != null){
+									
+									if(productConfigs.size() == 1){
+										productConfig = (ProductConfig) productConfigs.get(0);
+									} else {	
+										ProductConfig pc = null;
+										Set<String> parent = new HashSet<String>();
+										for(Object PCo : productConfigs){
+											pc = (ProductConfig)PCo;
+											parent.add(pc.getProductSkuCode());
+										}
+										if(parent.size() == 1){
+											productConfig = (ProductConfig) productConfigs.get(0);
+										} else {
+											errorMessage.append(" Multiple Mapping present for this Channel And SKU.");
+											validaterow = false;
+										}
+
 									}
-									if ((channelorderid != null)
-											&& (idsList == null || !idsList
-													.contains(channelorderid)
-													&& !duplicateKey
-															.containsKey(channelorderid)
-													&& productConfig != null)) {
-										order.setChannelOrderID(channelorderid);
-										order.setProductSkuCode(productConfig
-												.getProductSkuCode());
-										duplicateKey.put(channelorderid, "");
-									} else {
-										errorMessage
-												.append(" Channel OrderId is already present ");
-										validaterow = false;
-									}
+									
+									try {
+										if(productConfig.getVendorSkuRef() != null){
+											channelorderid=entry.getCell(index).toString()+ GlobalConstant.orderUniqueSymbol+ productConfig.getVendorSkuRef();
+										} else {
+											errorMessage.append(" Vendor SKU mapping not present");
+											validaterow = false;
+										}
+										if ((channelorderid!=null)&&(idsList == null || !idsList.contains(channelorderid)
+												&& !duplicateKey.containsKey(channelorderid) && productConfig != null)) {
+											order.setChannelOrderID(channelorderid);
+											order.setProductSkuCode(productConfig.getProductSkuCode());
+											duplicateKey.put(channelorderid, "");
+										} else {
+											errorMessage.append(" Channel OrderId is already present ");
+											validaterow = false;
+										}
+									} catch (Exception e) {
+										
+									}								
+
 								} else {
 									errorMessage
 											.append("No Product with this Channel & SKU");
@@ -6401,27 +6402,11 @@ public class SaveMappedFiles {
 										.append(" Channel OrderId not present ");
 								validaterow = false;
 							} else {
-								if (onj.size() == 1
-										&& onj.get(0).getChannelOrderID()
-												.equals(channelOrderId)) {
-									channelOrderId = onj.get(0)
-											.getChannelOrderID();
+								if(onj.size() == 1 && onj.get(0).getChannelOrderID().equals(channelOrderId)){
+									channelOrderId = onj.get(0).getChannelOrderID();
 								} else {
-									boolean check = false;
-									for (Order eachOrder : onj) {
-										if (eachOrder.getChannelOrderID()
-												.equalsIgnoreCase(
-														channelOrderId)) {
-											channelOrderId = eachOrder
-													.getChannelOrderID();
-											check = true;
-										}
-									}
-									if (check != true) {
-										errorMessage
-												.append("Multiple Orders With Channel Order ID.");
-										validaterow = false;
-									}
+									errorMessage.append("Multiple Orders With Channel Order ID.");
+									validaterow = false;									
 								}
 							}
 

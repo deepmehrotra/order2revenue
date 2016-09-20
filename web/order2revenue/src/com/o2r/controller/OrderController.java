@@ -376,7 +376,15 @@ public class OrderController {
 							files.get(0), sellerId, applicationPath,
 							uploadReport));
 					model.put("mapType", "eventSkuMap");
-					break;
+
+					break;				
+				/*case "skuMapping":
+					model.put("skuMapping", saveContents.saveSKUMappingContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport));
+					model.put("mapType", "skuMappingMap");
+					break;*/
+
 				case "product_Tax_Mapping":
 					model.put("skuMapping", saveContents.saveTaxCategoryContents(
 							files.get(0), sellerId, applicationPath,
