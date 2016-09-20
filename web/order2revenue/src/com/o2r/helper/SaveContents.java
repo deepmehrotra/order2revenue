@@ -314,6 +314,24 @@ public class SaveContents {
 							&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						entry.getCell(8).setCellType(HSSFCell.CELL_TYPE_STRING);
 						order.setSubOrderID(entry.getCell(8).toString());
+
+						if (partner.getPcName().contains(
+								GlobalConstant.PCFLIPKART)
+								|| partner.getPcName().contains(
+										GlobalConstant.PCPAYTM)) {
+							order.setChannelOrderID(order.getChannelOrderID()
+									+ GlobalConstant.orderUniqueSymbol
+									+ order.getSubOrderID());
+						}
+					} else {
+						if (partner.getPcName().contains(
+								GlobalConstant.PCFLIPKART)
+								|| partner.getPcName().contains(
+										GlobalConstant.PCPAYTM)) {
+							errorMessage
+									.append(" Secondary OrderID is mandatory for Flipkart & PayTM;");
+							validaterow = false;
+						}
 					}
 					if (entry.getCell(9) != null
 							&& entry.getCell(9).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -2205,6 +2223,31 @@ public class SaveContents {
 									} else {
 										channelId = entry.getCell(1).toString();
 									}
+
+									if (partner
+											.getPcName()
+											.toLowerCase()
+											.contains(GlobalConstant.PCFLIPKART)
+											|| partner
+													.getPcName()
+													.toLowerCase()
+													.contains(
+															GlobalConstant.PCPAYTM)) {
+
+										if (entry.getCell(3) != null
+												&& entry.getCell(3)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+											channelId = channelId
+													+ GlobalConstant.orderUniqueSymbol
+													+ entry.getCell(3).toString();
+
+										} else {
+											errorMessage
+													.append(" Secondary Order ID is Null, it is mandatory for Flipkart and Paytm;");
+											validaterow = false;
+										}
+									}
+
 									List<Order> onj = orderService
 											.searchAsIsOrder("channelOrderID",
 													channelId, sellerId);

@@ -877,6 +877,8 @@ public class GlobalConstant {
 	// Channel Name
 	public static final String PCMYNTRA = "myntra";
 	public static final String PCJABONG = "jabong";
+	public static final String PCFLIPKART = "flipkart";
+	public static final String PCPAYTM = "paytm";
 
 	/*
 	 * public static final String

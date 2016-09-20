@@ -1,7 +1,7 @@
 package com.o2r.bean;
 
 public class DataConfig {
-	private Double serviceTax;
+	private double serviceTax;
 	private String xlsPath;
 	public String uploadReportPath;
 	private String payuMerchantKey;
@@ -10,11 +10,11 @@ public class DataConfig {
 	private String successurl;
 	private String failurl;
 
-	public Double getServiceTax() {
+	public double getServiceTax() {
 		return serviceTax;
 	}
 
-	public void setServiceTax(Double serviceTax) {
+	public void setServiceTax(double serviceTax) {
 		this.serviceTax = serviceTax;
 	}
 
@@ -72,5 +72,5 @@ public class DataConfig {
 
 	public void setFailurl(String failurl) {
 		this.failurl = failurl;
-	}	
+	}
 }
