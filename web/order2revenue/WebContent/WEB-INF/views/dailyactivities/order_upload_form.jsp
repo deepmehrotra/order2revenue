@@ -776,8 +776,7 @@ ol.d {
 									<li>Ensure that the 1st row of file is the "headers"</li>
 									<li>Do not change the formatting of columns or any
 										headers.</li>
-									<li>Add the following "Case Sensitive" headers (without "
-										") at the end of 1st row of the file and input its
+									<li>Add the following "Case Sensitive" headers at the end of 1st row of the file and input its
 										corresponding value against every row
 										<ol class="d">
 											<li><b>Mandatory Values (to be added manually by
@@ -833,8 +832,8 @@ ol.d {
 									<li>Ensure that the 1st row of file is the "headers"</li>
 									<li>Do not change the formatting of columns or any
 										headers.</li>
-									<li>Add the following "Case Sensitive" headers (without "
-										") at the end of 1st row of the file and input its
+									<li>Add the following "Case Sensitive" headers
+									 at the end of 1st row of the file and input its
 										corresponding value against every row
 										<ol class="d">
 											<li><b>Mandatory Values (to be added manually by
@@ -889,8 +888,7 @@ ol.d {
 									<li>Ensure that the 1st row of file is the "headers"</li>
 									<li>Do not change the formatting of columns or any
 										headers.</li>
-									<li>Add the following "Case Sensitive" headers (without "
-										") at the end of 1st row of the file and input its
+									<li>Add the following "Case Sensitive" headers at the end of 1st row of the file and input its
 										corresponding value against every row
 										<ol class="d">
 											<li><b>Mandatory Values (to be added manually by
@@ -941,8 +939,7 @@ ol.d {
 									<li>Ensure that the 1st row of file is the "headers"</li>
 									<li>Do not change the formatting of columns or any
 										headers.</li>
-									<li>Add the following "Case Sensitive" headers (without "
-										") at the end of 1st row of the file and input its
+									<li>Add the following "Case Sensitive" headers at the end of 1st row of the file and input its
 										corresponding value against every row
 										<ol class="d">
 											<li><b>Mandatory Values (to be added manually by
@@ -991,8 +988,8 @@ ol.d {
 									<li>Ensure that the 1st row of file is the "headers"</li>
 									<li>Do not change the formatting of columns or any
 										headers.</li>
-									<li>Add the following "Case Sensitive" headers (without "
-										") at the end of 1st row of the file and input its
+									<li>Add the following "Case Sensitive" headers 
+									at the end of 1st row of the file and input its
 										corresponding value against every row
 										<ol class="d">
 											<li><b>Mandatory Values (to be added manually by
@@ -1042,8 +1039,7 @@ ol.d {
 									<li>Ensure that the 1st row of file is the "headers"</li>
 									<li>Do not change the formatting of columns or any
 										headers.</li>
-									<li>Add the following "Case Sensitive" headers (without "
-										") at the end of 1st row of the file and input its
+									<li>Add the following "Case Sensitive" headers at the end of 1st row of the file and input its
 										corresponding value against every row
 										<ol class="d">
 											<li><b>Mandatory Values (to be added manually by
@@ -1104,8 +1100,16 @@ ol.d {
 									<li>Ensure that the 1st row of file is the "headers"</li>
 									<li>Do not change the formatting of columns or any
 										headers.</li>
-									<li>Add Colum with header name as<b> "O2R Channel"</b>. Non Mandatory. </li>
-										
+										<li>
+									<ul>
+											<li style="list-style-type: initial;">Mandatory Column
+												to be added by seller:</li>
+										</ul>
+										<ol class="d">
+												<li><b class="color">O2R Channel</b></li>
+
+										</ol>
+										</li>
 									<li>The downloaded excel file will by default have the
 										following columns with exact same heading.Ensure the same are
 										present.<br>
@@ -1142,8 +1146,16 @@ ol.d {
 									<li>Ensure that the 1st row of file is the "headers"</li>
 									<li>Do not change the formatting of columns or any
 										headers.</li>
-									<li>Add Colum with header name as <b> "O2R Channel"</b>. Non Mandatory. </li>
-										
+										<li>
+									<ul>
+											<li style="list-style-type: initial;">Mandatory Column
+												to be added by seller:</li>
+										</ul>
+										<ol class="d">
+												<li><b class="color">O2R Channel</b></li>
+
+										</ol>
+										</li>
 									<li>The downloaded excel file will by default have the
 										following columns with exact same heading. Ensure the same are
 										present.<br>
@@ -1181,6 +1193,15 @@ ol.d {
 									<li>Ensure that the 1st row of file is the "headers"</li>
 									<li>Do not change the formatting of columns or any
 										headers.</li>
+										<li>
+									<ul>
+										<li style="list-style-type: initial;">Mandatory Column
+											to be added by seller:</li>
+									</ul>
+									<ol class="d">
+												<li><b class="color">O2R Channel</b></li>
+
+									</ol></li>
 									<li>The downloaded excel file will by default have the
 										following columns with exact same heading. Ensure the same are
 										present.<br>
@@ -1215,7 +1236,16 @@ ol.d {
 									<li>Ensure that the 1st row of file is the "headers"</li>
 									<li>Do not change the formatting of columns or any
 										headers.</li>
-									<li>Add Colum with header name as <b> "O2R Channel"</b>. Non Mandatory. </li>
+										<li>
+									<ul>
+											<li style="list-style-type: initial;">Mandatory Column
+												to be added by seller:</li>
+										</ul>
+										<ol class="d">
+												<li><b class="color">O2R Channel</b></li>
+
+										</ol>
+										</li>
 									<li>The downloaded excel file will by default have the
 										following columns with exact same heading.Ensure the same are
 										present.<br>
@@ -1252,6 +1282,16 @@ ol.d {
 									<li>Ensure that the 1st row of file is the "headers"</li>
 									<li>Do not change the formatting of columns or any
 										headers.</li>
+										<li>
+										<ul>
+											<li style="list-style-type: initial;">Mandatory Column
+												to be added by seller:</li>
+										</ul>
+										<ol class="d">
+											<li><b class="color">O2R Channel</b></li>
+
+										</ol>
+										</li>
 									<li>The downloaded excel file will by default have the
 										following columns with exact same heading. Ensure the same are
 										present.<br>
