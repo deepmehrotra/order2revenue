@@ -391,6 +391,12 @@ public class OrderController {
 							uploadReport));
 					model.put("mapType", "skuMappingMap");
 					break;
+				case "Dlink_SKU_Mapping":
+					model.put("dlinkSkuMapping", saveContents.saveDlinkSkuMappingContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport));
+					model.put("mapType", "DlinkSkuMappingMap");
+					break;
 				case "vendorSKUMapping":
 					model.put("vendorSKUMapping", saveContents.saveVendorSKUMappingContents(
 							files.get(0), sellerId, applicationPath,

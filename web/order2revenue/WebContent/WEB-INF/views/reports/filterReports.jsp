@@ -79,7 +79,7 @@
 										<div class="col-md-8">
 											<div class="row">
 												<select class="form-control" name="statusList" id="statusList" class="chosen-select" style="width: 97.5%;">
-													<option value="">Select Status</option>
+													<option value="">All</option>
 					                            	<option value="Actionable">Actionable</option>
 					                            	<option value="Settled">Settled</option>
 					                            	<option value="In Process">In Process</option>

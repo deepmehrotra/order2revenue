@@ -156,8 +156,7 @@
 		<ul class="nav navbar-top-links navbar-right">
 			<!-- //Code for Getting started dropdown -->
 			<li class="dropdown"><a class="dropdown-toggle count-info"
-				data-toggle="dropdown"> <img
-					src="/O2R/landing/img/notification.png" alt="notification">
+				data-toggle="dropdown"><i class="fa fa-steam"></i>
 			</a>
 				<ol class="dropdown-menu animated fadeInRight m-t-xs"
 					style="background: #333; border-left: none !important; border: 2px solid #fff;padding-bottom: 14px;width: 290px;">

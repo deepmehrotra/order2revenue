@@ -136,6 +136,8 @@ input+label {
 													<%--  <form:hidden path="pcId" value="${partner.pcId}"/> --%>
 													<input type="hidden" name="pcId" id="pcId"
 														value="${partner.pcId}" />
+													<input type="hidden" name="pcName" id="pcName"
+														value="${partner.pcName}" />
 													<input type="hidden" name="nrnReturnConfig.configId"
 														id="nrnReturnConfig.configId"
 														value="${partner.nrnReturnConfig.configId}" />
@@ -152,11 +154,15 @@ input+label {
 																			class="form-control" id="partnerName" readonly="true" />
 																	</c:when>
 																	<c:otherwise>
-																		<form:input path="pcName" value="${partner.pcName}"
-																			class="form-control required" id="partnerName"
-																			onblur="checkOnBlur()" />
-																		<span id="partnerNameMessage"
+																		<div class="col-sm-3">
+																			<label id="postName" class="control-label" >${partner.pcName}</label>
+																		</div>
+																		<div class="col-sm-9">
+																			<input name="pcNameSuffix" class="form-control" id="partnerName"
+																			onblur="checkOnBlur()" style="width: 108%;"/>
+																			<span id="partnerNameMessage"
 																			style="font-weight: bold;color=red"></span>
+																		</div>																		
 																	</c:otherwise>
 																</c:choose>
 															</div>
@@ -3755,9 +3761,12 @@ input+label {
 						});
 		var nameAvailability = true;
 		function checkOnBlur() {
-			var partner = document.getElementById("partnerName").value;
+			var demo = document.getElementById("partnerName").value;
+			alert(demo);
+			var partner = document.getElementById("postName").innerHTML;
+			alert(partner+demo);
 			$.ajax({
-				url : "ajaxPartnerCheck.html?partner=" + partner,
+				url : "ajaxPartnerCheck.html?partner="+partner+demo,
 				success : function(res) {
 					if (res == "false") {
 						if ('${partner.pcId}' != '0') {
