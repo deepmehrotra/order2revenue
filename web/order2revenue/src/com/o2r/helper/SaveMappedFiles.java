@@ -284,7 +284,13 @@ public class SaveMappedFiles {
 											order.setChannelOrderID(channelID);
 											order.setProductSkuCode(productConfig
 													.getProductSkuCode());
-											duplicateKey.put(channelID, "");
+											
+											if (!(partner.getPcName().toLowerCase()
+													.contains(GlobalConstant.PCFLIPKART)
+													|| partner.getPcName().toLowerCase()
+															.contains(GlobalConstant.PCPAYTM))) {
+												duplicateKey.put(channelID, "");
+											}
 										} else {
 											errorMessage
 													.append(" Channel OrderId is already present ");
@@ -325,11 +331,20 @@ public class SaveMappedFiles {
 									.contains(GlobalConstant.PCFLIPKART)
 									|| partner.getPcName().toLowerCase()
 											.contains(GlobalConstant.PCPAYTM)) {
-								order.setChannelOrderID(order
+								
+								channelID = order
 										.getChannelOrderID()
 										+ GlobalConstant.orderUniqueSymbol
-										+ order.getSubOrderID());
-
+										+ order.getSubOrderID();
+								if ((channelID != null)
+										&& (idsList == null || (!idsList
+												.contains(channelID))
+												&& !duplicateKey
+														.containsKey(channelID)
+												&& productConfig != null)) {
+									order.setChannelOrderID(channelID);
+									duplicateKey.put(channelID, "");
+								}
 							}
 						} else {
 							if (partner.getPcName().toLowerCase()
