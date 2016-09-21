@@ -237,6 +237,7 @@ ol.d {
 									Commission Upload</option>
 								<option value="Tax_Category_Mapping">Tax Category
 									Upload</option>
+								<option value="Dlink_SKU_Mapping">D-link SKU Mapping Upload</option>
 							</select>
 						</div>
 						<div class="col-md-4">
@@ -296,6 +297,8 @@ ol.d {
 											Commission Upload</option>
 										<option value="product_Tax_Mapping"
 											data-show=".taxcategoryupload">Tax Category Upload</option>
+										<option value="Dlink_SKU_Mapping"
+											data-show=".taxcategoryupload">D-link SKU Mapping Upload</option>
 									</select>
 								</div>
 								<div class="col-md-4">

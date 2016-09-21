@@ -125,6 +125,14 @@ public class PartnerController {
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Partner existPartner = null;
+		String suffix = request.getParameter("pcNameSuffix");
+		String partnerName = "";
+		if(suffix != null && !suffix.equals("")){
+			partnerName = partnerBean.getPcName()+suffix;
+		} else {
+			partnerName = partnerBean.getPcName();
+		}
+		partnerBean.setPcName(partnerName);
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			existPartner = partnerService.getPartner(partnerBean.getPcName(),

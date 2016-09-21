@@ -584,8 +584,13 @@ public class ProductDaoImpl implements ProductDao {
 					session.saveOrUpdate(product);
 				}
 			}
+			
+			Query deleteQuery = session.createSQLQuery("delete from productconfig where productConfigId =?");
+			deleteQuery.setInteger(0, productConfig.getProductConfigId());
+			deleteQuery.executeUpdate();
 			session.getTransaction().commit();
 			session.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed! by sellerId : " + sellerId, e);
@@ -839,7 +844,7 @@ public class ProductDaoImpl implements ProductDao {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(ProductConfig.class);
-			criteria.createAlias("product", "product",CriteriaSpecification.LEFT_JOIN);
+			criteria.createAlias("product", "product");
 			Criterion res1 = Restrictions.or(Restrictions.eq("channelSkuRef", SKUCode).ignoreCase(),Restrictions.eq("vendorSkuRef", SKUCode).ignoreCase());
 			
 			criteria.add(Restrictions.eq("channelName", channel).ignoreCase())

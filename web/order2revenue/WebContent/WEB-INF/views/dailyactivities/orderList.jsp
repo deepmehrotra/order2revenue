@@ -80,7 +80,7 @@
 					<div class="col-lg-12">
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
-								<h5>Orders(${MpOrdersCount})</h5>
+								<h5><a href="orderList.html">Orders(${MpOrdersCount})</a></h5>
 								<div class="table-menu-links">
 									<a href="poOrderList.html?value=" id="POOrders">PO Orders</a> <a
 										href="#" id="returnOrders">Return</a> <a

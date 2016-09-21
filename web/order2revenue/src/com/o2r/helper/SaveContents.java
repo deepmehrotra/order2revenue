@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -1629,6 +1630,92 @@ public class SaveContents {
 		log.info("$$$ saveTaxCategoryContents ends : SaveContents $$$");
 		return returnTaxCatMap;
 	}
+	
+	
+	
+	public Map<String, ProductConfig> saveDlinkSkuMappingContents(MultipartFile file,
+			int sellerId, String path, UploadReport uploadReport)
+			throws IOException {
+		log.info("$$$ saveDlinkSkuMappingContents starts : SaveContents $$$");
+		boolean validaterow = true;		
+		StringBuffer errorMessage = null;	
+		Map<String, ProductConfig> productConfigMap = new HashMap<String, ProductConfig>();		
+		try {
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			HSSFRow entry;
+			Integer noOfEntries = 1;
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}			
+			log.info(noOfEntries.toString());
+			log.debug("After getting no of rows" + noOfEntries);
+			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;				
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
+				List<ProductConfig> productConfigs = null;
+				ProductConfig productConfig = null;
+				try {
+					if (entry.getCell(0) != null
+							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						if (entry.getCell(1) != null
+								&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							if (entry.getCell(3) != null
+									&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								productConfigs = productService.getProductConfig(entry.getCell(1).toString().trim(), entry.getCell(3).toString().trim(), sellerId);
+								if(productConfigs != null){
+									if(productConfigs.size() == 1){
+										if(productConfigs.get(0).getProductSkuCode().equals(entry.getCell(0).toString().trim())){
+											productConfig = productConfigs.get(0);
+										} else {
+											errorMessage.append("Invalid Product SKU, Channel SKU Combination.");
+											validaterow = false;
+										}
+									} else {
+										errorMessage.append("Multiple Product Mappings With This Channel And Channel SKU.");
+										validaterow = false;
+									}
+								} else {
+									errorMessage.append("No Product Mappings With This Channel And Channel SKU.");
+									validaterow = false;
+								}
+							} else {
+								errorMessage.append("Channel is Null.");
+								validaterow = false;
+							}
+							
+						} else {
+							errorMessage.append("Child SKU is Null.");
+							validaterow = false;
+						}
+					} else {
+						errorMessage.append("Parent SKU is Null.");
+						validaterow = false;
+					}
+					if (validaterow) {
+						productService.removeSKUMapping(productConfig, sellerId);						
+					} else {
+						productConfigMap.put(errorMessage.toString(), productConfig);
+					}
+				} catch (Exception e) {
+					log.error("Failed! by SellerId : " + sellerId, e);
+				}
+			}
+			
+			Set<String> errorSet = productConfigMap.keySet();
+			downloadUploadReportXLS(offices, "Dlink_SKU_Mapping", 4,
+					errorSet, path, sellerId, uploadReport);
+		} catch (Exception e) {
+
+			log.error("Failed! by SellerId : " + sellerId, e);
+			addErrorUploadReport("Dlink_SKU_Mapping", sellerId, uploadReport);
+			throw new MultipartException("Constraints Violated");
+		}
+		log.info("$$$ saveDlinkSkuMappingContents ends : SaveContents $$$");
+		return productConfigMap;
+	}
+	
 
 	// My coding Product Config *********
 

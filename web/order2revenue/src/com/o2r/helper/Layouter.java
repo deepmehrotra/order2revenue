@@ -69,6 +69,8 @@ public class Layouter {
 			buildSKUMappingHeaders(worksheet, startRowIndex, startColIndex);
 		} else if (sheetName.equalsIgnoreCase("MP_Vendor_SKU_Mapping")) {
 			buildVendorSKUMappingHeaders(worksheet, startRowIndex, startColIndex);
+		} else if (sheetName.equalsIgnoreCase("Dlink_SKU_Mapping")) {
+			buildDlinkSKUMappingHeaders(worksheet, startRowIndex, startColIndex);
 		}
 	}
 
@@ -1009,6 +1011,46 @@ public class Layouter {
 		cell4.setCellValue("Channel Name");
 		cell4.setCellStyle(headerCellStyle);
 	}
+	
+	
+	public static void buildDlinkSKUMappingHeaders(HSSFSheet worksheet,
+			int startRowIndex, int startColIndex) {
+		// Create font style for the headers
+		Font font = worksheet.getWorkbook().createFont();
+		font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+
+		// Create cell style for the headers
+		HSSFCellStyle headerCellStyle = worksheet.getWorkbook()
+				.createCellStyle();
+		headerCellStyle.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);
+		headerCellStyle.setFillPattern(CellStyle.FINE_DOTS);
+		headerCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		headerCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		headerCellStyle.setWrapText(true);
+		headerCellStyle.setFont(font);
+		headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
+
+		// Create the column headers
+		HSSFRow rowHeader = worksheet.createRow((short) startRowIndex + 2);
+		rowHeader.setHeight((short) 500);
+
+		HSSFCell cell1 = rowHeader.createCell(startColIndex + 0);
+		cell1.setCellValue("Product SKU_Code");
+		cell1.setCellStyle(headerCellStyle);
+
+		HSSFCell cell2 = rowHeader.createCell(startColIndex + 1);
+		cell2.setCellValue("Channel SKU_Ref");
+		cell2.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell3 = rowHeader.createCell(startColIndex + 2);
+		cell3.setCellValue("Vendor SKU_Ref");
+		cell3.setCellStyle(headerCellStyle);
+
+		HSSFCell cell4 = rowHeader.createCell(startColIndex + 3);
+		cell4.setCellValue("Channel Name");
+		cell4.setCellStyle(headerCellStyle);
+	}
+	
 
 	public static void buildChannelOrderReport(HSSFSheet worksheet,
 			int startRowIndex, int startColIndex, String reportName,
