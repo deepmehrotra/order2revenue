@@ -990,9 +990,8 @@ public class SaveMappedFiles {
 										.getCell(index)
 										.toString()
 										.substring(
-												0,
 												entry.getCell(index).toString()
-														.indexOf("'")));
+														.indexOf("'") + 1));
 								channelorderid = channelorderid
 										+ GlobalConstant.orderUniqueSymbol
 										+ order.getSubOrderID();
@@ -2921,11 +2920,9 @@ public class SaveMappedFiles {
 									itemId = entry
 											.getCell(secOrderIndex)
 											.toString()
-											.substring(
-													0,
-													entry.getCell(secOrderIndex)
+											.substring(entry.getCell(secOrderIndex)
 															.toString()
-															.indexOf(":"));
+															.indexOf(":") + 1);
 								} else {
 									errorMessage
 											.append(" Order item ID not present ");

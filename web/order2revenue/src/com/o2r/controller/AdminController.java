@@ -117,7 +117,7 @@ public class AdminController {
 		return new ModelAndView("admin/queryList", model);
 	}
 
-	@RequestMapping(value = "/admin/reverseOrderList", method = RequestMethod.GET)
+	@RequestMapping(value = "/seller/reverseOrderList", method = RequestMethod.GET)
 	public ModelAndView returnOrRTOlist() {
 
 		log.info("$$$ reverseOrderList Starts : AdminController $$$");
