@@ -855,9 +855,9 @@ public class ProductDaoImpl implements ProductDao {
 					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
 			returnlist = criteria.list();
-			if (returnlist != null && returnlist.size() != 0) {
+			if (returnlist.size() == 0) {
 				
-				return returnlist;
+				//return returnlist;
 				/*if(returnlist.size() == 1){
 					returnObject = (ProductConfig) returnlist.get(0);
 				} else {	
@@ -873,7 +873,7 @@ public class ProductDaoImpl implements ProductDao {
 						returnObject = null;
 					}
 				}*/				
-			} else {
+			//} else {
 				returnlist = null;
 				log.debug("Product sku " + SKUCode + " not found");
 			}

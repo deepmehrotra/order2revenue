@@ -252,12 +252,20 @@ public class SaveContents {
 											.getProductSkuCode());
 								else
 									order.setProductSkuCode(skuCode);
-								duplicateKey.put(channelID, "");
-							} else {
-								errorMessage
-										.append(" Channel OrderId is already present;");
 
-								validaterow = false;
+								if (!(partner.getPcName().toLowerCase()
+										.contains(GlobalConstant.PCFLIPKART) || partner
+										.getPcName().toLowerCase()
+										.contains(GlobalConstant.PCPAYTM))) {
+									duplicateKey.put(channelID, "");
+								}
+							} else {
+								if (channelID != null) {
+									errorMessage
+											.append(" Channel OrderId is already present;");
+
+									validaterow = false;
+								}
 							}
 						}
 					} else {
@@ -339,21 +347,46 @@ public class SaveContents {
 					if (entry.getCell(8) != null
 							&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						entry.getCell(8).setCellType(HSSFCell.CELL_TYPE_STRING);
-						order.setSubOrderID(entry.getCell(8).toString());
 
-						if (partner.getPcName().contains(
-								GlobalConstant.PCFLIPKART)
-								|| partner.getPcName().contains(
-										GlobalConstant.PCPAYTM)) {
-							order.setChannelOrderID(order.getChannelOrderID()
-									+ GlobalConstant.orderUniqueSymbol
-									+ order.getSubOrderID());
+						String itemID = entry.getCell(8).toString();
+						if (itemID.contains("'")) {
+							itemID = removeExtraQuote(itemID);
+						}
+
+						order.setSubOrderID(itemID);
+
+						if (partner != null
+								&& (partner.getPcName().contains(
+										GlobalConstant.PCFLIPKART) || partner
+										.getPcName().contains(
+												GlobalConstant.PCPAYTM))) {
+							channelID = order.getChannelOrderID();
+
+							if (channelID != null) {
+								channelID = channelID
+										+ GlobalConstant.orderUniqueSymbol
+										+ order.getSubOrderID();
+
+								if ((idsList == null || (!idsList
+										.contains(channelID))
+										&& !duplicateKey.containsKey(channelID)
+										&& productConfig != null)) {
+									order.setChannelOrderID(channelID);
+									duplicateKey.put(channelID, "");
+								} else {
+
+									errorMessage
+											.append(" Channel OrderId is already present ");
+									validaterow = false;
+								}
+							}
 						}
 					} else {
-						if (partner.getPcName().contains(
-								GlobalConstant.PCFLIPKART)
-								|| partner.getPcName().contains(
-										GlobalConstant.PCPAYTM)) {
+						if (partner != null
+								&& (partner.getPcName().contains(
+										GlobalConstant.PCFLIPKART) || partner
+										.getPcName().contains(
+												GlobalConstant.PCPAYTM))) {
 							errorMessage
 									.append(" Secondary OrderID is mandatory for Flipkart & PayTM;");
 							validaterow = false;
@@ -593,8 +626,10 @@ public class SaveContents {
 					if (taxcat != null)
 						otb.setTaxCategtory(taxcat.getTaxCatName());
 					else {
-						errorMessage.append("Tax Category does not exist ");
-						validaterow = false;
+						if (product != null) {
+							errorMessage.append("Tax Category does not exist ");
+							validaterow = false;
+						}
 					}
 
 					if (entry.getCell(21) != null
@@ -1630,16 +1665,14 @@ public class SaveContents {
 		log.info("$$$ saveTaxCategoryContents ends : SaveContents $$$");
 		return returnTaxCatMap;
 	}
-	
-	
-	
-	public Map<String, ProductConfig> saveDlinkSkuMappingContents(MultipartFile file,
-			int sellerId, String path, UploadReport uploadReport)
-			throws IOException {
+
+	public Map<String, ProductConfig> saveDlinkSkuMappingContents(
+			MultipartFile file, int sellerId, String path,
+			UploadReport uploadReport) throws IOException {
 		log.info("$$$ saveDlinkSkuMappingContents starts : SaveContents $$$");
-		boolean validaterow = true;		
-		StringBuffer errorMessage = null;	
-		Map<String, ProductConfig> productConfigMap = new HashMap<String, ProductConfig>();		
+		boolean validaterow = true;
+		StringBuffer errorMessage = null;
+		Map<String, ProductConfig> productConfigMap = new HashMap<String, ProductConfig>();
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -1647,12 +1680,12 @@ public class SaveContents {
 			Integer noOfEntries = 1;
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
-			}			
+			}
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				entry = worksheet.getRow(rowIndex);
-				validaterow = true;				
+				validaterow = true;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				List<ProductConfig> productConfigs = null;
 				ProductConfig productConfig = null;
@@ -1663,28 +1696,40 @@ public class SaveContents {
 								&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							if (entry.getCell(3) != null
 									&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-								productConfigs = productService.getProductConfig(entry.getCell(1).toString().trim(), entry.getCell(3).toString().trim(), sellerId);
-								if(productConfigs != null){
-									if(productConfigs.size() == 1){
-										if(productConfigs.get(0).getProductSkuCode().equals(entry.getCell(0).toString().trim())){
-											productConfig = productConfigs.get(0);
+								productConfigs = productService
+										.getProductConfig(entry.getCell(1)
+												.toString().trim(), entry
+												.getCell(3).toString().trim(),
+												sellerId);
+								if (productConfigs != null) {
+									if (productConfigs.size() == 1) {
+										if (productConfigs
+												.get(0)
+												.getProductSkuCode()
+												.equals(entry.getCell(0)
+														.toString().trim())) {
+											productConfig = productConfigs
+													.get(0);
 										} else {
-											errorMessage.append("Invalid Product SKU, Channel SKU Combination.");
+											errorMessage
+													.append("Invalid Product SKU, Channel SKU Combination.");
 											validaterow = false;
 										}
 									} else {
-										errorMessage.append("Multiple Product Mappings With This Channel And Channel SKU.");
+										errorMessage
+												.append("Multiple Product Mappings With This Channel And Channel SKU.");
 										validaterow = false;
 									}
 								} else {
-									errorMessage.append("No Product Mappings With This Channel And Channel SKU.");
+									errorMessage
+											.append("No Product Mappings With This Channel And Channel SKU.");
 									validaterow = false;
 								}
 							} else {
 								errorMessage.append("Channel is Null.");
 								validaterow = false;
 							}
-							
+
 						} else {
 							errorMessage.append("Child SKU is Null.");
 							validaterow = false;
@@ -1694,18 +1739,20 @@ public class SaveContents {
 						validaterow = false;
 					}
 					if (validaterow) {
-						productService.removeSKUMapping(productConfig, sellerId);						
+						productService
+								.removeSKUMapping(productConfig, sellerId);
 					} else {
-						productConfigMap.put(errorMessage.toString(), productConfig);
+						productConfigMap.put(errorMessage.toString(),
+								productConfig);
 					}
 				} catch (Exception e) {
 					log.error("Failed! by SellerId : " + sellerId, e);
 				}
 			}
-			
+
 			Set<String> errorSet = productConfigMap.keySet();
-			downloadUploadReportXLS(offices, "Dlink_SKU_Mapping", 4,
-					errorSet, path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "Dlink_SKU_Mapping", 4, errorSet,
+					path, sellerId, uploadReport);
 		} catch (Exception e) {
 
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -1715,7 +1762,6 @@ public class SaveContents {
 		log.info("$$$ saveDlinkSkuMappingContents ends : SaveContents $$$");
 		return productConfigMap;
 	}
-	
 
 	// My coding Product Config *********
 
@@ -1937,10 +1983,11 @@ public class SaveContents {
 												.toString(), entry.getCell(3)
 												.toString(), sellerId);
 								if (procon != null) {
-									if(procon.size() == 1){
+									if (procon.size() == 1) {
 										productConfig = procon.get(0);
 									} else {
-										errorMessage.append(" Multiple Mapping present for this Channel And SKU.");
+										errorMessage
+												.append(" Multiple Mapping present for this Channel And SKU.");
 										validaterow = false;
 									}
 								} else if (procon == null
@@ -1980,12 +2027,14 @@ public class SaveContents {
 									&& entry.getCell(3) != null
 									&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 
-								entry.getCell(2).setCellType(HSSFCell.CELL_TYPE_STRING);
+								entry.getCell(2).setCellType(
+										HSSFCell.CELL_TYPE_STRING);
 
-								/*String mapKey = entry.getCell(2).toString()
-										.trim()
-										+ "$"
-										+ entry.getCell(3).toString().trim();*/
+								/*
+								 * String mapKey = entry.getCell(2).toString()
+								 * .trim() + "$" +
+								 * entry.getCell(3).toString().trim();
+								 */
 
 								/*
 								 * ProductConfig procon = productService
@@ -1995,7 +2044,8 @@ public class SaveContents {
 								 * == null && !uniqueVendorSKUMap
 								 * .containsKey(mapKey)) {
 								 */
-								productConfig.setVendorSkuRef(entry.getCell(2).toString());
+								productConfig.setVendorSkuRef(entry.getCell(2)
+										.toString());
 								/*
 								 * uniqueVendorSKUMap.put(mapKey, mapKey); }
 								 * else { errorMessage .append(
@@ -2340,7 +2390,8 @@ public class SaveContents {
 														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 											channelId = channelId
 													+ GlobalConstant.orderUniqueSymbol
-													+ entry.getCell(3).toString();
+													+ entry.getCell(3)
+															.toString();
 
 										} else {
 											errorMessage
@@ -4184,4 +4235,8 @@ public class SaveContents {
 		return validaterow;
 	}
 
+	private static String removeExtraQuote(String input) {
+		String out = input.replaceAll("'", "");
+		return out;
+	}
 }

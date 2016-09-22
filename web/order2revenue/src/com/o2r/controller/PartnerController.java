@@ -127,8 +127,8 @@ public class PartnerController {
 		Partner existPartner = null;
 		String suffix = request.getParameter("pcNameSuffix");
 		String partnerName = "";
-		if(suffix != null && !suffix.equals("")){
-			partnerName = partnerBean.getPcName()+suffix;
+		if(suffix != null && !suffix.equals("")) {
+			partnerName = partnerBean.getPcName() + suffix;
 		} else {
 			partnerName = partnerBean.getPcName();
 		}

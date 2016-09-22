@@ -136,7 +136,7 @@ input+label {
 													<%--  <form:hidden path="pcId" value="${partner.pcId}"/> --%>
 													<input type="hidden" name="pcId" id="pcId"
 														value="${partner.pcId}" />
-													<input type="hidden" name="pcName" id="pcName"
+													<input type="hidden" name="pcName1" id="pcName"
 														value="${partner.pcName}" />
 													<input type="hidden" name="nrnReturnConfig.configId"
 														id="nrnReturnConfig.configId"
@@ -151,15 +151,15 @@ input+label {
 																<c:choose>
 																	<c:when test="${partner.pcId != 0}">
 																		<form:input path="pcName" value="${partner.pcName}"
-																			class="form-control" id="partnerName" readonly="true" />
+																			class="form-control" id="partnerName1" readonly="true" />
 																	</c:when>
 																	<c:otherwise>
 																		<div class="col-sm-3">
 																			<label id="postName" class="control-label" >${partner.pcName}</label>
 																		</div>
 																		<div class="col-sm-9">
-																			<input name="pcNameSuffix" class="form-control" id="partnerName"
-																			onblur="checkOnBlur()" style="width: 108%;"/>
+																			<input name="pcNameSuffix" class="form-control" id="partnerName2"
+																			onblur="checkOnBlur()" style="width: 108%;" placeholder="Suffix" />
 																			<span id="partnerNameMessage"
 																			style="font-weight: bold;color=red"></span>
 																		</div>																		
@@ -3762,7 +3762,7 @@ input+label {
 		var nameAvailability = true;
 		function checkOnBlur() {
 			var demo = document.getElementById("partnerName").value;
-			alert(demo);
+			//alert(demo);
 			var partner = document.getElementById("postName").innerHTML;
 			alert(partner+demo);
 			$.ajax({

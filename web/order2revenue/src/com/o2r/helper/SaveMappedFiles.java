@@ -284,11 +284,16 @@ public class SaveMappedFiles {
 											order.setChannelOrderID(channelID);
 											order.setProductSkuCode(productConfig
 													.getProductSkuCode());
-											
-											if (!(partner.getPcName().toLowerCase()
-													.contains(GlobalConstant.PCFLIPKART)
-													|| partner.getPcName().toLowerCase()
-															.contains(GlobalConstant.PCPAYTM))) {
+
+											if (!(partner
+													.getPcName()
+													.toLowerCase()
+													.contains(
+															GlobalConstant.PCFLIPKART) || partner
+													.getPcName()
+													.toLowerCase()
+													.contains(
+															GlobalConstant.PCPAYTM))) {
 												duplicateKey.put(channelID, "");
 											}
 										} else {
@@ -327,13 +332,15 @@ public class SaveMappedFiles {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
 							order.setSubOrderID(entry.getCell(index).toString());
-							if (partner.getPcName().toLowerCase()
-									.contains(GlobalConstant.PCFLIPKART)
-									|| partner.getPcName().toLowerCase()
-											.contains(GlobalConstant.PCPAYTM)) {
-								
-								channelID = order
-										.getChannelOrderID()
+							if (partner != null
+									&& (partner
+											.getPcName()
+											.toLowerCase()
+											.contains(GlobalConstant.PCFLIPKART) || partner
+											.getPcName().toLowerCase()
+											.contains(GlobalConstant.PCPAYTM))) {
+
+								channelID = order.getChannelOrderID()
 										+ GlobalConstant.orderUniqueSymbol
 										+ order.getSubOrderID();
 								if ((channelID != null)
@@ -344,23 +351,31 @@ public class SaveMappedFiles {
 												&& productConfig != null)) {
 									order.setChannelOrderID(channelID);
 									duplicateKey.put(channelID, "");
+								} else {
+									errorMessage
+											.append(" Channel OrderId is already present ");
+									validaterow = false;
 								}
 							}
 						} else {
-							if (partner.getPcName().toLowerCase()
-									.contains(GlobalConstant.PCFLIPKART)
-									|| partner.getPcName().toLowerCase()
-											.contains(GlobalConstant.PCPAYTM)) {
+							if (partner != null
+									&& (partner
+											.getPcName()
+											.toLowerCase()
+											.contains(GlobalConstant.PCFLIPKART) || partner
+											.getPcName().toLowerCase()
+											.contains(GlobalConstant.PCPAYTM))) {
 								errorMessage
 										.append(" The column 'Sale Order Item Code' is null, it is mandatory for Flipkart and Paytm,");
 								validaterow = false;
 							}
 						}
 					} else {
-						if (partner.getPcName().toLowerCase()
-								.contains(GlobalConstant.PCFLIPKART)
-								|| partner.getPcName().toLowerCase()
-										.contains(GlobalConstant.PCPAYTM)) {
+						if (partner != null
+								&& (partner.getPcName().toLowerCase()
+										.contains(GlobalConstant.PCFLIPKART) || partner
+										.getPcName().toLowerCase()
+										.contains(GlobalConstant.PCPAYTM))) {
 
 							errorMessage
 									.append(" The column 'Sale Order Item Code' doesn't exist, it is mandatory for Flipkart and Paytm,");
@@ -761,9 +776,11 @@ public class SaveMappedFiles {
 						if (taxcat != null)
 							otb.setTaxCategtory(taxcat.getTaxCatName());
 						else {
-							errorMessage
-									.append("No Tax Category mapped for this product ");
-							validaterow = false;
+							if (product != null) {
+								errorMessage
+										.append("No Tax Category mapped for this product ");
+								validaterow = false;
+							}
 						}
 					}
 					if (cellIndexMap.get(columHeaderMap.get("Seller Note")) != null) {
@@ -1422,9 +1439,11 @@ public class SaveMappedFiles {
 					if (taxcat != null)
 						otb.setTaxCategtory(taxcat.getTaxCatName());
 					else {
-						errorMessage
-								.append("No Tax Category mapped for this product ");
-						validaterow = false;
+						if (product != null) {
+							errorMessage
+									.append("No Tax Category mapped for this product ");
+							validaterow = false;
+						}
 					}
 
 					if (cellIndexMap.get(columHeaderMap.get("Seller Note")) != null) {
@@ -2121,9 +2140,11 @@ public class SaveMappedFiles {
 					if (taxcat != null)
 						otb.setTaxCategtory(taxcat.getTaxCatName());
 					else {
-						errorMessage
-								.append("No Tax Category mapped for this product ");
-						validaterow = false;
+						if (product != null) {
+							errorMessage
+									.append("No Tax Category mapped for this product ");
+							validaterow = false;
+						}
 					}
 
 					if (cellIndexMap.get(columHeaderMap.get("Seller Note")) != null) {
@@ -2769,9 +2790,11 @@ public class SaveMappedFiles {
 					if (taxcat != null)
 						otb.setTaxCategtory(taxcat.getTaxCatName());
 					else {
-						errorMessage
-								.append("No Tax Category mapped for this product ");
-						validaterow = false;
+						if (product != null) {
+							errorMessage
+									.append("No Tax Category mapped for this product ");
+							validaterow = false;
+						}
 					}
 
 					if (cellIndexMap.get(columHeaderMap.get("Seller Note")) != null) {
@@ -2935,7 +2958,8 @@ public class SaveMappedFiles {
 									itemId = entry
 											.getCell(secOrderIndex)
 											.toString()
-											.substring(entry.getCell(secOrderIndex)
+											.substring(
+													entry.getCell(secOrderIndex)
 															.toString()
 															.indexOf(":") + 1);
 								} else {
@@ -4251,9 +4275,11 @@ public class SaveMappedFiles {
 					if (taxcat != null)
 						otb.setTaxCategtory(taxcat.getTaxCatName());
 					else {
-						errorMessage
-								.append("No Tax Category mapped for this product ");
-						validaterow = false;
+						if (product != null) {
+							errorMessage
+									.append("No Tax Category mapped for this product ");
+							validaterow = false;
+						}
 					}
 
 					if (cellIndexMap.get(columHeaderMap.get("Seller Note")) != null) {
@@ -5630,9 +5656,11 @@ public class SaveMappedFiles {
 					if (taxcat != null)
 						otb.setTaxCategtory(taxcat.getTaxCatName());
 					else {
-						errorMessage
-								.append("No Tax Category mapped for this product ");
-						validaterow = false;
+						if (product != null) {
+							errorMessage
+									.append("No Tax Category mapped for this product ");
+							validaterow = false;
+						}
 					}
 
 					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
@@ -6486,9 +6514,11 @@ public class SaveMappedFiles {
 					if (taxcat != null)
 						otb.setTaxCategtory(taxcat.getTaxCatName());
 					else {
-						errorMessage
-								.append("No Tax Category mapped for this product ");
-						validaterow = false;
+						if (product != null) {
+							errorMessage
+									.append("No Tax Category mapped for this product ");
+							validaterow = false;
+						}
 					}
 
 					if (cellIndexMap.get(columHeaderMap.get("Seller Note")) != null) {
