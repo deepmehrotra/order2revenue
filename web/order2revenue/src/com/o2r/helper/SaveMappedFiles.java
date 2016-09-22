@@ -331,7 +331,14 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							order.setSubOrderID(entry.getCell(index).toString());
+							
+							String itemID = entry.getCell(8).toString();
+							if (itemID.contains("'")) {
+								itemID = removeExtraQuote(itemID);
+							}
+
+							order.setSubOrderID(itemID);
+							
 							if (partner != null
 									&& (partner
 											.getPcName()
@@ -7034,5 +7041,10 @@ public class SaveMappedFiles {
 			e.printStackTrace();
 			log.error("Failed! by SellerId : " + sellerId, e);
 		}
+	}
+	
+	private static String removeExtraQuote(String input) {
+		String out = input.replaceAll("'", "");
+		return out;
 	}
 }
