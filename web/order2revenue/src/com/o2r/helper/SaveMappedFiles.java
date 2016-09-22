@@ -5172,7 +5172,7 @@ public class SaveMappedFiles {
 										if (entry.getCell(index).toString()
 												.contains("S")
 												&& productConfig
-														.getChannelSkuRef() != null)
+														.getVendorSkuRef() != null)
 											id = entry
 													.getCell(index)
 													.toString()
@@ -5184,38 +5184,18 @@ public class SaveMappedFiles {
 																			"S"))
 													+ GlobalConstant.orderUniqueSymbol
 													+ productConfig
-															.getChannelSkuRef();
-										else if (entry.getCell(index)
-												.toString().contains("S")
-												&& productConfig
-														.getChannelSkuRef() == null)
-											id = entry
-													.getCell(index)
-													.toString()
-													.substring(
-															0,
-															entry.getCell(index)
-																	.toString()
-																	.indexOf(
-																			"S"))
-													+ GlobalConstant.orderUniqueSymbol
-													+ entry.getCell(skuIndex)
-															.toString();
+															.getVendorSkuRef();
+										
 										else if (!entry.getCell(index)
 												.toString().contains("S")
 												&& productConfig
-														.getChannelSkuRef() != null)
+												.getVendorSkuRef() != null)
 											id = entry.getCell(index)
 													.toString()
 													+ GlobalConstant.orderUniqueSymbol
 													+ productConfig
-															.getChannelSkuRef();
-										else
-											id = entry.getCell(index)
-													.toString()
-													+ GlobalConstant.orderUniqueSymbol
-													+ entry.getCell(skuIndex)
-															.toString();
+													.getVendorSkuRef();
+									
 									} catch (Exception e) {
 
 									}
