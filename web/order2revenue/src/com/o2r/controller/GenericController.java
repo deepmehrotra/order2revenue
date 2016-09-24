@@ -432,6 +432,86 @@ public class GenericController {
 		logger.info("$$$ findGlobalOrders Ends : GenericController $$$");
 		return new ModelAndView("globalOrderSearch", model);
 	}
+	
+	@RequestMapping(value = "/seller/findOrders", method = RequestMethod.POST)
+	public ModelAndView findOrders(HttpServletRequest request,
+			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
+
+		logger.info("$$$ findOrders Starts : GenericController $$$");
+		int sellerId = 0;
+		List<OrderBean> orderlist = null;
+		List<Order> temporaryorderlist = null;
+		Map<String, Object> model = new HashMap<String, Object>();
+		Date startDate = null;
+		Date endDate = null;
+		String searchCriteria = null;
+		String searchString = null;
+
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			searchCriteria = request.getParameter("searchCriteria");
+			searchString = request.getParameter("searchString");
+
+			if (request.getParameter("startDate") != null
+					&& request.getParameter("endDate") != null
+					&& (request.getParameter("startDate").length() != 0)
+					&& (request.getParameter("endDate").length() != 0)) {
+				startDate = new Date(request.getParameter("startDate"));
+				endDate = new Date(request.getParameter("endDate"));
+				orderlist = new ArrayList<OrderBean>();
+			}
+
+			logger.debug(" Values in global search header :searchCriteria : "
+					+ searchCriteria + "  -->searchString : " + searchString
+					+ " " + "startDate : " + startDate + " endDate  " + endDate);
+
+			if (searchString != null && searchString.length() != 0) {
+				if (searchCriteria.equals("customerName")
+						|| searchCriteria.equals("customerCity")
+						|| searchCriteria.equals("customerEmail")
+						|| searchCriteria.equals("customerPhnNo")) {
+					orderlist = ConverterClass.prepareListofBean(orderService
+							.findOrdersbyCustomerDetails(searchCriteria,
+									searchString, sellerId));
+				} else {
+					orderlist = ConverterClass.prepareListofBean(orderService
+							.findOrders(searchCriteria, searchString, sellerId,
+									false, true));
+				}
+			} else {
+				if (searchCriteria.equalsIgnoreCase("dateofPayment")
+						&& startDate != null && endDate != null) {
+					temporaryorderlist = orderService.findOrdersbyPaymentDate(
+							searchCriteria, startDate, endDate, sellerId);
+
+				} else {
+					if (searchString != null && startDate != null
+							&& endDate != null) {
+						temporaryorderlist = orderService.findOrdersbyDate(
+								searchCriteria, startDate, endDate, sellerId,
+								false);
+					}
+				}
+
+				if (temporaryorderlist != null
+						&& temporaryorderlist.size() != 0)
+					orderlist = ConverterClass
+							.prepareListofBean(temporaryorderlist);
+			}
+			model.put("searchOrderList", orderlist);
+		} catch (CustomException ce) {
+			logger.error("findGlobalOrders exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Failed! by seller ID : " + sellerId, e);
+		}
+		logger.info("$$$ findOrders Ends : GenericController $$$");
+		return new ModelAndView("admin/reverseOrderList", model);
+	}
 
 	@RequestMapping(value = "/userquery", method = RequestMethod.POST)
 	public @ResponseBody String saveQuery(HttpServletRequest request) {

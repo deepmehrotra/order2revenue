@@ -136,8 +136,10 @@ input+label {
 													<%--  <form:hidden path="pcId" value="${partner.pcId}"/> --%>
 													<input type="hidden" name="pcId" id="pcId"
 														value="${partner.pcId}" />
-													<input type="hidden" name="pcName1" id="pcName"
-														value="${partner.pcName}" />
+													<c:if test="${partner.pcId == 0}">
+														<input type="hidden" name="pcName" id="pcName"
+															value="${partner.pcName}" />
+													</c:if>
 													<input type="hidden" name="nrnReturnConfig.configId"
 														id="nrnReturnConfig.configId"
 														value="${partner.nrnReturnConfig.configId}" />

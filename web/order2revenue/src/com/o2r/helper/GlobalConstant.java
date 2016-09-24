@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class GlobalConstant {
 
 	public static final String orderUniqueSymbol = "$";
-	
+
 	public final ArrayList<String> orderList = new ArrayList<String>() {
 		/**
 		 *
@@ -150,11 +150,11 @@ public class GlobalConstant {
 			add("SKU");
 			add("Invoice ID");
 			add("Recieved Amount");
-			add("Payment Date");			
+			add("Payment Date");
 			add("Particular");
 		}
 	};
-	
+
 	public static final ArrayList<String> UnicommercePaymentHeaderList = new ArrayList<String>() {
 		private static final long serialVersionUID = 1L;
 		{
@@ -166,11 +166,11 @@ public class GlobalConstant {
 			add("Particular");
 		}
 	};
-	
+
 	public static final ArrayList<String> JabongPaymentHeaderList = new ArrayList<String>() {
 		private static final long serialVersionUID = 1L;
 		{
-			add("Payment Date");			
+			add("Payment Date");
 			add("ChannelOrderId");
 			add("Recieved Amount");
 			add("Invoice ID");
@@ -196,7 +196,7 @@ public class GlobalConstant {
 			add("Shipping PinCode");
 			add("Order Shipped Date");
 			add("Sales Channel");
-			add("Payment Type");			
+			add("Payment Type");
 			add("AWB No");
 			add("PIreferenceNo");
 			add("Logistic Partner");
@@ -235,7 +235,7 @@ public class GlobalConstant {
 			add("Payment Type");
 			add("Logistic Partner");
 			add("Sales Channel");
-			add("InvoiceID");			
+			add("InvoiceID");
 			add("Order Shipped Date");
 			add("Net Rate");
 			add("Seller Note");
@@ -266,7 +266,7 @@ public class GlobalConstant {
 			add("Payment Type");
 			add("Order Shipped Date");
 			add("Customer Address");
-			add("Sales Channel");			
+			add("Sales Channel");
 			add("Quantity");
 			add("Net Rate");
 			add("Seller Note");
@@ -308,7 +308,7 @@ public class GlobalConstant {
 
 		}
 	};
-	
+
 	public static final ArrayList<String> LimeroadOrderHeaderList = new ArrayList<String>() {
 		/**
 	 *
@@ -317,7 +317,7 @@ public class GlobalConstant {
 
 		{
 			add("Channel Order ID");
-			add("SkUCode");	
+			add("SkUCode");
 			add("Order Recieved Date");
 			add("Secondary OrderID");
 			add("Quantity");
@@ -326,7 +326,7 @@ public class GlobalConstant {
 			add("Shipping PinCode");
 			add("Order Shipped Date");
 			add("Sales Channel");
-			add("Payment Type");			
+			add("Payment Type");
 			add("AWB No");
 			add("PIreferenceNo");
 			add("Logistic Partner");
@@ -335,13 +335,13 @@ public class GlobalConstant {
 			add("Customer Name");
 			add("Customer Address");
 			add("Customer City");
-			add("Customer Phone No");			
+			add("Customer Phone No");
 			add("Customer Email");
 			add("Seller Note");
-			
+
 		}
 	};
-	
+
 	public static final ArrayList<String> UnicommerceOrderHeaderList = new ArrayList<String>() {
 		/**
 	 *
@@ -350,7 +350,7 @@ public class GlobalConstant {
 
 		{
 			add("Channel Order ID");
-			add("SkUCode");	
+			add("SkUCode");
 			add("Order Recieved Date");
 			add("Secondary OrderID");
 			add("Quantity");
@@ -360,7 +360,7 @@ public class GlobalConstant {
 			add("Order Shipped Date");
 			add("Sales Channel");
 			add("O2R Channel");
-			add("Payment Type");			
+			add("Payment Type");
 			add("AWB No");
 			add("PIreferenceNo");
 			add("Logistic Partner");
@@ -370,13 +370,13 @@ public class GlobalConstant {
 			add("Customer Address A");
 			add("Customer Address B");
 			add("Customer City");
-			add("Customer Phone No");			
+			add("Customer Phone No");
 			add("Customer Email");
 			add("Seller Note");
-			
+
 		}
 	};
-	
+
 	public static final ArrayList<String> JabongOrderHeaderList = new ArrayList<String>() {
 		/**
 	 *
@@ -394,7 +394,7 @@ public class GlobalConstant {
 			add("Customer Phone No");
 			add("Customer City");
 			add("Shipping PinCode");
-			add("Payment Type");			
+			add("Payment Type");
 			add("Order SP");
 			add("Order MRP");
 			add("Logistic Partner");
@@ -465,20 +465,14 @@ public class GlobalConstant {
 	public static final String nullValuesError = "Field Should Not Be Empty!";
 	public static final String nullValuesErrorCode = "#00999";
 
-	
-	public static final String volShipping="Volumetric Shipping";
-	public static final String dwShipping="Deadweight Shipping";
-	
-	
-	//Alerts Message
+	public static final String volShipping = "Volumetric Shipping";
+	public static final String dwShipping = "Deadweight Shipping";
+
+	// Alerts Message
 	public static final String InventoryMsg = "Product Quantity is Under Limit !";
 	public static final String OrderMsg = "Order Bucket Is Low !";
 	public static final String CustomerMsg = "Customer Is Blacklisted with Contact No";
-	
-	
-	
-	
-	
+
 	/*
 	 * log.error("searchExpense exception : " + GlobalConstant.nullException);
 	 * model.put("errorMessage", GlobalConstant.nullValuesError);
@@ -939,8 +933,8 @@ public class GlobalConstant {
 			put("getReturnId", "Return Id/ GP ID");
 			put("getReturnChargesDesciption", "Return Charges Description");
 			put("getTdsToBeDeposited", "TDS to be deposited");
-			
-			//For Consolidated Report
+
+			// For Consolidated Report
 			put("orderId", "OrderId");
 			put("Partner", "Channel");
 			put("subOrderId", "Secondary OrderId");
@@ -1008,9 +1002,7 @@ public class GlobalConstant {
 			put("sellerNote", "Seller Notes");
 			put("status", "Last Updated Status");
 			put("finalStatus", "Action");
-			
-			
-			
+
 			// For Channel Report
 			put("getCategory", "Product Category");
 			put("getProductSku", "Product SKU");
@@ -1150,6 +1142,47 @@ public class GlobalConstant {
 			put("10", "October");
 			put("11", "November");
 			put("12", "December");
+		}
+	};
+
+	/**
+	 * Map of WorkSheet Names for Upload Report
+	 * 
+	 */
+	public static final Map<String, String> worksheetNameMap = new HashMap<String, String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			put("ordersummary", "MP_Order_Upload");
+			put("orderPoSummary", "PO_Order_Upload");
+			put("gatepassSummary", "PO_Gatepass_Uplooad");
+			put("paymentSummary", "MP_Payment_Upload");
+			put("returnSummary", "MP_Return_Upload");
+			put("productSummary", "Create_Parent_Product");
+			put("editProductSummary", "Product_Edit");
+			put("productConfigSummary", "PO_Product_Config");
+			put("inventorySummary", "InventoryReport");
+			put("poPaymentSummary", "Po_Payment_Upload");
+			put("expenseSummary", "Expense_Upload");
+			put("EventSKUSummary", "Event_SKU_Upload");
+			put("product_Tax_Mapping", "product_Tax_Mapping");
+			put("Dlink_SKU_Mapping", "Dlink_SKU_Mapping");
+			put("vendorSKUMapping", "MP_Vendor_SKU_Mapping");
+			put("Unicommerce_Order", "Unicommerce_Order_Upload");
+			put("Flipkart_Payment", "Flipkart_Payment");
+			put("Flipkart_Order", "Flipkart_Order_Upload");
+			put("PayTM_Payment", "PayTM_Payment");
+			put("PayTM_Order", "PayTM_Order_Upload");
+			put("Amazon_Order", "Amazon_Order_Upload");
+			put("Amazon_Payment", "Amazon_Payment");
+			put("Limeroad_Payment", "Limeroad_Payment");
+			put("Limeroad_Order", "Limeroad_Order_Upload");
+			put("Snapdeal_Payment", "Snapdeal_Payment");
+			put("Snapdeal_Order", "Snapdeal_Order_Upload");
+			put("Jabong_Payment", "Jabong_Payment_Upload");
+			put("Jabong_Order", "Jabong_Order_Upload");
+			put("CreateInventoryGroups", "Create_Inventory_Group");
+			put("CreateProCat", "Create_Product_Category");
+			put("prodCat_Comm_Mapping", "ProdCat_Comm_Mapping");
 		}
 	};
 

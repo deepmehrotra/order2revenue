@@ -49,6 +49,7 @@ import com.o2r.dao.AreaConfigDao;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.FileUploadForm;
+import com.o2r.helper.GlobalConstant;
 import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
 import com.o2r.helper.SaveMappedFiles;
@@ -276,6 +277,13 @@ public class OrderController {
 			fileNames.add(files.get(0).getOriginalFilename());
 			try {
 				sellerId = helperClass.getSellerIdfromSession(request);
+				uploadReport.setFileType(GlobalConstant.worksheetNameMap.get(uploadForm.getSheetValue()));
+				uploadReport.setDescription("Imported");
+				uploadReport.setSeller(sellerService.getSeller(sellerId));
+				uploadReport.setNoOfErrors(0);
+				uploadReport.setStatus("In Progress");
+				reportGeneratorService.addUploadReport(uploadReport, sellerId);
+				
 				log.debug(" Filename : " + files.get(0).getOriginalFilename());
 				log.debug(" uploadForm.getSheetValue() : "
 						+ uploadForm.getSheetValue());
@@ -530,6 +538,13 @@ public class OrderController {
 						+ e.getLocalizedMessage());
 				e.printStackTrace();
 				log.error("Failed! by Seller ID : "+sellerId, e);
+
+				uploadReport.setStatus("Exception");
+				try {
+					reportGeneratorService.addUploadReport(uploadReport, sellerId);
+				} catch (CustomException e1) {
+					e1.printStackTrace();
+				}
 			}
 
 		}

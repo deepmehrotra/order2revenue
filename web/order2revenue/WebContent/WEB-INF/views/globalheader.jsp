@@ -156,10 +156,9 @@
 		<ul class="nav navbar-top-links navbar-right">
 			<!-- //Code for Getting started dropdown -->
 			<li class="dropdown"><a class="dropdown-toggle count-info"
-				data-toggle="dropdown"><i class="fa fa-steam"></i>
-			</a>
+				data-toggle="dropdown"><i class="fa fa-steam"></i> </a>
 				<ol class="dropdown-menu animated fadeInRight m-t-xs"
-					style="background: #333; border-left: none !important; border: 2px solid #fff;padding-bottom: 14px;width: 290px;">
+					style="background: #333; border-left: none !important; border: 2px solid #fff; padding-bottom: 14px; width: 290px;">
 					<h3 style="color: #fff; padding: 11px 0px 0px 17px;">Getting
 						Started</h3>
 					<hr class="line-dashed">
@@ -220,116 +219,108 @@
 								class="pull-right"> More Info</a>
 						</p>
 					</li>
-				</ol>
-			</li>
-			
-			
-					<li class="dropdown">
-                        <a class="dropdown-toggle count-info" data-toggle="dropdown" 
-                        	style="padding: 0px;min-height: 0px;position: relative;top: 4px;" onclick="Alerts();">
-                            <i class="fa fa-bell" id="bellimg" style="font-size:20px;color:#1ab394"></i>
-                            <span id="spanid" style="position: relative;right: 23px;color: #fff;font-size: 9px;top: -4px;"></span>
-                        </a>
-                        <ol class="dropdown-menu dropdown-messages animated fadeInRight" style="background:#fff;border-left: none !important;border: 2px solid #fff;margin-top: 20px;">
-                            <li>
-                               <div id="alert-div-1" class="dropdown-messages-box" style="display: none;">
-                               		<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
-                               		<div class="media-body">                               			
-                               			<label id="alert-msg-1"
-											style="font-size: smaller; font-weight: normal !important;"></label><br>
-                               			<label id="alert-type-1"
-											style="font-size: smaller; font-weight: normal !important;"
-											class=""></label>
-										<label
-											id="alert-date-1"
-											style="font-size: smaller; font-weight: normal !important;"
-											class="text-muted pull-right">
-										</label>
-                               		</div>
-                               </div>
-                            </li>
-                            <li class="divider" id="alert-line-1" style="display: none;"></li>
-                            <li>
-                                <div id="alert-div-2" class="dropdown-messages-box" style="display: none;">                                	
-                                	<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
-                                	<div class="media-body">  
-                                		<label id="alert-msg-2"
-											style="font-size: smaller; font-weight: normal !important;">
-										</label><br>                           		
-                               			<label id="alert-type-2"
-											style="font-size: smaller; font-weight: normal !important;">
-										</label>
-										<label
-											id="alert-date-2"
-											style="font-size: smaller; font-weight: normal !important;"
-											class="text-muted pull-right">
-										</label>
-                               		</div>
-                                </div>
-                            </li>
-                            <li class="divider" id="alert-line-2" style="display: none;"></li>
-                            <li>
-                                <div id="alert-div-3" class="dropdown-messages-box" style="display: none;">                                	
-                                	<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
-                                	<div class="media-body">
-                                		<label id="alert-msg-3"
-											style="font-size: smaller; font-weight: normal !important;">
-										</label><br>
-                                		<label id="alert-type-3"
-											style="font-size: smaller; font-weight: normal !important;">
-										</label>
-										<label
-											id="alert-date-3"
-											style="font-size: smaller; font-weight: normal !important;"
-											class="text-muted pull-right">
-										</label>
-                               		</div>
-                                </div>
-                            </li>
-                            <li class="divider" id="alert-line-3" style="display: none;"></li>
-                            <li>
-                                <div id="alert-div-4" class="dropdown-messages-box" style="display: none;">                                	
-                                	<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
-                                	<div class="media-body">
-                                		<label id="alert-msg-4"
-											style="font-size: smaller; font-weight: normal !important;"></label><br>
-											<label id="alert-type-4" style="font-size: smaller; font-weight: normal !important;"></label>
-											<label id="alert-date-4" style="font-size: smaller; font-weight: normal !important;" class="text-muted pull-right">
-										</label>
-                               		</div>
-                                </div>
-                            </li>
-                            <li class="divider" id="alert-line-4" style="display: none;"></li>
-                            <li>
-                                <div id="alert-div-5" class="dropdown-messages-box" style="display: none;">
-                                	<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
-                                	<div class="media-body">
-                                		<label id="alert-msg-5"
-											style="font-size: smaller; font-weight: normal !important;">
-										</label><br>
-                                		<label id="alert-type-5"
-											style="font-size: smaller; font-weight: normal !important;">
-										</label>											
-										<label
-											id="alert-date-5"
-											style="font-size: smaller; font-weight: normal !important;"
-											class="text-muted pull-right">
-										</label>
-                               		</div>
-                                </div>
-                            </li>
-                            <li class="divider" id="alert-line-5" style="display: none;"></li>
-                            <li>
-                            	<div id="alert-div-0" class="text-center link-block">
-                            		<a href="getAlertsList.html">
-                            		<i class="fa fa-envelope"></i><strong> See All Alerts</strong></a>
-                            	</div>                            	
-                            </li>                            
-                        </ol>
-                    </li>
-			
-			
-			
+				</ol></li>
+
+
+			<li class="dropdown"><a class="dropdown-toggle count-info"
+				data-toggle="dropdown"
+				style="padding: 0px; min-height: 0px; position: relative; top: 4px;"
+				onclick="Alerts();"> <i class="fa fa-bell" id="bellimg"
+					style="font-size: 20px; color: #1ab394"></i> <span id="spanid"
+					style="position: relative; right: 23px; color: #fff; font-size: 9px; top: -4px;"></span>
+			</a>
+				<ol class="dropdown-menu dropdown-messages animated fadeInRight"
+					style="background: #fff; border-left: none !important; border: 2px solid #fff; margin-top: 20px;">
+					<li>
+						<div id="alert-div-1" class="dropdown-messages-box"
+							style="display: none;">
+							<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
+							<div class="media-body">
+								<label id="alert-msg-1"
+									style="font-size: smaller; font-weight: normal !important;"></label><br>
+								<label id="alert-type-1"
+									style="font-size: smaller; font-weight: normal !important;"
+									class=""></label> <label id="alert-date-1"
+									style="font-size: smaller; font-weight: normal !important;"
+									class="text-muted pull-right"> </label>
+							</div>
+						</div>
+					</li>
+					<li class="divider" id="alert-line-1" style="display: none;"></li>
+					<li>
+						<div id="alert-div-2" class="dropdown-messages-box"
+							style="display: none;">
+							<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
+							<div class="media-body">
+								<label id="alert-msg-2"
+									style="font-size: smaller; font-weight: normal !important;">
+								</label><br> <label id="alert-type-2"
+									style="font-size: smaller; font-weight: normal !important;">
+								</label> <label id="alert-date-2"
+									style="font-size: smaller; font-weight: normal !important;"
+									class="text-muted pull-right"> </label>
+							</div>
+						</div>
+					</li>
+					<li class="divider" id="alert-line-2" style="display: none;"></li>
+					<li>
+						<div id="alert-div-3" class="dropdown-messages-box"
+							style="display: none;">
+							<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
+							<div class="media-body">
+								<label id="alert-msg-3"
+									style="font-size: smaller; font-weight: normal !important;">
+								</label><br> <label id="alert-type-3"
+									style="font-size: smaller; font-weight: normal !important;">
+								</label> <label id="alert-date-3"
+									style="font-size: smaller; font-weight: normal !important;"
+									class="text-muted pull-right"> </label>
+							</div>
+						</div>
+					</li>
+					<li class="divider" id="alert-line-3" style="display: none;"></li>
+					<li>
+						<div id="alert-div-4" class="dropdown-messages-box"
+							style="display: none;">
+							<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
+							<div class="media-body">
+								<label id="alert-msg-4"
+									style="font-size: smaller; font-weight: normal !important;"></label><br>
+								<label id="alert-type-4"
+									style="font-size: smaller; font-weight: normal !important;"></label>
+								<label id="alert-date-4"
+									style="font-size: smaller; font-weight: normal !important;"
+									class="text-muted pull-right"> </label>
+							</div>
+						</div>
+					</li>
+					<li class="divider" id="alert-line-4" style="display: none;"></li>
+					<li>
+						<div id="alert-div-5" class="dropdown-messages-box"
+							style="display: none;">
+							<a class="pull-left"><i class="fa fa-exclamation-circle"></i></a>
+							<div class="media-body">
+								<label id="alert-msg-5"
+									style="font-size: smaller; font-weight: normal !important;">
+								</label><br> <label id="alert-type-5"
+									style="font-size: smaller; font-weight: normal !important;">
+								</label> <label id="alert-date-5"
+									style="font-size: smaller; font-weight: normal !important;"
+									class="text-muted pull-right"> </label>
+							</div>
+						</div>
+					</li>
+					<li class="divider" id="alert-line-5" style="display: none;"></li>
+					<li>
+						<div id="alert-div-0" class="text-center link-block">
+							<a href="getAlertsList.html"> <i class="fa fa-envelope"></i><strong>
+									See All Alerts</strong></a>
+						</div>
+					</li>
+				</ol></li>
+
+
+
 			<li class="dropdown"><a class="dropdown-toggle count-info"
 				id="progrssDropdown" data-toggle="dropdown" href="#"> <i
 					id="progressSpiner" class="fa fa-exchange"></i>
@@ -524,8 +515,8 @@
 							
 							if (p1 == 'true') {
 								//alert("IN");
-								$('#progressSpiner').attr('class', 'fa fa-refresh fa-spin');
-								$('#progressSpiner').attr('style', 'color:#1ab394;');
+								//$('#progressSpiner').attr('class', 'fa fa-refresh fa-spin');
+								//$('#progressSpiner').attr('style', 'color:#1ab394;');
 							} else {
 								//alert("done");
 								$("#bar1").hide();
@@ -566,6 +557,16 @@
 																	document
 																			.getElementById("uploadReport-status-"
 																					+ i).style = "font-size: smaller; font-weight: normal !important; color: red !important;";
+																} else if (arrayItem.status == "In Progress") {
+																	
+																	document
+																		.getElementById("uploadReport-i-"
+																			+ i).style = "color: #1ab394 !important;";
+																	$('#progressSpiner').attr('class', 'fa fa-refresh fa-spin');
+																	$('#progressSpiner').attr('style', 'color:#1ab394;');
+																	document
+																		.getElementById("uploadReport-status-"
+																			+ i).style = "font-size: smaller; font-weight: normal !important; color: green !important;";
 																} else {
 																	document
 																			.getElementById("uploadReport-status-"

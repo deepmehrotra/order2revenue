@@ -4751,7 +4751,7 @@ public class SaveMappedFiles {
 						entry.getCell(index).setCellType(
 								HSSFCell.CELL_TYPE_STRING);
 						List<Order> onj = orderService.searchAsIsOrder(
-								"subOrderID", entry.getCell(index).toString(),
+								"channelOrderID", entry.getCell(index).toString(),
 								sellerId);
 						System.out.println(entry.getCell(index).toString());
 						if (onj != null) {
@@ -4969,7 +4969,8 @@ public class SaveMappedFiles {
 							validaterow = false;
 						}
 						if (cellIndexMap.get(columHeaderMap
-								.get("Sales Channel")) != null) {
+								.get("Sales Channel")) != null
+								&& manualCharge != null) {
 							int indexchannel = cellIndexMap.get(columHeaderMap
 									.get("Sales Channel"));
 							manualCharge.setPartner(entry.getCell(indexchannel)
@@ -6867,7 +6868,7 @@ public class SaveMappedFiles {
 												.getDateOfPayment(), manuals
 												.getPaidAmount(), manuals
 												.getPartner() != null ? manuals
-												.getPartner() : "Snapdeal",
+												.getPartner() : "Jabong",
 										sellerId), sellerId);
 					} catch (Exception e) {
 						log.error("Failed! by SellerId : " + sellerId, e);
@@ -6876,7 +6877,7 @@ public class SaveMappedFiles {
 				manualChargesService.addListManualCharges(manualChargesList,
 						sellerId);
 			}
-			uploadResultXLS(offices, "Snapdeal_Payment", errorSet, path,
+			uploadResultXLS(offices, "Jabong_Payment", errorSet, path,
 					sellerId, uploadReport);
 		}
 

@@ -90,7 +90,7 @@
 							</div>
 							<div class="ibox-content overflow-h">
 								<form role="search" class="navbar-form-new" method="post"
-									action="findGlobalOrders.html" id="findGlobalOrderForm"
+									action="findOrders.html" id="findGlobalOrderForm"
 									class="form-horizontal">
 									<div class="col-sm-12" id="search1">
 										<div class="col-sm-5">
@@ -131,8 +131,7 @@
 											<input type="text" name="searchString" class="form-control"
 												placeholder="Search String">
 										</div>
-										<div class="col-sm-5" id="searcstring2"
-											style="display: none">
+										<div class="col-sm-5" id="searcstring2" style="display: none">
 											<div class="input-group f-left" style="width: 150px;">
 												<div class="input-group date">
 													<span class="input-group-addon"><i
@@ -155,6 +154,39 @@
 										</div>
 									</div>
 								</form>
+								<c:if test="${!empty searchOrderList}">
+									<div class="ibox-content">
+										<table class="table table-bordered custom-table">
+											<thead>
+												<tr>
+													<th>#</th>
+													<th>Partner</th>
+													<th>Channel Order Id</th>
+													<th>Status</th>
+													<th>Actions</th>
+												</tr>
+											</thead>
+											<tbody>
+
+												<c:if test="${!empty searchOrderList}">
+													<c:forEach items="${searchOrderList}" var="searchOrder"
+														varStatus="loop">
+														<tr>
+															<td>${loop.index+1}</td>
+															<td>${searchOrder.pcName}</td>
+															<td>${searchOrder.channelOrderID}</td>
+															<td>${searchOrder.status}</td>
+															<td><label data-toggle="modal"
+																data-target="#myModal23"
+																onclick="reverseOrder(${searchOrder.orderId},'${searchOrder.channelOrderID}')"
+																style='cursor: pointer;'>Reverse</label></td>
+														</tr>
+													</c:forEach>
+												</c:if>
+											</tbody>
+										</table>
+									</div>
+								</c:if>
 							</div>
 						</div>
 					</div>

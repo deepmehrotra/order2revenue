@@ -2856,14 +2856,19 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Seller.class).add(
-					Restrictions.eq("id", sellerId));
-			seller = (Seller) criteria.list().get(0);
-			uploadReport.setSeller(seller);
-			if (seller.getUploadReportList() != null) {
-				seller.getUploadReportList().add(uploadReport);
+			
+			if (uploadReport.getId() != 0) {
+				session.merge(uploadReport);
+			} else {
+				Criteria criteria = session.createCriteria(Seller.class).add(
+						Restrictions.eq("id", sellerId));
+				seller = (Seller) criteria.list().get(0);
+				uploadReport.setSeller(seller);
+				if (seller.getUploadReportList() != null) {
+					seller.getUploadReportList().add(uploadReport);
+				}
+				session.saveOrUpdate(seller);
 			}
-			session.saveOrUpdate(seller);
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {

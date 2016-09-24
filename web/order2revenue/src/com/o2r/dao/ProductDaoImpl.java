@@ -1309,7 +1309,7 @@ public class ProductDaoImpl implements ProductDao {
 			if (criterialist != null && criteria.list().size() != 0) {
 				SKUList = criterialist;
 			}
-			System.out.println("Product Lit : " + SKUList.size());
+			//System.out.println("Product Lit : " + SKUList.size());
 			/*criterialist = null;
 			Criteria criteriaformappingsku = session
 					.createCriteria(Product.class);

@@ -32,23 +32,23 @@ public class PartnerDaoImpl implements PartnerDao {
 	static Logger log = Logger.getLogger(PartnerDaoImpl.class.getName());
 	private static final String chargesDeleteQuery = "delete from NRnReturnCharges where config_configId=:configId";
 
-
 	@Override
 	public void addPartner(Partner partner, int sellerId)
 			throws CustomException {
-		
 
 		log.info("*** AddPArtner Starts : partnerDaoImpl****");
-		log.debug("******* Inside PartnerDaoIMpl partner id :"+ partner.getPcId()+"******* ConfigId : "+partner.getNrnReturnConfig().getConfigId());
-		long id=partner.getPcId();
-		
+		log.debug("******* Inside PartnerDaoIMpl partner id :"
+				+ partner.getPcId() + "******* ConfigId : "
+				+ partner.getNrnReturnConfig().getConfigId());
+		long id = partner.getPcId();
+
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			if (id != 0) {				
-				Query gettingTaxId = session
-						.createSQLQuery(chargesDeleteQuery)
-						.setParameter("configId", partner.getNrnReturnConfig().getConfigId());
+			if (id != 0) {
+				Query gettingTaxId = session.createSQLQuery(chargesDeleteQuery)
+						.setParameter("configId",
+								partner.getNrnReturnConfig().getConfigId());
 				gettingTaxId.executeUpdate();
 				session.saveOrUpdate(partner);
 
@@ -61,36 +61,37 @@ public class PartnerDaoImpl implements PartnerDao {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.addPartnerError,
-					new Date(), 1, GlobalConstant.addPartnerErrorCode, e);			
+					new Date(), 1, GlobalConstant.addPartnerErrorCode, e);
 		}
 		log.info("*** AddPArtner Ends : partnerDaoImpl****");
 	}
-	
+
 	@Override
 	public void editPartner(Partner partner, int sellerId)
 			throws CustomException {
-		
 
 		log.info("*** editPartner Starts : partnerDaoImpl****");
-		log.debug("******* Inside PartnerDaoIMpl partner id :"+ partner.getPcId()+"******* ConfigId : "+partner.getNrnReturnConfig().getConfigId());
-		long id=partner.getPcId();
-		
+		log.debug("******* Inside PartnerDaoIMpl partner id :"
+				+ partner.getPcId() + "******* ConfigId : "
+				+ partner.getNrnReturnConfig().getConfigId());
+		long id = partner.getPcId();
+
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			if (id != 0) {				
-				
+			if (id != 0) {
+
 				session.merge(partner);
-			} 
+			}
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.addPartnerError,
-					new Date(), 1, GlobalConstant.addPartnerErrorCode, e);			
+					new Date(), 1, GlobalConstant.addPartnerErrorCode, e);
 		}
 		log.info("*** editPartner Ends : partnerDaoImpl****");
 	}
@@ -108,15 +109,15 @@ public class PartnerDaoImpl implements PartnerDao {
 			if (seller.getPartners() != null
 					&& seller.getPartners().size() != 0)
 				returnlist = seller.getPartners();
-			
+
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.listPartnerError,
 					new Date(), 3, GlobalConstant.listPartnerErrorCode, e);
-			
+
 		}
 		log.info("*** listPartner Ends : partnerDaoImpl****");
 		return returnlist;
@@ -124,36 +125,38 @@ public class PartnerDaoImpl implements PartnerDao {
 
 	@Override
 	public Partner getPartner(long partnerid) throws CustomException {
-		
+
 		log.info("*** getPartner Starts : partnerDaoImpl****");
-		Partner partner=null;
-		try {			
+		Partner partner = null;
+		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			partner =(Partner) session.get(Partner.class,partnerid);
+			partner = (Partner) session.get(Partner.class, partnerid);
 			Hibernate.initialize(partner.getNrnReturnConfig().getCharges());
 			session.getTransaction().commit();
 			session.close();
-			
+
 		} catch (Exception e) {
-			e.printStackTrace();			
-			log.error("Failed!",e);
+			e.printStackTrace();
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.getPartnerError,
 					new Date(), 3, GlobalConstant.getPartnerErrorCode, e);
 		}
 		log.info("*** getPartner Ends : partnerDaoImpl****");
 		return partner;
 	}
-	
+
 	@Override
-	public MetaPartner getMetaPartner(String partnerName) throws CustomException {
-		
+	public MetaPartner getMetaPartner(String partnerName)
+			throws CustomException {
+
 		log.info("*** getPartner Starts : partnerDaoImpl****");
-		MetaPartner partner=null;
-		try {			
+		MetaPartner partner = null;
+		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			//partner =(MetaPartner) session.get(MetaPartner.class,partnerName);
+			// partner =(MetaPartner)
+			// session.get(MetaPartner.class,partnerName);
 			Criteria criteria = session.createCriteria(MetaPartner.class).add(
 					Restrictions.eq("pcName", partnerName));
 			if (criteria.list() != null && criteria.list().size() != 0) {
@@ -162,10 +165,10 @@ public class PartnerDaoImpl implements PartnerDao {
 			}
 			session.getTransaction().commit();
 			session.close();
-			
+
 		} catch (Exception e) {
-			e.printStackTrace();			
-			log.error("Failed!",e);
+			e.printStackTrace();
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.getPartnerError,
 					new Date(), 3, GlobalConstant.getPartnerErrorCode, e);
 		}
@@ -176,7 +179,7 @@ public class PartnerDaoImpl implements PartnerDao {
 	@Override
 	public Partner getPartner(String partnername, int sellerId)
 			throws CustomException {
-		
+
 		log.info("*** getPartner by PartnerName Starts : partnerDaoImpl****");
 		Partner returnpartner = null;
 		Seller seller = null;
@@ -184,31 +187,37 @@ public class PartnerDaoImpl implements PartnerDao {
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			seller=(Seller)session.get(Seller.class, sellerId);
-			/*Criteria criteria = session.createCriteria(Seller.class).add(
-					Restrictions.eq("id", sellerId));
-			criteria.createAlias("partners", "partner",CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.like("partner.pcName", partnername, MatchMode.EXACT))
-				//	.add(Restrictions.eq("partner.pcName", partnername).ignoreCase())
-					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);*/
-			List<Partner> partnerList=seller.getPartners();
+			seller = (Seller) session.get(Seller.class, sellerId);
+			/*
+			 * Criteria criteria = session.createCriteria(Seller.class).add(
+			 * Restrictions.eq("id", sellerId));
+			 * criteria.createAlias("partners",
+			 * "partner",CriteriaSpecification.LEFT_JOIN)
+			 * .add(Restrictions.like("partner.pcName", partnername,
+			 * MatchMode.EXACT)) // .add(Restrictions.eq("partner.pcName",
+			 * partnername).ignoreCase())
+			 * .setResultTransformer(CriteriaSpecification
+			 * .DISTINCT_ROOT_ENTITY);
+			 */
+			List<Partner> partnerList = seller.getPartners();
 			if (partnerList != null && partnerList.size() != 0) {
-				for(Partner partner:partnerList)
-				{
-					if(partner.getPcName().equals(partnername))
-				returnpartner = partner;
+				for (Partner partner : partnerList) {
+					if (partner != null && partner.getPcName().equals(partnername))
+						returnpartner = partner;
 				}
-				if(returnpartner!=null&&returnpartner.getNrnReturnConfig()!=null)
-				Hibernate.initialize(returnpartner.getNrnReturnConfig().getCharges());
+				if (returnpartner != null
+						&& returnpartner.getNrnReturnConfig() != null)
+					Hibernate.initialize(returnpartner.getNrnReturnConfig()
+							.getCharges());
 			}
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.getPartnerError,
 					new Date(), 3, GlobalConstant.getPartnerErrorCode, e);
-			
+
 		}
 		log.info("*** getPartner by partnerName Starts : partnerDaoImpl****");
 		return returnpartner;
@@ -218,11 +227,11 @@ public class PartnerDaoImpl implements PartnerDao {
 	@Override
 	public void deletePartner(Partner partner, int sellerId)
 			throws CustomException {
-		
+
 		log.info("*** DeletePartner Starts : partnerDaoImpl****");
-		log.debug(" In partner delete pid " + partner.getPcId()
-				+ "   pcname " + partner.getPcName());
-		
+		log.debug(" In partner delete pid " + partner.getPcId() + "   pcname "
+				+ partner.getPcName());
+
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -235,96 +244,86 @@ public class PartnerDaoImpl implements PartnerDao {
 			int sellerdelete = session.createQuery(
 					"DELETE FROM Partner WHERE pcId = " + partner.getPcId())
 					.executeUpdate();
-			
-			log.debug(" update : " + updated + " sellerdelete "
-					+ sellerdelete);
+
+			log.debug(" update : " + updated + " sellerdelete " + sellerdelete);
 			session.getTransaction().commit();
 			session.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(GlobalConstant.deletePartnerError,
-					new Date(), 3, GlobalConstant.deletePartnerErrorCode, e);			
+					new Date(), 3, GlobalConstant.deletePartnerErrorCode, e);
 
 		}
 		log.info("*** DeletePartner Ends : partnerDaoImpl****");
 	}
-	
+
 	@Override
-	public void addMetaPartner(MetaPartner partner)
-			throws CustomException {
-		
+	public void addMetaPartner(MetaPartner partner) throws CustomException {
 
 		log.info("*** AddPArtner Starts : partnerDaoImpl****");
-		log.debug("******* Inside PartnerDaoIMpl partner id :"+ partner.getPcId()+"******* ConfigId : "+partner.getNrnReturnConfig().getConfigId());
-		long id=partner.getPcId();
-		
+		log.debug("******* Inside PartnerDaoIMpl partner id :"
+				+ partner.getPcId() + "******* ConfigId : "
+				+ partner.getNrnReturnConfig().getConfigId());
+		long id = partner.getPcId();
+
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			
+
 			session.saveOrUpdate(partner);
-			
+
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed!",e);
+			log.error("Failed!", e);
 			throw new CustomException(GlobalConstant.addPartnerError,
-					new Date(), 1, GlobalConstant.addPartnerErrorCode, e);			
+					new Date(), 1, GlobalConstant.addPartnerErrorCode, e);
 		}
 		log.info("*** AddPArtner Ends : partnerDaoImpl****");
 	}
-	
-	/*@Override
-	public void deleteNrConfigFromPartner(Partner partner, int sellerId)
-			throws CustomException {
-		System.out.println(" In deleteNrConfigFromPartner pid " + partner.getPcId()
-				+ "   pcname " + partner.getPcName());
-		// sellerId=4;
-		try {
-			Session session = sessionFactory.openSession();
-			session.beginTransaction();
-			Query deleteQuery = session
-					.createSQLQuery("delete from Seller_Partner where partners_pcId=? and Seller_id=?");
 
-			deleteQuery.setInteger(0, partner.getPcId());
-			deleteQuery.setInteger(1, sellerId);
-			int updated = deleteQuery.executeUpdate();
-			int sellerdelete = session.createQuery(
-					"DELETE FROM Partner WHERE pcId = " + partner.getPcId())
-					.executeUpdate();
-			
-			 * Criteria
-			 * criteria=session.createCriteria(Seller.class).add(Restrictions
-			 * .eq("id", sellerId)); criteria.createAlias("partners", "partner",
-			 * CriteriaSpecification.LEFT_JOIN)
-			 * .add(Restrictions.eq("partner.pcId", partner.getPcId()))
-			 * .setResultTransformer
-			 * (CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			 * seller=(Seller)criteria.list().get(0); Partner
-			 * partneris=seller.getPartners().get(0);
-			 * seller.getPartners().remove(partneris);
-			 * session.delete(partneris);
-			 * System.out.println(" List size after deletion :"
-			 * +seller.getPartners().size()); session.saveOrUpdate(seller);
-			 
-			System.out.println(" update : " + updated + " sellerdelete "
-					+ sellerdelete);
-			session.getTransaction().commit();
-			session.close();
-
-		} catch (Exception e) {
-
-			log.error("Failed!",e);
-			throw new CustomException(GlobalConstant.deletePartnerError,
-					new Date(), 3, GlobalConstant.deletePartnerErrorCode, e);
-			// System.out.println(" Inside delleting partner"+
-			// e.getLocalizedMessage());
-
-		}
-
-	}*/
+	/*
+	 * @Override public void deleteNrConfigFromPartner(Partner partner, int
+	 * sellerId) throws CustomException {
+	 * System.out.println(" In deleteNrConfigFromPartner pid " +
+	 * partner.getPcId() + "   pcname " + partner.getPcName()); // sellerId=4;
+	 * try { Session session = sessionFactory.openSession();
+	 * session.beginTransaction(); Query deleteQuery = session .createSQLQuery(
+	 * "delete from Seller_Partner where partners_pcId=? and Seller_id=?");
+	 * 
+	 * deleteQuery.setInteger(0, partner.getPcId()); deleteQuery.setInteger(1,
+	 * sellerId); int updated = deleteQuery.executeUpdate(); int sellerdelete =
+	 * session.createQuery( "DELETE FROM Partner WHERE pcId = " +
+	 * partner.getPcId()) .executeUpdate();
+	 * 
+	 * Criteria criteria=session.createCriteria(Seller.class).add(Restrictions
+	 * .eq("id", sellerId)); criteria.createAlias("partners", "partner",
+	 * CriteriaSpecification.LEFT_JOIN) .add(Restrictions.eq("partner.pcId",
+	 * partner.getPcId())) .setResultTransformer
+	 * (CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+	 * seller=(Seller)criteria.list().get(0); Partner
+	 * partneris=seller.getPartners().get(0);
+	 * seller.getPartners().remove(partneris); session.delete(partneris);
+	 * System.out.println(" List size after deletion :"
+	 * +seller.getPartners().size()); session.saveOrUpdate(seller);
+	 * 
+	 * System.out.println(" update : " + updated + " sellerdelete " +
+	 * sellerdelete); session.getTransaction().commit(); session.close();
+	 * 
+	 * } catch (Exception e) {
+	 * 
+	 * log.error("Failed!",e); throw new
+	 * CustomException(GlobalConstant.deletePartnerError, new Date(), 3,
+	 * GlobalConstant.deletePartnerErrorCode, e); //
+	 * System.out.println(" Inside delleting partner"+ //
+	 * e.getLocalizedMessage());
+	 * 
+	 * }
+	 * 
+	 * }
+	 */
 
 }
