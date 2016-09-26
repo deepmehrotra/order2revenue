@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@page import="java.util.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -112,7 +113,7 @@ input+label {
 		<div id="page-wrapper" class="gray-bg">
 			<jsp:include page="../globalheader.jsp"></jsp:include>
 			<div class="wrapper wrapper-content animated fadeInRight"
-					id="centerpane">
+				id="centerpane">
 				<div class="row">
 					<div class="col-lg-12">
 						<form:form method="POST" action="savePartner.html"
@@ -153,18 +154,20 @@ input+label {
 																<c:choose>
 																	<c:when test="${partner.pcId != 0}">
 																		<form:input path="pcName" value="${partner.pcName}"
-																			class="form-control" id="partnerName1" readonly="true" />
+																			class="form-control" id="partnerName1"
+																			readonly="true" />
 																	</c:when>
 																	<c:otherwise>
 																		<div class="col-sm-3">
-																			<label id="postName" class="control-label" >${partner.pcName}</label>
+																			<label id="postName" class="control-label">${partner.pcName}</label>
 																		</div>
 																		<div class="col-sm-9">
-																			<input name="pcNameSuffix" class="form-control" id="partnerName2"
-																			onblur="checkOnBlur()" style="width: 108%;" placeholder="Suffix" />
-																			<span id="partnerNameMessage"
-																			style="font-weight: bold;color=red"></span>
-																		</div>																		
+																			<input name="pcNameSuffix" class="form-control"
+																				id="partnerName2" onblur="checkOnBlur()"
+																				style="width: 108%;" placeholder="Suffix" /> <span
+																				id="partnerNameMessage"
+																				style="font-weight: bold;color=red"></span>
+																		</div>
 																	</c:otherwise>
 																</c:choose>
 															</div>
@@ -292,7 +295,28 @@ input+label {
 													5 Duration will have 5 and Payment from SD will have 10)</small>
 											</div>
 											<div class="col-sm-12 radio1" id="blk-datewisepay">
-												<div class="row">
+												<c:if test="${fn:contains(partner.pcName, 'flipkart')}">
+													<div class="row">
+														<div class="col-md-3"  style="padding-bottom: 18px;"></div>
+														<div class="col-md-4" style="padding-bottom: 18px;">
+															<div class="radio">
+																<form:radiobutton path="paymentCategory" value="prepaid"
+																	id="prepaid" name="toggler"
+																	class="paymentcycleClass" />
+																<label>Prepaid </label>
+															</div>
+														</div>
+														<div class="col-md-3" style="padding-bottom: 18px;">
+															<div class="radio">
+																<form:radiobutton path="paymentCategory" value="postpaid"
+																	id="postpaid" name="toggler" class="postpaid"/>
+																<label>Postpaid </label>
+															</div>
+														</div>
+														<div class="col-md-2"  style="padding-bottom: 18px;"></div>
+													</div>
+												</c:if>
+												<div class="row" id="blk-prepaid">
 													<div class="col-md-6" style="padding-bottom: 18px;">
 														<form:select path="isshippeddatecalc" items="${datemap}"
 															class="form-control" id="paymentField1">
@@ -309,6 +333,28 @@ input+label {
 														style="display: block;">
 														<form:input path="noofdaysfromdeliverydate"
 															id="noofdaysfromdeliverydate"
+															value="${partner.noofdaysfromdeliverydate}"
+															placeholder="Payment Days From Delivery Date"
+															class="form-control number" />
+													</div>
+												</div>
+												<div class="col-sm-12 radio1" id="blk-postpaid">
+													<div class="col-md-6" style="padding-bottom: 18px;">
+														<form:select path="isshippeddatecalc" items="${datemap}"
+															class="form-control" id="paymentField2">
+														</form:select>
+													</div>
+													<div class="col-md-6 payment-box" id="truePost">
+														<form:input path="noofdaysfromshippeddate"
+															id="noofdaysfromshippeddate1"
+															value="${partner.noofdaysfromshippeddate}"
+															placeholder="Payment Days From Shipped Date"
+															class="form-control" />
+													</div>
+													<div class="col-md-6 payment-box" id="falsePost"
+														style="display: block;">
+														<form:input path="noofdaysfromdeliverydate"
+															id="noofdaysfromdeliverydate1"
 															value="${partner.noofdaysfromdeliverydate}"
 															placeholder="Payment Days From Delivery Date"
 															class="form-control number" />
@@ -3319,6 +3365,10 @@ input+label {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
 							});
+							$(".postpaid").click(function() {
+								$('#blk-prepaid').hide();
+								$("#blk-" + $(this).attr('id')).slideDown();								
+							});
 							$("[name=paymentType]").click(function() {
 								$('.radio1').hide();
 								$("#blk-" + $(this).val()).slideDown();
@@ -3330,6 +3380,10 @@ input+label {
 							$('#paymentField1').change(function() {
 								$('.payment-box').hide();
 								$('#' + $(this).val()).fadeIn();
+							});
+							$('#paymentField2').change(function() {
+								$('.payment-box').hide();
+								$('#' + $(this).val() + 'Post').fadeIn();
 							});
 							$('#data_1 .input-group.date').datepicker({
 								todayBtn : "linked",
@@ -3766,9 +3820,9 @@ input+label {
 			var demo = document.getElementById("partnerName").value;
 			//alert(demo);
 			var partner = document.getElementById("postName").innerHTML;
-			alert(partner+demo);
+			alert(partner + demo);
 			$.ajax({
-				url : "ajaxPartnerCheck.html?partner="+partner+demo,
+				url : "ajaxPartnerCheck.html?partner=" + partner + demo,
 				success : function(res) {
 					if (res == "false") {
 						if ('${partner.pcId}' != '0') {

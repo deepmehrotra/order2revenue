@@ -17,6 +17,7 @@ public class PartnerBean {
 	private String pcDesc;
 	private String pcLogoUrl;
 	private String paymentType;
+	private String paymentCategory;
 	private boolean isshippeddatecalc;
 	private int noofdaysfromshippeddate;
 	private int noofdaysfromdeliverydate;
@@ -267,5 +268,11 @@ public class PartnerBean {
 	public void setshippingfeeWeightVariableList(
 			List<ChargesBean> shippingfeeWeightVariableList) {
 		this.shippingfeeWeightVariableList = shippingfeeWeightVariableList;
+	}
+	public String getPaymentCategory() {
+		return paymentCategory;
+	}
+	public void setPaymentCategory(String paymentCategory) {
+		this.paymentCategory = paymentCategory;
 	}
 }
