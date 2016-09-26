@@ -2567,28 +2567,33 @@ public class SaveContents {
 										+ entry.getCell(2) + " 3 :"
 										+ entry.getCell(3));
 
-								if (validaterow) {
-									order = orderService.addOrderPayment(
-											skucode, channelOrderId, payment,
-											sellerId);
-								} else {
-									returnPaymentMap.put(errorMessage
-											.toString(), ConverterClass
-											.prepareOrderBean(order));
-								}
-								if (order != null) {
-									if (!channelOrderIdCheck
-											.containsKey(channelOrderId)) {
-										channelOrderIdCheck.put(channelOrderId,
-												channelOrderId);
-										order.setPaymentUpload(paymentUpload);
-										paymentUpload.getOrders().add(order);
-										generatePaymentUpload = true;
-									}
-								}
+								
 							} else {
+								System.out.println(" Salses channel is nu ll");
 								errorMessage.append("Channel Not Present.");
 								validaterow = false;
+							}
+							
+							if (validaterow) {
+								totalpositive = totalpositive + positiveAmount;
+								totalnegative = totalnegative + negativeAmount;
+								order = orderService.addOrderPayment(
+										skucode, channelOrderId, payment,
+										sellerId);
+							} else {
+								returnPaymentMap.put(errorMessage
+										.toString(), ConverterClass
+										.prepareOrderBean(order));
+							}
+							if (order != null) {
+								if (!channelOrderIdCheck
+										.containsKey(channelOrderId)) {
+									channelOrderIdCheck.put(channelOrderId,
+											channelOrderId);
+									order.setPaymentUpload(paymentUpload);
+									paymentUpload.getOrders().add(order);
+									generatePaymentUpload = true;
+								}
 							}
 						} else {
 							errorMessage.append("Channel is Blank.");
@@ -2661,8 +2666,7 @@ public class SaveContents {
 							validaterow = false;
 						}
 						if (validaterow) {
-							totalpositive = totalpositive + positiveAmount;
-							totalnegative = totalnegative + negativeAmount;
+							
 							manualChargesList.add(manualCharges);
 						} else {
 							returnPaymentMap
@@ -3152,11 +3156,11 @@ public class SaveContents {
 									.parseFloat(entry.getCell(11).toString()));
 						}
 
-					} else {
+					} /*else {
 						validaterow = false;
 						errorMessage.append("Value of " + criteria
 								+ " is Invalid for Return.. ");
-					}
+					}*/
 					if (validaterow)
 						orderService.addReturnOrder(order.getChannelOrderID(),
 								orderReturn, sellerId);
