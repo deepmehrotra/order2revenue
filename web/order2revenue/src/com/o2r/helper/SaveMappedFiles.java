@@ -332,11 +332,12 @@ public class SaveMappedFiles {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
 							
-							String itemID = entry.getCell(8).toString();
+							String itemID = entry.getCell(index).toString();
 							if (itemID.contains("'")) {
 								itemID = removeExtraQuote(itemID);
 							}
-
+							itemID=removeExtraQuote(itemID);
+System.out.println(" itemoID after removing : "+itemID);
 							order.setSubOrderID(itemID);
 							
 							if (partner != null
@@ -7025,7 +7026,12 @@ public class SaveMappedFiles {
 	}
 	
 	private static String removeExtraQuote(String input) {
-		String out = input.replaceAll("'", "");
-		return out;
+		String out="";
+		if(input.contains("'"))
+		out= input.replaceAll("'", "");
+		if(input.contains("`"))
+			out= input.replaceAll("`", "");
+			
+	return out;
 	}
 }
