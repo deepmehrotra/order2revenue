@@ -8,4 +8,5 @@ public interface AlertsDao {
 	public void saveAlerts(SellerAlerts alerts, int sellerId);
 	public List<SellerAlerts> getAlerts(int sellerId);
 	public int unreadCount(int sellerId);
+	public void markRead(int sellerId);
 }

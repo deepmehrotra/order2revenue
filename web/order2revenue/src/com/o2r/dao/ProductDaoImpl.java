@@ -582,9 +582,11 @@ public class ProductDaoImpl implements ProductDao {
 					}
 					product.setProductConfig(productConfigs);
 					session.saveOrUpdate(product);
+					session.getTransaction().commit();
 				}
 			}
 			
+			session.getTransaction().begin();
 			Query deleteQuery = session.createSQLQuery("delete from productconfig where productConfigId =?");
 			deleteQuery.setInteger(0, productConfig.getProductConfigId());
 			deleteQuery.executeUpdate();
