@@ -3102,8 +3102,6 @@ System.out.println(" itemoID after removing : "+itemID);
 							}
 							if (order != null & validaterow) {
 								if (!duplicateKey.containsKey(channelOrderId)) {
-									System.out
-											.println(" Setting payment upload");
 									order.setPaymentUpload(paymentUpload);
 									paymentUpload.getOrders().add(order);
 									generatePaymentUpload = true;
@@ -3127,7 +3125,6 @@ System.out.println(" itemoID after removing : "+itemID);
 							 * ); } if (skucode != null &&
 							 * skucode.equalsIgnoreCase("null")) {
 							 */
-							System.out.println(" Setting manual charges ");
 							newmanualCharge = new ManualCharges();
 							try {
 								index = cellIndexMap.get(columHeaderMap
@@ -4631,7 +4628,7 @@ System.out.println(" itemoID after removing : "+itemID);
 						if (amount > 0) {
 							totalpositive = totalpositive + amount;
 						} else if (amount < 0) {
-							totalnegative = totalnegative + amount;
+							totalnegative = totalnegative + Math.abs(amount);
 						}
 						order = orderService.addOrderPayment(skucode,
 								channelOrderId, orderPayment, sellerId);
@@ -5851,7 +5848,6 @@ System.out.println(" itemoID after removing : "+itemID);
 									try {
 										amount = entry.getCell(index)
 												.getNumericCellValue();
-										System.out.println(amount);
 										if (amount > 0) {
 											paymentBean
 													.setPositiveAmount(paymentBean
@@ -5898,7 +5894,7 @@ System.out.println(" itemoID after removing : "+itemID);
 						if (amount > 0) {
 							totalpositive = totalpositive + amount;
 						} else if (amount < 0) {
-							totalnegative = totalnegative + amount;
+							totalnegative = totalnegative + Math.abs(amount);
 						}
 						order = orderService.addOrderPayment(skucode,
 								channelOrderId, ConverterClass
