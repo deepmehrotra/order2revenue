@@ -37,6 +37,10 @@ public class Partner {
 	@Column
 	private int noofdaysfromshippeddate;
 	@Column
+	private boolean isshippeddatecalcPost;
+	@Column
+	private int noofdaysfromshippeddatePost;
+	@Column
 	private int startcycleday;
 	@Column
 	private int paycycleduration;
@@ -193,6 +197,18 @@ public class Partner {
 	}
 	public void setPaymentCategory(String paymentCategory) {
 		this.paymentCategory = paymentCategory;
+	}
+	public boolean isIsshippeddatecalcPost() {
+		return isshippeddatecalcPost;
+	}
+	public void setIsshippeddatecalcPost(boolean isshippeddatecalcPost) {
+		this.isshippeddatecalcPost = isshippeddatecalcPost;
+	}
+	public int getNoofdaysfromshippeddatePost() {
+		return noofdaysfromshippeddatePost;
+	}
+	public void setNoofdaysfromshippeddatePost(int noofdaysfromshippeddatePost) {
+		this.noofdaysfromshippeddatePost = noofdaysfromshippeddatePost;
 	}
 
 

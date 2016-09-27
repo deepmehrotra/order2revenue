@@ -487,38 +487,20 @@
 						function() {
 							
 							isProgress = $("#isProgress").val();
-							//alert(isProgress);
 							p1 = Cookies.get("setProgress");
-							//alert(p1);
 							
 							if (p1 == 'undefined' || p1 == '') {
 								p1 = false;
 							}
 							
 							if (isProgress == 'false') {
-								//alert("dddd");
 								p1 = false;
 								Cookies.set("setProgress", "false");
 							}
 							
-							/* if (((isProgress == 'undefined' || isProgress == '')
-									&& p1 == false) || isProgress ==  false
-									) {
-								alert("done");
-								$("#bar1").hide();
+							if (p1 == 'true') {
 								
 							} else {
-								alert("IN");
-								$('#progressSpiner').attr('class', 'fa fa-refresh fa-spin');
-								$('#progressSpiner').attr('style', 'color:#1ab394;');
-							} */
-							
-							if (p1 == 'true') {
-								//alert("IN");
-								//$('#progressSpiner').attr('class', 'fa fa-refresh fa-spin');
-								//$('#progressSpiner').attr('style', 'color:#1ab394;');
-							} else {
-								//alert("done");
 								$("#bar1").hide();
 							}
 
@@ -529,6 +511,7 @@
 									.success(
 											function(data) {												
 												var i = 1;
+												var stopSpinner = true;
 												if (data) {
 													data.forEach(function(
 																	arrayItem) {
@@ -559,10 +542,11 @@
 																					+ i).style = "font-size: smaller; font-weight: normal !important; color: red !important;";
 																} else if (arrayItem.status == "In Progress") {
 																	
+																	stopSpinner = false;
 																	document
 																		.getElementById("uploadReport-i-"
 																			+ i).style = "color: #1ab394 !important;";
-																	$('#progressSpiner').attr('class', 'fa fa-refresh fa-spin');
+																	$('#progressSpiner').attr('class', 'fa fa-spinner fa-pulse');
 																	$('#progressSpiner').attr('style', 'color:#1ab394;');
 																	document
 																		.getElementById("uploadReport-status-"
@@ -619,6 +603,10 @@
 	
 																i++;						
 															});
+												}
+												if (stopSpinner) {
+													$('#progressSpiner').attr('class', 'fa fa-exchange');
+													$('#progressSpiner').attr('style', 'color:#999c9e;');
 												}
 											});
 
