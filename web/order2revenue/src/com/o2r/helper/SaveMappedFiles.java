@@ -4751,121 +4751,136 @@ System.out.println(" itemoID after removing : "+itemID);
 									.toString())) {
 						entry.getCell(index).setCellType(
 								HSSFCell.CELL_TYPE_STRING);
-						List<Order> onj = orderService.searchAsIsOrder(
-								"channelOrderID", entry.getCell(index).toString(),
-								sellerId);
-						System.out.println(entry.getCell(index).toString());
-						if (onj != null) {
-							if (onj.size() == 1) {
-								if (paymentMap.containsKey(entry.getCell(index)
-										.toString())) {
-									paymentBean = paymentMap.get(entry.getCell(
-											index).toString());
-								} else {
-									paymentBean = new OrderPaymentBean();
-								}
-								key = entry.getCell(index).toString();
-								paymentBean.setChannelOrderId(onj.get(0)
-										.getChannelOrderID());
+						if(cellIndexMap.get(columHeaderMap.get("Seller SKU")) != null){
+							int skuIndex = cellIndexMap.get(columHeaderMap.get("Seller SKU"));
+							if(entry.getCell(skuIndex) != null
+									&& StringUtils.isNotBlank(entry.getCell(skuIndex).toString())){
+								
+								String channelOrderID = entry.getCell(index).toString()
+										+GlobalConstant.orderUniqueSymbol
+										+entry.getCell(skuIndex).toString();
+								
+								List<Order> onj = orderService.searchAsIsOrder(
+										"channelOrderID", channelOrderID,
+										sellerId);
+								System.out.println(entry.getCell(index).toString());
+								if (onj != null) {
+									if (onj.size() == 1) {
+										if (paymentMap.containsKey(entry.getCell(index)
+												.toString())) {
+											paymentBean = paymentMap.get(entry.getCell(
+													index).toString());
+										} else {
+											paymentBean = new OrderPaymentBean();
+										}
+										key = entry.getCell(index).toString();
+										paymentBean.setChannelOrderId(onj.get(0)
+												.getChannelOrderID());
 
-								try {
-									index = cellIndexMap.get(columHeaderMap
-											.get("Payment Date"));
-									if (entry.getCell(index) != null
-											&& StringUtils.isNotBlank(entry
-													.getCell(index).toString())) {
-										String date = entry.getCell(index)
-												.toString();
-										paymentBean.setDateofPayment(new Date(
-												date));
-									} else {
-										errorMessage
-												.append(" Payment Date format is wrong or null");
-										validaterow = false;
-									}
-								} catch (NullPointerException e) {
-									errorMessage
-											.append("The column 'Date' doesn't exist");
-									validaterow = false;
-								}
-
-								try {
-									index = cellIndexMap.get(columHeaderMap
-											.get("Recieved Amount"));
-									if (entry.getCell(index) != null
-											&& StringUtils.isNotBlank(entry
-													.getCell(index).toString())) {
 										try {
-											String amt = entry
-													.getCell(index)
-													.toString()
-													.substring(
-															entry.getCell(index)
-																	.toString()
-																	.indexOf(
-																			".") + 1)
-													.trim();
-											System.out.println(amt);
-											amount = Double.parseDouble(amt);
-											System.out.println(amount);
-											if (amount > 0) {
-												paymentBean
-														.setPositiveAmount(paymentBean
-																.getPositiveAmount()
-																+ amount);
-												// totalpositive = totalpositive
-												// + amount;
-											} else if (amount < 0) {
-												paymentBean
-														.setNegativeAmount(Math.abs(paymentBean
-																.getNegativeAmount()
-																+ amount));
-												/*
-												 * totalnegative = totalnegative
-												 * + Math.abs(amount);
-												 */
+											index = cellIndexMap.get(columHeaderMap
+													.get("Payment Date"));
+											if (entry.getCell(index) != null
+													&& StringUtils.isNotBlank(entry
+															.getCell(index).toString())) {
+												String date = entry.getCell(index)
+														.toString();
+												paymentBean.setDateofPayment(new Date(date));
+											} else {
+												errorMessage
+														.append(" Payment Date format is wrong or null");
+												validaterow = false;
 											}
-										} catch (Exception e) {
-											log.error("Failed by seller "
-													+ sellerId, e);
+										} catch (NullPointerException e) {
 											errorMessage
-													.append(" Payment Amount cell is corrupted");
+													.append("The column 'Date' doesn't exist");
 											validaterow = false;
 										}
+
+										try {
+											index = cellIndexMap.get(columHeaderMap
+													.get("Recieved Amount"));
+											if (entry.getCell(index) != null
+													&& StringUtils.isNotBlank(entry
+															.getCell(index).toString())) {
+												try {
+													String amt = entry
+															.getCell(index)
+															.toString()
+															.substring(
+																	entry.getCell(index)
+																			.toString()
+																			.indexOf(
+																					".") + 1)
+															.trim();
+													System.out.println(amt);
+													amount = Double.parseDouble(amt);
+													System.out.println(amount);
+													if (amount > 0) {
+														paymentBean
+																.setPositiveAmount(paymentBean
+																		.getPositiveAmount()
+																		+ amount);
+														// totalpositive = totalpositive
+														// + amount;
+													} else if (amount < 0) {
+														paymentBean
+																.setNegativeAmount(Math.abs(paymentBean
+																		.getNegativeAmount()
+																		+ amount));
+														/*
+														 * totalnegative = totalnegative
+														 * + Math.abs(amount);
+														 */
+													}
+												} catch (Exception e) {
+													log.error("Failed by seller "
+															+ sellerId, e);
+													errorMessage
+															.append(" Payment Amount cell is corrupted");
+													validaterow = false;
+												}
+											} else {
+												errorMessage
+														.append("Amount format is wrong or null.");
+												validaterow = false;
+											}
+										} catch (NullPointerException e) {
+											errorMessage
+													.append("The column 'Amount' doesn't exist");
+											validaterow = false;
+										}
+
 									} else {
 										errorMessage
-												.append("Amount format is wrong or null.");
+												.append("Multiple Orders With This Channel Order ID.");
 										validaterow = false;
 									}
-								} catch (NullPointerException e) {
-									errorMessage
-											.append("The column 'Amount' doesn't exist");
+								} else {
+									errorMessage.append("Channel OrderId not present.");
 									validaterow = false;
 								}
 
+								if (validaterow) {
+									if (amount > 0) {
+										totalpositive = totalpositive + amount;
+									} else {
+										totalnegative = totalnegative
+												+ Math.abs(amount);
+									}
+									paymentMap.put(key, paymentBean);
+
+								} else {
+									errorSet.add(errorMessage.toString());
+								}
 							} else {
-								errorMessage
-										.append("Multiple Orders With This Channel Order ID.");
+								errorMessage.append("SKU is Blank or Null.");
 								validaterow = false;
 							}
 						} else {
-							errorMessage.append("Channel OrderId not present.");
+							errorMessage.append("The column 'SKU' doesn't exist.");
 							validaterow = false;
 						}
-
-						if (validaterow) {
-							if (amount > 0) {
-								totalpositive = totalpositive + amount;
-							} else {
-								totalnegative = totalnegative
-										+ Math.abs(amount);
-							}
-							paymentMap.put(key, paymentBean);
-
-						} else {
-							errorSet.add(errorMessage.toString());
-						}
-
 					} else {
 						if (cellIndexMap.get(columHeaderMap
 								.get("Payment Detail")) != null) {
@@ -4946,8 +4961,7 @@ System.out.println(" itemoID after removing : "+itemID);
 									try {
 										String date = entry.getCell(index)
 												.toString();
-										manualCharge.setDateOfPayment(new Date(
-												date));
+										manualCharge.setDateOfPayment(new Date(date));
 									} catch (Exception e) {
 										errorMessage
 												.append("Date May Be Wrong Format");
@@ -4965,8 +4979,7 @@ System.out.println(" itemoID after removing : "+itemID);
 							}
 
 						} else {
-							errorMessage
-									.append("Payment Details May Be Null Or Blank Or Not In Condition .");
+							errorMessage.append("Payment Details May Be Null Or Blank Or Payment Details with '"+entry.getCell(index).toString()+"' will Not Accepted .");
 							validaterow = false;
 						}
 						if (cellIndexMap.get(columHeaderMap
