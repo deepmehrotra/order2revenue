@@ -331,15 +331,16 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							
+
 							String itemID = entry.getCell(index).toString();
 							if (itemID.contains("'")) {
 								itemID = removeExtraQuote(itemID);
 							}
-							itemID=removeExtraQuote(itemID);
-System.out.println(" itemoID after removing : "+itemID);
+							itemID = removeExtraQuote(itemID);
+							System.out.println(" itemoID after removing : "
+									+ itemID);
 							order.setSubOrderID(itemID);
-							
+
 							if (partner != null
 									&& (partner
 											.getPcName()
@@ -4752,8 +4753,8 @@ System.out.println(" itemoID after removing : "+itemID);
 						entry.getCell(index).setCellType(
 								HSSFCell.CELL_TYPE_STRING);
 						List<Order> onj = orderService.searchAsIsOrder(
-								"channelOrderID", entry.getCell(index).toString(),
-								sellerId);
+								"channelOrderID", entry.getCell(index)
+										.toString(), sellerId);
 						System.out.println(entry.getCell(index).toString());
 						if (onj != null) {
 							if (onj.size() == 1) {
@@ -5194,17 +5195,17 @@ System.out.println(" itemoID after removing : "+itemID);
 													+ GlobalConstant.orderUniqueSymbol
 													+ productConfig
 															.getVendorSkuRef();
-										
+
 										else if (!entry.getCell(index)
 												.toString().contains("S")
 												&& productConfig
-												.getVendorSkuRef() != null)
+														.getVendorSkuRef() != null)
 											id = entry.getCell(index)
 													.toString()
 													+ GlobalConstant.orderUniqueSymbol
 													+ productConfig
-													.getVendorSkuRef();
-									
+															.getVendorSkuRef();
+
 									} catch (Exception e) {
 
 									}
@@ -7024,14 +7025,14 @@ System.out.println(" itemoID after removing : "+itemID);
 			log.error("Failed! by SellerId : " + sellerId, e);
 		}
 	}
-	
+
 	private static String removeExtraQuote(String input) {
-		String out="";
-		if(input.contains("'"))
-		out= input.replaceAll("'", "");
-		if(input.contains("`"))
-			out= input.replaceAll("`", "");
-			
-	return out;
+		String out = "";
+		if (input.contains("'"))
+			out = input.replaceAll("'", "");
+		if (input.contains("`"))
+			out = input.replaceAll("`", "");
+
+		return out;
 	}
 }
