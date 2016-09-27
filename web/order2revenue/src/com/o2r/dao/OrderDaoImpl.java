@@ -318,8 +318,7 @@ public class OrderDaoImpl implements OrderDao {
 										order.getOrderTax().getTaxCategtory(),
 										sellerId).getTaxPercent();
 
-						reconciledate = getreconciledate(order, seller
-								.getPartners().get(0), order.getOrderDate());
+						reconciledate = getreconciledate(order, partner, order.getOrderDate());
 						if (reconciledate != null)
 							order.setPaymentDueDate(reconciledate);
 						log.debug(" after settinf rec date delivery date :"
@@ -2146,7 +2145,7 @@ public class OrderDaoImpl implements OrderDao {
 
 			log.debug(" ORder delivery date in rec 2 : "
 					+ order.getDeliveryDate());
-			if (paymentType.equals("paymentcycle")) {
+					if (paymentType.equals("paymentcycle")) {
 				if (payfromshippingdate)
 					currentdate = ordershippeddate;
 				else
@@ -2161,9 +2160,6 @@ public class OrderDaoImpl implements OrderDao {
 						if (currentdate < enddate || currentdate == enddate
 								|| currentdate == startdate) {
 							fsd = paydate;
-							System.out
-									.println(" Cycle Start Day :" + startdate);
-							System.out.println(" Cycle End Day :" + enddate);
 							break;
 						} else {
 							tempsd = startdate;
