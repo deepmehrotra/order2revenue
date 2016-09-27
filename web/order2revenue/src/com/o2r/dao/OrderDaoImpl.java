@@ -2526,7 +2526,7 @@ public class OrderDaoImpl implements OrderDao {
 
 				if (pbean.getshippingfeeWeightVariableList() != null
 						&& pbean.getshippingfeeWeightVariableList().size() != 0
-						&& deadWeight > volWeight) {
+						&& deadWeight >= volWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
 							.getshippingfeeWeightVariableList().iterator();
@@ -2707,7 +2707,7 @@ public class OrderDaoImpl implements OrderDao {
 
 				if (pbean.getshippingfeeWeightFixedList() != null
 						&& pbean.getshippingfeeWeightFixedList().size() != 0
-						&& deadWeight > volWeight) {
+						&& deadWeight >= volWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
 							.getshippingfeeWeightFixedList().iterator();
@@ -3810,7 +3810,7 @@ public class OrderDaoImpl implements OrderDao {
 
 				if (pbean.getshippingfeeWeightVariableList() != null
 						&& pbean.getshippingfeeWeightVariableList().size() != 0
-						&& deadWeight > volWeight) {
+						&& deadWeight >= volWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
 							.getshippingfeeWeightVariableList().iterator();
@@ -3991,7 +3991,7 @@ public class OrderDaoImpl implements OrderDao {
 
 				if (pbean.getshippingfeeWeightFixedList() != null
 						&& pbean.getshippingfeeWeightFixedList().size() != 0
-						&& deadWeight > volWeight) {
+						&& deadWeight >= volWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
 							.getshippingfeeWeightFixedList().iterator();

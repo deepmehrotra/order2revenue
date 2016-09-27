@@ -130,7 +130,7 @@ ol.d {
 		$("#isProgress").val("true");
 		$("#isProgress").trigger("change");
 		setProgress1();
-		$('#progressSpiner').attr('class', 'fa fa-refresh fa-spin');
+		$('#progressSpiner').attr('class', 'fa fa-spinner fa-pulse');
 		$('#progressSpiner').attr('style', 'color:#1ab394;');
 
 		$('#uploadReport').show();

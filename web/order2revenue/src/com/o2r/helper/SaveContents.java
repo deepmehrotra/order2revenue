@@ -2585,9 +2585,10 @@ public class SaveContents {
 										.toString(), ConverterClass
 										.prepareOrderBean(order));
 							}
-							if (order != null) {
+							if (order != null && validaterow == true) {
 								if (!channelOrderIdCheck
 										.containsKey(channelOrderId)) {
+									System.out.println("##### OrderID : " + order.getOrderId());
 									channelOrderIdCheck.put(channelOrderId,
 											channelOrderId);
 									order.setPaymentUpload(paymentUpload);

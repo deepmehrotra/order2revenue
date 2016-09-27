@@ -340,22 +340,22 @@ input+label {
 												</div>
 												<div class="col-sm-12 radio1" id="blk-postpaid">
 													<div class="col-md-6" style="padding-bottom: 18px;">
-														<form:select path="isshippeddatecalc" items="${datemap}"
+														<form:select path="isshippeddatecalcPost" items="${datemap}"
 															class="form-control" id="paymentField2">
 														</form:select>
 													</div>
 													<div class="col-md-6 payment-box" id="truePost">
-														<form:input path="noofdaysfromshippeddate"
-															id="noofdaysfromshippeddate1"
-															value="${partner.noofdaysfromshippeddate}"
+														<form:input path="noofdaysfromshippeddatePost"
+															id="noofdaysfromshippeddatePost"
+															value="${partner.noofdaysfromshippeddatePost}"
 															placeholder="Payment Days From Shipped Date"
 															class="form-control" />
 													</div>
 													<div class="col-md-6 payment-box" id="falsePost"
 														style="display: block;">
-														<form:input path="noofdaysfromdeliverydate"
-															id="noofdaysfromdeliverydate1"
-															value="${partner.noofdaysfromdeliverydate}"
+														<form:input path="noofdaysfromdeliverydatePost"
+															id="noofdaysfromdeliverydatePost"
+															value="${partner.noofdaysfromdeliverydatePost}"
 															placeholder="Payment Days From Delivery Date"
 															class="form-control number" />
 													</div>
@@ -1566,7 +1566,7 @@ input+label {
 																						<input type="text" placeholder=""
 																							class="form-control number"
 																							name="nr-RTOCharSFVarFixedAmt"
-																							value="${chargeMap.RTOCharSFFixedAmt}">
+																							value="${chargeMap.RTOCharSFVarFixedAmt}">
 																					</div>
 																				</div>
 																				<div class="col-sm-4">
@@ -2647,9 +2647,11 @@ input+label {
 																		<div class="col-sm-6">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
+																						class="revShippingFee"
 																						path="nrnReturnConfig.revShippingFeeType"
 																						id="revShippingFeeType_revShipFeePCC"
-																						value="revShipFeePCC" /> <i></i>( % of Shipping
+																						value="revShipFeePCC"
+																						onclick="alert('click')" /> <i></i>( % of Shipping
 																					Fee )
 																				</label>
 																			</div>
@@ -2670,6 +2672,7 @@ input+label {
 																		<div class="col-sm-6">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
+																						class="revShippingFee"
 																						path="nrnReturnConfig.revShippingFeeType"
 																						id="revShippingFeeType_revShipFeeGRT"
 																						value="revShipFeeGRT" /> <i></i> Which Ever Is
@@ -2718,6 +2721,7 @@ input+label {
 																		<div class="col-sm-6">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
+																						class="revShippingFee"
 																						path="nrnReturnConfig.revShippingFeeType"
 																						id="revShippingFeeType_revShipFeeFF"
 																						value="revShipFeeFF" /> <i></i>Fix Amount
@@ -2739,6 +2743,7 @@ input+label {
 																		<div class="col-sm-6">
 																			<div class="checkbox i-checks">
 																				<label> <form:checkbox
+																						class="revShippingFee"
 																						path="nrnReturnConfig.revShippingFeeType"
 																						id="revShippingFeeType_revShipFeeShipFee"
 																						value="revShipFeeShipFee" /> <i></i>Same as
@@ -2964,6 +2969,37 @@ input+label {
 		}
 	</script>
 	<script type="text/javascript">
+		function revShippingFeePCC() {
+			$("#revShippingFeeType_revShipFeeGRT").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeeFF").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeeShipFee").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeeVar").iCheck('uncheck');
+		}
+		function revShippingFeeGRT() {
+			$("#revShippingFeeType_revShipFeePCC").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeeFF").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeeShipFee").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeeVar").iCheck('uncheck');
+		}
+		function revShippingFeeFF() {
+			$("#revShippingFeeType_revShipFeeGRT").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeePCC").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeeShipFee").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeeVar").iCheck('uncheck');
+		}
+		function revShippingFeeSF() {
+			$("#revShippingFeeType_revShipFeeGRT").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeeFF").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeePCC").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeeVar").iCheck('uncheck');
+		}
+		function revShipFeeVar() {
+			$("#revShippingFeeType_revShipFeeGRT").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeeFF").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeeShipFee").iCheck('uncheck');
+			$("#revShippingFeeType_revShipFeePCC").iCheck('uncheck');
+		}
+		
 		function addField(argument) {
 			var myTable = document.getElementById("myTable");
 			var currentIndex = myTable.rows.length;
@@ -3193,6 +3229,10 @@ input+label {
 									.steps(
 											{
 												bodyTag : "fieldset",
+												onCanceled: function (event)
+										        {
+													window.location.href = "partners.html";
+										        },
 												onStepChanging : function(
 														event, currentIndex,
 														newIndex) {
@@ -3367,12 +3407,26 @@ input+label {
 							});
 							$(".postpaid").click(function() {
 								$('#blk-prepaid').hide();
-								$("#blk-" + $(this).attr('id')).slideDown();								
+								$("#blk-" + $(this).attr('id')).slideDown();
+								document.getElementById('truePost').style.display = 'block';
+								$("#noofdaysfromshippeddatePost").fadeIn();
+							});
+							$(".prepaid").click(function() {
+								$('#blk-postpaid').hide();
+								$("#blk-" + $(this).attr('id')).slideDown();	
+								$("#noofdaysfromshippeddatePost").fadeIn();
 							});
 							$("[name=paymentType]").click(function() {
 								$('.radio1').hide();
 								$("#blk-" + $(this).val()).slideDown();
 							});
+							
+							$("#revShippingFeeType_revShipFeePCC").on("ifChecked", revShippingFeePCC);
+							$("#revShippingFeeType_revShipFeeGRT").on("ifChecked", revShippingFeeGRT);
+							$("#revShippingFeeType_revShipFeeFF").on("ifChecked", revShippingFeeFF);
+							$("#revShippingFeeType_revShipFeeShipFee").on("ifChecked", revShippingFeeSF);
+							$("#revShippingFeeType_revShipFeeVar").on("ifChecked", revShipFeeVar);
+							
 							/* $('#paymentField').change(function() {
 								$('.payment-box').hide();
 								$('#' + $(this).val()).fadeIn();
@@ -3392,6 +3446,36 @@ input+label {
 								calendarWeeks : true,
 								autoclose : true
 							});
+							
+							if ('${partner.paymentCategory}' == 'Prepaid') {
+								$("#prepaid").prop("checked", true)
+										.trigger("click");
+								$('#paymentField2').trigger('change');
+								if ('${partner.isshippeddatecalcPost}' != 'true') {
+									$("#noofdaysfromdeliverydatePost")
+											.val(
+													'${partner.noofdaysfromshippeddatePost}');
+								} else {
+									$('#paymentField2').val(
+											'${partner.isshippeddatecalcPost}');
+									$('#paymentField2').trigger('change');
+								}
+							}
+							if ('${partner.paymentCategory}' == 'Postpaid') {
+								$("#postpaid").prop("checked", true)
+										.trigger("click");
+								$('#paymentField2').trigger('change');
+								if ('${partner.isshippeddatecalcPost}' != 'true') {
+									$("#noofdaysfromdeliverydatePost")
+											.val(
+													'${partner.noofdaysfromshippeddatePost}');
+								} else {
+									$('#paymentField2').val(
+											'${partner.isshippeddatecalcPost}');
+									$('#paymentField2').trigger('change');
+								}
+							}
+							
 							if ('${partner.paymentType}' == 'paymentcycle')
 								$("#paymentcycle").prop("checked", true)
 										.trigger("click");
