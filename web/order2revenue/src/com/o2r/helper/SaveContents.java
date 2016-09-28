@@ -2591,7 +2591,7 @@ public class SaveContents {
 									System.out.println("##### OrderID : " + order.getOrderId());
 									channelOrderIdCheck.put(channelOrderId,
 											channelOrderId);
-									order.setPaymentUpload(paymentUpload);
+									//order.getPaymentUpload().add(paymentUpload);
 									paymentUpload.getOrders().add(order);
 									generatePaymentUpload = true;
 								}
@@ -3453,7 +3453,7 @@ public class SaveContents {
 				}
 
 				if (poOrder != null) {
-					poOrder.setPaymentUpload(paymentUpload);
+					//poOrder.getPaymentUpload().add(paymentUpload);
 					paymentUpload.getOrders().add(poOrder);
 					generatePaymentUpload = true;
 				}
