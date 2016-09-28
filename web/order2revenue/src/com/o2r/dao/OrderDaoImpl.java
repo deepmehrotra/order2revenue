@@ -3727,7 +3727,7 @@ public class OrderDaoImpl implements OrderDao {
 			}
 
 			// Payment collection charges
-			if (partner.getNrnReturnConfig().isWhicheverGreaterPCC()) {
+			if (nrnReturnConfig.isWhicheverGreaterPCC()) {
 				double percentAmount = chargesMap
 						.containsKey(GlobalConstant.percentSPPCCHigher) ? chargesMap
 						.get(GlobalConstant.percentSPPCCHigher) * SP / 100
@@ -3764,35 +3764,35 @@ public class OrderDaoImpl implements OrderDao {
 			}
 
 			log.debug(" States : MetroLsit : "
-					+ partner.getNrnReturnConfig().getMetroList()
+					+ nrnReturnConfig.getMetroList()
 					+ " national list : "
-					+ partner.getNrnReturnConfig().getNationalList()
+					+ nrnReturnConfig.getNationalList()
 					+ " LocalList : "
-					+ partner.getNrnReturnConfig().getLocalList()
+					+ nrnReturnConfig.getLocalList()
 					+ " zonallist: "
-					+ partner.getNrnReturnConfig().getZonalList());
+					+ nrnReturnConfig.getZonalList());
 			log.debug(" State we are geting ofrom excel : " + state);
 
 			// ****Shipping charges
 			String valueType = "";
-			if (partner.getNrnReturnConfig().getShippingFeeType() != null
-					&& partner.getNrnReturnConfig().getShippingFeeType()
+			if (nrnReturnConfig.getShippingFeeType() != null
+					&& nrnReturnConfig.getShippingFeeType()
 							.equals("variable")) {
-				if (partner.getNrnReturnConfig().getMetroList() != null
-						&& partner.getNrnReturnConfig().getMetroList()
+				if (nrnReturnConfig.getMetroList() != null
+						&& nrnReturnConfig.getMetroList()
 								.contains(state)) {
 
 					valueType = "metro";
-				} else if (partner.getNrnReturnConfig().getNationalList() != null
-						&& partner.getNrnReturnConfig().getNationalList()
+				} else if (nrnReturnConfig.getNationalList() != null
+						&& nrnReturnConfig.getNationalList()
 								.contains(state)) {
 					valueType = "national";
-				} else if (partner.getNrnReturnConfig().getLocalList() != null
-						&& partner.getNrnReturnConfig().getLocalList()
+				} else if (nrnReturnConfig.getLocalList() != null
+						&& nrnReturnConfig.getLocalList()
 								.contains(state)) {
 					valueType = "local";
-				} else if (partner.getNrnReturnConfig().getZonalList() != null
-						&& partner.getNrnReturnConfig().getZonalList()
+				} else if (nrnReturnConfig.getZonalList() != null
+						&& nrnReturnConfig.getZonalList()
 								.contains(state)) {
 					valueType = "zonal";
 				}
@@ -3800,8 +3800,8 @@ public class OrderDaoImpl implements OrderDao {
 				valueType = "fixed";
 			}
 			order.setVolShippingString(valueType);
-			if (partner.getNrnReturnConfig().getShippingFeeType() != null
-					&& partner.getNrnReturnConfig().getShippingFeeType()
+			if (nrnReturnConfig.getShippingFeeType() != null
+					&& nrnReturnConfig.getShippingFeeType()
 							.equals("variable")) {
 
 				if (pbean.getshippingfeeWeightVariableList() != null
@@ -3981,8 +3981,8 @@ public class OrderDaoImpl implements OrderDao {
 						}
 					}
 				}
-			} else if (partner.getNrnReturnConfig().getShippingFeeType() != null
-					&& partner.getNrnReturnConfig().getShippingFeeType()
+			} else if (nrnReturnConfig.getShippingFeeType() != null
+					&& nrnReturnConfig.getShippingFeeType()
 							.equals("fixed")) {
 
 				if (pbean.getshippingfeeWeightFixedList() != null

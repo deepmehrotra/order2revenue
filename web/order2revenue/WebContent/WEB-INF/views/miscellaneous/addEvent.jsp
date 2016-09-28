@@ -491,10 +491,8 @@ span .#error {
 																					</div>
 																					<div class="col-md-5" style="padding: 0px;">
 																						<input type="text" name="nr-pccrange"
-																							class="form-control validateNumber"
-																							ng-model="firstname"
-																							ng-init="firstname=${chargeMap.pccrange}"
-																							value="${chargeMap.pccrange}">
+																							class="form-control validateNumber"																							
+																							value="${chargeMap.pccrange}" id="text01">
 																					</div>
 																					<div class="col-md-5">
 																						<input type="text" name="nr-pccvalue"
@@ -506,7 +504,7 @@ span .#error {
 																						<label>Greater than</label>
 																					</div>
 																					<div class="col-md-5" style="padding: 0px;">
-																						<label> &nbsp; &nbsp;{{firstname}}</label>
+																						<label id="label01"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ${chargeMap.pccrange}</label>
 																					</div>
 
 																					<div class="col-md-5">
@@ -3406,7 +3404,11 @@ Custom and plugin javascript
 							});
 
 							/* Retrive CheckBoxes Ends */
-
+							
+							$("#text01").keyup(function() {
+								$("#label01").text($(this).val()); //OR $("#label1").html($(this).val());
+							});
+							
 							$('.i-checks').iCheck({
 								checkboxClass : 'icheckbox_square-green',
 								radioClass : 'iradio_square-green',

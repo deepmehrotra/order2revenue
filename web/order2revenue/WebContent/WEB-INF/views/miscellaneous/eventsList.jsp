@@ -102,9 +102,9 @@
 												<td><fmt:formatDate  value="${event.endDate}"
 														pattern="MMM dd ,YY" /></td>																								
 												<c:set var="now" value="${currentDate}" />
-												<fmt:formatDate var="start" value="${event.startDate}"	pattern="MMM dd ,YY" />
-												<fmt:formatDate var="end" value="${event.endDate}"	pattern="MMM dd ,YY" />
-												<fmt:formatDate var="now" value="${now}" pattern="MMM dd ,YY" />
+												<fmt:formatDate var="start" value="${event.startDate}"	pattern="DD-MM-YYYY" />
+												<fmt:formatDate var="end" value="${event.endDate}"	pattern="DD-MM-YYYY" />
+												<fmt:formatDate var="now" value="${now}" pattern="DD-MM-YYYY" />
 												<c:choose>
 													<c:when test="${start <= now && end >= now}">
 	        													<td><font color="green">Active</font></td>
