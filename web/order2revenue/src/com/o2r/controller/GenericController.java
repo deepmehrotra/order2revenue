@@ -321,6 +321,20 @@ public class GenericController {
 		return new ModelAndView("Alerts", model);
 	}
 
+	@RequestMapping(value = "/seller/markRead", method = RequestMethod.GET)
+	public void markRead(HttpServletRequest request) {
+		logger.info("$$$ markRead Starts : GenericController $$$");
+		int sellerId = 0;
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			alertsService.markRead(sellerId);
+		} catch (Exception e) {
+			logger.error("Failed ! ", e);
+			e.printStackTrace();
+		}
+		logger.info("$$$ markRead Ends : GenericController $$$");
+	}
+	
 	@RequestMapping(value = "/seller/initialsetup", method = RequestMethod.GET)
 	public String initialsetup(HttpServletRequest request) {
 		logger.debug(" Inside initialsetup ");

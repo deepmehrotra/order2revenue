@@ -130,7 +130,7 @@ ol.d {
 		$("#isProgress").val("true");
 		$("#isProgress").trigger("change");
 		setProgress1();
-		$('#progressSpiner').attr('class', 'fa fa-refresh fa-spin');
+		$('#progressSpiner').attr('class', 'fa fa-spinner fa-pulse');
 		$('#progressSpiner').attr('style', 'color:#1ab394;');
 
 		$('#uploadReport').show();
@@ -1292,6 +1292,7 @@ ol.d {
 										</ul>
 										<ol class="d">
 											<li><b class="color">O2R Channel</b></li>
+											<li><b class="color">PAYMENTDATE</b></li>
 
 										</ol>
 										</li>
@@ -1310,11 +1311,10 @@ ol.d {
 											<li>Outstanding Payable to Vendors (Final)</li>
 										</ol>
 									</li>
-									<li>At the end of the 1st row.Add the following: "Payment
-										Date": Date of Payment received.Ensure to enter the value as <b>"MM-DD-YYYY"</b>
+									<!-- <li>At the end of the 1st row.Add the following: "PAYMENTDATE": Date of Payment received.Ensure to enter the value as <b>"MM-DD-YYYY"</b>
 										format
 
-									</li>
+									</li> -->
 									<li>Save the file in <b>.xls(97-2003)</b> format
 									</li>
 									<li>Simply Upload the file after selecting <b>

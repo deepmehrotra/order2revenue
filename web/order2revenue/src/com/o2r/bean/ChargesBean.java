@@ -7,7 +7,7 @@ public class ChargesBean {
 	private String chargeType;
 	private String criteria;
 	private long range;
-	private double value;
+	private float value;
 	private double localValue;
 	private double zonalValue;
 	private double nationalValue;
@@ -31,10 +31,10 @@ public class ChargesBean {
 	public void setRange(long range) {
 		this.range = range;
 	}
-	public double getValue() {
+	public float getValue() {
 		return value;
 	}
-	public void setValue(double value) {
+	public void setValue(float value) {
 		this.value = value;
 	}
 	public double getLocalValue() {

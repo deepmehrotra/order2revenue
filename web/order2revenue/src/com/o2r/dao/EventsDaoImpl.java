@@ -216,7 +216,9 @@ public class EventsDaoImpl implements EventsDao {
 					Events event=(Events)eventList.get(0);					
 					if(event != null && ((event.getSelectAll() != null && event.getSelectAll().equals("true")) 
 							|| (sku != null && event.getSkuList() != null && event.getSkuList().contains(sku)))
-							&& event.getStatus().equals("Active")){	
+							&& event.getStatus().equals("Active")){							
+						if(event.getNrnReturnConfig()!=null)
+							Hibernate.initialize(event.getNrnReturnConfig().getCharges());
 						log.info("$$$ isEventActive Exit $$$");
 						return event;
 					}

@@ -28,5 +28,9 @@ public class AlertsServiceImpl implements AlertsService{
 	@Override
 	public int unreadCount(int sellerId) {
 		return alertsDao.unreadCount(sellerId);
+	}
+	@Override
+	public void markRead(int sellerId) {
+		alertsDao.markRead(sellerId);
 	}	
 }

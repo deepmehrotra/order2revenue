@@ -4,10 +4,7 @@ package com.o2r.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.o2r.model.Events;
 import com.o2r.model.MetaNRnReturnConfig;
-import com.o2r.model.NRnReturnConfig;
-import com.o2r.model.Order;
 
 
 public class MetaPartnerBean {
@@ -18,9 +15,13 @@ public class MetaPartnerBean {
 	private String pcDesc;
 	private String pcLogoUrl;
 	private String paymentType;
+	private String paymentCategory;
 	private boolean isshippeddatecalc;
 	private int noofdaysfromshippeddate;
 	private int noofdaysfromdeliverydate;
+	private boolean isshippeddatecalcPost;
+	private int noofdaysfromshippeddatePost;
+	private int noofdaysfromdeliverydatePost;
 	private int startcycleday;
 	private int paycycleduration;
 	private int paydaysfromstartday;
@@ -253,5 +254,29 @@ public class MetaPartnerBean {
 	public void setShippingfeeWeightVariableList(
 			List<ChargesBean> shippingfeeWeightVariableList) {
 		this.shippingfeeWeightVariableList = shippingfeeWeightVariableList;
+	}
+	public boolean isIsshippeddatecalcPost() {
+		return isshippeddatecalcPost;
+	}
+	public void setIsshippeddatecalcPost(boolean isshippeddatecalcPost) {
+		this.isshippeddatecalcPost = isshippeddatecalcPost;
+	}
+	public int getNoofdaysfromshippeddatePost() {
+		return noofdaysfromshippeddatePost;
+	}
+	public void setNoofdaysfromshippeddatePost(int noofdaysfromshippeddatePost) {
+		this.noofdaysfromshippeddatePost = noofdaysfromshippeddatePost;
+	}
+	public int getNoofdaysfromdeliverydatePost() {
+		return noofdaysfromdeliverydatePost;
+	}
+	public void setNoofdaysfromdeliverydatePost(int noofdaysfromdeliverydatePost) {
+		this.noofdaysfromdeliverydatePost = noofdaysfromdeliverydatePost;
+	}
+	public String getPaymentCategory() {
+		return paymentCategory;
+	}
+	public void setPaymentCategory(String paymentCategory) {
+		this.paymentCategory = paymentCategory;
 	}
 }

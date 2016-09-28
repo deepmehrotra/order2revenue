@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -83,5 +84,24 @@ public class AlertsDaoImpl implements AlertsDao {
 				session.close();
 		}
 		return unreadSize;
+	}
+	
+	@Override
+	public void markRead(int sellerId) {
+		List<SellerAlerts> alerts = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query query= session.createSQLQuery("update selleralerts set status='read' where status='unread'");
+			query.executeUpdate();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed By seller ID : " + sellerId, e);
+		} finally {
+			if (session != null)
+				session.close();
+		}
 	}
 }

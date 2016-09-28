@@ -491,9 +491,14 @@ public class ConverterClass {
 			partner.setPcLogoUrl(partnerBean.getPcLogoUrl());
 			partner.setPcName(partnerBean.getPcName());
 			partner.setPaymentType(partnerBean.getPaymentType());
+			partner.setPaymentCategory(partnerBean.getPaymentCategory());
 			partner.setIsshippeddatecalc(partnerBean.isIsshippeddatecalc());
 			partner.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromshippeddate());
+			partner.setIsshippeddatecalcPost(partnerBean
+					.isIsshippeddatecalcPost());
+			partner.setNoofdaysfromshippeddatePost(partnerBean
+					.getNoofdaysfromshippeddatePost());
 			partner.setStartcycleday(partnerBean.getStartcycleday());
 			partner.setPaycycleduration(partnerBean.getPaycycleduration());
 			partner.setPaydaysfromstartday(partnerBean.getPaydaysfromstartday());
@@ -521,9 +526,12 @@ public class ConverterClass {
 			partner.setPcLogoUrl(partnerBean.getPcLogoUrl());
 			partner.setPcName(partnerBean.getPcName());
 			partner.setPaymentType(partnerBean.getPaymentType());
+			partner.setPaymentCategory(partnerBean.getPaymentCategory());
 			partner.setIsshippeddatecalc(partnerBean.isIsshippeddatecalc());
 			partner.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromshippeddate());
+			partner.setIsshippeddatecalcPost(partnerBean.isIsshippeddatecalcPost());
+			partner.setNoofdaysfromshippeddatePost(partnerBean.getNoofdaysfromshippeddatePost());
 			partner.setStartcycleday(partnerBean.getStartcycleday());
 			partner.setPaycycleduration(partnerBean.getPaycycleduration());
 			partner.setPaydaysfromstartday(partnerBean.getPaydaysfromstartday());
@@ -548,9 +556,13 @@ public class ConverterClass {
 			partner.setPcLogoUrl(metaPartner.getPcLogoUrl());
 			partner.setPcName(metaPartner.getPcName());
 			partner.setPaymentType(metaPartner.getPaymentType());
+			partner.setPaymentCategory(metaPartner.getPaymentCategory());
 			partner.setIsshippeddatecalc(metaPartner.isIsshippeddatecalc());
 			partner.setNoofdaysfromshippeddate(metaPartner
 					.getNoofdaysfromshippeddate());
+			partner.setIsshippeddatecalcPost(metaPartner.isIsshippeddatecalcPost());
+			partner.setNoofdaysfromshippeddatePost(metaPartner
+					.getNoofdaysfromshippeddatePost());
 			partner.setStartcycleday(metaPartner.getStartcycleday());
 			partner.setPaycycleduration(metaPartner.getPaycycleduration());
 			partner.setPaydaysfromstartday(metaPartner.getPaydaysfromstartday());
@@ -754,9 +766,13 @@ public class ConverterClass {
 				bean.setPcLogoUrl(partner.getPcLogoUrl());
 				bean.setPcName(partner.getPcName());
 				bean.setPaymentType(partner.getPaymentType());
+				bean.setPaymentCategory(partner.getPaymentCategory());
 				bean.setIsshippeddatecalc(partner.isIsshippeddatecalc());
 				bean.setNoofdaysfromshippeddate(partner
 						.getNoofdaysfromshippeddate());
+				bean.setIsshippeddatecalcPost(partner.isIsshippeddatecalcPost());
+				bean.setNoofdaysfromshippeddatePost(partner
+						.getNoofdaysfromshippeddatePost());
 				bean.setStartcycleday(partner.getStartcycleday());
 				bean.setPaycycleduration(partner.getPaycycleduration());
 				bean.setPaydaysfromstartday(partner.getPaydaysfromstartday());
@@ -783,9 +799,13 @@ public class ConverterClass {
 			bean.setPcLogoUrl(partner.getPcLogoUrl());
 			bean.setPcName(partner.getPcName());
 			bean.setPaymentType(partner.getPaymentType());
+			bean.setPaymentCategory(partner.getPaymentCategory());
 			bean.setIsshippeddatecalc(partner.isIsshippeddatecalc());
 			bean.setNoofdaysfromshippeddate(partner
 					.getNoofdaysfromshippeddate());
+			bean.setIsshippeddatecalcPost(partner.isIsshippeddatecalcPost());
+			bean.setNoofdaysfromshippeddatePost(partner
+					.getNoofdaysfromshippeddatePost());
 			bean.setStartcycleday(partner.getStartcycleday());
 			bean.setPaycycleduration(partner.getPaycycleduration());
 			bean.setPaydaysfromstartday(partner.getPaydaysfromstartday());

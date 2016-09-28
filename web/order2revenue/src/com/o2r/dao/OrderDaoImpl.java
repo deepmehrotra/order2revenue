@@ -318,8 +318,7 @@ public class OrderDaoImpl implements OrderDao {
 										order.getOrderTax().getTaxCategtory(),
 										sellerId).getTaxPercent();
 
-						reconciledate = getreconciledate(order, seller
-								.getPartners().get(0), order.getOrderDate());
+						reconciledate = getreconciledate(order, partner, order.getOrderDate());
 						if (reconciledate != null)
 							order.setPaymentDueDate(reconciledate);
 						log.debug(" after settinf rec date delivery date :"
@@ -2146,7 +2145,7 @@ public class OrderDaoImpl implements OrderDao {
 
 			log.debug(" ORder delivery date in rec 2 : "
 					+ order.getDeliveryDate());
-			if (paymentType.equals("paymentcycle")) {
+					if (paymentType.equals("paymentcycle")) {
 				if (payfromshippingdate)
 					currentdate = ordershippeddate;
 				else
@@ -2161,9 +2160,6 @@ public class OrderDaoImpl implements OrderDao {
 						if (currentdate < enddate || currentdate == enddate
 								|| currentdate == startdate) {
 							fsd = paydate;
-							System.out
-									.println(" Cycle Start Day :" + startdate);
-							System.out.println(" Cycle End Day :" + enddate);
 							break;
 						} else {
 							tempsd = startdate;
@@ -2526,7 +2522,7 @@ public class OrderDaoImpl implements OrderDao {
 
 				if (pbean.getshippingfeeWeightVariableList() != null
 						&& pbean.getshippingfeeWeightVariableList().size() != 0
-						&& deadWeight > volWeight) {
+						&& deadWeight >= volWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
 							.getshippingfeeWeightVariableList().iterator();
@@ -2707,7 +2703,7 @@ public class OrderDaoImpl implements OrderDao {
 
 				if (pbean.getshippingfeeWeightFixedList() != null
 						&& pbean.getshippingfeeWeightFixedList().size() != 0
-						&& deadWeight > volWeight) {
+						&& deadWeight >= volWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
 							.getshippingfeeWeightFixedList().iterator();
@@ -3731,7 +3727,7 @@ public class OrderDaoImpl implements OrderDao {
 			}
 
 			// Payment collection charges
-			if (partner.getNrnReturnConfig().isWhicheverGreaterPCC()) {
+			if (nrnReturnConfig.isWhicheverGreaterPCC()) {
 				double percentAmount = chargesMap
 						.containsKey(GlobalConstant.percentSPPCCHigher) ? chargesMap
 						.get(GlobalConstant.percentSPPCCHigher) * SP / 100
@@ -3768,35 +3764,35 @@ public class OrderDaoImpl implements OrderDao {
 			}
 
 			log.debug(" States : MetroLsit : "
-					+ partner.getNrnReturnConfig().getMetroList()
+					+ nrnReturnConfig.getMetroList()
 					+ " national list : "
-					+ partner.getNrnReturnConfig().getNationalList()
+					+ nrnReturnConfig.getNationalList()
 					+ " LocalList : "
-					+ partner.getNrnReturnConfig().getLocalList()
+					+ nrnReturnConfig.getLocalList()
 					+ " zonallist: "
-					+ partner.getNrnReturnConfig().getZonalList());
+					+ nrnReturnConfig.getZonalList());
 			log.debug(" State we are geting ofrom excel : " + state);
 
 			// ****Shipping charges
 			String valueType = "";
-			if (partner.getNrnReturnConfig().getShippingFeeType() != null
-					&& partner.getNrnReturnConfig().getShippingFeeType()
+			if (nrnReturnConfig.getShippingFeeType() != null
+					&& nrnReturnConfig.getShippingFeeType()
 							.equals("variable")) {
-				if (partner.getNrnReturnConfig().getMetroList() != null
-						&& partner.getNrnReturnConfig().getMetroList()
+				if (nrnReturnConfig.getMetroList() != null
+						&& nrnReturnConfig.getMetroList()
 								.contains(state)) {
 
 					valueType = "metro";
-				} else if (partner.getNrnReturnConfig().getNationalList() != null
-						&& partner.getNrnReturnConfig().getNationalList()
+				} else if (nrnReturnConfig.getNationalList() != null
+						&& nrnReturnConfig.getNationalList()
 								.contains(state)) {
 					valueType = "national";
-				} else if (partner.getNrnReturnConfig().getLocalList() != null
-						&& partner.getNrnReturnConfig().getLocalList()
+				} else if (nrnReturnConfig.getLocalList() != null
+						&& nrnReturnConfig.getLocalList()
 								.contains(state)) {
 					valueType = "local";
-				} else if (partner.getNrnReturnConfig().getZonalList() != null
-						&& partner.getNrnReturnConfig().getZonalList()
+				} else if (nrnReturnConfig.getZonalList() != null
+						&& nrnReturnConfig.getZonalList()
 								.contains(state)) {
 					valueType = "zonal";
 				}
@@ -3804,13 +3800,13 @@ public class OrderDaoImpl implements OrderDao {
 				valueType = "fixed";
 			}
 			order.setVolShippingString(valueType);
-			if (partner.getNrnReturnConfig().getShippingFeeType() != null
-					&& partner.getNrnReturnConfig().getShippingFeeType()
+			if (nrnReturnConfig.getShippingFeeType() != null
+					&& nrnReturnConfig.getShippingFeeType()
 							.equals("variable")) {
 
 				if (pbean.getshippingfeeWeightVariableList() != null
 						&& pbean.getshippingfeeWeightVariableList().size() != 0
-						&& deadWeight > volWeight) {
+						&& deadWeight >= volWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
 							.getshippingfeeWeightVariableList().iterator();
@@ -3985,13 +3981,13 @@ public class OrderDaoImpl implements OrderDao {
 						}
 					}
 				}
-			} else if (partner.getNrnReturnConfig().getShippingFeeType() != null
-					&& partner.getNrnReturnConfig().getShippingFeeType()
+			} else if (nrnReturnConfig.getShippingFeeType() != null
+					&& nrnReturnConfig.getShippingFeeType()
 							.equals("fixed")) {
 
 				if (pbean.getshippingfeeWeightFixedList() != null
 						&& pbean.getshippingfeeWeightFixedList().size() != 0
-						&& deadWeight > volWeight) {
+						&& deadWeight >= volWeight) {
 					boolean inRange = false;
 					Iterator<ChargesBean> shippingfeeWeightIterator = pbean
 							.getshippingfeeWeightFixedList().iterator();

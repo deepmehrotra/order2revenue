@@ -127,7 +127,7 @@ public class PartnerController {
 		Partner existPartner = null;
 		String suffix = request.getParameter("pcNameSuffix");
 		String partnerName = "";
-		if(suffix != null && !suffix.equals("")) {
+		if (suffix != null && !suffix.equals("")) {
 			partnerName = partnerBean.getPcName() + suffix;
 		} else {
 			partnerName = partnerBean.getPcName();
@@ -545,6 +545,11 @@ public class PartnerController {
 					partnerBean.setNoofdaysfromshippeddate(partnerBean
 							.getNoofdaysfromdeliverydate());
 				}
+				if (partnerBean.getPcName().contains(GlobalConstant.PCFLIPKART)
+						&& !partnerBean.isIsshippeddatecalcPost()) {
+					partnerBean.setNoofdaysfromshippeddatePost(partnerBean
+							.getNoofdaysfromdeliverydatePost());
+				}
 
 				if (image.getSize() != 0) {
 					if (!image.isEmpty()) {
@@ -951,6 +956,11 @@ public class PartnerController {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
 		}
+		if (partnerBean.getPcName().contains(GlobalConstant.PCFLIPKART)
+				&& !partnerBean.isIsshippeddatecalcPost()) {
+			partnerBean.setNoofdaysfromshippeddatePost(partnerBean
+					.getNoofdaysfromdeliverydatePost());
+		}
 
 		if (image != null) {
 			if (!image.isEmpty()) {
@@ -1053,6 +1063,12 @@ public class PartnerController {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
 		}
+		if (partnerBean.getPcName().contains(GlobalConstant.PCFLIPKART)
+				&& !partnerBean.isIsshippeddatecalcPost()) {
+			partnerBean.setNoofdaysfromshippeddatePost(partnerBean
+					.getNoofdaysfromdeliverydatePost());
+		}
+
 		if (image != null) {
 			if (!image.isEmpty()) {
 				try {
@@ -2348,6 +2364,11 @@ public class PartnerController {
 				partnerBean.setNoofdaysfromshippeddate(partnerBean
 						.getNoofdaysfromdeliverydate());
 			}
+			if (partnerBean.getPcName().contains(GlobalConstant.PCFLIPKART)
+					&& !partnerBean.isIsshippeddatecalcPost()) {
+				partnerBean.setNoofdaysfromshippeddatePost(partnerBean
+						.getNoofdaysfromdeliverydatePost());
+			}
 
 			if (image.getSize() != 0) {
 				if (!image.isEmpty()) {
@@ -2391,7 +2412,7 @@ public class PartnerController {
 					.prepareMetaPartnerModel(partnerBean);
 			if (existPartner != null && partnerBean.getPcId() == 0) {
 				partner.setPcId(existPartner.getPcId());
-			} 
+			}
 			partnerService.addMetaPartner(partner);
 		} catch (CustomException ce) {
 			log.error("SavePartner exception : " + ce.toString());
