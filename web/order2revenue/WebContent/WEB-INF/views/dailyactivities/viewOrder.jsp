@@ -639,6 +639,10 @@
                                             <td>Address</td>
                                             <td>${order.customer.customerAddress}</td>  
                                         </tr>
+                                        <tr>
+                                            <td>Address</td>
+                                            <td>${order.customer.zipcode}</td>  
+                                        </tr>
                                         </tbody>
                                     </table>
                                     </div>
