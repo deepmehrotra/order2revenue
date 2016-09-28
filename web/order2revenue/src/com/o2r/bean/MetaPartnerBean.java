@@ -3,6 +3,7 @@ package com.o2r.bean;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.o2r.model.MetaNRnReturnConfig;
 
 
@@ -14,6 +15,7 @@ public class MetaPartnerBean {
 	private String pcDesc;
 	private String pcLogoUrl;
 	private String paymentType;
+	private String paymentCategory;
 	private boolean isshippeddatecalc;
 	private int noofdaysfromshippeddate;
 	private int noofdaysfromdeliverydate;
@@ -270,5 +272,11 @@ public class MetaPartnerBean {
 	}
 	public void setNoofdaysfromdeliverydatePost(int noofdaysfromdeliverydatePost) {
 		this.noofdaysfromdeliverydatePost = noofdaysfromdeliverydatePost;
+	}
+	public String getPaymentCategory() {
+		return paymentCategory;
+	}
+	public void setPaymentCategory(String paymentCategory) {
+		this.paymentCategory = paymentCategory;
 	}
 }

@@ -301,8 +301,7 @@ input+label {
 														<div class="col-md-4" style="padding-bottom: 18px;">
 															<div class="radio">
 																<form:radiobutton path="paymentCategory" value="prepaid"
-																	id="prepaid" name="toggler"
-																	class="paymentcycleClass" />
+																	id="prepaid" name="toggler" class="prepaid"/>
 																<label>Prepaid </label>
 															</div>
 														</div>
@@ -2650,8 +2649,7 @@ input+label {
 																						class="revShippingFee"
 																						path="nrnReturnConfig.revShippingFeeType"
 																						id="revShippingFeeType_revShipFeePCC"
-																						value="revShipFeePCC"
-																						onclick="alert('click')" /> <i></i>( % of Shipping
+																						value="revShipFeePCC" /> <i></i>( % of Shipping
 																					Fee )
 																				</label>
 																			</div>
@@ -3408,13 +3406,15 @@ input+label {
 							$(".postpaid").click(function() {
 								$('#blk-prepaid').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
-								document.getElementById('truePost').style.display = 'block';
+								//document.getElementById('truePost').style.display = 'block';
 								$("#noofdaysfromshippeddatePost").fadeIn();
+								$('#paymentField2').trigger('change');
 							});
 							$(".prepaid").click(function() {
 								$('#blk-postpaid').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();	
-								$("#noofdaysfromshippeddatePost").fadeIn();
+								$("#noofdaysfromshippeddate").fadeIn();
+								$('#paymentField1').trigger('change');
 							});
 							$("[name=paymentType]").click(function() {
 								$('.radio1').hide();
@@ -3439,6 +3439,7 @@ input+label {
 								$('.payment-box').hide();
 								$('#' + $(this).val() + 'Post').fadeIn();
 							});
+							
 							$('#data_1 .input-group.date').datepicker({
 								todayBtn : "linked",
 								keyboardNavigation : false,
@@ -3447,9 +3448,10 @@ input+label {
 								autoclose : true
 							});
 							
-							if ('${partner.paymentCategory}' == 'Prepaid') {
+							if ('${partner.paymentCategory}' == 'prepaid') {
 								$("#prepaid").prop("checked", true)
 										.trigger("click");
+								$(".prepaid").trigger("click");
 								$('#paymentField2').trigger('change');
 								if ('${partner.isshippeddatecalcPost}' != 'true') {
 									$("#noofdaysfromdeliverydatePost")
@@ -3461,9 +3463,10 @@ input+label {
 									$('#paymentField2').trigger('change');
 								}
 							}
-							if ('${partner.paymentCategory}' == 'Postpaid') {
+							if ('${partner.paymentCategory}' == 'postpaid') {
 								$("#postpaid").prop("checked", true)
 										.trigger("click");
+								$(".postpaid").trigger("click");
 								$('#paymentField2').trigger('change');
 								if ('${partner.isshippeddatecalcPost}' != 'true') {
 									$("#noofdaysfromdeliverydatePost")
@@ -3904,7 +3907,7 @@ input+label {
 			var demo = document.getElementById("partnerName").value;
 			//alert(demo);
 			var partner = document.getElementById("postName").innerHTML;
-			alert(partner + demo);
+			//alert(partner + demo);
 			$.ajax({
 				url : "ajaxPartnerCheck.html?partner=" + partner + demo,
 				success : function(res) {
