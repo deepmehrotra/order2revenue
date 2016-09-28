@@ -3698,18 +3698,19 @@ input+label {
 										'check');
 							if ('${partner.nrnReturnConfig.retCharSFFF}' == 'true')
 								$('#retCharSFFF').iCheck('check');
-							else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeShipFee')
+							if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeShipFee')
 								$('#revShippingFeeType_revShipFeeShipFee')
 										.iCheck('check');
-							else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeFF')
+							if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeFF')
 								$('#revShippingFeeType_revShipFeeFF').iCheck(
 										'check');
-							else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeGRT')
+							if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeGRT')
 								$('#revShippingFeeType_revShipFeeGRT').iCheck(
 										'check');
-							else if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeePCC')
+							if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeePCC') 
 								$('#revShippingFeeType_revShipFeePCC').iCheck(
-										'check');
+									'check');
+				
 							if ('${partner.nrnReturnConfig.retCharSFPCC}' == 'true')
 								$('#retCharSFPCC').iCheck('check');
 							if ('${partner.nrnReturnConfig.RTOCharSFPCC}' == 'true')
