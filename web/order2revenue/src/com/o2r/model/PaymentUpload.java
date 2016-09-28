@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,7 +35,7 @@ public class PaymentUpload {
 	@Column
 	private String uploadStatus;
 	
-	@OneToMany(mappedBy = "paymentUpload")
+	@ManyToMany(mappedBy = "paymentUpload")
 	private List<Order> orders =new ArrayList<Order>();
 	
 	public int getUploadId() {

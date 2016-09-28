@@ -11,17 +11,18 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Order_Table")
+@Table(name = "Order_Table")
 public class Order {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column
 	private int orderId;
 	@Column
@@ -99,53 +100,48 @@ public class Order {
 	@Column
 	private double fixedfee;
 	@Column
-	private String  volShippingString;
+	private String volShippingString;
 	@Column
-	private String  dwShippingString;
+	private String dwShippingString;
 	@Column
-	private String  eventName;
+	private String eventName;
 	@Column
 	private double pccAmount;
 	@Column
 	private double productCost;
 	@Column
 	private double grossMargin;
-	@OneToMany(cascade=CascadeType.ALL)
-	private List<OrderTimeline> orderTimeline=new ArrayList<>();
-	@ManyToOne(cascade=CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<OrderTimeline> orderTimeline = new ArrayList<>();
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Customer customer;
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
 	private OrderPayment orderPayment;
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
 	private OrderRTOorReturn orderReturnOrRTO;
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
 	private OrderTax orderTax;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Seller seller;
-	@ManyToOne(fetch = FetchType.LAZY)
-	private PaymentUpload paymentUpload;
-	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
-	private PaymentUpload upload;	
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<PaymentUpload> paymentUpload = new ArrayList<>();
 	@Column
 	private boolean poOrder = false;
 	@Column
 	private double eossValue;
 	@ManyToOne
 	private ProductConfig productConfig;
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Order consolidatedOrder;
-	
-	
-	public PaymentUpload getPaymentUpload() {
+
+	public List<PaymentUpload> getPaymentUpload() {
 		return paymentUpload;
 	}
 
-	public void setPaymentUpload(PaymentUpload paymentUpload) {
+	public void setPaymentUpload(List<PaymentUpload> paymentUpload) {
 		this.paymentUpload = paymentUpload;
 	}
 
-	
-	
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -153,8 +149,6 @@ public class Order {
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
-
-
 
 	public int getOrderId() {
 		return orderId;
@@ -171,6 +165,7 @@ public class Order {
 	public void setGeOrderId(String geOrderId) {
 		this.geOrderId = geOrderId;
 	}
+
 	public Date getOrderDate() {
 		return orderDate;
 	}
@@ -322,6 +317,7 @@ public class Order {
 	public void setNetRate(double netRate) {
 		this.netRate = netRate;
 	}
+
 	public double getDiscount() {
 		return discount;
 	}
@@ -410,7 +406,6 @@ public class Order {
 		this.sellerNote = sellerNote;
 	}
 
-	
 	public String getPaymentType() {
 		return paymentType;
 	}
@@ -475,8 +470,7 @@ public class Order {
 				+ ", rTOLimitCrossed=" + rTOLimitCrossed + ", orderTimeline="
 				+ orderTimeline + ", customer=" + customer + ", orderPayment="
 				+ orderPayment + ", orderReturnOrRTO=" + orderReturnOrRTO
-				+ ", orderTax=" + orderTax 
-				+ "]";
+				+ ", orderTax=" + orderTax + "]";
 	}
 
 	public double getPoPrice() {

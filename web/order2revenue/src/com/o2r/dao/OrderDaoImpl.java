@@ -1565,8 +1565,10 @@ public class OrderDaoImpl implements OrderDao {
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Order.class).add(
 					Restrictions.eq("orderId", orderid));
-			if (criteria.list() != null && criteria.list().size() != 0)
+			if (criteria.list() != null && criteria.list().size() != 0) {
 				order = (Order) criteria.list().get(0);
+				Hibernate.initialize(order.getPaymentUpload());
+			}
 			if (order != null) {
 				orderPayment.setNegativeAmount(Math.abs(orderPayment
 						.getNegativeAmount()));

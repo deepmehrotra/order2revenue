@@ -294,7 +294,7 @@ public class UploadController {
 				paymentUpload.setUploadStatus("Success");
 			}
 			if (order != null) {
-				order.setPaymentUpload(paymentUpload);
+				order.getPaymentUpload().add(paymentUpload);
 				paymentUpload.getOrders().add(order);
 			}
 
