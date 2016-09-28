@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -545,7 +546,7 @@ public class PartnerController {
 					partnerBean.setNoofdaysfromshippeddate(partnerBean
 							.getNoofdaysfromdeliverydate());
 				}
-				if (partnerBean.getPcName().contains(GlobalConstant.PCFLIPKART)
+				if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
 						&& !partnerBean.isIsshippeddatecalcPost()) {
 					partnerBean.setNoofdaysfromshippeddatePost(partnerBean
 							.getNoofdaysfromdeliverydatePost());
@@ -889,6 +890,8 @@ public class PartnerController {
 				}
 
 			}
+			
+			Collections.sort(categoryList);
 			model.put("partner", partner);
 			model.put("categoryList", categoryList);
 			model.put("datemap", datemap);
@@ -956,7 +959,7 @@ public class PartnerController {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
 		}
-		if (partnerBean.getPcName().contains(GlobalConstant.PCFLIPKART)
+		if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
 				&& !partnerBean.isIsshippeddatecalcPost()) {
 			partnerBean.setNoofdaysfromshippeddatePost(partnerBean
 					.getNoofdaysfromdeliverydatePost());
@@ -1063,7 +1066,7 @@ public class PartnerController {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
 		}
-		if (partnerBean.getPcName().contains(GlobalConstant.PCFLIPKART)
+		if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
 				&& !partnerBean.isIsshippeddatecalcPost()) {
 			partnerBean.setNoofdaysfromshippeddatePost(partnerBean
 					.getNoofdaysfromdeliverydatePost());
@@ -1721,7 +1724,8 @@ public class PartnerController {
 				pbean.setPcName(pbean.getPcName() + "-New");
 			}
 
-			model.put("categoryMap", categoryMap);
+			Map<String, Float> sortedCategoryMap = new TreeMap<String, Float>(categoryMap);
+			model.put("categoryMap", sortedCategoryMap);
 			model.put("partner", pbean);
 			model.put("chargeMap", chargeMap);
 		} catch (CustomException ce) {
@@ -2364,7 +2368,7 @@ public class PartnerController {
 				partnerBean.setNoofdaysfromshippeddate(partnerBean
 						.getNoofdaysfromdeliverydate());
 			}
-			if (partnerBean.getPcName().contains(GlobalConstant.PCFLIPKART)
+			if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
 					&& !partnerBean.isIsshippeddatecalcPost()) {
 				partnerBean.setNoofdaysfromshippeddatePost(partnerBean
 						.getNoofdaysfromdeliverydatePost());

@@ -356,9 +356,9 @@ public class SaveContents {
 						order.setSubOrderID(itemID);
 
 						if (partner != null
-								&& (partner.getPcName().contains(
+								&& (partner.getPcName().toLowerCase().contains(
 										GlobalConstant.PCFLIPKART) || partner
-										.getPcName().contains(
+										.getPcName().toLowerCase().contains(
 												GlobalConstant.PCPAYTM))) {
 							channelID = order.getChannelOrderID();
 
@@ -383,9 +383,9 @@ public class SaveContents {
 						}
 					} else {
 						if (partner != null
-								&& (partner.getPcName().contains(
+								&& (partner.getPcName().toLowerCase().contains(
 										GlobalConstant.PCFLIPKART) || partner
-										.getPcName().contains(
+										.getPcName().toLowerCase().contains(
 												GlobalConstant.PCPAYTM))) {
 							errorMessage
 									.append(" Secondary OrderID is mandatory for Flipkart & PayTM;");

@@ -2144,6 +2144,12 @@ public class OrderDaoImpl implements OrderDao {
 			orderdeliverydate = deliverydate.getDate();
 			ordershippeddate = shippeddate.getDate();
 			enddate = partner.getPaycycleduration();
+			
+			if (partner.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+					&& order.getPaymentType().toUpperCase().equalsIgnoreCase("COD")) {
+				isIsshippeddatecalc = partner.isIsshippeddatecalcPost();
+				noofdaysfromshippeddate = partner.getNoofdaysfromshippeddatePost();
+			}
 
 			log.debug(" ORder delivery date in rec 2 : "
 					+ order.getDeliveryDate());
