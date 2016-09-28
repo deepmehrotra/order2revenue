@@ -551,6 +551,11 @@ public class PartnerController {
 					partnerBean.setNoofdaysfromshippeddatePost(partnerBean
 							.getNoofdaysfromdeliverydatePost());
 				}
+				if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+						&& !partnerBean.isIsshippeddatecalcOthers()) {
+					partnerBean.setNoofdaysfromshippeddateOthers(partnerBean
+							.getNoofdaysfromdeliverydateOthers());
+				}
 
 				if (image.getSize() != 0) {
 					if (!image.isEmpty()) {
@@ -964,6 +969,11 @@ public class PartnerController {
 			partnerBean.setNoofdaysfromshippeddatePost(partnerBean
 					.getNoofdaysfromdeliverydatePost());
 		}
+		if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+				&& !partnerBean.isIsshippeddatecalcOthers()) {
+			partnerBean.setNoofdaysfromshippeddateOthers(partnerBean
+					.getNoofdaysfromdeliverydateOthers());
+		}
 
 		if (image != null) {
 			if (!image.isEmpty()) {
@@ -1070,6 +1080,11 @@ public class PartnerController {
 				&& !partnerBean.isIsshippeddatecalcPost()) {
 			partnerBean.setNoofdaysfromshippeddatePost(partnerBean
 					.getNoofdaysfromdeliverydatePost());
+		}
+		if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+				&& !partnerBean.isIsshippeddatecalcOthers()) {
+			partnerBean.setNoofdaysfromshippeddateOthers(partnerBean
+					.getNoofdaysfromdeliverydateOthers());
 		}
 
 		if (image != null) {
@@ -2372,6 +2387,11 @@ public class PartnerController {
 					&& !partnerBean.isIsshippeddatecalcPost()) {
 				partnerBean.setNoofdaysfromshippeddatePost(partnerBean
 						.getNoofdaysfromdeliverydatePost());
+			}
+			if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+					&& !partnerBean.isIsshippeddatecalcOthers()) {
+				partnerBean.setNoofdaysfromshippeddateOthers(partnerBean
+						.getNoofdaysfromdeliverydateOthers());
 			}
 
 			if (image.getSize() != 0) {

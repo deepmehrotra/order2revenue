@@ -499,6 +499,10 @@ public class ConverterClass {
 					.isIsshippeddatecalcPost());
 			partner.setNoofdaysfromshippeddatePost(partnerBean
 					.getNoofdaysfromshippeddatePost());
+			partner.setIsshippeddatecalcOthers(partnerBean
+					.isIsshippeddatecalcOthers());
+			partner.setNoofdaysfromshippeddateOthers(partnerBean
+					.getNoofdaysfromshippeddateOthers());
 			partner.setStartcycleday(partnerBean.getStartcycleday());
 			partner.setPaycycleduration(partnerBean.getPaycycleduration());
 			partner.setPaydaysfromstartday(partnerBean.getPaydaysfromstartday());
@@ -532,6 +536,8 @@ public class ConverterClass {
 					.getNoofdaysfromshippeddate());
 			partner.setIsshippeddatecalcPost(partnerBean.isIsshippeddatecalcPost());
 			partner.setNoofdaysfromshippeddatePost(partnerBean.getNoofdaysfromshippeddatePost());
+			partner.setIsshippeddatecalcOthers(partnerBean.isIsshippeddatecalcOthers());
+			partner.setNoofdaysfromshippeddateOthers(partnerBean.getNoofdaysfromshippeddateOthers());
 			partner.setStartcycleday(partnerBean.getStartcycleday());
 			partner.setPaycycleduration(partnerBean.getPaycycleduration());
 			partner.setPaydaysfromstartday(partnerBean.getPaydaysfromstartday());
@@ -563,6 +569,9 @@ public class ConverterClass {
 			partner.setIsshippeddatecalcPost(metaPartner.isIsshippeddatecalcPost());
 			partner.setNoofdaysfromshippeddatePost(metaPartner
 					.getNoofdaysfromshippeddatePost());
+			partner.setIsshippeddatecalcOthers(metaPartner.isIsshippeddatecalcOthers());
+			partner.setNoofdaysfromshippeddateOthers(metaPartner
+					.getNoofdaysfromshippeddateOthers());
 			partner.setStartcycleday(metaPartner.getStartcycleday());
 			partner.setPaycycleduration(metaPartner.getPaycycleduration());
 			partner.setPaydaysfromstartday(metaPartner.getPaydaysfromstartday());
@@ -773,6 +782,9 @@ public class ConverterClass {
 				bean.setIsshippeddatecalcPost(partner.isIsshippeddatecalcPost());
 				bean.setNoofdaysfromshippeddatePost(partner
 						.getNoofdaysfromshippeddatePost());
+				bean.setIsshippeddatecalcOthers(partner.isIsshippeddatecalcOthers());
+				bean.setNoofdaysfromshippeddateOthers(partner
+						.getNoofdaysfromshippeddateOthers());
 				bean.setStartcycleday(partner.getStartcycleday());
 				bean.setPaycycleduration(partner.getPaycycleduration());
 				bean.setPaydaysfromstartday(partner.getPaydaysfromstartday());
@@ -806,6 +818,9 @@ public class ConverterClass {
 			bean.setIsshippeddatecalcPost(partner.isIsshippeddatecalcPost());
 			bean.setNoofdaysfromshippeddatePost(partner
 					.getNoofdaysfromshippeddatePost());
+			bean.setIsshippeddatecalcOthers(partner.isIsshippeddatecalcOthers());
+			bean.setNoofdaysfromshippeddateOthers(partner
+					.getNoofdaysfromshippeddateOthers());
 			bean.setStartcycleday(partner.getStartcycleday());
 			bean.setPaycycleduration(partner.getPaycycleduration());
 			bean.setPaydaysfromstartday(partner.getPaydaysfromstartday());

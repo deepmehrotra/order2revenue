@@ -22,6 +22,9 @@ public class MetaPartnerBean {
 	private boolean isshippeddatecalcPost;
 	private int noofdaysfromshippeddatePost;
 	private int noofdaysfromdeliverydatePost;
+	private boolean isshippeddatecalcOthers;
+	private int noofdaysfromshippeddateOthers;
+	private int noofdaysfromdeliverydateOthers;
 	private int startcycleday;
 	private int paycycleduration;
 	private int paydaysfromstartday;
@@ -278,5 +281,25 @@ public class MetaPartnerBean {
 	}
 	public void setPaymentCategory(String paymentCategory) {
 		this.paymentCategory = paymentCategory;
+	}
+	public boolean isIsshippeddatecalcOthers() {
+		return isshippeddatecalcOthers;
+	}
+	public void setIsshippeddatecalcOthers(boolean isshippeddatecalcOthers) {
+		this.isshippeddatecalcOthers = isshippeddatecalcOthers;
+	}
+	public int getNoofdaysfromshippeddateOthers() {
+		return noofdaysfromshippeddateOthers;
+	}
+	public void setNoofdaysfromshippeddateOthers(
+			int noofdaysfromshippeddateOthers) {
+		this.noofdaysfromshippeddateOthers = noofdaysfromshippeddateOthers;
+	}
+	public int getNoofdaysfromdeliverydateOthers() {
+		return noofdaysfromdeliverydateOthers;
+	}
+	public void setNoofdaysfromdeliverydateOthers(
+			int noofdaysfromdeliverydateOthers) {
+		this.noofdaysfromdeliverydateOthers = noofdaysfromdeliverydateOthers;
 	}
 }

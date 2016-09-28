@@ -41,6 +41,10 @@ public class Partner {
 	@Column
 	private int noofdaysfromshippeddatePost;
 	@Column
+	private boolean isshippeddatecalcOthers;
+	@Column
+	private int noofdaysfromshippeddateOthers;
+	@Column
 	private int startcycleday;
 	@Column
 	private int paycycleduration;
@@ -209,6 +213,19 @@ public class Partner {
 	}
 	public void setNoofdaysfromshippeddatePost(int noofdaysfromshippeddatePost) {
 		this.noofdaysfromshippeddatePost = noofdaysfromshippeddatePost;
+	}
+	public boolean isIsshippeddatecalcOthers() {
+		return isshippeddatecalcOthers;
+	}
+	public void setIsshippeddatecalcOthers(boolean isshippeddatecalcOthers) {
+		this.isshippeddatecalcOthers = isshippeddatecalcOthers;
+	}
+	public int getNoofdaysfromshippeddateOthers() {
+		return noofdaysfromshippeddateOthers;
+	}
+	public void setNoofdaysfromshippeddateOthers(
+			int noofdaysfromshippeddateOthers) {
+		this.noofdaysfromshippeddateOthers = noofdaysfromshippeddateOthers;
 	}
 
 

@@ -2149,6 +2149,10 @@ public class OrderDaoImpl implements OrderDao {
 					&& order.getPaymentType().toUpperCase().equalsIgnoreCase("COD")) {
 				isIsshippeddatecalc = partner.isIsshippeddatecalcPost();
 				noofdaysfromshippeddate = partner.getNoofdaysfromshippeddatePost();
+			} else if (partner.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+					&& order.getPaymentType().toLowerCase().equalsIgnoreCase("others")) {
+				isIsshippeddatecalc = partner.isIsshippeddatecalcOthers();
+				noofdaysfromshippeddate = partner.getNoofdaysfromshippeddateOthers();
 			}
 
 			log.debug(" ORder delivery date in rec 2 : "
