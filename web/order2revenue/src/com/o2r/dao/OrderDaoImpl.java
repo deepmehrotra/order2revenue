@@ -1565,8 +1565,10 @@ public class OrderDaoImpl implements OrderDao {
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Order.class).add(
 					Restrictions.eq("orderId", orderid));
-			if (criteria.list() != null && criteria.list().size() != 0)
+			if (criteria.list() != null && criteria.list().size() != 0) {
 				order = (Order) criteria.list().get(0);
+				//Hibernate.initialize(order.getPaymentUpload());
+			}
 			if (order != null) {
 				orderPayment.setNegativeAmount(Math.abs(orderPayment
 						.getNegativeAmount()));
@@ -2142,6 +2144,12 @@ public class OrderDaoImpl implements OrderDao {
 			orderdeliverydate = deliverydate.getDate();
 			ordershippeddate = shippeddate.getDate();
 			enddate = partner.getPaycycleduration();
+			
+			if (partner.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+					&& order.getPaymentType().toUpperCase().equalsIgnoreCase("COD")) {
+				isIsshippeddatecalc = partner.isIsshippeddatecalcPost();
+				noofdaysfromshippeddate = partner.getNoofdaysfromshippeddatePost();
+			}
 
 			log.debug(" ORder delivery date in rec 2 : "
 					+ order.getDeliveryDate());

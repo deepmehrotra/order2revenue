@@ -356,9 +356,9 @@ public class SaveContents {
 						order.setSubOrderID(itemID);
 
 						if (partner != null
-								&& (partner.getPcName().contains(
+								&& (partner.getPcName().toLowerCase().contains(
 										GlobalConstant.PCFLIPKART) || partner
-										.getPcName().contains(
+										.getPcName().toLowerCase().contains(
 												GlobalConstant.PCPAYTM))) {
 							channelID = order.getChannelOrderID();
 
@@ -383,9 +383,9 @@ public class SaveContents {
 						}
 					} else {
 						if (partner != null
-								&& (partner.getPcName().contains(
+								&& (partner.getPcName().toLowerCase().contains(
 										GlobalConstant.PCFLIPKART) || partner
-										.getPcName().contains(
+										.getPcName().toLowerCase().contains(
 												GlobalConstant.PCPAYTM))) {
 							errorMessage
 									.append(" Secondary OrderID is mandatory for Flipkart & PayTM;");
@@ -2591,7 +2591,7 @@ public class SaveContents {
 									System.out.println("##### OrderID : " + order.getOrderId());
 									channelOrderIdCheck.put(channelOrderId,
 											channelOrderId);
-									order.setPaymentUpload(paymentUpload);
+									//order.getPaymentUpload().add(paymentUpload);
 									paymentUpload.getOrders().add(order);
 									generatePaymentUpload = true;
 								}
@@ -3453,7 +3453,7 @@ public class SaveContents {
 				}
 
 				if (poOrder != null) {
-					poOrder.setPaymentUpload(paymentUpload);
+					//poOrder.getPaymentUpload().add(paymentUpload);
 					paymentUpload.getOrders().add(poOrder);
 					generatePaymentUpload = true;
 				}
