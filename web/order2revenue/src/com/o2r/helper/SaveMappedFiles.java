@@ -3102,7 +3102,7 @@ System.out.println(" itemoID after removing : "+itemID);
 							}
 							if (order != null & validaterow) {
 								if (!duplicateKey.containsKey(channelOrderId)) {
-									order.getPaymentUpload().add(paymentUpload);
+									//order.getPaymentUpload().add(paymentUpload);
 									paymentUpload.getOrders().add(order);
 									generatePaymentUpload = true;
 									duplicateKey.put(channelOrderId,
@@ -3497,7 +3497,7 @@ System.out.println(" itemoID after removing : "+itemID);
 							}
 							if (order != null) {
 								if (!duplicateKey.containsKey(channelOrderId)) {
-									order.getPaymentUpload().add(paymentUpload);
+									//order.getPaymentUpload().add(paymentUpload);
 									paymentUpload.getOrders().add(order);
 									generatePaymentUpload = true;
 									duplicateKey.put(channelOrderId,
@@ -4637,7 +4637,7 @@ System.out.println(" itemoID after removing : "+itemID);
 					}
 					if (order != null) {
 						if (!duplicateKey.containsKey(channelOrderId)) {
-							order.getPaymentUpload().add(paymentUpload);
+							//order.getPaymentUpload().add(paymentUpload);
 							paymentUpload.getOrders().add(order);
 							generatePaymentUpload = true;
 							duplicateKey.put(channelOrderId, channelOrderId);
@@ -5009,7 +5009,7 @@ System.out.println(" itemoID after removing : "+itemID);
 							.prepareOrderPaymentModel(entryz.getValue()),
 							sellerId);
 					if (order != null) {
-						order.getPaymentUpload().add(paymentUpload);
+						//order.getPaymentUpload().add(paymentUpload);
 						paymentUpload.getOrders().add(order);
 						generatePaymentUpload = true;
 					}
@@ -5905,7 +5905,7 @@ System.out.println(" itemoID after removing : "+itemID);
 					}
 					if (order != null) {
 						if (!duplicateKey.containsKey(channelOrderId)) {
-							order.getPaymentUpload().add(paymentUpload);
+							//order.getPaymentUpload().add(paymentUpload);
 							paymentUpload.getOrders().add(order);
 							generatePaymentUpload = true;
 							duplicateKey.put(channelOrderId, channelOrderId);
@@ -6837,7 +6837,7 @@ System.out.println(" itemoID after removing : "+itemID);
 					}
 					if (order != null) {
 						if (!duplicateKey.containsKey(channelOrderId)) {
-							order.getPaymentUpload().add(paymentUpload);
+							//order.getPaymentUpload().add(paymentUpload);
 							paymentUpload.getOrders().add(order);
 							generatePaymentUpload = true;
 							duplicateKey.put(channelOrderId, channelOrderId);

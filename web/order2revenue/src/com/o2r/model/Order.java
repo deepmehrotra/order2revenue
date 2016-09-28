@@ -123,8 +123,8 @@ public class Order {
 	private OrderTax orderTax;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Seller seller;
-	@ManyToMany(cascade = CascadeType.ALL)
-	private List<PaymentUpload> paymentUpload = new ArrayList<>();
+	/*@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<PaymentUpload> paymentUpload = new ArrayList<>();*/
 	@Column
 	private boolean poOrder = false;
 	@Column
@@ -134,13 +134,13 @@ public class Order {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Order consolidatedOrder;
 
-	public List<PaymentUpload> getPaymentUpload() {
+	/*public List<PaymentUpload> getPaymentUpload() {
 		return paymentUpload;
 	}
 
 	public void setPaymentUpload(List<PaymentUpload> paymentUpload) {
 		this.paymentUpload = paymentUpload;
-	}
+	}*/
 
 	public Customer getCustomer() {
 		return customer;

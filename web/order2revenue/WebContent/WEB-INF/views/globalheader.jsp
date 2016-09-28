@@ -225,8 +225,8 @@
 			<li class="dropdown"><a class="dropdown-toggle count-info"
 				data-toggle="dropdown"
 				style="padding: 0px; min-height: 0px; position: relative; top: 4px;"
-				onclick="Alerts();"> <i class="fa fa-bell" id="bellimg"
-					style="font-size: 20px; color: #1ab394"></i> <span id="spanid"
+				onclick="Alerts();"> <i class="fa fa-bell-o" id="bellimg"
+					style="font-size: 17px; color: #1ab394; padding: 3px; margin: 0px 7px 0px 2px;" aria-hidden="true"></i> <span id="spanid"
 					style="position: relative; right: 23px; color: #fff; font-size: 9px; top: -4px;"></span>
 			</a>
 				<ol class="dropdown-menu dropdown-messages animated fadeInRight"

@@ -10,8 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -35,7 +36,10 @@ public class PaymentUpload {
 	@Column
 	private String uploadStatus;
 	
-	@ManyToMany(mappedBy = "paymentUpload")
+	@ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "PaymentUpload_Order", 
+             joinColumns = { @JoinColumn(name = "uploadId") }, 
+             inverseJoinColumns = { @JoinColumn(name = "orderId") })
 	private List<Order> orders =new ArrayList<Order>();
 	
 	public int getUploadId() {
