@@ -326,15 +326,16 @@ public class OrderDaoImpl implements OrderDao {
 								+ order.getDeliveryDate());
 
 						order.setStatus("Shipped");
+						event = eventsService.isEventActiive(
+								order.getOrderDate(), partner.getPcName(),
+								order.getProductSkuCode(), sellerId);
 						if (partner != null
 								&& partner.getNrnReturnConfig() != null
 								&& partner.getNrnReturnConfig()
 										.isNrCalculator()) {
 
 							// Check conditions here....
-							event = eventsService.isEventActiive(
-									order.getOrderDate(), partner.getPcName(),
-									order.getProductSkuCode(), sellerId);
+							
 							if (event != null) {
 
 								order.setEventName(event.getEventName());
@@ -374,8 +375,68 @@ public class OrderDaoImpl implements OrderDao {
 									+ " delivery date :"
 									+ order.getDeliveryDate());
 						} else {
+							
+							if (event != null) {
 
-							props = PropertiesLoaderUtils
+								order.setEventName(event.getEventName());
+								event.setNetSalesQuantity(event
+										.getNetSalesQuantity()
+										+ order.getQuantity());
+
+								if (event.getNrnReturnConfig()
+										.getNrCalculatorEvent()
+										.equalsIgnoreCase("variable")) {
+									if (!calculateNR(
+											event.getNrnReturnConfig(), order,
+											product.getCategoryName(),
+											product.getDeadWeight(),
+											product.getVolWeight(), sellerId))
+										throw new Exception();
+								} else if (event.getNrnReturnConfig()
+										.getNrCalculatorEvent()
+										.equalsIgnoreCase("original")) {
+									props = PropertiesLoaderUtils
+											.loadProperties(resource);
+									order.setPartnerCommission((order.getOrderSP() - order
+											.getGrossNetRate()) * order.getQuantity());
+
+									if (partner.isTdsApplicable())
+										order.getOrderTax()
+												.setTdsToDeduct(
+														(order.getPartnerCommission() - (order
+																.getPartnerCommission() * 100 / (100 + Double.parseDouble(props
+																.getProperty("serviceTax")))))
+																* (((props
+																		.getProperty("TDS")) != null ? Double
+																		.parseDouble(props
+																				.getProperty("TDS"))
+																		: 0) / 100)
+																* order.getQuantity());
+								}
+
+							} else {
+								props = PropertiesLoaderUtils
+										.loadProperties(resource);
+								order.setPartnerCommission((order.getOrderSP() - order
+										.getGrossNetRate()) * order.getQuantity());
+
+								if (partner.isTdsApplicable())
+									order.getOrderTax()
+											.setTdsToDeduct(
+													(order.getPartnerCommission() - (order
+															.getPartnerCommission() * 100 / (100 + Double.parseDouble(props
+															.getProperty("serviceTax")))))
+															* (((props
+																	.getProperty("TDS")) != null ? Double
+																	.parseDouble(props
+																			.getProperty("TDS"))
+																	: 0) / 100)
+															* order.getQuantity());
+							}
+							
+							
+
+							/*props = PropertiesLoaderUtils
 									.loadProperties(resource);
 							order.setPartnerCommission((order.getOrderSP() - order
 									.getGrossNetRate()) * order.getQuantity());
@@ -391,7 +452,7 @@ public class OrderDaoImpl implements OrderDao {
 																.parseDouble(props
 																		.getProperty("TDS"))
 																: 0) / 100)
-														* order.getQuantity());
+														* order.getQuantity());*/
 
 						}
 						order.setOrderMRP(order.getOrderMRP()
@@ -3585,7 +3646,7 @@ public class OrderDaoImpl implements OrderDao {
 		float dwchargetemp = 0;
 		float shippingCharges = 0;
 		String tempStr = null;
-		String state = order.getCustomer().getCustomerAddress();
+		String state = null;
 		double SP = order.getOrderSP();
 		StringBuffer temp = new StringBuffer("");
 		Map<String, Float> chargesMap = new HashMap<String, Float>();
@@ -3717,13 +3778,41 @@ public class OrderDaoImpl implements OrderDao {
 
 		// Extracting comiision value
 		try {
+			
+			partner = partnerService.getPartner(order.getPcName(), sellerId);
+			if(partner != null){
+				nrnReturnConfig.setMetroList(partner.getNrnReturnConfig().getMetroList());
+				nrnReturnConfig.setNationalList(partner.getNrnReturnConfig().getNationalList());
+				nrnReturnConfig.setZonalList(partner.getNrnReturnConfig().getZonalList());
+				nrnReturnConfig.setLocalList(partner.getNrnReturnConfig().getLocalList());
+			}
+			
+			if (nrnReturnConfig != null
+					&& nrnReturnConfig.getMetroList() != null
+					&& nrnReturnConfig.getMetroList().length() != 0) {
+				state = areaConfigDao.getMetroFromZipCode(order.getCustomer()
+						.getZipcode());
+				log.debug(" City from zipcode : " + state);
+			}
+			
+			if (state == null
+					|| !(state.equalsIgnoreCase("Delhi")
+							|| state.equalsIgnoreCase("Chennai")
+							|| state.equalsIgnoreCase("Mumbai") || state
+								.equalsIgnoreCase("Kolkata"))) {
+				state = areaConfigDao.getStateFromZipCode(order.getCustomer()
+						.getZipcode());
+				log.debug(" State from zipcode : " + state);
+			}
+			
 			if (nrnReturnConfig.getCommissionType() != null
 					&& nrnReturnConfig.getCommissionType().equals("fixed")) {
 				comission = chargesMap
 						.get(GlobalConstant.fixedCommissionPercent);
 
 			} else {
-				comission = chargesMap.get(prodCat);
+				comission = chargesMap.containsKey(prodCat) ? chargesMap
+						.get(prodCat) : 0;
 			}
 
 			// Add partner new changes:
@@ -4251,7 +4340,7 @@ public class OrderDaoImpl implements OrderDao {
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
 
-			partner = partnerService.getPartner(order.getPcName(), sellerId);
+			
 			if (partner != null && partner.isTdsApplicable()) {
 				props = PropertiesLoaderUtils.loadProperties(resource);
 				tds = (((props.getProperty("TDS") != null ? Double

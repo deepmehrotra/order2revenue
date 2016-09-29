@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page import = "org.springframework.core.io.*" %>
 <%@ page import = "org.springframework.core.io.support.PropertiesLoaderUtils" %>
 <%@ page language="java" import="java.util.*" %> 
@@ -213,23 +214,52 @@ span .#error {
 																				<c:when	test="${partner.paymentType == 'paymentcycle'}">
 																					<font color="green" size="2"><input  type="text" class="form-control" placeholder="${partner.startcycleday} to ${partner.paycycleduration} ,Payment on ${partner.paydaysfromstartday}" style="text-align: center;" disabled></font>
 																				</c:when>
-																				<c:when
-																					test="${partner.paymentType == 'datewisepay'}">
-																					<c:choose>
-																						<c:when test="${partner.isshippeddatecalc}">
-																							<font color="green" size="2"><input type="text" class="form-control" placeholder="${partner.noofdaysfromshippeddate} Days From Shipped Date" style="text-align: center;" disabled></font>
-																						</c:when>
-																						<c:otherwise>
-																							<font color="green" size="2"><input type="text" class="form-control" placeholder="${partner.noofdaysfromshippeddate} Days From Delivery Date" style="text-align: center;" disabled></font>
-																						</c:otherwise>
-																					</c:choose>
+																				<c:when	test="${partner.paymentType == 'datewisepay'}">
+																					<c:if test="${fn:contains(partner.pcName, 'flipkart')}">
+																						<div style="text-align:left;">
+																							<c:if test="${partner.noofdaysfromshippeddate != 0}">
+																								<c:if test="${partner.isshippeddatecalc == 'true'}">
+																									<label class="labelfix">PREPAID : ${partner.noofdaysfromshippeddate} Days - Shipping Date</label>
+																								</c:if>
+																								<c:if test="${partner.isshippeddatecalc == 'false'}">
+																									<label class="labelfix">PREPAID : ${partner.noofdaysfromshippeddate} Days - Delivery Date</label>
+																								</c:if>																							
+																							</c:if>																						
+																							<c:if test="${partner.noofdaysfromshippeddatePost != 0}">
+																								<c:if test="${partner.isshippeddatecalcPost == 'true'}">
+																									<label class="labelfix">POSTPAID : ${partner.noofdaysfromshippeddatePost} Days - Shipping Date</label>
+																								</c:if>
+																								<c:if test="${partner.isshippeddatecalcPost == 'false'}">
+																									<label class="labelfix">POSTPAID : ${partner.noofdaysfromshippeddatePost} Days - Delivery Date</label>
+																								</c:if>																							
+																							</c:if>																						
+																							<c:if test="${partner.noofdaysfromshippeddateOthers != 0}">
+																								<c:if test="${partner.isshippeddatecalcOthers == 'true'}">
+																									<label class="labelfix">OTHERS : ${partner.noofdaysfromshippeddateOthers} Days - Shipping Date</label>
+																								</c:if>
+																								<c:if test="${partner.isshippeddatecalcOthers == 'false'}">
+																									<label class="labelfix">OTHERS : ${partner.noofdaysfromshippeddateOthers} Days - Delivery Date</label>
+																								</c:if>																							
+																							</c:if>
+																						</div>																																																																		
+																					</c:if>
+																					<c:if test="${!fn:contains(partner.pcName, 'flipkart')}">
+																						<c:choose>
+																							<c:when test="${partner.isshippeddatecalc}">
+																								<font color="green" size="2"><input type="text" class="form-control" placeholder="${partner.noofdaysfromshippeddate} Days From Shipped Date" style="text-align: center;" disabled></font>
+																							</c:when>
+																							<c:otherwise>
+																								<font color="green" size="2"><input type="text" class="form-control" placeholder="${partner.noofdaysfromshippeddate} Days From Delivery Date" style="text-align: center;" disabled></font>
+																							</c:otherwise>
+																						</c:choose>
+																					</c:if>																					
 																				</c:when>
 																				<c:otherwise>
 																					<font color="green" size="2"><input type="text" class="form-control" placeholder="${partner.monthlypaydate} of Every Month" style="text-align: center;" disabled></font>																					
 																				</c:otherwise>
 																			</c:choose>
 																	</div>
-																	<br><br><br>
+																	<br><br><br><br>
 															<h4 style="text-align: center;">STATE DISTRIBUTION</h4>
 															<div class="row">
 																<div class="col-lg-12">
@@ -748,9 +778,9 @@ span .#error {
 																<div class="col-sm-12 radio1" id="blk-8">
 																	<div class="row">
 																		<div class="col-md-12">
-																			<c:if test="${chargeMap.RTOCharSFFixedAmt != null}">
+																			<c:if test="${chargeMap.RTOCharSFVarFixedAmt != null}">
 																				<label class="labelfix">Fixed Amount :
-																					${chargeMap.RTOCharSFFixedAmt}</label>
+																					${chargeMap.RTOCharSFVarFixedAmt}</label>
 																				<br>
 																			</c:if>
 																			<c:if test="${chargeMap.RTOCharSFPercentSP != null}">

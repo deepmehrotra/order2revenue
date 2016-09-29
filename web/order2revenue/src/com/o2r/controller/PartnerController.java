@@ -1533,7 +1533,8 @@ public class PartnerController {
 					categoryMap.put(cat.getCatName(),
 							chargeMap.get(cat.getCatName()));
 				}
-			}
+			}	
+			
 			model.put("categoryMap", categoryMap);
 			System.out.println(pbean.getFixedfeeList().size());
 			model.put("partner", pbean);
