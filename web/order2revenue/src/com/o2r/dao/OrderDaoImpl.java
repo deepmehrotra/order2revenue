@@ -52,6 +52,7 @@ import com.o2r.model.OrderRTOorReturn;
 import com.o2r.model.OrderTax;
 import com.o2r.model.OrderTimeline;
 import com.o2r.model.Partner;
+import com.o2r.model.PaymentVariables;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
@@ -1886,6 +1887,15 @@ public class OrderDaoImpl implements OrderDao {
 												- order.getTotalAmountRecieved());
 
 					}
+				}
+				
+				if(orderPayment.getPaymentVar()!=null&&orderPayment.getPaymentVar().size()>0)
+				{
+					for(PaymentVariables payvar:orderPayment.getPaymentVar())
+					{
+						order.getOrderPayment().getPaymentVar().add(payvar);
+					}
+					
 				}
 				order.getOrderPayment().setDateofPayment(
 						orderPayment.getDateofPayment());

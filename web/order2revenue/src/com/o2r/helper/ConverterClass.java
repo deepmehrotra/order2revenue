@@ -1226,6 +1226,7 @@ public class ConverterClass {
 			orderPayment.setPaymentDifference(bean.getPaymentDifference());
 			orderPayment.setPaymentCycleStart(bean.getPaymentCycleStart());
 			orderPayment.setPaymentCycleEnd(bean.getPaymentCycleEnd());
+			orderPayment.setPaymentVar(bean.getPaymentVar());
 		}
 		return orderPayment;
 	}
@@ -1246,6 +1247,7 @@ public class ConverterClass {
 			orderPayment.setPaymentDifference(bean.getPaymentDifference());
 			orderPayment.setPaymentCycleStart(bean.getPaymentCycleStart());
 			orderPayment.setPaymentCycleEnd(bean.getPaymentCycleEnd());
+			orderPayment.setPaymentVar(bean.getPaymentVar());
 		}
 		return orderPayment;
 	}

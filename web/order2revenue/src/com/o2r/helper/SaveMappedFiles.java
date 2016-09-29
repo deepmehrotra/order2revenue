@@ -49,6 +49,7 @@ import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
 import com.o2r.model.Partner;
 import com.o2r.model.PaymentUpload;
+import com.o2r.model.PaymentVariables;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.TaxCategory;
@@ -2225,7 +2226,7 @@ System.out.println(" itemoID after removing : "+itemID);
 		ChannelUploadMapping chanupload = null;
 		Map<String, String> columHeaderMap = new LinkedHashMap<String, String>();
 		Map<String, Integer> cellIndexMap = new LinkedHashMap<String, Integer>();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		/*SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");*/
 		StringBuffer errorMessage = new StringBuffer();
 		CustomerBean customerBean = null;
 		Partner partner = null;
@@ -2913,12 +2914,13 @@ System.out.println(" itemoID after removing : "+itemID);
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
-				if (columHeaderMap.containsValue(entry.getCell(cellIndex)
+				/*if (columHeaderMap.containsValue(entry.getCell(cellIndex)
 						.toString())) {
 					cellIndexMap.put(entry.getCell(cellIndex).toString(),
 							cellIndex);
 				}
-
+*/				cellIndexMap.put(entry.getCell(cellIndex).toString(),
+						cellIndex);
 			}
 
 			try {
@@ -3088,12 +3090,44 @@ System.out.println(" itemoID after removing : "+itemID);
 							}
 
 							if (validaterow) {
+								// Code to set extra variables from flipkart payments sheet
+								List<PaymentVariables> payvarlist=new ArrayList<PaymentVariables>();
+								for(String s:GlobalConstant.flipkartpaymentvariablesList)
+								{
+									PaymentVariables payvar=new PaymentVariables();
+								try
+								{
+									if(cellIndexMap.containsKey(s))
+									{
+										index = cellIndexMap.get(s);
+										if (entry.getCell(index) != null
+												&& StringUtils.isNotBlank(entry
+														.getCell(index).toString()))
+										{
+											payvar.setPayKey(s);
+											payvar.setPayValue(entry
+														.getCell(index).toString());
+											payvarlist.add(payvar);
+										}
+									
+									}
+								}
+								catch(Exception e)
+								{
+									log.warn("Failed by seller ID : "+sellerId
+											+ " FlipkatyPayment : Error in reading field "+s,e);
+								}
+								
+								}
+								
 								if (amount > 0) {
 									totalpositive = totalpositive + amount;
 								} else {
 									totalnegative = totalnegative
 											+ Math.abs(amount);
 								}
+								
+								orderPayment.setPaymentVar(payvarlist);
 								order = orderService.addOrderPayment(skucode,
 										channelOrderId, orderPayment, sellerId);
 							} else {
@@ -3328,11 +3362,13 @@ System.out.println(" itemoID after removing : "+itemID);
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
-				if (columHeaderMap.containsValue(entry.getCell(cellIndex)
+				/*if (columHeaderMap.containsValue(entry.getCell(cellIndex)
 						.toString())) {
 					cellIndexMap.put(entry.getCell(cellIndex).toString(),
 							cellIndex);
-				}
+				}*/
+				cellIndexMap.put(entry.getCell(cellIndex).toString(),
+						cellIndex);
 
 			}
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
@@ -3482,6 +3518,37 @@ System.out.println(" itemoID after removing : "+itemID);
 							}
 
 							if (validaterow) {
+								
+								//Code for ading other payment variables
+								List<PaymentVariables> payvarlist=new ArrayList<PaymentVariables>();
+								for(String s:GlobalConstant.snapdealpaymentvariablesList)
+								{
+									PaymentVariables payvar=new PaymentVariables();
+								try
+								{
+									if(cellIndexMap.containsKey(s))
+									{
+										index = cellIndexMap.get(s);
+										if (entry.getCell(index) != null
+												&& StringUtils.isNotBlank(entry
+														.getCell(index).toString()))
+										{
+											payvar.setPayKey(s);
+											payvar.setPayValue(entry
+														.getCell(index).toString());
+											payvarlist.add(payvar);
+										}
+									
+									}
+								}
+								catch(Exception e)
+								{
+									log.warn("Failed by seller ID : "+sellerId
+											+ " FlipkatyPayment : Error in reading field "+s,e);
+								}
+								
+								}
+								orderPayment.setPaymentVar(payvarlist);
 
 								if (amount > 0) {
 									totalpositive = totalpositive + amount;
@@ -4390,11 +4457,13 @@ System.out.println(" itemoID after removing : "+itemID);
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
-				if (columHeaderMap.containsValue(entry.getCell(cellIndex)
+				/*if (columHeaderMap.containsValue(entry.getCell(cellIndex)
 						.toString())) {
 					cellIndexMap.put(entry.getCell(cellIndex).toString(),
 							cellIndex);
-				}
+				}*/
+				cellIndexMap.put(entry.getCell(cellIndex).toString(),
+						cellIndex);
 			}
 
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
@@ -4625,6 +4694,37 @@ System.out.println(" itemoID after removing : "+itemID);
 					}
 
 					if (validaterow) {
+						//Code for saving extra payment varibale in order
+						List<PaymentVariables> payvarlist=new ArrayList<PaymentVariables>();
+						for(String s:GlobalConstant.paytmpaymentvariablesList)
+						{
+							PaymentVariables payvar=new PaymentVariables();
+						try
+						{
+							if(cellIndexMap.containsKey(s))
+							{
+								index = cellIndexMap.get(s);
+								if (entry.getCell(index) != null
+										&& StringUtils.isNotBlank(entry
+												.getCell(index).toString()))
+								{
+									payvar.setPayKey(s);
+									payvar.setPayValue(entry
+												.getCell(index).toString());
+									payvarlist.add(payvar);
+								}
+							
+							}
+						}
+						catch(Exception e)
+						{
+							log.warn("Failed by seller ID : "+sellerId
+									+ " FlipkatyPayment : Error in reading field "+s,e);
+						}
+						
+						}
+						orderPayment.setPaymentVar(payvarlist);
+						
 						if (amount > 0) {
 							totalpositive = totalpositive + amount;
 						} else if (amount < 0) {
@@ -4681,7 +4781,7 @@ System.out.println(" itemoID after removing : "+itemID);
 		Map<String, String> columHeaderMap = new LinkedHashMap<String, String>();
 		Map<String, Integer> cellIndexMap = new LinkedHashMap<String, Integer>();
 		StringBuffer errorMessage = null;
-		String channelOrderId = null;
+		//String channelOrderId = null;
 		String skucode = null;
 		Order order = null;
 		int noOfEntries = 1;
@@ -4729,7 +4829,7 @@ System.out.println(" itemoID after removing : "+itemID);
 				validaterow = true;
 				int index = 0;
 				String channelheader = null;
-				channelOrderId = null;
+				//channelOrderId = null;
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				double amount = 0;
 
@@ -5765,11 +5865,13 @@ System.out.println(" itemoID after removing : "+itemID);
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
-				if (columHeaderMap.containsValue(entry.getCell(cellIndex)
+				/*if (columHeaderMap.containsValue(entry.getCell(cellIndex)
 						.toString())) {
 					cellIndexMap.put(entry.getCell(cellIndex).toString(),
 							cellIndex);
-				}
+				}*/
+				cellIndexMap.put(entry.getCell(cellIndex).toString(),
+						cellIndex);
 			}
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
@@ -5891,6 +5993,38 @@ System.out.println(" itemoID after removing : "+itemID);
 						validaterow = false;
 					}
 					if (validaterow) {
+						
+						//Code for saving extra payment varibale in order
+						List<PaymentVariables> payvarlist=new ArrayList<PaymentVariables>();
+						for(String s:GlobalConstant.limeroadpaymentvariablesList)
+						{
+							PaymentVariables payvar=new PaymentVariables();
+						try
+						{
+							if(cellIndexMap.containsKey(s))
+							{
+								index = cellIndexMap.get(s);
+								if (entry.getCell(index) != null
+										&& StringUtils.isNotBlank(entry
+												.getCell(index).toString()))
+								{
+									payvar.setPayKey(s);
+									payvar.setPayValue(entry
+												.getCell(index).toString());
+									payvarlist.add(payvar);
+								}
+							
+							}
+						}
+						catch(Exception e)
+						{
+							log.warn("Failed by seller ID : "+sellerId
+									+ " FlipkatyPayment : Error in reading field "+s,e);
+						}
+						
+						}
+						paymentBean.setPaymentVar(payvarlist);
+						
 						if (amount > 0) {
 							totalpositive = totalpositive + amount;
 						} else if (amount < 0) {
@@ -5950,7 +6084,7 @@ System.out.println(" itemoID after removing : "+itemID);
 		Partner partner = null;
 		Events event = null;
 		List<Order> saveList = new ArrayList<Order>();
-		List<String> SKUList = new ArrayList<String>();
+		/*List<String> SKUList = new ArrayList<String>();*/
 		List<String> idsList = new ArrayList<String>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
@@ -5985,7 +6119,7 @@ System.out.println(" itemoID after removing : "+itemID);
 				}
 
 			}
-			SKUList = productService.listProductSKU(sellerId);
+			/*SKUList = productService.listProductSKU(sellerId);*/
 			idsList = orderService.listOrderIds("channelOrderID", sellerId);
 			log.info(noOfEntries);
 			log.debug("After getting no of rows" + noOfEntries);
@@ -6603,7 +6737,7 @@ System.out.println(" itemoID after removing : "+itemID);
 		Set<String> errorSet = new HashSet<String>();
 		PaymentUpload paymentUpload = new PaymentUpload();
 		List<ManualCharges> manualChargesList = new ArrayList<ManualCharges>();
-		ManualCharges newmanualCharge = null;
+		/*ManualCharges newmanualCharge = null;*/
 		boolean generatePaymentUpload = false;
 		String uploadPaymentId = null;
 		Map<String, String> duplicateKey = new HashMap<String, String>();
@@ -6627,11 +6761,13 @@ System.out.println(" itemoID after removing : "+itemID);
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
-				if (columHeaderMap.containsValue(entry.getCell(cellIndex)
+				/*if (columHeaderMap.containsValue(entry.getCell(cellIndex)
 						.toString())) {
 					cellIndexMap.put(entry.getCell(cellIndex).toString(),
 							cellIndex);
-				}
+				}*/
+				cellIndexMap.put(entry.getCell(cellIndex).toString(),
+						cellIndex);
 
 			}
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
@@ -6823,6 +6959,37 @@ System.out.println(" itemoID after removing : "+itemID);
 					}
 
 					if (validaterow) {
+						
+						//Code for saving extra payment varibale in order
+						List<PaymentVariables> payvarlist=new ArrayList<PaymentVariables>();
+						for(String s:GlobalConstant.jabongpaymentvariablesList)
+						{
+							PaymentVariables payvar=new PaymentVariables();
+						try
+						{
+							if(cellIndexMap.containsKey(s))
+							{
+								index = cellIndexMap.get(s);
+								if (entry.getCell(index) != null
+										&& StringUtils.isNotBlank(entry
+												.getCell(index).toString()))
+								{
+									payvar.setPayKey(s);
+									payvar.setPayValue(entry
+												.getCell(index).toString());
+									payvarlist.add(payvar);
+								}
+							
+							}
+						}
+						catch(Exception e)
+						{
+							log.warn("Failed by seller ID : "+sellerId
+									+ " FlipkatyPayment : Error in reading field "+s,e);
+						}
+						
+						}
+						orderPayment.setPaymentVar(payvarlist);
 
 						if (amount > 0) {
 							totalpositive = totalpositive + amount;

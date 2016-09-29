@@ -1,6 +1,9 @@
 package com.o2r.bean;
 
 import java.util.Date;
+import java.util.List;
+
+import com.o2r.model.PaymentVariables;
 
 public class OrderPaymentBean {
 
@@ -20,6 +23,7 @@ public class OrderPaymentBean {
 	private String paymentCycle;
 	private Date paymentCycleStart;
 	private Date paymentCycleEnd;
+	private List<PaymentVariables> paymentVar;
 	public int getOrderpayId() {
 		return orderpayId;
 	}
@@ -137,6 +141,12 @@ public class OrderPaymentBean {
 		} else if (!channelOrderId.equals(other.channelOrderId))
 			return false;
 		return true;
+	}
+	public List<PaymentVariables> getPaymentVar() {
+		return paymentVar;
+	}
+	public void setPaymentVar(List<PaymentVariables> paymentVar) {
+		this.paymentVar = paymentVar;
 	}
 
 }

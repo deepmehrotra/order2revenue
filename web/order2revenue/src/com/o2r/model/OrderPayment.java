@@ -1,12 +1,16 @@
 package com.o2r.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -41,6 +45,8 @@ public class OrderPayment {
 	private Date paymentCycleStart;
 	@Column
 	private Date paymentCycleEnd;
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	private List<PaymentVariables> paymentVar ;
 
 	public String getPaymentdesc() {
 		return paymentdesc;
@@ -155,5 +161,13 @@ public class OrderPayment {
 
 	public void setPaymentCycleEnd(Date paymentCycleEnd) {
 		this.paymentCycleEnd = paymentCycleEnd;
+	}
+
+	public List<PaymentVariables> getPaymentVar() {
+		return paymentVar;
+	}
+
+	public void setPaymentVar(List<PaymentVariables> paymentVar) {
+		this.paymentVar = paymentVar;
 	}
 }

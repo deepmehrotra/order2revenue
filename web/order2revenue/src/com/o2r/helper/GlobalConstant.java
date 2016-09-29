@@ -460,6 +460,186 @@ public class GlobalConstant {
 		}
 	};
 
+	public final ArrayList<String> amazonpaymentvariablesList = new ArrayList<String>() {
+		/**
+			 *
+			 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Amazon Easy Ship Fees");
+			add("Commission");
+			add("Fixed closing fee");
+			add("FBA Pick & Pack Fee");
+			add("FBA Weight Handling Fee");
+			add("Delivery Services Fee");
+			add("Amazon Easy Ship Fees");
+			add("Refund commission");
+			add("Product Tax");
+			add("Previous Reserve Amount Balance");
+			add("Current Reserve Amount");
+			add("Shipping");
+			add("Shipping holdback");
+			add("Shipping Chargeback");
+			add("Shipping tax");
+			add("Tax Withholding Reimbursement");
+
+		}
+	};
+	
+	public static final ArrayList<String> flipkartpaymentvariablesList = new ArrayList<String>() {
+		/**
+			 *
+			 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Total Marketplace Fee (Rs.)");
+			add("Service Tax (Rs.)");
+			add("Sb Cess Tax(Rs.)");
+			add("KK Cess Tax(Rs.)");
+			add("Commission Rate");
+			add("Commission (Rs.)");
+			add("Payment Fee/collection fee");
+			add("Fee Discount (Rs.)");
+			add("Cancellation Fee (Rs.)");
+			add("Fixed Fee  (Rs.)");
+			add("Admonetaisation Fee (Rs.)");
+			add("Dead Weight (In Kgs)");
+			add("Chargeable Wt. Slab (In Kgs)");
+			add("Chargeable Weight Type");
+			add("Shipping Fee (Rs.)");
+			add("Reverse Shipping  Fee (Rs.)");
+			add("Shipping Zone");
+			add("Token Of Apology");
+			add("Pick And Pack Fee");
+			add("Storage Fee");
+			add("Removal Fee");
+			add("Service Cancellation Fee(Rs.)");
+			add("Total Offer Amount");
+			add("My Offer Share");
+			add("Flipkart Offer Share");
+			add("NDD Amount(next day delivery or same day)");
+			add("Ndd Fee");
+			add("SDD Amount");
+			add("Sdd Fee");
+			add("Sellable Regular Storage Fee");
+			add("Unsellable Regular Storage Fee");
+			add("Sellable Longterm 1 Storage Fee");
+			add("Unsellable Longterm 1 Storage Fee");
+			add("Sellable Longterm 2 Storage Fee");
+			add("Unsellable Longterm 2 Storage Fee");
+			add("Is Replacement");
+			
+
+		}
+	};
+	
+	
+	public static final ArrayList<String> paytmpaymentvariablesList = new ArrayList<String>() {
+		/**
+				 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Marketplace Commission");
+			add("Logistics Charges");
+			add("PG Commission");
+			add("Adjustment Amount");
+			add("Adjustment Taxes");
+			add("Net Adjustments");
+			add("Service Tax");
+			add("Payable Amount");
+			add("Payout - Wallet");
+			add("Payout - PG");
+			add("Payout - COD");
+
+		}
+	};
+	
+	public static final ArrayList<String> snapdealpaymentvariablesList = new ArrayList<String>() {
+		/**
+				 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Seller Funded Cashback");
+			add("Benefit Passed on to Buyer");
+			add("EMI");
+			add("Fulfillment Fee");
+			add("Fulfillment Fee Waiver");
+			add("Processing Charges");
+			add("Packaging Charges");
+			add("Special Packaging Charges");
+			add("Marketing Fee");
+			add("Payment Collection Fee");
+			add("Courier Fee");
+			add("Fulfilment fees for Returns");
+			add("Processing fees for Returns");
+			add("Packaging fees for Returns");
+			add("Special packaging fees for Returns");
+			add("Payment collection fees for Returns");
+			add("Logistics fees for Returns");
+			add("Reverse logistics fees for Returns");
+			add("Service Tax");
+			add("Swachh Bharat Cess");
+			add("Krishi Kalyan Cess");
+			add("Commission");
+
+		}
+	};
+	
+	
+	public static final ArrayList<String> limeroadpaymentvariablesList = new ArrayList<String>() {
+		/**
+				 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Total Cart Discount");
+			add("Cart Disc By Vendor (Final)");
+			add("Cart Disc By Limeroad (final)");
+			add("Vendor NSP");
+			add("Net Selling Price");
+			add("Taxable Amount");
+			add("Tax 2 Rate");
+			add("Tax 2 Amount");
+			add("Shipping Charge paid by Customer");
+			add("COD Charge paid by Customer");
+			add("Entry Tax");
+			add("LBT/Octroi");
+			add("LR Margin % inclusive service tax");
+			add("Transporter Cost Recovered from Vendor (Final)");
+			add("Cod Cost Recovered from Vendor (Final)");
+			add("LR Margin Amount after Discount borne by Limeroad (Final)");
+			add("Logistics fees for Returns");
+			add("Transporter Cost Recovered from Vendor on Return (Final)");
+			add("Vendor Payment Due (after TDS addition) (Final)");
+			add("Margin Reversed on Returns");
+			
+
+		}
+	};
+	
+	public static final ArrayList<String> jabongpaymentvariablesList = new ArrayList<String>() {
+		/**
+				 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Jabong Product Discount");
+			add("Seller Product Discount");
+			add("Taxable Amount");
+			add("Tax 2 Amount");
+			add("Tax%");
+			add("Return Amount");
+			add("TYPE OF TAX");
+			add("Tax Amount");
+			add("Final Commission %");
+			add("Commission Amount");
+		}
+	};
+	
 	/* Null Area */
 	public static final String nullException = "NullException !";
 	public static final String nullValuesError = "Field Should Not Be Empty!";

@@ -500,8 +500,57 @@
                     <div class="float-e-margins col-lg-4">
                         <div class="panel panel-default">
                           <div class="panel-heading">
-                            <h4 class="panel-title ibox-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapsepayment">Payment Info <i class="glyphicon glyphicon-minus" style="float: right;"></i> </a></h4>
+                            <h4 class="panel-title ibox-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapsepayment">Payment Info  
+                             <i class="glyphicon glyphicon-minus" style="float: right;"></i> 
+                             <a class="btn btn-small btn-info pull-right" href="#" data-toggle="modal"data-target="#modaltable" style="margin:-2px 10px 0px 0px;padding: 0px 6px 0px 6px;color: #000;background-color:#dccdb8;" title="Channel Properties">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a></h4>
+
                           </div>
+			<div class="modal inmodal fade" id="modaltable" tabindex="-1" role="dialog"  aria-hidden="true">
+                          <div class="modal-dialog modal-lg">
+                            <div class="modal-content animated bounceInRight" style="left: 22%;width:50%;">
+                              <div class="modal-header" style="padding: 5px 6px 9px 14px;background: #c1c1c1;color: #fff;font-weight: bold;letter-spacing: 1px;">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span> </button>
+                                <h1>Channel Properties</h1>
+                               </div>
+                              <div class="modal-body">
+                                <div class="row">
+                                  <div class="col-sm-12" style="overflow-x: scroll;overflow-y: scroll;height: 228px;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>S.NO</th>
+                                                <th>Property</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:if test="${!empty order.orderPayment.paymentVar}">
+											<c:forEach items="${order.orderPayment.paymentVar}" var="properties"
+													varStatus="loop">
+                                            <tr>
+                                                <td>
+                                                   ${loop.index+1}
+                                                </td>
+                                                <td>
+                                                   ${properties.payKey}
+                                                <td>
+                                                   ${properties.payValue}
+                                                </td>
+                                            </tr>
+                                            </c:forEach>
+                                            </c:if>
+                                           
+                                        </tbody>
+                                    </table>
+                                    
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                           <div id="collapsepayment" class="panel-collapse collapse in">
                             <div class="panel-body" style="overflow-x: hidden;overflow-y: scroll;height: 345px;">
                               <div class="ibox-content add-company view-order">        
