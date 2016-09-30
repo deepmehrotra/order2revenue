@@ -3,6 +3,7 @@ package com.o2r.helper;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -11,7 +12,6 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.o2r.bean.ChannelNR;
 import com.o2r.bean.ChannelReportDetails;
@@ -21,6 +21,7 @@ import com.o2r.bean.YearlyStockList;
 import com.o2r.model.Expenses;
 import com.o2r.model.Order;
 import com.o2r.model.Product;
+import com.o2r.service.CategoryService;
 import com.o2r.service.ProductService;
 
 public class FillManager {
@@ -32,10 +33,11 @@ public class FillManager {
 	 * @param startRowIndex starting row offset
 	 * @param startColIndex starting column offset
 	 * @param datasource the data source
+	 * @throws CustomException 
 	 */
 	
 		
-	public static void fillReport(HSSFSheet worksheet, int startRowIndex, int startColIndex,String status, List<Order> datasource , String[] headers, ProductService productService, int sellerId) {
+	public static void fillReport(HSSFSheet worksheet, int startRowIndex, int startColIndex,String status, List<Order> datasource , String[] headers, ProductService productService,CategoryService categoryService, int sellerId) throws CustomException {
 		// Row offset
 		startRowIndex += 2;
 		int startCol=0;
@@ -43,12 +45,10 @@ public class FillManager {
 		HSSFCellStyle bodyCellStyle = worksheet.getWorkbook().createCellStyle();
 		bodyCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
 		bodyCellStyle.setWrapText(true);
-				
-		/*System.out.println(" Insidee fill manage : datasource size : "+datasource);
-		System.out.println(" Start ro index : "+startRowIndex);
-		System.out.println(" header length  : "+headers.length);
-		System.out.println(" headers  : "+headers);*/
+		
 		int rowIndex=startRowIndex-1;
+		Map<String, String> productCatMap =productService.getSKUCategoryMap(sellerId);
+		Map<String, String> categoryParentMap = categoryService.getCategoryParentMap(sellerId);
 		// Create body
 		try{
 			if(datasource!=null&&datasource.size()!=0)
@@ -63,7 +63,7 @@ public class FillManager {
 				HSSFRow row = worksheet.createRow((short) rowIndex+1);
 				// Retrieve the id value
 				double commissionCharge=(datasource.get(i-2).getPccAmount()+datasource.get(i-2).getShippingCharges()+datasource.get(i-2).getFixedfee()+datasource.get(i-2).getPartnerCommission());
-				Product product=productService.getProduct(datasource.get(i-2).getProductSkuCode(),sellerId);
+				//Product product=productService.getProduct(datasource.get(i-2).getProductSkuCode(),sellerId);
 				for(int j=0;j<headers.length;j++)
 				{				
 					
@@ -160,8 +160,7 @@ public class FillManager {
 					else if(headers[j].equals("productCategory"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
-						if(product != null)
-							cell.setCellValue(product.getCategoryName());
+						cell.setCellValue(productCatMap.get(datasource.get(i-2).getProductSkuCode()));
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("totalMRP"))
@@ -330,22 +329,21 @@ public class FillManager {
 					else if(headers[j].equals("grossCostProduct"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
-						if(product != null)
-							cell.setCellValue(product.getProductPrice()*datasource.get(i-2).getQuantity());
+							cell.setCellValue(datasource.get(i-2).getProductCost()*datasource.get(i-2).getQuantity());
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("returnCostProduct"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
-						if(product != null && datasource.get(i-2).getOrderReturnOrRTO() != null)
-							cell.setCellValue(product.getProductPrice()*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty());
+						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
+							cell.setCellValue(datasource.get(i-2).getProductCost()*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty());
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("netCostProduct"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
-						if(product != null && datasource.get(i-2).getOrderReturnOrRTO() != null)
-							cell.setCellValue((product.getProductPrice()*datasource.get(i-2).getQuantity())-(product.getProductPrice()*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()));
+						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
+							cell.setCellValue((datasource.get(i-2).getProductCost()*datasource.get(i-2).getQuantity())-(datasource.get(i-2).getProductCost()*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()));
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("grossProfit"))

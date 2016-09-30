@@ -589,7 +589,7 @@
 		}
 		$("#selectReportForm").submit();
 
-		$.ajax({
+	/* 	$.ajax({
 			url : $("#selectReportForm").attr("action"),
 			context : document.body,
 			type : 'post',
@@ -601,7 +601,7 @@
 	            	$('#centerpane').html(res);
 	        	}
 			}
-		});
+		}); */
 	}
 </script>
 

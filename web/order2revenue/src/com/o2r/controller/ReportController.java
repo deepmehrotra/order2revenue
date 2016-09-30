@@ -878,6 +878,7 @@ public class ReportController {
 	public void downloadreport(HttpServletRequest request,
 			HttpServletResponse response) {
 
+		long starttime=System.currentTimeMillis();
 		log.info("$$$ downloadreport Starts : ReportController $$$");
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -918,7 +919,8 @@ public class ReportController {
 			e.printStackTrace();
 			log.error("Failed! By Seller ID : " + sellerId, e);
 		}
-		log.debug(" Got response ttso size in controller: " + ttso.size());
+		long endtime=System.currentTimeMillis();
+		log.info("$$$ Time take to generate report : "+(endtime-starttime));
 		log.info("$$$ downloadreport Ends : ReportController $$$");
 	}
 

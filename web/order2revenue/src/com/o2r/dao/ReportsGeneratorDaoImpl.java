@@ -633,9 +633,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		Date currentDate=new Date();
 		Map<String, Object> consolidatedMap=new HashMap<String, Object>();
 		ConsolidatedOrderBean bean=null;
+		Session session =null;
 		try {			
 			orderList=orderService.findOrdersbyDate("shippedDate", startDate, endDate, sellerId, false);
-			Session session = sessionFactory.openSession();
+				session=sessionFactory.openSession();
 			session.beginTransaction();
 			
 			Criteria criteria = session.createCriteria(Order.class);
@@ -659,12 +660,20 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				orderList=orderlistGpReturn;
 			int loopcount=0;
 			int threadsize=0;
-			if (orderList.size() > 1000) {
-				threadsize = (int) Math.nextUp(orderList.size() / 100);
-				loopcount = 100;
-			} else {
-				threadsize = 10;
-				loopcount = 10;
+			if(orderList.size()>10000&&orderList.size()<100000)
+			{
+				threadsize=10;
+				loopcount=100;
+			}
+			else if(orderList.size()<10000)
+			{
+				threadsize=5;
+				loopcount=100;
+			}
+			else if(orderList.size()>100000)
+			{
+				threadsize=20;
+				loopcount=100;
 			}
 			ExecutorService executor = Executors.newFixedThreadPool(threadsize);			
 			for (int x = 0; x < orderList.size(); x = x + loopcount) {
@@ -681,15 +690,20 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				    consolidatedList.add((ConsolidatedOrderBean)entry.getValue());
 				}
 			}
+				
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 			log.error("Failed! by sellerId : "+sellerId,e);					
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		finally
+		{
+			session.close();
+		}
 		log.info("*** getConsolidatedOrdersReport ends : ReportsGeneratorDaoImpl ****");
 		Date edate = new Date();
-		System.out.println("Time Taken to execute : "+(edate.getTime() - sdate.getTime()));
+		log.info("Time Taken to execute : "+(edate.getTime() - sdate.getTime()));
 		return consolidatedList;
 	}
 	

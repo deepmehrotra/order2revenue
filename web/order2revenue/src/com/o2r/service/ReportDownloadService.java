@@ -18,6 +18,7 @@ import com.o2r.bean.ChannelReportDetails;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.YearlyStockList;
+import com.o2r.helper.CustomException;
 import com.o2r.helper.FillManager;
 import com.o2r.helper.HelperClass;
 import com.o2r.helper.Layouter;
@@ -39,6 +40,8 @@ public class ReportDownloadService {
 	private ProductService productService;
 	@Autowired
 	private HelperClass helperClass;
+	@Autowired
+	private CategoryService categoryService;
 	
 	@Resource(name="sessionFactory")
 	private SessionFactory sessionFactory;
@@ -74,7 +77,14 @@ public class ReportDownloadService {
 		Layouter.buildOrderReport(worksheet, startRowIndex, startColIndex,reportname,headers);
 		
 		// 5. Fill report
-		FillManager.fillReport(worksheet, startRowIndex, startColIndex,status, orderlist , headers, productService, sellerId );
+		
+		try {
+			FillManager.fillReport(worksheet, startRowIndex, startColIndex,status, orderlist , headers, productService,categoryService, sellerId );
+		} catch (CustomException e) {
+			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+		}
 		
 		// 6. Set the response properties
 		String fileName = "Consolidated_Order_Report.xls";
