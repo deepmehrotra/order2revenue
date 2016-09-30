@@ -2328,13 +2328,13 @@ public class OrderDaoImpl implements OrderDao {
 		float serviceTax = 0;
 		double tds = 0;
 
-		StringBuffer area = new StringBuffer("");
-		StringBuffer volarea = new StringBuffer("");
+		/*StringBuffer area = new StringBuffer("");
+		StringBuffer volarea = new StringBuffer("");*/
 
 		float vwchargetemp = 0;
 		float dwchargetemp = 0;
 		float shippingCharges = 0;
-		String tempStr = null;
+		//String tempStr = null;
 		String state = null;
 
 		try {
@@ -2352,10 +2352,11 @@ public class OrderDaoImpl implements OrderDao {
 								.equalsIgnoreCase("Kolkata"))) {
 				state = areaConfigDao.getStateFromZipCode(order.getCustomer()
 						.getZipcode());
-				log.debug(" State from zipcode : " + state);
+				
 			}
+			log.info(" State from zipcode : " + state);
 			double SP = order.getOrderSP();
-			StringBuffer temp = new StringBuffer("");
+			//StringBuffer temp = new StringBuffer("");
 			Map<String, Float> chargesMap = new HashMap<String, Float>();
 			// Map<String, Float> returnMap = new HashMap<String, Float>();
 
@@ -2363,7 +2364,7 @@ public class OrderDaoImpl implements OrderDao {
 
 			List<NRnReturnCharges> chargesList = partner.getNrnReturnConfig()
 					.getCharges();
-
+			System.out.println(" NR chrge list size : "+chargesList.size());
 			for (NRnReturnCharges charge : chargesList) {
 
 				if (charge.getChargeName().contains("fixedfee")
@@ -2502,7 +2503,6 @@ public class OrderDaoImpl implements OrderDao {
 				comission = chargesMap.containsKey(prodCat) ? chargesMap
 						.get(prodCat) : 0;
 			}
-
 			// Add partner new changes:
 
 			// Getting Fixed fee
@@ -2524,7 +2524,6 @@ public class OrderDaoImpl implements OrderDao {
 							.get(pbean.getFixedfeeList().size() - 1).getValue();
 				}
 			}
-
 			// Payment collection charges
 			if (partner.getNrnReturnConfig().isWhicheverGreaterPCC()) {
 				double percentAmount = chargesMap
