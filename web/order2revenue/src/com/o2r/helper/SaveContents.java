@@ -197,7 +197,7 @@ public class SaveContents {
 								+ entry.getCell(0));
 						if (partner != null) {
 							productConfigs = productService.getProductConfig(
-									entry.getCell(2).toString(),
+									entry.getCell(2).toString().toUpperCase(),
 									partner.getPcName(), sellerId);
 							if (productConfigs != null) {
 								if (productConfigs.size() == 1) {
@@ -768,7 +768,7 @@ public class SaveContents {
 							&& StringUtils.isNotBlank(entry.getCell(2)
 									.toString())) {
 						List<ProductConfig> productConfigs = productService
-								.getProductConfig(entry.getCell(2).toString(),
+								.getProductConfig(entry.getCell(2).toString().toUpperCase(),
 										order.getPcName(), sellerId);
 						if (productConfigs == null) {
 							errorMessage
@@ -1040,9 +1040,9 @@ public class SaveContents {
 								&& !uniqueProductMap.containsKey(entry.getCell(
 										1).toString())) {
 							product.setProductSkuCode(entry.getCell(1)
-									.toString());
-							uniqueProductMap.put(entry.getCell(1).toString(),
-									entry.getCell(1).toString());
+									.toString().toUpperCase());
+							uniqueProductMap.put(entry.getCell(1).toString().toUpperCase(),
+									entry.getCell(1).toString().toUpperCase());
 						} else {
 							product.setProductSkuCode(entry.getCell(1)
 									.toString());
@@ -1261,7 +1261,7 @@ public class SaveContents {
 					if (entry.getCell(1) != null
 							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						product = productService.getProduct(entry.getCell(1)
-								.toString(), sellerId);
+								.toString().toUpperCase(), sellerId);
 						if (product == null) {
 							errorMessage
 									.append(" Invalid SKU code ! Product Doesn't Exist ! ");
@@ -1698,7 +1698,7 @@ public class SaveContents {
 									&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								productConfigs = productService
 										.getProductConfig(entry.getCell(1)
-												.toString().trim(), entry
+												.toString().trim().toUpperCase(), entry
 												.getCell(3).toString().trim(),
 												sellerId);
 								if (productConfigs != null) {
@@ -1707,7 +1707,7 @@ public class SaveContents {
 												.get(0)
 												.getProductSkuCode()
 												.equals(entry.getCell(0)
-														.toString().trim())) {
+														.toString().trim().toUpperCase())) {
 											productConfig = productConfigs
 													.get(0);
 										} else {
@@ -1960,7 +1960,7 @@ public class SaveContents {
 						entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
 
 						Product product = productService.getProduct(entry
-								.getCell(0).toString(), sellerId);
+								.getCell(0).toString().trim().toUpperCase(), sellerId);
 						if (product != null) {
 							productConfig.setProductSkuCode(product
 									.getProductSkuCode());
@@ -1974,13 +1974,13 @@ public class SaveContents {
 										HSSFCell.CELL_TYPE_STRING);
 
 								String mapKey = entry.getCell(1).toString()
-										.trim()
+										.trim().toUpperCase()
 										+ "$"
 										+ entry.getCell(3).toString().trim();
 
 								List<ProductConfig> procon = productService
 										.getProductConfig(entry.getCell(1)
-												.toString(), entry.getCell(3)
+												.toString().trim().toUpperCase(), entry.getCell(3)
 												.toString(), sellerId);
 								if (procon != null) {
 									if (procon.size() == 1) {
@@ -1994,7 +1994,7 @@ public class SaveContents {
 										&& !uniqueProductMap
 												.containsKey(mapKey)) {
 									productConfig.setChannelSkuRef(entry
-											.getCell(1).toString());
+											.getCell(1).toString().trim().toUpperCase());
 									uniqueProductMap.put(mapKey, mapKey);
 								} else {
 									errorMessage
@@ -2045,7 +2045,7 @@ public class SaveContents {
 								 * .containsKey(mapKey)) {
 								 */
 								productConfig.setVendorSkuRef(entry.getCell(2)
-										.toString());
+										.toString().trim().toUpperCase());
 								/*
 								 * uniqueVendorSKUMap.put(mapKey, mapKey); }
 								 * else { errorMessage .append(
@@ -2146,7 +2146,7 @@ public class SaveContents {
 					if (entry.getCell(0) != null
 							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						productConfig.setProductSkuCode(entry.getCell(0)
-								.toString());
+								.toString().trim().toUpperCase());
 					} else {
 						errorMessage.append(" Product SKU is null ");
 						validaterow = false;
@@ -2162,7 +2162,7 @@ public class SaveContents {
 					if (entry.getCell(2) != null
 							&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						productConfig.setChannelSkuRef(entry.getCell(2)
-								.toString());
+								.toString().trim().toUpperCase());
 					} else {
 						errorMessage.append(" Channel SKU is null ");
 						validaterow = false;
@@ -2267,8 +2267,7 @@ public class SaveContents {
 		log.info("$$$ savePaymentContents starts : SaveContents $$$");
 		PaymentUpload paymentUpload = new PaymentUpload();
 		double totalpositive = 0;
-		double totalnegative = 0;
-		String channelOrderId = null;
+		double totalnegative = 0;		
 		String skucode = null;
 		Order order = null;
 		String uploadPaymentId = null;
@@ -2303,8 +2302,7 @@ public class SaveContents {
 				double negativeAmount = 0;
 				// Product product=new Product();
 				OrderPayment payment = new OrderPayment();
-				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
-				log.debug(" channelOrderId " + channelOrderId);
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");				
 				try {
 					if (entry.getCell(0) != null
 							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK
@@ -2324,7 +2322,7 @@ public class SaveContents {
 											&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 										productConfigs = productService
 												.getProductConfig(entry
-														.getCell(2).toString(),
+														.getCell(2).toString().trim().toUpperCase(),
 														partner.getPcName(),
 														sellerId);
 										if (productConfigs != null) {
@@ -2405,25 +2403,11 @@ public class SaveContents {
 													channelId, sellerId);
 									if (onj != null) {
 										if (onj.size() == 1) {
-											channelOrderId = onj.get(0)
+											channelId = onj.get(0)
 													.getChannelOrderID();
 										} else {
-											boolean check = false;
-											for (Order eachOrder : onj) {
-												if (eachOrder
-														.getChannelOrderID()
-														.equalsIgnoreCase(
-																channelOrderId)) {
-													channelOrderId = eachOrder
-															.getChannelOrderID();
-													check = true;
-												}
-											}
-											if (check != true) {
-												errorMessage
-														.append("Multiple Orders With Channel Order ID.");
-												validaterow = false;
-											}
+											errorMessage.append("Multiple Orders With Channel Order ID.");
+											validaterow = false;
 										}
 									} else if (entry.getCell(3) != null
 											&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -2432,25 +2416,11 @@ public class SaveContents {
 														.toString(), sellerId);
 										if (onj != null) {
 											if (onj.size() == 1) {
-												channelOrderId = onj.get(0)
+												channelId = onj.get(0)
 														.getChannelOrderID();
 											} else {
-												boolean check = false;
-												for (Order eachOrder : onj) {
-													if (eachOrder
-															.getChannelOrderID()
-															.equalsIgnoreCase(
-																	channelOrderId)) {
-														channelOrderId = eachOrder
-																.getChannelOrderID();
-														check = true;
-													}
-												}
-												if (check != true) {
-													errorMessage
-															.append("Multiple Orders With Channel Order ID.");
-													validaterow = false;
-												}
+												errorMessage.append("Multiple Orders With Channel Order ID.");
+												validaterow = false;
 											}
 										} else {
 											errorMessage
@@ -2471,25 +2441,11 @@ public class SaveContents {
 													sellerId);
 									if (onj != null) {
 										if (onj.size() == 1) {
-											channelOrderId = onj.get(0)
+											channelId = onj.get(0)
 													.getChannelOrderID();
 										} else {
-											boolean check = false;
-											for (Order eachOrder : onj) {
-												if (eachOrder
-														.getChannelOrderID()
-														.equalsIgnoreCase(
-																channelOrderId)) {
-													channelOrderId = eachOrder
-															.getChannelOrderID();
-													check = true;
-												}
-											}
-											if (check != true) {
-												errorMessage
-														.append("Multiple Orders With Secondary Order ID.");
-												validaterow = false;
-											}
+											errorMessage.append("Multiple Orders With Secondary Order ID.");
+											validaterow = false;
 										}
 									} else {
 										errorMessage
@@ -2578,7 +2534,7 @@ public class SaveContents {
 								totalpositive = totalpositive + positiveAmount;
 								totalnegative = totalnegative + negativeAmount;
 								order = orderService.addOrderPayment(
-										skucode, channelOrderId, payment,
+										skucode, channelId, payment,
 										sellerId);
 							} else {
 								returnPaymentMap.put(errorMessage
@@ -2587,10 +2543,10 @@ public class SaveContents {
 							}
 							if (order != null && validaterow == true) {
 								if (!channelOrderIdCheck
-										.containsKey(channelOrderId)) {
+										.containsKey(channelId)) {
 									System.out.println("##### OrderID : " + order.getOrderId());
-									channelOrderIdCheck.put(channelOrderId,
-											channelOrderId);
+									channelOrderIdCheck.put(channelId,
+											channelId);
 									//order.getPaymentUpload().add(paymentUpload);
 									paymentUpload.getOrders().add(order);
 									generatePaymentUpload = true;
@@ -2767,7 +2723,7 @@ public class SaveContents {
 						errorMessage.append(" Product SKU does not exist ");
 						validaterow = false;
 					} else {
-						SkUCode = entry.getCell(0).toString();
+						SkUCode = entry.getCell(0).toString().trim().toUpperCase();
 					}
 					if ((entry.getCell(1) == null
 							|| StringUtils.isNotBlank(entry.getCell(1)
@@ -2910,7 +2866,7 @@ public class SaveContents {
 													.getCell(2).toString())) {
 										productConfigs = productService
 												.getProductConfig(entry
-														.getCell(2).toString(),
+														.getCell(2).toString().trim().toUpperCase(),
 														partner.getPcName(),
 														sellerId);
 										if (productConfigs != null) {
@@ -3676,13 +3632,13 @@ public class SaveContents {
 							if (event != null) {
 								if (event.getSkuList() == null) {
 									event.setSkuList(entry.getCell(1)
-											.toString() + ",");
+											.toString().trim().toUpperCase() + ",");
 								} else if (!event.getSkuList().contains(
-										entry.getCell(1).toString())) {
+										entry.getCell(1).toString().trim().toUpperCase())) {
 									StringBuffer skuBuffer = new StringBuffer(
 											event.getSkuList());
 									event.setSkuList(skuBuffer.append(
-											entry.getCell(1).toString())
+											entry.getCell(1).toString().trim().toUpperCase())
 											.toString()
 											+ ",");
 								} else {

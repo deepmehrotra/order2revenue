@@ -221,7 +221,7 @@ public class SaveMappedFiles {
 							entry.getCell(idIndex).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
 							productConfigs = productService.getProductConfig(
-									entry.getCell(skuIndex).toString(),
+									entry.getCell(skuIndex).toString().trim().toUpperCase(),
 									partner.getPcName(), sellerId);
 							if (productConfigs != null) {
 								if (productConfigs.size() == 1) {
@@ -963,7 +963,7 @@ System.out.println(" itemoID after removing : "+itemID);
 								productConfigs = productService
 										.getProductConfig(
 												entry.getCell(skuIndex)
-														.toString(), partner
+														.toString().trim().toString(), partner
 														.getPcName(), sellerId);
 								if (productConfigs != null) {
 									if (productConfigs.size() == 1) {
@@ -1628,7 +1628,7 @@ System.out.println(" itemoID after removing : "+itemID);
 								productConfigs = productService
 										.getProductConfig(
 												entry.getCell(skuIndex)
-														.toString(), partner
+														.toString().trim().toUpperCase(), partner
 														.getPcName(), sellerId);
 								if (productConfigs != null) {
 
@@ -2346,7 +2346,7 @@ System.out.println(" itemoID after removing : "+itemID);
 								productConfigs = productService
 										.getProductConfig(
 												entry.getCell(skuIndex)
-														.toString(), partner
+														.toString().trim().toUpperCase(), partner
 														.getPcName(), sellerId);
 								if (productConfigs != null) {
 
@@ -2981,7 +2981,7 @@ System.out.println(" itemoID after removing : "+itemID);
 								channelOrderId = entry.getCell(index)
 										.toString()
 										+ GlobalConstant.orderUniqueSymbol
-										+ entry.getCell(skuIndex).toString()
+										+ entry.getCell(skuIndex).toString().trim().toUpperCase()
 										+ GlobalConstant.orderUniqueSymbol
 										+ itemId;
 
@@ -3082,7 +3082,7 @@ System.out.println(" itemoID after removing : "+itemID);
 								if (entry.getCell(index) != null
 										&& StringUtils.isNotBlank(entry
 												.getCell(index).toString())) {
-									skucode = entry.getCell(index).toString();
+									skucode = entry.getCell(index).toString().trim().toUpperCase();
 								}
 							} catch (NullPointerException e) {
 								errorMessage
@@ -3410,7 +3410,7 @@ System.out.println(" itemoID after removing : "+itemID);
 								channelOrderId = entry.getCell(index)
 										.toString()
 										+ GlobalConstant.orderUniqueSymbol
-										+ entry.getCell(skuIndex).toString();
+										+ entry.getCell(skuIndex).toString().trim().toUpperCase();
 								onj = orderService.searchAsIsOrder(
 										"channelOrderID", channelOrderId,
 										sellerId);
@@ -3510,7 +3510,7 @@ System.out.println(" itemoID after removing : "+itemID);
 								if (entry.getCell(index) != null
 										&& StringUtils.isNotBlank(entry
 												.getCell(index).toString())) {
-									skucode = entry.getCell(index).toString();
+									skucode = entry.getCell(index).toString().trim().toUpperCase();
 								}
 							} catch (NullPointerException e) {
 								errorMessage
@@ -3822,7 +3822,7 @@ System.out.println(" itemoID after removing : "+itemID);
 								productConfigs = productService
 										.getProductConfig(
 												entry.getCell(skuIndex)
-														.toString(), partner
+														.toString().trim().toUpperCase(), partner
 														.getPcName(), sellerId);
 								if (productConfigs != null) {
 
@@ -4524,12 +4524,13 @@ System.out.println(" itemoID after removing : "+itemID);
 									HSSFCell.CELL_TYPE_STRING);
 							entry.getCell(secOrderIndex).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-
+							skucode = entry.getCell(skuIndex)
+									.toString().trim().toUpperCase();
 							if (partner != null) {
 								productConfigs = productService
 										.getProductConfig(
 												entry.getCell(skuIndex)
-														.toString(), partner
+														.toString().trim().toUpperCase(), partner
 														.getPcName(), sellerId);
 								if (productConfigs != null) {
 
@@ -4571,7 +4572,7 @@ System.out.println(" itemoID after removing : "+itemID);
 													index).toString()
 													+ GlobalConstant.orderUniqueSymbol
 													+ entry.getCell(skuIndex)
-															.toString()
+															.toString().trim().toUpperCase()
 													+ GlobalConstant.orderUniqueSymbol
 													+ entry.getCell(
 															secOrderIndex)
@@ -4855,7 +4856,7 @@ System.out.println(" itemoID after removing : "+itemID);
 								
 								String channelOrderID = entry.getCell(index).toString()
 										+GlobalConstant.orderUniqueSymbol
-										+entry.getCell(skuIndex).toString();
+										+entry.getCell(skuIndex).toString().trim().toUpperCase();
 								
 								List<Order> onj = orderService.searchAsIsOrder(
 										"channelOrderID", channelOrderID,
@@ -5263,7 +5264,7 @@ System.out.println(" itemoID after removing : "+itemID);
 								productConfigs = productService
 										.getProductConfig(
 												entry.getCell(skuIndex)
-														.toString(), partner
+														.toString().trim().toUpperCase(), partner
 														.getPcName(), sellerId);
 								if (productConfigs != null) {
 
@@ -5906,7 +5907,7 @@ System.out.println(" itemoID after removing : "+itemID);
 								HSSFCell.CELL_TYPE_STRING);
 						channelOrderId = entry.getCell(index).toString()
 								+ GlobalConstant.orderUniqueSymbol
-								+ entry.getCell(skuIndex).toString();
+								+ entry.getCell(skuIndex).toString().trim().toUpperCase();
 						List<Order> onj = orderService.searchAsIsOrder(
 								"channelOrderID", channelOrderId, sellerId);
 						if (onj != null) {
@@ -6084,7 +6085,6 @@ System.out.println(" itemoID after removing : "+itemID);
 		Partner partner = null;
 		Events event = null;
 		List<Order> saveList = new ArrayList<Order>();
-		/*List<String> SKUList = new ArrayList<String>();*/
 		List<String> idsList = new ArrayList<String>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
@@ -6117,9 +6117,7 @@ System.out.println(" itemoID after removing : "+itemID);
 					cellIndexMap.put(entry.getCell(cellIndex).toString(),
 							cellIndex);
 				}
-
-			}
-			/*SKUList = productService.listProductSKU(sellerId);*/
+			}		
 			idsList = orderService.listOrderIds("channelOrderID", sellerId);
 			log.info(noOfEntries);
 			log.debug("After getting no of rows" + noOfEntries);
@@ -6179,7 +6177,7 @@ System.out.println(" itemoID after removing : "+itemID);
 								productConfigs = productService
 										.getProductConfig(
 												entry.getCell(skuIndex)
-														.toString(), partner
+														.toString().trim().toUpperCase(), partner
 														.getPcName(), sellerId);
 								if (productConfigs != null) {
 
@@ -6848,20 +6846,8 @@ System.out.println(" itemoID after removing : "+itemID);
 										channelOrderId = onj.get(0)
 												.getChannelOrderID();
 									} else {
-										boolean check = false;
-										for (Order eachOrder : onj) {
-											if (eachOrder.getSubOrderID()
-													.equalsIgnoreCase(itemID)) {
-												channelOrderId = eachOrder
-														.getChannelOrderID();
-												check = true;
-											}
-										}
-										if (check != true) {
-											errorMessage
-													.append("Multiple Orders With Channel Order ID.");
-											validaterow = false;
-										}
+										errorMessage.append("Multiple Orders With Channel Order ID.");
+										validaterow = false;
 									}
 								} else {
 									errorMessage
