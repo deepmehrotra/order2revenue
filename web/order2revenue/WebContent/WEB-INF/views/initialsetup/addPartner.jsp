@@ -302,7 +302,7 @@ input+label {
 															<div class="radio">
 																<%-- <form:radiobutton path="paymentCategory" value="prepaid"
 																	id="prepaid" name="toggler" class="prepaid"/> --%>
-																<i class="fa fa-arrow-right" aria-hidden="true"></i> <label
+																<i class="fa fa-arrow-down" aria-hidden="true" id="prepaidArrow" ></i> <label
 																	id="prepaid" class="prepaid"> Prepaid </label>
 															</div>
 														</div>
@@ -310,7 +310,7 @@ input+label {
 															<div class="radio">
 																<%-- <form:radiobutton path="paymentCategory" value="postpaid"
 																	id="postpaid" name="toggler" class="postpaid"/> --%>
-																<i class="fa fa-arrow-right" aria-hidden="true"></i> <label
+																<i class="fa fa-arrow-right" aria-hidden="true" id="postpaidArrow" ></i> <label
 																	id="postpaid" class="postpaid"> Postpaid </label>
 															</div>
 														</div>
@@ -318,7 +318,7 @@ input+label {
 															<div class="radio">
 																<%-- <form:radiobutton path="paymentCategory" value="prepaid"
 																	id="prepaid" name="toggler" class="prepaid"/> --%>
-																<i class="fa fa-arrow-right" aria-hidden="true"></i> <label
+																<i class="fa fa-arrow-right" aria-hidden="true" id="othersArrow" ></i> <label
 																	id="others" class="others"> Others </label>
 															</div>
 														</div>
@@ -3443,6 +3443,10 @@ input+label {
 								//document.getElementById('truePost').style.display = 'block';
 								$("#noofdaysfromshippeddatePost").fadeIn();
 								$('#paymentField2').trigger('change');
+								
+								$('#postpaidArrow').attr('class', 'fa fa-arrow-down');
+								$('#prepaidArrow').attr('class', 'fa fa-arrow-right');
+								$('#othersArrow').attr('class', 'fa fa-arrow-right');
 							});
 							$(".prepaid").click(function() {
 								$('#blk-postpaid').hide();
@@ -3450,6 +3454,10 @@ input+label {
 								$("#blk-" + $(this).attr('id')).slideDown();
 								$("#noofdaysfromshippeddate").fadeIn();
 								$('#paymentField1').trigger('change');
+								
+								$('#prepaidArrow').attr('class', 'fa fa-arrow-down');
+								$('#postpaidArrow').attr('class', 'fa fa-arrow-right');
+								$('#othersArrow').attr('class', 'fa fa-arrow-right');
 							});
 							$(".others").click(function() {
 								$('#blk-prepaid').hide();
@@ -3457,6 +3465,10 @@ input+label {
 								$("#blk-" + $(this).attr('id')).slideDown();
 								$("#noofdaysfromshippeddate").fadeIn();
 								$('#paymentField3').trigger('change');
+								
+								$('#othersArrow').attr('class', 'fa fa-arrow-down');
+								$('#postpaidArrow').attr('class', 'fa fa-arrow-right');
+								$('#prepaidArrow').attr('class', 'fa fa-arrow-right');
 							});
 							$("[name=paymentType]").click(function() {
 								$('.radio1').hide();
@@ -3775,6 +3787,10 @@ input+label {
 							if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeePCC')
 								$('#revShippingFeeType_revShipFeePCC').iCheck(
 										'check');
+							
+							$('#collapsefour1').on('hide.bs.collapse', function () {
+								  alert("Hidden");
+								})
 
 							if ('${partner.nrnReturnConfig.retCharSFPCC}' == 'true')
 								$('#retCharSFPCC').iCheck('check');
