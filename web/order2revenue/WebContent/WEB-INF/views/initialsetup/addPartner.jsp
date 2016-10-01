@@ -3789,8 +3789,64 @@ input+label {
 										'check');
 							
 							$('#collapsefour1').on('hide.bs.collapse', function () {
-								  alert("Hidden");
-								})
+								  
+								var isWeightValid = false;
+								var isVolumeValid = false;
+								var selVal = $('input[name="nrnReturnConfig.shippingFeeType"]:checked').val();
+								  if (selVal == 'variable') {
+									  for (i=0; i<999; i++) {
+										  var selectName = "nr-shippingfeeWeightVariable" + i + "-criteria";
+										  var mySelect = $('select[name="' + selectName + '"] option:selected').val();
+										  if (typeof mySelect === "undefined") {
+											  break;
+										  } else if (mySelect == "Additional") {
+											  isWeightValid = true;
+											  break;
+										  }
+									  }
+									  for (i=0; i<999; i++) {
+										  var selectName = "nr-shippingfeeVolumeVariable" + i + "-criteria";
+										  var mySelect = $('select[name="' + selectName + '"] option:selected').val();
+										  if (typeof mySelect === "undefined") {
+											  break;
+										  } else if (mySelect == "Additional") {
+											  isVolumeValid = true;
+											  break;
+										  }
+									  }
+								  } else {
+									  
+									  for (i=0; i<999; i++) {
+										  var selectName = "nr-shippingfeeWeightFixed" + i + "-criteria";
+										  var mySelect = $('select[name="' + selectName + '"] option:selected').val();
+										  if (typeof mySelect === "undefined") {
+											  break;
+										  } else if (mySelect == "Additional") {
+											  isWeightValid = true;
+											  break;
+										  }
+									  }
+									  for (i=0; i<999; i++) {
+										  var selectName = "nr-shippingfeeVolumeFixed" + i + "-criteria";
+										  var mySelect = $('select[name="' + selectName + '"] option:selected').val();
+										  if (typeof mySelect === "undefined") {
+											  break;
+										  } else if (mySelect == "Additional") {
+											  isVolumeValid = true;
+											  break;
+										  }
+									  }
+									  
+								  }
+								  
+								  if (isWeightValid == false) {
+									  alert("Please select Additional values for Weight")
+								  }
+								  
+								  if (isVolumeValid == false) {
+									  alert("Please select Additional values for Volume")
+								  }
+							})
 
 							if ('${partner.nrnReturnConfig.retCharSFPCC}' == 'true')
 								$('#retCharSFPCC').iCheck('check');
