@@ -1059,7 +1059,7 @@ public class SaveContents {
 						Category cat = categoryService.getSubCategory(entry
 								.getCell(2).toString(), sellerId);
 						if (cat != null) {
-							product.setCategoryName(entry.getCell(2).toString());
+							product.setCategoryName(cat.getCatName());
 						} else {
 							product.setCategoryName(entry.getCell(2).toString());
 							errorMessage.append(" Category does not exist ");

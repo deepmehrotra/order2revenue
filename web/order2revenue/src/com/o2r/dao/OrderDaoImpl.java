@@ -2683,7 +2683,7 @@ public class OrderDaoImpl implements OrderDao {
 											.getshippingfeeWeightVariableList()
 											.size() - 2).getZonalValue();
 
-						while (tempWeight > 0) {
+						while (tempWeight > 0 && addWeight != 0) {
 							if (valueType.equalsIgnoreCase("metro"))
 								dwchargetemp += (float) pbean
 										.getshippingfeeWeightVariableList()
@@ -2772,7 +2772,7 @@ public class OrderDaoImpl implements OrderDao {
 											.getshippingfeeVolumeVariableList()
 											.size() - 2).getZonalValue();
 
-						while (tempWeight > 0) {
+						while (tempWeight > 0 && addWeight != 0) {
 							if (valueType.equalsIgnoreCase("metro"))
 								vwchargetemp += (float) pbean
 										.getshippingfeeVolumeVariableList()
@@ -2839,7 +2839,7 @@ public class OrderDaoImpl implements OrderDao {
 									.get(pbean.getshippingfeeWeightFixedList()
 											.size() - 2).getValue();
 
-						while (tempWeight > 0) {
+						while (tempWeight > 0 && addWeight != 0) {
 							if (valueType.equalsIgnoreCase("fixed"))
 								dwchargetemp += (float) pbean
 										.getshippingfeeWeightFixedList()
@@ -2886,7 +2886,7 @@ public class OrderDaoImpl implements OrderDao {
 									.get(pbean.getshippingfeeVolumeFixedList()
 											.size() - 2).getValue();
 
-						while (tempWeight > 0) {
+						while (tempWeight > 0 && addWeight != 0) {
 							if (valueType.equalsIgnoreCase("fixed"))
 								vwchargetemp += (float) pbean
 										.getshippingfeeVolumeFixedList()
@@ -3995,7 +3995,7 @@ public class OrderDaoImpl implements OrderDao {
 											.getshippingfeeWeightVariableList()
 											.size() - 2).getZonalValue();
 
-						while (tempWeight > 0) {
+						while (tempWeight > 0 && addWeight != 0) {
 							if (valueType.equalsIgnoreCase("metro"))
 								dwchargetemp += (float) pbean
 										.getshippingfeeWeightVariableList()
@@ -4084,7 +4084,7 @@ public class OrderDaoImpl implements OrderDao {
 											.getshippingfeeVolumeVariableList()
 											.size() - 2).getZonalValue();
 
-						while (tempWeight > 0) {
+						while (tempWeight > 0 && addWeight != 0) {
 							if (valueType.equalsIgnoreCase("metro"))
 								vwchargetemp += (float) pbean
 										.getshippingfeeVolumeVariableList()
@@ -4151,7 +4151,7 @@ public class OrderDaoImpl implements OrderDao {
 									.get(pbean.getshippingfeeWeightFixedList()
 											.size() - 2).getValue();
 
-						while (tempWeight > 0) {
+						while (tempWeight > 0 && addWeight != 0) {
 							if (valueType.equalsIgnoreCase("fixed"))
 								dwchargetemp += (float) pbean
 										.getshippingfeeWeightFixedList()
@@ -4198,7 +4198,7 @@ public class OrderDaoImpl implements OrderDao {
 									.get(pbean.getshippingfeeVolumeFixedList()
 											.size() - 2).getValue();
 
-						while (tempWeight > 0) {
+						while (tempWeight > 0 && addWeight != 0) {
 							if (valueType.equalsIgnoreCase("fixed"))
 								vwchargetemp += (float) pbean
 										.getshippingfeeVolumeFixedList()
