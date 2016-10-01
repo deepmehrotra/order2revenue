@@ -360,6 +360,26 @@ public class OrderDaoImpl implements OrderDao {
 											product.getDeadWeight(),
 											product.getVolWeight()))
 										throw new Exception();
+								} else if (event.getNrnReturnConfig()
+										.getNrCalculatorEvent()
+										.equalsIgnoreCase("fixed")) {
+									props = PropertiesLoaderUtils
+											.loadProperties(resource);
+									order.setPartnerCommission((order.getOrderSP() - order
+											.getGrossNetRate()) * order.getQuantity());
+
+									if (partner.isTdsApplicable())
+										order.getOrderTax()
+												.setTdsToDeduct(
+														(order.getPartnerCommission() - (order
+																.getPartnerCommission() * 100 / (100 + Double.parseDouble(props
+																.getProperty("serviceTax")))))
+																* (((props
+																		.getProperty("TDS")) != null ? Double
+																		.parseDouble(props
+																				.getProperty("TDS"))
+																		: 0) / 100)
+																* order.getQuantity());
 								}
 
 							} else if (!calculateNR(partner, order,
@@ -394,7 +414,10 @@ public class OrderDaoImpl implements OrderDao {
 										throw new Exception();
 								} else if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
-										.equalsIgnoreCase("original")) {
+										.equalsIgnoreCase("original") 
+										|| event.getNrnReturnConfig()
+										.getNrCalculatorEvent()
+										.equalsIgnoreCase("fixed")) {
 									props = PropertiesLoaderUtils
 											.loadProperties(resource);
 									order.setPartnerCommission((order.getOrderSP() - order
