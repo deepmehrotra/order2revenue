@@ -182,10 +182,12 @@ public class DashboardDaoImpl implements DashboardDao {
 			thisFinancialYearStart.setYear(thisFinancialYearStart.getYear()-1);
 		}
 		thisFinancialYearStart.setMonth(3);
-		thisFinancialYearStart.setDate(1);
+		thisFinancialYearStart.setDate(0);
+		thisFinancialYearStart.setHours(0);
+
 		lastFinancialYearStart.setDate(1);
 		lastFinancialYearStart.setMonth(3);
-		lastFinancialYearStart.setYear(lastFinancialYearStart.getYear()-1);
+		lastFinancialYearStart.setYear(thisFinancialYearStart.getYear()-1);
 		lastYearSatrt.setYear(lastYearSatrt.getYear() - 1);
 		after10days.setDate(after10days.getDate() + 10);
 		oneMonthBack.setDate(1);
@@ -829,7 +831,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					Restrictions.eq("sellerId", sellerId));
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			ProjectionList projList = Projections.projectionList();
-			projList.add(Projections.countDistinct("customerEmail"));
+			projList.add(Projections.countDistinct("customerPhnNo"));
 			criteria.setProjection(projList);
 			results = criteria.list();
 			if (results != null && results.size() != 0

@@ -131,7 +131,7 @@ public class SaveMappedFiles {
 							colums.getChannelColumName());
 				}
 			}
-			log.info("columHeaderMap for Amazon Order : " + columHeaderMap);
+			log.info("columHeaderMap for  : " + columHeaderMap);
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -141,14 +141,15 @@ public class SaveMappedFiles {
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
-				if (columHeaderMap.containsValue(entry.getCell(cellIndex)
+				
+				if (entry.getCell(cellIndex)!=null&&columHeaderMap.containsValue(entry.getCell(cellIndex)
 						.toString())) {
 					cellIndexMap.put(entry.getCell(cellIndex).toString(),
 							cellIndex);
 				}
 
 			}
-			log.info("cellIndexMap for Amazon Order : " + cellIndexMap);
+			//log.info("cellIndexMap: " + cellIndexMap);
 			// SKUList = productService.listProductSKU(sellerId);
 			idsList = orderService.listOrderIds("channelOrderID", sellerId);
 			log.info(noOfEntries);
@@ -167,12 +168,13 @@ public class SaveMappedFiles {
 				ProductConfig productConfig = null;
 				List<ProductConfig> productConfigs = null;
 				TaxCategory taxcat = null;
+				int o2rIndex;
 				try {
 
 					try {
 
 						try {
-							int o2rIndex = cellIndexMap.get(columHeaderMap
+							o2rIndex = cellIndexMap.get(columHeaderMap
 									.get("O2R Channel"));
 							if (entry.getCell(o2rIndex) != null
 									&& entry.getCell(o2rIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -198,7 +200,7 @@ public class SaveMappedFiles {
 							validaterow = false;
 						}
 
-						if (cellIndexMap.get(columHeaderMap
+						/*if (cellIndexMap.get(columHeaderMap
 								.get("Sales Channel")) != null) {
 							index = cellIndexMap.get(columHeaderMap
 									.get("Sales Channel"));
@@ -207,7 +209,7 @@ public class SaveMappedFiles {
 									.append("The column 'Sales Channel' doesn't exist");
 							validaterow = false;
 						}
-
+*/
 						int idIndex = cellIndexMap.get(columHeaderMap
 								.get("Channel Order ID"));
 						int skuIndex = cellIndexMap.get(columHeaderMap
@@ -219,6 +221,8 @@ public class SaveMappedFiles {
 
 								&& partner != null) {
 							entry.getCell(idIndex).setCellType(
+									HSSFCell.CELL_TYPE_STRING);
+							entry.getCell(skuIndex).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
 							productConfigs = productService.getProductConfig(
 									entry.getCell(skuIndex).toString().trim().toUpperCase(),
@@ -253,7 +257,7 @@ public class SaveMappedFiles {
 									} else {
 										sku = productConfig.getVendorSkuRef();
 
-										if (entry.getCell(index).toString()
+										if (partner!=null&&partner.getPcName()
 												.contains("limeroad")
 												&& entry.getCell(idIndex)
 														.toString()
@@ -338,7 +342,6 @@ public class SaveMappedFiles {
 								itemID = removeExtraQuote(itemID);
 							}
 							itemID=removeExtraQuote(itemID);
-System.out.println(" itemoID after removing : "+itemID);
 							order.setSubOrderID(itemID);
 							
 							if (partner != null
@@ -538,7 +541,7 @@ System.out.println(" itemoID after removing : "+itemID);
 								.get("Shipping PinCode"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							log.debug(" getting zipcode ");
+							
 							String zipCode = entry.getCell(index).toString();
 							if (zipCode.contains(".")) {
 								zipCode = zipCode.substring(0,
@@ -7188,12 +7191,11 @@ System.out.println(" itemoID after removing : "+itemID);
 	}
 	
 	private static String removeExtraQuote(String input) {
-		String out="";
 		if(input.contains("'"))
-		out= input.replaceAll("'", "");
+			input= input.replaceAll("'", "");
 		if(input.contains("`"))
-			out= input.replaceAll("`", "");
+			input= input.replaceAll("`", "");
 			
-	return out;
+	return input;
 	}
 }

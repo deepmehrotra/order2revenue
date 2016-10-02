@@ -838,9 +838,9 @@ public class ProductDaoImpl implements ProductDao {
 			String channel, int sellerId) throws CustomException {
 
 		log.info("*** getProductConfig Starts : ProductDaoImpl ****");
-		ProductConfig returnObject = null;
+		//ProductConfig returnObject = null;
 		List<ProductConfig> returnlist = null;
-		log.debug(" ***Insid get product config from sku and channel ***"
+		log.info(" ***Insid get product config from sku and channel ***"
 				+ SKUCode + " - " + channel);
 		try {
 			Session session = sessionFactory.openSession();
@@ -859,27 +859,10 @@ public class ProductDaoImpl implements ProductDao {
 			returnlist = criteria.list();
 			if (returnlist.size() == 0) {
 				
-				//return returnlist;
-				/*if(returnlist.size() == 1){
-					returnObject = (ProductConfig) returnlist.get(0);
-				} else {	
-					ProductConfig pc = null;
-					Set<String> parent = new HashSet<String>();
-					for(Object PCo : returnlist){
-						pc = (ProductConfig)PCo;
-						parent.add(pc.getProductSkuCode());
-					}
-					if(parent.size() == 1){
-						returnObject = (ProductConfig) returnlist.get(0);
-					} else {
-						returnObject = null;
-					}
-				}*/				
-			//} else {
 				returnlist = null;
 				log.debug("Product sku " + SKUCode + " not found");
 			}
-			log.debug(" Return object :#### " + returnObject);
+			//log.info(" Return object :#### " + returnlist.size());
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {

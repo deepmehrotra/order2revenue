@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +46,6 @@ import com.o2r.bean.ProductBean;
 import com.o2r.bean.ProductConfigBean;
 import com.o2r.dao.AreaConfigDao;
 import com.o2r.model.Category;
-import com.o2r.model.Customer;
 import com.o2r.model.Events;
 import com.o2r.model.ExpenseCategory;
 import com.o2r.model.Expenses;
@@ -193,7 +191,7 @@ public class SaveContents {
 							&& entry.getCell(2) != null
 							&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
-						log.debug(" Getting string value form : "
+						log.info(" Getting string value form : "
 								+ entry.getCell(0));
 						if (partner != null) {
 							productConfigs = productService.getProductConfig(
