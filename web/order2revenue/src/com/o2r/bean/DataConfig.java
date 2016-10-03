@@ -9,6 +9,7 @@ public class DataConfig {
 	private String payubaseurl;
 	private String successurl;
 	private String failurl;
+	private int tds;
 
 	public double getServiceTax() {
 		return serviceTax;
@@ -72,5 +73,13 @@ public class DataConfig {
 
 	public void setFailurl(String failurl) {
 		this.failurl = failurl;
+	}
+
+	public int getTds() {
+		return tds;
+	}
+
+	public void setTds(int tds) {
+		this.tds = tds;
 	}
 }

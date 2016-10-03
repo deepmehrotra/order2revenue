@@ -363,23 +363,18 @@ public class OrderDaoImpl implements OrderDao {
 								} else if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("fixed")) {
-									props = PropertiesLoaderUtils
-											.loadProperties(resource);
+									
 									order.setPartnerCommission((order.getOrderSP() - order
 											.getGrossNetRate()) * order.getQuantity());
 
 									if (partner.isTdsApplicable())
 										order.getOrderTax()
-												.setTdsToDeduct(
-														(order.getPartnerCommission() - (order
-																.getPartnerCommission() * 100 / (100 + Double.parseDouble(props
-																.getProperty("serviceTax")))))
-																* (((props
-																		.getProperty("TDS")) != null ? Double
-																		.parseDouble(props
-																				.getProperty("TDS"))
-																		: 0) / 100)
-																* order.getQuantity());
+										.setTdsToDeduct(
+												(order.getPartnerCommission() - (order
+														.getPartnerCommission() * 100 / (100 + dataConfig.getServiceTax())))
+														* (((dataConfig.getTds()) != 0 ? dataConfig.getTds()
+																: 0) / 100)
+														* order.getQuantity());
 								}
 
 							} else if (!calculateNR(partner, order,
@@ -427,34 +422,24 @@ public class OrderDaoImpl implements OrderDao {
 										order.getOrderTax()
 												.setTdsToDeduct(
 														(order.getPartnerCommission() - (order
-																.getPartnerCommission() * 100 / (100 + Double.parseDouble(props
-																.getProperty("serviceTax")))))
-																* (((props
-																		.getProperty("TDS")) != null ? Double
-																		.parseDouble(props
-																				.getProperty("TDS"))
+																.getPartnerCommission() * 100 / (100 + dataConfig.getServiceTax())))
+																* (((dataConfig.getTds()) != 0 ? dataConfig.getTds()
 																		: 0) / 100)
 																* order.getQuantity());
 								}
 
 							} else {
-								props = PropertiesLoaderUtils
-										.loadProperties(resource);
 								order.setPartnerCommission((order.getOrderSP() - order
 										.getGrossNetRate()) * order.getQuantity());
 
 								if (partner.isTdsApplicable())
 									order.getOrderTax()
-											.setTdsToDeduct(
-													(order.getPartnerCommission() - (order
-															.getPartnerCommission() * 100 / (100 + Double.parseDouble(props
-															.getProperty("serviceTax")))))
-															* (((props
-																	.getProperty("TDS")) != null ? Double
-																	.parseDouble(props
-																			.getProperty("TDS"))
-																	: 0) / 100)
-															* order.getQuantity());
+									.setTdsToDeduct(
+											(order.getPartnerCommission() - (order
+													.getPartnerCommission() * 100 / (100 + dataConfig.getServiceTax())))
+													* (((dataConfig.getTds()) != 0 ? dataConfig.getTds()
+															: 0) / 100)
+													* order.getQuantity());
 							}
 							
 							
