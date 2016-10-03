@@ -505,9 +505,8 @@ public class SaveContents {
 										validaterow = false;
 									}
 								} else {
-									errorMessage
-											.append(" Net Rate is null and ongoing event on the order with fixed price.");
-
+									errorMessage.append(" Net Rate is null and ongoing event expects NR.");
+									validaterow = false;
 								}
 							}
 						} else {
@@ -526,10 +525,12 @@ public class SaveContents {
 												+ sellerId, e);
 										errorMessage
 												.append(" Net Rate should be number ");
+										validaterow = false;
 
 									}
 								} else {
 									errorMessage.append(" Net Rate is null ");
+									validaterow = false;
 								}
 							}
 
@@ -544,10 +545,12 @@ public class SaveContents {
 					}
 					if (entry.getCell(17) != null
 							&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						entry.getCell(17)
-								.setCellType(HSSFCell.CELL_TYPE_STRING);
-						customerBean.setCustomerPhnNo(entry.getCell(17)
-								.toString());
+						entry.getCell(17).setCellType(HSSFCell.CELL_TYPE_STRING);
+						if(entry.getCell(17).toString().length() == 10 && !entry.getCell(17).toString().contains("9999999999")){
+							if (entry.getCell(17).toString().matches("[0-9]+") && entry.getCell(17).toString().length() > 2) {
+								customerBean.setCustomerPhnNo(entry.getCell(17).toString());
+							}								
+						}						
 						try {
 							boolean isBlackList = customerService.isBlackList(
 									entry.getCell(17).toString(), sellerId);

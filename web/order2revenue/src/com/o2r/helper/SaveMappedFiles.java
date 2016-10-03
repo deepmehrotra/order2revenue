@@ -426,9 +426,8 @@ public class SaveMappedFiles {
 								.get("Customer Email"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-
-							customerBean.setCustomerEmail(entry.getCell(index)
-									.toString());
+							if(!entry.getCell(index).toString().contains("@marketplace.amazon.in"))
+								customerBean.setCustomerEmail(entry.getCell(index).toString());
 						}
 					}
 					if (cellIndexMap.get(columHeaderMap.get("Customer Name")) != null) {
@@ -446,10 +445,12 @@ public class SaveMappedFiles {
 								.get("Customer Phone No"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							customerBean.setCustomerPhnNo(entry.getCell(index)
-									.toString());
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							if(entry.getCell(index).toString().length() == 10 && !entry.getCell(index).toString().contains("9999999999")){
+								if (entry.getCell(index).toString().matches("[0-9]+") && entry.getCell(index).toString().length() > 2) {
+									customerBean.setCustomerPhnNo(entry.getCell(index).toString());
+								}								
+							}							
 						}
 					}
 
@@ -738,8 +739,7 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event on the order with fixed price.");
+										errorMessage.append(" Net Rate is null and ongoing event expects NR.");
 										validaterow = false;
 									}
 								} else {
@@ -769,9 +769,16 @@ public class SaveMappedFiles {
 													+ sellerId, e);
 											errorMessage
 													.append(" Net Rate should be number ");
+											validaterow = false;
 
 										}
+									} else {
+										errorMessage.append(" Net Rate is null.");
+										validaterow = false;
 									}
+								} else {
+									errorMessage.append(" The Column 'Net Rate' Not Present.");
+									validaterow = false;
 								}
 							}
 						}
@@ -1325,8 +1332,7 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event on the order with fixed price.");
+										errorMessage.append(" Net Rate is null and ongoing event expects NR.");
 										validaterow = false;
 									}
 								} else {
@@ -1356,9 +1362,15 @@ public class SaveMappedFiles {
 													+ sellerId, e);
 											errorMessage
 													.append(" Net Rate should be number ");
-
+											validaterow = false;
 										}
+									} else {
+										errorMessage.append(" Net Rate is null.");
+										validaterow = false;
 									}
+								} else {
+									errorMessage.append(" The Column 'Net Rate' Not Present.");
+									validaterow = false;
 								}
 							}
 						}
@@ -1379,10 +1391,12 @@ public class SaveMappedFiles {
 								.get("Customer Phone No"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							customerBean.setCustomerPhnNo(entry.getCell(index)
-									.toString());
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							if(entry.getCell(index).toString().length() == 10 && !entry.getCell(index).toString().contains("9999999999")){
+								if (entry.getCell(index).toString().matches("[0-9]+") && entry.getCell(index).toString().length() > 2) {
+									customerBean.setCustomerPhnNo(entry.getCell(index).toString());
+								}								
+							}
 						}
 					}
 					if (cellIndexMap.get(columHeaderMap.get("Customer City")) != null) {
@@ -1783,10 +1797,12 @@ public class SaveMappedFiles {
 								.get("Customer Phone No"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							customerBean.setCustomerPhnNo(entry.getCell(index)
-									.toString());
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							if(entry.getCell(index).toString().length() == 10 && !entry.getCell(index).toString().contains("9999999999")){
+								if (entry.getCell(index).toString().matches("[0-9]+") && entry.getCell(index).toString().length() > 2) {
+									customerBean.setCustomerPhnNo(entry.getCell(index).toString());
+								}								
+							}
 						}
 					}
 
@@ -2102,8 +2118,7 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event on the order with fixed price.");
+										errorMessage.append(" Net Rate is null and ongoing event expects NR.");
 										validaterow = false;
 									}
 								} else {
@@ -2133,9 +2148,15 @@ public class SaveMappedFiles {
 													+ sellerId, e);
 											errorMessage
 													.append(" Net Rate should be number ");
-
+											validaterow = false;
 										}
+									} else {
+										errorMessage.append(" Net Rate is null.");
+										validaterow = false;
 									}
+								} else {
+									errorMessage.append(" The Column 'Net Rate' Not Present.");
+									validaterow = false;
 								}
 							}
 						}
@@ -2608,10 +2629,12 @@ public class SaveMappedFiles {
 								.get("Customer Phone No"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							customerBean.setCustomerPhnNo(entry.getCell(index)
-									.toString());
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							if(entry.getCell(index).toString().length() == 10 && !entry.getCell(index).toString().contains("9999999999")){
+								if (entry.getCell(index).toString().matches("[0-9]+") && entry.getCell(index).toString().length() > 2) {
+									customerBean.setCustomerPhnNo(entry.getCell(index).toString());
+								}								
+							}
 						}
 					}
 					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
@@ -2783,9 +2806,15 @@ public class SaveMappedFiles {
 													+ sellerId, e);
 											errorMessage
 													.append(" Net Rate should be number ");
-
+											validaterow = false;
 										}
+									} else {
+										errorMessage.append(" Net Rate is null.");
+										validaterow = false;
 									}
+								} else {
+									errorMessage.append(" The Column 'Net Rate' Not Present.");
+									validaterow = false;
 								}
 							}
 						}
@@ -4222,8 +4251,7 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event on the order with fixed price.");
+										errorMessage.append(" Net Rate is null and ongoing event expects NR.");
 										validaterow = false;
 									}
 								} else {
@@ -4253,9 +4281,15 @@ public class SaveMappedFiles {
 													+ sellerId, e);
 											errorMessage
 													.append(" Net Rate should be number ");
-
+											validaterow = false;
 										}
+									} else {
+										errorMessage.append(" Net Rate is null.");
+										validaterow = false;
 									}
+								} else {
+									errorMessage.append(" The Column 'Net Rate' Not Present.");
+									validaterow = false;
 								}
 							}
 						}
@@ -4278,10 +4312,12 @@ public class SaveMappedFiles {
 								.get("Customer Phone No"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							customerBean.setCustomerPhnNo(entry.getCell(index)
-									.toString());
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							if(entry.getCell(index).toString().length() == 10 && !entry.getCell(index).toString().contains("9999999999")){
+								if (entry.getCell(index).toString().matches("[0-9]+") && entry.getCell(index).toString().length() > 2) {
+									customerBean.setCustomerPhnNo(entry.getCell(index).toString());
+								}								
+							}
 						}
 					}
 					if (cellIndexMap.get(columHeaderMap.get("Customer City")) != null) {
@@ -5631,8 +5667,7 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event on the order with fixed price.");
+										errorMessage.append(" Net Rate is null and ongoing event expects NR.");
 										validaterow = false;
 									}
 								} else {
@@ -5662,9 +5697,15 @@ public class SaveMappedFiles {
 													+ sellerId, e);
 											errorMessage
 													.append(" Net Rate should be number ");
-
+											validaterow = false;
 										}
+									} else {
+										errorMessage.append(" Net Rate is null.");
+										validaterow = false;
 									}
+								} else {
+									errorMessage.append(" The Column 'Net Rate' Not Present.");
+									validaterow = false;
 								}
 							}
 						}
@@ -5687,10 +5728,12 @@ public class SaveMappedFiles {
 								.get("Customer Phone No"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							customerBean.setCustomerPhnNo(entry.getCell(index)
-									.toString());
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							if(entry.getCell(index).toString().length() == 10 && !entry.getCell(index).toString().contains("9999999999")){
+								if (entry.getCell(index).toString().matches("[0-9]+") && entry.getCell(index).toString().length() > 2) {
+									customerBean.setCustomerPhnNo(entry.getCell(index).toString());
+								}								
+							}
 						}
 					}
 					if (cellIndexMap.get(columHeaderMap.get("Customer City")) != null) {
@@ -6521,8 +6564,7 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event on the order with fixed price.");
+										errorMessage.append(" Net Rate is null and ongoing event expects NR.");
 										validaterow = false;
 									}
 								} else {
@@ -6552,9 +6594,15 @@ public class SaveMappedFiles {
 													+ sellerId, e);
 											errorMessage
 													.append(" Net Rate should be number ");
-
+											validaterow = false;
 										}
+									} else {
+										errorMessage.append(" Net Rate is null.");
+										validaterow = false;
 									}
+								} else {
+									errorMessage.append(" The Column 'Net Rate' Not Present.");
+									validaterow = false;
 								}
 							}
 						}
@@ -6575,10 +6623,12 @@ public class SaveMappedFiles {
 								.get("Customer Phone No"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							customerBean.setCustomerPhnNo(entry.getCell(index)
-									.toString());
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							if(entry.getCell(index).toString().length() == 10 && !entry.getCell(index).toString().contains("9999999999")){
+								if (entry.getCell(index).toString().matches("[0-9]+") && entry.getCell(index).toString().length() > 2) {
+									customerBean.setCustomerPhnNo(entry.getCell(index).toString());
+								}								
+							}
 						}
 					}
 					if (cellIndexMap.get(columHeaderMap.get("Customer City")) != null) {
