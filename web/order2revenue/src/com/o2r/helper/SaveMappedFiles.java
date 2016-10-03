@@ -486,29 +486,53 @@ public class SaveMappedFiles {
 								.append("The column 'quantity-purchased' doesn't exist");
 						validaterow = false;
 					}
-
-					try {
-						index = cellIndexMap
-								.get(columHeaderMap.get("Order SP"));
-						if (entry.getCell(index) != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+					
+					if(partner != null){
+						if(partner.getPcName().equalsIgnoreCase(GlobalConstant.PCAMAZON) 
+								|| partner.getPcName().equalsIgnoreCase(GlobalConstant.PCFLIPKART)){
 							try {
-								order.setOrderSP(Double.parseDouble(entry
-										.getCell(index).toString()));
-							} catch (NumberFormatException e) {
+								index = cellIndexMap
+										.get(columHeaderMap.get("Order SP"));			
+								if (entry.getCell(index) != null
+										&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+									try {
+										order.setOrderSP(Double.parseDouble(entry
+												.getCell(index).toString()));
+									} catch (NumberFormatException e) {
+										errorMessage.append(" Total Price should be a number ");
+										validaterow = false;
+									}
+								} else {
+									errorMessage.append(" Total Price is null ");
+									validaterow = false;
+								}
+							} catch (NullPointerException e) {
 								errorMessage
-										.append(" Order SP should be a number ");
+										.append("The column 'Total Price' doesn't exist");
+								validaterow = false;
+							}							
+						} else {
+							if (cellIndexMap.get(columHeaderMap.get("Order SP All")) != null) {
+								index = cellIndexMap.get(columHeaderMap.get("Order SP All"));
+								if (entry.getCell(index) != null
+										&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+									try {
+										order.setOrderSP(Double.parseDouble(entry
+												.getCell(index).toString()));
+									} catch (NumberFormatException e) {
+										errorMessage.append(" Selling Price should be a number ");
+										validaterow = false;
+									}
+								} else {
+									errorMessage.append(" Selling Price is null ");
+									validaterow = false;
+								}
+							} else {
+								errorMessage.append("The column 'Selling Price' doesn't exist");
 								validaterow = false;
 							}
-						} else {
-							errorMessage.append(" Order SP is null ");
-							validaterow = false;
 						}
-					} catch (NullPointerException e) {
-						errorMessage
-								.append("The column 'Total Price' doesn't exist");
-						validaterow = false;
-					}
+					} 					
 
 					try {
 						index = cellIndexMap.get(columHeaderMap
