@@ -248,20 +248,24 @@ public boolean empty(String s)
 	.table ,th,td{
 		font-weight: 800;
 		border:none !important;
+		font-size: 10px;
+		border-collapse: collapse;
+	}
+	.table>tbody>tr>td{
+		padding: 7px 7px 3px 10px;
 	}
 	.tabltd
 	{
-		border-top: 2px solid #ccc !important;
+		border-top: 1px solid #ccc !important;
 	}
-	
 	table td + td{
 	font-weight:800;
-
+	font-size: 10px;
 	}
 	.column
 	{
 		background-color: #ededed;
-		height: 570px;
+		height: 424px;
 		width: 100%;
 	}
 	.column p
@@ -283,7 +287,7 @@ public boolean empty(String s)
 	.column1
 	{
 		background-color: #ededed;
-		height: 200px;
+		height: 150px;
 		width: 100%;
 		margin-top: 20px;
 	}
@@ -298,8 +302,7 @@ public boolean empty(String s)
 	}
 	.column1 button
 	{
-		margin:0px 0px 3px 26px;
-    	width: 80%;
+    	width: 100%;
     	background-color: #1ab394;
     	color:#fff;
 	}
@@ -307,9 +310,18 @@ public boolean empty(String s)
 	{
 		color: #1ab394;
 	}
-
-
-       
+	.sp{
+		color: #1ab394;
+		font-weight: 700;
+	}
+	#check
+	{
+		width: 33%;
+	    margin-top: -36px;
+	    margin-right: 8px;
+	    box-shadow: 2px solid;
+	    outline: none;
+	}
     </style>
  </head>
  <body>
@@ -317,18 +329,16 @@ public boolean empty(String s)
 	<jsp:include page="../sidenavigation.jsp"></jsp:include>
     <div id="page-wrapper" class="gray-bg">
      <jsp:include page="../globalheader.jsp"></jsp:include>  
-		<div class="wrapper wrapper-content animated fadeInRight" id="centerpane" style="background: #fff;"> 
-			<div class="row">
-                <div class="col-lg-12 text-center">
-					<div class ="navy-line" style="border:1px solid #1ab395;width: 6%;margin-left: 47%;">
-					</div>
-					<h1>Upgrade Plan </h1>
-				</div>
-            </div>
+		<div class="wrapper wrapper-content animated fadeInRight" id="centerpane" style="background: #fff;"> 			
 			<div class="row">
                 <div class="col-lg-12">
 					<div class="col-lg-9">
-						<div class="col-md-4">
+						<div class="col-lg-12 text-center">
+							<div class ="navy-line" style="border:1px solid #1ab395;width: 6%;margin-left: 47%;">
+							</div>
+							<h1>UPGRADE PLAN</h1>
+						</div>
+						<%-- <div class="col-md-4">
 							<div class="column text-center">
 								<h3>Current Plan</h3>
 								<c:choose>
@@ -353,12 +363,31 @@ public boolean empty(String s)
 									</c:otherwise>
 								</c:choose>
 							</div>
-						</div>
+						</div> --%>
 						<c:forEach items="${upgrade}" var="up">
 							<c:if test="${up.planName != myAccount.plan.planName && up.planName != 'Admin_Demo'}">
 								<div class="col-md-4">
 									<div class="column1 text-center">
 										<button class="btn btn-block" onclick="select(this)" value="${up.pid}">${up.planName}</button>
+										<br>
+										<div align="center">
+											<p>								
+												<img src="/O2R/seller/img/rupee.png" alt="rupee"> <c:out value="${up.planPrice}"/> per Order
+											</p>									
+											<p>
+												ORDER COUNT =  <c:out value="${up.orderCount}"/>
+											</p>
+											<p>
+												MIN AMOUNT =<span><img src="/O2R/seller/img/rupee.png" alt="rupee"> <fmt:formatNumber type="number" maxFractionDigits="0" value="${up.orderCount*up.planPrice}" />/-</span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</c:if>
+							<c:if test="${up.planName == myAccount.plan.planName}">
+								<div class="col-md-4">
+									<div class="column1 text-center">
+										<button class="btn btn-block" onclick="select(this)" style="outline: none;background-color: darkslategrey" value="${up.pid}">${up.planName}</button>
 										<br>
 										<div align="center">
 											<p>								
@@ -398,7 +427,7 @@ public boolean empty(String s)
 						</c:forEach>
 					</div>
 					<div class="col-lg-3">
-						<div class="column text-center">
+						<div class="column text-center" style="margin-left: -21px;width: 111%;margin-top: -11px;">
 							<form id="selectPlan" action="thankyou.html" method="post" >
 							<input type="hidden" id='returntxnid' name="returntxnid" value="" />
 							<input type="hidden" id='payusuccessful' name="payusuccessful" value="" />
@@ -409,7 +438,7 @@ public boolean empty(String s)
 											Desired Plan
 										</td>
 										<td>
-											<select class="form-control selectPlanField" name="pid" onchange="updateFields(this)">
+											<select class="form-control selectPlanField" name="pid" onchange="updateFields(this)" style="font-size: 12px;color: #1ab394;">
 												<option value="notSelected">
 													Select Plan
 												</option>
@@ -428,7 +457,7 @@ public boolean empty(String s)
 											Desired Order	
 										</td>
 										<td>
-											<input type="number" class="form-control currOrderCount" name="orderCount" oninput="updatePrices(this)">
+											<input type="number" class="form-control currOrderCount" name="orderCount" oninput="updatePrices(this)" style="font-size: 12px;color: #1ab394;">
 											<small>Minimum Order</small>
 										</td>
 
@@ -464,7 +493,7 @@ public boolean empty(String s)
 
 									</tr>
 									<tr>
-										<td style="text-align: right;font-size: 12px;">
+										<td style="text-align: right;font-size: 10px;">
 											Service Tax :
 										</td>
 										<td style="text-align: left;">
@@ -472,7 +501,7 @@ public boolean empty(String s)
 										</td>
 									</tr>
 									<tr>
-										<td style="text-align: right;font-size: 12px;">
+										<td style="text-align: right;font-size: 10px;">
 											Krishi Kalyan Cess :
 										</td>
 										<td style="text-align: left;">
@@ -480,7 +509,7 @@ public boolean empty(String s)
 										</td>
 									</tr>
 									<tr>
-										<td style="text-align: right;font-size: 12px;">
+										<td style="text-align: right;font-size: 10px;">
 											Swachh bharat Cess :
 										</td>
 										<td style="text-align: left;">
@@ -506,7 +535,7 @@ public boolean empty(String s)
 							</table>
 							</form>
 							
-							<button type="button" disabled="true" class="btn btn-gray pull-right checkoutButton" 
+							<button type="button" disabled="true" id="check" class="btn btn-gray pull-right checkoutButton" 
 								style="width: 50%;margin-top: -14px;margin-right: 8px;box-shadow: 2px solid;box-shadow: 4px 11px 10px #ccc;" onclick="submitPayUForm();">Checkout</button>
 						</div>
 						<div>
@@ -531,12 +560,11 @@ public boolean empty(String s)
 					</div>	
                 </div>
 				<div class="col-lg-12 text-center">
-					<br>
-					<p style="font-weight:bolder;">
-						<a href="#">Plz note</a> the above mentioned charges are subjected to additional service tax @ 15% over and above the stated charges. No additional or hidden charges<br>
-						<a href="#">Order Count</a> is the number of orders purchased by the seller. The seller can choose to recharge his account with any amount equal to greater than the stated minimum amounts.<br>
-						<a href="#">Purchased Orders</a> have unlimited time validity. They can used as per the consumption levels without any fixed monthly.liability.<br>
-						The seller will receive reminders to recharge his account when only 10% of purchased order count.are left in the order bucket.
+					<p style="color: #000;position: relative;top: 6px;">
+						<span class="sp">Plz note</span> the above mentioned charges are subjected to additional service tax @ 15% over and above the stated charges.No additional or hidden charges<br>
+						<span class="sp">Order Count</span> is the number of orders purchased by the seller.The seller can choose to recharge his account with any amount equal to greater than the stated minimum amounts.<br>
+						<span class="sp">Purchased Orders</span> have unlimited time validity.They can used as per the consumption levels without any fixed monthly.liability.<br>
+						The seller will receive reminders to recharge his account when only 10% of purchased order count are left in the order bucket.
 					</p>
 				</div>
             </div>

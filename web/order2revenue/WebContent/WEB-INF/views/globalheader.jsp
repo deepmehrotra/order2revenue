@@ -615,8 +615,7 @@
 								url : "getRecentAlerts.html",
 								dataType : "json",
 								success : function(data) {										
-									if(data){
-										console.log(data);
+									if(data){										
 										document.getElementById("alert-div-0").style.display = "inherit";										
 										var i=1;
 										for(var index=0; index < data.length; index++){	
