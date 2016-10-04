@@ -3644,146 +3644,18 @@ public class OrderDaoImpl implements OrderDao {
 		double pccAmount = 0;
 		float serviceTax = 0;
 		double tds = 0;
+		
 		Partner partner = null;
 
-		StringBuffer area = new StringBuffer("");
-		StringBuffer volarea = new StringBuffer("");
+		/*StringBuffer area = new StringBuffer("");
+		StringBuffer volarea = new StringBuffer("");*/
 
 		float vwchargetemp = 0;
 		float dwchargetemp = 0;
 		float shippingCharges = 0;
-		String tempStr = null;
+		//String tempStr = null;
 		String state = null;
-		double SP = order.getOrderSP();
-		StringBuffer temp = new StringBuffer("");
-		Map<String, Float> chargesMap = new HashMap<String, Float>();
 
-		List<NRnReturnCharges> chargesList = nrnReturnConfig.getCharges();
-
-		PartnerBean pbean = new PartnerBean();
-
-		for (NRnReturnCharges charge : chargesList) {
-
-			if (charge.getChargeName().contains("fixedfee")
-					&& charge.getCriteria() != null
-					&& !"".equals(charge.getCriteria())) {
-
-				ChargesBean chargeBean = new ChargesBean();
-				chargeBean.setChargeType("fixedfee");
-				chargeBean.setCriteria(charge.getCriteria());
-				chargeBean.setRange(charge.getCriteriaRange());
-				chargeBean.setValue(charge.getChargeAmount());
-				pbean.getFixedfeeList().add(chargeBean);
-
-			} else if (charge.getChargeName().contains("shippingfeeVolume")
-					&& charge.getCriteria() != null
-					&& !"".equals(charge.getCriteria())) {
-
-				if (pbean.getNrnReturnConfig().getShippingFeeType()
-						.equalsIgnoreCase("variable")
-						&& charge.getChargeName().contains(
-								"shippingfeeVolumeVariable")) {
-
-					ChargesBean chargeBean = pbean.getChargesBean(
-							"shippingfeeVolumeVariable", charge.getCriteria(),
-							charge.getCriteriaRange());
-					if (chargeBean == null) {
-						chargeBean = new ChargesBean();
-						chargeBean.setChargeType("shippingfeeVolumeVariable");
-						chargeBean.setCriteria(charge.getCriteria());
-						chargeBean.setRange(charge.getCriteriaRange());
-						pbean.getshippingfeeVolumeVariableList()
-								.add(chargeBean);
-					}
-
-					if (charge.getChargeName().contains("Local")) {
-						chargeBean.setLocalValue(charge.getChargeAmount());
-					} else if (charge.getChargeName().contains("Zonal")) {
-						chargeBean.setZonalValue(charge.getChargeAmount());
-					} else if (charge.getChargeName().contains("National")) {
-						chargeBean.setNationalValue(charge.getChargeAmount());
-					} else if (charge.getChargeName().contains("Metro")) {
-						chargeBean.setMetroValue(charge.getChargeAmount());
-					}
-
-				} else if (charge.getChargeName().contains(
-						"shippingfeeVolumeFixed")) {
-					ChargesBean chargeBean = new ChargesBean();
-					chargeBean.setChargeType("shippingfeeVolumeFixed");
-					chargeBean.setCriteria(charge.getCriteria());
-					chargeBean.setRange(charge.getCriteriaRange());
-					chargeBean.setValue(charge.getChargeAmount());
-					pbean.getshippingfeeVolumeFixedList().add(chargeBean);
-				}
-
-			} else if (charge.getChargeName().contains("shippingfeeWeight")
-					&& charge.getCriteria() != null
-					&& !"".equals(charge.getCriteria())) {
-
-				if (pbean.getNrnReturnConfig().getShippingFeeType()
-						.equalsIgnoreCase("variable")
-						&& charge.getChargeName().contains(
-								"shippingfeeWeightVariable")) {
-
-					ChargesBean chargeBean = pbean.getChargesBean(
-							"shippingfeeWeightVariable", charge.getCriteria(),
-							charge.getCriteriaRange());
-					if (chargeBean == null) {
-						chargeBean = new ChargesBean();
-						chargeBean.setChargeType("shippingfeeWeightVariable");
-						chargeBean.setCriteria(charge.getCriteria());
-						chargeBean.setRange(charge.getCriteriaRange());
-						pbean.getshippingfeeWeightVariableList()
-								.add(chargeBean);
-					}
-
-					if (charge.getChargeName().contains("Local")) {
-						chargeBean.setLocalValue(charge.getChargeAmount());
-					} else if (charge.getChargeName().contains("Zonal")) {
-						chargeBean.setZonalValue(charge.getChargeAmount());
-					} else if (charge.getChargeName().contains("National")) {
-						chargeBean.setNationalValue(charge.getChargeAmount());
-					} else if (charge.getChargeName().contains("Metro")) {
-						chargeBean.setMetroValue(charge.getChargeAmount());
-					}
-
-				} else if (charge.getChargeName().contains(
-						"shippingfeeWeightFixed")) {
-					ChargesBean chargeBean = new ChargesBean();
-					chargeBean.setChargeType("shippingfeeWeightFixed");
-					chargeBean.setCriteria(charge.getCriteria());
-					chargeBean.setRange(charge.getCriteriaRange());
-					chargeBean.setValue(charge.getChargeAmount());
-					pbean.getshippingfeeWeightFixedList().add(chargeBean);
-				}
-
-			} else {
-				chargesMap
-						.put(charge.getChargeName(), charge.getChargeAmount());
-			}
-		}
-		if (pbean.getFixedfeeList() != null
-				&& pbean.getFixedfeeList().size() != 0)
-			Collections
-					.sort(pbean.getFixedfeeList(), new SortByCriteriaRange());
-		if (pbean.getshippingfeeVolumeFixedList() != null
-				&& pbean.getshippingfeeVolumeFixedList().size() != 0)
-			Collections.sort(pbean.getshippingfeeVolumeFixedList(),
-					new SortByCriteria());
-		if (pbean.getshippingfeeWeightFixedList() != null
-				&& pbean.getshippingfeeWeightFixedList().size() != 0)
-			Collections.sort(pbean.getshippingfeeWeightFixedList(),
-					new SortByCriteria());
-		if (pbean.getshippingfeeVolumeVariableList() != null
-				&& pbean.getshippingfeeVolumeVariableList().size() != 0)
-			Collections.sort(pbean.getshippingfeeVolumeVariableList(),
-					new SortByCriteria());
-		if (pbean.getshippingfeeWeightVariableList() != null
-				&& pbean.getshippingfeeWeightVariableList().size() != 0)
-			Collections.sort(pbean.getshippingfeeWeightVariableList(),
-					new SortByCriteria());
-
-		// Extracting comiision value
 		try {
 			
 			partner = partnerService.getPartner(order.getPcName(), sellerId);
@@ -3794,6 +3666,7 @@ public class OrderDaoImpl implements OrderDao {
 				nrnReturnConfig.setLocalList(partner.getNrnReturnConfig().getLocalList());
 			}
 			
+			
 			if (nrnReturnConfig != null
 					&& nrnReturnConfig.getMetroList() != null
 					&& nrnReturnConfig.getMetroList().length() != 0) {
@@ -3801,7 +3674,6 @@ public class OrderDaoImpl implements OrderDao {
 						.getZipcode());
 				log.debug(" City from zipcode : " + state);
 			}
-			
 			if (state == null
 					|| !(state.equalsIgnoreCase("Delhi")
 							|| state.equalsIgnoreCase("Chennai")
@@ -3809,11 +3681,149 @@ public class OrderDaoImpl implements OrderDao {
 								.equalsIgnoreCase("Kolkata"))) {
 				state = areaConfigDao.getStateFromZipCode(order.getCustomer()
 						.getZipcode());
-				log.debug(" State from zipcode : " + state);
+				
 			}
-			
+			log.info(" State from zipcode : " + state);
+			double SP = order.getOrderSP();
+			//StringBuffer temp = new StringBuffer("");
+			Map<String, Float> chargesMap = new HashMap<String, Float>();
+			// Map<String, Float> returnMap = new HashMap<String, Float>();
+
+			PartnerBean pbean = new PartnerBean();
+
+			List<NRnReturnCharges> chargesList = nrnReturnConfig.getCharges();
+			System.out.println(" NR chrge list size : "+chargesList.size());
+			for (NRnReturnCharges charge : chargesList) {
+
+				if (charge.getChargeName().contains("fixedfee")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
+
+					ChargesBean chargeBean = new ChargesBean();
+					chargeBean.setChargeType("fixedfee");
+					chargeBean.setCriteria(charge.getCriteria());
+					chargeBean.setRange(charge.getCriteriaRange());
+					chargeBean.setValue(charge.getChargeAmount());
+					pbean.getFixedfeeList().add(chargeBean);
+
+				} else if (charge.getChargeName().contains("shippingfeeVolume")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
+
+					if (nrnReturnConfig.getShippingFeeType()
+							.equalsIgnoreCase("variable")
+							&& charge.getChargeName().contains(
+									"shippingfeeVolumeVariable")) {
+
+						ChargesBean chargeBean = pbean
+								.getChargesBean("shippingfeeVolumeVariable",
+										charge.getCriteria(),
+										charge.getCriteriaRange());
+						if (chargeBean == null) {
+							chargeBean = new ChargesBean();
+							chargeBean
+									.setChargeType("shippingfeeVolumeVariable");
+							chargeBean.setCriteria(charge.getCriteria());
+							chargeBean.setRange(charge.getCriteriaRange());
+							pbean.getshippingfeeVolumeVariableList().add(
+									chargeBean);
+						}
+
+						if (charge.getChargeName().contains("Local")) {
+							chargeBean.setLocalValue(charge.getChargeAmount());
+						} else if (charge.getChargeName().contains("Zonal")) {
+							chargeBean.setZonalValue(charge.getChargeAmount());
+						} else if (charge.getChargeName().contains("National")) {
+							chargeBean.setNationalValue(charge
+									.getChargeAmount());
+						} else if (charge.getChargeName().contains("Metro")) {
+							chargeBean.setMetroValue(charge.getChargeAmount());
+						}
+
+					} else if (charge.getChargeName().contains(
+							"shippingfeeVolumeFixed")) {
+						ChargesBean chargeBean = new ChargesBean();
+						chargeBean.setChargeType("shippingfeeVolumeFixed");
+						chargeBean.setCriteria(charge.getCriteria());
+						chargeBean.setRange(charge.getCriteriaRange());
+						chargeBean.setValue(charge.getChargeAmount());
+						pbean.getshippingfeeVolumeFixedList().add(chargeBean);
+					}
+
+				} else if (charge.getChargeName().contains("shippingfeeWeight")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
+
+					if (nrnReturnConfig.getShippingFeeType()
+							.equalsIgnoreCase("variable")
+							&& charge.getChargeName().contains(
+									"shippingfeeWeightVariable")) {
+
+						ChargesBean chargeBean = pbean
+								.getChargesBean("shippingfeeWeightVariable",
+										charge.getCriteria(),
+										charge.getCriteriaRange());
+						if (chargeBean == null) {
+							chargeBean = new ChargesBean();
+							chargeBean
+									.setChargeType("shippingfeeWeightVariable");
+							chargeBean.setCriteria(charge.getCriteria());
+							chargeBean.setRange(charge.getCriteriaRange());
+							pbean.getshippingfeeWeightVariableList().add(
+									chargeBean);
+						}
+
+						if (charge.getChargeName().contains("Local")) {
+							chargeBean.setLocalValue(charge.getChargeAmount());
+						} else if (charge.getChargeName().contains("Zonal")) {
+							chargeBean.setZonalValue(charge.getChargeAmount());
+						} else if (charge.getChargeName().contains("National")) {
+							chargeBean.setNationalValue(charge
+									.getChargeAmount());
+						} else if (charge.getChargeName().contains("Metro")) {
+							chargeBean.setMetroValue(charge.getChargeAmount());
+						}
+
+					} else if (charge.getChargeName().contains(
+							"shippingfeeWeightFixed")) {
+						ChargesBean chargeBean = new ChargesBean();
+						chargeBean.setChargeType("shippingfeeWeightFixed");
+						chargeBean.setCriteria(charge.getCriteria());
+						chargeBean.setRange(charge.getCriteriaRange());
+						chargeBean.setValue(charge.getChargeAmount());
+						pbean.getshippingfeeWeightFixedList().add(chargeBean);
+					}
+
+				} else {
+					chargesMap.put(charge.getChargeName(),
+							charge.getChargeAmount());
+				}
+			}
+			if (pbean.getFixedfeeList() != null
+					&& pbean.getFixedfeeList().size() != 0)
+				Collections.sort(pbean.getFixedfeeList(),
+						new SortByCriteriaRange());
+			if (pbean.getshippingfeeVolumeFixedList() != null
+					&& pbean.getshippingfeeVolumeFixedList().size() != 0)
+				Collections.sort(pbean.getshippingfeeVolumeFixedList(),
+						new SortByCriteria());
+			if (pbean.getshippingfeeWeightFixedList() != null
+					&& pbean.getshippingfeeWeightFixedList().size() != 0)
+				Collections.sort(pbean.getshippingfeeWeightFixedList(),
+						new SortByCriteria());
+			if (pbean.getshippingfeeVolumeVariableList() != null
+					&& pbean.getshippingfeeVolumeVariableList().size() != 0)
+				Collections.sort(pbean.getshippingfeeVolumeVariableList(),
+						new SortByCriteria());
+			if (pbean.getshippingfeeWeightVariableList() != null
+					&& pbean.getshippingfeeWeightVariableList().size() != 0)
+				Collections.sort(pbean.getshippingfeeWeightVariableList(),
+						new SortByCriteria());
+
+			// Extracting comiision value
 			if (nrnReturnConfig.getCommissionType() != null
-					&& nrnReturnConfig.getCommissionType().equals("fixed")) {
+					&& nrnReturnConfig.getCommissionType()
+							.equals("fixed")) {
 				comission = chargesMap
 						.get(GlobalConstant.fixedCommissionPercent);
 
@@ -3821,7 +3831,6 @@ public class OrderDaoImpl implements OrderDao {
 				comission = chargesMap.containsKey(prodCat) ? chargesMap
 						.get(prodCat) : 0;
 			}
-
 			// Add partner new changes:
 
 			// Getting Fixed fee
@@ -3832,7 +3841,7 @@ public class OrderDaoImpl implements OrderDao {
 						.getFixedfeeList().iterator();
 				while (fixedfeeIterator.hasNext()) {
 					ChargesBean cBean = fixedfeeIterator.next();
-					if (SP <= cBean.getRange()) {
+			if (SP <= cBean.getRange()) {
 						fixedfee = (float) cBean.getValue();
 						inRange = true;
 						break;
@@ -3843,7 +3852,6 @@ public class OrderDaoImpl implements OrderDao {
 							.get(pbean.getFixedfeeList().size() - 1).getValue();
 				}
 			}
-
 			// Payment collection charges
 			if (nrnReturnConfig.isWhicheverGreaterPCC()) {
 				double percentAmount = chargesMap
@@ -3881,15 +3889,15 @@ public class OrderDaoImpl implements OrderDao {
 				}
 			}
 
-			log.debug(" States : MetroLsit : "
-					+ nrnReturnConfig.getMetroList()
+			/*log.debug(" States : MetroLsit : "
+					+ partner.getNrnReturnConfig().getMetroList()
 					+ " national list : "
-					+ nrnReturnConfig.getNationalList()
+					+ partner.getNrnReturnConfig().getNationalList()
 					+ " LocalList : "
-					+ nrnReturnConfig.getLocalList()
+					+ partner.getNrnReturnConfig().getLocalList()
 					+ " zonallist: "
-					+ nrnReturnConfig.getZonalList());
-			log.debug(" State we are geting ofrom excel : " + state);
+					+ partner.getNrnReturnConfig().getZonalList());
+			log.debug(" State we are geting ofrom excel : " + state);*/
 
 			// ****Shipping charges
 			String valueType = "";
@@ -4203,141 +4211,7 @@ public class OrderDaoImpl implements OrderDao {
 			} else {
 				shippingCharges = dwchargetemp;
 				order.setDwShippingString(GlobalConstant.dwShipping);
-			}
-
-			// End
-
-			/*
-			 * // Getting Fixed fee if
-			 * (chargesMap.containsKey(GlobalConstant.fixedfeelt250) &&
-			 * chargesMap.get(GlobalConstant.fixedfeelt250).intValue() != 0) {
-			 * if (SP < 251) fixedfee =
-			 * chargesMap.get(GlobalConstant.fixedfeelt250); else if (SP > 250
-			 * && SP < 501) fixedfee = chargesMap
-			 * .containsKey(GlobalConstant.fixedfeegt250lt500) ? chargesMap
-			 * .get(GlobalConstant.fixedfeegt250lt500) : 0; else fixedfee =
-			 * chargesMap .containsKey(GlobalConstant.fixedfeegt500) ?
-			 * chargesMap .get(GlobalConstant.fixedfeegt500) : 0; } else if
-			 * (chargesMap.containsKey(GlobalConstant.fixedfeelt500) &&
-			 * chargesMap.get(GlobalConstant.fixedfeelt500).intValue() != 0) {
-			 * if (SP < 501) fixedfee =
-			 * chargesMap.get(GlobalConstant.fixedfeelt500); else fixedfee =
-			 * chargesMap .containsKey(GlobalConstant.fixedfeegt500Big) ?
-			 * chargesMap .get(GlobalConstant.fixedfeegt500Big) : 0; } else { if
-			 * (SP < 501) fixedfee = chargesMap
-			 * .containsKey(GlobalConstant.fixedfeelt500Big) ? chargesMap
-			 * .get(GlobalConstant.fixedfeelt500Big) : 0; else if (SP > 500 &&
-			 * SP < 1001) fixedfee = chargesMap
-			 * .containsKey(GlobalConstant.fixedfeegt500lt1000) ? chargesMap
-			 * .get(GlobalConstant.fixedfeegt500lt1000) : 0; else if (SP > 1000
-			 * && SP < 10001) fixedfee = chargesMap
-			 * .containsKey(GlobalConstant.fixedfeegt1000lt10000) ? chargesMap
-			 * .get(GlobalConstant.fixedfeegt1000lt10000) : 0; else fixedfee =
-			 * chargesMap .containsKey(GlobalConstant.fixedfeegt10000) ?
-			 * chargesMap .get(GlobalConstant.fixedfeegt10000) : 0;
-			 * 
-			 * }
-			 * 
-			 * // Payment collection charges if
-			 * (nrnReturnConfig.isWhicheverGreaterPCC()) { double percentAmount
-			 * = chargesMap .containsKey(GlobalConstant.percentSPPCC) ?
-			 * chargesMap .get(GlobalConstant.percentSPPCC) * SP / 100 : 0; if
-			 * (chargesMap.containsKey(GlobalConstant.fixedAmtPCC) &&
-			 * percentAmount > chargesMap .get(GlobalConstant.fixedAmtPCC)) {
-			 * pccAmount = percentAmount; } else pccAmount = chargesMap
-			 * .containsKey(GlobalConstant.fixedAmtPCC) ? chargesMap
-			 * .get(GlobalConstant.fixedAmtPCC) : 0;
-			 * 
-			 * } else if (chargesMap.containsKey(GlobalConstant.fixedAmtPCC) &&
-			 * chargesMap.get(GlobalConstant.fixedAmtPCC) != 0.0) pccAmount =
-			 * chargesMap.get(GlobalConstant.fixedAmtPCC);
-			 * 
-			 * else pccAmount =
-			 * chargesMap.containsKey(GlobalConstant.percentSPPCC) ? chargesMap
-			 * .get(GlobalConstant.percentSPPCC) * SP / 100 : 0;
-			 * 
-			 * log.debug(" States : MetroLsit : " +
-			 * nrnReturnConfig.getMetroList() + " national list : " +
-			 * nrnReturnConfig.getNationalList() + " LocalList : " +
-			 * nrnReturnConfig.getLocalList() + " zonallist: " +
-			 * nrnReturnConfig.getZonalList());
-			 * log.debug(" State we are geting ofrom excel : " + state);
-			 * 
-			 * // ****Shipping charges if (nrnReturnConfig.getShippingFeeType()
-			 * != null &&
-			 * nrnReturnConfig.getShippingFeeType().equals("variable")) { if
-			 * (nrnReturnConfig.getMetroList() != null &&
-			 * nrnReturnConfig.getMetroList().contains(state)) {
-			 * System.out.println(" Inside ,etro list setting state ");
-			 * area.append("metro"); volarea.append("metro"); } else if
-			 * (nrnReturnConfig.getNationalList() != null &&
-			 * nrnReturnConfig.getNationalList().contains(state)) {
-			 * area.append("national"); volarea.append("national"); } else if
-			 * (nrnReturnConfig.getLocalList() != null &&
-			 * nrnReturnConfig.getLocalList().contains(state)) {
-			 * area.append("local"); volarea.append("local"); } else if
-			 * (nrnReturnConfig.getZonalList() != null &&
-			 * nrnReturnConfig.getZonalList().contains(state)) {
-			 * area.append("zonal"); volarea.append("zonal"); } } else {
-			 * area.append("fixed"); volarea.append("fixed"); } if (deadWeight <
-			 * 501) { area.append("dwlt500");
-			 * order.setDwShippingString(area.toString()); dwchargetemp =
-			 * chargesMap.containsKey(area.toString()) ? chargesMap
-			 * .get(area.toString()) : 0;
-			 * 
-			 * } else { temp = new StringBuffer(area); area.append("dwlt500");
-			 * temp.append("dwgt500"); log.debug(" Area : " + area + " temp : "
-			 * + temp); dwchargetemp = chargesMap.containsKey(area.toString()) ?
-			 * chargesMap .get(area.toString()) : 0;
-			 * log.debug(" Charges for lesstthan 500 : " + dwchargetemp); float
-			 * range = (float) Math.ceil((deadWeight - 500) / 500);
-			 * log.debug(" Range : " + range); dwchargetemp = dwchargetemp +
-			 * (range * (chargesMap.containsKey(temp.toString()) ? chargesMap
-			 * .get(temp.toString()) : 0));
-			 * log.debug(" Charges for greater than 500 : " +
-			 * chargesMap.get(temp.toString()));
-			 * order.setDwShippingString(temp.toString());
-			 * 
-			 * }
-			 * 
-			 * if (volWeight < 501) { tempStr =
-			 * volarea.append("vwlt500").toString(); log.debug(" tempStr " +
-			 * tempStr);
-			 * 
-			 * vwchargetemp = chargesMap.containsKey(tempStr) ? chargesMap
-			 * .get(tempStr) : 0; order.setVolShippingString(tempStr); } else if
-			 * (volWeight > 500 && volWeight < 1001) { tempStr =
-			 * volarea.append("vwgt500lt1000").toString(); vwchargetemp =
-			 * chargesMap.containsKey(tempStr) ? chargesMap .get(tempStr) : 0;
-			 * order.setVolShippingString(volarea.toString()); } else if
-			 * (volWeight > 1000 && volWeight < 1501) { tempStr =
-			 * volarea.append("vwgt1000lt1500").toString(); vwchargetemp =
-			 * chargesMap.containsKey(tempStr) ? chargesMap .get(tempStr) : 0;
-			 * order.setVolShippingString(volarea.toString()); } else if
-			 * (volWeight > 1500 && volWeight < 5001) { tempStr =
-			 * volarea.append("vwgt1500lt5000").toString();
-			 * log.debug(" tempStr " + tempStr); vwchargetemp =
-			 * chargesMap.containsKey(tempStr) ? chargesMap .get(tempStr) : 0;
-			 * order.setVolShippingString(volarea.toString()); } else if
-			 * (volWeight > 5000) { temp = new StringBuffer(volarea);
-			 * volarea.append("vwgt1500lt5000");
-			 * 
-			 * vwchargetemp = chargesMap.containsKey(volarea.toString()) ?
-			 * chargesMap .get(volarea.toString()) : 0;
-			 * log.debug(" vol Charges for lesstthan 500 : " + vwchargetemp);
-			 * temp.append("vwgt5000"); float range = (float)
-			 * Math.ceil((volWeight - 5000) / 1000); log.debug("volarea  " +
-			 * volarea + " temp : " + temp + " range invol: " + range);
-			 * vwchargetemp = vwchargetemp + (range *
-			 * (chargesMap.containsKey(temp.toString()) ? chargesMap
-			 * .get(temp.toString()) : 0));
-			 * order.setVolShippingString(temp.toString());
-			 * 
-			 * } log.debug(" vwchargetemp : " + vwchargetemp +
-			 * " dwchargetemp : " + dwchargetemp); if (vwchargetemp >
-			 * dwchargetemp) shippingCharges = vwchargetemp; else
-			 * shippingCharges = dwchargetemp;
-			 */
+			}			
 
 			comission = (float) (comission * SP) / 100;
 			serviceTax = (chargesMap.containsKey("serviceTax") ? chargesMap
@@ -4346,10 +4220,8 @@ public class OrderDaoImpl implements OrderDao {
 					/ 100;
 			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
 					- serviceTax;
-
-			
+			props = PropertiesLoaderUtils.loadProperties(resource);
 			if (partner != null && partner.isTdsApplicable()) {
-				props = PropertiesLoaderUtils.loadProperties(resource);
 				tds = (((props.getProperty("TDS") != null ? Double
 						.parseDouble(props.getProperty("TDS")) : 0)
 						* comission
@@ -4357,13 +4229,15 @@ public class OrderDaoImpl implements OrderDao {
 						* order.getQuantity();
 				order.getOrderTax().setTdsToDeduct(tds);
 			}
+
 			order.setGrossNetRate(nrValue);
 			order.setPartnerCommission(comission);
 			order.setFixedfee(fixedfee);
-			order.setPccAmount(pccAmount);
 			order.setServiceTax(serviceTax);
+			order.setPccAmount(pccAmount);
 			order.setShippingCharges(shippingCharges);
 		} catch (Exception e) {
+			log.error("Failed!", e);
 			e.printStackTrace();
 			return false;
 		}
@@ -5638,6 +5512,11 @@ public class OrderDaoImpl implements OrderDao {
 			if (session != null)
 				session.close();
 		}
+		return null;
+	}
+	
+	@Override
+	public List<Order> ordersByPartner(String pcName, int sellerID) {		
 		return null;
 	}
 

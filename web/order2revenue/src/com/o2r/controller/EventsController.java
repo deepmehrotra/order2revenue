@@ -244,7 +244,7 @@ public class EventsController {
 										eventsBean.getNrnReturnConfig()
 												.getCharges()
 												.add(nrnReturncharge);
-
+										System.out.println(eventsBean.getNrnReturnConfig().getCharges());
 									}
 								} else if (entry.getKey().contains(
 										"shippingfeeVolumeFixed")) {
@@ -282,6 +282,7 @@ public class EventsController {
 												.getCharges()
 												.add(nrnReturncharge);
 									}
+									System.out.println(eventsBean.getNrnReturnConfig().getCharges());
 								}
 							} else if (entry.getKey().contains(
 									"shippingfeeWeight")
@@ -413,7 +414,7 @@ public class EventsController {
 										eventsBean.getNrnReturnConfig()
 												.getCharges()
 												.add(nrnReturncharge);
-
+										System.out.println(eventsBean.getNrnReturnConfig().getCharges());
 									}
 								} else if (entry.getKey().contains(
 										"shippingfeeWeightFixed")) {
@@ -450,6 +451,7 @@ public class EventsController {
 										eventsBean.getNrnReturnConfig()
 												.getCharges()
 												.add(nrnReturncharge);
+										System.out.println(eventsBean.getNrnReturnConfig().getCharges());
 									}
 								}
 							}
@@ -463,7 +465,7 @@ public class EventsController {
 								.getValue()[0]));
 						nrnReturncharge.setChargeName(temp);
 						nrnReturncharge.setConfig(eventsBean
-								.getNrnReturnConfig());
+								.getNrnReturnConfig());						
 						chargeList.add(nrnReturncharge);
 					}
 
@@ -482,7 +484,7 @@ public class EventsController {
 				}
 			}
 			}
-
+			System.out.println(eventsBean.getNrnReturnConfig().getCharges());
 			Partner partner = partnerService.getPartner(
 					eventsBean.getChannelName(),
 					helperClass.getSellerIdfromSession(request));
@@ -495,13 +497,18 @@ public class EventsController {
 						partner.getNrnReturnConfig().getZonalList());
 				eventsBean.getNrnReturnConfig().setNationalList(
 						partner.getNrnReturnConfig().getNationalList());
+			}			
+			
+			
+			for(NRnReturnCharges charge : chargeList){
+				eventsBean.getNrnReturnConfig().getCharges().add(charge);
 			}
-			eventsBean.getNrnReturnConfig().setCharges(chargeList);
-
+			
 			try {
 				eventsBean.setSellerId(helperClass
 						.getSellerIdfromSession(request));
 				eventsBean.setCreatedDate(new Date());
+				System.out.println(eventsBean.getNrnReturnConfig().getCharges());
 				Events events = ConverterClass.prepareEventsModel(eventsBean);
 				eventsService.addEvent(events,
 						helperClass.getSellerIdfromSession(request));
@@ -817,6 +824,11 @@ public class EventsController {
 					partnerMap.put(bean.getPcName(), bean.getPcName());
 				}
 			}
+			System.out.println(eventsBean.getShippingfeeWeightFixedList());
+			System.out.println(eventsBean.getShippingfeeVolumeFixedList());
+			System.out.println(eventsBean.getShippingfeeWeightVariableList());
+			System.out.println(eventsBean.getShippingfeeVolumeVariableList());
+			System.out.println(eventsBean.getFixedfeeList());
 			model.put("event", eventsBean);
 			model.put("categoryMap", categoryMap);
 			model.put("partnerMap", partnerMap);

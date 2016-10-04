@@ -42,6 +42,7 @@ public class EventsDaoImpl implements EventsDao {
 			Partner partner = null;
 			Seller seller = null;					
 			String currentPartnerName = events.getChannelName();
+			System.out.println(events.getNrnReturnConfig().getCharges());
 			if(events.getEventId() != 0){
 				session.merge(events);
 			} else {					
