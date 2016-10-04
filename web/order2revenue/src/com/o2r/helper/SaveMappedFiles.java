@@ -6771,6 +6771,8 @@ public class SaveMappedFiles {
 						cellIndex);
 
 			}
+			System.out.println(" columHeaderMap : "+columHeaderMap);
+			System.out.println(" cellIndexMap : "+cellIndexMap);
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				entry = worksheet.getRow(rowIndex);
@@ -6805,6 +6807,7 @@ public class SaveMappedFiles {
 							validaterow = false;
 						}
 					} catch (NullPointerException e) {
+						e.printStackTrace();
 						errorMessage
 								.append("The column 'Sales Channel' doesn't exist");
 						validaterow = false;
