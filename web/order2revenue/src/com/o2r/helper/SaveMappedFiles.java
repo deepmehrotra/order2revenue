@@ -4235,30 +4235,24 @@ public class SaveMappedFiles {
 
 					try {
 						index = cellIndexMap.get(columHeaderMap
-								.get("OrderSP Component A"));
-						int index1 = cellIndexMap.get(columHeaderMap
-								.get("OrderSP Component B"));
+								.get("OrderSP Component A"));						
 						if (entry.getCell(index) != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK
-								&& entry.getCell(index1) != null
-								&& entry.getCell(index1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
 								order.setOrderSP(Double.parseDouble(entry
-										.getCell(index).toString())
-										+ Double.parseDouble(entry.getCell(
-												index1).toString()));
+										.getCell(index).toString()));
 							} catch (NumberFormatException e) {
 								errorMessage
-										.append(" Order SP should be a number ");
+										.append(" Item_price should be a number ");
 								validaterow = false;
 							}
 						} else {
-							errorMessage.append(" Order SP is null ");
+							errorMessage.append(" Item_price is null ");
 							validaterow = false;
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'item_price' or 'shipping_amount' doesn't exist");
+								.append("The column 'item_price' doesn't exist");
 						validaterow = false;
 					}
 
