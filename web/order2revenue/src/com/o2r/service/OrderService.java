@@ -129,4 +129,6 @@ public interface OrderService {
 	public List<String> listOrderIds(String criteria,int sellerId);
 	
 	public List<Order> searchAsIsOrder(String criteria, String ID, int sellerId);
+	
+	public List<Order> ordersByPartner(String pcName, int sellerID);
 }

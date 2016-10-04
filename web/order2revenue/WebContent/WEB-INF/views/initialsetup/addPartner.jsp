@@ -840,7 +840,7 @@ input+label {
 																				<h4 class="text-info">Which Ever is Higher</h4>
 																			</div>
 																			<div class="col-sm-12">
-																				<h4>Volume calculation= (lxbxh)(cm)/5000</h4>
+																				<h4>Volumetric calculation= (lxbxh)(cm)/5000</h4>
 																				<table class="table table-bordered" id="myTable">
 																					<thead>
 																						<tr>
@@ -957,7 +957,7 @@ input+label {
 																				</table>
 																			</div>
 																			<div class="col-sm-12">
-																				<h4>Weight calculation</h4>
+																				<h4>Deadweight calculation</h4>
 																				<table class="table table-bordered" id="myTable2">
 																					<thead>
 																						<tr>
@@ -1081,7 +1081,7 @@ input+label {
 																				<h4 class="text-info">Which Ever is Higher</h4>
 																			</div>
 																			<div class="col-sm-6">
-																				<h4>Weight calculation</h4>
+																				<h4>Deadweight calculation</h4>
 																				<table class="table table-bordered" id="myTable3">
 																					<thead>
 																						<tr>
@@ -1160,7 +1160,7 @@ input+label {
 																				</table>
 																			</div>
 																			<div class="col-sm-6">
-																				<h4>Volume calculation= (lxbxh)(cm)/5000</h4>
+																				<h4>Volumetric calculation= (lxbxh)(cm)/5000</h4>
 																				<table class="table table-bordered" id="myTable4">
 																					<thead>
 																						<tr>

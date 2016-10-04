@@ -656,10 +656,14 @@ span .#error {
 																				test="${partner.nrnReturnConfig.retCharSFShipFee == 'true'}">
 																				<label class="labelfix">Shipping Fee</label>
 																				<br>
-																			</c:if>
+																			</c:if>																			
 																			<c:if
 																				test="${partner.nrnReturnConfig.retCharSFRevShipFee == 'true'}">
 																				<label class="labelfix">Reverse Shipping Fee</label>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.retCharSFPCC == 'true'}">
+																				<label class="labelfix">Payment Collection Charges</label>
 																			</c:if>
 																		</div>
 																	</div>
@@ -807,6 +811,10 @@ span .#error {
 																				test="${partner.nrnReturnConfig.RTOCharSFRevShipFee == 'true'}">
 																				<label class="labelfix">Reverse Shipping Fee</label>
 																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.RTOCharSFPCC == 'true'}">
+																				<label class="labelfix">Payment Collection Charges</label>
+																			</c:if>
 																		</div>
 																	</div>
 																</div>
@@ -947,6 +955,10 @@ span .#error {
 																				test="${partner.nrnReturnConfig.repCharSFRevShipFee == 'true'}">
 																				<label class="labelfix">Reverse Shipping Fee</label>
 																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.repCharSFPCC == 'true'}">
+																				<label class="labelfix">Payment Collection Charges</label>
+																			</c:if>																			
 																		</div>
 																	</div>
 																</div>
@@ -1092,6 +1104,10 @@ span .#error {
 																			<c:if
 																				test="${partner.nrnReturnConfig.PDCharSFRevShipFee == 'true'}">
 																				<label class="labelfix">Reverse Shipping Fee</label>
+																			</c:if>
+																			<c:if
+																				test="${partner.nrnReturnConfig.PDCharSFPCC == 'true'}">
+																				<label class="labelfix">Payment Collection Charges</label>
 																			</c:if>
 																		</div>
 																	</div>
@@ -1410,8 +1426,7 @@ span .#error {
 																			<c:if
 																				test="${partner.nrnReturnConfig.canCharBRRevShipFee == 'true'}">
 																				<label class="labelfix">Reverse Shipping Fee</label>
-																			</c:if>
-																			
+																			</c:if>																			
 																		</div>
 																	</div>
 																</div>

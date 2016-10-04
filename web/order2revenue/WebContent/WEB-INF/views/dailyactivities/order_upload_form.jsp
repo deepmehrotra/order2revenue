@@ -1093,6 +1093,70 @@ ol.d {
 									<li>Watch Tutorial</li>
 								</ol>
 							</div>
+							
+							<div class="jabongorderupload">
+								<h2 class="text-center">
+									<b>Follow These Instructions</b>
+								</h2>
+								<ol>
+									<li>Bulk Download pending orders from limeroad Seller
+										Panel, before generating shipping label</li>
+									<li>Open the downloaded file</li>
+									<li>Ensure that the 1st row of file is the "headers"</li>
+									<li>Do not change the formatting of columns or any
+										headers.</li>
+									<li>Add the following "Case Sensitive" headers at the end of 1st row of the file and input its
+										corresponding value against every row
+										<ol class="d">
+											<li><b>Mandatory Values (to be added manually by
+													seller)</b>
+												<ol class="c">
+													<li><b class="color">Sales Channel</b> - Channel name
+														for which file is being upoaded.It should be
+														same(case-sensitive) as the name of sales channel
+														configured.</li>
+													<li><b class="color">InvoiceID</b>Input invoice ID for
+														each order transaction.</li>
+													<li><b class="color">Order Shipped Date</b> - Mention
+														shipped date in "MM-DD-YYYY" format.</li>
+													<li><b class="color">Billing Postcode</b>Shipping Pin Code.The
+														same is available in address column.The seller can easily
+														use the RIGHT formula to extract pin code values into this
+														column.</li>
+												</ol></li>
+											<li><b>Non-Mandatory (scenario specific or good to
+													have attributes)</b>
+												<ol class="c">
+													<li><b class="color">Net Rate</b> - Mandatory when N/R
+														switch is off,or an Event is configured for all or any
+														particular SKU's at fixed Transfer Price.</li>
+													<li><b class="color">Seller Notes</b> - Any customized
+														remarks about order.</li>
+													<li><b class="color">Secondary OrderID </b> -
+														Additional Order Search Identifier</li>
+													<li><b class="color">Order MRP </b> - Used to find
+														discount values on order,enter MRP per quantity.</li>
+													<li><b class="color">Shipping Provider (first mile) </b> - Shipping
+														Provider</li>
+													<li><b class="color">Customer Email</b> - If
+														provided,adds to the customer database.</li>
+													<li><b class="color">Billing City</b> - City where
+														the order is shipped</li>
+												</ol></li>
+										</ol>
+									</li>
+									<li>Save the file in ".xls" (97-2003) format</li>
+									<li>Import the file by selecting "Jabong Order Upload"
+										from the dropdown list</li>
+									<li>Make sure to keep the spelling & spacing of all column
+										headers exactly as stated in the instructions.</li>
+									<li>The file to be imported should have the following
+										columns by default Order Id, Date Time,Vendor
+										Code,Price,Qty,Customer Name, Number,Address,Order Type,AWB</li>
+									<li>Watch Tutorial</li>
+								</ol>
+							</div>
+							
 							<div class="amazonepaymentupload">
 								<h2 class="text-center">
 									<b>Follow These Instructions</b>
@@ -1325,6 +1389,51 @@ ol.d {
 								</ol>
 
 							</div>
+							
+							<div class="jabongpaymentupload">
+								<h2 class="text-center">
+									<b>Follow These Instructions</b>
+								</h2>
+								<ol>
+									<li>Open the file received via mail from Jabong for the
+										payments received</li>
+									<li>Ensure that the 1st row of file is the "headers"</li>
+									<li>Do not change the formatting of columns or any
+										headers.</li>
+										<li>
+										<ul>
+											<li style="list-style-type: initial;">Mandatory Column
+												to be added by seller:</li>
+										</ul>
+										<ol class="d">
+											<li><b class="color">Sales Channel</b></li>
+										</ol>
+										</li>
+									<li>The downloaded excel file will by default have the
+										following columns with exact same heading. Ensure the same are
+										present.<br>
+										<ul>
+											<li style="list-style-type: initial;">Mandatory Column
+												(Already present in downloaded file)</li>
+										</ul>
+										<ol class="d">
+											<li>Order Number</li>
+											<li>Sales Channel</li>
+											<li>Payment Date</li>
+											<li>Payable</li>
+										</ol>
+									</li>									
+									<li>Save the file in <b>.xls(97-2003)</b> format
+									</li>
+									<li>Simply Upload the file after selecting <b>
+											"Jabong Payment Upload"</b>from the dropdown list on the Import
+										Page.
+									</li>
+									<li>Watch Tutorial</li>
+								</ol>
+
+							</div>
+							
 						</div>
 					</div>
 				</div>

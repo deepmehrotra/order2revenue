@@ -209,8 +209,8 @@ span .#error {
 											<div class="col-sm-6">												
 												<label class="col-sm-4 control-label text-center" style="padding: 0px;margin-right: -6px;position: relative;right: 22px;"><b>Select All</b></label>
 												<div class="col-sm-8">
-													<div style="padding: 0px;">														
-														<form:checkbox path="selectAll" id="selectAllSku" value="true" />
+													<div style="padding: 0px;">																									
+														<form:checkbox path="selectAll" id="selectAllSku" value="true" />														
 													</div>												
 												</div>
 											</div>										
@@ -368,8 +368,8 @@ span .#error {
 																				<div class="col-sm-12">
 																					<div class="form-group col-md-12">
 																						<c:choose>
-																							<c:when test="${!empty partner.fixedfeeList}">
-																								<c:forEach items="${partner.fixedfeeList}"
+																							<c:when test="${!empty event.fixedfeeList}">
+																								<c:forEach items="${event.fixedfeeList}"
 																									var="fixedfee" varStatus="loop">
 																									<div class="col-md-3 content-rgt">
 																										<select class="form-control"
@@ -592,7 +592,7 @@ span .#error {
 																				<h4 class="text-info">Which Ever is Higher</h4>
 																			</div>
 																			<div class="col-sm-12">
-																				<h4>Volume calculation= (lxbxh)(cm)/5000</h4>
+																				<h4>Volumetric calculation= (lxbxh)(cm)/5000</h4>
 																				<table class="table table-bordered" id="myTable">
 																					<thead>
 																						<tr>
@@ -608,9 +608,9 @@ span .#error {
 																					<tbody>
 																						<c:choose>
 																							<c:when
-																								test="${!empty partner.shippingfeeVolumeVariableList}">
+																								test="${!empty event.shippingfeeVolumeVariableList}">
 																								<c:forEach
-																									items="${partner.shippingfeeVolumeVariableList}"
+																									items="${event.shippingfeeVolumeVariableList}"
 																									var="shippingfee" varStatus="loop">
 																									<tr>
 																										<td><select class="form-control selected"
@@ -627,38 +627,34 @@ span .#error {
 																													</c:otherwise>
 																												</c:choose>
 																										</select></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeVolumeVariable${loop.index}-range"
-																														class="form-control validateNumber"
-																														value="${shippingfee.range}">
-																												</div>
+																										<td><div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeVolumeVariable${loop.index}-range"
+																													class="form-control number"
+																													value="${shippingfee.range}">
 																											</div></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeVolumeVariable${loop.index}-localValue"
-																														class="form-control validateNumber"
-																														value="${shippingfee.localValue}">
-																												</div>
+																										<td><div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeVolumeVariable${loop.index}-localValue"
+																													class="form-control number"
+																													value="${shippingfee.localValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingfeeVolumeVariable${loop.index}-zonalValue"
-																													class="form-control validateNumber"
+																													class="form-control number"
 																													value="${shippingfee.zonalValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingfeeVolumeVariable${loop.index}-nationalValue"
-																													class="form-control validateNumber"
+																													class="form-control number"
 																													value="${shippingfee.nationalValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingfeeVolumeVariable${loop.index}-metroValue"
-																													class="form-control validateNumber"
+																													class="form-control number"
 																													value="${shippingfee.metroValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
@@ -676,34 +672,30 @@ span .#error {
 																											<option value="Upto">Upto</option>
 																											<option value="Additional">Additional</option>
 																									</select></td>
-																									<td><div class="form-group ">
-																											<div class=" content-rgt">
-																												<input type="text"
-																													name="nr-shippingfeeVolumeVariable0-range"
-																													class="form-control validateNumber">
-																											</div>
+																									<td><div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingfeeVolumeVariable0-range"
+																												class="form-control number">
 																										</div></td>
-																									<td><div class="form-group ">
-																											<div class=" content-rgt">
-																												<input type="text"
-																													name="nr-shippingfeeVolumeVariable0-localValue"
-																													class="form-control validateNumber">
-																											</div>
+																									<td><div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingfeeVolumeVariable0-localValue"
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingfeeVolumeVariable0-zonalValue"
-																												class="form-control validateNumber">
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingfeeVolumeVariable0-nationalValue"
-																												class="form-control validateNumber">
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingfeeVolumeVariable0-metroValue"
-																												class="form-control validateNumber">
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="button"
@@ -717,7 +709,7 @@ span .#error {
 																				</table>
 																			</div>
 																			<div class="col-sm-12">
-																				<h4>Weight calculation</h4>
+																				<h4>Deadweight calculation</h4>
 																				<table class="table table-bordered" id="myTable2">
 																					<thead>
 																						<tr>
@@ -733,9 +725,9 @@ span .#error {
 																					<tbody>
 																						<c:choose>
 																							<c:when
-																								test="${!empty partner.shippingfeeWeightVariableList}">
+																								test="${!empty event.shippingfeeWeightVariableList}">
 																								<c:forEach
-																									items="${partner.shippingfeeWeightVariableList}"
+																									items="${event.shippingfeeWeightVariableList}"
 																									var="shippingfee" varStatus="loop">
 																									<tr>
 																										<td><select class="form-control selected"
@@ -752,26 +744,22 @@ span .#error {
 																													</c:otherwise>
 																												</c:choose>
 																										</select></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeWeightVariable${loop.index}-range"
-																														class="form-control validateNumber"
-																														value="${shippingfee.range}">
-																												</div>
+																										<td><div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeWeightVariable${loop.index}-range"
+																													class="form-control number"
+																													value="${shippingfee.range}">
 																											</div></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeWeightVariable${loop.index}-localValue"
-																														class="form-control validateNumber"
-																														value="${shippingfee.localValue}">
-																												</div>
+																										<td><div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeWeightVariable${loop.index}-localValue"
+																													class="form-control number"
+																													value="${shippingfee.localValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingfeeWeightVariable${loop.index}-zonalValue"
-																													class="form-control validateNumber"
+																													class="form-control number"
 																													value="${shippingfee.zonalValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
@@ -783,7 +771,7 @@ span .#error {
 																										<td><div class=" content-rgt">
 																												<input type="text"
 																													name="nr-shippingfeeWeightVariable${loop.index}-metroValue"
-																													class="form-control validateNumber"
+																													class="form-control number"
 																													value="${shippingfee.metroValue}">
 																											</div></td>
 																										<td><div class=" content-rgt">
@@ -801,32 +789,30 @@ span .#error {
 																											<option value="Upto">Upto</option>
 																											<option value="Additional">Additional</option>
 																									</select></td>
-																									<td><div class="form-group ">
-																											<div class=" content-rgt">
-																												<input type="text"
-																													name="nr-shippingfeeWeightVariable0-range"
-																													class="form-control validateNumber">
-																											</div>
+																									<td><div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingfeeWeightVariable0-range"
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingfeeWeightVariable0-localValue"
-																												class="form-control validateNumber">
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingfeeWeightVariable0-zonalValue"
-																												class="form-control validateNumber">
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingfeeWeightVariable0-nationalValue"
-																												class="form-control validateNumber">
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="text"
 																												name="nr-shippingfeeWeightVariable0-metroValue"
-																												class="form-control validateNumber">
+																												class="form-control number">
 																										</div></td>
 																									<td><div class=" content-rgt">
 																											<input type="button"
@@ -847,7 +833,7 @@ span .#error {
 																				<h4 class="text-info">Which Ever is Higher</h4>
 																			</div>
 																			<div class="col-sm-6">
-																				<h4>Weight calculation</h4>
+																				<h4>Deadweight calculation</h4>
 																				<table class="table table-bordered" id="myTable3">
 																					<thead>
 																						<tr>
@@ -860,9 +846,9 @@ span .#error {
 																					<tbody>
 																						<c:choose>
 																							<c:when
-																								test="${!empty partner.shippingfeeWeightFixedList}">
+																								test="${!empty event.shippingfeeWeightFixedList}">
 																								<c:forEach
-																									items="${partner.shippingfeeWeightFixedList}"
+																									items="${event.shippingfeeWeightFixedList}"
 																									var="shippingfee" varStatus="loop">
 																									<tr>
 																										<td><select class="form-control selected"
@@ -879,21 +865,17 @@ span .#error {
 																													</c:otherwise>
 																												</c:choose>
 																										</select></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeWeightFixed${loop.index}-range"
-																														class="form-control validateNumber"
-																														value="${shippingfee.range}">
-																												</div>
+																										<td><div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeWeightFixed${loop.index}-range"
+																													class="form-control number"
+																													value="${shippingfee.range}">
 																											</div></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeWeightFixed${loop.index}-value"
-																														class="form-control validateNumber"
-																														value="${shippingfee.value}">
-																												</div>
+																										<td><div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeWeightFixed${loop.index}-value"
+																													class="form-control number"
+																													value="${shippingfee.value}">
 																											</div></td>
 																										<td><div class=" content-rgt">
 																												<input type="button"
@@ -910,24 +892,16 @@ span .#error {
 																											<option value="Upto">Upto</option>
 																											<option value="Additional">Additional</option>
 																									</select></td>
-																									<td>
-																										<div class="form-group ">
-																											<div class=" content-rgt">
-																												<input type="text"
-																													name="nr-shippingfeeWeightFixed0-range"
-																													class="form-control validateNumber">
-																											</div>
-																										</div>
-																									</td>
-																									<td>
-																										<div class="form-group ">
-																											<div class=" content-rgt">
-																												<input type="text"
-																													name="nr-shippingfeeWeightFixed0-value"
-																													class="form-control validateNumber">
-																											</div>
-																										</div>
-																									</td>
+																									<td><div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingfeeWeightFixed0-range"
+																												class="form-control number">
+																										</div></td>
+																									<td><div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingfeeWeightFixed0-value"
+																												class="form-control number">
+																										</div></td>
 																									<td><input type="button" name=""
 																										class="button btn btn-primary"
 																										onclick="addField3()" value="+"></td>
@@ -938,7 +912,7 @@ span .#error {
 																				</table>
 																			</div>
 																			<div class="col-sm-6">
-																				<h4>Volume calculation= (lxbxh)(cm)/5000</h4>
+																				<h4>Volumetric calculation= (lxbxh)(cm)/5000</h4>
 																				<table class="table table-bordered" id="myTable4">
 																					<thead>
 																						<tr>
@@ -951,9 +925,9 @@ span .#error {
 																					<tbody>
 																						<c:choose>
 																							<c:when
-																								test="${!empty partner.shippingfeeVolumeFixedList}">
+																								test="${!empty event.shippingfeeVolumeFixedList}">
 																								<c:forEach
-																									items="${partner.shippingfeeVolumeFixedList}"
+																									items="${event.shippingfeeVolumeFixedList}"
 																									var="shippingfee" varStatus="loop">
 																									<tr>
 																										<td><select class="form-control selected"
@@ -970,22 +944,20 @@ span .#error {
 																													</c:otherwise>
 																												</c:choose>
 																										</select></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeVolumeFixed${loop.index}-range"
-																														class="form-control validateNumber"
-																														value="${shippingfee.range}">
-																												</div>
+																										<td><div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeVolumeFixed${loop.index}-range"
+																													class="form-control number"
+																													value="${shippingfee.range}">
 																											</div></td>
-																										<td><div class="form-group ">
-																												<div class=" content-rgt">
-																													<input type="text"
-																														name="nr-shippingfeeVolumeFixed${loop.index}-value"
-																														class="form-control validateNumber"
-																														value="${shippingfee.value}">
-																												</div>
-																											</div></td>
+																										<td>
+																											<div class=" content-rgt">
+																												<input type="text"
+																													name="nr-shippingfeeVolumeFixed${loop.index}-value"
+																													class="form-control number"
+																													value="${shippingfee.value}">
+																											</div>
+																										</td>
 																										<td><div class=" content-rgt">
 																												<input type="button"
 																													class="button btn btn-primary" value="+"
@@ -1003,16 +975,12 @@ span .#error {
 																									</select></td>
 																									<td><input type="text"
 																										name="nr-shippingfeeVolumeFixed0-range"
-																										class="form-control validateNumber"></td>
-																									<td>
-																										<div class="form-group ">
-																											<div class=" content-rgt">
-																												<input type="text"
-																													name="nr-shippingfeeVolumeFixed0-value"
-																													class="form-control validateNumber">
-																											</div>
-																										</div>
-																									</td>
+																										class="form-control number"></td>
+																									<td><div class=" content-rgt">
+																											<input type="text"
+																												name="nr-shippingfeeVolumeFixed0-value"
+																												class="form-control number">
+																										</div></td>
 																									<td><input type="button" name=""
 																										class="button btn btn-primary" value="+"
 																										onclick="addField4()"></td>
@@ -3276,7 +3244,10 @@ Custom and plugin javascript
 							/* Retrive Radio Buttons Ends */
 
 							/* Retrive CheckBoxes Starts */
-
+							
+							if ('${event.selectAll}' == 'true')
+								$('#selectAllSku').iCheck('check');
+							
 							if ('${eventsBean.nrnReturnConfig.whicheverGreaterPCC}' == 'true') {
 								$('#whicheverGreaterPCC').iCheck('check');
 							}
