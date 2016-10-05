@@ -16,6 +16,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.xml.bind.DatatypeConverter;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
@@ -254,12 +255,11 @@ public class SellerDaoImpl implements SellerDao {
 
 		log.info("*** planUpgrade Starts : SellerDaoImpl ****");
 		AccountTransaction at = null;
-		Plan plan = null;
+		//Plan plan = null;
 		Seller seller = null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			plan=(Plan)session.get(Plan.class, pid);
 			seller = (Seller) session.get(Seller.class, sellerid);			
 			if (seller.getSellerAccount() == null) {
 				throw new Exception();
@@ -275,7 +275,7 @@ public class SellerDaoImpl implements SellerDao {
 					totalAmount);
 			
 			}
-			if (seller.getSellerAccount().getLastLogin() == null
+			/*if (seller.getSellerAccount().getLastLogin() == null
 					|| seller.getSellerAccount().isAccountStatus() == false) {
 				seller.getSellerAccount().setAccountStatus(true);
 				seller.getSellerAccount().setLastLogin(new Date());
@@ -283,12 +283,9 @@ public class SellerDaoImpl implements SellerDao {
 						seller.getSellerAccount().getTotalOrderProcessed()
 								+ plan.getOrderCount());
 				seller.getSellerAccount().setAtivationDate(new Date());
-			}
+			}*/
 			seller.getSellerAccount().setLastTransaction(new Date());
-			System.out.println("plan "+plan.getPid());
-			seller.getSellerAccount().setPlanId(
-					plan.getPid());
-			seller.setPlan(plan);
+			
 			Random r = new Random();
 			int randomId = r.nextInt(9999999);
 			String invoiceId = "O2R" +sellerid+"-"+ randomId;
@@ -315,7 +312,7 @@ public class SellerDaoImpl implements SellerDao {
 	}
 
 	@Override
-	public AccountTransaction upgradeAccountTransaction(String txnStat,String txnid, int sellerid)throws CustomException {
+	public AccountTransaction upgradeAccountTransaction(String txnStat,String planName,String txnid, int sellerid)throws CustomException {
 		
 
 		log.info("*** upgradeAccountTransaction Starts : SellerDaoImpl ****");
@@ -323,12 +320,19 @@ public class SellerDaoImpl implements SellerDao {
 		AccountTransaction at = null;
 		Plan plan = null;
 		Seller seller = null;
+		List<Plan> planlist=null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			Criteria criteria=session.createCriteria(Seller.class)
 					.add(Restrictions.eq("id", sellerid));
-			List temp=criteria.list();		
+			List temp=criteria.list();	
+			if(planName!=null&&StringUtils.isNotBlank(planName))
+			{
+			Criteria plancrit=session.createCriteria(Plan.class)
+					.add(Restrictions.eq("planName", planName));
+			planlist=plancrit.list();
+			}
 			if (temp != null&& temp.size()>0) {
 				seller=(Seller)temp.get(0);
 				for(AccountTransaction atran:seller.getSellerAccount().getAccountTransactions())
@@ -336,12 +340,18 @@ public class SellerDaoImpl implements SellerDao {
 					if(txnid.equals(atran.getTransactionId()))
 						at=atran;
 			}
-			System.out.println(" Got at: "+at);
 			if(at!=null)
 			{
-			at.setStatus(txnStat);
-				if(txnStat.equals("Success"))
+			
+				if(txnStat.equals("Success")&&at.getStatus().equals("Pending"))
 			{
+					if(planlist!=null&&planlist.size()>0)
+					{
+						plan=planlist.get(0);
+						seller.getSellerAccount().setPlanId(
+								plan.getPid());
+						seller.setPlan(plan);
+					}
 			seller.getSellerAccount().setOrderBucket(
 					seller.getSellerAccount().getOrderBucket()
 							+ at.getCurrentOrderCount());
@@ -349,7 +359,10 @@ public class SellerDaoImpl implements SellerDao {
 					seller.getSellerAccount().getTotalAmountPaidToO2r() + 
 					at.getTransactionAmount());
 			
+			
 			}
+				at.setStatus(txnStat);
+
 			}
 			}
 			

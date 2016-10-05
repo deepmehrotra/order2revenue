@@ -2,7 +2,6 @@ package com.o2r.service;
 
 import java.util.List;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ import com.o2r.model.StateDeliveryTime;
 public class SellerServiceImpl implements SellerService,ServletContextAware {
 
     private ServletContext context;
-    private ServletConfig config;
+    /*private ServletConfig config;*/
 
     @Override
     public void setServletContext(final ServletContext servletContext) {
@@ -109,9 +108,9 @@ public class SellerServiceImpl implements SellerService,ServletContextAware {
 	}
 	
 	@Override
-	public AccountTransaction upgradeAccountTransaction(String txnStat, String txnid,
+	public AccountTransaction upgradeAccountTransaction(String txnStat,String planName, String txnid,
 			int sellerid) throws CustomException
 			{
-		return sellerDao.upgradeAccountTransaction(txnStat, txnid, sellerid);
+		return sellerDao.upgradeAccountTransaction(txnStat,planName, txnid, sellerid);
 			}
 }

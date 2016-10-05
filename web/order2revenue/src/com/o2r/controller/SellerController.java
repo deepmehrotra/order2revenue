@@ -517,22 +517,16 @@ public class SellerController {
 		/*String status=request.getParameter("payusuccessful");
 		
 		System.out.println(" Upgraevalue payusuccessful: "+request.getParameter("payusuccessful"));*/
-		Map<String,String[]> map=request.getParameterMap();
-		for(Map.Entry<String,String[]> entry:map.entrySet())
-		{
-			System.out.println(" Key : "+entry.getKey()+" value : "+entry.getValue()[0]);
-		}
+		
 		try {
 			
 			//upgrade account transaction object
 			String txnId=request.getParameter("txnid");
-			System.out.println("txnId "+txnId);
 			if(txnId!=null&&StringUtils.isNotBlank(txnId))
 			{
 				if(request.getParameter("count")!=null&&request.getParameter("amount")!=null)
 				{
 			Double currTotalAmount = new Double(request.getParameter("amount"));
-			System.out.println(request.getParameter("count"));
 			//Long currOrderCount =2L;
 			Long currOrderCount = new Long(request.getParameter("count"));
 				
@@ -541,12 +535,10 @@ public class SellerController {
 			
 			log.info(" seller :"+helperClass.getSellerIdfromSession(request)+"status "+status+" txnId "+txnId);
 			log.info("currOrderCount : "+currOrderCount);
-			System.out.println(" request.getParameter(amount) "+request.getParameter("pId"));
 			int pId=request.getParameter("pId")!=null?Integer.parseInt(request.getParameter("pId")):0;
 			AccountTransaction at = sellerService.planUpgrade(status,txnId,
 					pId, currTotalAmount, currOrderCount,
 					helperClass.getSellerIdfromSession(request));
-			System.out.println(" AT sved : "+at);
 				}
 			
 			}
@@ -581,9 +573,8 @@ public class SellerController {
 		return new ModelAndView("selleraccount/payuform");
 	}
 
-	@RequestMapping("/seller/thankyou.html")
-	public ModelAndView planUpgrade2(HttpServletRequest request,
-			@ModelAttribute("command") PlanBean planBean, BindingResult result) {
+	@RequestMapping(value="/seller/thankyou",method = RequestMethod.POST)
+	public ModelAndView planUpgrade2(HttpServletRequest request) {
 
 		log.info("$$$ thankyou Starts : SellerController $$$");
 		Map<String, Object> model =null;
@@ -595,7 +586,7 @@ public class SellerController {
 		model =new HashMap<String, Object>();
 		String status=request.getParameter("payusuccessful")!=null?request.getParameter("payusuccessful"):"";
 		String txnStat="";
-		log.info(" seller :"+helperClass.getSellerIdfromSession(request)+"status "+status+" txnId "+txnId);
+		String planName=request.getParameter("planname");
 		if(status!=null&&!StringUtils.isEmpty(status))
 		{
 			model.put("status", status);
@@ -609,9 +600,8 @@ public class SellerController {
 			/*AccountTransaction at = sellerService.planUpgrade(txnStat,txnId,
 					planBean.getPid(), currTotalAmount, currOrderCount,
 					helperClass.getSellerIdfromSession(request));*/
-			AccountTransaction updated =sellerService.upgradeAccountTransaction(txnStat, txnId,
+			AccountTransaction updated =sellerService.upgradeAccountTransaction(txnStat,planName, txnId,
 					helperClass.getSellerIdfromSession(request));
-			System.out.println(" Update at : "+updated);
 			model.put("currTotalAmount", updated.getTransactionAmount());
 			model.put("currOrderCount", updated.getCurrentOrderCount());
 			model.put("accountTransaction", updated);

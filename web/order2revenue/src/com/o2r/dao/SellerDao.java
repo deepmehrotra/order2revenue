@@ -45,7 +45,7 @@ public boolean sendMail(String to, String subject, String body);
 
 public List<AccountTransaction> getAccountTransactions(int sellerId);
 
-public AccountTransaction upgradeAccountTransaction(String txnStat, String txnid,
+public AccountTransaction upgradeAccountTransaction(String txnStat,String planName, String txnid,
 		int sellerid) throws CustomException;
 
 

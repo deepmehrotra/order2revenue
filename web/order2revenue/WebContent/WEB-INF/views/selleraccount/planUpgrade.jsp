@@ -115,30 +115,7 @@ public boolean empty(String s)
   <script type="text/javascript"
     src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script type="text/javascript">
-    function onclickviewExpCat(id) {
-       $.ajax({
-            url : 'viewExpenseGroup.html?expcategoryId='+id,
-            success : function(data) {
-            	if($(data).find('#j_username').length > 0){
-            		window.location.href = "orderindex.html";
-            	}else{
-                	$('#centerpane').html(data);
-            	}
-            }
-        });
-    }
-    function onclickAddTaxCategory() {
-    	  $.ajax({
-            url : 'addTaxCategory.html',
-            success : function(data) {
-            	if($(data).find('#j_username').length > 0){
-            		window.location.href = "orderindex.html";
-            	}else{
-                	$('#centerpane').html(data);
-            	}
-            }
-        });
-    }
+  
     
     function select(obj) {		
 		$(".selectPlanField").val($(obj).val()).trigger('change');	
@@ -152,6 +129,7 @@ public boolean empty(String s)
 			var educationcess =.5;
 			var orderCount = parseInt($(obj).find(':selected').data('ordercount'));			
 			var planPrice = $(obj).find(':selected').data('planprice');	
+			var planName = $(".selectPlanField").find(':selected').data('planname');
 			var planId = $(".selectPlanField").find(':selected').val();
 			var minAmount = parseInt(Math.ceil(orderCount*planPrice));			
 			var taxAmount = parseFloat(parseFloat(minAmount*serviceTax/100).toFixed(2));
@@ -162,6 +140,8 @@ public boolean empty(String s)
 			$(".currTotalAmount").val(totalAmount);
 			$(".currOrderCount").val(orderCount);
 			$(".planid").val(planId);
+			var pname=$(".successUrl").val()+planName;
+			$(".successUrl").val(pname);
 			localStorage.setItem("totalAmount", totalAmount);
 			localStorage.setItem("orderCount", orderCount);
 			localStorage.setItem("txnid", '<%= txnid %>');
@@ -198,6 +178,7 @@ public boolean empty(String s)
 				var educationcess =.5;
 				$(".checkoutButton").removeAttr('disabled');
 				var planPrice = $(".selectPlanField").find(':selected').data('planprice');
+				var planName = $(".selectPlanField").find(':selected').data('planname');	
 				var planId = $(".selectPlanField").find(':selected').val();
 				var minAmount = parseInt(Math.ceil(currOrder*planPrice));
 				var taxAmount = parseFloat(parseFloat(minAmount*serviceTax/100).toFixed(2));
@@ -213,6 +194,8 @@ public boolean empty(String s)
 				$(".educessTaxAmountText").html(educessAmount);
 				$(".payuAmount").val(totalAmount);
 				$(".planid").val(planId);
+				var pname=$(".successUrl").val()+planName;
+				$(".successUrl").val(pname);
 				localStorage.setItem("totalAmount", totalAmount);
 				localStorage.setItem("orderCount", orderCount);
 				localStorage.setItem("pid", $(".selectPlanField").val());	
@@ -449,8 +432,10 @@ public boolean empty(String s)
 												<c:forEach items="${upgrade}" var="up">
 													<option value='<c:out value="${up.pid}"/>' 
 														data-planprice='<c:out value="${up.planPrice}"/>'
-														data-ordercount='<c:out value="${up.orderCount}"/>'>
+														data-ordercount='<c:out value="${up.orderCount}"/>'
+														data-planname='<c:out value="${up.planName}"/>'>
 														<c:out value="${up.planName}"/>
+														
 													</option>
 												</c:forEach>
 											</select>
@@ -554,8 +539,8 @@ public boolean empty(String s)
 							    <input type="hidden" name="email" id="email" value="${myAccount.email}" />
 								<input type="hidden" name="phone" value="${myAccount.contactNo}" />
 								<input type="hidden" name="productinfo" value="${myAccount.email}"/>
-								<input type="hidden" name="surl" class="successUrl" value="${successurl}<%= txnid %>"/>
-								<input type="hidden" name="furl" class="failureUrl" value="${failurl}<%= txnid %>" />
+								<input type="hidden" name="surl" class="successUrl" value="${successurl}<%= txnid %>&planname="/>
+								<input type="hidden" name="furl" class="failureUrl" value="${failurl}<%= txnid %>&planname=" />
 								<input type="hidden" name="count" class="currOrderCount" value="" />
 								<input type="hidden" name="pId"  class="planid" value="" />
 					         	<% if(empty(hash)){ %>
