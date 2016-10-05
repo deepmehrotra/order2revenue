@@ -3951,7 +3951,7 @@ public class OrderDaoImpl implements OrderDao {
 							break;
 						}
 					}
-					if (!inRange) {
+					if (!inRange) {						
 						float tempWeight = deadWeight
 								- (float) pbean
 										.getshippingfeeWeightVariableList()
@@ -4041,6 +4041,8 @@ public class OrderDaoImpl implements OrderDao {
 						}
 					}
 					if (!inRange) {
+						System.out.println("ShippigFeeWeightVariableList : "+pbean.getshippingfeeWeightVariableList().size()+"Order ID : "+ order.getChannelOrderID());
+						System.out.println(pbean.getshippingfeeWeightVariableList().size() - 2);
 						float tempWeight = volWeight
 								- (float) pbean
 										.getshippingfeeVolumeVariableList()
