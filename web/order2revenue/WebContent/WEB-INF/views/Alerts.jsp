@@ -134,9 +134,15 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 		src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
 
 	<script>
-		$(document).ready(function() {
-		
-		});		
+    $(document).ready(function(){
+        $('.dataTables-example').dataTable({
+                responsive: true,
+                "dom": 'T<"clear">lfrtip',
+                "tableTools": {
+                    "sSwfPath": "/O2R/seller/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
+                }
+        });
+    });
 	</script>
 </body>
 </html>

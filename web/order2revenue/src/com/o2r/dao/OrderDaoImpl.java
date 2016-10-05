@@ -1,5 +1,6 @@
 package com.o2r.dao;
 
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -36,6 +37,7 @@ import com.o2r.bean.ChargesBean;
 import com.o2r.bean.DataConfig;
 import com.o2r.bean.DebitNoteBean;
 import com.o2r.bean.PartnerBean;
+import com.o2r.bean.PartnerDetailsBean;
 import com.o2r.bean.PoPaymentBean;
 import com.o2r.bean.PoPaymentDetailsBean;
 import com.o2r.bean.ChargesBean.SortByCriteria;
@@ -5518,8 +5520,60 @@ public class OrderDaoImpl implements OrderDao {
 	}
 	
 	@Override
-	public List<Order> ordersByPartner(String pcName, int sellerID) {		
-		return null;
+	public PartnerDetailsBean detailsOfPartner(String pcName, int sellerID) {
+		
+		Session session = null;
+		PartnerDetailsBean PDBean = new PartnerDetailsBean();
+		try {
+			
+			PDBean.setPcName(pcName);
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			Query orderQuery = session.createSQLQuery("select count(ot.orderDate),min(ot.orderDate),max(ot.orderDate) from order_table ot where  ot.seller_id=? and ot.pcName=?");
+			orderQuery.setInteger(0, sellerID);
+			orderQuery.setString(1, pcName);
+			if(orderQuery != null && orderQuery.list().size() != 0){
+				Object[] orderObject = (Object[]) orderQuery.list().get(0);
+				if(orderObject != null){
+					PDBean.setTotalNoOfOrders(((BigInteger)orderObject[0]).longValue());
+					PDBean.setFirstOrderDate((Date)orderObject[1]);
+					PDBean.setLastOrderDate((Date)orderObject[2]);
+				}
+			}
+			
+			Query paymentQuery = session.createSQLQuery("select count(op.dateofPayment),min(op.dateofPayment),max(op.dateofPayment) from order_table ot,orderpay op where  ot.seller_id=? and ot.pcName=? and ot.orderpayment_paymentId=op.paymentId");
+			paymentQuery.setInteger(0, sellerID);
+			paymentQuery.setString(1, pcName);
+			if(paymentQuery != null && paymentQuery.list().size() != 0){
+				Object[] paymentObject = (Object[]) paymentQuery.list().get(0);
+				if(paymentObject != null){
+					PDBean.setTotalNoOfPayments(((BigInteger)paymentObject[0]).longValue());
+					PDBean.setFirstPaymentDate((Date)paymentObject[1]);
+					PDBean.setLastPaymentDate((Date)paymentObject[2]);
+				}
+			}
+			
+			Query returnQuery = session.createSQLQuery("select count(ort.returnDate),min(ort.returnDate),max(ort.returnDate) from order_table ot,orderreturn ort where  ot.seller_id=? and ot.pcName=? and ot.orderReturnOrRTO_returnId=ort.returnId");
+			returnQuery.setInteger(0, sellerID);
+			returnQuery.setString(1, pcName);
+			if(returnQuery != null && returnQuery.list().size() != 0){
+				Object[] returnObject = (Object[]) returnQuery.list().get(0);
+				if(returnObject != null){
+					PDBean.setTotalNoOfReturns(((BigInteger)returnObject[0]).longValue());
+					PDBean.setFirstReturnDate((Date)returnObject[1]);
+					PDBean.setLastReturnDate((Date)returnObject[2]);
+				}
+			}
+			
+		} catch (Exception e) {
+			log.error("Failed By Seller ID : "+sellerID, e);
+			e.printStackTrace();
+		} finally {
+			if(session != null)
+				session.close();
+		}		
+		return PDBean;
 	}
 
 }
