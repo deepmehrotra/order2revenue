@@ -447,17 +447,16 @@ public boolean empty(String s)
 										</td>
 										<td>
 											<input type="number" class="form-control currOrderCount" name="orderCount" oninput="updatePrices(this)" style="font-size: 12px;color: #1ab394;">
-											<small>Minimum Order</small>
+											<small class="span">Minimum Order</small>
 										</td>
 
 									</tr>
 									<tr>
 										<td>
-											Price/Order<br>
-											<small>As Per Current Plan</small>
+											Price/Order											
 										</td>
 										<td>
-											<img src="/O2R/seller/img/rupee.png" alt="rupee"> <span class="currPlanPriceTxt"></span> per Order
+											<img src="/O2R/seller/img/rupee.png" alt="rupee"> <span class="span currPlanPriceTxt"></span><font class="span"> per Order</font>
 										</td>
 									</tr>
 									<!-- <tr>

@@ -7,10 +7,9 @@
 <html>
  <head>
  <jsp:include page="../globalcsslinks.jsp"></jsp:include>
-  <!-- <script type="text/javascript"
-    src="https://code.jquery.com/jquery-1.10.1.min.js"></script> -->
-
- <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.css">
+  <script type="text/javascript"
+    src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+ 
 
 <style type="text/css">
 	.column
@@ -20,6 +19,12 @@
 		width: 100%;
 		margin-top: 20px;
 	}
+	table td
+    {
+        border: 1px solid #fff;
+        height: 40px;
+        font-weight: 800;
+    }
 </style>
  </head>
  <body>
@@ -30,19 +35,20 @@
 		<div class="wrapper wrapper-content animated fadeInRight" id="centerpane" style="background: #fff;"> 
 			<div class="row">
                 <div class="col-lg-12">
-					<div class="col-lg-6 text-center" style="margin-top: 50px;">
-						<img src="/O2R/seller/img/check.png" alt="check" style="float: left; width: 20%;">
+					<div class="col-lg-6 text-center" style="margin-top: 50px;">						
 						<c:choose>
 							<c:when test='${status =="true"}'>
+							<img src="/O2R/seller/img/success_transaction.jpg" alt="check" style="float: left;">
 							<h1>Payment Successful</h1>
 							</c:when>
 							<c:otherwise>
+							<img src="/O2R/seller/img/fail_transaction.jpg" alt="check" style="float: left;">
 							<h1>Sorry! Your payment failed.</h1>
 							</c:otherwise>
 						</c:choose>
 						
 						<div>
-							<table cellpadding="0" cellspacing="0" border="1" width="50%" style="position: relative;left: 86px;top: 23px;">
+							<table cellpadding="0" cellspacing="0" width="100%" style="position: relative;top: 23px;background-color: #f2f2f2;">
 								<tbody>
 									<tr>
 										<td>
@@ -97,7 +103,7 @@
 							</table>
 						</div>
 						<br><br>
-						<button class="btn btn-primary" style="background-color: #1ab394;color: #fff;margin-left: 16%;">Print Record</button>
+						<button class="btn btn-primary" style="background-color: #1ab394;color: #fff;margin-left: -2%;">Print Record</button>
 					</div>
 					<div class="col-lg-6">
 						<div class="column text-center">
