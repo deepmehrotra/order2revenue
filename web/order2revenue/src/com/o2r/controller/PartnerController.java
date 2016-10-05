@@ -36,6 +36,7 @@ import com.o2r.bean.ChargesBean.SortByCriteriaRange;
 import com.o2r.bean.ChargesBean.SortByCriteria;
 import com.o2r.bean.MetaPartnerBean;
 import com.o2r.bean.PartnerBean;
+import com.o2r.bean.PartnerDetailsBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
@@ -47,6 +48,7 @@ import com.o2r.model.NRnReturnCharges;
 import com.o2r.model.Partner;
 import com.o2r.model.TaxCategory;
 import com.o2r.service.CategoryService;
+import com.o2r.service.OrderService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.TaxDetailService;
 
@@ -67,6 +69,9 @@ public class PartnerController {
 	private TaxDetailService taxDetailService;
 	@Autowired
 	ServletContext context;
+	@Autowired
+	private OrderService orderService;
+	
 
 	Properties props = null;
 	org.springframework.core.io.Resource resource = new ClassPathResource(
@@ -621,11 +626,18 @@ public class PartnerController {
 		log.info("$$$ listAllPartners Starts : OrderController $$$");
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
-		List<PartnerBean> addedlist = null;
+		List<PartnerBean> partnerList = null;
+		List<PartnerDetailsBean> PDBeans = new ArrayList<PartnerDetailsBean>();
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-			addedlist = ConverterClass.prepareListofPartnerBean(partnerService
+			partnerList = ConverterClass.prepareListofPartnerBean(partnerService
 					.listPartners(helperClass.getSellerIdfromSession(request)));
+			for(PartnerBean PB : partnerList){
+				PartnerDetailsBean PDBean = orderService.detailsOfPartner(PB.getPcName(), sellerId);
+				if(PDBean != null)
+					PDBeans.add(PDBean);
+			}			
+			
 		} catch (CustomException ce) {
 			log.error("ListAllPartner exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -637,7 +649,7 @@ public class PartnerController {
 			e.printStackTrace();
 			log.error(e.getCause());
 		}
-		model.put("partners", addedlist);
+		model.put("partnerDetailsList", PDBeans);
 		log.info("$$$ listAllPartners Ends : OrderController $$$");
 		return new ModelAndView("initialsetup/partnerDetail", model);
 	}

@@ -409,7 +409,7 @@ span .#error {
 																			<div id="accordion2" class="collapse">
 																				<c:if
 																					test="${partner.nrnReturnConfig.shippingFeeType == 'variable'}">
-																					<h5>Volume calculation= (lxbxh)(cm)/5</h5>
+																					<h5>Volumetric calculation= (lxbxh)(cm)/5</h5>
 																					<table class="table-bordered"
 																						style="border-spacing: 0 5px;width: 86%;">
 																						<thead>
@@ -438,7 +438,7 @@ span .#error {
 																						</tbody>
 																					</table>
 																					<br>
-																					<h5>Weight calculation</h5>
+																					<h5>Deadweight calculation</h5>
 																					<table class="table-bordered"
 																						style="border-spacing: 0 5px;width: 86%;">
 																						<thead>
@@ -469,7 +469,7 @@ span .#error {
 																				</c:if>
 																				<c:if
 																					test="${partner.nrnReturnConfig.shippingFeeType == 'fixed'}">
-																					<h5>Weight calculation</h5>
+																					<h5>Deadweight calculation</h5>
 																					<table class="table-bordered"
 																						style="border-spacing: 0 5px;">
 																						<thead>
@@ -493,7 +493,7 @@ span .#error {
 																					</table>
 
 
-																					<h5>Volume calculation= (lxbxh)(cm)/5000</h5>
+																					<h5>Volumetric calculation= (lxbxh)(cm)/5000</h5>
 																					<table class="table-bordered"
 																						style="border-spacing: 0 5px;">
 																						<thead>
