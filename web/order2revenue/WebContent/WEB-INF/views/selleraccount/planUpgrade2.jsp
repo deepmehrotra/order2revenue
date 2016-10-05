@@ -7,8 +7,8 @@
 <html>
  <head>
  <jsp:include page="../globalcsslinks.jsp"></jsp:include>
-  <script type="text/javascript"
-    src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <!-- <script type="text/javascript"
+    src="https://code.jquery.com/jquery-1.10.1.min.js"></script> -->
 
  <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.css">
 

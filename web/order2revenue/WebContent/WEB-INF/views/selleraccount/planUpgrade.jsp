@@ -151,7 +151,8 @@ public boolean empty(String s)
 			var kktax =.5;
 			var educationcess =.5;
 			var orderCount = parseInt($(obj).find(':selected').data('ordercount'));			
-			var planPrice = $(obj).find(':selected').data('planprice');			
+			var planPrice = $(obj).find(':selected').data('planprice');	
+			var planId = $(".selectPlanField").find(':selected').val();
 			var minAmount = parseInt(Math.ceil(orderCount*planPrice));			
 			var taxAmount = parseFloat(parseFloat(minAmount*serviceTax/100).toFixed(2));
 			var kktaxAmount = parseFloat(parseFloat(minAmount*kktax/100).toFixed(2));
@@ -160,6 +161,7 @@ public boolean empty(String s)
 			$(".currPlanPriceTxt").html(planPrice);			
 			$(".currTotalAmount").val(totalAmount);
 			$(".currOrderCount").val(orderCount);
+			$(".planid").val(planId);
 			localStorage.setItem("totalAmount", totalAmount);
 			localStorage.setItem("orderCount", orderCount);
 			localStorage.setItem("txnid", '<%= txnid %>');
@@ -196,6 +198,7 @@ public boolean empty(String s)
 				var educationcess =.5;
 				$(".checkoutButton").removeAttr('disabled');
 				var planPrice = $(".selectPlanField").find(':selected').data('planprice');
+				var planId = $(".selectPlanField").find(':selected').val();
 				var minAmount = parseInt(Math.ceil(currOrder*planPrice));
 				var taxAmount = parseFloat(parseFloat(minAmount*serviceTax/100).toFixed(2));
 				var kktaxAmount = parseFloat(parseFloat(minAmount*kktax/100).toFixed(2));
@@ -209,6 +212,7 @@ public boolean empty(String s)
 				$(".kkTaxAmountText").html(kktaxAmount);
 				$(".educessTaxAmountText").html(educessAmount);
 				$(".payuAmount").val(totalAmount);
+				$(".planid").val(planId);
 				localStorage.setItem("totalAmount", totalAmount);
 				localStorage.setItem("orderCount", orderCount);
 				localStorage.setItem("pid", $(".selectPlanField").val());	
@@ -521,8 +525,10 @@ public boolean empty(String s)
 							    <input type="hidden" name="email" id="email" value="${myAccount.email}" />
 								<input type="hidden" name="phone" value="${myAccount.contactNo}" />
 								<input type="hidden" name="productinfo" value="${myAccount.email}"/>
-								<input type="hidden" name="surl" class="successUrl" value="${successurl}"/>
-								<input type="hidden" name="furl" class="failureUrl" value="${failurl}" />
+								<input type="hidden" name="surl" class="successUrl" value="${successurl}<%= txnid %>"/>
+								<input type="hidden" name="furl" class="failureUrl" value="${failurl}<%= txnid %>" />
+								<input type="hidden" name="count" class="currOrderCount" value="" />
+								<input type="hidden" name="pId"  class="planid" value="" />
 					         	<% if(empty(hash)){ %>
 					            	<input type="submit" style="display:none;" value="Submit" />
 					          	<% } %>

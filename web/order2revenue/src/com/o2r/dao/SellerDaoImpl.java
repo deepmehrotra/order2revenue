@@ -259,7 +259,7 @@ public class SellerDaoImpl implements SellerDao {
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			plan = (Plan) session.get(Plan.class, pid);
+			plan=(Plan)session.get(Plan.class, pid);
 			seller = (Seller) session.get(Seller.class, sellerid);			
 			if (seller.getSellerAccount() == null) {
 				throw new Exception();
@@ -273,9 +273,7 @@ public class SellerDaoImpl implements SellerDao {
 			seller.getSellerAccount().setTotalAmountPaidToO2r(
 					seller.getSellerAccount().getTotalAmountPaidToO2r() + 
 					totalAmount);
-			seller.getSellerAccount().setPlanId(
-					plan.getPid());
-			seller.setPlan(plan);
+			
 			}
 			if (seller.getSellerAccount().getLastLogin() == null
 					|| seller.getSellerAccount().isAccountStatus() == false) {
@@ -287,7 +285,10 @@ public class SellerDaoImpl implements SellerDao {
 				seller.getSellerAccount().setAtivationDate(new Date());
 			}
 			seller.getSellerAccount().setLastTransaction(new Date());
-
+			System.out.println("plan "+plan.getPid());
+			seller.getSellerAccount().setPlanId(
+					plan.getPid());
+			seller.setPlan(plan);
 			Random r = new Random();
 			int randomId = r.nextInt(9999999);
 			String invoiceId = "O2R" +sellerid+"-"+ randomId;
@@ -313,6 +314,64 @@ public class SellerDaoImpl implements SellerDao {
 		return at;
 	}
 
+	@Override
+	public AccountTransaction upgradeAccountTransaction(String txnStat,String txnid, int sellerid)throws CustomException {
+		
+
+		log.info("*** upgradeAccountTransaction Starts : SellerDaoImpl ****");
+		System.out.println("txnStat "+txnStat+"txnid "+txnid+" sellerid "+sellerid);
+		AccountTransaction at = null;
+		Plan plan = null;
+		Seller seller = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria=session.createCriteria(Seller.class)
+					.add(Restrictions.eq("id", sellerid));
+			List temp=criteria.list();		
+			if (temp != null&& temp.size()>0) {
+				seller=(Seller)temp.get(0);
+				for(AccountTransaction atran:seller.getSellerAccount().getAccountTransactions())
+				{
+					if(txnid.equals(atran.getTransactionId()))
+						at=atran;
+			}
+			System.out.println(" Got at: "+at);
+			if(at!=null)
+			{
+			at.setStatus(txnStat);
+				if(txnStat.equals("Success"))
+			{
+			seller.getSellerAccount().setOrderBucket(
+					seller.getSellerAccount().getOrderBucket()
+							+ at.getCurrentOrderCount());
+			seller.getSellerAccount().setTotalAmountPaidToO2r(
+					seller.getSellerAccount().getTotalAmountPaidToO2r() + 
+					at.getTransactionAmount());
+			
+			}
+			}
+			}
+			
+			
+			session.saveOrUpdate(seller);
+
+			session.getTransaction().commit();
+			session.close();
+		}catch (NullPointerException e) {
+			log.error("Failed! by sellerId : "+sellerid,e);
+			throw new CustomException(GlobalConstant.planUpgradeError, new Date(), 1, GlobalConstant.planUpgradeErrorCode, e);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : "+sellerid,e);
+			throw new CustomException(GlobalConstant.planUpgradeError, new Date(), 1, GlobalConstant.planUpgradeErrorCode, e);
+		}
+		log.info("*** planUpgrade Ends : SellerDaoImpl ****");
+		return at;
+	}
+
+	
 	public AccountTransaction payementStatus(Plan plan) {
 		
 		log.info("*** payementStatus Starts : SellerDaoImpl ****");

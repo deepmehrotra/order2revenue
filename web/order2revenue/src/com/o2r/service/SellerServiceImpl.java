@@ -107,4 +107,11 @@ public class SellerServiceImpl implements SellerService,ServletContextAware {
 	public List<AccountTransaction> getAccountTransactions(int sellerId) {
 		return sellerDao.getAccountTransactions(sellerId);
 	}
+	
+	@Override
+	public AccountTransaction upgradeAccountTransaction(String txnStat, String txnid,
+			int sellerid) throws CustomException
+			{
+		return sellerDao.upgradeAccountTransaction(txnStat, txnid, sellerid);
+			}
 }

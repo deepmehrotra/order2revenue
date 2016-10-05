@@ -1,7 +1,6 @@
 package com.o2r.service;
 
 import java.util.List;
-import java.util.Properties;
 
 import com.o2r.helper.CustomException;
 import com.o2r.model.AccountTransaction;
@@ -39,4 +38,7 @@ public interface SellerService {
  public boolean sendMail(String to, String subject, String body);
 
 public List<AccountTransaction> getAccountTransactions(int sellerId);
+
+public AccountTransaction upgradeAccountTransaction(String txnStat, String txnid,
+		int sellerid) throws CustomException;
 }
