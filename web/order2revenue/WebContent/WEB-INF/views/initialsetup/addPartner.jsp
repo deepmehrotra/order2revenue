@@ -609,7 +609,7 @@ input+label {
 																<div id="collapseTwo1" class="panel-collapse collapse">
 																	<div class="panel-body">
 																		<h4>Please select .....</h4>
-																		<label id="fixedfee-error1"
+																		<label id="fixedfee-error"
 																			style="visible: none;"> </label>
 																		<div id="room_fileds">
 																			<div id="content">
@@ -3919,7 +3919,7 @@ input+label {
 											'hide.bs.collapse',
 											function(e) {
 
-												$('#fixedfee-error1').hide();
+												$('#fixedfee-error').hide();
 												var isValid = false;
 
 												for (i = 0; i < 999; i++) {
@@ -3940,11 +3940,11 @@ input+label {
 
 												if (isValid == false) {
 
-													$('#fixedfee-error1').show();										
+													$('#fixedfee-error').show();										
 													
 													document
-															.getElementById("fixedfee-error1").innerHTML = "Please select Greater Than values";
-													$('#fixedfee-error1').attr('style', 'color:#8a1f11;');
+															.getElementById("fixedfee-error").innerHTML = "Please select Greater Than values";
+													$('#fixedfee-error').attr('style', 'color:#8a1f11;');
 
 													e.preventDefault();
 												}
@@ -4170,6 +4170,7 @@ input+label {
 			});
 		}
 		function submitForm() {
+
 			var validator = $("#addpartnerform")
 					.validate(
 							{
@@ -4269,7 +4270,14 @@ input+label {
 				},
 				number : true
 			});
-			if (validator.form() && nameAvailability) {
+			
+			var isError = false;
+			if ($("#fixedfee-error").is(":visible") || $("#shippingfee-error").is(":visible")) {
+				isError = true;
+			}
+			
+			//alert(isError); 
+			if (validator.form() && nameAvailability && isError == false) {
 				$('form#addpartnerform').submit();
 			} else {
 				$('html, body').animate({
