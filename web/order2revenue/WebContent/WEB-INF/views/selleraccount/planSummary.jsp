@@ -227,24 +227,32 @@ thead tr th {
     height: 30px;
     line-height: 30px;
      text-align: center; 
+     
 }
-
+/* 
 table.scroll tbody {
     height: 100px;
     overflow-y: auto;
     overflow-x: auto;
-}
+} */
 
 tbody { border-top: 2px solid black; }
 
 tbody td, thead th {
-    border-right: 1px solid black;
+    border-right: 1px solid #ccc;
+    
 }
-
 tbody td:last-child, thead th:last-child {
     border-right: none;
 }
-
+thead,tbody { 
+       display: block; 
+   }
+tbody {
+   height: 200px; 
+   overflow-y: auto; 
+   overflow-x: auto;
+}
 </style>
 </head>
 <body>
@@ -379,7 +387,7 @@ tbody td:last-child, thead th:last-child {
 						</div>
 
 						<div class="col-lg-6 text-center">
-							<div class="col-lg-12" style="background: #f5f5f5;overflow:scroll;height:330px;">
+							<div class="col-lg-12" style="background: #f5f5f5;">
 								<h1 class="heading">Payment History</h1>
 								<table class="table scroll">
 									<thead style="background-color: #e5e7e6;">
@@ -407,7 +415,7 @@ tbody td:last-child, thead th:last-child {
 								</table>
 							</div>
 							<div class="col-lg-12"
-								style="background: #f5f5f5; margin-top: 20px;overflow:scroll;height:330px;">
+								style="background: #f5f5f5; margin-top: 20px;">
 								<h1 class="heading">Usage History</h1>
 								<table class="table scroll">
 									<thead style="background-color: #e5e7e6;">
