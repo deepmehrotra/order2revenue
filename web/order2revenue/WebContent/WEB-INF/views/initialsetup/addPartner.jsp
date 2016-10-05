@@ -302,24 +302,27 @@ input+label {
 															<div class="radio">
 																<%-- <form:radiobutton path="paymentCategory" value="prepaid"
 																	id="prepaid" name="toggler" class="prepaid"/> --%>
-																<i class="fa fa-arrow-down" aria-hidden="true" id="prepaidArrow" ></i> <label
-																	id="prepaid" class="prepaid"> Prepaid </label>
+																<i class="fa fa-arrow-down" aria-hidden="true"
+																	id="prepaidArrow"></i> <label id="prepaid"
+																	class="prepaid"> Prepaid </label>
 															</div>
 														</div>
 														<div class="col-md-3" style="padding-bottom: 18px;">
 															<div class="radio">
 																<%-- <form:radiobutton path="paymentCategory" value="postpaid"
 																	id="postpaid" name="toggler" class="postpaid"/> --%>
-																<i class="fa fa-arrow-right" aria-hidden="true" id="postpaidArrow" ></i> <label
-																	id="postpaid" class="postpaid"> Postpaid </label>
+																<i class="fa fa-arrow-right" aria-hidden="true"
+																	id="postpaidArrow"></i> <label id="postpaid"
+																	class="postpaid"> Postpaid </label>
 															</div>
 														</div>
 														<div class="col-md-3" style="padding-bottom: 18px;">
 															<div class="radio">
 																<%-- <form:radiobutton path="paymentCategory" value="prepaid"
 																	id="prepaid" name="toggler" class="prepaid"/> --%>
-																<i class="fa fa-arrow-right" aria-hidden="true" id="othersArrow" ></i> <label
-																	id="others" class="others"> Others </label>
+																<i class="fa fa-arrow-right" aria-hidden="true"
+																	id="othersArrow"></i> <label id="others" class="others">
+																	Others </label>
 															</div>
 														</div>
 														<div class="col-md-1" style="padding-bottom: 18px;"></div>
@@ -606,6 +609,8 @@ input+label {
 																<div id="collapseTwo1" class="panel-collapse collapse">
 																	<div class="panel-body">
 																		<h4>Please select .....</h4>
+																		<label id="fixedfee-error1"
+																			style="visible: none;"> </label>
 																		<div id="room_fileds">
 																			<div id="content">
 																				<div class="col-sm-12">
@@ -811,6 +816,8 @@ input+label {
 																</div>
 																<div id="collapsefour1" class="panel-collapse collapse">
 																	<div class="panel-body">
+																		<label id="shippingfee-error" 
+																			for="shippingfee" style="visible: none;"> </label>
 																		<div class="col-sm-12">
 																			<div class="col-sm-6">
 																				<div class="radio">
@@ -3034,7 +3041,7 @@ input+label {
 
 		function addField(argument) {
 			var myTable = document.getElementById("myTable");
-			var currentIndex = myTable.rows.length;
+			var currentIndex = myTable.rows.length - 1;
 			var currentRow = myTable.insertRow(-1);
 			var linksBox = document.createElement("select");
 			linksBox.setAttribute("name", "nr-shippingfeeVolumeVariable"
@@ -3096,7 +3103,7 @@ input+label {
 		}
 		function addField2(argument) {
 			var myTable = document.getElementById("myTable2");
-			var currentIndex = myTable.rows.length;
+			var currentIndex = myTable.rows.length - 1;
 			var currentRow = myTable.insertRow(-1);
 			var linksBox = document.createElement("select");
 			linksBox.setAttribute("name", "nr-shippingfeeWeightVariable"
@@ -3157,7 +3164,7 @@ input+label {
 		}
 		function addField3(argument) {
 			var myTable = document.getElementById("myTable3");
-			var currentIndex = myTable.rows.length;
+			var currentIndex = myTable.rows.length - 1;
 			var currentRow = myTable.insertRow(-1);
 			var linksBox = document.createElement("select");
 			linksBox.setAttribute("name", "nr-shippingfeeWeightFixed"
@@ -3200,7 +3207,7 @@ input+label {
 		}
 		function addField4(argument) {
 			var myTable = document.getElementById("myTable4");
-			var currentIndex = myTable.rows.length;
+			var currentIndex = myTable.rows.length - 1;
 			var currentRow = myTable.insertRow(-1);
 			var linksBox = document.createElement("select");
 			linksBox.setAttribute("name", "nr-shippingfeeVolumeFixed"
@@ -3436,45 +3443,61 @@ input+label {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
 							});
-							$(".postpaid").click(function() {
-								$('#blk-prepaid').hide();
-								$('#blk-others').hide();
-								$("#blk-" + $(this).attr('id')).slideDown();
-								//document.getElementById('truePost').style.display = 'block';
-								$("#noofdaysfromshippeddatePost").fadeIn();
-								$('#paymentField2').trigger('change');
-								
-								$('#postpaidArrow').attr('class', 'fa fa-arrow-down');
-								$('#prepaidArrow').attr('class', 'fa fa-arrow-right');
-								$('#othersArrow').attr('class', 'fa fa-arrow-right');
-							});
-							$(".prepaid").click(function() {
-								$('#blk-postpaid').hide();
-								$('#blk-others').hide();
-								$("#blk-" + $(this).attr('id')).slideDown();
-								$("#noofdaysfromshippeddate").fadeIn();
-								$('#paymentField1').trigger('change');
-								
-								$('#prepaidArrow').attr('class', 'fa fa-arrow-down');
-								$('#postpaidArrow').attr('class', 'fa fa-arrow-right');
-								$('#othersArrow').attr('class', 'fa fa-arrow-right');
-							});
-							$(".others").click(function() {
-								$('#blk-prepaid').hide();
-								$('#blk-postpaid').hide();
-								$("#blk-" + $(this).attr('id')).slideDown();
-								$("#noofdaysfromshippeddate").fadeIn();
-								$('#paymentField3').trigger('change');
-								
-								$('#othersArrow').attr('class', 'fa fa-arrow-down');
-								$('#postpaidArrow').attr('class', 'fa fa-arrow-right');
-								$('#prepaidArrow').attr('class', 'fa fa-arrow-right');
-							});
+							$(".postpaid").click(
+									function() {
+										$('#blk-prepaid').hide();
+										$('#blk-others').hide();
+										$("#blk-" + $(this).attr('id'))
+												.slideDown();
+										//document.getElementById('truePost').style.display = 'block';
+										$("#noofdaysfromshippeddatePost")
+												.fadeIn();
+										$('#paymentField2').trigger('change');
+
+										$('#postpaidArrow').attr('class',
+												'fa fa-arrow-down');
+										$('#prepaidArrow').attr('class',
+												'fa fa-arrow-right');
+										$('#othersArrow').attr('class',
+												'fa fa-arrow-right');
+									});
+							$(".prepaid").click(
+									function() {
+										$('#blk-postpaid').hide();
+										$('#blk-others').hide();
+										$("#blk-" + $(this).attr('id'))
+												.slideDown();
+										$("#noofdaysfromshippeddate").fadeIn();
+										$('#paymentField1').trigger('change');
+
+										$('#prepaidArrow').attr('class',
+												'fa fa-arrow-down');
+										$('#postpaidArrow').attr('class',
+												'fa fa-arrow-right');
+										$('#othersArrow').attr('class',
+												'fa fa-arrow-right');
+									});
+							$(".others").click(
+									function() {
+										$('#blk-prepaid').hide();
+										$('#blk-postpaid').hide();
+										$("#blk-" + $(this).attr('id'))
+												.slideDown();
+										$("#noofdaysfromshippeddate").fadeIn();
+										$('#paymentField3').trigger('change');
+
+										$('#othersArrow').attr('class',
+												'fa fa-arrow-down');
+										$('#postpaidArrow').attr('class',
+												'fa fa-arrow-right');
+										$('#prepaidArrow').attr('class',
+												'fa fa-arrow-right');
+									});
 							$("[name=paymentType]").click(function() {
 								$('.radio1').hide();
 								$("#blk-" + $(this).val()).slideDown();
 							});
-							
+
 							$("#datewisepay").click(function() {
 								$("#blk-prepaid").slideDown();
 								$("#noofdaysfromshippeddate").fadeIn();
@@ -3787,66 +3810,145 @@ input+label {
 							if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeePCC')
 								$('#revShippingFeeType_revShipFeePCC').iCheck(
 										'check');
-							
-							$('#collapsefour1').on('hide.bs.collapse', function () {
-								  
-								var isWeightValid = false;
-								var isVolumeValid = false;
-								var selVal = $('input[name="nrnReturnConfig.shippingFeeType"]:checked').val();
-								  if (selVal == 'variable') {
-									  for (i=0; i<999; i++) {
-										  var selectName = "nr-shippingfeeWeightVariable" + i + "-criteria";
-										  var mySelect = $('select[name="' + selectName + '"] option:selected').val();
-										  if (typeof mySelect === "undefined") {
-											  break;
-										  } else if (mySelect == "Additional") {
-											  isWeightValid = true;
-											  break;
-										  }
-									  }
-									  for (i=0; i<999; i++) {
-										  var selectName = "nr-shippingfeeVolumeVariable" + i + "-criteria";
-										  var mySelect = $('select[name="' + selectName + '"] option:selected').val();
-										  if (typeof mySelect === "undefined") {
-											  break;
-										  } else if (mySelect == "Additional") {
-											  isVolumeValid = true;
-											  break;
-										  }
-									  }
-								  } else {
-									  
-									  for (i=0; i<999; i++) {
-										  var selectName = "nr-shippingfeeWeightFixed" + i + "-criteria";
-										  var mySelect = $('select[name="' + selectName + '"] option:selected').val();
-										  if (typeof mySelect === "undefined") {
-											  break;
-										  } else if (mySelect == "Additional") {
-											  isWeightValid = true;
-											  break;
-										  }
-									  }
-									  for (i=0; i<999; i++) {
-										  var selectName = "nr-shippingfeeVolumeFixed" + i + "-criteria";
-										  var mySelect = $('select[name="' + selectName + '"] option:selected').val();
-										  if (typeof mySelect === "undefined") {
-											  break;
-										  } else if (mySelect == "Additional") {
-											  isVolumeValid = true;
-											  break;
-										  }
-									  }
-									  
-								  }
-								  
-								  if (isWeightValid == false) {
-									  alert("Please select Additional values for Weight")
-								  }
-								  
-								  if (isVolumeValid == false) {
-									  alert("Please select Additional values for Volume")
-								  }
-							})
+
+							$('#collapsefour1')
+									.on(
+											'hide.bs.collapse',
+											function(e) {
+
+												$('#shippingfee-error').hide();
+												var isWeightValid = false;
+												var isVolumeValid = false;
+												var selVal = $(
+														'input[name="nrnReturnConfig.shippingFeeType"]:checked')
+														.val();
+												if (selVal == 'variable') {
+													for (i = 0; i < 999; i++) {
+														var selectName = "nr-shippingfeeWeightVariable"
+																+ i
+																+ "-criteria";
+														var mySelect = $(
+																'select[name="'
+																		+ selectName
+																		+ '"] option:selected')
+																.val();
+														if (typeof mySelect === "undefined") {
+															break;
+														} else if (mySelect == "Additional") {
+															isWeightValid = true;
+															break;
+														}
+													}
+													for (i = 0; i < 999; i++) {
+														var selectName = "nr-shippingfeeVolumeVariable"
+																+ i
+																+ "-criteria";
+														var mySelect = $(
+																'select[name="'
+																		+ selectName
+																		+ '"] option:selected')
+																.val();
+														if (typeof mySelect === "undefined") {
+															break;
+														} else if (mySelect == "Additional") {
+															isVolumeValid = true;
+															break;
+														}
+													}
+												} else {
+
+													for (i = 0; i < 999; i++) {
+														var selectName = "nr-shippingfeeWeightFixed"
+																+ i
+																+ "-criteria";
+														var mySelect = $(
+																'select[name="'
+																		+ selectName
+																		+ '"] option:selected')
+																.val();
+														if (typeof mySelect === "undefined") {
+															break;
+														} else if (mySelect == "Additional") {
+															isWeightValid = true;
+															break;
+														}
+													}
+													for (i = 0; i < 999; i++) {
+														var selectName = "nr-shippingfeeVolumeFixed"
+																+ i
+																+ "-criteria";
+														var mySelect = $(
+																'select[name="'
+																		+ selectName
+																		+ '"] option:selected')
+																.val();
+														if (typeof mySelect === "undefined") {
+															break;
+														} else if (mySelect == "Additional") {
+															isVolumeValid = true;
+															break;
+														}
+													}
+
+												}
+
+												if (isWeightValid == false) {
+
+													$('#shippingfee-error')
+															.show();
+													document
+															.getElementById("shippingfee-error").innerHTML = "Please select Additional values for Dead Weight calculation";
+
+													$('#shippingfee-error').attr('style', 'color:#8a1f11;');
+													e.preventDefault();
+												}
+
+												if (isVolumeValid == false) {
+
+													$('#shippingfee-error')
+															.show();
+													document
+															.getElementById("shippingfee-error").innerHTML = "Please select Additional values for Volumetric Weight calculation";
+													$('#shippingfee-error').attr('style', 'color:#8a1f11;');
+													e.preventDefault();
+												}
+											});
+
+							$('#collapseTwo1')
+									.on(
+											'hide.bs.collapse',
+											function(e) {
+
+												$('#fixedfee-error1').hide();
+												var isValid = false;
+
+												for (i = 0; i < 999; i++) {
+													var selectName = "nr-fixedfee"
+															+ i + "-criteria";
+													var mySelect = $(
+															'select[name="'
+																	+ selectName
+																	+ '"] option:selected')
+															.val();
+													if (typeof mySelect === "undefined") {
+														break;
+													} else if (mySelect == "Greater Than") {
+														isValid = true;
+														break;
+													}
+												}
+
+												if (isValid == false) {
+
+													$('#fixedfee-error1').show();										
+													
+													document
+															.getElementById("fixedfee-error1").innerHTML = "Please select Greater Than values";
+													$('#fixedfee-error1').attr('style', 'color:#8a1f11;');
+
+													e.preventDefault();
+												}
+											});
 
 							if ('${partner.nrnReturnConfig.retCharSFPCC}' == 'true')
 								$('#retCharSFPCC').iCheck('check');

@@ -206,44 +206,48 @@ span .#error {
 										<div class="col-sm-12">
 											<h4>Product SKU</h4>
 										</div>
-											<div class="col-sm-6">												
-												<label class="col-sm-4 control-label text-center" style="padding: 0px;margin-right: -6px;position: relative;right: 22px;"><b>Select All</b></label>
-												<div class="col-sm-8">
-													<div style="padding: 0px;">																									
-														<form:checkbox path="selectAll" id="selectAllSku" value="true" />														
-													</div>												
+										<div class="col-sm-6">
+											<label class="col-sm-4 control-label text-center"
+												style="padding: 0px; margin-right: -6px; position: relative; right: 22px;"><b>Select
+													All</b></label>
+											<div class="col-sm-8">
+												<div style="padding: 0px;">
+													<form:checkbox path="selectAll" id="selectAllSku"
+														value="true" />
 												</div>
-											</div>										
-											<div class="col-sm-6" id="multiSelect" >												
-												<label class="col-sm-4 control-label" >Select SKU </label>
-												<div class="col-sm-8">	                                       
-			                                        <select data-placeholder="Click To Select" name="multiSku" id="multiSku" class="chosen-select" multiple="multiple" style="width:350px;" tabindex="4" required>
-			                                            <c:choose>
-															<c:when test="${!empty skuList}">
-																<c:forEach items="${skuList}" var="sk"
-																	varStatus="loop">
-																	<option value="${sk}" selected>${sk}</option>
+											</div>
+										</div>
+										<div class="col-sm-6" id="multiSelect">
+											<label class="col-sm-4 control-label">Select SKU </label>
+											<div class="col-sm-8">
+												<select data-placeholder="Click To Select" name="multiSku"
+													id="multiSku" class="chosen-select" multiple="multiple"
+													style="width: 350px;" tabindex="4" required>
+													<c:choose>
+														<c:when test="${!empty skuList}">
+															<c:forEach items="${skuList}" var="sk" varStatus="loop">
+																<option value="${sk}" selected>${sk}</option>
+															</c:forEach>
+															<c:if test="${!empty skus}">
+																<c:forEach items="${skus}" var="sku" varStatus="loop">
+																	<option value="${sku}">${sku}</option>
 																</c:forEach>
-																<c:if test="${!empty skus}">			                                            		
-					                                            	<c:forEach items="${skus}" var="sku" varStatus="loop">
-					                                            		<option value="${sku}">${sku}</option>
-					                                            	</c:forEach>
-					                                            </c:if>
-															</c:when>
-															<c:otherwise>
-																<c:if test="${!empty skus}">			                                            		
-					                                            	<c:forEach items="${skus}" var="sku" varStatus="loop">
-					                                            		<option value="${sku}">${sku}</option>
-					                                            	</c:forEach>
-					                                            </c:if>
-															</c:otherwise>
-														</c:choose>                                        
-			                                        </select>
-		                                        </div>
-		                                    </div>                                  		
-                                   		<br>
-                                   		
-                                   		<div class="col-sm-12">
+															</c:if>
+														</c:when>
+														<c:otherwise>
+															<c:if test="${!empty skus}">
+																<c:forEach items="${skus}" var="sku" varStatus="loop">
+																	<option value="${sku}">${sku}</option>
+																</c:forEach>
+															</c:if>
+														</c:otherwise>
+													</c:choose>
+												</select>
+											</div>
+										</div>
+										<br>
+
+										<div class="col-sm-12">
 											<h4>NR Calculator</h4>
 										</div>
 										<div class="col-sm-12">
@@ -365,6 +369,8 @@ span .#error {
 																		<h4>Please select .....</h4>
 																		<div id="room_fileds">
 																			<div id="content">
+																				<label id="fixedfee-error" class="error"
+																					for="fixedfee" style="visible: none;"> </label>
 																				<div class="col-sm-12">
 																					<div class="form-group col-md-12">
 																						<c:choose>
@@ -491,7 +497,7 @@ span .#error {
 																					</div>
 																					<div class="col-md-5" style="padding: 0px;">
 																						<input type="text" name="nr-pccrange"
-																							class="form-control validateNumber"																							
+																							class="form-control validateNumber"
 																							value="${chargeMap.pccrange}" id="text01">
 																					</div>
 																					<div class="col-md-5">
@@ -504,7 +510,8 @@ span .#error {
 																						<label>Greater than</label>
 																					</div>
 																					<div class="col-md-5" style="padding: 0px;">
-																						<label id="label01"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ${chargeMap.pccrange}</label>
+																						<label id="label01"> &nbsp; &nbsp; &nbsp;
+																							&nbsp; &nbsp; ${chargeMap.pccrange}</label>
 																					</div>
 
 																					<div class="col-md-5">
@@ -557,12 +564,15 @@ span .#error {
 															<div class="panel panel-default">
 																<div class="panel-heading">
 																	<h4 class="panel-title">
-																		<a data-toggle="collapse" data-parent="#accordion"
-																			href="#collapsefour1">Shipping Fee</a>
+																		<a id="shippingfee-link" data-toggle="collapse"
+																			data-parent="#accordion" href="#collapsefour1">Shipping
+																			Fee</a>
 																	</h4>
 																</div>
 																<div id="collapsefour1" class="panel-collapse collapse">
 																	<div class="panel-body">
+																		<label id="shippingfee-error" class="error"
+																			for="shippingfee" style="visible: none;"> </label>
 																		<div class="col-sm-12">
 																			<div class="col-sm-6">
 																				<div class="radio">
@@ -2680,7 +2690,7 @@ Custom and plugin javascript
 
 	<script type="text/javascript">
 		var v = 1;
-		var index = 0;		
+		var index = 0;
 		function myFunction() {
 			v++;
 			index = index + 1;
@@ -2715,7 +2725,7 @@ Custom and plugin javascript
 	<script type="text/javascript">
 		function addField(argument) {
 			var myTable = document.getElementById("myTable");
-			var currentIndex = myTable.rows.length;
+			var currentIndex = myTable.rows.length - 1;
 			var currentRow = myTable.insertRow(-1);
 
 			var linksBox = document.createElement("select");
@@ -2794,7 +2804,7 @@ Custom and plugin javascript
 		}
 		function addField2(argument) {
 			var myTable = document.getElementById("myTable2");
-			var currentIndex = myTable.rows.length;
+			var currentIndex = myTable.rows.length - 1;
 			var currentRow = myTable.insertRow(-1);
 
 			var linksBox = document.createElement("select");
@@ -2872,7 +2882,7 @@ Custom and plugin javascript
 		}
 		function addField3(argument) {
 			var myTable = document.getElementById("myTable3");
-			var currentIndex = myTable.rows.length;
+			var currentIndex = myTable.rows.length - 1;
 			var currentRow = myTable.insertRow(-1);
 
 			var linksBox = document.createElement("select");
@@ -2926,7 +2936,7 @@ Custom and plugin javascript
 		}
 		function addField4(argument) {
 			var myTable = document.getElementById("myTable4");
-			var currentIndex = myTable.rows.length;
+			var currentIndex = myTable.rows.length - 1;
 			var currentRow = myTable.insertRow(-1);
 
 			var linksBox = document.createElement("select");
@@ -2977,14 +2987,7 @@ Custom and plugin javascript
 			currentCell = currentRow.insertCell(-1);
 			currentCell.appendChild(addRowBox);
 		}
-
-	</script>
-	<script>
-		var app = angular.module('myApp', []);
-		app.controller('myCtrl', function($scope) {
-			$scope.firstname = "";
-		});
-	</script>
+	</script>	
 
 	<script language=JavaScript>
 		function additional(x) {
@@ -2996,7 +2999,7 @@ Custom and plugin javascript
 		function upto() {
 			document.getElementById("myBtn").disabled = false;
 		}
-	</script>	
+	</script>
 
 	<script type="text/javascript">
 		$(document)
@@ -3244,10 +3247,10 @@ Custom and plugin javascript
 							/* Retrive Radio Buttons Ends */
 
 							/* Retrive CheckBoxes Starts */
-							
+
 							if ('${event.selectAll}' == 'true')
 								$('#selectAllSku').iCheck('check');
-							
+
 							if ('${eventsBean.nrnReturnConfig.whicheverGreaterPCC}' == 'true') {
 								$('#whicheverGreaterPCC').iCheck('check');
 							}
@@ -3369,17 +3372,151 @@ Custom and plugin javascript
 								$('#revShippingFeeType_revShipFeePCC').iCheck(
 										'check');
 
+							$('#collapsefour1')
+									.on(
+											'hide.bs.collapse',
+											function(e) {
+
+												$('#shippingfee-error').hide();
+												var isWeightValid = false;
+												var isVolumeValid = false;
+												var selVal = $(
+														'input[name="nrnReturnConfig.shippingFeeType"]:checked')
+														.val();
+												if (selVal == 'variable') {
+													for (i = 0; i < 999; i++) {
+														var selectName = "nr-shippingfeeWeightVariable"
+																+ i
+																+ "-criteria";
+														var mySelect = $(
+																'select[name="'
+																		+ selectName
+																		+ '"] option:selected')
+																.val();
+														if (typeof mySelect === "undefined") {
+															break;
+														} else if (mySelect == "Additional") {
+															isWeightValid = true;
+															break;
+														}
+													}
+													for (i = 0; i < 999; i++) {
+														var selectName = "nr-shippingfeeVolumeVariable"
+																+ i
+																+ "-criteria";
+														var mySelect = $(
+																'select[name="'
+																		+ selectName
+																		+ '"] option:selected')
+																.val();
+														if (typeof mySelect === "undefined") {
+															break;
+														} else if (mySelect == "Additional") {
+															isVolumeValid = true;
+															break;
+														}
+													}
+												} else {
+
+													for (i = 0; i < 999; i++) {
+														var selectName = "nr-shippingfeeWeightFixed"
+																+ i
+																+ "-criteria";
+														var mySelect = $(
+																'select[name="'
+																		+ selectName
+																		+ '"] option:selected')
+																.val();
+														if (typeof mySelect === "undefined") {
+															break;
+														} else if (mySelect == "Additional") {
+															isWeightValid = true;
+															break;
+														}
+													}
+													for (i = 0; i < 999; i++) {
+														var selectName = "nr-shippingfeeVolumeFixed"
+																+ i
+																+ "-criteria";
+														var mySelect = $(
+																'select[name="'
+																		+ selectName
+																		+ '"] option:selected')
+																.val();
+														if (typeof mySelect === "undefined") {
+															break;
+														} else if (mySelect == "Additional") {
+															isVolumeValid = true;
+															break;
+														}
+													}
+
+												}
+
+												if (isWeightValid == false) {
+
+													$('#shippingfee-error')
+															.show();
+													document
+															.getElementById("shippingfee-error").innerHTML = "Please select Additional values for Dead Weight calculation";
+
+													e.preventDefault();
+												}
+
+												if (isVolumeValid == false) {
+
+													$('#shippingfee-error')
+															.show();
+													document
+															.getElementById("shippingfee-error").innerHTML = "Please select Additional values for Volumetric Weight calculation";
+													e.preventDefault();
+												}
+											});
+
+							$('#collapseTwo1')
+									.on(
+											'hide.bs.collapse',
+											function(e) {
+
+												$('#fixedfee-error').hide();
+												var isValid = false;
+
+												for (i = 0; i < 999; i++) {
+													var selectName = "nr-fixedfee"
+															+ i + "-criteria";
+													var mySelect = $(
+															'select[name="'
+																	+ selectName
+																	+ '"] option:selected')
+															.val();
+													if (typeof mySelect === "undefined") {
+														break;
+													} else if (mySelect == "Greater Than") {
+														isValid = true;
+														break;
+													}
+												}
+
+												if (isValid == false) {
+
+													$('#fixedfee-error').show();
+													document
+															.getElementById("fixedfee-error").innerHTML = "Please select Greater Than values";
+
+													e.preventDefault();
+												}
+											});
+
 							$('#selectAll').click(function() {
-								alert("Lets Work")
 								$('#multiSku option').prop('selected', true);
 							});
 
 							/* Retrive CheckBoxes Ends */
-							
+
 							$("#text01").keyup(function() {
 								$("#label01").text($(this).val()); //OR $("#label1").html($(this).val());
 							});
-							
+
 							$('.i-checks').iCheck({
 								checkboxClass : 'icheckbox_square-green',
 								radioClass : 'iradio_square-green',
@@ -3492,9 +3629,9 @@ Custom and plugin javascript
 										"Valid Start Date !").hide();
 								$("#endDateMessageG").html("Valid End Date !")
 										.hide();
-								nameAvailability=false;
+								nameAvailability = false;
 							} else {
-								nameAvailability=true;
+								nameAvailability = true;
 								$("#startDateMessageG").html(
 										"Valid Start Date !").show();
 								$("#endDateMessageG").html("Valid End Date !")
@@ -3544,10 +3681,9 @@ Custom and plugin javascript
 		for ( var selector in config) {
 			$(selector).chosen(config[selector]);
 		};
-	</script>	
-	<script type="text/javascript">	
-	
-	
+	</script>
+	<script type="text/javascript">
+		
 	</script>
 
 
