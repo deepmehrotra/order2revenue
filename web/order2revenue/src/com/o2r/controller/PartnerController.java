@@ -71,7 +71,6 @@ public class PartnerController {
 	ServletContext context;
 	@Autowired
 	private OrderService orderService;
-	
 
 	Properties props = null;
 	org.springframework.core.io.Resource resource = new ClassPathResource(
@@ -551,12 +550,14 @@ public class PartnerController {
 					partnerBean.setNoofdaysfromshippeddate(partnerBean
 							.getNoofdaysfromdeliverydate());
 				}
-				if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+				if (partnerBean.getPcName().toLowerCase()
+						.contains(GlobalConstant.PCFLIPKART)
 						&& !partnerBean.isIsshippeddatecalcPost()) {
 					partnerBean.setNoofdaysfromshippeddatePost(partnerBean
 							.getNoofdaysfromdeliverydatePost());
 				}
-				if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+				if (partnerBean.getPcName().toLowerCase()
+						.contains(GlobalConstant.PCFLIPKART)
 						&& !partnerBean.isIsshippeddatecalcOthers()) {
 					partnerBean.setNoofdaysfromshippeddateOthers(partnerBean
 							.getNoofdaysfromdeliverydateOthers());
@@ -630,14 +631,17 @@ public class PartnerController {
 		List<PartnerDetailsBean> PDBeans = new ArrayList<PartnerDetailsBean>();
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-			partnerList = ConverterClass.prepareListofPartnerBean(partnerService
-					.listPartners(helperClass.getSellerIdfromSession(request)));
-			for(PartnerBean PB : partnerList){
-				PartnerDetailsBean PDBean = orderService.detailsOfPartner(PB.getPcName(), sellerId);
-				if(PDBean != null)
+			partnerList = ConverterClass
+					.prepareListofPartnerBean(partnerService
+							.listPartners(helperClass
+									.getSellerIdfromSession(request)));
+			for (PartnerBean PB : partnerList) {
+				PartnerDetailsBean PDBean = orderService.detailsOfPartner(
+						PB.getPcName(), sellerId);
+				if (PDBean != null)
 					PDBeans.add(PDBean);
-			}			
-			
+			}
+
 		} catch (CustomException ce) {
 			log.error("ListAllPartner exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -907,7 +911,7 @@ public class PartnerController {
 				}
 
 			}
-			
+
 			Collections.sort(categoryList);
 			model.put("partner", partner);
 			model.put("categoryList", categoryList);
@@ -976,12 +980,14 @@ public class PartnerController {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
 		}
-		if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+		if (partnerBean.getPcName().toLowerCase()
+				.contains(GlobalConstant.PCFLIPKART)
 				&& !partnerBean.isIsshippeddatecalcPost()) {
 			partnerBean.setNoofdaysfromshippeddatePost(partnerBean
 					.getNoofdaysfromdeliverydatePost());
 		}
-		if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+		if (partnerBean.getPcName().toLowerCase()
+				.contains(GlobalConstant.PCFLIPKART)
 				&& !partnerBean.isIsshippeddatecalcOthers()) {
 			partnerBean.setNoofdaysfromshippeddateOthers(partnerBean
 					.getNoofdaysfromdeliverydateOthers());
@@ -1088,12 +1094,14 @@ public class PartnerController {
 			partnerBean.setNoofdaysfromshippeddate(partnerBean
 					.getNoofdaysfromdeliverydate());
 		}
-		if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+		if (partnerBean.getPcName().toLowerCase()
+				.contains(GlobalConstant.PCFLIPKART)
 				&& !partnerBean.isIsshippeddatecalcPost()) {
 			partnerBean.setNoofdaysfromshippeddatePost(partnerBean
 					.getNoofdaysfromdeliverydatePost());
 		}
-		if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+		if (partnerBean.getPcName().toLowerCase()
+				.contains(GlobalConstant.PCFLIPKART)
 				&& !partnerBean.isIsshippeddatecalcOthers()) {
 			partnerBean.setNoofdaysfromshippeddateOthers(partnerBean
 					.getNoofdaysfromdeliverydateOthers());
@@ -1545,8 +1553,8 @@ public class PartnerController {
 					categoryMap.put(cat.getCatName(),
 							chargeMap.get(cat.getCatName()));
 				}
-			}	
-			
+			}
+
 			model.put("categoryMap", categoryMap);
 			System.out.println(pbean.getFixedfeeList().size());
 			model.put("partner", pbean);
@@ -1752,7 +1760,8 @@ public class PartnerController {
 				pbean.setPcName(pbean.getPcName() + "-New");
 			}
 
-			Map<String, Float> sortedCategoryMap = new TreeMap<String, Float>(categoryMap);
+			Map<String, Float> sortedCategoryMap = new TreeMap<String, Float>(
+					categoryMap);
 			model.put("categoryMap", sortedCategoryMap);
 			model.put("partner", pbean);
 			model.put("chargeMap", chargeMap);
@@ -2396,12 +2405,14 @@ public class PartnerController {
 				partnerBean.setNoofdaysfromshippeddate(partnerBean
 						.getNoofdaysfromdeliverydate());
 			}
-			if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+			if (partnerBean.getPcName().toLowerCase()
+					.contains(GlobalConstant.PCFLIPKART)
 					&& !partnerBean.isIsshippeddatecalcPost()) {
 				partnerBean.setNoofdaysfromshippeddatePost(partnerBean
 						.getNoofdaysfromdeliverydatePost());
 			}
-			if (partnerBean.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+			if (partnerBean.getPcName().toLowerCase()
+					.contains(GlobalConstant.PCFLIPKART)
 					&& !partnerBean.isIsshippeddatecalcOthers()) {
 				partnerBean.setNoofdaysfromshippeddateOthers(partnerBean
 						.getNoofdaysfromdeliverydateOthers());
