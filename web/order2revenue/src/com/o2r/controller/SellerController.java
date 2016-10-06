@@ -514,9 +514,6 @@ public class SellerController {
 
 		log.info("$$$ planUpgrade Starts : SellerController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		/*String status=request.getParameter("payusuccessful");
-		
-		System.out.println(" Upgraevalue payusuccessful: "+request.getParameter("payusuccessful"));*/
 		
 		try {
 			
@@ -527,14 +524,13 @@ public class SellerController {
 				if(request.getParameter("count")!=null&&request.getParameter("amount")!=null)
 				{
 			Double currTotalAmount = new Double(request.getParameter("amount"));
-			//Long currOrderCount =2L;
 			Long currOrderCount = new Long(request.getParameter("count"));
 				
-			String txnStat="";
 			String status="Pending";
 			
 			log.info(" seller :"+helperClass.getSellerIdfromSession(request)+"status "+status+" txnId "+txnId);
 			log.info("currOrderCount : "+currOrderCount);
+			//Note: PID not used as of now but not removed if required later
 			int pId=request.getParameter("pId")!=null?Integer.parseInt(request.getParameter("pId")):0;
 			AccountTransaction at = sellerService.planUpgrade(status,txnId,
 					pId, currTotalAmount, currOrderCount,
@@ -552,6 +548,7 @@ public class SellerController {
 			model.put("payubaseurl", dataConfig.getPayubaseurl());
 			model.put("payuSalt", dataConfig.getPayuSalt());
 			model.put("payuMerchantKey", dataConfig.getPayuMerchantKey());
+			/*model.put("udf2", request.getParameter("planName"));*/
 		} catch (CustomException ce) {
 			log.error("planUpgrade exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -582,11 +579,13 @@ public class SellerController {
 			
 		/*Double currTotalAmount = new Double(request.getParameter("totalAmount"));
 		Long currOrderCount = new Long(request.getParameter("orderCount"));*/
+			System.out.println("planname : "+request.getParameter("planname"));
+			String planname=request.getParameter("planname");
 		String txnId=request.getParameter("txnId");
 		model =new HashMap<String, Object>();
 		String status=request.getParameter("payusuccessful")!=null?request.getParameter("payusuccessful"):"";
 		String txnStat="";
-		String planName=request.getParameter("planname");
+		//String planName=request.getParameter("planname");
 		if(status!=null&&!StringUtils.isEmpty(status))
 		{
 			model.put("status", status);
@@ -600,7 +599,7 @@ public class SellerController {
 			/*AccountTransaction at = sellerService.planUpgrade(txnStat,txnId,
 					planBean.getPid(), currTotalAmount, currOrderCount,
 					helperClass.getSellerIdfromSession(request));*/
-			AccountTransaction updated =sellerService.upgradeAccountTransaction(txnStat,planName, txnId,
+			AccountTransaction updated =sellerService.upgradeAccountTransaction(txnStat,planname, txnId,
 					helperClass.getSellerIdfromSession(request));
 			model.put("currTotalAmount", updated.getTransactionAmount());
 			model.put("currOrderCount", updated.getCurrentOrderCount());

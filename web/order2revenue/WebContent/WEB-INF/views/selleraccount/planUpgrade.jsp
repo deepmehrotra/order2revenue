@@ -66,7 +66,7 @@ public boolean empty(String s)
 	}
 	else
 		txnid=params.get("txnid");
-    udf2 = txnid;
+    udf2 = request.getParameter("planName");
 	String txn="abcd";
 	String hash="";
 	String hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
@@ -139,9 +139,10 @@ public boolean empty(String s)
 			$(".currPlanPriceTxt").html(planPrice);			
 			$(".currTotalAmount").val(totalAmount);
 			$(".currOrderCount").val(orderCount);
-			$(".planid").val(planId);
+			$(".planName").val(planName);
+			/* $(".planid").val(planId);
 			var pname=$(".successUrl").val()+planName;
-			$(".successUrl").val(pname);
+			$(".successUrl").val(pname); */
 			localStorage.setItem("totalAmount", totalAmount);
 			localStorage.setItem("orderCount", orderCount);
 			localStorage.setItem("txnid", '<%= txnid %>');
@@ -193,9 +194,9 @@ public boolean empty(String s)
 				$(".kkTaxAmountText").html(kktaxAmount);
 				$(".educessTaxAmountText").html(educessAmount);
 				$(".payuAmount").val(totalAmount);
-				$(".planid").val(planId);
-				var pname=$(".successUrl").val()+planName;
-				$(".successUrl").val(pname);
+				$(".planName").val(planName);
+				/* var pname=$(".successUrl").val()+planName;
+				$(".successUrl").val(pname); */
 				localStorage.setItem("totalAmount", totalAmount);
 				localStorage.setItem("orderCount", orderCount);
 				localStorage.setItem("pid", $(".selectPlanField").val());	
@@ -531,17 +532,17 @@ public boolean empty(String s)
 								<input type="hidden" name="key" value="<%= merchant_key %>" />
 								<input type="hidden" name="hash" value="<%= hash %>"/>
 							    <input type="hidden" name="txnid" value="<%= txnid %>" />
-							    <input type="hidden" name="udf2" value="<%= txnid %>" />
+							    <input type="hidden" name="udf2" class="udf2" value="<%= txnid %>" />
 								<input type="hidden" name="service_provider" value="payu_paisa" />
 							    <input type="hidden" name="amount" class="payuAmount" value="<%= (empty(params.get("amount"))) ? "" : params.get("amount") %>" />
 							    <input type="hidden" name="firstname" id="firstname" value="${myAccount.name}" />
 							    <input type="hidden" name="email" id="email" value="${myAccount.email}" />
 								<input type="hidden" name="phone" value="${myAccount.contactNo}" />
 								<input type="hidden" name="productinfo" value="${myAccount.email}"/>
-								<input type="hidden" name="surl" class="successUrl" value="${successurl}<%= txnid %>&planname="/>
-								<input type="hidden" name="furl" class="failureUrl" value="${failurl}<%= txnid %>&planname=" />
+								<input type="hidden" name="surl" class="successUrl" value="${successurl}<%= txnid %>&planname=<%= udf2 %>"/>
+								<input type="hidden" name="furl" class="failureUrl" value="${failurl}<%= txnid %>&planname=<%= udf2 %>" />
 								<input type="hidden" name="count" class="currOrderCount" value="" />
-								<input type="hidden" name="pId"  class="planid" value="" />
+								<input type="hidden" name="planName" class="planName" value="<%= udf2 %>" />
 					         	<% if(empty(hash)){ %>
 					            	<input type="submit" style="display:none;" value="Submit" />
 					          	<% } %>
