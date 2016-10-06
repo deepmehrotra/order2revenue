@@ -71,6 +71,8 @@ public class Layouter {
 			buildVendorSKUMappingHeaders(worksheet, startRowIndex, startColIndex);
 		} else if (sheetName.equalsIgnoreCase("Dlink_SKU_Mapping")) {
 			buildDlinkSKUMappingHeaders(worksheet, startRowIndex, startColIndex);
+		} else if (sheetName.equalsIgnoreCase("ProdCat_Comm_Event_Mapping")) {
+			buildProductCommEventHeaders(worksheet, startRowIndex, startColIndex);
 		}
 	}
 
@@ -1050,6 +1052,46 @@ public class Layouter {
 		cell4.setCellValue("Channel Name");
 		cell4.setCellStyle(headerCellStyle);
 	}
+	
+	public static void buildProductCommEventHeaders(HSSFSheet worksheet,
+			int startRowIndex, int startColIndex) {
+		// Create font style for the headers
+		Font font = worksheet.getWorkbook().createFont();
+		font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+
+		// Create cell style for the headers
+		HSSFCellStyle headerCellStyle = worksheet.getWorkbook()
+				.createCellStyle();
+		headerCellStyle.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);
+		headerCellStyle.setFillPattern(CellStyle.FINE_DOTS);
+		headerCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		headerCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		headerCellStyle.setWrapText(true);
+		headerCellStyle.setFont(font);
+		headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
+
+		// Create the column headers
+		HSSFRow rowHeader = worksheet.createRow((short) startRowIndex + 2);
+		rowHeader.setHeight((short) 500);
+
+		HSSFCell cell1 = rowHeader.createCell(startColIndex + 0);
+		cell1.setCellValue("Channel Name");
+		cell1.setCellStyle(headerCellStyle);
+
+		HSSFCell cell2 = rowHeader.createCell(startColIndex + 1);
+		cell2.setCellValue("Product Category");
+		cell2.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell3 = rowHeader.createCell(startColIndex + 2);
+		cell3.setCellValue("Commission Percent");
+		cell3.setCellStyle(headerCellStyle);
+
+		HSSFCell cell4 = rowHeader.createCell(startColIndex + 3);
+		cell4.setCellValue("Event Name");
+		cell4.setCellStyle(headerCellStyle);
+	}
+	
+	
 	
 
 	public static void buildChannelOrderReport(HSSFSheet worksheet,

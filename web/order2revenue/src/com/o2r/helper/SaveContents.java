@@ -4196,6 +4196,153 @@ public class SaveContents {
 		log.info("$$$ saveVendorSKUMappingContents ends : SaveContents $$$");
 		return validaterow;
 	}
+	
+	
+	public boolean saveProdCatCommissionEventContents(MultipartFile file,
+			int sellerId, String path, UploadReport uploadReport)
+			throws IOException {
+		log.info("$$$ saveProdCatCommissionEventContents starts : SaveContents $$$");
+		boolean validaterow = true;
+		StringBuffer errorMessage = null;
+		try {
+			Map<String, String> returnlist = new LinkedHashMap<>();
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			HSSFRow entry;
+			Integer noOfEntries = 1;
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			log.info(noOfEntries.toString());
+			log.debug("After getting no of rows" + noOfEntries);
+			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				Events event = null;
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
+				try {
+					if (entry.getCell(0) != null
+							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						if(entry.getCell(3) != null
+							&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							event = eventsService.getEvent(entry.getCell(3).toString(), sellerId);
+							System.out.println(event.getChannelName());
+							if (event != null && event.getChannelName().equalsIgnoreCase(entry.getCell(0).toString())) {
+								
+								if(event.getNrnReturnConfig()
+										.getNrCalculatorEvent()
+										.equalsIgnoreCase("variable")) {
+									
+									if(event.getNrnReturnConfig().getCommissionType().equalsIgnoreCase("categoryWise")) {
+										
+										List<NRnReturnCharges> chargesList = event.getNrnReturnConfig().getCharges();
+										if (entry.getCell(1) != null
+												&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+											Category prodcat = categoryService.getCategory(
+													entry.getCell(1).toString(), sellerId);
+											NRnReturnCharges nrnReturncharge = null;
+											if (prodcat != null) {
+												for (NRnReturnCharges charge : chargesList) {
+													if (charge.getChargeName()
+															.equalsIgnoreCase(
+																	prodcat.getCatName())) {
+														nrnReturncharge = charge;											
+													}
+												}
+
+												if (entry.getCell(2) != null
+														&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+
+													try {
+														float commPercent = Float
+																.valueOf(entry.getCell(2)
+																		.toString());
+
+														if (nrnReturncharge == null) {
+															nrnReturncharge = new NRnReturnCharges();
+															nrnReturncharge.setChargeAmount(commPercent);
+															nrnReturncharge.setChargeName(prodcat.getCatName());
+															nrnReturncharge
+																	.setConfig(event
+																			.getNrnReturnConfig());
+															event.getNrnReturnConfig()
+																	.getCharges()
+																	.add(nrnReturncharge);
+														} else {
+															nrnReturncharge
+																	.setChargeAmount(commPercent);
+														}
+
+													} catch (NumberFormatException e) {
+														errorMessage.append(" Commission percent should be a number ");
+														validaterow = false;
+													}
+												} else {
+													errorMessage
+															.append(" Commission percent is null ");
+													validaterow = false;
+												}
+											} else {
+												errorMessage
+														.append(" Product Category does not exist ");
+												validaterow = false;
+											}
+										} else {
+											errorMessage
+													.append(" Procduct Category is null ");
+											validaterow = false;
+										}
+										
+									} else {
+										errorMessage.append("Commision Type is Fixed for This Event.");
+										validaterow = false;
+									}																	
+								} else {
+									errorMessage.append("NR Calculator Is Not 'Variable' For this Event.");
+									validaterow = false;
+								}							
+							} else {
+								errorMessage.append("No Event By this Name On This Partner.");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append("Event Name Is Blank or Null.");
+							validaterow = false;
+						}						
+					} else {
+						errorMessage.append(" Partner Name is null ");
+						validaterow = false;
+					}
+					if (validaterow) {
+						System.out.println(event.getEventId());
+						eventsService.addEvent(event, sellerId);
+					} else {
+						returnlist.put(errorMessage.toString(), "");
+					}
+				} catch (Exception e) {
+					log.error("Failed! by SellerId : " + sellerId, e);
+					if (event != null) {
+						errorMessage.append("Invalid Input! ");
+						returnlist.put(errorMessage.toString(), "");
+					}
+				}
+				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
+						+ entry.getCell(2) + " 3 :" + entry.getCell(3));
+				// Pre save to generate id for use in hierarchy
+			}
+			Set<String> errorSet = returnlist.keySet();
+			downloadUploadReportXLS(offices, "ProdCat_Comm_Event_Mapping", 4,
+					errorSet, path, sellerId, uploadReport);
+		} catch (Exception e) {
+			log.error("Failed! by SellerId : " + sellerId, e);
+			addErrorUploadReport("ProdCat_Comm_Event_Mapping", sellerId, uploadReport);
+			throw new MultipartException("Constraints Violated");
+		}
+		log.info("$$$ saveProdCatCommissionEventContents ends : SaveContents $$$");
+		return validaterow;
+	}
+	
+	
 
 	private static String removeExtraQuote(String input) {
 		String out = input.replaceAll("'", "");

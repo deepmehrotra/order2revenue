@@ -593,6 +593,7 @@ public class EventsController {
 		Map<String, Float> chargeMap = new HashMap<String, Float>();
 		Events event = null;
 		Map<String, Float> categoryMap = new HashMap<String, Float>();
+		List<String> productList = new ArrayList<String>();
 		eventsBean
 				.setEventId(Integer.parseInt(request.getParameter("eventId")));
 		log.debug("***** Check : " + eventsBean.getEventId());
@@ -612,6 +613,13 @@ public class EventsController {
 				}
 				model.put("chargeMap", chargeMap);
 			}
+			List<Product> products = productService.listProducts(helperClass
+					.getSellerIdfromSession(request));
+			if (products != null && products.size() != 0) {
+				for (Product product : products) {
+					productList.add(product.getProductSkuCode());
+				}
+			}
 			List<Category> categoryList = categoryService
 					.listCategories(helperClass.getSellerIdfromSession(request));
 			for (Category cat : categoryList) {
@@ -626,6 +634,7 @@ public class EventsController {
 					partnerMap.put(bean.getPcName(), bean.getPcName());
 				}
 			}
+			model.put("skus", productList);
 			model.put("categoryMap", categoryMap);
 			model.put("partnerMap", partnerMap);
 		} catch (CustomException ce) {
@@ -647,12 +656,13 @@ public class EventsController {
 			@ModelAttribute("command") EventsBean eventsBean,
 			BindingResult result) {
 
-		log.info("$$$ addDuplicateEvent Starts : EventsController $$$");
+		log.info("$$$ editEvent Starts : EventsController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Float> chargeMap = new HashMap<String, Float>();
 		Events event = null;
 		List<String> skuList=null;
 		Map<String, Float> categoryMap = new HashMap<String, Float>();
+		List<String> productList = new ArrayList<String>();
 		eventsBean
 				.setEventId(Integer.parseInt(request.getParameter("eventId")));
 		log.debug("***** Check : " + eventsBean.getEventId());
@@ -810,6 +820,15 @@ public class EventsController {
 
 				model.put("chargeMap", chargeMap);
 			}
+			
+			List<Product> products = productService.listProducts(helperClass
+					.getSellerIdfromSession(request));
+			if (products != null && products.size() != 0) {
+				for (Product product : products) {
+					productList.add(product.getProductSkuCode());
+				}
+			}
+			
 			List<Category> categoryList = categoryService
 					.listCategories(helperClass.getSellerIdfromSession(request));
 			for (Category cat : categoryList) {
@@ -823,12 +842,8 @@ public class EventsController {
 				for (Partner bean : partnerList) {
 					partnerMap.put(bean.getPcName(), bean.getPcName());
 				}
-			}
-			System.out.println(eventsBean.getShippingfeeWeightFixedList());
-			System.out.println(eventsBean.getShippingfeeVolumeFixedList());
-			System.out.println(eventsBean.getShippingfeeWeightVariableList());
-			System.out.println(eventsBean.getShippingfeeVolumeVariableList());
-			System.out.println(eventsBean.getFixedfeeList());
+			}	
+			model.put("skus", productList);
 			model.put("event", eventsBean);
 			model.put("categoryMap", categoryMap);
 			model.put("partnerMap", partnerMap);
@@ -842,7 +857,7 @@ public class EventsController {
 			log.error("Failed!", e);
 			e.printStackTrace();
 		}
-		log.info("$$$ addDuplicateEvent Ends : EventsController $$$");
+		log.info("$$$ editEvent Ends : EventsController $$$");
 		return new ModelAndView("miscellaneous/addEvent", model);
 	}
 

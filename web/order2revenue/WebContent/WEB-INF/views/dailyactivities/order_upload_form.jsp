@@ -237,6 +237,8 @@ ol.d {
 										Category</option>
 									<option value="ProdCat_Comm_Mapping">Category wise
 										Commission Upload</option>
+									<option value="ProdCat_Comm_Event_Mapping">Category wise
+										Commission For Event Upload</option>
 									<option value="Tax_Category_Mapping">Tax Category
 										Upload</option>
 									<option value="Dlink_SKU_Mapping">D-link SKU Mapping Upload</option>
@@ -297,6 +299,9 @@ ol.d {
 											<option value="prodCat_Comm_Mapping"
 												data-show=".categorywisecommission">Category wise
 												Commission Upload</option>
+											<option value="prodCat_Comm_Event_Mapping"
+												data-show=".categorywisecommission">Category wise
+												Commission For Event Upload</option>
 											<option value="product_Tax_Mapping"
 												data-show=".taxcategoryupload">Tax Category Upload</option>
 											<option value="Dlink_SKU_Mapping"

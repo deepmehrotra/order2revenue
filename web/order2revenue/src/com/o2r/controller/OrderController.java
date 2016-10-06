@@ -488,6 +488,12 @@ public class OrderController {
 							uploadReport));
 					model.put("mapType", "prodCat_Comm_Mapping");
 					break;
+				case "prodCat_Comm_Event_Mapping":
+					model.put("prodCat_Comm_Event_Mapping", saveContents.saveProdCatCommissionEventContents(
+							files.get(0), sellerId, applicationPath,
+							uploadReport));
+					model.put("mapType", "prodCat_Comm_Event_Mapping");
+					break;
 
 				}
 				inputStream = files.get(0).getInputStream();

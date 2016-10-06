@@ -252,6 +252,9 @@ public class EventsDaoImpl implements EventsDao {
 			eventList=criteria.list();
 			if(eventList!=null&&eventList.size()!=0&&eventList.get(0)!=null)
 				event=(Events)eventList.get(0);
+			if(event.getNrnReturnConfig() != null){
+				Hibernate.initialize(event.getNrnReturnConfig().getCharges());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed! by sellerId : "+sellerID,e);
