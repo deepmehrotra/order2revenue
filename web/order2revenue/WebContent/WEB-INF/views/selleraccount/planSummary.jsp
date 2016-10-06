@@ -186,6 +186,15 @@ tbody {
    overflow-x: scroll;
    width:448px;
 }
+.para
+   {
+       position: relative;
+   top: -102px;
+   left: -2px;
+   font-size: 11px;
+   font-weight: 800;
+   color: #fff;
+   }
 </style>
 </head>
 <body>
