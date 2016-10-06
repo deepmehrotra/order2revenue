@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.DebitNoteBean;
+import com.o2r.bean.PartnerDetailsBean;
 import com.o2r.bean.PoPaymentBean;
 import com.o2r.bean.PoPaymentDetailsBean;
 import com.o2r.dao.OrderDao;
@@ -279,7 +280,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-	public List<Order> ordersByPartner(String pcName, int sellerID) {		
-		return orderDao.ordersByPartner(pcName, sellerID);
+	public PartnerDetailsBean detailsOfPartner(String pcName, int sellerID) {		
+		return orderDao.detailsOfPartner(pcName, sellerID);
 	}
 }

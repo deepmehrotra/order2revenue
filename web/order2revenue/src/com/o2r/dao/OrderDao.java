@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.DebitNoteBean;
+import com.o2r.bean.PartnerDetailsBean;
 import com.o2r.bean.PoPaymentBean;
 import com.o2r.bean.PoPaymentDetailsBean;
 import com.o2r.helper.CustomException;
@@ -130,5 +131,5 @@ public interface OrderDao {
 	
 	public List<Order> searchAsIsOrder(String criteria, String ID, int sellerId);
 	
-	public List<Order> ordersByPartner(String pcName, int sellerID);
+	public PartnerDetailsBean detailsOfPartner(String pcName, int sellerID);
 }

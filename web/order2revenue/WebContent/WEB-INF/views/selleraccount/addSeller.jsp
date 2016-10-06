@@ -179,7 +179,7 @@ span .#error {
 
 											<div class="col-sm-8">
 												<form:input type="text" class="form-control"
-													value="${seller.contactNo}" path="contactNo" />
+													value="${seller.contactNo}" path="contactNo" required="true" />
 											</div>
 										</div>
 										<div class="form-group">
