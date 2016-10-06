@@ -310,6 +310,12 @@ public boolean empty(String s)
 	    box-shadow: 2px solid;
 	    outline: none;
 	}
+	.labelpara
+    {
+        font-size: 11px;
+        position: relative;
+        top: 9px;
+    }
     </style>
  </head>
  <body>
@@ -419,7 +425,7 @@ public boolean empty(String s)
 								<tbody>
 									<tr>
 										<td>
-											Desired Plan
+											<label class="labelpara">Desired Plan </label>
 										</td>
 										<td>
 											<select class="form-control selectPlanField" name="pid" onchange="updateFields(this)" style="font-size: 12px;color: #1ab394;">
@@ -440,7 +446,7 @@ public boolean empty(String s)
 									</tr>
 									<tr>
 										<td>
-											Desired Order	
+											<label class="labelpara">Desired Orders</label>	
 										</td>
 										<td>
 											<input type="number" class="form-control currOrderCount" name="orderCount" oninput="updatePrices(this)" style="font-size: 12px;color: #1ab394;">
