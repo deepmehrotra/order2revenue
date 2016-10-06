@@ -10,30 +10,7 @@
 <script type="text/javascript"
 	src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script type="text/javascript">
-	function onclickviewExpCat(id) {
-		$.ajax({
-			url : 'viewExpenseGroup.html?expcategoryId=' + id,
-			success : function(data) {
-				if($(data).find('#j_username').length > 0){
-	        		window.location.href = "orderindex.html";
-	        	}else{
-	            	$('#centerpane').html(data);
-	        	}
-			}
-		});
-	}
-	function onclickAddTaxCategory() {
-		$.ajax({
-			url : 'addTaxCategory.html',
-			success : function(data) {
-				if($(data).find('#j_username').length > 0){
-	        		window.location.href = "orderindex.html";
-	        	}else{
-	            	$('#centerpane').html(data);
-	        	}
-			}
-		});
-	}
+	
 	function updateFields(obj) {
 		if ($(obj).val() && "notSelected" != $(obj).val()) {
 			var minAmount = parseInt($(obj).find(':selected').data('minamount'));
