@@ -72,19 +72,6 @@
 			$(".checkoutButton").prop('disabled', true);
 		}
 	}
-	function show_sidebar1(){
-		document.getElementById('box1').style.visibility="visible";		
-	}
-	function hide_sidebar1(){
-		document.getElementById('box1').style.visibility="hidden";	
-	}
-	function show_sidebar(){
-		document.getElementById('box').style.visibility="visible";		
-	}
-	function hide_sidebar(){
-		document.getElementById('box').style.visibility="hidden";		
-	}
-	
 </script>
 <style type="text/css">
 .column {
@@ -93,40 +80,13 @@
 	width: 100%;
 	margin-top: 20px;
 }
-
-#box
-    {
-        width: 55%;
-        background-color: #232728;
-        color: #fff;
-        padding: 7px 0px 5px 8px;
-        text-align: left;
-        float: left;
-        position: relative;
-        top: -36px;
-        right: 49px;
-    }
-
-#box1
-    {
-        width: 100%;
-        height: 82px;
-        background-color: #232728;
-        color: #fff;
-        padding: 6px 11px 0px 12px;
-        text-align: left;
-        text-align: justify;
-    }
-
 .heading {
 	color: #00a1f1;
 	font-weight: 500;
 }
-
 .table th {
 	border: 1px solid #ccc;
 }
-
 .para {
 	position: relative;
 	top: -87px;
@@ -158,10 +118,12 @@ input.star {
 
 label.star {
 	float: right;
-	padding: 7px;
-	font-size: 29px;
-	color: #444;
-	transition: all .2s;
+    padding: 1px;
+    font-size: 20px;
+    color: #444;
+    transition: all .2s;
+    position: relative;
+    right: 58px;
 }
 
 input.star:checked   ~ label.star:before {
@@ -196,39 +158,33 @@ label.star:before {
 	width: auto !important;
 	height: auto !important;
 }
-.scroll
-{
-	width: 100%;
-}
-thead tr th { 
+thead th 
+    { 
     height: 30px;
     line-height: 30px;
-     text-align: center; 
-     
+    text-align: center;
+    }
+table,tr,td,th
+{
+    border:1px solid #ccc;
+    padding:2px;
 }
-/* 
-table.scroll tbody {
-    height: 100px;
-    overflow-y: auto;
-    overflow-x: auto;
-} */
-
-tbody { border-top: 2px solid black; }
-
-tbody td, thead th {
-    border-right: 1px solid #ccc;
-    
+table td
+{
+    min-width: 88px;
 }
-tbody td:last-child, thead th:last-child {
-    border-right: none;
+.name
+{
+    white-space: nowrap;
 }
 thead,tbody { 
        display: block; 
    }
 tbody {
-   height: 200px; 
+   height: 100px; 
    overflow-y: auto; 
-   overflow-x: auto;
+   overflow-x: scroll;
+   width:448px;
 }
 </style>
 </head>
@@ -250,23 +206,17 @@ tbody {
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="col-lg-6 text-center" style="background: #f5f5f5;">
-							<h1 class="heading">Order Bucket</h1>
-							<div class="col-md-6">
-								<img src="/O2R/seller/img/bucket.png" alt="bucket" width="50%"
-									onmouseover="show_sidebar();" onmouseout="hide_sidebar();">
+							<h1 class="heading">Account Summary</h1>
+							<div class="col-md-6 tooltip-demo">
+								<img src="/O2R/seller/img/bucket.png" alt="bucket" width="50%" data-toggle="tooltip" data-placement="top" title="All balance credited into O2R account is non refundable & can only be used towards processing of orders & purchase of products/services from O2R.">
 								<p>
 									<b>Orders</b>
 								</p>
 								<p class="para black-color" style="padding: 9px 0px 4px 2px;font-size: 11px;">
 									<c:out value="${myAccount.sellerAccount.orderBucket}" />
 								</p>
-
-								<p id="box" style="visibility: hidden;">All balance credited
-									into O2R account is non refundable & can only be used towards
-									processing of orders & purchase of products/services from
-									Uniware.</p>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-6 tooltip-demo">
 								<div>
 									<p style="position: relative; left: -34%;">
 										<b>Complete life</b>
@@ -279,8 +229,7 @@ tbody {
 										<c:set var="ordersProcessed" value="${myAccount.sellerAccount.totalOrderProcessed}" />
 										<c:set var="remainingOrdersPer" value="${remainingOrders/orderBucket*100}" />
 										<c:set var="ordersProcessedPer" value="${ordersProcessed/orderBucket*100}" />
-										<div class="progress" onmouseover="show_sidebar1();"
-											onmouseout="hide_sidebar1();">
+										<div class="progress" data-toggle="tooltip" data-placement="top" title="These bar represent the number of order purchased,consumed,remaining during the current cycle and the whole life period">
 											<div class="progress-bar progress-bar-success"
 												role="progressbar"
 												style="width: <c:out value="${ordersProcessedPer}" />%; background-color: #b4d733;">
@@ -290,8 +239,7 @@ tbody {
 												role="progressbar" style="width: <c:out value="${remainingOrdersPer}" />%; background-color: #000;">
 												<c:out value="${remainingOrders}" /></div>
 										</div>
-										<div class="progress" onmouseover="show_sidebar1();"
-											onmouseout="hide_sidebar1();">
+										<div class="progress" data-toggle="tooltip" data-placement="left" title="These bar represent the number of order purchased,consumed,remaining during the current cycle and the whole life period">
 											<div class="progress-bar progress-bar-success"
 												role="progressbar" style="width: 60%;">746</div>
 											<div class="progress-bar progress-bar-warning"
@@ -312,8 +260,7 @@ tbody {
 									</c:otherwise>
 								</c:choose>						
 							</div>
-							<div class="col-md-12" style="margin-top: -137px;">
-								<h1 class="heading">Account Summary</h1>
+							<div class="col-md-12">
 								<div class="col-md-6 text-center">
 									<p>
 										<b>Current Plan</b>
@@ -338,26 +285,24 @@ tbody {
 									<br>
 									<h3>Activation Date</h3>
 									<p>
-										<b><fmt:formatDate type="date"
-												value="${myAccount.sellerAccount.ativationDate}" /></b>
+										<b>
+											<fmt:formatDate type="date"
+												value="${myAccount.sellerAccount.ativationDate}" />
+										</b>
 									</p>
-
 								</div>
 								<div class="col-md-6 text-center">
-									<p>
-										<b>Price per order</b>
-									</p>
-									<h1>
-										&#8377;
-										<c:out value="${myAccount.plan.planPrice}" />
-									</h1>
-									<a href="upgrade.html"><button class="btn"
-											style="background-color: #00a1f1; color: #fff;">Upgrade</button></a>
+									<p><b>Price per order</b></p>
+									<h2>
+										<b>&#8377; <c:out value="${myAccount.plan.planPrice}" /></b>
+									</h2>
+									<button class="btn" style="background-color:#00a1f1;color:#fff;margin-left: 16%;box-shadow: -2px 4px 0px #877070;font-weight: 800;">UPGRADE</button>
 									<br> <br>
 									<h3 style="margin-top: 16px;">Last Plan Upgrade Date</h3>
 									<p>
 										<b><fmt:formatDate type="date"
-												value="${myAccount.sellerAccount.lastTransaction}" /></b>
+												value="${myAccount.sellerAccount.lastTransaction}" />
+										</b>
 									</p>
 								</div>
 							</div>
@@ -366,19 +311,33 @@ tbody {
 						<div class="col-lg-6 text-center">
 							<div class="col-lg-12" style="background: #f5f5f5;">
 								<h1 class="heading">Payment History</h1>
-								<table class="table scroll">
-									<thead style="background-color: #e5e7e6;">
-										<tr>
-											<th>Invoice ID</th>
-											<th>Date of Transaction</th>
-											<th>Transaction ID</th>
-											<th>Status</th>
-											<th>Amount</th>
-											<th><img src="/O2R/seller/img/download.png" alt="download"></th>
-										</tr>
-									</thead>
-									<tbody style="background-color: #fff;">
-										<c:forEach items="${accountTransactions}" var="at">
+								<table class="table table-striped" style="width: 100%;background:#2f4050;color: #fff;margin: 0px;border: none;">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            Invoice ID
+                                        </th>
+                                        <th>
+                                            Date of Transaction
+                                        </th>
+                                        <th>
+                                            Transaction ID
+                                        </th>
+                                        <th>
+                                            Status
+                                        </th>
+                                        <th>
+                                            Amount
+                                        </th>
+                                        <th>
+                                            <img src="/O2R/seller/img/download.png" alt="download">
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <table class="table table-striped">
+                                <tbody>
+                                	<c:forEach items="${accountTransactions}" var="at">
 										<tr>
 											<td><c:out value="${at.invoiceId}"/></td>
 											<td><fmt:formatDate type="date" value="${at.transactionDate}"/></td>
@@ -387,45 +346,45 @@ tbody {
 											<td><c:out value="${at.transactionAmount}"/></td>
 											<td></td>
 										</tr>
-										</c:forEach>
-									</tbody>
-								</table>
+									</c:forEach>
+                                </tbody>
+                            </table>	   
 							</div>
 							<div class="col-lg-12"
 								style="background: #f5f5f5; margin-top: 20px;">
 								<h1 class="heading">Usage History</h1>
-								<table class="table scroll">
-									<thead style="background-color: #e5e7e6;">
-										<tr>
-											<th>Date</th>
-											<th>Amount Spent</th>
-											<th>Price / Order</th>
-											<th>Orders Bought</th>
-											<th>Orders Consumed</th>
-											<th>Orders Remaining</th>
-										</tr>
-									</thead>
-									<tbody style="background-color: #fff;">
-										<tr>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-										</tr>
-									</tbody>
-								</table>
+								<table class="table table-striped" style="width: 100%;background:#2f4050;color: #fff;margin: 0px;border: none;">
+	                                <thead>
+	                                    <tr>
+	                                        <th>Date</th>
+	                                        <th>Amount Spent</th>
+	                                        <th>Price / Order</th>
+	                                        <th>Orders Bought</th>
+	                                        <th>Orders Consumed</th>
+	                                        <th>Orders Remaining</th>
+	                                    </tr>
+	                                </thead>
+                            	</table>
+	                            <table class="table table-striped">
+	                                <tbody>
+	                                    <tr>
+	                                        <td>20 aug 2016</td>
+	                                        <td>200</td>
+	                                        <td>20</td>
+	                                        <td>2000</td>
+	                                        <td>2000</td>
+	                                        <td>898989898988</td>
+	                                    </tr>
+	                                </tbody>
+	                            </table> 
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<jsp:include page="../globalfooter.jsp"></jsp:include>
-
 		</div>
 	</div>
-
 	<jsp:include page="../globaljslinks.jsp"></jsp:include>
 	<script type="text/javascript">
 	var $table = $('table.scroll'),

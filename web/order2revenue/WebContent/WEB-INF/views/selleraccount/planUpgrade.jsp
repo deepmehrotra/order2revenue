@@ -253,7 +253,7 @@ public boolean empty(String s)
 	.column
 	{
 		background-color: #ededed;
-		height: 424px;
+		height: 370px;
 		width: 100%;
 	}
 	.column p
@@ -276,7 +276,7 @@ public boolean empty(String s)
 	{
 		background-color: #ededed;
 		height: 150px;
-		width: 100%;
+		width: 98%;
 		margin-top: 20px;
 	}
 	.column1 p
@@ -298,7 +298,7 @@ public boolean empty(String s)
 	{
 		color: #1ab394;
 	}
-	.sp{
+	.sp2{
 		color: #1ab394;
 		font-weight: 700;
 	}
@@ -321,11 +321,7 @@ public boolean empty(String s)
 			<div class="row">
                 <div class="col-lg-12">
 					<div class="col-lg-9">
-						<div class="col-lg-12 text-center">
-							<div class ="navy-line" style="border:1px solid #1ab395;width: 6%;margin-left: 47%;">
-							</div>
-							<h1>UPGRADE PLAN</h1>
-						</div>
+						
 						<%-- <div class="col-md-4">
 							<div class="column text-center">
 								<h3>Current Plan</h3>
@@ -525,7 +521,7 @@ public boolean empty(String s)
 							</form>
 							
 							<button type="button" disabled="true" id="check" class="btn btn-gray pull-right checkoutButton" 
-								style="width: 50%;margin-top: -14px;margin-right: 8px;box-shadow: 2px solid;box-shadow: 4px 11px 10px #ccc;" onclick="submitPayUForm();">Checkout</button>
+								style="width: 50%;margin-top: -5px;margin-right: 8px;box-shadow: 2px solid;box-shadow: 4px 11px 10px #ccc;" onclick="submitPayUForm();">Checkout</button>
 						</div>
 						<div>
 							<form action="<%= action1 %>" method="post" name="payuForm">
@@ -550,11 +546,11 @@ public boolean empty(String s)
 						</div>
 					</div>	
                 </div>
-				<div class="col-lg-12 text-center">
-					<p style="color: #000;position: relative;top: 6px;">
-						<span class="sp">Plz note</span> the above mentioned charges are subjected to additional service tax @ 15% over and above the stated charges.No additional or hidden charges<br>
-						<span class="sp">Order Count</span> is the number of orders purchased by the seller.The seller can choose to recharge his account with any amount equal to greater than the stated minimum amounts.<br>
-						<span class="sp">Purchased Orders</span> have unlimited time validity.They can used as per the consumption levels without any fixed monthly.liability.<br>
+				<div class="col-lg-12 text-center m-t">
+					<p style="color: #000;position: relative;top: 23px;">
+						<span class="sp2">Plz note</span> the above mentioned charges are subjected to additional service tax @ 15% over and above the stated charges.No additional or hidden charges<br>
+						<span class="sp2">Order Count</span> is the number of orders purchased by the seller.The seller can choose to recharge his account with any amount equal to greater than the stated minimum amounts.<br>
+						<span class="sp2">Purchased Orders</span> have unlimited time validity.They can used as per the consumption levels without any fixed monthly.liability.<br>
 						The seller will receive reminders to recharge his account when only 10% of purchased order count are left in the order bucket.
 					</p>
 				</div>
