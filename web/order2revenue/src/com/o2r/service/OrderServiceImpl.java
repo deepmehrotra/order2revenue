@@ -283,4 +283,16 @@ public class OrderServiceImpl implements OrderService {
 	public PartnerDetailsBean detailsOfPartner(String pcName, int sellerID) {		
 		return orderDao.detailsOfPartner(pcName, sellerID);
 	}
+	
+	@Override
+	public List<Order> findOrdersOnCriteria(String column, String value,
+			int sellerId, boolean poOrder, boolean isSearch, int pageNo) {
+		return orderDao.findOrdersOnCriteria(column, value, sellerId, poOrder, isSearch, pageNo);
+	}
+	
+	@Override
+	public int countOnCriteria(String column, String value, int sellerId,
+			boolean poOrder, boolean isSearch) {
+		return orderDao.countOnCriteria(column, value, sellerId, poOrder, isSearch);
+	}
 }

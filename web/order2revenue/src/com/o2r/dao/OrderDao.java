@@ -132,4 +132,10 @@ public interface OrderDao {
 	public List<Order> searchAsIsOrder(String criteria, String ID, int sellerId);
 	
 	public PartnerDetailsBean detailsOfPartner(String pcName, int sellerID);
+	
+	public List<Order> findOrdersOnCriteria(String column, String value, int sellerId,
+			boolean poOrder, boolean isSearch, int pageNo);
+	
+	public int countOnCriteria(String column, String value, int sellerId,
+			boolean poOrder, boolean isSearch);
 }

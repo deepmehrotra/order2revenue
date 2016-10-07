@@ -722,34 +722,49 @@ public class OrderController {
 			} else if (request.getParameter("status") != null) {
 				String status = request.getParameter("status");
 				if (status.equalsIgnoreCase("return")) {
-					returnlist = ConverterClass.prepareListofBean(orderService
+					
+					int pageNo = request.getParameter("page") != null ? Integer
+							.parseInt(request.getParameter("page")) : 0;
+					returnlist = ConverterClass.prepareListofBean
+							(orderService.findOrdersOnCriteria("status", "Return Recieved", sellerId, false, false, pageNo));
+					
+					int returnCount = orderService.countOnCriteria("status", "Return Recieved", sellerId, false, false);
+					/*returnlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Return Recieved", sellerId,
 									false, false));
 					List<OrderBean> orderList = ConverterClass
 							.prepareListofBean(orderService.findOrders(
 									"status", "Return Limit Crossed", sellerId,
-									false, false));
-					if (orderList != null&&returnlist!=null) {
-						returnlist.addAll(orderList);
+									false, false));*/
+					if(returnlist != null){
 						model.put("orders", returnlist);
 					}
-					else if(orderList==null&&returnlist!=null)
-					{
-						model.put("orders", returnlist);
-					}
-					else if(returnlist==null&&orderList!=null)
-					{
-						model.put("orders", orderList);
-					}
-					
-
+					System.out.println(returnlist.size()+ " : "+returnCount);
+					model.put("returnCount", returnCount);
+					model.put("listSize", (listSize + (listSize*pageNo)));
+					model.put("searchStatus", "Return");
 					poOrderlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Return Recieved", sellerId,
 									true, false));
 					model.put("poOrders", poOrderlist);
 
 				} else if (status.equalsIgnoreCase("payment")) {
-					returnlist = ConverterClass.prepareListofBean(orderService
+					
+					int pageNo = request.getParameter("page") != null ? Integer
+							.parseInt(request.getParameter("page")) : 0;
+					returnlist = ConverterClass.prepareListofBean
+							(orderService.findOrdersOnCriteria("status", "Payment Recieved", sellerId, false, false, pageNo));
+					
+					int paymentCount = orderService.countOnCriteria("status", "Payment Recieved", sellerId, false, false);
+					System.out.println(returnlist.size()+ " : "+paymentCount);
+					if(returnlist != null){
+						model.put("orders", returnlist);
+					}
+					model.put("paymentCount", paymentCount);
+					model.put("listSize", (listSize + (listSize*pageNo)));
+					model.put("searchStatus", "Payment");
+					
+					/*returnlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Payment Recieved", sellerId,
 									false, false));
 					List<OrderBean> orderList = ConverterClass
@@ -758,18 +773,31 @@ public class OrderController {
 									false, false));
 					if (orderList != null) {
 						returnlist.addAll(orderList);
-					}
-					model.put("orders", returnlist);
+					}*/					
 
 					poOrderlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Payment Recieved", sellerId,
 									true, false));
 					model.put("poOrders", poOrderlist);
 				} else if (status.equalsIgnoreCase("actionable")) {
-					returnlist = ConverterClass.prepareListofBean(orderService
+					
+					int pageNo = request.getParameter("page") != null ? Integer
+							.parseInt(request.getParameter("page")) : 0;
+					returnlist = ConverterClass.prepareListofBean
+							(orderService.findOrdersOnCriteria("finalStatus", "Actionable", sellerId, false, false, pageNo));
+					
+					int actionableCount = orderService.countOnCriteria("finalStatus", "Actionable", sellerId, false, false);
+					System.out.println(returnlist.size()+ " : "+actionableCount);
+					if(returnlist != null){
+						model.put("orders", returnlist);
+					}					
+					model.put("actionableCount", actionableCount);
+					model.put("listSize", (listSize + (listSize*pageNo)));
+					model.put("searchStatus", "Actionable");
+					/*returnlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("finalStatus", "Actionable", sellerId,
 									false, false));
-					model.put("orders", returnlist);
+					model.put("orders", returnlist);*/
 
 					poOrderlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("finalStatus", "Actionable", sellerId,
