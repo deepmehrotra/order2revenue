@@ -5575,5 +5575,99 @@ public class OrderDaoImpl implements OrderDao {
 		}		
 		return PDBean;
 	}
+	
+	@Override
+	public List<Order> findOrdersOnCriteria(String column, String value,
+			int sellerId, boolean poOrder, boolean isSearch, int pageNo) {
+		
+		List<Order> orderlist = null;
+		Criteria criteria = null;
+		List tempList = null;
+		Session session = null;
+		
+		try {
+			
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			criteria = session.createCriteria(Order.class);
+			/*criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
+					CriteriaSpecification.LEFT_JOIN);*/
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN);
+			criteria.add(Restrictions.eq("seller.id", sellerId));
+			if(value.equalsIgnoreCase("Return Recieved")){
+				criteria.add(Restrictions.or(Restrictions.eq(column, "Return Recieved"),Restrictions.eq(column, "Return Limit Crossed")));
+			} else if(value.equalsIgnoreCase("Payment Recieved")){
+				criteria.add(Restrictions.or(Restrictions.eq(column, "Payment Recieved"),Restrictions.eq(column, "Payment Deducted")));
+			} else {
+				criteria.add(Restrictions.eq(column, value));
+			}
+			criteria.setFirstResult(pageNo * pageSize);
+			criteria.setMaxResults(pageSize);
+			criteria.add(Restrictions.eq("poOrder", poOrder))
+				.addOrder(org.hibernate.criterion.Order.desc("lastActivityOnOrder"))
+				.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			
+			tempList = criteria.list();
+			if (tempList != null && tempList.size() != 0
+					&& tempList.get(0) != null) {
+				orderlist = tempList;
+				if (orderlist != null && orderlist.size() != 0) {
+					for (Order order : orderlist) {
+						Hibernate.initialize(order.getOrderTimeline());
+					}
+				}
+			}
+			
+		} catch (Exception e) {
+			log.error("Failed By Seller ID : "+sellerId, e);
+			e.printStackTrace();
+		} finally {
+			if(session != null)
+				session.close();
+		}
+		
+		return orderlist;
+	}
+	
+	@Override
+	public int countOnCriteria(String column, String value, int sellerId,
+			boolean poOrder, boolean isSearch) {		
+		
+		Criteria criteria = null;
+		int resultCount = 0;
+		Session session = null;
+		
+		try {
+			
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			criteria = session.createCriteria(Order.class);
+			/*criteria.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
+					CriteriaSpecification.LEFT_JOIN);*/
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN);
+			criteria.add(Restrictions.eq("seller.id", sellerId));
+			if(value.equalsIgnoreCase("Return Recieved")){
+				criteria.add(Restrictions.or(Restrictions.eq(column, "Return Recieved"),Restrictions.eq(column, "Return Limit Crossed")));
+			} else if(value.equalsIgnoreCase("Payment Recieved")){
+				criteria.add(Restrictions.or(Restrictions.eq(column, "Payment Recieved"),Restrictions.eq(column, "Payment Deducted")));
+			} else {
+				criteria.add(Restrictions.eq(column, value));
+			}			
+			criteria.add(Restrictions.eq("poOrder", poOrder));				
+			criteria.setProjection(Projections.rowCount());
+			resultCount = (int)criteria.uniqueResult();			
+			
+		} catch (Exception e) {
+			log.error("Failed By Seller ID : "+sellerId, e);
+			e.printStackTrace();
+		} finally {
+			if(session != null)
+				session.close();
+		}
+		
+		return resultCount;
+	}
 
 }
