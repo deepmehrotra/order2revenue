@@ -2540,7 +2540,9 @@ public class OrderDaoImpl implements OrderDao {
 						.containsKey(GlobalConstant.percentSPPCCHigher) ? chargesMap
 						.get(GlobalConstant.percentSPPCCHigher) * SP / 100
 						: 0;
-				if (chargesMap.containsKey(GlobalConstant.fixedAmtPCC)
+				if (!chargesMap.containsKey(GlobalConstant.fixedAmtPCC)) {
+					pccAmount = percentAmount;
+				} else if (chargesMap.containsKey(GlobalConstant.fixedAmtPCC)
 						&& percentAmount > chargesMap
 								.get(GlobalConstant.fixedAmtPCC)) {
 					pccAmount = percentAmount;
