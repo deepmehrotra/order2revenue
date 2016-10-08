@@ -3514,7 +3514,7 @@ input+label {
 									"ifChecked", revShippingFeeSF);
 							$("#revShippingFeeType_revShipFeeVar").on(
 									"ifChecked", revShipFeeVar);
-
+							
 							/* $('#paymentField').change(function() {
 								$('.payment-box').hide();
 								$('#' + $(this).val()).fadeIn();
@@ -3855,7 +3855,7 @@ input+label {
 															break;
 														}
 													}
-												} else {
+												} else if (selVal == 'fixed') {
 
 													for (i = 0; i < 999; i++) {
 														var selectName = "nr-shippingfeeWeightFixed"
@@ -3890,6 +3890,9 @@ input+label {
 														}
 													}
 
+												} else {
+													isWeightValid = true;
+													isVolumeValid = true;
 												}
 
 												if (isWeightValid == false) {
@@ -3935,6 +3938,13 @@ input+label {
 													} else if (mySelect == "Greater Than") {
 														isValid = true;
 														break;
+													}
+													
+													if (i==0) {
+														var rangeVal = $("#txt_name0").val();
+														if (rangeVal.length === 0 || !rangeVal.trim()) {
+															isValid = true;
+														}
 													}
 												}
 

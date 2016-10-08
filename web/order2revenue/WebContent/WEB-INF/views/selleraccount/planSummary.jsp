@@ -80,23 +80,19 @@
 	width: 100%;
 	margin-top: 20px;
 }
+
 .heading {
 	color: #00a1f1;
 	font-weight: 500;
 }
+
 .table th {
 	border: 1px solid #ccc;
 }
-.para {
-	position: relative;
-	top: -87px;
-	left: -2px;
-	font-size: 14px;
-	font-weight: 800;
-}
 
 @import
-	url(https://fonts.googleapis.com/css?family=Roboto:500,100,300,700,400);
+	url(https://fonts.googleapis.com/css?family=Roboto:500,100,300,700,400)
+	;
 
 div.title {
 	font-size: 2em;
@@ -118,12 +114,12 @@ input.star {
 
 label.star {
 	float: right;
-    padding: 1px;
-    font-size: 20px;
-    color: #444;
-    transition: all .2s;
-    position: relative;
-    right: 58px;
+	padding: 1px;
+	font-size: 20px;
+	color: #444;
+	transition: all .2s;
+	position: relative;
+	right: 58px;
 }
 
 input.star:checked   ~ label.star:before {
@@ -158,43 +154,45 @@ label.star:before {
 	width: auto !important;
 	height: auto !important;
 }
-thead th 
-    { 
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-    }
-table,tr,td,th
-{
-    border:1px solid #ccc;
-    padding:2px;
+
+thead th {
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
 }
-table td
-{
-    min-width: 88px;
+
+table, tr, td, th {
+	border: 1px solid #ccc;
+	padding: 2px;
 }
-.name
-{
-    white-space: nowrap;
+
+table td {
+	min-width: 88px;
 }
-thead,tbody { 
-       display: block; 
-   }
+
+.name {
+	white-space: nowrap;
+}
+
+thead, tbody {
+	display: block;
+}
+
 tbody {
-   height: 100px; 
-   overflow-y: auto; 
-   overflow-x: scroll;
-   width:448px;
+	height: 100px;
+	overflow-y: auto;
+	overflow-x: scroll;
+	width: 476px;
 }
-.para
-   {
-       position: relative;
-   top: -102px;
-   left: -2px;
-   font-size: 11px;
-   font-weight: 800;
-   color: #fff;
-   }
+
+.para {
+	position: relative;
+	top: -102px;
+	left: -2px;
+	font-size: 11px;
+	font-weight: 800;
+	color: #fff !important;
+}
 </style>
 </head>
 <body>
@@ -217,11 +215,14 @@ tbody {
 						<div class="col-lg-6 text-center" style="background: #f5f5f5;">
 							<h1 class="heading">Account Summary</h1>
 							<div class="col-md-6 tooltip-demo">
-								<img src="/O2R/seller/img/bucket.png" alt="bucket" width="50%" data-toggle="tooltip" data-placement="top" title="All balance credited into O2R account is non refundable & can only be used towards processing of orders & purchase of products/services from O2R.">
+								<img src="/O2R/seller/img/bucket.png" alt="bucket" width="50%"
+									data-toggle="tooltip" data-placement="top"
+									title="All balance credited into O2R account is non refundable & can only be used towards processing of orders & purchase of products/services from O2R.">
 								<p>
 									<b>Orders</b>
 								</p>
-								<p class="para black-color" style="padding: 9px 0px 4px 2px;font-size: 11px;">
+								<p class="para black-color"
+									style="padding: 9px 0px 4px 2px; font-size: 11px;">
 									<c:out value="${myAccount.sellerAccount.orderBucket}" />
 								</p>
 							</div>
@@ -231,43 +232,55 @@ tbody {
 										<b>Complete life</b>
 									</p>
 								</div>
-								<c:set var="orderBucket" value="${myAccount.sellerAccount.orderBucket}"/>
+								<c:set var="orderBucket"
+									value="${myAccount.sellerAccount.orderBucket}" />
 								<c:choose>
 									<c:when test="${orderBucket != null && orderBucket > 0}">
-										<c:set var="remainingOrders" value="${myAccount.sellerAccount.orderBucket - myAccount.sellerAccount.totalOrderProcessed}" />
-										<c:set var="ordersProcessed" value="${myAccount.sellerAccount.totalOrderProcessed}" />
-										<c:set var="remainingOrdersPer" value="${remainingOrders/orderBucket*100}" />
-										<c:set var="ordersProcessedPer" value="${ordersProcessed/orderBucket*100}" />
-										<div class="progress" data-toggle="tooltip" data-placement="top" title="These bar represent the number of order purchased,consumed,remaining during the current cycle and the whole life period">
+										<c:set var="remainingOrders"
+											value="${myAccount.sellerAccount.orderBucket - myAccount.sellerAccount.totalOrderProcessed}" />
+										<c:set var="ordersProcessed"
+											value="${myAccount.sellerAccount.totalOrderProcessed}" />
+										<c:set var="remainingOrdersPer"
+											value="${remainingOrders/orderBucket*100}" />
+										<c:set var="ordersProcessedPer"
+											value="${ordersProcessed/orderBucket*100}" />
+										<div class="progress" data-toggle="tooltip"
+											data-placement="top"
+											title="These bar represent the number of order purchased,consumed,remaining during the current cycle and the whole life period">
 											<div class="progress-bar progress-bar-success"
 												role="progressbar"
 												style="width: <c:out value="${ordersProcessedPer}" />%; background-color: #b4d733;">
 												<c:out value="${ordersProcessed}" />
 											</div>
 											<div class="progress-bar progress-bar-warning"
-												role="progressbar" style="width: <c:out value="${remainingOrdersPer}" />%; background-color: #000;">
-												<c:out value="${remainingOrders}" /></div>
+												role="progressbar"
+												style="width: <c:out value="${remainingOrdersPer}" />%; background-color: #000;">
+												<c:out value="${remainingOrders}" />
+											</div>
 										</div>
-										<div class="progress" data-toggle="tooltip" data-placement="left" title="These bar represent the number of order purchased,consumed,remaining during the current cycle and the whole life period">
+										<div class="progress" data-toggle="tooltip"
+											data-placement="left"
+											title="These bar represent the number of order purchased,consumed,remaining during the current cycle and the whole life period">
 											<div class="progress-bar progress-bar-success"
 												role="progressbar" style="width: 60%;">746</div>
 											<div class="progress-bar progress-bar-warning"
-												role="progressbar" style="width: 40%; background-color: #000;">
-												254</div>
+												role="progressbar"
+												style="width: 40%; background-color: #000;">254</div>
 										</div>
 										<div>
 											<p style="position: relative; left: -31%; top: -5px;">
 												<b>Complete Cycle</b>
 											</p>
 										</div>
-										<p id="box1" style="visibility: hidden;">These bar represent
-											the number of order purchased,consumed,remaining during the
-											current cycle and the whole life period</p>
+										<p id="box1" style="visibility: hidden;">These bar
+											represent the number of order purchased,consumed,remaining
+											during the current cycle and the whole life period</p>
 									</c:when>
 									<c:otherwise>
-										<div>Nothing in Order Bucket yet. Please purchase/upgrade your plan.</div>
+										<div>Nothing in Order Bucket yet. Please
+											purchase/upgrade your plan.</div>
 									</c:otherwise>
-								</c:choose>						
+								</c:choose>
 							</div>
 							<div class="col-md-12">
 								<div class="col-md-6 text-center">
@@ -294,24 +307,25 @@ tbody {
 									<br>
 									<h3>Activation Date</h3>
 									<p>
-										<b>
-											<fmt:formatDate type="date"
+										<b> <fmt:formatDate type="date"
 												value="${myAccount.sellerAccount.ativationDate}" />
 										</b>
 									</p>
 								</div>
 								<div class="col-md-6 text-center">
-									<p><b>Price per order</b></p>
+									<p>
+										<b>Price per order</b>
+									</p>
 									<h2>
 										<b>&#8377; <c:out value="${myAccount.plan.planPrice}" /></b>
 									</h2>
-									<button class="btn" style="background-color:#00a1f1;color:#fff;margin-left: 16%;box-shadow: -2px 4px 0px #877070;font-weight: 800;">UPGRADE</button>
+									<button class="btn"
+										style="background-color: #00a1f1; color: #fff; margin-left: 16%; box-shadow: -2px 4px 0px #877070; font-weight: 800;">UPGRADE</button>
 									<br> <br>
 									<h3 style="margin-top: 16px;">Last Plan Upgrade Date</h3>
 									<p>
 										<b><fmt:formatDate type="date"
-												value="${myAccount.sellerAccount.lastTransaction}" />
-										</b>
+												value="${myAccount.sellerAccount.lastTransaction}" /> </b>
 									</p>
 								</div>
 							</div>
@@ -320,72 +334,64 @@ tbody {
 						<div class="col-lg-6 text-center">
 							<div class="col-lg-12" style="background: #f5f5f5;">
 								<h1 class="heading">Payment History</h1>
-								<table class="table table-striped" style="width: 100%;background:#2f4050;color: #fff;margin: 0px;border: none;">
-                                    <thead>
-                                    <tr>
-                                        <th>
-                                            Invoice ID
-                                        </th>
-                                        <th>
-                                            Date of Transaction
-                                        </th>
-                                        <th>
-                                            Transaction ID
-                                        </th>
-                                        <th>
-                                            Status
-                                        </th>
-                                        <th>
-                                            Amount
-                                        </th>
-                                        <th>
-                                            <img src="/O2R/seller/img/download.png" alt="download">
-                                        </th>
-                                    </tr>
-                                </thead>
-                            </table>
-                            <table class="table table-striped">
-                                <tbody>
-                                	<c:forEach items="${accountTransactions}" var="at">
+								<table class="table table-striped"
+									style="width: 100%; background: #2f4050; color: #fff; margin: 0px; border: none;">
+									<thead>
 										<tr>
-											<td><c:out value="${at.invoiceId}"/></td>
-											<td><fmt:formatDate type="date" value="${at.transactionDate}"/></td>
-											<td><c:out value="${at.transactionId}"/></td>
-											<td><c:out value="${at.status}"/></td>
-											<td><c:out value="${at.transactionAmount}"/></td>
-											<td></td>
+											<th>Invoice ID</th>
+											<th>Date of Transaction</th>
+											<th>Transaction ID</th>
+											<th>Status</th>
+											<th>Amount</th>
+											<th><img src="/O2R/seller/img/download.png"
+												alt="download"></th>
 										</tr>
-									</c:forEach>
-                                </tbody>
-                            </table>	   
+									</thead>
+								</table>
+								<table class="table table-striped">
+									<tbody>
+										<c:forEach items="${accountTransactions}" var="at">
+											<tr>
+												<td><c:out value="${at.invoiceId}" /></td>
+												<td><fmt:formatDate type="date"
+														value="${at.transactionDate}" /></td>
+												<td><c:out value="${at.transactionId}" /></td>
+												<td><c:out value="${at.status}" /></td>
+												<td><c:out value="${at.transactionAmount}" /></td>
+												<td></td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
 							</div>
 							<div class="col-lg-12"
 								style="background: #f5f5f5; margin-top: 20px;">
 								<h1 class="heading">Usage History</h1>
-								<table class="table table-striped" style="width: 100%;background:#2f4050;color: #fff;margin: 0px;border: none;">
-	                                <thead>
-	                                    <tr>
-	                                        <th>Date</th>
-	                                        <th>Amount Spent</th>
-	                                        <th>Price / Order</th>
-	                                        <th>Orders Bought</th>
-	                                        <th>Orders Consumed</th>
-	                                        <th>Orders Remaining</th>
-	                                    </tr>
-	                                </thead>
-                            	</table>
-	                            <table class="table table-striped">
-	                                <tbody>
-	                                    <tr>
-	                                        <td>20 aug 2016</td>
-	                                        <td>200</td>
-	                                        <td>20</td>
-	                                        <td>2000</td>
-	                                        <td>2000</td>
-	                                        <td>898989898988</td>
-	                                    </tr>
-	                                </tbody>
-	                            </table> 
+								<table class="table table-striped"
+									style="width: 100%; background: #2f4050; color: #fff; margin: 0px; border: none;">
+									<thead>
+										<tr>
+											<th>Date</th>
+											<th>Amount Spent</th>
+											<th>Price / Order</th>
+											<th>Orders Bought</th>
+											<th>Orders Consumed</th>
+											<th>Orders Remaining</th>
+										</tr>
+									</thead>
+								</table>
+								<table class="table table-striped">
+									<tbody>
+										<tr>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
