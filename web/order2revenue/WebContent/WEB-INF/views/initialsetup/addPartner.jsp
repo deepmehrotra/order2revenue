@@ -4146,6 +4146,10 @@ input+label {
 								38 : {
 									id : 38,
 									text : 'Chennai'
+								},
+								38 : {
+									id : 38,
+									text : 'Bihar'
 								}
 							};
 							var pick = $("#pickList").pickList({
