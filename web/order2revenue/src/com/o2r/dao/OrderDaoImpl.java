@@ -365,9 +365,11 @@ public class OrderDaoImpl implements OrderDao {
 								} else if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("fixed")) {
+									double commissiontemp=(order.getOrderSP() - order
+											.getGrossNetRate()) * order.getQuantity();
 									
-									order.setPartnerCommission((order.getOrderSP() - order
-											.getGrossNetRate()) * order.getQuantity());
+									order.setPartnerCommission(commissiontemp-dataConfig.getServiceTax()*commissiontemp/100);
+									order.setServiceTax((float)(dataConfig.getServiceTax()*commissiontemp/100));
 
 									if (partner.isTdsApplicable())
 										order.getOrderTax()
@@ -415,10 +417,13 @@ public class OrderDaoImpl implements OrderDao {
 										|| event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("fixed")) {
-									props = PropertiesLoaderUtils
-											.loadProperties(resource);
-									order.setPartnerCommission((order.getOrderSP() - order
-											.getGrossNetRate()) * order.getQuantity());
+									/*props = PropertiesLoaderUtils
+											.loadProperties(resource);*/
+									double commissiontemp=(order.getOrderSP() - order
+											.getGrossNetRate()) * order.getQuantity();
+									
+									order.setPartnerCommission(commissiontemp-dataConfig.getServiceTax()*commissiontemp/100);
+									order.setServiceTax((float)(dataConfig.getServiceTax()*commissiontemp/100));
 
 									if (partner.isTdsApplicable())
 										order.getOrderTax()
@@ -431,8 +436,13 @@ public class OrderDaoImpl implements OrderDao {
 								}
 
 							} else {
-								order.setPartnerCommission((order.getOrderSP() - order
-										.getGrossNetRate()) * order.getQuantity());
+								double commissiontemp=(order.getOrderSP() - order
+										.getGrossNetRate()) * order.getQuantity();
+								
+								order.setPartnerCommission(commissiontemp-dataConfig.getServiceTax()*commissiontemp/100);
+								order.setServiceTax((float)(dataConfig.getServiceTax()*commissiontemp/100));
+								/*order.setPartnerCommission((order.getOrderSP() - order
+										.getGrossNetRate()) * order.getQuantity());*/
 
 								if (partner.isTdsApplicable())
 									order.getOrderTax()
