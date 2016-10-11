@@ -154,8 +154,15 @@ span .#error {
 										<div class="form-group">
 											<label class="col-sm-4 control-label">Select Channel</label>
 											<div class="col-sm-8">
-												<form:select path="channelName" items="${partnerMap}"
-													id="channelName" class="form-control"></form:select>
+												<form:select path="channelName" 
+													id="channelName" class="form-control">
+													<c:forEach var="partner" items="${partnerMap}">
+														<c:if test="${event.channelName eq partner.value}">
+															<option id="" value="${partner.value}" selected>${partner.value}</option>
+														</c:if>														
+       													<option id="" value="${partner.value}">${partner.value}</option>   
+   													</c:forEach>													
+												</form:select>
 											</div>
 										</div>
 									</div>
@@ -3528,8 +3535,7 @@ Custom and plugin javascript
 								forceParse : false,
 								calendarWeeks : true,
 								autoclose : true
-							});
-
+							});							
 						});
 
 		function submitOrder() {

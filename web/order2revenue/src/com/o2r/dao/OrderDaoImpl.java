@@ -1279,6 +1279,10 @@ public class OrderDaoImpl implements OrderDao {
 							.getReturnorrtoQty()))
 							- orderReturn.getReturnOrRTOChargestoBeDeducted());
 				}
+				
+				if(orderReturn != null && orderReturn.getBadReturnQty() > 0 && order != null){
+					order.setGrossProfit(order.getGrossProfit() - (orderReturn.getBadReturnQty()*order.getProductCost()));
+				}
 
 				order.getOrderPayment().setPaymentDifference(
 						order.getOrderPayment().getNetPaymentResult()
