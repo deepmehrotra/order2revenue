@@ -224,12 +224,7 @@
 									<label> <input type="checkbox" class="checkbox1"
 										value="netSp" name="headers"> Net Taxable Sale
 									</label>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" class="checkbox1"
-										value="netRate" name="headers"> Net Rate
-									</label>
-								</div>
+								</div>								
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
 										value="grossNR" name="headers"> Gross Actual Sale
@@ -290,11 +285,6 @@
 										value="grossTax" name="headers"> Gross Tax Dues
 									</label>
 								</div>
-								
-							</div>
-
-							<div class="col-md-3">								
-								
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
 										value="returnTax" name="headers"> Reversed Tax Dues
@@ -305,6 +295,11 @@
 										value="netTax" name="headers"> Net Tax Dues
 									</label>
 								</div>
+								
+							</div>
+
+							<div class="col-md-3">								
+								
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
 										value="grossTDS" name="headers"> Gross TDS Dues
@@ -379,17 +374,17 @@
 									<label> <input type="checkbox" class="checkbox1"
 										value="grossCostProduct" name="headers"> Gross Product Cost
 									</label>
-								</div>							
-
-							</div>
-
-							<div class="col-md-3">
-								
+								</div>	
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
 										value="returnCostProduct" name="headers"> Return Product Cost
 									</label>
-								</div>
+								</div>						
+
+							</div>
+
+							<div class="col-md-3">								
+								
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
 										value="netCostProduct" name="headers"> Net Product Cost

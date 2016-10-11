@@ -67,6 +67,14 @@ public class FillManager {
 				for(int j=0;j<headers.length;j++)
 				{				
 					
+					double eossDis = 0;
+					double eossReturnDis = 0;
+					if(datasource.get(i-2).getShippedDate() != null){
+						eossDis = datasource.get(i-2).getEossValue();
+					}
+					if(datasource.get(i-2).getOrderReturnOrRTO().getReturnDate() != null){
+						eossReturnDis = datasource.get(i-2).getEossValue();
+					}
 					if(headers[j].equals("SelectAll"))
 						startColIndex--;
 				
@@ -145,12 +153,12 @@ public class FillManager {
 						cell.setCellValue(datasource.get(i-2).getOrderPayment().getPaymentDifference());
 						cell.setCellStyle(bodyCellStyle);
 					}
-					else if(headers[j].equals("netRate"))
+					/*else if(headers[j].equals("netRate"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
 						cell.setCellValue(datasource.get(i-2).getNetRate());
 						cell.setCellStyle(bodyCellStyle);
-					}
+					}*/
 					else if(headers[j].equals("PIreferenceNo"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
@@ -179,7 +187,8 @@ public class FillManager {
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
 						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
-							cell.setCellValue((datasource.get(i-2).getGrossNetRate())*((datasource.get(i-2).getQuantity())-datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()));
+							cell.setCellValue((datasource.get(i-2).getGrossNetRate()*(datasource.get(i-2).getQuantity()-datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()))
+									- datasource.get(i-2).getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted());
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("grossPR"))
@@ -192,14 +201,16 @@ public class FillManager {
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
 						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
-							cell.setCellValue((datasource.get(i-2).getPr()/datasource.get(i-2).getQuantity())*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty());
+							cell.setCellValue(((datasource.get(i-2).getPr()/datasource.get(i-2).getQuantity())*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty())
+									+ datasource.get(i-2).getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted());
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("netPR"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
 						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
-							cell.setCellValue((datasource.get(i-2).getPr())-((datasource.get(i-2).getPr()/datasource.get(i-2).getQuantity())*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()));
+							cell.setCellValue((datasource.get(i-2).getPr())-((datasource.get(i-2).getPr()/datasource.get(i-2).getQuantity())*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty() 
+									- datasource.get(i-2).getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()));
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("netPCC"))
@@ -323,7 +334,9 @@ public class FillManager {
 					else if(headers[j].equals("serviceTax"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
-						cell.setCellValue(datasource.get(i-2).getServiceTax());
+						/*cell.setCellValue(datasource.get(i-2).getServiceTax());*/
+						cell.setCellValue((commissionCharge+((commissionCharge*datasource.get(i-2).getQuantity())*.15))
+								*(datasource.get(i-2).getQuantity()-datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty())*.15);
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("grossCostProduct"))
@@ -386,27 +399,29 @@ public class FillManager {
 					else if(headers[j].equals("grossCommission"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
-						cell.setCellValue((commissionCharge*datasource.get(i-2).getQuantity())+((commissionCharge*datasource.get(i-2).getQuantity())*.145));
+						cell.setCellValue((commissionCharge+((commissionCharge*datasource.get(i-2).getQuantity())*.15))*datasource.get(i-2).getQuantity());
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("returnCommission"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
 						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
-							cell.setCellValue((commissionCharge*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty())+((commissionCharge*(datasource.get(i-2).getQuantity()-datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()))*.145));
+							cell.setCellValue((commissionCharge+((commissionCharge*datasource.get(i-2).getQuantity())*.15))*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty());
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("netCommission"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
 						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
-							cell.setCellValue(((commissionCharge*datasource.get(i-2).getQuantity())+((commissionCharge*datasource.get(i-2).getQuantity())*.145))-((commissionCharge*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty())+((commissionCharge*(datasource.get(i-2).getQuantity()-datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()))*.145)));
+							cell.setCellValue(((commissionCharge+((commissionCharge*datasource.get(i-2).getQuantity())*.15))*datasource.get(i-2).getQuantity())
+									-((commissionCharge+((commissionCharge*datasource.get(i-2).getQuantity())*.15))*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()
+											- datasource.get(i-2).getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()));
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("netTax"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
-						cell.setCellValue(datasource.get(i-2).getOrderTax().getNetTax());
+						cell.setCellValue(datasource.get(i-2).getOrderTax().getTax() - datasource.get(i-2).getOrderTax().getTaxToReturn());
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("returnType"))
@@ -454,21 +469,19 @@ public class FillManager {
 					else if(headers[j].equals("eossDiscount"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
-						cell.setCellValue(datasource.get(i-2).getDiscount());
+						cell.setCellValue(eossDis);
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("totalReturnEossDiscount"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
-						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
-							cell.setCellValue((datasource.get(i-2).getDiscount()/datasource.get(i-2).getQuantity())*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty());
+						cell.setCellValue(eossReturnDis);
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("netReturnEossDiscount"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
-						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
-							cell.setCellValue((datasource.get(i-2).getDiscount())-((datasource.get(i-2).getDiscount()/datasource.get(i-2).getQuantity())*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()));
+						cell.setCellValue(eossDis - eossReturnDis);
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("netSellingFee"))
@@ -496,7 +509,7 @@ public class FillManager {
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
 						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
-							cell.setCellValue((datasource.get(i-2).getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted())-(datasource.get(i-2).getGrossNetRate()*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()));
+							cell.setCellValue((datasource.get(i-2).getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted())+(datasource.get(i-2).getGrossNetRate()*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()));
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("netShippingCharges"))
