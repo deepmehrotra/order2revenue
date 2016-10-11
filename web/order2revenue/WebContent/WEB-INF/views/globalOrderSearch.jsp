@@ -41,7 +41,7 @@
 								<h5>Search Results</h5>
 							</div>
 							<div class="ibox-content">
-								<table class="table table-bordered custom-table">
+								<table class="table table-striped table-bordered table-hover dataTables-example">
 									<thead>
 										<tr>
 											<th>#</th>
@@ -299,9 +299,26 @@
 	</div>
 
 	<jsp:include page="globaljslinks.jsp"></jsp:include>
-	<script type="text/javascript">
 	
+	
+	<!-- Data Tables -->
+	<script src="/O2R/seller/js/plugins/dataTables/jquery.dataTables.js"></script>
+	<script src="/O2R/seller/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+	<script
+		src="/O2R/seller/js/plugins/dataTables/dataTables.responsive.js"></script>
+	<script
+		src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
+<script type="text/javascript">	
 $(document).ready(function(){
+	
+	
+	$('.dataTables-example').dataTable({
+        responsive: true,
+        "dom": 'T<"clear">lfrtip',
+        "tableTools": {
+            "sSwfPath": "/O2R/seller/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
+        }
+	});
 	
 	$('#badQuantityDiv').hide();
 	$('#inventoryType').click(function(){		

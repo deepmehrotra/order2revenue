@@ -84,11 +84,29 @@
 									<div class="ibox-title">
 										<h5><a href="orderList.html">Orders(${MpOrdersCount})</a></h5>
 										<div class="table-menu-links">
-											<a href="poOrderList.html?value=" id="POOrders">PO Orders</a> 
-											<a href="#" id="returnOrders">Return</a> 
-											<a href="gatepasslist.html" id="gatepass">GatePass</a> 
-											<a href="#" id="paymentOrders">Payment</a> 
-											<a href="#"	id="actionableOrders">Actionable</a>
+											<div class="pull-left" style="width: 74%;">
+												<a href="poOrderList.html?value=" id="POOrders">PO Orders</a> 
+												<a href="orderList.html?status=return"><strong>Return</strong></a> 
+												<a href="gatepasslist.html" id="gatepass">GatePass</a> 
+												<a href="orderList.html?status=payment">Payment</a> 
+												<form role="search" class="form-inline" method="GET"
+													action="#" style="width: 16%;float: right;display: flex;">
+													<select class="btn btn-primary btn-xs" id="orderCriteria" name="orderCriteria" required="required" style="margin-right: 3px;color: #676a6c !important;">
+														<option value="">Select To Search</option>		
+														<option value="Payment Recieved" id="Payment Recieved">Payment Recieved</option>									
+														<option value="Payment Deducted" id="Payment Deducted">Payment Deducted</option>
+														<option value="Payment Disputed" id="Payment Disputed">Payment Disputed</option>											
+														<option value="Return Limit Crossed" id="Return Limit Crossed">Return Limit Crossed</option>
+														<option value="Return Not Recieved" id="Return Not Recieved">Return Not Recieved</option>
+														<option value="Return Recieved" id="Return Recieved">Return Recieved</option>
+														<option value="Shipped" id="Shipped">Shipped</option>
+														<option value="Actionable" id="Actionable">Actionable</option>
+														<option value="Settled" id="Settled">Settled</option>
+														<option value="In Process" id="In Process">In Process</option>											
+													</select>
+													<button class="btn btn-primary btn-xs" type="submit">GET</button>
+												</form>	
+											</div>
 										</div>
 										<c:if test="${returnCount > 0 }">
 											<c:choose>
@@ -152,7 +170,7 @@
 											<button type="button" id="LoadFirst500"
 												class="btn btn-xs btn-white active">500</button>
 											<button type="button" class="btn btn-xs btn-white">1000</button>
-											<button type="button" id="LoadMoreOrder1"
+											<button type="button" id="LoadMoreOrder"
 												class="btn btn-xs btn-white">More</button>
 											<a href="#" class="btn btn-primary btn-xs">Create New Order</a>
 										</div>
@@ -162,11 +180,29 @@
 									<div class="ibox-title">
 										<h5><a href="orderList.html">Orders(${MpOrdersCount})</a></h5>
 										<div class="table-menu-links">
-											<a href="poOrderList.html?value=" id="POOrders">PO Orders</a> 
-											<a href="#" id="returnOrders">Return</a> 
-											<a href="gatepasslist.html" id="gatepass">GatePass</a> 
-											<a href="#" id="paymentOrders">Payment</a> 
-											<a href="#"	id="actionableOrders">Actionable</a>
+											<div class="pull-left" style="width: 74%;">
+												<a href="poOrderList.html?value=" id="POOrders">PO Orders</a> 
+												<a href="orderList.html?status=return">Return</a> 
+												<a href="gatepasslist.html" id="gatepass">GatePass</a> 
+												<a href="orderList.html?status=payment"><strong>Payment</strong></a> 
+												<form role="search" class="form-inline" method="GET"
+													action="#" style="width: 16%;float: right;display: flex;">
+													<select class="btn btn-primary btn-xs" id="orderCriteria" name="orderCriteria" required="required" style="margin-right: 3px;color: #676a6c !important;">
+														<option value="">Select To Search</option>		
+														<option value="Payment Recieved" id="Payment Recieved">Payment Recieved</option>									
+														<option value="Payment Deducted" id="Payment Deducted">Payment Deducted</option>
+														<option value="Payment Disputed" id="Payment Disputed">Payment Disputed</option>											
+														<option value="Return Limit Crossed" id="Return Limit Crossed">Return Limit Crossed</option>
+														<option value="Return Not Recieved" id="Return Not Recieved">Return Not Recieved</option>
+														<option value="Return Recieved" id="Return Recieved">Return Recieved</option>
+														<option value="Shipped" id="Shipped">Shipped</option>
+														<option value="Actionable" id="Actionable">Actionable</option>
+														<option value="Settled" id="Settled">Settled</option>
+														<option value="In Process" id="In Process">In Process</option>											
+													</select>
+													<button class="btn btn-primary btn-xs" type="submit">GET</button>
+												</form>	
+											</div>
 										</div>
 										<c:if test="${paymentCount > 0 }">
 											<c:choose>
@@ -230,100 +266,41 @@
 											<button type="button" id="LoadFirst500"
 												class="btn btn-xs btn-white active">500</button>
 											<button type="button" class="btn btn-xs btn-white">1000</button>
-											<button type="button" id="LoadMoreOrder2"
+											<button type="button" id="LoadMoreOrder"
 												class="btn btn-xs btn-white">More</button>
 											<a href="#" class="btn btn-primary btn-xs">Create New Order</a>
 										</div>
 									</div>
 								</c:when>
-								<c:when test="${searchStatus eq 'Actionable'}">
-									<div class="ibox-title">
-										<h5><a href="orderList.html">Orders(${MpOrdersCount})</a></h5>
-										<div class="table-menu-links">
-											<a href="poOrderList.html?value=" id="POOrders">PO Orders</a> 
-											<a href="#" id="returnOrders">Return</a> 
-											<a href="gatepasslist.html" id="gatepass">GatePass</a> 
-											<a href="#" id="paymentOrders">Payment</a> 
-											<a href="#"	id="actionableOrders">Actionable</a>
-										</div>
-										<c:if test="${actionableCount > 0 }">
-											<c:choose>
-												<c:when test="${actionableCount >= listSize}">
-													<label class="m-l-lg">${listSize-499} - ${listSize} of ${actionableCount}</label>
-												</c:when>
-												<c:when test="${actionableCount < listSize}">
-													<label class="m-l-lg">${listSize-499} - ${actionableCount} of ${actionableCount}</label>
-												</c:when>																			
-											</c:choose>									
-										</c:if>
-										<c:if test="${actionableCount == 0 }">
-											<label class="m-l-lg">0 - 0 of 0</label>
-										</c:if>
-										<div class="ibox-tools">
-											<button class="btn btn-white table-menu-search search-dd">
-												<i class="fa fa-search"></i>
-											</button>
-											<div class="search-more-wrp">
-												<form role="search" class="form-inline" method="post"
-													action="searchOrder.html">
-													<div class="form-group">
-														<select class="form-control" name="searchOrder"
-															id="searchOrders">
-															<option id="1" value="channelOrderID">Channel
-																OrderId/PO ID</option>
-															<option id="2" value="invoiceID">Invoice ID</option>
-															<option id="3" value="subOrderID">Sub Order ID</option>
-															<option id="4" value="pcName">Partner</option>
-															<option id="5" value="customerName">Customer Name</option>
-															<option id="6" value="status">Order Status</option>
-															<option id="7" value="orderDate">Order Date</option>
-															<option id="8" value="shippedDate">Order Shipped
-																Date</option>
-														</select>
-													</div>
-													<div class="form-group TopSearch-box001 OrderSearch-box "
-														id="searchchannelOrderID">
-														<input type="text" placeholder="Enter Channel OrderID"
-															class="form-control" name="channelOrderID">
-													</div>
-													<div class="form-group TopSearch-box002 OrderSearch-box"
-														id="SearchorderDate" style="display: none">
-														<div class="input-group date">
-															<span class="input-group-addon"><i
-																class="fa fa-calendar"></i></span><input type="text"
-																class="form-control" placeholder="" name="startDate">
-														</div>
-														<div class="input-group date">
-															<span class="input-group-addon"><i
-																class="fa fa-calendar"></i></span><input type="text"
-																class="form-control" placeholder="" name="endDate">
-														</div>
-													</div>											
-													<div class="form-group">
-														<button class="btn btn-primary btn-block" type="submit">Search</button>
-													</div>
-												</form>
-											</div>
-											<span>Last</span>
-											<button type="button" id="LoadFirst500"
-												class="btn btn-xs btn-white active">500</button>
-											<button type="button" class="btn btn-xs btn-white">1000</button>
-											<button type="button" id="LoadMoreOrder3"
-												class="btn btn-xs btn-white">More</button>
-											<a href="#" class="btn btn-primary btn-xs">Create New Order</a>
-										</div>
-									</div>
-								</c:when>
+								
 								<c:otherwise>
 									<div class="ibox-title">
 										<h5><a href="orderList.html">Orders(${MpOrdersCount})</a></h5>
 										<div class="table-menu-links">
-											<a href="poOrderList.html?value=" id="POOrders">PO Orders</a> 
-											<a href="#" id="returnOrders">Return</a> 
-											<a href="gatepasslist.html" id="gatepass">GatePass</a> 
-											<a href="#" id="paymentOrders">Payment</a> 
-											<a href="#"	id="actionableOrders">Actionable</a>
-										</div>
+											<div class="pull-left" style="width: 74%;">
+												<a href="poOrderList.html?value=" id="POOrders">PO Orders</a> 
+												<a href="orderList.html?status=return">Return</a> 
+												<a href="gatepasslist.html" id="gatepass">GatePass</a> 
+												<a href="orderList.html?status=payment">Payment</a> 
+												<form role="search" class="form-inline" method="GET"
+													action="#" style="width: 16%;float: right;display: flex;">
+													<select class="btn btn-primary btn-xs" id="orderCriteria" name="orderCriteria" required="required" style="margin-right: 3px;color: #676a6c !important;">
+														<option value="">Select To Search</option>		
+														<option value="Payment Recieved" id="Payment Recieved">Payment Recieved</option>									
+														<option value="Payment Deducted" id="Payment Deducted">Payment Deducted</option>
+														<option value="Payment Disputed" id="Payment Disputed">Payment Disputed</option>											
+														<option value="Return Limit Crossed" id="Return Limit Crossed">Return Limit Crossed</option>
+														<option value="Return Not Recieved" id="Return Not Recieved">Return Not Recieved</option>
+														<option value="Return Recieved" id="Return Recieved">Return Recieved</option>
+														<option value="Shipped" id="Shipped">Shipped</option>
+														<option value="Actionable" id="Actionable">Actionable</option>
+														<option value="Settled" id="Settled">Settled</option>
+														<option value="In Process" id="In Process">In Process</option>											
+													</select>
+													<button class="btn btn-primary btn-xs" type="submit">GET</button>
+												</form>	
+											</div>																					
+										</div>										
 										<c:if test="${MpOrdersCount > 0 }">
 											<c:choose>
 												<c:when test="${MpOrdersCount >= listSize}">
@@ -534,46 +511,20 @@
             e.preventDefault();
              pageno=parseInt(getQueryVariable("page"));
              pageno=pageno+1;
-            window.location="orderList.html?page="+pageno;
+             var status = ${searchStatus};
+             alert(status);
+             if(status != ""){
+            	 window.location="orderList.html?page="+pageno+"&status="+status; 
+             } else {
+            	window.location="orderList.html?page="+pageno;
+             }
             	
-        });
-        $('#LoadMoreOrder1').click(function (e) {
-            e.preventDefault();
-             pageno=parseInt(getQueryVariable("page"));
-             pageno=pageno+1;
-            window.location="orderList.html?page="+pageno+"&status=return";
-            	
-        });
-        $('#LoadMoreOrder2').click(function (e) {
-            e.preventDefault();
-             pageno=parseInt(getQueryVariable("page"));
-             pageno=pageno+1;
-            window.location="orderList.html?page="+pageno+"&status=payment";
-            	
-        });
-        $('#LoadMoreOrder3').click(function (e) {
-            e.preventDefault();
-             pageno=parseInt(getQueryVariable("page"));
-             pageno=pageno+1;
-            window.location="orderList.html?page="+pageno+"&status=actionable";
-            	
-        });
+        });               
         $('#LoadFirst500').click(function (e) {
            window.location="orderList.html?page="+0;
             	
-        });
-        $('#returnOrders').click(function (e) {
-            window.location="orderList.html?status=return";
-             	
-         });
-        $('#paymentOrders').click(function (e) {
-            window.location="orderList.html?status=payment";
-             	
-         });
-        $('#actionableOrders').click(function (e) {
-            window.location="orderList.html?status=actionable";
-             	
-         });
+        });      
+        
     });
     
     function getQueryVariable(variable) {
