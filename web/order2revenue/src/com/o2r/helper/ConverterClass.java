@@ -1318,8 +1318,8 @@ public class ConverterClass {
 			bean.setUploadDate(payUpload.getUploadDate());
 			bean.setUploadId(payUpload.getUploadId());
 			bean.setUploadDesc(payUpload.getUploadDesc());
-			bean.setOrders(ConverterClass.prepareListofBean(payUpload
-					.getOrders()));
+			/*bean.setOrders(ConverterClass.prepareListofBean(payUpload
+					.getOrders()));*/
 		}
 		return bean;
 	}
@@ -1333,8 +1333,8 @@ public class ConverterClass {
 			payment.setUploadDate(bean.getUploadDate());
 			payment.setUploadId(bean.getUploadId());
 			payment.setUploadDesc(bean.getUploadDesc());
-			payment.setOrders(ConverterClass.prepareListofOrdersFromBean(bean
-					.getOrders()));
+			/*payment.setOrders(ConverterClass.prepareListofOrdersFromBean(bean
+					.getOrders()));*/
 		}
 
 		return payment;

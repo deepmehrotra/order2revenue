@@ -161,8 +161,8 @@ public class UploadController {
 					&& uploadId.length() != 0) {
 				payment = paymentUploadService.getPaymentUpload(Integer
 						.parseInt(uploadId));
-				orderlist = ConverterClass.prepareListofBean(payment
-						.getOrders());
+				/*orderlist = ConverterClass.prepareListofBean(payment
+						.getOrders());*/
 
 			}
 		} catch (Exception e) {
@@ -295,7 +295,7 @@ public class UploadController {
 			}
 			if (order != null) {
 				//order.getPaymentUpload().add(paymentUpload);
-				paymentUpload.getOrders().add(order);
+				//paymentUpload.getOrders().add(order);
 			}
 
 			paymentUploadService.addPaymentUpload(paymentUpload, sellerId);

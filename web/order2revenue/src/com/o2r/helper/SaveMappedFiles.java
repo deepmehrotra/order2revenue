@@ -3266,7 +3266,7 @@ public class SaveMappedFiles {
 							if (order != null & validaterow) {
 								if (!duplicateKey.containsKey(channelOrderId)) {
 									// order.getPaymentUpload().add(paymentUpload);
-									paymentUpload.getOrders().add(order);
+									//paymentUpload.getOrders().add(order);
 									generatePaymentUpload = true;
 									duplicateKey.put(channelOrderId,
 											channelOrderId);
@@ -3698,7 +3698,7 @@ public class SaveMappedFiles {
 							if (order != null) {
 								if (!duplicateKey.containsKey(channelOrderId)) {
 									// order.getPaymentUpload().add(paymentUpload);
-									paymentUpload.getOrders().add(order);
+									//paymentUpload.getOrders().add(order);
 									generatePaymentUpload = true;
 									duplicateKey.put(channelOrderId,
 											channelOrderId);
@@ -4884,7 +4884,7 @@ public class SaveMappedFiles {
 					if (order != null) {
 						if (!duplicateKey.containsKey(channelOrderId)) {
 							// order.getPaymentUpload().add(paymentUpload);
-							paymentUpload.getOrders().add(order);
+							//paymentUpload.getOrders().add(order);
 							generatePaymentUpload = true;
 							duplicateKey.put(channelOrderId, channelOrderId);
 						}
@@ -5283,7 +5283,7 @@ public class SaveMappedFiles {
 							sellerId);
 					if (order != null) {
 						// order.getPaymentUpload().add(paymentUpload);
-						paymentUpload.getOrders().add(order);
+						//paymentUpload.getOrders().add(order);
 						generatePaymentUpload = true;
 					}
 				}
@@ -6230,7 +6230,7 @@ public class SaveMappedFiles {
 					if (order != null) {
 						if (!duplicateKey.containsKey(channelOrderId)) {
 							// order.getPaymentUpload().add(paymentUpload);
-							paymentUpload.getOrders().add(order);
+							//paymentUpload.getOrders().add(order);
 							generatePaymentUpload = true;
 							duplicateKey.put(channelOrderId, channelOrderId);
 						}
@@ -7200,7 +7200,7 @@ public class SaveMappedFiles {
 					if (order != null) {
 						if (!duplicateKey.containsKey(channelOrderId)) {
 							// order.getPaymentUpload().add(paymentUpload);
-							paymentUpload.getOrders().add(order);
+							//paymentUpload.getOrders().add(order);
 							generatePaymentUpload = true;
 							duplicateKey.put(channelOrderId, channelOrderId);
 						}

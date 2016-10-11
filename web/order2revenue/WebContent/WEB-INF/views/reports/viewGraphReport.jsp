@@ -343,11 +343,9 @@
                                     <th>#</th>
                                     <th>Partner Name</th>
                                     <th>Period</th>                                    
-                                    <th>Net Payment Result</th>
                                     <th>Sale Quantity</th>
                                     <th>Return Quantity</th>
                                     <th>Delivered Order</th>
-                                    <th>Payment Difference Amount</th>
                                     <th>Return Order</th>
                                     <th>Settled Order</th>
                                     <th>Actionable Order</th>
@@ -363,15 +361,9 @@
                                     <td>${loop.index+1}</td>
                                     <td>${order.pcName}</td>
                                     <td>${period}</td>
-                                    <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.netPaymentResult}" /></td>
                                     <td>${order.saleQuantity}</td>
                                     <td>${order.returnQuantiy}</td>
                                     <td>${order.deliveredOrder}</td>
-                                    <td><fmt:formatNumber
-												type="number" maxFractionDigits="2"
-												value="${order.paymentDifferenceAmount}" /></td>
                                     <td>${order.returnOrder}</td>
                                     <td>${order.settledOrder}</td>
                                     <td>${order.actionableOrder}</td>

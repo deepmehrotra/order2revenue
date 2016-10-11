@@ -108,7 +108,7 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomExceptio
 		   session.beginTransaction();
 		   Criteria criteria=session.createCriteria(PaymentUpload.class).add(Restrictions.eq("uploadId", paymentUploadId));
 		   returnObject=(PaymentUpload)criteria.list().get(0);
-		   Hibernate.initialize(returnObject.getOrders());
+		   //Hibernate.initialize(returnObject.getOrders());
 		   session.getTransaction().commit();
 		   session.close();
 		}
@@ -144,7 +144,7 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomExceptio
 			   if(seller.getPaymentUploads()!=null&&seller.getPaymentUploads().size()!=0)
 			   {
 				   returnObject=seller.getPaymentUploads().get(0);
-				   Hibernate.initialize(returnObject.getOrders());
+				   //Hibernate.initialize(returnObject.getOrders());
 			   }
 		  
 		   session.getTransaction().commit();
