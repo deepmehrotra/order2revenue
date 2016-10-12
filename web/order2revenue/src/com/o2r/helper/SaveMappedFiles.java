@@ -4939,11 +4939,11 @@ public class SaveMappedFiles {
 		PaymentUpload paymentUpload = new PaymentUpload();
 		boolean generatePaymentUpload = false;
 		Map<String, OrderPaymentBean> paymentMap = new HashMap<String, OrderPaymentBean>();
+		Map<String, Double> easyShipMap = new HashMap<String, Double>();
 		OrderPaymentBean paymentBean = null;
 		List<ManualCharges> manualChargesList = new ArrayList<ManualCharges>();
 		ManualCharges manualCharge = null;
-		String uploadPaymentId = null;
-		String key = null;
+		String uploadPaymentId = null;		
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping("Amazon",
 					"Payment");
@@ -4972,6 +4972,7 @@ public class SaveMappedFiles {
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				entry = worksheet.getRow(rowIndex);
+				String key = null;
 				validaterow = true;
 				int index = 0;
 				String channelheader = null;
@@ -4999,8 +5000,9 @@ public class SaveMappedFiles {
 									.get("Seller SKU"));
 							if (entry.getCell(skuIndex) != null
 									&& StringUtils.isNotBlank(entry.getCell(
-											skuIndex).toString())) {
-
+											skuIndex).toString())) {		
+								
+								
 								String channelOrderID = entry.getCell(index)
 										.toString()
 										+ GlobalConstant.orderUniqueSymbol
@@ -5014,14 +5016,12 @@ public class SaveMappedFiles {
 										.toString());
 								if (onj != null) {
 									if (onj.size() == 1) {
-										if (paymentMap.containsKey(entry
-												.getCell(index).toString())) {
-											paymentBean = paymentMap.get(entry
-													.getCell(index).toString());
+										if (paymentMap.containsKey(onj.get(0).getChannelOrderID())) {
+											paymentBean = paymentMap.get(onj.get(0).getChannelOrderID());
 										} else {
 											paymentBean = new OrderPaymentBean();
 										}
-										key = entry.getCell(index).toString();
+										key = onj.get(0).getChannelOrderID();
 										paymentBean.setChannelOrderId(onj
 												.get(0).getChannelOrderID());
 
@@ -5124,28 +5124,92 @@ public class SaveMappedFiles {
 									errorMessage
 											.append("Channel OrderId not present.");
 									validaterow = false;
-								}
-
-								if (validaterow) {
-									if (amount > 0) {
-										totalpositive = totalpositive + amount;
-									} else {
-										totalnegative = totalnegative
-												+ Math.abs(amount);
-									}
-									paymentMap.put(key, paymentBean);
-
-								} else {
-									errorSet.add(errorMessage.toString());
-								}
+								}								
 							} else {
-								errorMessage.append("SKU is Blank or Null.");
-								validaterow = false;
-							}
+								
+								if (cellIndexMap.get(columHeaderMap
+										.get("Payment Detail")) != null) {
+									int PDindex = cellIndexMap.get(columHeaderMap.get("Payment Detail"));
+									if (entry.getCell(PDindex) != null
+											&& StringUtils.isNotBlank(entry.getCell(PDindex)
+													.toString())
+											&& (entry
+													.getCell(PDindex)
+													.toString()
+													.trim()
+													.equalsIgnoreCase(
+															"Amazon Easy Ship Fees"))) {
+										String chanId = entry.getCell(index).toString();
+										try {
+											index = cellIndexMap
+													.get(columHeaderMap
+															.get("Recieved Amount"));
+											if (entry.getCell(index) != null
+													&& StringUtils
+															.isNotBlank(entry
+																	.getCell(
+																			index)
+																	.toString())) {
+												try {
+													String amt = entry
+															.getCell(index)
+															.toString()
+															.substring(
+																	entry.getCell(
+																			index)
+																			.toString()
+																			.indexOf(
+																					".") + 1)
+															.trim();
+													System.out.println(amt);
+													amount = Double.parseDouble(amt);
+													System.out.println(amount);													
+												} catch (Exception e) {
+													log.error("Failed by seller "+ sellerId, e);
+													errorMessage.append(" Payment Amount cell is corrupted");
+													validaterow = false;
+												}
+											} else {
+												errorMessage.append("Amount format is wrong or null.");
+												validaterow = false;
+											}
+										} catch (NullPointerException e) {
+											errorMessage.append("The column 'Amount' doesn't exist");
+											validaterow = false;
+										}
+										if(easyShipMap.containsKey(chanId)){
+											easyShipMap.put(chanId, easyShipMap.get(chanId)+(amount));
+										} else {
+											easyShipMap.put(chanId, amount);
+										}										
+										
+									} else {
+										errorMessage.append("SKU is Blank or Null.");
+										validaterow = false;
+									}
+								} else {
+									errorMessage
+											.append("The column 'Payment Detail' doesn't exist");
+									validaterow = false;
+								}																
+							}							
 						} else {
 							errorMessage
 									.append("The column 'SKU' doesn't exist.");
 							validaterow = false;
+						}
+						if (validaterow) {
+							if (amount > 0) {
+								totalpositive = totalpositive + amount;
+							} else {
+								totalnegative = totalnegative
+										+ Math.abs(amount);
+							}
+							if(key != null)
+								paymentMap.put(key, paymentBean);
+
+						} else {
+							errorSet.add(errorMessage.toString());
 						}
 					} else {
 						if (cellIndexMap.get(columHeaderMap
@@ -5278,6 +5342,14 @@ public class SaveMappedFiles {
 				for (Entry<String, OrderPaymentBean> entryz : paymentMap
 						.entrySet()) {
 					double finalCharge = entryz.getValue().getPositiveAmount() - entryz.getValue().getNegativeAmount();
+					if(easyShipMap.size() != 0){
+						String CID = entryz.getValue().getChannelOrderId()
+								.substring(0, entryz.getValue().getChannelOrderId().indexOf(GlobalConstant.orderUniqueSymbol));
+						System.out.println(CID);
+						if(easyShipMap.containsKey(CID)){
+							finalCharge = finalCharge + easyShipMap.get(CID);
+						}
+					}
 					if(finalCharge < 0){
 						entryz.getValue().setNegativeAmount(Math.abs(finalCharge));
 						entryz.getValue().setPositiveAmount(0);
