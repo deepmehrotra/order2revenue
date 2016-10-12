@@ -304,7 +304,10 @@
 	        } 
 	    });
         
-        
+        var selectedValue = "${searchStatus}";
+        if(selectedValue != ""){
+        	$('#orderCriteria').val(selectedValue);
+        }
         
         $('#searchOrder').change(function () {
             $('.OrderSearch-box').hide();
@@ -326,8 +329,7 @@
             e.preventDefault();
              pageno=parseInt(getQueryVariable("page"));
              pageno=pageno+1;
-             var status = "${searchStatus}";
-             alert(status);
+             var status = "${searchStatus}";             
              if(status != ""){
             	 window.location="orderList.html?page="+pageno+"&status="+status; 
              } else {
@@ -335,7 +337,14 @@
              }
         });               
         $('#LoadFirst500').click(function (e) {
-           window.location="orderList.html?page="+0;            	
+        	
+        	var status = "${searchStatus}";            
+            if(status != ""){
+           	 	window.location="orderList.html?page="+0+"&status="+status; 
+            } else {
+            	window.location="orderList.html?page="+0; 
+            }
+                      	
         });      
         
     });
