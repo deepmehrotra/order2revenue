@@ -368,8 +368,8 @@ public class OrderDaoImpl implements OrderDao {
 									double commissiontemp=(order.getOrderSP() - order
 											.getGrossNetRate()) * order.getQuantity();
 									
-									order.setPartnerCommission(commissiontemp-dataConfig.getServiceTax()*commissiontemp/100);
-									order.setServiceTax((float)(dataConfig.getServiceTax()*commissiontemp/100));
+									order.setPartnerCommission(commissiontemp/1.15);
+									order.setServiceTax((float)(commissiontemp-order.getPartnerCommission()));
 
 									if (partner.isTdsApplicable())
 										order.getOrderTax()
@@ -422,8 +422,8 @@ public class OrderDaoImpl implements OrderDao {
 									double commissiontemp=(order.getOrderSP() - order
 											.getGrossNetRate()) * order.getQuantity();
 									
-									order.setPartnerCommission(commissiontemp-dataConfig.getServiceTax()*commissiontemp/100);
-									order.setServiceTax((float)(dataConfig.getServiceTax()*commissiontemp/100));
+									order.setPartnerCommission(commissiontemp/1.15);
+									order.setServiceTax((float)(commissiontemp-order.getPartnerCommission()));
 
 									if (partner.isTdsApplicable())
 										order.getOrderTax()
@@ -439,8 +439,8 @@ public class OrderDaoImpl implements OrderDao {
 								double commissiontemp=(order.getOrderSP() - order
 										.getGrossNetRate()) * order.getQuantity();
 								
-								order.setPartnerCommission(commissiontemp-dataConfig.getServiceTax()*commissiontemp/100);
-								order.setServiceTax((float)(dataConfig.getServiceTax()*commissiontemp/100));
+								order.setPartnerCommission(commissiontemp/1.15);
+								order.setServiceTax((float)(commissiontemp-order.getPartnerCommission()));
 								/*order.setPartnerCommission((order.getOrderSP() - order
 										.getGrossNetRate()) * order.getQuantity());*/
 
