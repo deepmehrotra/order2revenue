@@ -201,8 +201,7 @@ public class FillManager {
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
 						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
-							cell.setCellValue(((datasource.get(i-2).getPr()/datasource.get(i-2).getQuantity())*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty())
-									+ datasource.get(i-2).getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted());
+							cell.setCellValue(((datasource.get(i-2).getPr()/datasource.get(i-2).getQuantity())*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()));
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("netPR"))
