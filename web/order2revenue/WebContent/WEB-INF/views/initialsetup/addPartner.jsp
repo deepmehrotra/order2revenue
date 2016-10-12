@@ -3942,7 +3942,12 @@ input+label {
 													
 													if (i==0) {
 														var rangeVal = $("#txt_name0").val();
-														if (rangeVal.length === 0 || !rangeVal.trim()) {
+														if (typeof rangeVal === "undefined") {
+															var rangeVal1 = $("#nr-fixedfee0-range").val();
+															if (rangeVal1.length === 0 || !rangeVal1.trim()) {
+																isValid = true;
+															}
+														} else if (rangeVal.length === 0 || !rangeVal.trim()) {
 															isValid = true;
 														}
 													}

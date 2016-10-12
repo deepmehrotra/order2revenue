@@ -454,10 +454,10 @@ public class ReportController {
 			endDate = new Date(request.getParameter("enddate"));
 			status = request.getParameter("statusList");
 
-			consolidatedBeans = reportGeneratorService
+			/*consolidatedBeans = reportGeneratorService
 					.getConsolidatedOrdersReport(startDate, endDate, status,
 							helperClass.getSellerIdfromSession(request));
-			model.put("consolidatedOrders", consolidatedBeans);
+			model.put("consolidatedOrders", consolidatedBeans);*/
 
 			ttso = reportGeneratorService.getAllPartnerTSOdetails(startDate,
 					endDate, helperClass.getSellerIdfromSession(request));
@@ -520,6 +520,7 @@ public class ReportController {
 				model.put("citipercent", cityPercentage);
 			}
 			Collections.sort(ttso, new TotalShippedOrder.OrderByNR());
+			model.put("consolidatedOrders", ttso);
 			model.put("NRsortedttso", getSortedList(ttso));
 			Collections.sort(ttso, new TotalShippedOrder.OrderByReturnamount());
 			model.put("returnAmountsortedttso", getSortedList(ttso));
