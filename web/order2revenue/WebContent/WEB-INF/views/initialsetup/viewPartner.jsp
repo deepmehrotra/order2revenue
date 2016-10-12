@@ -355,17 +355,17 @@ span .#error {
 																				</c:if>
 																				<c:if
 																					test="${partner.nrnReturnConfig.commissionType == 'categoryWise' }">
+																					<div class="form-group col-md-12" style="overflow-x:hidden;overflow-y:scroll;height:200px;">
 																					<c:choose>
-																						<c:when test="${!empty categoryMap}">
+																						<c:when test="${!empty categoryMap}">																						
 																							<c:forEach items="${categoryMap}" var="cat"
-																								varStatus="loop">
-																								<div class="form-group col-md-12">
+																								varStatus="loop">																								
 																									<label class="labelfix">${cat.key} :
-																										${cat.value}</label>
-																								</div>
-																							</c:forEach>
+																										${cat.value}</label><br>																								
+																							</c:forEach>																						
 																						</c:when>
 																					</c:choose>
+																					</div>
 																				</c:if>
 																			</div>
 																		</td>

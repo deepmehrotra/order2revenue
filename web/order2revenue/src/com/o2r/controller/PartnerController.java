@@ -1757,7 +1757,7 @@ public class PartnerController {
 			if (isDuplicate != null && isDuplicate) {
 				pbean.setPcId(0);
 				pbean.getNrnReturnConfig().setConfigId(0);
-				pbean.setPcName(pbean.getPcName() + "-New");
+				pbean.setPcName(pbean.getPcName() + "_");
 			}
 
 			Map<String, Float> sortedCategoryMap = new TreeMap<String, Float>(
