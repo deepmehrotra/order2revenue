@@ -91,8 +91,7 @@
 																					src="/O2R/sellerimages/defaultSeller.jpg"></a></td>
 																		</c:if>
 																		<td><a data-toggle="tab"
-																			href="#contact-${seller.id}" class="client-link">${seller.name} (${seller.id})</a></td>
-																		<td>${seller.brandName}</td>
+																			href="#contact-${seller.id}" class="client-link">${seller.email} (${seller.id})</a></td>
 																		<td class="contact-type"><i class="fa fa-phone">
 																		</i></td>
 																		<td>${seller.contactNo}</td>
