@@ -3,11 +3,13 @@ package com.o2r.controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -107,15 +109,16 @@ public class ReportController {
 		String reportName = request.getParameter("reportName");
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-			/*partners = partnerService.listPartners(helperClass
-					.getSellerIdfromSession(request));
-			for (Partner partner : partners)
-				partnerlist.add(partner.getPcName());*/
+			/*
+			 * partners = partnerService.listPartners(helperClass
+			 * .getSellerIdfromSession(request)); for (Partner partner :
+			 * partners) partnerlist.add(partner.getPcName());
+			 */
 
 			model.put("reportName", reportName);
 			model.put("reportNameStr",
 					GlobalConstant.reportNameMap.get(reportName));
-			//model.put("partnerlist", partnerlist);
+			// model.put("partnerlist", partnerlist);
 		} catch (CustomException ce) {
 			log.error("addManualPayment exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -140,7 +143,7 @@ public class ReportController {
 		else if (reportName.equals("consolidatedOrders"))
 			return new ModelAndView("reports/filterReports", model);
 		else if (reportName.equals("netProfitabilityReport"))
-			return new ModelAndView("reports/revenueReport", model);		
+			return new ModelAndView("reports/revenueReport", model);
 		else
 			return new ModelAndView("reports/comingSoon", model);
 	}
@@ -149,8 +152,8 @@ public class ReportController {
 	public ModelAndView getRevenueReport(HttpServletRequest request)
 			throws Exception {
 		log.info("$$$ getRevenueReport Starts : ReportController $$$");
-		long startreportCalc=System.currentTimeMillis();
-		long endreportCalc=0;
+		long startreportCalc = System.currentTimeMillis();
+		long endreportCalc = 0;
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
@@ -194,8 +197,9 @@ public class ReportController {
 							expensesCatList, catList);
 			model.put("shortTable", npList);
 			model.put("catList", catList);
-			endreportCalc=System.currentTimeMillis();
-			log.info("Time take to generate report : "+(endreportCalc-startreportCalc));
+			endreportCalc = System.currentTimeMillis();
+			log.info("Time take to generate report : "
+					+ (endreportCalc - startreportCalc));
 			log.info("$$$ getRevenueReport end : ReportController $$$");
 			return new ModelAndView("reports/viewBusinessProfitReport", model);
 
@@ -213,8 +217,8 @@ public class ReportController {
 	public ModelAndView getPartnerReport(HttpServletRequest request)
 			throws Exception {
 		log.info("$$$ getPartnerReport Starts : ReportController $$$");
-		long startreportCalc=System.currentTimeMillis();
-		long endreportCalc=0;
+		long startreportCalc = System.currentTimeMillis();
+		long endreportCalc = 0;
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
@@ -232,15 +236,19 @@ public class ReportController {
 					GlobalConstant.reportNameMap.get(reportName));
 
 			if ("debtorsReport".equalsIgnoreCase(reportName)) {
-				Map<String,Object> objMap=reportGeneratorService
+				Map<String, Object> objMap = reportGeneratorService
 						.getDebtorsReportDetails(startDate, endDate, sellerId);
-				List<PartnerReportDetails> debtorsList =(List<PartnerReportDetails>) objMap.get("list");
-				
-				System.out.println(" Size of debtors list : "+debtorsList.size());
+				List<PartnerReportDetails> debtorsList = (List<PartnerReportDetails>) objMap
+						.get("list");
+
+				System.out.println(" Size of debtors list : "
+						+ debtorsList.size());
 				List<DebtorsGraph1> debtorsGraph1PartnerList = ConverterClass
-						.transformDebtorsGraph1Graph((Map<String,DebtorsGraph1> )objMap.get("partnermap"));
+						.transformDebtorsGraph1Graph((Map<String, DebtorsGraph1>) objMap
+								.get("partnermap"));
 				List<DebtorsGraph1> debtorsGraph1CategoryList = ConverterClass
-						.transformDebtorsGraph1Graph( (Map<String,DebtorsGraph1> )objMap.get("categorymap"));
+						.transformDebtorsGraph1Graph((Map<String, DebtorsGraph1>) objMap
+								.get("categorymap"));
 				model.put("shortTablePartner", debtorsGraph1PartnerList);
 				model.put("shortTableCategory", debtorsGraph1CategoryList);
 
@@ -269,8 +277,9 @@ public class ReportController {
 						new DebtorsGraph1.OrderByACNS());
 				model.put("categoryByACNS", ConverterClass
 						.getDebtorsGraph1SortedList(debtorsGraph1CategoryList));
-				endreportCalc=System.currentTimeMillis();
-				log.info("Time take to generate debtorsReport : "+(endreportCalc-startreportCalc));
+				endreportCalc = System.currentTimeMillis();
+				log.info("Time take to generate debtorsReport : "
+						+ (endreportCalc - startreportCalc));
 				log.info("$$$ getPartnerReport end : ReportController $$$");
 				return new ModelAndView("reports/viewDebtorsGraphReport", model);
 			}
@@ -352,8 +361,9 @@ public class ReportController {
 				model.put("channelMC", channelMCList);
 
 				model.put("partnerBusiness", partnerBusinessList);
-				endreportCalc=System.currentTimeMillis();
-				log.info("Time take to generate partnerBusinessReport : "+(endreportCalc-startreportCalc));
+				endreportCalc = System.currentTimeMillis();
+				log.info("Time take to generate partnerBusinessReport : "
+						+ (endreportCalc - startreportCalc));
 				log.info("$$$ getPartnerReport end : ReportController $$$");
 
 				return new ModelAndView("reports/viewBRGraphReport", model);
@@ -403,8 +413,9 @@ public class ReportController {
 				List<MonthlyCommission> monthlyGraph = reportGeneratorService
 						.fetchMonthlyComm(sellerId, startDate, endDate);
 				model.put("monthlyGraph", monthlyGraph);
-				endreportCalc=System.currentTimeMillis();
-				log.info("Time take to generate partnerCommissionReport : "+(endreportCalc-startreportCalc));
+				endreportCalc = System.currentTimeMillis();
+				log.info("Time take to generate partnerCommissionReport : "
+						+ (endreportCalc - startreportCalc));
 				log.info("$$$ getPartnerReport end : ReportController $$$");
 				return new ModelAndView("reports/viewCommGraphReport", model);
 			}
@@ -418,8 +429,9 @@ public class ReportController {
 			log.error("Failed! By Seller ID : " + sellerId, ex);
 			model.put("errorMessage", ex.getMessage());
 		}
-		endreportCalc=System.currentTimeMillis();
-		log.info("Time take to generate report : "+(endreportCalc-startreportCalc));
+		endreportCalc = System.currentTimeMillis();
+		log.info("Time take to generate report : "
+				+ (endreportCalc - startreportCalc));
 		log.info("$$$ getPartnerReport end : ReportController $$$");
 
 		return new ModelAndView("globalErorPage", model);
@@ -463,8 +475,49 @@ public class ReportController {
 						+ ttso.get(0).getCityQuantity());
 				System.out.println(" Citi percent size : "
 						+ ttso.get(0).getCityPercentage());
-				model.put("citicount", ttso.get(0).getCityQuantity());
-				model.put("citipercent", ttso.get(0).getCityPercentage());
+
+				Map<String, Double> cityQuantity = new HashMap<String, Double>();
+				Map<String, Double> cityPercentage = new HashMap<String, Double>();
+				
+				Set<Entry<String, Double>> set = ttso.get(0).getCityPercentage().entrySet();
+				List<Entry<String, Double>> list = new ArrayList<Entry<String, Double>>(
+						set);
+				Collections.sort(list,
+						new Comparator<Map.Entry<String, Double>>() {
+							public int compare(Map.Entry<String, Double> o1,
+									Map.Entry<String, Double> o2) {
+								return (o2.getValue()).compareTo(o1.getValue());
+							}
+						});
+				int i = 1;
+				double cityQTY = 0;
+				double cityPCT = 0;
+				for (Map.Entry<String, Double> entry : list) {
+					if (i < 5) {
+						cityQuantity.put(entry.getKey(), ttso.get(0).getCityQuantity().get(entry.getKey()));
+						cityPercentage.put(entry.getKey(), entry.getValue());
+					} else {
+						cityQTY += ttso.get(0).getCityQuantity().get(entry.getKey());
+						cityPCT += entry.getValue();
+					}
+					i++;
+				}
+				cityQuantity.put("Others", cityQTY);
+				cityPercentage.put("Others", cityPCT);
+				
+				Set<Entry<String, Double>> set1 = cityQuantity.entrySet();
+				List<Entry<String, Double>> list1 = new ArrayList<Entry<String, Double>>(
+						set1);
+				Collections.sort(list1,
+						new Comparator<Map.Entry<String, Double>>() {
+							public int compare(Map.Entry<String, Double> o1,
+									Map.Entry<String, Double> o2) {
+									return (o2.getValue()).compareTo(o1.getValue());
+							}
+						});
+				
+				model.put("citicount", list1);
+				model.put("citipercent", cityPercentage);
 			}
 			Collections.sort(ttso, new TotalShippedOrder.OrderByNR());
 			model.put("NRsortedttso", getSortedList(ttso));
@@ -757,7 +810,7 @@ public class ReportController {
 			String reportName = request.getParameter("reportName");
 			String startDateStr = request.getParameter("startdate");
 			String endDateStr = request.getParameter("enddate");
-			Map<String,Object> obj=null;
+			Map<String, Object> obj = null;
 			Date startDate = null;
 			if (StringUtils.isNotBlank(startDateStr))
 				startDate = new Date(startDateStr);
@@ -769,10 +822,11 @@ public class ReportController {
 
 			List<PartnerReportDetails> partnerBusinessList = new ArrayList<PartnerReportDetails>();
 			if ("debtorsReport".equalsIgnoreCase(reportName)) {
-				
-						obj=reportGeneratorService
-						.getDebtorsReportDetails(startDate, endDate, sellerId);
-						partnerBusinessList =(List<PartnerReportDetails>)obj.get("list");
+
+				obj = reportGeneratorService.getDebtorsReportDetails(startDate,
+						endDate, sellerId);
+				partnerBusinessList = (List<PartnerReportDetails>) obj
+						.get("list");
 			} else {
 				partnerBusinessList = reportGeneratorService
 						.getPartnerReportDetails(startDate, endDate, sellerId);
@@ -878,7 +932,7 @@ public class ReportController {
 	public void downloadreport(HttpServletRequest request,
 			HttpServletResponse response) {
 
-		long starttime=System.currentTimeMillis();
+		long starttime = System.currentTimeMillis();
 		log.info("$$$ downloadreport Starts : ReportController $$$");
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -901,14 +955,14 @@ public class ReportController {
 			orderlist = orderService
 					.findOrdersbyDate("shippedDate", startDate, endDate,
 							helperClass.getSellerIdfromSession(request), false);
-			
+
 			reportDownloadService.downloadReport(response, status, orderlist,
 					reportheaders, reportName,
 					helperClass.getSellerIdfromSession(request));
 		} catch (ClassNotFoundException e) {
 			System.out.println(" Class castexception in download report");
 			e.printStackTrace();
-			log.error("Failed ! in ReportContrller ",e);
+			log.error("Failed ! in ReportContrller ", e);
 		} catch (CustomException ce) {
 			ce.printStackTrace();
 			log.error("downloadReport exception : " + ce.toString());
@@ -919,8 +973,8 @@ public class ReportController {
 			e.printStackTrace();
 			log.error("Failed! By Seller ID : " + sellerId, e);
 		}
-		long endtime=System.currentTimeMillis();
-		log.info("$$$ Time take to generate report : "+(endtime-starttime));
+		long endtime = System.currentTimeMillis();
+		log.info("$$$ Time take to generate report : " + (endtime - starttime));
 		log.info("$$$ downloadreport Ends : ReportController $$$");
 	}
 

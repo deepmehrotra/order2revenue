@@ -3266,7 +3266,7 @@ public class SaveMappedFiles {
 							if (order != null & validaterow) {
 								if (!duplicateKey.containsKey(channelOrderId)) {
 									// order.getPaymentUpload().add(paymentUpload);
-									paymentUpload.getOrders().add(order);
+									//paymentUpload.getOrders().add(order);
 									generatePaymentUpload = true;
 									duplicateKey.put(channelOrderId,
 											channelOrderId);
@@ -3698,7 +3698,7 @@ public class SaveMappedFiles {
 							if (order != null) {
 								if (!duplicateKey.containsKey(channelOrderId)) {
 									// order.getPaymentUpload().add(paymentUpload);
-									paymentUpload.getOrders().add(order);
+									//paymentUpload.getOrders().add(order);
 									generatePaymentUpload = true;
 									duplicateKey.put(channelOrderId,
 											channelOrderId);
@@ -4884,7 +4884,7 @@ public class SaveMappedFiles {
 					if (order != null) {
 						if (!duplicateKey.containsKey(channelOrderId)) {
 							// order.getPaymentUpload().add(paymentUpload);
-							paymentUpload.getOrders().add(order);
+							//paymentUpload.getOrders().add(order);
 							generatePaymentUpload = true;
 							duplicateKey.put(channelOrderId, channelOrderId);
 						}
@@ -5088,7 +5088,7 @@ public class SaveMappedFiles {
 														paymentBean
 																.setNegativeAmount(Math.abs(paymentBean
 																		.getNegativeAmount()
-																		+ amount));
+																		+ Math.abs(amount)));
 														/*
 														 * totalnegative =
 														 * totalnegative +
@@ -5277,13 +5277,21 @@ public class SaveMappedFiles {
 			if (paymentMap != null) {
 				for (Entry<String, OrderPaymentBean> entryz : paymentMap
 						.entrySet()) {
+					double finalCharge = entryz.getValue().getPositiveAmount() - entryz.getValue().getNegativeAmount();
+					if(finalCharge < 0){
+						entryz.getValue().setNegativeAmount(Math.abs(finalCharge));
+						entryz.getValue().setPositiveAmount(0);
+					} else {
+						entryz.getValue().setPositiveAmount(finalCharge);
+						entryz.getValue().setNegativeAmount(0);
+					}					
 					order = orderService.addOrderPayment(skucode, entryz
 							.getValue().getChannelOrderId(), ConverterClass
 							.prepareOrderPaymentModel(entryz.getValue()),
 							sellerId);
 					if (order != null) {
 						// order.getPaymentUpload().add(paymentUpload);
-						paymentUpload.getOrders().add(order);
+						//paymentUpload.getOrders().add(order);
 						generatePaymentUpload = true;
 					}
 				}
@@ -6230,7 +6238,7 @@ public class SaveMappedFiles {
 					if (order != null) {
 						if (!duplicateKey.containsKey(channelOrderId)) {
 							// order.getPaymentUpload().add(paymentUpload);
-							paymentUpload.getOrders().add(order);
+							//paymentUpload.getOrders().add(order);
 							generatePaymentUpload = true;
 							duplicateKey.put(channelOrderId, channelOrderId);
 						}
@@ -7200,7 +7208,7 @@ public class SaveMappedFiles {
 					if (order != null) {
 						if (!duplicateKey.containsKey(channelOrderId)) {
 							// order.getPaymentUpload().add(paymentUpload);
-							paymentUpload.getOrders().add(order);
+							//paymentUpload.getOrders().add(order);
 							generatePaymentUpload = true;
 							duplicateKey.put(channelOrderId, channelOrderId);
 						}

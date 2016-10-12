@@ -36,11 +36,11 @@ public class PaymentUpload {
 	@Column
 	private String uploadStatus;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	/*@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "PaymentUpload_Order", 
              joinColumns = { @JoinColumn(name = "uploadId") }, 
              inverseJoinColumns = { @JoinColumn(name = "orderId") })
-	private List<Order> orders =new ArrayList<Order>();
+	private List<Order> orders =new ArrayList<Order>();*/
 	
 	public int getUploadId() {
 		return uploadId;
@@ -90,13 +90,13 @@ public class PaymentUpload {
 		this.uploadStatus = uploadStatus;
 	}
 
-	public List<Order> getOrders() {
+	/*public List<Order> getOrders() {
 		return orders;
 	}
 
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
-	}
+	}*/
 
 	public double getTotalnegativevalue() {
 		return totalnegativevalue;

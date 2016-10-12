@@ -2549,7 +2549,7 @@ public class SaveContents {
 									channelOrderIdCheck.put(channelId,
 											channelId);
 									//order.getPaymentUpload().add(paymentUpload);
-									paymentUpload.getOrders().add(order);
+									//paymentUpload.getOrders().add(order);
 									generatePaymentUpload = true;
 								}
 							}
@@ -3409,7 +3409,7 @@ public class SaveContents {
 
 				if (poOrder != null) {
 					//poOrder.getPaymentUpload().add(paymentUpload);
-					paymentUpload.getOrders().add(poOrder);
+					//paymentUpload.getOrders().add(poOrder);
 					generatePaymentUpload = true;
 				}
 			}
