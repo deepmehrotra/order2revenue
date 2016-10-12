@@ -3266,7 +3266,7 @@ public class SaveMappedFiles {
 							if (order != null & validaterow) {
 								if (!duplicateKey.containsKey(channelOrderId)) {
 									// order.getPaymentUpload().add(paymentUpload);
-									//paymentUpload.getOrders().add(order);
+									// paymentUpload.getOrders().add(order);
 									generatePaymentUpload = true;
 									duplicateKey.put(channelOrderId,
 											channelOrderId);
@@ -3698,7 +3698,7 @@ public class SaveMappedFiles {
 							if (order != null) {
 								if (!duplicateKey.containsKey(channelOrderId)) {
 									// order.getPaymentUpload().add(paymentUpload);
-									//paymentUpload.getOrders().add(order);
+									// paymentUpload.getOrders().add(order);
 									generatePaymentUpload = true;
 									duplicateKey.put(channelOrderId,
 											channelOrderId);
@@ -4235,7 +4235,7 @@ public class SaveMappedFiles {
 
 					try {
 						index = cellIndexMap.get(columHeaderMap
-								.get("OrderSP Component A"));						
+								.get("OrderSP Component A"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							try {
@@ -4884,7 +4884,7 @@ public class SaveMappedFiles {
 					if (order != null) {
 						if (!duplicateKey.containsKey(channelOrderId)) {
 							// order.getPaymentUpload().add(paymentUpload);
-							//paymentUpload.getOrders().add(order);
+							// paymentUpload.getOrders().add(order);
 							generatePaymentUpload = true;
 							duplicateKey.put(channelOrderId, channelOrderId);
 						}
@@ -5277,21 +5277,23 @@ public class SaveMappedFiles {
 			if (paymentMap != null) {
 				for (Entry<String, OrderPaymentBean> entryz : paymentMap
 						.entrySet()) {
-					double finalCharge = entryz.getValue().getPositiveAmount() - entryz.getValue().getNegativeAmount();
-					if(finalCharge < 0){
-						entryz.getValue().setNegativeAmount(Math.abs(finalCharge));
+					double finalCharge = entryz.getValue().getPositiveAmount()
+							- entryz.getValue().getNegativeAmount();
+					if (finalCharge < 0) {
+						entryz.getValue().setNegativeAmount(
+								Math.abs(finalCharge));
 						entryz.getValue().setPositiveAmount(0);
 					} else {
 						entryz.getValue().setPositiveAmount(finalCharge);
 						entryz.getValue().setNegativeAmount(0);
-					}					
+					}
 					order = orderService.addOrderPayment(skucode, entryz
 							.getValue().getChannelOrderId(), ConverterClass
 							.prepareOrderPaymentModel(entryz.getValue()),
 							sellerId);
 					if (order != null) {
 						// order.getPaymentUpload().add(paymentUpload);
-						//paymentUpload.getOrders().add(order);
+						// paymentUpload.getOrders().add(order);
 						generatePaymentUpload = true;
 					}
 				}
@@ -6238,7 +6240,7 @@ public class SaveMappedFiles {
 					if (order != null) {
 						if (!duplicateKey.containsKey(channelOrderId)) {
 							// order.getPaymentUpload().add(paymentUpload);
-							//paymentUpload.getOrders().add(order);
+							// paymentUpload.getOrders().add(order);
 							generatePaymentUpload = true;
 							duplicateKey.put(channelOrderId, channelOrderId);
 						}
@@ -6561,17 +6563,29 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					if (cellIndexMap.get(columHeaderMap
-							.get("Secondary OrderID")) != null) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Secondary OrderID"));
-						if (entry.getCell(index) != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							order.setSubOrderID(entry.getCell(index).toString());
+					try {
+						if (cellIndexMap.get(columHeaderMap
+								.get("Secondary OrderID")) != null) {
+							index = cellIndexMap.get(columHeaderMap
+									.get("Secondary OrderID"));
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								entry.getCell(index).setCellType(
+										HSSFCell.CELL_TYPE_STRING);
+								order.setSubOrderID(entry.getCell(index)
+										.toString());
+							}
+						} else {
+							errorMessage
+									.append(" Order Item Id is null;");
+							validaterow = false;
 						}
+					} catch (NullPointerException e) {
+						errorMessage
+								.append("The column 'Order Item Id' doesn't exist");
+						validaterow = false;
 					}
+					
 					if (cellIndexMap.get(columHeaderMap.get("PIreferenceNo")) != null) {
 						index = cellIndexMap.get(columHeaderMap
 								.get("PIreferenceNo"));
@@ -6984,8 +6998,8 @@ public class SaveMappedFiles {
 						.put(entry.getCell(cellIndex).toString(), cellIndex);
 
 			}
-			System.out.println(" columHeaderMap : "+columHeaderMap);
-			System.out.println(" cellIndexMap : "+cellIndexMap);
+			System.out.println(" columHeaderMap : " + columHeaderMap);
+			System.out.println(" cellIndexMap : " + cellIndexMap);
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				entry = worksheet.getRow(rowIndex);
@@ -7059,7 +7073,13 @@ public class SaveMappedFiles {
 										sellerId);
 
 								if (onj != null) {
-									if (onj.size() == 1
+									if (onj.size() > 1) {
+										for (Order tmpOrder : onj) {
+											if (tmpOrder.getSubOrderID().equalsIgnoreCase(itemID)) {
+												channelOrderId = tmpOrder.getChannelOrderID();
+											}
+										}
+									} else if (onj.size() == 1
 											&& onj.get(0).getSubOrderID()
 													.equalsIgnoreCase(itemID)) {
 										channelOrderId = onj.get(0)
@@ -7208,7 +7228,7 @@ public class SaveMappedFiles {
 					if (order != null) {
 						if (!duplicateKey.containsKey(channelOrderId)) {
 							// order.getPaymentUpload().add(paymentUpload);
-							//paymentUpload.getOrders().add(order);
+							// paymentUpload.getOrders().add(order);
 							generatePaymentUpload = true;
 							duplicateKey.put(channelOrderId, channelOrderId);
 						}
