@@ -334,8 +334,7 @@ public class FillManager {
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
 						/*cell.setCellValue(datasource.get(i-2).getServiceTax());*/
-						cell.setCellValue((commissionCharge+((commissionCharge*datasource.get(i-2).getQuantity())*.15))
-								*(datasource.get(i-2).getQuantity()-datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty())*.15);
+						cell.setCellValue((commissionCharge)*(datasource.get(i-2).getQuantity()-datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty())*.15);
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("grossCostProduct"))
@@ -398,23 +397,21 @@ public class FillManager {
 					else if(headers[j].equals("grossCommission"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
-						cell.setCellValue((commissionCharge+((commissionCharge*datasource.get(i-2).getQuantity())*.15))*datasource.get(i-2).getQuantity());
+						cell.setCellValue(commissionCharge*1.15*datasource.get(i-2).getQuantity());
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("returnCommission"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
 						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
-							cell.setCellValue((commissionCharge+((commissionCharge*datasource.get(i-2).getQuantity())*.15))*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty());
+							cell.setCellValue(commissionCharge*1.15*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty());
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("netCommission"))
 					{
 						HSSFCell cell = row.createCell(startColIndex+j);
 						if(datasource.get(i-2).getOrderReturnOrRTO() != null)
-							cell.setCellValue(((commissionCharge+((commissionCharge*datasource.get(i-2).getQuantity())*.15))*datasource.get(i-2).getQuantity())
-									-((commissionCharge+((commissionCharge*datasource.get(i-2).getQuantity())*.15))*datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()
-											- datasource.get(i-2).getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted()));
+							cell.setCellValue(((commissionCharge*1.15)*(datasource.get(i-2).getQuantity()- datasource.get(i-2).getOrderReturnOrRTO().getReturnorrtoQty()))- datasource.get(i-2).getOrderReturnOrRTO().getReturnOrRTOChargestoBeDeducted());
 						cell.setCellStyle(bodyCellStyle);
 					}
 					else if(headers[j].equals("netTax"))
