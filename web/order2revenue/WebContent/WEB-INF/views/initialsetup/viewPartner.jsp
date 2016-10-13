@@ -59,7 +59,8 @@ span .#error {
 
     .labelfix
     {
-        font-size: 12px;
+        font-size: 11px;
+        font-weight: 600;
     }
     
 .partnerImg
@@ -69,6 +70,13 @@ span .#error {
        }
  .nav-pills{
  	min-width: 20%;
+ }
+ table th{
+ 	font-size: 10px;
+ 	font-weight: 900;
+ }
+ .shippedtab td{
+ text-align:center;
  }
 
 </style>
@@ -320,7 +328,7 @@ span .#error {
 															<table class="table table hover"
 																style="border-spacing: 0 5px;">
 																<tbody>
-																	<tr data-toggle="collapse" data-target="#accordion"
+																	<tr data-toggle="collapse" data-target="#accordion1"
 																		class="clickable">
 																		<td style="width: 50%;"><label>COMMISSION</label></td>
 																		<td>
@@ -339,7 +347,7 @@ span .#error {
 
 																	<tr>
 																		<td colspan="10">
-																			<div id="accordion" class="collapse">
+																			<div id="accordion1" class="collapse">
 																				<c:if
 																					test="${partner.nrnReturnConfig.commissionType == 'fixed' }">
 																					<label class="labelfix">Fixed Amount :
@@ -347,17 +355,17 @@ span .#error {
 																				</c:if>
 																				<c:if
 																					test="${partner.nrnReturnConfig.commissionType == 'categoryWise' }">
+																					<div class="form-group col-md-12" style="overflow-x:hidden;overflow-y:scroll;height:200px;">
 																					<c:choose>
-																						<c:when test="${!empty categoryMap}">
+																						<c:when test="${!empty categoryMap}">																						
 																							<c:forEach items="${categoryMap}" var="cat"
-																								varStatus="loop">
-																								<div class="form-group col-md-12">
+																								varStatus="loop">																								
 																									<label class="labelfix">${cat.key} :
-																										${cat.value}</label>
-																								</div>
-																							</c:forEach>
+																										${cat.value}</label><br>																								
+																							</c:forEach>																						
 																						</c:when>
 																					</c:choose>
+																					</div>
 																				</c:if>
 																			</div>
 																		</td>
@@ -398,20 +406,20 @@ span .#error {
 																				Fee</label></td>
 																		<td><c:if
 																				test="${partner.nrnReturnConfig.shippingFeeType == 'fixed'}">
-																				<button class="btn btn-grey" id="button1" style="width:100%;"><font size="2" color="green">Fixed</font><span class="caret"></span></button>
+																				<button class="btn btn-grey" id="button1" style="width:100%;"><font size="2" color="green">Fixed</font></button>
 																			</c:if> <c:if
 																				test="${partner.nrnReturnConfig.shippingFeeType == 'variable'}">
-																				<button class="btn btn-grey " id="button1" style="width:100%;"><font size="2" color="green">Variable</font><span class="caret"></span></button>
+																				<button class="btn btn-grey " id="button1" style="width:100%;"><font size="2" color="green">Variable</font></button>
 																			</c:if></td>
 																	</tr>
 																	<tr>
 																		<td colspan="10">
 																			<div id="accordion2" class="collapse">
 																				<c:if
-																					test="${partner.nrnReturnConfig.shippingFeeType == 'variable'}">
-																					<h5>Volumetric calculation= (lxbxh)(cm)/5</h5>
-																					<table class="table-bordered"
-																						style="border-spacing: 0 5px;width: 86%;">
+																					test="${partner.nrnReturnConfig.shippingFeeType == 'variable'}">																					
+																					<label style="text-align: left;">Volumetric calculation= (lxbxh)(cm)/5</label>
+																					<table class="table-bordered shippedtab"
+																						style="border-spacing: 0 5px;">
 																						<thead>
 																							<tr>
 																								<th>Volume Weight Slab(gms)</th>
@@ -438,9 +446,9 @@ span .#error {
 																						</tbody>
 																					</table>
 																					<br>
-																					<h5>Deadweight calculation</h5>
-																					<table class="table-bordered"
-																						style="border-spacing: 0 5px;width: 86%;">
+																					<label style="text-align: left;">Deadweight calculation</label>
+																					<table class="table-bordered shippedtab"
+																						style="border-spacing: 0 5px;">
 																						<thead>
 																							<tr>
 																								<th>Dead Weight Slab(gms)</th>
@@ -469,8 +477,8 @@ span .#error {
 																				</c:if>
 																				<c:if
 																					test="${partner.nrnReturnConfig.shippingFeeType == 'fixed'}">
-																					<h5>Deadweight calculation</h5>
-																					<table class="table-bordered"
+																					<label style="text-align: left;">Deadweight calculation</label>
+																					<table class="table-bordered shippedtab"
 																						style="border-spacing: 0 5px;">
 																						<thead>
 																							<tr>
@@ -493,8 +501,8 @@ span .#error {
 																					</table>
 
 
-																					<h5>Volumetric calculation= (lxbxh)(cm)/5000</h5>
-																					<table class="table-bordered"
+																					<label style="text-align: left;">Volumetric calculation= (lxbxh)(cm)/5000</label>
+																					<table class="table-bordered shippedtab"
 																						style="border-spacing: 0 5px;">
 																						<thead>
 																							<tr>
@@ -551,22 +559,22 @@ span .#error {
 														<div class="add-company">
 															<hr>
 															<div class="col-sm-12">
-																<div class="col-sm-4"></div>
-																<div class="col-sm-4">
-																	<label>SELLER FAULT</label>
+																<div class="col-sm-2"></div>
+																<div class="col-sm-5" style="padding: 0px;">
+																	<label style="font-size: 12px;font-weight: 700;text-align: center;">SELLER FAULT</label>
 																</div>
-																<div class="col-sm-4">
-																	<label>BUYER RETURN</label>
+																<div class="col-sm-5" style="padding: 0px;">
+																	<label style="font-size: 12px;font-weight: 700;text-align: center;">BUYER RETURN</label>
 																</div>
 															</div>
 
 															<div class="col-lg-12">
-																<div class="col-sm-2">
+																<div class="col-sm-12 m-l">
 																	<div class="radio">
-																		<strong style="position: relative;right: 30px;top: 7px;">RETURN</strong>
+																		<label style="position: relative;right: 30px;font-size: 12px;font-weight: 600;">RETURN</label>
 																	</div>
 																</div>
-																<div class="col-sm-5" style="padding: 2px;">
+																<div class="col-sm-6" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.retCharSFType == 'fixed'}">
@@ -593,7 +601,7 @@ span .#error {
 																		</c:otherwise>
 																	</c:choose>
 																</div>
-																<div class="col-sm-5" style="padding: 2px;">
+																<div class="col-sm-6" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.retCharBRType == 'fixed'}">
@@ -712,12 +720,12 @@ span .#error {
 															</div>
 															<div class="col-lg-12">
 																<div class="hr-line-dashed"></div>
-																<div class="col-sm-2">
+																<div class="col-sm-12 m-l">
 																	<div class="radio">
-																		<strong style="position: relative;right: 30px;top: 7px;">RTO</strong>
+																		<label style="position: relative;right: 30px;font-size: 12px;font-weight: 600;">RTO</label>
 																	</div>
 																</div>
-																<div class="col-sm-5" style="padding: 2px;">
+																<div class="col-sm-6" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.RTOCharSFType == 'fixed'}">
@@ -744,7 +752,7 @@ span .#error {
 																		</c:otherwise>
 																	</c:choose>
 																</div>
-																<div class="col-sm-5" style="padding: 2px;">
+																<div class="col-sm-6" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.RTOCharBRType == 'fixed'}">
@@ -863,12 +871,12 @@ span .#error {
 															</div>
 															<div class="col-lg-12">
 																<div class="hr-line-dashed"></div>
-																<div class="col-sm-2">
+																<div class="col-sm-12 m-l">
 																	<div class="radio">
-																		<strong style="position: relative;right: 30px;top: 7px;">REPLACE<br>MENT</strong>
+																		<label style="position: relative;right: 30px;font-size: 12px;font-weight: 600;">REPLACEMENT</label>
 																	</div>
 																</div>
-																<div class="col-sm-5" style="padding: 2px;">
+																<div class="col-sm-6" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.repCharSFType == 'fixed'}">
@@ -895,7 +903,7 @@ span .#error {
 																		</c:otherwise>
 																	</c:choose>
 																</div>
-																<div class="col-sm-5" style="padding: 2px;">
+																<div class="col-sm-6" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.repCharBRType == 'fixed'}">
@@ -1014,12 +1022,12 @@ span .#error {
 															</div>
 															<div class="col-lg-12">
 																<div class="hr-line-dashed"></div>
-																<div class="col-sm-2">
+																<div class="col-sm-12 m-l">
 																	<div class="radio">
-																		<strong style="position: relative;right: 30px;top: 7px;">PARTIAL DELIVERY</strong>
+																		<label style="position: relative;right: 30px;font-size: 12px;font-weight: 600;">PARTIAL DELIVERY</label>
 																	</div>
 																</div>
-																<div class="col-sm-5" style="padding: 2px;">
+																<div class="col-sm-6" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.PDCharSFType == 'fixed'}">
@@ -1046,7 +1054,7 @@ span .#error {
 																		</c:otherwise>
 																	</c:choose>
 																</div>
-																<div class="col-sm-5" style="padding: 2px;">
+																<div class="col-sm-6" style="padding: 2px;">
 																	<c:choose>
 																		<c:when
 																			test="${partner.nrnReturnConfig.PDCharBRType == 'fixed'}">
@@ -1168,9 +1176,9 @@ span .#error {
 
 															<div class="col-lg-12">
 																<div class="hr-line-dashed"></div>
-																	<div class="col-sm-12">
-																		<div class="radio" style="text-align: center;">
-																			<label><strong>CANCELLATION	</strong></label>
+																	<div class="col-sm-12 m-l">
+																		<div class="radio">
+																			<label style="position: relative;right: 30px;font-size: 12px;font-weight: 600;">CANCELLATION</label>
 																		</div>
 																	</div>
 															</div>
@@ -1434,7 +1442,7 @@ span .#error {
 																<div class="hr-line-dashed"></div>
 																	<div class="col-sm-12">
 																		<div class="radio" style="text-align: center;">
-																			<label><strong>REVERSE SHIPPING</strong></label>
+																			<label style="font-size: 12px;font-weight: 600;">REVERSE SHIPPING</label>
 																		</div>
 																	</div>
 																</div>

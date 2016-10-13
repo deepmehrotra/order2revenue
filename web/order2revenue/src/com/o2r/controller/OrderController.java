@@ -719,16 +719,17 @@ public class OrderController {
 				log.debug(" Getting list from session" + obj);
 				model.put("orders", obj);
 				request.getSession().removeAttribute("orderSearchObject");
-			} else if (request.getParameter("status") != null) {
+			} else if (request.getParameter("status") != null || (request.getParameter("orderCriteria") != null 
+					&& !request.getParameter("orderCriteria").equals(""))) {
 				String status = request.getParameter("status");
-				if (status.equalsIgnoreCase("return")) {
+				if (status != null && status.equalsIgnoreCase("return")) {
 					
 					int pageNo = request.getParameter("page") != null ? Integer
 							.parseInt(request.getParameter("page")) : 0;
 					returnlist = ConverterClass.prepareListofBean
-							(orderService.findOrdersOnCriteria("status", "Return Recieved", sellerId, false, false, pageNo));
+							(orderService.findOrdersOnCriteria("status", "Return", sellerId, false, false, pageNo));
 					
-					int returnCount = orderService.countOnCriteria("status", "Return Recieved", sellerId, false, false);
+					int returnCount = orderService.countOnCriteria("status", "Return", sellerId, false, false);
 					/*returnlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Return Recieved", sellerId,
 									false, false));
@@ -738,31 +739,29 @@ public class OrderController {
 									false, false));*/
 					if(returnlist != null){
 						model.put("orders", returnlist);
-					}
-					System.out.println(returnlist.size()+ " : "+returnCount);
-					model.put("returnCount", returnCount);
+					}					
+					model.put("listCount", returnCount);
 					model.put("listSize", (listSize + (listSize*pageNo)));
-					model.put("searchStatus", "Return");
+					model.put("searchStatus", "return");
 					poOrderlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Return Recieved", sellerId,
 									true, false));
 					model.put("poOrders", poOrderlist);
 
-				} else if (status.equalsIgnoreCase("payment")) {
+				} else if (status != null && status.equalsIgnoreCase("payment")) {
 					
 					int pageNo = request.getParameter("page") != null ? Integer
 							.parseInt(request.getParameter("page")) : 0;
 					returnlist = ConverterClass.prepareListofBean
-							(orderService.findOrdersOnCriteria("status", "Payment Recieved", sellerId, false, false, pageNo));
+							(orderService.findOrdersOnCriteria("status", "Payment", sellerId, false, false, pageNo));
 					
-					int paymentCount = orderService.countOnCriteria("status", "Payment Recieved", sellerId, false, false);
-					System.out.println(returnlist.size()+ " : "+paymentCount);
+					int paymentCount = orderService.countOnCriteria("status", "Payment", sellerId, false, false);					
 					if(returnlist != null){
 						model.put("orders", returnlist);
 					}
-					model.put("paymentCount", paymentCount);
+					model.put("listCount", paymentCount);
 					model.put("listSize", (listSize + (listSize*pageNo)));
-					model.put("searchStatus", "Payment");
+					model.put("searchStatus", "payment");
 					
 					/*returnlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Payment Recieved", sellerId,
@@ -779,32 +778,25 @@ public class OrderController {
 							.findOrders("status", "Payment Recieved", sellerId,
 									true, false));
 					model.put("poOrders", poOrderlist);
-				} else if (status.equalsIgnoreCase("actionable")) {
-					
+				} else {
+					String searchField = request.getParameter("orderCriteria");
+					if(status != null){
+						searchField = status;
+					}
 					int pageNo = request.getParameter("page") != null ? Integer
 							.parseInt(request.getParameter("page")) : 0;
 					returnlist = ConverterClass.prepareListofBean
-							(orderService.findOrdersOnCriteria("finalStatus", "Actionable", sellerId, false, false, pageNo));
+							(orderService.findOrdersOnCriteria("status", searchField, sellerId, false, false, pageNo));
 					
-					int actionableCount = orderService.countOnCriteria("finalStatus", "Actionable", sellerId, false, false);
-					System.out.println(returnlist.size()+ " : "+actionableCount);
+					int listCount = orderService.countOnCriteria("status", searchField, sellerId, false, false);					
 					if(returnlist != null){
 						model.put("orders", returnlist);
 					}					
-					model.put("actionableCount", actionableCount);
+					model.put("listCount", listCount);
 					model.put("listSize", (listSize + (listSize*pageNo)));
-					model.put("searchStatus", "Actionable");
-					/*returnlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("finalStatus", "Actionable", sellerId,
-									false, false));
-					model.put("orders", returnlist);*/
-
-					poOrderlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("finalStatus", "Actionable", sellerId,
-									true, false));
-					model.put("poOrders", poOrderlist);
+					model.put("searchStatus", searchField);
 				}
-			} else {
+			}  else {
 				int pageNo = request.getParameter("page") != null ? Integer
 						.parseInt(request.getParameter("page")) : 0;							
 				model.put("orders", ConverterClass
@@ -817,7 +809,8 @@ public class OrderController {
 								helperClass.getSellerIdfromSession(request),
 								pageNo)));
 				model.put("listSize", (listSize + (listSize*pageNo)));
-				model.put("MpOrdersCount", orderService.mpOrdersCount(sellerId));	
+				model.put("listCount", orderService.mpOrdersCount(sellerId));	
+				model.put("searchStatus", "");
 			}
 		} catch (CustomException ce) {
 			ce.printStackTrace();

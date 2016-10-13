@@ -2461,9 +2461,7 @@ public class SaveContents {
 								try {
 									if (entry.getCell(4) != null
 											&& StringUtils.isNotBlank(entry
-													.getCell(4).toString())
-											&& (int) Float.parseFloat(entry
-													.getCell(4).toString()) != 0) {
+													.getCell(4).toString())) {
 
 										if ((int) Float.parseFloat(entry
 												.getCell(4).toString()) < 0) {

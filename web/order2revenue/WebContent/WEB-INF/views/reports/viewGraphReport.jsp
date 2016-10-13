@@ -362,13 +362,13 @@
                                     <td>${order.pcName}</td>
                                     <td>${period}</td>
                                     <td>${order.saleQuantity}</td>
-                                    <td>${order.returnQuantiy}</td>
-                                    <td>${order.deliveredOrder}</td>
-                                    <td>${order.returnOrder}</td>
-                                    <td>${order.settledOrder}</td>
-                                    <td>${order.actionableOrder}</td>
-                                    <td>${order.returnLimitCrossed}</td>
-                                    <td>${order.rtoLimitCrossed}</td>
+                                    <td>${order.returnQuantity}</td>
+                                    <td>${order.noOfDeliveredOrder}</td>
+                                    <td>${order.noOfReturnOrder}</td>
+                                    <td>${order.noOfSettledOrders}</td>
+                                    <td>${order.noOfActionableOrders}</td>
+                                    <td>${order.noOfReturnLimitCrossed}</td>
+                                    <td>${order.noOfRTOLimitCrossed}</td>
                                  </tr>
                                 </c:forEach>
                                 </c:if>

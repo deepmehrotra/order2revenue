@@ -689,7 +689,7 @@
                                             <td>${order.customer.customerAddress}</td>  
                                         </tr>
                                         <tr>
-                                            <td>Address</td>
+                                            <td>Zipcode</td>
                                             <td>${order.customer.zipcode}</td>  
                                         </tr>
                                         </tbody>

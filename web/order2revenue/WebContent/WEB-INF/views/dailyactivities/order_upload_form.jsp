@@ -134,7 +134,12 @@ ol.d {
 		$('#progressSpiner').attr('class', 'fa fa-spinner fa-pulse');
 		$('#progressSpiner').attr('style', 'color:#1ab394;');
 
-		$('#uploadReport').show();
+		/* $('#uploadReport').show();
+		setTimeout(function() {
+		    $('#uploadReport').fadeOut('fast');
+		}, 3000); */
+		//$('#progrssDropdown').dropdown("toggle");
+		
 		NProgress.configure({
 			parent : "#bar1"
 		});

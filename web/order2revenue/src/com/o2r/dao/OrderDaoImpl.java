@@ -5611,10 +5611,12 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN);
 			criteria.add(Restrictions.eq("seller.id", sellerId));
-			if(value.equalsIgnoreCase("Return Recieved")){
+			if(value.equalsIgnoreCase("Return")){
 				criteria.add(Restrictions.or(Restrictions.eq(column, "Return Recieved"),Restrictions.eq(column, "Return Limit Crossed")));
-			} else if(value.equalsIgnoreCase("Payment Recieved")){
+			} else if(value.equalsIgnoreCase("Payment")){
 				criteria.add(Restrictions.or(Restrictions.eq(column, "Payment Recieved"),Restrictions.eq(column, "Payment Deducted")));
+			} else if(value.equalsIgnoreCase("Actionable") || value.equalsIgnoreCase("Settled") || value.equalsIgnoreCase("In Process")){
+				criteria.add(Restrictions.eq("finalStatus", value));
 			} else {
 				criteria.add(Restrictions.eq(column, value));
 			}
@@ -5664,10 +5666,12 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN);
 			criteria.add(Restrictions.eq("seller.id", sellerId));
-			if(value.equalsIgnoreCase("Return Recieved")){
+			if(value.equalsIgnoreCase("Return")){
 				criteria.add(Restrictions.or(Restrictions.eq(column, "Return Recieved"),Restrictions.eq(column, "Return Limit Crossed")));
-			} else if(value.equalsIgnoreCase("Payment Recieved")){
+			} else if(value.equalsIgnoreCase("Payment")){
 				criteria.add(Restrictions.or(Restrictions.eq(column, "Payment Recieved"),Restrictions.eq(column, "Payment Deducted")));
+			} else if(value.equalsIgnoreCase("Actionable") || value.equalsIgnoreCase("Settled") || value.equalsIgnoreCase("In Process")){
+				criteria.add(Restrictions.eq("finalStatus", value));
 			} else {
 				criteria.add(Restrictions.eq(column, value));
 			}			
