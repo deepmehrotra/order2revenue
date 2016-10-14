@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.dao.SellerAccountDao;
+import com.o2r.model.AccountTransaction;
 import com.o2r.model.SellerAccount;
 
 @Service("sellerAccountService")
@@ -38,6 +39,11 @@ public class SellerAccountServiceImpl implements SellerAccountService {
 	@Override
 	public void deleteSellerAccount(SellerAccount sellerAccount) {
 		sellerAccountDao.deleteSellerAccount(sellerAccount);		
+	}
+	
+	@Override
+	public AccountTransaction getLastTXN(int SellerId) {		
+		return sellerAccountDao.getLastTXN(SellerId);
 	}
 
 }

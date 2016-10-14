@@ -308,9 +308,9 @@
 																<li class="list-group-item"><span
 																	class="pull-right" id="Tstatus-${seller.id}"></span>TXN Status</li>
 																<li class="list-group-item"><span
-																	class="pull-right">
-																		${seller.sellerAccount.totalAmountPaidToO2r} </span> Total
-																	Amount Paid</li>
+																	class="pull-right"><fmt:formatNumber type="number" maxFractionDigits="2"
+																			value="${seller.sellerAccount.totalAmountPaidToO2r}" /></span>
+																			Total Amount Paid</li>
 																<li class="list-group-item"><span
 																	class="pull-right"> ${seller.plan.planName} </span>
 																	Plan Name</li>
@@ -458,17 +458,27 @@
 					});
 				}
 				
-				function Transaction(id){
-					alert("Okay !"+id);
+				function Transaction(id){					
 					$.ajax({								
-						url : "",				
-						success : function(data) {															
+						url : "getLastTXN.html?sellerId="+id,
+						dataType : "json",				
+						success : function(data) {							
+							if(data.id != null){
+								document.getElementById("Tid-"+id).innerHTML = data.id;
+							}
+							if(data.date != null){
+								document.getElementById("Tdate-"+id).innerHTML = data.date;
+							}
+							if(data.amount != null){
+								document.getElementById("Tamount-"+id).innerHTML = data.amount;
+							}
+							if(data.status != null){							
+								document.getElementById("Tstatus-"+id).innerHTML = data.status;
+							}							
 						}							
 					});					
 				}
 			</script>
-
-
 		</div>
 	</div>
 </body>

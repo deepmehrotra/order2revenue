@@ -34,6 +34,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.o2r.bean.DataConfig;
 import com.o2r.bean.PlanBean;
 import com.o2r.bean.SellerBean;
@@ -194,6 +196,31 @@ public class SellerController {
 		}
 		log.info("$$$ listSeller Ends : SellerController $$$");
 		return new ModelAndView("miscellaneous/sellerList", model);
+	}
+	
+	@RequestMapping(value = "/seller/getLastTXN", method = RequestMethod.GET)
+	public @ResponseBody String getLastTXN(HttpServletRequest request) {
+
+		log.info("$$$ getLastTXN Starts : SellerController $$$");
+		int sellerId =Integer.parseInt(request.getParameter("sellerId"));		
+		Map<String, Object> lastTXN = new HashMap<String, Object>();		
+		Gson gson = null;
+		try {
+			GsonBuilder gsonBuilder = new GsonBuilder();			
+			gson = gsonBuilder.setPrettyPrinting().create();
+			AccountTransaction accTxn= sellerAccountService.getLastTXN(sellerId);
+			if(accTxn != null){
+				lastTXN.put("id", accTxn.getTransactionId());
+				lastTXN.put("date", accTxn.getTransactionDate());
+				lastTXN.put("amount", accTxn.getTransactionAmount());
+				lastTXN.put("status", accTxn.getStatus());
+			}								
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by seller ID : " + sellerId, e);
+		}
+		log.info("$$$ getLastTXN Ends : SellerController $$$");
+		return gson.toJson(lastTXN);
 	}
 
 	@RequestMapping(value = "/seller/changePassword", method = RequestMethod.POST)
