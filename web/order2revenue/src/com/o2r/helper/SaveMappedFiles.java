@@ -122,6 +122,7 @@ public class SaveMappedFiles {
 		boolean validaterow = true;
 		Set<String> errorSet = new HashSet<String>();
 		Map<String, String> duplicateKey = new HashMap<String, String>();
+		String uploadFileName = "";
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping(
 					"Unicommerce", "order");
@@ -138,6 +139,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -876,6 +878,7 @@ public class SaveMappedFiles {
 
 					// Pre save to generate id for use in hierarchy
 					if (validaterow) {
+						order.setOrderFileName(uploadFileName);
 						order.setCustomer(customerBean);
 						order.setOrderTax(otb);
 						/*
@@ -914,7 +917,7 @@ public class SaveMappedFiles {
 								null);
 			}
 			errorSet = returnOrderMap.keySet();
-			uploadResultXLS(offices, "Unicommerce_Order_Upload", errorSet,
+			uploadResultXLS(offices, "Unicommerce_Order_Upload", uploadFileName, errorSet,
 					path, sellerId, uploadReport);
 
 		} catch (Exception e) {
@@ -949,6 +952,7 @@ public class SaveMappedFiles {
 		boolean validaterow = true;
 		Set<String> errorSet = new HashSet<String>();
 		Map<String, String> duplicateKey = new HashMap<String, String>();
+		String uploadFileName = "";
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping(
 					"Flipkart", "order");
@@ -964,6 +968,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -1557,6 +1562,7 @@ public class SaveMappedFiles {
 
 					// Pre save to generate id for use in hierarchy
 					if (validaterow) {
+						order.setOrderFileName(uploadFileName);
 						order.setCustomer(customerBean);
 						order.setOrderTax(otb);
 						/*
@@ -1595,7 +1601,7 @@ public class SaveMappedFiles {
 								null);
 			}
 			errorSet = returnOrderMap.keySet();
-			uploadResultXLS(offices, "Flipkart_Order_Upload", errorSet, path,
+			uploadResultXLS(offices, "Flipkart_Order_Upload", uploadFileName, errorSet, path,
 					sellerId, uploadReport);
 
 		} catch (Exception e) {
@@ -1630,6 +1636,7 @@ public class SaveMappedFiles {
 		boolean validaterow = true;
 		Set<String> errorSet = new HashSet<String>();
 		Map<String, String> duplicateKey = new HashMap<String, String>();
+		String uploadFileName = "";
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping("Amazon",
 					"order");
@@ -1646,6 +1653,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -2276,6 +2284,7 @@ public class SaveMappedFiles {
 
 					// Pre save to generate id for use in hierarchy
 					if (validaterow) {
+						order.setOrderFileName(uploadFileName);
 						order.setCustomer(customerBean);
 						order.setOrderTax(otb);
 						/*
@@ -2314,7 +2323,7 @@ public class SaveMappedFiles {
 								null);
 			}
 			errorSet = returnOrderMap.keySet();
-			uploadResultXLS(offices, "Amazon_Order_Upload", errorSet, path,
+			uploadResultXLS(offices, "Amazon_Order_Upload", uploadFileName, errorSet, path,
 					sellerId, uploadReport);
 
 		} catch (Exception e) {
@@ -2348,6 +2357,7 @@ public class SaveMappedFiles {
 		boolean validaterow = true;
 		Set<String> errorSet = new HashSet<String>();
 		Map<String, String> duplicateKey = new HashMap<String, String>();
+		String uploadFileName = "";
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping(
 					"Snapdeal", "order");
@@ -2363,6 +2373,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -2944,6 +2955,7 @@ public class SaveMappedFiles {
 
 					// Pre save to generate id for use in hierarchy
 					if (validaterow) {
+						order.setOrderFileName(uploadFileName);
 						order.setCustomer(customerBean);
 						order.setOrderTax(otb);
 						/*
@@ -2982,7 +2994,7 @@ public class SaveMappedFiles {
 								null);
 			}
 			errorSet = returnOrderMap.keySet();
-			uploadResultXLS(offices, "Snapdeal_Order_Upload", errorSet, path,
+			uploadResultXLS(offices, "Snapdeal_Order_Upload", uploadFileName, errorSet, path,
 					sellerId, uploadReport);
 
 		} catch (Exception e) {
@@ -3020,7 +3032,7 @@ public class SaveMappedFiles {
 		boolean generatePaymentUpload = false;
 		String uploadPaymentId = null;
 		Map<String, String> duplicateKey = new HashMap<String, String>();
-
+		String uploadFileName = "";
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping(
 					"Flipkart", "Payment");
@@ -3036,6 +3048,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -3255,7 +3268,7 @@ public class SaveMappedFiles {
 									totalnegative = totalnegative
 											+ Math.abs(amount);
 								}
-
+								orderPayment.setPaymentFileName(uploadFileName);
 								orderPayment.setPaymentVar(payvarlist);
 								order = orderService.addOrderPayment(skucode,
 										channelOrderId, orderPayment, sellerId);
@@ -3263,7 +3276,7 @@ public class SaveMappedFiles {
 								errorSet.add(errorMessage.toString());
 
 							}
-							if (order != null & validaterow) {
+							if (order != null & validaterow) {								
 								if (!duplicateKey.containsKey(channelOrderId)) {
 									// order.getPaymentUpload().add(paymentUpload);
 									// paymentUpload.getOrders().add(order);
@@ -3438,7 +3451,7 @@ public class SaveMappedFiles {
 				manualChargesService.addListManualCharges(manualChargesList,
 						sellerId);
 			}
-			uploadResultXLS(offices, "Flipkart_Payment", errorSet, path,
+			uploadResultXLS(offices, "Flipkart_Payment", uploadFileName, errorSet, path,
 					sellerId, uploadReport);
 		}
 
@@ -3472,7 +3485,7 @@ public class SaveMappedFiles {
 		String uploadPaymentId = null;
 		Map<String, String> duplicateKey = new HashMap<String, String>();
 		double amount = 0;
-
+		String uploadFileName = "";
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping(
 					"Snapdeal", "Payment");
@@ -3488,6 +3501,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -3681,6 +3695,7 @@ public class SaveMappedFiles {
 									}
 
 								}
+								orderPayment.setPaymentFileName(uploadFileName);
 								orderPayment.setPaymentVar(payvarlist);
 
 								if (amount > 0) {
@@ -3840,7 +3855,7 @@ public class SaveMappedFiles {
 				manualChargesService.addListManualCharges(manualChargesList,
 						sellerId);
 			}
-			uploadResultXLS(offices, "Snapdeal_Payment", errorSet, path,
+			uploadResultXLS(offices, "Snapdeal_Payment", uploadFileName, errorSet, path,
 					sellerId, uploadReport);
 		}
 
@@ -3870,6 +3885,7 @@ public class SaveMappedFiles {
 		boolean validaterow = true;
 		Set<String> errorSet = new HashSet<String>();
 		Map<String, String> duplicateKey = new HashMap<String, String>();
+		String uploadFileName = "";
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping("PayTM",
 					"order");
@@ -3885,6 +3901,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -4512,6 +4529,7 @@ public class SaveMappedFiles {
 
 					// Pre save to generate id for use in hierarchy
 					if (validaterow) {
+						order.setOrderFileName(uploadFileName);
 						order.setCustomer(customerBean);
 						order.setOrderTax(otb);
 						/*
@@ -4550,7 +4568,7 @@ public class SaveMappedFiles {
 								null);
 			}
 			errorSet = returnOrderMap.keySet();
-			uploadResultXLS(offices, "PayTM_Order_Upload", errorSet, path,
+			uploadResultXLS(offices, "PayTM_Order_Upload", uploadFileName, errorSet, path,
 					sellerId, uploadReport);
 
 		} catch (Exception e) {
@@ -4584,6 +4602,7 @@ public class SaveMappedFiles {
 		PaymentUpload paymentUpload = new PaymentUpload();
 		boolean generatePaymentUpload = false;
 		Map<String, String> duplicateKey = new HashMap<String, String>();
+		String uploadFileName = "";
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping("PayTM",
 					"Payment");
@@ -4599,6 +4618,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -4869,6 +4889,7 @@ public class SaveMappedFiles {
 							}
 
 						}
+						orderPayment.setPaymentFileName(uploadFileName);
 						orderPayment.setPaymentVar(payvarlist);
 
 						if (amount > 0) {
@@ -4910,7 +4931,7 @@ public class SaveMappedFiles {
 				paymentUploadService.addPaymentUpload(paymentUpload, sellerId);
 			}
 
-			uploadResultXLS(offices, "PayTM_Payment", errorSet, path, sellerId,
+			uploadResultXLS(offices, "PayTM_Payment", uploadFileName, errorSet, path, sellerId,
 					uploadReport);
 		}
 
@@ -4944,6 +4965,7 @@ public class SaveMappedFiles {
 		List<ManualCharges> manualChargesList = new ArrayList<ManualCharges>();
 		ManualCharges manualCharge = null;
 		String uploadPaymentId = null;		
+		String uploadFileName = "";
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping("Amazon",
 					"Payment");
@@ -4960,6 +4982,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -5341,6 +5364,7 @@ public class SaveMappedFiles {
 			if (paymentMap != null) {
 				for (Entry<String, OrderPaymentBean> entryz : paymentMap
 						.entrySet()) {
+					entryz.getValue().setPaymentFileName(uploadFileName);
 					double finalCharge = entryz.getValue().getPositiveAmount() - entryz.getValue().getNegativeAmount();
 					if(easyShipMap.size() != 0){
 						String CID = entryz.getValue().getChannelOrderId()
@@ -5403,7 +5427,7 @@ public class SaveMappedFiles {
 				manualChargesService.addListManualCharges(manualChargesList,
 						sellerId);
 			}
-			uploadResultXLS(offices, "Amazon_Payment", errorSet, path,
+			uploadResultXLS(offices, "Amazon_Payment", uploadFileName, errorSet, path,
 					sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed by seller: " + sellerId, e);
@@ -5431,6 +5455,7 @@ public class SaveMappedFiles {
 		boolean validaterow = true;
 		Set<String> errorSet = new HashSet<String>();
 		Map<String, String> duplicateKey = new HashMap<String, String>();
+		String uploadFileName = "";
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping(
 					"Limeroad", "order");
@@ -5446,6 +5471,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -6046,6 +6072,7 @@ public class SaveMappedFiles {
 
 					// Pre save to generate id for use in hierarchy
 					if (validaterow) {
+						order.setOrderFileName(uploadFileName);
 						order.setCustomer(customerBean);
 						order.setOrderTax(otb);
 						/*
@@ -6084,7 +6111,7 @@ public class SaveMappedFiles {
 								null);
 			}
 			errorSet = returnOrderMap.keySet();
-			uploadResultXLS(offices, "Limeroad_Order_Upload", errorSet, path,
+			uploadResultXLS(offices, "Limeroad_Order_Upload", uploadFileName, errorSet, path,
 					sellerId, uploadReport);
 
 		} catch (Exception e) {
@@ -6118,6 +6145,7 @@ public class SaveMappedFiles {
 		boolean generatePaymentUpload = false;
 		Map<String, String> duplicateKey = new HashMap<String, String>();
 		OrderPaymentBean paymentBean = null;
+		String uploadFileName = "";
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping(
 					"Limeroad", "Payment");
@@ -6133,6 +6161,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -6293,6 +6322,7 @@ public class SaveMappedFiles {
 							}
 
 						}
+						paymentBean.setPaymentFileName(uploadFileName);
 						paymentBean.setPaymentVar(payvarlist);
 
 						if (amount > 0) {
@@ -6335,7 +6365,7 @@ public class SaveMappedFiles {
 				paymentUpload.setUploadStatus("Success");
 				paymentUploadService.addPaymentUpload(paymentUpload, sellerId);
 			}
-			uploadResultXLS(offices, "Limeroad_Payment", errorSet, path,
+			uploadResultXLS(offices, "Limeroad_Payment", uploadFileName, errorSet, path,
 					sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed by seller: " + sellerId, e);
@@ -6363,6 +6393,7 @@ public class SaveMappedFiles {
 		boolean validaterow = true;
 		Set<String> errorSet = new HashSet<String>();
 		Map<String, String> duplicateKey = new HashMap<String, String>();
+		String uploadFileName = "";
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping("Jabong",
 					"order");
@@ -6378,6 +6409,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -6963,6 +6995,7 @@ public class SaveMappedFiles {
 
 					// Pre save to generate id for use in hierarchy
 					if (validaterow) {
+						order.setOrderFileName(uploadFileName);
 						order.setCustomer(customerBean);
 						order.setOrderTax(otb);
 						/*
@@ -7001,7 +7034,7 @@ public class SaveMappedFiles {
 								null);
 			}
 			errorSet = returnOrderMap.keySet();
-			uploadResultXLS(offices, "Jabong_Order_Upload", errorSet, path,
+			uploadResultXLS(offices, "Jabong_Order_Upload", uploadFileName, errorSet, path,
 					sellerId, uploadReport);
 
 		} catch (Exception e) {
@@ -7039,7 +7072,7 @@ public class SaveMappedFiles {
 		String uploadPaymentId = null;
 		Map<String, String> duplicateKey = new HashMap<String, String>();
 		double amount = 0;
-
+		String uploadFileName = "";
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping("Jabong",
 					"Payment");
@@ -7055,6 +7088,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -7282,6 +7316,7 @@ public class SaveMappedFiles {
 							}
 
 						}
+						orderPayment.setPaymentFileName(uploadFileName);
 						orderPayment.setPaymentVar(payvarlist);
 
 						if (amount > 0) {
@@ -7347,7 +7382,7 @@ public class SaveMappedFiles {
 				manualChargesService.addListManualCharges(manualChargesList,
 						sellerId);
 			}
-			uploadResultXLS(offices, "Jabong_Payment", errorSet, path,
+			uploadResultXLS(offices, "Jabong_Payment", uploadFileName, errorSet, path,
 					sellerId, uploadReport);
 		}
 
@@ -7357,7 +7392,7 @@ public class SaveMappedFiles {
 
 	}
 
-	public void uploadResultXLS(HSSFWorkbook workbook, String worksheetName,
+	public void uploadResultXLS(HSSFWorkbook workbook, String worksheetName, String fileName,
 			Set<String> errorSet, String path, int sellerId,
 			UploadReport uploadReport) throws ClassNotFoundException,
 			CustomException {
@@ -7365,7 +7400,11 @@ public class SaveMappedFiles {
 		log.info("$$$ uploadResultXLS starts : SaveContents $$$");
 		String errorMessage;
 		boolean isError = false;
+		int noOfRows = 1;
 		HSSFSheet worksheet = workbook.getSheetAt(0);
+		while (worksheet.getRow(noOfRows) != null) {
+			noOfRows++;
+		}
 		int colNumber = worksheet.getRow(0).getPhysicalNumberOfCells();
 		worksheet.setColumnWidth(colNumber, 15000);
 		// Create font style for the headers
@@ -7438,16 +7477,25 @@ public class SaveMappedFiles {
 				log.debug(" Directory doesnnt exist");
 				fileSaveDir.mkdirs();
 			}
-
-			String filePath = dataConfig.getUploadReportPath() + File.separator
-					+ worksheet.getSheetName() + "Status"
-					+ new Date().getTime() + ".xls";
+			String filePath = "";
+			if(fileName != null && !fileName.equals("")) {
+				filePath = dataConfig.getUploadReportPath() + File.separator
+						+ fileName + ".xls";
+				uploadReport.setFileName(fileName);
+			} else {
+				filePath = dataConfig.getUploadReportPath() + File.separator
+						+ worksheetName + "UploadStatus"
+						+ new Date().getTime() + ".xls";
+				uploadReport.setFileName(worksheetName);
+			}
+			
 			FileOutputStream out = new FileOutputStream(new File(filePath));
 			workbook.write(out);
 			out.close();
 			uploadReport.setFileType(worksheetName);
 			uploadReport.setFilePath(filePath);
 			uploadReport.setNoOfErrors(errorSet.size());
+			uploadReport.setNoOfSuccess((noOfRows - errorSet.size()) - 3);
 			uploadReport.setDescription("Imported");
 			uploadReport.setSeller(sellerService.getSeller(sellerId));
 			if (isError) {

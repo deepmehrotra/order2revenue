@@ -23,6 +23,7 @@ public class OrderPaymentBean {
 	private String paymentCycle;
 	private Date paymentCycleStart;
 	private Date paymentCycleEnd;
+	private String paymentFileName;
 	private List<PaymentVariables> paymentVar;
 	public int getOrderpayId() {
 		return orderpayId;
@@ -105,6 +106,12 @@ public class OrderPaymentBean {
 	}
 	public void setPaymentCycleEnd(Date paymentCycleEnd) {
 		this.paymentCycleEnd = paymentCycleEnd;
+	}
+	public String getPaymentFileName() {
+		return paymentFileName;
+	}
+	public void setPaymentFileName(String paymentFileName) {
+		this.paymentFileName = paymentFileName;
 	}
 	public double getPositiveAmount() {
 		return positiveAmount;

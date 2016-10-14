@@ -86,12 +86,12 @@
 																		</c:if>
 																		<c:if test="${seller.logoUrl == null}">
 																			<td class="client-avatar"><a data-toggle="tab"
-																				href="#contact-${seller.id}" class="client-link"><img
+																				href="#contact-${seller.id}" class="client-link" onclick="Transaction(${seller.id});"><img
 																					alt="image"
 																					src="/O2R/sellerimages/defaultSeller.jpg"></a></td>
 																		</c:if>
 																		<td><a data-toggle="tab"
-																			href="#contact-${seller.id}" class="client-link">${seller.email} (${seller.id})</a></td>
+																			href="#contact-${seller.id}" class="client-link" onclick="Transaction(${seller.id});">${seller.email} (${seller.id})</a></td>
 																		<td class="contact-type"><i class="fa fa-phone">
 																		</i></td>
 																		<td>${seller.contactNo}</td>
@@ -298,7 +298,15 @@
 																<li class="list-group-item"><span
 																	class="pull-right">
 																		${seller.sellerAccount.totalOrderProcessed} </span> Total
-																	Order Processed</li>
+																	Order Processed</li>																
+																<li class="list-group-item"><span
+																	class="pull-right" id="Tid-${seller.id}"></span>Last TXN ID</li>
+																<li class="list-group-item"><span
+																	class="pull-right" id="Tdate-${seller.id}"></span>Last TXN Date</li>
+																<li class="list-group-item"><span
+																	class="pull-right" id="Tamount-${seller.id}"></span>Last TXN Amount</li>
+																<li class="list-group-item"><span
+																	class="pull-right" id="Tstatus-${seller.id}"></span>TXN Status</li>
 																<li class="list-group-item"><span
 																	class="pull-right">
 																		${seller.sellerAccount.totalAmountPaidToO2r} </span> Total
@@ -448,6 +456,15 @@
 								$(row).hide();
 						}
 					});
+				}
+				
+				function Transaction(id){
+					alert("Okay !"+id);
+					$.ajax({								
+						url : "",				
+						success : function(data) {															
+						}							
+					});					
 				}
 			</script>
 

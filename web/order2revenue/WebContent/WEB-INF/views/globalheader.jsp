@@ -595,7 +595,11 @@
 																if (arrayItem.status == "Error" || arrayItem.status == "Failed") {
 																	document
 																		.getElementById("uploadReport-status-"
-																			+ i).innerHTML = arrayItem.noOfErrors + " Errors";
+																			+ i).innerHTML = arrayItem.noOfErrors+" Errors<br>"+"<span style='color:green;'>"+arrayItem.noOfSuccess+" Success</span>";
+																} else if (arrayItem.status == "Success") {
+																	document
+																	.getElementById("uploadReport-status-"
+																		+ i).innerHTML = arrayItem.noOfSuccess+" Success";
 																} else {
 																	document
 																		.getElementById("uploadReport-status-"

@@ -25,7 +25,7 @@ public class OrderRTOorReturnBean {
 	private double grossProfit;
 	private String inventoryType;
 	private int badReturnQty;
-	
+	private String returnFileName;
 	
 	public int getReturnId() {
 		return returnId;
@@ -142,7 +142,10 @@ public class OrderRTOorReturnBean {
 	public void setBadReturnQty(int badReturnQty) {
 		this.badReturnQty = badReturnQty;
 	}
-
-
-
+	public String getReturnFileName() {
+		return returnFileName;
+	}
+	public void setReturnFileName(String returnFileName) {
+		this.returnFileName = returnFileName;
+	}	
 }

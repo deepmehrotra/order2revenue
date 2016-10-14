@@ -46,7 +46,8 @@ public class OrderBean {
 	private float serviceTax;
 	private double fixedfee;
 	private double pccAmount;
-	private String  eventName;
+	private String  eventName;	
+	private String orderFileName;	
 	private String  volShippingString;
 	private String  dwShippingString;
 	private double productCost;
@@ -417,6 +418,14 @@ public class OrderBean {
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
 	}
+
+	public String getOrderFileName() {
+		return orderFileName;
+	}
+
+	public void setOrderFileName(String orderFileName) {
+		this.orderFileName = orderFileName;
+	}	
 
 	public double getEossValue() {
 		return eossValue;

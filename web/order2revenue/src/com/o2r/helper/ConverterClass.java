@@ -136,6 +136,7 @@ public class ConverterClass {
 			order.setServiceTax(orderBean.getServiceTax());
 			order.setFixedfee(orderBean.getFixedfee());
 			order.setEventName(orderBean.getEventName());
+			order.setOrderFileName(orderBean.getOrderFileName());			
 			order.setVolShippingString(orderBean.getVolShippingString());
 			order.setDwShippingString(orderBean.getDwShippingString());
 			order.setGrossMargin(orderBean.getGrossMargin());
@@ -200,6 +201,7 @@ public class ConverterClass {
 				order.setServiceTax(orderBean.getServiceTax());
 				order.setFixedfee(orderBean.getFixedfee());
 				order.setEventName(orderBean.getEventName());
+				order.setOrderFileName(orderBean.getOrderFileName());				
 				order.setVolShippingString(orderBean.getVolShippingString());
 				order.setDwShippingString(orderBean.getDwShippingString());
 				order.setGrossMargin(orderBean.getGrossMargin());
@@ -266,6 +268,7 @@ public class ConverterClass {
 				bean.setFixedfee(order.getFixedfee());
 				bean.setEossValue(order.getEossValue());
 				bean.setEventName(order.getEventName());
+				bean.setOrderFileName(order.getOrderFileName());
 				bean.setVolShippingString(order.getVolShippingString());
 				bean.setDwShippingString(order.getDwShippingString());
 				bean.setGrossMargin(order.getGrossMargin());
@@ -327,6 +330,7 @@ public class ConverterClass {
 			bean.setSealNo(order.getSealNo());
 			bean.setPoPrice(order.getPoPrice());
 			bean.setEventName(order.getEventName());
+			bean.setOrderFileName(order.getOrderFileName());
 			bean.setVolShippingString(order.getVolShippingString());
 			bean.setDwShippingString(order.getDwShippingString());
 			bean.setPccAmount(order.getPccAmount());
@@ -1227,6 +1231,7 @@ public class ConverterClass {
 			orderPayment.setPaymentCycleStart(bean.getPaymentCycleStart());
 			orderPayment.setPaymentCycleEnd(bean.getPaymentCycleEnd());
 			orderPayment.setPaymentVar(bean.getPaymentVar());
+			orderPayment.setPaymentFileName(bean.getPaymentFileName());
 		}
 		return orderPayment;
 	}
@@ -1248,6 +1253,7 @@ public class ConverterClass {
 			orderPayment.setPaymentCycleStart(bean.getPaymentCycleStart());
 			orderPayment.setPaymentCycleEnd(bean.getPaymentCycleEnd());
 			orderPayment.setPaymentVar(bean.getPaymentVar());
+			orderPayment.setPaymentFileName(bean.getPaymentFileName());
 		}
 		return orderPayment;
 	}
@@ -1276,6 +1282,7 @@ public class ConverterClass {
 			orderReturn.setGrossProfit(bean.getGrossProfit());
 			orderReturn.setBadReturnQty(bean.getBadReturnQty());
 			orderReturn.setInventoryType(bean.getInventoryType());
+			orderReturn.setReturnFileName(bean.getReturnFileName());
 		}
 		return orderReturn;
 	}
@@ -1304,6 +1311,7 @@ public class ConverterClass {
 			orderReturn.setGrossProfit(bean.getGrossProfit());
 			orderReturn.setBadReturnQty(bean.getBadReturnQty());
 			orderReturn.setInventoryType(bean.getInventoryType());
+			orderReturn.setReturnFileName(bean.getReturnFileName());
 		}
 		return orderReturn;
 	}
@@ -3310,6 +3318,7 @@ public class ConverterClass {
 				bean.setId(uploadReport.getId());
 				bean.setDescription(uploadReport.getDescription());
 				bean.setFileType(uploadReport.getFileType());
+				bean.setFileName(uploadReport.getFileName());
 				bean.setFilePath(uploadReport.getFilePath());
 				bean.setSellerId(uploadReport.getSeller().getId());
 				bean.setSellerName(uploadReport.getSeller().getName());
@@ -3317,6 +3326,7 @@ public class ConverterClass {
 				bean.setTimeTaken(uploadReport.getTimeTaken());
 				bean.setUploadDate(uploadReport.getUploadDate());
 				bean.setNoOfErrors(uploadReport.getNoOfErrors());
+				bean.setNoOfSuccess(uploadReport.getNoOfSuccess());
 				bean.setUploadedAt(GlobalConstant.toDuration(new Date()
 						.getTime() - uploadReport.getUploadDate().getTime()));
 				uploadReportBeans.add(bean);

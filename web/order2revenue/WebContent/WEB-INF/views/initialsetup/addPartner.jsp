@@ -162,11 +162,20 @@ input+label {
 																			<label id="postName" class="control-label">${partner.pcName}</label>
 																		</div>
 																		<div class="col-sm-9">
-																			<input name="pcNameSuffix" class="form-control"
+																			<c:if test="${partner.pcName != null}">
+																				<input name="pcNameSuffix" class="form-control"
 																				id="partnerName2" onblur="checkOnBlur()"
 																				style="width: 108%;" placeholder="Suffix" /> <span
 																				id="partnerNameMessage"
 																				style="font-weight: bold;color=red"></span>
+																			</c:if>
+																			<c:if test="${partner.pcName == null}">
+																				<input name="pcNameSuffix" class="form-control"
+																				id="partnerName2" onblur="checkOnBlur()"
+																				style="width: 108%;" placeholder="Suffix"  required='true' /> <span
+																				id="partnerNameMessage"
+																				style="font-weight: bold;color=red"></span>
+																			</c:if>
 																		</div>
 																	</c:otherwise>
 																</c:choose>

@@ -106,6 +106,8 @@ public class Order {
 	@Column
 	private String eventName;
 	@Column
+	private String orderFileName;	
+	@Column
 	private double pccAmount;
 	@Column
 	private double productCost;
@@ -553,6 +555,15 @@ public class Order {
 		this.eventName = eventName;
 	}
 
+	public String getOrderFileName() {
+		return orderFileName;
+	}
+
+	public void setOrderFileName(String orderFileName) {
+		this.orderFileName = orderFileName;
+	}
+	
+
 	public ProductConfig getProductConfig() {
 		return productConfig;
 	}
@@ -565,7 +576,7 @@ public class Order {
 		return consolidatedOrder;
 	}
 
-	public void setConsolidatedOrderID(Order consolidatedOrder) {
+	public void setConsolidatedOrder(Order consolidatedOrder) {
 		this.consolidatedOrder = consolidatedOrder;
 	}
 

@@ -136,21 +136,23 @@ public class SaveContents {
 		CustomerBean customerBean = null;
 		OrderTaxBean otb = null;
 		Events event = null;
+		String uploadFileName = "";
 		List<Order> saveList = null;
-		List<String> idsList = new ArrayList<String>();
-		List<String> SKUList = new ArrayList<String>();
+		List<String> idsList = new ArrayList<String>();		
 		Map<String, String> duplicateKey = new HashMap<String, String>();
-		try {
+		try {			
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
 			saveList = new ArrayList<Order>();
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			System.out.println(file.getOriginalFilename());			
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			System.out.println(uploadFileName);
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
-			idsList = orderService.listOrderIds("channelOrderID", sellerId);
-			SKUList = productService.listProductSKU(sellerId);
+			idsList = orderService.listOrderIds("channelOrderID", sellerId);			
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				try {
 					validaterow = true;
@@ -643,6 +645,7 @@ public class SaveContents {
 							+ entry.getCell(2) + " 3 :" + entry.getCell(3));
 					// Pre save to generate id for use in hierarchy
 					if (validaterow) {
+						order.setOrderFileName(uploadFileName);
 						order.setCustomer(customerBean);
 						order.setOrderTax(otb);
 						/*
@@ -681,7 +684,7 @@ public class SaveContents {
 								null);
 			}
 			Set<String> errorSet = returnOrderMap.keySet();
-			downloadUploadReportXLS(offices, "MP_Order_Upload", 23, errorSet,
+			downloadUploadReportXLS(offices, "MP_Order_Upload", uploadFileName, 23, errorSet,
 					path, sellerId, uploadReport);
 
 		} catch (Exception e) {
@@ -709,7 +712,7 @@ public class SaveContents {
 
 		String poId = null;
 		String invoiceId = null;
-
+		String uploadFileName = "";
 		List<Order> orderlist = new ArrayList<Order>();
 
 		try {
@@ -718,6 +721,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -976,7 +980,7 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = returnOrderMap.keySet();
-			downloadUploadReportXLS(offices, "PO_Order_Upload", 10, errorSet,
+			downloadUploadReportXLS(offices, "PO_Order_Upload", uploadFileName, 10, errorSet,
 					path, sellerId, uploadReport);
 
 		} catch (Exception e) {
@@ -1001,6 +1005,7 @@ public class SaveContents {
 		StringBuffer errorMessage = null;
 		Map<String, String> uniqueProductMap = new HashMap<String, String>();
 		List<Product> saveList = null;
+		String uploadFileName = "";
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -1010,6 +1015,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -1212,7 +1218,7 @@ public class SaveContents {
 								null);
 			}
 			Set<String> errorSet = returnProductMap.keySet();
-			downloadUploadReportXLS(offices, "Create_Parent_Product", 10,
+			downloadUploadReportXLS(offices, "Create_Parent_Product", uploadFileName, 10,
 					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
@@ -1237,6 +1243,7 @@ public class SaveContents {
 		StringBuffer errorMessage = null;
 		List<Product> productList = new ArrayList<Product>();
 		Product product = null;
+		String uploadFileName = "";
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -1246,6 +1253,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -1384,7 +1392,7 @@ public class SaveContents {
 			returnProductMap.put(errorMessage.toString(),
 					ConverterClass.prepareProductBean(product));
 			Set<String> errorSet = returnProductMap.keySet();
-			downloadUploadReportXLS(offices, "Product_Edit", 8, errorSet, path,
+			downloadUploadReportXLS(offices, "Product_Edit", uploadFileName, 8, errorSet, path,
 					sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
@@ -1485,7 +1493,7 @@ public class SaveContents {
 		StringBuffer errorMessage = null;
 		List<Category> productCategoryList = null;
 		Map<String, Category> productCategoryMap = new HashMap<String, Category>();
-
+		String uploadFileName = "";
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -1494,6 +1502,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			productCategoryList = categoryService.listCategories(sellerId);
 			System.out.println(productCategoryList.size());
 			if (productCategoryList != null) {
@@ -1655,7 +1664,7 @@ public class SaveContents {
 			 * +sellerId, ce); }
 			 */
 			Set<String> errorSet = returnTaxCatMap.keySet();
-			downloadUploadReportXLS(offices, "product_Tax_Mapping", 3,
+			downloadUploadReportXLS(offices, "product_Tax_Mapping", uploadFileName, 3,
 					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 
@@ -1674,6 +1683,7 @@ public class SaveContents {
 		boolean validaterow = true;
 		StringBuffer errorMessage = null;
 		Map<String, ProductConfig> productConfigMap = new HashMap<String, ProductConfig>();
+		String uploadFileName = "";
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -1682,6 +1692,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -1752,7 +1763,7 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = productConfigMap.keySet();
-			downloadUploadReportXLS(offices, "Dlink_SKU_Mapping", 4, errorSet,
+			downloadUploadReportXLS(offices, "Dlink_SKU_Mapping", uploadFileName, 4, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 
@@ -1773,6 +1784,7 @@ public class SaveContents {
 		Set<String> errorSet = new HashSet<>();
 		StringBuffer errorMessage = null;
 		Category category = null;
+		String uploadFileName = "";
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -1781,6 +1793,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
@@ -1824,7 +1837,7 @@ public class SaveContents {
 				}
 			}
 
-			saveMappedFiles.uploadResultXLS(offices, "Create_Inventory_Group",
+			saveMappedFiles.uploadResultXLS(offices, "Create_Inventory_Group", uploadFileName,
 					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 
@@ -1844,6 +1857,7 @@ public class SaveContents {
 		Set<String> errorSet = new HashSet<>();
 		StringBuffer errorMessage = null;
 		Category category = null;
+		String uploadFileName = "";
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -1852,6 +1866,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
@@ -1916,7 +1931,7 @@ public class SaveContents {
 				}
 			}
 
-			saveMappedFiles.uploadResultXLS(offices, "Create_Product_Category",
+			saveMappedFiles.uploadResultXLS(offices, "Create_Product_Category", uploadFileName,
 					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 
@@ -1939,6 +1954,7 @@ public class SaveContents {
 		Map<String, String> uniqueProductMap = new HashMap<String, String>();
 		Map<String, String> uniqueVendorSKUMap = new HashMap<String, String>();
 		List<ProductConfig> saveList = new ArrayList<ProductConfig>();
+		String uploadFileName = "";
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -1947,6 +1963,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -2103,7 +2120,7 @@ public class SaveContents {
 								null);
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
-			downloadUploadReportXLS(offices, "MP_Vendor_SKU_Mapping", 4,
+			downloadUploadReportXLS(offices, "MP_Vendor_SKU_Mapping", uploadFileName, 4,
 					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 
@@ -2123,6 +2140,7 @@ public class SaveContents {
 		boolean validaterow = true;
 		Map<String, ProductConfigBean> returnProductConfigMap = new LinkedHashMap<>();
 		StringBuffer errorMessage = null;
+		String uploadFileName = "";
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -2131,6 +2149,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -2246,7 +2265,7 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
-			downloadUploadReportXLS(offices, "PO_Product_Config", 6, errorSet,
+			downloadUploadReportXLS(offices, "PO_Product_Config", uploadFileName, 6, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
@@ -2274,6 +2293,7 @@ public class SaveContents {
 		String uploadPaymentId = null;
 		HSSFRow entry;
 		Integer noOfEntries = 1;
+		String uploadFileName = "";
 		Date todaydat = new Date();
 		List<ManualCharges> manualChargesList = new ArrayList<ManualCharges>();
 		Map<String, Object> returnPaymentMap = new LinkedHashMap<>();
@@ -2290,6 +2310,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -2529,12 +2550,13 @@ public class SaveContents {
 								validaterow = false;
 							}
 							
-							if (validaterow) {
+							if (validaterow) {								
+								payment.setPaymentFileName(uploadFileName);
 								totalpositive = totalpositive + positiveAmount;
 								totalnegative = totalnegative + negativeAmount;
 								order = orderService.addOrderPayment(
 										skucode, channelId, payment,
-										sellerId);
+										sellerId);								
 							} else {
 								returnPaymentMap.put(errorMessage
 										.toString(), ConverterClass
@@ -2670,7 +2692,7 @@ public class SaveContents {
 						sellerId);
 			}
 			Set<String> errorSet = returnPaymentMap.keySet();
-			downloadUploadReportXLS(offices, "MP_Payment_Upload", 8, errorSet,
+			downloadUploadReportXLS(offices, "MP_Payment_Upload", uploadFileName, 8, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
@@ -2695,6 +2717,7 @@ public class SaveContents {
 		int currentInventory = 0;
 		int quantoAdd = 0;
 		int quantoSub = 0;
+		String uploadFileName = "";
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -2704,6 +2727,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -2760,7 +2784,7 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnInventoryMap.keySet();
-			downloadUploadReportXLS(offices, "InventoryReport", 5, errorSet,
+			downloadUploadReportXLS(offices, "InventoryReport", uploadFileName, 5, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save c" + "ontents exception :"
@@ -2784,6 +2808,7 @@ public class SaveContents {
 		StringBuffer errorMessage = null;
 		boolean validaterow = true;
 		int returnId = 0;
+		String uploadFileName = "";
 		OrderRTOorReturn orderReturn = null;
 		Map<String, Order> returnlist = new LinkedHashMap<>();
 		List<Order> orderlist = null;
@@ -2807,6 +2832,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -3115,10 +3141,11 @@ public class SaveContents {
 						errorMessage.append("Value of " + criteria
 								+ " is Invalid for Return.. ");
 					}*/
-					if (validaterow)
+					if (validaterow){
+						orderReturn.setReturnFileName(uploadFileName);
 						orderService.addReturnOrder(order.getChannelOrderID(),
 								orderReturn, sellerId);
-					else {
+					} else {
 						order.setOrderReturnOrRTO(orderReturn);
 						returnlist.put(errorMessage.toString(), order);
 					}
@@ -3130,7 +3157,7 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "MP_Return_Upload", 13, errorSet,
+			downloadUploadReportXLS(offices, "MP_Return_Upload", uploadFileName, 13, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -3156,7 +3183,7 @@ public class SaveContents {
 			HSSFSheet worksheet = offices.getSheetAt(0);
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
-			}
+			}			
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			DebitNoteBean dnBean = null;
@@ -3251,7 +3278,7 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "DebitNoteSheet", 9, errorSet,
+			downloadUploadReportXLS(offices, "DebitNoteSheet", null, 9, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -3280,7 +3307,7 @@ public class SaveContents {
 		double totalnegative = 0;
 		boolean generatePaymentUpload = false;
 		boolean disputedGP = false;
-
+		String uploadFileName = "";
 		try {
 
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -3288,6 +3315,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -3426,7 +3454,7 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = returnMap.keySet();
-			downloadUploadReportXLS(offices, "Po_Payment_Upload", 6, errorSet,
+			downloadUploadReportXLS(offices, "Po_Payment_Upload", uploadFileName, 6, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -3448,12 +3476,14 @@ public class SaveContents {
 		boolean validaterow = true;
 		ExpenseBean expensebean = null;
 		Map<String, ExpenseBean> returnlist = new LinkedHashMap<>();
+		String uploadFileName = "";
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -3573,7 +3603,7 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "Expense_Upload", 7, errorSet,
+			downloadUploadReportXLS(offices, "Expense_Upload", uploadFileName, 7, errorSet,
 					path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -3596,13 +3626,14 @@ public class SaveContents {
 		Map<String, Events> returnlist = new LinkedHashMap<>();
 		Events event = null;
 		Map<String, Events> eventsMap = new HashMap<String, Events>();
-
+		String uploadFileName = "";
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -3673,7 +3704,7 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			saveMappedFiles.uploadResultXLS(offices, "Event_SKU_Upload",
+			saveMappedFiles.uploadResultXLS(offices, "Event_SKU_Upload", uploadFileName,
 					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -3698,12 +3729,16 @@ public class SaveContents {
 	}
 
 	public void downloadUploadReportXLS(HSSFWorkbook workbook,
-			String worksheetName, int colNumber, Set<String> errorSet,
+			String worksheetName, String fileName, int colNumber, Set<String> errorSet,
 			String path, int sellerId, UploadReport uploadReport)
 			throws ClassNotFoundException, CustomException {
 
 		log.info("$$$ downloadUploadReportXLS starts : SaveContents $$$");
+		int noOfRows = 1;
 		HSSFSheet worksheet = workbook.getSheetAt(0);
+		while (worksheet.getRow(noOfRows) != null) {
+			noOfRows++;
+		}
 		String errorMessage;
 		boolean isError = false;
 
@@ -3739,8 +3774,7 @@ public class SaveContents {
 		errorCellStyle.setFont(font);
 
 		// Create the column headers
-		HSSFRow rowHeader = worksheet.getRow((short) startRowIndex + 2);
-
+		HSSFRow rowHeader = worksheet.getRow((short) startRowIndex + 2);		
 		HSSFCell cell1 = rowHeader.createCell(colNumber);
 		cell1.setCellValue("Error Message");
 		cell1.setCellStyle(headerCellStyle);
@@ -3781,9 +3815,15 @@ public class SaveContents {
 				log.debug(" Directory doesnnt exist");
 				fileSaveDir.mkdirs();
 			}
-
-			String filePath = uploadFilePath + File.separator + worksheetName
-					+ "UploadStatus" + new Date().getTime() + ".xls";
+			String filePath = "";
+			if(fileName != null && !fileName.equals("")){
+				filePath = uploadFilePath + File.separator + fileName + ".xls";
+				uploadReport.setFileName(fileName);
+			} else {
+				filePath = uploadFilePath + File.separator + worksheetName
+						+ "UploadStatus" + new Date().getTime() + ".xls";
+				uploadReport.setFileName(worksheetName);
+			}			 
 			FileOutputStream out = new FileOutputStream(new File(filePath));
 			workbook.write(out);
 			out.close();
@@ -3792,6 +3832,7 @@ public class SaveContents {
 			uploadReport.setDescription("Imported");
 			uploadReport.setSeller(sellerService.getSeller(sellerId));
 			uploadReport.setNoOfErrors(errorSet.size());
+			uploadReport.setNoOfSuccess((noOfRows - errorSet.size()) - 3);
 
 			if (isError) {
 				uploadReport.setStatus("Failed");
@@ -3847,7 +3888,7 @@ public class SaveContents {
 		List<GatePass> gatepasslist = new ArrayList<GatePass>();
 		ProductConfig productConfig = null;
 		List<ProductConfig> productConfigs = null;
-
+		String uploadFileName = "";
 		try {
 
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -3855,6 +3896,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -4050,7 +4092,7 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "PO_Gatepass_Uplooad", 10,
+			downloadUploadReportXLS(offices, "PO_Gatepass_Uplooad", uploadFileName, 10,
 					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -4068,6 +4110,7 @@ public class SaveContents {
 		log.info("$$$ saveProdCatCommissionContents starts : SaveContents $$$");
 		boolean validaterow = true;
 		StringBuffer errorMessage = null;
+		String uploadFileName = "";
 		try {
 			Map<String, String> returnlist = new LinkedHashMap<>();
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -4077,6 +4120,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -4182,7 +4226,7 @@ public class SaveContents {
 				// Pre save to generate id for use in hierarchy
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "ProdCat_Comm_Mapping", 3,
+			downloadUploadReportXLS(offices, "ProdCat_Comm_Mapping", uploadFileName, 3,
 					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -4200,6 +4244,7 @@ public class SaveContents {
 		log.info("$$$ saveProdCatCommissionEventContents starts : SaveContents $$$");
 		boolean validaterow = true;
 		StringBuffer errorMessage = null;
+		String uploadFileName = "";
 		try {
 			Map<String, String> returnlist = new LinkedHashMap<>();
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -4209,6 +4254,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -4327,7 +4373,7 @@ public class SaveContents {
 				// Pre save to generate id for use in hierarchy
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "ProdCat_Comm_Event_Mapping", 4,
+			downloadUploadReportXLS(offices, "ProdCat_Comm_Event_Mapping", uploadFileName, 4,
 					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
