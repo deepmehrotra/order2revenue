@@ -4727,7 +4727,7 @@ public class OrderDaoImpl implements OrderDao {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			for (Order order : orderlist) {
-				order.setConsolidatedOrderID(consolidatedOrder);
+				order.setConsolidatedOrder(consolidatedOrder);
 				session.merge(order);
 			}
 			session.getTransaction().commit();

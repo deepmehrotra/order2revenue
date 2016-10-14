@@ -6,12 +6,14 @@ public class UploadReportBean {
 	
 	private Integer id;
 	private String fileType;
+	private String fileName;
 	private String description;
 	private String status;
 	private String filePath;
 	private int sellerId;
 	private String sellerName;
 	private double timeTaken;
+	private long noOfSuccess;
 	private long noOfErrors;
 	private Date uploadDate;
 	private String uploadedAt;
@@ -27,6 +29,12 @@ public class UploadReportBean {
 	}
 	public void setFileType(String fileType) {
 		this.fileType = fileType;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	public String getStatus() {
 		return status;
@@ -69,6 +77,12 @@ public class UploadReportBean {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public long getNoOfSuccess() {
+		return noOfSuccess;
+	}
+	public void setNoOfSuccess(long noOfSuccess) {
+		this.noOfSuccess = noOfSuccess;
 	}
 	public String getFilePath() {
 		return filePath;

@@ -57,6 +57,8 @@ public class OrderRTOorReturn {
 	private String inventoryType;
 	@Column
 	private int badReturnQty;
+	@Column
+	private String returnFileName;
 	
 	@OneToMany(mappedBy="consolidatedReturn", cascade=CascadeType.ALL)  
 	private List<GatePass> gatepasses =new ArrayList<GatePass>();
@@ -224,4 +226,11 @@ public class OrderRTOorReturn {
 		this.badReturnQty = badReturnQty;
 	}
 
+	public String getReturnFileName() {
+		return returnFileName;
+	}
+
+	public void setReturnFileName(String returnFileName) {
+		this.returnFileName = returnFileName;
+	}
 }

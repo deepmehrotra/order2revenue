@@ -55,10 +55,12 @@
 												<tr>
 													<th>#</th>
 													<th>File Type</th>
+													<th>File Name</th>
 													<th>Description</th>
 													<th>Upload Date</th>
-													<th>Status</th>
+													<th>No. Of Success</th>
 													<th>No. of Errors</th>
+													<th>Status</th>
 													<th>Time Taken</th>
 													<th>Action</th>
 												</tr>
@@ -70,12 +72,14 @@
 														<tr>
 															<td>${loop.index+1}</td>
 															<td>${uploadReport.fileType}</td>
+															<td>${uploadReport.fileName}</td>
 															<td>${uploadReport.description}</td>
 															<td><fmt:formatDate
 																	value="${uploadReport.uploadDate}"
 																	pattern="MMM dd ,YY" /></td>
-															<td>${uploadReport.status}</td>
+															<td>${uploadReport.noOfSuccess}</td>
 															<td>${uploadReport.noOfErrors}</td>
+															<td>${uploadReport.status}</td>
 															<td><fmt:formatNumber type="number"
 																	maxFractionDigits="2" value="${uploadReport.timeTaken}" /> s</td>
 															<td><a href="#" onClick="onclickDownload('${uploadReport.id}');">Download</a></td>

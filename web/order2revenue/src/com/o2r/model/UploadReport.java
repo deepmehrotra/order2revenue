@@ -25,6 +25,8 @@ public class UploadReport {
 	@Column
 	private String fileType;
 	@Column
+	private String fileName;
+	@Column
 	private String description;
 	@Column
 	private String Status;
@@ -34,6 +36,8 @@ public class UploadReport {
 	private float timeTaken;
 	@Column
 	private long noOfErrors;
+	@Column
+	private long noOfSuccess;
 	@Column
 	private Date uploadDate;
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -53,6 +57,14 @@ public class UploadReport {
 
 	public void setFileType(String fileType) {
 		this.fileType = fileType;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 	public String getStatus() {
@@ -111,6 +123,14 @@ public class UploadReport {
 		this.noOfErrors = noOfErrors;
 	}
 
+	public long getNoOfSuccess() {
+		return noOfSuccess;
+	}
+
+	public void setNoOfSuccess(long noOfSuccess) {
+		this.noOfSuccess = noOfSuccess;
+	}
+	
 	public static class OrderByDate implements Comparator<UploadReport> {
 		@Override
 		public int compare(UploadReport report1, UploadReport report2) {

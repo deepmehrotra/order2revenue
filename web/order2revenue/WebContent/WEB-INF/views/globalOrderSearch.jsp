@@ -7,6 +7,15 @@
 <html>
 <head>
 <jsp:include page="globalcsslinks.jsp"></jsp:include>
+<!-- Data Tables -->
+<link href="/O2R/seller/css/plugins/dataTables/dataTables.bootstrap.css"
+	rel="stylesheet">
+<link
+	href="/O2R/seller/css/plugins/dataTables/dataTables.responsive.css"
+	rel="stylesheet">
+<link
+	href="/O2R/seller/css/plugins/dataTables/dataTables.tableTools.min.css"
+	rel="stylesheet">
 <style>
 #register {
 	position: fixed;
@@ -69,14 +78,12 @@
 															pattern="MMM dd ,YY" /></td>
 													<td><fmt:formatNumber type="number"
                                                                 maxFractionDigits="2" 
-                                                                value="${searchOrder.orderPayment.netPaymentResult}" />
-                                                                </td>
+                                                                value="${searchOrder.orderPayment.netPaymentResult}" /></td>
 													<td>${searchOrder.status}</td>
 													<c:if
 														test="${empty searchOrder.orderReturnOrRTO.returnDate}">
 														<td><label data-toggle="modal"
-															data-target="#myModal22"
-															onclick="setOrderID(${searchOrder.orderId},'${searchOrder.channelOrderID}','return')"
+															data-target="#myModal22" onclick="setOrderID(${searchOrder.orderId},'${searchOrder.channelOrderID}','return')"
 															style='cursor: pointer;'>Mark Return</label></td>
 													</c:if>
 													<td><label data-toggle="modal"

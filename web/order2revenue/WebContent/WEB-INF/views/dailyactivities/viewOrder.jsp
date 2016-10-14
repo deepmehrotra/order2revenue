@@ -702,7 +702,7 @@
                         <div class="float-e-margins col-lg-6">
                             <div class="panel panel-default">
                               <div class="panel-heading">
-                                <h4 class="panel-title ibox-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapsesellernotes">Seller Notes <i class="glyphicon glyphicon-minus" style="float: right;"></i> </a></h4>
+                                <h4 class="panel-title ibox-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapsesellernotes">Other Info<i class="glyphicon glyphicon-minus" style="float: right;"></i> </a></h4>
                               </div>
                               <div id="collapsesellernotes" class="panel-collapse collapse in">
                                 <div class="panel-body">
@@ -710,8 +710,20 @@
                                     <table class="table table table-striped">
                                         <tbody>
                                         	<tr>
-	                                            <td>Note : </td>
-	                                            <td>${order.sellerNote}</td>        
+	                                            <td>Seller Note : </td>
+	                                            <td>${order.sellerNote}</td>
+	                                        </tr>
+	                                        <tr>	                                        
+	                                            <td>Order File : </td>
+	                                            <td><a href="getUploadReportList.html">${order.orderFileName}</a></td>
+	                                        </tr>
+	                                        <tr>
+	                                            <td>Payment File : </td>
+	                                            <td><a href="getUploadReportList.html">${order.orderPayment.paymentFileName}</a></td>
+	                                        </tr>
+	                                        <tr>
+	                                            <td>Return File : </td>
+	                                            <td><a href="getUploadReportList.html">${order.orderReturnOrRTO.returnFileName}</a></td>        
                                         	</tr>
                                         </tbody>
                                     </table>

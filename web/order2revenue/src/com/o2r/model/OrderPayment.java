@@ -45,6 +45,8 @@ public class OrderPayment {
 	private Date paymentCycleStart;
 	@Column
 	private Date paymentCycleEnd;
+	@Column
+	private String paymentFileName;
 	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
 	private List<PaymentVariables> paymentVar ;
 
@@ -161,6 +163,14 @@ public class OrderPayment {
 
 	public void setPaymentCycleEnd(Date paymentCycleEnd) {
 		this.paymentCycleEnd = paymentCycleEnd;
+	}
+
+	public String getPaymentFileName() {
+		return paymentFileName;
+	}
+
+	public void setPaymentFileName(String paymentFileName) {
+		this.paymentFileName = paymentFileName;
 	}
 
 	public List<PaymentVariables> getPaymentVar() {

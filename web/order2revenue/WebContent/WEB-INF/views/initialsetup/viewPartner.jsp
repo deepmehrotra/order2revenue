@@ -202,14 +202,14 @@ span .#error {
 																			<c:choose>
 																					<c:when
 																						test="${partner.paymentType == 'paymentcycle'}">
-																						<font color="green" size="2"><input type="text" class="form-control" placeholder="Payment Cycle" style="text-align: center;" disabled></font>																						
+																						<font color="green" size="2"><input type="text" class="form-control" placeholder="Subdivided Monthly" style="text-align: center;" disabled></font>																						
 																					</c:when>
 																					<c:when
 																						test="${partner.paymentType == 'datewisepay'}">
 																						<font color="green" size="2"><input type="text" class="form-control" placeholder="Day Wise" style="text-align: center;" disabled></font>
 																					</c:when>
 																					<c:otherwise>
-																						<font color="green" size="2"><input type="text" class="form-control" placeholder="Monthly" style="text-align: center;" disabled></font>																					
+																						<font color="green" size="2"><input type="text" class="form-control" placeholder="Monthly Payment" style="text-align: center;" disabled></font>																					
 																					</c:otherwise>
 																			</c:choose>
 																		</div>	
@@ -220,7 +220,12 @@ span .#error {
 																	<div class="col-lg-12" style="text-align:center;">
 																		<c:choose>
 																				<c:when	test="${partner.paymentType == 'paymentcycle'}">
-																					<font color="green" size="2"><input  type="text" class="form-control" placeholder="${partner.startcycleday} to ${partner.paycycleduration} ,Payment on ${partner.paydaysfromstartday}" style="text-align: center;" disabled></font>
+																					<c:if test="${partner.paycyclefromshipordel eq 'true'}">
+																						<label class="labelfix" style="text-align: left;">${partner.startcycleday} to ${partner.paycycleduration} ,Payment on ${partner.paydaysfromstartday} from Shipping Date</label>
+																					</c:if>
+																					<c:if test="${partner.paycyclefromshipordel eq 'false'}">
+																						<label class="labelfix" style="text-align: left;">${partner.startcycleday} to ${partner.paycycleduration} ,Payment on ${partner.paydaysfromstartday} from Delivery Date</label>
+																					</c:if>																					
 																				</c:when>
 																				<c:when	test="${partner.paymentType == 'datewisepay'}">
 																					<c:if test="${fn:contains(partner.pcName, 'flipkart')}">
@@ -1475,7 +1480,10 @@ span .#error {
 																					Per Weight : ${chargeMap.revShipFeeVWPW}<br>
 																					Min Weight : ${chargeMap.revShipFeeVWMW}
 																			</div>
-																		</c:when>																		
+																		</c:when>
+																		<c:otherwise>
+																			<label class="labelfix">None</label>
+																		</c:otherwise>																		
 																	</c:choose>
 																</div>
 																
