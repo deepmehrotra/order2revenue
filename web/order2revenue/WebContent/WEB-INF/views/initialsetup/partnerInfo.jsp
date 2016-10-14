@@ -28,77 +28,77 @@
 </style>
 <jsp:include page="../globalcsslinks.jsp"></jsp:include>
 <script type="text/javascript">
-                        function onclickaddpartner(value, id) {
-                            var urltogo = "";
-                            if (value == "add") {
-                                if (id != 0) {
-                                    urltogo = 'addPartner.html?pid=' + id;
-                                    location.href = urltogo;
-                                } else {
-                                    urltogo = 'addPartner.html';
-                                    location.href = urltogo;
-                                }
+	function onclickaddpartner(value, id) {
+		var urltogo = "";
+		if (value == "add") {
+			if (id != 0) {
+				urltogo = 'addPartner.html?pid=' + id;
+				location.href = urltogo;
+			} else {
+				urltogo = 'addPartner.html';
+				location.href = urltogo;
+			}
 
-                            } else if (value == "partnerDetails") {
-                                urltogo = 'listPartners.html';
-                            } else {
-                                urltogo = 'editPartner.html?pcId=' + id;
-                            }
-                            $.ajax({
+		} else if (value == "partnerDetails") {
+			urltogo = 'listPartners.html';
+		} else {
+			urltogo = 'editPartner.html?pcId=' + id;
+		}
+		$.ajax({
 
-                                url: urltogo,
-                                success: function(data) {
-                                	if($(data).find('#j_username').length > 0){
-                                		window.location.href = "orderindex.html";
-                                	}else{
-                                    	$('#centerpane').html(data);
-                                	}
-                                }
-                            });
-                        }
+			url : urltogo,
+			success : function(data) {
+				if ($(data).find('#j_username').length > 0) {
+					window.location.href = "orderindex.html";
+				} else {
+					$('#centerpane').html(data);
+				}
+			}
+		});
+	}
 
-                        function onclickConfigurepartner(value) {
-                            var urltogo = "";
-                            /* if (value.localeCompare("jabong") != 0) { */
-                                if (value.localeCompare("myntra") != 0) {
-                                    urltogo = 'addPartner.html?partnerName=' + value;
-                                } else {
-                                    urltogo = 'addMyntra.html?partnerName=' + value;
-                                }
-                            /* } else {
-                                urltogo = 'addJabong.html?partnerName=' + value;
-                            } */
-                            location.href = urltogo;
-                        }
+	function onclickConfigurepartner(value) {
+		var urltogo = "";
+		/* if (value.localeCompare("jabong") != 0) { */
+		if (value.localeCompare("myntra") != 0) {
+			urltogo = 'addPartner.html?partnerName=' + value;
+		} else {
+			urltogo = 'addMyntra.html?partnerName=' + value;
+		}
+		/* } else {
+		    urltogo = 'addJabong.html?partnerName=' + value;
+		} */
+		location.href = urltogo;
+	}
 
-                        function onclickEditpartner(id, name) {
-                            var urltogo = "";
-                            /* if (name.localeCompare("jabong") != 0) { */
-                                if (name.localeCompare("myntra") != 0) {
-                                    urltogo = 'editPartner.html?pcId=' + id;
-                                } else {
-                                    urltogo = 'editMyntra.html?pcId=' + id;
-                                }
-                            /* } else {
-                                urltogo = 'editJabong.html?pcId=' + id;
-                            } */
-                            location.href = urltogo;
-                        }
-                        
-                        function onclickDuplicatepartner(id, name) {
-                            var urltogo = "";
-                            /* if (name.localeCompare("jabong") != 0) { */
-                                if (name.localeCompare("myntra") != 0) {
-                                    urltogo = 'editPartner.html?pcId=' + id + "&isDuplicate=true";
-                                } else {
-                                    urltogo = 'editMyntra.html?pcId=' + id + "&isDuplicate=true";
-                                }
-                            /* } else {
-                                urltogo = 'editJabong.html?pcId=' + id;
-                            } */
-                            location.href = urltogo;
-                        }
-                        </script>
+	function onclickEditpartner(id, name) {
+		var urltogo = "";
+		/* if (name.localeCompare("jabong") != 0) { */
+		if (name.localeCompare("myntra") != 0) {
+			urltogo = 'editPartner.html?pcId=' + id;
+		} else {
+			urltogo = 'editMyntra.html?pcId=' + id;
+		}
+		/* } else {
+		    urltogo = 'editJabong.html?pcId=' + id;
+		} */
+		location.href = urltogo;
+	}
+
+	function onclickDuplicatepartner(id, name) {
+		var urltogo = "";
+		/* if (name.localeCompare("jabong") != 0) { */
+		if (name.localeCompare("myntra") != 0) {
+			urltogo = 'editPartner.html?pcId=' + id + "&isDuplicate=true";
+		} else {
+			urltogo = 'editMyntra.html?pcId=' + id + "&isDuplicate=true";
+		}
+		/* } else {
+		    urltogo = 'editJabong.html?pcId=' + id;
+		} */
+		location.href = urltogo;
+	}
+</script>
 </head>
 
 <body>
@@ -114,15 +114,16 @@
 							<div class="ibox-title">
 								<h5>Active Sales Channels</h5>
 								<div class="ibox-tools">
-									<a href="listPartners.html" class="btn btn-primary btn-xs">View Channel Details</a>
-									<a href="#" onclick="onclickaddpartner('add',0)"
+									<a href="listPartners.html" class="btn btn-primary btn-xs">View
+										Channel Details</a> <a href="#"
+										onclick="onclickaddpartner('add',0)"
 										class="btn btn-primary btn-xs">Add Sales Channel</a>
 								</div>
 							</div>
 							<div class="ibox-content add-company">
 								<c:if test="${!empty partners}">
 									<c:forEach items="${partners}" var="partner">
-										<div class="col-lg-3">
+										<div class="col-xs-12 col-sm-3 col-lg-3">
 											<div class="panel panel-default add-logo-page">
 												<div class="panel-body text-center">
 													<div class="partnerImg">
@@ -161,15 +162,29 @@
                                     </div>
 									
                                 </div> --%>
-													<div>
-														<a title="Edit" href="#" style="width: 33%; z-index: 9999;"
-															onclick="onclickEditpartner('${partner.pcId}','${partner.pcName}')"><i
-															class="fa fa-pencil"></i></a> 
-														<a title="Duplicate" href="#" style="width: 66%; z-index: 9998;"
-															onclick="onclickDuplicatepartner('${partner.pcId}','${partner.pcName}')"><i
-															class="fa fa-files-o" style="position: relative; left: 35px;"></i></a>
-														<a title="View" href="viewPartner.html?pcId=${partner.pcId}"><i
-															class="fa fa-eye" style="position: relative; left: 72px;"></i></a>
+													<div class="panel panel-default add-logo-page"
+														style="border-top: 0px solid #ccc;">
+														<div
+															class="panel-body col-xs-12 col-sm-4 col-lg-4 text-center">
+															<a title="Edit" href="#"
+																style="z-index: 9999;"
+																onclick="onclickEditpartner('${partner.pcId}','${partner.pcName}')"><i
+																class="fa fa-pencil"></i></a>
+														</div>
+														<div
+															class="panel-body col-xs-12 col-sm-4 col-lg-4 text-center">
+
+															<a title="Duplicate" href="#"
+																style="z-index: 9998;"
+																onclick="onclickDuplicatepartner('${partner.pcId}','${partner.pcName}')"><i
+																class="fa fa-files-o"></i></a>
+														</div>
+														<div
+															class="panel-body col-xs-12 col-sm-4 col-lg-4 text-center">
+
+															<a title="View" href="viewPartner.html?pcId=${partner.pcId}">
+															<i class="fa fa-eye"></i></a>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -188,7 +203,7 @@
 								<c:if test="${!empty partnertoadd}">
 									<c:forEach items="${partnertoadd}" var="addpartner"
 										varStatus="loop">
-										<div class="col-lg-3">
+										<div class="col-xs-12 col-sm-3 col-lg-3">
 											<div class="panel panel-default add-logo-page">
 												<div class="panel-body text-center">
 													<img alt="image" src="${addpartner.pcLogoUrl}"

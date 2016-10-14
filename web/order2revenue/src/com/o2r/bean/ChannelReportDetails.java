@@ -582,8 +582,10 @@ public class ChannelReportDetails {
 		@Override
 		public int compare(ChannelReportDetails graph1, ChannelReportDetails graph2) {
 
-			return graph1.getTaxPercent() < graph2.getTaxPercent() ? -1
-					: (graph1.getTaxPercent() > graph2.getTaxPercent() ? 1 : 0);
+			/*return graph1.getTaxPercent() < graph2.getTaxPercent() ? -1
+					: (graph1.getTaxPercent() > graph2.getTaxPercent() ? 1 : 0);*/
+			return graph1.getTaxCategory().toUpperCase().compareTo(
+					graph2.getTaxCategory().toUpperCase());
 		}
 	}
 	
