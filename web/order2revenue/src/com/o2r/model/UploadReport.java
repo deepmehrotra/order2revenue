@@ -36,7 +36,7 @@ public class UploadReport {
 	private float timeTaken;
 	@Column
 	private long noOfErrors;
-	@Column
+	@Column(nullable = false)
 	private long noOfSuccess;
 	@Column
 	private Date uploadDate;
