@@ -148,7 +148,7 @@
 						</div>
 					</div>
 					<button class="btn btn-white" type="submit"
-						style="height: 34px; margin-left: 5px;">
+						style="height: 34px;">
 						<i class="fa fa-search"></i>
 					</button>
 				</div>
