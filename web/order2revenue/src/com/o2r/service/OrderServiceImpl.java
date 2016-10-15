@@ -295,4 +295,9 @@ public class OrderServiceImpl implements OrderService {
 			boolean poOrder, boolean isSearch) {
 		return orderDao.countOnCriteria(column, value, sellerId, poOrder, isSearch);
 	}
+	
+	@Override
+	public void markOrderStatus(String status, int orderId, int sellerId) {
+		orderDao.markOrderStatus(status, orderId, sellerId);
+	}
 }

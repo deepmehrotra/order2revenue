@@ -44,6 +44,7 @@
 								<th>Sub Order Id</th>
 								<th>Order Date</th>
 								<th>Status</th>
+								<th>Final Status</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -57,6 +58,18 @@
 										pattern="MMM-dd-YYYY" /></td>
 								<td>${order.status}</td>
 								<td>${order.finalStatus}</td>
+								<td>
+									<form  class="form-inline" action="markOrderStatus.html" method="get">
+										<input type="hidden" name="orderId" value="${order.orderId}">
+										<select class="btn btn-primary btn-xs" id="" name="selectStatus" required="required" style="width: 75%;color: #676a6c !important;">
+											<option value="">Select To Mark</option>										
+											<option value="Settled" id="Settled">Settled</option>
+											<option value="" disabled>Payment Recieved</option>
+											<option value="" disabled>Return Recieved</option>											
+										</select>
+										<button class="btn btn-primary btn-xs" type="submit">Mark</button>
+									</form>					
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -848,8 +861,7 @@ $(function ($) {
 	});
 
 
-
-
+	
 </script>
 </body>
 </html>

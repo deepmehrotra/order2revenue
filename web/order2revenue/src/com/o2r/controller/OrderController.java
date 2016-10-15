@@ -196,6 +196,43 @@ public class OrderController {
 		log.info("$$$ displayDownloadForm Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/order_upload_form", model);
 	}
+	
+	@RequestMapping(value = "/seller/markOrderStatus", method = RequestMethod.GET)
+	public ModelAndView markOrderStatus(HttpServletRequest request) {
+		log.info("$$$ markOrderStatus Starts : OrderController $$$");
+		int sellerId = 0;
+		/*Map<String, Object> model = new HashMap<String, Object>();
+		Product product = null;
+		Events event = null;*/
+		try {
+			int orderId = Integer.parseInt(request.getParameter("orderId"));
+			String finalStatus = request.getParameter("selectStatus");
+			sellerId = helperClass.getSellerIdfromSession(request); 
+			orderService.markOrderStatus(finalStatus, orderId, sellerId);
+			/*Order order = orderService.getOrder(orderId,sellerId);			
+			product = productService.getProduct(order.getProductSkuCode(),
+					sellerId);
+			log.debug(" Payment difference :"
+					+ order.getOrderPayment().getPaymentDifference());
+			event = eventsService.getEvent(order.getEventName(), sellerId);
+			model.put("order", ConverterClass.prepareOrderBean(order));
+			model.put("event", ConverterClass.prepareEventsBean(event));
+			model.put("serviceTax", (order.getPccAmount()+order.getFixedfee()+order.getPartnerCommission()+order.getShippingCharges())*dataConfig.getServiceTax()/100);*/
+		} /*catch (CustomException ce) {
+			log.error("viewOrderDailyAct exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		}*/ catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed by seller ID : "+sellerId, e);
+		}
+		/*if (product != null)
+			model.put("productCost", product.getProductPrice());*/
+		log.info("$$$ markOrderStatus Ends : OrderController $$$");
+		return new ModelAndView("redirect:/seller/orderList.html");
+	}
 
 	@RequestMapping(value = "/seller/uploadOrderDA", method = RequestMethod.GET)
 	public ModelAndView displayUploadForm(HttpServletRequest request, @RequestParam("value") String value,

@@ -5689,5 +5689,35 @@ public class OrderDaoImpl implements OrderDao {
 		
 		return resultCount;
 	}
+	
+	@Override
+	public void markOrderStatus(String status, int orderId, int sellerId) {
+		
+		Session session = null;
+		Order order = null;		
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Order.class).add(Restrictions.eq("orderId", orderId));
+			order = (Order) criteria.list().get(0);
+			if(order != null) {
+				order.setFinalStatus(status);
+				order.getOrderPayment().setPaymentDifference(0);
+				OrderTimeline timeline = new OrderTimeline();
+				timeline.setEventDate(new Date());
+				timeline.setEvent(status);
+				order.getOrderTimeline().add(timeline);
+				order.setLastActivityOnOrder(new Date());
+				session.merge(order);	
+				session.getTransaction().commit();
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed by seller ID : "+sellerId, e);
+		} finally {
+			if(session != null)
+				session.close();
+		}
+	}
 
 }
