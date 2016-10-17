@@ -1091,7 +1091,7 @@ public class SaveMappedFiles {
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'ORDER ID' doesn't exist");
+								.append("The column 'ORDER ID' or 'SKU Code' doesn't exist");
 						validaterow = false;
 					}
 
@@ -1110,23 +1110,25 @@ public class SaveMappedFiles {
 										.substring(
 												entry.getCell(index).toString()
 														.indexOf("'") + 1));
-								channelorderid = channelorderid
-										+ GlobalConstant.orderUniqueSymbol
-										+ order.getSubOrderID();
-								if ((channelorderid != null)
-										&& (idsList == null || !idsList
-												.contains(channelorderid)
-												&& !duplicateKey
-														.containsKey(channelorderid)
-												&& productConfig != null)) {
-									order.setChannelOrderID(channelorderid);
-									order.setProductSkuCode(productConfig
-											.getProductSkuCode());
-									duplicateKey.put(channelorderid, "");
-								} else {
-									errorMessage
-											.append(" Channel OrderId is already present ");
-									validaterow = false;
+								if (channelorderid != null) {
+									channelorderid = channelorderid
+											+ GlobalConstant.orderUniqueSymbol
+											+ order.getSubOrderID();
+									
+											if (idsList == null || !idsList
+													.contains(channelorderid)
+													&& !duplicateKey
+															.containsKey(channelorderid)
+													&& productConfig != null) {
+										order.setChannelOrderID(channelorderid);
+										order.setProductSkuCode(productConfig
+												.getProductSkuCode());
+										duplicateKey.put(channelorderid, "");
+									} else {
+										errorMessage
+												.append(" Channel OrderId is already present ");
+										validaterow = false;
+									}
 								}
 							}
 						} else {
@@ -1245,7 +1247,6 @@ public class SaveMappedFiles {
 									HSSFCell.CELL_TYPE_STRING);
 							order.setInvoiceID(entry.getCell(index).toString());
 						} else {
-							order.setInvoiceID(entry.getCell(index).toString());
 							errorMessage.append(" Invoice ID is null;");
 							validaterow = false;
 						}
@@ -7327,8 +7328,9 @@ public class SaveMappedFiles {
 						order = orderService.addOrderPayment(skucode,
 								channelOrderId, orderPayment, sellerId);
 					} else {
-						errorSet.add(errorMessage.toString());
-
+						if (StringUtils.isNotBlank(errorMessage.toString().trim())) {
+							errorSet.add(errorMessage.toString());
+						}
 					}
 					if (order != null) {
 						if (!duplicateKey.containsKey(channelOrderId)) {

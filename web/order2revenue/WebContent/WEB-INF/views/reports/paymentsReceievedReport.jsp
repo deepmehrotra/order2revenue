@@ -63,7 +63,7 @@
 																	<th>Partner</th>
 																	<th>Prepaid NPR</th>
 																	<th>COD NPR</th>
-																	<th>B2B NPR</th>
+																	<th>B2B/Others NPR</th>
 																	<th>Total Net NPR</th>
 																</tr>
 															</thead>
@@ -149,7 +149,7 @@
 																	<th>Category</th>
 																	<th>Prepaid NPR</th>
 																	<th>COD NPR</th>
-																	<th>B2B NPR</th>
+																	<th>B2B/Others NPR</th>
 																	<th>Total Net NPR</th>
 																</tr>
 															</thead>

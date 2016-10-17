@@ -628,6 +628,12 @@ public class SellerController {
 					helperClass.getSellerIdfromSession(request));*/
 			AccountTransaction updated =sellerService.upgradeAccountTransaction(txnStat,planname, txnId,
 					helperClass.getSellerIdfromSession(request));
+			int sellerId = helperClass.getSellerIdfromSession(request);
+			Seller seller = sellerService.getSeller(sellerId);
+			model.put("myAccount", seller);
+			
+			model.put("myPlan", ConverterClass.preparePlanBean(seller.getPlan()));
+			
 			model.put("currTotalAmount", updated.getTransactionAmount());
 			model.put("currOrderCount", updated.getCurrentOrderCount());
 			model.put("accountTransaction", updated);

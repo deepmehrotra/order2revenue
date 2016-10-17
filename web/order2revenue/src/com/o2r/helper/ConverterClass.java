@@ -1585,6 +1585,20 @@ public class ConverterClass {
 		}
 		return plan;
 	}
+	
+	public static PlanBean preparePlanBean(Plan plan) {
+		PlanBean planbean = new PlanBean();
+		if (plan != null) {
+			planbean.setPlanName(plan.getPlanName());
+			planbean.setActive(plan.isActive());
+			planbean.setOrderCount(plan.getOrderCount());
+			planbean.setDescription(plan.getDescription());
+			planbean.setPid(plan.getPid());
+			planbean.setPlanId(plan.getPlanId());
+			planbean.setPlanPrice(plan.getPlanPrice());
+		}
+		return planbean;
+	}
 
 	public static List<PlanBean> prepareListofPlanBean(List<Plan> plans) {
 		List<PlanBean> beans = null;
@@ -2670,12 +2684,15 @@ public class ConverterClass {
 					consolidated.setPartner("Others");
 					consolidated.setCodNPR(channelGraph.getCodNPR());
 					consolidated.setPrepaidNPR(channelGraph.getPrepaidNPR());
+					consolidated.setB2bNPR(channelGraph.getB2bNPR());
 					consolidated.setNetNPR(channelGraph.getNetNPR());
 				} else {
 					consolidated.setCodNPR(consolidated.getCodNPR()
 							+ channelGraph.getCodNPR());
 					consolidated.setPrepaidNPR(consolidated.getPrepaidNPR()
 							+ channelGraph.getPrepaidNPR());
+					consolidated.setB2bNPR(consolidated.getB2bNPR()
+							+ channelGraph.getB2bNPR());
 					consolidated.setNetNPR(consolidated.getNetNPR()
 							+ channelGraph.getNetNPR());
 				}
