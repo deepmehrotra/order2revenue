@@ -887,6 +887,191 @@ public class EventsController {
 		log.info("$$$ eventsList Ends : EventsController $$$");
 		return new ModelAndView("miscellaneous/eventsList", model);
 	}
+	
+	@RequestMapping(value = "/seller/viewEvent", method = RequestMethod.GET)
+	public ModelAndView viewEvent(HttpServletRequest request) {
+
+		log.info("$$$ viewEvent Starts : EventsController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		int sellerID = 0;
+		EventsBean eventBean = null;
+		List<String> skuList=null;
+		Map<String, Float> chargeMap = new HashMap<String, Float>();
+		Map<String, Float> categoryMap = new HashMap<String, Float>();		
+		List<Category> categoryObjects = null;
+		try {
+			int id = Integer.parseInt(request.getParameter("eventId"));
+			sellerID = helperClass.getSellerIdfromSession(request);
+			eventBean = ConverterClass.prepareEventsBean(eventsService.getEvent(id));
+			model.put("event", eventBean);
+			if(eventBean.getSkuList() != null)
+				skuList = Arrays.asList(eventBean.getSkuList().split(",")); 
+			model.put("skuList", skuList);					
+			for (NRnReturnCharges charge : eventBean.getNrnReturnConfig()
+					.getCharges()) {
+
+				if (charge.getChargeName().contains("fixedfee")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
+
+					ChargesBean chargeBean = new ChargesBean();
+					chargeBean.setChargeType("fixedfee");
+					chargeBean.setCriteria(charge.getCriteria());
+					chargeBean.setRange(charge.getCriteriaRange());
+					chargeBean.setValue(charge.getChargeAmount());
+					eventBean.getFixedfeeList().add(chargeBean);
+
+				} else if (charge.getChargeName().contains(
+						"shippingfeeVolume")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
+
+					if (eventBean.getNrnReturnConfig()
+							.getShippingFeeType()
+							.equalsIgnoreCase("variable")
+							&& charge.getChargeName().contains(
+									"shippingfeeVolumeVariable")) {
+
+						ChargesBean chargeBean = eventBean.getChargesBean(
+								"shippingfeeVolumeVariable",
+								charge.getCriteria(),
+								charge.getCriteriaRange());
+						if (chargeBean == null) {
+							chargeBean = new ChargesBean();
+							chargeBean
+									.setChargeType("shippingfeeVolumeVariable");
+							chargeBean.setCriteria(charge.getCriteria());
+							chargeBean.setRange(charge.getCriteriaRange());
+							eventBean.getShippingfeeVolumeVariableList()
+									.add(chargeBean);
+						}
+
+						if (charge.getChargeName().contains("Local")) {
+							chargeBean.setLocalValue(charge
+									.getChargeAmount());
+						} else if (charge.getChargeName().contains("Zonal")) {
+							chargeBean.setZonalValue(charge
+									.getChargeAmount());
+						} else if (charge.getChargeName().contains(
+								"National")) {
+							chargeBean.setNationalValue(charge
+									.getChargeAmount());
+						} else if (charge.getChargeName().contains("Metro")) {
+							chargeBean.setMetroValue(charge
+									.getChargeAmount());
+						}
+
+					} else if (charge.getChargeName().contains(
+							"shippingfeeVolumeFixed")) {
+						ChargesBean chargeBean = new ChargesBean();
+						chargeBean.setChargeType("shippingfeeVolume");
+						chargeBean.setCriteria(charge.getCriteria());
+						chargeBean.setRange(charge.getCriteriaRange());
+						chargeBean.setValue(charge.getChargeAmount());
+						eventBean.getShippingfeeVolumeFixedList().add(
+								chargeBean);
+					}
+
+				} else if (charge.getChargeName().contains(
+						"shippingfeeWeight")
+						&& charge.getCriteria() != null
+						&& !"".equals(charge.getCriteria())) {
+
+					if (eventBean.getNrnReturnConfig()
+							.getShippingFeeType()
+							.equalsIgnoreCase("variable")
+							&& charge.getChargeName().contains(
+									"shippingfeeWeightVariable")) {
+
+						ChargesBean chargeBean = eventBean.getChargesBean(
+								"shippingfeeWeightVariable",
+								charge.getCriteria(),
+								charge.getCriteriaRange());
+						if (chargeBean == null) {
+							chargeBean = new ChargesBean();
+							chargeBean
+									.setChargeType("shippingfeeWeightVariable");
+							chargeBean.setCriteria(charge.getCriteria());
+							chargeBean.setRange(charge.getCriteriaRange());
+							eventBean.getShippingfeeWeightVariableList()
+									.add(chargeBean);
+						}
+
+						if (charge.getChargeName().contains("Local")) {
+							chargeBean.setLocalValue(charge
+									.getChargeAmount());
+						} else if (charge.getChargeName().contains("Zonal")) {
+							chargeBean.setZonalValue(charge
+									.getChargeAmount());
+						} else if (charge.getChargeName().contains(
+								"National")) {
+							chargeBean.setNationalValue(charge
+									.getChargeAmount());
+						} else if (charge.getChargeName().contains("Metro")) {
+							chargeBean.setMetroValue(charge
+									.getChargeAmount());
+						}
+
+					} else if (charge.getChargeName().contains(
+							"shippingfeeWeightFixed")) {
+						ChargesBean chargeBean = new ChargesBean();
+						chargeBean.setChargeType("shippingfeeWeight");
+						chargeBean.setCriteria(charge.getCriteria());
+						chargeBean.setRange(charge.getCriteriaRange());
+						chargeBean.setValue(charge.getChargeAmount());
+						eventBean.getShippingfeeWeightFixedList().add(
+								chargeBean);
+					}
+
+				} else {
+					chargeMap.put(charge.getChargeName(),
+							charge.getChargeAmount());
+				}
+			}
+			if (eventBean.getFixedfeeList() != null)
+				Collections.sort(eventBean.getFixedfeeList(),
+						new SortByCriteriaRange());
+			if (eventBean.getShippingfeeVolumeVariableList() != null)
+				Collections.sort(
+						eventBean.getShippingfeeVolumeVariableList(),
+						new SortByCriteria());
+			if (eventBean.getShippingfeeWeightVariableList() != null)
+				Collections.sort(
+						eventBean.getShippingfeeWeightVariableList(),
+						new SortByCriteria());
+			if (eventBean.getShippingfeeVolumeFixedList() != null)
+				Collections.sort(
+						eventBean.getShippingfeeVolumeFixedList(),
+						new SortByCriteria());
+			if (eventBean.getShippingfeeWeightFixedList() != null)
+				Collections.sort(
+						eventBean.getShippingfeeWeightFixedList(),
+						new SortByCriteria());
+
+			model.put("chargeMap", chargeMap);	
+			categoryObjects = categoryService.listCategories(helperClass
+					.getSellerIdfromSession(request));
+			if (categoryObjects != null && categoryObjects.size() > 0) {
+				for (Category cat : categoryObjects) {
+					categoryMap.put(cat.getCatName(),
+							chargeMap.get(cat.getCatName()));
+				}
+			}
+			model.put("categoryMap", categoryMap);
+			
+		} catch (CustomException ce) {
+			log.error("eventList exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Exception e) {
+			log.error("Failed! by Seller ID : "+sellerID, e);
+			e.printStackTrace();
+		}
+		log.info("$$$ viewEvent Ends : EventsController $$$");
+		return new ModelAndView("miscellaneous/viewEvent", model);
+	}
 
 	@RequestMapping(value = "/seller/eventAction", method = RequestMethod.GET)
 	public ModelAndView PlayPause(HttpServletRequest request,
