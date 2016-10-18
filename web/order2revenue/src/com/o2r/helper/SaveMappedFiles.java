@@ -27,6 +27,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -2343,7 +2344,7 @@ public class SaveMappedFiles {
 		ChannelUploadMapping chanupload = null;
 		Map<String, String> columHeaderMap = new LinkedHashMap<String, String>();
 		Map<String, Integer> cellIndexMap = new LinkedHashMap<String, Integer>();
-		/* SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); */
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		StringBuffer errorMessage = new StringBuffer();
 		CustomerBean customerBean = null;
 		Partner partner = null;
@@ -2574,7 +2575,7 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 
 							try {
-								if (HSSFDateUtil.isCellDateFormatted(entry
+								if (DateUtil.isCellDateFormatted(entry
 										.getCell(index))) {
 									order.setOrderDate(entry.getCell(index)
 											.getDateCellValue());
@@ -2780,17 +2781,13 @@ public class SaveMappedFiles {
 								.get("Order Shipped Date"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-
-							try {
-								if (HSSFDateUtil.isCellDateFormatted(entry
-										.getCell(index))) {
-									order.setShippedDate(entry.getCell(index)
-											.getDateCellValue());
-								} else {
+							System.out.println(entry.getCell(index).toString());
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							try {								
 									String date = entry.getCell(index)
-											.toString();
-									order.setShippedDate(new Date(date));
-								}
+											.toString();							
+									order.setShippedDate(format.parse(date));
+																	
 							} catch (Exception e) {
 								errorMessage
 										.append(" Shipped Date formate is wrong ,");

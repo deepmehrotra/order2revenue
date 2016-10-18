@@ -1737,6 +1737,7 @@ public class ConverterClass {
 		events.setSkuList(eventsBean.getSkuList());
 		events.setStatus(eventsBean.getStatus());
 		events.setSelectAll(eventsBean.getSelectAll());
+		
 		return events;
 
 	}
@@ -1762,6 +1763,7 @@ public class ConverterClass {
 			eventsBean.setSkuList(events.getSkuList());
 			eventsBean.setStatus(events.getStatus());
 			eventsBean.setSelectAll(events.getSelectAll());
+			
 		}
 		return eventsBean;
 	}

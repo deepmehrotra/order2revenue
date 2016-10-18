@@ -836,7 +836,7 @@ span .#error {
 																	<div class="row">
 																		<div class="col-md-12">
 																			<label class="labelfix">Fixed Amount :
-																					chargeMap.RTOCharBRFixedAmt} %</label>
+																					${chargeMap.RTOCharBRFixedAmt} %</label>
 																			
 																		</div>
 																	</div>
@@ -1169,16 +1169,15 @@ span .#error {
 																<div class="col-sm-12 radio1" id="blk-23">
 																	<div class="row">
 																		<div class="col-md-12">
-																			<input type="text"
-																				value="${chargeMap.PDCharBRFixedAmt} %"
-																				class="form-control" disabled>
+																			<label class="labelfix">Fixed Amount :
+																			${chargeMap.PDCharBRFixedAmt} %</label>
 																		</div>
 																	</div>
 																</div>
 
 															</div>
 															
-
+															
 															<div class="col-lg-12">
 																<div class="hr-line-dashed"></div>
 																	<div class="col-sm-12 m-l">

@@ -93,7 +93,7 @@
 										<c:forEach items="${eventsList}" var="event" varStatus="loop">
 											<tr>
 												<td><input type="checkbox" name="eventId" value="${event.eventId}" onclick="selectOne(this);"></td>
-												<td>${event.eventName}</td>
+												<td><a href="viewEvent.html?eventId=${event.eventId}">${event.eventName}</a></td>
 												<td><fmt:formatDate value="${event.createdDate}"
 														pattern="MMM dd ,YY" /></td>
 												<td>${event.channelName}</td>

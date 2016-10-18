@@ -229,7 +229,7 @@ ol.d {
 									<option value="PO_Gatepass_Uplooad">PO GatePass Upload</option>
 									<option value="Create_Parent_Product">Create Parent
 										Product</option>
-									<option value="Product_Edit">Edit Product Upload</option>
+									<option value="Edit_Parent_Product">Edit Parent Product Upload</option>
 									<option value="MP_Vendor_SKU_Mapping">Vendor SKU
 										Mapping</option>
 									<option value="PO_Product_Config">PO Product Config</option>
