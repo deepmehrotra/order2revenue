@@ -869,9 +869,7 @@ ol.d {
 															particular SKU's at fixed Transfer Price.</li>
 														<li><b class="color">Seller Notes</b> - Any customized
 															remarks about order.</li>
-														<li><b class="color">AWB No</b> - Airway bill number.
-															It is used to track order during return and to track order
-															delivery status.</li>
+														<li><b class="color">Customer Phone No</b> - Add customer phone number.</li>
 														<li><b class="color">Order MRP</b> - Used to find
 															discount values on order,enter MRP per quantity.</li>
 														<li><b class="color">Logistic Partner</b> - Shipping
