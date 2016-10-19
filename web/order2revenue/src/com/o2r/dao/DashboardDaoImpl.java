@@ -1259,7 +1259,7 @@ public class DashboardDaoImpl implements DashboardDao {
 		return sum;
 	}
 	
-	public double grossProfitForDuration(Session session, Date startDate,Date endDate, int sellerId) {
+	public static double grossProfitForDuration(Session session, Date startDate,Date endDate, int sellerId) {
 
 		log.info("***grossProfitForDuration starts***");
 		long gpstarttime=System.currentTimeMillis();

@@ -56,8 +56,7 @@
 		                       <!--  <i class="fa fa-shopping-cart" aria-hidden="false"></i> -->
 		                    </div>
 		                    <div class="col-xs-8 text-right" style="color: #fff;">
-		                        <span> Sale Quantity</span>
-		                        <h2 class="font-bold">4,232</h2>
+		                        <span id="grossMarginPeriod"></span>		                        
 		                    </div>    
 		                </div>
 		            </div>
@@ -527,7 +526,15 @@
       <jsp:include page="globalfooter.jsp"></jsp:include>
     </div>
 </div>	
-
+<script type="text/javascript">
+$.ajax({								
+	url : "getGrossMargin.html",
+	dataType : "json",
+	success : function(data) {
+		document.getElementById("grossMarginPeriod").innerHTML = ALL;											
+	}							
+});
+</script>
 
 <jsp:include page="globaljslinks.jsp"></jsp:include>
 </body>
