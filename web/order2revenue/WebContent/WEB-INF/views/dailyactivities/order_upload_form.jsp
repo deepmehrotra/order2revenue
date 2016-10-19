@@ -1131,10 +1131,8 @@ ol.d {
 															each order transaction.</li>
 														<li><b class="color">Order Shipped Date</b> - Mention
 															shipped date in "MM-DD-YYYY" format.</li>
-														<li><b class="color">Billing Postcode</b>Shipping Pin Code.The
-															same is available in address column.The seller can easily
-															use the RIGHT formula to extract pin code values into this
-															column.</li>
+														<li><b class="color">Quantity</b>- Quantity of
+															orders.In most cases it is 1.</li>
 													</ol></li>
 												<li><b>Non-Mandatory (scenario specific or good to
 														have attributes)</b>

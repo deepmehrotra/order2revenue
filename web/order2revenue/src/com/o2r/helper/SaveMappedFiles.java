@@ -2345,6 +2345,7 @@ public class SaveMappedFiles {
 		Map<String, String> columHeaderMap = new LinkedHashMap<String, String>();
 		Map<String, Integer> cellIndexMap = new LinkedHashMap<String, Integer>();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		StringBuffer errorMessage = new StringBuffer();
 		CustomerBean customerBean = null;
 		Partner partner = null;
@@ -2573,17 +2574,11 @@ public class SaveMappedFiles {
 								.get("Order Recieved Date"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-
-							try {
-								if (DateUtil.isCellDateFormatted(entry
-										.getCell(index))) {
-									order.setOrderDate(entry.getCell(index)
-											.getDateCellValue());
-								} else {
-									String date = entry.getCell(index)
-											.toString();
-									order.setOrderDate(new Date(date));
-								}
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							try {	
+									String date = entry.getCell(index).toString();
+									order.setOrderDate(format1.parse(date));
+								
 							} catch (Exception e) {
 								errorMessage
 										.append(" Order Received Date format is wrong ,");
