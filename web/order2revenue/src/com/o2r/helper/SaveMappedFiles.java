@@ -365,7 +365,17 @@ public class SaveMappedFiles {
 												.getPcName()
 												.toLowerCase()
 												.contains(
-														GlobalConstant.PCPAYTM)) {
+														GlobalConstant.PCPAYTM)
+										||partner
+										.getPcName()
+										.toLowerCase()
+										.contains(
+												GlobalConstant.PCAMAZON)
+												||partner
+												.getPcName()
+												.toLowerCase()
+												.contains(
+														GlobalConstant.PCJABONG)) {
 
 									channelID = order.getChannelOrderID()
 											+ GlobalConstant.orderUniqueSymbol
@@ -391,9 +401,19 @@ public class SaveMappedFiles {
 												.getPcName()
 												.toLowerCase()
 												.contains(
-														GlobalConstant.PCPAYTM)) {
+														GlobalConstant.PCPAYTM)
+														||partner
+														.getPcName()
+														.toLowerCase()
+														.contains(
+																GlobalConstant.PCAMAZON)
+																||partner
+																.getPcName()
+																.toLowerCase()
+																.contains(
+																		GlobalConstant.PCJABONG)) {
 									errorMessage
-											.append(" The column 'Sale Order Item Code' is null, it is mandatory for Flipkart and Paytm,");
+											.append(" The column 'Sale Order Item Code' is null, it is mandatory.");
 									validaterow = false;
 								}
 							}
@@ -403,7 +423,17 @@ public class SaveMappedFiles {
 							if (partner.getPcName().toLowerCase()
 									.contains(GlobalConstant.PCFLIPKART)
 									|| partner.getPcName().toLowerCase()
-											.contains(GlobalConstant.PCPAYTM)) {
+											.contains(GlobalConstant.PCPAYTM)
+											||partner
+											.getPcName()
+											.toLowerCase()
+											.contains(
+													GlobalConstant.PCAMAZON)
+													||partner
+													.getPcName()
+													.toLowerCase()
+													.contains(
+															GlobalConstant.PCJABONG)) {
 
 								errorMessage
 										.append(" The column 'Sale Order Item Code' doesn't exist, it is mandatory for Flipkart and Paytm,");
@@ -1764,22 +1794,7 @@ public class SaveMappedFiles {
 													.append(" Vendor SKU code not mapped.");
 											validaterow = false;
 										}
-										if ((channelorderid != null)
-												&& (idsList == null || !idsList
-														.contains(channelorderid)
-														&& !duplicateKey
-																.containsKey(channelorderid)
-														&& productConfig != null)) {
-											order.setChannelOrderID(channelorderid);
-											order.setProductSkuCode(productConfig
-													.getProductSkuCode());
-											duplicateKey
-													.put(channelorderid, "");
-										} else {
-											errorMessage
-													.append(" Channel OrderId is already present ");
-											validaterow = false;
-										}
+										
 									} catch (Exception e) {
 
 									}
@@ -1808,7 +1823,31 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							order.setSubOrderID(entry.getCell(index).toString());
+							order.setSubOrderID(entry.getCell(index).toString()
+									.substring(
+											entry.getCell(index).toString()
+													.indexOf("'") + 1));
+							
+							if (channelorderid != null){
+								channelorderid = channelorderid
+										+ GlobalConstant.orderUniqueSymbol
+										+ order.getSubOrderID();
+									if( (idsList == null || !idsList
+											.contains(channelorderid)
+											&& !duplicateKey
+													.containsKey(channelorderid)
+											&& productConfig != null)) {
+								order.setChannelOrderID(channelorderid);
+								order.setProductSkuCode(productConfig
+										.getProductSkuCode());
+								duplicateKey
+										.put(channelorderid, "");
+							} else {
+								errorMessage
+										.append(" Channel OrderId is already present ");
+								validaterow = false;
+							}
+							}
 						}
 					}
 
@@ -6509,22 +6548,7 @@ public class SaveMappedFiles {
 													.append(" Vendor SKU mapping not present");
 											validaterow = false;
 										}
-										if ((channelorderid != null)
-												&& (idsList == null || !idsList
-														.contains(channelorderid)
-														&& !duplicateKey
-																.containsKey(channelorderid)
-														&& productConfig != null)) {
-											order.setChannelOrderID(channelorderid);
-											order.setProductSkuCode(productConfig
-													.getProductSkuCode());
-											duplicateKey
-													.put(channelorderid, "");
-										} else {
-											errorMessage
-													.append(" Channel OrderId is already present ");
-											validaterow = false;
-										}
+										
 									} catch (Exception e) {
 
 									}
@@ -6669,6 +6693,26 @@ public class SaveMappedFiles {
 										HSSFCell.CELL_TYPE_STRING);
 								order.setSubOrderID(entry.getCell(index)
 										.toString());
+								if (channelorderid != null){
+									channelorderid = channelorderid
+											+ GlobalConstant.orderUniqueSymbol
+											+ order.getSubOrderID();
+										if( (idsList == null || !idsList
+												.contains(channelorderid)
+												&& !duplicateKey
+														.containsKey(channelorderid)
+												&& productConfig != null)) {
+									order.setChannelOrderID(channelorderid);
+									order.setProductSkuCode(productConfig
+											.getProductSkuCode());
+									duplicateKey
+											.put(channelorderid, "");
+								} else {
+									errorMessage
+											.append(" Channel OrderId is already present ");
+									validaterow = false;
+								}
+								}
 							}
 						} else {
 							errorMessage
@@ -7489,7 +7533,7 @@ public class SaveMappedFiles {
 			uploadReport.setFileType(worksheetName);
 			uploadReport.setFilePath(filePath);
 			uploadReport.setNoOfErrors(errorSet.size());
-			uploadReport.setNoOfSuccess((noOfRows - errorSet.size()) - 3);
+			uploadReport.setNoOfSuccess((noOfRows - errorSet.size()) - 1);
 			uploadReport.setDescription("Imported");
 			uploadReport.setSeller(sellerService.getSeller(sellerId));
 			if (isError) {

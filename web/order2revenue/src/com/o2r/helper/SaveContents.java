@@ -256,7 +256,13 @@ public class SaveContents {
 								if (!(partner.getPcName().toLowerCase()
 										.contains(GlobalConstant.PCFLIPKART) || partner
 										.getPcName().toLowerCase()
-										.contains(GlobalConstant.PCPAYTM))) {
+										.contains(GlobalConstant.PCPAYTM)
+										|| partner
+										.getPcName().toLowerCase()
+										.contains(GlobalConstant.PCAMAZON)
+										|| partner
+										.getPcName().toLowerCase()
+										.contains(GlobalConstant.PCJABONG))) {
 									duplicateKey.put(channelID, "");
 								}
 							} else {
@@ -359,7 +365,13 @@ public class SaveContents {
 								&& (partner.getPcName().toLowerCase().contains(
 										GlobalConstant.PCFLIPKART) || partner
 										.getPcName().toLowerCase().contains(
-												GlobalConstant.PCPAYTM))) {
+												GlobalConstant.PCPAYTM)
+												|| partner
+												.getPcName().toLowerCase()
+												.contains(GlobalConstant.PCAMAZON)
+												|| partner
+												.getPcName().toLowerCase()
+												.contains(GlobalConstant.PCJABONG))) {
 							channelID = order.getChannelOrderID();
 
 							if (channelID != null) {
@@ -386,9 +398,14 @@ public class SaveContents {
 								&& (partner.getPcName().toLowerCase().contains(
 										GlobalConstant.PCFLIPKART) || partner
 										.getPcName().toLowerCase().contains(
-												GlobalConstant.PCPAYTM))) {
+												GlobalConstant.PCPAYTM)|| partner
+												.getPcName().toLowerCase()
+												.contains(GlobalConstant.PCAMAZON)
+												|| partner
+												.getPcName().toLowerCase()
+												.contains(GlobalConstant.PCJABONG))) {
 							errorMessage
-									.append(" Secondary OrderID is mandatory for Flipkart & PayTM;");
+									.append(" Secondary OrderID is mandatory");
 							validaterow = false;
 						}
 					}

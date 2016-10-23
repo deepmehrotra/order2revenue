@@ -598,8 +598,9 @@ public class OrderDaoImpl implements OrderDao {
 					} catch (Exception e) {
 						status = false;
 						erroneousOrders.append(order.getChannelOrderID() + ",");
-						e.printStackTrace();
-						log.error("Failed! by sellerId : " + sellerId, e);
+						if(session.getTransaction().isActive())
+							session.getTransaction().rollback();
+						log.error("Failed! by sellerId : " + sellerId+" for order : "+order.getChannelOrderID(), e);
 						orderCount--;
 					}
 				}
