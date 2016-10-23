@@ -1,11 +1,14 @@
 package com.o2r.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -100,6 +103,10 @@ public class Seller {
 	// Seller to upload Report OneToMany
 	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
 	private List<UploadReport> uploadReportList = new ArrayList<UploadReport>();
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "seller")
+	private Set<AmazonOrderInfo> orderInfos = new HashSet<AmazonOrderInfo>(0);
+	
 	
 
 	public SellerAccount getSellerAccount() {
@@ -310,5 +317,16 @@ public class Seller {
 		this.uploadReportList = uploadReportList;
 	}
 
+	
+	public Set<AmazonOrderInfo> getOrderInfos() {
+		return orderInfos;
+	}
+
+	public void setOrderInfos(Set<AmazonOrderInfo> orderInfos) {
+		this.orderInfos = orderInfos;
+	}
+
+	
+	
 
 }

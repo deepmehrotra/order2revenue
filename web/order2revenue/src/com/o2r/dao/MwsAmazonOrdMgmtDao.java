@@ -2,10 +2,10 @@ package com.o2r.dao;
 
 import java.util.List;
 
-import com.o2r.model.Order;
+import com.o2r.model.AmazonOrderInfo;
 
 public interface MwsAmazonOrdMgmtDao {
 
-	public List<Order> getOrderList() throws Exception;
+	public List<AmazonOrderInfo> getOrderList() throws Exception;
 	
 }

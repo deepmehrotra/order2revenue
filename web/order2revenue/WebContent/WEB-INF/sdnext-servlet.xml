@@ -92,6 +92,11 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 				<value>com.o2r.model.MetaNRnReturnConfig</value>
 				<value>com.o2r.model.ChannelUploadMapping</value>
 				<value>com.o2r.model.ColumMap</value>
+				<value>com.o2r.model.AmazonOrderInfo</value>
+				<value>com.o2r.model.AmazonOrderItemInfo</value>
+				<value>com.o2r.model.ExceptionLogging</value>
+				<value>com.o2r.model.PartnerSellerAuthInfo</value>
+				<value>com.o2r.model.ShippingAddress</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

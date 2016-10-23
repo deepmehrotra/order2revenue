@@ -2,11 +2,13 @@ package com.o2r.model;
 // Generated Oct 23, 2016 4:48:17 PM by Hibernate Tools 3.4.0.CR1
 
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -29,6 +31,7 @@ public class PartnerSellerAuthInfo  implements java.io.Serializable {
      private String serviceurl;
      private Integer status;
      private Integer pcid;
+     private Partner partner;
 
     public PartnerSellerAuthInfo() {
     }
@@ -45,9 +48,8 @@ public class PartnerSellerAuthInfo  implements java.io.Serializable {
        this.pcid = pcid;
     }
    
-     @Id @GeneratedValue(strategy=IDENTITY)
-
-    
+    @Id
+  	@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="ID", unique=true, nullable=false)
     public Integer getId() {
         return this.id;
@@ -147,7 +149,18 @@ public class PartnerSellerAuthInfo  implements java.io.Serializable {
         this.pcid = pcid;
     }
 
+    @OneToOne(cascade = CascadeType.ALL)
+	public Partner getPartner() {
+		return partner;
+	}
 
+	public void setPartner(Partner partner) {
+		this.partner = partner;
+	}
+
+
+    
+    
 
 
 }

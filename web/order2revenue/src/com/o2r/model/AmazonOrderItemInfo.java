@@ -4,7 +4,12 @@ package com.o2r.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -63,7 +68,8 @@ public class AmazonOrderItemInfo  implements java.io.Serializable {
      private String pricedesignation;
      private String buyercustomizedurl;
      private String requestid;
-     private Integer orderId;
+     //private Integer orderId;
+     private AmazonOrderInfo orderInfo;
 
     public AmazonOrderItemInfo() {
     }
@@ -119,12 +125,11 @@ public class AmazonOrderItemInfo  implements java.io.Serializable {
        this.pricedesignation = pricedesignation;
        this.buyercustomizedurl = buyercustomizedurl;
        this.requestid = requestid;
-       this.orderId = orderId;
+       //this.orderId = orderId;
     }
    
-     @Id 
-
-    
+    @Id
+  	@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="ID", unique=true, nullable=false)
     public int getId() {
         return this.id;
@@ -585,14 +590,26 @@ public class AmazonOrderItemInfo  implements java.io.Serializable {
     }
 
     
-    @Column(name="ORDER_ID")
+    /*@Column(name="ORDER_ID")
     public Integer getOrderId() {
         return this.orderId;
     }
     
     public void setOrderId(Integer orderId) {
         this.orderId = orderId;
-    }
+    }*/
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ORDER_ID", nullable = false)
+	public AmazonOrderInfo getOrderInfo() {
+		return orderInfo;
+	}
+
+
+	public void setOrderInfo(AmazonOrderInfo orderInfo) {
+		this.orderInfo = orderInfo;
+	}
 
 
 

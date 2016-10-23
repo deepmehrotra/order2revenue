@@ -4,7 +4,12 @@ package com.o2r.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -29,7 +34,8 @@ public class ShippingAddress  implements java.io.Serializable {
      private String postalcode;
      private String countrycode;
      private String phone;
-     private Integer shippingAddId;
+     //private Integer shippingAddId;
+     private AmazonOrderInfo orderInfo;
 
     public ShippingAddress() {
     }
@@ -51,12 +57,11 @@ public class ShippingAddress  implements java.io.Serializable {
        this.postalcode = postalcode;
        this.countrycode = countrycode;
        this.phone = phone;
-       this.shippingAddId = shippingAddId;
+       //this.shippingAddId = shippingAddId;
     }
    
-     @Id 
-
-    
+    @Id 
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="SHIPPINGADDRESS_ID", unique=true, nullable=false)
     public int getShippingaddressId() {
         return this.shippingaddressId;
@@ -177,14 +182,25 @@ public class ShippingAddress  implements java.io.Serializable {
     }
 
     
-    @Column(name="SHIPPING_ADD_ID")
+    /*@Column(name="SHIPPING_ADD_ID")
     public Integer getShippingAddId() {
         return this.shippingAddId;
     }
     
     public void setShippingAddId(Integer shippingAddId) {
         this.shippingAddId = shippingAddId;
-    }
+    }*/
+
+    @ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "SHIPPING_ADD_ID", nullable = false)
+	public AmazonOrderInfo getOrderInfo() {
+		return orderInfo;
+	}
+
+
+	public void setOrderInfo(AmazonOrderInfo orderInfo) {
+		this.orderInfo = orderInfo;
+	}
 
 
 
