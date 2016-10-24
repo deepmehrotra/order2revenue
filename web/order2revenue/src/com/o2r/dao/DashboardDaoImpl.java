@@ -322,7 +322,7 @@ public class DashboardDaoImpl implements DashboardDao {
 		return dashboardBean;
 	}
 
-	public long netSaleQtyforTime(Session session, Date startDate,Date endDate, int sellerId) {
+	public static long netSaleQtyforTime(Session session, Date startDate,Date endDate, int sellerId) {
 		
 		log.info("***netSaleQtyforTime starts***");
 		//List<Object[]> results = null;
@@ -1262,6 +1262,7 @@ public class DashboardDaoImpl implements DashboardDao {
 	public static double grossProfitForDuration(Session session, Date startDate,Date endDate, int sellerId) {
 
 		log.info("***grossProfitForDuration starts***");
+		log.info("*** Start Date : "+startDate+"    End Date : "+endDate);
 		long gpstarttime=System.currentTimeMillis();
 		List<Double> results = null;
 		double gpforMP = 0;

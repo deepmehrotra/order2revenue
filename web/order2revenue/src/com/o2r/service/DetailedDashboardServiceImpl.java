@@ -1,5 +1,9 @@
 package com.o2r.service;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,12 +19,85 @@ public class DetailedDashboardServiceImpl implements DetailedDashboardService{
 	private DetailedDashboardDao detailedDashboardDao;
 	
 	@Override
-	public double getGrossGrossProfit(String period, int sellerId) {		
-		return detailedDashboardDao.getGrossGrossProfit(period, sellerId);
+	public double getGrossGrossProfit(Date startDate, Date endDate, int sellerId) {		
+		return detailedDashboardDao.getGrossGrossProfit(startDate, endDate, sellerId);
 	}
 	
 	@Override
-	public double getNetGrossProfit(String period, int sellerId) {
-		return detailedDashboardDao.getNetGrossProfit(period, sellerId);
+	public double getNetGrossProfit(Date startDate, Date endDate, int sellerId) {
+		return detailedDashboardDao.getNetGrossProfit(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public double getGrossBadquantityValue(Date startDate, Date endDate, int sellerId) {
+		return detailedDashboardDao.getGrossBadquantityValue(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public long getGrossSaleQuantity(Date startDate, Date endDate, int sellerId) {
+		return detailedDashboardDao.getGrossSaleQuantity(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public long getNetSaleQuantity(Date startDate, Date endDate, int sellerId) {
+		return detailedDashboardDao.getNetSaleQuantity(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public double getGrossNR(Date startDate, Date endDate, int sellerId) {
+		return detailedDashboardDao.getGrossNR(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public double getReturnNR(Date startDate, Date endDate, int sellerId) {
+		return detailedDashboardDao.getReturnNR(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public double getGrossPR(Date startDate, Date endDate, int sellerId) {
+		return detailedDashboardDao.getGrossPR(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public double getReturnPR(Date startDate, Date endDate, int sellerId) {
+		return detailedDashboardDao.getReturnPR(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public double getAdditionalCharges(Date startDate, Date endDate, int sellerId) {
+		return detailedDashboardDao.getAdditionalCharges(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public double getGrossSP(Date startDate, Date endDate, int sellerId) {
+		return detailedDashboardDao.getGrossSP(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public double getReturnSP(Date startDate, Date endDate, int sellerId) {
+		return detailedDashboardDao.getReturnSP(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public Map<String, Object> getTopSellingSKU(Date startDate, Date endDate,
+			int sellerId) {
+		return detailedDashboardDao.getTopSellingSKU(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public List<Map<String, Object>> getTopSellingRegion(Date startDate,
+			Date endDate, int sellerId) {
+		return detailedDashboardDao.getTopSellingRegion(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public List<Map<String, Object>> getUpcomingPayment(int sellerId, String status) {
+		return detailedDashboardDao.getUpcomingPayment(sellerId, status);
+	}
+	
+	@Override
+	public List<Map<String, Object>> getOutstandingPayment(Date startDate,
+			Date endDate, int sellerId, String status) {
+		return detailedDashboardDao.getOutstandingPayment(startDate, endDate, sellerId, status);
 	}
 }
