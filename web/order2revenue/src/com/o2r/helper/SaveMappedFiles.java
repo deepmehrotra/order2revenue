@@ -27,7 +27,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,7 +139,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -999,15 +998,15 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
-				if (columHeaderMap.containsValue(entry.getCell(cellIndex)
-						.toString())) {
+				/*if (columHeaderMap.containsValue(entry.getCell(cellIndex)
+						.toString())) {*/
 					cellIndexMap.put(entry.getCell(cellIndex).toString(),
 							cellIndex);
-				}
+				//}
 
 			}
 			// SKUList = productService.listProductSKU(sellerId);
@@ -1685,7 +1684,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -2415,7 +2414,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -3080,7 +3079,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -3533,7 +3532,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -3933,7 +3932,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -4650,7 +4649,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -5014,7 +5013,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -5503,7 +5502,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -6193,7 +6192,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -6441,7 +6440,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -7125,7 +7124,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {

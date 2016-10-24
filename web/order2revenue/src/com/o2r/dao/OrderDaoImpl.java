@@ -274,7 +274,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void addOrder(List<Order> orderList, int sellerId)
+	public synchronized void  addOrder(List<Order> orderList, int sellerId)
 			throws CustomException {
 
 		log.info("*** AddOrder List starts ***");
@@ -312,7 +312,7 @@ public class OrderDaoImpl implements OrderDao {
 
 						partner = (Partner) session.get(Partner.class,
 								partner.getPcId());
-						Hibernate.initialize(partner.getOrders());
+						/*Hibernate.initialize(partner.getOrders());*/
 
 						calculateDeliveryDate(order, sellerId);
 
@@ -522,11 +522,11 @@ public class OrderDaoImpl implements OrderDao {
 						order.getCustomer().getOrders().add(order);
 
 						// Adding order to the Partner
-						if (partner.getOrders() != null
+						/*if (partner.getOrders() != null
 								&& order.getOrderId() == 0) {
 							partner.getOrders().add(order);
 						}
-
+						 */
 						// Setting payment difference for old orders
 						if (order.getPaymentDueDate().compareTo(
 								java.util.Calendar.getInstance().getTime()) < 0) {
@@ -574,7 +574,7 @@ public class OrderDaoImpl implements OrderDao {
 							order.getOrderTimeline().add(timeline);
 							order.setSeller(seller);
 							seller.getOrders().add(order);
-							session.saveOrUpdate(partner);
+							/*session.saveOrUpdate(partner);*/
 							session.saveOrUpdate(seller);
 						}
 						taxDetailService.addMonthlyTaxDetail(session,

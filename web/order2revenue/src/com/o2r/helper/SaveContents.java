@@ -148,7 +148,7 @@ public class SaveContents {
 				noOfEntries++;
 			}
 			System.out.println(file.getOriginalFilename());			
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			System.out.println(uploadFileName);
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
@@ -738,7 +738,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -1032,7 +1032,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -1270,7 +1270,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -1519,7 +1519,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			productCategoryList = categoryService.listCategories(sellerId);
 			System.out.println(productCategoryList.size());
 			if (productCategoryList != null) {
@@ -1709,7 +1709,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -1810,7 +1810,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
@@ -1883,7 +1883,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
@@ -1980,7 +1980,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -2166,7 +2166,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -2327,7 +2327,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -2744,7 +2744,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -2849,7 +2849,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -3332,7 +3332,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -3500,7 +3500,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -3650,7 +3650,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -3913,7 +3913,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -4137,7 +4137,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -4271,7 +4271,7 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
