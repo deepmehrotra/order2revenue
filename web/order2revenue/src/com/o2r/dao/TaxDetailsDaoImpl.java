@@ -20,8 +20,6 @@ import org.springframework.stereotype.Repository;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Category;
-import com.o2r.model.ChannelUploadMapping;
-import com.o2r.model.ManualCharges;
 import com.o2r.model.Product;
 import com.o2r.model.Seller;
 import com.o2r.model.TaxCategory;
@@ -125,7 +123,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			int sellerId) {
 
 		log.info("*** addMonthlyTaxDetail Starts : TaxDetailsDaoImpl ****");
-		log.debug("***Add Monthly Tax : cat : " + taxDetail.getParticular()
+		log.info("***Add Monthly Tax : cat : " + taxDetail.getParticular()
 				+ " Amoun :" + taxDetail.getBalanceRemaining());
 
 		List<Integer> taxIds = null;
@@ -162,7 +160,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 
 			} else {
 				seller = (Seller) session.get(Seller.class, sellerId);
-				log.debug("Saving new tax object");
+				log.info("Saving new tax object");
 				taxDetail.setStatus("Due");
 				taxDetail.setDescription("Tax Amount for "
 						+ formatter.format(taxDetail.getUploadDate()));

@@ -495,7 +495,7 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public void addSKUMapping(List<ProductConfig> productConfigList,
+	public synchronized void addSKUMapping(List<ProductConfig> productConfigList,
 			int sellerId) throws CustomException {
 
 		log.info("*** addProductConfig List Starts : ProductDaoImpl ****");

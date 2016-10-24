@@ -27,7 +27,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,7 +139,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -365,7 +364,17 @@ public class SaveMappedFiles {
 												.getPcName()
 												.toLowerCase()
 												.contains(
-														GlobalConstant.PCPAYTM)) {
+														GlobalConstant.PCPAYTM)
+										||partner
+										.getPcName()
+										.toLowerCase()
+										.contains(
+												GlobalConstant.PCAMAZON)
+												||partner
+												.getPcName()
+												.toLowerCase()
+												.contains(
+														GlobalConstant.PCJABONG)) {
 
 									channelID = order.getChannelOrderID()
 											+ GlobalConstant.orderUniqueSymbol
@@ -391,9 +400,19 @@ public class SaveMappedFiles {
 												.getPcName()
 												.toLowerCase()
 												.contains(
-														GlobalConstant.PCPAYTM)) {
+														GlobalConstant.PCPAYTM)
+														||partner
+														.getPcName()
+														.toLowerCase()
+														.contains(
+																GlobalConstant.PCAMAZON)
+																||partner
+																.getPcName()
+																.toLowerCase()
+																.contains(
+																		GlobalConstant.PCJABONG)) {
 									errorMessage
-											.append(" The column 'Sale Order Item Code' is null, it is mandatory for Flipkart and Paytm,");
+											.append(" The column 'Sale Order Item Code' is null, it is mandatory.");
 									validaterow = false;
 								}
 							}
@@ -403,7 +422,17 @@ public class SaveMappedFiles {
 							if (partner.getPcName().toLowerCase()
 									.contains(GlobalConstant.PCFLIPKART)
 									|| partner.getPcName().toLowerCase()
-											.contains(GlobalConstant.PCPAYTM)) {
+											.contains(GlobalConstant.PCPAYTM)
+											||partner
+											.getPcName()
+											.toLowerCase()
+											.contains(
+													GlobalConstant.PCAMAZON)
+													||partner
+													.getPcName()
+													.toLowerCase()
+													.contains(
+															GlobalConstant.PCJABONG)) {
 
 								errorMessage
 										.append(" The column 'Sale Order Item Code' doesn't exist, it is mandatory for Flipkart and Paytm,");
@@ -969,15 +998,15 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
-				if (columHeaderMap.containsValue(entry.getCell(cellIndex)
-						.toString())) {
+				/*if (columHeaderMap.containsValue(entry.getCell(cellIndex)
+						.toString())) {*/
 					cellIndexMap.put(entry.getCell(cellIndex).toString(),
 							cellIndex);
-				}
+				//}
 
 			}
 			// SKUList = productService.listProductSKU(sellerId);
@@ -1655,7 +1684,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -1764,22 +1793,7 @@ public class SaveMappedFiles {
 													.append(" Vendor SKU code not mapped.");
 											validaterow = false;
 										}
-										if ((channelorderid != null)
-												&& (idsList == null || !idsList
-														.contains(channelorderid)
-														&& !duplicateKey
-																.containsKey(channelorderid)
-														&& productConfig != null)) {
-											order.setChannelOrderID(channelorderid);
-											order.setProductSkuCode(productConfig
-													.getProductSkuCode());
-											duplicateKey
-													.put(channelorderid, "");
-										} else {
-											errorMessage
-													.append(" Channel OrderId is already present ");
-											validaterow = false;
-										}
+										
 									} catch (Exception e) {
 
 									}
@@ -1808,7 +1822,31 @@ public class SaveMappedFiles {
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
-							order.setSubOrderID(entry.getCell(index).toString());
+							order.setSubOrderID(entry.getCell(index).toString()
+									.substring(
+											entry.getCell(index).toString()
+													.indexOf("'") + 1));
+							
+							if (channelorderid != null){
+								channelorderid = channelorderid
+										+ GlobalConstant.orderUniqueSymbol
+										+ order.getSubOrderID();
+									if( (idsList == null || !idsList
+											.contains(channelorderid)
+											&& !duplicateKey
+													.containsKey(channelorderid)
+											&& productConfig != null)) {
+								order.setChannelOrderID(channelorderid);
+								order.setProductSkuCode(productConfig
+										.getProductSkuCode());
+								duplicateKey
+										.put(channelorderid, "");
+							} else {
+								errorMessage
+										.append(" Channel OrderId is already present ");
+								validaterow = false;
+							}
+							}
 						}
 					}
 
@@ -2376,7 +2414,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -3041,7 +3079,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -3494,7 +3532,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -3894,7 +3932,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -4611,7 +4649,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -4975,7 +5013,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -5464,7 +5502,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -6154,7 +6192,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -6402,7 +6440,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -6509,22 +6547,7 @@ public class SaveMappedFiles {
 													.append(" Vendor SKU mapping not present");
 											validaterow = false;
 										}
-										if ((channelorderid != null)
-												&& (idsList == null || !idsList
-														.contains(channelorderid)
-														&& !duplicateKey
-																.containsKey(channelorderid)
-														&& productConfig != null)) {
-											order.setChannelOrderID(channelorderid);
-											order.setProductSkuCode(productConfig
-													.getProductSkuCode());
-											duplicateKey
-													.put(channelorderid, "");
-										} else {
-											errorMessage
-													.append(" Channel OrderId is already present ");
-											validaterow = false;
-										}
+										
 									} catch (Exception e) {
 
 									}
@@ -6669,6 +6692,26 @@ public class SaveMappedFiles {
 										HSSFCell.CELL_TYPE_STRING);
 								order.setSubOrderID(entry.getCell(index)
 										.toString());
+								if (channelorderid != null){
+									channelorderid = channelorderid
+											+ GlobalConstant.orderUniqueSymbol
+											+ order.getSubOrderID();
+										if( (idsList == null || !idsList
+												.contains(channelorderid)
+												&& !duplicateKey
+														.containsKey(channelorderid)
+												&& productConfig != null)) {
+									order.setChannelOrderID(channelorderid);
+									order.setProductSkuCode(productConfig
+											.getProductSkuCode());
+									duplicateKey
+											.put(channelorderid, "");
+								} else {
+									errorMessage
+											.append(" Channel OrderId is already present ");
+									validaterow = false;
+								}
+								}
 							}
 						} else {
 							errorMessage
@@ -7081,7 +7124,7 @@ public class SaveMappedFiles {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
@@ -7489,7 +7532,7 @@ public class SaveMappedFiles {
 			uploadReport.setFileType(worksheetName);
 			uploadReport.setFilePath(filePath);
 			uploadReport.setNoOfErrors(errorSet.size());
-			uploadReport.setNoOfSuccess((noOfRows - errorSet.size()) - 3);
+			uploadReport.setNoOfSuccess((noOfRows - errorSet.size()) - 1);
 			uploadReport.setDescription("Imported");
 			uploadReport.setSeller(sellerService.getSeller(sellerId));
 			if (isError) {
