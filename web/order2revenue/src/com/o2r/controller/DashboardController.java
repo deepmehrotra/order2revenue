@@ -1,8 +1,8 @@
 package com.o2r.controller;
 
-import java.awt.Robot;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.o2r.dao.DashboardDaoImpl;
 import com.o2r.helper.HelperClass;
-import com.o2r.model.AccountTransaction;
 import com.o2r.service.CategoryService;
-import com.o2r.service.DashboardService;
 import com.o2r.service.DetailedDashboardService;
 import com.o2r.service.PartnerService;
 import com.o2r.service.ProductService;
@@ -329,7 +326,59 @@ public class DashboardController {
 		}
 		log.info("$$$ getTopSellingRegion Ends : DashboardController $$$");
 		return gson.toJson(TopSKUMap);
-	}	
+	}
+	
+	@RequestMapping(value = "/seller/getUpcomingPayment", method = RequestMethod.GET)
+	public @ResponseBody String getUpcomingPayment(HttpServletRequest request) {
+
+		log.info("$$$ getUpcomingPayment Starts : DashboardController $$$");		
+		int sellerId = 0;	
+		Map<String, Object> upcomPayMap = new HashMap<String, Object>();		
+		Gson gson = null;
+		List<Map<String, Object>> upPayList = null;		
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);						
+			GsonBuilder gsonBuilder = new GsonBuilder();			
+			gson = gsonBuilder.setPrettyPrinting().create();
+			upPayList = detailedDashboardService.getUpcomingPayment(sellerId, "");
+			if (upPayList != null && upPayList.size() != 0) {
+				Map<String, Object> upPay = upPayList.get(0);
+				if(upPay != null)
+					upcomPayMap.put("Total", Math.round((double)(upPay.get("Total"))*100)/100);				
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by seller ID : " + sellerId, e);
+		}
+		log.info("$$$ getUpcomingPayment Ends : DashboardController $$$");
+		return gson.toJson(upcomPayMap);
+	}
+	
+	@RequestMapping(value = "/seller/getOutstandingPayment", method = RequestMethod.GET)
+	public @ResponseBody String getOutstandingPayment(HttpServletRequest request) {
+
+		log.info("$$$ getOutstandingPayment Starts : DashboardController $$$");		
+		int sellerId = 0;	
+		Map<String, Object> OutPayMap = new HashMap<String, Object>();		
+		Gson gson = null;
+		List<Map<String, Object>> OutPay = null;			
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);			
+			GsonBuilder gsonBuilder = new GsonBuilder();			
+			gson = gsonBuilder.setPrettyPrinting().create();
+			OutPay = detailedDashboardService.getOutstandingPayment(sellerId, "");
+			if (OutPay != null && OutPay.size() != 0) {
+				Map<String, Object> oPay = OutPay.get(0);
+				if(oPay != null)
+					OutPayMap.put("Total", Math.round((double)(oPay.get("Total"))*100)/100);				
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by seller ID : " + sellerId, e);
+		}
+		log.info("$$$ getOutstandingPayment Ends : DashboardController $$$");
+		return gson.toJson(OutPayMap);
+	}
 	
 	private Map<String, Date> setDate(String status){
 		Map<String, Date> dateMap = new HashMap<String, Date>();

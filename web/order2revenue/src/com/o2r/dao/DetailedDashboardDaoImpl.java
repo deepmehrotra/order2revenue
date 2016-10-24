@@ -115,10 +115,10 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 			+ "ot.paymentDueDate >:currentDate";
 	
 	private static final String outstandingPaymentChannelWise = "select ot.pcName, sum(ot.netRate) from order_table ot, orderpay op where ot.seller_id = :sellerId and "
-			+ "ot.shippedDate between :startDate AND :endDate and ot.orderPayment_paymentId = op.paymentId and op.paymentDifference <> 0 group by ot.pcName";
+			+ "ot.orderPayment_paymentId = op.paymentId and op.paymentDifference <> 0 group by ot.pcName";
 	
-	private static final String outstandingPaymentAll = "select sum(ot.netRate)  from order_table ot, orderpay op where ot.seller_id = :sellerId and ot.shippedDate between :startDate AND "
-			+ ":endDate and ot.orderPayment_paymentId = op.paymentId and op.paymentDifference <> 0 ";
+	private static final String outstandingPaymentAll = "select sum(ot.netRate) from order_table ot, orderpay op where ot.seller_id = :sellerId "
+			+ "and ot.orderPayment_paymentId = op.paymentId and op.paymentDifference <> 0";
 	
 	
 	
@@ -646,7 +646,7 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 						&& upPayList.get(0) != null) {
 					for(Object obj : upPayList)	{
 						Object[] result = (Object[]) obj;
-						upcomingPaymentMap.put((String) result[0], Long.parseLong(result[1].toString()));
+						upcomingPaymentMap.put((String) result[0], Double.parseDouble(result[1].toString()));
 						upcomingPaymentList.add(upcomingPaymentMap);						
 					}
 				}
@@ -655,36 +655,60 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 						.setParameter("sellerId", sellerId)
 						.setParameter("currentDate", currentDate);
 				if(upcomPay != null && upcomPay.list().size() != 0){
-					long upPay = (long) upcomPay.list().get(0);
+					double upPay = (double) upcomPay.list().get(0);
 					upcomingPaymentMap.put("Total", upPay);
 					upcomingPaymentList.add(upcomingPaymentMap);
 				}	
 			}
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		} finally {
 			if(session != null){
 				session.close();
 			}
-		}		
+		}	
+		System.out.println(upcomingPaymentList.size());
 		return upcomingPaymentList;
 	}
 	
 	@Override
-	public List<Map<String, Object>> getOutstandingPayment(Date startDate,
-			Date endDate, int sellerId, String status) {
+	public List<Map<String, Object>> getOutstandingPayment(int sellerId, String status) {
 		List<Map<String, Object>> outstandingPaymentList = new ArrayList<Map<String,Object>>();
 		Map<String, Object> outstandingPaymentMap = new HashMap<String, Object>();
 		Session session = null;
+		List<Object> ouPayList = null;
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
+			if(status.equalsIgnoreCase("list")){
+				Query outPayList = session.createSQLQuery(outstandingPaymentChannelWise)						
+						.setParameter("sellerId", sellerId);
+				ouPayList = outPayList.list();			
+				if (ouPayList != null && ouPayList.size() != 0
+						&& ouPayList.get(0) != null) {
+					for(Object obj : ouPayList)	{
+						Object[] result = (Object[]) obj;
+						outstandingPaymentMap.put((String) result[0], Double.parseDouble(result[1].toString()));
+						outstandingPaymentList.add(outstandingPaymentMap);						
+					}
+				}
+			} else {
+				Query outPay = session.createSQLQuery(outstandingPaymentAll)						
+						.setParameter("sellerId", sellerId);
+				if(outPay != null && outPay.list().size() != 0){
+					double ouPay = (double) outPay.list().get(0);
+					outstandingPaymentMap.put("Total", ouPay);
+					outstandingPaymentList.add(outstandingPaymentMap);
+				}	
+			}
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		} finally {
-			if(session != null)
+			if(session != null){
 				session.close();
-		}		
+			}
+		}	
+		System.out.println(outstandingPaymentList.size());
 		return outstandingPaymentList;
 	}
 	

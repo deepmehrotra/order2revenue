@@ -29,7 +29,7 @@ public interface DetailedDashboardService {
 	public List<Map<String, Object>> getTopSellingRegion(Date startDate, Date endDate, int sellerId);
 	
 	public List<Map<String, Object>> getUpcomingPayment(int sellerId, String status);
-	public List<Map<String, Object>> getOutstandingPayment(Date startDate, Date endDate, int sellerId, String status);
+	public List<Map<String, Object>> getOutstandingPayment(int sellerId, String status);
 	
 	
 }

@@ -96,8 +96,7 @@ public class DetailedDashboardServiceImpl implements DetailedDashboardService{
 	}
 	
 	@Override
-	public List<Map<String, Object>> getOutstandingPayment(Date startDate,
-			Date endDate, int sellerId, String status) {
-		return detailedDashboardDao.getOutstandingPayment(startDate, endDate, sellerId, status);
+	public List<Map<String, Object>> getOutstandingPayment(int sellerId, String status) {
+		return detailedDashboardDao.getOutstandingPayment(sellerId, status);
 	}
 }

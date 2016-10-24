@@ -495,70 +495,86 @@
                     </div>
                 </div>
             </div>            
-            	<div class="col-lg-12 m-b" style="background: currentColor;padding: 16px;">
-	                <div class="col-lg-6">
-	                    <div data-toggle="buttons" class="btn-group">
-	                        <label class="btn btn-sm btn-white"> <input type="radio" id="option1" name="options"> Today </label>
-	                        <label class="btn btn-sm btn-white active"> <input type="radio" id="option2" name="options"> Monthly </label>
-	                        <label class="btn btn-sm btn-white"> <input type="radio" id="option3" name="options"> Quaterly </label>
-	                        <label class="btn btn-sm btn-white"> <input type="radio" id="option4" name="options"> Annually </label>
-	                    </div>
-	                </div>
-	                <div class="col-lg-6">
-	                </div>
-	                <div class="col-lg-12">
-			            <div class="col-lg-3">
+            	<div class="col-lg-12 m-b" style="padding: 16px;">
+	            	<div class="col-sm-6">
+		                <div class="col-lg-12">
+		                    Outstanding Payment
+		                </div>
+			            <div class="col-lg-4">
 			                <div class="widget style1">
-			                    <div class="col-xs-4 text-center">
-			                       <!--  <i class="fa fa-shopping-cart" aria-hidden="false"></i> -->
-			                    </div>
-			                    <div class="col-xs-8 text-right" style="color:#fff;">
-			                        <span>Outstanding Payments</span>
-			                        <h2 class="font-bold" id="Period"></h2>
-			                    </div>    
+	                            <div class="col-lg-12 col-xs-12">
+	                                <span>TOTAL</span>	                                
+	                            </div>
 			                </div>
 			            </div>
-			            <div class="col-lg-3">
+			            <div class="col-lg-4">
 			                <div class="widget style1 navy-bg">
 			                    <div class="row">
-			                        <div class="col-xs-4">
+			                        <div class="col-xs-12 text-center">
 			                            <img src="/O2R/seller/img/gross.png" alt="gross">
 			                        </div>
-			                        <div class="col-xs-8 text-right">
-			                            <span> Gross Value</span>
-			                            <h2 class="font-bold" id="GV"></h2>
+			                        <div class="col-xs-12 text-center">
+			                            <span>Gross Value</span>
+			                            <h5 class="font-bold" id="outPayGV"></h5>
 			                        </div>
 			                    </div>
 			                </div>
 			            </div>
-			            <div class="col-lg-3">
+			            <div class="col-lg-4">
 			                <div class="widget style1 lazur-bg">
 			                    <div class="row">
-			                        <div class="col-xs-4">
+			                        <div class="col-xs-12 text-center">
 			                            <img src="/O2R/seller/img/return.png" alt="return">
 			                        </div>
-			                        <div class="col-xs-8 text-right">
-			                            <span> Return Value</span>
-			                            <h2 class="font-bold" id="RV"></h2>
+			                        <div class="col-xs-12 text-center">
+			                            <span>Discounted</span>
+			                            <h5 class="font-bold">###</h5>
 			                        </div>
 			                    </div>
 			                </div>
 			            </div>
-			            <div class="col-lg-3">
-			                <div class="widget style1 yellow-bg">
+	        		</div>
+	        		<div class="col-sm-6" style="background: #a9a9a9;padding: 16px;">
+		                <div class="col-lg-12" style="color: #fff;">
+		                    Upcoming Payment
+		                </div>
+		                
+			            <div class="col-lg-4">
+			                <div class="widget style1">
+	                            <div class="col-lg-12 col-xs-12" style="color: #fff;">
+	                                <span>TOTAL</span>	                                
+	                            </div>
+			                </div>
+			            </div>
+			            <div class="col-lg-4">
+			                <div class="widget style1 navy-bg">
 			                    <div class="row">
-			                        <div class="col-xs-4">
-			                            <img src="/O2R/seller/img/net.png" alt="net">
+			                        <div class="col-xs-12 text-center">
+			                            <img src="/O2R/seller/img/gross.png" alt="gross">
 			                        </div>
-			                        <div class="col-xs-8 text-right">
-			                            <span> Net Value </span>
-			                            <h2 class="font-bold" id="NV"></h2>
+			                        <div class="col-xs-12 text-center">
+			                            <span> Gross Value</span>
+			                            <h5 class="font-bold" id="upcomPayGV"></h5>
 			                        </div>
 			                    </div>
 			                </div>
 			            </div>
-			        </div>
-		        </div>           
+			            <div class="col-lg-4">
+			                <div class="widget style1 lazur-bg">
+			                    <div class="row">
+			                        <div class="col-xs-12 text-center">
+			                            <img src="/O2R/seller/img/return.png" alt="return">
+			                        </div>
+			                        <div class="col-xs-12 text-center">
+			                            <span>Deducted</span>
+			                            <h5 class="font-bold">###</h5>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+	        		</div>
+	        	</div>
+	                
             
             
             <div class="ibox-content">
@@ -683,6 +699,22 @@ $(document).ready(function(){
 			document.getElementById("topSellingRegionRV").innerHTML = data.returnQ;
 			document.getElementById("topSellingRegionNV").innerHTML = data.netQ;
 			document.getElementById("topSellingRegionName").innerHTML = data.name;		
+		}							
+	});
+	
+	$.ajax({								
+		url : "getOutstandingPayment.html",
+		dataType : "json",
+		success : function(data) {			
+			document.getElementById("upcomPayGV").innerHTML = data.Total;
+		}							
+	});
+	
+	$.ajax({								
+		url : "getUpcomingPayment.html",
+		dataType : "json",
+		success : function(data) {		
+			document.getElementById("outPayGV").innerHTML = data.Total;			
 		}							
 	});
 });
