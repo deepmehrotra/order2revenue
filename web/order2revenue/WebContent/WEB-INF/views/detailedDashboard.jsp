@@ -695,10 +695,10 @@ $(document).ready(function(){
 		dataType : "json",
 		success : function(data) {			
 			document.getElementById("topSellingRegionPeriod").innerHTML = "ALL";
-			document.getElementById("topSellingRegionGV").innerHTML = data.saleQ;
-			document.getElementById("topSellingRegionRV").innerHTML = data.returnQ;
-			document.getElementById("topSellingRegionNV").innerHTML = data.netQ;
-			document.getElementById("topSellingRegionName").innerHTML = data.name;		
+			document.getElementById("topSellingRegionGV").innerHTML = data.grossSale;
+			document.getElementById("topSellingRegionRV").innerHTML = data.returnSale;
+			document.getElementById("topSellingRegionNV").innerHTML = data.netSale;
+			document.getElementById("topSellingRegionName").innerHTML = data.Region;		
 		}							
 	});
 	
@@ -808,10 +808,10 @@ function topSellingRegion(status){
 		dataType : "json",
 		success : function(data) {			
 			document.getElementById("topSellingRegionPeriod").innerHTML = status;
-			document.getElementById("topSellingRegionGV").innerHTML = data.saleQ;
-			document.getElementById("topSellingRegionRV").innerHTML = data.returnQ;
-			document.getElementById("topSellingRegionNV").innerHTML = data.netQ;
-			document.getElementById("topSellingRegionName").innerHTML = data.name;		
+			document.getElementById("topSellingRegionGV").innerHTML = data.grossSale;
+			document.getElementById("topSellingRegionRV").innerHTML = data.returnSale;
+			document.getElementById("topSellingRegionNV").innerHTML = data.netSale;
+			document.getElementById("topSellingRegionName").innerHTML = data.Region;		
 		}							
 	});
 }

@@ -120,6 +120,10 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 	private static final String outstandingPaymentAll = "select sum(ot.netRate) from order_table ot, orderpay op where ot.seller_id = :sellerId "
 			+ "and ot.orderPayment_paymentId = op.paymentId and op.paymentDifference <> 0";
 	
+	private static final String topSellingRegions = "SELECT  count(ot.orderId) as count,cus.customerCity FROM order_table ot, customer cus, orderreturn ort "
+			+ "where ot.seller_id = :sellerId and ot.orderReturnOrRTO_returnId = ort.returnId and ort.returnDate is not null "
+			+ "and ort.returnDate between :startDate AND :endDate and ot.customer_customerId = cus.customerId "
+			+ "and cus.customerCity is not null group by cus.customerCity order by count desc";  
 	
 	
 	
@@ -579,43 +583,42 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 	@Override
 	public List<Map<String, Object>> getTopSellingRegion(Date startDate,
 			Date endDate, int sellerId) {
-		List<Object[]> results = null;
+		List<Object> results = null;
 		List<Map<String, Object>> topRegions = new ArrayList<Map<String,Object>>();
-		Map<String, Object> topRegion = new LinkedHashMap<String, Object>();
+		Map<String, Long> topRegionGross = new LinkedHashMap<String, Long>();
+		Map<String, Long> topRegionReturn = new LinkedHashMap<String, Long>();
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		Session session = null;
+		String key= "";
+		long value = 0;
 		try {	
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Order.class);
-			criteria.createAlias("seller", "seller",
-					CriteriaSpecification.LEFT_JOIN)
-			.createAlias("orderReturnOrRTO", "orderReturnOrRTO",
-					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.between("shippedDate", startDate, endDate));
-			Criterion rest1 = Restrictions.eq("poOrder", false);
-			Criterion rest2 = Restrictions.and(	
-					Restrictions.eq("poOrder", true),
-					Restrictions.isNotNull("consolidatedOrder"));
-			criteria.add(Restrictions.or(rest1, rest2));
-			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			ProjectionList projList = Projections.projectionList();
-			projList.add(Projections.groupProperty("zipcode"));
-			projList.add(Projections.sqlProjection("(sum(quantity)) as grossQty",new String[] { "grossQty" },
-					new Type[] { Hibernate.INTEGER }),"grossQty");
-			projList.add(Projections.sqlProjection("(sum(quantity-returnorrtoQty)) as netQty",new String[] { "netQty" },
-					new Type[] { Hibernate.INTEGER }),"netQty");
-			criteria.setProjection(projList);
-			criteria.addOrder(org.hibernate.criterion.Order.desc("netQty"));
-			results = (List<Object[]>) criteria.list();
-			Object[] result = null;
-			result = (Object[]) criteria.list().get(0);
-			if (result != null) {
-				topRegion.put("zipcode", result[0]);
-				topRegion.put("grossQ", Long.parseLong(result[1].toString()));
-				topRegion.put("netQ", Long.parseLong(result[2].toString()));
-				topRegions.add(topRegion);
-			}			
+			topRegionGross = DashboardDaoImpl.topSellingRegion(session, startDate, endDate, sellerId);
+			if(topRegionGross.size() != 0){				
+				Map.Entry<String, Long> entry=topRegionGross.entrySet().iterator().next();
+				key= entry.getKey();
+				value=entry.getValue();
+			}
+			System.out.println(key +" : "+value);
+			Query topSelleingRegions = session.createSQLQuery(topSellingRegions)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = topSelleingRegions.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] topR = (Object[]) obj;
+					topRegionReturn.put((String)topR[1], Long.parseLong(topR[0].toString()));
+				}
+			}
+			if(topRegionReturn.size() != 0){
+				resultMap.put("Region", key);
+				resultMap.put("grossSale", value);				
+				resultMap.put("returnSale", topRegionReturn.get(key) != null ? topRegionReturn.get(key) : 0);
+				resultMap.put("netSale", (value - (topRegionReturn.get(key) != null ? topRegionReturn.get(key) : 0)));
+				topRegions.add(resultMap);
+			}
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();

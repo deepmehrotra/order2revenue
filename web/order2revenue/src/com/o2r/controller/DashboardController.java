@@ -1,5 +1,6 @@
 package com.o2r.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -296,13 +297,13 @@ public class DashboardController {
 		Date startDate = new Date();
 		Date endDate = new Date();
 		int sellerId = 0;	
-		Map<String, Object> TopSKUMap = new HashMap<String, Object>();		
+		Map<String, Object> TopRegion = new HashMap<String, Object>();
+		List<Map<String, Object>> topRegions = new ArrayList<Map<String,Object>>();
 		Gson gson = null;
 		String period = "ALL";
 		String status = request.getParameter("status");		
 		try {
-			sellerId = helperClass.getSellerIdfromSession(request);	
-			Map<String, Object> topSKU = null;
+			sellerId = helperClass.getSellerIdfromSession(request);			
 			if(status != null && !status.equals("")){
 				period = status;
 			}
@@ -313,19 +314,20 @@ public class DashboardController {
 			}
 			GsonBuilder gsonBuilder = new GsonBuilder();			
 			gson = gsonBuilder.setPrettyPrinting().create();
-			topSKU = detailedDashboardService.getTopSellingSKU(startDate, endDate, sellerId);
-			if (topSKU != null) {
-				TopSKUMap.put("sku", topSKU.get("sku"));
-				TopSKUMap.put("saleQ", topSKU.get("grossQ"));			
-				TopSKUMap.put("returnQ", ((long)topSKU.get("grossQ") - (long)topSKU.get("netQ")));	
-				TopSKUMap.put("netQ", topSKU.get("netQ"));
+			topRegions = detailedDashboardService.getTopSellingRegion(startDate, endDate, sellerId);
+			if (topRegions != null && topRegions.size() != 0) {
+				Map<String, Object> resultMap = topRegions.get(0);
+				TopRegion.put("Region", resultMap.get("Region"));
+				TopRegion.put("grossSale", resultMap.get("grossSale"));			
+				TopRegion.put("returnSale", resultMap.get("returnSale"));	
+				TopRegion.put("netSale", resultMap.get("netSale"));
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed! by seller ID : " + sellerId, e);
 		}
 		log.info("$$$ getTopSellingRegion Ends : DashboardController $$$");
-		return gson.toJson(TopSKUMap);
+		return gson.toJson(TopRegion);
 	}
 	
 	@RequestMapping(value = "/seller/getUpcomingPayment", method = RequestMethod.GET)

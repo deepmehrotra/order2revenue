@@ -960,7 +960,7 @@ public class DashboardDaoImpl implements DashboardDao {
 		return expenseMonthly;
 	}
 
-	public Map<String, Long> topSellingRegion(Session session, Date startDate,
+	public static Map<String, Long> topSellingRegion(Session session, Date startDate,
 			Date endDate, int sellerId) {
 
 		log.info("***topSellingRegion starts***");
