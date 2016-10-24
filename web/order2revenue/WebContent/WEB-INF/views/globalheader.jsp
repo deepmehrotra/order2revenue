@@ -50,6 +50,25 @@
 	width: 60%;
 	margin-left: 20%;
 }
+ .butonend
+     {
+        padding: 0px 6px 0px 6px;
+        border: 0px solid #fff;
+        border-radius: 50%;
+        background: magenta;
+        color: #fff;
+        z-index: 99999999999999999999999;
+        cursor: pointer;
+        margin: 0px -44px 0px 2px;
+        position: relative;
+        top: 7px;
+    }
+    .paragraph
+    {
+        color: #000;
+        text-align: justify;
+        font-weight: 600;
+    }
 </style>
 
 <!--Start of Zopim Live Chat Script-->
