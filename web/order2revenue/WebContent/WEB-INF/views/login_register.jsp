@@ -124,8 +124,8 @@
     	</div>
 		<div class="form">
 	      <ul class="tab-group">
-	        <li class="tab active"><a href="#login">Log In</a></li>
-	        <li class="tab"><a href="#signup">Sign Up</a></li>
+	        <li class="tab active"><a href="#login" onclick="location.href='login-form.html#login'">Log In</a></li>
+	        <li class="tab"><a href="#signup" onclick="location.href='login-form.html#signup'">Sign Up</a></li>
 	      </ul>
 	      <div class="tab-content">
 	      	<div id="login">   
