@@ -1688,11 +1688,11 @@ public class SaveMappedFiles {
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {
-				if (columHeaderMap.containsValue(entry.getCell(cellIndex)
-						.toString())) {
+				/*if (columHeaderMap.containsValue(entry.getCell(cellIndex)
+						.toString())) {*/
 					cellIndexMap.put(entry.getCell(cellIndex).toString(),
 							cellIndex);
-				}
+				//}
 
 			}
 			log.info("cellIndexMap for Amazon Order : " + cellIndexMap);
@@ -2330,8 +2330,9 @@ public class SaveMappedFiles {
 						/*
 						 * orderService.addOrder(ConverterClass.prepareModel(order
 						 * ), sellerId);
+						 * 
 						 */
-						System.out.println(" Adding order to save list : "
+						log.info(" Adding order to save list : "
 								+ order.getChannelOrderID());
 						saveList.add(ConverterClass.prepareModel(order));
 					} else {
@@ -2340,6 +2341,14 @@ public class SaveMappedFiles {
 						log.debug(" Error while saving order : "
 								+ order.getChannelOrderID()
 								+ " errorMessage : " + errorMessage);
+						if(cellIndexMap.get("ship-promotion-id")!=null
+								&&entry.getCell(cellIndexMap.get("ship-promotion-id")) != null
+								&& StringUtils.isNotBlank(entry.getCell(cellIndexMap.get("ship-promotion-id"))
+										.toString()))
+						{
+							log.info("Promotion ID available for this order.");
+						}
+						else
 						returnOrderMap.put(errorMessage.toString(), order);
 					}
 				} catch (Exception e) {
@@ -3487,6 +3496,8 @@ public class SaveMappedFiles {
 		}
 
 		catch (Exception e) {
+			addErrorUploadReport("Flipkart_Payment", sellerId,
+					uploadReport);
 			log.error("Failed by seller: " + sellerId, e);
 		}
 	}
@@ -3891,6 +3902,8 @@ public class SaveMappedFiles {
 		}
 
 		catch (Exception e) {
+			addErrorUploadReport("Snapdeal_Payment", sellerId,
+					uploadReport);
 			log.error("Failed by seller: " + sellerId, e);
 		}
 	}
@@ -4967,6 +4980,8 @@ public class SaveMappedFiles {
 		}
 
 		catch (Exception e) {
+			addErrorUploadReport("PayTM_Payment", sellerId,
+					uploadReport);
 			log.error("Failed by seller: " + sellerId, e);
 		}
 	}
@@ -5461,6 +5476,8 @@ public class SaveMappedFiles {
 			uploadResultXLS(offices, "Amazon_Payment", uploadFileName, errorSet, path,
 					sellerId, uploadReport);
 		} catch (Exception e) {
+			addErrorUploadReport("Amazon_Payment", sellerId,
+					uploadReport);
 			log.error("Failed by seller: " + sellerId, e);
 		}
 	}
@@ -6399,6 +6416,8 @@ public class SaveMappedFiles {
 			uploadResultXLS(offices, "Limeroad_Payment", uploadFileName, errorSet, path,
 					sellerId, uploadReport);
 		} catch (Exception e) {
+			addErrorUploadReport("Limeroad_Payment", sellerId,
+					uploadReport);
 			log.error("Failed by seller: " + sellerId, e);
 		}
 	}
@@ -7424,6 +7443,8 @@ public class SaveMappedFiles {
 		}
 
 		catch (Exception e) {
+			addErrorUploadReport("Jabong_Payment", sellerId,
+					uploadReport);
 			log.error("Failed by seller: " + sellerId, e);
 		}
 
@@ -7568,7 +7589,7 @@ public class SaveMappedFiles {
 			uploadReport.setFileType(worksheetName);
 			uploadReport.setDescription("Imported");
 			uploadReport.setSeller(sellerService.getSeller(sellerId));
-			uploadReport.setStatus("Error");
+			uploadReport.setStatus("Exception");
 
 			reportGeneratorService.addUploadReport(uploadReport, sellerId);
 			log.info("$$$ downloadUploadReportXLS ends : SaveContents $$$");

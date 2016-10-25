@@ -3108,11 +3108,13 @@ public class SaveContents {
 							errorMessage.append(" Quantity can not be null ");
 							validaterow = false;
 						}
+											
 						if (entry.getCell(7) != null
 								&& StringUtils.isNotBlank(entry.getCell(7)
 										.toString())
 								&& returnMap.containsKey(entry.getCell(7)
 										.toString())) {
+							
 							orderReturn.setType(entry.getCell(7).toString());
 						} else {
 							errorMessage.append("Invalid order Return Type");
@@ -3153,11 +3155,11 @@ public class SaveContents {
 									.parseFloat(entry.getCell(11).toString()));
 						}
 
-					} /*else {
+					} else {
 						validaterow = false;
 						errorMessage.append("Value of " + criteria
 								+ " is Invalid for Return.. ");
-					}*/
+					}
 					if (validaterow){
 						orderReturn.setReturnFileName(uploadFileName);
 						orderService.addReturnOrder(order.getChannelOrderID(),

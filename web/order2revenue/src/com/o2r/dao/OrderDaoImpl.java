@@ -3124,7 +3124,7 @@ public class OrderDaoImpl implements OrderDao {
 				chargesMap
 						.put(charge.getChargeName(), charge.getChargeAmount());
 			}
-
+System.out.println(" Retunrr Type : "+returnType);
 			switch (returnType) {
 			case "returnCharges":
 				if (faultType.equals(GlobalConstant.SellerFaultString)) {
