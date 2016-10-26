@@ -2940,6 +2940,8 @@ public class SaveContents {
 															+ GlobalConstant.orderUniqueSymbol
 															+ productConfig
 																	.getVendorSkuRef();
+													System.out
+															.println(" channelID withc vendor sku "+channelID);
 												} else {
 													channelID = entry
 															.getCell(1)
@@ -2961,6 +2963,7 @@ public class SaveContents {
 										channelID = entry.getCell(1).toString();
 									}
 									if (channelID != null) {
+										System.out.println( " not null searching order channelID"+channelID);
 										ord = orderService.searchAsIsOrder(
 												column, channelID, sellerId);
 									}
@@ -2986,29 +2989,10 @@ public class SaveContents {
 												.append("Return Already Recieved. ");
 									}
 								} else {
-									boolean check = false;
-									for (Order eachOrder : ord) {
-										if (eachOrder.getChannelOrderID()
-												.equalsIgnoreCase(channelID)) {
-											if (eachOrder.getOrderReturnOrRTO()
-													.getReturnDate() == null) {
-												order.setChannelOrderID(eachOrder
-														.getChannelOrderID());
-												check = true;
-											} else {
-												check = true;
-												validaterow = false;
-												errorMessage
-														.append("Return Already Recieved. ");
-											}
-										}
-									}
-									if (check != true) {
-										errorMessage
-												.append("Multiple Orders With Channel Order ID.");
-										validaterow = false;
-									}
-								}
+									errorMessage
+									.append("Multiple Orders With Channel Order ID.");
+							validaterow = false;
+							}
 							} else if (orderlist != null
 									&& orderlist.size() != 0) {
 								if (orderlist.size() == 1) {
@@ -3040,9 +3024,7 @@ public class SaveContents {
 						}
 					}
 					if (id != null) {
-						log.debug(" Order list in return : " + orderlist);
 						if (orderlist != null && orderlist.size() != 0) {
-							log.debug(" Order list is not null ");
 							returnId = orderlist.get(0).getOrderReturnOrRTO()
 									.getReturnId();
 						}
@@ -3155,11 +3137,11 @@ public class SaveContents {
 									.parseFloat(entry.getCell(11).toString()));
 						}
 
-					} else {
+					} /*else {
 						validaterow = false;
 						errorMessage.append("Value of " + criteria
 								+ " is Invalid for Return.. ");
-					}
+					}*/
 					if (validaterow){
 						orderReturn.setReturnFileName(uploadFileName);
 						orderService.addReturnOrder(order.getChannelOrderID(),
