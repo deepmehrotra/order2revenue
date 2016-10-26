@@ -5,9 +5,6 @@ import java.util.List;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import com.o2r.amazonservices.mws.orders.model.ListOrderItemsResult;
-import com.o2r.amazonservices.mws.orders.model.ListOrdersResult;
-import com.o2r.amazonservices.mws.orders.model.OrderItem;
 import com.o2r.bean.AuthInfoBean;
 import com.o2r.model.AmazonOrderInfo;
 import com.o2r.model.Order;
@@ -28,12 +25,14 @@ public interface MwsAmazonOrdMgmtService {
 	
 	public List<String> getConfiguredoOrderStatus() throws Exception;
 	
-	public ListOrdersResult getListOrders(XMLGregorianCalendar createdAfter, XMLGregorianCalendar createdBefore, List<String> orderStatus, AuthInfoBean authInfo) throws Exception;
+	public com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult getListOrders(XMLGregorianCalendar createdAfter, XMLGregorianCalendar createdBefore, List<String> orderStatus, AuthInfoBean authInfo) throws Exception;
 	
-	public ListOrderItemsResult getListOrderItems(AuthInfoBean authInfo, String amazonOrderId) throws Exception;
+	public com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult getListOrderItems(AuthInfoBean authInfo, String amazonOrderId) throws Exception;
 	
 	public AmazonOrderInfo getAmazonOrderInfoObj(AuthInfoBean authInfo, String amazonOrderId) throws Exception;
 	
-	public void saveOrderInfo(com.o2r.amazonservices.mws.orders.model.Order order, List<OrderItem> orderItems) throws Exception;
+	public Date toDate(XMLGregorianCalendar calendar) throws Exception;
+	
+	public void saveOrderInfo(com.amazonservices.mws.orders._2013_09_01.model.Order order, List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems) throws Exception;
 	
 }

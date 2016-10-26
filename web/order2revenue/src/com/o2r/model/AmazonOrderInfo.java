@@ -64,7 +64,7 @@ public class AmazonOrderInfo  implements java.io.Serializable {
      private String ispremiumorder;
      private String requestid;
      //private Integer sellerId;
-     private Set<AmazonOrderItemInfo> stockDailyRecords = new HashSet<AmazonOrderItemInfo>(0);
+     private Set<AmazonOrderItemInfo> amazonOrderItemInfos = new HashSet<AmazonOrderItemInfo>(0);
      private Set<ShippingAddress> ShippingAddress = new HashSet<ShippingAddress>(0);
      private Seller seller;
 
@@ -488,15 +488,6 @@ public class AmazonOrderInfo  implements java.io.Serializable {
     }*/
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "orderInfo")
-	public Set<AmazonOrderItemInfo> getStockDailyRecords() {
-		return stockDailyRecords;
-	}
-
-	public void setStockDailyRecords(Set<AmazonOrderItemInfo> stockDailyRecords) {
-		this.stockDailyRecords = stockDailyRecords;
-	}
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "orderInfo")
 	public Set<ShippingAddress> getShippingAddress() {
 		return ShippingAddress;
@@ -518,7 +509,16 @@ public class AmazonOrderInfo  implements java.io.Serializable {
 		this.seller = seller;
 	}
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "orderInfo")
+	public Set<AmazonOrderItemInfo> getAmazonOrderItemInfos() {
+		return amazonOrderItemInfos;
+	}
 
+
+	public void setAmazonOrderItemInfos(
+			Set<AmazonOrderItemInfo> amazonOrderItemInfos) {
+		this.amazonOrderItemInfos = amazonOrderItemInfos;
+	}
 
 
 }

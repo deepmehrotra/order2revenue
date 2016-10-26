@@ -3,10 +3,6 @@ package com.o2r.jobs;
 import java.util.Date;
 import java.util.List;
 
-import com.o2r.amazonservices.mws.orders.model.ListOrderItemsResult;
-import com.o2r.amazonservices.mws.orders.model.ListOrdersResult;
-import com.o2r.amazonservices.mws.orders.model.Order;
-import com.o2r.amazonservices.mws.orders.model.OrderItem;
 import com.o2r.bean.AuthInfoBean;
 import com.o2r.model.Partner;
 import com.o2r.model.Seller;
@@ -27,11 +23,11 @@ public class AmazonOrderMgmt {
 			for (Seller seller : sellers) {
 				for (Partner partner : seller.getPartners()) {
 					AuthInfoBean authInfo = ordMgmtService.getAuthInfoBeanObj(partner.getAuthInfo());
-					ListOrdersResult listOrderResult = ordMgmtService.getListOrders(ordMgmtService.getCreatedAfter(new Date()), ordMgmtService.getCreatedBefore(new Date()), ordMgmtService.getConfiguredoOrderStatus(), authInfo);
-					List<Order> orders = listOrderResult.getOrders();
-					for (Order order : orders) {
-						ListOrderItemsResult itemResults = ordMgmtService.getListOrderItems(authInfo, order.getAmazonOrderId());
-						List<OrderItem> orderItems = itemResults.getOrderItems();
+					com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult listOrderResult = ordMgmtService.getListOrders(ordMgmtService.getCreatedAfter(new Date()), ordMgmtService.getCreatedBefore(new Date()), ordMgmtService.getConfiguredoOrderStatus(), authInfo);
+					List<com.amazonservices.mws.orders._2013_09_01.model.Order> orders = listOrderResult.getOrders();
+					for (com.amazonservices.mws.orders._2013_09_01.model.Order order : orders) {
+						com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult itemResults = ordMgmtService.getListOrderItems(authInfo, order.getAmazonOrderId());
+						List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems = itemResults.getOrderItems();
 						ordMgmtService.saveOrderInfo(order, orderItems);
 					}
 				}
