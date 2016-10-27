@@ -206,9 +206,11 @@ public class PartnerDaoImpl implements PartnerDao {
 						returnpartner = partner;
 				}
 				if (returnpartner != null
-						&& returnpartner.getNrnReturnConfig() != null)
+						&& returnpartner.getNrnReturnConfig() != null) {
 					Hibernate.initialize(returnpartner.getNrnReturnConfig()
 							.getCharges());
+					Hibernate.initialize(returnpartner.getOrders());
+				}
 			}
 			session.getTransaction().commit();
 			session.close();

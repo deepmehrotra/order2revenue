@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+
 import com.o2r.model.OrderTimeline;
 
 public class OrderBean {
@@ -64,8 +66,8 @@ public class OrderBean {
 	private OrderBean consolidatedOrder;
 	private double grossProfit;
 	
-	
-	
+	private int sellerId;
+	private String sellerName;
 
 	public CustomerBean getCustomer() {
 		return customer;
@@ -497,5 +499,21 @@ public class OrderBean {
 
 	public void setGrossMargin(double grossMargin) {
 		this.grossMargin = grossMargin;
+	}
+
+	public int getSellerId() {
+		return sellerId;
+	}
+
+	public void setSellerId(int sellerId) {
+		this.sellerId = sellerId;
+	}
+
+	public String getSellerName() {
+		return sellerName;
+	}
+
+	public void setSellerName(String sellerName) {
+		this.sellerName = sellerName;
 	}
 }

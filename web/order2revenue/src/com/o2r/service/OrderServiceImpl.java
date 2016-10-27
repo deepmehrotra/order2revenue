@@ -300,4 +300,9 @@ public class OrderServiceImpl implements OrderService {
 	public void markOrderStatus(String status, int orderId, int sellerId) {
 		orderDao.markOrderStatus(status, orderId, sellerId);
 	}
+	
+	@Override
+	public boolean reverseOrder(int orderId, int sellerId) throws CustomException {
+		return orderDao.reverseOrder(orderId, sellerId);
+	}
 }

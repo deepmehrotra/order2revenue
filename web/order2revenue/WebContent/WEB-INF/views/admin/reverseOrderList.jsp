@@ -99,7 +99,7 @@
 												<option value="">Select Criteria</option>
 												<option id="1" value="channelOrderID">Channel
 													OrderID/PO ID</option>
-												<option id="2" value="awbNum">AWB</option>
+												<!-- <option id="2" value="awbNum">AWB</option>
 												<option id="3" value="invoiceID">Invoice ID</option>
 												<option id="4" value="subOrderID">Sub Order ID</option>
 												<option id="5" value="PIreferenceNo">PI Reference
@@ -124,7 +124,7 @@
 												<option id="20" value="paymentDueDate">Payment Due
 													Date</option>
 												<option id="21" value="dateofPayment">Actual Date
-													of Payment</option>
+													of Payment</option> -->
 											</select>
 										</div>
 										<div class="col-sm-5" id="serchstring1">
@@ -154,6 +154,14 @@
 										</div>
 									</div>
 								</form>
+								
+								<c:if test="${!empty status}">
+								<div class="ibox-content">
+									<br><br>
+									<h3 align="center">${status}</h3>
+								</div>
+								</c:if>
+								
 								<c:if test="${!empty searchOrderList}">
 									<div class="ibox-content">
 										<table class="table table-bordered custom-table">
@@ -162,6 +170,8 @@
 													<th>#</th>
 													<th>Partner</th>
 													<th>Channel Order Id</th>
+													<th>Seller Id</th>
+													<th>Seller Name</th>
 													<th>Status</th>
 													<th>Actions</th>
 												</tr>
@@ -175,10 +185,11 @@
 															<td>${loop.index+1}</td>
 															<td>${searchOrder.pcName}</td>
 															<td>${searchOrder.channelOrderID}</td>
+															<td>${searchOrder.sellerId}</td>
+															<td>${searchOrder.sellerName}</td>
 															<td>${searchOrder.status}</td>
-															<td><label data-toggle="modal"
-																data-target="#myModal23"
-																onclick="reverseOrder(${searchOrder.orderId},'${searchOrder.channelOrderID}')"
+															<td><label 
+																onclick="reverseOrder(${searchOrder.orderId},'${searchOrder.sellerId}')"
 																style='cursor: pointer;'>Reverse</label></td>
 														</tr>
 													</c:forEach>
@@ -199,5 +210,11 @@
 	</div>
 
 
+<script type="text/javascript">
+	function reverseOrder(id, sellerId) {
+		//alert("Id: " + id + ", Value: " + sellerId);
+		window.location.href = "reverseOrder.html?orderId=" + id + "&sellerId=" + sellerId;
+	}
+</script>
 </body>
 </html>

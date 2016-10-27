@@ -489,7 +489,7 @@ public class GenericController {
 									searchString, sellerId));
 				} else {
 					orderlist = ConverterClass.prepareListofBean(orderService
-							.findOrders(searchCriteria, searchString, sellerId,
+							.findOrders(searchCriteria, searchString, 0,
 									false, true));
 				}
 			} else {
