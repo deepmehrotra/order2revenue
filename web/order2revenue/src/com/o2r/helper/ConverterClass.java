@@ -273,6 +273,10 @@ public class ConverterClass {
 				bean.setDwShippingString(order.getDwShippingString());
 				bean.setGrossMargin(order.getGrossMargin());
 				bean.setProductCost(order.getProductCost());
+				
+				bean.setSellerId(order.getSeller().getId());
+				bean.setSellerName(order.getSeller().getName());
+				
 				if (order.getProductConfig() != null)
 					bean.setProductConfig(prepareProductConfigBean(order
 							.getProductConfig()));
@@ -338,6 +342,9 @@ public class ConverterClass {
 			bean.setServiceTax(order.getServiceTax());
 			bean.setGrossMargin(order.getGrossMargin());
 			bean.setProductCost(order.getProductCost());
+			
+			bean.setSellerId(order.getSeller().getId());
+			bean.setSellerName(order.getSeller().getName());
 			
 		}
 		return bean;

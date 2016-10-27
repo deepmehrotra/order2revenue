@@ -140,4 +140,6 @@ public interface OrderDao {
 			boolean poOrder, boolean isSearch);
 	
 	public void markOrderStatus(String status, int orderId, int sellerId);
+
+	public boolean reverseOrder(int orderId, int sellerId) throws CustomException;
 }

@@ -29,6 +29,7 @@ import com.o2r.model.ChannelUploadMapping;
 import com.o2r.model.ColumMap;
 import com.o2r.model.Employee;
 import com.o2r.service.AdminService;
+import com.o2r.service.OrderService;
 import com.o2r.service.UploadMappingService;
 
 /**
@@ -44,7 +45,9 @@ public class AdminController {
 	private HelperClass helperClass;
 	@Autowired
 	private UploadMappingService uploadMappingService;
-
+	@Autowired
+	private OrderService orderService;
+	
 	static Logger log = Logger.getLogger(AdminController.class.getName());
 
 	@RequestMapping(value = "/seller/save", method = RequestMethod.POST)
@@ -118,13 +121,39 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/seller/reverseOrderList", method = RequestMethod.GET)
-	public ModelAndView returnOrRTOlist() {
+	public ModelAndView reverseOrderList() {
 
 		log.info("$$$ reverseOrderList Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		System.out.println(" Inside reverse Order list");
 		model.put("order", new OrderBean());
 		log.info("$$$ reverseOrderList Ends : AdminController $$$");
+		return new ModelAndView("/admin/reverseOrderList", model);
+	}
+	
+	@RequestMapping(value = "/seller/reverseOrder", method = RequestMethod.GET)
+	public ModelAndView reverseOrder(
+			@RequestParam(value = "orderId") String orderId,
+			@RequestParam(value = "sellerId") String sellerId) {
+
+		log.info("$$$ reverseOrder Starts : AdminController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		System.out.println(" Inside reverse Order");
+		
+		String status = "";
+		try {
+			if (orderService.reverseOrder(Integer.parseInt(orderId), Integer.parseInt(sellerId))) {
+				status = "Order reversed successfully";
+			} else {
+				status = "Error reversing the Order, please contact Admin";
+			}
+		} catch (Exception e) {
+			log.error("Failed! for Order Id : " + orderId, e);
+			status = "Error reversing the Order, please contact Admin";
+		}
+		model.put("status", status);
+		model.put("order", new OrderBean());
+		log.info("$$$ reverseOrder Ends : AdminController $$$");
 		return new ModelAndView("/admin/reverseOrderList", model);
 	}
 

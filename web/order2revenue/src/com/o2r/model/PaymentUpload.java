@@ -1,19 +1,14 @@
 package com.o2r.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+
 
 @Entity
 @Table(name = "PaymentUpload")
@@ -35,6 +30,14 @@ public class PaymentUpload {
 	private double netRecievedAmount;
 	@Column
 	private String uploadStatus;
+	
+	/*@CollectionOfElements(fetch = FetchType.LAZY)
+	@JoinTable(name = "JOINTABLE_NAME",
+	    joinColumns = @JoinColumn(name = "id"))
+	@MapKey(columns = @Column(name = "name"))
+	@MapKey(name = "order")
+	private Map<Integer, Double> orderList = new HashMap<Integer, Double>();*/
+
 	
 	/*@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "PaymentUpload_Order", 
