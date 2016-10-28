@@ -57,6 +57,7 @@ import com.o2r.model.OrderPayment;
 import com.o2r.model.OrderRTOorReturn;
 import com.o2r.model.Partner;
 import com.o2r.model.PaymentUpload;
+import com.o2r.model.PaymentUpload_Order;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.SellerAlerts;
@@ -2583,7 +2584,14 @@ public class SaveContents {
 								totalnegative = totalnegative + negativeAmount;
 								order = orderService.addOrderPayment(
 										skucode, channelId, payment,
-										sellerId);								
+										sellerId);
+								
+								//New
+								PaymentUpload_Order paymentUpload_Order =  new PaymentUpload_Order();
+								paymentUpload_Order.setOrderId(order.getOrderId());
+								paymentUpload_Order.setAmount(positiveAmount - negativeAmount);
+								paymentUpload_Order.setPaymentUpload(paymentUpload);
+								paymentUpload.getOrderList().add(paymentUpload_Order);
 							} else {
 								returnPaymentMap.put(errorMessage
 										.toString(), ConverterClass
