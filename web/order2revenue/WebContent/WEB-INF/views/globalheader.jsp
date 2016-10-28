@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<html>
+<html lang="en">
 
 <head>
 <!--[if lt IE 9]>
@@ -96,6 +96,20 @@
         });
 </script>
 <!--End of Zopim Live Chat Script-->
+
+
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-82779501-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+
 
 </head>
 
@@ -463,12 +477,11 @@
 	</div>
 	<nav class="cd-vertical-nav">
 	<ul>
-		<li><a href="#" onclick="onclickNavigate('upload',0)"><span
-				class="label">Export</span></a></li>
-		<li><a href="orderList.html"><span class="label">Order</span></a></li>
-		<li><a href="paymentUploadList.html"><span class="label">Payment</span></a></li>
+		<li><a href="#" onclick="onclickNavigate('upload',0)"><span	class="label">Export</span></a></li>
+		<li><a href="orderList.html?#orderlist"><span class="label">Order</span></a></li>
+		<li><a href="paymentUploadList.html?#payment"><span class="label">Payment</span></a></li>
 		<li><a href="poOrderList.html?value="><span class="label">PoList</span></a></li>
-		<li><a href="returnOrderList.html"><span class="label">Return</span></a></li>
+		<li><a href="returnOrderList.html?#return"><span class="label">Return</span></a></li>
 	</ul>
 	</nav>
 

@@ -24,6 +24,7 @@
       <div class="wrapper wrapper-content animated fadeInRight" id="centerpane">
          <!--  <div class="wrapper wrapper-content"> -->
        <div class="row">
+       				<div class="col-sm-12"><a href="showDetailed.html" class="btn-primary btn-xs" style="position: relative;top: -6px;background-color: #293846;">DETAILED VIEW</a></div>
                     <div class="col-lg-3">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
