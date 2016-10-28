@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,8 @@ import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.bean.DetailedDashboardBean;
+import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Order;
 
 @Repository("DetailedDashboardDao")
@@ -123,10 +124,96 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 	private static final String topSellingRegions = "SELECT  count(ot.orderId) as count,cus.customerCity FROM order_table ot, customer cus, orderreturn ort "
 			+ "where ot.seller_id = :sellerId and ot.orderReturnOrRTO_returnId = ort.returnId and ort.returnDate is not null "
 			+ "and ort.returnDate between :startDate AND :endDate and ot.customer_customerId = cus.customerId "
-			+ "and cus.customerCity is not null group by cus.customerCity order by count desc";  
+			+ "and cus.customerCity is not null group by cus.customerCity order by count desc";
 	
+	private static final String grossProfitForMPMonthWiseQuery = "select monthname(ot.shippedDate),year(ot.shippedDate),sum(ot.grossMargin) as gross from order_table ot  where ot.shippedDate "
+			+ "between :startDate AND :endDate and ot.poOrder =0 and ot.seller_Id=:sellerId group by month(ot.shippedDate),year(ot.shippedDate) order by month(ot.shippedDate) desc";
 	
+	private static final String grossProfitPOMonthWiseQuery = "Select monthname(ot.shippedDate),year(ot.shippedDate),sum(ot.grossProfit) as grossProfit"
+			+ " from Order_Table ot where ot.shippedDate "
+			+ "between  :startDate AND :endDate and ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL "
+			+ "and ot.seller_Id=:sellerId group by month(ot.shippedDate),year(ot.shippedDate)";
 	
+	private static final String returnValueForMPMonthWiseQuery = "select monthname(ort.returnDate),year(ort.returnDate),sum((ot.grossMargin / ot.quantity)* ort.returnorrtoQty) "
+			+ "from order_table ot, orderreturn ort where ot.orderReturnOrRTO_returnId =ort.returnId "
+			+ "and ort.returnDate between :startDate AND :endDate and ot.poOrder =0  and ot.seller_Id=:sellerId group by month(ort.returnDate),year(ort.returnDate)";
+	
+	private static final String returnValuePOMonthWiseQuery = "Select monthname(ort.returnDate),year(ort.returnDate),sum(ot.grossProfit)"
+			+ "from Order_Table ot ,OrderReturn  ort where ort.returnDate "
+			+ "between  :startDate AND :endDate and ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL "
+			+ "and ort.returnId=ot.orderReturnOrRTO_returnId and ot.seller_Id=:sellerId group by month(ort.returnDate),year(ort.returnDate)";
+	
+	private static final String grossBadquantityMPMonthWiseQuery = "select monthname(ort.returnDate),year(ort.returnDate),sum(ot.productCost*ort.badReturnQty) "
+			+ "from order_table ot,orderreturn ort where ort.returnDate between :startDate AND :endDate and "
+			+ "ot.orderReturnOrRTO_returnId =ort.returnId and ot.poOrder =0  and ot.seller_Id=:sellerId group by month(ort.returnDate),year(ort.returnDate)";
+	
+	private static final String orderNRMPMonthWiseQuery = "Select monthname(ot.shippedDate),year(ot.shippedDate),sum(ot.grossNetRate * ot.quantity) as grossnetrate from "			
+			+ "Order_Table ot where ot.shippedDate between :startDate AND "
+			+ ":endDate and ot.poOrder =0 and ot.seller_Id=:sellerId group by month(ot.shippedDate),year(ot.shippedDate) order by month(ot.shippedDate) desc";
+	
+	private static final String orderNRPOMonthWiseQuery = "Select monthname(ot.shippedDate),year(ot.shippedDate),sum(ot.netRate) as grossnetrate from "			
+			+ "Order_Table ot where ot.shippedDate between :startDate AND "
+			+ ":endDate and ot.poOrder =1 and ot.consolidatedOrder_orderId is NULL "
+			+ "and ot.seller_Id=:sellerId group by month(ot.shippedDate),year(ot.shippedDate)";
+	
+	private static final String returnNRPOMonthWiseQuery = "Select monthname(ort.returnDate),year(ort.returnDate),sum(ort.netNR) as returnCharges from "
+			+ "Order_Table ot ,OrderReturn  ort where ort.returnDate between :startDate AND :endDate and "
+			+ "ort.returnId=ot.orderReturnOrRTO_returnId and ot.poOrder =1 and ot.consolidatedOrder_orderId is NULL and "
+			+ "ot.seller_Id=:sellerId group by month(ort.returnDate),year(ort.returnDate)";
+	
+	private static final String returnNRMPMonthWiseQuery = "Select monthname(ort.returnDate),year(ort.returnDate),sum(ot.grossNetRate * ort.returnorrtoQty) as returnCharges from Order_Table ot ,OrderReturn  ort where "
+			+ "ort.returnDate between :startDate AND :endDate and ort.returnId=ot.orderReturnOrRTO_returnId "
+			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId group by month(ort.returnDate),year(ort.returnDate)";
+	
+	private static final String additionalChargesMonthWiseQuery = "Select monthname(ort.returnDate),year(ort.returnDate),sum(ort.estimateddeduction) as addCharges from Order_Table ot ,OrderReturn  ort where "
+			+ "ort.returnDate between :startDate AND :endDate and ort.returnId=ot.orderReturnOrRTO_returnId "
+			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId group by month(ort.returnDate),year(ort.returnDate)";
+	
+	private static final String orderPRMPMonthWiseQuery = "Select monthname(ot.shippedDate),year(ot.shippedDate),sum(ot.pr * ot.quantity) as grossnetrate from "			
+			+ "Order_Table ot where ot.shippedDate between :startDate AND "
+			+ ":endDate and ot.poOrder =0 and ot.seller_Id=:sellerId group by month(ot.shippedDate),year(ot.shippedDate) order by month(ot.shippedDate) desc";
+	
+	private static final String orderPRPOMonthWiseQuery = "Select monthname(ot.shippedDate),year(ot.shippedDate),sum(ot.pr) as grossnetrate from "			
+			+ "Order_Table ot where ot.shippedDate between :startDate AND "
+			+ ":endDate and ot.poOrder =1 and ot.consolidatedOrder_orderId is NULL "
+			+ "and ot.seller_Id=:sellerId group by month(ot.shippedDate),year(ot.shippedDate)";
+	
+	private static final String returnPRPOMonthWiseQuery = "Select monthname(ort.returnDate),year(ort.returnDate),sum(ort.netPR) as returnCharges from "
+			+ "Order_Table ot ,OrderReturn  ort where ort.returnDate between :startDate AND :endDate and "
+			+ "ort.returnId=ot.orderReturnOrRTO_returnId and ot.poOrder =1 and ot.consolidatedOrder_orderId is NULL and "
+			+ "ot.seller_Id=:sellerId group by month(ort.returnDate),year(ort.returnDate)";
+	
+	private static final String returnPRMPMonthWiseQuery = "Select monthname(ort.returnDate),year(ort.returnDate),sum(ot.pr * ort.returnorrtoQty) as returnCharges from Order_Table ot ,OrderReturn  ort where "
+			+ "ort.returnDate between :startDate AND :endDate and ort.returnId=ot.orderReturnOrRTO_returnId "
+			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId group by month(ort.returnDate),year(ort.returnDate)";
+	
+	private static final String orderSPMPMonthWiseQuery = "Select monthname(ot.shippedDate),year(ot.shippedDate),sum(ot.orderSP) as orderSp from "			
+			+ "Order_Table ot where ot.shippedDate between :startDate AND "
+			+ ":endDate and ot.poOrder =0 and ot.seller_Id=:sellerId group by month(ot.shippedDate),year(ot.shippedDate) order by month(ot.shippedDate) desc";
+	
+	private static final String orderSPPOMonthWiseQuery = "Select monthname(ot.shippedDate),year(ot.shippedDate),sum(ot.poPrice) as grossnetrate from "			
+			+ "Order_Table ot,OrderReturn ort where ot.shippedDate between :startDate AND "
+			+ ":endDate and ot.poOrder =1 and ot.consolidatedOrder_orderId is NULL and ort.returnId=ot.orderReturnOrRTO_returnId "
+			+ "and ort.returnDate is NULL and ot.seller_Id=:sellerId group by month(ot.shippedDate),year(ot.shippedDate)";
+	
+	private static final String returnSPPOMonthWiseQuery = "Select monthname(ort.returnDate),year(ort.returnDate),sum(ot.poPrice) as returnCharges from "
+			+ "Order_Table ot ,OrderReturn  ort where ort.returnDate between :startDate AND :endDate and "
+			+ "ort.returnId=ot.orderReturnOrRTO_returnId and ot.poOrder =1 and ot.consolidatedOrder_orderId is NULL and "
+			+ "ot.shippedDate is NULL and ot.seller_Id=:sellerId group by month(ort.returnDate),year(ort.returnDate)";
+	
+	private static final String returnSPMPMonthWiseQuery = "Select monthname(ort.returnDate),year(ort.returnDate),sum((ot.orderSP / ot.quantity)* ort.returnorrtoQty) as returnCharges from Order_Table ot ,OrderReturn  ort where "
+			+ "ort.returnDate between :startDate AND :endDate and ort.returnId=ot.orderReturnOrRTO_returnId "
+			+ "and ot.poOrder =0 and ot.seller_Id=:sellerId group by month(ort.returnDate),year(ort.returnDate)";
+	
+	private static final String grossSaleQuantityMonthWise = "Select monthname(ot.shippedDate),year(ot.shippedDate),sum(ot.quantity) from "
+			+ "Order_Table ot where ot.shippedDate between :startDate AND :endDate "
+			+ "and (ot.poOrder =0 OR (ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL ))and "
+			+ "ot.seller_Id=:sellerId group by month(ot.shippedDate),year(ot.shippedDate)";
+	
+	private static final String returnSaleQuantityMonthWise = "Select monthname(ort.returnDate),year(ort.returnDate),sum(ort.returnorrtoQty) from "
+			+ "Order_Table ot, OrderReturn ort where ort.returnDate between :startDate AND :endDate and ort.returnId=ot.orderReturnOrRTO_returnId "
+			+ "and (ot.poOrder =0 OR (ot.poOrder =1 and  ot.consolidatedOrder_orderId is NULL ))and "
+			+ "ot.seller_Id=:sellerId group by month(ort.returnDate),year(ort.returnDate)";
 	
 	
 	@Override
@@ -535,10 +622,11 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 	}
 	
 	@Override
-	public Map<String, Object> getTopSellingSKU(Date startDate, Date endDate,
-			int sellerId) {
+	public List<Map<String, Object>> getTopSellingSKU(Date startDate, Date endDate, String status, int sellerId) {
 		Object[] result = null;
-		Map<String, Object> topSKU = new LinkedHashMap<String, Object>();
+		List<Object> results = null;
+		List<Map<String, Object>> topSKUs = new ArrayList<Map<String,Object>>();
+		Map<String, Object> topSKU = new HashMap<String, Object>();
 		Session session = null;
 		try {	
 			session = sessionFactory.openSession();
@@ -564,12 +652,27 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 					new Type[] { Hibernate.INTEGER }),"netQty");
 			criteria.setProjection(projList);
 			criteria.addOrder(org.hibernate.criterion.Order.desc("netQty"));
-			result = (Object[]) criteria.list().get(0);			
-			if (result != null) {
-				topSKU.put("sku", result[0]);
-				topSKU.put("grossQ", Long.parseLong(result[1].toString()));
-				topSKU.put("netQ", Long.parseLong(result[2].toString()));
-			}			
+			if(status != null){
+				results = criteria.list();
+				if(results != null && results.size() != 0){
+					for(Object each : results){
+						Object[] sku = (Object[]) each;
+						topSKU.put("sku", sku[0]);
+						topSKU.put("grossQ", Long.parseLong(sku[1].toString()));
+						topSKU.put("netQ", Long.parseLong(sku[2].toString()));
+						topSKUs.add(topSKU);
+						topSKU = new HashMap<String, Object>();
+					}
+				}
+			} else {
+				result = (Object[]) criteria.list().get(0);			
+				if (result != null) {
+					topSKU.put("sku", result[0]);
+					topSKU.put("grossQ", Long.parseLong(result[1].toString()));
+					topSKU.put("netQ", Long.parseLong(result[2].toString()));
+					topSKUs.add(topSKU);				
+				}
+			}						
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
@@ -577,12 +680,12 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 			if(session != null)
 				session.close();
 		}		
-		return topSKU;
+		return topSKUs;
 	}
 	
 	@Override
 	public List<Map<String, Object>> getTopSellingRegion(Date startDate,
-			Date endDate, int sellerId) {
+			Date endDate, String status, int sellerId) {
 		List<Object> results = null;
 		List<Map<String, Object>> topRegions = new ArrayList<Map<String,Object>>();
 		Map<String, Long> topRegionGross = new LinkedHashMap<String, Long>();
@@ -594,12 +697,7 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 		try {	
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			topRegionGross = DashboardDaoImpl.topSellingRegion(session, startDate, endDate, sellerId);
-			if(topRegionGross.size() != 0){				
-				Map.Entry<String, Long> entry=topRegionGross.entrySet().iterator().next();
-				key= entry.getKey();
-				value=entry.getValue();
-			}
+			topRegionGross = DashboardDaoImpl.topSellingRegion(session, startDate, endDate, sellerId);			
 			System.out.println(key +" : "+value);
 			Query topSelleingRegions = session.createSQLQuery(topSellingRegions)						
 					.setParameter("startDate", startDate)
@@ -612,13 +710,32 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 					topRegionReturn.put((String)topR[1], Long.parseLong(topR[0].toString()));
 				}
 			}
-			if(topRegionReturn.size() != 0){
-				resultMap.put("Region", key);
-				resultMap.put("grossSale", value);				
-				resultMap.put("returnSale", topRegionReturn.get(key) != null ? topRegionReturn.get(key) : 0);
-				resultMap.put("netSale", (value - (topRegionReturn.get(key) != null ? topRegionReturn.get(key) : 0)));
-				topRegions.add(resultMap);
-			}
+			if(status != null){
+				if(topRegionGross != null && topRegionGross.size() != 0){
+					for (Map.Entry<String, Long> entry : topRegionGross.entrySet())
+					{
+						resultMap.put("Region", entry.getKey());						
+						resultMap.put("grossSale", entry.getValue());				
+						resultMap.put("returnSale", topRegionReturn.get(entry.getKey()) != null ? topRegionReturn.get(entry.getKey()) : 0);
+						resultMap.put("netSale", (entry.getValue() - (topRegionReturn.get(entry.getKey()) != null ? topRegionReturn.get(entry.getKey()) : 0)));
+						topRegions.add(resultMap);
+						resultMap = new LinkedHashMap<String, Object>();
+					}
+				}
+			} else {
+				if(topRegionGross.size() != 0){				
+					Map.Entry<String, Long> entry=topRegionGross.entrySet().iterator().next();
+					key= entry.getKey();
+					value=entry.getValue();
+				}
+				if(topRegionReturn.size() != 0){
+					resultMap.put("Region", key);
+					resultMap.put("grossSale", value);				
+					resultMap.put("returnSale", topRegionReturn.get(key) != null ? topRegionReturn.get(key) : 0);
+					resultMap.put("netSale", (value - (topRegionReturn.get(key) != null ? topRegionReturn.get(key) : 0)));
+					topRegions.add(resultMap);
+				}
+			}			
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();
@@ -650,7 +767,8 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 					for(Object obj : upPayList)	{
 						Object[] result = (Object[]) obj;
 						upcomingPaymentMap.put((String) result[0], Double.parseDouble(result[1].toString()));
-						upcomingPaymentList.add(upcomingPaymentMap);						
+						upcomingPaymentList.add(upcomingPaymentMap);
+						upcomingPaymentMap = new HashMap<String, Object>();
 					}
 				}
 			} else {
@@ -692,7 +810,8 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 					for(Object obj : ouPayList)	{
 						Object[] result = (Object[]) obj;
 						outstandingPaymentMap.put((String) result[0], Double.parseDouble(result[1].toString()));
-						outstandingPaymentList.add(outstandingPaymentMap);						
+						outstandingPaymentList.add(outstandingPaymentMap);
+						outstandingPaymentMap = new HashMap<String, Object>();
 					}
 				}
 			} else {
@@ -713,6 +832,508 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 		}	
 		System.out.println(outstandingPaymentList.size());
 		return outstandingPaymentList;
+	}
+	
+	@Override
+	public List<DetailedDashboardBean> getGrossMarginList(Date startDate,
+			Date endDate, int sellerId) {
+		
+		List<Object> results = null;
+		DetailedDashboardBean DDbean = null;
+		List<DetailedDashboardBean> grossMarginMonthWiseMapList = new ArrayList<DetailedDashboardBean>();
+		Map<String, Object> grossMarginMPMap = new HashMap<String, Object>();
+		Map<String, Object> returnMarginMPMap = new HashMap<String, Object>();
+		Map<String, Object> grossMarginPOMap = new HashMap<String, Object>();
+		Map<String, Object> returnMarginPOMap = new HashMap<String, Object>();
+		Map<String, Object> badQuantityMap = new HashMap<String, Object>();
+		Map<String, Object> grossMarginMap = new HashMap<String, Object>();
+		Map<String, Object> returnMarginMap = new HashMap<String, Object>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query grossMarginMonthWise = session.createSQLQuery(grossProfitForMPMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = grossMarginMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] grossNR = (Object[]) obj;
+					grossMarginMPMap.put(grossNR[0].toString()+","+grossNR[1].toString(), grossNR[2]);
+				}
+			}
+			
+			Query grossMarginPOMonthWise = session.createSQLQuery(grossProfitPOMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = grossMarginPOMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] grossNR = (Object[]) obj;
+					grossMarginPOMap.put(grossNR[0].toString()+","+grossNR[1].toString(), grossNR[2]);
+				}
+			}
+			
+			Query returnMarginMPMonthWise = session.createSQLQuery(returnValueForMPMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = returnMarginMPMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] returnNR = (Object[]) obj;
+					returnMarginMPMap.put(returnNR[0].toString()+","+returnNR[1].toString(), returnNR[2]);
+				}
+			}
+			
+			Query returnMarginPOMonthWise = session.createSQLQuery(returnValuePOMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = returnMarginPOMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] returnNR = (Object[]) obj;
+					returnMarginPOMap.put(returnNR[0].toString()+","+returnNR[1].toString(), returnNR[2]);
+				}
+			}
+			
+			Query badQuantityMonthWise = session.createSQLQuery(grossBadquantityMPMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = badQuantityMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] returnNR = (Object[]) obj;
+					badQuantityMap.put(returnNR[0].toString()+","+returnNR[1].toString(), returnNR[2]);
+				}
+			}
+			
+			if(grossMarginMPMap.size() != 0){
+				for (Map.Entry<String, Object> entry : grossMarginMPMap.entrySet())
+				{
+					grossMarginMap.put(entry.getKey(), (double)entry.getValue() + (double)(grossMarginPOMap.get(entry.getKey()) != null ? grossMarginPOMap.get(entry.getKey()) : 0d));
+				}
+			}
+			if(returnMarginMPMap.size() != 0){
+				for (Map.Entry<String, Object> entry : returnMarginMPMap.entrySet())
+				{
+					returnMarginMap.put(entry.getKey(), (double)entry.getValue() + (double)(returnMarginPOMap.get(entry.getKey()) != null ? returnMarginPOMap.get(entry.getKey()) : 0d));
+				}
+			}
+			
+			if(grossMarginMap.size() != 0){				
+				for (Map.Entry<String, Object> entry : grossMarginMap.entrySet())
+				{
+					DDbean = new DetailedDashboardBean();
+				    DDbean.setMonth(entry.getKey());
+				    DDbean.setMonthNo(GlobalConstant.MonthNo(entry.getKey().substring(0, entry.getKey().indexOf(","))));
+				    DDbean.setGrossValue((double)entry.getValue());
+				    DDbean.setReturnValue((double)(returnMarginMap.get(entry.getKey()) != null ? returnMarginMap.get(entry.getKey()) : 0d));
+				    DDbean.setNetValue((double)entry.getValue() - (double)(returnMarginMap.get(entry.getKey()) != null ? returnMarginMap.get(entry.getKey()) : 0d)
+				    						- (double)(badQuantityMap.get(entry.getKey()) != null ? badQuantityMap.get(entry.getKey()) : 0d));
+				    DDbean.setBadQtyCharges((double)(badQuantityMap.get(entry.getKey()) != null ? badQuantityMap.get(entry.getKey()) : 0d));
+				    grossMarginMonthWiseMapList.add(DDbean);
+				}
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null)
+				session.close();
+		}
+		
+		return grossMarginMonthWiseMapList;
+
+		
+	}
+	
+	@Override
+	public List<DetailedDashboardBean> getActualSaleList(Date startDate,
+			Date endDate, int sellerId) {
+		List<Object> results = null;
+		DetailedDashboardBean DDbean = null;
+		List<DetailedDashboardBean> NRMonthWiseMapList = new ArrayList<DetailedDashboardBean>();
+		Map<String, Object> grossNRMPMap = new HashMap<String, Object>();
+		Map<String, Object> returnNRMPMap = new HashMap<String, Object>();
+		Map<String, Object> grossNRPOMap = new HashMap<String, Object>();
+		Map<String, Object> returnNRPOMap = new HashMap<String, Object>();
+		Map<String, Object> addChargesMap = new HashMap<String, Object>();
+		Map<String, Object> grossNRMap = new HashMap<String, Object>();
+		Map<String, Object> returnNRMap = new HashMap<String, Object>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query grossNRMonthWise = session.createSQLQuery(orderNRMPMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = grossNRMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] grossNR = (Object[]) obj;
+					grossNRMPMap.put(grossNR[0].toString()+","+grossNR[1].toString(), grossNR[2]);
+				}
+			}
+			
+			Query grossNRPOMonthWise = session.createSQLQuery(orderNRPOMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = grossNRPOMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] grossNR = (Object[]) obj;
+					grossNRPOMap.put(grossNR[0].toString()+","+grossNR[1].toString(), grossNR[2]);
+				}
+			}
+			
+			Query returnNRMonthWise = session.createSQLQuery(returnNRMPMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = returnNRMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] returnNR = (Object[]) obj;
+					returnNRMPMap.put(returnNR[0].toString()+","+returnNR[1].toString(), returnNR[2]);
+				}
+			}
+			
+			Query returnNRPOMonthWise = session.createSQLQuery(returnNRPOMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = returnNRPOMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] returnNR = (Object[]) obj;
+					returnNRPOMap.put(returnNR[0].toString()+","+returnNR[1].toString(), returnNR[2]);
+				}
+			}
+			
+			Query addChargesMonthWise = session.createSQLQuery(additionalChargesMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = addChargesMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] returnNR = (Object[]) obj;
+					addChargesMap.put(returnNR[0].toString()+","+returnNR[1].toString(), returnNR[2]);
+				}
+			}
+			
+			if(grossNRMPMap.size() != 0){
+				for (Map.Entry<String, Object> entry : grossNRMPMap.entrySet())
+				{
+				    grossNRMap.put(entry.getKey(), (double)entry.getValue() + (double)(grossNRPOMap.get(entry.getKey()) != null ? grossNRPOMap.get(entry.getKey()) : 0d));
+				}
+			}
+			if(returnNRMPMap.size() != 0){
+				for (Map.Entry<String, Object> entry : returnNRMPMap.entrySet())
+				{
+				    returnNRMap.put(entry.getKey(), (double)entry.getValue() + (double)(returnNRPOMap.get(entry.getKey()) != null ? returnNRPOMap.get(entry.getKey()) : 0d));
+				}
+			}			
+			if(grossNRMap.size() != 0){				
+				for (Map.Entry<String, Object> entry : grossNRMap.entrySet())
+				{
+					DDbean = new DetailedDashboardBean();
+				    DDbean.setMonth(entry.getKey());
+				    DDbean.setMonthNo(GlobalConstant.MonthNo(entry.getKey().substring(0, entry.getKey().indexOf(","))));
+				    DDbean.setGrossValue((double)entry.getValue());
+				    DDbean.setReturnValue((double)(returnNRMap.get(entry.getKey()) != null ? returnNRMap.get(entry.getKey()) : 0d));
+				    DDbean.setNetValue((double)entry.getValue() - (double)(returnNRMap.get(entry.getKey()) != null ? returnNRMap.get(entry.getKey()) : 0d)
+				    						- (double)(addChargesMap.get(entry.getKey()) != null ? addChargesMap.get(entry.getKey()) : 0d));
+				    DDbean.setAddCharges((double)(addChargesMap.get(entry.getKey()) != null ? addChargesMap.get(entry.getKey()) : 0d));
+				    NRMonthWiseMapList.add(DDbean);
+				}
+			}				
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null)
+				session.close();
+		}
+		
+		return NRMonthWiseMapList;
+	}
+	
+	@Override
+	public List<DetailedDashboardBean> getTaxFreeSaleList(Date startDate,
+			Date endDate, int sellerId) {
+		List<Object> results = null;
+		DetailedDashboardBean DDbean = null;
+		List<DetailedDashboardBean> PRMonthWiseMapList = new ArrayList<DetailedDashboardBean>();
+		Map<String, Object> grossPRMPMap = new HashMap<String, Object>();
+		Map<String, Object> returnPRMPMap = new HashMap<String, Object>();
+		Map<String, Object> grossPRPOMap = new HashMap<String, Object>();
+		Map<String, Object> returnPRPOMap = new HashMap<String, Object>();
+		Map<String, Object> addChargesMap = new HashMap<String, Object>();
+		Map<String, Object> grossPRMap = new HashMap<String, Object>();
+		Map<String, Object> returnPRMap = new HashMap<String, Object>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query grossPRMonthWise = session.createSQLQuery(orderPRMPMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = grossPRMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] grossNR = (Object[]) obj;
+					grossPRMPMap.put(grossNR[0].toString()+","+grossNR[1].toString(), grossNR[2]);
+				}
+			}
+			
+			Query grossPRPOMonthWise = session.createSQLQuery(orderPRPOMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = grossPRPOMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] grossNR = (Object[]) obj;
+					grossPRPOMap.put(grossNR[0].toString()+","+grossNR[1].toString(), grossNR[2]);
+				}
+			}
+			
+			Query returnPRMonthWise = session.createSQLQuery(returnPRMPMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = returnPRMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] returnNR = (Object[]) obj;
+					returnPRMPMap.put(returnNR[0].toString()+","+returnNR[1].toString(), returnNR[2]);
+				}
+			}
+			
+			Query returnPRPOMonthWise = session.createSQLQuery(returnPRPOMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = returnPRPOMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] returnNR = (Object[]) obj;
+					returnPRPOMap.put(returnNR[0].toString()+","+returnNR[1].toString(), returnNR[2]);
+				}
+			}
+			
+			Query addChargesMonthWise = session.createSQLQuery(additionalChargesMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = addChargesMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] returnNR = (Object[]) obj;
+					addChargesMap.put(returnNR[0].toString()+","+returnNR[1].toString(), returnNR[2]);
+				}
+			}
+			
+			if(grossPRMPMap.size() != 0){
+				for (Map.Entry<String, Object> entry : grossPRMPMap.entrySet())
+				{
+					grossPRMap.put(entry.getKey(), (double)entry.getValue() + (double)(grossPRPOMap.get(entry.getKey()) != null ? grossPRPOMap.get(entry.getKey()) : 0d));
+				}
+			}
+			if(returnPRMPMap.size() != 0){
+				for (Map.Entry<String, Object> entry : returnPRMPMap.entrySet())
+				{
+					returnPRMap.put(entry.getKey(), (double)entry.getValue() + (double)(returnPRPOMap.get(entry.getKey()) != null ? returnPRPOMap.get(entry.getKey()) : 0d));
+				}
+			}
+			
+			if(grossPRMap.size() != 0){				
+				for (Map.Entry<String, Object> entry : grossPRMap.entrySet())
+				{
+					DDbean = new DetailedDashboardBean();
+				    DDbean.setMonth(entry.getKey());
+				    DDbean.setMonthNo(GlobalConstant.MonthNo(entry.getKey().substring(0, entry.getKey().indexOf(","))));
+				    DDbean.setGrossValue((double)entry.getValue());
+				    DDbean.setReturnValue((double)(returnPRMap.get(entry.getKey()) != null ? returnPRMap.get(entry.getKey()) : 0d));
+				    DDbean.setNetValue((double)entry.getValue() - (double)(returnPRMap.get(entry.getKey()) != null ? returnPRMap.get(entry.getKey()) : 0d)
+				    						- (double)(addChargesMap.get(entry.getKey()) != null ? addChargesMap.get(entry.getKey()) : 0d));
+				    DDbean.setAddCharges((double)(addChargesMap.get(entry.getKey()) != null ? addChargesMap.get(entry.getKey()) : 0d));
+				    PRMonthWiseMapList.add(DDbean);
+				}
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null)
+				session.close();
+		}
+		
+		return PRMonthWiseMapList;
+	}
+	
+	@Override
+	public List<DetailedDashboardBean> getTaxableSaleList(Date startDate,
+			Date endDate, int sellerId) {
+		List<Object> results = null;
+		DetailedDashboardBean DDbean = null;
+		List<DetailedDashboardBean> SPMonthWiseMapList = new ArrayList<DetailedDashboardBean>();
+		Map<String, Object> grossSPMPMap = new HashMap<String, Object>();
+		Map<String, Object> returnSPMPMap = new HashMap<String, Object>();
+		Map<String, Object> grossSPPOMap = new HashMap<String, Object>();
+		Map<String, Object> returnSPPOMap = new HashMap<String, Object>();		
+		Map<String, Object> grossSPMap = new HashMap<String, Object>();
+		Map<String, Object> returnSPMap = new HashMap<String, Object>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query grossSPMonthWise = session.createSQLQuery(orderSPMPMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = grossSPMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] grossNR = (Object[]) obj;
+					grossSPMPMap.put(grossNR[0].toString()+","+grossNR[1].toString(), grossNR[2]);
+				}
+			}
+			
+			Query grossSPPOMonthWise = session.createSQLQuery(orderSPPOMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = grossSPPOMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] grossNR = (Object[]) obj;
+					grossSPPOMap.put(grossNR[0].toString()+","+grossNR[1].toString(), grossNR[2]);
+				}
+			}
+			
+			Query returnSPMPMonthWise = session.createSQLQuery(returnSPMPMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = returnSPMPMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] returnNR = (Object[]) obj;
+					returnSPMPMap.put(returnNR[0].toString()+","+returnNR[1].toString(), returnNR[2]);
+				}
+			}		
+			
+			Query returnSPPOMonthWise = session.createSQLQuery(returnSPPOMonthWiseQuery)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = returnSPPOMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] returnNR = (Object[]) obj;
+					returnSPPOMap.put(returnNR[0].toString()+","+returnNR[1].toString(), returnNR[2]);
+				}
+			}	
+			
+			if(grossSPMPMap.size() != 0){
+				for (Map.Entry<String, Object> entry : grossSPMPMap.entrySet())
+				{
+					grossSPMap.put(entry.getKey(), (double)entry.getValue() + (double)(grossSPPOMap.get(entry.getKey()) != null ? grossSPPOMap.get(entry.getKey()) : 0d));
+				}
+			}
+			if(returnSPMPMap.size() != 0){
+				for (Map.Entry<String, Object> entry : returnSPMPMap.entrySet())
+				{
+					returnSPMap.put(entry.getKey(), (double)entry.getValue() + (double)(returnSPPOMap.get(entry.getKey()) != null ? returnSPPOMap.get(entry.getKey()) : 0d));
+				}
+			}
+			
+			if(grossSPMap.size() != 0){				
+				for (Map.Entry<String, Object> entry : grossSPMap.entrySet())
+				{
+					DDbean = new DetailedDashboardBean();
+				    DDbean.setMonth(entry.getKey());
+				    DDbean.setMonthNo(GlobalConstant.MonthNo(entry.getKey().substring(0, entry.getKey().indexOf(","))));
+				    DDbean.setGrossValue((double)entry.getValue());
+				    DDbean.setReturnValue((double)(returnSPMap.get(entry.getKey()) != null ? returnSPMap.get(entry.getKey()) : 0d));
+				    DDbean.setNetValue((double)entry.getValue() - (double)(returnSPMap.get(entry.getKey()) != null ? returnSPMap.get(entry.getKey()) : 0d));				    
+				    SPMonthWiseMapList.add(DDbean);
+				}
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null)
+				session.close();
+		}
+		
+		return SPMonthWiseMapList;
+	}
+	
+	@Override
+	public List<DetailedDashboardBean> getSaleQuantityList(Date startDate,
+			Date endDate, int sellerId) {
+		List<Object> results = null;
+		DetailedDashboardBean DDbean = null;
+		List<DetailedDashboardBean> SaleQtyMonthWiseMapList = new ArrayList<DetailedDashboardBean>();				
+		Map<String, Object> grossSaleQtyMap = new HashMap<String, Object>();
+		Map<String, Object> returnSaleQtyMap = new HashMap<String, Object>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query grossSaleQtyMonthWise = session.createSQLQuery(grossSaleQuantityMonthWise)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = grossSaleQtyMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] grossNR = (Object[]) obj;
+					BigDecimal tempDblist= (BigDecimal) grossNR[2];
+					grossSaleQtyMap.put(grossNR[0].toString()+","+grossNR[1].toString(), tempDblist.longValue());
+				}
+			}			
+			
+			Query returnSaleQtyMonthWise = session.createSQLQuery(returnSaleQuantityMonthWise)						
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate)
+					.setParameter("sellerId", sellerId);
+			results = returnSaleQtyMonthWise.list();
+			if(results != null && results.size() != 0){
+				for(Object obj : results){
+					Object[] returnNR = (Object[]) obj;
+					BigDecimal tempDblist= (BigDecimal) returnNR[2];
+					returnSaleQtyMap.put(returnNR[0].toString()+","+returnNR[1].toString(), tempDblist.longValue());
+				}
+			}			
+			if(grossSaleQtyMap.size() != 0){				
+				for (Map.Entry<String, Object> entry : grossSaleQtyMap.entrySet())
+				{
+					DDbean = new DetailedDashboardBean();
+				    DDbean.setMonth(entry.getKey());
+				    DDbean.setMonthNo(GlobalConstant.MonthNo(entry.getKey().substring(0, entry.getKey().indexOf(","))));
+				    DDbean.setGrossValue((long)entry.getValue());
+				    DDbean.setReturnValue((long)(returnSaleQtyMap.get(entry.getKey()) != null ? returnSaleQtyMap.get(entry.getKey()) : 0l));
+				    DDbean.setNetValue((long)entry.getValue() - (long)(returnSaleQtyMap.get(entry.getKey()) != null ? returnSaleQtyMap.get(entry.getKey()) : 0l));				    
+				    SaleQtyMonthWiseMapList.add(DDbean);
+				}
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null)
+				session.close();
+		}
+		
+		return SaleQtyMonthWiseMapList;
 	}
 	
 }

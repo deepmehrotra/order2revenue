@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.o2r.bean.DetailedDashboardBean;
 import com.o2r.dao.DetailedDashboardDao;
 
 @Service("DetailedDashboardService")
@@ -79,15 +80,14 @@ public class DetailedDashboardServiceImpl implements DetailedDashboardService{
 	}
 	
 	@Override
-	public Map<String, Object> getTopSellingSKU(Date startDate, Date endDate,
-			int sellerId) {
-		return detailedDashboardDao.getTopSellingSKU(startDate, endDate, sellerId);
+	public List<Map<String, Object>> getTopSellingSKU(Date startDate, Date endDate, String status, int sellerId) {
+		return detailedDashboardDao.getTopSellingSKU(startDate, endDate, status, sellerId);
 	}
 	
 	@Override
 	public List<Map<String, Object>> getTopSellingRegion(Date startDate,
-			Date endDate, int sellerId) {
-		return detailedDashboardDao.getTopSellingRegion(startDate, endDate, sellerId);
+			Date endDate, String status, int sellerId) {
+		return detailedDashboardDao.getTopSellingRegion(startDate, endDate, status, sellerId);
 	}
 	
 	@Override
@@ -98,5 +98,35 @@ public class DetailedDashboardServiceImpl implements DetailedDashboardService{
 	@Override
 	public List<Map<String, Object>> getOutstandingPayment(int sellerId, String status) {
 		return detailedDashboardDao.getOutstandingPayment(sellerId, status);
+	}
+	
+	@Override
+	public List<DetailedDashboardBean> getGrossMarginList(Date startDate,
+			Date endDate, int sellerId) {
+		return detailedDashboardDao.getGrossMarginList(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public List<DetailedDashboardBean> getActualSaleList(Date startDate,
+			Date endDate, int sellerId) {
+		return detailedDashboardDao.getActualSaleList(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public List<DetailedDashboardBean> getTaxFreeSaleList(Date startDate,
+			Date endDate, int sellerId) {
+		return detailedDashboardDao.getTaxFreeSaleList(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public List<DetailedDashboardBean> getTaxableSaleList(Date startDate,
+			Date endDate, int sellerId) {
+		return detailedDashboardDao.getTaxableSaleList(startDate, endDate, sellerId);
+	}
+	
+	@Override
+	public List<DetailedDashboardBean> getSaleQuantityList(Date startDate,
+			Date endDate, int sellerId) {
+		return detailedDashboardDao.getSaleQuantityList(startDate, endDate, sellerId);
 	}
 }

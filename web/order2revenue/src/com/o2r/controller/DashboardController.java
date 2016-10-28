@@ -1,6 +1,10 @@
 package com.o2r.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.o2r.bean.DetailedDashboardBean;
 import com.o2r.helper.HelperClass;
 import com.o2r.service.CategoryService;
 import com.o2r.service.DetailedDashboardService;
@@ -263,7 +268,7 @@ public class DashboardController {
 		String status = request.getParameter("status");		
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);	
-			Map<String, Object> topSKU = null;
+			List<Map<String, Object>> topSKUs = null;
 			if(status != null && !status.equals("")){
 				period = status;
 			}
@@ -274,8 +279,9 @@ public class DashboardController {
 			}
 			GsonBuilder gsonBuilder = new GsonBuilder();			
 			gson = gsonBuilder.setPrettyPrinting().create();
-			topSKU = detailedDashboardService.getTopSellingSKU(startDate, endDate, sellerId);
-			if (topSKU != null) {
+			topSKUs = detailedDashboardService.getTopSellingSKU(startDate, endDate, null, sellerId);
+			if (topSKUs != null) {
+				Map<String, Object> topSKU = topSKUs.get(0);
 				TopSKUMap.put("sku", topSKU.get("sku"));
 				TopSKUMap.put("saleQ", topSKU.get("grossQ"));			
 				TopSKUMap.put("returnQ", ((long)topSKU.get("grossQ") - (long)topSKU.get("netQ")));	
@@ -314,7 +320,7 @@ public class DashboardController {
 			}
 			GsonBuilder gsonBuilder = new GsonBuilder();			
 			gson = gsonBuilder.setPrettyPrinting().create();
-			topRegions = detailedDashboardService.getTopSellingRegion(startDate, endDate, sellerId);
+			topRegions = detailedDashboardService.getTopSellingRegion(startDate, endDate, null, sellerId);
 			if (topRegions != null && topRegions.size() != 0) {
 				Map<String, Object> resultMap = topRegions.get(0);
 				TopRegion.put("Region", resultMap.get("Region"));
@@ -426,6 +432,141 @@ public class DashboardController {
 			e.printStackTrace();
 		}		
 		return dateMap;
+	}
+	@RequestMapping(value = "/seller/getDashListOnCriteria", method = RequestMethod.GET)
+	public ModelAndView getDashListOnCriteria(HttpServletRequest request) {
+
+		log.info("$$$ getGrossMargin Starts : DashboardController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Date> dateMap = new HashMap<String, Date>();
+		DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+		Date startDate = new Date();
+		Date endDate = new Date();
+		int sellerId = 0;
+		List<DetailedDashboardBean> DDbeanList = new ArrayList<DetailedDashboardBean>();
+		DetailedDashboardBean DDbean = null;
+		List<Map<String, Object>> paymentMapList = new ArrayList<Map<String,Object>>();
+		try {
+			String period = "ALL";
+			String status = request.getParameter("status") != null ? request.getParameter("status") : "";
+			String criteria = request.getParameter("selectCriteriaList") != null ? request.getParameter("selectCriteriaList") : "";
+			sellerId = helperClass.getSellerIdfromSession(request);			
+			if(status != null && !status.equals("")){
+				period = status;
+				dateMap = setDate(period);
+				if(dateMap.size() != 0){
+					startDate = dateMap.get("startDate");
+					endDate = dateMap.get("endDate");
+				}
+			} else {
+				System.out.println(request.getParameter("startDateList"));
+				System.out.println(request.getParameter("endDateList"));
+				if(request.getParameter("startDateList") != null){
+					startDate = formatter.parse(request.getParameter("startDateList"));
+				} else {
+					startDate = new Date();
+				}
+				if(request.getParameter("endDateList") != null){
+					endDate = formatter.parse(request.getParameter("endDateList"));
+				} else {
+					endDate = new Date();
+				}
+			}
+			
+			switch (criteria) {
+			case "Gross Margin":
+				DDbeanList = detailedDashboardService.getGrossMarginList(startDate, endDate, sellerId);	
+				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByMonth());
+				break;
+			case "Actual Sale":
+				DDbeanList = detailedDashboardService.getActualSaleList(startDate, endDate, sellerId);
+				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByMonth());
+				break;
+			case "Tax Free Sale":
+				DDbeanList = detailedDashboardService.getTaxFreeSaleList(startDate, endDate, sellerId);
+				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByMonth());
+				break;
+			case "Taxable Sale":
+				DDbeanList = detailedDashboardService.getTaxableSaleList(startDate, endDate, sellerId);
+				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByMonth());
+				break;
+			case "Sale Quantity":
+				DDbeanList = detailedDashboardService.getSaleQuantityList(startDate, endDate, sellerId);
+				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByMonth());
+				break;
+			case "Top Selleing SKUs":
+				paymentMapList = detailedDashboardService.getTopSellingSKU(startDate, endDate, "list", sellerId);
+				if(paymentMapList != null && paymentMapList.size() != 0){
+					for(Map<String, Object> each : paymentMapList){
+						DDbean = new DetailedDashboardBean();
+						DDbean.setSku(each.get("sku").toString());
+						DDbean.setGrossValue((long)each.get("grossQ"));
+						DDbean.setReturnValue((long)each.get("grossQ") - (long)each.get("netQ"));
+						DDbean.setNetValue((long)each.get("netQ"));
+						DDbeanList.add(DDbean);
+					}
+				}
+				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByGrossValue());
+				break;
+			case "Top Selling Regions":
+				paymentMapList = detailedDashboardService.getTopSellingRegion(startDate, endDate, "list", sellerId);
+				if(paymentMapList != null && paymentMapList.size() != 0){
+					for(Map<String, Object> each : paymentMapList){
+						DDbean = new DetailedDashboardBean();
+						DDbean.setCity(each.get("Region").toString());
+						DDbean.setGrossValue((long)each.get("grossSale"));
+						DDbean.setReturnValue((long)each.get("returnSale"));
+						DDbean.setNetValue((long)each.get("netSale"));
+						DDbeanList.add(DDbean);
+					}
+				}
+				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByGrossValue());
+				break;
+				
+			case "Outstanding Payment":
+				paymentMapList = detailedDashboardService.getOutstandingPayment(sellerId, "list");
+				if(paymentMapList != null && paymentMapList.size() != 0){
+					for(Map<String, Object> each : paymentMapList){
+						DDbean = new DetailedDashboardBean();
+						Map.Entry<String, Object> entry=each.entrySet().iterator().next();
+						DDbean.setChannel(entry.getKey());
+						DDbean.setGrossValue((double) entry.getValue());
+						DDbeanList.add(DDbean);
+					}
+				}
+				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByGrossValue());
+				break;
+				
+			case "Upcoming Payment":
+				paymentMapList = detailedDashboardService.getUpcomingPayment(sellerId, "list");
+				if(paymentMapList != null && paymentMapList.size() != 0){
+					for(Map<String, Object> each : paymentMapList){
+						DDbean = new DetailedDashboardBean();
+						Map.Entry<String, Object> entry=each.entrySet().iterator().next();
+						DDbean.setChannel(entry.getKey());
+						DDbean.setGrossValue((double) entry.getValue());
+						DDbeanList.add(DDbean);
+					}
+				}
+				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByGrossValue());
+				break;
+				
+			default:
+				DDbean = new DetailedDashboardBean();
+				break;
+			}
+			
+			model.put("DDBeans", DDbeanList);
+			model.put("criteria", criteria);
+			model.put("startDate", startDate);
+			model.put("endDate", endDate);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by seller ID : " + sellerId, e);
+		}
+		log.info("$$$ getGrossMargin Ends : DashboardController $$$");
+		return new ModelAndView("detailedDashboard", model);
 	}
 	
 }

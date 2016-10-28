@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.o2r.bean.DetailedDashboardBean;
+
 public interface DetailedDashboardService {	
 	
 	public double getNetGrossProfit(Date startDate, Date endDate, int sellerId);
@@ -25,11 +27,19 @@ public interface DetailedDashboardService {
 	public double getReturnSP(Date startDate, Date endDate, int sellerId);
 	public double getGrossSP(Date startDate, Date endDate, int sellerId);
 	
-	public Map<String, Object> getTopSellingSKU(Date startDate, Date endDate, int sellerId);
-	public List<Map<String, Object>> getTopSellingRegion(Date startDate, Date endDate, int sellerId);
+	public List<Map<String, Object>> getTopSellingSKU(Date startDate, Date endDate, String status, int sellerId);
+	public List<Map<String, Object>> getTopSellingRegion(Date startDate, Date endDate, String status, int sellerId);
 	
 	public List<Map<String, Object>> getUpcomingPayment(int sellerId, String status);
 	public List<Map<String, Object>> getOutstandingPayment(int sellerId, String status);
 	
+	public List<DetailedDashboardBean> getGrossMarginList(Date startDate, Date endDate, int sellerId);
 	
+	public List<DetailedDashboardBean> getActualSaleList(Date startDate, Date endDate, int sellerId);
+	
+	public List<DetailedDashboardBean> getTaxFreeSaleList(Date startDate, Date endDate, int sellerId);
+	
+	public List<DetailedDashboardBean> getTaxableSaleList(Date startDate, Date endDate, int sellerId);
+	
+	public List<DetailedDashboardBean> getSaleQuantityList(Date startDate, Date endDate, int sellerId);
 }
