@@ -35,6 +35,7 @@ import com.o2r.model.Order;
 import com.o2r.model.OrderPayment;
 import com.o2r.model.Partner;
 import com.o2r.model.PaymentUpload;
+import com.o2r.model.PaymentUpload_Order;
 import com.o2r.model.UploadReport;
 import com.o2r.service.DownloadService;
 import com.o2r.service.ManualChargesService;
@@ -146,36 +147,37 @@ public class UploadController {
 		return new ModelAndView("dailyactivities/orderPaymentDetails", model);
 	}
 
-	@RequestMapping(value = "/seller/paymentDetails", method = RequestMethod.POST)
-	public @ResponseBody String viewPaymentDetails(HttpServletRequest request) {
+	@RequestMapping(value = "/seller/paymentDetails", method = RequestMethod.GET)
+	public ModelAndView viewPaymentDetails(HttpServletRequest request,
+			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
 
 		log.info("$$$ viewPaymentDetails Starts : UploadController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		PaymentUpload payment = null;
-		List<OrderBean> orderlist = null;
+		List<OrderBean> orderlist = new ArrayList<OrderBean>();
 		String action = request.getParameter("action");
 		String uploadId = request.getParameter("uploadId");
 		try {
-			if (action != null && action.equals("list") && uploadId != null
-					&& uploadId.length() != 0) {
+			if (uploadId != null && uploadId.length() != 0) {
 				payment = paymentUploadService.getPaymentUpload(Integer
 						.parseInt(uploadId));
-				/*orderlist = ConverterClass.prepareListofBean(payment
-						.getOrders());*/
+
+				for (PaymentUpload_Order pu_order : payment.getOrderList()) {
+					Order order = orderService.getOrder(pu_order.getOrderId());
+					orderlist.add(ConverterClass.prepareOrderBean(order));
+				}
 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("FAiled!", e);
 		}
-		model.put("Result", "OK");
-		model.put("Records", orderlist);
 
-		// Convert Java Object to Json
-		String jsonArray = gson.toJson(model);
+		model.put("orders", orderlist);
+
 		log.info("$$$ viewPaymentDetails Ends : UploadController $$$");
-		return jsonArray;
+		return new ModelAndView("dailyactivities/orderPaymentDetails", model);
 	}
 
 	/**
@@ -294,8 +296,8 @@ public class UploadController {
 				paymentUpload.setUploadStatus("Success");
 			}
 			if (order != null) {
-				//order.getPaymentUpload().add(paymentUpload);
-				//paymentUpload.getOrders().add(order);
+				// order.getPaymentUpload().add(paymentUpload);
+				// paymentUpload.getOrders().add(order);
 			}
 
 			paymentUploadService.addPaymentUpload(paymentUpload, sellerId);
@@ -352,9 +354,5 @@ public class UploadController {
 		return new ModelAndView("dailyactivities/dailyactivities");
 
 	}
-	
-	
-	
-	 
 
 }

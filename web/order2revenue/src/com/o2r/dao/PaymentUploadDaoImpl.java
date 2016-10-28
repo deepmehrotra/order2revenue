@@ -79,7 +79,7 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomExceptio
 		Seller seller=null;
 		try
 		{
-		Session session=sessionFactory.openSession();
+		   Session session=sessionFactory.openSession();
 		   session.beginTransaction();
 		   Criteria criteria=session.createCriteria(Seller.class).add(Restrictions.eq("id", sellerId));
 		   seller=(Seller)criteria.list().get(0);
@@ -109,6 +109,7 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomExceptio
 		   Criteria criteria=session.createCriteria(PaymentUpload.class).add(Restrictions.eq("uploadId", paymentUploadId));
 		   returnObject=(PaymentUpload)criteria.list().get(0);
 		   //Hibernate.initialize(returnObject.getOrders());
+		   Hibernate.initialize(returnObject.getOrderList());
 		   session.getTransaction().commit();
 		   session.close();
 		}

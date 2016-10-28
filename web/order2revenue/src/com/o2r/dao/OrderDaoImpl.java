@@ -983,6 +983,7 @@ public class OrderDaoImpl implements OrderDao {
 			Hibernate.initialize(returnorder.getOrderPayment());
 			Hibernate.initialize(returnorder.getOrderTimeline());
 			Hibernate.initialize(returnorder.getCustomer());
+			Hibernate.initialize(returnorder.getSeller());
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
