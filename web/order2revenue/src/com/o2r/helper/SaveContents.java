@@ -640,7 +640,7 @@ public class SaveContents {
 								order.getProductSkuCode(), sellerId);
 						if (product != null) {
 							taxcat = taxDetailService.getTaxCategory(product,
-									sellerId, customerBean.getZipcode());
+									order.getOrderSP(),sellerId, customerBean.getZipcode());
 						}
 					}
 					if (taxcat != null)
@@ -1930,7 +1930,18 @@ public class SaveContents {
 					}
 					if (entry.getCell(2) != null
 							&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						category.setCatDescription(entry.getCell(0).toString());
+						category.setCatDescription(entry.getCell(2).toString());
+					}
+					if (entry.getCell(3) != null
+							&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						try {
+							category.setTaxFreePriceLimit(Double.parseDouble(entry.getCell(3).toString()));
+						} catch (Exception e) {
+							e.printStackTrace();
+							category.setTaxFreePriceLimit(0d);
+						}						
+					} else {
+						category.setTaxFreePriceLimit(0d);
 					}
 
 					if (validaterow) {
@@ -1944,7 +1955,6 @@ public class SaveContents {
 				} catch (Exception e) {
 					log.error("Failed! by SellerId : " + sellerId, e);
 					errorSet.add("Invalid input!");
-
 				}
 			}
 

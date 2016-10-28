@@ -640,6 +640,71 @@ public class GlobalConstant {
 		}
 	};
 	
+	// Headers For Detailed Dashboard
+	
+	public static final ArrayList<String> grossHeader = new ArrayList<String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			add("#");
+			add("Month");
+			add("Gross");
+			add("Return");
+			add("Net");
+			add("BadQtyCharge");
+		}
+	};
+	public static final ArrayList<String> NR_PR_Header = new ArrayList<String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			add("#");
+			add("Month");
+			add("Gross");
+			add("Return");
+			add("Net");
+			add("Additional");
+		}
+	};
+	public static final ArrayList<String> SP_SaleQty_Header = new ArrayList<String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			add("#");
+			add("Month");
+			add("Gross");
+			add("Return");
+			add("Net");
+		}
+	};
+	public static final ArrayList<String> Up_Out_Header = new ArrayList<String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			add("#");
+			add("Channel");
+			add("Gross");			
+		}
+	};
+	public static final ArrayList<String> SKUHeader = new ArrayList<String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			add("#");
+			add("SKU");
+			add("Gross");
+			add("Return");
+			add("Net");
+		}
+	};
+	public static final ArrayList<String> RegionsHeader = new ArrayList<String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			add("#");
+			add("City");
+			add("Gross");
+			add("Return");
+			add("Net");
+		}
+	};
+	
+	
+	
 	/* Null Area */
 	public static final String nullException = "NullException !";
 	public static final String nullValuesError = "Field Should Not Be Empty!";

@@ -651,18 +651,9 @@
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th>#</th>
-									<th>Month</th>
-									<th>Channel</th>
-									<th>City</th>
-									<th>SKU</th>
-									<th>Gross</th>
-									<th>Return</th>
-									<th>Net</th>
-									<th>Additional</th>
-									<th>BadQtyCharge</th>
-									<th>Deducted</th>
-									
+									<c:forEach items="${HeaderList}" var="HeadName" varStatus="loop">
+										<th>${HeadName}</th>
+									</c:forEach>									
 								</tr>
 							</thead>							
 							<tbody >
@@ -670,17 +661,10 @@
 									<c:if test="${!empty DDBeans}">
 										<c:forEach items="${DDBeans}" var="DDBean" varStatus="loop">
 											<tr>
-												<td>${loop.index+1}</td>
-												<td></td>
+												<td>${loop.index+1}</td>												
 												<td>${DDBean.channel}</td>
-												<td></td>
-												<td></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.grossValue}" /></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>									
+																					
 											</tr>
 										</c:forEach>
 									</c:if>
@@ -691,15 +675,10 @@
 											<tr>
 												<td>${loop.index+1}</td>
 												<td>${DDBean.month}</td>
-												<td></td>
-												<td></td>
-												<td></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.grossValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.returnValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.netValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.addCharges}" /></td>
-												<td></td>
-												<td></td>									
 											</tr>
 										</c:forEach>
 									</c:if>
@@ -709,16 +688,10 @@
 										<c:forEach items="${DDBeans}" var="DDBean" varStatus="loop">
 											<tr>
 												<td>${loop.index+1}</td>
-												<td>${DDBean.month}</td>
-												<td></td>
-												<td></td>
-												<td></td>
+												<td>${DDBean.month}</td>												
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.grossValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.returnValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.netValue}" /></td>
-												<td></td>
-												<td></td>	
-												<td></td>								
 											</tr>
 										</c:forEach>
 									</c:if>
@@ -729,15 +702,10 @@
 											<tr>
 												<td>${loop.index+1}</td>
 												<td>${DDBean.month}</td>
-												<td></td>
-												<td></td>
-												<td></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.grossValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.returnValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.netValue}" /></td>
-												<td></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.grossValue}" /></td>
-												<td></td>									
 											</tr>
 										</c:forEach>
 									</c:if>
@@ -747,16 +715,10 @@
 										<c:forEach items="${DDBeans}" var="DDBean" varStatus="loop">
 											<tr>
 												<td>${loop.index+1}</td>
-												<td></td>
-												<td></td>
 												<td>${DDBean.city}</td>
-												<td></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.grossValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.returnValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.netValue}" /></td>
-												<td></td>
-												<td></td>
-												<td></td>									
 											</tr>
 										</c:forEach>
 									</c:if>
@@ -767,15 +729,9 @@
 											<tr>
 												<td>${loop.index+1}</td>
 												<td>${DDBean.month}</td>
-												<td></td>
-												<td></td>
-												<td></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.grossValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.returnValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.netValue}" /></td>
-												<td></td>
-												<td></td>	
-												<td></td>								
 											</tr>
 										</c:forEach>
 									</c:if>
@@ -785,16 +741,10 @@
 										<c:forEach items="${DDBeans}" var="DDBean" varStatus="loop">
 											<tr>
 												<td>${loop.index+1}</td>
-												<td></td>
-												<td></td>
-												<td></td>
 												<td>${DDBean.sku}</td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.grossValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.returnValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.netValue}" /></td>
-												<td></td>
-												<td></td>	
-												<td></td>								
 											</tr>
 										</c:forEach>
 									</c:if>
@@ -830,7 +780,7 @@
 							document.getElementById("wiseList").innerHTML = "Channel Wise List";
 						}
 						$('.slim-scroll-bar').slimScroll({
-					        height: '250px',
+					        height: '200px',
 					        railOpacity: 0.4
 					    });
 						

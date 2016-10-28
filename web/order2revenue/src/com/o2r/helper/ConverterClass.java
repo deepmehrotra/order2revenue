@@ -860,6 +860,7 @@ public class ConverterClass {
 			bean.setSubCategory(prepareListofCategoryBean(category
 					.getSubCategory()));
 			bean.setCreatedOn(category.getCreatedOn());
+			bean.setTaxFreePriceLimit(category.getTaxFreePriceLimit());
 			bean.setOpeningStock(category.getOpeningStock());
 			bean.setSkuCount(category.getSkuCount());
 			bean.setOsUpdate(category.getOsUpdate());
@@ -877,6 +878,7 @@ public class ConverterClass {
 			category.setProductCount(categoryBean.getProductCount());
 			category.setParentCatName(categoryBean.getParentCatName());
 			category.setCreatedOn(categoryBean.getCreatedOn());
+			category.setTaxFreePriceLimit(categoryBean.getTaxFreePriceLimit());
 			category.setOpeningStock(categoryBean.getOpeningStock());
 			category.setSkuCount(categoryBean.getSkuCount());
 			category.setOsUpdate(categoryBean.getOsUpdate());
@@ -899,6 +901,7 @@ public class ConverterClass {
 				bean.setProductCount(category.getProductCount());
 				bean.setParentCatName(category.getParentCatName());
 				bean.setCreatedOn(category.getCreatedOn());
+				bean.setTaxFreePriceLimit(category.getTaxFreePriceLimit());
 				bean.setOpeningStock(category.getOpeningStock());
 				bean.setSkuCount(category.getSkuCount());
 				bean.setOsUpdate(category.getOsUpdate());

@@ -9,7 +9,7 @@ public class ProductBean {
 	private String productName;
 	private Date productDate;
 	private String productSkuCode;
-	private float productPrice;
+	private float productPrice;	
 	private long quantity;
 	private long threholdLimit;
 	private String channelSKU;
@@ -53,7 +53,7 @@ public class ProductBean {
 	}
 	public void setProductPrice(float productPrice) {
 		this.productPrice = productPrice;
-	}
+	}	
 	public CategoryBean getCategory() {
 		return category;
 	}

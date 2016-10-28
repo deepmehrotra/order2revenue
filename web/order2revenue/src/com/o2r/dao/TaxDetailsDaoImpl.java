@@ -558,23 +558,29 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 	}
 	
 	@Override
-	public TaxCategory getTaxCategory(Product product, int sellerId, String zipcode) throws CustomException {
+	public TaxCategory getTaxCategory(Product product, double sp, int sellerId, String zipcode) throws CustomException {
 		log.info("*** getTaxCategory Starts : TaxDetailsDaoImpl ****");
 		TaxCategory taxCategory = null;
 		String sellerState=null;
 		try {
 			Category category = categoryService.getCategory(product.getCategoryName(), sellerId);
-			Seller seller = sellerService.getSeller(sellerId);
-			if(seller != null)
-				sellerState = areaConfigDao.getStateFromZipCode(seller.getZipcode());
-			String customerState = areaConfigDao.getStateFromZipCode(zipcode);
-			System.out.println(" Customer state : "+customerState);
-			System.out.println(" sellerState state : "+sellerState);
-			if (sellerState != null && sellerState.equalsIgnoreCase(customerState) && category != null) {
-				taxCategory = category.getLST();
-			} else {
-				taxCategory = category.getCST();
-			}
+			if(category != null){
+				if(category.getTaxFreePriceLimit() >= sp){
+					taxCategory = getTaxCategory(null, sellerId);
+				} else {
+					Seller seller = sellerService.getSeller(sellerId);
+					if(seller != null)
+						sellerState = areaConfigDao.getStateFromZipCode(seller.getZipcode());
+					String customerState = areaConfigDao.getStateFromZipCode(zipcode);
+					System.out.println(" Customer state : "+customerState);
+					System.out.println(" sellerState state : "+sellerState);
+					if (sellerState != null && sellerState.equalsIgnoreCase(customerState) && category != null) {
+						taxCategory = category.getLST();
+					} else {
+						taxCategory = category.getCST();
+					}
+				}
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("**Error Code : "

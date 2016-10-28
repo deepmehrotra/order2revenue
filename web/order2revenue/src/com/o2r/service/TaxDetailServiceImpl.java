@@ -62,9 +62,9 @@ public class TaxDetailServiceImpl implements TaxDetailService {
 	}
 	
 	@Override
-	public TaxCategory getTaxCategory(Product product, int sellerId,
+	public TaxCategory getTaxCategory(Product product, double sp, int sellerId,
 			String zipcode) throws CustomException {
-		return taxDetailDao.getTaxCategory(product, sellerId, zipcode);
+		return taxDetailDao.getTaxCategory(product, sp, sellerId, zipcode);
 	}
 
 	@Override
@@ -106,7 +106,6 @@ public class TaxDetailServiceImpl implements TaxDetailService {
 	@Override
 	public TaxDetail addMonthlyTaxDetail(Session session, TaxDetail taxDetail,
 			int sellerId) {
-		// TODO Auto-generated method stub
 		return taxDetailDao.addMonthlyTaxDetail(session, taxDetail, sellerId);
 	}
 

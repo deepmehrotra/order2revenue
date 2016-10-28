@@ -15,6 +15,7 @@ public class CategoryBean {
 	private String parentCatName;
 	private Category parent;
 	private Date createdOn;
+	private double taxFreePriceLimit;
 	private long productCount;
 	private long skuCount;
 	private long openingStock;
@@ -77,6 +78,12 @@ public class CategoryBean {
 	}
 	public void setCreatedOn(Date createdOn) {
 		this.createdOn = createdOn;
+	}
+	public double getTaxFreePriceLimit() {
+		return taxFreePriceLimit;
+	}
+	public void setTaxFreePriceLimit(double taxFreePriceLimit) {
+		this.taxFreePriceLimit = taxFreePriceLimit;
 	}
 	public long getSkuCount() {
 		return skuCount;

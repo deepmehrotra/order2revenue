@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.o2r.bean.DetailedDashboardBean;
+import com.o2r.helper.GlobalConstant;
 import com.o2r.helper.HelperClass;
 import com.o2r.service.CategoryService;
 import com.o2r.service.DetailedDashboardService;
@@ -443,6 +444,7 @@ public class DashboardController {
 		Date startDate = new Date();
 		Date endDate = new Date();
 		int sellerId = 0;
+		List<String> headerList  = null;
 		List<DetailedDashboardBean> DDbeanList = new ArrayList<DetailedDashboardBean>();
 		DetailedDashboardBean DDbean = null;
 		List<Map<String, Object>> paymentMapList = new ArrayList<Map<String,Object>>();
@@ -477,22 +479,27 @@ public class DashboardController {
 			case "Gross Margin":
 				DDbeanList = detailedDashboardService.getGrossMarginList(startDate, endDate, sellerId);	
 				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByMonth());
+				headerList = GlobalConstant.grossHeader;
 				break;
 			case "Actual Sale":
 				DDbeanList = detailedDashboardService.getActualSaleList(startDate, endDate, sellerId);
 				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByMonth());
+				headerList = GlobalConstant.NR_PR_Header;
 				break;
 			case "Tax Free Sale":
 				DDbeanList = detailedDashboardService.getTaxFreeSaleList(startDate, endDate, sellerId);
 				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByMonth());
+				headerList = GlobalConstant.NR_PR_Header;
 				break;
 			case "Taxable Sale":
 				DDbeanList = detailedDashboardService.getTaxableSaleList(startDate, endDate, sellerId);
 				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByMonth());
+				headerList = GlobalConstant.SP_SaleQty_Header;
 				break;
 			case "Sale Quantity":
 				DDbeanList = detailedDashboardService.getSaleQuantityList(startDate, endDate, sellerId);
 				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByMonth());
+				headerList = GlobalConstant.SP_SaleQty_Header;
 				break;
 			case "Top Selleing SKUs":
 				paymentMapList = detailedDashboardService.getTopSellingSKU(startDate, endDate, "list", sellerId);
@@ -507,6 +514,7 @@ public class DashboardController {
 					}
 				}
 				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByGrossValue());
+				headerList = GlobalConstant.SKUHeader;
 				break;
 			case "Top Selling Regions":
 				paymentMapList = detailedDashboardService.getTopSellingRegion(startDate, endDate, "list", sellerId);
@@ -521,6 +529,7 @@ public class DashboardController {
 					}
 				}
 				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByGrossValue());
+				headerList = GlobalConstant.RegionsHeader;
 				break;
 				
 			case "Outstanding Payment":
@@ -535,6 +544,7 @@ public class DashboardController {
 					}
 				}
 				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByGrossValue());
+				headerList = GlobalConstant.Up_Out_Header;
 				break;
 				
 			case "Upcoming Payment":
@@ -549,6 +559,7 @@ public class DashboardController {
 					}
 				}
 				Collections.sort(DDbeanList, new DetailedDashboardBean.sortByGrossValue());
+				headerList = GlobalConstant.Up_Out_Header;
 				break;
 				
 			default:
@@ -557,6 +568,7 @@ public class DashboardController {
 			}
 			
 			model.put("DDBeans", DDbeanList);
+			model.put("HeaderList", headerList);
 			model.put("criteria", criteria);
 			model.put("startDate", startDate);
 			model.put("endDate", endDate);

@@ -34,6 +34,8 @@ public class Category {
 	private String parentCatName;
 	@Column
 	private Date createdOn;
+	@Column(nullable = false)
+	private double taxFreePriceLimit;
 	@Column
 	private long skuCount;
 	@Column
@@ -134,6 +136,14 @@ public class Category {
 
 	public void setCreatedOn(Date createdOn) {
 		this.createdOn = createdOn;
+	}
+
+	public double getTaxFreePriceLimit() {
+		return taxFreePriceLimit;
+	}
+
+	public void setTaxFreePriceLimit(double taxFreePriceLimit) {
+		this.taxFreePriceLimit = taxFreePriceLimit;
 	}
 
 	public long getSkuCount() {

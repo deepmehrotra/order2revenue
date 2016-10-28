@@ -53,7 +53,7 @@ public interface TaxDetailsDao {
 	public List<TaxDetail> listTaxDetails(int sellerId, String taxOrTds)
 			throws CustomException;
 
-	public TaxCategory getTaxCategory(Product product, int sellerId,
+	public TaxCategory getTaxCategory(Product product, double sp, int sellerId,
 			String zipcode) throws CustomException;
 
 	public void removeProductMapping(int tcId, int sellerId)

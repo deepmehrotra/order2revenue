@@ -882,7 +882,7 @@ public class SaveMappedFiles {
 								order.getProductSkuCode(), sellerId);
 						if (product != null) {
 							taxcat = taxDetailService.getTaxCategory(product,
-									sellerId, customerBean.getZipcode());
+									order.getOrderSP(), sellerId, customerBean.getZipcode());
 						}
 
 						if (taxcat != null)
@@ -1568,7 +1568,7 @@ public class SaveMappedFiles {
 								order.getProductSkuCode(), sellerId);
 						if (product != null) {
 							taxcat = taxDetailService.getTaxCategory(product,
-									sellerId, customerBean.getZipcode());
+									order.getOrderSP(), sellerId, customerBean.getZipcode());
 						}
 					}
 					if (taxcat != null)
@@ -2300,7 +2300,7 @@ public class SaveMappedFiles {
 								order.getProductSkuCode(), sellerId);
 						if (product != null) {
 							taxcat = taxDetailService.getTaxCategory(product,
-									sellerId, customerBean.getZipcode());
+									order.getOrderSP(), sellerId, customerBean.getZipcode());
 						}
 					}
 					if (taxcat != null)
@@ -2971,7 +2971,7 @@ public class SaveMappedFiles {
 								order.getProductSkuCode(), sellerId);
 						if (product != null) {
 							taxcat = taxDetailService.getTaxCategory(product,
-									sellerId, customerBean.getZipcode());
+									order.getOrderSP(), sellerId, customerBean.getZipcode());
 						}
 					}
 					if (taxcat != null)
@@ -4553,7 +4553,7 @@ public class SaveMappedFiles {
 								order.getProductSkuCode(), sellerId);
 						if (product != null) {
 							taxcat = taxDetailService.getTaxCategory(product,
-									sellerId, customerBean.getZipcode());
+									order.getOrderSP(), sellerId, customerBean.getZipcode());
 						}
 					}
 					if (taxcat != null)
@@ -6102,7 +6102,7 @@ public class SaveMappedFiles {
 								order.getProductSkuCode(), sellerId);
 						if (product != null) {
 							taxcat = taxDetailService.getTaxCategory(product,
-									sellerId, customerBean.getZipcode());
+									order.getOrderSP(), sellerId, customerBean.getZipcode());
 						}
 					}
 					if (taxcat != null)
@@ -7032,7 +7032,7 @@ public class SaveMappedFiles {
 								order.getProductSkuCode(), sellerId);
 						if (product != null) {
 							taxcat = taxDetailService.getTaxCategory(product,
-									sellerId, customerBean.getZipcode());
+									order.getOrderSP(), sellerId, customerBean.getZipcode());
 						}
 					}
 					if (taxcat != null)

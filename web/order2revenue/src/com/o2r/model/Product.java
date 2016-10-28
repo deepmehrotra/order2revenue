@@ -28,7 +28,7 @@ public class Product {
 	@Column
 	private String productName;
 	@Column
-	private float productPrice;
+	private float productPrice;	
 	@Column
 	private long quantity;
 	@Column
@@ -99,7 +99,7 @@ public class Product {
 	}
 	public void setProductPrice(float productPrice) {
 		this.productPrice = productPrice;
-	}
+	}	
 	public Category getCategory() {
 		return category;
 	}
