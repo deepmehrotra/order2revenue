@@ -81,7 +81,10 @@ import com.o2r.model.State;
 import com.o2r.model.StateDeliveryTime;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.TaxDetail;
+import com.o2r.model.TaxablePurchases;
 import com.o2r.model.UploadReport;
+import com.o2r.bean.TaxablePurchaseBean;
+
 
 public class ConverterClass {
 
@@ -1168,6 +1171,40 @@ public class ConverterClass {
 		return beans;
 	}
 
+	
+	
+	
+	
+	
+	public static TaxablePurchases prepareTaxablePurchasesModel(TaxablePurchaseBean bean) {
+		TaxablePurchases taxablePurchases = new TaxablePurchases();
+		if (bean != null) {
+			
+			System.out.println("bean.getTaxPurchaseId() "+bean.getTaxPurchaseId());
+			System.out.println("bean.getTaxCategory() "+bean.getTaxCategory());
+			System.out.println("bean.getTaxRate() "+bean.getTaxRate());
+			System.out.println("bean.getPurchaseDate() "+bean.getPurchaseDate());
+			System.out.println("bean.getBasicPrice() "+bean.getBasicPrice());
+			System.out.println("bean.getParticular() "+bean.getParticular());
+			System.out.println("bean.getTaxRate() "+bean.getTaxRate());
+			System.out.println("bean.getTaxAmount() "+bean.getTaxAmount());
+			
+			
+			taxablePurchases.setTaxPurchaseId(bean.getTaxPurchaseId());
+			taxablePurchases.setTaxCategory(bean.getTaxCategory());
+			taxablePurchases.setTaxRate(bean.getTaxRate());
+			taxablePurchases.setPurchaseDate(bean.getPurchaseDate());
+			taxablePurchases.setBasicPrice(bean.getBasicPrice());
+			taxablePurchases.setParticular(bean.getParticular());			
+			taxablePurchases.setTaxRate(bean.getTaxRate());
+			taxablePurchases.setTaxAmount(bean.getTaxAmount());	
+			taxablePurchases.setTotalAmount(bean.getTotalAmount());
+			//taxablePurchases.setSeller(Seller  Bean.getId());
+		}
+		return taxablePurchases;
+	}
+	
+	
 	public static OrderTax prepareOrderTaxModel(OrderTaxBean bean) {
 		OrderTax orderTax = new OrderTax();
 		if (bean != null) {

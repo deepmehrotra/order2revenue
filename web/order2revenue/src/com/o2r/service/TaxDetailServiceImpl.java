@@ -1,5 +1,6 @@
 package com.o2r.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.o2r.bean.TaxDetailBean;
 import com.o2r.dao.TaxDetailsDao;
 import com.o2r.helper.CustomException;
 import com.o2r.model.Product;
@@ -39,7 +41,7 @@ public class TaxDetailServiceImpl implements TaxDetailService {
 		return taxDetailDao.listTaxDetails(sellerId);
 
 	}
-
+	
 	@Override
 	public TaxDetail getTaxDetail(int taxDetailId) {
 		return taxDetailDao.getTaxDetail(taxDetailId);
@@ -114,7 +116,14 @@ public class TaxDetailServiceImpl implements TaxDetailService {
 	public List<TaxDetail> listTaxDetails(int sellerId, String taxOrTds)
 			throws CustomException {
 		return taxDetailDao.listTaxDetails(sellerId, taxOrTds);
+		//return taxDetailDao.newlistTaxDetails(sellerId, taxOrTds);
 	}
+	
+	@Override
+	public List<TaxDetailBean> listtaxDetailsOnMonth(int sellerId, Date sDate, Date eDate)
+			throws CustomException {
+		return taxDetailDao.listtaxDetailsOnMonth(sellerId, sDate, eDate);
+	}	
 	
 	@Override
 	public void removeProductMapping(int tcId, int sellerId)
@@ -125,5 +134,19 @@ public class TaxDetailServiceImpl implements TaxDetailService {
 	public Map<String, Float> getTaxCategoryMap(int sellerId) throws CustomException
 	{
 		return taxDetailDao.getTaxCategoryMap(sellerId);
+	}
+	
+	
+	@Override
+	public List<TaxDetailBean> getProdCategoryTaxDetails(int sellerId)
+			throws CustomException {
+		return taxDetailDao.getProdCategoryTaxDetails(sellerId);
+	}
+	
+	
+	@Override
+	public List<TaxDetailBean> getVatTaxDetails(int sellerId)
+			throws CustomException {
+		return taxDetailDao.getVatTaxDetails(sellerId);
 	}
 }

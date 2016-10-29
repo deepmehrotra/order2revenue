@@ -1,8 +1,10 @@
 package com.o2r.dao;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,10 +15,14 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.bean.TaxDetailBean;
+import com.o2r.bean.ViewDetailsBean;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Category;
@@ -26,6 +32,7 @@ import com.o2r.model.Product;
 import com.o2r.model.Seller;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.TaxDetail;
+import com.o2r.model.TaxablePurchases;
 import com.o2r.service.CategoryService;
 import com.o2r.service.SellerService;
 
@@ -39,6 +46,29 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 	private static final String taxTdRetriveQuery = "Select td.taxId from TaxDetail td,Seller s, "
 			+ "Seller_TaxDetail st where s.id=:sellerId and s.id=st.seller_id and "
 			+ "st.taxDetails_taxId=td.taxId and MONTH(td.uploadDate)=:month and td.particular=:particular";
+
+	
+
+	private static final String taxDetailsQuery = "select taxdetail.taxortdsCycle,taxcategory.taxCatType, sum(taxdetail.balanceRemaining)"
+			+ " from taxdetail, taxcategory,seller_taxcategory  "
+			+ " where  taxdetail.particular!='TDS' "
+			+ " and taxdetail.uploadDate>=:sDate  and taxdetail.uploadDate<=:eDate "
+			+ " and seller_taxcategory.taxCategories_taxCatId= taxcategory.taxCatId "
+			+ " and taxdetail.particular=taxcategory.taxCatName "
+			+ " and seller_taxcategory.seller_id=:sellerId  "
+			+ " and taxdetail.taxId in (select taxDetails_taxId from seller_taxdetail where seller_id=:sellerId )"
+			+ " group by taxdetail.taxortdsCycle,taxcategory.taxCatType order by taxdetail.taxortdsCycle";
+
+	private static final String taxablePurchasesQuery = " select tp.taxcategory,sum(tp.taxAmount),tp.purchaseDate,"
+			+ " Monthname(tp.purchaseDate) as month ,YEAR(tp.purchaseDate) "
+			+ " from taxablepurchases tp "
+			+ " where tp.seller_Id=:sellerId "			
+			+ " and tp.purchaseDate>=:sDate  and tp.purchaseDate<=:eDate "
+			+ " GROUP BY YEAR(tp.purchaseDate), MONTH(tp.purchaseDate),tp.taxcategory "
+			+ " order by YEAR(tp.purchaseDate), MONTH(tp.purchaseDate)";
+
+	private static final String prodCattaxDetailsQuery = "select productCategoryCode, Vat, Cst, Excise,CustomDuty, AntDumpingAgent "
+			+ " from prodtaxcategory where sellerId=:sellerId";
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -85,7 +115,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		return taxDetail;
 
 	}
-	
+
 	@Override
 	public void removeProductMapping(int tcId, int sellerId)
 			throws CustomException {
@@ -98,7 +128,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			Query updateQuery = session
 					.createSQLQuery("UPDATE category set LST_taxCatId = null where LST_taxCatId=?");
 			updateQuery.setInteger(0, tcId);
-			
+
 			Query updateQuery1 = session
 					.createSQLQuery("UPDATE category set CST_taxCatId = null where CST_taxCatId=?");
 			updateQuery1.setInteger(0, tcId);
@@ -106,12 +136,13 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			int updated = updateQuery.executeUpdate();
 			int updated1 = updateQuery1.executeUpdate();
 
-			log.debug("removeProductMapping updated:" + updated + " & " + + updated);
+			log.debug("removeProductMapping updated:" + updated + " & "
+					+ +updated);
 			session.getTransaction().commit();
 			session.close();
 
 		} catch (Exception e) {
-			log.error("Failed! by sellerId : "+sellerId,e);
+			log.error("Failed! by sellerId : " + sellerId, e);
 			e.printStackTrace();
 			throw new CustomException(GlobalConstant.deleteManualChargesError,
 					new Date(), 3, GlobalConstant.deleteManualChargesErrorCode,
@@ -335,7 +366,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		log.debug("addTaxCategory : cat : " + taxCategory.getTaxCatName()
 				+ " Amount :" + taxCategory.getTaxPercent());
 		Seller seller = null;
-		Session session=null;
+		Session session = null;
 		try {
 			System.out.println(taxCategory.getProductCategoryCST());
 			System.err.println(taxCategory.getProductCategoryLST());
@@ -350,14 +381,16 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 					seller.getTaxCategories().add(taxCategory);
 				session.merge(seller);
 			} else {
-				/*Criteria criteria = session.createCriteria(Seller.class).add(
-						Restrictions.eq("id", sellerId));
-				seller = (Seller) criteria.list().get(0);
-				seller.getTaxCategories().add(taxCategory);*/
+				/*
+				 * Criteria criteria = session.createCriteria(Seller.class).add(
+				 * Restrictions.eq("id", sellerId)); seller = (Seller)
+				 * criteria.list().get(0);
+				 * seller.getTaxCategories().add(taxCategory);
+				 */
 				taxCategory.setUploadDate(new Date());
 				session.merge(taxCategory);
 			}
-			session.getTransaction().commit();			
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.equals("**Error Code : "
@@ -367,11 +400,11 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 					new Date(), 1, sellerId + "-"
 							+ GlobalConstant.getTaxDetailListErrorCode, e);
 
-		} finally{
-			if(session != null)
+		} finally {
+			if (session != null)
 				session.close();
 		}
-		
+
 		log.info("*** addTaxCategory Ends : TaxDetailsDaoImpl ****");
 		return taxCategory;
 
@@ -447,7 +480,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 
 		}
 
-		log.info("*** listTaxDetails by TaxorTds Ends : TaxDetailsDaoImpl ****");
+		log.info("*** listTaxDetails by TaxorTds Ends : TaxDetailsDaoImpl ****");		
 		return returnlist;
 	}
 
@@ -466,11 +499,11 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 				returnlist = seller.getTaxCategories();
 
 			if (returnlist != null && returnlist.size() != 0) {
-				
+
 				for (TaxCategory returnObj : returnlist) {
 					Hibernate.initialize(returnObj.getProductCategoryCST());
 					Hibernate.initialize(returnObj.getProductCategoryLST());
-				}				
+				}
 			}
 			session.getTransaction().commit();
 			session.close();
@@ -487,14 +520,14 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		log.info("*** listTaxCategories Ends : TaxDetailsDaoImpl ****");
 		return returnlist;
 	}
-	
+
 	@Override
-	public Map<String,Float> getTaxCategoryMap(int sellerId)
+	public Map<String, Float> getTaxCategoryMap(int sellerId)
 			throws CustomException {
 
 		log.info("*** getTaxCategoryMap Starts : TaxDetailsDaoImpl ****");
-		Map<String,Float> returnMap = new HashMap<String,Float>();
-		List<TaxCategory> returnlist=null;
+		Map<String, Float> returnMap = new HashMap<String, Float>();
+		List<TaxCategory> returnlist = null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -504,11 +537,12 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 				returnlist = seller.getTaxCategories();
 
 			if (returnlist != null && returnlist.size() != 0) {
-				
+
 				for (TaxCategory returnObj : returnlist) {
-					if(!returnMap.containsKey(returnObj.getTaxCatName()))
-					returnMap.put(returnObj.getTaxCatName(), returnObj.getTaxPercent());
-				}				
+					if (!returnMap.containsKey(returnObj.getTaxCatName()))
+						returnMap.put(returnObj.getTaxCatName(),
+								returnObj.getTaxPercent());
+				}
 			}
 			session.getTransaction().commit();
 			session.close();
@@ -558,21 +592,26 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		log.info("*** getTaxCategory Ends : TaxDetailsDaoImpl ****");
 		return taxCategory;
 	}
-	
+
 	@Override
-	public TaxCategory getTaxCategory(Product product, int sellerId, String zipcode) throws CustomException {
+	public TaxCategory getTaxCategory(Product product, int sellerId,
+			String zipcode) throws CustomException {
 		log.info("*** getTaxCategory Starts : TaxDetailsDaoImpl ****");
 		TaxCategory taxCategory = null;
-		String sellerState=null;
+		String sellerState = null;
 		try {
-			Category category = categoryService.getCategory(product.getCategoryName(), sellerId);
+			Category category = categoryService.getCategory(
+					product.getCategoryName(), sellerId);
 			Seller seller = sellerService.getSeller(sellerId);
-			if(seller != null)
-				sellerState = areaConfigDao.getStateFromZipCode(seller.getZipcode());
+			if (seller != null)
+				sellerState = areaConfigDao.getStateFromZipCode(seller
+						.getZipcode());
 			String customerState = areaConfigDao.getStateFromZipCode(zipcode);
-			System.out.println(" Customer state : "+customerState);
-			System.out.println(" sellerState state : "+sellerState);
-			if (sellerState != null && sellerState.equalsIgnoreCase(customerState) && category != null) {
+			System.out.println(" Customer state : " + customerState);
+			System.out.println(" sellerState state : " + sellerState);
+			if (sellerState != null
+					&& sellerState.equalsIgnoreCase(customerState)
+					&& category != null) {
 				taxCategory = category.getLST();
 			} else {
 				taxCategory = category.getCST();
@@ -611,7 +650,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			if (criteria.list() != null && criteria.list().size() != 0) {
 				seller = (Seller) criteria.list().get(0);
 				returnObject = seller.getTaxCategories().get(0);
-				if(returnObject != null){
+				if (returnObject != null) {
 					Hibernate.initialize(returnObject.getProductCategoryCST());
 					Hibernate.initialize(returnObject.getProductCategoryLST());
 				}
@@ -702,6 +741,236 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 
 		}
 		log.info("*** deleteTaxCategory Ends : TaxDetailsDaoImpl ****");
+	}
+
+	@Override
+	public List<TaxDetailBean> listtaxDetailsOnMonth(int sellerId, Date sDate,
+			Date eDate) throws CustomException {
+
+		log.info("*** listTaxDetails by TaxorTds Starts : TaxDetailsDaoImpl ****");
+		List<TaxDetail> returnlist = null;
+		Seller seller = null;
+
+		List<TaxDetailBean> viewDetailsDbeanList = new ArrayList<TaxDetailBean>();
+		Session session = null;
+		try {
+			
+
+			List<Object[]> results = null;
+
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query mpquery1 = session.createSQLQuery(taxablePurchasesQuery)
+					.setParameter("sellerId", sellerId)
+					.setParameter("sDate", sDate)
+					.setParameter("eDate", eDate);
+			results = mpquery1.list();
+			
+			
+			System.out.println(" The result size"+results.size() );	
+			Iterator mpiterator1 = results.iterator();
+			HashMap<String, Float> taxMap = new HashMap<String, Float>();
+			while (mpiterator1.hasNext()) {
+				Object[] recordsRow = (Object[]) mpiterator1.next();
+				String mapkey = recordsRow[0].toString() + "," + recordsRow[3]
+						+ "," + recordsRow[4].toString().substring(2);			
+
+				taxMap.put(mapkey, Float.parseFloat(recordsRow[1].toString()));				
+			}			
+
+			Query mpquery = session.createSQLQuery(taxDetailsQuery)
+					.setParameter("sellerId", sellerId)
+					.setParameter("sDate", sDate)
+					.setParameter("eDate", eDate);
+			//System.out.println(" The query" + mpquery.toString());
+			results = mpquery.list();
+			String oldCatType = "";
+			double totalTax = 0.0d;
+			Iterator mpiterator = results.iterator();
+			System.out.println(" The size of the query data is "
+					+ results.size());
+			TaxDetailBean returnTaxDetailBean = new TaxDetailBean();
+
+			int itrvalue=0;
+			boolean check = true;
+			if (mpquery != null) {
+				while (mpiterator.hasNext()) {
+					Object[] recordsRow = (Object[]) mpiterator.next();
+
+					if (recordsRow[0] != null && recordsRow[1] != null) {
+
+						itrvalue=itrvalue+1;
+						if (!recordsRow[0].toString().equals(oldCatType) && check == false) {
+							//System.out.println(" VALUE");
+							viewDetailsDbeanList.add(returnTaxDetailBean);
+							returnTaxDetailBean = new TaxDetailBean();
+							totalTax = 0.0d;
+						}
+						returnTaxDetailBean.setTaxortdsCycle(recordsRow[0].toString());
+						returnTaxDetailBean.setTaxCatType(recordsRow[1] + "");
+						String fetchString = returnTaxDetailBean.getTaxCatType()+ ","+ returnTaxDetailBean.getTaxortdsCycle();						
+
+						float valTaxablePurchase = 0.0f;
+						if (taxMap.get(fetchString) != null) {
+							valTaxablePurchase = Float.parseFloat(taxMap.get(fetchString).toString());
+						}
+						if (returnTaxDetailBean.getTaxCatType().equals("LST")) {
+ 
+							returnTaxDetailBean.setVat(Double.parseDouble(recordsRow[2].toString())-valTaxablePurchase);
+							totalTax = totalTax + returnTaxDetailBean.getVat();
+
+						} else if (returnTaxDetailBean.getTaxCatType().equals("CST")) {
+							
+							returnTaxDetailBean.setCst(Double.parseDouble(recordsRow[2].toString())- valTaxablePurchase);
+							totalTax = totalTax + returnTaxDetailBean.getCst();
+
+						} else if (returnTaxDetailBean.getTaxCatType().equals("Excise")) {
+
+							returnTaxDetailBean.setExcise(Double.parseDouble(recordsRow[2].toString())- valTaxablePurchase);
+							totalTax = totalTax	+ returnTaxDetailBean.getExcise();
+
+						} else if (returnTaxDetailBean.getTaxCatType().equals("CutomDuty")) {
+							returnTaxDetailBean.setExcise(Double.parseDouble(recordsRow[2].toString())- valTaxablePurchase);
+							totalTax = totalTax	+ returnTaxDetailBean.getCustomDuty();
+						} else if (returnTaxDetailBean.getTaxCatType().equals("AntiDumpityDuty")){
+							returnTaxDetailBean.setAntiDumpingDuty(Double.parseDouble(recordsRow[2].toString())	- valTaxablePurchase);
+							totalTax = totalTax	+ returnTaxDetailBean.getAntiDumpingDuty();
+						}
+						returnTaxDetailBean.setTotalTax(totalTax);
+						check = false;
+						oldCatType = recordsRow[0].toString();
+						
+						if(results.size()==itrvalue){
+							viewDetailsDbeanList.add(returnTaxDetailBean);	
+						}						
+					}// if condition
+
+				}// while loop
+
+			}// mpquery
+			
+		} catch (Exception e) {
+			log.error("Failed! by sellerId : ", e);
+			log.debug("Inside exception  " + e.getLocalizedMessage());
+			e.printStackTrace();
+		}finally{
+			session.getTransaction().commit();
+			session.close();
+		}
+		long topsellingGPendtime = System.currentTimeMillis();
+		log.info(" topsellingGPendtime time  : " + (topsellingGPendtime));
+
+		log.info("***topsellingGPendtime ends***");
+
+		System.out.println(" viewDetailsDbeanList size "
+				+ viewDetailsDbeanList.size());
+		return viewDetailsDbeanList;
+	}
+
+	@Override
+	public List<TaxDetailBean> getProdCategoryTaxDetails(int sellerId)
+			throws CustomException {
+
+		log.info("*** listTaxDetails by TaxorTds Starts : TaxDetailsDaoImpl ****");
+
+		List<TaxDetailBean> viewDetailsDbeanList = new ArrayList<TaxDetailBean>();
+
+		try {
+
+			List<Object[]> results = null;
+			sellerId = 1;
+
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query mpquery = session.createSQLQuery(prodCattaxDetailsQuery)
+					.setParameter("sellerId", 0);
+			results = mpquery.list();
+			Iterator mpiterator1 = results.iterator();
+
+			//System.out.println(" The size" + results.size());
+			if (mpquery != null) {
+				while (mpiterator1.hasNext()) {
+					Object[] recordsRow = (Object[]) mpiterator1.next();
+					TaxDetailBean returnTaxDetailBean = new TaxDetailBean();
+					returnTaxDetailBean
+							.setTaxCategory(recordsRow[0].toString());
+					returnTaxDetailBean.setVat(Double.parseDouble(recordsRow[1]
+							.toString()));
+					returnTaxDetailBean.setCst(Double.parseDouble(recordsRow[2]
+							.toString()));
+					returnTaxDetailBean.setExcise(Double
+							.parseDouble(recordsRow[3].toString()));
+
+					returnTaxDetailBean.setCustomDuty(Double
+							.parseDouble(recordsRow[4].toString()));
+					returnTaxDetailBean.setAntiDumpingDuty(Double
+							.parseDouble(recordsRow[5].toString()));
+					if (returnTaxDetailBean != null)
+						viewDetailsDbeanList.add(returnTaxDetailBean);
+
+				}
+			}
+
+		} catch (Exception e) {
+			log.error("Failed! by sellerId : ", e);
+			log.debug("Inside exception  " + e.getLocalizedMessage());
+			e.printStackTrace();
+		}
+		long topsellingGPendtime = System.currentTimeMillis();
+		log.info(" topsellingGPendtime time  : " + (topsellingGPendtime));
+
+		log.info("***topsellingGPendtime ends***");
+
+		return viewDetailsDbeanList;
+	}
+
+	@Override
+	public List<TaxDetailBean> getVatTaxDetails(int sellerId)
+			throws CustomException {
+
+		log.info("*** listTaxDetails by TaxorTds Starts : TaxDetailsDaoImpl ****");
+
+		List<TaxDetailBean> viewDetailsDbeanList = new ArrayList<TaxDetailBean>();
+
+		try {
+			
+			System.out.println(" HII I AM IN VAT DETAILS METHOD");
+
+			List<Object[]> results = null;
+			// sellerId = 1;
+
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			String taxcat = "VAT";
+			Query mpquery = session.createSQLQuery(taxablePurchasesQuery)
+					.setParameter("taxCategtory", taxcat);
+			results = mpquery.list();
+			Iterator mpiterator1 = results.iterator();
+
+			System.out.println(" The size" + results.size());
+			if (mpquery != null) {
+				while (mpiterator1.hasNext()) {
+					Object[] recordsRow = (Object[]) mpiterator1.next();
+					TaxDetailBean returnTaxDetailBean = new TaxDetailBean();
+					returnTaxDetailBean.setVat(Double.parseDouble(recordsRow[0]
+							.toString()));
+					viewDetailsDbeanList.add(returnTaxDetailBean);
+				}
+			}
+			System.out.println("viewDetailsDbeanList viewDetailsDbeanList"
+					+ viewDetailsDbeanList.size());
+
+		} catch (Exception e) {
+			log.error("Failed! by sellerId : ", e);
+			log.debug("Inside exception  " + e.getLocalizedMessage());
+			e.printStackTrace();
+		}
+		long topsellingGPendtime = System.currentTimeMillis();
+		log.info(" topsellingGPendtime time  : " + (topsellingGPendtime));
+
+		log.info("***topsellingGPendtime ends***");
+
+		return viewDetailsDbeanList;
 	}
 
 }
