@@ -157,7 +157,10 @@
 										<!--  <td><label data-toggle="modal"
 															data-target="#modaltable" onclick="setClickID()"
 															style='cursor: pointer;' >${product.vat}</label></td>-->
-																			
+														
+														<td><fmt:formatNumber type="number"
+																maxFractionDigits="2" value="${product.vat}"/></td>
+																					
 														<td><fmt:formatNumber type="number"
 																maxFractionDigits="2" value="${product.cst}"/></td>
 														<td><fmt:formatNumber type="number"
