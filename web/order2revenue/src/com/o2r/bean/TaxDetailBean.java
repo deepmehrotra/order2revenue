@@ -14,6 +14,68 @@ public class TaxDetailBean {
 	private Date dateOfPayment;
 	private Double balanceRemaining;
 	private Date uploadDate;
+	private String taxCatType;
+	private String taxCategory;
+	
+	private double vat;	
+	private double cst;
+	private double excise;
+	private double customDuty;
+	private double antiDumpingDuty;
+	private double totalTax;
+	
+	public double getTotalTax() {
+		return totalTax;
+	}
+	public void setTotalTax(double totalTax) {
+		this.totalTax = totalTax;
+	}
+	public double getVat() {
+		return vat;
+	}
+	public void setVat(double vat) {
+		this.vat = vat;
+	}
+	public double getCst() {
+		return cst;
+	}
+	public void setCst(double cst) {
+		this.cst = cst;
+	}
+	public double getExcise() {
+		return excise;
+	}
+	public void setExcise(double excise) {
+		this.excise = excise;
+	}
+	public double getCustomDuty() {
+		return customDuty;
+	}
+	public void setCustomDuty(double customDuty) {
+		this.customDuty = customDuty;
+	}
+	public double getAntiDumpingDuty() {
+		return antiDumpingDuty;
+	}
+	public void setAntiDumpingDuty(double antiDumpingDuty) {
+		this.antiDumpingDuty = antiDumpingDuty;
+	}
+	
+	
+	
+	
+	public String getTaxCategory() {
+		return taxCategory;
+	}
+	public void setTaxCategory(String taxCategory) {
+		this.taxCategory = taxCategory;
+	}
+	public String getTaxCatType() {
+		return taxCatType;
+	}
+	public void setTaxCatType(String taxCatType) {
+		this.taxCatType = taxCatType;
+	}
 	public int getTaxId() {
 		return taxId;
 	}
