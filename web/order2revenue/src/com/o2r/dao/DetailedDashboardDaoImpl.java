@@ -727,14 +727,12 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 					Map.Entry<String, Long> entry=topRegionGross.entrySet().iterator().next();
 					key= entry.getKey();
 					value=entry.getValue();
-				}
-				if(topRegionReturn.size() != 0){
 					resultMap.put("Region", key);
 					resultMap.put("grossSale", value);				
 					resultMap.put("returnSale", topRegionReturn.get(key) != null ? topRegionReturn.get(key) : 0);
 					resultMap.put("netSale", (value - (topRegionReturn.get(key) != null ? topRegionReturn.get(key) : 0)));
 					topRegions.add(resultMap);
-				}
+				}				
 			}			
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);

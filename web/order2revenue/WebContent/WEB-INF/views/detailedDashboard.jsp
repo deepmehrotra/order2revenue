@@ -355,7 +355,7 @@
 			            <div class="col-lg-3">
 			                <div class="widget style1">
 			                    
-		                            <div class="col-lg-12 col-xs-12">
+		                            <div class="col-lg-12 col-xs-12 text-center">
 		                                <span>Value For</span>
 		                                <h2 class="font-bold" id="saleQuantityPeriod"></h2>
 		                            </div>
@@ -421,7 +421,7 @@
 			            <div class="col-lg-3">
 			                <div class="widget style1">
 			                    
-		                            <div class="col-lg-12 col-xs-12">
+		                            <div class="col-lg-12 col-xs-12 text-center">
 		                                <span id="topSellingSKUName"></span>
 		                                <h2 class="font-bold" id="topSellingSKUPeriod"></h2>
 		                            </div>
@@ -482,7 +482,7 @@
 		                </div>
 			            <div class="col-lg-3">
 			                <div class="widget style1">
-			                     <div class="col-lg-12 col-xs-12">
+			                     <div class="col-lg-12 col-xs-12 text-center">
 		                            <span id="topSellingRegionName"></span>
 		                            <h2 class="font-bold" id="topSellingRegionPeriod"></h2>
 		                        </div>		                        

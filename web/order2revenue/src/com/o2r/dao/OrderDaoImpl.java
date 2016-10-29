@@ -2417,6 +2417,10 @@ public class OrderDaoImpl implements OrderDao {
 						.getZipcode());
 
 			}
+			String city = areaConfigDao.getCityFromZipCode(order.getCustomer().getZipcode());
+			if(city != null){
+				order.getCustomer().setCustomerCity(city);
+			}
 			log.info(" State from zipcode : " + state);
 			double SP = order.getOrderSP();
 			// StringBuffer temp = new StringBuffer("");

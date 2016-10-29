@@ -5657,7 +5657,7 @@ public class SaveMappedFiles {
 
 								} else {
 									errorMessage
-											.append("No Product with this Channel & SKU");
+											.append("No Product with this Channel & SKU.");
 									validaterow = false;
 								}
 							}
@@ -5673,7 +5673,7 @@ public class SaveMappedFiles {
 								order.setChannelOrderID(entry.getCell(index)
 										.toString());
 								errorMessage
-										.append(" Channel OrderId is already present ");
+										.append(" Channel OrderId is already present. ");
 								validaterow = false;
 							}
 						} else {
