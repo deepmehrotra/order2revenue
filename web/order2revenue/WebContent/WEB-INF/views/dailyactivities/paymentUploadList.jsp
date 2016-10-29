@@ -14,7 +14,7 @@
     	{
     	
     	case "viewPayments" :
-    		targeturl="viewPayments.html?uploadId="+id;
+    		targeturl="paymentDetails.html?uploadId="+id;
     	break;
     	case "orderPaymentSheet" :
     		targeturl="orderPaymentSheet.html";

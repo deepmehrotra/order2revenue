@@ -2,9 +2,12 @@ package com.o2r.dao;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
+
 
 import org.hibernate.Session;
 
+import com.o2r.bean.TaxDetailBean;
 import com.o2r.helper.CustomException;
 import com.o2r.model.Product;
 import com.o2r.model.TaxCategory;
@@ -51,14 +54,25 @@ public interface TaxDetailsDao {
 			throws CustomException;
 
 	public List<TaxDetail> listTaxDetails(int sellerId, String taxOrTds)
+			throws CustomException;	
+	
+	public List<TaxDetailBean> listtaxDetailsOnMonth(int sellerId, Date sDate, Date eDate)
 			throws CustomException;
 
-	public TaxCategory getTaxCategory(Product product, double sp, int sellerId,
-			String zipcode) throws CustomException;
+
+	public TaxCategory getTaxCategory(Product product, double sp, int sellerId,String zipcode) throws CustomException;
 
 	public void removeProductMapping(int tcId, int sellerId)
 			throws CustomException;
 
 	public Map<String, Float> getTaxCategoryMap(int sellerId) throws CustomException;
 
+	
+	public List<TaxDetailBean> getProdCategoryTaxDetails(int sellerId)
+			throws CustomException;
+	
+	public List<TaxDetailBean> getVatTaxDetails(int sellerId)
+			throws CustomException;
+	
+	
 }

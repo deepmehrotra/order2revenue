@@ -1,10 +1,12 @@
 package com.o2r.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Session;
 
+import com.o2r.bean.TaxDetailBean;
 import com.o2r.helper.CustomException;
 import com.o2r.model.Product;
 import com.o2r.model.TaxCategory;
@@ -23,6 +25,13 @@ public interface TaxDetailService {
 	public List<TaxDetail> listTaxDetails(int sellerId, String taxOrTds)
 			throws CustomException;
 
+	public List<TaxDetailBean> listtaxDetailsOnMonth(int sellerId, Date sDate, Date eDate)
+			throws CustomException;
+
+	
+	public List<TaxDetailBean> getProdCategoryTaxDetails(int sellerId)
+			throws CustomException; 
+	
 	public TaxDetail getTaxDetail(int taxDetailId);
 
 	public void deleteTaxDetail(TaxDetail taxDetail, int sellerId);
@@ -59,5 +68,10 @@ public interface TaxDetailService {
 	public void removeProductMapping(int tcId, int sellerId)
 			throws CustomException;
 
-	public Map<String, Float> getTaxCategoryMap(int sellerId) throws CustomException;
+	public Map<String, Float> getTaxCategoryMap(int sellerId)
+			throws CustomException;
+	
+	
+	public List<TaxDetailBean> getVatTaxDetails(int sellerId)
+			throws CustomException;
 }
