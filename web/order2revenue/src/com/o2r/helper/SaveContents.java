@@ -2249,9 +2249,6 @@ public class SaveContents {
 											.append(" Commission should be a number ");
 									validaterow = false;
 								}
-							} else {
-								errorMessage.append(" Commission is null ");
-								validaterow = false;
 							}
 
 						} else {
