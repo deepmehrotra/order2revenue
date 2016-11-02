@@ -210,7 +210,7 @@ public class ViewDetailController {
 
 	
 	
-	@RequestMapping(value = "/seller/quaterlyindex", method = RequestMethod.POST)
+	@RequestMapping(value = "/seller/quaterlyindex1", method = RequestMethod.POST)
 	public ModelAndView getTopSKUDetailsAnnualy(HttpServletRequest request,
 			@ModelAttribute("command") ViewDetailsBean viewDetailsBean,
 			BindingResult result) {
