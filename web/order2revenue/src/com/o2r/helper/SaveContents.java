@@ -227,6 +227,7 @@ public class SaveContents {
 										channelID = entry.getCell(0).toString()
 												+ GlobalConstant.orderUniqueSymbol
 												+ skuCode;
+										order.setPartnerCommission(productConfig.getCommision());
 									} else {
 										errorMessage
 												.append("VendorSKU code is not mapped.");
@@ -2099,6 +2100,22 @@ public class SaveContents {
 								 * ); validaterow = false; }
 								 */
 
+							}
+							
+							if (entry.getCell(4) != null
+									&& entry.getCell(4).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									productConfig.setCommision(Float.valueOf(entry
+											.getCell(4).toString()));
+								} catch (NumberFormatException e) {
+									log.error("Failed! by SellerId : " + sellerId, e);
+									errorMessage
+											.append(" Commission should be a number ");
+									validaterow = false;
+								}
+							} else {
+								errorMessage.append(" Commission is null ");
+								validaterow = false;
 							}
 
 						} else {

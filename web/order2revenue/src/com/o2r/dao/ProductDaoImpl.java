@@ -65,13 +65,13 @@ public class ProductDaoImpl implements ProductDao {
 
 	private final String listProductConfig = "select pc.productSkuCode,pc.channelName,pc.channelSkuRef,"
 			+ "pc.vendorSkuRef,pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,pc.eossDiscountValue,pc.grossNR,"
-			+ "pc.productConfigId from productconfig pc,product p,product_productconfig pp where "
+			+ "pc.productConfigId, pc.commision from productconfig pc,product p,product_productconfig pp where "
 			+ "p.seller_id=? and pp.Product_productId=p.productId and "
 			+ "pp.productConfig_productConfigId=pc.productConfigId and pc.mrp <> 0";
 
 	private final String listProductMapping = "select pc.productSkuCode,pc.channelName,"
 			+ "pc.channelSkuRef,pc.vendorSkuRef,pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,"
-			+ "pc.eossDiscountValue,pc.grossNR,pc.productConfigId from productconfig pc,"
+			+ "pc.eossDiscountValue,pc.grossNR,pc.productConfigId, pc.commision from productconfig pc,"
 			+ "product p,product_productconfig pp where p.seller_id=? and pp.Product_productId="
 			+ "p.productId and pp.productConfig_productConfigId=pc.productConfigId and pc.mrp=0";
 	
@@ -81,13 +81,13 @@ public class ProductDaoImpl implements ProductDao {
 
 	private final String searchProductConfig = "select pc.productSkuCode,pc.channelName,pc.channelSkuRef,"
 			+ "pc.vendorSkuRef,pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,pc.eossDiscountValue,pc.grossNR,"
-			+ "pc.productConfigId from productconfig pc,product p,product_productconfig pp where "
+			+ "pc.productConfigId, pc.commision from productconfig pc,product p,product_productconfig pp where "
 			+ "p.seller_id=? and pp.Product_productId=p.productId and pp.productConfig_productConfigId=pc.productConfigId "
 			+ "and pc.mrp <> 0 and pc.";
 
 	private final String searchProductMapping = "select pc.productSkuCode,"
 			+ "pc.channelName,pc.channelSkuRef,pc.vendorSkuRef,pc.discount,pc.mrp,pc.productPrice,"
-			+ "pc.suggestedPOPrice,pc.eossDiscountValue,pc.grossNR,pc.productConfigId "
+			+ "pc.suggestedPOPrice,pc.eossDiscountValue,pc.grossNR,pc.productConfigId, pc.commision "
 			+ "from productconfig pc,product p,product_productconfig pp where p.seller_id=? "
 			+ "and pp.Product_productId=p.productId and pp.productConfig_productConfigId=pc.productConfigId"
 			+ " and pc.mrp=0 and pc.";
@@ -671,6 +671,7 @@ public class ProductDaoImpl implements ProductDao {
 					productConfig.setEossDiscountValue((double) object[8]);
 					productConfig.setGrossNR((double) object[9]);
 					productConfig.setProductConfigId((int) object[10]);
+					productConfig.setCommision((float) object[11]);
 					productConfigList.add(productConfig);
 				}
 			}
@@ -719,6 +720,7 @@ public class ProductDaoImpl implements ProductDao {
 					productConfig.setEossDiscountValue((double) object[8]);
 					productConfig.setGrossNR((double) object[9]);
 					productConfig.setProductConfigId((int) object[10]);
+					productConfig.setCommision((float) object[11]);
 					productConfigList.add(productConfig);
 				}
 			}

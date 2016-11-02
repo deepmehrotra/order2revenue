@@ -2418,8 +2418,9 @@ public class OrderDaoImpl implements OrderDao {
 						.getZipcode());
 
 			}
-			String city = areaConfigDao.getCityFromZipCode(order.getCustomer().getZipcode());
-			if(city != null){
+			String city = areaConfigDao.getCityFromZipCode(order.getCustomer()
+					.getZipcode());
+			if (city != null) {
 				order.getCustomer().setCustomerCity(city);
 			}
 			log.info(" State from zipcode : " + state);
@@ -2560,16 +2561,20 @@ public class OrderDaoImpl implements OrderDao {
 				Collections.sort(pbean.getshippingfeeWeightVariableList(),
 						new SortByCriteria());
 
-			// Extracting comiision value
+			// Extracting commission value
 			if (partner.getNrnReturnConfig().getCommissionType() != null
 					&& partner.getNrnReturnConfig().getCommissionType()
 							.equals("fixed")) {
 				comission = chargesMap
 						.get(GlobalConstant.fixedCommissionPercent);
 
-			} else {
+			} else if (partner.getNrnReturnConfig().getCommissionType() != null
+					&& partner.getNrnReturnConfig().getCommissionType()
+							.equals("categoryWise")) {
 				comission = chargesMap.containsKey(prodCat) ? chargesMap
 						.get(prodCat) : 0;
+			} else {
+				comission = (float) order.getPartnerCommission();
 			}
 			// Add partner new changes:
 
@@ -3167,7 +3172,7 @@ public class OrderDaoImpl implements OrderDao {
 				chargesMap
 						.put(charge.getChargeName(), charge.getChargeAmount());
 			}
-System.out.println(" Retunrr Type : "+returnType);
+			System.out.println(" Retunrr Type : " + returnType);
 			switch (returnType) {
 			case "returnCharges":
 				if (faultType.equals(GlobalConstant.SellerFaultString)) {
@@ -3887,15 +3892,20 @@ System.out.println(" Retunrr Type : "+returnType);
 				Collections.sort(pbean.getshippingfeeWeightVariableList(),
 						new SortByCriteria());
 
-			// Extracting comiision value
-			if (nrnReturnConfig.getCommissionType() != null
-					&& nrnReturnConfig.getCommissionType().equals("fixed")) {
+			// Extracting commission value
+			if (partner.getNrnReturnConfig().getCommissionType() != null
+					&& partner.getNrnReturnConfig().getCommissionType()
+							.equals("fixed")) {
 				comission = chargesMap
 						.get(GlobalConstant.fixedCommissionPercent);
 
-			} else {
+			} else if (partner.getNrnReturnConfig().getCommissionType() != null
+					&& partner.getNrnReturnConfig().getCommissionType()
+							.equals("categoryWise")) {
 				comission = chargesMap.containsKey(prodCat) ? chargesMap
 						.get(prodCat) : 0;
+			} else {
+				comission = (float) order.getPartnerCommission();
 			}
 			// Add partner new changes:
 
@@ -5794,7 +5804,8 @@ System.out.println(" Retunrr Type : "+returnType);
 	}
 
 	@Override
-	public boolean reverseOrder(int orderId, int sellerId) throws CustomException {
+	public boolean reverseOrder(int orderId, int sellerId)
+			throws CustomException {
 
 		log.info("*** reverseOrder starts : OrderDaoImpl ***");
 		boolean status = false;
@@ -5829,7 +5840,8 @@ System.out.println(" Retunrr Type : "+returnType);
 						.getTdsToDeduct()));
 				taxDetails.setParticular("TDS");
 				taxDetails.setUploadDate(order.getShippedDate());
-				taxDetailService.addMonthlyTDSDetail(session, taxDetails, sellerId);
+				taxDetailService.addMonthlyTDSDetail(session, taxDetails,
+						sellerId);
 			}
 			productService.updateInventory(order.getProductSkuCode(), 0,
 					order.getQuantity(), 0, false, sellerId,
@@ -5865,28 +5877,30 @@ System.out.println(" Retunrr Type : "+returnType);
 										.getSeller().getId(), order
 										.getShippedDate());
 			}
-			
+
 			if (order.getOrderPayment().getDateofPayment() != null) {
-				
-				/*PaymentUpload paymentUpload = paymentUploadService.getPaymentUpload(orderId.)
-				paymentUpload.setTotalpositivevalue(totalpositive);
-				paymentUpload.setTotalnegativevalue(totalnegative);
-				paymentUpload.setNetRecievedAmount(totalpositive
-						- totalnegative);
-				paymentUpload.setUploadDesc("PAYU" + sellerId + ""
-						+ todaydat.getTime());
-				paymentUpload.setUploadStatus("Success");
-				uploadPaymentId = paymentUploadService.addPaymentUpload(
-						paymentUpload, sellerId);*/
+
+				/*
+				 * PaymentUpload paymentUpload =
+				 * paymentUploadService.getPaymentUpload(orderId.)
+				 * paymentUpload.setTotalpositivevalue(totalpositive);
+				 * paymentUpload.setTotalnegativevalue(totalnegative);
+				 * paymentUpload.setNetRecievedAmount(totalpositive -
+				 * totalnegative); paymentUpload.setUploadDesc("PAYU" + sellerId
+				 * + "" + todaydat.getTime());
+				 * paymentUpload.setUploadStatus("Success"); uploadPaymentId =
+				 * paymentUploadService.addPaymentUpload( paymentUpload,
+				 * sellerId);
+				 */
 			}
 
 			int orderdelete = session.createSQLQuery(
-					"DELETE FROM partner_order_table WHERE orders_orderId = " + order.getOrderId())
-					.executeUpdate();
-			
+					"DELETE FROM partner_order_table WHERE orders_orderId = "
+							+ order.getOrderId()).executeUpdate();
+
 			session.delete(order);
 			status = true;
-			
+
 			log.debug(" Reversal process successful :Deleted " + orderdelete);
 			session.getTransaction().commit();
 			session.close();

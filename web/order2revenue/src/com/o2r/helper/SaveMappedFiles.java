@@ -296,6 +296,7 @@ public class SaveMappedFiles {
 														order.setChannelOrderID(channelID);
 														order.setProductSkuCode(productConfig
 																.getProductSkuCode());
+														order.setPartnerCommission(productConfig.getCommision());
 
 														if (!(partner
 																.getPcName()
@@ -1154,6 +1155,7 @@ public class SaveMappedFiles {
 										order.setChannelOrderID(channelorderid);
 										order.setProductSkuCode(productConfig
 												.getProductSkuCode());
+										order.setPartnerCommission(productConfig.getCommision());
 										duplicateKey.put(channelorderid, "");
 									} else {
 										errorMessage
@@ -1841,6 +1843,7 @@ public class SaveMappedFiles {
 								order.setChannelOrderID(channelorderid);
 								order.setProductSkuCode(productConfig
 										.getProductSkuCode());
+								order.setPartnerCommission(productConfig.getCommision());
 								duplicateKey
 										.put(channelorderid, "");
 							} else {
@@ -2561,6 +2564,7 @@ public class SaveMappedFiles {
 											order.setChannelOrderID(channelorderid);
 											order.setProductSkuCode(productConfig
 													.getProductSkuCode());
+											order.setPartnerCommission(productConfig.getCommision());
 											duplicateKey
 													.put(channelorderid, "");
 										} else {
@@ -4071,6 +4075,7 @@ public class SaveMappedFiles {
 										order.setChannelOrderID(channelorderid);
 										order.setProductSkuCode(productConfig
 												.getProductSkuCode());
+										order.setPartnerCommission(productConfig.getCommision());
 										duplicateKey.put(channelorderid, "");
 									} else {
 										errorMessage
@@ -5668,6 +5673,7 @@ public class SaveMappedFiles {
 								order.setChannelOrderID(id);
 								order.setProductSkuCode(productConfig
 										.getProductSkuCode());
+								order.setPartnerCommission(productConfig.getCommision());
 								duplicateKey.put(id, "");
 							} else {
 								order.setChannelOrderID(entry.getCell(index)
@@ -6731,6 +6737,7 @@ public class SaveMappedFiles {
 									order.setChannelOrderID(channelorderid);
 									order.setProductSkuCode(productConfig
 											.getProductSkuCode());
+									order.setPartnerCommission(productConfig.getCommision());
 									duplicateKey
 											.put(channelorderid, "");
 								} else {

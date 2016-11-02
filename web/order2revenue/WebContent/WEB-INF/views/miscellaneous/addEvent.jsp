@@ -303,7 +303,7 @@ span .#error {
 																<div id="collapseOne1" class="panel-collapse collapse">
 																	<div class="panel-body">
 																		<div class="col-sm-12">
-																			<div class="col-sm-6">
+																			<div class="col-sm-4">
 																				<div class="radio">
 																					<label> <form:radiobutton
 																							path="nrnReturnConfig.commissionType"
@@ -314,7 +314,7 @@ span .#error {
 																					</label>
 																				</div>
 																			</div>
-																			<div class="col-sm-6">
+																			<div class="col-sm-4">
 																				<div class="radio">
 																					<label> <form:radiobutton
 																							path="nrnReturnConfig.commissionType"
@@ -323,6 +323,17 @@ span .#error {
 																							name="commissionType" class="commissionType" />
 																						<!--  <input type="radio" value="5" id="optionsRadios1" name="toggler"> -->
 																						Category Wise
+																					</label>
+																				</div>
+																			</div>
+																			<div class="col-sm-4">
+																				<div class="radio">
+																					<label> <form:radiobutton
+																							path="nrnReturnConfig.commissionType"
+																							value="SKUWise" id="commisionType-SKUWise"
+																							name="commissionType" class="commissionType" />
+																						<!--       <input type="radio" value="4" id="optionsRadios1" name="toggler"> -->
+																						SKU Wise
 																					</label>
 																				</div>
 																			</div>
@@ -3134,6 +3145,9 @@ Custom and plugin javascript
 							else if ('${eventsBean.nrnReturnConfig.commissionType}' == 'categoryWise')
 								$("#commisionType-categoryWise").prop(
 										"checked", true).trigger("click");
+							else if ('${partner.nrnReturnConfig.commissionType}' == 'SKUWise')
+								$("#commisionType-SKUWise").prop(
+										"checked", true);
 
 							if ('${eventsBean.nrnReturnConfig.shippingFeeType}' == 'fixed')
 								$("#shippingfee-fixed").prop("checked", true)
