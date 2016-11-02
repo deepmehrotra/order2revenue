@@ -237,7 +237,8 @@ public class OrderController {
 	@RequestMapping(value = "/seller/uploadOrderDA", method = RequestMethod.GET)
 	public ModelAndView displayUploadForm(HttpServletRequest request, @RequestParam("value") String value,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
-
+		
+			
 		log.info("$$$ displayUploadForm Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();		
 		System.out.println("Inside Payment orders  viewpayments uploadId"
@@ -250,7 +251,29 @@ public class OrderController {
 		}		
 		log.info("$$$ displayUploadForm Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/order_upload_form", model);
+		//return new ModelAndView("initialsetup/listTaxablePurchases", model);
 	}
+	
+	
+	@RequestMapping(value = "/seller/uploadTaxablePurchasesDA", method = RequestMethod.GET)
+	public ModelAndView displayTaxablePurchasesUploadForm(HttpServletRequest request, @RequestParam("value") String value,
+			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
+
+		log.info("$$$ displayUploadForm Starts : OrderController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();		
+				
+		model.put("uploadValue", value);
+		try {
+			model.put("seller", sellerService.getSeller(helperClass.getSellerIdfromSession(request)));
+		} catch (Exception e) {
+			log.error("Failed to get Seller !", e);
+		}		
+		log.info("$$$ displayUploadForm Ends : OrderController $$$");
+		return new ModelAndView("dailyactivities/order_upload_form", model);
+		
+		
+	}	
+	
 
 	@RequestMapping(value = "/user-login", method = RequestMethod.GET)
 	public ModelAndView loginForm(HttpServletRequest request) {
@@ -288,6 +311,8 @@ public class OrderController {
 	public ModelAndView save(MultipartHttpServletRequest request,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
+		
+		
 		log.info("$$$ save() Starts : OrderController $$$");
 		
 		HttpSession session = request.getSession(true);
@@ -297,13 +322,18 @@ public class OrderController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		double starttime = System.currentTimeMillis();
 		log.debug(" **StartTime : " + starttime);
-		//List<MultipartFile> files = request.getFiles("0");
+		//List<MultipartFile> files = request.getFiles(0);
+			
 		List<MultipartFile> files = uploadForm.getFiles();
+		
+		
 
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
-		List<String> fileNames = new ArrayList<String>();		
-		MultipartFile fileinput = files.get(0);
+		List<String> fileNames = new ArrayList<String>();	
+		
+		
+		//MultipartFile fileinput = files.get(0);
 		UploadReport uploadReport = new UploadReport();
 		uploadReport.setUploadDate(new Date());
 		
@@ -328,7 +358,9 @@ public class OrderController {
 				// ValidateUpload.validateOfficeData(files.get(0));
 
 				Map orderProcessedMap = null;
-				log.debug("fileinput " + fileinput.getName());
+			//	log.debug("fileinput " + fileinput.getName());
+				
+				
 				switch (uploadForm.getSheetValue()) {
 				case "ordersummary":
 					orderProcessedMap = saveContents.saveOrderContents(
@@ -442,6 +474,16 @@ public class OrderController {
 							uploadReport));
 					model.put("mapType", "DlinkSkuMappingMap");
 					break;
+					
+				case "taxablePurchases_Mapping":	
+				
+					
+					model.put("taxablePurhcasesMapping", saveContents.saveTaxablePurchases(
+							files.get(0), sellerId, applicationPath,
+							uploadReport));
+					model.put("mapType", "taxablePurhcasesMap");
+					break;
+					
 				case "vendorSKUMapping":
 					model.put("vendorSKUMapping", saveContents.saveVendorSKUMappingContents(
 							files.get(0), sellerId, applicationPath,

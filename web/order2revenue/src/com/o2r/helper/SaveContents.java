@@ -62,6 +62,7 @@ import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.SellerAlerts;
 import com.o2r.model.TaxCategory;
+import com.o2r.model.TaxablePurchases;
 import com.o2r.model.UploadReport;
 import com.o2r.service.AlertsService;
 import com.o2r.service.CategoryService;
@@ -76,6 +77,7 @@ import com.o2r.service.ProductService;
 import com.o2r.service.ReportGeneratorService;
 import com.o2r.service.SellerService;
 import com.o2r.service.TaxDetailService;
+import com.o2r.service.TaxablePurchaseService;
 import com.o2r.service.UploadMappingService;
 
 @Service("saveContents")
@@ -113,7 +115,10 @@ public class SaveContents {
 	@Autowired
 	private CustomerService customerService;
 	@Autowired
-	private AlertsService alertService;
+	private AlertsService alertService;	
+	@Autowired
+	private TaxablePurchaseService taxablePurchaseService;
+	
 
 	private static final String UPLOAD_DIR = "UploadReport";
 
@@ -1793,6 +1798,135 @@ public class SaveContents {
 		return productConfigMap;
 	}
 
+	
+	
+	public Set<String> saveTaxablePurchases(MultipartFile file, int sellerId,
+			String path, UploadReport uploadReport) throws IOException {
+		log.info("$$$ saveInventoryGroups starts : SaveContents $$$");
+		boolean validaterow = true;
+		Set<String> errorSet = new HashSet<>();
+		StringBuffer errorMessage = null;
+		TaxablePurchases taxablePurchases = null;
+		String uploadFileName = "";
+		try {
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			HSSFRow entry;
+			Integer noOfEntries = 1;
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			log.info(noOfEntries.toString());
+			log.debug("After getting no of rows" + noOfEntries);
+			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
+				taxablePurchases = new TaxablePurchases();
+				try {
+					if (entry.getCell(0) != null
+							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						taxablePurchases.setTaxCategory(entry.getCell(0).toString());			
+						
+					} else {
+						errorMessage.append(" TaxablePurchases TaxCategory is null ");
+						validaterow = false;
+					}
+					
+					if (entry.getCell(1) != null
+							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						taxablePurchases.setTaxRate(Float.parseFloat(entry.getCell(1).toString()));							
+					} else {
+						errorMessage.append(" TaxablePurchases taxRate is null ");
+						validaterow = false;
+					}
+					
+					if (entry.getCell(2) != null
+							&& StringUtils.isNotBlank(entry
+									.getCell(2).toString())) {
+
+						try {
+							if (HSSFDateUtil
+									.isCellDateFormatted(entry
+											.getCell(2))) {
+								taxablePurchases.setPurchaseDate(entry
+										.getCell(2)
+										.getDateCellValue());
+							} else {
+								errorMessage
+										.append(" TaxablePurchases Purchase Date format is wrong ,enter mm/dd/yyyy ");
+								validaterow = false;
+							}
+						} catch (Exception e) {
+							errorMessage
+									.append(" TaxablePurchases Purchase Date format is wrong ,enter mm/dd/yyyy ");
+							validaterow = false;
+						}
+					} else {
+						errorMessage
+								.append(" TaxablePurchases Purchase Date is null ");
+						validaterow = false;
+					}
+					
+					if (entry.getCell(3) != null
+							&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						taxablePurchases.setParticular(entry.getCell(3).toString());							
+					} else {
+						errorMessage.append(" Particular is null ");
+						validaterow = false;
+					}
+					
+					
+					if (entry.getCell(4) != null
+							&& entry.getCell(4).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						taxablePurchases.setBasicPrice(Double.parseDouble(entry.getCell(4).toString()));	
+						
+						taxablePurchases.setTaxAmount(Double.parseDouble(entry.getCell(4).toString())*((Double.parseDouble(entry.getCell(1).toString()))/100));							
+						
+						taxablePurchases.setTotalAmount(Double.parseDouble(entry.getCell(4).toString())+ taxablePurchases.getTaxAmount());
+						
+					} else {
+						errorMessage.append(" TaxablePurchases taxRate is null ");
+						validaterow = false;
+					}					
+
+					
+					
+
+					if (validaterow) {						
+						Date dt = new Date();
+						taxablePurchases.setCreatedDate(dt);
+						taxablePurchaseService.addTaxablePurchase(taxablePurchases, sellerId);
+					} else {
+						errorSet.add(errorMessage.toString());
+					}
+					
+				} catch (Exception e) {
+					log.error("Failed! by SellerId : " + sellerId, e);
+				}
+			}
+			//saveMappedFiles.uploadResultXLS(offices, "TaxablePurchases_Mapping", uploadFileName,errorSet, path, sellerId, uploadReport);
+			
+			//Set<String> errorSet = returnProductConfigMap.keySet();
+			downloadUploadReportXLS(offices, "TaxablePurchases_Mapping", uploadFileName, 5, errorSet, path, sellerId, uploadReport);
+			
+			
+			
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			log.error("Failed! by SellerId : " + sellerId, e);
+			addErrorUploadReport("TaxablePurchases_Mapping", sellerId,
+					uploadReport);
+			throw new MultipartException("Constraints Violated");
+		}
+		log.info("$$$ saveInventoryGroups ends : SaveContents $$$");
+		return errorSet;
+	}
+	
+	
 	// My coding Product Config *********
 
 	public Set<String> saveInventoryGroups(MultipartFile file, int sellerId,
@@ -1857,6 +1991,8 @@ public class SaveContents {
 
 			saveMappedFiles.uploadResultXLS(offices, "Create_Inventory_Group", uploadFileName,
 					errorSet, path, sellerId, uploadReport);
+			
+			
 		} catch (Exception e) {
 
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -3810,12 +3946,15 @@ public class SaveContents {
 				errorMessage = errorMessage
 						.substring(errorMessage.indexOf(':') + 1);
 
+				System.out.println(" The column number ========================="+colNumber);
 				if (errorMessage.length() > 5) {
 					isError = true;
 					row = worksheet.getRow(errorRow + 2);
+					if(row!=null){
 					cell = row.createCell(colNumber);
 					cell.setCellValue(errorMessage);
 					cell.setCellStyle(errorCellStyle);
+					}
 				}
 			}
 
