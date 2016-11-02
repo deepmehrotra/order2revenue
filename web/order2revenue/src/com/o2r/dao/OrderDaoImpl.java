@@ -5517,8 +5517,9 @@ System.out.println(" Retunrr Type : "+returnType);
 	}
 
 	@Override
-	public List<String> listOrderIds(String OrderCriteria, int sellerId) {
-		List<String> idsList = null;
+	public Map<String, String> listOrderIds(String OrderCriteria, int sellerId) {
+		Map<String, String> idsList = new HashMap<String, String>();
+		List<Object> results = null;
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
@@ -5527,9 +5528,17 @@ System.out.println(" Retunrr Type : "+returnType);
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN).add(
 					Restrictions.eq("seller.id", sellerId));
-			criteria.setProjection(Projections.property(OrderCriteria));
-			idsList = criteria.list();
-
+			ProjectionList projList = Projections.projectionList();
+			projList.add(Projections.property(OrderCriteria));
+			projList.add(Projections.property("subOrderID"));
+			criteria.setProjection(projList);
+			results = criteria.list();
+			if(results != null) {
+				for(Object obj : results){
+					Object[] item = (Object[]) obj;
+					idsList.put(item[0].toString(), item[1].toString());
+				}
+			}
 		} catch (Exception e) {
 			log.error("Failed by Seller ID : " + sellerId, e);
 			e.printStackTrace();

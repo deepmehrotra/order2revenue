@@ -139,7 +139,7 @@ public class SaveContents {
 		Events event = null;
 		String uploadFileName = "";
 		List<Order> saveList = null;
-		List<String> idsList = new ArrayList<String>();		
+		Map<String, String> idsList = new HashMap<String, String>();		
 		Map<String, String> duplicateKey = new HashMap<String, String>();
 		try {			
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -169,6 +169,7 @@ public class SaveContents {
 					log.debug(entry.getCell(2));
 					TaxCategory taxcat = null;
 					String channelID = null;
+					String itemId = null;
 					Product product = null;
 					order = new OrderBean();
 					customerBean = new CustomerBean();
@@ -243,7 +244,54 @@ public class SaveContents {
 
 							System.out.println(" Channel id wiht parent sku : "
 									+ channelID);
-							if (channelID != null
+							
+							
+							
+							if (entry.getCell(8) != null
+									&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								entry.getCell(8).setCellType(HSSFCell.CELL_TYPE_STRING);
+								itemId = entry.getCell(8).toString();
+								if (itemId.contains("'")) {
+									itemId = removeExtraQuote(itemId);
+								}
+								itemId = removeExtraQuote(itemId);
+								order.setSubOrderID(itemId);									
+							}
+							if(!idsList.containsKey(channelID)
+									&& !duplicateKey.containsKey(channelID)){
+								order.setChannelOrderID(channelID);
+								if (productConfig != null)
+									order.setProductSkuCode(productConfig
+											.getProductSkuCode());
+								else
+									order.setProductSkuCode(skuCode);
+								duplicateKey.put(channelID, "");
+							} else {
+								if(itemId != null && ((idsList.get(channelID) != null 
+										&& !idsList.get(channelID).equals(itemId))
+										|| duplicateKey.containsKey(channelID))){
+									channelID = channelID + GlobalConstant.orderUniqueSymbol + itemId;
+									if(!idsList.containsKey(channelID)
+											&& !duplicateKey.containsKey(channelID)){
+										order.setChannelOrderID(channelID);
+										if (productConfig != null)
+											order.setProductSkuCode(productConfig.getProductSkuCode());
+										else
+											order.setProductSkuCode(skuCode);
+										duplicateKey.put(channelID, "");
+									} else {
+										errorMessage.append("Channel Order Id is Already Present.");
+										validaterow = false;
+									}
+								} else {
+									errorMessage.append("Channel Order Id is Already Present.");
+									validaterow = false;
+								}												
+							}
+							
+							
+							
+							/*if (channelID != null
 									&& !idsList.contains(channelID)
 									&& !duplicateKey.containsKey(channelID)) {
 
@@ -273,7 +321,7 @@ public class SaveContents {
 
 									validaterow = false;
 								}
-							}
+							}*/
 						}
 					} else {
 						errorMessage.append(" Channel OrderId or SKU is NULL");
@@ -350,7 +398,7 @@ public class SaveContents {
 					} else {
 						order.setInvoiceID(GlobalConstant.randomNo());
 					}
-					if (entry.getCell(8) != null
+					/*if (entry.getCell(8) != null
 							&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						entry.getCell(8).setCellType(HSSFCell.CELL_TYPE_STRING);
 
@@ -408,7 +456,7 @@ public class SaveContents {
 									.append(" Secondary OrderID is mandatory");
 							validaterow = false;
 						}
-					}
+					}*/
 					if (entry.getCell(9) != null
 							&& entry.getCell(9).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						order.setPIreferenceNo(entry.getCell(9).toString());

@@ -113,7 +113,7 @@ public class SaveMappedFiles {
 		Partner partner = null;
 		Events event = null;
 		List<Order> saveList = new ArrayList<Order>();
-		List<String> idsList = new ArrayList<String>();
+		Map<String, String> idsList = new HashMap<String, String>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
 		int noOfEntries = 1;
@@ -165,6 +165,7 @@ public class SaveMappedFiles {
 				customerBean = new CustomerBean();
 				otb = new OrderTaxBean();
 				int index = 0;
+				String itemID = null;
 				String channelID = "";
 				String sku = "";
 				Product product = null;
@@ -285,37 +286,47 @@ public class SaveMappedFiles {
 														idIndex).toString()
 														+ GlobalConstant.orderUniqueSymbol
 														+ sku;
+											}	
+											
+											if (cellIndexMap.get(columHeaderMap
+													.get("Secondary OrderID")) != null) {
+												index = cellIndexMap.get(columHeaderMap.get("Secondary OrderID"));
+												if (entry.getCell(index) != null
+														&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+													entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+													itemID = entry.getCell(index).toString();
+													if (itemID.contains("'")) {
+														itemID = removeExtraQuote(itemID);
+													}
+													itemID = removeExtraQuote(itemID);
+													order.setSubOrderID(itemID);
+												}
 											}
-											if (channelID != null) {
-												if (idsList == null
-														|| (!idsList
-																.contains(channelID))
-														&& !duplicateKey
-																.containsKey(channelID)) {
-													if (productConfig != null) {
+											if(!idsList.containsKey(channelID)
+													&& !duplicateKey.containsKey(channelID)){
+												order.setChannelOrderID(channelID);
+												if (productConfig != null)
+													order.setProductSkuCode(productConfig.getProductSkuCode());												
+												duplicateKey.put(channelID, "");
+											} else {
+												if(itemID != null && ((idsList.get(channelID) != null 
+														&& !idsList.get(channelID).equals(itemID))
+														|| duplicateKey.containsKey(channelID))){
+													channelID = channelID + GlobalConstant.orderUniqueSymbol + itemID;
+													if(!idsList.containsKey(channelID)
+															&& !duplicateKey.containsKey(channelID)){
 														order.setChannelOrderID(channelID);
-														order.setProductSkuCode(productConfig
-																.getProductSkuCode());
-
-														if (!(partner
-																.getPcName()
-																.toLowerCase()
-																.contains(
-																		GlobalConstant.PCFLIPKART) || partner
-																.getPcName()
-																.toLowerCase()
-																.contains(
-																		GlobalConstant.PCPAYTM))) {
-															duplicateKey.put(
-																	channelID,
-																	"");
-														}
+														if (productConfig != null)
+															order.setProductSkuCode(productConfig.getProductSkuCode());														
+														duplicateKey.put(channelID, "");
+													} else {
+														errorMessage.append("Channel Order Id is Already Present.");
+														validaterow = false;
 													}
 												} else {
-													errorMessage
-															.append(" Channel OrderId is already present ");
+													errorMessage.append("Channel Order Id is Already Present.");
 													validaterow = false;
-												}
+												}												
 											}
 										}
 									} catch (Exception e) {
@@ -341,16 +352,14 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 
-					if (cellIndexMap.get(columHeaderMap
+					/*if (cellIndexMap.get(columHeaderMap
 							.get("Secondary OrderID")) != null) {
 						index = cellIndexMap.get(columHeaderMap
 								.get("Secondary OrderID"));
 						if (partner != null) {
 							if (entry.getCell(index) != null
 									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-								entry.getCell(index).setCellType(
-										HSSFCell.CELL_TYPE_STRING);
-
+								entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 								String itemID = entry.getCell(index).toString();
 								if (itemID.contains("'")) {
 									itemID = removeExtraQuote(itemID);
@@ -439,7 +448,7 @@ public class SaveMappedFiles {
 								validaterow = false;
 							}
 						}
-					}
+					}*/
 
 					try {
 						index = cellIndexMap.get(columHeaderMap
@@ -996,7 +1005,7 @@ public class SaveMappedFiles {
 		Partner partner = null;
 		Events event = null;
 		List<Order> saveList = new ArrayList<Order>();
-		List<String> idsList = new ArrayList<String>();
+		Map<String, String> idsList = new HashMap<String, String>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
 		int noOfEntries = 1;
@@ -1170,7 +1179,7 @@ public class SaveMappedFiles {
 											+ order.getSubOrderID();
 									
 											if (idsList == null || !idsList
-													.contains(channelorderid)
+													.containsKey(channelorderid)
 													&& !duplicateKey
 															.containsKey(channelorderid)
 													&& productConfig != null) {
@@ -1679,7 +1688,7 @@ public class SaveMappedFiles {
 		Events event = null;
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		List<Order> saveList = new ArrayList<Order>();
-		List<String> idsList = new ArrayList<String>();
+		Map<String, String> idsList = new HashMap<String, String>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
 		int noOfEntries = 1;
@@ -1854,7 +1863,7 @@ public class SaveMappedFiles {
 										+ GlobalConstant.orderUniqueSymbol
 										+ order.getSubOrderID();
 									if( (idsList == null || !idsList
-											.contains(channelorderid)
+											.containsKey(channelorderid)
 											&& !duplicateKey
 													.containsKey(channelorderid)
 											&& productConfig != null)) {
@@ -2416,7 +2425,7 @@ public class SaveMappedFiles {
 		Partner partner = null;
 		Events event = null;
 		List<Order> saveList = new ArrayList<Order>();
-		List<String> idsList = new ArrayList<String>();
+		Map<String, String> idsList = new HashMap<String, String>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
 		int noOfEntries = 1;
@@ -2464,6 +2473,7 @@ public class SaveMappedFiles {
 				customerBean = new CustomerBean();
 				otb = new OrderTaxBean();
 				int index = 0;
+				String itemId = null;
 				ProductConfig productConfig = null;
 				List<ProductConfig> productConfigs = null;
 				String channelorderid = "";
@@ -2568,22 +2578,47 @@ public class SaveMappedFiles {
 													.append(" Vendor SKU code not mapped.");
 											validaterow = false;
 										}
-										if ((channelorderid != null)
-												&& (idsList == null || !idsList
-														.contains(channelorderid)
-														&& !duplicateKey
-																.containsKey(channelorderid)
-														&& productConfig != null)) {
-											order.setChannelOrderID(channelorderid);
-											order.setProductSkuCode(productConfig
-													.getProductSkuCode());
-											duplicateKey
-													.put(channelorderid, "");
-										} else {
-											errorMessage
-													.append(" Channel OrderId is already present ");
-											validaterow = false;
+										
+										if (cellIndexMap.get(columHeaderMap
+												.get("Secondary OrderID")) != null) {
+											index = cellIndexMap.get(columHeaderMap
+													.get("Secondary OrderID"));
+											if (entry.getCell(index) != null
+													&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+												entry.getCell(index).setCellType(
+														HSSFCell.CELL_TYPE_STRING);
+												order.setSubOrderID(entry.getCell(index).toString());
+												itemId = entry.getCell(index).toString();
+											}
 										}
+										
+										if(!idsList.containsKey(channelorderid)
+												&& !duplicateKey.containsKey(channelorderid)
+												&& productConfig != null){
+											order.setChannelOrderID(channelorderid);
+											duplicateKey.put(channelorderid, "");
+											order.setProductSkuCode(productConfig.getProductSkuCode());
+										} else {
+											if(itemId != null && ((idsList.get(channelorderid) != null 
+													&& !idsList.get(channelorderid).equals(itemId))
+													|| duplicateKey.containsKey(channelorderid))
+													&& productConfig != null){
+												channelorderid = channelorderid + GlobalConstant.orderUniqueSymbol + itemId;
+												if(!idsList.containsKey(channelorderid)
+														&& !duplicateKey.containsKey(channelorderid)){
+													order.setChannelOrderID(channelorderid);
+													duplicateKey.put(channelorderid, "");
+													order.setProductSkuCode(productConfig.getProductSkuCode());
+												} else {
+													errorMessage.append("Channel Order Id is Already Present.");
+													validaterow = false;
+												}
+											} else {
+												errorMessage.append("Channel Order Id is Already Present.");
+												validaterow = false;
+											}												
+										}
+										
 									} catch (Exception e) {
 
 									}
@@ -3938,7 +3973,7 @@ public class SaveMappedFiles {
 		Partner partner = null;
 		Events event = null;
 		List<Order> saveList = new ArrayList<Order>();
-		List<String> idsList = new ArrayList<String>();
+		Map<String, String> idsList = new HashMap<String, String>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
 		int noOfEntries = 1;
@@ -4076,7 +4111,7 @@ public class SaveMappedFiles {
 									}
 									if ((channelorderid != null)
 											&& (idsList == null || !idsList
-													.contains(channelorderid)
+													.containsKey(channelorderid)
 													&& !duplicateKey
 															.containsKey(channelorderid)
 													&& productConfig != null)) {
@@ -4123,7 +4158,7 @@ public class SaveMappedFiles {
 										+ order.getSubOrderID();
 								if ((channelorderid != null)
 										&& (idsList == null || !idsList
-												.contains(channelorderid)
+												.containsKey(channelorderid)
 												&& !duplicateKey
 														.containsKey(channelorderid)
 												&& productConfig != null)) {
@@ -5510,7 +5545,7 @@ public class SaveMappedFiles {
 		Partner partner = null;
 		Events event = null;
 		List<Order> saveList = new ArrayList<Order>();
-		List<String> idsList = new ArrayList<String>();
+		Map<String, String> idsList = new HashMap<String, String>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
 		int noOfEntries = 1;
@@ -5559,6 +5594,7 @@ public class SaveMappedFiles {
 				otb = new OrderTaxBean();
 				int index = 0;
 				Product product = null;
+				String itemId = null;
 				ProductConfig productConfig = null;
 				List<ProductConfig> productConfigs = null;
 				TaxCategory taxcat = null;
@@ -5669,21 +5705,47 @@ public class SaveMappedFiles {
 									validaterow = false;
 								}
 							}
-
-							if (idsList == null || !idsList.contains(id)
+							
+							if (cellIndexMap.get(columHeaderMap
+									.get("Secondary OrderID")) != null) {
+								index = cellIndexMap.get(columHeaderMap
+										.get("Secondary OrderID"));
+								if (entry.getCell(index) != null
+										&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+									entry.getCell(index).setCellType(
+											HSSFCell.CELL_TYPE_STRING);
+									order.setSubOrderID(entry.getCell(index).toString());
+									itemId = entry.getCell(index).toString();
+								}
+							}							
+							
+							if(!idsList.containsKey(id)
 									&& !duplicateKey.containsKey(id)
-									&& productConfig != null) {
+									&& productConfig != null){
 								order.setChannelOrderID(id);
-								order.setProductSkuCode(productConfig
-										.getProductSkuCode());
 								duplicateKey.put(id, "");
+								order.setProductSkuCode(productConfig.getProductSkuCode());
 							} else {
-								order.setChannelOrderID(entry.getCell(index)
-										.toString());
-								errorMessage
-										.append(" Channel OrderId is already present. ");
-								validaterow = false;
+								if(itemId != null && ((idsList.get(id) != null 
+										&& !idsList.get(id).equals(itemId))
+										|| duplicateKey.containsKey(id))
+										&& productConfig != null){
+									id = id + GlobalConstant.orderUniqueSymbol + itemId;
+									if(!idsList.containsKey(id)
+											&& !duplicateKey.containsKey(id)){
+										order.setChannelOrderID(id);
+										duplicateKey.put(id, "");
+										order.setProductSkuCode(productConfig.getProductSkuCode());
+									} else {
+										errorMessage.append("Channel Order Id is Already Present.");
+										validaterow = false;
+									}
+								} else {
+									errorMessage.append("Channel Order Id is Already Present.");
+									validaterow = false;
+								}												
 							}
+							
 						} else {
 							errorMessage.append(" Channel OrderId is null ");
 							validaterow = false;
@@ -5812,18 +5874,7 @@ public class SaveMappedFiles {
 					} catch (Exception e) {
 						order.setInvoiceID(GlobalConstant.randomNo());
 					}
-
-					if (cellIndexMap.get(columHeaderMap
-							.get("Secondary OrderID")) != null) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Secondary OrderID"));
-						if (entry.getCell(index) != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(
-									HSSFCell.CELL_TYPE_STRING);
-							order.setSubOrderID(entry.getCell(index).toString());
-						}
-					}
+					
 					if (cellIndexMap.get(columHeaderMap.get("PIreferenceNo")) != null) {
 						index = cellIndexMap.get(columHeaderMap
 								.get("PIreferenceNo"));
@@ -6446,7 +6497,7 @@ public class SaveMappedFiles {
 		Partner partner = null;
 		Events event = null;
 		List<Order> saveList = new ArrayList<Order>();
-		List<String> idsList = new ArrayList<String>();
+		Map<String, String> idsList = new HashMap<String, String>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
 		int noOfEntries = 1;
@@ -6724,20 +6775,20 @@ public class SaveMappedFiles {
 											+ GlobalConstant.orderUniqueSymbol
 											+ order.getSubOrderID();
 										if( (idsList == null || !idsList
-												.contains(channelorderid)
+												.containsKey(channelorderid)
 												&& !duplicateKey
 														.containsKey(channelorderid)
 												&& productConfig != null)) {
-									order.setChannelOrderID(channelorderid);
-									order.setProductSkuCode(productConfig
-											.getProductSkuCode());
-									duplicateKey
-											.put(channelorderid, "");
-								} else {
-									errorMessage
-											.append(" Channel OrderId is already present ");
-									validaterow = false;
-								}
+										order.setChannelOrderID(channelorderid);
+										order.setProductSkuCode(productConfig
+												.getProductSkuCode());
+										duplicateKey
+												.put(channelorderid, "");
+									} else {
+										errorMessage
+												.append(" Channel OrderId is already present ");
+										validaterow = false;
+									}
 								}
 							}
 						} else {

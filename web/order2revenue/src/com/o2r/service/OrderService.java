@@ -2,6 +2,7 @@ package com.o2r.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.DebitNoteBean;
@@ -127,7 +128,7 @@ public interface OrderService {
 	
 	public int poOrdersCount(int sellerId);
 	
-	public List<String> listOrderIds(String criteria,int sellerId);
+	public Map<String, String> listOrderIds(String criteria,int sellerId);
 	
 	public List<Order> searchAsIsOrder(String criteria, String ID, int sellerId);
 	
