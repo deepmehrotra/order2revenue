@@ -203,7 +203,7 @@
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
                                 <h5>Top Selling SKU</h5>
-                                <a href="viewDetails.html" onclick="onclickdashboard()">MoreSKU</a>&nbsp;&nbsp;&nbsp;
+                              
                             </div>
                             <div class="ibox-content">
                              <div class="slim-scroll-bar">
@@ -234,7 +234,7 @@
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
                                 <h5>Top Selling Regions(6 months)</h5>
-                                <a href="topSkuCityDetails.html" onclick="onclickdashboard()">MoreSKUCity</a>&nbsp;&nbsp;&nbsp;
+                               
                             </div>
                             <div class="ibox-content">
                              <div class="slim-scroll-bar">
