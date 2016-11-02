@@ -348,8 +348,7 @@ public class SaveContents {
 						entry.getCell(7).setCellType(HSSFCell.CELL_TYPE_STRING);
 						order.setInvoiceID(entry.getCell(7).toString());
 					} else {
-						errorMessage.append(" Invoice ID is null;");
-						validaterow = false;
+						order.setInvoiceID(GlobalConstant.randomNo());
 					}
 					if (entry.getCell(8) != null
 							&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {

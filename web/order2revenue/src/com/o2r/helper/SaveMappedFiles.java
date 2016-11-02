@@ -716,14 +716,10 @@ public class SaveMappedFiles {
 									HSSFCell.CELL_TYPE_STRING);
 							order.setInvoiceID(entry.getCell(index).toString());
 						} else {
-							order.setInvoiceID(entry.getCell(index).toString());
-							errorMessage.append(" Invoice ID is null;");
-							validaterow = false;
+							order.setInvoiceID(GlobalConstant.randomNo());							
 						}
 					} catch (Exception e) {
-						errorMessage
-								.append("The column 'Invoice ID' doesn't exist");
-						validaterow = false;
+						order.setInvoiceID(GlobalConstant.randomNo());
 					}
 
 					if (cellIndexMap.get(columHeaderMap.get("AWB No")) != null) {
@@ -787,16 +783,43 @@ public class SaveMappedFiles {
 								order.setShippedDate(new Date(date));
 							} catch (Exception e) {
 								errorMessage
-										.append(" Shipped Date formate is wrong ,enter mm/dd/yyyy,");
+										.append(" Shipped Date format is wrong ,enter mm/dd/yyyy,");
 								validaterow = false;
 							}
 						} else {
-							errorMessage.append(" Shipping Date is null ");
-							validaterow = false;
+							index = cellIndexMap.get(columHeaderMap.get("Updated Date"));
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									String dateStr = entry.getCell(index)
+											.toString();
+									String date = "";
+									if (dateStr.contains("T")) {
+										date = entry
+												.getCell(index)
+												.toString()
+												.substring(
+														0,
+														entry.getCell(index)
+																.toString()
+																.indexOf("T"));
+									} else {
+										date = entry.getCell(index).toString();
+									}
+									order.setShippedDate(new Date(date));
+								} catch (Exception e) {
+									errorMessage
+											.append("Updated Date format is wrong ,enter mm/dd/yyyy,");
+									validaterow = false;
+								}
+							} else {
+								errorMessage.append(" Shipping Date and Updated column is null.");
+								validaterow = false;
+							}
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Order Shipped Date' doesn't exist");
+								.append("The column 'Dispatch Date/Updated' doesn't exist.");
 						validaterow = false;
 					}
 
@@ -1278,13 +1301,10 @@ public class SaveMappedFiles {
 									HSSFCell.CELL_TYPE_STRING);
 							order.setInvoiceID(entry.getCell(index).toString());
 						} else {
-							errorMessage.append(" Invoice ID is null;");
-							validaterow = false;
+							order.setInvoiceID(GlobalConstant.randomNo());
 						}
 					} catch (Exception e) {
-						errorMessage
-								.append("The column 'Invoice No.' doesn't exist");
-						validaterow = false;
+						order.setInvoiceID(GlobalConstant.randomNo());
 					}
 
 					if (cellIndexMap.get(columHeaderMap.get("PIreferenceNo")) != null) {
@@ -2135,14 +2155,10 @@ public class SaveMappedFiles {
 									HSSFCell.CELL_TYPE_STRING);
 							order.setInvoiceID(entry.getCell(index).toString());
 						} else {
-							order.setInvoiceID(entry.getCell(index).toString());
-							errorMessage.append(" Invoice ID is null;");
-							validaterow = false;
+							order.setInvoiceID(GlobalConstant.randomNo());
 						}
 					} catch (Exception e) {
-						errorMessage
-								.append("The column 'Invoice ID' doesn't exist");
-						validaterow = false;
+						order.setInvoiceID(GlobalConstant.randomNo());
 					}
 
 					if (cellIndexMap.get(columHeaderMap.get("AWB No")) != null) {
@@ -2754,14 +2770,10 @@ public class SaveMappedFiles {
 									HSSFCell.CELL_TYPE_STRING);
 							order.setInvoiceID(entry.getCell(index).toString());
 						} else {
-							order.setInvoiceID(entry.getCell(index).toString());
-							errorMessage.append(" Invoice ID is null;");
-							validaterow = false;
+							order.setInvoiceID(GlobalConstant.randomNo());
 						}
 					} catch (Exception e) {
-						errorMessage
-								.append("The column 'Invoice Code' doesn't exist");
-						validaterow = false;
+						order.setInvoiceID(GlobalConstant.randomNo());
 					}
 
 					if (cellIndexMap.get(columHeaderMap
@@ -4254,14 +4266,10 @@ public class SaveMappedFiles {
 									HSSFCell.CELL_TYPE_STRING);
 							order.setInvoiceID(entry.getCell(index).toString());
 						} else {
-							// order.setInvoiceID(entry.getCell(index).toString());
-							errorMessage.append(" Invoice ID is null;");
-							validaterow = false;
+							order.setInvoiceID(GlobalConstant.randomNo());
 						}
 					} catch (Exception e) {
-						errorMessage
-								.append("The column 'invoice_id' doesn't exist");
-						validaterow = false;
+						order.setInvoiceID(GlobalConstant.randomNo());
 					}
 
 					if (cellIndexMap.get(columHeaderMap.get("PIreferenceNo")) != null) {
@@ -5799,14 +5807,10 @@ public class SaveMappedFiles {
 									HSSFCell.CELL_TYPE_STRING);
 							order.setInvoiceID(entry.getCell(index).toString());
 						} else {
-							order.setInvoiceID(entry.getCell(index).toString());
-							errorMessage.append(" Invoice ID is null;");
-							validaterow = false;
+							order.setInvoiceID(GlobalConstant.randomNo());
 						}
 					} catch (Exception e) {
-						errorMessage
-								.append("The column 'Invoice No.' doesn't exist");
-						validaterow = false;
+						order.setInvoiceID(GlobalConstant.randomNo());
 					}
 
 					if (cellIndexMap.get(columHeaderMap
@@ -6698,14 +6702,10 @@ public class SaveMappedFiles {
 									HSSFCell.CELL_TYPE_STRING);
 							order.setInvoiceID(entry.getCell(index).toString());
 						} else {
-							order.setInvoiceID(entry.getCell(index).toString());
-							errorMessage.append(" Invoice ID is null;");
-							validaterow = false;
+							order.setInvoiceID(GlobalConstant.randomNo());
 						}
 					} catch (Exception e) {
-						errorMessage
-								.append("The column 'Invoice No.' doesn't exist");
-						validaterow = false;
+						order.setInvoiceID(GlobalConstant.randomNo());
 					}
 
 					try {

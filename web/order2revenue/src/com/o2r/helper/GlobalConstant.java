@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class GlobalConstant {
@@ -358,6 +359,7 @@ public class GlobalConstant {
 			add("Order SP");
 			add("Shipping PinCode");
 			add("Order Shipped Date");
+			add("Updated Date");
 			add("Sales Channel");
 			add("O2R Channel");
 			add("Payment Type");
@@ -1486,5 +1488,18 @@ public class GlobalConstant {
 			return "0 second ago";
 		else
 			return res.toString();
+	}
+	
+	public static String randomNo(){		
+		String id = "";
+		Random random=new Random();
+		try {
+			int r1=random.nextInt((9999 - 1111) + 1) + 1111;
+			int r2=random.nextInt((9999 - 1111) + 1) + 1111;
+			id="O2R"+r1+r2;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return id;
 	}
 }
