@@ -5598,6 +5598,8 @@ public class SaveMappedFiles {
 
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
+							entry.getCell(skuIndex).setCellType(
+									HSSFCell.CELL_TYPE_STRING);
 							String id = "";
 							if (partner != null) {
 								productConfigs = productService
@@ -5683,7 +5685,7 @@ public class SaveMappedFiles {
 								validaterow = false;
 							}
 						} else {
-							errorMessage.append(" Channel OrderId is null ");
+							errorMessage.append(" Channel OrderId orSKU code is null ");
 							validaterow = false;
 						}
 					} catch (NullPointerException e) {
