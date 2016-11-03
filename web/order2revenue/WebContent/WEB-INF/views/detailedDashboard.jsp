@@ -31,9 +31,24 @@
 .widget.style1 h2 {
 	font-size: 11px;
 }
+.widget.style1 h3 {
+	font-size: 14px;
+}
 .netValue{
-	background: #2a9c2e;
+	background: burlywood;
 	color : #fff;
+}
+.colour {
+	color: #fff;
+}
+.span
+{
+	color: #fff;
+    font-size: 14px;
+}
+.table td
+{
+	color:#fff;
 }
 </style>
 <script type="text/javascript">
@@ -56,7 +71,7 @@
       <div class="wrapper wrapper-content animated fadeInRight white-bg">
       		<div class="col-sm-12"><a href="orderindex.html" 
       			class="btn-primary btn-xs" style="margin: 0px 0px 0px -15px;position: relative;top: -6px;background-color: #293846;">NORMAL VIEW</a></div>
-            <div class="col-lg-12 m-b" style="background: darkgray;padding: 16px;">
+            <div class="col-lg-12 m-b" style="background: #286265;padding: 16px;">
                 <div class="col-lg-6">
                     <div data-toggle="buttons" class="btn-group">
                         <label class="btn btn-sm btn-white" onclick="grossMarginCall('Today');"> <input type="radio" > Today </label>
@@ -69,10 +84,10 @@
                 </div>
                 <div class="col-lg-12">
 		            <div class="col-lg-3">
-		                <div class="widget style1">		                    
+		                <div class="widget style1" style="padding: 16px 0px 0px 0px;">		                    
 		                    <div class="col-xs-8 text-center" style="color: #fff;">
-		                    	<span>Gross Margin</span>
-		                        <h3 class="font-bold" id="grossMarginPeriod"></h3>		                        
+		                    	<h3 class="font-bold">Gross Margin</h3>
+		                        <h3 class="font-bold span" id="grossMarginPeriod"></h3>		                        
 		                    </div>    
 		                </div>
 		            </div>
@@ -130,7 +145,7 @@
 		            </div>		            
 		        </div>
 	         </div>
-            <div class="col-lg-12 m-b" style="background: currentColor;padding: 16px;">
+            <div class="col-lg-12 m-b" style="background: #286265;padding: 16px;">
                 <div class="col-lg-6">
                     <div data-toggle="buttons" class="btn-group">
                         <label class="btn btn-sm btn-white" onclick="ActualSale('Today');"> <input type="radio" > Today </label>
@@ -143,10 +158,10 @@
                 </div>
                 <div class="col-lg-12">
 		            <div class="col-lg-3">
-		                <div class="widget style1">		                    
+		                <div class="widget style1" style="padding: 16px 0px 0px 0px;">		                    
 		                    <div class="col-xs-8 text-center" style="color:#fff;">
-		                        <span>Actual Sale</span>
-		                        <h3 class="font-bold" id="ActualSalePeriod"></h3>
+		                        <h3 class="font-bold">Actual Sale</h3>
+		                        <h3 class="font-bold span" id="ActualSalePeriod"></h3>
 		                    </div>    
 		                </div>
 		            </div>
@@ -204,7 +219,7 @@
 		            </div>
 		        </div>
 	        </div>
-	        <div class="col-lg-12 m-b" style="background: currentColor;padding: 16px;">
+	        <div class="col-lg-12 m-b" style="background: #286265;padding: 16px;">
                 <div class="col-lg-6">
                     <div data-toggle="buttons" class="btn-group">
                         <label class="btn btn-sm btn-white" onclick="taxFreeSale('Today');"> <input type="radio" > Today </label>
@@ -217,10 +232,10 @@
                 </div>
                 <div class="col-lg-12">
 		            <div class="col-lg-3">
-		                <div class="widget style1">		                    
+		                <div class="widget style1" style="padding: 16px 0px 0px 0px;">		                    
 		                    <div class="col-xs-8 text-center" style="color:#fff;">
-		                        <span>Tax Free Sale</span>
-		                        <h2 class="font-bold" id="taxFreeSalePeriod"></h2>
+		                        <h3 class="font-bold">Tax Free Sale</h3>
+		                        <h3 class="font-bold span" id="taxFreeSalePeriod"></h3>
 		                    </div>    
 		                </div>
 		            </div>
@@ -280,11 +295,11 @@
 	        </div>
 	        <div class="row">
 	            <div class="col-lg-12 m-b">
-	            	<div class="col-sm-6" style="background: #a9a9a9;padding: 16px;">
-		                <div class="col-lg-3" style="color: #fff;">
-		                    Taxable Sale
+	            	<div class="col-sm-6" style="background: #666;padding: 16px;">
+		                <div class="col-lg-6" style="color: #fff;">
+		                    <h3 class="font-bold">Taxable Sale</h3>
 		                </div>
-		                <div class="col-lg-9">
+		                <div class="col-lg-6">
 		                    <div data-toggle="buttons" class="btn-group">
 				                <label class="btn btn-sm btn-white" onclick="taxableSale('Today');"> <input type="radio" > Today </label>
 		                        <label class="btn btn-sm btn-white" onclick="taxableSale('Monthly');"> <input type="radio" > Monthly </label>
@@ -292,59 +307,61 @@
 		                        <label class="btn btn-sm btn-white" onclick="taxableSale('Yearly');"> <input type="radio"> Annually </label>
 		                    </div>
 		                </div>
-			            <div class="col-lg-3">
-			                <div class="widget style1">
-	                            <div class="col-lg-12 col-xs-12" style="color: #fff;">
-	                                <span></span>
-	                                <h2 class="font-bold" id="taxableSalePeriod"></h2>
-	                            </div>
-			                </div>
-			            </div>
-			            <div class="col-lg-3">
-			                <div class="widget style1 navy-bg">
-			                    <div class="row">
-			                        <div class="col-xs-12 text-center">
-			                            <img src="/O2R/seller/img/gross.png" alt="gross">
-			                        </div>
-			                        <div class="col-xs-12 text-center">
-			                            <span> Gross Value</span>
-			                            <h5 class="font-bold" id="taxableSaleGV"></h5>
-			                        </div>
-			                    </div>
-			                </div>
-			            </div>
-			            <div class="col-lg-3">
-			                <div class="widget style1 lazur-bg">
-			                    <div class="row">
-			                        <div class="col-xs-12 text-center">
-			                            <img src="/O2R/seller/img/return.png" alt="return">
-			                        </div>
-			                        <div class="col-xs-12 text-center">
-			                            <span> Return Value</span>
-			                            <h5 class="font-bold" id="taxableSaleRV"></h5>
-			                        </div>
-			                    </div>
-			                </div>
-			            </div>
-			            <div class="col-lg-3">
-			                <div class="widget style1 netValue">
-			                    <div class="row">
-			                        <div class="col-xs-12 text-center">
-			                            <img src="/O2R/seller/img/net.png" alt="net">
-			                        </div>
-			                        <div class="col-xs-12 text-center">
-			                            <span> Net Value </span>
-			                            <h5 class="font-bold" id="taxableSaleNV"></h5>
-			                        </div>
-			                    </div>
-			                </div>
+			            <div class="col-lg-12">
+			            	<div class="col-lg-3">
+				                <div class="widget style1">
+		                            <div class="col-lg-12 col-xs-12" style="color: #fff;">
+		                                <span></span>
+		                                <h3 class="font-bold span" id="taxableSalePeriod"></h3>
+		                            </div>
+				                </div>
+				            </div>
+				            <div class="col-lg-3">
+				                <div class="widget style1 navy-bg">
+				                    <div class="row">
+				                        <div class="col-xs-12 text-center">
+				                            <img src="/O2R/seller/img/gross.png" alt="gross">
+				                        </div>
+				                        <div class="col-xs-12 text-center">
+				                            <span> Gross Value</span>
+				                            <h5 class="font-bold" id="taxableSaleGV"></h5>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				            <div class="col-lg-3">
+				                <div class="widget style1 lazur-bg">
+				                    <div class="row">
+				                        <div class="col-xs-12 text-center">
+				                            <img src="/O2R/seller/img/return.png" alt="return">
+				                        </div>
+				                        <div class="col-xs-12 text-center">
+				                            <span> Return Value</span>
+				                            <h5 class="font-bold" id="taxableSaleRV"></h5>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				            <div class="col-lg-3">
+				                <div class="widget style1 netValue">
+				                    <div class="row">
+				                        <div class="col-xs-12 text-center">
+				                            <img src="/O2R/seller/img/net.png" alt="net">
+				                        </div>
+				                        <div class="col-xs-12 text-center">
+				                            <span> Net Value </span>
+				                            <h5 class="font-bold" id="taxableSaleNV"></h5>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
 			            </div>
 	        		</div>
 	        		<div class="col-sm-6" style="padding: 16px;">
-		                <div class="col-lg-3">
-		                    Sale Quantity
+		                <div class="col-lg-6">
+		                    <h3 class="font-bold">Sale Quantity</h3>
 		                </div>
-		                <div class="col-lg-9">
+		                <div class="col-lg-6">
 		                    <div data-toggle="buttons" class="btn-group">
 		                        <label class="btn btn-sm btn-white" onclick="saleQuantity('Today')"> <input type="radio"> Today </label>
 		                        <label class="btn btn-sm btn-white" onclick="saleQuantity('Monthly')"> <input type="radio"> Monthly </label>
@@ -352,65 +369,64 @@
 		                        <label class="btn btn-sm btn-white" onclick="saleQuantity('Yearly')"> <input type="radio"> Annually </label>
 		                    </div>
 		                </div>
-			            <div class="col-lg-3">
-			                <div class="widget style1">
-			                    
+		                <div class="col-lg-12">
+		                	<div class="col-lg-3">
+				                <div class="widget style1">
 		                            <div class="col-lg-12 col-xs-12 text-center">
-		                                <span>Value For</span>
-		                                <h2 class="font-bold" id="saleQuantityPeriod"></h2>
+		                                <h3 class="font-bold" id="saleQuantityPeriod"></h3>
 		                            </div>
-		                        
-			                </div>
-			            </div>
-			            <div class="col-lg-3">
-			                <div class="widget style1 navy-bg">
-			                    <div class="row">
-			                        <div class="col-xs-12 text-center">
-			                            <img src="/O2R/seller/img/gross.png" alt="gross">
-			                        </div>
-			                        <div class="col-xs-12 text-center">
-			                            <span> Gross Value</span>
-			                            <h5 class="font-bold" id="saleQuantityGV"></h5>
-			                        </div>
-			                    </div>
-			                </div>
-			            </div>
-			            <div class="col-lg-3">
-			                <div class="widget style1 lazur-bg">
-			                    <div class="row">
-			                        <div class="col-xs-12 text-center">
-			                            <img src="/O2R/seller/img/return.png" alt="return">
-			                        </div>
-			                        <div class="col-xs-12 text-center">
-			                            <span> Return Value</span>
-			                            <h5 class="font-bold" id="saleQuantityRV"></h5>
-			                        </div>
-			                    </div>
-			                </div>
-			            </div>
-			            <div class="col-lg-3">
-			                <div class="widget style1 netValue">
-			                    <div class="row">
-			                        <div class="col-xs-12 text-center">
-			                            <img src="/O2R/seller/img/net.png" alt="net">
-			                        </div>
-			                        <div class="col-xs-12 text-center">
-			                            <span> Net Value </span>
-			                            <h5 class="font-bold" id="saleQuantityNV"></h5>
-			                        </div>
-			                    </div>
-			                </div>
-			            </div>
+				                </div>
+				            </div>
+				            <div class="col-lg-3">
+				                <div class="widget style1 navy-bg">
+				                    <div class="row">
+				                        <div class="col-xs-12 text-center">
+				                            <img src="/O2R/seller/img/gross.png" alt="gross">
+				                        </div>
+				                        <div class="col-xs-12 text-center">
+				                            <span> Gross Value</span>
+				                            <h5 class="font-bold" id="saleQuantityGV"></h5>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				            <div class="col-lg-3">
+				                <div class="widget style1 lazur-bg">
+				                    <div class="row">
+				                        <div class="col-xs-12 text-center">
+				                            <img src="/O2R/seller/img/return.png" alt="return">
+				                        </div>
+				                        <div class="col-xs-12 text-center">
+				                            <span> Return Value</span>
+				                            <h5 class="font-bold" id="saleQuantityRV"></h5>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				            <div class="col-lg-3">
+				                <div class="widget style1 netValue">
+				                    <div class="row">
+				                        <div class="col-xs-12 text-center">
+				                            <img src="/O2R/seller/img/net.png" alt="net">
+				                        </div>
+				                        <div class="col-xs-12 text-center">
+				                            <span> Net Value </span>
+				                            <h5 class="font-bold" id="saleQuantityNV"></h5>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+		                </div>			            
 	        		</div>
 	        	</div>	        	
 	        </div>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="col-sm-6" style="padding: 16px;">
-						<div class="col-lg-3">
-		                    Top Selling SKU
+						<div class="col-lg-6">
+		                    <h3 class="font-bold">Top Selling SKU</h3>
 		                </div>
-		                <div class="col-lg-9">
+		                <div class="col-lg-6">
 		                    <div data-toggle="buttons" class="btn-group">
 		                        <label class="btn btn-sm btn-white" onclick="topSellingSKU('Today')"> <input type="radio"> Today </label>
 		                        <label class="btn btn-sm btn-white" onclick="topSellingSKU('Monthly')"> <input type="radio"> Monthly </label>
@@ -418,61 +434,59 @@
 		                        <label class="btn btn-sm btn-white" onclick="topSellingSKU('Yearly')"> <input type="radio"> Annually </label>
 		                    </div>
 		                </div>
-			            <div class="col-lg-3">
-			                <div class="widget style1">
-			                    
-		                            <div class="col-lg-12 col-xs-12 text-center">
-		                                <span id="topSellingSKUName"></span>
-		                                <h2 class="font-bold" id="topSellingSKUPeriod"></h2>
-		                            </div>
-		                        
-			                </div>
-			            </div>
-			            <div class="col-lg-3">
-			                <div class="widget style1 navy-bg">
-			                    <div class="row">
-			                        <div class="col-xs-12 text-center">
-			                            <img src="/O2R/seller/img/gross.png" alt="gross">
-			                        </div>
-			                        <div class="col-xs-12 text-center">
-			                            <span> Gross Value</span>
-			                            <h5 class="font-bold" id="topSellingSKUGV"></h5>
-			                        </div>
-			                    </div>
-			                </div>
-			            </div>
-			            <div class="col-lg-3">
-			                <div class="widget style1 lazur-bg">
-			                    <div class="row">
-			                        <div class="col-xs-12 text-center">
-			                            <img src="/O2R/seller/img/return.png" alt="return">
-			                        </div>
-			                        <div class="col-xs-12 text-center">
-			                            <span> Return Value</span>
-			                            <h5 class="font-bold" id="topSellingSKURV"></h5>
-			                        </div>
-			                    </div>
-			                </div>
-			            </div>
-			            <div class="col-lg-3">
-			                <div class="widget style1 netValue">
-			                    <div class="row">
-			                        <div class="col-xs-12 text-center">
-			                            <img src="/O2R/seller/img/net.png" alt="net">
-			                        </div>
-			                        <div class="col-xs-12 text-center">
-			                            <span> Net Value </span>
-			                            <h5 class="font-bold" id="topSellingSKUNV"></h5>
-			                        </div>
-			                    </div>
-			                </div>
-			            </div>                        
+		                <div class="col-lg-12">
+		                	<div class="col-lg-3">
+				                <div class="widget style1" style="margin: 25px 0px 0px -50px;text-align: center;">
+				                   <small id="topSellingSKUName"></small>
+			                       <h3 class="font-bold" id="topSellingSKUPeriod"></h3>
+				                </div>
+				            </div>
+				            <div class="col-lg-3">
+				                <div class="widget style1 navy-bg">
+				                    <div class="row">
+				                        <div class="col-xs-12 text-center">
+				                            <img src="/O2R/seller/img/gross.png" alt="gross">
+				                        </div>
+				                        <div class="col-xs-12 text-center">
+				                            <span> Gross Value</span>
+				                            <h5 class="font-bold" id="topSellingSKUGV"></h5>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				            <div class="col-lg-3">
+				                <div class="widget style1 lazur-bg">
+				                    <div class="row">
+				                        <div class="col-xs-12 text-center">
+				                            <img src="/O2R/seller/img/return.png" alt="return">
+				                        </div>
+				                        <div class="col-xs-12 text-center">
+				                            <span> Return Value</span>
+				                            <h5 class="font-bold" id="topSellingSKURV"></h5>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				            <div class="col-lg-3">
+				                <div class="widget style1 netValue">
+				                    <div class="row">
+				                        <div class="col-xs-12 text-center">
+				                            <img src="/O2R/seller/img/net.png" alt="net">
+				                        </div>
+				                        <div class="col-xs-12 text-center">
+				                            <span> Net Value </span>
+				                            <h5 class="font-bold" id="topSellingSKUNV"></h5>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+		                </div>			                                    
                     </div>
-                    <div class="col-sm-6" style="padding: 16px;background: #a9a9a9;">
-                        <div class="col-lg-3">
-		                    Top Selling Reg
+                    <div class="col-sm-6" style="padding: 16px;background: #666;">
+                        <div class="col-lg-6">
+		                    <h3 class="font-bold colour">Top Selling Reg</h3>
 		                </div>
-		                <div class="col-lg-9">
+		                <div class="col-lg-6">
 		                    <div data-toggle="buttons" class="btn-group">
 		                        <label class="btn btn-sm btn-white" onclick="topSellingRegion('Today')"> <input type="radio"> Today </label>
 		                        <label class="btn btn-sm btn-white" onclick="topSellingRegion('Monthly')"> <input type="radio"> Monthly </label>
@@ -480,12 +494,11 @@
 		                        <label class="btn btn-sm btn-white" onclick="topSellingRegion('Yearly')"> <input type="radio"> Annually </label>
 		                    </div>
 		                </div>
-			            <div class="col-lg-3">
-			                <div class="widget style1">
-			                     <div class="col-lg-12 col-xs-12 text-center">
-		                            <span id="topSellingRegionName"></span>
-		                            <h2 class="font-bold" id="topSellingRegionPeriod"></h2>
-		                        </div>		                        
+		                <div class="col-lg-12">	                
+		                	<div class="col-lg-3">
+			                <div class="widget style1 text-center colour">                         
+		                        <span id="topSellingRegionName"></span>
+		                        <h3 class="font-bold span" id="topSellingRegionPeriod"></h3> 	                        
 			                </div>
 			            </div>
 			            <div class="col-lg-3">
@@ -527,19 +540,20 @@
 			                    </div>
 			                </div>
 			            </div>
+		                </div>			            
                     </div>
                 </div>
             </div> 
              <div class="row">          
             	<div class="col-lg-12 m-b" style="padding: 16px;">
-	            	<div class="col-sm-6" style="background: #a9a9a9;padding: 16px;">
+	            	<div class="col-sm-6" style="background: #666;padding: 16px;">
 		                <div class="col-lg-12">
-		                    Outstanding Payment
+		                    <h3 class="font-bold colour">Outstanding Payment</h3>
 		                </div>
 			            <div class="col-lg-4">
 			                <div class="widget style1">
 	                            <div class="col-lg-12 col-xs-12">
-	                                <span>TOTAL</span>	                                
+	                                <span class="colour">TOTAL</span>	                                
 	                            </div>
 			                </div>
 			            </div>
@@ -570,14 +584,14 @@
 			                </div>
 			            </div>
 	        		</div>
-	        		<div class="col-sm-6" style="background:cyan ;padding: 16px;">
-		                <div class="col-lg-12" style="color: #fff;">
-		                    Upcoming Payment
+	        		<div class="col-sm-6" style="padding: 16px;">
+		                <div class="col-lg-12">
+		                    <h3 class="font-bold">Upcoming Payment</h3>
 		                </div>
 		                
 			            <div class="col-lg-4">
 			                <div class="widget style1">
-	                            <div class="col-lg-12 col-xs-12" style="color: #fff;">
+	                            <div class="col-lg-12 col-xs-12">
 	                                <span>TOTAL</span>	                                
 	                            </div>
 			                </div>
@@ -611,11 +625,11 @@
 	        		</div>
 	        	</div>
 	         </div>
-				<div class="ibox-content" style="background: cadetblue;">
+				<div class="ibox-content" style="background: #286265;">
 					<div class="row">
 						<div class="col-sm-3 m-b-xs">
 							<p>
-								<label id="criteria"></label> <small id="wiseList"></small>
+								<label id="criteria" class="colour"></label> <small id="wiseList" class="colour"></small>
 							</p>
 						</div>
 						<div class="col-sm-3">							
@@ -648,11 +662,11 @@
 					</div>
 					<div class="table-responsive">
 					<div class="slim-scroll-bar">
-						<table class="table table-striped">
+						<table class="table">
 							<thead>
 								<tr>
 									<c:forEach items="${HeaderList}" var="HeadName" varStatus="loop">
-										<th>${HeadName}</th>
+										<th class="colour">${HeadName}</th>
 									</c:forEach>									
 								</tr>
 							</thead>							
