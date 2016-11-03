@@ -1460,6 +1460,7 @@ public class GlobalConstant {
 			put("CreateInventoryGroups", "Create_Inventory_Group");
 			put("CreateProCat", "Create_Product_Category");
 			put("prodCat_Comm_Mapping", "ProdCat_Comm_Mapping");
+			put("partnerCat_ProdCat_Mapping", "PartnerCat_ProdCat_Mapping");
 		}
 	};
 

@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -115,10 +116,9 @@ public class SaveContents {
 	@Autowired
 	private CustomerService customerService;
 	@Autowired
-	private AlertsService alertService;	
+	private AlertsService alertService;
 	@Autowired
 	private TaxablePurchaseService taxablePurchaseService;
-	
 
 	private static final String UPLOAD_DIR = "UploadReport";
 
@@ -144,21 +144,23 @@ public class SaveContents {
 		Events event = null;
 		String uploadFileName = "";
 		List<Order> saveList = null;
-		List<String> idsList = new ArrayList<String>();		
+		List<String> idsList = new ArrayList<String>();
 		Map<String, String> duplicateKey = new HashMap<String, String>();
-		try {			
+		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 			HSSFSheet worksheet = offices.getSheetAt(0);
 			saveList = new ArrayList<Order>();
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			System.out.println(file.getOriginalFilename());			
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			System.out.println(file.getOriginalFilename());
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			System.out.println(uploadFileName);
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
-			idsList = orderService.listOrderIds("channelOrderID", sellerId);			
+			idsList = orderService.listOrderIds("channelOrderID", sellerId);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
 				try {
 					validaterow = true;
@@ -232,7 +234,8 @@ public class SaveContents {
 										channelID = entry.getCell(0).toString()
 												+ GlobalConstant.orderUniqueSymbol
 												+ skuCode;
-										order.setPartnerCommission(productConfig.getCommision());
+										order.setPartnerCommission(productConfig
+												.getCommision());
 									} else {
 										errorMessage
 												.append("VendorSKU code is not mapped.");
@@ -261,13 +264,17 @@ public class SaveContents {
 									order.setProductSkuCode(skuCode);
 
 								if (!(partner.getPcName().toLowerCase()
-										.contains(GlobalConstant.PCFLIPKART) || partner
-										.getPcName().toLowerCase()
-										.contains(GlobalConstant.PCPAYTM)
+										.contains(GlobalConstant.PCFLIPKART)
 										|| partner
-										.getPcName().toLowerCase()
-										.contains(GlobalConstant.PCAMAZON)
+												.getPcName()
+												.toLowerCase()
+												.contains(
+														GlobalConstant.PCPAYTM)
 										|| partner
+												.getPcName()
+												.toLowerCase()
+												.contains(
+														GlobalConstant.PCAMAZON) || partner
 										.getPcName().toLowerCase()
 										.contains(GlobalConstant.PCJABONG))) {
 									duplicateKey.put(channelID, "");
@@ -369,16 +376,20 @@ public class SaveContents {
 						order.setSubOrderID(itemID);
 
 						if (partner != null
-								&& (partner.getPcName().toLowerCase().contains(
-										GlobalConstant.PCFLIPKART) || partner
-										.getPcName().toLowerCase().contains(
-												GlobalConstant.PCPAYTM)
-												|| partner
-												.getPcName().toLowerCase()
-												.contains(GlobalConstant.PCAMAZON)
-												|| partner
-												.getPcName().toLowerCase()
-												.contains(GlobalConstant.PCJABONG))) {
+								&& (partner.getPcName().toLowerCase()
+										.contains(GlobalConstant.PCFLIPKART)
+										|| partner
+												.getPcName()
+												.toLowerCase()
+												.contains(
+														GlobalConstant.PCPAYTM)
+										|| partner
+												.getPcName()
+												.toLowerCase()
+												.contains(
+														GlobalConstant.PCAMAZON) || partner
+										.getPcName().toLowerCase()
+										.contains(GlobalConstant.PCJABONG))) {
 							channelID = order.getChannelOrderID();
 
 							if (channelID != null) {
@@ -402,15 +413,20 @@ public class SaveContents {
 						}
 					} else {
 						if (partner != null
-								&& (partner.getPcName().toLowerCase().contains(
-										GlobalConstant.PCFLIPKART) || partner
-										.getPcName().toLowerCase().contains(
-												GlobalConstant.PCPAYTM)|| partner
-												.getPcName().toLowerCase()
-												.contains(GlobalConstant.PCAMAZON)
-												|| partner
-												.getPcName().toLowerCase()
-												.contains(GlobalConstant.PCJABONG))) {
+								&& (partner.getPcName().toLowerCase()
+										.contains(GlobalConstant.PCFLIPKART)
+										|| partner
+												.getPcName()
+												.toLowerCase()
+												.contains(
+														GlobalConstant.PCPAYTM)
+										|| partner
+												.getPcName()
+												.toLowerCase()
+												.contains(
+														GlobalConstant.PCAMAZON) || partner
+										.getPcName().toLowerCase()
+										.contains(GlobalConstant.PCJABONG))) {
 							errorMessage
 									.append(" Secondary OrderID is mandatory");
 							validaterow = false;
@@ -531,7 +547,8 @@ public class SaveContents {
 										validaterow = false;
 									}
 								} else {
-									errorMessage.append(" Net Rate is null and ongoing event expects NR.");
+									errorMessage
+											.append(" Net Rate is null and ongoing event expects NR.");
 									validaterow = false;
 								}
 							}
@@ -571,12 +588,17 @@ public class SaveContents {
 					}
 					if (entry.getCell(17) != null
 							&& entry.getCell(17).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						entry.getCell(17).setCellType(HSSFCell.CELL_TYPE_STRING);
-						if(entry.getCell(17).toString().length() == 10 && !entry.getCell(17).toString().contains("9999999999")){
-							if (entry.getCell(17).toString().matches("[0-9]+") && entry.getCell(17).toString().length() > 2) {
-								customerBean.setCustomerPhnNo(entry.getCell(17).toString());
-							}								
-						}						
+						entry.getCell(17)
+								.setCellType(HSSFCell.CELL_TYPE_STRING);
+						if (entry.getCell(17).toString().length() == 10
+								&& !entry.getCell(17).toString()
+										.contains("9999999999")) {
+							if (entry.getCell(17).toString().matches("[0-9]+")
+									&& entry.getCell(17).toString().length() > 2) {
+								customerBean.setCustomerPhnNo(entry.getCell(17)
+										.toString());
+							}
+						}
 						try {
 							boolean isBlackList = customerService.isBlackList(
 									entry.getCell(17).toString(), sellerId);
@@ -647,7 +669,8 @@ public class SaveContents {
 								order.getProductSkuCode(), sellerId);
 						if (product != null) {
 							taxcat = taxDetailService.getTaxCategory(product,
-									order.getOrderSP(),sellerId, customerBean.getZipcode());
+									order.getOrderSP(), sellerId,
+									customerBean.getZipcode());
 						}
 					}
 					if (taxcat != null)
@@ -708,8 +731,8 @@ public class SaveContents {
 								null);
 			}
 			Set<String> errorSet = returnOrderMap.keySet();
-			downloadUploadReportXLS(offices, "MP_Order_Upload", uploadFileName, 23, errorSet,
-					path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "MP_Order_Upload", uploadFileName,
+					23, errorSet, path, sellerId, uploadReport);
 
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
@@ -745,7 +768,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -797,8 +822,9 @@ public class SaveContents {
 							&& StringUtils.isNotBlank(entry.getCell(2)
 									.toString())) {
 						List<ProductConfig> productConfigs = productService
-								.getProductConfig(entry.getCell(2).toString().toUpperCase(),
-										order.getPcName(), sellerId);
+								.getProductConfig(entry.getCell(2).toString()
+										.toUpperCase(), order.getPcName(),
+										sellerId);
 						if (productConfigs == null) {
 							errorMessage
 									.append(" Product configuration does not exist ");
@@ -1004,8 +1030,8 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = returnOrderMap.keySet();
-			downloadUploadReportXLS(offices, "PO_Order_Upload", uploadFileName, 10, errorSet,
-					path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "PO_Order_Upload", uploadFileName,
+					10, errorSet, path, sellerId, uploadReport);
 
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
@@ -1039,7 +1065,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -1072,8 +1100,9 @@ public class SaveContents {
 										1).toString())) {
 							product.setProductSkuCode(entry.getCell(1)
 									.toString().toUpperCase());
-							uniqueProductMap.put(entry.getCell(1).toString().toUpperCase(),
-									entry.getCell(1).toString().toUpperCase());
+							uniqueProductMap.put(entry.getCell(1).toString()
+									.toUpperCase(), entry.getCell(1).toString()
+									.toUpperCase());
 						} else {
 							product.setProductSkuCode(entry.getCell(1)
 									.toString());
@@ -1242,8 +1271,8 @@ public class SaveContents {
 								null);
 			}
 			Set<String> errorSet = returnProductMap.keySet();
-			downloadUploadReportXLS(offices, "Create_Parent_Product", uploadFileName, 10,
-					errorSet, path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "Create_Parent_Product",
+					uploadFileName, 10, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
@@ -1277,7 +1306,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -1416,8 +1447,8 @@ public class SaveContents {
 			returnProductMap.put(errorMessage.toString(),
 					ConverterClass.prepareProductBean(product));
 			Set<String> errorSet = returnProductMap.keySet();
-			downloadUploadReportXLS(offices, "Product_Edit", uploadFileName, 8, errorSet, path,
-					sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "Product_Edit", uploadFileName, 8,
+					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
@@ -1526,7 +1557,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			productCategoryList = categoryService.listCategories(sellerId);
 			System.out.println(productCategoryList.size());
 			if (productCategoryList != null) {
@@ -1688,8 +1721,8 @@ public class SaveContents {
 			 * +sellerId, ce); }
 			 */
 			Set<String> errorSet = returnTaxCatMap.keySet();
-			downloadUploadReportXLS(offices, "product_Tax_Mapping", uploadFileName, 3,
-					errorSet, path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "product_Tax_Mapping",
+					uploadFileName, 3, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -1716,7 +1749,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -1734,7 +1769,8 @@ public class SaveContents {
 									&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								productConfigs = productService
 										.getProductConfig(entry.getCell(1)
-												.toString().trim().toUpperCase(), entry
+												.toString().trim()
+												.toUpperCase(), entry
 												.getCell(3).toString().trim(),
 												sellerId);
 								if (productConfigs != null) {
@@ -1743,7 +1779,8 @@ public class SaveContents {
 												.get(0)
 												.getProductSkuCode()
 												.equals(entry.getCell(0)
-														.toString().trim().toUpperCase())) {
+														.toString().trim()
+														.toUpperCase())) {
 											productConfig = productConfigs
 													.get(0);
 										} else {
@@ -1787,8 +1824,8 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = productConfigMap.keySet();
-			downloadUploadReportXLS(offices, "Dlink_SKU_Mapping", uploadFileName, 4, errorSet,
-					path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "Dlink_SKU_Mapping",
+					uploadFileName, 4, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -1799,8 +1836,6 @@ public class SaveContents {
 		return productConfigMap;
 	}
 
-	
-	
 	public Set<String> saveTaxablePurchases(MultipartFile file, int sellerId,
 			String path, UploadReport uploadReport) throws IOException {
 		log.info("$$$ saveInventoryGroups starts : SaveContents $$$");
@@ -1817,7 +1852,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -1829,32 +1866,34 @@ public class SaveContents {
 				try {
 					if (entry.getCell(0) != null
 							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						taxablePurchases.setTaxCategory(entry.getCell(0).toString());			
-						
+						taxablePurchases.setTaxCategory(entry.getCell(0)
+								.toString());
+
 					} else {
-						errorMessage.append(" TaxablePurchases TaxCategory is null ");
+						errorMessage
+								.append(" TaxablePurchases TaxCategory is null ");
 						validaterow = false;
 					}
-					
+
 					if (entry.getCell(1) != null
 							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						taxablePurchases.setTaxRate(Float.parseFloat(entry.getCell(1).toString()));							
+						taxablePurchases.setTaxRate(Float.parseFloat(entry
+								.getCell(1).toString()));
 					} else {
-						errorMessage.append(" TaxablePurchases taxRate is null ");
+						errorMessage
+								.append(" TaxablePurchases taxRate is null ");
 						validaterow = false;
 					}
-					
+
 					if (entry.getCell(2) != null
-							&& StringUtils.isNotBlank(entry
-									.getCell(2).toString())) {
+							&& StringUtils.isNotBlank(entry.getCell(2)
+									.toString())) {
 
 						try {
-							if (HSSFDateUtil
-									.isCellDateFormatted(entry
-											.getCell(2))) {
-								taxablePurchases.setPurchaseDate(entry
-										.getCell(2)
-										.getDateCellValue());
+							if (HSSFDateUtil.isCellDateFormatted(entry
+									.getCell(2))) {
+								taxablePurchases.setPurchaseDate(entry.getCell(
+										2).getDateCellValue());
 							} else {
 								errorMessage
 										.append(" TaxablePurchases Purchase Date format is wrong ,enter mm/dd/yyyy ");
@@ -1870,51 +1909,57 @@ public class SaveContents {
 								.append(" TaxablePurchases Purchase Date is null ");
 						validaterow = false;
 					}
-					
+
 					if (entry.getCell(3) != null
 							&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						taxablePurchases.setParticular(entry.getCell(3).toString());							
+						taxablePurchases.setParticular(entry.getCell(3)
+								.toString());
 					} else {
 						errorMessage.append(" Particular is null ");
 						validaterow = false;
 					}
-					
-					
+
 					if (entry.getCell(4) != null
 							&& entry.getCell(4).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						taxablePurchases.setBasicPrice(Double.parseDouble(entry.getCell(4).toString()));	
-						
-						taxablePurchases.setTaxAmount(Double.parseDouble(entry.getCell(4).toString())*((Double.parseDouble(entry.getCell(1).toString()))/100));							
-						
-						taxablePurchases.setTotalAmount(Double.parseDouble(entry.getCell(4).toString())+ taxablePurchases.getTaxAmount());
-						
+						taxablePurchases.setBasicPrice(Double.parseDouble(entry
+								.getCell(4).toString()));
+
+						taxablePurchases.setTaxAmount(Double.parseDouble(entry
+								.getCell(4).toString())
+								* ((Double.parseDouble(entry.getCell(1)
+										.toString())) / 100));
+
+						taxablePurchases.setTotalAmount(Double
+								.parseDouble(entry.getCell(4).toString())
+								+ taxablePurchases.getTaxAmount());
+
 					} else {
-						errorMessage.append(" TaxablePurchases taxRate is null ");
+						errorMessage
+								.append(" TaxablePurchases taxRate is null ");
 						validaterow = false;
-					}					
+					}
 
-					
-					
-
-					if (validaterow) {						
+					if (validaterow) {
 						Date dt = new Date();
 						taxablePurchases.setCreatedDate(dt);
-						taxablePurchaseService.addTaxablePurchase(taxablePurchases, sellerId);
+						taxablePurchaseService.addTaxablePurchase(
+								taxablePurchases, sellerId);
 					} else {
 						errorSet.add(errorMessage.toString());
 					}
-					
+
 				} catch (Exception e) {
 					log.error("Failed! by SellerId : " + sellerId, e);
 				}
 			}
-			//saveMappedFiles.uploadResultXLS(offices, "TaxablePurchases_Mapping", uploadFileName,errorSet, path, sellerId, uploadReport);
-			
-			//Set<String> errorSet = returnProductConfigMap.keySet();
-			downloadUploadReportXLS(offices, "TaxablePurchases_Mapping", uploadFileName, 5, errorSet, path, sellerId, uploadReport);
-			
-			
-			
+			// saveMappedFiles.uploadResultXLS(offices,
+			// "TaxablePurchases_Mapping", uploadFileName,errorSet, path,
+			// sellerId, uploadReport);
+
+			// Set<String> errorSet = returnProductConfigMap.keySet();
+			downloadUploadReportXLS(offices, "TaxablePurchases_Mapping",
+					uploadFileName, 5, errorSet, path, sellerId, uploadReport);
+
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -1926,8 +1971,7 @@ public class SaveContents {
 		log.info("$$$ saveInventoryGroups ends : SaveContents $$$");
 		return errorSet;
 	}
-	
-	
+
 	// My coding Product Config *********
 
 	public Set<String> saveInventoryGroups(MultipartFile file, int sellerId,
@@ -1946,7 +1990,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
@@ -1990,10 +2036,9 @@ public class SaveContents {
 				}
 			}
 
-			saveMappedFiles.uploadResultXLS(offices, "Create_Inventory_Group", uploadFileName,
-					errorSet, path, sellerId, uploadReport);
-			
-			
+			saveMappedFiles.uploadResultXLS(offices, "Create_Inventory_Group",
+					uploadFileName, errorSet, path, sellerId, uploadReport);
+
 		} catch (Exception e) {
 
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -2021,7 +2066,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
@@ -2073,11 +2120,12 @@ public class SaveContents {
 					if (entry.getCell(3) != null
 							&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						try {
-							category.setTaxFreePriceLimit(Double.parseDouble(entry.getCell(3).toString()));
+							category.setTaxFreePriceLimit(Double
+									.parseDouble(entry.getCell(3).toString()));
 						} catch (Exception e) {
 							e.printStackTrace();
 							category.setTaxFreePriceLimit(0d);
-						}						
+						}
 					} else {
 						category.setTaxFreePriceLimit(0d);
 					}
@@ -2096,8 +2144,8 @@ public class SaveContents {
 				}
 			}
 
-			saveMappedFiles.uploadResultXLS(offices, "Create_Product_Category", uploadFileName,
-					errorSet, path, sellerId, uploadReport);
+			saveMappedFiles.uploadResultXLS(offices, "Create_Product_Category",
+					uploadFileName, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -2128,7 +2176,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -2143,7 +2193,8 @@ public class SaveContents {
 						entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
 
 						Product product = productService.getProduct(entry
-								.getCell(0).toString().trim().toUpperCase(), sellerId);
+								.getCell(0).toString().trim().toUpperCase(),
+								sellerId);
 						if (product != null) {
 							productConfig.setProductSkuCode(product
 									.getProductSkuCode());
@@ -2163,8 +2214,10 @@ public class SaveContents {
 
 								List<ProductConfig> procon = productService
 										.getProductConfig(entry.getCell(1)
-												.toString().trim().toUpperCase(), entry.getCell(3)
-												.toString(), sellerId);
+												.toString().trim()
+												.toUpperCase(), entry
+												.getCell(3).toString(),
+												sellerId);
 								if (procon != null) {
 									if (procon.size() == 1) {
 										productConfig = procon.get(0);
@@ -2177,7 +2230,8 @@ public class SaveContents {
 										&& !uniqueProductMap
 												.containsKey(mapKey)) {
 									productConfig.setChannelSkuRef(entry
-											.getCell(1).toString().trim().toUpperCase());
+											.getCell(1).toString().trim()
+											.toUpperCase());
 									uniqueProductMap.put(mapKey, mapKey);
 								} else {
 									errorMessage
@@ -2237,14 +2291,16 @@ public class SaveContents {
 								 */
 
 							}
-							
+
 							if (entry.getCell(4) != null
 									&& entry.getCell(4).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								try {
-									productConfig.setCommision(Float.valueOf(entry
-											.getCell(4).toString()));
+									productConfig.setCommision(Float
+											.valueOf(entry.getCell(4)
+													.toString()));
 								} catch (NumberFormatException e) {
-									log.error("Failed! by SellerId : " + sellerId, e);
+									log.error("Failed! by SellerId : "
+											+ sellerId, e);
 									errorMessage
 											.append(" Commission should be a number ");
 									validaterow = false;
@@ -2298,8 +2354,8 @@ public class SaveContents {
 								null);
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
-			downloadUploadReportXLS(offices, "MP_Vendor_SKU_Mapping", uploadFileName, 4,
-					errorSet, path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "MP_Vendor_SKU_Mapping",
+					uploadFileName, 4, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -2327,7 +2383,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -2443,8 +2501,8 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
-			downloadUploadReportXLS(offices, "PO_Product_Config", uploadFileName, 6, errorSet,
-					path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "PO_Product_Config",
+					uploadFileName, 6, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
@@ -2465,7 +2523,7 @@ public class SaveContents {
 		log.info("$$$ savePaymentContents starts : SaveContents $$$");
 		PaymentUpload paymentUpload = new PaymentUpload();
 		double totalpositive = 0;
-		double totalnegative = 0;		
+		double totalnegative = 0;
 		String skucode = null;
 		Order order = null;
 		String uploadPaymentId = null;
@@ -2488,7 +2546,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -2502,7 +2562,7 @@ public class SaveContents {
 				double negativeAmount = 0;
 				// Product product=new Product();
 				OrderPayment payment = new OrderPayment();
-				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");				
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				try {
 					if (entry.getCell(0) != null
 							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK
@@ -2522,7 +2582,8 @@ public class SaveContents {
 											&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 										productConfigs = productService
 												.getProductConfig(entry
-														.getCell(2).toString().trim().toUpperCase(),
+														.getCell(2).toString()
+														.trim().toUpperCase(),
 														partner.getPcName(),
 														sellerId);
 										if (productConfigs != null) {
@@ -2606,7 +2667,8 @@ public class SaveContents {
 											channelId = onj.get(0)
 													.getChannelOrderID();
 										} else {
-											errorMessage.append("Multiple Orders With Channel Order ID.");
+											errorMessage
+													.append("Multiple Orders With Channel Order ID.");
 											validaterow = false;
 										}
 									} else if (entry.getCell(3) != null
@@ -2619,7 +2681,8 @@ public class SaveContents {
 												channelId = onj.get(0)
 														.getChannelOrderID();
 											} else {
-												errorMessage.append("Multiple Orders With Channel Order ID.");
+												errorMessage
+														.append("Multiple Orders With Channel Order ID.");
 												validaterow = false;
 											}
 										} else {
@@ -2644,7 +2707,8 @@ public class SaveContents {
 											channelId = onj.get(0)
 													.getChannelOrderID();
 										} else {
-											errorMessage.append("Multiple Orders With Secondary Order ID.");
+											errorMessage
+													.append("Multiple Orders With Secondary Order ID.");
 											validaterow = false;
 										}
 									} else {
@@ -2721,40 +2785,41 @@ public class SaveContents {
 										+ entry.getCell(2) + " 3 :"
 										+ entry.getCell(3));
 
-								
 							} else {
 								System.out.println(" Salses channel is nu ll");
 								errorMessage.append("Channel Not Present.");
 								validaterow = false;
 							}
-							
-							if (validaterow) {								
+
+							if (validaterow) {
 								payment.setPaymentFileName(uploadFileName);
 								totalpositive = totalpositive + positiveAmount;
 								totalnegative = totalnegative + negativeAmount;
-								order = orderService.addOrderPayment(
-										skucode, channelId, payment,
-										sellerId);
-								
-								//New
-								PaymentUpload_Order paymentUpload_Order =  new PaymentUpload_Order();
-								paymentUpload_Order.setOrderId(order.getOrderId());
-								paymentUpload_Order.setAmount(positiveAmount - negativeAmount);
-								paymentUpload_Order.setPaymentUpload(paymentUpload);
-								paymentUpload.getOrderList().add(paymentUpload_Order);
+								order = orderService.addOrderPayment(skucode,
+										channelId, payment, sellerId);
+
+								// New
+								PaymentUpload_Order paymentUpload_Order = new PaymentUpload_Order();
+								paymentUpload_Order.setOrderId(order
+										.getOrderId());
+								paymentUpload_Order.setAmount(positiveAmount
+										- negativeAmount);
+								paymentUpload_Order
+										.setPaymentUpload(paymentUpload);
+								paymentUpload.getOrderList().add(
+										paymentUpload_Order);
 							} else {
-								returnPaymentMap.put(errorMessage
-										.toString(), ConverterClass
-										.prepareOrderBean(order));
+								returnPaymentMap.put(errorMessage.toString(),
+										ConverterClass.prepareOrderBean(order));
 							}
 							if (order != null && validaterow == true) {
-								if (!channelOrderIdCheck
-										.containsKey(channelId)) {
-									System.out.println("##### OrderID : " + order.getOrderId());
+								if (!channelOrderIdCheck.containsKey(channelId)) {
+									System.out.println("##### OrderID : "
+											+ order.getOrderId());
 									channelOrderIdCheck.put(channelId,
 											channelId);
-									//order.getPaymentUpload().add(paymentUpload);
-									//paymentUpload.getOrders().add(order);
+									// order.getPaymentUpload().add(paymentUpload);
+									// paymentUpload.getOrders().add(order);
 									generatePaymentUpload = true;
 								}
 							}
@@ -2827,7 +2892,7 @@ public class SaveContents {
 							validaterow = false;
 						}
 						if (validaterow) {
-							
+
 							manualChargesList.add(manualCharges);
 						} else {
 							returnPaymentMap
@@ -2877,8 +2942,8 @@ public class SaveContents {
 						sellerId);
 			}
 			Set<String> errorSet = returnPaymentMap.keySet();
-			downloadUploadReportXLS(offices, "MP_Payment_Upload", uploadFileName, 8, errorSet,
-					path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "MP_Payment_Upload",
+					uploadFileName, 8, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
@@ -2912,7 +2977,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -2929,7 +2996,8 @@ public class SaveContents {
 						errorMessage.append(" Product SKU does not exist ");
 						validaterow = false;
 					} else {
-						SkUCode = entry.getCell(0).toString().trim().toUpperCase();
+						SkUCode = entry.getCell(0).toString().trim()
+								.toUpperCase();
 					}
 					if ((entry.getCell(1) == null
 							|| StringUtils.isNotBlank(entry.getCell(1)
@@ -2969,8 +3037,8 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnInventoryMap.keySet();
-			downloadUploadReportXLS(offices, "InventoryReport", uploadFileName, 5, errorSet,
-					path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "InventoryReport", uploadFileName,
+					5, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save c" + "ontents exception :"
 					+ e.getLocalizedMessage());
@@ -3017,7 +3085,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -3074,7 +3144,8 @@ public class SaveContents {
 													.getCell(2).toString())) {
 										productConfigs = productService
 												.getProductConfig(entry
-														.getCell(2).toString().trim().toUpperCase(),
+														.getCell(2).toString()
+														.trim().toUpperCase(),
 														partner.getPcName(),
 														sellerId);
 										if (productConfigs != null) {
@@ -3109,7 +3180,8 @@ public class SaveContents {
 															+ productConfig
 																	.getVendorSkuRef();
 													System.out
-															.println(" channelID withc vendor sku "+channelID);
+															.println(" channelID withc vendor sku "
+																	+ channelID);
 												} else {
 													channelID = entry
 															.getCell(1)
@@ -3131,7 +3203,9 @@ public class SaveContents {
 										channelID = entry.getCell(1).toString();
 									}
 									if (channelID != null) {
-										System.out.println( " not null searching order channelID"+channelID);
+										System.out
+												.println(" not null searching order channelID"
+														+ channelID);
 										ord = orderService.searchAsIsOrder(
 												column, channelID, sellerId);
 									}
@@ -3158,9 +3232,9 @@ public class SaveContents {
 									}
 								} else {
 									errorMessage
-									.append("Multiple Orders With Channel Order ID.");
-							validaterow = false;
-							}
+											.append("Multiple Orders With Channel Order ID.");
+									validaterow = false;
+								}
 							} else if (orderlist != null
 									&& orderlist.size() != 0) {
 								if (orderlist.size() == 1) {
@@ -3258,13 +3332,13 @@ public class SaveContents {
 							errorMessage.append(" Quantity can not be null ");
 							validaterow = false;
 						}
-											
+
 						if (entry.getCell(7) != null
 								&& StringUtils.isNotBlank(entry.getCell(7)
 										.toString())
 								&& returnMap.containsKey(entry.getCell(7)
 										.toString())) {
-							
+
 							orderReturn.setType(entry.getCell(7).toString());
 						} else {
 							errorMessage.append("Invalid order Return Type");
@@ -3305,12 +3379,12 @@ public class SaveContents {
 									.parseFloat(entry.getCell(11).toString()));
 						}
 
-					} /*else {
-						validaterow = false;
-						errorMessage.append("Value of " + criteria
-								+ " is Invalid for Return.. ");
-					}*/
-					if (validaterow){
+					} /*
+					 * else { validaterow = false;
+					 * errorMessage.append("Value of " + criteria +
+					 * " is Invalid for Return.. "); }
+					 */
+					if (validaterow) {
 						orderReturn.setReturnFileName(uploadFileName);
 						orderService.addReturnOrder(order.getChannelOrderID(),
 								orderReturn, sellerId);
@@ -3326,8 +3400,8 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "MP_Return_Upload", uploadFileName, 13, errorSet,
-					path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "MP_Return_Upload",
+					uploadFileName, 13, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -3352,7 +3426,7 @@ public class SaveContents {
 			HSSFSheet worksheet = offices.getSheetAt(0);
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
-			}			
+			}
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			DebitNoteBean dnBean = null;
@@ -3447,8 +3521,8 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "DebitNoteSheet", null, 9, errorSet,
-					path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "DebitNoteSheet", null, 9,
+					errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
 			e.printStackTrace();
@@ -3484,7 +3558,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -3603,8 +3679,8 @@ public class SaveContents {
 				}
 
 				if (poOrder != null) {
-					//poOrder.getPaymentUpload().add(paymentUpload);
-					//paymentUpload.getOrders().add(poOrder);
+					// poOrder.getPaymentUpload().add(paymentUpload);
+					// paymentUpload.getOrders().add(poOrder);
 					generatePaymentUpload = true;
 				}
 			}
@@ -3623,8 +3699,8 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = returnMap.keySet();
-			downloadUploadReportXLS(offices, "Po_Payment_Upload", uploadFileName, 6, errorSet,
-					path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "Po_Payment_Upload",
+					uploadFileName, 6, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
 			e.printStackTrace();
@@ -3652,7 +3728,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -3772,8 +3850,8 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "Expense_Upload", uploadFileName, 7, errorSet,
-					path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "Expense_Upload", uploadFileName,
+					7, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
 			e.printStackTrace();
@@ -3802,7 +3880,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -3829,14 +3909,16 @@ public class SaveContents {
 							if (event != null) {
 								if (event.getSkuList() == null) {
 									event.setSkuList(entry.getCell(1)
-											.toString().trim().toUpperCase() + ",");
+											.toString().trim().toUpperCase()
+											+ ",");
 								} else if (!event.getSkuList().contains(
-										entry.getCell(1).toString().trim().toUpperCase())) {
+										entry.getCell(1).toString().trim()
+												.toUpperCase())) {
 									StringBuffer skuBuffer = new StringBuffer(
 											event.getSkuList());
 									event.setSkuList(skuBuffer.append(
-											entry.getCell(1).toString().trim().toUpperCase())
-											.toString()
+											entry.getCell(1).toString().trim()
+													.toUpperCase()).toString()
 											+ ",");
 								} else {
 									errorMessage.append(" Duplicate SKU ");
@@ -3873,8 +3955,8 @@ public class SaveContents {
 				}
 			}
 			Set<String> errorSet = returnlist.keySet();
-			saveMappedFiles.uploadResultXLS(offices, "Event_SKU_Upload", uploadFileName,
-					errorSet, path, sellerId, uploadReport);
+			saveMappedFiles.uploadResultXLS(offices, "Event_SKU_Upload",
+					uploadFileName, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
 			e.printStackTrace();
@@ -3898,9 +3980,10 @@ public class SaveContents {
 	}
 
 	public void downloadUploadReportXLS(HSSFWorkbook workbook,
-			String worksheetName, String fileName, int colNumber, Set<String> errorSet,
-			String path, int sellerId, UploadReport uploadReport)
-			throws ClassNotFoundException, CustomException {
+			String worksheetName, String fileName, int colNumber,
+			Set<String> errorSet, String path, int sellerId,
+			UploadReport uploadReport) throws ClassNotFoundException,
+			CustomException {
 
 		log.info("$$$ downloadUploadReportXLS starts : SaveContents $$$");
 		int noOfRows = 1;
@@ -3943,7 +4026,7 @@ public class SaveContents {
 		errorCellStyle.setFont(font);
 
 		// Create the column headers
-		HSSFRow rowHeader = worksheet.getRow((short) startRowIndex + 2);		
+		HSSFRow rowHeader = worksheet.getRow((short) startRowIndex + 2);
 		HSSFCell cell1 = rowHeader.createCell(colNumber);
 		cell1.setCellValue("Error Message");
 		cell1.setCellStyle(headerCellStyle);
@@ -3960,14 +4043,16 @@ public class SaveContents {
 				errorMessage = errorMessage
 						.substring(errorMessage.indexOf(':') + 1);
 
-				System.out.println(" The column number ========================="+colNumber);
+				System.out
+						.println(" The column number ========================="
+								+ colNumber);
 				if (errorMessage.length() > 5) {
 					isError = true;
 					row = worksheet.getRow(errorRow + 2);
-					if(row!=null){
-					cell = row.createCell(colNumber);
-					cell.setCellValue(errorMessage);
-					cell.setCellStyle(errorCellStyle);
+					if (row != null) {
+						cell = row.createCell(colNumber);
+						cell.setCellValue(errorMessage);
+						cell.setCellStyle(errorCellStyle);
 					}
 				}
 			}
@@ -3988,14 +4073,14 @@ public class SaveContents {
 				fileSaveDir.mkdirs();
 			}
 			String filePath = "";
-			if(fileName != null && !fileName.equals("")){
+			if (fileName != null && !fileName.equals("")) {
 				filePath = uploadFilePath + File.separator + fileName + ".xls";
 				uploadReport.setFileName(fileName);
 			} else {
 				filePath = uploadFilePath + File.separator + worksheetName
 						+ "UploadStatus" + new Date().getTime() + ".xls";
 				uploadReport.setFileName(worksheetName);
-			}			 
+			}
 			FileOutputStream out = new FileOutputStream(new File(filePath));
 			workbook.write(out);
 			out.close();
@@ -4068,7 +4153,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -4264,8 +4351,8 @@ public class SaveContents {
 			}
 
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "PO_Gatepass_Uplooad", uploadFileName, 10,
-					errorSet, path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "PO_Gatepass_Uplooad",
+					uploadFileName, 10, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
 			e.printStackTrace();
@@ -4292,7 +4379,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -4398,8 +4487,8 @@ public class SaveContents {
 				// Pre save to generate id for use in hierarchy
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "ProdCat_Comm_Mapping", uploadFileName, 3,
-					errorSet, path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "ProdCat_Comm_Mapping",
+					uploadFileName, 3, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
 			addErrorUploadReport("ProdCat_Comm_Mapping", sellerId, uploadReport);
@@ -4408,8 +4497,7 @@ public class SaveContents {
 		log.info("$$$ saveVendorSKUMappingContents ends : SaveContents $$$");
 		return validaterow;
 	}
-	
-	
+
 	public boolean saveProdCatCommissionEventContents(MultipartFile file,
 			int sellerId, String path, UploadReport uploadReport)
 			throws IOException {
@@ -4426,7 +4514,9 @@ public class SaveContents {
 			while (worksheet.getRow(noOfEntries) != null) {
 				noOfEntries++;
 			}
-			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -4437,45 +4527,63 @@ public class SaveContents {
 				try {
 					if (entry.getCell(0) != null
 							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						if(entry.getCell(3) != null
-							&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							event = eventsService.getEvent(entry.getCell(3).toString(), sellerId);
+						if (entry.getCell(3) != null
+								&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							event = eventsService.getEvent(entry.getCell(3)
+									.toString(), sellerId);
 							System.out.println(event.getChannelName());
-							if (event != null && event.getChannelName().equalsIgnoreCase(entry.getCell(0).toString())) {
-								
-								if(event.getNrnReturnConfig()
+							if (event != null
+									&& event.getChannelName().equalsIgnoreCase(
+											entry.getCell(0).toString())) {
+
+								if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("variable")) {
-									
-									if(event.getNrnReturnConfig().getCommissionType().equalsIgnoreCase("categoryWise")) {
-										
-										List<NRnReturnCharges> chargesList = event.getNrnReturnConfig().getCharges();
+
+									if (event.getNrnReturnConfig()
+											.getCommissionType()
+											.equalsIgnoreCase("categoryWise")) {
+
+										List<NRnReturnCharges> chargesList = event
+												.getNrnReturnConfig()
+												.getCharges();
 										if (entry.getCell(1) != null
-												&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-											Category prodcat = categoryService.getCategory(
-													entry.getCell(1).toString(), sellerId);
+												&& entry.getCell(1)
+														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+											Category prodcat = categoryService
+													.getCategory(
+															entry.getCell(1)
+																	.toString(),
+															sellerId);
 											NRnReturnCharges nrnReturncharge = null;
 											if (prodcat != null) {
 												for (NRnReturnCharges charge : chargesList) {
-													if (charge.getChargeName()
+													if (charge
+															.getChargeName()
 															.equalsIgnoreCase(
 																	prodcat.getCatName())) {
-														nrnReturncharge = charge;											
+														nrnReturncharge = charge;
 													}
 												}
 
 												if (entry.getCell(2) != null
-														&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+														&& entry.getCell(2)
+																.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 
 													try {
 														float commPercent = Float
-																.valueOf(entry.getCell(2)
+																.valueOf(entry
+																		.getCell(
+																				2)
 																		.toString());
 
 														if (nrnReturncharge == null) {
 															nrnReturncharge = new NRnReturnCharges();
-															nrnReturncharge.setChargeAmount(commPercent);
-															nrnReturncharge.setChargeName(prodcat.getCatName());
+															nrnReturncharge
+																	.setChargeAmount(commPercent);
+															nrnReturncharge
+																	.setChargeName(prodcat
+																			.getCatName());
 															nrnReturncharge
 																	.setConfig(event
 																			.getNrnReturnConfig());
@@ -4488,7 +4596,8 @@ public class SaveContents {
 														}
 
 													} catch (NumberFormatException e) {
-														errorMessage.append(" Commission percent should be a number ");
+														errorMessage
+																.append(" Commission percent should be a number ");
 														validaterow = false;
 													}
 												} else {
@@ -4506,23 +4615,26 @@ public class SaveContents {
 													.append(" Procduct Category is null ");
 											validaterow = false;
 										}
-										
+
 									} else {
-										errorMessage.append("Commision Type is Fixed for This Event.");
+										errorMessage
+												.append("Commision Type is Fixed for This Event.");
 										validaterow = false;
-									}																	
+									}
 								} else {
-									errorMessage.append("NR Calculator Is Not 'Variable' For this Event.");
+									errorMessage
+											.append("NR Calculator Is Not 'Variable' For this Event.");
 									validaterow = false;
-								}							
+								}
 							} else {
-								errorMessage.append("No Event By this Name On This Partner.");
+								errorMessage
+										.append("No Event By this Name On This Partner.");
 								validaterow = false;
 							}
 						} else {
 							errorMessage.append("Event Name Is Blank or Null.");
 							validaterow = false;
-						}						
+						}
 					} else {
 						errorMessage.append(" Partner Name is null ");
 						validaterow = false;
@@ -4545,21 +4657,142 @@ public class SaveContents {
 				// Pre save to generate id for use in hierarchy
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "ProdCat_Comm_Event_Mapping", uploadFileName, 4,
-					errorSet, path, sellerId, uploadReport);
+			downloadUploadReportXLS(offices, "ProdCat_Comm_Event_Mapping",
+					uploadFileName, 4, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
-			addErrorUploadReport("ProdCat_Comm_Event_Mapping", sellerId, uploadReport);
+			addErrorUploadReport("ProdCat_Comm_Event_Mapping", sellerId,
+					uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
 		log.info("$$$ saveProdCatCommissionEventContents ends : SaveContents $$$");
 		return validaterow;
 	}
-	
-	
 
 	private static String removeExtraQuote(String input) {
 		String out = input.replaceAll("'", "");
 		return out;
+	}
+
+	public Object savepartnerCatMapping(MultipartFile file, int sellerId,
+			String path, UploadReport uploadReport) {
+		log.info("$$$ savepartnerCatMapping starts : SaveContents $$$");
+		boolean validaterow = true;
+		StringBuffer errorMessage = null;
+		String uploadFileName = "";
+		try {
+			Map<String, String> returnlist = new LinkedHashMap<>();
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			HSSFRow entry;
+			Integer noOfEntries = 1;
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
+			log.info(noOfEntries.toString());
+			log.debug("After getting no of rows" + noOfEntries);
+			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				Partner partner = null;
+				Category prodcat = null;
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
+				try {
+					if (entry.getCell(1) != null
+							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						partner = partnerService.getPartner(entry.getCell(1)
+								.toString(), sellerId);
+						if (partner != null) {
+
+							if (entry.getCell(0) != null
+									&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								prodcat = categoryService.getCategory(entry
+										.getCell(0).toString(), sellerId);
+
+								if (prodcat != null) {
+
+									if (entry.getCell(2) != null
+											&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+
+										String partnerCat = partner.getPcName()
+												+ "_"
+												+ entry.getCell(2).toString();
+
+										if (prodcat.getPartnerCatRef() == null) {
+											prodcat.setPartnerCatRef(partnerCat);
+										} else {
+											List<String> partnerCatList = new ArrayList<String>(
+													Arrays.asList(prodcat
+															.getPartnerCatRef()
+															.split(",")));
+
+											if (!partnerCatList
+													.contains(partnerCat)) {
+												partnerCatList.add(partnerCat);
+												prodcat.setPartnerCatRef(StringUtils
+														.join(partnerCatList,
+																','));
+											} else {
+												errorMessage
+														.append(" Channel Category reference already exist ");
+												validaterow = false;
+											}
+
+										}
+
+									} else {
+										errorMessage
+												.append(" Channel Category reference is null ");
+										validaterow = false;
+									}
+								} else {
+									errorMessage
+											.append(" Product Category does not exist ");
+									validaterow = false;
+								}
+							} else {
+								errorMessage
+										.append(" Procduct Category is null ");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append(" Partner does not exist ");
+							validaterow = false;
+						}
+					} else {
+						errorMessage.append(" Partner Name is null ");
+						validaterow = false;
+					}
+					if (validaterow) {
+						categoryService.addPartnerCatRef(prodcat, sellerId);
+					} else {
+						returnlist.put(errorMessage.toString(), "");
+					}
+				} catch (Exception e) {
+					log.error("Failed! by SellerId : " + sellerId, e);
+					if (partner != null) {
+						errorMessage.append("Invalid Input! ");
+						returnlist.put(errorMessage.toString(), "");
+					}
+				}
+				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
+						+ entry.getCell(2) + " 3 :" + entry.getCell(3));
+				// Pre save to generate id for use in hierarchy
+			}
+			Set<String> errorSet = returnlist.keySet();
+			downloadUploadReportXLS(offices, "PartnerCat_ProdCat_Mapping",
+					uploadFileName, 3, errorSet, path, sellerId, uploadReport);
+		} catch (Exception e) {
+			log.error("Failed! by SellerId : " + sellerId, e);
+			addErrorUploadReport("PartnerCat_ProdCat_Mapping", sellerId,
+					uploadReport);
+			throw new MultipartException("Constraints Violated");
+		}
+		log.info("$$$ savepartnerCatMapping ends : SaveContents $$$");
+		return validaterow;
+
 	}
 }

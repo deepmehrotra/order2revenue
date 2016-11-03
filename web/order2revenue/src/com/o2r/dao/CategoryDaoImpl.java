@@ -13,6 +13,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -82,6 +83,34 @@ public class CategoryDaoImpl implements CategoryDao {
 
 		}
 		log.info("***addCategory Exit****");
+
+	}
+
+	@Override
+	public void addPartnerCatRef(Category category, int sellerId)
+			throws CustomException {
+
+		log.info("***addPartnerCatRef Start****");
+		// Seller seller = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			session.saveOrUpdate(category);
+
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.addCategoryErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(GlobalConstant.addCategoryError,
+					new Date(), 1, sellerId + "-"
+							+ GlobalConstant.addCategoryErrorCode, e);
+
+		}
+		log.info("***addPartnerCatRef Exit****");
 
 	}
 
@@ -288,11 +317,19 @@ public class CategoryDaoImpl implements CategoryDao {
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Seller.class).add(
 					Restrictions.eq("id", sellerId));
+			Criterion res1 = Restrictions.or(
+					Restrictions.eq("category.catName", catname).ignoreCase(),
+					Restrictions.like("category.partnerCatRef",
+							"%" + catname + "%").ignoreCase());
 			criteria.createAlias("categories", "category",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("category.isSubCategory", true))
-					.add(Restrictions.eq("category.catName", catname)
-							.ignoreCase());
+					/*
+					 * .add(Restrictions.eq("category.catName", catname)
+					 * .ignoreCase());
+					 */
+					.add(res1);
+
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			tempList = criteria.list();
 			if (tempList != null && tempList.size() != 0) {
@@ -373,13 +410,14 @@ public class CategoryDaoImpl implements CategoryDao {
 			return 0;
 
 	}
-	
+
 	@Override
-	public Map<String,String> getCategoryParentMap(int sellerId) throws CustomException {
+	public Map<String, String> getCategoryParentMap(int sellerId)
+			throws CustomException {
 
 		log.info("*** getSKUCategoryMap Starts : ProductDaoImpl ****");
-		Map<String,String> returnMap = new HashMap<String, String>();
-		Seller seller=null;
+		Map<String, String> returnMap = new HashMap<String, String>();
+		Seller seller = null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -390,22 +428,20 @@ public class CategoryDaoImpl implements CategoryDao {
 					.add(Restrictions.eq("category.isSubCategory", true))
 					.setResultTransformer(
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			List templist=criteria.list();
+			List templist = criteria.list();
 			if (templist != null && templist.size() != 0) {
 				seller = (Seller) templist.get(0);
-				
+
 				if (seller.getCategories() != null
-						&& seller.getCategories().size() != 0)
-				{
-					for(Category cat:seller.getCategories())
-					{
+						&& seller.getCategories().size() != 0) {
+					for (Category cat : seller.getCategories()) {
 						returnMap.put(cat.getCatName(), cat.getParentCatName());
 					}
 				}
 				session.getTransaction().commit();
 				session.close();
-		}
-		}catch (Exception e) {
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed! by sellerId : " + sellerId, e);
 			throw new CustomException(
