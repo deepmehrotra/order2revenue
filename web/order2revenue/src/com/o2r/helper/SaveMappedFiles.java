@@ -1192,6 +1192,7 @@ public class SaveMappedFiles {
 										order.setChannelOrderID(channelorderid);
 										order.setProductSkuCode(productConfig
 												.getProductSkuCode());
+										order.setPartnerCommission(productConfig.getCommision());
 										duplicateKey.put(channelorderid, "");
 									} else {
 										errorMessage
@@ -1852,7 +1853,58 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 					
+					
 					if (cellIndexMap.get(columHeaderMap
+							.get("Secondary OrderID")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("Secondary OrderID"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							itemID = entry.getCell(index).toString();
+							if (itemID.contains("'")) {
+								itemID = removeExtraQuote(itemID);
+							}
+							itemID = removeExtraQuote(itemID);
+							order.setSubOrderID(itemID);
+						}
+					}
+					
+					if(channelorderid != null){
+						if(!idsList.containsKey(channelorderid)
+								&& !duplicateKey.containsKey(channelorderid)){
+							order.setChannelOrderID(channelorderid);
+							if (productConfig != null){
+								order.setProductSkuCode(productConfig.getProductSkuCode());	
+								order.setPartnerCommission(productConfig.getCommision());
+							}
+							duplicateKey.put(channelorderid, itemID);
+						} else {
+							if(itemID != null && ((idsList.get(channelorderid) != null 
+									&& !idsList.get(channelorderid).equals(itemID))
+									|| (duplicateKey.containsKey(channelorderid) 
+											&& (duplicateKey.get(channelorderid) == null
+											|| !duplicateKey.get(channelorderid).equals(itemID))))){
+								channelorderid = channelorderid + GlobalConstant.orderUniqueSymbol + itemID;
+								if(!idsList.containsKey(channelorderid)
+										&& !duplicateKey.containsKey(channelorderid)){
+									order.setChannelOrderID(channelorderid);
+									if (productConfig != null){
+										order.setProductSkuCode(productConfig.getProductSkuCode());	
+										order.setPartnerCommission(productConfig.getCommision());
+									}													
+									duplicateKey.put(channelorderid, itemID);
+								} else {
+									errorMessage.append("Channel Order Id is Already Present.");
+									validaterow = false;
+								}
+							} else {
+								errorMessage.append("Channel Order Id is Already Present.");
+								validaterow = false;
+							}																								
+						}
+					}
+					
+					/*if (cellIndexMap.get(columHeaderMap
 							.get("Secondary OrderID")) != null) {
 						index = cellIndexMap.get(columHeaderMap
 								.get("Secondary OrderID"));
@@ -1877,6 +1929,7 @@ public class SaveMappedFiles {
 								order.setChannelOrderID(channelorderid);
 								order.setProductSkuCode(productConfig
 										.getProductSkuCode());
+								order.setPartnerCommission(productConfig.getCommision());
 								duplicateKey
 										.put(channelorderid, "");
 							} else {
@@ -1886,7 +1939,7 @@ public class SaveMappedFiles {
 							}
 							}
 						}
-					}
+					}*/
 
 					try {
 						index = cellIndexMap.get(columHeaderMap
@@ -4104,6 +4157,7 @@ public class SaveMappedFiles {
 										order.setChannelOrderID(channelorderid);
 										order.setProductSkuCode(productConfig
 												.getProductSkuCode());
+										order.setPartnerCommission(productConfig.getCommision());
 										duplicateKey.put(channelorderid, "");
 									} else {
 										errorMessage
@@ -6756,9 +6810,11 @@ public class SaveMappedFiles {
 												&& !duplicateKey
 														.containsKey(channelorderid)
 												&& productConfig != null)) {
+
 										order.setChannelOrderID(channelorderid);
 										order.setProductSkuCode(productConfig
 												.getProductSkuCode());
+										order.setPartnerCommission(productConfig.getCommision());
 										duplicateKey
 												.put(channelorderid, "");
 									} else {

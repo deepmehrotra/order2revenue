@@ -133,13 +133,12 @@
                                 </c:if>
                                 </tbody>
                             </table>                      
-                            </div>
-                            
+                            </div>                 
                             
                             <div class="col-sm-12">
                             <div class="hr-line-dashed"></div>
-                                  <a href="#" id="upload" class="btn btn-success btn-xs" style="display: none;">Bulk Upload Product</a>&nbsp;&nbsp; 
-                                  <a href="#" id="download" class="btn btn-success btn-xs" style="display: none;">Download Product Summary</a>  
+                                  <a href="#" id="upload" class="btn btn-success btn-xs" onclick="onclickTaxablePurchases('uploadGatePass',0)" >Bulk Upload Product</a>&nbsp;&nbsp; 
+                                  <a href="#" id="download" class="btn btn-success btn-xs" onclick="onclickTaxablePurchases('downloadGatePass',0)">Download Product Summary</a>  
                                 </div>
                            
                         </div>
@@ -213,10 +212,11 @@
     		});
         $('#upload').click(function(){
     		 $.ajax({
-    	            url : 'uploadOrderDA.html?value=productSummary',
+    	           // url : 'uploadOrderDA.html?value=productSummary',
+    	        	url : 'uploadTaxablePurchasesDA.html?value=TaxablePurchases_Mapping', 
     	            success : function(data) {
     	            	if($(data).find('#j_username').length > 0){
-    	            		window.location.href = "orderindex.html";
+    	            		window.location.href = "uploadTaxablePurchasesDA.html";
     	            	}else{
     	                	$('#centerpane').html(data);
     	            	}
@@ -291,7 +291,33 @@
     		var sx=document.getElementById("oneone").value;
     		var xxx = $('form#addProductForm').submit();
     	 
-    	}	
+    	}
+    	
+    	
+    	function onclickTaxablePurchases(value,id) {
+    		
+    		var targeturl="";
+        	switch(value)
+        	{       	        	
+        	case "uploadTaxablePurchases" :
+        		targeturl="uploadTaxablePurchasesDA.html?value=TaxablePurchases_Mapping";
+        	break;
+        	case "downloadTaxablePurchases" :
+        		targeturl="downloadTaxablePurchasesDA.html?value=TaxablePurchases_Mapping";
+        	break;        	
+        		
+        	}
+            $.ajax({
+                url : targeturl,
+                success : function(data) {
+                	if($(data).find('#j_username').length > 0){
+                		window.location.href = "orderindex.html";
+                	}else{
+                    	$('#centerpane').html(data);
+                	}
+                }
+            });
+        }    	
     	
 
 
