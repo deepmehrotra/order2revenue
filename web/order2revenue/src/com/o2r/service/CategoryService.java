@@ -30,4 +30,6 @@ public List<Long> getSKuCount(String catname, int catId, int sellerId)  throws C
 public Category getSubCategory(String catname, int sellerId) throws CustomException;
 
 public Map<String, String> getCategoryParentMap(int sellerId) throws CustomException;
+
+public void addPartnerCatRef(Category prodcat, int sellerId) throws CustomException;
 }

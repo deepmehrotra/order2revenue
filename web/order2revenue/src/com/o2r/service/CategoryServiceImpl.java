@@ -20,60 +20,68 @@ import com.o2r.model.Category;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
 
- @Autowired
- private CategoryDao categoryDao;
+	@Autowired
+	private CategoryDao categoryDao;
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public void addCategory(Category category, int sellerId)
+			throws CustomException {
+		categoryDao.addCategory(category, sellerId);
 
-@Override
-@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public void addCategory(Category category ,int sellerId) throws CustomException {
-		categoryDao.addCategory(category,sellerId);
+	}
 
-}
+	@Override
+	public List<Category> listCategories(int sellerId) throws CustomException {
+		return categoryDao.listCategories(sellerId);
+	}
 
-@Override
-public List<Category> listCategories(int sellerId) throws CustomException {
-	return categoryDao.listCategories(sellerId);
-}
-@Override
-public List<Category> listParentCategories(int sellerId) throws CustomException
-{
-	return categoryDao.listParentCategories(sellerId);
-}
-@Override
-public Category getCategory(int CategoryId) {
-	return categoryDao.getCategory(CategoryId);
-}
+	@Override
+	public List<Category> listParentCategories(int sellerId)
+			throws CustomException {
+		return categoryDao.listParentCategories(sellerId);
+	}
 
-@Override
-public int deleteCategory(Category category,int sellerId) throws CustomException {
+	@Override
+	public Category getCategory(int CategoryId) {
+		return categoryDao.getCategory(CategoryId);
+	}
 
-	return categoryDao.deleteCategory(category,sellerId);
-}
+	@Override
+	public int deleteCategory(Category category, int sellerId)
+			throws CustomException {
 
-@Override
-public List<Long> getSKuCount(String catname,int catId, int sellerId) throws CustomException
-{
-	return categoryDao.getSKuCount(catname,catId , sellerId);
-}
+		return categoryDao.deleteCategory(category, sellerId);
+	}
 
-@Override
-public Category getCategory(String catname ,int sellerId) throws CustomException
-{
-	return categoryDao.getCategory(catname ,sellerId);
-}
+	@Override
+	public List<Long> getSKuCount(String catname, int catId, int sellerId)
+			throws CustomException {
+		return categoryDao.getSKuCount(catname, catId, sellerId);
+	}
 
-@Override
-public Category getSubCategory(String catname, int sellerId)
-		throws CustomException
-		{
-	return categoryDao.getSubCategory(catname,sellerId);
-		}
+	@Override
+	public Category getCategory(String catname, int sellerId)
+			throws CustomException {
+		return categoryDao.getCategory(catname, sellerId);
+	}
 
-@Override
-public Map<String, String> getCategoryParentMap(int sellerId)
-		throws CustomException
-		{
-	return categoryDao.getCategoryParentMap(sellerId);
-		}
+	@Override
+	public Category getSubCategory(String catname, int sellerId)
+			throws CustomException {
+		return categoryDao.getSubCategory(catname, sellerId);
+	}
+
+	@Override
+	public Map<String, String> getCategoryParentMap(int sellerId)
+			throws CustomException {
+		return categoryDao.getCategoryParentMap(sellerId);
+	}
+
+	@Override
+	public void addPartnerCatRef(Category prodcat, int sellerId)
+			throws CustomException {
+		categoryDao.addPartnerCatRef(prodcat, sellerId);
+
+	}
 }

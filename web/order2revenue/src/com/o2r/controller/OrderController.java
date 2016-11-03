@@ -101,14 +101,14 @@ public class OrderController {
 	DataConfig dataConfig;
 	@Autowired
 	AreaConfigDao areaConfigDao;
-	
+
 	@Resource(name = "saveMappedFiles")
 	private SaveMappedFiles saveMappedFiles;
 
 	private static final String UPLOAD_DIR = "upload";
-	
-	private int listSize=500;
-	
+
+	private int listSize = 500;
+
 	static Logger log = Logger.getLogger(OrderController.class.getName());
 	Gson gson = new Gson();
 
@@ -117,70 +117,72 @@ public class OrderController {
 	 * <p>
 	 * Make sure this method doesn't return any model. Otherwise, you'll get an
 	 * "IllegalStateException: getOutputStream() has already been called for this response"
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 * 
 	 */
 	@RequestMapping(value = "/seller/download/xls", method = RequestMethod.GET)
 	public void getXLS(HttpServletResponse response,
-			@RequestParam(value = "sheetvalue") String sheetvalue,HttpServletRequest request)
-			throws ClassNotFoundException, IOException {
+			@RequestParam(value = "sheetvalue") String sheetvalue,
+			HttpServletRequest request) throws ClassNotFoundException,
+			IOException {
 
 		log.info("$$$ getXLS Starts : OrderController $$$");
 		log.debug(" Downloading the sheet: " + sheetvalue);
-			
-			response.reset();
-			int BUFF_SIZE = 1024;
-			int byteRead = 0;
-			byte[] buffer = new byte[BUFF_SIZE];
-			File targetFile = new File(System.getProperty("catalina.base")+dataConfig.getXlsPath()+sheetvalue+".xls");
-			FileInputStream inputStream = new FileInputStream(targetFile);
-			response.setContentType("application/vnd.ms-excel");			
-			response.setHeader("Content-Disposition", "attachment; filename="+targetFile.getName());
-			response.setContentLength((int) targetFile.length());
-			OutputStream outputStream = response.getOutputStream();			
-			try {			    
-			    while ((byteRead = inputStream.read()) != -1) {
-			    	outputStream.write(buffer, 0, byteRead);			
-			    }			    
-			    outputStream.flush();
-			} catch (Exception e) {			    
-			    e.printStackTrace();
-			    log.error("failed !", e);
-			} finally {
-				outputStream.close();
-				inputStream.close();
-			}		
-		
-		
-		/*if (sheetvalue != null) {
-			if (sheetvalue.equals("ordersummary")) {
-				downloadService.downloadXLS(response);
-			} else if (sheetvalue.equals("orderposummary")) {
-				downloadService.downloadOrderPOXLS(response);
-			} else if (sheetvalue.equals("paymentsummary")) {
-				downloadService.downloadPaymentXLS(response);
-			} else if (sheetvalue.equals("returnsummary")) {
-				downloadService.downloadReturnXLS(response);
-			} else if (sheetvalue.equals("gatepasssummary")) {
-				downloadService.downloadGatePassXLS(response);
-			} else if (sheetvalue.equals("productsummary")) {
-				downloadService.downloadProductXLS(response);
-			}else if (sheetvalue.equals("editproductsummary")) {
-				downloadService.downloadEditProductXLS(response);
-			}else if (sheetvalue.equals("productconfigsummary")) {
-				downloadService.downloadProductConfigXLS(response);
-			} else if (sheetvalue.equals("inventorysummary")) {
-				downloadService.downloadInventoryXLS(response);
-			} else if (sheetvalue.equals("debitNotesummary")) {
-				downloadService.downloadDebitNoteXLS(response);
-			} else if (sheetvalue.equals("popaymentsummary")) {
-				downloadService.downloadPOPaymentXLS(response);
-			} else if (sheetvalue.equals("expensesummary")) {
-				downloadService.downloadExpensesXLS(response);
-			}else if (sheetvalue.equals("skumappingsummary")) {
-				downloadService.downloadSKUMappingXLS(response);
+
+		response.reset();
+		int BUFF_SIZE = 1024;
+		int byteRead = 0;
+		byte[] buffer = new byte[BUFF_SIZE];
+		File targetFile = new File(System.getProperty("catalina.base")
+				+ dataConfig.getXlsPath() + sheetvalue + ".xls");
+		FileInputStream inputStream = new FileInputStream(targetFile);
+		response.setContentType("application/vnd.ms-excel");
+		response.setHeader("Content-Disposition", "attachment; filename="
+				+ targetFile.getName());
+		response.setContentLength((int) targetFile.length());
+		OutputStream outputStream = response.getOutputStream();
+		try {
+			while ((byteRead = inputStream.read()) != -1) {
+				outputStream.write(buffer, 0, byteRead);
 			}
-		}*/
+			outputStream.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("failed !", e);
+		} finally {
+			outputStream.close();
+			inputStream.close();
+		}
+
+		/*
+		 * if (sheetvalue != null) { if (sheetvalue.equals("ordersummary")) {
+		 * downloadService.downloadXLS(response); } else if
+		 * (sheetvalue.equals("orderposummary")) {
+		 * downloadService.downloadOrderPOXLS(response); } else if
+		 * (sheetvalue.equals("paymentsummary")) {
+		 * downloadService.downloadPaymentXLS(response); } else if
+		 * (sheetvalue.equals("returnsummary")) {
+		 * downloadService.downloadReturnXLS(response); } else if
+		 * (sheetvalue.equals("gatepasssummary")) {
+		 * downloadService.downloadGatePassXLS(response); } else if
+		 * (sheetvalue.equals("productsummary")) {
+		 * downloadService.downloadProductXLS(response); }else if
+		 * (sheetvalue.equals("editproductsummary")) {
+		 * downloadService.downloadEditProductXLS(response); }else if
+		 * (sheetvalue.equals("productconfigsummary")) {
+		 * downloadService.downloadProductConfigXLS(response); } else if
+		 * (sheetvalue.equals("inventorysummary")) {
+		 * downloadService.downloadInventoryXLS(response); } else if
+		 * (sheetvalue.equals("debitNotesummary")) {
+		 * downloadService.downloadDebitNoteXLS(response); } else if
+		 * (sheetvalue.equals("popaymentsummary")) {
+		 * downloadService.downloadPOPaymentXLS(response); } else if
+		 * (sheetvalue.equals("expensesummary")) {
+		 * downloadService.downloadExpensesXLS(response); }else if
+		 * (sheetvalue.equals("skumappingsummary")) {
+		 * downloadService.downloadSKUMappingXLS(response); } }
+		 */
 		log.info("$$$ getXLS Ends : OrderController $$$");
 	}
 
@@ -196,84 +198,92 @@ public class OrderController {
 		log.info("$$$ displayDownloadForm Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/order_upload_form", model);
 	}
-	
+
 	@RequestMapping(value = "/seller/markOrderStatus", method = RequestMethod.GET)
 	public ModelAndView markOrderStatus(HttpServletRequest request) {
 		log.info("$$$ markOrderStatus Starts : OrderController $$$");
 		int sellerId = 0;
-		/*Map<String, Object> model = new HashMap<String, Object>();
-		Product product = null;
-		Events event = null;*/
+		/*
+		 * Map<String, Object> model = new HashMap<String, Object>(); Product
+		 * product = null; Events event = null;
+		 */
 		try {
 			int orderId = Integer.parseInt(request.getParameter("orderId"));
 			String finalStatus = request.getParameter("selectStatus");
-			sellerId = helperClass.getSellerIdfromSession(request); 
+			sellerId = helperClass.getSellerIdfromSession(request);
 			orderService.markOrderStatus(finalStatus, orderId, sellerId);
-			/*Order order = orderService.getOrder(orderId,sellerId);			
-			product = productService.getProduct(order.getProductSkuCode(),
-					sellerId);
-			log.debug(" Payment difference :"
-					+ order.getOrderPayment().getPaymentDifference());
-			event = eventsService.getEvent(order.getEventName(), sellerId);
-			model.put("order", ConverterClass.prepareOrderBean(order));
-			model.put("event", ConverterClass.prepareEventsBean(event));
-			model.put("serviceTax", (order.getPccAmount()+order.getFixedfee()+order.getPartnerCommission()+order.getShippingCharges())*dataConfig.getServiceTax()/100);*/
-		} /*catch (CustomException ce) {
-			log.error("viewOrderDailyAct exception : " + ce.toString());
-			model.put("errorMessage", ce.getLocalMessage());
-			model.put("errorTime", ce.getErrorTime());
-			model.put("errorCode", ce.getErrorCode());
-			return new ModelAndView("globalErorPage", model);
-		}*/ catch (Exception e) {
+			/*
+			 * Order order = orderService.getOrder(orderId,sellerId); product =
+			 * productService.getProduct(order.getProductSkuCode(), sellerId);
+			 * log.debug(" Payment difference :" +
+			 * order.getOrderPayment().getPaymentDifference()); event =
+			 * eventsService.getEvent(order.getEventName(), sellerId);
+			 * model.put("order", ConverterClass.prepareOrderBean(order));
+			 * model.put("event", ConverterClass.prepareEventsBean(event));
+			 * model.put("serviceTax",
+			 * (order.getPccAmount()+order.getFixedfee()+
+			 * order.getPartnerCommission
+			 * ()+order.getShippingCharges())*dataConfig.getServiceTax()/100);
+			 */
+		} /*
+		 * catch (CustomException ce) {
+		 * log.error("viewOrderDailyAct exception : " + ce.toString());
+		 * model.put("errorMessage", ce.getLocalMessage());
+		 * model.put("errorTime", ce.getErrorTime()); model.put("errorCode",
+		 * ce.getErrorCode()); return new ModelAndView("globalErorPage", model);
+		 * }
+		 */catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed by seller ID : "+sellerId, e);
+			log.error("Failed by seller ID : " + sellerId, e);
 		}
-		/*if (product != null)
-			model.put("productCost", product.getProductPrice());*/
+		/*
+		 * if (product != null) model.put("productCost",
+		 * product.getProductPrice());
+		 */
 		log.info("$$$ markOrderStatus Ends : OrderController $$$");
 		return new ModelAndView("redirect:/seller/orderList.html");
 	}
 
 	@RequestMapping(value = "/seller/uploadOrderDA", method = RequestMethod.GET)
-	public ModelAndView displayUploadForm(HttpServletRequest request, @RequestParam("value") String value,
+	public ModelAndView displayUploadForm(HttpServletRequest request,
+			@RequestParam("value") String value,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
-		
-			
+
 		log.info("$$$ displayUploadForm Starts : OrderController $$$");
-		Map<String, Object> model = new HashMap<String, Object>();		
+		Map<String, Object> model = new HashMap<String, Object>();
 		System.out.println("Inside Payment orders  viewpayments uploadId"
 				+ value);
 		model.put("uploadValue", value);
 		try {
-			model.put("seller", sellerService.getSeller(helperClass.getSellerIdfromSession(request)));
+			model.put("seller", sellerService.getSeller(helperClass
+					.getSellerIdfromSession(request)));
 		} catch (Exception e) {
 			log.error("Failed to get Seller !", e);
-		}		
+		}
 		log.info("$$$ displayUploadForm Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/order_upload_form", model);
-		//return new ModelAndView("initialsetup/listTaxablePurchases", model);
+		// return new ModelAndView("initialsetup/listTaxablePurchases", model);
 	}
-	
-	
+
 	@RequestMapping(value = "/seller/uploadTaxablePurchasesDA", method = RequestMethod.GET)
-	public ModelAndView displayTaxablePurchasesUploadForm(HttpServletRequest request, @RequestParam("value") String value,
+	public ModelAndView displayTaxablePurchasesUploadForm(
+			HttpServletRequest request, @RequestParam("value") String value,
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
 		log.info("$$$ displayUploadForm Starts : OrderController $$$");
-		Map<String, Object> model = new HashMap<String, Object>();		
-				
+		Map<String, Object> model = new HashMap<String, Object>();
+
 		model.put("uploadValue", value);
 		try {
-			model.put("seller", sellerService.getSeller(helperClass.getSellerIdfromSession(request)));
+			model.put("seller", sellerService.getSeller(helperClass
+					.getSellerIdfromSession(request)));
 		} catch (Exception e) {
 			log.error("Failed to get Seller !", e);
-		}		
+		}
 		log.info("$$$ displayUploadForm Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/order_upload_form", model);
-		
-		
-	}	
-	
+
+	}
 
 	@RequestMapping(value = "/user-login", method = RequestMethod.GET)
 	public ModelAndView loginForm(HttpServletRequest request) {
@@ -282,7 +292,7 @@ public class OrderController {
 		log.debug("catalina.base  " + System.getProperty("catalina.base"));
 
 		try {
-			//sellerId=helperClass.getSellerIdfromSession(request);					
+			// sellerId=helperClass.getSellerIdfromSession(request);
 			org.springframework.core.io.Resource resource = new ClassPathResource(
 					"database.properties");
 			Properties props = PropertiesLoaderUtils.loadProperties(resource);
@@ -312,25 +322,25 @@ public class OrderController {
 			@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map) {
 
 		log.info("$$$ save() Starts : OrderController $$$");
-		
+
 		HttpSession session = request.getSession(true);
 		session.setAttribute("isProgress", true);
-		
+
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		double starttime = System.currentTimeMillis();
 		log.debug(" **StartTime : " + starttime);
-		//List<MultipartFile> files = request.getFiles("0");
+		// List<MultipartFile> files = request.getFiles("0");
 		List<MultipartFile> files = uploadForm.getFiles();
-		MultipartFile fileinput =null;
+		MultipartFile fileinput = null;
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
 		List<String> fileNames = new ArrayList<String>();
-		if(files!=null&&files.get(0)!=null)
-		fileinput=files.get(0);
+		if (files != null && files.get(0) != null)
+			fileinput = files.get(0);
 		UploadReport uploadReport = new UploadReport();
 		uploadReport.setUploadDate(new Date());
-		
+
 		// gets absolute path of the web application
 		String applicationPath = request.getServletContext().getRealPath("");
 
@@ -338,13 +348,14 @@ public class OrderController {
 			fileNames.add(files.get(0).getOriginalFilename());
 			try {
 				sellerId = helperClass.getSellerIdfromSession(request);
-				uploadReport.setFileType(GlobalConstant.worksheetNameMap.get(uploadForm.getSheetValue()));
+				uploadReport.setFileType(GlobalConstant.worksheetNameMap
+						.get(uploadForm.getSheetValue()));
 				uploadReport.setDescription("Imported");
 				uploadReport.setSeller(sellerService.getSeller(sellerId));
 				uploadReport.setNoOfErrors(0);
 				uploadReport.setStatus("In Progress");
 				reportGeneratorService.addUploadReport(uploadReport, sellerId);
-				
+
 				log.debug(" Filename : " + files.get(0).getOriginalFilename());
 				log.debug(" uploadForm.getSheetValue() : "
 						+ uploadForm.getSheetValue());
@@ -405,11 +416,11 @@ public class OrderController {
 							files.get(0), sellerId, applicationPath,
 							uploadReport));
 					model.put("mapType", "productMap");
-					break;					
+					break;
 				case "editProductSummary":
-					model.put("editProductMap", saveContents.saveEditProductContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport));
+					model.put("editProductMap", saveContents
+							.saveEditProductContents(files.get(0), sellerId,
+									applicationPath, uploadReport));
 					model.put("mapType", "editProductMap");
 					break;
 				case "productConfigSummary":
@@ -446,119 +457,114 @@ public class OrderController {
 							uploadReport));
 					model.put("mapType", "eventSkuMap");
 
-					break;				
-				/*case "skuMapping":
-					model.put("skuMapping", saveContents.saveSKUMappingContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport));
-					model.put("mapType", "skuMappingMap");
-					break;*/
+					break;
+				/*
+				 * case "skuMapping": model.put("skuMapping",
+				 * saveContents.saveSKUMappingContents( files.get(0), sellerId,
+				 * applicationPath, uploadReport)); model.put("mapType",
+				 * "skuMappingMap"); break;
+				 */
 
 				case "product_Tax_Mapping":
-					model.put("skuMapping", saveContents.saveTaxCategoryContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport));
+					model.put("skuMapping", saveContents
+							.saveTaxCategoryContents(files.get(0), sellerId,
+									applicationPath, uploadReport));
 					model.put("mapType", "skuMappingMap");
 					break;
 				case "Dlink_SKU_Mapping":
-					model.put("dlinkSkuMapping", saveContents.saveDlinkSkuMappingContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport));
+					model.put("dlinkSkuMapping", saveContents
+							.saveDlinkSkuMappingContents(files.get(0),
+									sellerId, applicationPath, uploadReport));
 					model.put("mapType", "DlinkSkuMappingMap");
 					break;
 				case "vendorSKUMapping":
-					model.put("vendorSKUMapping", saveContents.saveVendorSKUMappingContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport));
+					model.put("vendorSKUMapping", saveContents
+							.saveVendorSKUMappingContents(files.get(0),
+									sellerId, applicationPath, uploadReport));
 					model.put("mapType", "vendorSKUMappingMap");
 					break;
 				case "Unicommerce_Order":
-					saveMappedFiles.saveUnicommerceOrderContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport);
+					saveMappedFiles.saveUnicommerceOrderContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
 					break;
 				case "Flipkart_Payment":
-					saveMappedFiles.saveFlipkartPaymentContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport);
+					saveMappedFiles.saveFlipkartPaymentContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
 					break;
 				case "Flipkart_Order":
-					saveMappedFiles.saveFlipkartOrderContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport);
+					saveMappedFiles.saveFlipkartOrderContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
 					break;
 				case "PayTM_Payment":
-					saveMappedFiles.savePayTMPaymentContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport);
-						break;
+					saveMappedFiles.savePayTMPaymentContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
+					break;
 				case "PayTM_Order":
-					saveMappedFiles.savePayTMOrderContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport);
-						break;
+					saveMappedFiles.savePayTMOrderContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
+					break;
 				case "Amazon_Order":
-					saveMappedFiles.saveAmzonOrderContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport);
+					saveMappedFiles.saveAmzonOrderContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
 					break;
 				case "Amazon_Payment":
-					saveMappedFiles.saveAmazonPaymentContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport);
-						break;
+					saveMappedFiles.saveAmazonPaymentContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
+					break;
 				case "Limeroad_Payment":
-					saveMappedFiles.saveLimeroadPaymentContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport);
-						break;
+					saveMappedFiles.saveLimeroadPaymentContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
+					break;
 				case "Limeroad_Order":
-					saveMappedFiles.saveLimeroadOrderContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport);
-						break;
+					saveMappedFiles.saveLimeroadOrderContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
+					break;
 				case "Snapdeal_Payment":
-					saveMappedFiles.saveSnapDealPaymentContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport);
-						break;
+					saveMappedFiles.saveSnapDealPaymentContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
+					break;
 				case "Snapdeal_Order":
-					saveMappedFiles.saveSnapdealOrderContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport);
-						break;
+					saveMappedFiles.saveSnapdealOrderContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
+					break;
 				case "Jabong_Payment":
-					saveMappedFiles.saveJabongPaymentContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport);
+					saveMappedFiles.saveJabongPaymentContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
 					break;
 				case "Jabong_Order":
-					saveMappedFiles.saveJabongOrderContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport);
+					saveMappedFiles.saveJabongOrderContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
 					break;
 				case "CreateInventoryGroups":
-					saveContents.saveInventoryGroups(files.get(0), sellerId, applicationPath, uploadReport);
-						break;
+					saveContents.saveInventoryGroups(files.get(0), sellerId,
+							applicationPath, uploadReport);
+					break;
 				case "CreateProCat":
-					saveContents.saveProductCategory(files.get(0), sellerId, applicationPath, uploadReport);
-						break;
+					saveContents.saveProductCategory(files.get(0), sellerId,
+							applicationPath, uploadReport);
+					break;
 				case "prodCat_Comm_Mapping":
-					model.put("prodCat_Comm_Mapping", saveContents.saveProdCatCommissionContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport));
+					model.put("prodCat_Comm_Mapping", saveContents
+							.saveProdCatCommissionContents(files.get(0),
+									sellerId, applicationPath, uploadReport));
 					model.put("mapType", "prodCat_Comm_Mapping");
 					break;
 				case "prodCat_Comm_Event_Mapping":
-					model.put("prodCat_Comm_Event_Mapping", saveContents.saveProdCatCommissionEventContents(
-							files.get(0), sellerId, applicationPath,
-							uploadReport));
+					model.put("prodCat_Comm_Event_Mapping", saveContents
+							.saveProdCatCommissionEventContents(files.get(0),
+									sellerId, applicationPath, uploadReport));
 					model.put("mapType", "prodCat_Comm_Event_Mapping");
 					break;
-				case "taxablePurchases_Mapping":	
-					model.put("taxablePurhcasesMapping", saveContents.saveTaxablePurchases(
-							files.get(0), sellerId, applicationPath,
-							uploadReport));
+				case "taxablePurchases_Mapping":
+					model.put("taxablePurhcasesMapping", saveContents
+							.saveTaxablePurchases(files.get(0), sellerId,
+									applicationPath, uploadReport));
+					model.put("mapType", "taxablePurhcasesMap");
+					break;
+				case "partnerCat_ProdCat_Mapping":
+					model.put("partnerCatMapping", saveContents
+							.savepartnerCatMapping(files.get(0), sellerId,
+									applicationPath, uploadReport));
 					model.put("mapType", "taxablePurhcasesMap");
 					break;
 
@@ -599,22 +605,26 @@ public class OrderController {
 				uploadReport.setTimeTaken((float) lapsetime);
 				uploadReport = reportGeneratorService.addUploadReport(
 						uploadReport, sellerId);
-				
-				List<UploadReportBean> uploadReports = ConverterClass.prepareUploadReportListBean(
-						reportGeneratorService.listUploadReport(helperClass.getSellerIdfromSession(request), false));
+
+				List<UploadReportBean> uploadReports = ConverterClass
+						.prepareUploadReportListBean(reportGeneratorService.listUploadReport(
+								helperClass.getSellerIdfromSession(request),
+								false));
 				if (uploadReports != null && uploadReports.size() > 3) {
-					uploadReports = uploadReports.subList(uploadReports.size() - 3, uploadReports.size());
+					uploadReports = uploadReports.subList(
+							uploadReports.size() - 3, uploadReports.size());
 				}
 				model.put("uploadReportList", uploadReports);
 			} catch (Exception e) {
 				log.debug("Inside exception , filetype not accepted "
 						+ e.getLocalizedMessage());
 				e.printStackTrace();
-				log.error("Failed! by Seller ID : "+sellerId, e);
+				log.error("Failed! by Seller ID : " + sellerId, e);
 
 				uploadReport.setStatus("Exception");
 				try {
-					reportGeneratorService.addUploadReport(uploadReport, sellerId);
+					reportGeneratorService.addUploadReport(uploadReport,
+							sellerId);
 				} catch (CustomException e1) {
 					e1.printStackTrace();
 				}
@@ -672,14 +682,14 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 		}
 		request.getSession().setAttribute("orderSearchObject", orderList);
 		log.info("$$$ searchOrder() Ends : OrderController $$$");
 		return new ModelAndView("redirect:/seller/orderList.html");
 
 	}
-	
+
 	@RequestMapping(value = "/seller/searchPOOrder", method = RequestMethod.POST)
 	public ModelAndView searchPOOrder(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
@@ -711,7 +721,7 @@ public class OrderController {
 
 			}
 			model.put("poOrders", orderList);
-			model.put("listSize", (listSize + (listSize*0)));
+			model.put("listSize", (listSize + (listSize * 0)));
 			model.put("PoOrdersCount", orderService.poOrdersCount(sellerId));
 		} catch (CustomException ce) {
 			log.error("searchPOOrder exception : " + ce.toString());
@@ -721,7 +731,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 		}
 		request.getSession().setAttribute("orderSearchObject", orderList);
 		log.info("$$$ searchPOOrder() Ends : OrderController $$$");
@@ -733,14 +743,13 @@ public class OrderController {
 	public ModelAndView poOrderDetails(
 			HttpServletRequest request,
 			@ModelAttribute("command") PoPaymentDetailsBean poPaymentDetailsBean,
-			@RequestParam("value") String value,
-			BindingResult result) {
+			@RequestParam("value") String value, BindingResult result) {
 
 		log.info("$$$ poOrderDetails Starts : OrderController $$$");
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerId = helperClass.getSellerIdfromSession(request);			
+			sellerId = helperClass.getSellerIdfromSession(request);
 			String year = "";
 			if ("".equals(value.trim()) || value.equals("0")) {
 				Calendar c = Calendar.getInstance();
@@ -749,7 +758,7 @@ public class OrderController {
 			} else {
 				year = value;
 			}
-		
+
 			List<PoPaymentDetailsBean> poPaymentList = orderService
 					.getPOPaymentDetails(sellerId, year);
 			model.put("poPaymentListMonthly", poPaymentList);
@@ -762,7 +771,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId,e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 		}
 
 		log.info("$$$ poOrderDetails Ends : OrderController $$$");
@@ -786,29 +795,33 @@ public class OrderController {
 				log.debug(" Getting list from session" + obj);
 				model.put("orders", obj);
 				request.getSession().removeAttribute("orderSearchObject");
-			} else if (request.getParameter("status") != null || (request.getParameter("orderCriteria") != null 
-					&& !request.getParameter("orderCriteria").equals(""))) {
+			} else if (request.getParameter("status") != null
+					|| (request.getParameter("orderCriteria") != null && !request
+							.getParameter("orderCriteria").equals(""))) {
 				String status = request.getParameter("status");
 				if (status != null && status.equalsIgnoreCase("return")) {
-					
+
 					int pageNo = request.getParameter("page") != null ? Integer
 							.parseInt(request.getParameter("page")) : 0;
-					returnlist = ConverterClass.prepareListofBean
-							(orderService.findOrdersOnCriteria("status", "Return", sellerId, false, false, pageNo));
-					
-					int returnCount = orderService.countOnCriteria("status", "Return", sellerId, false, false);
-					/*returnlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("status", "Return Recieved", sellerId,
-									false, false));
-					List<OrderBean> orderList = ConverterClass
-							.prepareListofBean(orderService.findOrders(
-									"status", "Return Limit Crossed", sellerId,
-									false, false));*/
-					if(returnlist != null){
+					returnlist = ConverterClass.prepareListofBean(orderService
+							.findOrdersOnCriteria("status", "Return", sellerId,
+									false, false, pageNo));
+
+					int returnCount = orderService.countOnCriteria("status",
+							"Return", sellerId, false, false);
+					/*
+					 * returnlist =
+					 * ConverterClass.prepareListofBean(orderService
+					 * .findOrders("status", "Return Recieved", sellerId, false,
+					 * false)); List<OrderBean> orderList = ConverterClass
+					 * .prepareListofBean(orderService.findOrders( "status",
+					 * "Return Limit Crossed", sellerId, false, false));
+					 */
+					if (returnlist != null) {
 						model.put("orders", returnlist);
-					}					
+					}
 					model.put("listCount", returnCount);
-					model.put("listSize", (listSize + (listSize*pageNo)));
+					model.put("listSize", (listSize + (listSize * pageNo)));
 					model.put("searchStatus", "return");
 					poOrderlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Return Recieved", sellerId,
@@ -816,30 +829,32 @@ public class OrderController {
 					model.put("poOrders", poOrderlist);
 
 				} else if (status != null && status.equalsIgnoreCase("payment")) {
-					
+
 					int pageNo = request.getParameter("page") != null ? Integer
 							.parseInt(request.getParameter("page")) : 0;
-					returnlist = ConverterClass.prepareListofBean
-							(orderService.findOrdersOnCriteria("status", "Payment", sellerId, false, false, pageNo));
-					
-					int paymentCount = orderService.countOnCriteria("status", "Payment", sellerId, false, false);					
-					if(returnlist != null){
+					returnlist = ConverterClass.prepareListofBean(orderService
+							.findOrdersOnCriteria("status", "Payment",
+									sellerId, false, false, pageNo));
+
+					int paymentCount = orderService.countOnCriteria("status",
+							"Payment", sellerId, false, false);
+					if (returnlist != null) {
 						model.put("orders", returnlist);
 					}
 					model.put("listCount", paymentCount);
-					model.put("listSize", (listSize + (listSize*pageNo)));
+					model.put("listSize", (listSize + (listSize * pageNo)));
 					model.put("searchStatus", "payment");
-					
-					/*returnlist = ConverterClass.prepareListofBean(orderService
-							.findOrders("status", "Payment Recieved", sellerId,
-									false, false));
-					List<OrderBean> orderList = ConverterClass
-							.prepareListofBean(orderService.findOrders(
-									"status", "Payment Deducted", sellerId,
-									false, false));
-					if (orderList != null) {
-						returnlist.addAll(orderList);
-					}*/					
+
+					/*
+					 * returnlist =
+					 * ConverterClass.prepareListofBean(orderService
+					 * .findOrders("status", "Payment Recieved", sellerId,
+					 * false, false)); List<OrderBean> orderList =
+					 * ConverterClass
+					 * .prepareListofBean(orderService.findOrders( "status",
+					 * "Payment Deducted", sellerId, false, false)); if
+					 * (orderList != null) { returnlist.addAll(orderList); }
+					 */
 
 					poOrderlist = ConverterClass.prepareListofBean(orderService
 							.findOrders("status", "Payment Recieved", sellerId,
@@ -847,25 +862,27 @@ public class OrderController {
 					model.put("poOrders", poOrderlist);
 				} else {
 					String searchField = request.getParameter("orderCriteria");
-					if(status != null){
+					if (status != null) {
 						searchField = status;
 					}
 					int pageNo = request.getParameter("page") != null ? Integer
 							.parseInt(request.getParameter("page")) : 0;
-					returnlist = ConverterClass.prepareListofBean
-							(orderService.findOrdersOnCriteria("status", searchField, sellerId, false, false, pageNo));
-					
-					int listCount = orderService.countOnCriteria("status", searchField, sellerId, false, false);					
-					if(returnlist != null){
+					returnlist = ConverterClass.prepareListofBean(orderService
+							.findOrdersOnCriteria("status", searchField,
+									sellerId, false, false, pageNo));
+
+					int listCount = orderService.countOnCriteria("status",
+							searchField, sellerId, false, false);
+					if (returnlist != null) {
 						model.put("orders", returnlist);
-					}					
+					}
 					model.put("listCount", listCount);
-					model.put("listSize", (listSize + (listSize*pageNo)));
+					model.put("listSize", (listSize + (listSize * pageNo)));
 					model.put("searchStatus", searchField);
 				}
-			}  else {
+			} else {
 				int pageNo = request.getParameter("page") != null ? Integer
-						.parseInt(request.getParameter("page")) : 0;							
+						.parseInt(request.getParameter("page")) : 0;
 				model.put("orders", ConverterClass
 						.prepareListofBean(orderService.listOrders(
 								helperClass.getSellerIdfromSession(request),
@@ -875,8 +892,8 @@ public class OrderController {
 						.prepareListofBean(orderService.listPOOrders(
 								helperClass.getSellerIdfromSession(request),
 								pageNo)));
-				model.put("listSize", (listSize + (listSize*pageNo)));
-				model.put("listCount", orderService.mpOrdersCount(sellerId));	
+				model.put("listSize", (listSize + (listSize * pageNo)));
+				model.put("listCount", orderService.mpOrdersCount(sellerId));
 				model.put("searchStatus", "");
 			}
 		} catch (CustomException ce) {
@@ -888,7 +905,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 		}
 		if (savedOrder != null)
 			model.put("savedOrder", savedOrder);
@@ -908,7 +925,8 @@ public class OrderController {
 		Events event = null;
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-			Order order = orderService.getOrder(orderBean.getOrderId(),sellerId);			
+			Order order = orderService.getOrder(orderBean.getOrderId(),
+					sellerId);
 			product = productService.getProduct(order.getProductSkuCode(),
 					sellerId);
 			log.debug(" Payment difference :"
@@ -916,8 +934,17 @@ public class OrderController {
 			event = eventsService.getEvent(order.getEventName(), sellerId);
 			model.put("order", ConverterClass.prepareOrderBean(order));
 			model.put("event", ConverterClass.prepareEventsBean(event));
-			model.put("serviceTax", (order.getPccAmount()+order.getFixedfee()+order.getPartnerCommission()+order.getShippingCharges())*dataConfig.getServiceTax()/100);
-			System.out.println((order.getPccAmount()+order.getFixedfee()+order.getPartnerCommission()+order.getShippingCharges())*dataConfig.getServiceTax()/100);
+			model.put(
+					"serviceTax",
+					(order.getPccAmount() + order.getFixedfee()
+							+ order.getPartnerCommission() + order
+								.getShippingCharges())
+							* dataConfig.getServiceTax() / 100);
+			System.out
+					.println((order.getPccAmount() + order.getFixedfee()
+							+ order.getPartnerCommission() + order
+								.getShippingCharges())
+							* dataConfig.getServiceTax() / 100);
 		} catch (CustomException ce) {
 			log.error("viewOrderDailyAct exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
@@ -926,7 +953,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 		}
 		if (product != null)
 			model.put("productCost", product.getProductPrice());
@@ -948,19 +975,21 @@ public class OrderController {
 					sellerId);
 			List<Order> orderlist = orderService.getPOOrdersFromConsolidated(
 					order.getOrderId(), sellerId);
-			
+
 			model.put("order", ConverterClass.prepareOrderBean(order));
 
 			if (orderlist == null) {
-				List<GatePass> gatepassList = orderService.getGatepassesFromConsolidated(
-						order.getOrderReturnOrRTO().getReturnId(), sellerId);
+				List<GatePass> gatepassList = orderService
+						.getGatepassesFromConsolidated(order
+								.getOrderReturnOrRTO().getReturnId(), sellerId);
 				model.put("gatepasslist", gatepassList);
-				
+
 				log.info("$$$ viewPOOrderDailyAct Ends : OrderController $$$");
 				return new ModelAndView("dailyactivities/viewGatePass", model);
 			} else {
-				model.put("orderlist", ConverterClass.prepareListofBean(orderlist));
-				
+				model.put("orderlist",
+						ConverterClass.prepareListofBean(orderlist));
+
 				log.info("$$$ viewPOOrderDailyAct Ends : OrderController $$$");
 				return new ModelAndView("dailyactivities/viewPOOrder", model);
 			}
@@ -972,7 +1001,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 			return new ModelAndView("globalErorPage", model);
 		}
 	}
@@ -985,7 +1014,7 @@ public class OrderController {
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);	
+			sellerId = helperClass.getSellerIdfromSession(request);
 			model.put("order", ConverterClass.prepareOrderBean(orderService
 					.getOrder(orderBean.getOrderId())));
 			model.put("orders", ConverterClass.prepareListofBean(orderService
@@ -998,7 +1027,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 		}
 		log.info("$$$ editOrderDA Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/editOrder", model);
@@ -1013,7 +1042,7 @@ public class OrderController {
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);	
+			sellerId = helperClass.getSellerIdfromSession(request);
 			orderService.deleteOrder(ConverterClass.prepareModel(orderBean),
 					helperClass.getSellerIdfromSession(request));
 			model.put("order", null);
@@ -1027,7 +1056,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 		}
 
 		log.info("$$$ deleteOrderDA Ends : OrderController $$$");
@@ -1041,10 +1070,10 @@ public class OrderController {
 		log.info("$$$ saveOrderDA Starts : OrderController $$$");
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
-		List<Order> orderlist=new ArrayList<Order>();
+		List<Order> orderlist = new ArrayList<Order>();
 
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);	
+			sellerId = helperClass.getSellerIdfromSession(request);
 			Order order = ConverterClass.prepareModel(orderBean);
 			orderlist.add(order);
 			orderService.addOrder(orderlist,
@@ -1057,7 +1086,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 		}
 
 		log.info("$$$ saveOrderDA Ends : OrderController $$$");
@@ -1074,7 +1103,7 @@ public class OrderController {
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);	
+			sellerId = helperClass.getSellerIdfromSession(request);
 			List<Partner> partnerlist = partnerService.listPartners(helperClass
 					.getSellerIdfromSession(request));
 			List<TaxCategory> taxCatList = taxDetailService
@@ -1116,7 +1145,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 			model.put("errorMessage", e.getCause());
 			return new ModelAndView("globalErorPage", model);
 		}
@@ -1135,7 +1164,7 @@ public class OrderController {
 		Map<String, Object> mode = new HashMap<String, Object>();
 		List parner = new ArrayList();
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);	
+			sellerId = helperClass.getSellerIdfromSession(request);
 			parner = orderService.findOrders("channelOrderID",
 					request.getParameter("id"),
 					helperClass.getSellerIdfromSession(request), false, false);
@@ -1146,7 +1175,7 @@ public class OrderController {
 			return errors;
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 		}
 		if (parner != null && parner.size() != 0 && parner.get(0) != null) {
 			log.info("$$$ getCheckPartner Ends : OrderController $$$");
@@ -1165,7 +1194,7 @@ public class OrderController {
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);	
+			sellerId = helperClass.getSellerIdfromSession(request);
 			int pageNo = request.getParameter("page") != null ? Integer
 					.parseInt(request.getParameter("page")) : 0;
 
@@ -1181,12 +1210,12 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 		}
 		log.info("$$$ gatepasslistDA Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/gatepasslist", model);
 	}
-	
+
 	@RequestMapping(value = "/seller/disputedGPList", method = RequestMethod.GET)
 	public ModelAndView disputedGPList(HttpServletRequest request,
 			@ModelAttribute("command") OrderBean orderBean, BindingResult result) {
@@ -1195,7 +1224,7 @@ public class OrderController {
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);	
+			sellerId = helperClass.getSellerIdfromSession(request);
 			int pageNo = request.getParameter("page") != null ? Integer
 					.parseInt(request.getParameter("page")) : 0;
 
@@ -1211,7 +1240,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 		}
 		log.info("$$$ disputedGPList Ends : OrderController $$$");
 		return new ModelAndView("dailyactivities/disputedGPList", model);
@@ -1237,7 +1266,7 @@ public class OrderController {
 			Date endDate = null;
 			String period = "";
 			boolean dateRange = true;
-			
+
 			if ("".equals(value.trim()) || value.equals("0")) {
 				Calendar c = Calendar.getInstance();
 				c.setTime(new Date());
@@ -1247,11 +1276,11 @@ public class OrderController {
 						c.getActualMaximum(Calendar.DAY_OF_MONTH));
 				endDate = c.getTime();
 				period = monthFormat.format(startDate);
-				//period = period.substring(period.indexOf(' '));
-				
+				// period = period.substring(period.indexOf(' '));
+
 			} else if ("All".equalsIgnoreCase(value.trim())) {
 				dateRange = false;
-				
+
 			} else if (value.contains(" ")) {
 				dateString = "1 " + value;
 				startDate = format.parse(dateString);
@@ -1275,17 +1304,18 @@ public class OrderController {
 						.findPOOrdersbyDate("orderDate", startDate, endDate,
 								sellerId));
 			} else {
-				int pageNo = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 0;					
-				
+				int pageNo = request.getParameter("page") != null ? Integer
+						.parseInt(request.getParameter("page")) : 0;
+
 				poOrderlist = ConverterClass.prepareListofBean(orderService
 						.listPOOrders(sellerId, pageNo));
-				model.put("listSize", (listSize + (listSize*pageNo)));				
-				
+				model.put("listSize", (listSize + (listSize * pageNo)));
+
 			}
-			
+
 			model.put("poOrders", poOrderlist);
 			model.put("period", period);
-			model.put("listSize", (listSize + (listSize*0)));
+			model.put("listSize", (listSize + (listSize * 0)));
 			model.put("PoOrdersCount", orderService.poOrdersCount(sellerId));
 
 		} catch (CustomException ce) {
@@ -1297,7 +1327,7 @@ public class OrderController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 		}
 
 		log.info("$$$ poOrderListDailyAct Ends : OrderController $$$");
@@ -1306,24 +1336,24 @@ public class OrderController {
 
 	@RequestMapping(value = "/seller/download/uploadLog", method = RequestMethod.GET)
 	public void getUploadLog(HttpServletRequest request,
-			HttpServletResponse response,
-			@RequestParam(value = "id") String id)
+			HttpServletResponse response, @RequestParam(value = "id") String id)
 			throws ClassNotFoundException {
 
 		log.info("$$$ getUploadLog Starts : OrderController $$$");
 		int sellerId = 0;
 		try {
-			sellerId=helperClass.getSellerIdfromSession(request);	
+			sellerId = helperClass.getSellerIdfromSession(request);
 			log.debug(" Downloading the Log: " + id);
-			int uploadId = Integer.parseInt(id);			
-			String filePath = reportGeneratorService.getUploadLog(uploadId, sellerId).getFilePath();
+			int uploadId = Integer.parseInt(id);
+			String filePath = reportGeneratorService.getUploadLog(uploadId,
+					sellerId).getFilePath();
 			if (filePath != null) {
 				downloadService.getUploadLog(response, filePath);
 			}
 
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed! by Seller ID : "+sellerId, e);
+			log.error("Failed! by Seller ID : " + sellerId, e);
 		}
 		log.info("$$$ getXLS Ends : OrderController $$$");
 	}

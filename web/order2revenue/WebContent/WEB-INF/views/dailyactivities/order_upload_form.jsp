@@ -250,6 +250,8 @@ ol.d {
 										Upload</option>
 									<option value="TaxablePurchases_Upload">Taxable
 										Purchases Upload</option>
+									<option value="PartnerCat_ProdCat_Mapping">Channel wise Category 
+										Mapping Upload</option>
 								</select>
 							</div>
 							<div class="col-md-4">
@@ -318,6 +320,9 @@ ol.d {
 											<option value="taxablePurchases_Mapping"
 												data-show=".taxablePurchasesupload">Taxable
 												Purchases Upload</option>
+											<option value="partnerCat_ProdCat_Mapping"
+												data-show=".partnerCategoryupload">Channel wise Category 
+												Mapping Upload</option>
 										</select>
 									</div>
 									<div class="col-md-4">

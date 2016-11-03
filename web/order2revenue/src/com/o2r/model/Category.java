@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table
@@ -52,6 +53,10 @@ public class Category {
 	private List<Category> subCategory = new ArrayList<Category>();
 	@Column
 	private long productCount;
+	
+	@Column
+	@Type(type="text")
+	private String partnerCatRef;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	private TaxCategory CST;
@@ -184,6 +189,14 @@ public class Category {
 
 	public void setLST(TaxCategory lST) {
 		LST = lST;
+	}
+
+	public String getPartnerCatRef() {
+		return partnerCatRef;
+	}
+
+	public void setPartnerCatRef(String partnerCatRef) {
+		this.partnerCatRef = partnerCatRef;
 	}
 
 }

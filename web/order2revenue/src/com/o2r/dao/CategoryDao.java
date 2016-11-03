@@ -31,4 +31,7 @@ public interface CategoryDao {
 
 	public Map<String, String> getCategoryParentMap(int sellerId)
 			throws CustomException;
+
+	public void addPartnerCatRef(Category category, int sellerId)
+			throws CustomException;
 }
