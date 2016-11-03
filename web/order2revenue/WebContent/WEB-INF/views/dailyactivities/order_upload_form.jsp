@@ -740,7 +740,7 @@ ol.d {
 								class="form-horizontal">
 								<div class="col-md-4">
 									<select class="form-control div-toggle" data-target=".my-info"
-										id="sheetValue" name="sheetValue1" required autocomplete="off"
+										id="sheetValue" name="sheetValue" required autocomplete="off"
 										style="width: 97%; margin-left: 14px">
 										<option value="" data-show=".upload">Upload</option>
 										<option value="Unicommerce_Order"
