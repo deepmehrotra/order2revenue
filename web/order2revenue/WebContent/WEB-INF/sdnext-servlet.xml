@@ -102,6 +102,10 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 				<value>com.o2r.model.PaymentVariables</value>
 				<value>com.o2r.model.TaxablePurchases</value>
 				<value>com.o2r.model.PaymentUpload_Order</value>
+				<value>com.o2r.bean.OrderItemsBean</value>
+				<value>com.o2r.bean.PriceComponentsBean</value>
+				<value>com.o2r.model.SellerAuthInfo</value>
+				<value>com.o2r.bean.FlipkartCustomerBean</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -181,6 +185,37 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
      	
      <!-- schedular mapping END -->
      
+     <!-- schedular mapping END -->
+     
+  
+<bean id="flipkartSearch" class="com.o2r.schedulers.FlipkartSearch"></bean> 
+        <bean name="setFlipkartSearch" class="org.springframework.scheduling.quartz.JobDetailBean">
+			<property name="jobClass" value="com.o2r.schedulers.SetTriggerJobFlipkartSearch" />		
+			<property name="jobDataAsMap">
+				<map>
+					<entry key="flipkartSearch" value-ref="flipkartSearch" />
+				</map>
+			</property>		
+		</bean>
+		 <!--<bean id="simpleTrigger2" class="org.springframework.scheduling.quartz.SimpleTriggerBean">		
+			<property name="jobDetail" ref="setFlipkartSearch" />
+			<property name="repeatInterval" value="500000" />
+			<property name="startDelay" value="5000" />			
+		</bean> -->
+     	<bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerBean">
+			<property name="jobDetail" ref="setFlipkartSearch" />
+			<property name="cronExpression" value="0 0/60 * * * ?" />	
+		</bean>
+		<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+			<property name="triggers">
+				<list>
+					 <ref bean="cronTrigger2" /> 
+					 <!--<ref bean="simpleTrigger2" />-->
+				</list>
+			</property>
+		</bean>
+     	
+     <!-- schedular mapping END -->
      
      
     <!-- <bean id="cStartEventHandler" class="com.o2r.schedulers.CStartEventHandler"/> -->
