@@ -153,7 +153,21 @@
 	            </div>
 	          </div>
 	          <br>
-	          <p class="forgot"><a href="#" data-toggle="modal" data-target="#sendInd" style="text-decoration:none;"><font size="3" color="white" > Forgot password ?</font></a></p>
+	          <div class="col-lg-12">
+	          	 <div class="check col-sm-6">
+	          		<input type="checkbox" name="_spring_security_remember_me" value="true"  autocomplete="off" style="width: 14%;height: 15px;float: left;position: relative;top: 4px;">
+					<label style="font-size: 12px;color: #fff;position: relative;left: -4px;">Remember Me ?</label>
+	          	</div>
+	          	 <div class="col-lg-6">
+	          	 	 <p class="forgot" style="margin-top:18px;margin-bottom: 18px;">
+			          	<a href="#" data-toggle="modal" data-target="#sendInd" style="text-decoration:none;">
+			          	<font size="2" color="white" > Forgot password ?</font>
+			          	</a>
+			          </p>
+	          	 </div>
+	          </div>
+	         
+	         
 	          <button class="button button-block">Log In</button>
 	          </form>
 	        </div>
@@ -161,7 +175,12 @@
 	        <div class="modal inmodal fade" id="sendInd" tabindex="-1" role="dialog"  aria-hidden="true">
 				<div class="modal-dialog modal-lg">
 					<div class="modal-content animated bounceInTop" style="left: 29%;width: 45%;top: 79px;">
+					
+					
+	          		
+						
 						<div class="modal-header" style="height: 76px;background: currentColor;">
+						 
 							<h1 style="color:white;"><b>FORGOT PASSWORD</b></h1>
 							<button type="button" class="close danger" data-dismiss="modal" style="opacity: 0.8;position: relative;top : -92px;right: -8px;"><span class="buton" aria-hidden="true" data-backdrop="false">&times;</span> </button>
 						</div>
@@ -206,7 +225,16 @@
 	              		<input type="email" id="email" name="email" required autocomplete="off"/ placeholder="Email id" onblur="onBlur()">
 	              		<span id="emailMessage" style="color:red"></span>
 	              	</div>
+	            </div>	            
+	             <div class="field-wrap">
+	            	<div class="icon1">
+	              		<img src="/O2R/landing/img/icons/contact.png" alt="user">
+	              	</div>
+	              	<div class="inputtext">
+	              		<input type="contactno" id="contactno" name="contactno" required autocomplete="off"/ placeholder="Contact No">	              		
+	              	</div>
 	            </div>
+	            
 	            <div class="field-wrap">
 	            	<div class="icon1">
 	            		<img src="/O2R/landing/img/icons/password.png" alt="user">

@@ -22,11 +22,17 @@
 				error-if-maximum-exceeded="true" />
 		</session-management> -->
 
+		<remember-me key="myAppKey" />
+		
+		<remember-me  token-validity-seconds="2505600"  data-source-ref="dataSource" />
+
 	</http>
 
 	<authentication-manager alias="authenticationManager">
 		<authentication-provider user-service-ref="customUserDetailsService" />
 	</authentication-manager>
+
+
 
 </beans:beans>
 
