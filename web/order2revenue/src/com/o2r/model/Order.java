@@ -28,6 +28,8 @@ public class Order {
 	@Column
 	private String geOrderId;
 	@Column
+	private String typeIdentifier;
+	@Column
 	private Date orderDate;
 	@Column
 	private Date paymentDueDate;
@@ -166,6 +168,14 @@ public class Order {
 
 	public void setGeOrderId(String geOrderId) {
 		this.geOrderId = geOrderId;
+	}
+
+	public String getTypeIdentifier() {
+		return typeIdentifier;
+	}
+
+	public void setTypeIdentifier(String typeIdentifier) {
+		this.typeIdentifier = typeIdentifier;
 	}
 
 	public Date getOrderDate() {

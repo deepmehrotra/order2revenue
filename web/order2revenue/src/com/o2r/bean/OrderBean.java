@@ -12,6 +12,7 @@ public class OrderBean {
 
 	private int orderId;
 	private String geOrderId;
+	private String typeIdentifier;
 	private Date orderDate;
 	private Date paymentDueDate;
 	private String productSkuCode;
@@ -91,6 +92,14 @@ public class OrderBean {
 
 	public void setGeOrderId(String geOrderId) {
 		this.geOrderId = geOrderId;
+	}
+
+	public String getTypeIdentifier() {
+		return typeIdentifier;
+	}
+
+	public void setTypeIdentifier(String typeIdentifier) {
+		this.typeIdentifier = typeIdentifier;
 	}
 
 	public Date getOrderDate() {

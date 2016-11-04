@@ -375,7 +375,7 @@ public class GlobalConstant {
 			add("Customer Phone No");
 			add("Customer Email");
 			add("Seller Note");
-
+			add("Type Identifier");
 		}
 	};
 
