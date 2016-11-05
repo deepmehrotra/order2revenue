@@ -102,6 +102,9 @@ public class SaveMappedFiles {
 
 	static Logger log = Logger.getLogger(SaveMappedFiles.class.getName());
 
+	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
 	public void saveUnicommerceOrderContents(MultipartFile file, int sellerId,
 			String path, UploadReport uploadReport) throws IOException {
 		log.info("$$$ saveUnicommerceOrderContents starts : SaveMappedFiles $$$");
@@ -361,18 +364,14 @@ public class SaveMappedFiles {
 														duplicateKey.put(channelID, itemID);
 													} else {
 														if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
-															itemID = order.getOrderDate().toString();
+															itemID = format.format(order.getOrderDate());
 														}
 														if(itemID != null && ((idsList.get(channelID) != null 
 																&& !idsList.get(channelID).equals(itemID))
 																|| (duplicateKey.containsKey(channelID) 
 																		&& (duplicateKey.get(channelID) == null
 																		|| !duplicateKey.get(channelID).equals(itemID))))){
-															if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
-																channelID = channelID + GlobalConstant.orderUniqueSymbol + order.getOrderDate().toString();
-															} else {
-																channelID = channelID + GlobalConstant.orderUniqueSymbol + itemID;
-															}															
+															channelID = channelID + GlobalConstant.orderUniqueSymbol + itemID;														
 															if(!idsList.containsKey(channelID)
 																	&& !duplicateKey.containsKey(channelID)){
 																order.setChannelOrderID(channelID);
@@ -2537,9 +2536,7 @@ public class SaveMappedFiles {
 
 		ChannelUploadMapping chanupload = null;
 		Map<String, String> columHeaderMap = new LinkedHashMap<String, String>();
-		Map<String, Integer> cellIndexMap = new LinkedHashMap<String, Integer>();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Map<String, Integer> cellIndexMap = new LinkedHashMap<String, Integer>();		
 		StringBuffer errorMessage = new StringBuffer();
 		CustomerBean customerBean = null;
 		Partner partner = null;

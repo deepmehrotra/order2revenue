@@ -738,6 +738,17 @@
 	                                            <td>Return File : </td>
 	                                            <td><a href="getUploadReportList.html">${order.orderReturnOrRTO.returnFileName}</a></td>        
                                         	</tr>
+                                        	<tr>
+	                                            <td>Order Type : </td>
+	                                            <c:choose>
+	                                            	<c:when test="${order.typeIdentifier != null}">
+	                                            		<td>${order.typeIdentifier}</td>
+	                                            	</c:when>
+	                                            	<c:otherwise>
+	                                            		<td>Normal</td>
+	                                            	</c:otherwise>
+	                                            </c:choose>	                                                    
+                                        	</tr>
                                         </tbody>
                                     </table>
                                   </div>
