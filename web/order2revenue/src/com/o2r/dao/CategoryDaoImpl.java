@@ -23,6 +23,7 @@ import org.springframework.stereotype.Repository;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.Category;
+import com.o2r.model.PartnerCategoryMap;
 import com.o2r.model.Product;
 import com.o2r.model.Seller;
 
@@ -450,5 +451,34 @@ public class CategoryDaoImpl implements CategoryDao {
 		}
 		log.info("*** getSKUCategoryMap Ends : ProductDaoImpl ****");
 		return returnMap;
+	}
+	
+	@Override
+	public List<String> listPartnerCategories() throws CustomException {
+
+		log.info("***listPartnerCategories Start****");
+		List<String> returnlist = new ArrayList<String>();
+		Seller seller = null;
+		try {
+			
+			List<PartnerCategoryMap> partnerCategoryMapList = new ArrayList<PartnerCategoryMap>();
+			partnerCategoryMapList = (List<PartnerCategoryMap>) sessionFactory.getCurrentSession().createCriteria(PartnerCategoryMap.class).list();
+			
+			if (partnerCategoryMapList != null && partnerCategoryMapList.size() != 0) {
+				for (PartnerCategoryMap cat : partnerCategoryMapList) {
+					returnlist.add(cat.getPartnerName() + "_" + cat.getPartnerCategoryRef());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.equals("**Error Code : "
+					+ (GlobalConstant.listCategoryErrorCode));
+			log.error("Failed! by sellerId : " + e);
+			throw new CustomException(GlobalConstant.listCategoryError,
+					new Date(), 3,
+					(GlobalConstant.listCategoryErrorCode), e);
+		}
+		log.info("***listCategories Exit****");
+		return returnlist;
 	}
 }

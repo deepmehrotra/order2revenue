@@ -102,6 +102,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 				<value>com.o2r.model.PaymentVariables</value>
 				<value>com.o2r.model.TaxablePurchases</value>
 				<value>com.o2r.model.PaymentUpload_Order</value>
+				<value>com.o2r.model.PartnerCategoryMap</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

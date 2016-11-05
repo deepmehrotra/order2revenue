@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
@@ -95,72 +95,113 @@ function checkOnBlur()
  	   	 }
  
 }
+    
+    function onclickAddCategory(id) {
+		$.ajax({
+			url : 'addCatInventory.html?parentid=' + id,
+			success : function(data) {
+				if ($(data).find('#j_username').length > 0) {
+					window.location.href = "orderindex.html";
+				} else {
+					$('#centerpane').html(data);
+				}
+			}
+		});
+	}
+    
+    function onclickEditCategory(id) {
+		$.ajax({
+			url : 'editCatInventory.html?catId=' + id,
+			success : function(data) {
+				if ($(data).find('#j_username').length > 0) {
+					window.location.href = "orderindex.html";
+				} else {
+					$('#centerpane').html(data);
+				}
+			}
+		});
+	}
  
 </script>
 </head>
 <body>
-<div class="row">
-                <div class="col-lg-12">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Inventory Group</h5>
-                        </div>
-                        <div class="ibox-content add-company">
-                         <form role="form" class="form-horizontal">
-                                <div class="col-sm-12" >
-                                    <div class="form-group"><label class="col-sm-5 control-label">Inventory Group</label>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>Inventory Group</h5>
+				</div>
+				<div class="ibox-content add-company">
+					<form role="form" class="form-horizontal">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label class="col-sm-5 control-label">Inventory Group</label>
 
-                                    <div class="col-sm-4">
-                                            <select class="form-control" name="account" id="inventorygroupdwopdown">
-                                             <c:forEach items="${categorymap}" var="cat">
-										   
-										         <option value="${cat.key}">${cat.value}</option>
-										    </c:forEach>
-                                            </select>
-                                        </div>
-                                    </div>
-                                <br><div class="hr-line-dashed"></div>
-                                </div>
-                                 </form>
-                                <div class="col-sm-12">
-                                 ${error}
-                                    <table class="table table-bordered custom-table">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Product Category Name</th>
-                                            <th>Created on</th>
-		                                    <th>Total SKU count</th>
-		                                     <th>Current Stock</th>
-		                                      <th>Monthly Opening Stock</th>
-		                                       <th>Action</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                         <c:forEach items="${subcategory}" var="subcategory" varStatus="loop">
-                                        <tr>
-                                            <td>${loop.index+1}</td>
-                                            <td>${subcategory.catName}</td>
-                                            <td>${subcategory.createdOn}</td>
-                                            <td>${subcategory.skuCount}</td>
-		                                    <td>${subcategory.productCount}</td>
-		                                    <td>${subcategory.openingStock}</td>
-                                            
-                                            <c:if test="${subcategory.skuCount == 0}">
-                                           		<td><a href="#"  onclick="onclickDeleteCategory(${category.id},${subcategory.id})"><i class="fa fa-trash text-navy" data-toggle="tooltip" data-placement="top" data-original-title="Delete"></i></a></td>
-                                        	</c:if>
-                                            
-                                            <c:if test="${subcategory.skuCount != 0}">
-                                            	<td><a href="#"><i class="fa fa-trash text-navy"  data-original-title="Delete" onclick="checkkDelete();"></i></a></td>
-                                        	</c:if>
-                                        </tr>
-                                       </c:forEach>
-                                        </tbody>
-                                    </table>
-                                    <div class="hr-line-dashed"></div>
-                                </div>
-					<form:form method="POST" action="saveCatInventory.html"	id="addCategoryForm" role="form" class="form-horizontal">
-						
+								<div class="col-sm-4">
+									<select class="form-control" name="account"
+										id="inventorygroupdwopdown">
+										<c:forEach items="${categorymap}" var="cat">
+
+											<option value="${cat.key}">${cat.value}</option>
+										</c:forEach>
+									</select>
+								</div>
+							</div>
+							<br>
+							<div class="hr-line-dashed"></div>
+						</div>
+					</form>
+					<div class="col-sm-12">
+						${error}
+						<table class="table table-bordered custom-table">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Product Category Name</th>
+									<th>Created on</th>
+									<th>Total SKU count</th>
+									<th>Current Stock</th>
+									<th>Monthly Opening Stock</th>
+									<th>Mapped Channel Category</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${subcategory}" var="subcategory"
+									varStatus="loop">
+									<tr>
+										<td>${loop.index+1}</td>
+										<td>${subcategory.catName}</td>
+										<td>${subcategory.createdOn}</td>
+										<td>${subcategory.skuCount}</td>
+										<td>${subcategory.productCount}</td>
+										<td>${subcategory.openingStock}</td>
+										<td><div
+												style="overflow-y: scroll; max-height: 300px; width: 400px;">
+												<p style="word-wrap: break-word; max-height: 300px;">${subcategory.partnerCatRef}</p>
+											</div></td>
+										<td><a
+											onClick="onclickEditCategory(${subcategory.id});"><i
+												class="fa fa-edit text-navy" data-toggle="tooltip"
+												data-placement="top" data-original-title="Edit"></i></a> <c:if
+												test="${subcategory.skuCount == 0}">
+												<a href="#"
+													onclick="onclickDeleteCategory(${category.id},${subcategory.id})"><i
+													class="fa fa-trash text-navy" data-toggle="tooltip"
+													data-placement="top" data-original-title="Delete"></i></a>
+											</c:if> <c:if test="${subcategory.skuCount != 0}">
+												<a href="#"><i class="fa fa-trash text-navy"
+													data-original-title="Delete" onclick="checkkDelete();"></i></a>
+											</c:if></td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+						<!-- <div class="hr-line-dashed"></div> -->
+					</div>
+					<%-- <form:form method="POST" action="saveCatInventory.html"
+						id="addCategoryForm" role="form" class="form-horizontal">
+
 						<input type="hidden" name="parentid" id="parentid"
 							value="${category.id}" />
 						<input type="hidden" name="parentCatName" id="parentCatName"
@@ -168,15 +209,16 @@ function checkOnBlur()
 						<div class="col-sm-12">
 							<div class="col-md-5">
 								<form:input path="catName" placeholder="Product Category"
-									class="form-control" id="categoryName" onblur="checkOnBlur()" style="margin-bottom:5px;" />
+									class="form-control" id="categoryName" onblur="checkOnBlur()"
+									style="margin-bottom:5px;" />
 								<span id="catNameMessage" style="color: red; font-weight: bold"></span>
 							</div>
 							<div class="col-md-5">
 								<form:input path="catDescription" placeholder="Alias Name"
 									class="form-control" style="margin-bottom:5px;" />
 							</div>
-						</div>
-						<%-- <div class="col-sm-12">
+						</div> --%>
+					<%-- <div class="col-sm-12">
 							<div class="col-md-5">
 								<form:input path="product.productConfig.productSKuCode" placeholder="Product SKU Code"
 									class="form-control" id="categoryName" onblur="checkOnBlur()" style="margin-bottom:5px;"/>
@@ -252,18 +294,19 @@ function checkOnBlur()
 								<span id="catNameMessage" style="color: red; font-weight: bold"></span>
 							</div>
 						</div> --%>
-						<div class="col-sm-12">
-							<div class="hr-line-dashed"></div>
-							<button class="btn btn-primary pull-right" type="button"
-								onclick="submitCategory()">Add Product Category</button>
-						</div>
-					</form:form>
+					<div class="col-sm-12">
+						<div class="hr-line-dashed"></div>
+						<button class="btn btn-primary pull-right" type="button"
+							onclick="onclickAddCategory(${category.id})">Add Product
+							Category</button>
+					</div>
+					<%-- </form:form> --%>
 
 				</div>
-                    </div>
-                </div>
-            </div>
- <script>
+			</div>
+		</div>
+	</div>
+	<script>
     $(document).ready(function(){
         $('.panel').each(function() {
             animationHover(this, 'flipInY');
