@@ -5541,12 +5541,14 @@ public class OrderDaoImpl implements OrderDao {
 			ProjectionList projList = Projections.projectionList();
 			projList.add(Projections.property(OrderCriteria));
 			projList.add(Projections.property("subOrderID"));
+			projList.add(Projections.property("orderDate"));
 			criteria.setProjection(projList);
 			results = criteria.list();
 			if(results != null) {
 				for(Object obj : results){
 					Object[] item = (Object[]) obj;
-					idsList.put(item[0].toString(), item[1].toString());
+					if(item[0]!=null)
+					idsList.put(item[0].toString(),item[1]!=null? item[1].toString():item[2].toString());
 				}
 			}
 		} catch (Exception e) {

@@ -1791,6 +1791,8 @@ public class SaveMappedFiles {
 
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
+							entry.getCell(skuIndex).setCellType(
+									HSSFCell.CELL_TYPE_STRING);
 							if (partner != null) {
 								productConfigs = productService
 										.getProductConfig(
@@ -1971,12 +1973,12 @@ public class SaveMappedFiles {
 
 						} else {
 							errorMessage
-									.append(" Order Recieved Date is null;");
-							validaterow = false;
+							.append(" Order Received Date is null,");
+					validaterow = false;
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'purchase-date' doesn't exist");
+								.append("The column 'Order recieved date' doesn't exist");
 						validaterow = false;
 					}
 
@@ -2295,12 +2297,18 @@ public class SaveMappedFiles {
 								validaterow = false;
 							}
 						} else {
-							errorMessage.append(" Shipping Date is null ");
-							validaterow = false;
+							if(order.getOrderDate()!=null)
+								order.setShippedDate(order.getOrderDate());
+							else
+							{
+								errorMessage
+								.append("'Order Shipped Date' or 'Purchase Date' are empty. ");
+						validaterow = false;
+							}
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Order Shipped Date' doesn't exist");
+								.append("The column 'Order Shipped Date' or 'Purchase Date' doesn't exist");
 						validaterow = false;
 					}
 
@@ -2597,6 +2605,8 @@ public class SaveMappedFiles {
 
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
+							entry.getCell(skuIndex).setCellType(
+									HSSFCell.CELL_TYPE_STRING);
 							if (partner != null) {
 								productConfigs = productService
 										.getProductConfig(
@@ -2637,7 +2647,7 @@ public class SaveMappedFiles {
 													.append(" Vendor SKU code not mapped.");
 											validaterow = false;
 										}
-										if ((channelorderid != null)
+										/*if ((channelorderid != null)
 												&& (idsList == null || !idsList
 														.containsKey(channelorderid)
 														&& !duplicateKey
@@ -2653,7 +2663,7 @@ public class SaveMappedFiles {
 											errorMessage
 													.append(" Channel OrderId is already present ");
 											validaterow = false;
-										}
+										}*/
 									} catch (Exception e) {
 
 									}
@@ -2709,16 +2719,15 @@ public class SaveMappedFiles {
 								.get("Order Recieved Date"));
 						if (entry.getCell(index) != null
 								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 							try {	
-									String date = entry.getCell(index).toString();
-									order.setOrderDate(format1.parse(date));
-								
-							} catch (Exception e) {
-								errorMessage
-										.append(" Order Received Date format is wrong ,");
-								validaterow = false;
-							}
+								String date = entry.getCell(index).toString();
+								order.setOrderDate(format1.parse(date));
+							
+						} catch (Exception e) {
+							errorMessage
+									.append(" Order Received Date format is wrong ,expected text format yyyy-MM-dd HH:mm:ss");
+							validaterow = false;
+						}
 
 						} else {
 							errorMessage
@@ -2729,6 +2738,42 @@ public class SaveMappedFiles {
 						errorMessage
 								.append("The column 'Order Created Date' doesn't exist");
 						validaterow = false;
+					}
+					
+					if(channelorderid != null&&order.getOrderDate()!=null){
+						String itemID=format.format(order.getOrderDate());
+						if(!idsList.containsKey(channelorderid)
+								&& !duplicateKey.containsKey(channelorderid)){
+							order.setChannelOrderID(channelorderid);
+							if (productConfig != null){
+								order.setProductSkuCode(productConfig.getProductSkuCode());	
+								order.setPartnerCommission(productConfig.getCommision());
+							}
+							duplicateKey.put(channelorderid, itemID);
+						} else {
+							if(itemID != null && ((idsList.get(channelorderid) != null 
+									&& !idsList.get(channelorderid).equals(itemID))
+									|| (duplicateKey.containsKey(channelorderid) 
+											&& (duplicateKey.get(channelorderid) == null
+											|| !duplicateKey.get(channelorderid).equals(itemID))))){
+								channelorderid = channelorderid + GlobalConstant.orderUniqueSymbol + itemID;
+								if(!idsList.containsKey(channelorderid)
+										&& !duplicateKey.containsKey(channelorderid)){
+									order.setChannelOrderID(channelorderid);
+									if (productConfig != null){
+										order.setProductSkuCode(productConfig.getProductSkuCode());	
+										order.setPartnerCommission(productConfig.getCommision());
+									}													
+									duplicateKey.put(channelorderid, itemID);
+								} else {
+									errorMessage.append("Channel Order Id is Already Present.");
+									validaterow = false;
+								}
+							} else {
+								errorMessage.append("Channel Order Id is Already Present.");
+								validaterow = false;
+							}																								
+						}
 					}
 
 					try {
@@ -4048,6 +4093,7 @@ public class SaveMappedFiles {
 				}
 
 			}
+			System.out.println("cellIndexMap "+cellIndexMap+" columHeaderMap "+columHeaderMap);
 			// SKUList = productService.listProductSKU(sellerId);
 			idsList = orderService.listOrderIds("channelOrderID", sellerId);
 			log.info(noOfEntries);
@@ -4148,7 +4194,7 @@ public class SaveMappedFiles {
 									} catch (Exception e) {
 
 									}
-									if ((channelorderid != null)
+									/*if ((channelorderid != null)
 											&& (idsList == null || !idsList
 													.containsKey(channelorderid)
 													&& !duplicateKey
@@ -4163,7 +4209,7 @@ public class SaveMappedFiles {
 										errorMessage
 												.append(" Channel OrderId is already present ");
 										validaterow = false;
-									}
+									}*/
 
 								} else {
 									errorMessage
@@ -4306,15 +4352,10 @@ public class SaveMappedFiles {
 									.toUpperCase().contains("OTHERS")) {
 								order.setPaymentType("Others");
 							} else {
-								order.setPaymentType(entry.getCell(index)
-										.toString());
-								errorMessage
-										.append(" Payment type should be COD or Prepaid or Others");
-								validaterow = false;
+								order.setPaymentType("Others");
 							}
 						} else {
-							errorMessage.append(" Payment type is null");
-							validaterow = false;
+							order.setPaymentType("Others");
 						}
 					} catch (NullPointerException e) {
 						errorMessage
@@ -4427,12 +4468,35 @@ public class SaveMappedFiles {
 								validaterow = false;
 							}
 						} else {
-							errorMessage.append(" Shipping Date is null ");
+							
+							index = cellIndexMap.get(columHeaderMap
+									.get("Alt Shipped Date"));
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									if (HSSFDateUtil.isCellDateFormatted(entry
+											.getCell(index))) {
+										order.setShippedDate(entry.getCell(index)
+												.getDateCellValue());
+									} else {
+										order.setShippedDate(new Date(entry.getCell(index)
+												.toString()));
+									}
+								} catch (Exception e) {
+									errorMessage
+											.append(" Estimated shipped date format is wrong ,enter mm/dd/yyyy,");
+									validaterow = false;
+								}
+							}
+							else
+							{
+							errorMessage.append(" Shipping Date and Estimated shipped date are empty");
 							validaterow = false;
+							}
 						}
 					} catch (NullPointerException e) {
 						errorMessage
-								.append("The column 'Order Shipped Date' doesn't exist");
+								.append("The column 'Order Shipped Date' or 'Estimated shipped date' doesn't exist");
 						validaterow = false;
 					}
 
@@ -4669,8 +4733,7 @@ public class SaveMappedFiles {
 						 * orderService.addOrder(ConverterClass.prepareModel(order
 						 * ), sellerId);
 						 */
-						System.out.println(" Adding order to save list : "
-								+ order.getChannelOrderID());
+						
 						saveList.add(ConverterClass.prepareModel(order));
 					} else {
 						order.setCustomer(customerBean);
@@ -6908,8 +6971,33 @@ public class SaveMappedFiles {
 								validaterow = false;
 							}
 						} else {
-							errorMessage.append(" Shipping Date is null ");
+
+							
+							index = cellIndexMap.get(columHeaderMap
+									.get("Alt Shipped Date"));
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									if (HSSFDateUtil.isCellDateFormatted(entry
+											.getCell(index))) {
+										order.setShippedDate(entry.getCell(index)
+												.getDateCellValue());
+									} else {
+										order.setShippedDate(new Date(entry.getCell(index)
+												.toString()));
+									}
+								} catch (Exception e) {
+									errorMessage
+											.append(" Updated at date format is wrong ,enter mm/dd/yyyy,");
+									validaterow = false;
+								}
+							}
+							else
+							{
+							errorMessage.append(" Shipping Date and Updated at dates are empty");
 							validaterow = false;
+							}
+						
 						}
 					} catch (NullPointerException e) {
 						errorMessage
@@ -6929,20 +7017,13 @@ public class SaveMappedFiles {
 											.parseFloat(entry.getCell(index)
 													.toString()));
 								} else {
-									errorMessage
-											.append(" Quantity can not be 0 ");
-									validaterow = false;
+									order.setQuantity(1);
 								}
 							} catch (NumberFormatException e) {
-								log.error("Failed! by SellerId : " + sellerId,
-										e);
-								errorMessage
-										.append(" Quantity should be a number ");
-								validaterow = false;
+								order.setQuantity(1);
 							}
 						} else {
-							errorMessage.append(" Quantity can not be null ");
-							validaterow = false;
+							order.setQuantity(1);
 						}
 					} catch (NullPointerException e) {
 						errorMessage
@@ -7149,8 +7230,7 @@ public class SaveMappedFiles {
 						 * orderService.addOrder(ConverterClass.prepareModel(order
 						 * ), sellerId);
 						 */
-						System.out.println(" Adding order to save list : "
-								+ order.getChannelOrderID());
+						
 						saveList.add(ConverterClass.prepareModel(order));
 					} else {
 						order.setCustomer(customerBean);
