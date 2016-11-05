@@ -5547,16 +5547,25 @@ public class OrderDaoImpl implements OrderDao {
 			projList.add(Projections.property(OrderCriteria));
 			projList.add(Projections.property("subOrderID"));
 			projList.add(Projections.property("orderDate"));
+			projList.add(Projections.property("pcName"));
 			criteria.setProjection(projList);
 			results = criteria.list();
 			if(results != null) {
-				for(Object obj : results){
-					Object[] item = (Object[]) obj;
-					if(item[0]!=null){
-						idsList.put(item[0].toString(),item[1]!=null? item[1].toString():item[2].toString());
-					}
-				}
-			}
+                for(Object obj : results){
+                    Object[] item = (Object[]) obj;
+                    if(item[0]!=null){
+                       if(item[3].toString().contains("snapdeal") || item[3].toString().contains("limeroad")){
+                           String orderdatedate=null;
+                           if(item[2].toString().contains(" ")){
+                               orderdatedate=item[2].toString().split(" ")[0].trim();
+                           }
+                           idsList.put(item[0].toString(),orderdatedate);
+                       } else {
+                           idsList.put(item[0].toString(),item[1]!=null? item[1].toString():null);
+                       }                        
+                   }
+                }
+            }
 		} catch (Exception e) {
 			log.error("Failed by Seller ID : " + sellerId, e);
 			e.printStackTrace();

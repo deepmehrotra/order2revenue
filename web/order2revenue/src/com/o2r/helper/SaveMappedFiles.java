@@ -204,6 +204,32 @@ public class SaveMappedFiles {
 						}
 						
 						try {
+							index = cellIndexMap.get(columHeaderMap
+									.get("Order Recieved Date"));
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									String dateStr = entry.getCell(index)
+											.toString();
+									order.setOrderDate(new Date(dateStr));
+								} catch (Exception e) {
+									errorMessage
+											.append(" Order Received Date format is wrong,");
+									validaterow = false;
+								}
+
+							} else {
+								errorMessage
+										.append(" Order Recieved Date is null;");
+								validaterow = false;
+							}
+						} catch (NullPointerException e) {
+							errorMessage
+									.append("The column 'purchase-date' doesn't exist");
+							validaterow = false;
+						}
+						
+						try {
 							o2rIndex = cellIndexMap.get(columHeaderMap
 									.get("O2R Channel"));
 							if (entry.getCell(o2rIndex) != null
@@ -334,12 +360,19 @@ public class SaveMappedFiles {
 				                						}
 														duplicateKey.put(channelID, itemID);
 													} else {
+														if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
+															itemID = order.getOrderDate().toString();
+														}
 														if(itemID != null && ((idsList.get(channelID) != null 
 																&& !idsList.get(channelID).equals(itemID))
 																|| (duplicateKey.containsKey(channelID) 
 																		&& (duplicateKey.get(channelID) == null
 																		|| !duplicateKey.get(channelID).equals(itemID))))){
-															channelID = channelID + GlobalConstant.orderUniqueSymbol + itemID;
+															if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
+																channelID = channelID + GlobalConstant.orderUniqueSymbol + order.getOrderDate().toString();
+															} else {
+																channelID = channelID + GlobalConstant.orderUniqueSymbol + itemID;
+															}															
 															if(!idsList.containsKey(channelID)
 																	&& !duplicateKey.containsKey(channelID)){
 																order.setChannelOrderID(channelID);
@@ -351,7 +384,11 @@ public class SaveMappedFiles {
 						                							String TI = channelID.substring(0, channelID.indexOf(GlobalConstant.orderUniqueSymbol));                                        	
 						                                        	order.setTypeIdentifier(TI);
 						                						}
-																duplicateKey.put(channelID, itemID);
+																if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
+																	duplicateKey.put(channelID, order.getOrderDate().toString());
+																} else {
+																	duplicateKey.put(channelID, itemID);
+																}																
 															} else {
 																errorMessage.append("Channel Order Id is Already Present.");
 																validaterow = false;
@@ -452,33 +489,7 @@ public class SaveMappedFiles {
 								validaterow = false;
 							}
 						}
-					}
-
-					try {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Order Recieved Date"));
-						if (entry.getCell(index) != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							try {
-								String dateStr = entry.getCell(index)
-										.toString();
-								order.setOrderDate(new Date(dateStr));
-							} catch (Exception e) {
-								errorMessage
-										.append(" Order Received Date format is wrong,");
-								validaterow = false;
-							}
-
-						} else {
-							errorMessage
-									.append(" Order Recieved Date is null;");
-							validaterow = false;
-						}
-					} catch (NullPointerException e) {
-						errorMessage
-								.append("The column 'purchase-date' doesn't exist");
-						validaterow = false;
-					}
+					}					
 
 					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
 						index = cellIndexMap.get(columHeaderMap
