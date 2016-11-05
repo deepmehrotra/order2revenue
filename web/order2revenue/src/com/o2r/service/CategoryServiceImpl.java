@@ -84,4 +84,9 @@ public class CategoryServiceImpl implements CategoryService {
 		categoryDao.addPartnerCatRef(prodcat, sellerId);
 
 	}
+
+	@Override
+	public List<String> listPartnerCategories() throws CustomException {
+		return categoryDao.listPartnerCategories();
+	}
 }

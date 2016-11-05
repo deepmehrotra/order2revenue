@@ -867,6 +867,7 @@ public class ConverterClass {
 			bean.setOpeningStock(category.getOpeningStock());
 			bean.setSkuCount(category.getSkuCount());
 			bean.setOsUpdate(category.getOsUpdate());
+			bean.setPartnerCatRef(category.getPartnerCatRef());
 		}
 		return bean;
 	}
@@ -885,6 +886,7 @@ public class ConverterClass {
 			category.setOpeningStock(categoryBean.getOpeningStock());
 			category.setSkuCount(categoryBean.getSkuCount());
 			category.setOsUpdate(categoryBean.getOsUpdate());
+			category.setPartnerCatRef(categoryBean.getPartnerCatRef());
 		}
 		return category;
 	}
@@ -908,7 +910,7 @@ public class ConverterClass {
 				bean.setOpeningStock(category.getOpeningStock());
 				bean.setSkuCount(category.getSkuCount());
 				bean.setOsUpdate(category.getOsUpdate());
-
+				bean.setPartnerCatRef(category.getPartnerCatRef());
 				beans.add(bean);
 			}
 		}

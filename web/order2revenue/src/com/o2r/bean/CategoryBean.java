@@ -22,6 +22,7 @@ public class CategoryBean {
 	private Date osUpdate;
 	
 	private ProductConfig productConfig;
+	private String partnerCatRef;
 	
 	private List<CategoryBean> subCategory = new ArrayList<CategoryBean>();
 	public int getId() {
@@ -108,6 +109,12 @@ public class CategoryBean {
 	}
 	public void setProductConfig(ProductConfig productConfig) {
 		this.productConfig = productConfig;
+	}
+	public String getPartnerCatRef() {
+		return partnerCatRef;
+	}
+	public void setPartnerCatRef(String partnerCatRef) {
+		this.partnerCatRef = partnerCatRef;
 	}
 
 

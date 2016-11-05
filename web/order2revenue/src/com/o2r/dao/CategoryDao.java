@@ -34,4 +34,6 @@ public interface CategoryDao {
 
 	public void addPartnerCatRef(Category category, int sellerId)
 			throws CustomException;
+
+	public List<String> listPartnerCategories() throws CustomException;
 }

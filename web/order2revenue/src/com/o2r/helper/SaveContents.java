@@ -4399,8 +4399,9 @@ public class SaveContents {
 									.getNrnReturnConfig().getCharges();
 							if (entry.getCell(1) != null
 									&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-								Category prodcat = categoryService.getCategory(
-										entry.getCell(1).toString(), sellerId);
+								Category prodcat = categoryService
+										.getSubCategory(entry.getCell(1)
+												.toString(), sellerId);
 								NRnReturnCharges nrnReturncharge = null;
 								if (prodcat != null) {
 									for (NRnReturnCharges charge : chargesList) {
@@ -4551,9 +4552,9 @@ public class SaveContents {
 												&& entry.getCell(1)
 														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 											Category prodcat = categoryService
-													.getCategory(
-															entry.getCell(1)
-																	.toString(),
+													.getSubCategory(entry
+															.getCell(1)
+															.toString(),
 															sellerId);
 											NRnReturnCharges nrnReturncharge = null;
 											if (prodcat != null) {
@@ -4720,27 +4721,37 @@ public class SaveContents {
 										String partnerCat = partner.getPcName()
 												+ "_"
 												+ entry.getCell(2).toString();
+										Category tempProdcat = categoryService
+												.getSubCategory(partnerCat,
+														sellerId);
 
-										if (prodcat.getPartnerCatRef() == null) {
-											prodcat.setPartnerCatRef(partnerCat);
-										} else {
-											List<String> partnerCatList = new ArrayList<String>(
-													Arrays.asList(prodcat
-															.getPartnerCatRef()
-															.split(",")));
-
-											if (!partnerCatList
-													.contains(partnerCat)) {
-												partnerCatList.add(partnerCat);
-												prodcat.setPartnerCatRef(StringUtils
-														.join(partnerCatList,
-																','));
+										if (tempProdcat == null) {
+											if (prodcat.getPartnerCatRef() == null) {
+												prodcat.setPartnerCatRef(partnerCat);
 											} else {
-												errorMessage
-														.append(" Channel Category reference already exist ");
-												validaterow = false;
-											}
+												List<String> partnerCatList = new ArrayList<String>(
+														Arrays.asList(prodcat
+																.getPartnerCatRef()
+																.split(",")));
 
+												if (!partnerCatList
+														.contains(partnerCat)) {
+													partnerCatList
+															.add(partnerCat);
+													prodcat.setPartnerCatRef(StringUtils
+															.join(partnerCatList,
+																	','));
+												} else {
+													errorMessage
+															.append(" Channel Category reference already exist ");
+													validaterow = false;
+												}
+
+											}
+										} else {
+											errorMessage
+													.append(" Channel Category reference already associated with a Product Category ");
+											validaterow = false;
 										}
 
 									} else {
