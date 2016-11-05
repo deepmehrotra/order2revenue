@@ -3770,6 +3770,8 @@ public class SaveMappedFiles {
 				// Code for fetching right colum
 				orderPayment = new OrderPayment();
 				order = null;
+				boolean combo=false;
+				List<Order> onj=null;
 				try {
 					if (cellIndexMap.get(columHeaderMap.get("ChannelOrderId")) != null) {
 						channelheader = columHeaderMap.get("ChannelOrderId");
@@ -3792,7 +3794,7 @@ public class SaveMappedFiles {
 							entry.getCell(index).setCellType(
 									HSSFCell.CELL_TYPE_STRING);
 
-							List<Order> onj = null;
+							onj = null;
 							if (entry.getCell(skuIndex) != null
 									&& entry.getCell(skuIndex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 								channelOrderId = entry.getCell(index)
@@ -3815,7 +3817,18 @@ public class SaveMappedFiles {
 												.equals(channelOrderId)) {
 									channelOrderId = onj.get(0)
 											.getChannelOrderID();
-								} else {
+								}
+								else if (onj.size() > 1&& onj.get(0).getChannelOrderID()
+										.contains(channelOrderId))
+								{
+									
+									if(onj.get(0).getTypeIdentifier()!=null&&
+											onj.get(0).getTypeIdentifier().equals(channelOrderId))
+									{
+										combo=true;
+									}
+								}
+								else {
 
 									errorMessage
 											.append("Multiple Orders With Channel Order ID.");
@@ -3948,8 +3961,29 @@ public class SaveMappedFiles {
 									totalnegative = totalnegative
 											+ Math.abs(amount);
 								}
+								if(combo)
+								{
+									
+									 if(onj!=null&&onj.size()>0)
+									 {
+										 if(amount>0)
+										 {
+										 orderPayment.setPositiveAmount(orderPayment.getPositiveAmount()/onj.size());
+										 }
+										 else{
+											 orderPayment.setNegativeAmount(orderPayment.getNegativeAmount()/onj.size());
+										 }
+									 for(Order ord:onj)
+									 {
+										 order = orderService.addOrderPayment(skucode,
+													ord.getChannelOrderID(), orderPayment, sellerId);
+									 }
+									 }
+								}
+								else{
 								order = orderService.addOrderPayment(skucode,
 										channelOrderId, orderPayment, sellerId);
+								}
 							} else {
 								errorSet.add(errorMessage.toString());
 
@@ -6547,6 +6581,8 @@ public class SaveMappedFiles {
 				String channelheader = null;
 				channelOrderId = null;
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
+				boolean combo=false;
+				List<Order> onj=null;
 
 				// Code for fetching right colum
 				try {
@@ -6572,14 +6608,25 @@ public class SaveMappedFiles {
 								+ GlobalConstant.orderUniqueSymbol
 								+ entry.getCell(skuIndex).toString().trim()
 										.toUpperCase();
-						List<Order> onj = orderService.searchAsIsOrder(
+						onj = orderService.searchAsIsOrder(
 								"channelOrderID", channelOrderId, sellerId);
 						if (onj != null) {
 							if (onj.size() == 1
 									&& onj.get(0).getChannelOrderID()
 											.equals(channelOrderId)) {
 								channelOrderId = onj.get(0).getChannelOrderID();
-							} else {
+							} 
+							else if (onj.size() > 1&& onj.get(0).getChannelOrderID()
+									.contains(channelOrderId))
+							{
+								
+								if(onj.get(0).getTypeIdentifier()!=null&&
+										onj.get(0).getTypeIdentifier().equals(channelOrderId))
+								{
+									combo=true;
+								}
+							}
+							else {
 								errorMessage
 										.append("Multiple Orders With Channel Order ID.");
 								validaterow = false;
@@ -6693,10 +6740,34 @@ public class SaveMappedFiles {
 						} else if (amount < 0) {
 							totalnegative = totalnegative + Math.abs(amount);
 						}
+						if(combo)
+						{
+							
+							 if(onj!=null&&onj.size()>0)
+							 {
+								 if(amount>0)
+								 {
+									 paymentBean.setPositiveAmount(paymentBean.getPositiveAmount()/onj.size());
+								 }
+								 else{
+									 paymentBean.setNegativeAmount(paymentBean.getNegativeAmount()/onj.size());
+								 }
+							 for(Order ord:onj)
+							 {
+								 order = orderService.addOrderPayment(skucode,
+										 ord.getChannelOrderID(), ConverterClass
+													.prepareOrderPaymentModel(paymentBean),
+											sellerId);
+								
+							 }
+							 }
+						}
+						else{
 						order = orderService.addOrderPayment(skucode,
 								channelOrderId, ConverterClass
 										.prepareOrderPaymentModel(paymentBean),
 								sellerId);
+						}
 					} else {
 						errorSet.add(errorMessage.toString());
 					}
@@ -7503,6 +7574,7 @@ public class SaveMappedFiles {
 				boolean combo=false;
 				List<Order> onj=null;
 				order = null;
+				int combocount=0;
 				try {
 					if (cellIndexMap.get(columHeaderMap.get("ChannelOrderId")) != null) {
 						channelheader = columHeaderMap.get("ChannelOrderId");
@@ -7572,6 +7644,7 @@ public class SaveMappedFiles {
 											if(tmpOrder.getTypeIdentifier().contains(channelOrderId))
 											{
 												combo=true;
+												combocount++;
 											}
 										}
 									} else if (onj.size() == 1
@@ -7722,10 +7795,10 @@ public class SaveMappedFiles {
 							 {
 								 if(amount>0)
 								 {
-								 orderPayment.setPositiveAmount(orderPayment.getPositiveAmount()/onj.size());
+								 orderPayment.setPositiveAmount(orderPayment.getPositiveAmount()/combocount);
 								 }
 								 else{
-									 orderPayment.setNegativeAmount(orderPayment.getNegativeAmount()/onj.size());
+									 orderPayment.setNegativeAmount(orderPayment.getNegativeAmount()/combocount);
 								 }
 							 for(Order ord:onj)
 							 {
