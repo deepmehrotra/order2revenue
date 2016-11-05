@@ -306,7 +306,11 @@ public class OrderDaoImpl implements OrderDao {
 				seller = (Seller) criteria.list().get(0);
 				erroneousOrders = new StringBuffer("");
 				for (Order order : orderList) {
-
+					
+					if(order.getOrderId() != 0){
+						reverseOrder(order.getOrderId(), sellerId);	
+						order.setOrderId(0);
+					}
 					try {
 						product = productService.getProduct(
 								order.getProductSkuCode(), sellerId);
@@ -628,6 +632,7 @@ public class OrderDaoImpl implements OrderDao {
 								e);
 						orderCount--;
 					}
+				
 				}
 			}
 		} catch (Exception e) {
@@ -5546,7 +5551,8 @@ public class OrderDaoImpl implements OrderDao {
 			if(results != null) {
 				for(Object obj : results){
 					Object[] item = (Object[]) obj;
-					idsList.put(item[0].toString(), item[1].toString());
+					if(item[0]!=null)
+	                    idsList.put(item[0].toString(),item[1]!=null? item[1].toString():null);
 				}
 			}
 		} catch (Exception e) {

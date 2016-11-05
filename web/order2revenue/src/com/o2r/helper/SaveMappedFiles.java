@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream.PutField;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -113,7 +114,7 @@ public class SaveMappedFiles {
 		Events event = null;
 		List<Order> saveList = new ArrayList<Order>();
 		Map<String, String> idsList = new HashMap<String, String>();
-		Map<Order, String> multyQtyMap = new HashMap<Order, String>();
+		Map<String, Order> multyQtyMap = new HashMap<String, Order>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
 		int noOfEntries = 1;
@@ -170,6 +171,7 @@ public class SaveMappedFiles {
 				Partner partner = null;
 				String channelID = null;
 				String sku = "";
+				String uniqueID4Map = null;
 				Product product = null;
 				ProductConfig productConfig = null;
 				List<ProductConfig> productConfigs = null;
@@ -185,6 +187,22 @@ public class SaveMappedFiles {
 								typeIden = entry.getCell(index).toString();
 							}
 						}
+						
+						if (cellIndexMap.get(columHeaderMap
+								.get("Secondary OrderID")) != null) {
+							index = cellIndexMap.get(columHeaderMap.get("Secondary OrderID"));
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+								itemID = entry.getCell(index).toString();
+								if (itemID.contains("'")) {
+									itemID = removeExtraQuote(itemID);
+								}
+								itemID = removeExtraQuote(itemID);
+								order.setSubOrderID(itemID);
+							}
+						}
+						
 						try {
 							o2rIndex = cellIndexMap.get(columHeaderMap
 									.get("O2R Channel"));
@@ -294,24 +312,11 @@ public class SaveMappedFiles {
 														idIndex).toString()
 														+ GlobalConstant.orderUniqueSymbol
 														+ sku;
-											}	
+											}										
 											
-											if (cellIndexMap.get(columHeaderMap
-													.get("Secondary OrderID")) != null) {
-												index = cellIndexMap.get(columHeaderMap.get("Secondary OrderID"));
-												if (entry.getCell(index) != null
-														&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-													entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
-													itemID = entry.getCell(index).toString();
-													if (itemID.contains("'")) {
-														itemID = removeExtraQuote(itemID);
-													}
-													itemID = removeExtraQuote(itemID);
-													order.setSubOrderID(itemID);
-												}
-											}
+											uniqueID4Map = channelID;
 											
-											if(channelID != null){
+											if(channelID != null){												
 												if (!(partner.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
                                                 		|| partner.getPcName().toLowerCase().contains(GlobalConstant.PCPAYTM)
                                                 		|| partner.getPcName().toLowerCase().contains(GlobalConstant.PCJABONG))) {	
@@ -383,20 +388,9 @@ public class SaveMappedFiles {
 					}
 
 					if (cellIndexMap.get(columHeaderMap
-							.get("Secondary OrderID")) != null) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Secondary OrderID"));
-						if (partner != null) {
-							if (entry.getCell(index) != null
-									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-								entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
-								String itemid = entry.getCell(index).toString();
-								if (itemid.contains("'")) {
-									itemid = removeExtraQuote(itemid);
-								}
-								itemid = removeExtraQuote(itemid);
-								order.setSubOrderID(itemid);
-
+							.get("Secondary OrderID")) != null) {						
+						if (partner != null && channelID != null) {							
+							if (itemID != null) {
 								if (partner.getPcName().toLowerCase()
 										.contains(GlobalConstant.PCFLIPKART)
 										|| partner
@@ -410,7 +404,7 @@ public class SaveMappedFiles {
 												.contains(
 														GlobalConstant.PCJABONG)) {
 
-									channelID = order.getChannelOrderID()
+									channelID = channelID
 											+ GlobalConstant.orderUniqueSymbol
 											+ order.getSubOrderID();
 									if ((channelID != null)
@@ -422,9 +416,9 @@ public class SaveMappedFiles {
 										order.setChannelOrderID(channelID);
 										order.setProductSkuCode(productConfig.getProductSkuCode());
                                         order.setPartnerCommission(productConfig.getCommision());
-                                        if(itemid != null && itemid.contains("-") && typeIden != null){
+                                        if(itemID != null && itemID.contains("-") && typeIden != null){
                 							String TI = channelID.substring(0, channelID.indexOf(GlobalConstant.orderUniqueSymbol))
-                									+ itemid.substring(0, itemid.indexOf("-"));                                        	
+                									+ itemID.substring(0, itemID.indexOf("-"));                                        	
                                         	order.setTypeIdentifier(TI);
                 						}
 										duplicateKey.put(channelID, "");
@@ -952,10 +946,51 @@ public class SaveMappedFiles {
 					if (validaterow) {
 						order.setOrderFileName(uploadFileName);
 						order.setCustomer(customerBean);
-						order.setOrderTax(otb);							 
-						System.out.println(" Adding order to save list : "
-								+ order.getChannelOrderID());
-						saveList.add(ConverterClass.prepareModel(order));
+						order.setOrderTax(otb);	
+						if(itemID != null && itemID.contains("-") && (typeIden == null || typeIden.equals(""))){
+							Order orderMul = null;
+							if(multyQtyMap.size() != 0 && multyQtyMap.get(uniqueID4Map) != null){								
+								orderMul = multyQtyMap.get(uniqueID4Map);
+								if(orderMul.getTypeIdentifier().contains(itemID.substring(itemID.lastIndexOf("-")+1))){
+									errorMessage.append("Duplicate Order.");
+									returnOrderMap.put(errorMessage.toString(), order);
+								} else {
+									orderMul.setQuantity(orderMul.getQuantity() + order.getQuantity());
+									orderMul.setTypeIdentifier(orderMul.getTypeIdentifier()+","+itemID.substring(itemID.lastIndexOf("-")+1));								
+									multyQtyMap.put(uniqueID4Map, orderMul);
+								}								
+							} else {
+								List<Order> resultList = orderService.searchAsIsOrder("channelOrderID",										
+										channelID.substring(0, channelID.lastIndexOf(GlobalConstant.orderUniqueSymbol)), sellerId);
+								if(resultList != null){
+									orderMul = resultList.get(0);
+									if(orderMul.getTypeIdentifier() != null && orderMul.getTypeIdentifier().contains(itemID.substring(itemID.lastIndexOf("-")+1))){
+										errorMessage.append("Duplicate Order.");
+										returnOrderMap.put(errorMessage.toString(), order);
+									} else {
+										orderMul.setQuantity(orderMul.getQuantity()+order.getQuantity());
+										orderMul.setTypeIdentifier(orderMul.getTypeIdentifier()+","+itemID.substring(itemID.lastIndexOf("-")+1));										
+										orderMul.setCustomer(ConverterClass.prepareModel(order).getCustomer());
+										orderMul.setOrderTax(ConverterClass.prepareModel(order).getOrderTax());
+										orderMul.setOrderPayment(ConverterClass.prepareModel(order).getOrderPayment());
+										orderMul.setOrderTimeline(ConverterClass.prepareModel(order).getOrderTimeline());
+										orderMul.setOrderReturnOrRTO(ConverterClass.prepareModel(order).getOrderReturnOrRTO());
+										orderMul.setSeller(ConverterClass.prepareModel(order).getSeller());
+										orderMul.setProductConfig(ConverterClass.prepareModel(order).getProductConfig());
+										orderMul.setConsolidatedOrder(ConverterClass.prepareModel(order).getConsolidatedOrder());
+										if(orderMul.getTypeIdentifier() == null){
+											order.setTypeIdentifier("MultiQty-"+itemID.substring(itemID.lastIndexOf("-")+1));
+										}
+										multyQtyMap.put(uniqueID4Map, orderMul);
+									}
+								} else {
+									order.setTypeIdentifier("MultiQty-"+itemID.substring(itemID.lastIndexOf("-")+1));
+									multyQtyMap.put(uniqueID4Map, ConverterClass.prepareModel(order));
+								}
+							}							
+						} else {
+							saveList.add(ConverterClass.prepareModel(order));
+						}						
 					} else {
 						order.setCustomer(customerBean);
 						order.setOrderTax(otb);
@@ -974,8 +1009,14 @@ public class SaveMappedFiles {
 
 			try {
 				System.out.println(" SaveList Size : " + saveList.size());
-				if (saveList != null && saveList.size() != 0)
+				if ((saveList != null && saveList.size() != 0) || multyQtyMap.size() != 0){
+					if(multyQtyMap != null && multyQtyMap.size() != 0){
+						for(Entry<String, Order> eachOrder : multyQtyMap.entrySet()){
+							saveList.add(eachOrder.getValue());
+						}
+					}
 					orderService.addOrder(saveList, sellerId);
+				}
 			} catch (CustomException ce) {
 				returnOrderMap
 						.put("Row :1:Note-Some orders("
