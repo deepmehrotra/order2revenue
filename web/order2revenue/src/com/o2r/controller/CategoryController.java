@@ -372,7 +372,7 @@ public class CategoryController {
 
 			List<String> partnerCategoryList = new ArrayList<String>();
 			partnerCategoryList = categoryService.listPartnerCategories();
-			
+
 			model.put("parentcatid", parentcatid);
 			model.put("categories", categorylist);
 			model.put("partnerCategories", partnerCategoryList);
@@ -391,7 +391,7 @@ public class CategoryController {
 		log.info("$$$ saveInventoryGroup Ends : CategoryController $$$");
 		return new ModelAndView("initialsetup/addCatInventorygroup", model);
 	}
-	
+
 	@RequestMapping(value = "/seller/editCatInventory", method = RequestMethod.GET)
 	public ModelAndView editCatInventory(
 			@ModelAttribute("command") CategoryBean categoryBean,
@@ -405,10 +405,12 @@ public class CategoryController {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			int catid = Integer.parseInt(request.getParameter("catId"));
 			int parentcatid = 0;
-			
+
 			List<String> partnerCatRefList = new ArrayList<String>();
-			CategoryBean category = ConverterClass.prepareCategoryBean(categoryService.getCategory(catid));
-			if (category.getPartnerCatRef() != null && !category.getPartnerCatRef().isEmpty()) {
+			CategoryBean category = ConverterClass
+					.prepareCategoryBean(categoryService.getCategory(catid));
+			if (category.getPartnerCatRef() != null
+					&& !category.getPartnerCatRef().isEmpty()) {
 				partnerCatRefList = Arrays.asList(category.getPartnerCatRef()
 						.split(","));
 			}
@@ -416,8 +418,9 @@ public class CategoryController {
 			List<CategoryBean> categorylist = ConverterClass
 					.prepareListofCategoryBean(categoryService
 							.listParentCategories(sellerId));
-			for (CategoryBean bean: categorylist) {
-				if (bean.getCatName().equalsIgnoreCase(category.getParentCatName())) {
+			for (CategoryBean bean : categorylist) {
+				if (bean.getCatName().equalsIgnoreCase(
+						category.getParentCatName())) {
 					parentcatid = bean.getId();
 				}
 			}
@@ -430,7 +433,7 @@ public class CategoryController {
 					partnerNameList.add(bean.getPcName());
 				}
 			}
-			
+
 			List<String> partnerCategoryList = new ArrayList<String>();
 			partnerCategoryList = categoryService.listPartnerCategories();
 
@@ -466,7 +469,6 @@ public class CategoryController {
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		String parentcatid = request.getParameter("parentcatid");
-		String partnerName = request.getParameter("partnerName");
 		if (result.hasErrors()) {
 			log.error("Errors in the product category");
 			return new ModelAndView(
@@ -475,9 +477,14 @@ public class CategoryController {
 		}
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-			categoryBean.setSubCategory(true);
-			Category category = ConverterClass
-					.prepareCategoryModel(categoryBean);
+			Category category;
+			if (categoryBean.getId() > 0) {
+				category = categoryService.getCategory(categoryBean.getId());
+			} else {
+				categoryBean.setSubCategory(true);
+				category = ConverterClass.prepareCategoryModel(categoryBean);
+			}
+
 			List<String> partnerCatRefList = new ArrayList<String>();
 			String tempPartnerCat = "";
 
@@ -497,8 +504,11 @@ public class CategoryController {
 								.split(","));
 						for (String tempPartnerCatRef : tempPartnerCatRefList) {
 							if (!tempPartnerCatRef.trim().isEmpty()) {
-								tempPartnerCat = pcName + "_" + tempPartnerCatRef;
-								Category tempCat = categoryService.getSubCategory(tempPartnerCat, sellerId);
+								tempPartnerCat = pcName + "_"
+										+ tempPartnerCatRef;
+								Category tempCat = categoryService
+										.getSubCategory(tempPartnerCat,
+												sellerId);
 								if (tempCat == null) {
 									partnerCatRefList.add(tempPartnerCat);
 								}
@@ -506,7 +516,8 @@ public class CategoryController {
 						}
 					} else {
 						tempPartnerCat = pcName + "_" + partnerCatRef;
-						Category tempCat = categoryService.getSubCategory(tempPartnerCat, sellerId);
+						Category tempCat = categoryService.getSubCategory(
+								tempPartnerCat, sellerId);
 						if (tempCat == null) {
 							partnerCatRefList.add(tempPartnerCat);
 						}
@@ -514,23 +525,21 @@ public class CategoryController {
 
 				}
 			}
-			
+
 			String[] catList = request.getParameterValues("multiSku");
 			if (catList != null && catList.length != 0) {
 				for (int i = 0; i < catList.length; i++) {
 					tempPartnerCat = catList[i];
-					Category tempCat = categoryService.getSubCategory(tempPartnerCat, sellerId);
-					if (tempCat == null) {
-						partnerCatRefList.add(tempPartnerCat);
-					}
+					partnerCatRefList.add(tempPartnerCat);
 				}
 			}
-			
+
 			catList = request.getParameterValues("multiSku1");
 			if (catList != null && catList.length != 0) {
 				for (int i = 0; i < catList.length; i++) {
 					tempPartnerCat = catList[i];
-					Category tempCat = categoryService.getSubCategory(tempPartnerCat, sellerId);
+					Category tempCat = categoryService.getSubCategory(
+							tempPartnerCat, sellerId);
 					if (tempCat == null) {
 						partnerCatRefList.add(tempPartnerCat);
 					}
@@ -541,8 +550,13 @@ public class CategoryController {
 				category.setPartnerCatRef(StringUtils.join(partnerCatRefList,
 						','));
 			}
-			categoryService.addCategory(category,
-					helperClass.getSellerIdfromSession(request));
+
+			if (category.getCategoryId() > 0) {
+				categoryService.addPartnerCatRef(category, sellerId);
+			} else {
+				categoryService.addCategory(category,
+						helperClass.getSellerIdfromSession(request));
+			}
 		} catch (CustomException ce) {
 			log.error("saveCatInventory exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());

@@ -104,7 +104,7 @@
 					<form:form method="POST" action="saveCatInventory.html"
 						id="addCategoryForm" role="form" class="form-horizontal">
 						<c:if test="${!empty category.id}">
-							<input type="hidden" name="catId" id="catId"
+							<form:input type="hidden" name="catId" id="catId" path="id"
 								value="${category.id}" />
 						</c:if>
 						<div class="col-lg-12">
@@ -243,6 +243,16 @@
 	</div>
 
 	<script src="/O2R/seller/js/chosen.jquery.js"></script>
+	<script>
+		$(document).ready(function() {
+			var catId = "${category.id}";
+			if (catId > 0) {
+				document.getElementById("categoryName").disabled = true;
+				document.getElementById("categorySelect").disabled = true; 
+				document.getElementById("catDescription").disabled = true; 
+			}
+		});
+	</script>
 	<script>
 		var config = {
 			'.chosen-select' : {},
