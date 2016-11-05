@@ -106,7 +106,7 @@ public class SaveMappedFiles {
 	private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	private final SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private final String regexForZipcode = "\\d{6}$";
-
+	
 	public void saveUnicommerceOrderContents(MultipartFile file, int sellerId,
 			String path, UploadReport uploadReport) throws IOException {
 		log.info("$$$ saveUnicommerceOrderContents starts : SaveMappedFiles $$$");
@@ -206,6 +206,32 @@ public class SaveMappedFiles {
 								itemID = removeExtraQuote(itemID);
 								order.setSubOrderID(itemID);
 							}
+						}
+						
+						try {
+							index = cellIndexMap.get(columHeaderMap
+									.get("Order Recieved Date"));
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									String dateStr = entry.getCell(index)
+											.toString();
+									order.setOrderDate(new Date(dateStr));
+								} catch (Exception e) {
+									errorMessage
+											.append(" Order Received Date format is wrong,");
+									validaterow = false;
+								}
+
+							} else {
+								errorMessage
+										.append(" Order Recieved Date is null;");
+								validaterow = false;
+							}
+						} catch (NullPointerException e) {
+							errorMessage
+									.append("The column 'purchase-date' doesn't exist");
+							validaterow = false;
 						}
 						
 						try {
@@ -339,12 +365,15 @@ public class SaveMappedFiles {
 				                						}
 														duplicateKey.put(channelID, itemID);
 													} else {
+														if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
+															itemID = format.format(order.getOrderDate());
+														}
 														if(itemID != null && ((idsList.get(channelID) != null 
 																&& !idsList.get(channelID).equals(itemID))
 																|| (duplicateKey.containsKey(channelID) 
 																		&& (duplicateKey.get(channelID) == null
 																		|| !duplicateKey.get(channelID).equals(itemID))))){
-															channelID = channelID + GlobalConstant.orderUniqueSymbol + itemID;
+															channelID = channelID + GlobalConstant.orderUniqueSymbol + itemID;														
 															if(!idsList.containsKey(channelID)
 																	&& !duplicateKey.containsKey(channelID)){
 																order.setChannelOrderID(channelID);
@@ -356,7 +385,11 @@ public class SaveMappedFiles {
 						                							String TI = channelID.substring(0, channelID.indexOf(GlobalConstant.orderUniqueSymbol));                                        	
 						                                        	order.setTypeIdentifier(TI);
 						                						}
-																duplicateKey.put(channelID, itemID);
+																if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
+																	duplicateKey.put(channelID, order.getOrderDate().toString());
+																} else {
+																	duplicateKey.put(channelID, itemID);
+																}																
 															} else {
 																errorMessage.append("Channel Order Id is Already Present.");
 																validaterow = false;
@@ -457,33 +490,7 @@ public class SaveMappedFiles {
 								validaterow = false;
 							}
 						}
-					}
-
-					try {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Order Recieved Date"));
-						if (entry.getCell(index) != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							try {
-								String dateStr = entry.getCell(index)
-										.toString();
-								order.setOrderDate(new Date(dateStr));
-							} catch (Exception e) {
-								errorMessage
-										.append(" Order Received Date format is wrong,");
-								validaterow = false;
-							}
-
-						} else {
-							errorMessage
-									.append(" Order Recieved Date is null;");
-							validaterow = false;
-						}
-					} catch (NullPointerException e) {
-						errorMessage
-								.append("The column 'purchase-date' doesn't exist");
-						validaterow = false;
-					}
+					}					
 
 					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
 						index = cellIndexMap.get(columHeaderMap
@@ -2525,7 +2532,7 @@ public class SaveMappedFiles {
 		ChannelUploadMapping chanupload = null;
 		Map<String, String> columHeaderMap = new LinkedHashMap<String, String>();
 		Map<String, Integer> cellIndexMap = new LinkedHashMap<String, Integer>();
-		
+
 		StringBuffer errorMessage = new StringBuffer();
 		CustomerBean customerBean = null;
 		Partner partner = null;

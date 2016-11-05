@@ -5552,21 +5552,20 @@ public class OrderDaoImpl implements OrderDao {
 			results = criteria.list();
 			if(results != null) {
 				for(Object obj : results){
-					Object[] item = (Object[]) obj;
-					if(item[0]!=null){
-                        if(item[3].toString().contains("snapdeal") || item[3].toString().contains("limeroad")){
-                        	String orderdatedate=null;
-                        	if(item[2].toString().contains(" "))
-                        	{
-                        		orderdatedate=item[2].toString().split(" ")[0].trim();
-                        	}
-                            idsList.put(item[0].toString(),orderdatedate);
-                        } else {
-                            idsList.put(item[0].toString(),item[1]!=null? item[1].toString():null);
-                        }                        
-                    }
-				}
-			}
+                    Object[] item = (Object[]) obj;
+                    if(item[0]!=null){
+                       if(item[3].toString().contains("snapdeal") || item[3].toString().contains("limeroad")){
+                           String orderdatedate=null;
+                           if(item[2].toString().contains(" ")){
+                               orderdatedate=item[2].toString().split(" ")[0].trim();
+                           }
+                           idsList.put(item[0].toString(),orderdatedate);
+                       } else {
+                           idsList.put(item[0].toString(),item[1]!=null? item[1].toString():null);
+                       }                        
+                   }
+                }
+            }
 		} catch (Exception e) {
 			log.error("Failed by Seller ID : " + sellerId, e);
 			e.printStackTrace();
