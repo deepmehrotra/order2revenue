@@ -2604,6 +2604,8 @@ public class SaveContents {
 				double negativeAmount = 0;
 				// Product product=new Product();
 				OrderPayment payment = new OrderPayment();
+				boolean combo=false;
+				List<Order> onj=null;
 				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
 				try {
 					if (entry.getCell(0) != null
@@ -2701,14 +2703,24 @@ public class SaveContents {
 										}
 									}
 
-									List<Order> onj = orderService
+									onj = orderService
 											.searchAsIsOrder("channelOrderID",
 													channelId, sellerId);
 									if (onj != null) {
 										if (onj.size() == 1) {
 											channelId = onj.get(0)
 													.getChannelOrderID();
-										} else {
+										}
+										else if (onj.size() > 1&& onj.get(0).getChannelOrderID()
+												.contains(entry.getCell(1).toString()))
+										{
+												if(onj.get(0).getTypeIdentifier()!=null&&
+													onj.get(0).getTypeIdentifier().contains(entry.getCell(1).toString()))
+											{
+												combo=true;
+											}
+										}
+										else {
 											errorMessage
 													.append("Multiple Orders With Channel Order ID.");
 											validaterow = false;
@@ -2739,7 +2751,7 @@ public class SaveContents {
 									}
 								} else if (entry.getCell(3) != null
 										&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-									List<Order> onj = orderService
+									 onj = orderService
 											.searchAsIsOrder(
 													"subOrderID",
 													entry.getCell(3).toString(),
@@ -2828,7 +2840,6 @@ public class SaveContents {
 										+ entry.getCell(3));
 
 							} else {
-								System.out.println(" Salses channel is nu ll");
 								errorMessage.append("Channel Not Present.");
 								validaterow = false;
 							}
@@ -2837,8 +2848,27 @@ public class SaveContents {
 								payment.setPaymentFileName(uploadFileName);
 								totalpositive = totalpositive + positiveAmount;
 								totalnegative = totalnegative + negativeAmount;
+								if(combo)
+									{
+									if(payment.getPositiveAmount()>0)
+									{
+										payment.setPositiveAmount(payment.getPositiveAmount()/onj.size());
+									}
+									else
+									{
+										payment.setNegativeAmount(payment.getNegativeAmount()/onj.size());
+									}
+									 for(Order ord:onj)
+									 {
+										 order = orderService.addOrderPayment(skucode,
+													ord.getChannelOrderID(), payment, sellerId);
+									 }
+									}
+								else
+								{
 								order = orderService.addOrderPayment(skucode,
 										channelId, payment, sellerId);
+								}
 
 								// New
 								PaymentUpload_Order paymentUpload_Order = new PaymentUpload_Order();
