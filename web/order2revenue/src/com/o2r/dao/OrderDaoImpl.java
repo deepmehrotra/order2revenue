@@ -306,7 +306,11 @@ public class OrderDaoImpl implements OrderDao {
 				seller = (Seller) criteria.list().get(0);
 				erroneousOrders = new StringBuffer("");
 				for (Order order : orderList) {
-
+					
+					if(order.getOrderId() != 0){
+						reverseOrder(order.getOrderId(), sellerId);	
+						order.setOrderId(0);
+					}
 					try {
 						product = productService.getProduct(
 								order.getProductSkuCode(), sellerId);
@@ -628,6 +632,7 @@ public class OrderDaoImpl implements OrderDao {
 								e);
 						orderCount--;
 					}
+				
 				}
 			}
 		} catch (Exception e) {
@@ -5527,8 +5532,9 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	@Override
-	public List<String> listOrderIds(String OrderCriteria, int sellerId) {
-		List<String> idsList = null;
+	public Map<String, String> listOrderIds(String OrderCriteria, int sellerId) {
+		Map<String, String> idsList = new HashMap<String, String>();
+		List<Object> results = null;
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
@@ -5537,9 +5543,29 @@ public class OrderDaoImpl implements OrderDao {
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN).add(
 					Restrictions.eq("seller.id", sellerId));
-			criteria.setProjection(Projections.property(OrderCriteria));
-			idsList = criteria.list();
-
+			ProjectionList projList = Projections.projectionList();
+			projList.add(Projections.property(OrderCriteria));
+			projList.add(Projections.property("subOrderID"));
+			projList.add(Projections.property("orderDate"));
+			projList.add(Projections.property("pcName"));
+			criteria.setProjection(projList);
+			results = criteria.list();
+			if(results != null) {
+				for(Object obj : results){
+                    Object[] item = (Object[]) obj;
+                    if(item[0]!=null){
+                       if(item[3].toString().contains("snapdeal") || item[3].toString().contains("limeroad")){
+                           String orderdatedate=null;
+                           if(item[2].toString().contains(" ")){
+                               orderdatedate=item[2].toString().split(" ")[0].trim();
+                           }
+                           idsList.put(item[0].toString(),orderdatedate);
+                       } else {
+                           idsList.put(item[0].toString(),item[1]!=null? item[1].toString():null);
+                       }                        
+                   }
+                }
+            }
 		} catch (Exception e) {
 			log.error("Failed by Seller ID : " + sellerId, e);
 			e.printStackTrace();

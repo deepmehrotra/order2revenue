@@ -2,6 +2,7 @@ package com.o2r.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -270,7 +271,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-	public List<String> listOrderIds(String criteria, int sellerId) {		
+	public Map<String, String> listOrderIds(String criteria, int sellerId) {		
 		return orderDao.listOrderIds(criteria, sellerId);
 	}
 	

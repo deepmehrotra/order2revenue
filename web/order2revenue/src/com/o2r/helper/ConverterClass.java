@@ -93,6 +93,7 @@ public class ConverterClass {
 		if (orderBean != null) {
 			order.setAwbNum(orderBean.getAwbNum());
 			order.setGeOrderId(orderBean.getGeOrderId());
+			order.setTypeIdentifier(orderBean.getTypeIdentifier());
 			order.setOrderDate(orderBean.getOrderDate());
 			order.setPcName(orderBean.getPcName());
 			order.setStatus(orderBean.getStatus());
@@ -158,6 +159,7 @@ public class ConverterClass {
 				order = new Order();
 				order.setAwbNum(orderBean.getAwbNum());
 				order.setGeOrderId(orderBean.getGeOrderId());
+				order.setTypeIdentifier(orderBean.getTypeIdentifier());
 				order.setOrderDate(orderBean.getOrderDate());
 				order.setPcName(orderBean.getPcName());
 				order.setStatus(orderBean.getStatus());
@@ -224,6 +226,7 @@ public class ConverterClass {
 				bean = new OrderBean();
 				bean.setAwbNum(order.getAwbNum());
 				bean.setGeOrderId(order.getGeOrderId());
+				bean.setTypeIdentifier(order.getTypeIdentifier());
 				bean.setOrderDate(order.getOrderDate());
 				bean.setPcName(order.getPcName());
 				bean.setStatus(order.getStatus());
@@ -294,6 +297,7 @@ public class ConverterClass {
 		if (order != null) {
 			bean.setAwbNum(order.getAwbNum());
 			bean.setGeOrderId(order.getGeOrderId());
+			bean.setTypeIdentifier(order.getTypeIdentifier());
 			bean.setOrderDate(order.getOrderDate());
 			bean.setPcName(order.getPcName());
 			bean.setStatus(order.getStatus());

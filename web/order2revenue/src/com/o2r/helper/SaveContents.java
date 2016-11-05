@@ -144,7 +144,7 @@ public class SaveContents {
 		Events event = null;
 		String uploadFileName = "";
 		List<Order> saveList = null;
-		List<String> idsList = new ArrayList<String>();
+		Map<String, String> idsList = new HashMap<String, String>();		
 		Map<String, String> duplicateKey = new HashMap<String, String>();
 		try {
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
@@ -176,6 +176,7 @@ public class SaveContents {
 					log.debug(entry.getCell(2));
 					TaxCategory taxcat = null;
 					String channelID = null;
+					String itemId = null;
 					Product product = null;
 					order = new OrderBean();
 					customerBean = new CustomerBean();
@@ -195,6 +196,30 @@ public class SaveContents {
 						errorMessage.append(" Partner Name is null;");
 						validaterow = false;
 					}
+					
+					if (entry.getCell(1) != null
+							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						try {
+							if (HSSFDateUtil.isCellDateFormatted(entry
+									.getCell(1))) {
+								order.setOrderDate(entry.getCell(1)
+										.getDateCellValue());
+							} else {
+								errorMessage
+										.append(" Order Received Date format is wrong ,enter mm/dd/yyyy,");
+								validaterow = false;
+							}
+						} catch (Exception e) {
+							errorMessage
+									.append(" Order Received Date format is wrong ,enter mm/dd/yyyy,");
+							validaterow = false;
+						}
+
+					} else {
+						errorMessage.append(" Order Recieved Date is null;");
+						validaterow = false;
+					}
+					
 					String skuCode = null;
 					if (entry.getCell(0) != null
 							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK
@@ -252,7 +277,71 @@ public class SaveContents {
 
 							System.out.println(" Channel id wiht parent sku : "
 									+ channelID);
-							if (channelID != null
+							
+							
+							
+							if (entry.getCell(8) != null
+									&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								entry.getCell(8).setCellType(HSSFCell.CELL_TYPE_STRING);
+								itemId = entry.getCell(8).toString();
+								if (itemId.contains("'")) {
+									itemId = removeExtraQuote(itemId);
+								}
+								itemId = removeExtraQuote(itemId);
+								order.setSubOrderID(itemId);									
+							}
+							if(channelID != null){												
+								if (!(partner.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+                                		|| partner.getPcName().toLowerCase().contains(GlobalConstant.PCPAYTM)
+                                		|| partner.getPcName().toLowerCase().contains(GlobalConstant.PCJABONG))) {	
+									
+									if(!idsList.containsKey(channelID)
+											&& !duplicateKey.containsKey(channelID)){
+										order.setChannelOrderID(channelID);
+										if (productConfig != null){
+											order.setProductSkuCode(productConfig.getProductSkuCode());	
+											order.setPartnerCommission(productConfig.getCommision());
+										}										
+										duplicateKey.put(channelID, itemId);
+									} else {
+										if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
+											itemId = order.getOrderDate().toString();
+										}
+										if(itemId != null && ((idsList.get(channelID) != null 
+												&& !idsList.get(channelID).equals(itemId))
+												|| (duplicateKey.containsKey(channelID) 
+														&& (duplicateKey.get(channelID) == null
+														|| !duplicateKey.get(channelID).equals(itemId))))){
+											if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
+												channelID = channelID + GlobalConstant.orderUniqueSymbol + order.getOrderDate().toString();
+											} else {
+												channelID = channelID + GlobalConstant.orderUniqueSymbol + itemId;
+											}															
+											if(!idsList.containsKey(channelID)
+													&& !duplicateKey.containsKey(channelID)){
+												order.setChannelOrderID(channelID);
+												if (productConfig != null){
+													order.setProductSkuCode(productConfig.getProductSkuCode());	
+													order.setPartnerCommission(productConfig.getCommision());
+												}												
+												if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
+													duplicateKey.put(channelID, order.getOrderDate().toString());
+												} else {
+													duplicateKey.put(channelID, itemId);
+												}																
+											} else {
+												errorMessage.append("Channel Order Id is Already Present.");
+												validaterow = false;
+											}
+										} else {
+											errorMessage.append("Channel Order Id is Already Present.");
+											validaterow = false;
+										}																								
+									}												
+								}
+							}
+							
+							/*if (channelID != null
 									&& !idsList.contains(channelID)
 									&& !duplicateKey.containsKey(channelID)) {
 
@@ -286,48 +375,13 @@ public class SaveContents {
 
 									validaterow = false;
 								}
-							}
+							}*/
 						}
 					} else {
 						errorMessage.append(" Channel OrderId or SKU is NULL");
 						validaterow = false;
 					}
-					if (entry.getCell(1) != null
-							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						try {
-							if (HSSFDateUtil.isCellDateFormatted(entry
-									.getCell(1))) {
-								order.setOrderDate(entry.getCell(1)
-										.getDateCellValue());
-							} else {
-								errorMessage
-										.append(" Order Received Date format is wrong ,enter mm/dd/yyyy,");
-								validaterow = false;
-							}
-						} catch (Exception e) {
-							errorMessage
-									.append(" Order Received Date format is wrong ,enter mm/dd/yyyy,");
-							validaterow = false;
-						}
-
-					} else {
-						errorMessage.append(" Order Recieved Date is null;");
-						validaterow = false;
-					}
-
-					/*
-					 * if (entry.getCell(2) != null &&
-					 * entry.getCell(2).getCellType() !=
-					 * HSSFCell.CELL_TYPE_BLANK) { if (SKUList != null &&
-					 * SKUList.contains(entry.getCell(2).toString())) {
-					 * order.setProductSkuCode(entry.getCell(2).toString()); }
-					 * else {
-					 * errorMessage.append(" Product SKU does not exist;");
-					 * validaterow = false; } } else {
-					 * errorMessage.append(" Product SKU is null;"); validaterow
-					 * = false; }
-					 */
-
+					
 					if (entry.getCell(4) != null
 							&& entry.getCell(4).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						customerBean.setCustomerName(entry.getCell(4)
@@ -361,8 +415,7 @@ public class SaveContents {
 						entry.getCell(7).setCellType(HSSFCell.CELL_TYPE_STRING);
 						order.setInvoiceID(entry.getCell(7).toString());
 					} else {
-						errorMessage.append(" Invoice ID is null;");
-						validaterow = false;
+						order.setInvoiceID(GlobalConstant.randomNo());
 					}
 					if (entry.getCell(8) != null
 							&& entry.getCell(8).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
@@ -372,63 +425,52 @@ public class SaveContents {
 						if (itemID.contains("'")) {
 							itemID = removeExtraQuote(itemID);
 						}
-
 						order.setSubOrderID(itemID);
+						if(channelID != null){
+							if (partner != null
+									&& (partner.getPcName().toLowerCase().contains(
+											GlobalConstant.PCFLIPKART) || partner
+											.getPcName().toLowerCase().contains(
+													GlobalConstant.PCPAYTM)												
+													|| partner
+													.getPcName().toLowerCase()
+													.contains(GlobalConstant.PCJABONG))) {
+								channelID = order.getChannelOrderID();
 
-						if (partner != null
-								&& (partner.getPcName().toLowerCase()
-										.contains(GlobalConstant.PCFLIPKART)
-										|| partner
-												.getPcName()
-												.toLowerCase()
-												.contains(
-														GlobalConstant.PCPAYTM)
-										|| partner
-												.getPcName()
-												.toLowerCase()
-												.contains(
-														GlobalConstant.PCAMAZON) || partner
-										.getPcName().toLowerCase()
-										.contains(GlobalConstant.PCJABONG))) {
-							channelID = order.getChannelOrderID();
+								if (channelID != null) {
+									channelID = channelID
+											+ GlobalConstant.orderUniqueSymbol
+											+ order.getSubOrderID();
 
-							if (channelID != null) {
-								channelID = channelID
-										+ GlobalConstant.orderUniqueSymbol
-										+ order.getSubOrderID();
+									if ((idsList == null || (!idsList
+											.containsKey(channelID))
+											&& !duplicateKey.containsKey(channelID)
+											&& productConfig != null)) {
+										order.setChannelOrderID(channelID);
+										order.setProductSkuCode(productConfig.getProductSkuCode());
+                                        order.setPartnerCommission(productConfig.getCommision());
+										duplicateKey.put(channelID, "");
+									} else {
 
-								if ((idsList == null || (!idsList
-										.contains(channelID))
-										&& !duplicateKey.containsKey(channelID)
-										&& productConfig != null)) {
-									order.setChannelOrderID(channelID);
-									duplicateKey.put(channelID, "");
-								} else {
-
-									errorMessage
-											.append(" Channel OrderId is already present ");
-									validaterow = false;
+										errorMessage
+												.append(" Channel OrderId is already present ");
+										validaterow = false;
+									}
 								}
 							}
-						}
+						}						
 					} else {
 						if (partner != null
-								&& (partner.getPcName().toLowerCase()
-										.contains(GlobalConstant.PCFLIPKART)
-										|| partner
-												.getPcName()
-												.toLowerCase()
-												.contains(
-														GlobalConstant.PCPAYTM)
-										|| partner
-												.getPcName()
-												.toLowerCase()
-												.contains(
-														GlobalConstant.PCAMAZON) || partner
-										.getPcName().toLowerCase()
-										.contains(GlobalConstant.PCJABONG))) {
+								&& (partner.getPcName().toLowerCase().contains(
+										GlobalConstant.PCFLIPKART) || partner
+										.getPcName().toLowerCase().contains(
+												GlobalConstant.PCPAYTM)
+												|| partner
+												.getPcName().toLowerCase()
+												.contains(GlobalConstant.PCJABONG))) {
+
 							errorMessage
-									.append(" Secondary OrderID is mandatory");
+									.append(" Secondary OrderID is mandatory for Flipkart, PayTm & Jabong.");
 							validaterow = false;
 						}
 					}
@@ -3059,8 +3101,7 @@ public class SaveContents {
 		Integer noOfEntries = 1;
 		Order order = new Order();
 		StringBuffer errorMessage = null;
-		boolean validaterow = true;
-		int returnId = 0;
+		boolean validaterow = true;		
 		String uploadFileName = "";
 		OrderRTOorReturn orderReturn = null;
 		Map<String, Order> returnlist = new LinkedHashMap<>();
@@ -3100,6 +3141,7 @@ public class SaveContents {
 				String column = null;
 				String id = null;
 				String channelID = null;
+				String typeCombo = null;
 				Partner partner = null;
 				ProductConfig productConfig = null;
 				List<ProductConfig> productConfigs = null;
@@ -3230,10 +3272,16 @@ public class SaveContents {
 										errorMessage
 												.append("Return Already Recieved. ");
 									}
-								} else {
-									errorMessage
-											.append("Multiple Orders With Channel Order ID.");
-									validaterow = false;
+								} else {									
+									if(ord.get(0).getTypeIdentifier() != null 
+											&& ord.get(0).getTypeIdentifier().contains(channelID.substring(0, channelID.indexOf(GlobalConstant.orderUniqueSymbol)))){
+										typeCombo = "Combo";
+										order.setChannelOrderID(ord.get(0).getChannelOrderID());
+										id = order.getChannelOrderID();
+									} else {
+										errorMessage.append("Multiple Orders With Channel Order ID.");
+										validaterow = false;
+									}									
 								}
 							} else if (orderlist != null
 									&& orderlist.size() != 0) {
@@ -3265,11 +3313,7 @@ public class SaveContents {
 							errorMessage.append("Invalid Criteria or Value !");
 						}
 					}
-					if (id != null) {
-						if (orderlist != null && orderlist.size() != 0) {
-							returnId = orderlist.get(0).getOrderReturnOrRTO()
-									.getReturnId();
-						}
+					if (id != null) {						
 						if (entry.getCell(3) != null
 								&& entry.getCell(3).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 							orderReturn.setReturnOrRTOId(entry.getCell(3)
@@ -3386,8 +3430,17 @@ public class SaveContents {
 					 */
 					if (validaterow) {
 						orderReturn.setReturnFileName(uploadFileName);
-						orderService.addReturnOrder(order.getChannelOrderID(),
-								orderReturn, sellerId);
+						if(typeCombo != null){
+							for (Order eachOrder : ord) {
+								if(eachOrder.getTypeIdentifier().contains(channelID.substring(0, channelID.indexOf(GlobalConstant.orderUniqueSymbol)))){
+									orderService.addReturnOrder(eachOrder.getChannelOrderID(), orderReturn, sellerId);
+								}
+							}
+						} else {
+							orderService.addReturnOrder(order.getChannelOrderID(),
+									orderReturn, sellerId);
+						}
+						
 					} else {
 						order.setOrderReturnOrRTO(orderReturn);
 						returnlist.put(errorMessage.toString(), order);
