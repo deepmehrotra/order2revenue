@@ -5554,7 +5554,8 @@ public class OrderDaoImpl implements OrderDao {
 				for(Object obj : results){
                     Object[] item = (Object[]) obj;
                     if(item[0]!=null){
-                       if(item[3].toString().contains("snapdeal") || item[3].toString().contains("limeroad")){
+                       if(!(item[3].toString().contains(GlobalConstant.PCAMAZON) || item[3].toString().contains(GlobalConstant.PCJABONG)
+                    		   || item[3].toString().contains(GlobalConstant.PCPAYTM)|| item[3].toString().contains(GlobalConstant.PCFLIPKART))){
                            String orderdatedate=null;
                            if(item[2].toString().contains(" ")){
                                orderdatedate=item[2].toString().split(" ")[0].trim();
