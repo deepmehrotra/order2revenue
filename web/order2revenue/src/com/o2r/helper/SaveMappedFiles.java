@@ -1323,15 +1323,10 @@ public class SaveMappedFiles {
 									.toUpperCase().contains("OTHERS")) {
 								order.setPaymentType("Others");
 							} else {
-								order.setPaymentType(entry.getCell(index)
-										.toString());
-								errorMessage
-										.append(" Payment type should be COD or Prepaid or Others");
-								validaterow = false;
+								order.setPaymentType("Others");
 							}
 						} else {
-							errorMessage.append(" Payment type is null");
-							validaterow = false;
+							order.setPaymentType("Others");
 						}
 					} catch (NullPointerException e) {
 						errorMessage
@@ -1678,8 +1673,6 @@ public class SaveMappedFiles {
 						 * orderService.addOrder(ConverterClass.prepareModel(order
 						 * ), sellerId);
 						 */
-						System.out.println(" Adding order to save list : "
-								+ order.getChannelOrderID());
 						saveList.add(ConverterClass.prepareModel(order));
 					} else {
 						order.setCustomer(customerBean);
@@ -3041,20 +3034,13 @@ public class SaveMappedFiles {
 											.parseFloat(entry.getCell(index)
 													.toString()));
 								} else {
-									errorMessage
-											.append(" Quantity can not be 0 ");
-									validaterow = false;
+									order.setQuantity(1);
 								}
 							} catch (NumberFormatException e) {
-								log.error("Failed! by SellerId : " + sellerId,
-										e);
-								errorMessage
-										.append(" Quantity should be a number ");
-								validaterow = false;
+								order.setQuantity(1);
 							}
 						} else {
-							errorMessage.append(" Quantity can not be null ");
-							validaterow = false;
+							order.setQuantity(1);
 						}
 					} catch (NullPointerException e) {
 						errorMessage
