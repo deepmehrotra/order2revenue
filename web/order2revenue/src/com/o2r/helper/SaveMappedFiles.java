@@ -347,60 +347,62 @@ public class SaveMappedFiles {
 											
 											uniqueID4Map = channelID;
 											
-											if(channelID != null){												
-												if (!(partner.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
-                                                		|| partner.getPcName().toLowerCase().contains(GlobalConstant.PCPAYTM)
-                                                		|| partner.getPcName().toLowerCase().contains(GlobalConstant.PCJABONG))) {	
-													
-													if(!idsList.containsKey(channelID)
-															&& !duplicateKey.containsKey(channelID)){
-														order.setChannelOrderID(channelID);
-														if (productConfig != null){
-															order.setProductSkuCode(productConfig.getProductSkuCode());	
-															order.setPartnerCommission(productConfig.getCommision());
-														}
-														if(itemID != null && itemID.contains("-") && typeIden != null){
-				                							String TI = channelID.substring(0, channelID.indexOf(GlobalConstant.orderUniqueSymbol));                                        	
-				                                        	order.setTypeIdentifier(TI);
-				                						}
-														duplicateKey.put(channelID, itemID);
-													} else {
-														if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
-															itemID = format.format(order.getOrderDate());
-														}
-														if(itemID != null && ((idsList.get(channelID) != null 
-																&& !idsList.get(channelID).equals(itemID))
-																|| (duplicateKey.containsKey(channelID) 
-																		&& (duplicateKey.get(channelID) == null
-																		|| !duplicateKey.get(channelID).equals(itemID))))){
-															channelID = channelID + GlobalConstant.orderUniqueSymbol + itemID;														
-															if(!idsList.containsKey(channelID)
-																	&& !duplicateKey.containsKey(channelID)){
-																order.setChannelOrderID(channelID);
-																if (productConfig != null){
-																	order.setProductSkuCode(productConfig.getProductSkuCode());	
-																	order.setPartnerCommission(productConfig.getCommision());
-																}
-																if(itemID != null && itemID.contains("-") && typeIden != null){
-						                							String TI = channelID.substring(0, channelID.indexOf(GlobalConstant.orderUniqueSymbol));                                        	
-						                                        	order.setTypeIdentifier(TI);
-						                						}
-																if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
-																	duplicateKey.put(channelID, order.getOrderDate().toString());
-																} else {
-																	duplicateKey.put(channelID, itemID);
-																}																
-															} else {
-																errorMessage.append("Channel Order Id is Already Present.");
-																validaterow = false;
-															}
-														} else {
-															errorMessage.append("Channel Order Id is Already Present.");
-															validaterow = false;
-														}																								
-													}												
-												}
-											}												
+											if(channelID != null){                                                
+                                                if (!(partner.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+                                                       || partner.getPcName().toLowerCase().contains(GlobalConstant.PCPAYTM)
+                                                       || partner.getPcName().toLowerCase().contains(GlobalConstant.PCJABONG))) {    
+                                                    String duplicateItemId=null;
+                                                    if(!(itemID != null && itemID.contains("-") && typeIden != null) 
+                                                            && !(itemID != null && itemID.contains("-") && typeIden == null)
+                                                            && !partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
+                                                    	duplicateItemId="";
+                                                        itemID = format.format(order.getOrderDate());
+                                                    }
+                                                    
+                                                    if(!idsList.containsKey(channelID)
+                                                            && !duplicateKey.containsKey(channelID)){
+                                                        order.setChannelOrderID(channelID);
+                                                        if (productConfig != null){
+                                                            order.setProductSkuCode(productConfig.getProductSkuCode());    
+                                                            order.setPartnerCommission(productConfig.getCommision());
+                                                        }
+                                                        if(itemID != null && itemID.contains("-") && typeIden != null){
+                                                            String TI = channelID.substring(0, channelID.indexOf(GlobalConstant.orderUniqueSymbol));                                            
+                                                            order.setTypeIdentifier(TI);
+                                                        }
+                                                        duplicateKey.put(channelID, itemID);
+                                                    } else {                                                        
+                                                        if(itemID != null && ((idsList.get(channelID) != null 
+                                                                && !idsList.get(channelID).equals(itemID))
+                                                                || (duplicateKey.containsKey(channelID) 
+                                                                        && (duplicateKey.get(channelID) == null
+                                                                        || !duplicateKey.get(channelID).equals(itemID))))){
+                                                            channelID = channelID + GlobalConstant.orderUniqueSymbol + itemID;                                                        
+                                                            if(!idsList.containsKey(channelID)
+                                                                    && !duplicateKey.containsKey(channelID)){
+                                                                order.setChannelOrderID(channelID);
+                                                                if (productConfig != null){
+                                                                    order.setProductSkuCode(productConfig.getProductSkuCode());    
+                                                                    order.setPartnerCommission(productConfig.getCommision());
+                                                                }
+                                                                if(itemID != null && itemID.contains("-") && typeIden != null){
+                                                                    String TI = channelID.substring(0, channelID.indexOf(GlobalConstant.orderUniqueSymbol));                                            
+                                                                    order.setTypeIdentifier(TI);                                                                                                                                        
+                                                                }
+                                                                duplicateKey.put(channelID, itemID);
+                                                            } else {
+                                                                errorMessage.append("Channel Order Id is Already Present.");
+                                                                validaterow = false;
+                                                            }
+                                                        } else {
+                                                            errorMessage.append("Channel Order Id is Already Present.");
+                                                            validaterow = false;
+                                                        }                                                                                                
+                                                    }  
+                                                    if(duplicateItemId!=null)
+                                                    	itemID=null;
+                                                }
+                                            }												
 										}
 									} catch (Exception e) {
 
@@ -3344,6 +3346,7 @@ public class SaveMappedFiles {
 								onj = orderService.searchAsIsOrder(
 										"channelOrderID", channelOrderId,
 										sellerId);
+								
 								if (onj == null) {
 									errorMessage
 											.append("No Orders With Channel OrderId.");
@@ -3356,12 +3359,13 @@ public class SaveMappedFiles {
 												.getChannelOrderID();
 										
 									} 
+									
 									else if (onj.size() > 1&& onj.get(0).getChannelOrderID()
-											.contains(channelOrderId))
+											.contains(entry.getCell(index).toString()))
 									{
-										
-										if(onj.get(0).getTypeIdentifier()!=null&&
-												onj.get(0).getTypeIdentifier().equals(channelOrderId))
+											if(onj.get(0).getTypeIdentifier()!=null&&
+												onj.get(0).getTypeIdentifier().contains(entry.getCell(index)
+														.toString()))
 										{
 											combo=true;
 										}
@@ -3378,7 +3382,6 @@ public class SaveMappedFiles {
 										.append("This Column 'Order item ID' or 'SKU' doesn't exist");
 								validaterow = false;
 							}
-
 							try {
 								index = cellIndexMap.get(columHeaderMap
 										.get("Payment Date"));
@@ -3444,7 +3447,7 @@ public class SaveMappedFiles {
 								validaterow = false;
 							}
 
-							/*try {
+							try {
 								index = cellIndexMap.get(columHeaderMap
 										.get("Seller SKU"));
 								if (entry.getCell(index) != null
@@ -3456,7 +3459,7 @@ public class SaveMappedFiles {
 							} catch (NullPointerException e) {
 								errorMessage
 										.append("This Column 'Seller SKU' doesn't exist");
-							}*/
+							}
 
 							if (validaterow) {
 								// Code to set extra variables from flipkart
@@ -3498,7 +3501,6 @@ public class SaveMappedFiles {
 											+ Math.abs(amount);
 								}
 								orderPayment.setPaymentFileName(uploadFileName);
-								orderPayment.setPaymentVar(payvarlist);
 								if(combo)
 								{
 									
@@ -3511,14 +3513,17 @@ public class SaveMappedFiles {
 										 else{
 											 orderPayment.setNegativeAmount(orderPayment.getNegativeAmount()/onj.size());
 										 }
-									 for(Order ord:onj)
+								 for(Order ord:onj)
 									 {
+										
 										 order = orderService.addOrderPayment(skucode,
 													ord.getChannelOrderID(), orderPayment, sellerId);
 									 }
 									 }
 								}
 								else{
+									orderPayment.setPaymentVar(payvarlist);
+									
 								order = orderService.addOrderPayment(skucode,
 										channelOrderId, orderPayment, sellerId);
 								}
@@ -3826,11 +3831,12 @@ public class SaveMappedFiles {
 											.getChannelOrderID();
 								}
 								else if (onj.size() > 1&& onj.get(0).getChannelOrderID()
-										.contains(channelOrderId))
+										.contains(entry.getCell(index).toString()))
 								{
 									
 									if(onj.get(0).getTypeIdentifier()!=null&&
-											onj.get(0).getTypeIdentifier().equals(channelOrderId))
+											onj.get(0).getTypeIdentifier().equals(entry.getCell(index)
+													.toString()))
 									{
 										combo=true;
 									}
@@ -3960,8 +3966,7 @@ public class SaveMappedFiles {
 
 								}
 								orderPayment.setPaymentFileName(uploadFileName);
-								orderPayment.setPaymentVar(payvarlist);
-
+								
 								if (amount > 0) {
 									totalpositive = totalpositive + amount;
 								} else {
@@ -3988,6 +3993,8 @@ public class SaveMappedFiles {
 									 }
 								}
 								else{
+									orderPayment.setPaymentVar(payvarlist);
+
 								order = orderService.addOrderPayment(skucode,
 										channelOrderId, orderPayment, sellerId);
 								}
@@ -5041,7 +5048,7 @@ public class SaveMappedFiles {
 															secOrderIndex)
 															.toString();
 
-										} else {
+										} /*else {
 											channelOrderId = entry.getCell(
 													index).toString()
 													+ GlobalConstant.orderUniqueSymbol
@@ -5052,7 +5059,7 @@ public class SaveMappedFiles {
 													+ entry.getCell(
 															secOrderIndex)
 															.toString();
-										}
+										}*/
 
 										 onj = orderService
 												.searchAsIsOrder(
@@ -5064,11 +5071,11 @@ public class SaveMappedFiles {
 												channelOrderId = onj.get(0)
 														.getChannelOrderID();
 											} else if (onj.size() > 1&& onj.get(0).getChannelOrderID()
-													.contains(channelOrderId))
+													.contains(entry.getCell(index).toString()))
 											{
-												
-												if(onj.get(0).getTypeIdentifier()!=null&&
-														onj.get(0).getTypeIdentifier().equals(channelOrderId))
+													if(onj.get(0).getTypeIdentifier()!=null&&
+														onj.get(0).getTypeIdentifier().contains(entry.getCell(index)
+																.toString()))
 												{
 													combo=true;
 												}
@@ -5207,8 +5214,7 @@ public class SaveMappedFiles {
 
 						}
 						orderPayment.setPaymentFileName(uploadFileName);
-						orderPayment.setPaymentVar(payvarlist);
-
+						
 						if (amount > 0) {
 							totalpositive = totalpositive + amount;
 						} else if (amount < 0) {
@@ -5216,7 +5222,6 @@ public class SaveMappedFiles {
 						}
 						if(combo)
 						{
-							
 							 if(onj!=null&&onj.size()>0)
 							 {
 								 if(amount>0)
@@ -5234,6 +5239,8 @@ public class SaveMappedFiles {
 							 }
 						}
 						else{
+							orderPayment.setPaymentVar(payvarlist);
+
 						order = orderService.addOrderPayment(skucode,
 								channelOrderId, orderPayment, sellerId);
 						}
@@ -5300,12 +5307,14 @@ public class SaveMappedFiles {
 		PaymentUpload paymentUpload = new PaymentUpload();
 		boolean generatePaymentUpload = false;
 		Map<String, OrderPaymentBean> paymentMap = new HashMap<String, OrderPaymentBean>();
+		Map<String, OrderPaymentBean> comboMap = new HashMap<String, OrderPaymentBean>();
 		Map<String, Double> easyShipMap = new HashMap<String, Double>();
 		OrderPaymentBean paymentBean = null;
 		List<ManualCharges> manualChargesList = new ArrayList<ManualCharges>();
 		ManualCharges manualCharge = null;
 		String uploadPaymentId = null;		
 		String uploadFileName = "";
+		
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping("Amazon",
 					"Payment");
@@ -5343,6 +5352,8 @@ public class SaveMappedFiles {
 				// channelOrderId = null;
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				double amount = 0;
+				boolean combo=false;
+				List<Order> onj=null;
 
 				// Code for fetching right colum
 				try {
@@ -5373,13 +5384,22 @@ public class SaveMappedFiles {
 										+ entry.getCell(skuIndex).toString()
 												.trim().toUpperCase();
 
-								List<Order> onj = orderService.searchAsIsOrder(
+								 onj = orderService.searchAsIsOrder(
 										"channelOrderID", channelOrderID,
 										sellerId);
 								System.out.println(entry.getCell(index)
 										.toString());
 								if (onj != null) {
-									if (onj.size() == 1) {
+									if(onj.size() > 1)
+									{
+										if(onj.get(0).getTypeIdentifier()!=null&&onj.get(0).getTypeIdentifier()
+												.contains(entry.getCell(index).toString())&&onj.get(0).getChannelOrderID()
+												.contains(entry.getCell(index).toString()))
+										{
+											combo=true;
+										}
+									}
+									if (onj.size() == 1||combo) {
 										if (paymentMap.containsKey(onj.get(0).getChannelOrderID())) {
 											paymentBean = paymentMap.get(onj.get(0).getChannelOrderID());
 										} else {
@@ -5436,10 +5456,8 @@ public class SaveMappedFiles {
 																			.indexOf(
 																					".") + 1)
 															.trim();
-													System.out.println(amt);
 													amount = Double
 															.parseDouble(amt);
-													System.out.println(amount);
 													if (amount > 0) {
 														paymentBean
 																.setPositiveAmount(paymentBean
@@ -6624,11 +6642,11 @@ public class SaveMappedFiles {
 								channelOrderId = onj.get(0).getChannelOrderID();
 							} 
 							else if (onj.size() > 1&& onj.get(0).getChannelOrderID()
-									.contains(channelOrderId))
+									.contains(entry.getCell(index).toString()))
 							{
 								
 								if(onj.get(0).getTypeIdentifier()!=null&&
-										onj.get(0).getTypeIdentifier().equals(channelOrderId))
+										onj.get(0).getTypeIdentifier().equals(entry.getCell(index).toString()))
 								{
 									combo=true;
 								}
@@ -6740,8 +6758,7 @@ public class SaveMappedFiles {
 
 						}
 						paymentBean.setPaymentFileName(uploadFileName);
-						paymentBean.setPaymentVar(payvarlist);
-
+						
 						if (amount > 0) {
 							totalpositive = totalpositive + amount;
 						} else if (amount < 0) {
@@ -6770,6 +6787,8 @@ public class SaveMappedFiles {
 							 }
 						}
 						else{
+							paymentBean.setPaymentVar(payvarlist);
+
 						order = orderService.addOrderPayment(skucode,
 								channelOrderId, ConverterClass
 										.prepareOrderPaymentModel(paymentBean),
@@ -7648,7 +7667,8 @@ public class SaveMappedFiles {
 											if (tmpOrder.getSubOrderID().equalsIgnoreCase(itemID)) {
 												channelOrderId = tmpOrder.getChannelOrderID();
 											}
-											if(tmpOrder.getTypeIdentifier().contains(channelOrderId))
+											if(tmpOrder.getTypeIdentifier().contains(entry.getCell(index)
+													.toString()))
 											{
 												combo=true;
 												combocount++;
@@ -7788,7 +7808,6 @@ public class SaveMappedFiles {
 
 						}
 						orderPayment.setPaymentFileName(uploadFileName);
-						orderPayment.setPaymentVar(payvarlist);
 
 						if (amount > 0) {
 							totalpositive = totalpositive + amount;
@@ -7809,13 +7828,14 @@ public class SaveMappedFiles {
 								 }
 							 for(Order ord:onj)
 							 {
-								 if(ord.getTypeIdentifier().contains(channelOrderId))
 								 order = orderService.addOrderPayment(skucode,
 											ord.getChannelOrderID(), orderPayment, sellerId);
 							 }
 							 }
 						}
 						else{
+							orderPayment.setPaymentVar(payvarlist);
+
 						order = orderService.addOrderPayment(skucode,
 								channelOrderId, orderPayment, sellerId);
 						}
