@@ -130,10 +130,10 @@
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label class="col-sm-4 control-label">Parent Category</label> <input
+									<label class="col-sm-6 control-label">Parent Category</label> <input
 										type="hidden" name="parentcatid" id="parentcatid"
 										value="${parentcatid}" />
-									<div class="col-sm-8">
+									<div class="col-sm-6">
 										<form:select id="categorySelect" class="form-control"
 											path="parentCatName">
 											<c:if test="${!empty categories}">
@@ -150,6 +150,14 @@
 												</c:forEach>
 											</c:if>
 										</form:select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-6 control-label">Tax Free Price Limit</label>
+
+									<div class="col-sm-6">
+										<form:input path="taxFreePriceLimit"
+											value="${category.taxFreePriceLimit}" class="form-control" />
 									</div>
 								</div>
 							</div>

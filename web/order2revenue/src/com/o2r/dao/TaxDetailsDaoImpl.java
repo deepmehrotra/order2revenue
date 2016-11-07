@@ -37,7 +37,7 @@ import com.o2r.service.SellerService;
 /**
  * @author Deep Mehrotra
  *
- */
+ */ 
 @Repository("taxDetailDao")
 public class TaxDetailsDaoImpl implements TaxDetailsDao {
 
@@ -602,7 +602,7 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			Category category = categoryService.getCategory(product.getCategoryName(), sellerId);
 			if(category != null){
 				if(category.getTaxFreePriceLimit() >= sp){
-					taxCategory = getTaxCategory(null, sellerId);
+					taxCategory = getTaxCategory("Tax@0", sellerId);
 				} else {
 					Seller seller = sellerService.getSeller(sellerId);
 					if(seller != null)

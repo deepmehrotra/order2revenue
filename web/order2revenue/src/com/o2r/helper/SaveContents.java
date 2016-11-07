@@ -2391,6 +2391,7 @@ public class SaveContents {
 				if (saveList != null && saveList.size() != 0)
 					productService.addSKUMapping(saveList, sellerId);
 			} catch (CustomException ce) {
+				ce.printStackTrace();
 				returnProductConfigMap
 						.put("Row:1:Note-Some channel SKU("
 								+ ce.getLocalMessage()
@@ -2400,7 +2401,7 @@ public class SaveContents {
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
 			downloadUploadReportXLS(offices, "MP_Vendor_SKU_Mapping",
-					uploadFileName, 4, errorSet, path, sellerId, uploadReport);
+					uploadFileName, 5, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 
 			log.error("Failed! by SellerId : " + sellerId, e);
@@ -5374,7 +5375,9 @@ public class SaveContents {
 												if (!partnerCatList
 														.contains(partnerCat)) {
 													partnerCatList
-															.add(partnerCat);
+															.add(GlobalConstant.orderUniqueSymbol
+																	+ partnerCat
+																	+ GlobalConstant.orderUniqueSymbol);
 													prodcat.setPartnerCatRef(StringUtils
 															.join(partnerCatList,
 																	','));

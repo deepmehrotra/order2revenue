@@ -663,12 +663,13 @@ public class DashboardDaoImpl implements DashboardDao {
 			Iterator iterator1 = results.iterator();
 			if (results != null) {
 				while (iterator1.hasNext()) {
-					Object[] recordsRow = (Object[]) iterator1.next();					
-					if (recordsRow[0] != null && recordsRow[1] != null) {
-						totalOutStandingPayments.put(recordsRow[1].toString(),
-								Double.parseDouble(recordsRow[0].toString()));
-						
-					}
+					Object[] recordsRow = (Object[]) iterator1.next();
+					if(recordsRow != null && recordsRow.length != 0){
+						if (recordsRow[0] != null && recordsRow[1] != null) {
+							totalOutStandingPayments.put(recordsRow[1].toString(),
+									Double.parseDouble(recordsRow[0].toString()));							
+						}
+					}					
 				}
 			}
 		} catch (Exception e) {
