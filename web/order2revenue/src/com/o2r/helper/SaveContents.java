@@ -4821,7 +4821,9 @@ public class SaveContents {
 												if (!partnerCatList
 														.contains(partnerCat)) {
 													partnerCatList
-															.add(partnerCat);
+															.add(GlobalConstant.orderUniqueSymbol
+																	+ partnerCat
+																	+ GlobalConstant.orderUniqueSymbol);
 													prodcat.setPartnerCatRef(StringUtils
 															.join(partnerCatList,
 																	','));

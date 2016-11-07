@@ -63,10 +63,10 @@ public class TaxablePurchaseDaoImpl implements TaxablePurchaseDao {
 	static Logger log = Logger
 			.getLogger(TaxablePurchaseDaoImpl.class.getName());
 
-	private static final String queryoftaxable = "select taxPurchaseId,taxCategory,taxRate,purchaseDate,particular,basicPrice,taxAmount"
+	private static final String queryoftaxable = "select taxPurchaseId,taxCategory,taxRate,purchaseDate,particular,basicPrice,taxAmount,totalAmount"
 			+ " from TaxablePurchases Where seller_id=:sellerId order by createdDate desc";
 	
-	private static final String queryoftaxable1 = "select taxPurchaseId,taxCategory,taxRate,purchaseDate,particular,basicPrice,taxAmount"
+	private static final String queryoftaxable1 = "select taxPurchaseId,taxCategory,taxRate,purchaseDate,particular,basicPrice,taxAmount,totalAmount"
 			+ " from TaxablePurchases Where taxPurchaseId=:taxPurchaseId";
 
 	@Override
@@ -108,9 +108,9 @@ public class TaxablePurchaseDaoImpl implements TaxablePurchaseDao {
 						returnviewDetailsBean.setBasicPrice(Float
 								.parseFloat(recordsRow[5].toString()));
 						returnviewDetailsBean.setTaxAmount(Float
-								.parseFloat(recordsRow[5].toString()));
+								.parseFloat(recordsRow[6].toString()));
 						returnviewDetailsBean.setTotalAmount(Float
-								.parseFloat(recordsRow[5].toString()));
+								.parseFloat(recordsRow[7].toString()));
 						viewDetailsDbeanList.add(returnviewDetailsBean);
 					}
 				}
@@ -246,9 +246,9 @@ public class TaxablePurchaseDaoImpl implements TaxablePurchaseDao {
 						returnviewDetailsBean.setBasicPrice(Float
 								.parseFloat(recordsRow[5].toString()));
 						returnviewDetailsBean.setTaxAmount(Float
-								.parseFloat(recordsRow[5].toString()));
+								.parseFloat(recordsRow[6].toString()));
 						returnviewDetailsBean.setTotalAmount(Float
-								.parseFloat(recordsRow[5].toString()));
+								.parseFloat(recordsRow[7].toString()));
 						
 					}
 				}

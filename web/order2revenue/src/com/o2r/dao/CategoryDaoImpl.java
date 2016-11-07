@@ -321,7 +321,8 @@ public class CategoryDaoImpl implements CategoryDao {
 			Criterion res1 = Restrictions.or(
 					Restrictions.eq("category.catName", catname).ignoreCase(),
 					Restrictions.like("category.partnerCatRef",
-							"%" + catname + "%").ignoreCase());
+							"%" + GlobalConstant.orderUniqueSymbol + catname 
+							+ GlobalConstant.orderUniqueSymbol + "%").ignoreCase());
 			criteria.createAlias("categories", "category",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("category.isSubCategory", true))

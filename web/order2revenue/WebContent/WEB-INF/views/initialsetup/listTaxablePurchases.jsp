@@ -114,11 +114,11 @@
 																                                  
                                    
                                    <td><fmt:formatNumber type="number"
-																maxFractionDigits="2" minFractionDigits="2" value="${product.basicPrice/product.taxRate}"/></td>
+																maxFractionDigits="2" minFractionDigits="2" value="${product.taxAmount}"/></td>
 																
                                    
                                     <td><fmt:formatNumber type="number"
-																maxFractionDigits="2" minFractionDigits="2" value="${product.basicPrice/product.taxRate+product.basicPrice}"/></td>
+																maxFractionDigits="2" minFractionDigits="2" value="${product.totalAmount}"/></td>
 													
 													
                                   
