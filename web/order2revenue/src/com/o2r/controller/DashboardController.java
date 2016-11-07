@@ -280,7 +280,7 @@ public class DashboardController {
 			GsonBuilder gsonBuilder = new GsonBuilder();			
 			gson = gsonBuilder.setPrettyPrinting().create();
 			topSKUs = detailedDashboardService.getTopSellingSKU(startDate, endDate, null, sellerId);
-			if (topSKUs != null) {
+			if (topSKUs != null && topSKUs.size() != 0) {
 				Map<String, Object> topSKU = topSKUs.get(0);
 				TopSKUMap.put("sku", topSKU.get("sku"));
 				TopSKUMap.put("saleQ", topSKU.get("grossQ"));			
