@@ -2398,7 +2398,7 @@ public class SaveContents {
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
 			downloadUploadReportXLS(offices, "MP_Vendor_SKU_Mapping",
-					uploadFileName, 4, errorSet, path, sellerId, uploadReport);
+					uploadFileName, 5, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 
 			log.error("Failed! by SellerId : " + sellerId, e);
