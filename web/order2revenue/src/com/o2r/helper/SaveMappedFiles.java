@@ -104,6 +104,7 @@ public class SaveMappedFiles {
 	static Logger log = Logger.getLogger(SaveMappedFiles.class.getName());
 	
 	private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	private final SimpleDateFormat formatmonthname = new SimpleDateFormat("dd-MMM-yyyy");
 	private final SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private final String regexForZipcode = "\\d{6}$";
 	
@@ -3750,6 +3751,7 @@ public class SaveMappedFiles {
 							colums.getChannelColumName());
 				}
 			}
+			System.out.println(columHeaderMap);
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -3771,6 +3773,7 @@ public class SaveMappedFiles {
 						.put(entry.getCell(cellIndex).toString(), cellIndex);
 
 			}
+			System.out.println("cellIndexMap "+cellIndexMap);
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				entry = worksheet.getRow(rowIndex);
@@ -3784,6 +3787,8 @@ public class SaveMappedFiles {
 				order = null;
 				boolean combo=false;
 				List<Order> onj=null;
+				Date recievedDate=null;
+				boolean orderavailable=false;
 				try {
 					if (cellIndexMap.get(columHeaderMap.get("ChannelOrderId")) != null) {
 						channelheader = columHeaderMap.get("ChannelOrderId");
@@ -3794,10 +3799,11 @@ public class SaveMappedFiles {
 						validaterow = false;
 					}
 					if (entry.getCell(index) != null) {
-						log.info(" channelorder id: "
-								+ entry.getCell(index).toString());
 						entry.getCell(index).setCellType(
 								HSSFCell.CELL_TYPE_STRING);
+						log.info(" channelorder id: "
+								+ entry.getCell(index).toString());
+						
 						if (StringUtils.isNumeric(entry.getCell(index)
 								.toString())) {
 
@@ -3818,6 +3824,26 @@ public class SaveMappedFiles {
 										"channelOrderID", channelOrderId,
 										sellerId);
 							}
+							
+							try {
+								int dateindex = cellIndexMap.get(columHeaderMap
+										.get("Order Date"));
+								if (entry.getCell(dateindex) != null
+										&& entry.getCell(dateindex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+									try {
+										entry.getCell(dateindex).setCellType(
+												HSSFCell.CELL_TYPE_STRING);
+											String date = entry.getCell(dateindex)
+													.toString();
+											recievedDate=formatmonthname.parse(date);
+										
+									} catch (Exception e) {
+									}
+
+								} 
+							} catch (NullPointerException e) {
+								e.printStackTrace();
+									}
 
 							if (onj == null) {
 								errorMessage
@@ -3830,21 +3856,37 @@ public class SaveMappedFiles {
 									channelOrderId = onj.get(0)
 											.getChannelOrderID();
 								}
-								else if (onj.size() > 1&& onj.get(0).getChannelOrderID()
-										.contains(entry.getCell(index).toString()))
+								else if (onj.size() > 1)
 								{
-									
-									if(onj.get(0).getTypeIdentifier()!=null&&
-											onj.get(0).getTypeIdentifier().equals(entry.getCell(index)
-													.toString()))
-									{
-										combo=true;
+									for(Order ordcheck:onj){
+									if(ordcheck.getTypeIdentifier()!=null){
+										if(ordcheck.getTypeIdentifier().contains(entry.getCell(index).toString()))
+											combo=true;
+										else
+											combo=false;
+									}
+									else if (recievedDate!=null){
+										if(format.format(ordcheck.getOrderDate()).equals(format.format(recievedDate))){
+											orderavailable=true;
+											channelOrderId=ordcheck.getChannelOrderID();
+										}
+									}
+									else{
+										errorMessage
+										.append("Multiple Orders With Channel Order ID.");
+								validaterow = false;
+									}
+									}
+									if(!(orderavailable||combo)){
+										errorMessage
+										.append("Multiple Orders With Channel Order ID.");
+								validaterow = false;
 									}
 								}
 								else {
 
 									errorMessage
-											.append("Multiple Orders With Channel Order ID.");
+											.append("No Orders With Channel Order ID.");
 									validaterow = false;
 								}
 							}
@@ -6608,6 +6650,8 @@ public class SaveMappedFiles {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				boolean combo=false;
 				List<Order> onj=null;
+				Date recievedDate=null;
+				boolean orderavailable=false;
 
 				// Code for fetching right colum
 				try {
@@ -6621,6 +6665,27 @@ public class SaveMappedFiles {
 								.append("The column 'Order ID' or 'Style Code' doesn't exist");
 						validaterow = false;
 					}
+					try {
+						int dateindex = cellIndexMap.get(columHeaderMap
+								.get("Order Date"));
+						if (entry.getCell(dateindex) != null
+								&& entry.getCell(dateindex).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							try {
+								if (HSSFDateUtil.isCellDateFormatted(entry
+										.getCell(dateindex))) {
+									recievedDate=entry.getCell(dateindex)
+											.getDateCellValue();
+								} else {
+									String date = entry.getCell(dateindex)
+											.toString();
+									recievedDate=new Date(date);
+								}
+							} catch (Exception e) {
+							}
+
+						} 
+					} catch (NullPointerException e) {
+							}
 					if (entry.getCell(index) != null
 							&& StringUtils.isNotBlank(entry.getCell(index)
 									.toString())
@@ -6641,19 +6706,44 @@ public class SaveMappedFiles {
 											.equals(channelOrderId)) {
 								channelOrderId = onj.get(0).getChannelOrderID();
 							} 
-							else if (onj.size() > 1&& onj.get(0).getChannelOrderID()
-									.contains(entry.getCell(index).toString()))
+							else if (onj.size() > 1)
 							{
-								
-								if(onj.get(0).getTypeIdentifier()!=null&&
-										onj.get(0).getTypeIdentifier().equals(entry.getCell(index).toString()))
+								for(Order ordcheck:onj)
 								{
+								
+								if(ordcheck.getTypeIdentifier()!=null)
+								{
+									if(onj.get(0).getTypeIdentifier().contains(entry.getCell(index).toString()))
 									combo=true;
+									else
+										combo=false;
+								}
+								else if (recievedDate!=null)
+								{
+									if(format.format(ordcheck.getOrderDate()).equals(format.format(recievedDate)))
+									{
+										orderavailable=true;
+										channelOrderId=ordcheck.getChannelOrderID();
+									}
+								}
+								else
+								{
+									errorMessage
+									.append("Multiple Orders With Channel Order ID.");
+							validaterow = false;
+								}
+								
+								}
+								if(!(orderavailable||combo))
+								{
+									errorMessage
+									.append("Multiple Orders With Channel Order ID.");
+							validaterow = false;
 								}
 							}
 							else {
 								errorMessage
-										.append("Multiple Orders With Channel Order ID.");
+										.append("No Orders With Channel Order ID.");
 								validaterow = false;
 							}
 							paymentBean = new OrderPaymentBean();
