@@ -2388,6 +2388,7 @@ public class SaveContents {
 				if (saveList != null && saveList.size() != 0)
 					productService.addSKUMapping(saveList, sellerId);
 			} catch (CustomException ce) {
+				ce.printStackTrace();
 				returnProductConfigMap
 						.put("Row:1:Note-Some channel SKU("
 								+ ce.getLocalMessage()
