@@ -871,7 +871,12 @@ public class ConverterClass {
 			bean.setOpeningStock(category.getOpeningStock());
 			bean.setSkuCount(category.getSkuCount());
 			bean.setOsUpdate(category.getOsUpdate());
-			bean.setPartnerCatRef(category.getPartnerCatRef());
+			if (category.getPartnerCatRef() != null
+					&& category.getPartnerCatRef().contains(GlobalConstant.orderUniqueSymbol)) {
+				bean.setPartnerCatRef(category.getPartnerCatRef().replace(GlobalConstant.orderUniqueSymbol, ""));
+			} else {
+				bean.setPartnerCatRef(category.getPartnerCatRef());
+			}
 		}
 		return bean;
 	}
@@ -914,7 +919,12 @@ public class ConverterClass {
 				bean.setOpeningStock(category.getOpeningStock());
 				bean.setSkuCount(category.getSkuCount());
 				bean.setOsUpdate(category.getOsUpdate());
-				bean.setPartnerCatRef(category.getPartnerCatRef());
+				if (category.getPartnerCatRef() != null
+						&& category.getPartnerCatRef().contains(GlobalConstant.orderUniqueSymbol)) {
+					bean.setPartnerCatRef(category.getPartnerCatRef().replace(GlobalConstant.orderUniqueSymbol, ""));
+				} else {
+					bean.setPartnerCatRef(category.getPartnerCatRef());
+				}
 				beans.add(bean);
 			}
 		}
