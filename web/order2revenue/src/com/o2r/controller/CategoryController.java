@@ -27,6 +27,7 @@ import com.o2r.bean.PartnerBean;
 import com.o2r.bean.TaxCategoryBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
+import com.o2r.helper.GlobalConstant;
 import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
 import com.o2r.model.Category;
@@ -510,7 +511,9 @@ public class CategoryController {
 										.getSubCategory(tempPartnerCat,
 												sellerId);
 								if (tempCat == null) {
-									partnerCatRefList.add(tempPartnerCat);
+									partnerCatRefList.add(GlobalConstant.orderUniqueSymbol
+											+ tempPartnerCat
+											+ GlobalConstant.orderUniqueSymbol);
 								}
 							}
 						}
@@ -519,7 +522,9 @@ public class CategoryController {
 						Category tempCat = categoryService.getSubCategory(
 								tempPartnerCat, sellerId);
 						if (tempCat == null) {
-							partnerCatRefList.add(tempPartnerCat);
+							partnerCatRefList.add(GlobalConstant.orderUniqueSymbol
+									+ tempPartnerCat
+									+ GlobalConstant.orderUniqueSymbol);
 						}
 					}
 
@@ -530,7 +535,9 @@ public class CategoryController {
 			if (catList != null && catList.length != 0) {
 				for (int i = 0; i < catList.length; i++) {
 					tempPartnerCat = catList[i];
-					partnerCatRefList.add(tempPartnerCat);
+					partnerCatRefList.add(GlobalConstant.orderUniqueSymbol
+							+ tempPartnerCat
+							+ GlobalConstant.orderUniqueSymbol);
 				}
 			}
 
@@ -541,7 +548,9 @@ public class CategoryController {
 					Category tempCat = categoryService.getSubCategory(
 							tempPartnerCat, sellerId);
 					if (tempCat == null) {
-						partnerCatRefList.add(tempPartnerCat);
+						partnerCatRefList.add(GlobalConstant.orderUniqueSymbol
+								+ tempPartnerCat
+								+ GlobalConstant.orderUniqueSymbol);
 					}
 				}
 			}
