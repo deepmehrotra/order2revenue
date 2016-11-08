@@ -121,7 +121,7 @@
 		                <div class="widget style1 yellow-bg">
 		                    <div class="row">
 		                        <div class="col-xs-4">
-		                            <img src="/O2R/seller/img/net.png" alt="net">
+		                            <img src="/O2R/seller/img/additional.png" alt="net">
 		                        </div>
 		                        <div class="col-xs-8 text-center">
 		                            <span> Bad Quantity</span>
@@ -195,7 +195,7 @@
 		                <div class="widget style1 yellow-bg">
 		                    <div class="row">
 		                        <div class="col-xs-4">
-		                            <img src="/O2R/seller/img/net.png" alt="net">
+		                            <img src="/O2R/seller/img/additional.png" alt="net">
 		                        </div>
 		                        <div class="col-xs-8 text-center">
 		                            <span> Additional Charges </span>
@@ -269,7 +269,7 @@
 		                <div class="widget style1 yellow-bg">
 		                    <div class="row">
 		                        <div class="col-xs-4">
-		                            <img src="/O2R/seller/img/net.png" alt="net">
+		                            <img src="/O2R/seller/img/additional.png" alt="net">
 		                        </div>
 		                        <div class="col-xs-8 text-center">
 		                            <span> Additional Charges </span>

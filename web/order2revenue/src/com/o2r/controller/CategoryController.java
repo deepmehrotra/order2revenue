@@ -481,8 +481,9 @@ public class CategoryController {
 			Category category;
 			if (categoryBean.getId() > 0) {
 				category = categoryService.getCategory(categoryBean.getId());
+				category.setTaxFreePriceLimit(categoryBean.getTaxFreePriceLimit());
 			} else {
-				categoryBean.setSubCategory(true);
+				categoryBean.setSubCategory(true);				
 				category = ConverterClass.prepareCategoryModel(categoryBean);
 			}
 

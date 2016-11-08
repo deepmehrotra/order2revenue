@@ -5548,6 +5548,7 @@ public class OrderDaoImpl implements OrderDao {
 			projList.add(Projections.property("subOrderID"));
 			projList.add(Projections.property("orderDate"));
 			projList.add(Projections.property("pcName"));
+			projList.add(Projections.property("typeIdentifier"));
 			criteria.setProjection(projList);
 			results = criteria.list();
 			if(results != null) {
@@ -5555,11 +5556,12 @@ public class OrderDaoImpl implements OrderDao {
                     Object[] item = (Object[]) obj;
                     if(item[0]!=null){
                        if(!(item[3].toString().contains(GlobalConstant.PCAMAZON) || item[3].toString().contains(GlobalConstant.PCJABONG)
-                    		   || item[3].toString().contains(GlobalConstant.PCPAYTM)|| item[3].toString().contains(GlobalConstant.PCFLIPKART))){
-                           String orderdatedate=null;
-                           if(item[2].toString().contains(" ")){
+                    		   || item[3].toString().contains(GlobalConstant.PCPAYTM)|| item[3].toString().contains(GlobalConstant.PCFLIPKART)
+                    		   || (item[4] != null && !item[4].toString().contains("MultiQty")))){
+                    	   String orderdatedate = item[2].toString();
+                           if(orderdatedate.contains(" ")){
                                orderdatedate=item[2].toString().split(" ")[0].trim();
-                           }
+                           }                               
                            idsList.put(item[0].toString(),orderdatedate);
                        } else {
                            idsList.put(item[0].toString(),item[1]!=null? item[1].toString():null);
