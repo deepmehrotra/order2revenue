@@ -58,7 +58,7 @@
 																				<option selected>LST</option>
 																				<option>CST</option>
 																				<option>Excise</option>
-																				<option>CutomDuty</option>
+																				<option>CustomDuty</option>
 																				<option>AntiDumpityDuty</option>
 																			</c:when>
 																			<c:when
@@ -66,7 +66,7 @@
 																				<option selected>CST</option>
 																				<option>LST</option>
 																				<option>Excise</option>
-																				<option>CutomDuty</option>
+																				<option>CustomDuty</option>
 																				<option>AntiDumpityDuty</option>
 																			</c:when>
 																			<c:when
@@ -74,12 +74,12 @@
 																				<option selected>Excise</option>
 																				<option>LST</option>
 																				<option>CST</option>
-																				<option>CutomDuty</option>
+																				<option>CustomDuty</option>
 																				<option>AntiDumpityDuty</option>
 																			</c:when>
 																			<c:when
-																				test="${taxablePurchases.taxCategory eq 'CutomDuty'}">
-																				<option selected>CutomDuty</option>
+																				test="${taxablePurchases.taxCategory eq 'CustomDuty'}">
+																				<option selected>CustomDuty</option>
 																				<option>LST</option>
 																				<option>CST</option>
 																				<option>Excise</option>
@@ -89,7 +89,7 @@
 																				<option>LST</option>
 																				<option selected>AntiDumpityDuty</option>
 																				<option>CST</option>
-																				<option>CutomDuty</option>
+																				<option>CustomDuty</option>
 																				<option>AntiDumpityDuty</option>
 																			</c:otherwise>
 																		</c:choose>
@@ -102,7 +102,7 @@
 																		<option>LST</option>
 																		<option>CST</option>
 																		<option>Excise</option>
-																		<option>CutomDuty</option>
+																		<option>CustomDuty</option>
 																		<option>AntiDumpityDuty</option>
 																	</form:select>
 																</c:otherwise>
@@ -189,13 +189,17 @@
 						required : true,
 						min : 1,
 						number : true,
+					},
+					purchaseDate : {
+						required : true,						
 					}
 
 				},
 				messages : {
 					expenseName : "particular Name Required",
 					basicPrice : "basicPrice required",
-					taxRate : "taxRate required"
+					taxRate : "taxRate required",
+					purchaseDate : "Purchase Date required"
 				}
 			});
 			if (validator.form()) { // validation perform
