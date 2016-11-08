@@ -293,56 +293,52 @@ public class SaveContents {
 								itemId = removeExtraQuote(itemId);
 								order.setSubOrderID(itemId);									
 							}
-							if(channelID != null){												
-								if (!(partner.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
-                                		|| partner.getPcName().toLowerCase().contains(GlobalConstant.PCPAYTM)
-                                		|| partner.getPcName().toLowerCase().contains(GlobalConstant.PCJABONG))) {	
-									
-									if(!idsList.containsKey(channelID)
-											&& !duplicateKey.containsKey(channelID)){
-										order.setChannelOrderID(channelID);
-										if (productConfig != null){
-											order.setProductSkuCode(productConfig.getProductSkuCode());	
-											order.setPartnerCommission(productConfig.getCommision());
-										}										
-										duplicateKey.put(channelID, itemId);
-									} else {
-										if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
-											itemId = order.getOrderDate().toString();
-										}
-										if(itemId != null && ((idsList.get(channelID) != null 
-												&& !idsList.get(channelID).equals(itemId))
-												|| (duplicateKey.containsKey(channelID) 
-														&& (duplicateKey.get(channelID) == null
-														|| !duplicateKey.get(channelID).equals(itemId))))){
-											if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
-												channelID = channelID + GlobalConstant.orderUniqueSymbol + order.getOrderDate().toString();
-											} else {
-												channelID = channelID + GlobalConstant.orderUniqueSymbol + itemId;
-											}															
-											if(!idsList.containsKey(channelID)
-													&& !duplicateKey.containsKey(channelID)){
-												order.setChannelOrderID(channelID);
-												if (productConfig != null){
-													order.setProductSkuCode(productConfig.getProductSkuCode());	
-													order.setPartnerCommission(productConfig.getCommision());
-												}												
-												if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
-													duplicateKey.put(channelID, order.getOrderDate().toString());
-												} else {
-													duplicateKey.put(channelID, itemId);
-												}																
-											} else {
-												errorMessage.append("Channel Order Id is Already Present.");
-												validaterow = false;
-											}
-										} else {
-											errorMessage.append("Channel Order Id is Already Present.");
-											validaterow = false;
-										}																								
-									}												
-								}
-							}
+							if(channelID != null){                                                
+                                if (!(partner.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+                                       || partner.getPcName().toLowerCase().contains(GlobalConstant.PCPAYTM)
+                                       || partner.getPcName().toLowerCase().contains(GlobalConstant.PCJABONG))) {    
+                                    String duplicateItemId=null;
+                                    if(!partner.getPcName().toLowerCase().contains(GlobalConstant.PCAMAZON)){
+                                    	duplicateItemId="";
+                                        itemId = format.format(order.getOrderDate());
+                                    }
+                                    
+                                    if(!idsList.containsKey(channelID)
+                                            && !duplicateKey.containsKey(channelID)){
+                                        order.setChannelOrderID(channelID);
+                                        if (productConfig != null){
+                                            order.setProductSkuCode(productConfig.getProductSkuCode());    
+                                            order.setPartnerCommission(productConfig.getCommision());
+                                        }                                        
+                                        duplicateKey.put(channelID, itemId);
+                                    } else {                                                        
+                                        if(itemId != null && ((idsList.get(channelID) != null 
+                                                && !idsList.get(channelID).equals(itemId))
+                                                || (duplicateKey.containsKey(channelID) 
+                                                        && (duplicateKey.get(channelID) == null
+                                                        || !duplicateKey.get(channelID).equals(itemId))))){
+                                            channelID = channelID + GlobalConstant.orderUniqueSymbol + itemId;                                                        
+                                            if(!idsList.containsKey(channelID)
+                                                    && !duplicateKey.containsKey(channelID)){
+                                                order.setChannelOrderID(channelID);
+                                                if (productConfig != null){
+                                                    order.setProductSkuCode(productConfig.getProductSkuCode());    
+                                                    order.setPartnerCommission(productConfig.getCommision());
+                                                }                                                
+                                                duplicateKey.put(channelID, itemId);
+                                            } else {
+                                                errorMessage.append("Channel Order Id is Already Present.");
+                                                validaterow = false;
+                                            }
+                                        } else {
+                                            errorMessage.append("Channel Order Id is Already Present.");
+                                            validaterow = false;
+                                        }                                                                                                
+                                    }  
+                                    if(duplicateItemId != null)
+                                    	itemId=null;
+                                }
+                            }						
 							
 							/*if (channelID != null
 									&& !idsList.contains(channelID)
@@ -438,8 +434,6 @@ public class SaveContents {
 													|| partner
 													.getPcName().toLowerCase()
 													.contains(GlobalConstant.PCJABONG))) {
-								channelID = order.getChannelOrderID();
-
 								if (channelID != null) {
 									channelID = channelID
 											+ GlobalConstant.orderUniqueSymbol
