@@ -607,14 +607,12 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 			Category category = categoryService.getCategory(product.getCategoryName(), sellerId);
 			if(category != null){
 				if(category.getTaxFreePriceLimit() >= sp){
-					taxCategory = getTaxCategory(null, sellerId);
+					taxCategory = getTaxCategory("Tax@0", sellerId);
 				} else {
 					Seller seller = sellerService.getSeller(sellerId);
 					if(seller != null)
 						sellerState = areaConfigDao.getStateFromZipCode(seller.getZipcode());
 					String customerState = areaConfigDao.getStateFromZipCode(zipcode);
-					System.out.println(" Customer state : "+customerState);
-					System.out.println(" sellerState state : "+sellerState);
 					if (sellerState != null && sellerState.equalsIgnoreCase(customerState) && category != null) {
 						taxCategory = category.getLST();
 					} else {

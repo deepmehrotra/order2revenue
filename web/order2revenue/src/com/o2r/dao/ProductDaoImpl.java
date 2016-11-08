@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -19,7 +17,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -658,7 +655,6 @@ public class ProductDaoImpl implements ProductDao {
 				List<Object> objects = listQuery.list();
 				for (Object eachObject : objects) {
 					Object[] object = (Object[]) eachObject;
-					System.out.println(object.length);
 					productConfig = new ProductConfig();
 					productConfig.setProductSkuCode((String) object[0]);
 					productConfig.setChannelName((String) object[1]);
