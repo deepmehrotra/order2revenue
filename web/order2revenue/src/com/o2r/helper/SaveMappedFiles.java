@@ -963,46 +963,56 @@ public class SaveMappedFiles {
 						order.setCustomer(customerBean);
 						order.setOrderTax(otb);	
 						if(itemID != null && itemID.contains("-") && (typeIden == null || typeIden.equals(""))){
-							Order orderMul = null;
-							if(multyQtyMap.size() != 0 && multyQtyMap.get(uniqueID4Map) != null){								
-								orderMul = multyQtyMap.get(uniqueID4Map);
-								if(orderMul.getTypeIdentifier().contains("-"+itemID.substring(itemID.lastIndexOf("-")+1)+"$")){
-									errorMessage.append("Duplicate Order.");
-									returnOrderMap.put(errorMessage.toString(), order);
-								} else {
-									orderMul.setQuantity(orderMul.getQuantity() + order.getQuantity());
-									orderMul.setTypeIdentifier(orderMul.getTypeIdentifier()+",-"+itemID.substring(itemID.lastIndexOf("-")+1)+"$");								
-									multyQtyMap.put(uniqueID4Map, orderMul);
-								}								
+							String separateNo = "";
+							if(!partner.getPcName().toLowerCase().contains("limeroad")){
+								separateNo = itemID.substring(itemID.lastIndexOf("-")+1);
 							} else {
-								List<Order> resultList = orderService.searchAsIsOrder("channelOrderID",										
-										channelID.substring(0, channelID.lastIndexOf(GlobalConstant.orderUniqueSymbol)), sellerId);
-								if(resultList != null){
-									orderMul = resultList.get(0);
-									if(orderMul.getTypeIdentifier() != null && orderMul.getTypeIdentifier().contains("-"+itemID.substring(itemID.lastIndexOf("-")+1)+"$")){
+								separateNo = itemID.substring(0, itemID.indexOf("-"));
+							}
+							if (separateNo.matches("[0-9]+") && separateNo.length() <= 2) {
+								Order orderMul = null;
+								if(multyQtyMap.size() != 0 && multyQtyMap.get(uniqueID4Map) != null){								
+									orderMul = multyQtyMap.get(uniqueID4Map);
+									if(orderMul.getTypeIdentifier().contains("-"+separateNo+"$")){
 										errorMessage.append("Duplicate Order.");
 										returnOrderMap.put(errorMessage.toString(), order);
 									} else {
-										orderMul.setQuantity(orderMul.getQuantity()+order.getQuantity());
-										orderMul.setTypeIdentifier(orderMul.getTypeIdentifier()+",-"+itemID.substring(itemID.lastIndexOf("-")+1)+"$");										
-										orderMul.setCustomer(ConverterClass.prepareModel(order).getCustomer());
-										orderMul.setOrderTax(ConverterClass.prepareModel(order).getOrderTax());
-										orderMul.setOrderPayment(ConverterClass.prepareModel(order).getOrderPayment());
-										orderMul.setOrderTimeline(ConverterClass.prepareModel(order).getOrderTimeline());
-										orderMul.setOrderReturnOrRTO(ConverterClass.prepareModel(order).getOrderReturnOrRTO());
-										orderMul.setSeller(ConverterClass.prepareModel(order).getSeller());
-										orderMul.setProductConfig(ConverterClass.prepareModel(order).getProductConfig());
-										orderMul.setConsolidatedOrder(ConverterClass.prepareModel(order).getConsolidatedOrder());
-										if(orderMul.getTypeIdentifier() == null){
-											order.setTypeIdentifier("MultiQty-"+(itemID.substring(itemID.lastIndexOf("-")+1))+"$");
-										}
+										orderMul.setQuantity(orderMul.getQuantity() + order.getQuantity());
+										orderMul.setTypeIdentifier(orderMul.getTypeIdentifier()+",-"+separateNo+"$");								
 										multyQtyMap.put(uniqueID4Map, orderMul);
-									}
+									}								
 								} else {
-									order.setTypeIdentifier("MultiQty-"+(itemID.substring(itemID.lastIndexOf("-")+1))+"$");
-									multyQtyMap.put(uniqueID4Map, ConverterClass.prepareModel(order));
+									List<Order> resultList = orderService.searchAsIsOrder("channelOrderID",										
+											channelID.substring(0, channelID.lastIndexOf(GlobalConstant.orderUniqueSymbol)), sellerId);
+									if(resultList != null){
+										orderMul = resultList.get(0);
+										if(orderMul.getTypeIdentifier() != null && orderMul.getTypeIdentifier().contains("-"+separateNo+"$")){
+											errorMessage.append("Duplicate Order.");
+											returnOrderMap.put(errorMessage.toString(), order);
+										} else {
+											orderMul.setQuantity(orderMul.getQuantity()+order.getQuantity());
+											orderMul.setTypeIdentifier(orderMul.getTypeIdentifier()+",-"+separateNo+"$");										
+											orderMul.setCustomer(ConverterClass.prepareModel(order).getCustomer());
+											orderMul.setOrderTax(ConverterClass.prepareModel(order).getOrderTax());
+											orderMul.setOrderPayment(ConverterClass.prepareModel(order).getOrderPayment());
+											orderMul.setOrderTimeline(ConverterClass.prepareModel(order).getOrderTimeline());
+											orderMul.setOrderReturnOrRTO(ConverterClass.prepareModel(order).getOrderReturnOrRTO());
+											orderMul.setSeller(ConverterClass.prepareModel(order).getSeller());
+											orderMul.setProductConfig(ConverterClass.prepareModel(order).getProductConfig());
+											orderMul.setConsolidatedOrder(ConverterClass.prepareModel(order).getConsolidatedOrder());
+											if(orderMul.getTypeIdentifier() == null){
+												order.setTypeIdentifier("MultiQty-"+separateNo+"$");
+											}
+											multyQtyMap.put(uniqueID4Map, orderMul);
+										}
+									} else {
+										order.setTypeIdentifier("MultiQty-"+separateNo+"$");
+										multyQtyMap.put(uniqueID4Map, ConverterClass.prepareModel(order));
+									}
 								}
-							}							
+							} else {
+								saveList.add(ConverterClass.prepareModel(order));
+							}
 						} else {
 							saveList.add(ConverterClass.prepareModel(order));
 						}						
