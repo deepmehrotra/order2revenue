@@ -5561,7 +5561,7 @@ public class OrderDaoImpl implements OrderDao {
                     	   String orderdatedate = item[2].toString();
                            if(orderdatedate.contains(" ")){
                                orderdatedate=item[2].toString().split(" ")[0].trim();
-                           }                               
+                           }
                            idsList.put(item[0].toString(),orderdatedate);
                        } else {
                            idsList.put(item[0].toString(),item[1]!=null? item[1].toString():null);

@@ -501,34 +501,37 @@ public class CategoryController {
 
 					List<String> tempPartnerCatRefList = new ArrayList<String>();
 
-					if (partnerCatRef.contains(",")) {
-						tempPartnerCatRefList = Arrays.asList(partnerCatRef
-								.split(","));
-						for (String tempPartnerCatRef : tempPartnerCatRefList) {
-							if (!tempPartnerCatRef.trim().isEmpty()) {
-								tempPartnerCat = pcName + "_"
-										+ tempPartnerCatRef;
-								Category tempCat = categoryService
-										.getSubCategory(tempPartnerCat,
-												sellerId);
-								if (tempCat == null) {
-									partnerCatRefList.add(GlobalConstant.orderUniqueSymbol
-											+ tempPartnerCat
-											+ GlobalConstant.orderUniqueSymbol);
+					if (partnerCatRef != null && !partnerCatRef.isEmpty()) {
+						if (partnerCatRef.contains(",")) {
+							tempPartnerCatRefList = Arrays.asList(partnerCatRef
+									.split(","));
+							for (String tempPartnerCatRef : tempPartnerCatRefList) {
+								if (!tempPartnerCatRef.trim().isEmpty()) {
+									tempPartnerCat = pcName + "_"
+											+ tempPartnerCatRef;
+									Category tempCat = categoryService
+											.getSubCategory(tempPartnerCat,
+													sellerId);
+									if (tempCat == null) {
+										partnerCatRefList
+												.add(GlobalConstant.orderUniqueSymbol
+														+ tempPartnerCat
+														+ GlobalConstant.orderUniqueSymbol);
+									}
 								}
 							}
-						}
-					} else {
-						tempPartnerCat = pcName + "_" + partnerCatRef;
-						Category tempCat = categoryService.getSubCategory(
-								tempPartnerCat, sellerId);
-						if (tempCat == null) {
-							partnerCatRefList.add(GlobalConstant.orderUniqueSymbol
-									+ tempPartnerCat
-									+ GlobalConstant.orderUniqueSymbol);
+						} else {
+							tempPartnerCat = pcName + "_" + partnerCatRef;
+							Category tempCat = categoryService.getSubCategory(
+									tempPartnerCat, sellerId);
+							if (tempCat == null) {
+								partnerCatRefList
+										.add(GlobalConstant.orderUniqueSymbol
+												+ tempPartnerCat
+												+ GlobalConstant.orderUniqueSymbol);
+							}
 						}
 					}
-
 				}
 			}
 
@@ -536,9 +539,10 @@ public class CategoryController {
 			if (catList != null && catList.length != 0) {
 				for (int i = 0; i < catList.length; i++) {
 					tempPartnerCat = catList[i];
-					partnerCatRefList.add(GlobalConstant.orderUniqueSymbol
-							+ tempPartnerCat
-							+ GlobalConstant.orderUniqueSymbol);
+					partnerCatRefList
+							.add(GlobalConstant.orderUniqueSymbol
+									+ tempPartnerCat
+									+ GlobalConstant.orderUniqueSymbol);
 				}
 			}
 
