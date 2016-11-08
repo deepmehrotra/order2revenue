@@ -133,6 +133,7 @@ public class PartnerDaoImpl implements PartnerDao {
 			session.beginTransaction();
 			partner = (Partner) session.get(Partner.class, partnerid);
 			Hibernate.initialize(partner.getNrnReturnConfig().getCharges());
+		//	Hibernate.initialize(partner.getSellerAuthInfo());
 			session.getTransaction().commit();
 			session.close();
 
@@ -162,6 +163,7 @@ public class PartnerDaoImpl implements PartnerDao {
 			if (criteria.list() != null && criteria.list().size() != 0) {
 				partner = (MetaPartner) criteria.list().get(0);
 				Hibernate.initialize(partner.getNrnReturnConfig().getCharges());
+				
 			}
 			session.getTransaction().commit();
 			session.close();
@@ -210,7 +212,12 @@ public class PartnerDaoImpl implements PartnerDao {
 					Hibernate.initialize(returnpartner.getNrnReturnConfig()
 							.getCharges());
 					Hibernate.initialize(returnpartner.getOrders());
+					//Hibernate.initialize(returnpartner.getSellerAuthInfo());
 				}
+				
+				System.out.println(" HELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+				
+				System.out.println("HELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"+returnpartner.getOrders());
 			}
 			session.getTransaction().commit();
 			session.close();

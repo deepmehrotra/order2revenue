@@ -71,8 +71,22 @@ public class Partner {
 	@OneToOne(cascade=CascadeType.ALL)
 	private NRnReturnConfig nrnReturnConfig;
 	
+	
+
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<Order> orders = new ArrayList<Order>();
+	
+	
+	@OneToOne(cascade=CascadeType.ALL)
+	private SellerAuthInfo sellerAuthInfo;
+	
+	
+	public SellerAuthInfo getSellerAuthInfo() {
+		return sellerAuthInfo;
+	}
+	public void setSellerAuthInfo(SellerAuthInfo sellerAuthInfo) {
+		this.sellerAuthInfo = sellerAuthInfo;
+	}	
 
 	public long getPcId() {
 		return pcId;

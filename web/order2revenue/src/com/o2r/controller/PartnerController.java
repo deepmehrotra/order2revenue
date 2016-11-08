@@ -46,6 +46,7 @@ import com.o2r.model.MetaNRnReturnCharges;
 import com.o2r.model.MetaPartner;
 import com.o2r.model.NRnReturnCharges;
 import com.o2r.model.Partner;
+import com.o2r.model.SellerAuthInfo;
 import com.o2r.model.TaxCategory;
 import com.o2r.service.CategoryService;
 import com.o2r.service.OrderService;
@@ -545,7 +546,9 @@ public class PartnerController {
 						}
 					}
 				}
-
+				
+				
+				
 				if (!partnerBean.isIsshippeddatecalc()) {
 					partnerBean.setNoofdaysfromshippeddate(partnerBean
 							.getNoofdaysfromdeliverydate());
@@ -602,6 +605,20 @@ public class PartnerController {
 					}
 				}
 
+				SellerAuthInfo sellerAuthInfo = new SellerAuthInfo();				
+				sellerAuthInfo.setSellerId(sellerId);
+				sellerAuthInfo.setMarketPlaceId(Integer.parseInt(request.getParameter("marketPlaceId")));
+				sellerAuthInfo.setMwsAuthToken(request.getParameter("mwsAuthToken"));
+				sellerAuthInfo.setAccessKey(request.getParameter("accessKey"));
+				sellerAuthInfo.setSecretKey(request.getParameter("secretKey"));				
+				sellerAuthInfo.setPcName(partnerBean.getPcName());	
+				//partnerBean.sets
+			    sellerAuthInfo.setStatus(true);	
+				
+				partnerBean.setSellerAuthInfo(sellerAuthInfo);
+				
+				
+				System.out.println("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
 				Partner partner = ConverterClass
 						.preparePartnerModel(partnerBean);
 				partnerService.addPartner(partner,
@@ -1554,7 +1571,20 @@ public class PartnerController {
 							chargeMap.get(cat.getCatName()));
 				}
 			}
-
+			
+			
+			//System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+			
+			//System.out.println("pbean.getSellerAuthInfo().getMwsAuthToken()");
+			/*com.o2r.model.SellerAuthInfo sellerAutthInfo = new SellerAuthInfo();
+			sellerAutthInfo.setMwsAuthToken(pbean.getSellerAuthInfo().getMwsAuthToken());
+			sellerAutthInfo.setSecretKey(pbean.getSellerAuthInfo().getSecretKey());
+			sellerAutthInfo.setAccessKey(pbean.getSellerAuthInfo().getAccessKey());			
+			sellerAutthInfo.setMarketPlaceId(Integer.parseInt(pbean.getSellerAuthInfo().getMwsAuthToken().toString()));
+			pbean.setSellerAuthInfo(sellerAutthInfo);
+			model.put("sellerAutthInfo", sellerAutthInfo);
+			//pbean.getSellerAuthInfo().dd(sellerAutthInfo);*/
+		
 			model.put("categoryMap", categoryMap);
 			System.out.println(pbean.getFixedfeeList().size());
 			model.put("partner", pbean);

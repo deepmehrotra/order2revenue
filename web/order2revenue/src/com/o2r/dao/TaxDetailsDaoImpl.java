@@ -1,12 +1,17 @@
 package com.o2r.dao;
 
+
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -744,6 +749,8 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		log.info("*** deleteTaxCategory Ends : TaxDetailsDaoImpl ****");
 	}
 
+	
+	
 	@Override
 	public List<TaxDetailBean> listtaxDetailsOnMonth(int sellerId, Date sDate,
 			Date eDate) throws CustomException {
@@ -766,90 +773,99 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 					.setParameter("sDate", sDate)
 					.setParameter("eDate", eDate);
 			results = mpquery1.list();
-			
-			
-			System.out.println(" The result size"+results.size() );	
+				
 			Iterator mpiterator1 = results.iterator();
-			HashMap<String, Float> taxMap = new HashMap<String, Float>();
+			HashMap<String, Float> taxablePurchasesQueryMap = new HashMap<String, Float>();
 			while (mpiterator1.hasNext()) {
 				Object[] recordsRow = (Object[]) mpiterator1.next();
 				String mapkey = recordsRow[0].toString() + "," + recordsRow[3]
-						+ "," + recordsRow[4].toString().substring(2);			
+						+ "," + recordsRow[4].toString().substring(2);
+				taxablePurchasesQueryMap.put(mapkey, Float.parseFloat(recordsRow[1].toString()));				
+			}
+			
+			Calendar startCalendar = new GregorianCalendar();
+			startCalendar.setTime(sDate);
+			Calendar endCalendar = new GregorianCalendar();
+			endCalendar.setTime(eDate);
 
-				taxMap.put(mapkey, Float.parseFloat(recordsRow[1].toString()));				
-			}			
-
+			int diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+			int diffMonth = 1+diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);	
 			Query mpquery = session.createSQLQuery(taxDetailsQuery)
 					.setParameter("sellerId", sellerId)
 					.setParameter("sDate", sDate)
-					.setParameter("eDate", eDate);
-			//System.out.println(" The query" + mpquery.toString());
+					.setParameter("eDate", eDate);			
 			results = mpquery.list();
 			String oldCatType = "";
 			double totalTax = 0.0d;
-			Iterator mpiterator = results.iterator();
-			System.out.println(" The size of the query data is "
-					+ results.size());
-			TaxDetailBean returnTaxDetailBean = new TaxDetailBean();
-
-			int itrvalue=0;
-			boolean check = true;
-			if (mpquery != null) {
-				while (mpiterator.hasNext()) {
-					Object[] recordsRow = (Object[]) mpiterator.next();
-
-					if (recordsRow[0] != null && recordsRow[1] != null) {
-
-						itrvalue=itrvalue+1;
-						if (!recordsRow[0].toString().equals(oldCatType) && check == false) {
-							//System.out.println(" VALUE");
-							viewDetailsDbeanList.add(returnTaxDetailBean);
-							returnTaxDetailBean = new TaxDetailBean();
-							totalTax = 0.0d;
-						}
-						returnTaxDetailBean.setTaxortdsCycle(recordsRow[0].toString());
-						returnTaxDetailBean.setTaxCatType(recordsRow[1] + "");
-						String fetchString = returnTaxDetailBean.getTaxCatType()+ ","+ returnTaxDetailBean.getTaxortdsCycle();						
-
-						float valTaxablePurchase = 0.0f;
-						if (taxMap.get(fetchString) != null) {
-							valTaxablePurchase = Float.parseFloat(taxMap.get(fetchString).toString());
-						}
-						if (returnTaxDetailBean.getTaxCatType().equals("LST")) {
- 
-							returnTaxDetailBean.setVat(Double.parseDouble(recordsRow[2].toString())-valTaxablePurchase);
-							totalTax = totalTax + returnTaxDetailBean.getVat();
-
-						} else if (returnTaxDetailBean.getTaxCatType().equals("CST")) {
-							
-							returnTaxDetailBean.setCst(Double.parseDouble(recordsRow[2].toString())- valTaxablePurchase);
-							totalTax = totalTax + returnTaxDetailBean.getCst();
-
-						} else if (returnTaxDetailBean.getTaxCatType().equals("Excise")) {
-
-							returnTaxDetailBean.setExcise(Double.parseDouble(recordsRow[2].toString())- valTaxablePurchase);
-							totalTax = totalTax	+ returnTaxDetailBean.getExcise();
-
-						} else if (returnTaxDetailBean.getTaxCatType().equals("CutomDuty")) {
-							returnTaxDetailBean.setExcise(Double.parseDouble(recordsRow[2].toString())- valTaxablePurchase);
-							totalTax = totalTax	+ returnTaxDetailBean.getCustomDuty();
-						} else if (returnTaxDetailBean.getTaxCatType().equals("AntiDumpityDuty")){
-							returnTaxDetailBean.setAntiDumpingDuty(Double.parseDouble(recordsRow[2].toString())	- valTaxablePurchase);
-							totalTax = totalTax	+ returnTaxDetailBean.getAntiDumpingDuty();
-						}
-						returnTaxDetailBean.setTotalTax(totalTax);
-						check = false;
-						oldCatType = recordsRow[0].toString();
+			Iterator mpiterator = results.iterator();		
 						
-						if(results.size()==itrvalue){
-							viewDetailsDbeanList.add(returnTaxDetailBean);	
-						}						
-					}// if condition
-
-				}// while loop
-
-			}// mpquery
-			
+			HashMap<String, Float> taxDetailsQueryMap = new HashMap<String, Float>();
+			while (mpiterator.hasNext()) {
+				Object[] recordsRow = (Object[]) mpiterator.next();
+				String mapkey = recordsRow[1].toString() + "," + recordsRow[0].toString();
+				taxDetailsQueryMap.put(mapkey, Float.parseFloat(recordsRow[2].toString()));				
+			}			
+		
+			int itr=1;			
+			do{				
+					
+					TaxDetailBean returnTaxDetailBean = new TaxDetailBean();				
+					String currMonth=new SimpleDateFormat("MMMM").format(startCalendar.getTime());				
+					String currYear=new SimpleDateFormat("yy").format(startCalendar.getTime());				
+					returnTaxDetailBean.setTaxortdsCycle(currMonth+","+currYear);				
+					double valTaxablePurchase  = 0.0d;
+					double valTaxDetails =0.0d;				
+				
+					String fetchString = "LST"+ ","+ currMonth+","+currYear;					
+					if(taxablePurchasesQueryMap.get(fetchString)!=null)
+					valTaxablePurchase = Float.parseFloat(taxablePurchasesQueryMap.get(fetchString).toString());
+					if(taxDetailsQueryMap.get(fetchString)!=null)
+					valTaxDetails = Float.parseFloat(taxDetailsQueryMap.get(fetchString).toString());
+					returnTaxDetailBean.setVat(valTaxDetails-valTaxablePurchase);					
+				
+					valTaxablePurchase  = 0.0d;
+					valTaxDetails =0.0d;
+					fetchString = "CST"+ ","+ currMonth+","+currYear;					
+					if(taxablePurchasesQueryMap.get(fetchString)!=null)
+					valTaxablePurchase = Float.parseFloat(taxablePurchasesQueryMap.get(fetchString).toString());
+					if(taxDetailsQueryMap.get(fetchString)!=null)
+					valTaxDetails = Float.parseFloat(taxDetailsQueryMap.get(fetchString).toString());
+					returnTaxDetailBean.setCst(valTaxDetails-valTaxablePurchase);	
+					
+					valTaxablePurchase  = 0.0d;
+					valTaxDetails =0.0d;
+					fetchString = "Excise"+ ","+ currMonth+","+currYear;					
+					if(taxablePurchasesQueryMap.get(fetchString)!=null)
+					valTaxablePurchase = Float.parseFloat(taxablePurchasesQueryMap.get(fetchString).toString());
+					if(taxDetailsQueryMap.get(fetchString)!=null)
+					valTaxDetails = Float.parseFloat(taxDetailsQueryMap.get(fetchString).toString());					
+					returnTaxDetailBean.setExcise(valTaxDetails-valTaxablePurchase);					
+					
+					valTaxablePurchase  = 0.0d;
+					valTaxDetails =0.0d;
+					fetchString = "CustomDuty"+ ","+ currMonth+","+currYear;					
+					if(taxablePurchasesQueryMap.get(fetchString)!=null)
+					valTaxablePurchase = Float.parseFloat(taxablePurchasesQueryMap.get(fetchString).toString());
+					if(taxDetailsQueryMap.get(fetchString)!=null)
+					valTaxDetails = Float.parseFloat(taxDetailsQueryMap.get(fetchString).toString());					
+					returnTaxDetailBean.
+					setCustomDuty(valTaxDetails-valTaxablePurchase);					
+					
+					valTaxablePurchase  = 0.0d;
+					valTaxDetails =0.0d;
+					fetchString = "AntiDumpityDuty"+ ","+ currMonth+","+currYear;					
+					if(taxablePurchasesQueryMap.get(fetchString)!=null)
+					valTaxablePurchase = Float.parseFloat(taxablePurchasesQueryMap.get(fetchString).toString());
+					if(taxDetailsQueryMap.get(fetchString)!=null)
+					valTaxDetails = Float.parseFloat(taxDetailsQueryMap.get(fetchString).toString());				
+					returnTaxDetailBean.setAntiDumpingDuty(valTaxDetails-valTaxablePurchase);
+					double totalamt = returnTaxDetailBean.getCst()+returnTaxDetailBean.getVat()+returnTaxDetailBean.getExcise()+returnTaxDetailBean.getCustomDuty()+returnTaxDetailBean.getAntiDumpingDuty();
+					returnTaxDetailBean.setTotalTax(totalamt);
+					viewDetailsDbeanList.add(returnTaxDetailBean);					
+					startCalendar.add(Calendar.MONTH, 1);
+					
+			itr =itr+1;	
+			}while(itr<=diffMonth);								
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : ", e);
 			log.debug("Inside exception  " + e.getLocalizedMessage());
@@ -860,13 +876,10 @@ public class TaxDetailsDaoImpl implements TaxDetailsDao {
 		}
 		long topsellingGPendtime = System.currentTimeMillis();
 		log.info(" topsellingGPendtime time  : " + (topsellingGPendtime));
-
-		log.info("***topsellingGPendtime ends***");
-
-		System.out.println(" viewDetailsDbeanList size "
-				+ viewDetailsDbeanList.size());
+		log.info("***topsellingGPendtime ends***");		
 		return viewDetailsDbeanList;
 	}
+	
 
 	@Override
 	public List<TaxDetailBean> getProdCategoryTaxDetails(int sellerId)

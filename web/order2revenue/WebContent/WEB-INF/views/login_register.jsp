@@ -153,10 +153,10 @@
 	            </div>
 	          </div>
 	          <br>
-	          <div class="col-lg-12">
-	          	 <div class="check col-sm-6">
-	          		<input type="checkbox" name="_spring_security_remember_me" value="true"  autocomplete="off" style="width: 14%;height: 15px;float: left;position: relative;top: 4px;">
-					<label style="font-size: 12px;color: #fff;position: relative;left: -4px;">Remember Me ?</label>
+	          <div class="col-lg-12" style="margin:0px;padding:0px;">
+	          	 <div class="col-sm-6" style="margin:0px;padding:0px;">
+	          		<input type="checkbox" name="_spring_security_remember_me" value="true"  autocomplete="off" style="width: 14%;height: 15px;float: left;position: relative;top: 17px;left: -3px;">
+					<font size="2" color="white" style="position: relative;top: 18px;left: -1px;font-weight: 600;">Remember Me ?</font>
 	          	</div>
 	          	 <div class="col-lg-6">
 	          	 	 <p class="forgot" style="margin-top:18px;margin-bottom: 18px;">
