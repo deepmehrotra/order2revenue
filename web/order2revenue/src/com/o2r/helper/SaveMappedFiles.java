@@ -966,12 +966,12 @@ public class SaveMappedFiles {
 							Order orderMul = null;
 							if(multyQtyMap.size() != 0 && multyQtyMap.get(uniqueID4Map) != null){								
 								orderMul = multyQtyMap.get(uniqueID4Map);
-								if(orderMul.getTypeIdentifier().contains(itemID.substring(itemID.lastIndexOf("-")+1))){
+								if(orderMul.getTypeIdentifier().contains("-"+itemID.substring(itemID.lastIndexOf("-")+1)+"$")){
 									errorMessage.append("Duplicate Order.");
 									returnOrderMap.put(errorMessage.toString(), order);
 								} else {
 									orderMul.setQuantity(orderMul.getQuantity() + order.getQuantity());
-									orderMul.setTypeIdentifier(orderMul.getTypeIdentifier()+","+itemID.substring(itemID.lastIndexOf("-")+1));								
+									orderMul.setTypeIdentifier(orderMul.getTypeIdentifier()+",-"+itemID.substring(itemID.lastIndexOf("-")+1)+"$");								
 									multyQtyMap.put(uniqueID4Map, orderMul);
 								}								
 							} else {
@@ -979,12 +979,12 @@ public class SaveMappedFiles {
 										channelID.substring(0, channelID.lastIndexOf(GlobalConstant.orderUniqueSymbol)), sellerId);
 								if(resultList != null){
 									orderMul = resultList.get(0);
-									if(orderMul.getTypeIdentifier() != null && orderMul.getTypeIdentifier().contains(itemID.substring(itemID.lastIndexOf("-")+1))){
+									if(orderMul.getTypeIdentifier() != null && orderMul.getTypeIdentifier().contains("-"+itemID.substring(itemID.lastIndexOf("-")+1)+"$")){
 										errorMessage.append("Duplicate Order.");
 										returnOrderMap.put(errorMessage.toString(), order);
 									} else {
 										orderMul.setQuantity(orderMul.getQuantity()+order.getQuantity());
-										orderMul.setTypeIdentifier(orderMul.getTypeIdentifier()+","+itemID.substring(itemID.lastIndexOf("-")+1));										
+										orderMul.setTypeIdentifier(orderMul.getTypeIdentifier()+",-"+itemID.substring(itemID.lastIndexOf("-")+1)+"$");										
 										orderMul.setCustomer(ConverterClass.prepareModel(order).getCustomer());
 										orderMul.setOrderTax(ConverterClass.prepareModel(order).getOrderTax());
 										orderMul.setOrderPayment(ConverterClass.prepareModel(order).getOrderPayment());
@@ -994,12 +994,12 @@ public class SaveMappedFiles {
 										orderMul.setProductConfig(ConverterClass.prepareModel(order).getProductConfig());
 										orderMul.setConsolidatedOrder(ConverterClass.prepareModel(order).getConsolidatedOrder());
 										if(orderMul.getTypeIdentifier() == null){
-											order.setTypeIdentifier("MultiQty-"+itemID.substring(itemID.lastIndexOf("-")+1));
+											order.setTypeIdentifier("MultiQty-"+(itemID.substring(itemID.lastIndexOf("-")+1))+"$");
 										}
 										multyQtyMap.put(uniqueID4Map, orderMul);
 									}
 								} else {
-									order.setTypeIdentifier("MultiQty-"+itemID.substring(itemID.lastIndexOf("-")+1));
+									order.setTypeIdentifier("MultiQty-"+(itemID.substring(itemID.lastIndexOf("-")+1))+"$");
 									multyQtyMap.put(uniqueID4Map, ConverterClass.prepareModel(order));
 								}
 							}							
