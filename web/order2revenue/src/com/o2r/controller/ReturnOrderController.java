@@ -31,6 +31,7 @@ import com.o2r.helper.CustomException;
 import com.o2r.helper.DateDeserializer;
 import com.o2r.helper.DateSerializer;
 import com.o2r.helper.FileUploadForm;
+import com.o2r.helper.GlobalConstant;
 import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
 import com.o2r.helper.ValidateUpload;
@@ -208,10 +209,27 @@ public class ReturnOrderController {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			if (orderBean.getChannelOrderID() != null
 					&& orderBean.getOrderReturnOrRTO().getReturnOrRTOId() != null) {
+				/*List<Order> orderListToReturn = orderService.searchAsIsOrder("typeIdentifier", 
+						(String) orderBean.getChannelOrderID().subSequence(0, orderBean.getChannelOrderID().indexOf(GlobalConstant.orderUniqueSymbol)), sellerId);
+				if(orderListToReturn != null && orderListToReturn.size() != 0){
+					int orderCount = 0;
+					for (Order eachOrder : orderListToReturn) {
+						if(orderCount != 0){
+							orderBean.getOrderReturnOrRTO().setReturnorrtoQty(0);
+						}
+						orderService.addReturnOrder(eachOrder.getChannelOrderID(),
+								ConverterClass.prepareOrderRTOorReturnModel(orderBean
+										.getOrderReturnOrRTO()), sellerId);
+						orderCount ++;
+					}
+				} else {
+					orderService.addReturnOrder(orderBean.getChannelOrderID(),
+							ConverterClass.prepareOrderRTOorReturnModel(orderBean
+									.getOrderReturnOrRTO()), sellerId);
+				}*/
 				orderService.addReturnOrder(orderBean.getChannelOrderID(),
 						ConverterClass.prepareOrderRTOorReturnModel(orderBean
 								.getOrderReturnOrRTO()), sellerId);
-
 			}
 		} catch (CustomException ce) {
 			log.error("saveReturnorRTO exception : " + ce.toString());

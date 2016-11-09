@@ -3564,7 +3564,7 @@ public class SaveContents {
 			}
 			Set<String> errorSet = returnPaymentMap.keySet();
 			downloadUploadReportXLS(offices, "MP_Payment_Upload",
-					uploadFileName, 8, errorSet, path, sellerId, uploadReport);
+					uploadFileName, 9, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());

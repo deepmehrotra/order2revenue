@@ -28,6 +28,7 @@ import com.o2r.bean.PaymentUploadBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.FileUploadForm;
+import com.o2r.helper.GlobalConstant;
 import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
 import com.o2r.helper.ValidateUpload;
@@ -269,7 +270,7 @@ public class UploadController {
 			payment.setDateofPayment(orderBean.getOrderPayment()
 					.getDateofPayment());
 			log.debug("order id in payment controller : "
-					+ orderBean.getOrderId());
+					+ orderBean.getOrderId());			
 			order = orderService.addOrderPayment(orderBean.getOrderId(),
 					payment, sellerId);
 

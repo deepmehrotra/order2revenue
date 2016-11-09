@@ -544,7 +544,11 @@ public class Layouter {
 		
 		HSSFCell cell8 = rowHeader.createCell(startColIndex + 7);
 		cell8.setCellValue("Particular");
-		cell8.setCellStyle(headerCellStyle);	
+		cell8.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell9 = rowHeader.createCell(startColIndex + 8);
+		cell9.setCellValue("Recieved Date");
+		cell9.setCellStyle(headerCellStyle);
 
 	}
 
@@ -1012,6 +1016,10 @@ public class Layouter {
 		HSSFCell cell4 = rowHeader.createCell(startColIndex + 3);
 		cell4.setCellValue("Channel Name");
 		cell4.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell5 = rowHeader.createCell(startColIndex + 4);
+		cell5.setCellValue("Commision Percent");
+		cell5.setCellStyle(headerCellStyle);
 	}
 	
 	

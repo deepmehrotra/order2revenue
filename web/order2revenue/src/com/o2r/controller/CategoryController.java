@@ -481,9 +481,10 @@ public class CategoryController {
 			Category category;
 			if (categoryBean.getId() > 0) {
 				category = categoryService.getCategory(categoryBean.getId());
-				category.setTaxFreePriceLimit(categoryBean.getTaxFreePriceLimit());
+				category.setTaxFreePriceLimit(categoryBean
+						.getTaxFreePriceLimit());
 			} else {
-				categoryBean.setSubCategory(true);				
+				categoryBean.setSubCategory(true);
 				category = ConverterClass.prepareCategoryModel(categoryBean);
 			}
 
@@ -495,40 +496,44 @@ public class CategoryController {
 				if (entry.getKey().contains("partnerCatRef-")) {
 					String paramIndex = entry.getKey().substring(
 							entry.getKey().indexOf('-') + 1);
-					String pcName = parameters.get("partnerName-" + paramIndex)[0];
-					String partnerCatRef = parameters.get("partnerCatRef-"
-							+ paramIndex)[0].trim();
+					if (parameters.get("partnerName-" + paramIndex) != null) {
+						String pcName = parameters.get("partnerName-"
+								+ paramIndex)[0];
+						String partnerCatRef = parameters.get("partnerCatRef-"
+								+ paramIndex)[0].trim();
 
-					List<String> tempPartnerCatRefList = new ArrayList<String>();
+						List<String> tempPartnerCatRefList = new ArrayList<String>();
 
-					if (partnerCatRef != null && !partnerCatRef.isEmpty()) {
-						if (partnerCatRef.contains(",")) {
-							tempPartnerCatRefList = Arrays.asList(partnerCatRef
-									.split(","));
-							for (String tempPartnerCatRef : tempPartnerCatRefList) {
-								if (!tempPartnerCatRef.trim().isEmpty()) {
-									tempPartnerCat = pcName + "_"
-											+ tempPartnerCatRef;
-									Category tempCat = categoryService
-											.getSubCategory(tempPartnerCat,
-													sellerId);
-									if (tempCat == null) {
-										partnerCatRefList
-												.add(GlobalConstant.orderUniqueSymbol
-														+ tempPartnerCat
-														+ GlobalConstant.orderUniqueSymbol);
+						if (partnerCatRef != null && !partnerCatRef.isEmpty()) {
+							if (partnerCatRef.contains(",")) {
+								tempPartnerCatRefList = Arrays
+										.asList(partnerCatRef.split(","));
+								for (String tempPartnerCatRef : tempPartnerCatRefList) {
+									if (!tempPartnerCatRef.trim().isEmpty()) {
+										tempPartnerCat = pcName + "_"
+												+ tempPartnerCatRef;
+										Category tempCat = categoryService
+												.getSubCategory(tempPartnerCat,
+														sellerId);
+										if (tempCat == null) {
+											partnerCatRefList
+													.add(GlobalConstant.orderUniqueSymbol
+															+ tempPartnerCat
+															+ GlobalConstant.orderUniqueSymbol);
+										}
 									}
 								}
-							}
-						} else {
-							tempPartnerCat = pcName + "_" + partnerCatRef;
-							Category tempCat = categoryService.getSubCategory(
-									tempPartnerCat, sellerId);
-							if (tempCat == null) {
-								partnerCatRefList
-										.add(GlobalConstant.orderUniqueSymbol
-												+ tempPartnerCat
-												+ GlobalConstant.orderUniqueSymbol);
+							} else {
+								tempPartnerCat = pcName + "_" + partnerCatRef;
+								Category tempCat = categoryService
+										.getSubCategory(tempPartnerCat,
+												sellerId);
+								if (tempCat == null) {
+									partnerCatRefList
+											.add(GlobalConstant.orderUniqueSymbol
+													+ tempPartnerCat
+													+ GlobalConstant.orderUniqueSymbol);
+								}
 							}
 						}
 					}
