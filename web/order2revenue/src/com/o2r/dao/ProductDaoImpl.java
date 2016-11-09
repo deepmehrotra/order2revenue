@@ -60,7 +60,7 @@ public class ProductDaoImpl implements ProductDao {
 	private OrderService orderService;
 	@Autowired
 	private AlertsService alertService;
-	
+
 	private final int pageSize = 500;
 
 	private final String listProductConfig = "select pc.productSkuCode,pc.channelName,pc.channelSkuRef,"
@@ -74,7 +74,7 @@ public class ProductDaoImpl implements ProductDao {
 			+ "pc.eossDiscountValue,pc.grossNR,pc.productConfigId, pc.commision from productconfig pc,"
 			+ "product p,product_productconfig pp where p.seller_id=? and pp.Product_productId="
 			+ "p.productId and pp.productConfig_productConfigId=pc.productConfigId and pc.mrp=0";
-	
+
 	private final String listProductMappingCount = "select count(*) from productconfig pc,"
 			+ "product p,product_productconfig pp where p.seller_id=? and pp.Product_productId="
 			+ "p.productId and pp.productConfig_productConfigId=pc.productConfigId and pc.mrp=0";
@@ -495,8 +495,9 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public synchronized void addSKUMapping(List<ProductConfig> productConfigList,
-			int sellerId) throws CustomException {
+	public synchronized void addSKUMapping(
+			List<ProductConfig> productConfigList, int sellerId)
+			throws CustomException {
 
 		log.info("*** addProductConfig List Starts : ProductDaoImpl ****");
 		Product product = null;
@@ -585,14 +586,15 @@ public class ProductDaoImpl implements ProductDao {
 					session.getTransaction().commit();
 				}
 			}
-			
+
 			session.getTransaction().begin();
-			Query deleteQuery = session.createSQLQuery("delete from productconfig where productConfigId =?");
+			Query deleteQuery = session
+					.createSQLQuery("delete from productconfig where productConfigId =?");
 			deleteQuery.setInteger(0, productConfig.getProductConfigId());
 			deleteQuery.executeUpdate();
 			session.getTransaction().commit();
 			session.close();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed! by sellerId : " + sellerId, e);
@@ -808,7 +810,8 @@ public class ProductDaoImpl implements ProductDao {
 					CriteriaSpecification.LEFT_JOIN).add(
 					Restrictions.eq("seller.id", sellerId));
 			Criterion rest1 = Restrictions.eq("productSkuCode", skuCode);
-			Criterion rest2 = Restrictions.eq("productConfig.channelSkuRef", skuCode);					
+			Criterion rest2 = Restrictions.eq("productConfig.channelSkuRef",
+					skuCode);
 			criteria.add(Restrictions.or(rest1, rest2)).setResultTransformer(
 					CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
@@ -817,6 +820,7 @@ public class ProductDaoImpl implements ProductDao {
 			if (returnlist != null && returnlist.size() != 0) {
 
 				returnObject = (Product) returnlist.get(0);
+				Hibernate.initialize(returnObject.getPartnerCategoryMap());
 			} else {
 				log.debug("Product sku " + skuCode + " not found");
 			}
@@ -836,11 +840,11 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public List<ProductConfig> getProductConfig(String SKUCode,
-			String channel, int sellerId) throws CustomException {
+	public List<ProductConfig> getProductConfig(String SKUCode, String channel,
+			int sellerId) throws CustomException {
 
 		log.info("*** getProductConfig Starts : ProductDaoImpl ****");
-		//ProductConfig returnObject = null;
+		// ProductConfig returnObject = null;
 		List<ProductConfig> returnlist = null;
 		log.info(" ***Insid get product config from sku and channel ***"
 				+ SKUCode + " - " + channel);
@@ -849,22 +853,29 @@ public class ProductDaoImpl implements ProductDao {
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(ProductConfig.class);
 			criteria.createAlias("product", "product");
-			Criterion res1 = Restrictions.or(Restrictions.eq("channelSkuRef", SKUCode).ignoreCase(),Restrictions.eq("vendorSkuRef", SKUCode).ignoreCase());
-			
+			Criterion res1 = Restrictions.or(
+					Restrictions.eq("channelSkuRef", SKUCode).ignoreCase(),
+					Restrictions.eq("vendorSkuRef", SKUCode).ignoreCase());
+
 			criteria.add(Restrictions.eq("channelName", channel).ignoreCase())
-					.add(Restrictions.or(Restrictions.eq("productSkuCode", SKUCode).ignoreCase(),res1))
-					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			criteria.createAlias("product.seller", "seller",CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.or(
+							Restrictions.eq("productSkuCode", SKUCode)
+									.ignoreCase(), res1))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			criteria.createAlias("product.seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
-					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
 			returnlist = criteria.list();
 			if (returnlist.size() == 0) {
-				
+
 				returnlist = null;
 				log.debug("Product sku " + SKUCode + " not found");
 			}
-			//log.info(" Return object :#### " + returnlist.size());
+			// log.info(" Return object :#### " + returnlist.size());
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
@@ -878,7 +889,7 @@ public class ProductDaoImpl implements ProductDao {
 		return returnlist;
 
 	}
-	
+
 	@Override
 	public ProductConfig getProductConfigByAnySKU(String childSKUCode,
 			String channel, int sellerId) throws CustomException {
@@ -894,8 +905,10 @@ public class ProductDaoImpl implements ProductDao {
 			Criteria criteria = session.createCriteria(ProductConfig.class);
 			criteria.createAlias("product", "product",
 					CriteriaSpecification.LEFT_JOIN);
-			Criterion rest1 = Restrictions.eq("channelSkuRef", childSKUCode).ignoreCase();
-			Criterion rest2 = Restrictions.eq("vendorSkuRef", childSKUCode).ignoreCase();
+			Criterion rest1 = Restrictions.eq("channelSkuRef", childSKUCode)
+					.ignoreCase();
+			Criterion rest2 = Restrictions.eq("vendorSkuRef", childSKUCode)
+					.ignoreCase();
 			criteria.add(Restrictions.eq("channelName", channel).ignoreCase())
 					.add(Restrictions.or(rest1, rest2))
 					.setResultTransformer(
@@ -1172,12 +1185,13 @@ public class ProductDaoImpl implements ProductDao {
 					session.saveOrUpdate(productcat);
 				}
 				session.saveOrUpdate(product);
-				if(product != null){
-					if(product.getThreholdLimit() > product.getQuantity()){
+				if (product != null) {
+					if (product.getThreholdLimit() > product.getQuantity()) {
 						SellerAlerts sellerAlert = new SellerAlerts();
 						sellerAlert.setAlertDate(new Date());
 						sellerAlert.setAlertType("Inventory");
-						sellerAlert.setAlertMessage(GlobalConstant.InventoryMsg+" : "+product.getCategoryName());
+						sellerAlert.setAlertMessage(GlobalConstant.InventoryMsg
+								+ " : " + product.getCategoryName());
 						sellerAlert.setStatus("unread");
 						alertService.saveAlerts(sellerAlert, sellerId);
 					}
@@ -1289,28 +1303,29 @@ public class ProductDaoImpl implements ProductDao {
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN).add(
 					Restrictions.eq("seller.id", sellerId));
-			/*criteria.createAlias("productConfig", "productConfig",
-					CriteriaSpecification.LEFT_JOIN);*/
+			/*
+			 * criteria.createAlias("productConfig", "productConfig",
+			 * CriteriaSpecification.LEFT_JOIN);
+			 */
 			criteria.setProjection(Projections.property("productSkuCode"));
 			criterialist = criteria.list();
 			if (criterialist != null && criteria.list().size() != 0) {
 				SKUList = criterialist;
 			}
-			//System.out.println("Product Lit : " + SKUList.size());
-			/*criterialist = null;
-			Criteria criteriaformappingsku = session
-					.createCriteria(Product.class);
-			criteriaformappingsku.createAlias("seller", "seller",
-					CriteriaSpecification.LEFT_JOIN).add(
-					Restrictions.eq("seller.id", sellerId));
-			criteriaformappingsku.createAlias("productConfig", "productConfig",
-					CriteriaSpecification.LEFT_JOIN);
-			criteriaformappingsku.setProjection(Projections
-					.property("productConfig.channelSkuRef"));
-			criterialist = criteriaformappingsku.list();
-			if (criterialist != null && criteria.list().size() != 0) {
-				SKUList.addAll(criterialist);
-			}*/
+			// System.out.println("Product Lit : " + SKUList.size());
+			/*
+			 * criterialist = null; Criteria criteriaformappingsku = session
+			 * .createCriteria(Product.class);
+			 * criteriaformappingsku.createAlias("seller", "seller",
+			 * CriteriaSpecification.LEFT_JOIN).add(
+			 * Restrictions.eq("seller.id", sellerId));
+			 * criteriaformappingsku.createAlias("productConfig",
+			 * "productConfig", CriteriaSpecification.LEFT_JOIN);
+			 * criteriaformappingsku.setProjection(Projections
+			 * .property("productConfig.channelSkuRef")); criterialist =
+			 * criteriaformappingsku.list(); if (criterialist != null &&
+			 * criteria.list().size() != 0) { SKUList.addAll(criterialist); }
+			 */
 			System.out.println(SKUList.size());
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : " + sellerId, e);
@@ -1320,11 +1335,11 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		return SKUList;
 	}
-	
+
 	@Override
 	public int productCount(int sellerId) {
 		int noOfProduct = 0;
-		Session session=null;
+		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -1339,9 +1354,11 @@ public class ProductDaoImpl implements ProductDao {
 			System.out.println(noOfProduct);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : " + sellerId + " In Product Count",e);
+			log.error(
+					"Failed! by sellerId : " + sellerId + " In Product Count",
+					e);
 		} finally {
-			if(session != null)
+			if (session != null)
 				session.close();
 		}
 		return noOfProduct;
@@ -1350,29 +1367,32 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public long productMappingCount(int sellerId) {
 		BigInteger noOfProductMappings = new BigInteger("0");
-		Session session=null;
+		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			Query listQuery = session.createSQLQuery(listProductMappingCount);
-			listQuery.setInteger(0, sellerId);				
-			noOfProductMappings=(BigInteger) listQuery.uniqueResult();
+			listQuery.setInteger(0, sellerId);
+			noOfProductMappings = (BigInteger) listQuery.uniqueResult();
 			System.out.println(noOfProductMappings);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Failed! by sellerId : " + sellerId + " In Product Count",e);
+			log.error(
+					"Failed! by sellerId : " + sellerId + " In Product Count",
+					e);
 		} finally {
-			if(session != null)
+			if (session != null)
 				session.close();
 		}
 		return noOfProductMappings.longValue();
 	}
-	
+
 	@Override
-	public Map<String,String> getSKUCategoryMap(int sellerId) throws CustomException {
+	public Map<String, String> getSKUCategoryMap(int sellerId)
+			throws CustomException {
 
 		log.info("*** getSKUCategoryMap Starts : ProductDaoImpl ****");
-		Map<String,String> returnMap = new HashMap<String, String>();
+		Map<String, String> returnMap = new HashMap<String, String>();
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -1384,20 +1404,18 @@ public class ProductDaoImpl implements ProductDao {
 			projList.add(Projections.property("productSkuCode"));
 			projList.add(Projections.property("categoryName"));
 			crit.setProjection(projList);
-			List result=crit.list();
-			if(result!=null)
-			{
-				Iterator it=result.iterator();
-				 
-				while(it.hasNext())
-				{
-					Object ob[] = (Object[])it.next();
-					if(ob[0]!=null&&ob[1]!=null)
+			List result = crit.list();
+			if (result != null) {
+				Iterator it = result.iterator();
+
+				while (it.hasNext()) {
+					Object ob[] = (Object[]) it.next();
+					if (ob[0] != null && ob[1] != null)
 						returnMap.put(ob[0].toString(), ob[1].toString());
-					
+
 				}
 			}
-			System.out.println("returnMap size : "+returnMap.size());
+			System.out.println("returnMap size : " + returnMap.size());
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
@@ -1409,5 +1427,28 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		log.info("*** getSKUCategoryMap Ends : ProductDaoImpl ****");
 		return returnMap;
+	}
+
+	@Override
+	public void addPartnerCatMapping(Product product, int sellerId)
+			throws CustomException {
+
+		log.info("*** addPartnerCatMapping Starts : ProductDaoImpl ****");
+
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			session.saveOrUpdate(product);
+
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(GlobalConstant.addProductError,
+					new Date(), 1, GlobalConstant.addProductErrorCode, e);
+		}
+		log.info("*** addPartnerCatMapping Ends : ProductDaoImpl ****");
 	}
 }

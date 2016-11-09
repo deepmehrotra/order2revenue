@@ -114,6 +114,8 @@
 							<div class="ibox-title">
 								<h5>Active Sales Channels</h5>
 								<div class="ibox-tools">
+									<a href="parterCategoryMap.html" class="btn btn-primary btn-xs">View
+										Channel Category Mappings</a>
 									<a href="listPartners.html" class="btn btn-primary btn-xs">View
 										Channel Details</a> <a href="#"
 										onclick="onclickaddpartner('add',0)"

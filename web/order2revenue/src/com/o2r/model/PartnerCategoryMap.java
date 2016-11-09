@@ -1,10 +1,16 @@
 package com.o2r.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -19,6 +25,11 @@ public class PartnerCategoryMap {
 	private String partnerName;
 	@Column
 	private String partnerCategoryRef;
+	@Column
+	private float commission;
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Product> product = new ArrayList<>();
+	
 	public long getId() {
 		return id;
 	}
@@ -36,5 +47,17 @@ public class PartnerCategoryMap {
 	}
 	public void setPartnerName(String partnerName) {
 		this.partnerName = partnerName;
+	}
+	public float getCommission() {
+		return commission;
+	}
+	public void setCommission(float commission) {
+		this.commission = commission;
+	}
+	public List<Product> getProduct() {
+		return product;
+	}
+	public void setProduct(List<Product> product) {
+		this.product = product;
 	}
 }

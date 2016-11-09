@@ -36,19 +36,22 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public void addProductConfig(ProductConfig productConfig, int sellerId)throws CustomException {
+	public void addProductConfig(ProductConfig productConfig, int sellerId)
+			throws CustomException {
 		productDao.addProductConfig(productConfig, sellerId);
 	}
-	
+
 	@Override
-	public List<ProductConfig> listProductConfig(int sellerId, int pageNo, String condition)throws CustomException {
+	public List<ProductConfig> listProductConfig(int sellerId, int pageNo,
+			String condition) throws CustomException {
 		return productDao.listProductConfig(sellerId, pageNo, condition);
 	}
-	
+
 	@Override
 	public List<ProductConfig> searchProductConfig(String field, String value,
-			int sellerId, String condition) throws CustomException {		
-		return productDao.searchProductConfig(field, value, sellerId, condition);
+			int sellerId, String condition) throws CustomException {
+		return productDao
+				.searchProductConfig(field, value, sellerId, condition);
 	}
 
 	@Override
@@ -59,11 +62,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public int editProduct(int sellerId, List<Product> products)throws CustomException {
+	public int editProduct(int sellerId, List<Product> products)
+			throws CustomException {
 		return productDao.editProduct(sellerId, products);
 	}
-	
-	
+
 	@Override
 	public List<Product> listProducts(int sellerId, int pageNo)
 			throws CustomException {
@@ -89,8 +92,8 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void updateInventory(String sku, int currentInventory,
-			int quantoAdd, int quantoSub, boolean status, int sellerId, Date orderDate)
-			throws CustomException {
+			int quantoAdd, int quantoSub, boolean status, int sellerId,
+			Date orderDate) throws CustomException {
 		productDao.updateInventory(sku, currentInventory, quantoAdd, quantoSub,
 				status, sellerId, orderDate);
 	}
@@ -100,11 +103,11 @@ public class ProductServiceImpl implements ProductService {
 			throws CustomException {
 		return productDao.getProduct(skuCode, sellerId);
 	}
-	
+
 	@Override
 	public Product getProductEdit(String sku, int sellerId)
 			throws CustomException {
-		
+
 		return productDao.getProductEdit(sku, sellerId);
 	}
 
@@ -113,11 +116,12 @@ public class ProductServiceImpl implements ProductService {
 			String channel, int sellerId) throws CustomException {
 		return productDao.getProductConfig(channelSKUCode, channel, sellerId);
 	}
-	
+
 	@Override
-	public ProductConfig getProductConfigByAnySKU(String childSKUCode, String channel,
-			int sellerId) throws CustomException {
-		return productDao.getProductConfigByAnySKU(childSKUCode, channel, sellerId);
+	public ProductConfig getProductConfigByAnySKU(String childSKUCode,
+			String channel, int sellerId) throws CustomException {
+		return productDao.getProductConfigByAnySKU(childSKUCode, channel,
+				sellerId);
 	}
 
 	@Override
@@ -127,10 +131,10 @@ public class ProductServiceImpl implements ProductService {
 				sellerId);
 	}
 
-	/*@Override
-	public void addSKUMapping(ProductConfig productConfig, int sellerId) {
-		productDao.addSKUMapping(productConfig, sellerId);
-	}*/
+	/*
+	 * @Override public void addSKUMapping(ProductConfig productConfig, int
+	 * sellerId) { productDao.addSKUMapping(productConfig, sellerId); }
+	 */
 
 	@Override
 	public boolean getProductwithProductConfig(int sellerId)
@@ -153,35 +157,41 @@ public class ProductServiceImpl implements ProductService {
 	public void addProduct(List<Product> productList, int sellerId)
 			throws CustomException {
 		productDao.addProduct(productList, sellerId);
-		
+
 	}
 
 	@Override
 	public void addSKUMapping(List<ProductConfig> productConfigList,
 			int sellerId) throws CustomException {
 		productDao.addSKUMapping(productConfigList, sellerId);
-		
+
 	}
-	
+
 	@Override
-	public int productCount(int sellerId) {		
+	public int productCount(int sellerId) {
 		return productDao.productCount(sellerId);
 	}
-	
+
 	@Override
 	public long productMappingCount(int sellerId) {
 		return productDao.productMappingCount(sellerId);
 	}
-	
+
 	@Override
 	public List<String> listProductSKU(int sellerId) {
 		return productDao.listProductSKU(sellerId);
 	}
-	
+
 	@Override
-	public Map<String, String> getSKUCategoryMap(int sellerId) throws CustomException
-	{
+	public Map<String, String> getSKUCategoryMap(int sellerId)
+			throws CustomException {
 		return productDao.getSKUCategoryMap(sellerId);
+	}
+
+	@Override
+	public void addPartnerCatMapping(Product product, int sellerId)
+			throws CustomException {
+		productDao.addPartnerCatMapping(product, sellerId);
 	}
 
 }

@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -63,6 +64,8 @@ public class Product {
 	
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<ProductConfig> productConfig;
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<PartnerCategoryMap> partnerCategoryMap;
 
 	public Seller getSeller() {
 		return seller;
@@ -177,6 +180,12 @@ public class Product {
 	}
 	public void setProductConfig(List<ProductConfig> productConfig) {
 		this.productConfig = productConfig;
+	}
+	public List<PartnerCategoryMap> getPartnerCategoryMap() {
+		return partnerCategoryMap;
+	}
+	public void setPartnerCategoryMap(List<PartnerCategoryMap> partnerCategoryMap) {
+		this.partnerCategoryMap = partnerCategoryMap;
 	}
 
 
