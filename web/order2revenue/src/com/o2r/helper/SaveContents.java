@@ -3719,8 +3719,7 @@ public class SaveContents {
 				String criteria = "";
 				String column = null;
 				String id = null;
-				String channelID = null;
-				String typeCombo = null;
+				String channelID = null;				
 				Partner partner = null;
 				ProductConfig productConfig = null;
 				List<ProductConfig> productConfigs = null;
@@ -3852,15 +3851,8 @@ public class SaveContents {
 												.append("Return Already Recieved. ");
 									}
 								} else {									
-									if(ord.get(0).getTypeIdentifier() != null 
-											&& ord.get(0).getTypeIdentifier().contains(channelID.substring(0, channelID.indexOf(GlobalConstant.orderUniqueSymbol)))){
-										typeCombo = "Combo";
-										order.setChannelOrderID(ord.get(0).getChannelOrderID());
-										id = order.getChannelOrderID();
-									} else {
-										errorMessage.append("Multiple Orders With Channel Order ID.");
-										validaterow = false;
-									}									
+									errorMessage.append("Multiple Orders With Channel Order ID.");
+									validaterow = false;									
 								}
 							} else if (orderlist != null
 									&& orderlist.size() != 0) {
@@ -4009,16 +4001,8 @@ public class SaveContents {
 					 */
 					if (validaterow) {
 						orderReturn.setReturnFileName(uploadFileName);
-						if(typeCombo != null){
-							for (Order eachOrder : ord) {
-								if(eachOrder.getTypeIdentifier().contains(channelID.substring(0, channelID.indexOf(GlobalConstant.orderUniqueSymbol)))){
-									orderService.addReturnOrder(eachOrder.getChannelOrderID(), orderReturn, sellerId);
-								}
-							}
-						} else {
-							orderService.addReturnOrder(order.getChannelOrderID(),
-									orderReturn, sellerId);
-						}
+						orderService.addReturnOrder(order.getChannelOrderID(),
+								orderReturn, sellerId);
 						
 					} else {
 						order.setOrderReturnOrRTO(orderReturn);
