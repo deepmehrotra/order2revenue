@@ -162,7 +162,6 @@ function checkOnBlur()
 									<th>Total SKU count</th>
 									<th>Current Stock</th>
 									<th>Monthly Opening Stock</th>
-									<th>Mapped Channel Category</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -176,10 +175,6 @@ function checkOnBlur()
 										<td>${subcategory.skuCount}</td>
 										<td>${subcategory.productCount}</td>
 										<td>${subcategory.openingStock}</td>
-										<td><div
-												style="overflow-y: scroll; max-height: 300px; width: 400px;">
-												<p style="word-wrap: break-word; max-height: 300px;">${subcategory.partnerCatRef}</p>
-											</div></td>
 										<td><a
 											onClick="onclickEditCategory(${subcategory.id});"><i
 												class="fa fa-edit text-navy" data-toggle="tooltip"

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.o2r.dao.CategoryDao;
 import com.o2r.helper.CustomException;
 import com.o2r.model.Category;
+import com.o2r.model.PartnerCategoryMap;
 
 /**
  * @author Deep Mehortra
@@ -88,5 +89,24 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public List<String> listPartnerCategories() throws CustomException {
 		return categoryDao.listPartnerCategories();
+	}
+
+	@Override
+	public PartnerCategoryMap getPartnerCategoryMap(String partnerName,
+			String catName, int sellerId) throws CustomException {
+		return categoryDao
+				.getPartnerCategoryMap(partnerName, catName, sellerId);
+	}
+
+	@Override
+	public void addPartnerCatCommission(PartnerCategoryMap partnerCatMap,
+			int sellerId) throws CustomException {
+		categoryDao.addPartnerCatCommission(partnerCatMap, sellerId);
+	}
+
+	@Override
+	public List<PartnerCategoryMap> listPartnerCategoryMap(int sellerId,
+			int pageNo) throws CustomException {
+		return categoryDao.listPartnerCategoryMap(sellerId, pageNo);
 	}
 }

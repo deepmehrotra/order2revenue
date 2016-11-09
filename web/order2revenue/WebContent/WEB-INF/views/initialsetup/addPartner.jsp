@@ -116,7 +116,7 @@ input+label {
 				id="centerpane">
 				<div class="row">
 					<div class="col-lg-12">
-						<form:form method="POST" action="savePartner.html"
+						<form:form method="POST" action="saveMetaPartner.html"
 							id="addpartnerform" name="addpartnerform" role="form"
 							class="wizard-big form-horizontal" enctype="multipart/form-data">
 							<%-- <form id="form" action="#" class="wizard-big form-horizontal"
@@ -585,7 +585,7 @@ input+label {
 																			</div>
 																		</div>
 																		<div class="col-sm-12 radio1"
-																			id="blk-commisionType-categoryWise">
+																			id="blk-commisionType-categoryWise1">
 																			<c:choose>
 																				<c:when test="${!empty categoryMap}">
 																					<c:forEach items="${categoryMap}" var="cat"
