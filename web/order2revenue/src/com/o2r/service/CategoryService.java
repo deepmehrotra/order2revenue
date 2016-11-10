@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.o2r.helper.CustomException;
 import com.o2r.model.Category;
+import com.o2r.model.PartnerCategoryMap;
 
 /**
  * @author Deep Mehrotra
@@ -41,4 +42,13 @@ public interface CategoryService {
 			throws CustomException;
 
 	public List<String> listPartnerCategories() throws CustomException;
+
+	public PartnerCategoryMap getPartnerCategoryMap(String partnerName,
+			String catName, int sellerId) throws CustomException;
+
+	public void addPartnerCatCommission(PartnerCategoryMap partnerCatMap,
+			int sellerId) throws CustomException;
+
+	public List<PartnerCategoryMap> listPartnerCategoryMap(int sellerId,
+			int pageNo) throws CustomException;
 }

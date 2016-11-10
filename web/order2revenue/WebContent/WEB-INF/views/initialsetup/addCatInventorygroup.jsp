@@ -153,7 +153,8 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-6 control-label">Tax Free Price Limit</label>
+									<label class="col-sm-6 control-label">Tax Free Price
+										Limit</label>
 
 									<div class="col-sm-6">
 										<form:input path="taxFreePriceLimit"
@@ -161,83 +162,6 @@
 									</div>
 								</div>
 							</div>
-						</div>
-						<c:if test="${!empty partnerCatRefList}">
-							<div class="col-sm-12">
-								<label class="col-sm-3 control-label">Mapped Channel
-									Category</label>
-								<div class="col-sm-7">
-									<select data-placeholder="Click To Select" name="multiSku"
-										id="multiSku" class="chosen-select" multiple="multiple"
-										style="width: 750px;" tabindex="4" required>
-										<c:forEach items="${partnerCatRefList}" var="category"
-											varStatus="loop">
-											<option value="${category}" selected>${category}</option>
-										</c:forEach>
-									</select>
-								</div>
-							</div>
-						</c:if>
-						<div class="col-sm-12">
-							<div class="hr-line-dashed"></div>
-							<h4>Add Channel Mapping</h4>
-							<br><br>
-						</div>
-						<div class="col-sm-12">
-							<c:if test="${!empty partnerCategories}">
-								<label class="col-sm-3 control-label">Predefined Channel
-									Category</label>
-								<div class="col-sm-7">
-									<select data-placeholder="Click To Select" name="multiSku1"
-										id="multiSku1" class="chosen-select" multiple="multiple"
-										style="width: 750px;" tabindex="4" required>
-										<c:forEach items="${partnerCategories}" var="category"
-											varStatus="loop">
-											<option value="${category}">${category}</option>
-										</c:forEach>
-									</select>
-								</div>
-							</c:if>
-						</div>
-						<div id="room_fileds">
-							<div id="content">
-								<div class="col-sm-12">
-									<div class="col-sm-4">
-										<div class="form-group">
-											<br><br>
-											<label class="col-sm-4 control-label">Partner</label>
-
-											<div class="col-sm-8">
-												<select id="partnerSelect" class="form-control"
-													name="partnerName-0">
-													<c:if test="${!empty partnerList}">
-														<c:forEach items="${partnerList}" var="partner"
-															varStatus="loop">
-															<option value="${partner}">${partner}</option>
-														</c:forEach>
-													</c:if>
-												</select>
-											</div>
-										</div>
-									</div>
-
-									<div class="col-sm-8">
-										<div class="form-group">
-											<br><br>
-											<label class="col-sm-5 control-label">Channel
-												Category Ref</label>
-
-											<div class="col-sm-7">
-												<input name="partnerCatRef-0" value="" class="form-control" />
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-12">
-							<button class="btn btn-primary pull-right" type="button"
-								onclick="addField()">Add More</button>
 						</div>
 						<div class="col-sm-12">
 							<div class="hr-line-dashed"></div>
@@ -256,8 +180,8 @@
 			var catId = "${category.id}";
 			if (catId > 0) {
 				document.getElementById("categoryName").disabled = true;
-				document.getElementById("categorySelect").disabled = true; 
-				document.getElementById("catDescription").disabled = true; 
+				document.getElementById("categorySelect").disabled = true;
+				document.getElementById("catDescription").disabled = true;
 			}
 		});
 	</script>
@@ -281,61 +205,5 @@
 			$(selector).chosen(config[selector]);
 		};
 	</script>
-	<script type="text/javascript">
-		$('#select_all').click(
-				function() {
-					var list = "${categoryList}";
-					/*alert(list);
-					$('#multiSku').val(list); */
-					$.each(list.split(","), function(i, e) {
-						alert(e);
-						$("#multiSku option[value='" + e + "']").attr(
-								"selected", true);
-					});
-				});
-	</script>
-	<script type="text/javascript">
-		var partnerStr = "${partnerList}";
-		partnerStr = partnerStr.replace("[", "");
-		partnerStr = partnerStr.replace("]", "");
-		var partnerList = partnerStr.split(',');
-
-		//alert(partnerList);
-
-		var v = 1;
-		var index = 0;
-		function addField() {
-			v++;
-			index = index + 1;
-			var objTo = document.getElementById('room_fileds');
-			var divtest = document.createElement("div");
-			var output = "<div class='col-sm-12'>"
-					+ "<div class='col-sm-4'>"
-					+ "<div class='form-group'>"
-					+ "<label class='col-sm-4 control-label'>Partner</label>"
-					+ "<div class='col-sm-8'>"
-					+ "<select id='partnerSelect" + index + "' class='form-control' name='partnerName-" + index + "'>"
-
-			for (var i = 0; i < partnerList.length; i++) {
-				output += "<option value='" + partnerList[i] + "'>"
-						+ partnerList[i] + "</option>"
-			}
-
-			output += "</select>"
-					+ "</div>"
-					+ "</div>"
-					+ "</div>"
-					+ "<div class='col-sm-8'>"
-					+ "<div class='form-group'>"
-					+ "<label class='col-sm-5 control-label'>Channel Category Ref</label>"
-					+ "<div class='col-sm-7'>"
-					+ "<input id='partnerCatRef" + index + "' name='partnerCatRef-" + index + "' class='form-control' type='text' value=''>"
-					+ "</div>" + "</div>" + "</div>" + "</div>"
-
-			divtest.innerHTML = output;
-			objTo.appendChild(divtest);
-		}
-	</script>
-
 </body>
 </html>

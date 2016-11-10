@@ -561,11 +561,17 @@ public class OrderController {
 									applicationPath, uploadReport));
 					model.put("mapType", "taxablePurhcasesMap");
 					break;
-				case "partnerCat_ProdCat_Mapping":
-					model.put("partnerCatMapping", saveContents
-							.savepartnerCatMapping(files.get(0), sellerId,
+				case "SKU_PartnerCat_Mapping":
+					model.put("skuPartnerCatMapping", saveContents
+							.saveSKUCatMapping(files.get(0), sellerId,
 									applicationPath, uploadReport));
-					model.put("mapType", "taxablePurhcasesMap");
+					model.put("mapType", "skuCatMapping");
+					break;
+				case "savePartnerCatCommMapping":
+					model.put("savePartnerCatCommMapping", saveContents
+							.savePartnerCatCommMapping(files.get(0), sellerId,
+									applicationPath, uploadReport));
+					model.put("mapType", "partnerCatCommMapping");
 					break;
 
 				}

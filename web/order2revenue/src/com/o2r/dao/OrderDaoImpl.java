@@ -54,6 +54,7 @@ import com.o2r.model.OrderRTOorReturn;
 import com.o2r.model.OrderTax;
 import com.o2r.model.OrderTimeline;
 import com.o2r.model.Partner;
+import com.o2r.model.PartnerCategoryMap;
 import com.o2r.model.PaymentVariables;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
@@ -91,6 +92,8 @@ public class OrderDaoImpl implements OrderDao {
 	private SellerAccountService sellerAccountService;
 	@Autowired
 	private AlertsService alertService;
+	@Autowired
+	private CategoryDao categoryDao;
 	@Autowired
 	private AreaConfigDao areaConfigDao;
 	@Autowired
@@ -289,6 +292,7 @@ public class OrderDaoImpl implements OrderDao {
 		Events event = null;
 		Partner partner = null;
 		Product product;
+		String partnerCatRef = null;
 		boolean status = true;
 		StringBuffer erroneousOrders = null;
 		int orderCount = 0;
@@ -320,6 +324,16 @@ public class OrderDaoImpl implements OrderDao {
 						partner = (Partner) session.get(Partner.class,
 								partner.getPcId());
 						/* Hibernate.initialize(partner.getOrders()); */
+						
+						if (partner != null && product != null) {
+							if (product.getPartnerCategoryMap() != null) {
+								for (PartnerCategoryMap partnerCat : product.getPartnerCategoryMap()) {
+									if (partnerCat.getPartnerName().equalsIgnoreCase(partner.getPcName())) {
+										partnerCatRef = partnerCat.getPartnerCategoryRef();
+									}
+								}
+							} 
+						}
 
 						calculateDeliveryDate(order, sellerId);
 
@@ -358,7 +372,7 @@ public class OrderDaoImpl implements OrderDao {
 										.equalsIgnoreCase("variable")) {
 									if (!calculateNR(
 											event.getNrnReturnConfig(), order,
-											product.getCategoryName(),
+											partnerCatRef,
 											product.getDeadWeight(),
 											product.getVolWeight(), sellerId))
 										throw new Exception();
@@ -366,7 +380,7 @@ public class OrderDaoImpl implements OrderDao {
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("original")) {
 									if (!calculateNR(partner, order,
-											product.getCategoryName(),
+											partnerCatRef,
 											product.getDeadWeight(),
 											product.getVolWeight()))
 										throw new Exception();
@@ -395,7 +409,7 @@ public class OrderDaoImpl implements OrderDao {
 								}
 
 							} else if (!calculateNR(partner, order,
-									product.getCategoryName(),
+									partnerCatRef,
 									product.getDeadWeight(),
 									product.getVolWeight()))
 								throw new Exception();
@@ -420,7 +434,7 @@ public class OrderDaoImpl implements OrderDao {
 										.equalsIgnoreCase("variable")) {
 									if (!calculateNR(
 											event.getNrnReturnConfig(), order,
-											product.getCategoryName(),
+											partnerCatRef,
 											product.getDeadWeight(),
 											product.getVolWeight(), sellerId))
 										throw new Exception();
@@ -2573,8 +2587,13 @@ public class OrderDaoImpl implements OrderDao {
 			} else if (partner.getNrnReturnConfig().getCommissionType() != null
 					&& partner.getNrnReturnConfig().getCommissionType()
 							.equals("categoryWise")) {
-				comission = chargesMap.containsKey(prodCat) ? chargesMap
-						.get(prodCat) : 0;
+				PartnerCategoryMap partnerCat = categoryDao.getPartnerCategoryMap(
+						partner.getPcName(), prodCat, order.getSeller().getId());
+				if (partnerCat != null) {
+					comission = partnerCat.getCommission();
+				}
+				/*comission = chargesMap.containsKey(prodCat) ? chargesMap
+						.get(prodCat) : 0;*/
 			} else {
 				comission = (float) order.getPartnerCommission();
 			}
@@ -3904,8 +3923,13 @@ public class OrderDaoImpl implements OrderDao {
 			} else if (partner.getNrnReturnConfig().getCommissionType() != null
 					&& partner.getNrnReturnConfig().getCommissionType()
 							.equals("categoryWise")) {
-				comission = chargesMap.containsKey(prodCat) ? chargesMap
-						.get(prodCat) : 0;
+				PartnerCategoryMap partnerCat = categoryDao.getPartnerCategoryMap(
+						partner.getPcName(), prodCat, order.getSeller().getId());
+				if (partnerCat != null) {
+					comission = partnerCat.getCommission();
+				}
+				/*comission = chargesMap.containsKey(prodCat) ? chargesMap
+						.get(prodCat) : 0;*/
 			} else {
 				comission = (float) order.getPartnerCommission();
 			}
