@@ -437,10 +437,9 @@ public class SaveMappedFiles {
 												.toLowerCase()
 												.contains(
 														GlobalConstant.PCJABONG)) {
-
 									channelID = channelID
 											+ GlobalConstant.orderUniqueSymbol
-											+ order.getSubOrderID();
+											+ order.getSubOrderID();									
 									if ((channelID != null)
 											&& (idsList == null || (!idsList
 													.containsKey(channelID))
@@ -1071,11 +1070,23 @@ public class SaveMappedFiles {
 				if ((saveList != null && saveList.size() != 0) || multyQtyMap.size() != 0 || comboMap.size() != 0){
 					if(multyQtyMap != null && multyQtyMap.size() != 0){
 						for(Entry<String, Order> eachOrder : multyQtyMap.entrySet()){
+							if (eachOrder.getValue().getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+									|| eachOrder.getValue().getPcName().toLowerCase().contains(GlobalConstant.PCPAYTM)
+									|| eachOrder.getValue().getPcName().toLowerCase().contains(GlobalConstant.PCJABONG)) {
+								eachOrder.getValue().setChannelOrderID(eachOrder.getValue().getChannelOrderID()
+										.substring(0, eachOrder.getValue().getChannelOrderID().lastIndexOf("-")));
+							}
 							saveList.add(eachOrder.getValue());
 						}
 					}
 					if(comboMap != null && comboMap.size() != 0){
 						for(Entry<String, Order> eachOrder : comboMap.entrySet()){
+							if (eachOrder.getValue().getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+									|| eachOrder.getValue().getPcName().toLowerCase().contains(GlobalConstant.PCPAYTM)
+									|| eachOrder.getValue().getPcName().toLowerCase().contains(GlobalConstant.PCJABONG)) {
+								eachOrder.getValue().setChannelOrderID(eachOrder.getValue().getChannelOrderID()
+										.substring(0, eachOrder.getValue().getChannelOrderID().lastIndexOf("-")));
+							}
 							saveList.add(eachOrder.getValue());
 						}
 					}
@@ -5363,7 +5374,6 @@ public class SaveMappedFiles {
 		PaymentUpload paymentUpload = new PaymentUpload();
 		boolean generatePaymentUpload = false;
 		Map<String, OrderPaymentBean> paymentMap = new HashMap<String, OrderPaymentBean>();
-		Map<String, OrderPaymentBean> comboPaymentMap = new HashMap<String, OrderPaymentBean>();
 		Map<String, Double> easyShipMap = new HashMap<String, Double>();
 		OrderPaymentBean paymentBean = null;
 		List<ManualCharges> manualChargesList = new ArrayList<ManualCharges>();
@@ -5406,8 +5416,7 @@ public class SaveMappedFiles {
 				String channelheader = null;
 				// channelOrderId = null;
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
-				double amount = 0;
-				boolean combo=false;
+				double amount = 0;				
 				List<Order> onj=null;
 
 				// Code for fetching right colum
@@ -5444,31 +5453,16 @@ public class SaveMappedFiles {
 										sellerId);
 								System.out.println(entry.getCell(index)
 										.toString());
-								if (onj != null) {
-									if(onj.size() > 1 
-											&& onj.get(0) != null 
-											&& onj.get(0).getTypeIdentifier().contains(channelOrderID.substring(0, channelOrderID.indexOf(GlobalConstant.orderUniqueSymbol)))){
-										combo  = true;
-									}
-									if (onj.size() == 1 || combo) {
-										if(combo){
-											if (comboPaymentMap.containsKey(channelOrderID)) {
-												paymentBean = comboPaymentMap.get(channelOrderID);
-											} else {
-												paymentBean = new OrderPaymentBean();
-											}
-											key = channelOrderID;
-											paymentBean.setChannelOrderId(channelOrderID);
+								if (onj != null) {									
+									if (onj.size() == 1) {
+										if (paymentMap.containsKey(onj.get(0).getChannelOrderID())) {
+											paymentBean = paymentMap.get(onj.get(0).getChannelOrderID());
 										} else {
-											if (paymentMap.containsKey(onj.get(0).getChannelOrderID())) {
-												paymentBean = paymentMap.get(onj.get(0).getChannelOrderID());
-											} else {
-												paymentBean = new OrderPaymentBean();
-											}
-											key = onj.get(0).getChannelOrderID();
-											paymentBean.setChannelOrderId(onj
-													.get(0).getChannelOrderID());
+											paymentBean = new OrderPaymentBean();
 										}
+										key = onj.get(0).getChannelOrderID();
+										paymentBean.setChannelOrderId(onj
+												.get(0).getChannelOrderID());										
 										try {
 											index = cellIndexMap
 													.get(columHeaderMap
@@ -5647,9 +5641,7 @@ public class SaveMappedFiles {
 								totalnegative = totalnegative
 										+ Math.abs(amount);
 							}
-							if(key != null && combo){
-								comboPaymentMap.put(key, paymentBean);
-							} else if (key != null) {
+							if(key != null) {
 								paymentMap.put(key, paymentBean);
 							}
 
@@ -5780,44 +5772,6 @@ public class SaveMappedFiles {
 					log.error("Failed by seller: " + sellerId, e);
 					errorMessage.append("Invalid Input !");
 					errorSet.add(errorMessage.toString());
-				}
-			}
-			if (comboPaymentMap != null && comboPaymentMap.size() != 0) {
-				double lastAmt = 0;
-				for (Entry<String, OrderPaymentBean> entryz : comboPaymentMap.entrySet()) {
-					entryz.getValue().setPaymentFileName(uploadFileName);
-					double finalCharge = entryz.getValue().getPositiveAmount() - entryz.getValue().getNegativeAmount();
-					if(easyShipMap.size() != 0){
-						String CID = entryz.getValue().getChannelOrderId()
-								.substring(0, entryz.getValue().getChannelOrderId().indexOf(GlobalConstant.orderUniqueSymbol));
-						
-						if(easyShipMap.containsKey(CID)){
-							finalCharge = finalCharge + easyShipMap.get(CID);
-						}
-					}					
-					List<Order> comboOrderList = orderService.searchAsIsOrder("typeIdentifier", entryz.getKey(), sellerId);
-					if(comboOrderList != null && comboOrderList.size() != 0){
-						lastAmt = finalCharge / comboOrderList.size();
-						for (Order ord : comboOrderList){
-							entryz.getValue().setChannelOrderId(ord.getChannelOrderID());
-							if(lastAmt < 0){
-								entryz.getValue().setNegativeAmount(Math.abs(lastAmt));
-								entryz.getValue().setPositiveAmount(0);
-							} else {
-								entryz.getValue().setPositiveAmount(lastAmt);
-								entryz.getValue().setNegativeAmount(0);
-							}
-							order = orderService.addOrderPayment(skucode, entryz
-									.getValue().getChannelOrderId(), ConverterClass
-									.prepareOrderPaymentModel(entryz.getValue()),
-									sellerId);
-						}
-					}						
-					if (order != null) {
-						// order.getPaymentUpload().add(paymentUpload);
-						// paymentUpload.getOrders().add(order);
-						generatePaymentUpload = true;
-					}
 				}
 			}
 			if (paymentMap != null) {
