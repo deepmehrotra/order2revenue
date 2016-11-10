@@ -382,7 +382,7 @@ public class OrderDaoImpl implements OrderDao {
 									if (!calculateNR(partner, order,
 											partnerCatRef,
 											product.getDeadWeight(),
-											product.getVolWeight()))
+											product.getVolWeight(), sellerId))
 										throw new Exception();
 								} else if (event.getNrnReturnConfig()
 										.getNrCalculatorEvent()
@@ -411,7 +411,7 @@ public class OrderDaoImpl implements OrderDao {
 							} else if (!calculateNR(partner, order,
 									partnerCatRef,
 									product.getDeadWeight(),
-									product.getVolWeight()))
+									product.getVolWeight(), sellerId))
 								throw new Exception();
 
 							log.debug(" Shipping charges :"
@@ -2388,7 +2388,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	// Method to calculate NR
 	private boolean calculateNR(Partner partner, Order order, String prodCat,
-			float deadWeight, float volWeight) {
+			float deadWeight, float volWeight, int sellerId) {
 
 		log.info("*** calculateNR starts : OrderDaoImpl ***");
 		log.debug("**Parameters recieved : pcNAme -> " + partner.getPcName()
@@ -2588,7 +2588,7 @@ public class OrderDaoImpl implements OrderDao {
 					&& partner.getNrnReturnConfig().getCommissionType()
 							.equals("categoryWise")) {
 				PartnerCategoryMap partnerCat = categoryDao.getPartnerCategoryMap(
-						partner.getPcName(), prodCat, order.getSeller().getId());
+						partner.getPcName(), prodCat, sellerId);
 				if (partnerCat != null) {
 					comission = partnerCat.getCommission();
 				}
@@ -3924,7 +3924,7 @@ public class OrderDaoImpl implements OrderDao {
 					&& partner.getNrnReturnConfig().getCommissionType()
 							.equals("categoryWise")) {
 				PartnerCategoryMap partnerCat = categoryDao.getPartnerCategoryMap(
-						partner.getPcName(), prodCat, order.getSeller().getId());
+						partner.getPcName(), prodCat, sellerId);
 				if (partnerCat != null) {
 					comission = partnerCat.getCommission();
 				}

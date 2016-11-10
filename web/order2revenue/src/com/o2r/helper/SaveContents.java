@@ -5218,11 +5218,11 @@ public class SaveContents {
 				// Pre save to generate id for use in hierarchy
 			}
 			Set<String> errorSet = returnlist.keySet();
-			downloadUploadReportXLS(offices, "PartnerCat_ProdCat_Mapping",
+			downloadUploadReportXLS(offices, "SKU_PartnerCat_Mapping",
 					uploadFileName, 3, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 			log.error("Failed! by SellerId : " + sellerId, e);
-			addErrorUploadReport("PartnerCat_ProdCat_Mapping", sellerId,
+			addErrorUploadReport("SKU_PartnerCat_Mapping", sellerId,
 					uploadReport);
 			throw new MultipartException("Constraints Violated");
 		}
