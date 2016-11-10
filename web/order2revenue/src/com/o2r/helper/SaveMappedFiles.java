@@ -3339,6 +3339,7 @@ public class SaveMappedFiles {
 			}
 
 			try {
+				errorMessage = new StringBuffer("");
 				indexfulfilmentType = cellIndexMap.get(columHeaderMap
 						.get("Fulfilment Type"));
 				for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
@@ -3908,11 +3909,17 @@ public class SaveMappedFiles {
 								errorMessage
 										.append(" Channel OrderId not present ");
 								validaterow = false;
-							} else if (onj.size() == 1
-										&& onj.get(0).getChannelOrderID()
-												.equals(channelOrderId)) {
+							} else if (onj.size() == 1) {
+								if(recievedDate!=null&&format.format(onj.get(0).getOrderDate()).equals(format.format(recievedDate))){
 									channelOrderId = onj.get(0)
 											.getChannelOrderID();
+								}
+								else
+								{
+									errorMessage
+									.append(" Order recieved date is empty or it doesnt match with existing order. ");
+							validaterow = false;
+								}
 								}
 								else if (onj.size() > 1)
 								{
@@ -4067,27 +4074,7 @@ public class SaveMappedFiles {
 									totalnegative = totalnegative
 											+ Math.abs(amount);
 								}
-								/*if(combo)
-								{
-									
-									 if(onj!=null&&onj.size()>0)
-									 {
-										 if(amount>0)
-										 {
-										 orderPayment.setPositiveAmount(orderPayment.getPositiveAmount()/onj.size());
-										 }
-										 else{
-											 orderPayment.setNegativeAmount(orderPayment.getNegativeAmount()/onj.size());
-										 }
-									 for(Order ord:onj)
-									 {
-										 order = orderService.addOrderPayment(skucode,
-													ord.getChannelOrderID(), orderPayment, sellerId);
-									 }
-									 }
-								}*/
-								
-									orderPayment.setPaymentVar(payvarlist);
+								orderPayment.setPaymentVar(payvarlist);
 
 								order = orderService.addOrderPayment(skucode,
 										channelOrderId, orderPayment, sellerId);
@@ -5451,9 +5438,7 @@ public class SaveMappedFiles {
 								 onj = orderService.searchAsIsOrder(
 										"channelOrderID", channelOrderID,
 										sellerId);
-								System.out.println(entry.getCell(index)
-										.toString());
-								if (onj != null) {									
+									if (onj != null) {									
 									if (onj.size() == 1) {
 										if (paymentMap.containsKey(onj.get(0).getChannelOrderID())) {
 											paymentBean = paymentMap.get(onj.get(0).getChannelOrderID());
@@ -6691,6 +6676,7 @@ public class SaveMappedFiles {
 									recievedDate=new Date(date);
 								}
 							} catch (Exception e) {
+								e.printStackTrace();
 							}
 
 						} 
@@ -6711,10 +6697,17 @@ public class SaveMappedFiles {
 						onj = orderService.searchAsIsOrder(
 								"channelOrderID", channelOrderId, sellerId);
 						if (onj != null) {
-							if (onj.size() == 1
-									&& onj.get(0).getChannelOrderID()
-											.equals(channelOrderId)) {
+							if (onj.size() == 1) {
+								if(format.format(onj.get(0).getOrderDate()).equals(format.format(recievedDate)))
+								{
 								channelOrderId = onj.get(0).getChannelOrderID();
+								}
+								else
+								{
+									errorMessage
+									.append(" Order recieved date is empty or it doesnt match with existing order. ");
+							validaterow = false;
+								}
 							} 
 							else if (onj.size() > 1)
 							{
@@ -6729,12 +6722,7 @@ public class SaveMappedFiles {
 										channelOrderId=ordcheck.getChannelOrderID();
 									}
 								}
-								else
-								{
-									errorMessage
-									.append("Multiple Orders With Channel Order ID.");
-							validaterow = false;
-								}
+								
 								
 								}
 								if(!orderavailable)

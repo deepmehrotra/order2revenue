@@ -3060,7 +3060,7 @@ public class SaveContents {
 													}
 												} else {
 													errorMessage
-															.append("Multiple Orders With Channel Order ID.");
+															.append("Multiple Orders With Channel Order ID and no recieved date.");
 													validaterow = false;
 												}
 											}
