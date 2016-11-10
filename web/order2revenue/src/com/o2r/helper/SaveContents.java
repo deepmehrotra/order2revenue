@@ -2916,7 +2916,7 @@ public class SaveContents {
 				double negativeAmount = 0;
 				// Product product=new Product();
 				OrderPayment payment = new OrderPayment();
-				boolean combo = false;
+				//boolean combo = false;
 				List<Order> onj = null;
 				Date recievedDate = null;
 				boolean orderavailable = false;
@@ -3048,18 +3048,7 @@ public class SaveContents {
 													.getChannelOrderID();
 										} else if (onj.size() > 1) {
 											for (Order ordcheck : onj) {
-												if (ordcheck
-														.getTypeIdentifier() != null) {
-													if (ordcheck
-															.getTypeIdentifier()
-															.contains(
-																	entry.getCell(
-																			1)
-																			.toString()))
-														combo = true;
-													else
-														combo = false;
-												} else if (recievedDate != null) {
+												if (recievedDate != null) {
 													if (format
 															.format(ordcheck
 																	.getOrderDate())
@@ -3075,7 +3064,7 @@ public class SaveContents {
 													validaterow = false;
 												}
 											}
-											if (!(orderavailable || combo)) {
+											if (!orderavailable) {
 												errorMessage
 														.append("Multiple Orders With Channel Order ID.");
 												validaterow = false;
@@ -3206,27 +3195,11 @@ public class SaveContents {
 								payment.setPaymentFileName(uploadFileName);
 								totalpositive = totalpositive + positiveAmount;
 								totalnegative = totalnegative + negativeAmount;
-								if (combo) {
-									if (payment.getPositiveAmount() > 0) {
-										payment.setPositiveAmount(payment
-												.getPositiveAmount()
-												/ onj.size());
-									} else {
-										payment.setNegativeAmount(payment
-												.getNegativeAmount()
-												/ onj.size());
-									}
-									for (Order ord : onj) {
-										order = orderService.addOrderPayment(
-												skucode,
-												ord.getChannelOrderID(),
-												payment, sellerId);
-									}
-								} else {
+								
 									order = orderService.addOrderPayment(
 											skucode, channelId, payment,
 											sellerId);
-								}
+								
 
 								// New
 								PaymentUpload_Order paymentUpload_Order = new PaymentUpload_Order();

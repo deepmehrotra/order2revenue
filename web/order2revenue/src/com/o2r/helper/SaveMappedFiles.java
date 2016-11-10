@@ -3337,7 +3337,7 @@ public class SaveMappedFiles {
 					int index = 0;
 					String channelheader = null;
 					channelOrderId = null;
-					boolean combo=false;
+					//boolean combo=false;
 					
 					// errorMessage = new StringBuffer("Row :" + (rowIndex) +
 					// ":");
@@ -3401,8 +3401,7 @@ public class SaveMappedFiles {
 									errorMessage
 											.append("No Orders With Channel OrderId.");
 									validaterow = false;
-								} else {
-									if (onj.size() == 1
+								} else if (onj.size() == 1
 											&& onj.get(0).getChannelOrderID()
 													.equals(channelOrderId)) {
 										channelOrderId = onj.get(0)
@@ -3410,7 +3409,7 @@ public class SaveMappedFiles {
 										
 									} 
 									
-									else if (onj.size() > 1&& onj.get(0).getChannelOrderID()
+									/*else if (onj.size() > 1&& onj.get(0).getChannelOrderID()
 											.contains(entry.getCell(index).toString()))
 									{
 											if(onj.get(0).getTypeIdentifier()!=null&&
@@ -3419,13 +3418,13 @@ public class SaveMappedFiles {
 										{
 											combo=true;
 										}
-									}
+									}*/
 									else {
 										errorMessage
 												.append("Multiple Orders With Channel Order ID.");
 										validaterow = false;
 									}
-								}
+								
 
 							} catch (NullPointerException e) {
 								errorMessage
@@ -3551,7 +3550,7 @@ public class SaveMappedFiles {
 											+ Math.abs(amount);
 								}
 								orderPayment.setPaymentFileName(uploadFileName);
-								if(combo)
+								/*if(combo)
 								{
 									
 									 if(onj!=null&&onj.size()>0)
@@ -3571,12 +3570,12 @@ public class SaveMappedFiles {
 									 }
 									 }
 								}
-								else{
+								else{*/
 									orderPayment.setPaymentVar(payvarlist);
 									
 								order = orderService.addOrderPayment(skucode,
 										channelOrderId, orderPayment, sellerId);
-								}
+								//}
 							} else {
 								errorSet.add(errorMessage.toString());
 
@@ -3800,7 +3799,7 @@ public class SaveMappedFiles {
 							colums.getChannelColumName());
 				}
 			}
-			System.out.println(columHeaderMap);
+			
 			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 
 			HSSFSheet worksheet = offices.getSheetAt(0);
@@ -3834,7 +3833,7 @@ public class SaveMappedFiles {
 				// Code for fetching right colum
 				orderPayment = new OrderPayment();
 				order = null;
-				boolean combo=false;
+				//boolean combo=false;
 				List<Order> onj=null;
 				Date recievedDate=null;
 				boolean orderavailable=false;
@@ -3898,8 +3897,7 @@ public class SaveMappedFiles {
 								errorMessage
 										.append(" Channel OrderId not present ");
 								validaterow = false;
-							} else {
-								if (onj.size() == 1
+							} else if (onj.size() == 1
 										&& onj.get(0).getChannelOrderID()
 												.equals(channelOrderId)) {
 									channelOrderId = onj.get(0)
@@ -3908,13 +3906,7 @@ public class SaveMappedFiles {
 								else if (onj.size() > 1)
 								{
 									for(Order ordcheck:onj){
-									if(ordcheck.getTypeIdentifier()!=null){
-										if(ordcheck.getTypeIdentifier().contains(entry.getCell(index).toString()))
-											combo=true;
-										else
-											combo=false;
-									}
-									else if (recievedDate!=null){
+									 if (recievedDate!=null){
 										if(format.format(ordcheck.getOrderDate()).equals(format.format(recievedDate))){
 											orderavailable=true;
 											channelOrderId=ordcheck.getChannelOrderID();
@@ -3926,7 +3918,7 @@ public class SaveMappedFiles {
 								validaterow = false;
 									}
 									}
-									if(!(orderavailable||combo)){
+									if(!(orderavailable)){
 										errorMessage
 										.append("Multiple Orders With Channel Order ID.");
 								validaterow = false;
@@ -3935,10 +3927,10 @@ public class SaveMappedFiles {
 								else {
 
 									errorMessage
-											.append("No Orders With Channel Order ID.");
+											.append("Multiple Orders With Channel Order ID.");
 									validaterow = false;
 								}
-							}
+							
 							try {
 								index = cellIndexMap.get(columHeaderMap
 										.get("Payment Date"));
@@ -4064,7 +4056,7 @@ public class SaveMappedFiles {
 									totalnegative = totalnegative
 											+ Math.abs(amount);
 								}
-								if(combo)
+								/*if(combo)
 								{
 									
 									 if(onj!=null&&onj.size()>0)
@@ -4082,13 +4074,13 @@ public class SaveMappedFiles {
 													ord.getChannelOrderID(), orderPayment, sellerId);
 									 }
 									 }
-								}
-								else{
+								}*/
+								
 									orderPayment.setPaymentVar(payvarlist);
 
 								order = orderService.addOrderPayment(skucode,
 										channelOrderId, orderPayment, sellerId);
-								}
+								
 							} else {
 								errorSet.add(errorMessage.toString());
 
@@ -5049,7 +5041,7 @@ public class SaveMappedFiles {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				// Code for fetching right colum
 				orderPayment = new OrderPayment();
-				boolean combo=false;
+				
 				List<Order> onj=null;
 
 				try {
@@ -5161,16 +5153,7 @@ public class SaveMappedFiles {
 											if (onj.size() == 1) {
 												channelOrderId = onj.get(0)
 														.getChannelOrderID();
-											} else if (onj.size() > 1&& onj.get(0).getChannelOrderID()
-													.contains(entry.getCell(index).toString()))
-											{
-													if(onj.get(0).getTypeIdentifier()!=null&&
-														onj.get(0).getTypeIdentifier().contains(entry.getCell(index)
-																.toString()))
-												{
-													combo=true;
-												}
-											}
+											} 
 											else {
 												errorMessage
 														.append("Multiple Orders With Channel Order ID.");
@@ -5311,30 +5294,12 @@ public class SaveMappedFiles {
 						} else if (amount < 0) {
 							totalnegative = totalnegative + Math.abs(amount);
 						}
-						if(combo)
-						{
-							 if(onj!=null&&onj.size()>0)
-							 {
-								 if(amount>0)
-								 {
-								 orderPayment.setPositiveAmount(orderPayment.getPositiveAmount()/onj.size());
-								 }
-								 else{
-									 orderPayment.setNegativeAmount(orderPayment.getNegativeAmount()/onj.size());
-								 }
-							 for(Order ord:onj)
-							 {
-								 order = orderService.addOrderPayment(skucode,
-											ord.getChannelOrderID(), orderPayment, sellerId);
-							 }
-							 }
-						}
-						else{
+						
 							orderPayment.setPaymentVar(payvarlist);
 
 						order = orderService.addOrderPayment(skucode,
 								channelOrderId, orderPayment, sellerId);
-						}
+						
 					} else {
 						errorSet.add(errorMessage.toString());
 					}
@@ -6740,7 +6705,6 @@ public class SaveMappedFiles {
 				String channelheader = null;
 				channelOrderId = null;
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
-				boolean combo=false;
 				List<Order> onj=null;
 				Date recievedDate=null;
 				boolean orderavailable=false;
@@ -6803,14 +6767,7 @@ public class SaveMappedFiles {
 								for(Order ordcheck:onj)
 								{
 								
-								if(ordcheck.getTypeIdentifier()!=null)
-								{
-									if(onj.get(0).getTypeIdentifier().contains(entry.getCell(index).toString()))
-									combo=true;
-									else
-										combo=false;
-								}
-								else if (recievedDate!=null)
+								 if (recievedDate!=null)
 								{
 									if(format.format(ordcheck.getOrderDate()).equals(format.format(recievedDate)))
 									{
@@ -6826,7 +6783,7 @@ public class SaveMappedFiles {
 								}
 								
 								}
-								if(!(orderavailable||combo))
+								if(!orderavailable)
 								{
 									errorMessage
 									.append("Multiple Orders With Channel Order ID.");
@@ -6946,36 +6903,14 @@ public class SaveMappedFiles {
 						} else if (amount < 0) {
 							totalnegative = totalnegative + Math.abs(amount);
 						}
-						if(combo)
-						{
-							
-							 if(onj!=null&&onj.size()>0)
-							 {
-								 if(amount>0)
-								 {
-									 paymentBean.setPositiveAmount(paymentBean.getPositiveAmount()/onj.size());
-								 }
-								 else{
-									 paymentBean.setNegativeAmount(paymentBean.getNegativeAmount()/onj.size());
-								 }
-							 for(Order ord:onj)
-							 {
-								 order = orderService.addOrderPayment(skucode,
-										 ord.getChannelOrderID(), ConverterClass
-													.prepareOrderPaymentModel(paymentBean),
-											sellerId);
-								
-							 }
-							 }
-						}
-						else{
+						
 							paymentBean.setPaymentVar(payvarlist);
 
 						order = orderService.addOrderPayment(skucode,
 								channelOrderId, ConverterClass
 										.prepareOrderPaymentModel(paymentBean),
 								sellerId);
-						}
+						
 					} else {
 						errorSet.add(errorMessage.toString());
 					}
@@ -7779,7 +7714,7 @@ public class SaveMappedFiles {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				// Code for fetching right colum
 				orderPayment = new OrderPayment();
-				boolean combo=false;
+				//boolean combo=false;
 				List<Order> onj=null;
 				order = null;
 				int combocount=0;
@@ -7844,19 +7779,7 @@ public class SaveMappedFiles {
 										sellerId);
 
 								if (onj != null) {
-									if (onj.size() > 1) {
-										for (Order tmpOrder : onj) {
-											if (tmpOrder.getSubOrderID().equalsIgnoreCase(itemID)) {
-												channelOrderId = tmpOrder.getChannelOrderID();
-											}
-											if(tmpOrder.getTypeIdentifier().contains(entry.getCell(index)
-													.toString()))
-											{
-												combo=true;
-												combocount++;
-											}
-										}
-									} else if (onj.size() == 1
+									 if (onj.size() == 1
 											&& onj.get(0).getSubOrderID()
 													.equalsIgnoreCase(itemID)) {
 										channelOrderId = onj.get(0)
@@ -7996,31 +7919,13 @@ public class SaveMappedFiles {
 						} else {
 							totalnegative = totalnegative + Math.abs(amount);
 						}
-						if(combo)
-						{
-							
-							 if(onj!=null&&onj.size()>0)
-							 {
-								 if(amount>0)
-								 {
-								 orderPayment.setPositiveAmount(orderPayment.getPositiveAmount()/combocount);
-								 }
-								 else{
-									 orderPayment.setNegativeAmount(orderPayment.getNegativeAmount()/combocount);
-								 }
-							 for(Order ord:onj)
-							 {
-								 order = orderService.addOrderPayment(skucode,
-											ord.getChannelOrderID(), orderPayment, sellerId);
-							 }
-							 }
-						}
-						else{
+						
+						
 							orderPayment.setPaymentVar(payvarlist);
 
 						order = orderService.addOrderPayment(skucode,
 								channelOrderId, orderPayment, sellerId);
-						}
+						
 					} else {
 						if (StringUtils.isNotBlank(errorMessage.toString().trim())) {
 							errorSet.add(errorMessage.toString());
