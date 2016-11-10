@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -522,6 +523,7 @@ public class CategoryDaoImpl implements CategoryDao {
 			if (returnlist != null && returnlist.size() != 0) {
 
 				returnObject = (PartnerCategoryMap) returnlist.get(0);
+				Hibernate.initialize(returnObject.getProduct());
 			} else {
 				log.debug("PartnerCategoryMap " + catName + " not found");
 			}
