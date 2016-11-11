@@ -3403,7 +3403,7 @@ public class SaveMappedFiles {
 										+ entry.getCell(skuIndex).toString()
 												.trim().toUpperCase()
 										+ GlobalConstant.orderUniqueSymbol
-										+ itemId;
+										+ removeExtraQuote(itemId);
 
 								onj = orderService.searchAsIsOrder(
 										"channelOrderID", channelOrderId,
@@ -3910,7 +3910,7 @@ public class SaveMappedFiles {
 										.append(" Channel OrderId not present ");
 								validaterow = false;
 							} else if (onj.size() == 1) {
-								if(recievedDate!=null&&format.format(onj.get(0).getOrderDate()).equals(format.format(recievedDate))){
+									if(recievedDate!=null&&format.format(onj.get(0).getOrderDate()).equals(format.format(recievedDate))){
 									channelOrderId = onj.get(0)
 											.getChannelOrderID();
 								}
@@ -6698,7 +6698,7 @@ public class SaveMappedFiles {
 								"channelOrderID", channelOrderId, sellerId);
 						if (onj != null) {
 							if (onj.size() == 1) {
-								if(format.format(onj.get(0).getOrderDate()).equals(format.format(recievedDate)))
+								if(recievedDate!=null&&format.format(onj.get(0).getOrderDate()).equals(format.format(recievedDate)))
 								{
 								channelOrderId = onj.get(0).getChannelOrderID();
 								}
@@ -6750,7 +6750,7 @@ public class SaveMappedFiles {
 											.setDateofPayment(new Date(date));
 								} else {
 									errorMessage
-											.append(" Payment Date format is wrong or null");
+											.append(" Payment Date value is empty");
 									validaterow = false;
 								}
 							} catch (NullPointerException e) {
