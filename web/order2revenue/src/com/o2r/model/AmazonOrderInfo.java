@@ -62,7 +62,12 @@ public class AmazonOrderInfo  implements java.io.Serializable {
      private String purchaseordernumber;
      private String isprime;
      private String ispremiumorder;
-     private String requestid;
+     private String requestid;    
+
+
+	private String o2rStatus;
+     private String errorMessage;
+     
      //private Integer sellerId;
      private Set<AmazonOrderItemInfo> amazonOrderItemInfos = new HashSet<AmazonOrderItemInfo>(0);
      private Set<ShippingAddress> ShippingAddress = new HashSet<ShippingAddress>(0);
@@ -519,6 +524,27 @@ public class AmazonOrderInfo  implements java.io.Serializable {
 			Set<AmazonOrderItemInfo> amazonOrderItemInfos) {
 		this.amazonOrderItemInfos = amazonOrderItemInfos;
 	}
+	
+	@Column(name="O2R_STATUS")
+    public String getO2rStatus() {
+		return o2rStatus;
+	}
+
+
+	public void setO2rStatus(String o2rStatus) {
+		this.o2rStatus = o2rStatus;
+	}
+
+	 @Column(name="ERROR_MESSAGE")
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+	
 
 
 }

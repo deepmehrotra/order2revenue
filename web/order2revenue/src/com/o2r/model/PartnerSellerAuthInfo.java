@@ -30,13 +30,13 @@ public class PartnerSellerAuthInfo  implements java.io.Serializable {
      private String marketplaceid;
      private String serviceurl;
      private Integer status;
-     private Integer pcid;
+     private String pcName;
      private Partner partner;
 
     public PartnerSellerAuthInfo() {
     }
 
-    public PartnerSellerAuthInfo(String sellerid, String partnerSellerAuthInfocol, String mwsauthtoken, String accesskey, String secretkey, String marketplaceid, String serviceurl, Integer status, Integer pcid) {
+    public PartnerSellerAuthInfo(String sellerid, String partnerSellerAuthInfocol, String mwsauthtoken, String accesskey, String secretkey, String marketplaceid, String serviceurl, Integer status, String pcName) {
        this.sellerid = sellerid;
        this.partnerSellerAuthInfocol = partnerSellerAuthInfocol;
        this.mwsauthtoken = mwsauthtoken;
@@ -45,7 +45,7 @@ public class PartnerSellerAuthInfo  implements java.io.Serializable {
        this.marketplaceid = marketplaceid;
        this.serviceurl = serviceurl;
        this.status = status;
-       this.pcid = pcid;
+       this.pcName = pcName;
     }
    
     @Id
@@ -140,13 +140,13 @@ public class PartnerSellerAuthInfo  implements java.io.Serializable {
     }
 
     
-    @Column(name="PCID")
-    public Integer getPcid() {
-        return this.pcid;
+    @Column(name="PCNAME")
+    public String getPcName() {
+        return this.pcName;
     }
     
-    public void setPcid(Integer pcid) {
-        this.pcid = pcid;
+    public void setPcName(String pcName) {
+        this.pcName = pcName;
     }
 
     @OneToOne(cascade = CascadeType.ALL)
