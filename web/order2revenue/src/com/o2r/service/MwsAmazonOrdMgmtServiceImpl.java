@@ -122,7 +122,7 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 		com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult listOrdersResult = null;
 		try {
 			listOrdersResult = new com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult();
-			MarketplaceWebServiceOrdersClient client = MarketplaceWebServiceOrdersSampleConfig.getClient();
+			MarketplaceWebServiceOrdersClient client = com.o2r.amazonservices.mws.orders.config.MarketplaceWebServiceOrdersSampleConfig.getClient();
 			ListOrdersRequest request = new ListOrdersRequest();
 			List<String> marketplaceIds = new ArrayList<String>();
 			marketplaceIds.add(authInfo.getMarketplaceid());
@@ -146,7 +146,7 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 		com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult listOrderItemsResult = null;
 		try {
 			listOrderItemsResult = new com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult();
-			MarketplaceWebServiceOrdersClient client = MarketplaceWebServiceOrdersSampleConfig.getClient();
+			MarketplaceWebServiceOrdersClient client = com.o2r.amazonservices.mws.orders.config.MarketplaceWebServiceOrdersSampleConfig.getClient();
 	        ListOrderItemsRequest request = new ListOrderItemsRequest();
 	        request.setSellerId(authInfo.getSellerid());
 	        request.setMWSAuthToken(authInfo.getMwsauthtoken());

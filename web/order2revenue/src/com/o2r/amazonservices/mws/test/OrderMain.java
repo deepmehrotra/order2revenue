@@ -10,7 +10,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrders;
 import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersClient;
-import com.amazonservices.mws.orders._2013_09_01.constants.MWSConstants;
 import com.amazonservices.mws.orders._2013_09_01.model.GetOrderRequest;
 import com.amazonservices.mws.orders._2013_09_01.model.GetOrderResponse;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsRequest;
@@ -18,7 +17,7 @@ import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResponse;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersRequest;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResponse;
 import com.amazonservices.mws.orders._2013_09_01.model.ResponseHeaderMetadata;
-import com.amazonservices.mws.orders._2013_09_01.samples.MarketplaceWebServiceOrdersSampleConfig;
+import com.o2r.amazonservices.mws.constants.MWSConstants;
 
 public class OrderMain {
 
@@ -26,8 +25,8 @@ public class OrderMain {
 		try {
 			testHai();
 			invokeListOrders();
-			invokeGetOrder();
-			invokeListOrderItems();
+			//invokeGetOrder();
+			//invokeListOrderItems();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,7 +55,7 @@ public class OrderMain {
 	
 	public void invokeListOrders() throws Exception {
 		try {
-			MarketplaceWebServiceOrdersClient client = MarketplaceWebServiceOrdersSampleConfig.getClient();
+			MarketplaceWebServiceOrdersClient client = com.o2r.amazonservices.mws.orders.config.MarketplaceWebServiceOrdersSampleConfig.getClient();
 			ListOrdersRequest request = new ListOrdersRequest();
 			List<String> marketplaceIds = new ArrayList<String>();
 			marketplaceIds.add(MWSConstants.MARKETPLACEID);
@@ -128,7 +127,7 @@ public class OrderMain {
 	
 	public void invokeGetOrder() throws Exception {
 		try {
-			MarketplaceWebServiceOrdersClient client = MarketplaceWebServiceOrdersSampleConfig.getClient();
+			MarketplaceWebServiceOrdersClient client = com.o2r.amazonservices.mws.orders.config.MarketplaceWebServiceOrdersSampleConfig.getClient();
 			GetOrderRequest request = new GetOrderRequest();
 			request.setSellerId(MWSConstants.SELLERID);
 			request.setMWSAuthToken(MWSConstants.MWSAUTHTOKEN);
@@ -159,7 +158,7 @@ public class OrderMain {
 	
 	public void invokeListOrderItems() throws Exception {
 		try {
-			MarketplaceWebServiceOrdersClient client = MarketplaceWebServiceOrdersSampleConfig.getClient();
+			MarketplaceWebServiceOrdersClient client = com.o2r.amazonservices.mws.orders.config.MarketplaceWebServiceOrdersSampleConfig.getClient();
 	        ListOrderItemsRequest request = new ListOrderItemsRequest();
 	        String sellerId = MWSConstants.SELLERID;
 	        request.setSellerId(sellerId);
