@@ -614,8 +614,7 @@ public class OrderController {
 
 				List<UploadReportBean> uploadReports = ConverterClass
 						.prepareUploadReportListBean(reportGeneratorService.listUploadReport(
-								helperClass.getSellerIdfromSession(request),
-								false));
+								sellerId,false));
 				if (uploadReports != null && uploadReports.size() > 3) {
 					uploadReports = uploadReports.subList(
 							uploadReports.size() - 3, uploadReports.size());
