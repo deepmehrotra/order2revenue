@@ -1,6 +1,7 @@
 package com.o2r.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.o2r.helper.CustomException;
 import com.o2r.model.MetaPartner;
@@ -26,7 +27,12 @@ public interface PartnerDao {
 
 	void addMetaPartner(MetaPartner partner) throws CustomException;
 
-	public MetaPartner getMetaPartner(String partnerName) throws CustomException;
+	public MetaPartner getMetaPartner(String partnerName)
+			throws CustomException;
 
-	public void editPartner(Partner partner, int sellerId) throws CustomException;
+	public void editPartner(Partner partner, int sellerId)
+			throws CustomException;
+
+	public Map<String, Boolean> getPartnerMap(int sellerId)
+			throws CustomException;
 }

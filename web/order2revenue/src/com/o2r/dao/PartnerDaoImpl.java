@@ -1,7 +1,9 @@
 package com.o2r.dao;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -121,6 +123,48 @@ public class PartnerDaoImpl implements PartnerDao {
 		}
 		log.info("*** listPartner Ends : partnerDaoImpl****");
 		return returnlist;
+	}
+	
+	@Override
+	public Map<String, Boolean> getPartnerMap(int sellerId) throws CustomException {
+
+		log.info("*** getPartnerMap Starts : partnerDaoImpl****");
+		List<Partner> returnlist = null;
+		Partner returnObject = null;
+		Map<String, Boolean> partnerNameList = new HashMap<String, Boolean>();
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Seller seller = (Seller) session.get(Seller.class, sellerId);
+			log.debug(" getting seller " + seller);
+			if (seller.getPartners() != null
+					&& seller.getPartners().size() != 0)
+				returnlist = seller.getPartners();
+
+			if (returnlist != null && returnlist.size() != 0) {
+
+				returnObject = (Partner) returnlist.get(0);
+				if (returnObject != null && returnObject.getNrnReturnConfig() != null) {
+					partnerNameList.put(returnObject.getPcName().trim(), returnObject.getNrnReturnConfig()
+							.isNrCalculator());
+				} else{
+					log.debug("Partner is null " + sellerId);
+				}
+			} else {
+				log.debug("No Partners available for Seller ID: " + sellerId);
+			}
+			
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(GlobalConstant.listPartnerError,
+					new Date(), 3, GlobalConstant.listPartnerErrorCode, e);
+
+		}
+		log.info("*** getPartnerMap Ends : partnerDaoImpl****");
+		return partnerNameList;
 	}
 
 	@Override
@@ -268,8 +312,6 @@ public class PartnerDaoImpl implements PartnerDao {
 		log.debug("******* Inside PartnerDaoIMpl partner id :"
 				+ partner.getPcId() + "******* ConfigId : "
 				+ partner.getNrnReturnConfig().getConfigId());
-		long id = partner.getPcId();
-
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();

@@ -1,6 +1,7 @@
 package com.o2r.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.o2r.helper.CustomException;
 import com.o2r.model.MetaPartner;
@@ -25,8 +26,13 @@ public interface PartnerService {
 			throws CustomException;
 
 	public void addMetaPartner(MetaPartner partner) throws CustomException;
-	
-	public MetaPartner getMetaPartner(String partnerName) throws CustomException;
 
-	public void editPartner(Partner partner, int sellerId) throws CustomException;
+	public MetaPartner getMetaPartner(String partnerName)
+			throws CustomException;
+
+	public void editPartner(Partner partner, int sellerId)
+			throws CustomException;
+
+	public Map<String, Boolean> getPartnerMap(int sellerId)
+			throws CustomException;
 }

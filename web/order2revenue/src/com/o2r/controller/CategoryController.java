@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.o2r.bean.CategoryBean;
 import com.o2r.bean.FormBean;
 import com.o2r.bean.PartnerBean;
+import com.o2r.bean.PartnerCategoryBean;
 import com.o2r.bean.ProductBean;
 import com.o2r.bean.TaxCategoryBean;
 import com.o2r.helper.ConverterClass;
@@ -33,6 +34,7 @@ import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
 import com.o2r.model.Category;
 import com.o2r.model.Partner;
+import com.o2r.model.Product;
 import com.o2r.model.TaxCategory;
 import com.o2r.service.CategoryService;
 import com.o2r.service.DownloadService;
@@ -737,8 +739,8 @@ public class CategoryController {
 	}
 	
 	@RequestMapping(value = "/seller/parterCategoryMap", method = RequestMethod.GET)
-	public ModelAndView productConfigList(HttpServletRequest request,
-			@ModelAttribute("command") ProductBean productBean,
+	public ModelAndView parterCategoryMap(HttpServletRequest request,
+			@ModelAttribute("command") PartnerCategoryBean partnerCategoryBean,
 			BindingResult result) {
 
 		log.info("$$$ parterCategoryMap Starts : CategoryController $$$");
@@ -751,6 +753,18 @@ public class CategoryController {
 					.parseInt(request.getParameter("page")) : 0;
 			model.put("partnerCategoryMap", categoryService.listPartnerCategoryMap(
 					helperClass.getSellerIdfromSession(request), pageNo));
+			
+			List<Partner> partnerlist = partnerService.listPartners(helperClass
+					.getSellerIdfromSession(request));
+			List<String> partnerList = new ArrayList<String>();
+			
+			if (partnerlist != null && partnerlist.size() != 0) {
+				for (Partner bean : partnerlist) {
+					partnerList.add(bean.getPcName());
+				}
+			}
+			model.put("partnerList", partnerList);
+			model.put("partnerCat", partnerCategoryBean);
 		} catch (CustomException ce) {
 			log.error("productList exception : " + ce.toString());
 			model.put("errorMessage", ce.getLocalMessage());
