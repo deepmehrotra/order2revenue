@@ -189,9 +189,10 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void addPartnerCatMapping(Product product, int sellerId)
-			throws CustomException {
-		productDao.addPartnerCatMapping(product, sellerId);
+	public void addPartnerCatMapping(Map<String, Product> saveProductMap,
+			int sellerId) throws CustomException {
+		productDao.addPartnerCatMapping(saveProductMap, sellerId);
+
 	}
 
 }

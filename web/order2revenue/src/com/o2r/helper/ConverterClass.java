@@ -39,6 +39,7 @@ import com.o2r.bean.OrderPaymentBean;
 import com.o2r.bean.OrderRTOorReturnBean;
 import com.o2r.bean.OrderTaxBean;
 import com.o2r.bean.PartnerBean;
+import com.o2r.bean.PartnerCategoryBean;
 import com.o2r.bean.PartnerReportDetails;
 import com.o2r.bean.PaymentUploadBean;
 import com.o2r.bean.PlanBean;
@@ -70,6 +71,7 @@ import com.o2r.model.OrderPayment;
 import com.o2r.model.OrderRTOorReturn;
 import com.o2r.model.OrderTax;
 import com.o2r.model.Partner;
+import com.o2r.model.PartnerCategoryMap;
 import com.o2r.model.PaymentUpload;
 import com.o2r.model.Plan;
 import com.o2r.model.Product;
@@ -3416,6 +3418,37 @@ public class ConverterClass {
 		}
 
 		return uploadReportBeans;
+	}
+	
+	public static List<PartnerCategoryBean> preparePartnerCategoryListBean(
+			List<PartnerCategoryMap> partnerCategoryList) {
+
+		List<PartnerCategoryBean> partnerCategoryBeans = null;
+		if (partnerCategoryList != null && !partnerCategoryList.isEmpty()) {
+			partnerCategoryBeans = new ArrayList<PartnerCategoryBean>();
+			PartnerCategoryBean bean = null;
+			for (PartnerCategoryMap partnerCat : partnerCategoryList) {
+				bean = new PartnerCategoryBean();
+				bean.setId(partnerCat.getId());
+				bean.setPartnerName(partnerCat.getPartnerName());
+				bean.setPartnerCategoryRef(partnerCat.getPartnerCategoryRef());
+				bean.setCommission(partnerCat.getCommission());
+				partnerCategoryBeans.add(bean);
+			}
+		}
+		return partnerCategoryBeans;
+	}
+	
+	public static PartnerCategoryMap preparePartnerCategoryModel(
+			PartnerCategoryBean partnerCategoryBean) {
+
+		PartnerCategoryMap partnerCat = new PartnerCategoryMap();
+
+		partnerCat.setId(partnerCategoryBean.getId());
+		partnerCat.setPartnerName(partnerCategoryBean.getPartnerName());
+		partnerCat.setPartnerCategoryRef(partnerCategoryBean.getPartnerCategoryRef());
+		partnerCat.setCommission(partnerCategoryBean.getCommission());
+		return partnerCat;
 	}
 
 	public static List<YearlyStockList> combineStockList(

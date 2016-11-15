@@ -79,8 +79,8 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 											<div class="form-group">
 												<select class="form-control" name="searchPartnerCat"
 													id="searchPartnerCat" required>
-													<option value="channelName">Channel Name</option>
-													<option value="channelSkuRef">Channel Category
+													<option value="partnerName">Channel Name</option>
+													<option value="partnerCategoryRef">Channel Category
 														Ref.</option>
 												</select>
 											</div>
@@ -105,8 +105,8 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 								</div>
 							</div>
 							<div class="bs-example">
-								<div class="ibox-content cus-table-filters">
-									<div class="scroll-y">
+								<div class="ibox-content cus-table-filters scroll-y">
+									<div class="col-lg-12">
 										<table
 											class="table table-striped table-bordered table-hover dataTables-example">
 											<thead>
@@ -129,20 +129,32 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 															<td><fmt:formatNumber type="number"
 																	maxFractionDigits="2"
 																	value="${partnerCatObj.commission}" /></td>
-															<td class="tooltip-demo"><a href="#"><i
-																	class="fa fa-edit text-navy" data-toggle="tooltip"
-																	data-placement="top" data-original-title="Edit"></i></a></td>
+															<td class="tooltip-demo"><a
+																onclick="editCategory(
+																'${partnerCatObj.id}', '${partnerCatObj.partnerName}',
+																'${partnerCatObj.partnerCategoryRef}',
+																'${partnerCatObj.commission}')"
+																href="#"><i class="fa fa-edit text-navy"
+																	data-toggle="tooltip" data-placement="top"
+																	data-original-title="Edit"></i></a></td>
 														</tr>
 													</c:forEach>
 												</c:if>
 											</tbody>
 										</table>
 									</div>
-									<form:form method="POST" action="addParterCategory.html"
-										id="addParterCategoryForm" role="form" class="form-horizontal">
-										<div class="col-lg-12 ibox-content">
-											<div class="col-sm-4">
+									<div class="col-lg-12">
+										<div class="hr-line-dashed"></div>
+										<h4>Add/Edit Channel Category Mapping:</h4>
+										<br> <br> <label id="addParterCategory-error"
+											style="visible: none;"> </label>
+										<form:form method="POST" action="saveParterCategory.html"
+											id="addParterCategoryForm" role="form"
+											class="form-horizontal">
+											<div class="col-sm-3">
 												<div class="form-group">
+													<form:input type="hidden" name="catId" id="catId" path="id"
+														value="${partnerCat.id}" />
 													<label class="col-sm-6 control-label">Channel Name</label>
 													<div class="col-sm-6">
 														<form:select id="partnerSelect" class="form-control"
@@ -164,7 +176,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 													</div>
 												</div>
 											</div>
-											<div class="col-sm-4">
+											<div class="col-sm-6">
 												<div class="form-group">
 													<label class="col-sm-6 control-label">Channel
 														Category Ref</label>
@@ -172,31 +184,34 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 													<div class="col-sm-6">
 														<form:input path="partnerCategoryRef"
 															value="${partnerCat.partnerCategoryRef}"
-															class="form-control" id="partnerCategoryRef"
-															onblur="checkOnBlur()" />
+															class="form-control" id="partnerCategoryRef" />
 														<span id="catNameMessageR" style="color: red"></span> <span
 															id="catNameMessageG" style="color: green"></span>
 													</div>
 												</div>
 											</div>
-											<div class="col-sm-4">
+											<div class="col-sm-3">
 												<div class="form-group">
 													<label class="col-sm-6 control-label">Commission</label>
 
 													<div class="col-sm-6">
-														<form:input path="commission"
+														<form:input path="commission" id="commission"
 															value="${partnerCat.commission}" class="form-control" />
 													</div>
 												</div>
 											</div>
-
-										</div>
-										<div class="col-sm-12">
-											<div class="hr-line-dashed"></div>
-											<button class="btn btn-primary pull-right" type="button"
-												onclick="submitCategory()">Save</button>
-										</div>
-									</form:form>
+											<div class="col-sm-12">
+												<div class="hr-line-dashed"></div>
+												<div class="pull-right">
+													<button class="btn btn-primary" type="button"
+														onclick="clearFields()">Clear</button>
+													&nbsp;&nbsp;
+													<button class="btn btn-primary" type="button"
+														onclick="validateCat()">Save</button>
+												</div>
+											</div>
+										</form:form>
+									</div>
 									<div class="col-sm-12">
 										<div class="hr-line-dashed"></div>
 										<a href="#" id="upload1" class="btn btn-success btn-xs">Bulk
@@ -234,31 +249,6 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 												"tableTools" : {
 													"sSwfPath" : "/O2R/seller/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
 												}
-											});
-
-							var oTable = $('.dataTables-example').dataTable();
-
-							/* Apply the jEditable handlers to the table */
-							$('td', oTable.fnGetNodes())
-									.editable(
-											'addPartnerCategoryMap.html',
-											{
-												"callback" : function(sValue, y) {
-													var aPos = oTable
-															.fnGetPosition(this);
-													oTable.fnUpdate(sValue,
-															aPos[0], aPos[1]);
-												},
-												"submitdata" : function(value,
-														settings) {
-													return {
-														"row_id" : this.parentNode
-																.getAttribute('id'),
-														"column" : oTable
-																.fnGetPosition(this)[2]
-													};
-												},
-												"height" : "14px"
 											});
 
 							$('#searchParterCat').change(function() {
@@ -342,6 +332,47 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 			var xxx = $('editProduct.html?id' + vale).submit();
 		}
 
+		function editCategory(id, partnerName, catName, commission) {
+			var elId = document.getElementById('catId');
+			elId.value = id;
+			var elPartnerName = document.getElementById('partnerSelect');
+			elPartnerName.value = partnerName;
+			elPartnerName.disabled = true;
+			var elCat = document.getElementById('partnerCategoryRef');
+			elCat.value = catName;
+			elCat.disabled = true;
+			var elComm = document.getElementById('commission');
+			elComm.value = commission;
+			elComm.focus();
+		}
+
+		function clearFields() {
+			var elId = document.getElementById('catId');
+			elId.value = 0;
+			var elPartnerName = document.getElementById('partnerSelect');
+			//elPartnerName.value = "";
+			$("#partnerSelect").val($("#partnerSelect option:first").val());
+			elPartnerName.disabled = false;
+			var elCat = document.getElementById('partnerCategoryRef');
+			elCat.value = "";
+			elCat.disabled = false;
+			var elComm = document.getElementById('commission');
+			elComm.value = 0.0;
+		}
+
+		function validateCat() {
+			var elCat = document.getElementById('partnerCategoryRef');
+			alert(elCat.value);
+			if (elCat.value == null || elCat.value == '') {
+				$('#addParterCategory-error').show();
+				document.getElementById("addParterCategory-error").innerHTML = "Please enter Partner Category Reference";
+
+				$('#addParterCategory-error').attr('style', 'color:#8a1f11;');
+			} else {
+				$('form#addParterCategoryForm').submit();
+			}
+		}
+
 		$('#upload1').click(function() {
 			$.ajax({
 				url : 'uploadOrderDA.html?value=savePartnerCatCommMapping',
@@ -369,7 +400,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 		});
 
 		$('#LoadFirst500').click(function(e) {
-			window.location = "Product.html?page=" + 0;
+			window.location = "partnerCategoryMap.html?page=" + 0;
 
 		});
 	</script>

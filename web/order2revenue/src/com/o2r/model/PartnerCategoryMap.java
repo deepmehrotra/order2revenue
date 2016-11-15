@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -29,6 +30,8 @@ public class PartnerCategoryMap {
 	private float commission;
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Product> product = new ArrayList<>();
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Seller seller;
 	
 	public long getId() {
 		return id;
@@ -59,5 +62,11 @@ public class PartnerCategoryMap {
 	}
 	public void setProduct(List<Product> product) {
 		this.product = product;
+	}
+	public Seller getSeller() {
+		return seller;
+	}
+	public void setSeller(Seller seller) {
+		this.seller = seller;
 	}
 }

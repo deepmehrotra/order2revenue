@@ -1,6 +1,7 @@
 package com.o2r.dao;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,6 +29,7 @@ import com.o2r.model.PartnerCategoryMap;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
+import com.o2r.model.UploadReport;
 
 /**
  * @author Deep Mehrotra
@@ -503,8 +505,6 @@ public class CategoryDaoImpl implements CategoryDao {
 			session.beginTransaction();
 			Criteria criteria = session
 					.createCriteria(PartnerCategoryMap.class);
-			criteria.createAlias("product", "product");
-
 			criteria.add(Restrictions.eq("partnerName", partnerName)
 					.ignoreCase());
 
@@ -512,7 +512,7 @@ public class CategoryDaoImpl implements CategoryDao {
 				criteria.add(Restrictions.eq("partnerCategoryRef", catName)
 						.ignoreCase());
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			criteria.createAlias("product.seller", "seller",
+			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
 					.setResultTransformer(
@@ -540,6 +540,34 @@ public class CategoryDaoImpl implements CategoryDao {
 		log.info("*** getPartnerCategoryMap Ends : CategoryDaoImpl ****");
 		return returnObject;
 
+	}
+
+	@Override
+	public PartnerCategoryMap getPartnerCategoryMap(long id)
+			throws CustomException {
+		log.info("*** getPartnerCategoryMap start : CategoryDaoImpl ****");
+
+		List<PartnerCategoryMap> returnlist = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session
+					.createCriteria(PartnerCategoryMap.class);
+			criteria.add(Restrictions.eq("id", id));
+			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			if (criteria.list().size() != 0) {
+				returnlist = criteria.list();
+			}
+			session.getTransaction().commit();
+			session.close();
+			log.info("*** getPartnerCategoryMap ends : CategoryDaoImpl ****");
+
+			return returnlist.get(0);
+		} catch (Exception e) {
+			log.error("Failed! : " + e);
+			throw new CustomException(GlobalConstant.listCategoryError,
+					new Date(), 3, GlobalConstant.listCategoryErrorCode, e);
+		}
 	}
 
 	@Override
@@ -575,11 +603,43 @@ public class CategoryDaoImpl implements CategoryDao {
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
+
+			Seller seller = (Seller) session.get(Seller.class, sellerId);
+			if (seller.getPartnerCategoryList() != null
+					&& !seller.getPartnerCategoryList().isEmpty()) {
+
+				returnlist = seller.getPartnerCategoryList();
+			}
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(GlobalConstant.getProductError,
+					new Date(), 3, GlobalConstant.getProductErrorCode, e);
+
+		}
+		log.info("*** listPartnerCategoryMap by SellerId Ends : CategoryDaoImpl ****");
+		return returnlist;
+	}
+	
+	@Override
+	public List<PartnerCategoryMap> searchPartnerCategory(String searchCriteria, String value,
+			int sellerId) throws CustomException {
+
+		log.info("*** searchPartnerCategory by SellerId Starts : CategoryDaoImpl ****");
+		List<PartnerCategoryMap> returnlist = null;
+
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+
 			Criteria criteria = session
 					.createCriteria(PartnerCategoryMap.class);
-			criteria.createAlias("product", "product");
+			criteria.add(Restrictions.like(searchCriteria, "%" + value + "%"));
+
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			criteria.createAlias("product.seller", "seller",
+			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.eq("seller.id", sellerId))
 					.setResultTransformer(
@@ -595,7 +655,44 @@ public class CategoryDaoImpl implements CategoryDao {
 					new Date(), 3, GlobalConstant.getProductErrorCode, e);
 
 		}
-		log.info("*** listPartnerCategoryMap by SellerId Ends : CategoryDaoImpl ****");
+		log.info("*** searchPartnerCategory by SellerId Ends : CategoryDaoImpl ****");
 		return returnlist;
+	}
+
+	@Override
+	public void addParterCategory(PartnerCategoryMap partnerCategoryMap,
+			int sellerId) throws CustomException {
+		log.info("***addParterCategory Start for : " + sellerId + "****");
+		Seller seller = null;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			if (partnerCategoryMap.getId() != 0) {
+				PartnerCategoryMap newPartnerCat = getPartnerCategoryMap(partnerCategoryMap
+						.getId());
+				newPartnerCat.setCommission(partnerCategoryMap.getCommission());
+				session.merge(newPartnerCat);
+			} else {
+				Criteria criteria = session.createCriteria(Seller.class).add(
+						Restrictions.eq("id", sellerId));
+				seller = (Seller) criteria.list().get(0);
+				partnerCategoryMap.setSeller(seller);
+				if (seller.getPartnerCategoryList() != null) {
+					seller.getPartnerCategoryList().add(partnerCategoryMap);
+				}
+				session.saveOrUpdate(seller);
+			}
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			log.equals("**Error Code : "
+					+ (sellerId + "-" + GlobalConstant.addCategoryErrorCode));
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(GlobalConstant.addCategoryError,
+					new Date(), 1, sellerId + "-"
+							+ GlobalConstant.addCategoryErrorCode, e);
+		}
+		log.info("***addParterCategory Exit****");
 	}
 }

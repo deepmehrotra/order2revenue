@@ -88,4 +88,7 @@ public interface ProductDao {
 
 	public void addPartnerCatMapping(Product product, int sellerId)
 			throws CustomException;
+
+	public void addPartnerCatMapping(Map<String, Product> productMap,
+			int sellerId) throws CustomException;
 }

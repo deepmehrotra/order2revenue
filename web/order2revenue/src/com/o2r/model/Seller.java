@@ -102,7 +102,10 @@ public class Seller {
 	// Seller to upload Report OneToMany
 	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
 	private List<UploadReport> uploadReportList = new ArrayList<UploadReport>();
-	
+
+	// Seller to PartnerCategoryMap OneToMany
+	@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+	private List<PartnerCategoryMap> partnerCategoryList = new ArrayList<PartnerCategoryMap>();
 
 	public SellerAccount getSellerAccount() {
 		return sellerAccount;
@@ -320,5 +323,12 @@ public class Seller {
 		this.zipcode = zipcode;
 	}
 
+	public List<PartnerCategoryMap> getPartnerCategoryList() {
+		return partnerCategoryList;
+	}
+
+	public void setPartnerCategoryList(List<PartnerCategoryMap> partnerCategoryList) {
+		this.partnerCategoryList = partnerCategoryList;
+	}
 
 }

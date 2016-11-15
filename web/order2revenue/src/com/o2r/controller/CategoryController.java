@@ -35,6 +35,7 @@ import com.o2r.helper.SaveContents;
 import com.o2r.model.Category;
 import com.o2r.model.Partner;
 import com.o2r.model.Product;
+import com.o2r.model.ProductConfig;
 import com.o2r.model.TaxCategory;
 import com.o2r.service.CategoryService;
 import com.o2r.service.DownloadService;
@@ -737,7 +738,7 @@ public class CategoryController {
 		}
 
 	}
-	
+
 	@RequestMapping(value = "/seller/parterCategoryMap", method = RequestMethod.GET)
 	public ModelAndView parterCategoryMap(HttpServletRequest request,
 			@ModelAttribute("command") PartnerCategoryBean partnerCategoryBean,
@@ -747,17 +748,21 @@ public class CategoryController {
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		try {	
+		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			int pageNo = request.getParameter("page") != null ? Integer
 					.parseInt(request.getParameter("page")) : 0;
-			model.put("partnerCategoryMap", categoryService.listPartnerCategoryMap(
-					helperClass.getSellerIdfromSession(request), pageNo));
-			
+			model.put("partnerCategoryMap",
+					ConverterClass
+							.preparePartnerCategoryListBean(categoryService
+									.listPartnerCategoryMap(helperClass
+											.getSellerIdfromSession(request),
+											pageNo)));
+
 			List<Partner> partnerlist = partnerService.listPartners(helperClass
 					.getSellerIdfromSession(request));
 			List<String> partnerList = new ArrayList<String>();
-			
+
 			if (partnerlist != null && partnerlist.size() != 0) {
 				for (Partner bean : partnerlist) {
 					partnerList.add(bean.getPcName());
@@ -773,7 +778,7 @@ public class CategoryController {
 			return new ModelAndView("globalErorPage", model);
 		} catch (Throwable e) {
 			e.printStackTrace();
-			log.error("Failed By seller ID :"+sellerId,e);
+			log.error("Failed By seller ID :" + sellerId, e);
 		}
 
 		log.info("$$$ parterCategoryMap Ends : CategoryController $$$");
@@ -781,4 +786,80 @@ public class CategoryController {
 
 	}
 
+	@RequestMapping(value = "/seller/saveParterCategory", method = RequestMethod.POST)
+	public ModelAndView saveParterCategory(
+			@ModelAttribute("command") PartnerCategoryBean partnerCategoryBean,
+			BindingResult result, HttpServletRequest request) {
+
+		log.info("$$$ saveParterCategory Starts : CategoryController $$$");
+		int sellerId = 0;
+		Map<String, Object> model = new HashMap<String, Object>();
+		String parentcatid = request.getParameter("parentcatid");
+		if (result.hasErrors()) {
+			log.error("Errors in the product category");
+			return new ModelAndView("redirect:/seller/parterCategoryMap.html"
+					+ parentcatid);
+		}
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			categoryService
+					.addParterCategory(ConverterClass
+							.preparePartnerCategoryModel(partnerCategoryBean),
+							sellerId);
+		} catch (CustomException ce) {
+			log.error("saveCatInventory exception : " + ce.toString());
+			model.put("errorMessage", ce.getLocalMessage());
+			model.put("errorTime", ce.getErrorTime());
+			model.put("errorCode", ce.getErrorCode());
+			return new ModelAndView("globalErorPage", model);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			log.error("Failed! by Seller ID : " + sellerId, e);
+			return new ModelAndView("globalErorPage", model);
+		}
+		log.info("$$$ saveCatInventory Ends : CategoryController $$$");
+		return new ModelAndView("redirect:/seller/parterCategoryMap.html");
+	}
+
+	@RequestMapping(value = "/seller/searchPartnerCategoryMap", method = RequestMethod.POST)
+	public ModelAndView searchPartnerCategory(HttpServletRequest request,
+			@ModelAttribute("command") PartnerCategoryBean parterCategoryBean,
+			BindingResult result) {
+
+		log.info("$$$ searchPartnerCategory Starts : CategoryController $$$");
+		int sellerId = 0;
+		Map<String, Object> model = new HashMap<String, Object>();
+		List<PartnerCategoryBean> partnerCategoryList = new ArrayList<>();
+		String value = request.getParameter("value");
+		String searchPartnerCat = request.getParameter("searchPartnerCat");
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			if (searchPartnerCat != null && value != null) {
+				partnerCategoryList = ConverterClass
+						.preparePartnerCategoryListBean(categoryService
+								.searchPartnerCategory(
+										searchPartnerCat,
+										value,
+										helperClass
+												.getSellerIdfromSession(request)));
+			}
+
+			List<Partner> partnerlist = partnerService.listPartners(helperClass
+					.getSellerIdfromSession(request));
+			List<String> partnerList = new ArrayList<String>();
+
+			if (partnerlist != null && partnerlist.size() != 0) {
+				for (Partner bean : partnerlist) {
+					partnerList.add(bean.getPcName());
+				}
+			}
+			model.put("partnerList", partnerList);
+			model.put("partnerCategoryMap", partnerCategoryList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed By seller ID :" + sellerId, e);
+		}
+		log.info("$$$ searchPartnerCategory Ends : CategoryController $$$");
+		return new ModelAndView("initialsetup/partnerCategoryMap", model);
+	}
 }

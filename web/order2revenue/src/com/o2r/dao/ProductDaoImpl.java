@@ -749,8 +749,10 @@ public class ProductDaoImpl implements ProductDao {
 			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			criteria.addOrder(org.hibernate.criterion.Order.desc("productDate"));
 			returnlist = criteria.list();
-			for (Product product : returnlist)
+			for (Product product : returnlist) {
 				Hibernate.initialize(product.getProductConfig());
+				Hibernate.initialize(product.getPartnerCategoryMap());
+			}
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
@@ -1447,4 +1449,28 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		log.info("*** addPartnerCatMapping Ends : ProductDaoImpl ****");
 	}
+	
+	@Override
+	public void addPartnerCatMapping(Map<String, Product> productMap, int sellerId)
+			throws CustomException {
+
+		log.info("*** addPartnerCatMapping Starts : ProductDaoImpl ****");
+
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			for (Map.Entry<String, Product> entry : productMap.entrySet()) {
+				session.saveOrUpdate(entry.getValue());
+			}
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(GlobalConstant.addProductError,
+					new Date(), 1, GlobalConstant.addProductErrorCode, e);
+		}
+		log.info("*** addPartnerCatMapping Ends : ProductDaoImpl ****");
+	}	
 }

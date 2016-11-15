@@ -51,4 +51,14 @@ public interface CategoryDao {
 
 	public List<PartnerCategoryMap> listPartnerCategoryMap(int sellerId,
 			int pageNo) throws CustomException;
+
+	public void addParterCategory(PartnerCategoryMap partnerCategoryMap,
+			int sellerId) throws CustomException;
+
+	public PartnerCategoryMap getPartnerCategoryMap(long id)
+			throws CustomException;
+
+	public List<PartnerCategoryMap> searchPartnerCategory(
+			String searchCriteria, String value, int sellerId)
+			throws CustomException;
 }

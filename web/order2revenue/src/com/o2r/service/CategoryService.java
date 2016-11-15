@@ -51,4 +51,11 @@ public interface CategoryService {
 
 	public List<PartnerCategoryMap> listPartnerCategoryMap(int sellerId,
 			int pageNo) throws CustomException;
+
+	public void addParterCategory(PartnerCategoryMap partnerCategoryMap,
+			int sellerId) throws CustomException;
+
+	public List<PartnerCategoryMap> searchPartnerCategory(
+			String searchCriteria, String value, int sellerId)
+			throws CustomException;
 }

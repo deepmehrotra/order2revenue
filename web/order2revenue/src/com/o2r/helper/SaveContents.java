@@ -63,6 +63,7 @@ import com.o2r.model.PaymentUpload;
 import com.o2r.model.PaymentUpload_Order;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
+import com.o2r.model.Seller;
 import com.o2r.model.SellerAlerts;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.TaxablePurchases;
@@ -5095,10 +5096,19 @@ public class SaveContents {
 
 			Map<String, Boolean> partnerMap = partnerService
 					.getPartnerMap(sellerId);
+			Seller seller = sellerService.getSeller(sellerId);
 			List<Product> productList = productService.listProducts(sellerId);
 			Map<String, Product> productMap = new HashMap<String, Product>();
 			for (Product tmpProduct : productList) {
-				productMap.put(tmpProduct.getProductSkuCode().trim().toLowerCase(), tmpProduct);
+				productMap.put(tmpProduct.getProductSkuCode().trim()
+						.toLowerCase(), tmpProduct);
+			}
+			Map<String, Product> saveProductMap = new HashMap<String, Product>();
+			
+			List<PartnerCategoryMap> partnerCatList = categoryService.listPartnerCategoryMap(sellerId, 0);
+			Map<String, PartnerCategoryMap> partnerCategoryMap = new HashMap<String, PartnerCategoryMap>();
+			for (PartnerCategoryMap tmpPartnerCat : partnerCatList) {
+				partnerCategoryMap.put(tmpPartnerCat.getPartnerCategoryRef(), tmpPartnerCat);
 			}
 
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -5115,13 +5125,13 @@ public class SaveContents {
 
 						if (partnerMap.containsKey(entry.getCell(1).toString()
 								.trim())) {
-							
+
 							partnerName = entry.getCell(1).toString().trim();
-							
+
 							if (entry.getCell(0) != null
 									&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-								product = productMap.get(entry
-										.getCell(0).toString().trim().toLowerCase());
+								product = productMap.get(entry.getCell(0)
+										.toString().trim().toLowerCase());
 
 								if (product != null) {
 
@@ -5130,10 +5140,7 @@ public class SaveContents {
 
 										String catName = entry.getCell(2)
 												.toString().trim();
-										partnerCatMap = categoryService
-												.getPartnerCategoryMap(
-														partnerName,
-														catName, sellerId);
+										partnerCatMap = partnerCategoryMap.get(catName);
 
 										if (partnerCatMap == null) {
 											partnerCatMap = new PartnerCategoryMap();
@@ -5148,9 +5155,8 @@ public class SaveContents {
 										for (PartnerCategoryMap tempPartnerCatMap : product
 												.getPartnerCategoryMap()) {
 											if (partnerName
-													.equalsIgnoreCase(
-															tempPartnerCatMap
-																	.getPartnerName())) {
+													.equalsIgnoreCase(tempPartnerCatMap
+															.getPartnerName())) {
 												errorMessage
 														.append(" Channel Category reference already associated with this SKU for the Channel ");
 												validaterow = false;
@@ -5181,8 +5187,14 @@ public class SaveContents {
 					}
 					if (validaterow) {
 						partnerCatMap.getProduct().add(product);
+						partnerCatMap.setSeller(seller);
 						product.getPartnerCategoryMap().add(partnerCatMap);
-						productService.addPartnerCatMapping(product, sellerId);
+						// productService.addPartnerCatMapping(product,
+						// sellerId);
+						saveProductMap
+								.put(product.getProductSkuCode(), product);
+						partnerCategoryMap.put(
+								partnerCatMap.getPartnerCategoryRef(), partnerCatMap);
 					} else {
 						returnlist.put(errorMessage.toString(), "");
 					}
@@ -5196,6 +5208,10 @@ public class SaveContents {
 				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
 						+ entry.getCell(2) + " 3 :" + entry.getCell(3));
 				// Pre save to generate id for use in hierarchy
+			}
+			
+			if (saveProductMap != null && !saveProductMap.isEmpty()) {
+				productService.addPartnerCatMapping(saveProductMap, sellerId);
 			}
 			Set<String> errorSet = returnlist.keySet();
 			downloadUploadReportXLS(offices, "SKU_PartnerCat_Mapping",

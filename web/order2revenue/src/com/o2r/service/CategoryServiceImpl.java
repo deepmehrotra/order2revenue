@@ -109,4 +109,16 @@ public class CategoryServiceImpl implements CategoryService {
 			int pageNo) throws CustomException {
 		return categoryDao.listPartnerCategoryMap(sellerId, pageNo);
 	}
+
+	@Override
+	public void addParterCategory(PartnerCategoryMap partnerCategoryMap,
+			int sellerId) throws CustomException {
+		categoryDao.addParterCategory(partnerCategoryMap, sellerId);
+	}
+	
+	@Override
+	public List<PartnerCategoryMap> searchPartnerCategory(String searchCriteria,
+			String value, int sellerId) throws CustomException {
+		return categoryDao.searchPartnerCategory(searchCriteria, value, sellerId);
+	}
 }

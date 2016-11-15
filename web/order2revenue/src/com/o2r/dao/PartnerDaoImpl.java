@@ -130,7 +130,6 @@ public class PartnerDaoImpl implements PartnerDao {
 
 		log.info("*** getPartnerMap Starts : partnerDaoImpl****");
 		List<Partner> returnlist = null;
-		Partner returnObject = null;
 		Map<String, Boolean> partnerNameList = new HashMap<String, Boolean>();
 		try {
 			Session session = sessionFactory.openSession();
@@ -143,13 +142,15 @@ public class PartnerDaoImpl implements PartnerDao {
 
 			if (returnlist != null && returnlist.size() != 0) {
 
-				returnObject = (Partner) returnlist.get(0);
-				if (returnObject != null && returnObject.getNrnReturnConfig() != null) {
-					partnerNameList.put(returnObject.getPcName().trim(), returnObject.getNrnReturnConfig()
-							.isNrCalculator());
-				} else{
-					log.debug("Partner is null " + sellerId);
+				for (Partner partner : returnlist) {
+					if (partner != null && partner.getNrnReturnConfig() != null) {
+						partnerNameList.put(partner.getPcName().trim(), partner.getNrnReturnConfig()
+								.isNrCalculator());
+					} else{
+						log.debug("Partner is null " + sellerId);
+					}
 				}
+				
 			} else {
 				log.debug("No Partners available for Seller ID: " + sellerId);
 			}
