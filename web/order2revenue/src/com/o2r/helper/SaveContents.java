@@ -5099,16 +5099,23 @@ public class SaveContents {
 			Seller seller = sellerService.getSeller(sellerId);
 			List<Product> productList = productService.listProducts(sellerId);
 			Map<String, Product> productMap = new HashMap<String, Product>();
-			for (Product tmpProduct : productList) {
-				productMap.put(tmpProduct.getProductSkuCode().trim()
-						.toLowerCase(), tmpProduct);
+			if (productList != null && !productList.isEmpty()) {
+				for (Product tmpProduct : productList) {
+					productMap.put(tmpProduct.getProductSkuCode().trim()
+							.toLowerCase(), tmpProduct);
+				}
 			}
 			Map<String, Product> saveProductMap = new HashMap<String, Product>();
-			
-			List<PartnerCategoryMap> partnerCatList = categoryService.listPartnerCategoryMap(sellerId, 0);
+
+			List<PartnerCategoryMap> partnerCatList = categoryService
+					.listPartnerCategoryMap(sellerId, 0);
 			Map<String, PartnerCategoryMap> partnerCategoryMap = new HashMap<String, PartnerCategoryMap>();
-			for (PartnerCategoryMap tmpPartnerCat : partnerCatList) {
-				partnerCategoryMap.put(tmpPartnerCat.getPartnerCategoryRef(), tmpPartnerCat);
+			if (partnerCatList != null && !partnerCatList.isEmpty()) {
+				for (PartnerCategoryMap tmpPartnerCat : partnerCatList) {
+					partnerCategoryMap.put(
+							tmpPartnerCat.getPartnerCategoryRef(),
+							tmpPartnerCat);
+				}
 			}
 
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
@@ -5140,7 +5147,8 @@ public class SaveContents {
 
 										String catName = entry.getCell(2)
 												.toString().trim();
-										partnerCatMap = partnerCategoryMap.get(catName);
+										partnerCatMap = partnerCategoryMap
+												.get(catName);
 
 										if (partnerCatMap == null) {
 											partnerCatMap = new PartnerCategoryMap();
@@ -5194,7 +5202,8 @@ public class SaveContents {
 						saveProductMap
 								.put(product.getProductSkuCode(), product);
 						partnerCategoryMap.put(
-								partnerCatMap.getPartnerCategoryRef(), partnerCatMap);
+								partnerCatMap.getPartnerCategoryRef(),
+								partnerCatMap);
 					} else {
 						returnlist.put(errorMessage.toString(), "");
 					}
@@ -5209,7 +5218,7 @@ public class SaveContents {
 						+ entry.getCell(2) + " 3 :" + entry.getCell(3));
 				// Pre save to generate id for use in hierarchy
 			}
-			
+
 			if (saveProductMap != null && !saveProductMap.isEmpty()) {
 				productService.addPartnerCatMapping(saveProductMap, sellerId);
 			}

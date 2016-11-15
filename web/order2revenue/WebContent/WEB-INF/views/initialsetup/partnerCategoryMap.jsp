@@ -362,7 +362,6 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 
 		function validateCat() {
 			var elCat = document.getElementById('partnerCategoryRef');
-			alert(elCat.value);
 			if (elCat.value == null || elCat.value == '') {
 				$('#addParterCategory-error').show();
 				document.getElementById("addParterCategory-error").innerHTML = "Please enter Partner Category Reference";
