@@ -2916,7 +2916,7 @@ public class SaveContents {
 				double negativeAmount = 0;
 				// Product product=new Product();
 				OrderPayment payment = new OrderPayment();
-				//boolean combo = false;
+				// boolean combo = false;
 				List<Order> onj = null;
 				Date recievedDate = null;
 				boolean orderavailable = false;
@@ -3195,11 +3195,9 @@ public class SaveContents {
 								payment.setPaymentFileName(uploadFileName);
 								totalpositive = totalpositive + positiveAmount;
 								totalnegative = totalnegative + negativeAmount;
-								
-									order = orderService.addOrderPayment(
-											skucode, channelId, payment,
-											sellerId);
-								
+
+								order = orderService.addOrderPayment(skucode,
+										channelId, payment, sellerId);
 
 								// New
 								PaymentUpload_Order paymentUpload_Order = new PaymentUpload_Order();
@@ -5094,10 +5092,19 @@ public class SaveContents {
 					+ new Date().getTime();
 			log.info(noOfEntries.toString());
 			log.debug("After getting no of rows" + noOfEntries);
+
+			Map<String, Boolean> partnerMap = partnerService
+					.getPartnerMap(sellerId);
+			List<Product> productList = productService.listProducts(sellerId);
+			Map<String, Product> productMap = new HashMap<String, Product>();
+			for (Product tmpProduct : productList) {
+				productMap.put(tmpProduct.getProductSkuCode().trim().toLowerCase(), tmpProduct);
+			}
+
 			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
-				Partner partner = null;
 				Product product = null;
 				PartnerCategoryMap partnerCatMap = null;
+				String partnerName = null;
 
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
@@ -5105,14 +5112,16 @@ public class SaveContents {
 				try {
 					if (entry.getCell(1) != null
 							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						partner = partnerService.getPartner(entry.getCell(1)
-								.toString(), sellerId);
-						if (partner != null) {
 
+						if (partnerMap.containsKey(entry.getCell(1).toString()
+								.trim())) {
+							
+							partnerName = entry.getCell(1).toString().trim();
+							
 							if (entry.getCell(0) != null
 									&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-								product = productService.getProduct(entry
-										.getCell(0).toString(), sellerId);
+								product = productMap.get(entry
+										.getCell(0).toString().trim().toLowerCase());
 
 								if (product != null) {
 
@@ -5123,14 +5132,13 @@ public class SaveContents {
 												.toString().trim();
 										partnerCatMap = categoryService
 												.getPartnerCategoryMap(
-														partner.getPcName(),
+														partnerName,
 														catName, sellerId);
 
 										if (partnerCatMap == null) {
 											partnerCatMap = new PartnerCategoryMap();
 											partnerCatMap
-													.setPartnerName(partner
-															.getPcName());
+													.setPartnerName(partnerName);
 											partnerCatMap
 													.setPartnerCategoryRef(entry
 															.getCell(2)
@@ -5139,8 +5147,7 @@ public class SaveContents {
 
 										for (PartnerCategoryMap tempPartnerCatMap : product
 												.getPartnerCategoryMap()) {
-											if (partner
-													.getPcName()
+											if (partnerName
 													.equalsIgnoreCase(
 															tempPartnerCatMap
 																	.getPartnerName())) {
@@ -5181,7 +5188,7 @@ public class SaveContents {
 					}
 				} catch (Exception e) {
 					log.error("Failed! by SellerId : " + sellerId, e);
-					if (partner != null) {
+					if (partnerName != null) {
 						errorMessage.append("Invalid Input! ");
 						returnlist.put(errorMessage.toString(), "");
 					}

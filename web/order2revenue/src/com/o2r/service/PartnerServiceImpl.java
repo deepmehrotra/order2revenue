@@ -1,6 +1,7 @@
 package com.o2r.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,17 +29,16 @@ public class PartnerServiceImpl implements PartnerService {
 			throws CustomException {
 		partnerDao.addPartner(partner, sellerId);
 	}
-	
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void editPartner(Partner partner, int sellerId)
 			throws CustomException {
 		partnerDao.editPartner(partner, sellerId);
 	}
-	
+
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public void addMetaPartner(MetaPartner partner)
-			throws CustomException {
+	public void addMetaPartner(MetaPartner partner) throws CustomException {
 		partnerDao.addMetaPartner(partner);
 	}
 
@@ -62,7 +62,13 @@ public class PartnerServiceImpl implements PartnerService {
 
 	@Override
 	public MetaPartner getMetaPartner(String partnerName)
-			throws CustomException { 
+			throws CustomException {
 		return partnerDao.getMetaPartner(partnerName);
+	}
+
+	@Override
+	public Map<String, Boolean> getPartnerMap(int sellerId)
+			throws CustomException {
+		return partnerDao.getPartnerMap(sellerId);
 	}
 }

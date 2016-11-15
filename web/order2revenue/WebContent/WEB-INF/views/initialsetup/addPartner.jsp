@@ -116,7 +116,7 @@ input+label {
 				id="centerpane">
 				<div class="row">
 					<div class="col-lg-12">
-						<form:form method="POST" action="savePartner.html"
+						<form:form method="POST" action="saveMetaPartner.html"
 							id="addpartnerform" name="addpartnerform" role="form"
 							class="wizard-big form-horizontal" enctype="multipart/form-data">
 							<%-- <form id="form" action="#" class="wizard-big form-horizontal"
@@ -4277,12 +4277,13 @@ input+label {
 									toggler : "Please select any Payment Cycle"
 								}
 							});
+			/* meta disable */
 			$(".commissionType").rules("add", {
 				required : function(element) {
 					var clickCheckbox = document.querySelector('.js-switch_2');
 					return clickCheckbox.checked;
 				}
-			});
+			}); 
 			$("#fixedCommissionPercent").rules("add", {
 				required : function(element) {
 					if (getRole('commissionType') == 'fixed')
