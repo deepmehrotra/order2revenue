@@ -5846,6 +5846,7 @@ public class SaveMappedFiles {
 		Events event = null;
 		List<Order> saveList = new ArrayList<Order>();
 		Map<String, String> idsList = new HashMap<String, String>();
+		Map<String, Order> multyQtyMap = new HashMap<String, Order>();
 		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
 		OrderBean order = null;
 		int noOfEntries = 1;
@@ -5889,6 +5890,9 @@ public class SaveMappedFiles {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				entry = worksheet.getRow(rowIndex);
 				validaterow = true;
+				String orderType = null;
+				boolean isMulty = false;
+				String uniqueID4Map = "";
 				order = new OrderBean();
 				customerBean = new CustomerBean();
 				otb = new OrderTaxBean();
@@ -5900,6 +5904,14 @@ public class SaveMappedFiles {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
 				String channelorderid=null;
 				try {
+					
+					if (cellIndexMap.get(columHeaderMap.get("OrderType")) != null) {
+						index = cellIndexMap.get(columHeaderMap.get("OrderType"));
+						if (entry.getCell(index) != null
+								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							orderType = entry.getCell(index).toString();
+						}
+					}
 
 					try {
 						index = cellIndexMap.get(columHeaderMap
@@ -6007,7 +6019,8 @@ public class SaveMappedFiles {
 									validaterow = false;
 								}
 							}
-
+							
+							uniqueID4Map = channelorderid;
 						/*	if (idsList == null || !idsList.containsKey(id)
 									&& !duplicateKey.containsKey(id)
 									&& productConfig != null) {
@@ -6089,12 +6102,32 @@ public class SaveMappedFiles {
 									}													
 									duplicateKey.put(channelorderid, itemID);
 								} else {
+									if(orderType != null && orderType != ""){
+										isMulty = true;
+										order.setChannelOrderID(channelorderid);
+										if (productConfig != null){
+											order.setProductSkuCode(productConfig.getProductSkuCode());	
+											order.setPartnerCommission(productConfig.getCommision());
+										}													
+										duplicateKey.put(channelorderid, itemID);
+									} else {
+										errorMessage.append("Channel Order Id is already present.");
+										validaterow = false;
+									}									
+								}
+							} else {
+								if(orderType != null && orderType != ""){
+									isMulty = true;
+									order.setChannelOrderID(channelorderid);
+									if (productConfig != null){
+										order.setProductSkuCode(productConfig.getProductSkuCode());	
+										order.setPartnerCommission(productConfig.getCommision());
+									}													
+									duplicateKey.put(channelorderid, itemID);
+								} else {
 									errorMessage.append("Channel Order Id is already present.");
 									validaterow = false;
 								}
-							} else {
-								errorMessage.append("Channel Order Id is already present.");
-								validaterow = false;
 							}																								
 						}
 					}
@@ -6535,13 +6568,33 @@ public class SaveMappedFiles {
 						order.setOrderFileName(uploadFileName);
 						order.setCustomer(customerBean);
 						order.setOrderTax(otb);
-						/*
-						 * orderService.addOrder(ConverterClass.prepareModel(order
-						 * ), sellerId);
-						 */
-						System.out.println(" Adding order to save list : "
-								+ order.getChannelOrderID());
-						saveList.add(ConverterClass.prepareModel(order));
+						if(isMulty || orderType != null){
+							Order orderMul = null;
+							if(multyQtyMap.size() != 0 && multyQtyMap.get(uniqueID4Map) != null){								
+								orderMul = multyQtyMap.get(uniqueID4Map);
+								orderMul.setQuantity(orderMul.getQuantity() + order.getQuantity());
+								multyQtyMap.put(uniqueID4Map, orderMul);								
+							} else {
+								List<Order> resultList = orderService.searchAsIsOrder("channelOrderID", uniqueID4Map, sellerId);
+								if(resultList != null && resultList.size() == 1){
+									orderMul = resultList.get(0);
+									orderMul.setQuantity(orderMul.getQuantity()+order.getQuantity());
+									orderMul.setCustomer(ConverterClass.prepareModel(order).getCustomer());
+									orderMul.setOrderTax(ConverterClass.prepareModel(order).getOrderTax());
+									orderMul.setOrderPayment(ConverterClass.prepareModel(order).getOrderPayment());
+									orderMul.setOrderTimeline(ConverterClass.prepareModel(order).getOrderTimeline());
+									orderMul.setOrderReturnOrRTO(ConverterClass.prepareModel(order).getOrderReturnOrRTO());
+									orderMul.setSeller(ConverterClass.prepareModel(order).getSeller());
+									orderMul.setProductConfig(ConverterClass.prepareModel(order).getProductConfig());
+									orderMul.setConsolidatedOrder(ConverterClass.prepareModel(order).getConsolidatedOrder());										
+									multyQtyMap.put(uniqueID4Map, orderMul);
+								} else {									
+									multyQtyMap.put(uniqueID4Map, ConverterClass.prepareModel(order));
+								}
+							}
+						} else {
+							saveList.add(ConverterClass.prepareModel(order));
+						}						
 					} else {
 						order.setCustomer(customerBean);
 						order.setOrderTax(otb);
@@ -6560,8 +6613,15 @@ public class SaveMappedFiles {
 
 			try {
 				System.out.println(" SaveList Size : " + saveList.size());
-				if (saveList != null && saveList.size() != 0)
+				
+				if ((saveList != null && saveList.size() != 0) || multyQtyMap.size() != 0){
+					if(multyQtyMap != null && multyQtyMap.size() != 0){
+						for(Entry<String, Order> eachOrder : multyQtyMap.entrySet()){							
+							saveList.add(eachOrder.getValue());
+						}
+					}
 					orderService.addOrder(saveList, sellerId);
+				}				
 			} catch (CustomException ce) {
 				returnOrderMap
 						.put("Row :1:Note-Some orders("
