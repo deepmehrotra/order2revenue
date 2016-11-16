@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.o2r.model.AmazonOrderInfo;
 import com.o2r.model.Seller;
-
+ 
 public interface MwsAmazonOrdMgmtDao {
 
 	public List<AmazonOrderInfo> getOrderList() throws Exception;

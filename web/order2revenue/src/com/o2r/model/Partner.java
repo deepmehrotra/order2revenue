@@ -63,7 +63,7 @@ public class Partner {
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	private NRnReturnConfig nrnReturnConfig;
-	
+	 
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<Order> orders = new ArrayList<Order>();
 	
