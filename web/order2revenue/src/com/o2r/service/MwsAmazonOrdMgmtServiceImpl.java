@@ -18,8 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersClient;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsRequest;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResponse;
+import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersRequest;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResponse;
+import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult;
 import com.amazonservices.mws.orders._2013_09_01.model.OrderItem;
 import com.amazonservices.mws.orders._2013_09_01.model.ResponseHeaderMetadata;
 import com.amazonservices.mws.orders._2013_09_01.samples.MarketplaceWebServiceOrdersSampleConfig;
@@ -50,11 +52,11 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 	}
 
 	@Override
-	public AuthInfoBean getAuthInfoBeanObj(PartnerSellerAuthInfo sellerAuthInfo) throws Exception {
-		AuthInfoBean authInfoBean = null;
+	public PartnerSellerAuthInfo getAuthInfoBeanObj(PartnerSellerAuthInfo sellerAuthInfo) throws Exception {
+		PartnerSellerAuthInfo authInfoBean = null;
 		try {
-			authInfoBean = new AuthInfoBean();
-			authInfoBean.setSellerid(sellerAuthInfo.getSellerid());
+			authInfoBean = new PartnerSellerAuthInfo();
+			authInfoBean.setSellerid(sellerAuthInfo.getSellerid());	
 			authInfoBean.setAccesskey(sellerAuthInfo.getAccesskey());
 			authInfoBean.setMwsauthtoken(sellerAuthInfo.getMwsauthtoken());
 			authInfoBean.setSecretkey(sellerAuthInfo.getSecretkey());
@@ -118,7 +120,7 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 	}
 
 	@Override
-	public com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult getListOrders(XMLGregorianCalendar createdAfter, XMLGregorianCalendar createdBefore, List<String> orderStatus, AuthInfoBean authInfo) throws Exception {
+	public com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult getListOrders(XMLGregorianCalendar createdAfter, XMLGregorianCalendar createdBefore, List<String> orderStatus, PartnerSellerAuthInfo authInfo) throws Exception {
 		com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult listOrdersResult = null;
 		try {
 			listOrdersResult = new com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult();
@@ -142,7 +144,7 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 	}
 
 	@Override
-	public com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult getListOrderItems(AuthInfoBean authInfo, String amazonOrderId) throws Exception {
+	public com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult getListOrderItems(PartnerSellerAuthInfo authInfo, String amazonOrderId) throws Exception {
 		com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult listOrderItemsResult = null;
 		try {
 			listOrderItemsResult = new com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult();
@@ -166,6 +168,17 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 		return null;
 	}
 
+	
+	//getAmazonOrderInfoList
+	
+	@Override
+	public List<AmazonOrderInfo> getAmazonOrderInfoList(PartnerSellerAuthInfo authInfo) throws Exception {
+		// TODO Auto-generated method stub
+		
+		return amazonOrdMgmtDao.getOrderList();
+		//return null;
+	}
+	
 	@Override
 	public void saveOrderInfo(com.amazonservices.mws.orders._2013_09_01.model.Order order, List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems) throws Exception {
 		try {
@@ -259,6 +272,60 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 			expObj.printStackTrace();
 		}
 	}
+	
+	
+	
+	
+	@Override
+	public void saveOrderInfo(com.amazonservices.mws.orders._2013_09_01.model.Order order) throws Exception {
+		try {
+			AmazonOrderInfo amazonOrderInfo = new AmazonOrderInfo();
+			amazonOrderInfo.setAmazonorderid(order.getAmazonOrderId());
+			amazonOrderInfo.setSellerorderid(order.getSellerOrderId());
+			amazonOrderInfo.setPurchasedate(toDate(order.getPurchaseDate()));
+			amazonOrderInfo.setLastupdatedate(toDate(order.getLastUpdateDate()));
+			amazonOrderInfo.setOrderstatus(order.getOrderStatus());
+			amazonOrderInfo.setFulfillmentchannel(order.getFulfillmentChannel());
+			amazonOrderInfo.setSaleschannel(order.getSalesChannel());
+			amazonOrderInfo.setOrderchannel(order.getOrderChannel());
+			amazonOrderInfo.setShipservicelevel(order.getShipServiceLevel());
+			amazonOrderInfo.setOrdertotalcurrencycode(order.getOrderTotal().getCurrencyCode());
+			amazonOrderInfo.setOrdertotalamount(order.getOrderTotal().getAmount());
+			amazonOrderInfo.setNumberofitemsshipped(order.getNumberOfItemsShipped());
+			amazonOrderInfo.setNumberofitemsunshipped(order.getNumberOfItemsUnshipped());
+			//amazonOrderInfo.setPaymentexecutiondetailcurrencycode(order.getPaymentExecutionDetail().get(0).getPayment().getCurrencyCode());
+			//amazonOrderInfo.setPaymentexecutiondetailamount(order.getPaymentExecutionDetail().get(0).getPayment().getAmount());
+			//amazonOrderInfo.setPaymentexecutiondetailpaymentmethod(order.getPaymentExecutionDetail().get(0).getPaymentMethod());
+			amazonOrderInfo.setPaymentmethod(order.getPaymentMethod());
+			amazonOrderInfo.setMarketplaceid(order.getMarketplaceId());
+			amazonOrderInfo.setBuyeremail(order.getBuyerEmail());
+			amazonOrderInfo.setBuyername(order.getBuyerName());
+			amazonOrderInfo.setShipmentservicelevelcategory(order.getShipmentServiceLevelCategory());
+			amazonOrderInfo.setShippedbyamazontfm(order.getShippedByAmazonTFM().toString());
+			amazonOrderInfo.setTfmshipmentstatus(order.getTFMShipmentStatus());
+			amazonOrderInfo.setCbadisplayableshippinglabel(order.getCbaDisplayableShippingLabel());
+			amazonOrderInfo.setOrdertype(order.getOrderType());
+			amazonOrderInfo.setEarliestshipdate(toDate(order.getEarliestShipDate()));
+			amazonOrderInfo.setLatestshipdate(toDate(order.getLatestShipDate()));
+			amazonOrderInfo.setEarliestdeliverydate(toDate(order.getEarliestDeliveryDate()));
+			amazonOrderInfo.setLatestdeliverydate(toDate(order.getLatestDeliveryDate()));
+			//amazonOrderInfo.setIsbusinessorder(order.getIsBusinessOrder().toString());
+			amazonOrderInfo.setIsbusinessorder(order.getIsBusinessOrder()+"");
+			amazonOrderInfo.setPurchaseordernumber(order.getPurchaseOrderNumber());
+			amazonOrderInfo.setIsprime(order.getIsPrime().toString());
+			amazonOrderInfo.setIspremiumorder(order.getIsPremiumOrder().toString());
+			//amazonOrderInfo.setRequestid(order);
+			
+			//amazonOrderInfo.setSeller(seller);
+			
+			
+			//amazonOrderInfo.setAmazonOrderItemInfos(new HashSet<AmazonOrderItemInfo>(amazonOrderItemInfos));
+			amazonOrdMgmtDao.saveAmazonOrderInfo(amazonOrderInfo);
+		} catch (Exception expObj) {
+			expObj.printStackTrace();
+		}
+	}
+	
 
 	@Override
 	public Date toDate(XMLGregorianCalendar calendar) throws Exception {
@@ -273,5 +340,28 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 		}
 		return calendar.toGregorianCalendar().getTime();
 	}
+
+	/*@Override
+	public PartnerSellerAuthInfo getAuthInfoBeanObj(
+			PartnerSellerAuthInfo sellerAuthInfo) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ListOrdersResult getListOrders(XMLGregorianCalendar createdAfter,
+			XMLGregorianCalendar createdBefore, List<String> orderStatus,
+			PartnerSellerAuthInfo authInfo) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ListOrderItemsResult getListOrderItems(
+			PartnerSellerAuthInfo authInfo, String amazonOrderId)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}*/
 
 }

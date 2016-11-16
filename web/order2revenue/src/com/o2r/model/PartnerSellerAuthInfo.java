@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Table(name="partner_seller_auth_info"
     ,catalog="o2rschema"
 )
-public class PartnerSellerAuthInfo  implements java.io.Serializable {
+public class PartnerSellerAuthInfo  {
 
 
      private Integer id;

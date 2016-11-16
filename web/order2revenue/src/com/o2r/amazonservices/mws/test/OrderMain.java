@@ -18,6 +18,9 @@ import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersRequest;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResponse;
 import com.amazonservices.mws.orders._2013_09_01.model.ResponseHeaderMetadata;
 import com.o2r.amazonservices.mws.constants.MWSConstants;
+import com.o2r.model.PartnerSellerAuthInfo;
+import com.o2r.service.OrderService;
+import com.o2r.service.OrderServiceImpl;
 
 public class OrderMain {
 
@@ -25,8 +28,8 @@ public class OrderMain {
 		try {
 			testHai();
 			invokeListOrders();
-			//invokeGetOrder();
-			//invokeListOrderItems();
+			invokeGetOrder();
+			invokeListOrderItems();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,10 +46,14 @@ public class OrderMain {
 		try {
 			ListOrdersResponse response = client.listOrders(request);
 			ResponseHeaderMetadata rhmd = response.getResponseHeaderMetadata();
+		
             System.out.println("RequestId: "+rhmd.getRequestId());
             System.out.println("Timestamp: "+rhmd.getTimestamp());
             String responseXml = response.toXML();
             System.out.println("Orders Response:"+responseXml);
+            
+           
+            
 		} catch (Exception expObj) {
 			expObj.printStackTrace();
 		}
@@ -70,6 +77,17 @@ public class OrderMain {
 			orderStatus.add("Shipped");
 			request.setOrderStatus(orderStatus);
 			listOrders(client, request);
+			
+			 /*PartnerSellerAuthInfo partnerSellerAuthInfo = new PartnerSellerAuthInfo();
+	         partnerSellerAuthInfo.setSellerid(MWSConstants.SELLERID);
+	         partnerSellerAuthInfo.setMwsauthtoken(MWSConstants.MWSAUTHTOKEN);
+	         partnerSellerAuthInfo.setAccesskey(MWSConstants.ACCESSKEY);
+	         partnerSellerAuthInfo.setSecretkey(MWSConstants.SECRETKEY);
+	         partnerSellerAuthInfo.setServiceurl(MWSConstants.SERVICEURL);
+	         partnerSellerAuthInfo.setStatus(1);// 1 is shipped.	        
+	         OrderServiceImpl  orderservice = new  OrderServiceImpl();
+	         orderservice.savePartnerSellerAutoInfo(partnerSellerAuthInfo);*/     
+	            
 		} catch (Exception expObj) {
 			expObj.printStackTrace();
 		}

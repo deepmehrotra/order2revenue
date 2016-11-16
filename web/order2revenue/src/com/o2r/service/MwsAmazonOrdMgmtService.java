@@ -17,7 +17,10 @@ public interface MwsAmazonOrdMgmtService {
 	
 	public List<Seller> getSellers() throws Exception;
 	
-	public AuthInfoBean getAuthInfoBeanObj(PartnerSellerAuthInfo sellerAuthInfo) throws Exception;
+	//public AuthInfoBean getAuthInfoBeanObj(PartnerSellerAuthInfo sellerAuthInfo) throws Exception;
+	
+	public PartnerSellerAuthInfo getAuthInfoBeanObj(PartnerSellerAuthInfo sellerAuthInfo) throws Exception;
+	
 	
 	public XMLGregorianCalendar getCreatedAfter(Date createdAfter) throws Exception;
 	
@@ -25,14 +28,19 @@ public interface MwsAmazonOrdMgmtService {
 	
 	public List<String> getConfiguredoOrderStatus() throws Exception;
 	
-	public com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult getListOrders(XMLGregorianCalendar createdAfter, XMLGregorianCalendar createdBefore, List<String> orderStatus, AuthInfoBean authInfo) throws Exception;
+	public com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult getListOrders(XMLGregorianCalendar createdAfter, XMLGregorianCalendar createdBefore, List<String> orderStatus, PartnerSellerAuthInfo authInfo) throws Exception;
 	
-	public com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult getListOrderItems(AuthInfoBean authInfo, String amazonOrderId) throws Exception;
+	public com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult getListOrderItems(PartnerSellerAuthInfo authInfo, String amazonOrderId) throws Exception;
 	
 	public AmazonOrderInfo getAmazonOrderInfoObj(AuthInfoBean authInfo, String amazonOrderId) throws Exception;
+	
+	public List<AmazonOrderInfo> getAmazonOrderInfoList(PartnerSellerAuthInfo authInfo) throws Exception;
 	
 	public Date toDate(XMLGregorianCalendar calendar) throws Exception;
 	
 	public void saveOrderInfo(com.amazonservices.mws.orders._2013_09_01.model.Order order, List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems) throws Exception;
+	
+	public void saveOrderInfo(com.amazonservices.mws.orders._2013_09_01.model.Order order) throws Exception;
+	
 	
 }

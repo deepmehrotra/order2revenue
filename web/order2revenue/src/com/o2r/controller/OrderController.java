@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -20,6 +21,8 @@ import java.util.Properties;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -38,7 +41,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersClient;
+import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersRequest;
+import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResponse;
+import com.amazonservices.mws.orders._2013_09_01.model.ResponseHeaderMetadata;
 import com.google.gson.Gson;
+import com.o2r.amazonservices.mws.constants.MWSConstants;
 import com.o2r.bean.DataConfig;
 import com.o2r.bean.OrderBean;
 import com.o2r.bean.PoPaymentDetailsBean;
@@ -49,6 +57,7 @@ import com.o2r.helper.FileUploadForm;
 import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
 import com.o2r.helper.SaveMappedFiles;
+import com.o2r.model.AmazonOrderInfo;
 import com.o2r.model.Events;
 import com.o2r.model.GatePass;
 import com.o2r.model.Order;
@@ -56,9 +65,13 @@ import com.o2r.model.Partner;
 import com.o2r.model.Product;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
+import com.o2r.model.PartnerSellerAuthInfo;
 import com.o2r.service.DownloadService;
 import com.o2r.service.EventsService;
+import com.o2r.service.MwsAmazonOrdMgmtService;
+import com.o2r.service.MwsAmazonOrdMgmtServiceImpl;
 import com.o2r.service.OrderService;
+import com.o2r.service.OrderServiceImpl;
 import com.o2r.service.PartnerService;
 import com.o2r.service.ProductService;
 import com.o2r.service.ReportGeneratorService;
@@ -80,6 +93,10 @@ public class OrderController {
 	private SaveContents saveContents;
 	@Autowired
 	private PartnerService partnerService;
+	
+	
+	
+	
 	@Autowired
 	private SellerService serviceService;
 	@Autowired
@@ -92,12 +109,20 @@ public class OrderController {
 	private HelperClass helperClass;
 	@Autowired
 	EventsService eventsService;
+	
+	@Autowired
+	MwsAmazonOrdMgmtService mwsAmazonOrdMgmtService;
+	
+	
 	@Autowired
 	DataConfig dataConfig;
 	private int sellerId=0;
 	@Resource(name = "saveMappedFiles")
 	private SaveMappedFiles saveMappedFiles;
 	private static final String UPLOAD_DIR = "upload";
+	
+	
+	public MwsAmazonOrdMgmtService ordMgmtService = new MwsAmazonOrdMgmtServiceImpl();
 	
 	private int listSize=500;
 	
@@ -1051,5 +1076,149 @@ public class OrderController {
 		}
 		log.info("$$$ getXLS Ends : OrderController $$$");
 	}
+	
+	
+	@RequestMapping(value = "/seller/viewSellerAuthoInfoDtls", method = RequestMethod.GET)	
+	public ModelAndView viewSellerAuthoInfoDtls(HttpServletRequest request,
+			@ModelAttribute("command") PartnerSellerAuthInfo partnerSellerAuthInfo, BindingResult result) {
+
+		log.info("$$$ poOrderListDailyAct Starts : OrderController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			String sellerId=helperClass.getSellerIdfromSession(request)+"";	
+			//log.debug(" Downloading the Log: " + id);
+			//int uploadId = Integer.parseInt(id);			
+			
+			
+			
+			System.out.println("sellerIdsellerIdsellerId "+sellerId);
+			
+			System.out.println("MWSConstants.SELLERID"+MWSConstants.SELLERID);
+			
+			
+			System.out.println("I am in the view SellerAuthoInfor CONTROLLLLER");
+			
+			MarketplaceWebServiceOrdersClient client = com.o2r.amazonservices.mws.orders.config.MarketplaceWebServiceOrdersSampleConfig.getClient();
+			ListOrdersRequest request1 = new ListOrdersRequest();
+			List<String> marketplaceIds = new ArrayList<String>();
+			marketplaceIds.add(MWSConstants.MARKETPLACEID);
+			request1.setSellerId(MWSConstants.SELLERID);
+			request1.setMWSAuthToken(MWSConstants.MWSAUTHTOKEN);
+			request1.setMarketplaceId(marketplaceIds);
+			request1.setCreatedAfter(getCreatedAfter());
+			request1.setCreatedBefore(getCreatedBefore());
+			List<String> orderStatus = new ArrayList<String>();
+			orderStatus.add("Pending");
+			//orderStatus.add("PendingAvailability");
+			//request1.add("Shipped");
+			request1.setOrderStatus(orderStatus);
+			listOrders(client, request1);
+			
+			 
+	         partnerSellerAuthInfo.setSellerid(MWSConstants.SELLERID);
+	         partnerSellerAuthInfo.setMwsauthtoken(MWSConstants.MWSAUTHTOKEN);
+	         partnerSellerAuthInfo.setAccesskey(MWSConstants.ACCESSKEY);
+	         partnerSellerAuthInfo.setSecretkey(MWSConstants.SECRETKEY);
+	         partnerSellerAuthInfo.setServiceurl(MWSConstants.SERVICEURL);
+	         partnerSellerAuthInfo.setStatus(1);// 1 is shipped.    
+	         partnerSellerAuthInfo.setMarketplaceid(MWSConstants.MARKETPLACEID);// 1 is shipped.    
+	         //orderService.savePartnerSellerAutoInfo(partnerSellerAuthInfo);	
+			
+			//String sellerId= MWSConstants.SELLERID;
+			 com.o2r.jobs.AmazonOrderMgmt amazonOrderMgmt = new com.o2r.jobs.AmazonOrderMgmt();
+			 
+			 
+			 /*System.out.println("setSellerid"+partnerSellerAuthInfo.getSellerid());
+			 System.out.println("setMwsauthtoken"+partnerSellerAuthInfo.getMwsauthtoken());
+			 System.out.println("setAccesskey"+partnerSellerAuthInfo.getAccesskey());
+			 System.out.println("setSecretkey"+partnerSellerAuthInfo.getSecretkey());
+			 System.out.println("setServiceurl"+partnerSellerAuthInfo.getServiceurl());*/
+			 
+			 
+			 
+			 com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult listOrderResult = ordMgmtService.getListOrders(ordMgmtService.getCreatedAfter(new Date()), ordMgmtService.getCreatedBefore(new Date()), ordMgmtService.getConfiguredoOrderStatus(), partnerSellerAuthInfo);
+				List<com.amazonservices.mws.orders._2013_09_01.model.Order> orders = listOrderResult.getOrders();
+				for (com.amazonservices.mws.orders._2013_09_01.model.Order order : orders) {					
+					System.out.println("ORDERRSSSSSSSSSSSSS"+orders.size());
+					mwsAmazonOrdMgmtService.saveOrderInfo(order);						
+				}
+				List<AmazonOrderInfo> listamazaon= new ArrayList<AmazonOrderInfo>();
+				listamazaon = mwsAmazonOrdMgmtService.getAmazonOrderInfoList(partnerSellerAuthInfo);
+				
+				System.out.println(" The size of the amazon  ============================="+listamazaon.size());
+				
+				
+				model.put("amazonOrderInfoList",listamazaon);
+				
+		} catch (Throwable e) {
+			e.printStackTrace();
+			log.error("Failed! by Seller ID : "+sellerId, e);
+		}	
+			
+	         log.info("$$$ getXLS Ends : OrderController $$$");
+		
+	     //return new ModelAndView("initialsetup/viewSellerAuthoInfoDtls", model);
+	     return new ModelAndView("dailyactivities/listAmazonwsOrderInfo", model);
+	}
+	
+	
+	public XMLGregorianCalendar getCreatedAfter() throws Exception {
+		try {
+			Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DATE, 2);
+            calendar.set(Calendar.MONTH, 9);
+            calendar.set(Calendar.YEAR, 2016);
+            GregorianCalendar c = new GregorianCalendar();
+            c.setTime(calendar.getTime());
+            XMLGregorianCalendar dateCreatedAfter = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+            dateCreatedAfter = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+            return dateCreatedAfter;
+            
+		} catch (Exception expObj) {
+			expObj.printStackTrace();
+		}
+		return null;
+	}
+	
+	public XMLGregorianCalendar getCreatedBefore() throws Exception {
+		try {
+			Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DATE, 3);
+            calendar.set(Calendar.MONTH, 9);
+            calendar.set(Calendar.YEAR, 2016);
+            calendar.set(Calendar.MINUTE, Calendar.MINUTE - 2);
+            System.out.println("date:"+calendar.getTime());
+            GregorianCalendar c = new GregorianCalendar();
+            c.setTime(calendar.getTime());
+            XMLGregorianCalendar dateCreatedBefore = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+            dateCreatedBefore = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+            return dateCreatedBefore;
+		} catch (Exception expObj) {
+			expObj.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	
+	public void listOrders(MarketplaceWebServiceOrdersClient client, ListOrdersRequest request1) throws Exception {
+		System.out.println("Begin: Get All Orders Based On TimeFrame using ListOrders api from Amazon");
+		
+		try {
+			ListOrdersResponse response = client.listOrders(request1);
+			ResponseHeaderMetadata rhmd = response.getResponseHeaderMetadata();
+		
+            System.out.println("RequestId: "+rhmd.getRequestId());
+            System.out.println("Timestamp: "+rhmd.getTimestamp());
+            String responseXml = response.toXML();
+            System.out.println("Orders Response:"+responseXml);    
+            
+		} catch (Exception expObj) {
+			expObj.printStackTrace();
+		}
+		System.out.println("End: Get All Orders Based On TimeFrame using ListOrders api from Amazon");
+	}
+	
+	
 
 }
