@@ -65,6 +65,7 @@ import com.o2r.model.Partner;
 import com.o2r.model.Product;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
+import com.o2r.model.Seller;
 import com.o2r.model.PartnerSellerAuthInfo;
 import com.o2r.service.DownloadService;
 import com.o2r.service.EventsService;
@@ -92,11 +93,7 @@ public class OrderController {
 	@Resource(name = "saveContents")
 	private SaveContents saveContents;
 	@Autowired
-	private PartnerService partnerService;
-	
-	
-	
-	
+	private PartnerService partnerService;	
 	@Autowired
 	private SellerService serviceService;
 	@Autowired
@@ -108,8 +105,7 @@ public class OrderController {
 	@Autowired
 	private HelperClass helperClass;
 	@Autowired
-	EventsService eventsService;
-	
+	EventsService eventsService;	
 	@Autowired
 	MwsAmazonOrdMgmtService mwsAmazonOrdMgmtService;
 	
@@ -122,7 +118,7 @@ public class OrderController {
 	private static final String UPLOAD_DIR = "upload";
 	
 	
-	public MwsAmazonOrdMgmtService ordMgmtService = new MwsAmazonOrdMgmtServiceImpl();
+	//public MwsAmazonOrdMgmtService ordMgmtService = new MwsAmazonOrdMgmtServiceImpl();
 	
 	private int listSize=500;
 	
@@ -1087,15 +1083,10 @@ public class OrderController {
 		try {
 			String sellerId=helperClass.getSellerIdfromSession(request)+"";	
 			//log.debug(" Downloading the Log: " + id);
-			//int uploadId = Integer.parseInt(id);			
+			//int uploadId = Integer.parseInt(id);	
 			
-			
-			
-			System.out.println("sellerIdsellerIdsellerId "+sellerId);
-			
-			System.out.println("MWSConstants.SELLERID"+MWSConstants.SELLERID);
-			
-			
+			System.out.println("sellerIdsellerIdsellerId "+sellerId);			
+			System.out.println("MWSConstants.SELLERID"+MWSConstants.SELLERID);			
 			System.out.println("I am in the view SellerAuthoInfor CONTROLLLLER");
 			
 			MarketplaceWebServiceOrdersClient client = com.o2r.amazonservices.mws.orders.config.MarketplaceWebServiceOrdersSampleConfig.getClient();
@@ -1122,21 +1113,9 @@ public class OrderController {
 	         partnerSellerAuthInfo.setServiceurl(MWSConstants.SERVICEURL);
 	         partnerSellerAuthInfo.setStatus(1);// 1 is shipped.    
 	         partnerSellerAuthInfo.setMarketplaceid(MWSConstants.MARKETPLACEID);// 1 is shipped.    
-	         //orderService.savePartnerSellerAutoInfo(partnerSellerAuthInfo);	
-			
-			//String sellerId= MWSConstants.SELLERID;
-			 com.o2r.jobs.AmazonOrderMgmt amazonOrderMgmt = new com.o2r.jobs.AmazonOrderMgmt();
+	         //orderService.savePartnerSellerAutoInfo(partnerSellerAuthInfo);					 
 			 
-			 
-			 /*System.out.println("setSellerid"+partnerSellerAuthInfo.getSellerid());
-			 System.out.println("setMwsauthtoken"+partnerSellerAuthInfo.getMwsauthtoken());
-			 System.out.println("setAccesskey"+partnerSellerAuthInfo.getAccesskey());
-			 System.out.println("setSecretkey"+partnerSellerAuthInfo.getSecretkey());
-			 System.out.println("setServiceurl"+partnerSellerAuthInfo.getServiceurl());*/
-			 
-			 
-			 
-			 com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult listOrderResult = ordMgmtService.getListOrders(ordMgmtService.getCreatedAfter(new Date()), ordMgmtService.getCreatedBefore(new Date()), ordMgmtService.getConfiguredoOrderStatus(), partnerSellerAuthInfo);
+			 /*com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult listOrderResult = ordMgmtService.getListOrders(ordMgmtService.getCreatedAfter(new Date()), ordMgmtService.getCreatedBefore(new Date()), ordMgmtService.getConfiguredoOrderStatus(), partnerSellerAuthInfo);
 				List<com.amazonservices.mws.orders._2013_09_01.model.Order> orders = listOrderResult.getOrders();
 				for (com.amazonservices.mws.orders._2013_09_01.model.Order order : orders) {					
 					System.out.println("ORDERRSSSSSSSSSSSSS"+orders.size());
@@ -1145,11 +1124,33 @@ public class OrderController {
 				List<AmazonOrderInfo> listamazaon= new ArrayList<AmazonOrderInfo>();
 				listamazaon = mwsAmazonOrdMgmtService.getAmazonOrderInfoList(partnerSellerAuthInfo);
 				
-				System.out.println(" The size of the amazon  ============================="+listamazaon.size());
-				
-				
-				model.put("amazonOrderInfoList",listamazaon);
-				
+				System.out.println(" The size of the amazon  ============================="+listamazaon.size());*/	 
+			 
+			 
+			 
+			 try {
+				//List<Seller> sellers = ordMgmtService.getSellers();
+				//for (Seller seller : sellers) {
+					//for (Partner partner : seller.getPartners()) {
+						//PartnerSellerAuthInfo authInfo = ordMgmtService.getAuthInfoBeanObj(partner.getAuthInfo());
+						com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult listOrderResult = mwsAmazonOrdMgmtService.getListOrders(mwsAmazonOrdMgmtService.getCreatedAfter(new Date()), mwsAmazonOrdMgmtService.getCreatedBefore(new Date()), mwsAmazonOrdMgmtService.getConfiguredoOrderStatus(), partnerSellerAuthInfo);
+						List<com.amazonservices.mws.orders._2013_09_01.model.Order> orders = listOrderResult.getOrders();
+						for (com.amazonservices.mws.orders._2013_09_01.model.Order order : orders) {
+							com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult itemResults = mwsAmazonOrdMgmtService.getListOrderItems(partnerSellerAuthInfo, order.getAmazonOrderId());
+							List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems = itemResults.getOrderItems();
+							mwsAmazonOrdMgmtService.saveOrderInfo(order, orderItems);
+						}
+				//	}//for 
+			//	}//for				
+			} catch (Exception expObj) {
+				expObj.printStackTrace();
+			}
+			 
+			List<AmazonOrderInfo> listamazaon= new ArrayList<AmazonOrderInfo>();
+			listamazaon = mwsAmazonOrdMgmtService.getAmazonOrderInfoList(partnerSellerAuthInfo);	
+			
+			model.put("amazonOrderInfoList",listamazaon);
+			
 		} catch (Throwable e) {
 			e.printStackTrace();
 			log.error("Failed! by Seller ID : "+sellerId, e);
