@@ -88,6 +88,27 @@ public class ProductDaoImpl implements ProductDao {
 			+ "from productconfig pc,product p,product_productconfig pp where p.seller_id=? "
 			+ "and pp.Product_productId=p.productId and pp.productConfig_productConfigId=pc.productConfigId"
 			+ " and pc.mrp=0 and pc.";
+	
+	private final String listProductMappingUnique = "select pc.productSkuCode,pc.channelName,"
+			+ "pc.channelSkuRef,pc.vendorSkuRef,pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,"
+			+ "pc.eossDiscountValue,pc.grossNR,pc.productConfigId, pc.commision from productconfig pc,"
+			+ "product p,product_productconfig pp where p.seller_id=? and pp.Product_productId="
+			+ "p.productId and pp.productConfig_productConfigId=pc.productConfigId and pc.mrp=0 "
+			+ "GROUP BY pc.channelName, pc.vendorSkuRef HAVING COUNT(*) <= 1";
+	
+	private final String listProductMappingMultiVSKU = "select pc.productSkuCode,pc.channelName,"
+			+ "pc.channelSkuRef,pc.vendorSkuRef,pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,"
+			+ "pc.eossDiscountValue,pc.grossNR,pc.productConfigId, pc.commision from productconfig pc,"
+			+ "product p,product_productconfig pp where p.seller_id=? and pp.Product_productId="
+			+ "p.productId and pp.productConfig_productConfigId=pc.productConfigId and pc.mrp=0 "
+			+ "GROUP BY pc.channelName, pc.vendorSkuRef HAVING COUNT(*) > 1";
+	
+	private final String listProductMappingMultiVSKUSamePSKU = "select pc.productSkuCode,pc.channelName,"
+			+ "pc.channelSkuRef,pc.vendorSkuRef,pc.discount,pc.mrp,pc.productPrice,pc.suggestedPOPrice,"
+			+ "pc.eossDiscountValue,pc.grossNR,pc.productConfigId, pc.commision from productconfig pc,"
+			+ "product p,product_productconfig pp where p.seller_id=? and pp.Product_productId="
+			+ "p.productId and pp.productConfig_productConfigId=pc.productConfigId and pc.mrp=0 "
+			+ "GROUP BY pc.channelName, pc.vendorSkuRef, pc.productSkuCode HAVING COUNT(*) > 1";
 
 	static Logger log = Logger.getLogger(ProductDaoImpl.class.getName());
 
@@ -681,6 +702,103 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		log.info("*** listProductConfig by SellerId Ends : ProductDaoImpl ****");
 		return productConfigList;
+	}
+
+	@Override
+	public Map<String, Map<ProductConfig, ProductConfig>> fetchProductConfigMap(int sellerId)
+			throws CustomException {
+
+		log.info("*** fetchProductConfigMap by SellerId Starts : ProductDaoImpl ****");
+		Map<String, Map<ProductConfig, ProductConfig>> returnMap = new HashMap<String, Map<ProductConfig,ProductConfig>>();
+		Map<ProductConfig, ProductConfig> productConfigMap = new HashMap<ProductConfig, ProductConfig>();
+		Map<ProductConfig, ProductConfig> errorProductConfigMap = new HashMap<ProductConfig, ProductConfig>();
+		ProductConfig productConfig = null;
+		String targetSQL = listProductMappingUnique;
+		try {
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query listQuery = session.createSQLQuery(targetSQL);
+			listQuery.setInteger(0, sellerId);
+			if (listQuery != null && listQuery.list().size() != 0) {
+				List<Object> objects = listQuery.list();
+				for (Object eachObject : objects) {
+					Object[] object = (Object[]) eachObject;
+					productConfig = new ProductConfig();
+					productConfig.setProductSkuCode((String) object[0]);
+					productConfig.setChannelName((String) object[1]);
+					productConfig.setChannelSkuRef((String) object[2]);
+					productConfig.setVendorSkuRef((String) object[3]);
+					productConfig.setDiscount((float) object[4]);
+					productConfig.setMrp((double) object[5]);
+					productConfig.setProductPrice((double) object[6]);
+					productConfig.setSuggestedPOPrice((double) object[7]);
+					productConfig.setEossDiscountValue((double) object[8]);
+					productConfig.setGrossNR((double) object[9]);
+					productConfig.setProductConfigId((int) object[10]);
+					productConfig.setCommision((float) object[11]);
+					productConfigMap.put(productConfig, productConfig);
+				}
+			}
+			
+			targetSQL = listProductMappingMultiVSKU;
+			listQuery = session.createSQLQuery(targetSQL);
+			listQuery.setInteger(0, sellerId);
+			if (listQuery != null && listQuery.list().size() != 0) {
+				List<Object> objects = listQuery.list();
+				for (Object eachObject : objects) {
+					Object[] object = (Object[]) eachObject;
+					productConfig = new ProductConfig();
+					productConfig.setProductSkuCode((String) object[0]);
+					productConfig.setChannelName((String) object[1]);
+					productConfig.setChannelSkuRef((String) object[2]);
+					productConfig.setVendorSkuRef((String) object[3]);
+					productConfig.setDiscount((float) object[4]);
+					productConfig.setMrp((double) object[5]);
+					productConfig.setProductPrice((double) object[6]);
+					productConfig.setSuggestedPOPrice((double) object[7]);
+					productConfig.setEossDiscountValue((double) object[8]);
+					productConfig.setGrossNR((double) object[9]);
+					productConfig.setProductConfigId((int) object[10]);
+					productConfig.setCommision((float) object[11]);
+					errorProductConfigMap.put(productConfig, productConfig);
+				}
+			}
+			
+			targetSQL = listProductMappingMultiVSKUSamePSKU;
+			listQuery = session.createSQLQuery(targetSQL);
+			listQuery.setInteger(0, sellerId);
+			if (listQuery != null && listQuery.list().size() != 0) {
+				List<Object> objects = listQuery.list();
+				for (Object eachObject : objects) {
+					Object[] object = (Object[]) eachObject;
+					productConfig = new ProductConfig();
+					productConfig.setProductSkuCode((String) object[0]);
+					productConfig.setChannelName((String) object[1]);
+					productConfig.setChannelSkuRef((String) object[2]);
+					productConfig.setVendorSkuRef((String) object[3]);
+					productConfig.setDiscount((float) object[4]);
+					productConfig.setMrp((double) object[5]);
+					productConfig.setProductPrice((double) object[6]);
+					productConfig.setSuggestedPOPrice((double) object[7]);
+					productConfig.setEossDiscountValue((double) object[8]);
+					productConfig.setGrossNR((double) object[9]);
+					productConfig.setProductConfigId((int) object[10]);
+					productConfig.setCommision((float) object[11]);
+					productConfigMap.put(productConfig, productConfig);
+					errorProductConfigMap.remove(productConfig);
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : " + sellerId, e);
+			throw new CustomException(GlobalConstant.listProductsError,
+					new Date(), 3, GlobalConstant.listProductsErrorCode, e);
+		}
+		log.info("*** fetchProductConfigMap by SellerId Ends : ProductDaoImpl ****");
+		returnMap.put("resultMap", productConfigMap);
+		returnMap.put("errorMap", errorProductConfigMap);
+		return returnMap;
 	}
 
 	@Override
@@ -1449,10 +1567,10 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		log.info("*** addPartnerCatMapping Ends : ProductDaoImpl ****");
 	}
-	
+
 	@Override
-	public void addPartnerCatMapping(Map<String, Product> productMap, int sellerId)
-			throws CustomException {
+	public void addPartnerCatMapping(Map<String, Product> productMap,
+			int sellerId) throws CustomException {
 
 		log.info("*** addPartnerCatMapping Starts : ProductDaoImpl ****");
 
@@ -1472,5 +1590,5 @@ public class ProductDaoImpl implements ProductDao {
 					new Date(), 1, GlobalConstant.addProductErrorCode, e);
 		}
 		log.info("*** addPartnerCatMapping Ends : ProductDaoImpl ****");
-	}	
+	}
 }

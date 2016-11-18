@@ -307,9 +307,9 @@ public class OrderDaoImpl implements OrderDao {
 				seller = (Seller) criteria.list().get(0);
 				erroneousOrders = new StringBuffer("");
 				for (Order order : orderList) {
-					
-					if(order.getOrderId() != 0){
-						reverseOrder(order.getOrderId(), sellerId);	
+
+					if (order.getOrderId() != 0) {
+						reverseOrder(order.getOrderId(), sellerId);
 						order.setOrderId(0);
 					}
 					try {
@@ -324,15 +324,19 @@ public class OrderDaoImpl implements OrderDao {
 						partner = (Partner) session.get(Partner.class,
 								partner.getPcId());
 						/* Hibernate.initialize(partner.getOrders()); */
-						
+
 						if (partner != null && product != null) {
 							if (product.getPartnerCategoryMap() != null) {
-								for (PartnerCategoryMap partnerCat : product.getPartnerCategoryMap()) {
-									if (partnerCat.getPartnerName().equalsIgnoreCase(partner.getPcName())) {
-										partnerCatRef = partnerCat.getPartnerCategoryRef();
+								for (PartnerCategoryMap partnerCat : product
+										.getPartnerCategoryMap()) {
+									if (partnerCat.getPartnerName()
+											.equalsIgnoreCase(
+													partner.getPcName())) {
+										partnerCatRef = partnerCat
+												.getPartnerCategoryRef();
 									}
 								}
-							} 
+							}
 						}
 
 						calculateDeliveryDate(order, sellerId);
@@ -371,8 +375,8 @@ public class OrderDaoImpl implements OrderDao {
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("variable")) {
 									if (!calculateNR(
-											event.getNrnReturnConfig(), order,
-											partnerCatRef,
+											event.getNrnReturnConfig(),
+											partner, order, partnerCatRef,
 											product.getDeadWeight(),
 											product.getVolWeight(), sellerId))
 										throw new Exception();
@@ -409,8 +413,7 @@ public class OrderDaoImpl implements OrderDao {
 								}
 
 							} else if (!calculateNR(partner, order,
-									partnerCatRef,
-									product.getDeadWeight(),
+									partnerCatRef, product.getDeadWeight(),
 									product.getVolWeight(), sellerId))
 								throw new Exception();
 
@@ -433,8 +436,8 @@ public class OrderDaoImpl implements OrderDao {
 										.getNrCalculatorEvent()
 										.equalsIgnoreCase("variable")) {
 									if (!calculateNR(
-											event.getNrnReturnConfig(), order,
-											partnerCatRef,
+											event.getNrnReturnConfig(),
+											partner, order, partnerCatRef,
 											product.getDeadWeight(),
 											product.getVolWeight(), sellerId))
 										throw new Exception();
@@ -643,7 +646,7 @@ public class OrderDaoImpl implements OrderDao {
 								e);
 						orderCount--;
 					}
-				
+
 				}
 			}
 		} catch (Exception e) {
@@ -1227,9 +1230,11 @@ public class OrderDaoImpl implements OrderDao {
 					.setResultTransformer(
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			seller = (Seller) criteria.list().get(0);
+			
 			if (seller.getOrders() != null && seller.getOrders().size() != 0) {
 				order = seller.getOrders().get(0);
 
+				partner = partnerService.getPartner(order.getPcName(), sellerId);
 				// Check condition 4 Events here
 				event = eventsService.isEventActiive(order.getOrderDate(),
 						order.getPcName(), order.getProductSkuCode(), sellerId);
@@ -1241,11 +1246,11 @@ public class OrderDaoImpl implements OrderDao {
 								event.getNrnReturnConfig());
 					} else {
 						returnChargesCalculated = calculateReturnCharges(order,
-								orderReturn, sellerId);
+								partner, orderReturn, sellerId);
 					}
 				} else {
 					returnChargesCalculated = calculateReturnCharges(order,
-							orderReturn, sellerId);
+							partner, orderReturn, sellerId);
 				}
 				if (orderReturn.getReturnorrtoQty() > 0) {
 					returnChargesCalculated = returnChargesCalculated
@@ -1349,8 +1354,6 @@ public class OrderDaoImpl implements OrderDao {
 						sellerId);
 
 				// Reverting TDS information for Return Order
-				partner = partnerService
-						.getPartner(order.getPcName(), sellerId);
 				if (partner != null && partner.isTdsApplicable()) {
 					tdsDetails = new TaxDetail();
 					tdsDetails.setBalanceRemaining(-(order.getOrderTax()
@@ -2587,13 +2590,16 @@ public class OrderDaoImpl implements OrderDao {
 			} else if (partner.getNrnReturnConfig().getCommissionType() != null
 					&& partner.getNrnReturnConfig().getCommissionType()
 							.equals("categoryWise")) {
-				PartnerCategoryMap partnerCat = categoryDao.getPartnerCategoryMap(
-						partner.getPcName(), prodCat, sellerId);
+				PartnerCategoryMap partnerCat = categoryDao
+						.getPartnerCategoryMap(partner.getPcName(), prodCat,
+								sellerId);
 				if (partnerCat != null) {
 					comission = partnerCat.getCommission();
 				}
-				/*comission = chargesMap.containsKey(prodCat) ? chargesMap
-						.get(prodCat) : 0;*/
+				/*
+				 * comission = chargesMap.containsKey(prodCat) ? chargesMap
+				 * .get(prodCat) : 0;
+				 */
 			} else {
 				comission = (float) order.getPartnerCommission();
 			}
@@ -3160,7 +3166,7 @@ public class OrderDaoImpl implements OrderDao {
 	/*
 	 * Method to calculate return charges
 	 */
-	private float calculateReturnCharges(Order order,
+	private float calculateReturnCharges(Order order, Partner partner,
 			OrderRTOorReturn ordereturn, int sellerId) throws Exception {
 
 		log.info("*** calculateReturnCharges starts : OrderDaoImpl ***");
@@ -3178,8 +3184,6 @@ public class OrderDaoImpl implements OrderDao {
 		boolean isRevShippingFee = false;
 
 		try {
-			Partner partner = partnerService.getPartner(order.getPcName(),
-					sellerId);
 
 			String returnType = ordereturn.getType();
 			String faultType = ordereturn.getReturnCategory();
@@ -3721,8 +3725,9 @@ public class OrderDaoImpl implements OrderDao {
 		return projList;
 	}
 
-	private boolean calculateNR(NRnReturnConfig nrnReturnConfig, Order order,
-			String prodCat, float deadWeight, float volWeight, int sellerId) {
+	private boolean calculateNR(NRnReturnConfig nrnReturnConfig,
+			Partner partner, Order order, String prodCat, float deadWeight,
+			float volWeight, int sellerId) {
 
 		log.info("$$$ calculateNR for Events Start $$$");
 
@@ -3732,8 +3737,6 @@ public class OrderDaoImpl implements OrderDao {
 		double pccAmount = 0;
 		float serviceTax = 0;
 		double tds = 0;
-
-		Partner partner = null;
 
 		/*
 		 * StringBuffer area = new StringBuffer(""); StringBuffer volarea = new
@@ -3748,7 +3751,6 @@ public class OrderDaoImpl implements OrderDao {
 
 		try {
 
-			partner = partnerService.getPartner(order.getPcName(), sellerId);
 			if (partner != null) {
 				nrnReturnConfig.setMetroList(partner.getNrnReturnConfig()
 						.getMetroList());
@@ -3923,13 +3925,16 @@ public class OrderDaoImpl implements OrderDao {
 			} else if (partner.getNrnReturnConfig().getCommissionType() != null
 					&& partner.getNrnReturnConfig().getCommissionType()
 							.equals("categoryWise")) {
-				PartnerCategoryMap partnerCat = categoryDao.getPartnerCategoryMap(
-						partner.getPcName(), prodCat, sellerId);
+				PartnerCategoryMap partnerCat = categoryDao
+						.getPartnerCategoryMap(partner.getPcName(), prodCat,
+								sellerId);
 				if (partnerCat != null) {
 					comission = partnerCat.getCommission();
 				}
-				/*comission = chargesMap.containsKey(prodCat) ? chargesMap
-						.get(prodCat) : 0;*/
+				/*
+				 * comission = chargesMap.containsKey(prodCat) ? chargesMap
+				 * .get(prodCat) : 0;
+				 */
 			} else {
 				comission = (float) order.getPartnerCommission();
 			}
@@ -5571,24 +5576,31 @@ public class OrderDaoImpl implements OrderDao {
 			projList.add(Projections.property("pcName"));
 			criteria.setProjection(projList);
 			results = criteria.list();
-			if(results != null) {
-				for(Object obj : results){
-                    Object[] item = (Object[]) obj;
-                    if(item[0]!=null){
-                       if(!(item[3].toString().contains(GlobalConstant.PCAMAZON) || item[3].toString().contains(GlobalConstant.PCJABONG)
-                    		   || item[3].toString().contains(GlobalConstant.PCPAYTM)|| item[3].toString().contains(GlobalConstant.PCFLIPKART))){
-                           String orderdatedate=item[2].toString();
-                           if(orderdatedate.contains(" ")){
-                               orderdatedate=item[2].toString().split(" ")[0].trim();
-                           }
-                        	   
-                           idsList.put(item[0].toString(),orderdatedate);
-                       } else {
-                           idsList.put(item[0].toString(),item[1]!=null? item[1].toString():null);
-                       }                        
-                   }
-                }
-            }
+			if (results != null) {
+				for (Object obj : results) {
+					Object[] item = (Object[]) obj;
+					if (item[0] != null) {
+						if (!(item[3].toString().contains(
+								GlobalConstant.PCAMAZON)
+								|| item[3].toString().contains(
+										GlobalConstant.PCJABONG)
+								|| item[3].toString().contains(
+										GlobalConstant.PCPAYTM) || item[3]
+								.toString().contains(GlobalConstant.PCFLIPKART))) {
+							String orderdatedate = item[2].toString();
+							if (orderdatedate.contains(" ")) {
+								orderdatedate = item[2].toString().split(" ")[0]
+										.trim();
+							}
+
+							idsList.put(item[0].toString(), orderdatedate);
+						} else {
+							idsList.put(item[0].toString(),
+									item[1] != null ? item[1].toString() : null);
+						}
+					}
+				}
+			}
 		} catch (Exception e) {
 			log.error("Failed by Seller ID : " + sellerId, e);
 			e.printStackTrace();
