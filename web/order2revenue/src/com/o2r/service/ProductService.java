@@ -80,12 +80,17 @@ public interface ProductService {
 
 	public long productMappingCount(int sellerId);
 
-	public ProductConfig getProductConfigByAnySKU(String childSKUCode,
-			String channel, int sellerId) throws CustomException;
+	/*
+	 * public ProductConfig getProductConfigByAnySKU(String childSKUCode, String
+	 * channel, int sellerId) throws CustomException;
+	 */
 
 	public Map<String, String> getSKUCategoryMap(int sellerId)
 			throws CustomException;
 
-	public void addPartnerCatMapping(Map<String, Product> saveProductMap, int sellerId)
-			throws CustomException;
+	public void addPartnerCatMapping(Map<String, Product> saveProductMap,
+			int sellerId) throws CustomException;
+
+	public Map<String, Map<ProductConfig, ProductConfig>> fetchProductConfigMap(
+			int sellerId) throws CustomException;
 }

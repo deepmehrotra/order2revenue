@@ -265,4 +265,40 @@ public class ProductConfig {
 	public void setVendorSkuRef(String vendorSkuRef) {
 		this.vendorSkuRef = vendorSkuRef;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		// self check
+		if (this == o)
+			return true;
+		// null check
+		if (o == null)
+			return false;
+		// type check and cast
+		if (getClass() != o.getClass())
+			return false;
+		ProductConfig productConfig = (ProductConfig) o;
+		// field comparison
+		if (this.getChannelName().equalsIgnoreCase(
+				productConfig.getChannelName())
+				&& (this.getProductSkuCode().equalsIgnoreCase(
+						productConfig.getProductSkuCode())
+						|| this.getProductSkuCode().equalsIgnoreCase(
+								productConfig.getChannelSkuRef()) || this
+						.getProductSkuCode().equalsIgnoreCase(
+								productConfig.getVendorSkuRef()))) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((productSkuCode == null) ? 0 : 31);
+		return result;
+	}
+
 }

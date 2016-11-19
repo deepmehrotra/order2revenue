@@ -91,4 +91,7 @@ public interface ProductDao {
 
 	public void addPartnerCatMapping(Map<String, Product> productMap,
 			int sellerId) throws CustomException;
+
+	public Map<String, Map<ProductConfig, ProductConfig>> fetchProductConfigMap(
+			int sellerId) throws CustomException;
 }

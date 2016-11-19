@@ -117,12 +117,12 @@ public class ProductServiceImpl implements ProductService {
 		return productDao.getProductConfig(channelSKUCode, channel, sellerId);
 	}
 
-	@Override
-	public ProductConfig getProductConfigByAnySKU(String childSKUCode,
-			String channel, int sellerId) throws CustomException {
-		return productDao.getProductConfigByAnySKU(childSKUCode, channel,
-				sellerId);
-	}
+	/*
+	 * @Override public ProductConfig getProductConfigByAnySKU(String
+	 * childSKUCode, String channel, int sellerId) throws CustomException {
+	 * return productDao.getProductConfigByAnySKU(childSKUCode, channel,
+	 * sellerId); }
+	 */
 
 	@Override
 	public List<Product> getProductwithCreatedDate(Date startDate,
@@ -193,6 +193,12 @@ public class ProductServiceImpl implements ProductService {
 			int sellerId) throws CustomException {
 		productDao.addPartnerCatMapping(saveProductMap, sellerId);
 
+	}
+
+	@Override
+	public Map<String, Map<ProductConfig, ProductConfig>> fetchProductConfigMap(
+			int sellerId) throws CustomException {
+		return productDao.fetchProductConfigMap(sellerId);
 	}
 
 }
