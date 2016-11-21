@@ -134,9 +134,7 @@
 					<div class="top-search-30 f-left">
 						<select class="form-control" name="searchCriteria" required
 							autocomplete="off" / id="searchCriteriaGlobal">
-							<option value="">Select Criteria</option>
-							<option id="1" value="channelOrderID">Channel OrderID/PO
-								ID</option>
+							<option id="1" value="channelOrderID">Channel OrderID</option>
 							<option id="2" value="awbNum">AWB</option>
 							<option id="3" value="invoiceID">Invoice ID</option>
 							<option id="4" value="subOrderID">Sub Order ID</option>
