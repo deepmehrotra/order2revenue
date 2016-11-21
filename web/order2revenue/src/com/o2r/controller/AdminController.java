@@ -47,7 +47,7 @@ public class AdminController {
 	private UploadMappingService uploadMappingService;
 	@Autowired
 	private OrderService orderService;
-	
+
 	static Logger log = Logger.getLogger(AdminController.class.getName());
 
 	@RequestMapping(value = "/seller/save", method = RequestMethod.POST)
@@ -130,7 +130,7 @@ public class AdminController {
 		log.info("$$$ reverseOrderList Ends : AdminController $$$");
 		return new ModelAndView("/admin/reverseOrderList", model);
 	}
-	
+
 	@RequestMapping(value = "/seller/reverseOrder", method = RequestMethod.GET)
 	public ModelAndView reverseOrder(
 			@RequestParam(value = "orderId") String orderId,
@@ -139,10 +139,11 @@ public class AdminController {
 		log.info("$$$ reverseOrder Starts : AdminController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		System.out.println(" Inside reverse Order");
-		
+
 		String status = "";
 		try {
-			if (orderService.reverseOrder(Integer.parseInt(orderId), Integer.parseInt(sellerId))) {
+			if (orderService.reverseOrder(Integer.parseInt(orderId),
+					Integer.parseInt(sellerId))) {
 				status = "Order reversed successfully";
 			} else {
 				status = "Error reversing the Order, please contact Admin";
@@ -238,6 +239,10 @@ public class AdminController {
 					tempList = GlobalConstant.UnicommercePaymentHeaderList;
 				else if (fileName.equalsIgnoreCase("order"))
 					tempList = GlobalConstant.UnicommerceOrderHeaderList;
+				break;
+			case "BrownTape":
+				if (fileName.equalsIgnoreCase("order"))
+					tempList = GlobalConstant.BrownTapeOrderHeaderList;
 				break;
 			}
 			System.out.println("getting bvalues" + parameters);
@@ -375,6 +380,11 @@ public class AdminController {
 						else if (fileName.equalsIgnoreCase("order"))
 							model.put("o2rheaders",
 									GlobalConstant.JabongOrderHeaderList);
+						break;
+					case "BrownTape":
+						if (fileName.equalsIgnoreCase("order"))
+							model.put("o2rheaders",
+									GlobalConstant.BrownTapeOrderHeaderList);
 						break;
 					}
 				}

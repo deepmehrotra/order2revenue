@@ -60,6 +60,7 @@ public class GlobalConstant {
 			add("Limeroad");
 			add("Unicommerce");
 			add("Jabong");
+			add("BrownTape");
 		}
 	};
 	public static final ArrayList<String> filesMappingList = new ArrayList<String>() {
@@ -409,6 +410,42 @@ public class GlobalConstant {
 			add("Net Rate");
 			add("Seller Note");
 
+		}
+	};
+	
+	public static final ArrayList<String> BrownTapeOrderHeaderList = new ArrayList<String>() {
+		/**
+	 *
+	 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Channel Order ID");
+			add("SkUCode");
+			add("Order Recieved Date");
+			add("Secondary OrderID");
+			add("Quantity");
+			add("InvoiceID");
+			add("Order SP");
+			add("Shipping PinCode");
+			add("Order Shipped Date");
+			add("Updated Date");
+			add("Sales Channel");
+			add("O2R Channel");
+			add("Payment Type");
+			add("AWB No");
+			add("PIreferenceNo");
+			add("Logistic Partner");
+			add("Order MRP");
+			add("Net Rate");
+			add("Customer Name");
+			add("Customer Address A");
+			add("Customer Address B");
+			add("Customer City");
+			add("Customer Phone No");
+			add("Customer Email");
+			add("Seller Note");
+			add("Type Identifier");
 		}
 	};
 
@@ -1447,6 +1484,7 @@ public class GlobalConstant {
 			put("Dlink_SKU_Mapping", "Dlink_SKU_Mapping");
 			put("vendorSKUMapping", "MP_Vendor_SKU_Mapping");
 			put("Unicommerce_Order", "Unicommerce_Order_Upload");
+			put("BrownTape_Order", "BrownTape_Order_Upload");
 			put("Flipkart_Payment", "Flipkart_Payment");
 			put("Flipkart_Order", "Flipkart_Order_Upload");
 			put("PayTM_Payment", "PayTM_Payment");

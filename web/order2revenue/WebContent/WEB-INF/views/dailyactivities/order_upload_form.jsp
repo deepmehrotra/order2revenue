@@ -243,7 +243,7 @@ ol.d {
 									<!-- <option value="ProdCat_Comm_Mapping">Category wise
 										Commission Upload</option> -->
 									<option value="Partner_Cat_Comm_Mapping">Category wise
-										Commission Upload</option>										
+										Commission Upload</option>
 									<option value="ProdCat_Comm_Event_Mapping">Category
 										wise Commission For Event Upload</option>
 									<option value="Tax_Category_Mapping">Tax Category
@@ -783,6 +783,9 @@ ol.d {
 										<option value="Jabong_Payment"
 											data-show=".jabongpaymentupload">Jabong Payment
 											Upload</option>
+										<option value="BrownTape_Order"
+											data-show=".browntapeorderupload">BrownTape Order
+											Upload</option>
 									</select>
 								</div>
 								<div class="col-md-4">
@@ -1212,6 +1215,55 @@ ol.d {
 										<li>The file to be imported should have the following
 											columns by default Order Id, Date Time,Vendor
 											Code,Price,Qty,Customer Name, Number,Address,Order Type,AWB</li>
+										<li>Watch Tutorial</li>
+									</ol>
+								</div>
+
+								<div class="browntapeorderupload">
+									<h2 class="text-center">
+										<b>Follow These Instructions</b>
+									</h2>
+									<ol>
+										<li>Bulk Download Sale Orders report from BrownTape Panel
+											for all shipped orders</li>
+										<li>Open the downloaded file</li>
+										<li>Ensure that the 1st row of file is the "headers"</li>
+										<li>Do not change the formatting of columns or any
+											headers.</li>
+										<li>Add the following "Case Sensitive" headers at the end
+											of 1st row of the file and input its corresponding value
+											against every row
+											<ol class="d">
+												<li><b>Mandatory Values (to be added manually by
+														seller)</b>
+													<ol class="c">
+														<li><b class="color">O2R Channel</b> - Channel name
+															for which orders are uploaded. It should be exactly the
+															same(case-sensitive) as the name of sales channel
+															configured with Order2Revenue.</li>
+													</ol></li>
+												<li><b>Non-Mandatory (scenario specific or good to
+														have attributes)</b>
+													<ol class="c">
+														<li><b class="color">Net Rate</b> - Mandatory when
+															N/R switch is off,or an Event is configured for all or
+															any particular SKU's at fixed Transfer Price.</li>
+														<li><b class="color">Seller Notes</b> - Any
+															customized remarks about order.</li>
+													</ol></li>
+											</ol>
+										</li>
+										<li>Save the file in ".xls" (97-2003) format</li>
+										<li>Import the file by selecting "Unicommerce Order
+											Upload" from the dropdown list</li>
+										<li>Make sure to keep the spelling & spacing of all
+											column headers exactly as stated in the instructions.</li>
+										<li>The file to be imported should have the following
+											columns by default: Fulfillment Status, Channel, Channel Ref,
+											Invoice Number, Order Date(IST), Order Type, Customer Email,
+											Customer Name, Address Line 1, Address Line 2, City, Pincode,
+											Phone, Quantity, SKU Codes, Invoice Created Date, MRP,
+											Seller's Price</li>
 										<li>Watch Tutorial</li>
 									</ol>
 								</div>

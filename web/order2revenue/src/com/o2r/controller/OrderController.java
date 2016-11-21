@@ -58,7 +58,6 @@ import com.o2r.model.GatePass;
 import com.o2r.model.Order;
 import com.o2r.model.Partner;
 import com.o2r.model.Product;
-import com.o2r.model.SellerAccount;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
 import com.o2r.service.DownloadService;
@@ -535,6 +534,10 @@ public class OrderController {
 					saveMappedFiles.saveJabongOrderContents(files.get(0),
 							sellerId, applicationPath, uploadReport);
 					break;
+				case "BrownTape_Order":
+					saveMappedFiles.saveBrownTapeOrderContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
+					break;
 				case "CreateInventoryGroups":
 					saveContents.saveInventoryGroups(files.get(0), sellerId,
 							applicationPath, uploadReport);
@@ -613,8 +616,8 @@ public class OrderController {
 						uploadReport, sellerId);
 
 				List<UploadReportBean> uploadReports = ConverterClass
-						.prepareUploadReportListBean(reportGeneratorService.listUploadReport(
-								sellerId,false));
+						.prepareUploadReportListBean(reportGeneratorService
+								.listUploadReport(sellerId, false));
 				if (uploadReports != null && uploadReports.size() > 3) {
 					uploadReports = uploadReports.subList(
 							uploadReports.size() - 3, uploadReports.size());
