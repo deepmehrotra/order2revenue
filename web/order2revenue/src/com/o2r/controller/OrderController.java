@@ -117,6 +117,7 @@ public class OrderController {
 	@Autowired
 	MwsAmazonOrdMgmtService mwsAmazonOrdMgmtService;
 	
+	@Autowired
 	@Resource(name = "amazonOrderMgmt")
 	private AmazonOrderMgmt amazonOrderMgmt;
 	

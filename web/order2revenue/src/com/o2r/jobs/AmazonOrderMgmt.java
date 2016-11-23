@@ -131,7 +131,7 @@ public class AmazonOrderMgmt {
 		
 			List<PartnerSellerAuthInfo> partnerSellerAuthInfoList = ordMgmtService.getSellersFromPartnerSellerAuthoInfo();	
 			
-			System.out.println(" The PartnerSellerAuthInfo1 size is======================="+partnerSellerAuthInfoList.size());
+		//	System.out.println(" The PartnerSellerAuthInfo1 size is======================="+partnerSellerAuthInfoList.size());
 			
 			for (PartnerSellerAuthInfo PartnerSellerAuthInfo : partnerSellerAuthInfoList) {		
 				

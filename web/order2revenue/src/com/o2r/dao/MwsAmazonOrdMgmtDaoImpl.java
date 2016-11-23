@@ -86,26 +86,25 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 	@Override
 	public List<PartnerSellerAuthInfo> getSellersFromPartnerSellerAuthoInfo() throws Exception {
 		Session session = null;
-		List<String> sellersList = null;
+		//List<String> sellersList = null;
 		
 		List<PartnerSellerAuthInfo> returnlist = null;
 		
+		final String QRY = "from PartnerSellerAuthInfo where PCNAME='Amazon'";
 		
-		try {	
+		try {			
+			session = sessionFactory.openSession();				
 			
-			session = sessionFactory.openSession();	
-			Criteria criteria = session
-					.createCriteria(PartnerSellerAuthInfo.class);
-			criteria.add(Restrictions.eq("PCNAME", "Amazon"));
+			returnlist = session.createQuery(QRY).list();
 			
-			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			if (criteria.list().size() != 0) {
-				returnlist = criteria.list();
-			}
-			session.getTransaction().commit();
-			session.close();
 			
-			System.out.println("sellersList ================"+sellersList.size());
+			//criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			
+			System.out.println("returnlistreturnlistreturnlist"+returnlist.size());
+			
+			
+			
+			//System.out.println("sellersList ================"+sellersList.size());
 		
 		} catch (Exception expObj) {
 			

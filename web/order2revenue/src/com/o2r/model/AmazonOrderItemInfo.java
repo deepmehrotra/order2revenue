@@ -65,9 +65,16 @@ public class AmazonOrderItemInfo implements java.io.Serializable {
 	private String pricedesignation;
 	private String buyercustomizedurl;
 	private String requestid;
-	// private Integer orderId;
-	//@ManyToOne(fetch = FetchType.LAZY)
+	private Integer orderId;
+	
 	//private AmazonOrderInfo amazonOrderInfo;
+	
+	
+	
+	
+	
+	
+	
 
 	public AmazonOrderItemInfo() {
 	}
@@ -152,7 +159,7 @@ public class AmazonOrderItemInfo implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID", unique = true, nullable = false)
+	@Column(name = "ITEM_ID", unique = true, nullable = false)
 	public int getId() {
 		return this.id;
 	}
@@ -161,7 +168,7 @@ public class AmazonOrderItemInfo implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "AMAZONORDERID")
+	@Column(name = "AMAZONORDER_ID")
 	public String getAmazonorderid() {
 		return this.amazonorderid;
 	}
@@ -574,16 +581,16 @@ public class AmazonOrderItemInfo implements java.io.Serializable {
 	/*public AmazonOrderInfo getAmazonOrderInfo() {
 		return amazonOrderInfo;
 	}
-
+	@ManyToOne(fetch = FetchType.LAZY)
 	public void setAmazonOrderInfo(AmazonOrderInfo amazonOrderInfo) {
 		this.amazonOrderInfo = amazonOrderInfo;
 	}*/
 
-	/*
-	 * @Column(name="ORDER_ID") public Integer getOrderId() { return
-	 * this.orderId; }
-	 * 
-	 * public void setOrderId(Integer orderId) { this.orderId = orderId; }
-	 */
+	
+	 @Column(name="ORDER_ID") public Integer getOrderId() { return
+	 this.orderId; }
+	 
+	  public void setOrderId(Integer orderId) { this.orderId = orderId; }
+	 
 
 }

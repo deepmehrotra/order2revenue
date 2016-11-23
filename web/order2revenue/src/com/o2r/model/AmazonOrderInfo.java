@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -81,11 +82,16 @@ public class AmazonOrderInfo  implements java.io.Serializable {
     
 
 
-	private Set<ShippingAddress> ShippingAddress = new HashSet<ShippingAddress>(0);
+	//private Set<ShippingAddress> ShippingAddress = new HashSet<ShippingAddress>(0);
      
+   
+   
      
-   //@OneToMany(mappedBy="amazon_order_info", cascade=CascadeType.ALL)
-   // private List<AmazonOrderItemInfo> amazonOrderItemInfo = new ArrayList<AmazonOrderItemInfo>();
+   //@OneToMany( cascade=CascadeType.ALL)
+   //private List<AmazonOrderItemInfo> amazonOrderItemInfo = new ArrayList<AmazonOrderItemInfo>();
+   
+	/*@OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+	private List<Order> orders = new ArrayList<Order>();*/
     
   //   @OneToMany(mappedBy="amazon_order_info", cascade=CascadeType.ALL)
  //	private List<ShippingAddress> shippingAddress = new ArrayList<ShippingAddress>();
@@ -138,7 +144,7 @@ public class AmazonOrderInfo  implements java.io.Serializable {
        this.requestid = requestid;
        //this.sellerId = sellerId;
     }
-   
+    
 
     @Id
  	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -552,17 +558,19 @@ public class AmazonOrderInfo  implements java.io.Serializable {
 	
 
 	
-	/*public List<AmazonOrderItemInfo> getAmazonOrderItemInfo() {
+	@OneToMany( cascade=CascadeType.ALL)
+	@JoinTable(name="amazon_order_item_info", joinColumns={@JoinColumn(name="ORDER_ID")},inverseJoinColumns={@JoinColumn(name="ITEM_ID")})
+	public Set<AmazonOrderItemInfo> getAmazonOrderItemInfo() {
 		return amazonOrderItemInfo;
 	}
 
-
-	public void setAmazonOrderItemInfo(List<AmazonOrderItemInfo> amazonOrderItemInfo) {
+	
+	public void setAmazonOrderItemInfo(Set<AmazonOrderItemInfo> amazonOrderItemInfo) {
 		this.amazonOrderItemInfo = amazonOrderItemInfo;
 	}
 
 
-	public List<ShippingAddress> getShippingAddress() {
+	/*public List<ShippingAddress> getShippingAddress() {
 		return shippingAddress;
 	}
 
@@ -571,7 +579,7 @@ public class AmazonOrderInfo  implements java.io.Serializable {
 		this.shippingAddress = shippingAddress;
 	}*/
 	
-	 public Set<AmazonOrderItemInfo> getAmazonOrderItemInfo() {
+	/* public Set<AmazonOrderItemInfo> getAmazonOrderItemInfo() {
 			return amazonOrderItemInfo;
 	 }
 
@@ -588,7 +596,7 @@ public class AmazonOrderInfo  implements java.io.Serializable {
 
 	 public void setShippingAddress(Set<ShippingAddress> shippingAddress) {
 			ShippingAddress = shippingAddress;
-	 }
+	 }*/
 		
 
 }

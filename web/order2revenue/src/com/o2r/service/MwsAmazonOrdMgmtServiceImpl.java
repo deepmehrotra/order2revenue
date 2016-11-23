@@ -342,7 +342,10 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 				amazonOrderItemInfos.add(amazonOrderItemInfo);
 			}
 
-			//amazonOrderInfo.setAmazonOrderItemInfos(new HashSet<AmazonOrderItemInfo>(amazonOrderItemInfos));
+			//amazonOrderInfo.setAmazonOrderItemInfo(new Has<AmazonOrderItemInfo>(amazonOrderItemInfos));
+			amazonOrderInfo.setAmazonOrderItemInfo(new HashSet<AmazonOrderItemInfo>(amazonOrderItemInfos));
+			//amazonOrderInfo.set
+			
 			System.out.println(" amazonOrderInfo" + amazonOrderInfo);
 			if (amazonOrderInfo != null)
 				amazonOrdMgmtDao.saveAmazonOrderInfo(amazonOrderInfo);
