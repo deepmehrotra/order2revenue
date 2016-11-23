@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -70,9 +71,13 @@ public class Partner {
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	private NRnReturnConfig nrnReturnConfig;
-	
+	 
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<Order> orders = new ArrayList<Order>();
+	
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "partner", cascade = CascadeType.ALL)
+	private PartnerSellerAuthInfo authInfo;
+	
 
 	public long getPcId() {
 		return pcId;
@@ -202,6 +207,7 @@ public class Partner {
 	public void setPaymentCategory(String paymentCategory) {
 		this.paymentCategory = paymentCategory;
 	}
+
 	public boolean isIsshippeddatecalcPost() {
 		return isshippeddatecalcPost;
 	}
@@ -226,6 +232,13 @@ public class Partner {
 	public void setNoofdaysfromshippeddateOthers(
 			int noofdaysfromshippeddateOthers) {
 		this.noofdaysfromshippeddateOthers = noofdaysfromshippeddateOthers;
+	}
+	public PartnerSellerAuthInfo getAuthInfo() {
+		return authInfo;
+	}
+	public void setAuthInfo(PartnerSellerAuthInfo authInfo) {
+		this.authInfo = authInfo;
+
 	}
 
 

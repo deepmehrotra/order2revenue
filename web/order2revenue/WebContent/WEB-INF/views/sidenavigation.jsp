@@ -117,9 +117,16 @@
 					<li><a href="/seller/taxDetailsOnMonth.html">Tax</a></li>
 					<li><a href="#" onclick="onclickSideNavigation('TDS')">TDS</a></li>
 					<li><a href="eventsList.html">Events</a></li>
+<<<<<<< HEAD
 					<li><a href="customerList.html">Customers</a></li>					
 					<li><a href="listTaxablePurchases.html">TaxablePurchases</a></li>	
 												
+=======
+					<li><a href="customerList.html">Customers</a></li>	
+					
+					<li><a href="viewSellerAuthoInfoDtls.html">ParnerSellerAuthoInfo</a></li>
+									
+>>>>>>> refs/heads/feature/ordermanagement_alldone_webservices
 				</ul></li>
 				
 			<c:if test='<%= SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equals("[ROLE_ADMIN, ROLE_MODERATOR]") %>'>	
