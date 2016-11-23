@@ -307,9 +307,9 @@ public class OrderDaoImpl implements OrderDao {
 				seller = (Seller) criteria.list().get(0);
 				erroneousOrders = new StringBuffer("");
 				for (Order order : orderList) {
-					
-					if(order.getOrderId() != 0){
-						reverseOrder(order.getOrderId(), sellerId);	
+
+					if (order.getOrderId() != 0) {
+						reverseOrder(order.getOrderId(), sellerId);
 						order.setOrderId(0);
 					}
 					try {
@@ -324,15 +324,19 @@ public class OrderDaoImpl implements OrderDao {
 						partner = (Partner) session.get(Partner.class,
 								partner.getPcId());
 						/* Hibernate.initialize(partner.getOrders()); */
-						
+
 						if (partner != null && product != null) {
 							if (product.getPartnerCategoryMap() != null) {
-								for (PartnerCategoryMap partnerCat : product.getPartnerCategoryMap()) {
-									if (partnerCat.getPartnerName().equalsIgnoreCase(partner.getPcName())) {
-										partnerCatRef = partnerCat.getPartnerCategoryRef();
+								for (PartnerCategoryMap partnerCat : product
+										.getPartnerCategoryMap()) {
+									if (partnerCat.getPartnerName()
+											.equalsIgnoreCase(
+													partner.getPcName())) {
+										partnerCatRef = partnerCat
+												.getPartnerCategoryRef();
 									}
 								}
-							} 
+							}
 						}
 
 						calculateDeliveryDate(order, sellerId);
@@ -409,8 +413,7 @@ public class OrderDaoImpl implements OrderDao {
 								}
 
 							} else if (!calculateNR(partner, order,
-									partnerCatRef,
-									product.getDeadWeight(),
+									partnerCatRef, product.getDeadWeight(),
 									product.getVolWeight(), sellerId))
 								throw new Exception();
 
@@ -643,7 +646,7 @@ public class OrderDaoImpl implements OrderDao {
 								e);
 						orderCount--;
 					}
-				
+
 				}
 			}
 		} catch (Exception e) {
@@ -2587,13 +2590,16 @@ public class OrderDaoImpl implements OrderDao {
 			} else if (partner.getNrnReturnConfig().getCommissionType() != null
 					&& partner.getNrnReturnConfig().getCommissionType()
 							.equals("categoryWise")) {
-				PartnerCategoryMap partnerCat = categoryDao.getPartnerCategoryMap(
-						partner.getPcName(), prodCat, sellerId);
+				PartnerCategoryMap partnerCat = categoryDao
+						.getPartnerCategoryMap(partner.getPcName(), prodCat,
+								sellerId);
 				if (partnerCat != null) {
 					comission = partnerCat.getCommission();
 				}
-				/*comission = chargesMap.containsKey(prodCat) ? chargesMap
-						.get(prodCat) : 0;*/
+				/*
+				 * comission = chargesMap.containsKey(prodCat) ? chargesMap
+				 * .get(prodCat) : 0;
+				 */
 			} else {
 				comission = (float) order.getPartnerCommission();
 			}
@@ -3776,6 +3782,11 @@ public class OrderDaoImpl implements OrderDao {
 						.getZipcode());
 
 			}
+			String city = areaConfigDao.getCityFromZipCode(order.getCustomer()
+					.getZipcode());
+			if (city != null) {
+				order.getCustomer().setCustomerCity(city);
+			}
 			log.info(" State from zipcode : " + state);
 			double SP = order.getOrderSP();
 			// StringBuffer temp = new StringBuffer("");
@@ -3923,13 +3934,16 @@ public class OrderDaoImpl implements OrderDao {
 			} else if (partner.getNrnReturnConfig().getCommissionType() != null
 					&& partner.getNrnReturnConfig().getCommissionType()
 							.equals("categoryWise")) {
-				PartnerCategoryMap partnerCat = categoryDao.getPartnerCategoryMap(
-						partner.getPcName(), prodCat, sellerId);
+				PartnerCategoryMap partnerCat = categoryDao
+						.getPartnerCategoryMap(partner.getPcName(), prodCat,
+								sellerId);
 				if (partnerCat != null) {
 					comission = partnerCat.getCommission();
 				}
-				/*comission = chargesMap.containsKey(prodCat) ? chargesMap
-						.get(prodCat) : 0;*/
+				/*
+				 * comission = chargesMap.containsKey(prodCat) ? chargesMap
+				 * .get(prodCat) : 0;
+				 */
 			} else {
 				comission = (float) order.getPartnerCommission();
 			}
@@ -5571,24 +5585,31 @@ public class OrderDaoImpl implements OrderDao {
 			projList.add(Projections.property("pcName"));
 			criteria.setProjection(projList);
 			results = criteria.list();
-			if(results != null) {
-				for(Object obj : results){
-                    Object[] item = (Object[]) obj;
-                    if(item[0]!=null){
-                       if(!(item[3].toString().contains(GlobalConstant.PCAMAZON) || item[3].toString().contains(GlobalConstant.PCJABONG)
-                    		   || item[3].toString().contains(GlobalConstant.PCPAYTM)|| item[3].toString().contains(GlobalConstant.PCFLIPKART))){
-                           String orderdatedate=item[2].toString();
-                           if(orderdatedate.contains(" ")){
-                               orderdatedate=item[2].toString().split(" ")[0].trim();
-                           }
-                        	   
-                           idsList.put(item[0].toString(),orderdatedate);
-                       } else {
-                           idsList.put(item[0].toString(),item[1]!=null? item[1].toString():null);
-                       }                        
-                   }
-                }
-            }
+			if (results != null) {
+				for (Object obj : results) {
+					Object[] item = (Object[]) obj;
+					if (item[0] != null) {
+						if (!(item[3].toString().contains(
+								GlobalConstant.PCAMAZON)
+								|| item[3].toString().contains(
+										GlobalConstant.PCJABONG)
+								|| item[3].toString().contains(
+										GlobalConstant.PCPAYTM) || item[3]
+								.toString().contains(GlobalConstant.PCFLIPKART))) {
+							String orderdatedate = item[2].toString();
+							if (orderdatedate.contains(" ")) {
+								orderdatedate = item[2].toString().split(" ")[0]
+										.trim();
+							}
+
+							idsList.put(item[0].toString(), orderdatedate);
+						} else {
+							idsList.put(item[0].toString(),
+									item[1] != null ? item[1].toString() : null);
+						}
+					}
+				}
+			}
 		} catch (Exception e) {
 			log.error("Failed by Seller ID : " + sellerId, e);
 			e.printStackTrace();

@@ -1476,7 +1476,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 
 			double netPr = currOrder.getPr() / grossSaleQty
 					* (grossSaleQty - saleRetQty);
-			channelReport.setNetPr(netPr);
+			channelReport.setNetPr(netPr - additionalCharges);
 			// MP/PO Order conditions
 			if (channelReport.isPoOrder()) {
 				// saleRetSpAmount = grossSpAmount;
@@ -1935,12 +1935,23 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					commDetails.setCategoryName(key);
 				else
 					commDetails.setPartner(key);
-				double returnCommission = Double.parseDouble(order[1]
-						.toString());
-				double additionalRetCharges = Double.parseDouble(order[2]
-						.toString());
-				int returnQty = Integer.parseInt(order[3].toString());
-				double tdsToReturn = Double.parseDouble(order[4].toString());
+				double returnCommission = 0;
+				if (order[1] != null) {
+					returnCommission = Double.parseDouble(order[1].toString());
+				}
+				/*
+				 * double additionalRetCharges = Double.parseDouble(order[2]
+				 * .toString());
+				 */
+				int returnQty = 0;
+				if (order[3] != null) {
+					returnQty = Integer.parseInt(order[3].toString());
+				}
+				double tdsToReturn = 0;
+				if (order[4] != null) {
+					tdsToReturn = Double.parseDouble(order[4].toString());
+				}
+
 				commDetails.setNetSaleQty(existRQ - returnQty);
 				commDetails.setNetReturnCommission(existRC + returnCommission);
 				// commDetails.setAdditionalReturnCharges(existARC +
@@ -2998,8 +3009,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 	}
 
 	@Override
-	public synchronized UploadReport addUploadReport(UploadReport uploadReport, int sellerId)
-			throws CustomException {
+	public synchronized UploadReport addUploadReport(UploadReport uploadReport,
+			int sellerId) throws CustomException {
 		log.info("***addUploadReport Start for : " + sellerId + "****");
 		Seller seller = null;
 		try {

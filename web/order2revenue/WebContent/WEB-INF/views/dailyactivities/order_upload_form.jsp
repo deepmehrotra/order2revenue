@@ -1123,6 +1123,11 @@ ol.d {
 															same is available in address column.The seller can easily
 															use the RIGHT formula to extract pin code values into
 															this column.</li>
+														<li><b class="color">Note Special Case: </b>OrderType
+															- In case of multiple quantity order from limeroad, input
+															second order with these directivers :quantity = total
+															quantity - 1 , Add a colum "OrderType" and enter value of
+															this cell as "Multiple"</li>
 													</ol></li>
 												<li><b>Non-Mandatory (scenario specific or good to
 														have attributes)</b>
