@@ -21,7 +21,6 @@ import javax.persistence.Table;
 )
 public class AmazonOrderItemInfo  implements java.io.Serializable {
 
-
      private int id;
      private String amazonorderid;
      private String asin;

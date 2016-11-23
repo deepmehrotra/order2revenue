@@ -17,6 +17,8 @@ public interface MwsAmazonOrdMgmtService {
 	
 	public List<Seller> getSellers() throws Exception;
 	
+	public List<PartnerSellerAuthInfo> getSellersFromPartnerSellerAuthoInfo() throws Exception;
+	
 	//public AuthInfoBean getAuthInfoBeanObj(PartnerSellerAuthInfo sellerAuthInfo) throws Exception;
 	
 	public PartnerSellerAuthInfo getAuthInfoBeanObj(PartnerSellerAuthInfo sellerAuthInfo) throws Exception;

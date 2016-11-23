@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.o2r.model.AmazonOrderInfo;
+import com.o2r.model.PartnerCategoryMap;
+import com.o2r.model.PartnerSellerAuthInfo;
 import com.o2r.model.Seller;
 
 @Repository("mwsAmazonOrdMgmtDao")
@@ -56,9 +59,15 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 		List<Seller> sellersList = null;
 		final String QRY = "from Seller";
 		try {
-			System.out.println("sellersList ================"+sellersList.size());
+		//	System.out.println("sellersList ================"+sellersList.size());
 			session = sessionFactory.openSession();
-			sellersList = session.createQuery(QRY).list();			
+			sellersList = session.createQuery(QRY).list();
+			
+			if (sellersList != null && sellersList.size() != 0) {
+			for (Seller seller : sellersList) {
+				Hibernate.initialize(seller.getPartners());
+			}
+			}
 			System.out.println("sellersList ================"+sellersList.size());
 		} catch (Exception expObj) {
 			
@@ -70,6 +79,48 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 		}
 		return sellersList;
 	}
+	
+	
+	
+	
+	@Override
+	public List<PartnerSellerAuthInfo> getSellersFromPartnerSellerAuthoInfo() throws Exception {
+		Session session = null;
+		List<String> sellersList = null;
+		
+		List<PartnerSellerAuthInfo> returnlist = null;
+		
+		
+		try {	
+			
+			session = sessionFactory.openSession();	
+			Criteria criteria = session
+					.createCriteria(PartnerSellerAuthInfo.class);
+			criteria.add(Restrictions.eq("PCNAME", "Amazon"));
+			
+			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			if (criteria.list().size() != 0) {
+				returnlist = criteria.list();
+			}
+			session.getTransaction().commit();
+			session.close();
+			
+			System.out.println("sellersList ================"+sellersList.size());
+		
+		} catch (Exception expObj) {
+			
+			expObj.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return returnlist;
+	}
+	
+	
+	
+	
 
 	@Override
 	public void saveAmazonOrderInfo(AmazonOrderInfo orderInfo) throws Exception {

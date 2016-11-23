@@ -51,6 +51,15 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 		return amazonOrdMgmtDao.getSeller();
 	}
 
+	
+	@Override
+	public List<PartnerSellerAuthInfo> getSellersFromPartnerSellerAuthoInfo() throws Exception {
+		return amazonOrdMgmtDao.getSellersFromPartnerSellerAuthoInfo();
+	}
+	
+	
+	
+	
 	@Override
 	public PartnerSellerAuthInfo getAuthInfoBeanObj(
 			PartnerSellerAuthInfo sellerAuthInfo) throws Exception {
@@ -333,9 +342,7 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 				amazonOrderItemInfos.add(amazonOrderItemInfo);
 			}
 
-			amazonOrderInfo
-					.setAmazonOrderItemInfos(new HashSet<AmazonOrderItemInfo>(
-							amazonOrderItemInfos));
+			//amazonOrderInfo.setAmazonOrderItemInfos(new HashSet<AmazonOrderItemInfo>(amazonOrderItemInfos));
 			System.out.println(" amazonOrderInfo" + amazonOrderInfo);
 			if (amazonOrderInfo != null)
 				amazonOrdMgmtDao.saveAmazonOrderInfo(amazonOrderInfo);
