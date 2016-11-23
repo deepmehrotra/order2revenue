@@ -76,18 +76,19 @@ public class AmazonOrderInfo  implements java.io.Serializable {
      
     
  	
-    // private Set<AmazonOrderItemInfo> amazonOrderItemInfo = new HashSet<AmazonOrderItemInfo>(0);
+     private Set<AmazonOrderItemInfo> amazonOrderItemInfo = new HashSet<AmazonOrderItemInfo>(0);
      
-    // private Set<ShippingAddress> ShippingAddress = new HashSet<ShippingAddress>(0);
-     
-     
-    @OneToMany(mappedBy = "orderInfo", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
- 	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    private List<AmazonOrderItemInfo> amazonOrderItemInfo = new ArrayList<AmazonOrderItemInfo>();
     
-    @OneToMany(mappedBy = "orderInfo", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
- 	private List<ShippingAddress> shippingAddress = new ArrayList<ShippingAddress>();
+
+
+	private Set<ShippingAddress> ShippingAddress = new HashSet<ShippingAddress>(0);
+     
+     
+   //@OneToMany(mappedBy="amazon_order_info", cascade=CascadeType.ALL)
+   // private List<AmazonOrderItemInfo> amazonOrderItemInfo = new ArrayList<AmazonOrderItemInfo>();
+    
+  //   @OneToMany(mappedBy="amazon_order_info", cascade=CascadeType.ALL)
+ //	private List<ShippingAddress> shippingAddress = new ArrayList<ShippingAddress>();
     
     private Seller seller;
 
@@ -570,6 +571,25 @@ public class AmazonOrderInfo  implements java.io.Serializable {
 		this.shippingAddress = shippingAddress;
 	}*/
 	
+	 public Set<AmazonOrderItemInfo> getAmazonOrderItemInfo() {
+			return amazonOrderItemInfo;
+	 }
+
+
+	 public void setAmazonOrderItemInfo(Set<AmazonOrderItemInfo> amazonOrderItemInfo) {
+			this.amazonOrderItemInfo = amazonOrderItemInfo;
+	 }
+
+
+	 public Set<ShippingAddress> getShippingAddress() {
+			return ShippingAddress;
+	 }
+
+
+	 public void setShippingAddress(Set<ShippingAddress> shippingAddress) {
+			ShippingAddress = shippingAddress;
+	 }
+		
 
 }
 
