@@ -1405,7 +1405,7 @@ public class OrderController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {			
 			 
-			amazonOrderMgmt.invokeListOrdersAndOrderItems();
+			//amazonOrderMgmt.invokeListOrdersAndOrderItems();
 			
 			List<AmazonOrderInfo> listamazaon= new ArrayList<AmazonOrderInfo>();
 			listamazaon = mwsAmazonOrdMgmtService.getAmazonOrderInfoList(partnerSellerAuthInfo);

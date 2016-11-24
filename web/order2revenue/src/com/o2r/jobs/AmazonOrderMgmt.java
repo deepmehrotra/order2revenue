@@ -189,12 +189,12 @@ public class AmazonOrderMgmt {
 		try {
 			chanupload = uploadMappingService.getChannelUploadMapping("Amazon",
 					"order");
-			if (chanupload != null && chanupload.getColumMap() != null) {
+			/*if (chanupload != null && chanupload.getColumMap() != null) {
 				for (ColumMap colums : chanupload.getColumMap()) {
 					columHeaderMap.put(colums.getO2rColumName(),
 							colums.getChannelColumName());
 				}
-			}
+			}*/
 			log.info("columHeaderMap for Amazon Order : " + columHeaderMap);
 			//HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
 
@@ -223,14 +223,13 @@ public class AmazonOrderMgmt {
 				//amazonOrderItemInfo = list.get(0);
 				
 				
-				//sellerId = amazonOrderInfo.getSeller().getId();
-				sellerId=65;
-				if(amazonOrderInfo!=null){
-					
+				sellerId = amazonOrderInfo.getSellerId(); 
+				
+				System.out.println(" SELLERIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"+sellerId);
+				//sellerId=65;
+				if(amazonOrderInfo!=null){					
 					System.out.println("amazonOrderInfo.getAmazonorderid()"+amazonOrderInfo.getAmazonorderid());
-					
-					System.out.println("cellIndex"+cellIndex);
-					
+					System.out.println("cellIndex"+cellIndex);					
 					cellIndexMap.put(amazonOrderInfo.getAmazonorderid(),
 							cellIndex);
 				}
@@ -288,11 +287,9 @@ public class AmazonOrderMgmt {
 					}
 
 					try {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Channel Order ID"));
-						int skuIndex = cellIndexMap.get(columHeaderMap
-								.get("SkUCode"));
-						if (amazonOrderItemInfo.getSellersku()!=null) {
+						//index = cellIndexMap.get(columHeaderMap.get("Channel Order ID"));
+						//int skuIndex = cellIndexMap.get(columHeaderMap.get("SkUCode"));
+						//if (amazonOrderItemInfo.getSellersku()!=null) {
 
 							//entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 							//entry.getCell(skuIndex).setCellType(HSSFCell.CELL_TYPE_STRING);
@@ -343,12 +340,13 @@ public class AmazonOrderMgmt {
 									validaterow = false;
 								}
 							}
-						} else {
+						/*} else {
 							errorMessage
 									.append(" Channel OrderId or SKU code is null ");
 							validaterow = false;
-						}
+						}*/
 					} catch (NullPointerException e) {
+						e.printStackTrace();
 						errorMessage
 								.append("The column 'ORDER ID' doesn't exist");
 						validaterow = false;
@@ -356,9 +354,8 @@ public class AmazonOrderMgmt {
 					
 					
 					
-					if (cellIndexMap.get(columHeaderMap
-							.get("Secondary OrderID")) != null) {
-						index = cellIndexMap.get(columHeaderMap.get("Secondary OrderID"));
+					//if (cellIndexMap.get(columHeaderMap.get("Secondary OrderID")) != null) {
+					//	index = cellIndexMap.get(columHeaderMap.get("Secondary OrderID"));
 						if (amazonOrderInfo.getAmazonorderid() != null) {
 							//entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 							//itemID = amazonOrderInfo.getAmazonOrderItemInfos().entry.getCell(index).toString();
@@ -369,7 +366,7 @@ public class AmazonOrderMgmt {
 							itemID = removeExtraQuote(itemID);
 							order.setSubOrderID(itemID);
 						}
-					}
+					//}
 					
 					if(channelorderid != null){
 						if(!idsList.containsKey(channelorderid)
@@ -409,8 +406,7 @@ public class AmazonOrderMgmt {
 					
 
 					try {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Order Recieved Date"));
+						//index = cellIndexMap.get(columHeaderMap.get("Order Recieved Date"));
 						if (amazonOrderInfo.getPurchasedate() != null ) {
 							try {
 								String dateStr = amazonOrderInfo.getPurchasedate().toString();
@@ -423,6 +419,7 @@ public class AmazonOrderMgmt {
 								}
 								order.setOrderDate(format.parse(date));
 							} catch (Exception e) {
+								e.printStackTrace();
 								errorMessage
 										.append(" Order Received Date format is wrong,");
 								validaterow = false;
@@ -434,29 +431,28 @@ public class AmazonOrderMgmt {
 					validaterow = false;
 						}
 					} catch (NullPointerException e) {
+						e.printStackTrace();
 						errorMessage
 								.append("The column 'Order recieved date' doesn't exist");
 						validaterow = false;
 					}
 
-					if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Customer Email"));
+					//if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
+					//	index = cellIndexMap.get(columHeaderMap.get("Customer Email"));
 						if (amazonOrderInfo.getBuyeremail() != null) {
 							log.debug(" Email from sheet ************ "
 									+ rowIndex + ":"
 									+ amazonOrderInfo.getBuyeremail());
 							customerBean.setCustomerEmail(amazonOrderInfo.getBuyeremail());
 						}
-					}
+					//}
 					try {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Customer Name"));
+						//index = cellIndexMap.get(columHeaderMap.get("Customer Name"));
 						if (amazonOrderInfo.getBuyername() != null ) {
 							customerBean.setCustomerName(amazonOrderInfo.getBuyername());
 						}
 					} catch (NullPointerException e) {
-
+						e.printStackTrace();
 					}
 					if (cellIndexMap.get(columHeaderMap
 							.get("Customer Phone No")) != null) {
@@ -482,8 +478,7 @@ public class AmazonOrderMgmt {
 					
 
 					try {
-						index = cellIndexMap
-								.get(columHeaderMap.get("Quantity"));
+						//index = cellIndexMap.get(columHeaderMap.get("Quantity"));
 						if (amazonOrderInfo.getNumberofitemsshipped()>=0) {
 							try {
 								if ((int) Float.parseFloat(amazonOrderInfo.getNumberofitemsshipped()
@@ -497,6 +492,7 @@ public class AmazonOrderMgmt {
 									validaterow = false;
 								}
 							} catch (NumberFormatException e) {
+								e.printStackTrace();
 								log.error("Failed! by SellerId : " + sellerId,
 										e);
 								errorMessage
@@ -508,16 +504,15 @@ public class AmazonOrderMgmt {
 							validaterow = false;
 						}
 					} catch (NullPointerException e) {
+						e.printStackTrace();
 						errorMessage
 								.append("The column 'quantity-purchased' doesn't exist");
 						validaterow = false;
 					}
 
 					try {
-						index = cellIndexMap.get(columHeaderMap
-								.get("OrderSP Component A"));
-						int index1 = cellIndexMap.get(columHeaderMap
-								.get("OrderSP Component B"));
+						//index = cellIndexMap.get(columHeaderMap.get("OrderSP Component A"));
+						//int index1 = cellIndexMap.get(columHeaderMap.get("OrderSP Component B"));
 						if (amazonOrderInfo.getOrdertotalamount() != null ) {
 							try {
 								order.setOrderSP(Double.parseDouble(amazonOrderInfo.getOrdertotalamount().toString())
@@ -532,6 +527,7 @@ public class AmazonOrderMgmt {
 							validaterow = false;
 						}
 					} catch (NullPointerException e) {
+						e.printStackTrace();
 						errorMessage
 								.append("The column 'item-price' or 'shipping-price' doesn't exist");
 						validaterow = false;
@@ -683,25 +679,24 @@ public class AmazonOrderMgmt {
 						}
 					}*/
 
-					if (cellIndexMap.get(columHeaderMap.get("Order MRP")) != null) {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Order MRP"));
-						amazonOrderInfo.getOrdertotalamount();
+					//if (cellIndexMap.get(columHeaderMap.get("Order MRP")) != null) {
+						//index = cellIndexMap.get(columHeaderMap.get("Order MRP"));
+						
 						if (amazonOrderInfo.getOrdertotalamount() != null) {
 							try {
 								order.setOrderMRP(Double.parseDouble(amazonOrderInfo.getOrdertotalamount()));
 							} catch (NumberFormatException e) {
+								e.printStackTrace();
 								log.error("Failed! by SellerId : " + sellerId,
 										e);
 								errorMessage
 										.append(" Order MRP should be a number ");
 							}
 						}
-					}
+					//}
 
 					try {
-						index = cellIndexMap.get(columHeaderMap
-								.get("Order Shipped Date"));
+						//index = cellIndexMap.get(columHeaderMap.get("Order Shipped Date"));
 						if (amazonOrderInfo.getPurchasedate() != null) {
 							try {
 								String dateStr = amazonOrderInfo.getPurchasedate().toString();
@@ -711,8 +706,10 @@ public class AmazonOrderMgmt {
 								} else {
 									date = dateStr;
 								}
-								order.setShippedDate(new Date(date));
+								//order.setShippedDate(new Date(date));
+								order.setShippedDate(new Date());
 							} catch (Exception e) {
+								e.printStackTrace();
 								errorMessage
 										.append(" Shipped Date formate is wrong ,enter mm/dd/yyyy,");
 								validaterow = false;
@@ -728,6 +725,7 @@ public class AmazonOrderMgmt {
 							}
 						}
 					} catch (NullPointerException e) {
+						e.printStackTrace();
 						errorMessage
 								.append("The column 'Order Shipped Date' or 'Purchase Date' doesn't exist");
 						validaterow = false;
@@ -773,10 +771,8 @@ public class AmazonOrderMgmt {
 									&& partner.getNrnReturnConfig() != null
 									&& !partner.getNrnReturnConfig()
 											.isNrCalculator()) {
-								if (cellIndexMap.get(columHeaderMap
-										.get("Net Rate")) != null) {
-									index = cellIndexMap.get(columHeaderMap
-											.get("Net Rate"));
+								//if (cellIndexMap.get(columHeaderMap.get("Net Rate")) != null) {
+								//	index = cellIndexMap.get(columHeaderMap.get("Net Rate"));
 									if (amazonOrderInfo.getOrdertotalamount() != null) {
 										try {
 											order.setGrossNetRate(Double
@@ -793,11 +789,11 @@ public class AmazonOrderMgmt {
 												.append(" Net Rate is null.");
 										validaterow = false;
 									}
-								} else {
+								/*} else {
 									errorMessage
 											.append(" The Column 'Net Rate' Not Present.");
 									validaterow = false;
-								}
+								}*/
 							}
 						}
 					}
@@ -861,7 +857,7 @@ public class AmazonOrderMgmt {
 						returnOrderMap.put(errorMessage.toString(), order);
 					}
 				} catch (Exception e) {
-
+					e.printStackTrace();
 					log.error("Failed! by SellerId : " + sellerId, e);
 					errorMessage.append("Invalid Input! ");
 					returnOrderMap.put(errorMessage.toString(), order);
@@ -873,6 +869,7 @@ public class AmazonOrderMgmt {
 				if (saveList != null && saveList.size() != 0)
 					orderService.addOrder(saveList, sellerId);
 			} catch (CustomException ce) {
+				ce.printStackTrace();
 				returnOrderMap
 						.put("Row :1:Note-Some orders("
 								+ ce.getLocalMessage()

@@ -2,6 +2,7 @@ package com.o2r.model;
 
 // Generated Oct 23, 2016 4:48:17 PM by Hibernate Tools 3.4.0.CR1
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -19,6 +21,10 @@ import javax.persistence.Table;
 @Table(name = "amazon_order_item_info", catalog = "o2rschema")
 public class AmazonOrderItemInfo implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String amazonorderid;
 	private String asin;
@@ -65,103 +71,19 @@ public class AmazonOrderItemInfo implements java.io.Serializable {
 	private String pricedesignation;
 	private String buyercustomizedurl;
 	private String requestid;
-	private Integer orderId;
-	
-	//private AmazonOrderInfo amazonOrderInfo;
-	
-	
+	//private int orderId=2;
+	private int orderId;
+	private AmazonOrderInfo amazonOrderInfo;
 	
 	
 	
-	
-	
-
-	public AmazonOrderItemInfo() {
-	}
-
-	public AmazonOrderItemInfo(int id) {
-		this.id = id;
-	}
-
-	public AmazonOrderItemInfo(int id, String amazonorderid, String asin,
-			String sellersku, String orderitemid, String title,
-			String quantityordered, String quantityshipped,
-			String pointsgrantedpointsnumber, String pointsgrantedcurrencycode,
-			String pointsgrantedamount, String itempricecurrencycode,
-			String itempriceamount, String shippingpricecurrencycode,
-			String shippingpriceamount, String giftwrappricecurrencycode,
-			String giftwrappriceamount, String itemtaxcurrencycode,
-			String itemtaxamount, String shippingtaxcurrencycode,
-			String shippingtaxamount, String giftwraptaxcurrencycode,
-			String giftwraptaxamount, String shippingdiscountcurrencycode,
-			String shippingdiscountamount,
-			String promotiondiscountcurrencycode,
-			String promotiondiscountamount, String promotionids,
-			String codfeecurrencycode, String codfeeamount,
-			String codfeediscountcurrencycode, String codfeediscountamount,
-			String giftmessagetext, String giftwraplevel,
-			String invoicedatainvoicerequirement,
-			String invoicedatabuyerselectedinvoicecategory,
-			String invoicedatainvoicetitle,
-			String invoicedatainvoiceinformation, String conditionnote,
-			String conditionid, String conditionsubtypeid,
-			String scheduleddeliverystartdate, String scheduleddeliveryenddate,
-			String pricedesignation, String buyercustomizedurl,
-			String requestid, Integer orderId) {
-		this.id = id;
-		this.amazonorderid = amazonorderid;
-		this.asin = asin;
-		this.sellersku = sellersku;
-		this.orderitemid = orderitemid;
-		this.title = title;
-		this.quantityordered = quantityordered;
-		this.quantityshipped = quantityshipped;
-		this.pointsgrantedpointsnumber = pointsgrantedpointsnumber;
-		this.pointsgrantedcurrencycode = pointsgrantedcurrencycode;
-		this.pointsgrantedamount = pointsgrantedamount;
-		this.itempricecurrencycode = itempricecurrencycode;
-		this.itempriceamount = itempriceamount;
-		this.shippingpricecurrencycode = shippingpricecurrencycode;
-		this.shippingpriceamount = shippingpriceamount;
-		this.giftwrappricecurrencycode = giftwrappricecurrencycode;
-		this.giftwrappriceamount = giftwrappriceamount;
-		this.itemtaxcurrencycode = itemtaxcurrencycode;
-		this.itemtaxamount = itemtaxamount;
-		this.shippingtaxcurrencycode = shippingtaxcurrencycode;
-		this.shippingtaxamount = shippingtaxamount;
-		this.giftwraptaxcurrencycode = giftwraptaxcurrencycode;
-		this.giftwraptaxamount = giftwraptaxamount;
-		this.shippingdiscountcurrencycode = shippingdiscountcurrencycode;
-		this.shippingdiscountamount = shippingdiscountamount;
-		this.promotiondiscountcurrencycode = promotiondiscountcurrencycode;
-		this.promotiondiscountamount = promotiondiscountamount;
-		this.promotionids = promotionids;
-		this.codfeecurrencycode = codfeecurrencycode;
-		this.codfeeamount = codfeeamount;
-		this.codfeediscountcurrencycode = codfeediscountcurrencycode;
-		this.codfeediscountamount = codfeediscountamount;
-		this.giftmessagetext = giftmessagetext;
-		this.giftwraplevel = giftwraplevel;
-		this.invoicedatainvoicerequirement = invoicedatainvoicerequirement;
-		this.invoicedatabuyerselectedinvoicecategory = invoicedatabuyerselectedinvoicecategory;
-		this.invoicedatainvoicetitle = invoicedatainvoicetitle;
-		this.invoicedatainvoiceinformation = invoicedatainvoiceinformation;
-		this.conditionnote = conditionnote;
-		this.conditionid = conditionid;
-		this.conditionsubtypeid = conditionsubtypeid;
-		this.scheduleddeliverystartdate = scheduleddeliverystartdate;
-		this.scheduleddeliveryenddate = scheduleddeliveryenddate;
-		this.pricedesignation = pricedesignation;
-		this.buyercustomizedurl = buyercustomizedurl;
-		this.requestid = requestid;
-		// this.orderId = orderId;
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ITEM_ID", unique = true, nullable = false)
 	public int getId() {
 		return this.id;
+		//return 2;
 	}
 
 	public void setId(int id) {
@@ -577,20 +499,25 @@ public class AmazonOrderItemInfo implements java.io.Serializable {
 	public void setRequestid(String requestid) {
 		this.requestid = requestid;
 	}
-
-	/*public AmazonOrderInfo getAmazonOrderInfo() {
-		return amazonOrderInfo;
-	}
-	@ManyToOne(fetch = FetchType.LAZY)
-	public void setAmazonOrderInfo(AmazonOrderInfo amazonOrderInfo) {
-		this.amazonOrderInfo = amazonOrderInfo;
-	}*/
-
 	
-	 @Column(name="ORDER_ID") public Integer getOrderId() { return
-	 this.orderId; }
+	 @Column(name="ORDER_ID") 
+	 public Integer getOrderId() {
+		 return	 orderId; 
+	 }
 	 
-	  public void setOrderId(Integer orderId) { this.orderId = orderId; }
+	 public void setOrderId(Integer orderId) {
+		  this.orderId = orderId; 
+	 }
 	 
+	 @ManyToOne
+		@JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
+		public AmazonOrderInfo getAmazonOrderInfo() {
+			return amazonOrderInfo;
+		}
+
+		public void setAmazonOrderInfo(AmazonOrderInfo amazonOrderInfo) {
+			this.amazonOrderInfo = amazonOrderInfo;
+		}
+		
 
 }
