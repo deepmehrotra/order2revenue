@@ -535,6 +535,14 @@ public class OrderController {
 					saveMappedFiles.saveJabongOrderContents(files.get(0),
 							sellerId, applicationPath, uploadReport);
 					break;
+				case "Shopclues_Payment":
+					saveMappedFiles.saveShopcluesPaymentContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
+					break;
+				case "Shopclues_Order":
+					saveMappedFiles.saveShopcluesOrderContents(files.get(0),
+							sellerId, applicationPath, uploadReport);
+					break;
 				case "CreateInventoryGroups":
 					saveContents.saveInventoryGroups(files.get(0), sellerId,
 							applicationPath, uploadReport);

@@ -783,6 +783,8 @@ ol.d {
 										<option value="Jabong_Payment"
 											data-show=".jabongpaymentupload">Jabong Payment
 											Upload</option>
+										<option value="Shopclues_Order" data-show=".jabongorderupload">Shopclues Order Upload</option>
+										<option value="Shopclues_Payment" data-show=".jabongpaymentupload">Shopclues Payment Upload</option>
 									</select>
 								</div>
 								<div class="col-md-4">
