@@ -719,7 +719,7 @@
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.grossValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.returnValue}" /></td>
 												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.netValue}" /></td>
-												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.grossValue}" /></td>
+												<td><fmt:formatNumber type="number"	maxFractionDigits="2" value="${DDBean.badQtyCharges}" /></td>
 											</tr>
 										</c:forEach>
 									</c:if>
