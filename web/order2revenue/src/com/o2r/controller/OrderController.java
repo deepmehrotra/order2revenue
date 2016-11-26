@@ -536,7 +536,7 @@ public class OrderController {
 							sellerId, applicationPath, uploadReport);
 					break;
 				case "Shopclues_Payment":
-					saveMappedFiles.saveShopcluesPaymentContents(files.get(0),
+					saveMappedFiles.saveShopcluesOrderContents(files.get(0),
 							sellerId, applicationPath, uploadReport);
 					break;
 				case "Shopclues_Order":
