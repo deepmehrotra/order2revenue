@@ -187,7 +187,7 @@
 								</div>
 								<div class="checkbox">
 									<label> <input type="checkbox" class="checkbox1"
-										value="quantity" name="headers"> Sale Quantity
+										value="quantity" name="headers"> Gross Sale Quantity
 									</label>
 								</div>	
 								<div class="checkbox">

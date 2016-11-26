@@ -57,6 +57,7 @@ public class GlobalConstant {
 			add("Flipkart");
 			add("Snapdeal");
 			add("PayTM");
+			add("Shopclues");
 			add("Limeroad");
 			add("Unicommerce");
 			add("Jabong");
@@ -177,6 +178,21 @@ public class GlobalConstant {
 			add("Recieved Amount");
 			add("Invoice ID");
 			add("SKU");
+			add("Particular");
+		}
+	};
+	
+	public static final ArrayList<String> ShopcluesPaymentHeaderList = new ArrayList<String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			add("ChannelOrderId");
+			add("SKU");
+			add("Invoice ID");
+			add("Recieved Amount");
+			add("Channel");			
+			add("Criteria");
+			add("Deducted Amount");
+			add("Payment Date");
 			add("Particular");
 		}
 	};
@@ -302,6 +318,39 @@ public class GlobalConstant {
 			add("Net Rate");
 			add("Customer_Fname");
 			add("Customer_Lname");
+			add("Customer Address");
+			add("Customer City");
+			add("Customer Phone No");
+			add("Customer Email");
+			add("Seller Note");
+
+		}
+	};
+	
+	public static final ArrayList<String> ShopcluesOrderHeaderList = new ArrayList<String>() {
+		/**
+	 *
+	 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Order Recieved Date");
+			add("Secondary OrderID");
+			add("Channel Order ID");
+			add("SkUCode");
+			add("Quantity");
+			add("InvoiceID");
+			add("OrderSP");
+			add("Shipping PinCode");
+			add("Order Shipped Date");
+			add("Sales Channel");
+			add("Payment Type");
+			add("AWB No");
+			add("PIreferenceNo");
+			add("Logistic Partner");
+			add("Order MRP");
+			add("Net Rate");
+			add("Customer Name");			
 			add("Customer Address");
 			add("Customer City");
 			add("Customer Phone No");
@@ -1265,7 +1314,7 @@ public class GlobalConstant {
 			put("PIreferenceNo", "PIreferenceNo");
 			put("productCategory", "ProductCategory");
 			put("sku", "Vendor  SKU");
-			put("quantity", "Qty");
+			put("quantity", "Gross Sale Qty");
 			put("returnQuantity", "Return Qty");
 			put("netSaleQuantity", "Net Sale Qty");
 			put("totalMRP", "MRP");

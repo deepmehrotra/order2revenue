@@ -234,6 +234,12 @@ public class AdminController {
 				else if (fileName.equalsIgnoreCase("order"))
 					tempList = GlobalConstant.PayTMOrderHeaderList;
 				break;
+			case "Shopclues":
+				if (fileName.equalsIgnoreCase("payment"))
+					tempList = GlobalConstant.ShopcluesPaymentHeaderList;
+				else if (fileName.equalsIgnoreCase("order"))
+					tempList = GlobalConstant.ShopcluesOrderHeaderList;
+				break;
 			case "Unicommerce":
 				if (fileName.equalsIgnoreCase("payment"))
 					tempList = GlobalConstant.UnicommercePaymentHeaderList;
@@ -385,6 +391,14 @@ public class AdminController {
 						if (fileName.equalsIgnoreCase("order"))
 							model.put("o2rheaders",
 									GlobalConstant.BrownTapeOrderHeaderList);
+						break;
+					case "Shopclues":
+						if (fileName.equalsIgnoreCase("payment"))
+							model.put("o2rheaders",
+									GlobalConstant.ShopcluesPaymentHeaderList);
+						else if (fileName.equalsIgnoreCase("order"))
+							model.put("o2rheaders",
+									GlobalConstant.ShopcluesOrderHeaderList);
 						break;
 					}
 				}
