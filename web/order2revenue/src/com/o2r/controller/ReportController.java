@@ -1117,6 +1117,24 @@ public class ReportController {
 					fifthreco.setActionableOrdersPercent(fifthreco
 							.getActionableOrdersPercent()
 							+ newttso.getActionableOrdersPercent());
+					fifthreco.setNoOfInProcessOrders(fifthreco
+							.getNoOfInProcessOrders()
+							+ newttso.getNoOfInProcessOrders());
+					fifthreco.setInProcessOrdersPercent(fifthreco
+							.getInProcessOrdersPercent()
+							+ newttso.getInProcessOrdersPercent());
+					fifthreco.setPayNotReceivedPercent(fifthreco.getPayNotReceivedPercent() 
+							+ newttso.getPayNotReceivedPercent());
+					fifthreco.setNoOfPayNotReceivedOrders(fifthreco.getNoOfPayNotReceivedOrders() 
+							+ newttso.getNoOfPayNotReceivedOrders());
+					fifthreco.setNoOfPositivePayDiffOrders(fifthreco.getNoOfPositivePayDiffOrders() 
+							+ newttso.getNoOfPositivePayDiffOrders());
+					fifthreco.setPositivePayDiffPercent(fifthreco.getPositivePayDiffPercent()
+							+ newttso.getPositivePayDiffPercent());
+					fifthreco.setNoOfNegativePayDiffOrders(fifthreco.getNoOfNegativePayDiffOrders() 
+							+ newttso.getNoOfNegativePayDiffOrders());
+					fifthreco.setNegativePayDiffPercent(fifthreco.getNegativePayDiffPercent() 
+							+ newttso.getNegativePayDiffPercent());
 					fifthreco.setNoOfSettledOrders(fifthreco
 							.getNoOfSettledOrders()
 							+ newttso.getNoOfSettledOrders());

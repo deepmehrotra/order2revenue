@@ -164,6 +164,10 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		int totalNoofRO = 0;
 		int totalNoofSO = 0;
 		int totalNoofAO = 0;
+		int totalNoofInO = 0;
+		int totalNoofPNRO = 0;
+		int totalNoofPPDO = 0;
+		int totalNoofNPDO = 0;
 		int totalNoofRTOCross = 0;
 		int totalNoofreturnCross = 0;
 		int iteratorCount = 0;
@@ -355,8 +359,7 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			AOprojList.add(Projections.rowCount());
 			criteriaforActionalbleOrder.setProjection(AOprojList);
 			try {
-				List<Object[]> actionableOrderCount = criteriaforActionalbleOrder
-						.list();
+				List<Object[]> actionableOrderCount = criteriaforActionalbleOrder.list();
 				Iterator AOiterator = actionableOrderCount.iterator();
 				if (actionableOrderCount != null) {
 					iteratorCount = 0;
@@ -375,6 +378,50 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 				}
 			} catch (Exception e) {
 				log.info("Failed! Error in getting Actionable Order Count"
+						+ e.getMessage());
+			}
+			
+			/*
+			 * Code for calculating no of InProcess orders
+			 */
+			Criteria criteriaforInProcessOrder = session
+					.createCriteria(Order.class);
+			criteriaforInProcessOrder
+					.createAlias("seller", "seller",
+							CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions.between("orderDate", startDate, endDate))
+					.add(Restrictions.eq("finalStatus", "In Process"));
+			criteriaforInProcessOrder
+					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			ProjectionList InOprojList = Projections.projectionList();
+			InOprojList.add(Projections.groupProperty("pcName"));
+			InOprojList.add(Projections.rowCount());
+			criteriaforInProcessOrder.setProjection(InOprojList);
+			try {
+				Map<String, Integer> inProcessOrdersMap = new HashMap<String, Integer>();
+				List<Object[]> InProcessOrderCount = criteriaforInProcessOrder.list();
+				Iterator InOiterator = InProcessOrderCount.iterator();
+				if (InProcessOrderCount != null) {
+					iteratorCount = 0;
+					while (InOiterator.hasNext()) {
+						Object[] recordsRow = (Object[]) InOiterator.next();
+						if (recordsRow[1] != null) {
+							totalNoofInO = totalNoofInO
+									+ Integer
+											.parseInt(recordsRow[1].toString());
+							inProcessOrdersMap.put(recordsRow[0].toString(), Integer.parseInt(recordsRow[1].toString()));							
+						}
+
+					}
+				}
+				for(TotalShippedOrder order : ttso){
+					if(inProcessOrdersMap.size() != 0 && inProcessOrdersMap.containsKey(order.getPcName())){
+						order.setNoOfInProcessOrders(inProcessOrdersMap.get(order.getPcName()));
+					}
+				}
+			} catch (Exception e) {
+				log.info("Failed! Error in getting InProcess Order Count"
 						+ e.getMessage());
 			}
 
@@ -397,8 +444,8 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 			criteriaforSettledOrder.setProjection(SOprojList);
 
 			try {
-				List<Object[]> settledOrderCount = criteriaforSettledOrder
-						.list();
+				Map<String, Integer> settledOrdersMap = new HashMap<String, Integer>();
+				List<Object[]> settledOrderCount = criteriaforSettledOrder.list();
 				Iterator SOiterator = settledOrderCount.iterator();
 				if (settledOrderCount != null) {
 					iteratorCount = 0;
@@ -408,16 +455,171 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 							totalNoofSO = totalNoofSO
 									+ Integer
 											.parseInt(recordsRow[1].toString());
-							ttso[iteratorCount++].setNoOfSettledOrders(Integer
-									.parseInt(recordsRow[1].toString()));
+							settledOrdersMap.put(recordsRow[0].toString(), Integer.parseInt(recordsRow[1].toString()));	
+							/*ttso[iteratorCount++].setNoOfSettledOrders(Integer
+									.parseInt(recordsRow[1].toString()));*/
 						}
 
+					}
+				}
+				for(TotalShippedOrder order : ttso){
+					if(settledOrdersMap.size() != 0 && settledOrdersMap.containsKey(order.getPcName())){
+						order.setNoOfSettledOrders(settledOrdersMap.get(order.getPcName()));
 					}
 				}
 			} catch (Exception e) {
 				log.info("Failed! Error in getting Settled Order Count"
 						+ e.getMessage());
+			}			
+			
+			/*
+			 * Code for calculating no of Payment Not Received orders
+			 */
+			Criteria criteriaforPaymentNotReceivedOrder = session
+					.createCriteria(Order.class);
+			criteriaforPaymentNotReceivedOrder.createAlias("orderPayment", "orderPayment",
+					CriteriaSpecification.LEFT_JOIN);
+			criteriaforPaymentNotReceivedOrder
+					.createAlias("seller", "seller",
+							CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions.between("orderDate", startDate, endDate))					
+					.add(Restrictions.isNull("orderPayment.dateofPayment"));
+			criteriaforPaymentNotReceivedOrder
+					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			ProjectionList PNROprojList = Projections.projectionList();
+			PNROprojList.add(Projections.groupProperty("pcName"));
+			PNROprojList.add(Projections.rowCount());
+			criteriaforPaymentNotReceivedOrder.setProjection(PNROprojList);
+
+			try {
+				Map<String, Integer> paymnetNotReceivedOrdersMap = new HashMap<String, Integer>();
+				List<Object[]> PNROrderCount = criteriaforPaymentNotReceivedOrder.list();
+				Iterator PNROiterator = PNROrderCount.iterator();
+				if (PNROrderCount != null) {
+					iteratorCount = 0;
+					while (PNROiterator.hasNext()) {
+						Object[] recordsRow = (Object[]) PNROiterator.next();
+						if (recordsRow[1] != null) {
+							totalNoofPNRO = totalNoofPNRO
+									+ Integer
+											.parseInt(recordsRow[1].toString());
+							paymnetNotReceivedOrdersMap.put(recordsRow[0].toString(), Integer.parseInt(recordsRow[1].toString()));	
+							/*ttso[iteratorCount++].setNoOfSettledOrders(Integer
+									.parseInt(recordsRow[1].toString()));*/
+						}
+					}
+				}
+				for(TotalShippedOrder order : ttso){
+					if(paymnetNotReceivedOrdersMap.size() != 0 && paymnetNotReceivedOrdersMap.containsKey(order.getPcName())){
+						order.setNoOfPayNotReceivedOrders(paymnetNotReceivedOrdersMap.get(order.getPcName()));
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("Failed By Seller ID : "+sellerId, e);
+				log.info("Failed! Error in getting Payment Not Received Order Count"
+						+ e.getMessage());
 			}
+			
+			/*
+			 * Code for calculating no of Positive Payment Difference orders
+			 */
+			Criteria criteriaforPositivePayDiffOrder = session
+					.createCriteria(Order.class);
+			criteriaforPositivePayDiffOrder.createAlias("orderPayment", "orderPayment",
+					CriteriaSpecification.LEFT_JOIN);
+			criteriaforPositivePayDiffOrder
+					.createAlias("seller", "seller",
+							CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions.between("orderDate", startDate, endDate))					
+					.add(Restrictions.gt("orderPayment.paymentDifference", 1.0));
+			criteriaforPositivePayDiffOrder
+					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			ProjectionList PPDOprojList = Projections.projectionList();
+			PPDOprojList.add(Projections.groupProperty("pcName"));
+			PPDOprojList.add(Projections.rowCount());
+			criteriaforPositivePayDiffOrder.setProjection(PPDOprojList);
+
+			try {
+				Map<String, Integer> positivePayDiffOrdersMap = new HashMap<String, Integer>();
+				List<Object[]> PPDOrderCount = criteriaforPositivePayDiffOrder.list();
+				Iterator PPDOiterator = PPDOrderCount.iterator();
+				if (PPDOrderCount != null) {
+					iteratorCount = 0;
+					while (PPDOiterator.hasNext()) {
+						Object[] recordsRow = (Object[]) PPDOiterator.next();
+						if (recordsRow[1] != null) {
+							totalNoofPPDO = totalNoofPPDO
+									+ Integer.parseInt(recordsRow[1].toString());
+							positivePayDiffOrdersMap.put(recordsRow[0].toString(), Integer.parseInt(recordsRow[1].toString()));	
+							/*ttso[iteratorCount++].setNoOfSettledOrders(Integer
+									.parseInt(recordsRow[1].toString()));*/
+						}
+					}
+				}
+				for(TotalShippedOrder order : ttso){
+					if(positivePayDiffOrdersMap.size() != 0 && positivePayDiffOrdersMap.containsKey(order.getPcName())){
+						order.setNoOfPositivePayDiffOrders(positivePayDiffOrdersMap.get(order.getPcName()));
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("Failed By Seller ID : "+sellerId, e);
+				log.info("Failed! Error in getting Positive Pay Difference Order Count"
+						+ e.getMessage());
+			}
+			
+			
+			/*
+			 * Code for calculating no of Negative Payment Difference orders
+			 */
+			Criteria criteriaforNegativePayDiffOrder = session
+					.createCriteria(Order.class);
+			criteriaforNegativePayDiffOrder.createAlias("orderPayment", "orderPayment",
+					CriteriaSpecification.LEFT_JOIN);
+			criteriaforNegativePayDiffOrder
+					.createAlias("seller", "seller",
+							CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId))
+					.add(Restrictions.between("orderDate", startDate, endDate))					
+					.add(Restrictions.lt("orderPayment.paymentDifference", -1.0));
+			criteriaforNegativePayDiffOrder
+					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			ProjectionList NPDOprojList = Projections.projectionList();
+			NPDOprojList.add(Projections.groupProperty("pcName"));
+			NPDOprojList.add(Projections.rowCount());
+			criteriaforNegativePayDiffOrder.setProjection(NPDOprojList);
+
+			try {
+				Map<String, Integer> negativePayDiffOrdersMap = new HashMap<String, Integer>();
+				List<Object[]> NPDOrderCount = criteriaforNegativePayDiffOrder.list();
+				Iterator NPDOiterator = NPDOrderCount.iterator();
+				if (NPDOrderCount != null) {
+					iteratorCount = 0;
+					while (NPDOiterator.hasNext()) {
+						Object[] recordsRow = (Object[]) NPDOiterator.next();
+						if (recordsRow[1] != null) {
+							totalNoofNPDO = totalNoofNPDO
+									+ Integer.parseInt(recordsRow[1].toString());
+							negativePayDiffOrdersMap.put(recordsRow[0].toString(), Integer.parseInt(recordsRow[1].toString()));	
+							/*ttso[iteratorCount++].setNoOfSettledOrders(Integer
+									.parseInt(recordsRow[1].toString()));*/
+						}
+					}
+				}
+				for(TotalShippedOrder order : ttso){
+					if(negativePayDiffOrdersMap.size() != 0 && negativePayDiffOrdersMap.containsKey(order.getPcName())){
+						order.setNoOfNegativePayDiffOrders(negativePayDiffOrdersMap.get(order.getPcName()));
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("Failed By Seller ID : "+sellerId, e);
+				log.info("Failed! Error in getting Negative pay Difference Order Count"
+						+ e.getMessage());
+			}			
 
 			/*
 			 * Code for caluclating no of RTOlimit crossed orders
@@ -586,6 +788,27 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 					if ((int) totalNoofAO != 0)
 						ttso[i].setActionableOrdersPercent(ttso[i]
 								.getNoOfActionableOrders() * 100 / totalNoofAO);
+					if ((int) totalNoofInO != 0)
+						ttso[i].setInProcessOrdersPercent(ttso[i]
+								.getNoOfInProcessOrders() * 100 / totalNoofInO);
+					
+					if ((int) totalNoofPNRO != 0)
+						ttso[i].setPayNotReceivedPercent(ttso[i]
+								.getNoOfPayNotReceivedOrders() * 100 / totalNoofPNRO);
+					
+					if ((int) totalNoofPPDO != 0)
+						ttso[i].setPositivePayDiffPercent(ttso[i]
+								.getNoOfPositivePayDiffOrders() * 100 / totalNoofPPDO);
+					
+					if ((int) totalNoofNPDO != 0)
+						ttso[i].setNegativePayDiffPercent(ttso[i]
+								.getNoOfNegativePayDiffOrders() * 100 / totalNoofNPDO);
+					
+					
+					/*if(ttso[i].getNoOfRTOOrder() != 0){
+						totalNoofRO = (int) (totalNoofRO + ttso[i].getNoOfRTOOrder());
+						ttso[i].setNoOfReturnOrder(ttso[i].getNoOfReturnOrder() + ttso[i].getNoOfRTOOrder());
+					}*/
 					if ((int) totalNoofRO != 0)
 						ttso[i].setReturnOrderPercent(ttso[i]
 								.getNoOfReturnOrder() * 100 / totalNoofRO);

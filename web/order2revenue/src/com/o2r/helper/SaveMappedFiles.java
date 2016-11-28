@@ -3675,8 +3675,11 @@ public class SaveMappedFiles {
 								 * }
 								 */
 								else {
-									errorMessage
-											.append("Multiple Orders With Channel Order ID.");
+									if(onj.size() == 1){
+										errorMessage.append("No Order With Channel Order ID.");
+									} else {
+										errorMessage.append("Multiple Orders With Channel Order ID.");
+									}									
 									validaterow = false;
 								}
 

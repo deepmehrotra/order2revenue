@@ -52,8 +52,8 @@
                                             <thead>
                                              <tr>
                                                 <th>Partner</th>
-                                                <th>Total N/R</th>
-                                                <th>% N/R</th>
+                                                <th> Actual Sale Amount</th>
+                                                <th>% of Actual Sale Amount</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -90,8 +90,8 @@
                                             <thead>
                                            <tr>
                                                 <th>Partner</th>
-                                                <th>Sale Quantity</th>
-                                                <th>% Sale Quantity</th>
+                                                <th>Gross Sale Quantity</th>
+                                                <th>% of Gross Sale Quantity</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -128,8 +128,8 @@
                                             <thead>
                                             <tr>
                                                 <th>Partner</th>
-                                                <th>Sale Amount</th>
-                                                <th>Sale Amount Percent</th>
+                                                <th>Taxable Sale Amount</th>
+                                                <th>% of Taxable Sale Amount</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -272,9 +272,123 @@
                                     </div>
                                 </div>
                                 </div>
+                                
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                    <div class="float-e-margins graph-brd">
+                                    <div class="ibox-content">
+                                         <table class="table table-bordered custom-table">
+                                            <thead>
+                                           <tr>
+                                                <th>Partner</th>
+                                                <th>Payment Not Received</th>
+                                                <th>% of Payment Not Received</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <c:if test="${!empty NRsortedttso}">
+                                 			 <c:forEach items="${NRsortedttso}" var="forPayNotReci" varStatus="loop">
+                                            <tr>
+                                                <td>${forPayNotReci.pcName}</td>
+                                                <td>${forPayNotReci.noOfPayNotReceivedOrders}</td>
+                                                <td>${forPayNotReci.payNotReceivedPercent}</td>
+                                            </tr>
+                                            </c:forEach>
+                                            </c:if>
+                                           </tbody>
+                                        </table>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="float-e-margins graph-brd">
+                                        <div class="ibox-content">
+                                            <div class="flot-chart">
+                                                <div class="flot-chart-content" id="flot-line-chart-PNR"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                    <div class="float-e-margins graph-brd">
+                                    <div class="ibox-content">
+                                         <table class="table table-bordered custom-table">
+                                            <thead>
+                                           <tr>
+                                                <th>Partner</th>
+                                                <th>+ve Payment Diff</th>
+                                                <th>% of +ve Payment Diff</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <c:if test="${!empty NRsortedttso}">
+                                 			 <c:forEach items="${NRsortedttso}" var="forPosPayDiff" varStatus="loop">
+                                            <tr>
+                                                <td>${forPosPayDiff.pcName}</td>
+                                                <td>${forPosPayDiff.noOfPositivePayDiffOrders}</td>
+                                                <td>${forPosPayDiff.positivePayDiffPercent}</td>
+                                            </tr>
+                                            </c:forEach>
+                                            </c:if>
+                                           </tbody>
+                                        </table>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="float-e-margins graph-brd">
+                                        <div class="ibox-content">
+                                            <div class="flot-chart">
+                                                <div class="flot-chart-content" id="flot-bar-chart-PPD"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                    <div class="float-e-margins graph-brd">
+                                    <div class="ibox-content">
+                                         <table class="table table-bordered custom-table">
+                                            <thead>
+                                           <tr>
+                                                <th>Partner</th>
+                                                <th>-ve Payment Diff</th>
+                                                <th>% of -ve Payment Diff</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <c:if test="${!empty NRsortedttso}">
+                                 			 <c:forEach items="${NRsortedttso}" var="forNegPayDiff" varStatus="loop">
+                                            <tr>
+                                                <td>${forNegPayDiff.pcName}</td>
+                                                <td>${forNegPayDiff.noOfNegativePayDiffOrders}</td>
+                                                <td>${forNegPayDiff.negativePayDiffPercent}</td>
+                                            </tr>
+                                            </c:forEach>
+                                            </c:if>
+                                           </tbody>
+                                        </table>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="float-e-margins graph-brd">
+                                        <div class="ibox-content">
+                                            <div class="flot-chart">
+                                                <div class="flot-chart-content" id="flot-bar-chart-NPD"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
 
                                 <div class="row">
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-12" style="overflow: scroll;overflow-y: hidden;">
                                         <div class="float-e-margins graph-brd">
                                         <div >
                                          <table class="table table-bordered custom-table">
@@ -284,11 +398,11 @@
                                                 <th>Delivered</th>
                                                 <th>% Delivered</th>
                                                 <th>Return</th>
-                                                <th>% Return</th>
-                                                <th>RTO</th>
-                                                <th>% RTO</th>
+                                                <th>% Return</th>                                                
                                                 <th>Actionable</th>
                                                 <th>% Actionable</th>
+                                                <th>In Process</th>
+                                                <th>% In Process</th>
                                                 <th>Settled</th>
                                                 <th>% Settled</th>
                                                 <th>Return Limit Crossed</th>
@@ -305,11 +419,11 @@
                                                 <td>${NRsortedttso.noOfDeliveredOrder}</td>
                                                 <td>${NRsortedttso.deliveredOrderPercent}</td>
                                                 <td>${NRsortedttso.noOfReturnOrder}</td>
-                                                <td>${NRsortedttso.returnOrderPercent}</td>
-                                                <td>${NRsortedttso.noOfRTOOrder}</td>
-                                                <td>${NRsortedttso.RTOOrderPercent}</td>
+                                                <td>${NRsortedttso.returnOrderPercent}</td>                                                
                                                 <td>${NRsortedttso.noOfActionableOrders}</td>
                                                 <td>${NRsortedttso.actionableOrdersPercent}</td>
+                                                <td>${NRsortedttso.noOfInProcessOrders}</td>
+                                                <td>${NRsortedttso.inProcessOrdersPercent}</td>
                                                 <td>${NRsortedttso.noOfSettledOrders}</td>
                                                 <td>${NRsortedttso.settledOrdersPercent}</td>
                                                  <td>${NRsortedttso.noOfReturnLimitCrossed}</td>
@@ -477,7 +591,48 @@ var arr2=[i++,'${returnAmountsortedttso.pcName}'];
 lineDataRA.push(arr1);
 linearrayRA.push(arr2);
 </c:forEach>
-   
+
+
+// Bar chart For Positive Pay Diff
+
+var PPDBarData=[];
+var PPDTicks=[];
+i=1;
+<c:forEach items="${NRsortedttso}" var="PPD" varStatus="loop">
+var arr1 = [i,'${PPD.positivePayDiffPercent}'];
+var arr2=[i++,'${PPD.pcName}'];
+PPDBarData.push(arr1);
+PPDTicks.push(arr2);
+</c:forEach>
+
+//Bar chart For Payment Not Received
+
+var PNRTemp=[];
+var PNRTicks=[];
+i=1;
+<c:forEach items="${NRsortedttso}" var="PNR" varStatus="loop">
+var arr1 = [i,'${PNR.payNotReceivedPercent}'];
+var arr2=[i++,'${PNR.pcName}'];
+PNRTemp.push(arr1);
+PNRTicks.push(arr2);
+</c:forEach>
+
+//Bar chart For Negative Pay Diff
+
+var NPDBarData=[];
+var NPDTicks=[];
+i=1;
+<c:forEach items="${NRsortedttso}" var="NPD" varStatus="loop">
+var arr1 = [i,'${NPD.negativePayDiffPercent}'];
+var arr2=[i++,'${NPD.pcName}'];
+NPDBarData.push(arr1);
+NPDTicks.push(arr2);
+</c:forEach>
+
+
+
+
+
 //Script for pie chart saleAmounrsortedttso
 
 //Populating Pie Chart 
@@ -549,10 +704,13 @@ linearrayRA.push(arr2);
 	//Calling all the charts
  $(window).load(function() {
 	 
-			flotbar(temp,ticks,"#flot-bar-chart");
+		flotbar(temp,ticks,"#flot-bar-chart");
 		flotline(linetemp,linearrayfortick,"#flot-line-chart");
 		flotbar(RQBarData,ticksforRQBar,"#flot-bar-chart-RQ");
 		flotline(lineDataRA,linearrayRA,"#flot-line-chart-RA");
+		flotbar(PPDBarData,PPDTicks,"#flot-bar-chart-PPD");
+		flotline(PNRTemp,PNRTicks,"#flot-line-chart-PNR");
+		flotbar(NPDBarData,NPDTicks,"#flot-bar-chart-NPD");
 		flotpie(piedata,"#flot-pie-chart");
 		flotpie(citipiedata,"#flot-pie-chart-CITY");
 		morrisline(linedata,yaxis,yaxis);
