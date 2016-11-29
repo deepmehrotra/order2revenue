@@ -292,7 +292,7 @@ public class SaveContents {
 								}
 								itemId = removeExtraQuote(itemId);
 								order.setSubOrderID(itemId);
-								if(partner.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+								if(partner != null && partner.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
 										&& itemId.contains("OI:")){
 									itemId = itemId.replaceAll("OI:", "");												
 								}
