@@ -182,6 +182,36 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
      	
      <!-- schedular mapping END -->
      
+     <!-- Schedular mapping START(4 Order Settled) -->  
+        
+        <!-- <bean name="setTriggerJobOrderS" class="org.springframework.scheduling.quartz.JobDetailBean">
+			<property name="jobClass" value="com.o2r.schedulers.SetTriggerJobOrderSettled" />		
+			<property name="jobDataAsMap">
+				<map>
+					<entry key="sampleJob" value-ref="sampleJob" />
+				</map>
+			</property>		
+		</bean> -->
+		<!-- <bean id="simpleTrigger2" class="org.springframework.scheduling.quartz.SimpleTriggerBean">		
+			<property name="jobDetail" ref="setTriggerJobOrderS" />
+			<property name="repeatInterval" value="50000000" />
+			<property name="startDelay" value="500000" />			
+		</bean> -->
+     	<!-- <bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerBean">
+			<property name="jobDetail" ref="setTriggerJobOrderS" />
+			<property name="cronExpression" value="0 0 1 1 * ?" />	
+		</bean> -->	
+		<!-- <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+			<property name="triggers">
+				<list>
+					<ref bean="cronTrigger2" />
+					<ref bean="simpleTrigger2" />
+				</list>
+			</property>
+		</bean> -->
+     	
+     <!-- schedular mapping END -->
+     
      
      
     <!-- <bean id="cStartEventHandler" class="com.o2r.schedulers.CStartEventHandler"/> -->

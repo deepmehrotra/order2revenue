@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.o2r.controller.AdminController;
 import com.o2r.helper.HelperClass;
 import com.o2r.model.Order;
+import com.o2r.model.OrderTimeline;
 import com.o2r.model.Product;
 import com.o2r.model.ProductStockList;
 
@@ -30,7 +31,7 @@ public class SampleJob {
 	@Autowired
 	private HelperClass helperClass;
 	
-	static Logger log = Logger.getLogger(AdminController.class.getName());
+	static Logger log = Logger.getLogger(SampleJob.class.getName());
 	
 	public void executeJobPaymentDueDate() {
 
@@ -134,6 +135,55 @@ public class SampleJob {
 			}
 			session.getTransaction().commit();
 			log.debug("ProductStockList Updated !!!! No of new Entries : "+count);
+		} catch (Exception e) {
+			log.error("Failed!",e);
+		} finally {
+			if(session != null)
+            	session.close();
+		}
+	}
+	
+	
+public void executeJobSettleOrder(){
+	
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -90);
+		Date backDate=cal.getTime(); 
+		Session session=null;
+		List<Order> orderList = new ArrayList<Order>();
+		int count = 0;
+		try {
+			session = sessionFactory.openSession();
+			if(session != null)
+				session.beginTransaction();
+			
+			Criteria criteria = session.createCriteria(Order.class);
+				criteria.createAlias("orderPayment", "orderPayment", CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.lt("orderPayment.dateofPayment", backDate))
+					.add(Restrictions.gt("orderPayment.paymentDifference", 0.0))
+					.add(Restrictions.ne("finalStatus", "Settled"));
+					
+			orderList = criteria.list();
+			if(orderList != null && orderList.size() != 0){
+				for(Order order : orderList){
+					order.getOrderPayment().setPaymentDifference(0);
+					order.setFinalStatus("Settled");
+					OrderTimeline timeline = new OrderTimeline();
+					timeline.setEventDate(new Date());
+					timeline.setEvent("Settled");
+					order.getOrderTimeline().add(timeline);
+					order.setLastActivityOnOrder(new Date());
+					try {
+						session.merge(order);
+						count++;
+					} catch (Exception e) {
+						e.printStackTrace();
+						log.error("Error in executeJobSettleOrder in SampleJob Schedular !");
+					}					
+				}
+			}
+			session.getTransaction().commit();
+			log.debug("Order Settled !!!! No of rows Updated : "+count);
 		} catch (Exception e) {
 			log.error("Failed!",e);
 		} finally {

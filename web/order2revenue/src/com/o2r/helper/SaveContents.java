@@ -292,6 +292,10 @@ public class SaveContents {
 								}
 								itemId = removeExtraQuote(itemId);
 								order.setSubOrderID(itemId);
+								if(partner.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+										&& itemId.contains("OI:")){
+									itemId = itemId.replaceAll("OI:", "");												
+								}
 							}
 
 							if (channelID != null) {
@@ -3011,11 +3015,14 @@ public class SaveContents {
 										if (entry.getCell(3) != null
 												&& entry.getCell(3)
 														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+											String itemId = entry.getCell(3).toString();
+											if(partner.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
+													&& itemId.contains("OI:")){
+												itemId = itemId.replaceAll("OI:", "");												
+											}
 											channelId = channelId
 													+ GlobalConstant.orderUniqueSymbol
-													+ entry.getCell(3)
-															.toString();
-
+													+ itemId;
 										} else {
 											errorMessage
 													.append(" Secondary Order ID is Null, it is mandatory for Flipkart,Paytm and Jabong");
