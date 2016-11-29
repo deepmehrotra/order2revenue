@@ -656,7 +656,6 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 									.setNoOfRTOLimitCrossed(Integer
 											.parseInt(recordsRow[1].toString()));
 						}
-
 					}
 				}
 			} catch (Exception e) {
