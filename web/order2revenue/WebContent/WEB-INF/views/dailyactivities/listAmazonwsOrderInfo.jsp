@@ -39,12 +39,14 @@
 								<c:if test="${productCount == 0 }">
 									<label class="m-l-lg">0 - 0 of 0</label>
 								</c:if>
+								
+							<form role="search" class="form-inline" method="post" action="moveStatusAmazonOrderInfo.html" id="addOrderForm44">	
                             <div class="ibox-tools">
                             <!--   <button class="btn btn-white table-menu-search search-dd">
                                 <i class="fa fa-search"></i>
                            </button> -->
                                 <div class="search-more-wrp">
-                                    <form role="search" class="form-inline" method="post" action="searchProduct.html">
+                                    
                                         <!--  <div class="form-group">
                                             <select class="form-control" name="searchProduct"  id="searchProduct">
                                                 <option value="SKU">SKU</option>
@@ -67,18 +69,29 @@
                                         <div class="form-group">
                                             <button class="btn btn-primary btn-block" type="submit">Search</button>
                                         </div>
-                                    </form>
+                                   
                                 </div>
                                 <span>Last</span>
                                <button type="button"   id="LoadFirst500"  class="btn btn-xs btn-white active">500</button>
                                 <button type="button" class="btn btn-xs btn-white">1000</button>
                                 <button type="button"  id="LoadMoreProduct" class="btn btn-xs btn-white">More</button>
-                                <a href="addTaxablePurchases.html"  class="btn btn-primary btn-xs" style="display;none" >Move Status</a>
+                                
+                              <button class="btn btn-primary pull-right" type="button" onclick="moveStatus()">Move Status</button>
+                                 
+                               <!--   <a class="btn btn-primary btn-xs" style="display;none"  onclick="moveStatus();" >Move Status</a>-->
                             </div>
+                            
+                             </form>
+                            
+                            
                         </div>
                         <div class="ibox-content overflow-h cus-table-filters">
                         <div class="scroll-y">
                         	<input type="hidden" id="delStatus" value="${deleteStatus}">
+                        	
+                        	
+                        	
+                        	<form name="abcd" class="form-inline" method="post" action="moveStatusAmazonOrderInfo.html" id="formabcd">
                              <table class="table table-striped table-bordered table-hover dataTables-example" >
                                 <thead>
                                 <tr>
@@ -97,7 +110,7 @@
                                 <c:if test="${!empty amazonOrderInfoList}">
                                 <c:forEach items="${amazonOrderInfoList}" var="product" varStatus="loop">
                                 <tr>                               
-                                    <td><input type="checkbox"></td>                          
+                                    <td><input type="checkbox" name="Jagadeesha" value="${product.amazonorderid}"></td>                          
                                     <td>${product.orderId}</td>                                     
                                     <td>${product.amazonorderid}</td> 								
 									
@@ -123,7 +136,8 @@
                                 </c:forEach>
                                 </c:if>
                                 </tbody>
-                            </table>                      
+                            </table>  
+                            </form>                    
                             </div>                 
                             
                             <div class="col-sm-12">
@@ -284,6 +298,33 @@
     	 
     	}
     	
+    	function moveStatus(){
+    		alert('jaga');  	
+    		
+    		
+    		
+    		
+    		$.ajax({
+    			url : $("#formabcd").attr("action"),
+    			context : document.body,
+    			type : 'POST',
+    			data : $("#formabcd").serialize(),
+    			success : function(res) {
+    				if($(res).find('#j_username').length > 0){
+    	        		window.location.href = "moveStatusAmazonOrderInfo.html";
+    	        	}else{
+    	        		//window.location.href = "moveStatusAmazonOrderInfo.html";
+    	            	$('#centerpane').html(res);
+    	        	}
+
+    			}
+    		});
+    		
+    		
+    		
+    	
+    	
+    	}
     	
     	function onclickTaxablePurchases(value,id) {
     		

@@ -38,6 +38,10 @@ public interface MwsAmazonOrdMgmtService {
 	
 	public List<AmazonOrderInfo> getAmazonOrderInfoList(PartnerSellerAuthInfo authInfo) throws Exception;
 	
+	public List<AmazonOrderInfo> getAmazonOrderInfoList(String value) throws Exception;
+	
+	
+	
 	public Date toDate(XMLGregorianCalendar calendar) throws Exception;
 	
 	public void saveOrderInfo(com.amazonservices.mws.orders._2013_09_01.model.Order order, List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems) throws Exception;

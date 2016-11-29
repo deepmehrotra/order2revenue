@@ -7,9 +7,11 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,6 +94,7 @@ public class AmazonOrderMgmt {
 	private EventsService eventsService;
 	@Autowired
 	private TaxDetailService taxDetailService;
+	//private FileOutputStream //session;
 	
 	
 	static Logger log = Logger.getLogger(AmazonOrderMgmt.class.getName());
@@ -136,7 +139,14 @@ public class AmazonOrderMgmt {
 			for (PartnerSellerAuthInfo PartnerSellerAuthInfo : partnerSellerAuthInfoList) {		
 				
 		 		PartnerSellerAuthInfo authInfo = ordMgmtService.getAuthInfoBeanObj(PartnerSellerAuthInfo);
-				com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult listOrderResult = ordMgmtService.getListOrders(ordMgmtService.getCreatedAfter(new Date()), ordMgmtService.getCreatedBefore(new Date()), ordMgmtService.getConfiguredoOrderStatus(), authInfo);
+		 		
+		 		
+		 		Calendar cal = Calendar.getInstance();
+		 		cal.add(Calendar.MONTH, -1);
+		 		Date result = cal.getTime();
+		 		System.out.println("result"+result);
+				com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult listOrderResult = ordMgmtService.getListOrders(ordMgmtService.getCreatedAfter(new Date()), ordMgmtService.getCreatedBefore(result), ordMgmtService.getConfiguredoOrderStatus(), authInfo);
+				System.out.println("The Size "+listOrderResult.getOrders().size());
 				List<com.amazonservices.mws.orders._2013_09_01.model.Order> orders = listOrderResult.getOrders();
 				for (com.amazonservices.mws.orders._2013_09_01.model.Order order : orders) {
 					com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult itemResults = ordMgmtService.getListOrderItems(authInfo, order.getAmazonOrderId());
@@ -159,9 +169,6 @@ public class AmazonOrderMgmt {
 	
 	
 	
-	//public void saveAmzonOrderContents(MultipartFile file, int sellerId,
-	//		String path, UploadReport uploadReport) throws IOException {
-		
 	public void  saveAmzonOrderContents(List<AmazonOrderInfo> amazonOrderInfoList) throws IOException {
 		log.info("$$$ saveAmzonOrderContents starts : SaveMappedFiles $$$");
 
@@ -180,56 +187,23 @@ public class AmazonOrderMgmt {
 		int noOfEntries = 1;
 		OrderTaxBean otb = null;
 		int sellerId=0;
-	//	HSSFRow entry;
 		boolean validaterow = true;
 		Set<String> errorSet = new HashSet<String>();
 		Map<String, String> duplicateKey = new HashMap<String, String>();
 		String uploadFileName = "";
 		AmazonOrderItemInfo amazonOrderItemInfo=null;
 		try {
-			chanupload = uploadMappingService.getChannelUploadMapping("Amazon",
-					"order");
-			/*if (chanupload != null && chanupload.getColumMap() != null) {
-				for (ColumMap colums : chanupload.getColumMap()) {
-					columHeaderMap.put(colums.getO2rColumName(),
-							colums.getChannelColumName());
-				}
-			}*/
+			
+			//chanupload = uploadMappingService.getChannelUploadMapping("Amazon","order");
+			
 			log.info("columHeaderMap for Amazon Order : " + columHeaderMap);
-			//HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
-
-			//HSSFSheet worksheet = offices.getSheetAt(0);
-			//while (worksheet.getRow(noOfEntries) != null) {
-			//	noOfEntries++;
-			//}
 			
-			//uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
-			//entry = worksheet.getRow(0);
-			
-			//amazonOrderInfoList.get(index) 
-			for (int cellIndex = 0; cellIndex < amazonOrderInfoList.size(); cellIndex++) {
+			for (int cellIndex = 0; cellIndex < amazonOrderInfoList.size(); cellIndex++) {				
 				
-				
-				AmazonOrderInfo amazonOrderInfo= amazonOrderInfoList.get(cellIndex); 
-				//java.util.set com.o2r.model.AmazonOrderItemInfo>= amazonOrderInfo.getAmazonOrderItemInfos().
-						
-				//Set<AmazonOrderItemInfo> set = amazonOrderInfo.getAmazonOrderItemInfos();
-				//List<AmazonOrderItemInfo> list= amazonOrderInfo.getAmazonOrderItemInfos();
-				//amazonOrderItemInfo=(AmazonOrderItemInfo) set.toArray()[0];			
-				
-				
-				//Set<Foo> set = ...;
-				//List<AmazonOrderItemInfo> list = new ArrayList<AmazonOrderItemInfo>(set);
-				//amazonOrderItemInfo = list.get(0);
-				
-				
-				sellerId = amazonOrderInfo.getSellerId(); 
-				
-				System.out.println(" SELLERIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"+sellerId);
-				//sellerId=65;
+				AmazonOrderInfo amazonOrderInfo= amazonOrderInfoList.get(cellIndex); 							
+				sellerId=65;
 				if(amazonOrderInfo!=null){					
-					System.out.println("amazonOrderInfo.getAmazonorderid()"+amazonOrderInfo.getAmazonorderid());
-					System.out.println("cellIndex"+cellIndex);					
+							
 					cellIndexMap.put(amazonOrderInfo.getAmazonorderid(),
 							cellIndex);
 				}
@@ -239,15 +213,22 @@ public class AmazonOrderMgmt {
 			idsList = orderService.listOrderIds("channelOrderID", sellerId);
 			log.info(noOfEntries);
 			log.debug("After getting no of rows" + noOfEntries);
-			for (int rowIndex = 1; rowIndex < amazonOrderInfoList.size(); rowIndex++) {
-				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
+						
+			for (int rowIndex = 0; rowIndex < amazonOrderInfoList.size(); rowIndex++) {
 				
-				AmazonOrderInfo amazonOrderInfo= amazonOrderInfoList.get(rowIndex); 
-				
-				//amazonOrderInfo.getAmazonOrderItemInfos()amazonOrderInfo;
-				
-				//entry = worksheet.getRow(rowIndex);
-				validaterow = true;
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");				
+				AmazonOrderInfo amazonOrderInfo= amazonOrderInfoList.get(rowIndex);				
+				Set<AmazonOrderItemInfo> amazonOrderItemInfoset= amazonOrderInfo.getAmazonOrderItemInfo();
+					
+				 Iterator<AmazonOrderItemInfo> itr = amazonOrderItemInfoset.iterator();
+			        while(itr.hasNext())
+			        {
+			        	
+			        	amazonOrderItemInfo = itr.next();		
+			       
+			      
+			        	
+			    validaterow = true;
 				order = new OrderBean();
 				customerBean = new CustomerBean();
 				otb = new OrderTaxBean();
@@ -264,14 +245,12 @@ public class AmazonOrderMgmt {
 					try {
 						//index = cellIndexMap.get(columHeaderMap.get("Sales Channel"));
 						if (amazonOrderInfo.getSaleschannel() != null) {
-							partner = partnerService.getPartner(amazonOrderInfo.getSaleschannel(), sellerId);
 							
-							System.out.println(" The partner"+partner);
-				
+							partner = partnerService.getPartner(amazonOrderInfo.getSaleschannel(), sellerId);
 							if (partner != null)
 								order.setPcName(partner.getPcName());
 							else {
-								order.setPcName(amazonOrderInfo.getSaleschannel());
+								
 								errorMessage.append(" Partner do not exist;");
 								validaterow = false;
 							}
@@ -287,13 +266,11 @@ public class AmazonOrderMgmt {
 					}
 
 					try {
-						//index = cellIndexMap.get(columHeaderMap.get("Channel Order ID"));
 						//int skuIndex = cellIndexMap.get(columHeaderMap.get("SkUCode"));
-						//if (amazonOrderItemInfo.getSellersku()!=null) {
-
-							//entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
-							//entry.getCell(skuIndex).setCellType(HSSFCell.CELL_TYPE_STRING);
+						if (amazonOrderItemInfo.getSellersku()!=null) {				
+						
 							if (partner != null) {
+								
 								productConfigs = productService
 										.getProductConfig(amazonOrderItemInfo.getSellersku(),
 												partner.getPcName(), sellerId);
@@ -340,30 +317,23 @@ public class AmazonOrderMgmt {
 									validaterow = false;
 								}
 							}
-						/*} else {
+						} else {
 							errorMessage
 									.append(" Channel OrderId or SKU code is null ");
 							validaterow = false;
-						}*/
+						}
 					} catch (NullPointerException e) {
 						e.printStackTrace();
 						errorMessage
 								.append("The column 'ORDER ID' doesn't exist");
 						validaterow = false;
-					}
-					
-					
+					}					
 					
 					//if (cellIndexMap.get(columHeaderMap.get("Secondary OrderID")) != null) {
 					//	index = cellIndexMap.get(columHeaderMap.get("Secondary OrderID"));
 						if (amazonOrderInfo.getAmazonorderid() != null) {
-							//entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
-							//itemID = amazonOrderInfo.getAmazonOrderItemInfos().entry.getCell(index).toString();
-							itemID="";
-							if (itemID.contains("'")) {
-								itemID = removeExtraQuote(itemID);
-							}
-							itemID = removeExtraQuote(itemID);
+							
+							itemID=amazonOrderInfo.getOrderId()+"";
 							order.setSubOrderID(itemID);
 						}
 					//}
@@ -409,22 +379,14 @@ public class AmazonOrderMgmt {
 						//index = cellIndexMap.get(columHeaderMap.get("Order Recieved Date"));
 						if (amazonOrderInfo.getPurchasedate() != null ) {
 							try {
-								String dateStr = amazonOrderInfo.getPurchasedate().toString();
-								String date = "";
-								if (dateStr.contains("T")) {
-									date = dateStr.substring(0,dateStr.indexOf("T"));
-								} else {
-									//date = entry.getCell(index).toString();
-									date = dateStr;
-								}
-								order.setOrderDate(format.parse(date));
+								String dateStr = amazonOrderInfo.getPurchasedate().toString();								
+								order.setOrderDate(format.parse(dateStr));
 							} catch (Exception e) {
 								e.printStackTrace();
 								errorMessage
 										.append(" Order Received Date format is wrong,");
 								validaterow = false;
 							}
-
 						} else {
 							errorMessage
 							.append(" Order Received Date is null,");
@@ -533,8 +495,8 @@ public class AmazonOrderMgmt {
 						validaterow = false;
 					}
 
-					/*try {
-						index = cellIndexMap.get(columHeaderMap
+					try {
+						/*index = cellIndexMap.get(columHeaderMap
 								.get("Customer Address 1"));
 						int index1 = cellIndexMap.get(columHeaderMap
 								.get("Customer Address 2"));
@@ -550,12 +512,14 @@ public class AmazonOrderMgmt {
 									.getCell(index).toString()
 									+ entry.getCell(index1).toString()
 									+ entry.getCell(index2).toString());
-						}
+						}*/
+						customerBean.setCustomerAddress("No.1, Bangaloe-560001");
+						
 					} catch (NullPointerException e) {
 
 					}
 
-					if (amazonOrderInfo.getcellIndexMap.get(columHeaderMap.get("Customer City")) != null) {
+					/*if (amazonOrderInfo.getcellIndexMap.get(columHeaderMap.get("Customer City")) != null) {
 						index = cellIndexMap.get(columHeaderMap
 								.get("Customer City"));
 						if (entry.getCell(index) != null
@@ -564,7 +528,7 @@ public class AmazonOrderMgmt {
 									.toString());
 						}
 					}*/
-
+					customerBean.setCustomerCity("Bangalore");
 					/*try {
 						index = cellIndexMap.get(columHeaderMap
 								.get("Shipping PinCode"));
@@ -602,7 +566,8 @@ public class AmazonOrderMgmt {
 								.append("The column 'ship-postal-code' doesn't exist");
 						validaterow = false;
 					}*/
-
+					
+					customerBean.setZipcode("560001");
 					/*try {
 						index = cellIndexMap.get(columHeaderMap
 								.get("Payment Type"));
@@ -628,7 +593,8 @@ public class AmazonOrderMgmt {
 								.append("The column 'payment-method' doesn't exist");
 						validaterow = false;
 					}*/
-
+					System.out.println("Payment Method"+amazonOrderInfo.getPaymentmethod());
+					order.setPaymentType("COD");
 					/*if (cellIndexMap
 							.get(columHeaderMap.get("Logistic Partner")) != null) {
 						index = cellIndexMap.get(columHeaderMap
@@ -642,7 +608,7 @@ public class AmazonOrderMgmt {
 							}
 						}
 					}*/
-
+					order.setLogisticPartner("Self Shift");
 					/*try {
 						index = cellIndexMap.get(columHeaderMap
 								.get("InvoiceID"));
@@ -657,7 +623,7 @@ public class AmazonOrderMgmt {
 					} catch (Exception e) {
 						order.setInvoiceID(GlobalConstant.randomNo());
 					}*/
-
+					order.setInvoiceID(GlobalConstant.randomNo());
 					/*if (cellIndexMap.get(columHeaderMap.get("AWB No")) != null) {
 						index = cellIndexMap.get(columHeaderMap.get("AWB No"));
 						if (entry.getCell(index) != null
@@ -668,7 +634,7 @@ public class AmazonOrderMgmt {
 						}
 					}*/
 
-					
+					order.setAwbNum("AWB100200");
 					/*if (cellIndexMap.get(columHeaderMap.get("PIreferenceNo")) != null) {
 						index = cellIndexMap.get(columHeaderMap
 								.get("PIreferenceNo"));
@@ -678,7 +644,7 @@ public class AmazonOrderMgmt {
 									.toString());
 						}
 					}*/
-
+					order.setPIreferenceNo("PI100");
 					//if (cellIndexMap.get(columHeaderMap.get("Order MRP")) != null) {
 						//index = cellIndexMap.get(columHeaderMap.get("Order MRP"));
 						
@@ -731,7 +697,8 @@ public class AmazonOrderMgmt {
 						validaterow = false;
 					}
 
-					if (partner != null) {
+					if (partner != null) {					
+						
 						event = eventsService.isEventActiive(
 								order.getOrderDate(), partner.getPcName(),
 								order.getProductSkuCode(), sellerId);
@@ -826,7 +793,7 @@ public class AmazonOrderMgmt {
 
 						}
 					}*/
-
+					order.setSellerNote("NOTE NOTE");
 					// Pre save to generate id for use in hierarchy
 					if (validaterow) {
 						order.setOrderFileName(uploadFileName);
@@ -862,7 +829,11 @@ public class AmazonOrderMgmt {
 					errorMessage.append("Invalid Input! ");
 					returnOrderMap.put(errorMessage.toString(), order);
 				}
-			}
+				
+			        }//100jaga	
+				
+			        
+			}//for loop
 
 			try {
 				System.out.println(" SaveList Size : " + saveList.size());
@@ -879,13 +850,16 @@ public class AmazonOrderMgmt {
 			}
 			errorSet = returnOrderMap.keySet();
 			//uploadResultXLS(offices, "Amazon_Order_Upload", uploadFileName, errorSet, path,sellerId, uploadReport);
-
+			orderService.updateErrorMessage(returnOrderMap, sellerId);
 		} catch (Exception e) {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
 			//addErrorUploadReport("Amazon_Order_Upload", sellerId, uploadReport);
 			log.error("Failed! by SellerId : " + sellerId, e);
+		}
+		finally {
+			//session.close();
 		}
 	}
 	

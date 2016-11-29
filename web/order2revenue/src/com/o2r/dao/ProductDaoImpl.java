@@ -846,6 +846,11 @@ public class ProductDaoImpl implements ProductDao {
 		List<ProductConfig> returnlist = null;
 		log.info(" ***Insid get product config from sku and channel ***"
 				+ SKUCode + " - " + channel);
+		
+		System.out.println("SKUCodeSKUCodeSKUCodeSKUCodeSKUCode"+SKUCode);
+		
+		channel ="amazon";
+		SKUCode="PSKU1";
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();

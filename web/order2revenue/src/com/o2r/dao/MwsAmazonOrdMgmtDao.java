@@ -10,6 +10,8 @@ public interface MwsAmazonOrdMgmtDao {
 
 	public List<AmazonOrderInfo> getOrderList() throws Exception;
 	
+	public List<AmazonOrderInfo> getOrderList(String value) throws Exception;
+	
 	public List<Seller> getSeller() throws Exception;
 	
 	public List<PartnerSellerAuthInfo> getSellersFromPartnerSellerAuthoInfo() throws Exception;

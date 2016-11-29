@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -38,6 +39,7 @@ import com.o2r.bean.ChargesBean.SortByCriteria;
 import com.o2r.bean.ChargesBean.SortByCriteriaRange;
 import com.o2r.bean.DataConfig;
 import com.o2r.bean.DebitNoteBean;
+import com.o2r.bean.OrderBean;
 import com.o2r.bean.PartnerBean;
 import com.o2r.bean.PartnerDetailsBean;
 import com.o2r.bean.PoPaymentBean;
@@ -107,6 +109,9 @@ public class OrderDaoImpl implements OrderDao {
 			"database.properties");
 	Properties props = null;
 
+	
+	//private static final String updateAmazonOrderInfo ="update amazon_order_info set error_message=? where amazonorderid=?";
+			
 	private final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
 
 	private final int pageSize = 500;
@@ -5963,4 +5968,39 @@ public class OrderDaoImpl implements OrderDao {
 		log.info("*** reverseOrder ends : OrderDaoImpl ***");
 		return status;
 	}
+	
+	
+	@Override
+	public void updateErrorMessage(Map<String, OrderBean> hMap, int sellerId)
+			throws CustomException {
+		
+		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();		
+		System.out.println("hMap size "+hMap.size());
+		Set mapSet = (Set) hMap.entrySet();
+        Iterator mapIterator = mapSet.iterator();
+        while (mapIterator.hasNext()) 
+        {
+        	
+        Map.Entry mapEntry = (Map.Entry) mapIterator.next();
+        String keyValue = (String) mapEntry.getKey();
+        OrderBean value = (OrderBean) mapEntry.getValue();       
+        String chid=value.getChannelOrderID();      
+        String channelOrderId= chid.substring(0, chid.indexOf( '$' )+1);       
+        Query deleteQuery = session.createSQLQuery("update amazon_order_info set error_message=? where amazonorderid=?");		
+        deleteQuery.setString(0, keyValue);
+		deleteQuery.setString(1, channelOrderId);
+		deleteQuery.executeUpdate();
+		
+        }  
+		
+        session.getTransaction().commit();
+		session.close();
+	}
+	
+	
+	
+	
+	
 }

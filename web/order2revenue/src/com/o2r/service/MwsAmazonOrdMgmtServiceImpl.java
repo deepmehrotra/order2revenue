@@ -150,9 +150,10 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 			marketplaceIds.add(authInfo.getMarketplaceid());
 			request.setSellerId(authInfo.getSellerid());
 			request.setMWSAuthToken(authInfo.getMwsauthtoken());
-			request.setMarketplaceId(marketplaceIds);
+			request.setMarketplaceId(marketplaceIds);			
 			request.setCreatedAfter(createdAfter);
 			request.setCreatedBefore(createdBefore);
+			System.out.println("createdBefore"+createdBefore);
 			request.setOrderStatus(orderStatus);
 			ListOrdersResponse response = client.listOrders(request);
 			ResponseHeaderMetadata rhmd = response.getResponseHeaderMetadata();
@@ -160,6 +161,8 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 		} catch (Exception expObj) {
 			expObj.printStackTrace();
 		}
+		
+		System.out.println("List size "+listOrdersResult.getOrders().size());
 		return listOrdersResult;
 	}
 
@@ -203,6 +206,16 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 		// return null;
 	}
 
+	
+	@Override
+	public List<AmazonOrderInfo> getAmazonOrderInfoList(
+			String value) throws Exception {
+		// TODO Auto-generated method stub
+
+		return amazonOrdMgmtDao.getOrderList(value);
+		// return null;
+	}
+	
 	@Override
 	public void saveOrderInfo(
 			com.amazonservices.mws.orders._2013_09_01.model.Order order,
@@ -223,8 +236,7 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 			amazonOrderInfo.setSaleschannel(order.getSalesChannel());
 			amazonOrderInfo.setOrderchannel(order.getOrderChannel());
 			amazonOrderInfo.setShipservicelevel(order.getShipServiceLevel());
-			amazonOrderInfo.setOrdertotalcurrencycode(order.getOrderTotal()
-					.getCurrencyCode());
+			//amazonOrderInfo.setOrdertotalcurrencycode(order.getOrderTotal().getCurrencyCode());
 			amazonOrderInfo.setOrdertotalamount(order.getOrderTotal()
 					.getAmount());
 			amazonOrderInfo.setNumberofitemsshipped(order
@@ -264,13 +276,14 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 			amazonOrderInfo.setIspremiumorder(order.getIsPremiumOrder()
 					.toString());
 
-			// amazonOrderInfo.setSeller(seller);
+			amazonOrderInfo.setSellerId(65);
+			//amazonOrderInfo.setSellerId(Integer.parseInt(order.getSellerOrderId()));
 			// amazonOrderInfo.setRequestid(order);
 
 			List<AmazonOrderItemInfo> amazonOrderItemInfos = new ArrayList<AmazonOrderItemInfo>();
 			for (OrderItem orderItem : orderItems) {
 				AmazonOrderItemInfo amazonOrderItemInfo = new AmazonOrderItemInfo();
-				amazonOrderItemInfo.setAmazonorderid(orderItem.getASIN());
+			//	amazonOrderItemInfo.setAmazonorderid(orderItem.getASIN());
 				amazonOrderItemInfo.setSellersku(orderItem.getSellerSKU());
 				amazonOrderItemInfo.setOrderitemid(orderItem.getOrderItemId());
 				amazonOrderItemInfo.setTitle(orderItem.getTitle());
@@ -346,9 +359,11 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 			amazonOrderInfo.setAmazonOrderItemInfo(new HashSet<AmazonOrderItemInfo>(amazonOrderItemInfos));
 			//amazonOrderInfo.set
 			
-			System.out.println(" amazonOrderInfo" + amazonOrderInfo);
-			if (amazonOrderInfo != null)
-				amazonOrdMgmtDao.saveAmazonOrderInfo(amazonOrderInfo);
+			
+			System.out.println("amazonOrderInfo100"+amazonOrderInfo);
+			if (amazonOrderInfo != null){
+				amazonOrdMgmtDao.saveAmazonOrderInfo(amazonOrderInfo);				
+			}
 		} catch (Exception expObj) {
 			expObj.printStackTrace();
 		}

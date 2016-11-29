@@ -36,7 +36,6 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 		final String QRY = "from AmazonOrderInfo";
 		try {
 
-			// session = HibernateUtil.getSessionFactory().openSession();
 			session = sessionFactory.openSession();
 			amazonOrderInfos = session.createQuery(QRY).list();
 			LOGGER.info("Response: " + amazonOrderInfos.size());
@@ -53,13 +52,39 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 		return amazonOrderInfos;
 	}
 
+	
+	
+	@Override
+	public List<AmazonOrderInfo> getOrderList(String value) throws Exception {
+		LOGGER.info("Start: getOrderList");
+		Session session = null;
+		List<AmazonOrderInfo> amazonOrderInfos = new ArrayList<AmazonOrderInfo>();
+		final String QRY = "from AmazonOrderInfo where amazonorderid in("+value+")";
+		try {
+
+			session = sessionFactory.openSession();
+			amazonOrderInfos = session.createQuery(QRY).list();		
+			LOGGER.info("Response: " + amazonOrderInfos.size());
+			LOGGER.info("Response:" + session.createQuery(QRY).list().size());
+
+		} catch (Exception expObj) {
+			expObj.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		LOGGER.info("End: getOrderList");
+		return amazonOrderInfos;
+	}
+	
 	@Override
 	public List<Seller> getSeller() throws Exception {
 		Session session = null;
 		List<Seller> sellersList = null;
 		final String QRY = "from Seller";
 		try {
-		//	System.out.println("sellersList ================"+sellersList.size());
+			
 			session = sessionFactory.openSession();
 			sellersList = session.createQuery(QRY).list();
 			
@@ -67,8 +92,7 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 			for (Seller seller : sellersList) {
 				Hibernate.initialize(seller.getPartners());
 			}
-			}
-			System.out.println("sellersList ================"+sellersList.size());
+			}			
 		} catch (Exception expObj) {
 			
 			expObj.printStackTrace();
@@ -93,19 +117,10 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 		final String QRY = "from PartnerSellerAuthInfo where PCNAME='Amazon'";
 		
 		try {			
-			session = sessionFactory.openSession();				
 			
+			session = sessionFactory.openSession();				
 			returnlist = session.createQuery(QRY).list();
 			
-			
-			//criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-			
-			System.out.println("returnlistreturnlistreturnlist"+returnlist.size());
-			
-			
-			
-			//System.out.println("sellersList ================"+sellersList.size());
-		
 		} catch (Exception expObj) {
 			
 			expObj.printStackTrace();
@@ -118,24 +133,25 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 	}
 	
 	
-	
-	
 
 	@Override
 	public void saveAmazonOrderInfo(AmazonOrderInfo orderInfo) throws Exception {
+
+
+//
+
 		Session session = null;
 		Seller seller = null;
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			
+			System.out.println("sellerId100"+orderInfo.getSellerId());
 			Criteria criteria = session.createCriteria(Seller.class).add(
 					Restrictions.eq("id", 65));
 			seller = (Seller) criteria.list().get(0);
 			
-			orderInfo.setSeller(seller);
-			System.out.println(" THE DATA AmazonOrderInfoAmazonOrderInfoAmazonOrderInfo"+orderInfo);
-			//session = sessionFactory.openSession();
+			orderInfo.setSeller(seller);			
 			Transaction transaction = session.beginTransaction();
 			session.save(orderInfo);
 			transaction.commit();

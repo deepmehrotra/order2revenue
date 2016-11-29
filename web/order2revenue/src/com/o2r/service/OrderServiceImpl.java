@@ -1,6 +1,7 @@
 package com.o2r.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.DebitNoteBean;
+import com.o2r.bean.OrderBean;
 import com.o2r.bean.PartnerDetailsBean;
 import com.o2r.bean.PoPaymentBean;
 import com.o2r.bean.PoPaymentDetailsBean;
@@ -305,5 +307,13 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public boolean reverseOrder(int orderId, int sellerId) throws CustomException {
 		return orderDao.reverseOrder(orderId, sellerId);
+	}
+	
+	
+	@Override
+	public void updateErrorMessage(Map<String, OrderBean> hMap, int sellerId)
+			throws CustomException {
+		orderDao.updateErrorMessage(hMap, sellerId);
+		
 	}
 }
