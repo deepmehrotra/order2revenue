@@ -20,7 +20,11 @@ import javax.persistence.Table;
 public class ShippingAddress  implements java.io.Serializable {
 
 
-     private int shippingaddressId;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int shippingaddressId;
      private String name;
      private String addressline1;
      private String addressline2;
@@ -33,8 +37,9 @@ public class ShippingAddress  implements java.io.Serializable {
      private String countrycode;
      private String phone;
      //private Integer shippingAddId;
-     private AmazonOrderInfo orderInfo;
-
+     //private AmazonOrderInfo orderInfo;
+     private AmazonOrderInfo amazonOrderInfo;
+     
     public ShippingAddress() {
     }
 
@@ -177,29 +182,20 @@ public class ShippingAddress  implements java.io.Serializable {
     
     public void setPhone(String phone) {
         this.phone = phone;
-    }
+    }  
+  
 
-    
-    /*@Column(name="SHIPPING_ADD_ID")
-    public Integer getShippingAddId() {
-        return this.shippingAddId;
-    }
-    
-    public void setShippingAddId(Integer shippingAddId) {
-        this.shippingAddId = shippingAddId;
-    }*/
-
-    @ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "SHIPPING_ADD_ID", nullable = false)
-	public AmazonOrderInfo getOrderInfo() {
-		return orderInfo;
+	
+	@ManyToOne
+	@JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
+	public AmazonOrderInfo getAmazonOrderInfo() {
+		return amazonOrderInfo;
 	}
 
-
-	public void setOrderInfo(AmazonOrderInfo orderInfo) {
-		this.orderInfo = orderInfo;
+	public void setAmazonOrderInfo(AmazonOrderInfo amazonOrderInfo) {
+		this.amazonOrderInfo = amazonOrderInfo;
 	}
-
+	
 
 
 

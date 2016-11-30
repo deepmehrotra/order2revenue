@@ -57,6 +57,7 @@ import com.o2r.model.PaymentVariables;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
+import com.o2r.model.ShippingAddress;
 import com.o2r.model.TaxCategory;
 import com.o2r.model.UploadReport;
 import com.o2r.model.PartnerSellerAuthInfo;
@@ -192,6 +193,8 @@ public class AmazonOrderMgmt {
 		Map<String, String> duplicateKey = new HashMap<String, String>();
 		String uploadFileName = "";
 		AmazonOrderItemInfo amazonOrderItemInfo=null;
+		ShippingAddress shippingAddressInfo=null;
+		
 		try {
 			
 			//chanupload = uploadMappingService.getChannelUploadMapping("Amazon","order");
@@ -219,7 +222,18 @@ public class AmazonOrderMgmt {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");				
 				AmazonOrderInfo amazonOrderInfo= amazonOrderInfoList.get(rowIndex);				
 				Set<AmazonOrderItemInfo> amazonOrderItemInfoset= amazonOrderInfo.getAmazonOrderItemInfo();
-					
+				
+				Set<ShippingAddress> ShippingAddressinfoset= amazonOrderInfo.getShippingAddressinfo();
+				
+				
+				Iterator<ShippingAddress> itr1 = ShippingAddressinfoset.iterator();
+		        while(itr1.hasNext())
+		        {
+		        	
+		        	shippingAddressInfo  =  itr1.next();
+		        	
+		        }
+				
 				 Iterator<AmazonOrderItemInfo> itr = amazonOrderItemInfoset.iterator();
 			        while(itr.hasNext())
 			        {
@@ -421,7 +435,7 @@ public class AmazonOrderMgmt {
 						index = cellIndexMap.get(columHeaderMap
 								.get("Customer Phone No"));
 						if (amazonOrderInfo.getBuyername() != null) {
-							customerBean.setCustomerPhnNo(amazonOrderInfo.getBuyername());
+							customerBean.setCustomerPhnNo(shippingAddressInfo.getPhone());
 							//entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
 						/*	if (entry.getCell(index).toString().length() == 10
 									&& !entry.getCell(index).toString()
@@ -476,9 +490,8 @@ public class AmazonOrderMgmt {
 						//index = cellIndexMap.get(columHeaderMap.get("OrderSP Component A"));
 						//int index1 = cellIndexMap.get(columHeaderMap.get("OrderSP Component B"));
 						if (amazonOrderInfo.getOrdertotalamount() != null ) {
-							try {
-								order.setOrderSP(Double.parseDouble(amazonOrderInfo.getOrdertotalamount().toString())
-										+ Double.parseDouble(amazonOrderInfo.getOrdertotalamount()));
+							try {								
+								order.setOrderSP(Double.parseDouble(amazonOrderItemInfo.getItempriceamount()));
 							} catch (NumberFormatException e) {
 								errorMessage
 										.append(" Order SP should be a number ");
@@ -495,25 +508,19 @@ public class AmazonOrderMgmt {
 						validaterow = false;
 					}
 
-					try {
-						/*index = cellIndexMap.get(columHeaderMap
-								.get("Customer Address 1"));
-						int index1 = cellIndexMap.get(columHeaderMap
-								.get("Customer Address 2"));
-						int index2 = cellIndexMap.get(columHeaderMap
-								.get("Customer Address 3"));
-						if (amazonOrderInfo.getShippingAddress() != null
-								&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK
-								&& entry.getCell(index1) != null
-								&& entry.getCell(index1).getCellType() != HSSFCell.CELL_TYPE_BLANK
-								&& entry.getCell(index2) != null
-								&& entry.getCell(index2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-							customerBean.setCustomerAddress(entry
-									.getCell(index).toString()
-									+ entry.getCell(index1).toString()
-									+ entry.getCell(index2).toString());
-						}*/
-						customerBean.setCustomerAddress("No.1, Bangaloe-560001");
+					try {						
+						//customerBean.setCustomerAddress("No.1, Bangaloe-560001");						
+						String shipadd1="";
+						String shipadd2="";
+						String shipadd3="";
+					    if(shippingAddressInfo.getAddressline1()!=null)
+					    	shipadd1=shippingAddressInfo.getAddressline1();
+					    if(shippingAddressInfo.getAddressline2()!=null)
+					    	shipadd2=shippingAddressInfo.getAddressline2();
+					    if(shippingAddressInfo.getAddressline3()!=null)
+					    	shipadd2=shippingAddressInfo.getAddressline3();
+					    
+					    customerBean.setCustomerAddress(shipadd1+shipadd2+shipadd2);
 						
 					} catch (NullPointerException e) {
 
@@ -528,7 +535,11 @@ public class AmazonOrderMgmt {
 									.toString());
 						}
 					}*/
-					customerBean.setCustomerCity("Bangalore");
+					String city="";
+					if(shippingAddressInfo.getCity()!=null)
+						city=shippingAddressInfo.getAddressline1();
+					
+					customerBean.setCustomerCity(city);
 					/*try {
 						index = cellIndexMap.get(columHeaderMap
 								.get("Shipping PinCode"));
@@ -567,7 +578,13 @@ public class AmazonOrderMgmt {
 						validaterow = false;
 					}*/
 					
-					customerBean.setZipcode("560001");
+					String zipcode="";
+					if(shippingAddressInfo.getPostalcode()!=null)
+						zipcode=shippingAddressInfo.getPostalcode();	
+					
+					customerBean.setZipcode(zipcode);
+					
+					
 					/*try {
 						index = cellIndexMap.get(columHeaderMap
 								.get("Payment Type"));
@@ -593,8 +610,13 @@ public class AmazonOrderMgmt {
 								.append("The column 'payment-method' doesn't exist");
 						validaterow = false;
 					}*/
-					System.out.println("Payment Method"+amazonOrderInfo.getPaymentmethod());
-					order.setPaymentType("COD");
+					//System.out.println("Payment Method"+amazonOrderInfo.getPaymentmethod());
+					
+					String paymentType="";
+					if(amazonOrderInfo.getPaymentmethod()!=null)
+					paymentType=amazonOrderInfo.getPaymentmethod();	
+					order.setPaymentType(paymentType);
+					
 					/*if (cellIndexMap
 							.get(columHeaderMap.get("Logistic Partner")) != null) {
 						index = cellIndexMap.get(columHeaderMap
@@ -662,18 +684,10 @@ public class AmazonOrderMgmt {
 					//}
 
 					try {
-						//index = cellIndexMap.get(columHeaderMap.get("Order Shipped Date"));
+			
 						if (amazonOrderInfo.getPurchasedate() != null) {
-							try {
-								String dateStr = amazonOrderInfo.getPurchasedate().toString();
-								String date = "";
-								if (dateStr.contains("T")) {
-								//	date = entry.getCell(index).toString().substring(0,entry.getCell(index).toString().indexOf("T"));
-								} else {
-									date = dateStr;
-								}
-								//order.setShippedDate(new Date(date));
-								order.setShippedDate(new Date());
+							try {								
+								order.setShippedDate(amazonOrderInfo.getPurchasedate());
 							} catch (Exception e) {
 								e.printStackTrace();
 								errorMessage
@@ -682,7 +696,7 @@ public class AmazonOrderMgmt {
 							}
 						} else {
 							if(order.getOrderDate()!=null)
-								order.setShippedDate(order.getOrderDate());
+								order.setShippedDate(amazonOrderInfo.getPurchasedate());
 							else
 							{
 								errorMessage
@@ -830,7 +844,8 @@ public class AmazonOrderMgmt {
 					returnOrderMap.put(errorMessage.toString(), order);
 				}
 				
-			        }//100jaga	
+			 
+			  }//100jaga	
 				
 			        
 			}//for loop

@@ -152,8 +152,7 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 			request.setMWSAuthToken(authInfo.getMwsauthtoken());
 			request.setMarketplaceId(marketplaceIds);			
 			request.setCreatedAfter(createdAfter);
-			request.setCreatedBefore(createdBefore);
-			System.out.println("createdBefore"+createdBefore);
+			request.setCreatedBefore(createdBefore);		
 			request.setOrderStatus(orderStatus);
 			ListOrdersResponse response = client.listOrders(request);
 			ResponseHeaderMetadata rhmd = response.getResponseHeaderMetadata();

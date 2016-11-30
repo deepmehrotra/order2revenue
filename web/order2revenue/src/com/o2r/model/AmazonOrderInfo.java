@@ -84,14 +84,12 @@ public class AmazonOrderInfo  implements java.io.Serializable {
     
  	
   private Set<AmazonOrderItemInfo> amazonOrderItemInfo = new HashSet<AmazonOrderItemInfo>(0);
-     
-  //@OneToMany(cascade = CascadeType.ALL)
-	//private List<OrderTimeline> orderTimeline = new ArrayList<>();
+  
+  private Set<ShippingAddress> shippingAddressinfo = new HashSet<ShippingAddress>(0);
+   
 
 
-	
-    
-    private Seller seller;
+	private Seller seller;
 
     public AmazonOrderInfo() {
     }
@@ -559,6 +557,16 @@ public class AmazonOrderInfo  implements java.io.Serializable {
 	public void setAmazonOrderItemInfo(Set<AmazonOrderItemInfo> amazonOrderItemInfo) {
 		this.amazonOrderItemInfo = amazonOrderItemInfo;
 	}
+
+	@OneToMany(mappedBy="amazonOrderInfo", cascade=CascadeType.ALL, fetch = FetchType.EAGER )
+	 public Set<ShippingAddress> getShippingAddressinfo() {
+			return shippingAddressinfo;
+		}
+
+
+		public void setShippingAddressinfo(Set<ShippingAddress> shippingAddressinfo) {
+			this.shippingAddressinfo = shippingAddressinfo;
+		}
 		
 
 }
