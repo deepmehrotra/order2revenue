@@ -98,6 +98,7 @@ public class SampleJob {
 	
 	public void executeJobProductStockList(){
 		
+		log.info("$$$ executeJobProductStockList() Starts : SampleJob $$$");
 		Date currentDate=new Date();
 		Session session=null;
 		try {
@@ -141,17 +142,20 @@ public class SampleJob {
 			if(session != null)
             	session.close();
 		}
+		log.info("$$$ executeJobProductStockList() Ends : SampleJob $$$");
 	}
 	
 	
-public void executeJobSettleOrder(){
-	
+	public void executeJobSettleOrder() {
+		
+		log.info("$$$ executeJobSettleOrder() Starts : SampleJob $$$");
+		log.info("Fired At : "+ new Date());
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DATE, -90);
 		Date backDate=cal.getTime(); 
 		Session session=null;
 		List<Order> orderList = new ArrayList<Order>();
-		int count = 0;
+		int count = 0;		
 		try {
 			session = sessionFactory.openSession();
 			if(session != null)
@@ -164,8 +168,11 @@ public void executeJobSettleOrder(){
 					.add(Restrictions.ne("finalStatus", "Settled"));
 					
 			orderList = criteria.list();
+			if(orderList != null){
+				log.info("No of Orders to be Settle : "+orderList.size());
+			}
 			if(orderList != null && orderList.size() != 0){
-				for(Order order : orderList){
+				for(Order order : orderList){					
 					order.getOrderPayment().setPaymentDifference(0);
 					order.setFinalStatus("Settled");
 					OrderTimeline timeline = new OrderTimeline();
@@ -174,7 +181,7 @@ public void executeJobSettleOrder(){
 					order.getOrderTimeline().add(timeline);
 					order.setLastActivityOnOrder(new Date());
 					try {
-						session.merge(order);
+						session.merge(order);						
 						count++;
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -183,13 +190,15 @@ public void executeJobSettleOrder(){
 				}
 			}
 			session.getTransaction().commit();
-			log.debug("Order Settled !!!! No of rows Updated : "+count);
+			log.info("Order Settled !!!! No of rows Updated : "+count);
 		} catch (Exception e) {
 			log.error("Failed!",e);
+			log.info("Rows Updated : "+count);
 		} finally {
 			if(session != null)
             	session.close();
 		}
+		log.info("$$$ executeJobSettleOrder() Ends : SampleJob $$$");
 	}
 	
 }
