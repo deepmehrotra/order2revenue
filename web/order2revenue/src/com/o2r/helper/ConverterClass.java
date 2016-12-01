@@ -536,7 +536,7 @@ public class ConverterClass {
 			partner.setMonthlypaydate(partnerBean.getMonthlypaydate());
 			partner.setNrnReturnConfig(partnerBean.getNrnReturnConfig());
 			partner.setEvents(partnerBean.getEvents());
-			partner.setSellerAuthInfo(partnerBean.getSellerAuthInfo());
+			partner.setPartnerSellerAuthInfo(partnerBean.getPartnerSellerAuthInfo());
 		}
 		return partner;
 	}
@@ -821,6 +821,7 @@ public class ConverterClass {
 				bean.setPaycyclefromshipordel(partner.isPaycyclefromshipordel());
 				bean.setMonthlypaydate(partner.getMonthlypaydate());
 				bean.setNrnReturnConfig(partner.getNrnReturnConfig());
+				bean.setPartnerSellerAuthInfo(partner.getPartnerSellerAuthInfo());
 				bean.setEvents(partner.getEvents());
 				beans.add(bean);
 			}
@@ -858,6 +859,7 @@ public class ConverterClass {
 			bean.setMonthlypaydate(partner.getMonthlypaydate());
 			bean.setEvents(partner.getEvents());
 			bean.setNrnReturnConfig(partner.getNrnReturnConfig());
+			bean.setPartnerSellerAuthInfo(partner.getPartnerSellerAuthInfo());
 		}
 		return bean;
 	}

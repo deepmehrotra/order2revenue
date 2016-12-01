@@ -260,9 +260,9 @@ public class PartnerDaoImpl implements PartnerDao {
 					//Hibernate.initialize(returnpartner.getSellerAuthInfo());
 				}
 				
-				System.out.println(" HELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+			//	System.out.println(" HELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 				
-				System.out.println("HELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"+returnpartner.getOrders());
+			//	System.out.println("HELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"+returnpartner.getOrders());
 			}
 			session.getTransaction().commit();
 			session.close();

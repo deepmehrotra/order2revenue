@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import com.o2r.bean.AuthInfoBean;
+
 import com.o2r.model.AmazonOrderInfo;
 import com.o2r.model.Order;
 import com.o2r.model.PartnerSellerAuthInfo;
@@ -19,9 +19,9 @@ public interface MwsAmazonOrdMgmtService {
 	
 	public List<PartnerSellerAuthInfo> getSellersFromPartnerSellerAuthoInfo() throws Exception;
 	
-	//public AuthInfoBean getAuthInfoBeanObj(PartnerSellerAuthInfo sellerAuthInfo) throws Exception;
+	//public AuthInfoBean getAuthInfoBeanObj(PartnerSellerAuthInfo partnerSellerAuthInfo) throws Exception;
 	
-	public PartnerSellerAuthInfo getAuthInfoBeanObj(PartnerSellerAuthInfo sellerAuthInfo) throws Exception;
+	public PartnerSellerAuthInfo getAuthInfoBeanObj(PartnerSellerAuthInfo partnerSellerAuthInfo) throws Exception;
 	
 	
 	public XMLGregorianCalendar getCreatedAfter(Date createdAfter) throws Exception;
@@ -34,7 +34,7 @@ public interface MwsAmazonOrdMgmtService {
 	
 	public com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult getListOrderItems(PartnerSellerAuthInfo authInfo, String amazonOrderId) throws Exception;
 	
-	public AmazonOrderInfo getAmazonOrderInfoObj(AuthInfoBean authInfo, String amazonOrderId) throws Exception;
+	public AmazonOrderInfo getAmazonOrderInfoObj(PartnerSellerAuthInfo authInfo, String amazonOrderId) throws Exception;
 	
 	public List<AmazonOrderInfo> getAmazonOrderInfoList(PartnerSellerAuthInfo authInfo) throws Exception;
 	

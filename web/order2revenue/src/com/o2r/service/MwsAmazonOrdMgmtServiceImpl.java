@@ -25,7 +25,7 @@ import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult;
 import com.amazonservices.mws.orders._2013_09_01.model.OrderItem;
 import com.amazonservices.mws.orders._2013_09_01.model.ResponseHeaderMetadata;
 import com.amazonservices.mws.orders._2013_09_01.samples.MarketplaceWebServiceOrdersSampleConfig;
-import com.o2r.bean.AuthInfoBean;
+
 import com.o2r.dao.MwsAmazonOrdMgmtDao;
 import com.o2r.model.AmazonOrderInfo;
 import com.o2r.model.AmazonOrderItemInfo;
@@ -188,7 +188,7 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 	}
 
 	@Override
-	public AmazonOrderInfo getAmazonOrderInfoObj(AuthInfoBean authInfo,
+	public AmazonOrderInfo getAmazonOrderInfoObj(PartnerSellerAuthInfo authInfo,
 			String amazonOrderId) throws Exception {
 		// TODO Auto-generated method stub
 		return null;

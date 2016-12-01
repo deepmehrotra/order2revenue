@@ -31,7 +31,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.o2r.bean.AuthInfoBean;
+
 import com.o2r.bean.CustomerBean;
 import com.o2r.bean.OrderBean;
 import com.o2r.bean.OrderTaxBean;
