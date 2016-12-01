@@ -27,8 +27,8 @@ public class OrderMain {
 		try {
 			testHai();
 			invokeListOrders();
-			//invokeGetOrder();
-			//invokeListOrderItems();
+			invokeGetOrder();
+			invokeListOrderItems();
 			invokeListOrdersByNextToken();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
