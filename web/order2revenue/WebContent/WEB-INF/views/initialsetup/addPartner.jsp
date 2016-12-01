@@ -104,6 +104,13 @@ label {
 input+label {
 	display: inline-block;
 }
+.wizard > .steps > ul > li {
+    width: 16.4%;
+}
+.label1
+{
+	color: #fff;
+}
 </style>
 
 </head>
@@ -2945,6 +2952,91 @@ input+label {
 									</div>
 								</div>
 							</fieldset>
+						    
+						    <h1>Channel Sync</h1>
+						
+						    <fieldset>
+											<div class="row">
+												<div class="ibox float-e-margins">
+												<h1 class="text-center" style="position: relative;top: -24px;">Channel Sync</h1>
+												<div class="hr-line-dashed" style="margin: -11px 0px 34px 19px;">
+												</div>
+												<div class="add-company">
+													<div class="col-lg-12">
+														<input type="checkbox" class="js-switch_3" id="nr-switch1"/>
+														<div class="col-sm-12 radio6" id="nr-switch1-sec">
+															<table class="table" border="0" style="width: 50%;text-align: center;margin-left: 30%;">
+															<tbody style="background: #1ab394;">
+																<tr>
+																	<td style="vertical-align: middle;">
+																	<label class="label1">
+																		mwsAuthToken
+																	</label> 
+																	</td>
+																	<td>																	
+																	<input type="text" placeholder="mwsAuthToken"
+																						class="form-control"
+																						id="mwsAuthToken"
+																						name="mwsAuthToken"
+																						value="${partner.sellerAuthInfo.mwsAuthToken}">
+																						
+																	</td>
+																</tr>
+																<tr>
+																	<td style="vertical-align: middle;"> 
+																		<label class="label1">
+																			accessKey
+																		</label> 
+																	</td>
+																	<td>
+																	
+																	<input type="text" placeholder="accessKey"
+																						class="form-control"
+																						id="accessKey"
+																						name="accessKey"
+																						value="${partner.sellerAuthInfo.accessKey}">
+																						
+																	</td>
+																</tr>
+																<tr>
+																	<td style="vertical-align: middle;">
+																		<label class="label1">
+																		secretKey
+																		</label>  
+																	</td>
+																	<td>																	
+																	<input type="text" placeholder="secretKey"
+																						class="form-control"
+																						id="secretKey"
+																						name="secretKey"
+																						value="${partner.sellerAuthInfo.secretKey}">
+																						
+																	</td>
+																</tr>
+																<tr>
+																	<td style="vertical-align: middle;">
+																		<label class="label1">
+																		marketPlaceId
+																		</label>  
+																	</td>
+																	
+																	<td>
+																	<input type="text" placeholder="marketPlaceId"
+																						class="form-control number"
+																						id="marketPlaceId"
+																						name="marketPlaceId"
+																						value="${partner.sellerAuthInfo.marketPlaceId}">
+																						
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+														</div> 
+													</div>
+												</div>
+											</div>
+										</div>
+									</fieldset>						
 						</form:form>
 						<div style="visibility: hidden;">
 							<input class="btn btn-primary pull-right" id="submitButton"
@@ -4345,7 +4437,75 @@ input+label {
 			} else
 				return true;
 		}
+		
+		$("#nr-switch1").change(function() {
+		    if(this.checked) {
+		        
+		            $('.radio6').hide();
+		            $("#nr-switch1-sec").slideDown();
+		    }
+			else
+			{
+		            $("#nr-switch1-sec").slideUp();
+				
+			}
+			});	
+		        $('#paymentField').change(function () {
+		            $('.payment-box').hide();
+		            $('#'+$(this).val()).fadeIn();
+		        });
+		        $('#data_1 .input-group.date').datepicker({
+		                todayBtn: "linked",
+		                keyboardNavigation: false,
+		                forceParse: false,
+		                calendarWeeks: true,
+		                autoclose: true
+		            });
+		    });
 	</script>
+	<script>
+    $(document).ready(function(){
+        $("[name=toggler]").click(function(){
+            $('.radio1').hide();
+            $("#blk-"+$(this).val()).slideDown();
+        });	
+$("#nr-switch").change(function() {
+    if(this.checked) {
+        
+            $('.radio5').hide();
+            $("#nr-switch-sec").slideDown();
+    }
+	else
+	{
+            $("#nr-switch-sec").slideUp();
+		
+	}
+	});
+	$("#nr-switch1").change(function() {
+    if(this.checked) {
+        
+            $('.radio6').hide();
+            $("#nr-switch1-sec").slideDown();
+    }
+	else
+	{
+            $("#nr-switch1-sec").slideUp();
+		
+	}
+	});	
+        $('#paymentField').change(function () {
+            $('.payment-box').hide();
+            $('#'+$(this).val()).fadeIn();
+        });
+        $('#data_1 .input-group.date').datepicker({
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true
+            });
+    });
+</script>
 
 </body>
 </html>

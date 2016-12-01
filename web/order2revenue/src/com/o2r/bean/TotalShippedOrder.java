@@ -34,12 +34,20 @@ public class TotalShippedOrder {
 	private double returnLimitCrossedPercent;
 	private long noOfActionableOrders;
 	private double actionableOrdersPercent;
+	private long noOfInProcessOrders;
+	private double inProcessOrdersPercent;
 	private long noOfSettledOrders;
 	private double settledOrdersPercent;
 	private double netPaymentResult;
 	private double netPaymentResultPercent;
 	private double totalPaymentDiffference;
 	private double paymentDiffferencePercent;
+	private long noOfPayNotReceivedOrders;
+	private double payNotReceivedPercent;
+	private long noOfPositivePayDiffOrders;
+	private double positivePayDiffPercent;
+	private long noOfNegativePayDiffOrders;
+	private double negativePayDiffPercent;
 
 	public long getSaleQuantity() {
 		return saleQuantity;
@@ -257,6 +265,22 @@ public class TotalShippedOrder {
 		this.actionableOrdersPercent = actionableOrdersPercent;
 	}
 
+	public long getNoOfInProcessOrders() {
+		return noOfInProcessOrders;
+	}
+
+	public void setNoOfInProcessOrders(long noOfInProcessOrders) {
+		this.noOfInProcessOrders = noOfInProcessOrders;
+	}
+
+	public double getInProcessOrdersPercent() {
+		return inProcessOrdersPercent;
+	}
+
+	public void setInProcessOrdersPercent(double inProcessOrdersPercent) {
+		this.inProcessOrdersPercent = inProcessOrdersPercent;
+	}
+
 	@Override
 	public String toString() {
 		return "TotalShippedOrder [saleQuantity=" + saleQuantity
@@ -403,6 +427,54 @@ public class TotalShippedOrder {
 
 	public void setPaymentDiffferencePercent(double paymentDiffferencePercent) {
 		this.paymentDiffferencePercent = paymentDiffferencePercent;
+	}
+
+	public long getNoOfPayNotReceivedOrders() {
+		return noOfPayNotReceivedOrders;
+	}
+
+	public void setNoOfPayNotReceivedOrders(long noOfPayNotReceivedOrders) {
+		this.noOfPayNotReceivedOrders = noOfPayNotReceivedOrders;
+	}
+
+	public double getPayNotReceivedPercent() {
+		return payNotReceivedPercent;
+	}
+
+	public void setPayNotReceivedPercent(double payNotReceivedPercent) {
+		this.payNotReceivedPercent = payNotReceivedPercent;
+	}
+
+	public long getNoOfPositivePayDiffOrders() {
+		return noOfPositivePayDiffOrders;
+	}
+
+	public void setNoOfPositivePayDiffOrders(long noOfPositivePayDiffOrders) {
+		this.noOfPositivePayDiffOrders = noOfPositivePayDiffOrders;
+	}
+
+	public double getPositivePayDiffPercent() {
+		return positivePayDiffPercent;
+	}
+
+	public void setPositivePayDiffPercent(double positivePayDiffPercent) {
+		this.positivePayDiffPercent = positivePayDiffPercent;
+	}
+
+	public long getNoOfNegativePayDiffOrders() {
+		return noOfNegativePayDiffOrders;
+	}
+
+	public void setNoOfNegativePayDiffOrders(long noOfNegativePayDiffOrders) {
+		this.noOfNegativePayDiffOrders = noOfNegativePayDiffOrders;
+	}
+
+	public double getNegativePayDiffPercent() {
+		return negativePayDiffPercent;
+	}
+
+	public void setNegativePayDiffPercent(double negativePayDiffPercent) {
+		this.negativePayDiffPercent = negativePayDiffPercent;
 	}
 
 }

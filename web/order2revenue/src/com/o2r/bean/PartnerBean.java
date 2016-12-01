@@ -7,7 +7,8 @@ import java.util.List;
 import com.o2r.model.Events;
 import com.o2r.model.NRnReturnConfig;
 import com.o2r.model.Order;
-
+import com.o2r.model.SellerAuthInfo;
+            
 
 public class PartnerBean {
 
@@ -39,7 +40,8 @@ public class PartnerBean {
 	private int monthlypaydate;
 	private List<Events> events=new ArrayList<Events>();
 	private List<Order> orders = new ArrayList<Order>();
-	private NRnReturnConfig nrnReturnConfig;
+	private NRnReturnConfig nrnReturnConfig;	
+	private SellerAuthInfo sellerAuthInfo;
 	
 	private List<ChargesBean> fixedfeeList = new ArrayList<ChargesBean>();
 	private List<ChargesBean> shippingfeeVolumeFixedList = new ArrayList<ChargesBean>();
@@ -47,6 +49,16 @@ public class PartnerBean {
 	private List<ChargesBean> shippingfeeVolumeVariableList = new ArrayList<ChargesBean>();
 	private List<ChargesBean> shippingfeeWeightVariableList = new ArrayList<ChargesBean>();
 
+	
+	
+	public SellerAuthInfo getSellerAuthInfo() {
+		return sellerAuthInfo;
+	}
+	public void setSellerAuthInfo(SellerAuthInfo sellerAuthInfo) {
+		this.sellerAuthInfo = sellerAuthInfo;
+	}
+	
+	
 	public List<Events> getEvents() {
 		return events;
 	}

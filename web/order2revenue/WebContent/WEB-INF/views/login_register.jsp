@@ -153,7 +153,11 @@
 	            </div>
 	          </div>
 	          <br>
+
 	          <div class="col-lg-12" style="margin:0px;padding:0px;overflow: hidden;width: 100%;">
+
+	          <div class="col-lg-12" style="margin:0px;padding:0px;">
+
 	          	 <div class="col-sm-6" style="margin:0px;padding:0px;">
 	          		<input type="checkbox" name="_spring_security_remember_me" value="true"  autocomplete="off" style="width: 14%;height: 15px;float: left;position: relative;top: 17px;left: -3px;">
 					<font size="2" color="white" style="position: relative;top: 18px;left: -1px;font-weight: 600;">Remember Me ?</font>

@@ -189,17 +189,24 @@
 						required : true,
 						min : 1,
 						number : true,
+<<<<<<< HEAD
 					},
+=======
+					},					
+>>>>>>> refs/heads/Release_14_May_As_Is_Order_Upload_PartnerChanges
 					purchaseDate : {
 						required : true,						
 					}
-
 				},
 				messages : {
 					expenseName : "particular Name Required",
 					basicPrice : "basicPrice required",
 					taxRate : "taxRate required",
+<<<<<<< HEAD
 					purchaseDate : "Purchase Date required"
+=======
+					purchaseDate : "purchaseDate required"
+>>>>>>> refs/heads/Release_14_May_As_Is_Order_Upload_PartnerChanges
 				}
 			});
 			if (validator.form()) { // validation perform
