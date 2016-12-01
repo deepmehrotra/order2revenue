@@ -12,6 +12,10 @@ public class MWSConstants {
 	
 	public static String SECRETKEY = "LXqPe3XMUx2xEOGI8J6tko/9UKD3HmrYGfyQ3dW6";
 	
+	public static String ORDERSTATUSPENDING = "Pending";
+	
+	public static String ORDERSTATUSPENDINGAVAILABILITY = "PendingAvailability";
+	
 	public static String APPNAME = "O2R-Order";
 	
 	public static String APPVERSION = "1.0";

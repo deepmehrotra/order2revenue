@@ -23,7 +23,6 @@ public interface MwsAmazonOrdMgmtService {
 	
 	public PartnerSellerAuthInfo getAuthInfoBeanObj(PartnerSellerAuthInfo sellerAuthInfo) throws Exception;
 	
-	
 	public XMLGregorianCalendar getCreatedAfter(Date createdAfter) throws Exception;
 	
 	public XMLGregorianCalendar getCreatedBefore(Date createdBefore) throws Exception;
@@ -40,13 +39,12 @@ public interface MwsAmazonOrdMgmtService {
 	
 	public List<AmazonOrderInfo> getAmazonOrderInfoList(String value) throws Exception;
 	
-	
-	
 	public Date toDate(XMLGregorianCalendar calendar) throws Exception;
 	
 	public void saveOrderInfo(com.amazonservices.mws.orders._2013_09_01.model.Order order, List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems) throws Exception;
 	
 	public void saveOrderInfo(com.amazonservices.mws.orders._2013_09_01.model.Order order) throws Exception;
 	
+	public com.amazonservices.mws.orders._2013_09_01.model.ListOrdersByNextTokenResult getListOrdersByNextToken(PartnerSellerAuthInfo authInfo, String nextToken) throws Exception;
 	
 }

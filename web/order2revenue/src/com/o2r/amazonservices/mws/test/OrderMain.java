@@ -14,13 +14,12 @@ import com.amazonservices.mws.orders._2013_09_01.model.GetOrderRequest;
 import com.amazonservices.mws.orders._2013_09_01.model.GetOrderResponse;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsRequest;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResponse;
+import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersByNextTokenRequest;
+import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersByNextTokenResponse;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersRequest;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResponse;
 import com.amazonservices.mws.orders._2013_09_01.model.ResponseHeaderMetadata;
 import com.o2r.amazonservices.mws.constants.MWSConstants;
-import com.o2r.model.PartnerSellerAuthInfo;
-import com.o2r.service.OrderService;
-import com.o2r.service.OrderServiceImpl;
 
 public class OrderMain {
 
@@ -28,8 +27,9 @@ public class OrderMain {
 		try {
 			testHai();
 			invokeListOrders();
-			invokeGetOrder();
-			invokeListOrderItems();
+			//invokeGetOrder();
+			//invokeListOrderItems();
+			invokeListOrdersByNextToken();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -185,6 +185,38 @@ public class OrderMain {
 	        String amazonOrderId = "403-2044050-9547564";
 	        request.setAmazonOrderId(amazonOrderId);
 			listOrderItems(client, request);
+		} catch (Exception expObj) {
+			expObj.printStackTrace();
+		}
+	}
+	
+	public void listOrdersByNextToken(MarketplaceWebServiceOrdersClient client, ListOrdersByNextTokenRequest request) throws Exception {
+		try {
+			ListOrdersByNextTokenResponse response = client.listOrdersByNextToken(request);
+            ResponseHeaderMetadata rhmd = response.getResponseHeaderMetadata();
+            // We recommend logging every the request id and timestamp of every call.
+            System.out.println("Response:");
+            System.out.println("RequestId: "+rhmd.getRequestId());
+            System.out.println("Timestamp: "+rhmd.getTimestamp());
+            String responseXml = response.toXML();
+            System.out.println(responseXml);
+		} catch (Exception expObj) {
+			expObj.printStackTrace();
+		}
+	}
+	
+	public void invokeListOrdersByNextToken() throws Exception {
+		try {
+			MarketplaceWebServiceOrdersClient client = com.o2r.amazonservices.mws.orders.config.MarketplaceWebServiceOrdersSampleConfig.getClient();
+	        // Create a request.
+	        ListOrdersByNextTokenRequest request = new ListOrdersByNextTokenRequest();
+	        String sellerId = MWSConstants.SELLERID;
+	        request.setSellerId(sellerId);
+	        String mwsAuthToken = MWSConstants.MWSAUTHTOKEN;
+	        request.setMWSAuthToken(mwsAuthToken);
+	        String nextToken = "P5W+xHBCOsOaJqJYLDm0ZIfVkJJPpovR8pIWOJAWSB8+dnJmJQzF0QCmMxH2xtHoqBXdLk4iogwgT7ZByNq5qxGFz7a0uK7mdIq0/HqQFhhiC3Xz1ota/iJ0wMvlylZkWQWPqGlbsnPFsZtrK/Gz4HyZosP/Wvl0M+3Hrrug8sSlOzdsrZHCYruZIF9n45mtnrZ4AbBdBTeicp5jJPQPcgCy5/GuGI4OLzyB960RsbIZEWUDFvtT50mpLasp7yc0HU87p1pVsUrbZaL2quSQErCXSaG7w7Y2wag2/ezEw/ClQuFX9HJv7/iRDmILvEyopquVBiU6BRxxrBy2GCH8wagvZMrJ3HUC+5FXWjJ/Uuhcn0NV+47eBUhv8CQbxpHmGeHJ5oXgGLnCA6dCsio3WbJy9FUT+rprPMG4jNqghnlDZBmR6xJsEr5KRLN5wRPF1YGxuBKk5+fDByX5Mt/kM/cQATim0jO6KHLSnvJ/Mqg=";
+	        request.setNextToken(nextToken);
+	        listOrdersByNextToken(client, request);
 		} catch (Exception expObj) {
 			expObj.printStackTrace();
 		}
