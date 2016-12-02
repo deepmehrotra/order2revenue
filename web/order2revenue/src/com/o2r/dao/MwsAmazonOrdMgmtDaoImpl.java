@@ -114,8 +114,8 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 		
 		List<PartnerSellerAuthInfo> returnlist = null;
 		
-		final String QRY = "from PartnerSellerAuthInfo where PCNAME='Amazon'";
-		
+		//final String QRY = "from PartnerSellerAuthInfo where PCNAME like '%Amazon%'";
+		final String QRY = "from PartnerSellerAuthInfo where PCNAME ='Amazon.in'";
 		try {			
 			
 			session = sessionFactory.openSession();				
@@ -146,15 +146,14 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			
-			System.out.println("sellerId100"+orderInfo.getSellerId());
+			int sellerid= orderInfo.getSellerId();
 			Criteria criteria = session.createCriteria(Seller.class).add(
-					Restrictions.eq("id", 65));
+					Restrictions.eq("id", sellerid));
 			seller = (Seller) criteria.list().get(0);
-			
-			orderInfo.setSeller(seller);			
-			Transaction transaction = session.beginTransaction();
-			session.save(orderInfo);
-			transaction.commit();
+			seller.getOrderInfos().add(orderInfo);
+			orderInfo.setSeller(seller);		
+			session.saveOrUpdate(seller);
+			//session.save(orderInfo);				
 		} catch (Exception expObj) {
 			expObj.printStackTrace();
 		} finally {

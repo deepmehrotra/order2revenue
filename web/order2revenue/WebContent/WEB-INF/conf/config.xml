@@ -72,7 +72,7 @@ http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 				<value>com.o2r.model.NRnReturnConfig</value>
 				<value>com.o2r.model.State</value>
 				<value>com.o2r.model.StateDeliveryTime</value>
-				<value>com.o2r.model.SellerAuthInfo</value>
+				
 				
 			</list>
 		</property>

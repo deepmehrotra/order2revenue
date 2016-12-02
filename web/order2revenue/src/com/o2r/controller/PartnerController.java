@@ -608,11 +608,17 @@ public class PartnerController {
 				
 				PartnerSellerAuthInfo  partnerSellerAuthInfo = new PartnerSellerAuthInfo();				
 				partnerSellerAuthInfo.setSellerid(sellerId+"");
+				
+				System.out.println("amazon sellerid"+request.getParameter("partnerSellerAuthInfoId"));
+				if(request.getParameter("partnerSellerAuthInfoId")!=null){
+					partnerSellerAuthInfo.setId(Integer.parseInt(request.getParameter("partnerSellerAuthInfoId")));
+				}
 				partnerSellerAuthInfo.setMarketplaceid(request.getParameter("marketPlaceId"));
 				partnerSellerAuthInfo.setMwsauthtoken(request.getParameter("mwsAuthToken"));
 				partnerSellerAuthInfo.setAccesskey(request.getParameter("accessKey"));
 				partnerSellerAuthInfo.setSecretkey(request.getParameter("secretKey"));				
 				partnerSellerAuthInfo.setPcName(partnerBean.getPcName());	
+				partnerSellerAuthInfo.setAmazonSellerId(request.getParameter("amazonSelleid"));	
 				partnerSellerAuthInfo.setStatus(1);		
 				partnerBean.setPartnerSellerAuthInfo(partnerSellerAuthInfo);
 				

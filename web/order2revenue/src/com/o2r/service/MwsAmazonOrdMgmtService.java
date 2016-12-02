@@ -44,7 +44,7 @@ public interface MwsAmazonOrdMgmtService {
 	
 	public Date toDate(XMLGregorianCalendar calendar) throws Exception;
 	
-	public void saveOrderInfo(com.amazonservices.mws.orders._2013_09_01.model.Order order, List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems) throws Exception;
+	public void saveOrderInfo(com.amazonservices.mws.orders._2013_09_01.model.Order order, List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems, int sellerId) throws Exception;
 	
 	public void saveOrderInfo(com.amazonservices.mws.orders._2013_09_01.model.Order order) throws Exception;
 	

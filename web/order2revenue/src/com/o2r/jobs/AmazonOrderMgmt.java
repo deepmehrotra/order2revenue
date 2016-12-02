@@ -1,14 +1,17 @@
 package com.o2r.jobs;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,9 +19,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Set;
+
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.jasper.tagplugins.jstl.core.Out;
 import org.apache.log4j.Logger;
@@ -26,11 +33,12 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import com.o2r.bean.CustomerBean;
 import com.o2r.bean.OrderBean;
@@ -97,6 +105,9 @@ public class AmazonOrderMgmt {
 	private TaxDetailService taxDetailService;
 	//private FileOutputStream //session;
 	
+	org.springframework.core.io.Resource resource = new ClassPathResource(
+			"database.properties");
+	
 	
 	static Logger log = Logger.getLogger(AmazonOrderMgmt.class.getName());
 	
@@ -141,19 +152,19 @@ public class AmazonOrderMgmt {
 				
 		 		PartnerSellerAuthInfo authInfo = ordMgmtService.getAuthInfoBeanObj(PartnerSellerAuthInfo);
 		 		
-		 		
+		 		int sellerId = Integer.parseInt(authInfo.getSellerid());
 		 		Calendar cal = Calendar.getInstance();
 		 		cal.add(Calendar.MONTH, -1);
-		 		Date result = cal.getTime();
-		 		System.out.println("result"+result);
+		 		Date result = cal.getTime(); 		 		
 				com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult listOrderResult = ordMgmtService.getListOrders(ordMgmtService.getCreatedAfter(new Date()), ordMgmtService.getCreatedBefore(result), ordMgmtService.getConfiguredoOrderStatus(), authInfo);
 				System.out.println("The Size "+listOrderResult.getOrders().size());
 				List<com.amazonservices.mws.orders._2013_09_01.model.Order> orders = listOrderResult.getOrders();
 				for (com.amazonservices.mws.orders._2013_09_01.model.Order order : orders) {
 					com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult itemResults = ordMgmtService.getListOrderItems(authInfo, order.getAmazonOrderId());
-					List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems = itemResults.getOrderItems();
-					
-					ordMgmtService.saveOrderInfo(order, orderItems);
+					List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems = itemResults.getOrderItems();					
+					System.out.println("orders"+orders.size());
+					System.out.println("orderItems"+orderItems.size());
+					ordMgmtService.saveOrderInfo(order, orderItems,sellerId);
 				}
 			}
 		//}
@@ -167,6 +178,71 @@ public class AmazonOrderMgmt {
 		
 	}
 	
+	
+	
+	
+	
+	
+public void invokeListOrdersAndOrderItemsFromProperty() throws Exception {		
+		
+	Properties props = null;
+	props = PropertiesLoaderUtils.loadProperties(resource);
+	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	
+		try {	
+			
+			
+			String afterDate= props.getProperty("createdAfterDate");
+			String beforeDate= props.getProperty("createdBeforeDate");			
+			String status = props.getProperty("orderStatus");
+			
+			XMLGregorianCalendar createdAfterDate=null;
+			XMLGregorianCalendar createBeforeDate=null;
+		    GregorianCalendar calender = new GregorianCalendar();		    
+		    Date afterdate1 = formatter.parse(afterDate);
+		    Date beforedate1=formatter.parse(beforeDate);
+		    calender.setTime(afterdate1);		    
+		    createdAfterDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(calender);
+		    calender.setTime(beforedate1);		
+		    createBeforeDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(calender);  
+		    
+		    
+		    
+		    String[] parts = status.split(",");
+		    List<String> orderStatus = new ArrayList<String>();
+		    
+		    for(int i=0; i<parts.length-1; i++){
+		    	orderStatus.add(parts[i]);
+		    }  
+		    System.out.println("ORDER STATUS"+orderStatus);
+		    
+			List<PartnerSellerAuthInfo> partnerSellerAuthInfoList = ordMgmtService.getSellersFromPartnerSellerAuthoInfo();		
+			for (PartnerSellerAuthInfo PartnerSellerAuthInfo : partnerSellerAuthInfoList) {						
+		 		PartnerSellerAuthInfo authInfo = ordMgmtService.getAuthInfoBeanObj(PartnerSellerAuthInfo);		 		
+		 		int sellerId = Integer.parseInt(authInfo.getSellerid());			 		
+				com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult listOrderResult = ordMgmtService.getListOrders(createdAfterDate, createBeforeDate, orderStatus, authInfo);
+				System.out.println("The Size "+listOrderResult.getOrders().size());
+				List<com.amazonservices.mws.orders._2013_09_01.model.Order> orders = listOrderResult.getOrders();
+				for (com.amazonservices.mws.orders._2013_09_01.model.Order order : orders) {
+					com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult itemResults = ordMgmtService.getListOrderItems(authInfo, order.getAmazonOrderId());
+					List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems = itemResults.getOrderItems();		
+					
+					System.out.println("orders"+orders.size());
+					System.out.println("orderItems"+orderItems.size());
+					ordMgmtService.saveOrderInfo(order, orderItems,sellerId);
+				}
+			}
+		//}
+		
+	} catch (Exception expObj) {
+		expObj.printStackTrace();
+	}
+		
+		
+		
+		
+	}
+
 	
 	
 	

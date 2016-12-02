@@ -32,11 +32,14 @@ public class PartnerSellerAuthInfo  {
      private Integer status;
      private String pcName;
      private Partner partner;
+     private String amazonSellerId;
+     
 
-    public PartnerSellerAuthInfo() {
+   
+	public PartnerSellerAuthInfo() {
     }
 
-    public PartnerSellerAuthInfo(String sellerid, String partnerSellerAuthInfocol, String mwsauthtoken, String accesskey, String secretkey, String marketplaceid, String serviceurl, Integer status, String pcName) {
+    public PartnerSellerAuthInfo(String sellerid, String partnerSellerAuthInfocol, String mwsauthtoken, String accesskey, String secretkey, String marketplaceid, String serviceurl, Integer status, String pcName, String amazonSellerId) {
        this.sellerid = sellerid;
        this.partnerSellerAuthInfocol = partnerSellerAuthInfocol;
        this.mwsauthtoken = mwsauthtoken;
@@ -46,6 +49,7 @@ public class PartnerSellerAuthInfo  {
        this.serviceurl = serviceurl;
        this.status = status;
        this.pcName = pcName;
+       this.amazonSellerId=amazonSellerId;
     }
    
     @Id
@@ -158,6 +162,13 @@ public class PartnerSellerAuthInfo  {
 		this.partner = partner;
 	}
 
+	 public String getAmazonSellerId() {
+			return amazonSellerId;
+	 }
+
+	public void setAmazonSellerId(String amazonSellerId) {
+			this.amazonSellerId = amazonSellerId;
+	}
 
     
     

@@ -510,7 +510,7 @@ public class AmazonOrderItemInfo implements java.io.Serializable {
 	 }*/
 	 
 	   @ManyToOne
-		@JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
+		/*@JoinColumn(name="ORDER_ID", insertable=false, updatable=false)*/
 		public AmazonOrderInfo getAmazonOrderInfo() {
 			return amazonOrderInfo;
 		}

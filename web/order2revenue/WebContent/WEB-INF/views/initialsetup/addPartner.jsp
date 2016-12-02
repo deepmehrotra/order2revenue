@@ -123,7 +123,7 @@ input+label {
 				id="centerpane">
 				<div class="row">
 					<div class="col-lg-12">
-						<form:form method="POST" action="saveMetaPartner.html"
+						<form:form method="POST" action="savePartner.html"
 							id="addpartnerform" name="addpartnerform" role="form"
 							class="wizard-big form-horizontal" enctype="multipart/form-data">
 							<%-- <form id="form" action="#" class="wizard-big form-horizontal"
@@ -2961,6 +2961,12 @@ input+label {
 												<h1 class="text-center" style="position: relative;top: -24px;">Channel Sync</h1>
 												<div class="hr-line-dashed" style="margin: -11px 0px 34px 19px;">
 												</div>
+												
+												<c:if test="${!empty partner.partnerSellerAuthInfo.id}">
+												<input type="hidden" name="partnerSellerAuthInfoId" id="partnerSellerAuthInfoId"
+												value="${partner.partnerSellerAuthInfo.id}" />
+												</c:if>
+									
 												<div class="add-company">
 													<div class="col-lg-12">
 														<input type="checkbox" class="js-switch_3" id="nr-switch1"/>
@@ -2978,7 +2984,7 @@ input+label {
 																						class="form-control"
 																						id="mwsAuthToken"
 																						name="mwsAuthToken"
-																						value="${partner.sellerAuthInfo.mwsAuthToken}">
+																						value="${partner.partnerSellerAuthInfo.mwsauthtoken}">
 																						
 																	</td>
 																</tr>
@@ -2994,7 +3000,7 @@ input+label {
 																						class="form-control"
 																						id="accessKey"
 																						name="accessKey"
-																						value="${partner.sellerAuthInfo.accessKey}">
+																						value="${partner.partnerSellerAuthInfo.accesskey}">
 																						
 																	</td>
 																</tr>
@@ -3009,7 +3015,7 @@ input+label {
 																						class="form-control"
 																						id="secretKey"
 																						name="secretKey"
-																						value="${partner.sellerAuthInfo.secretKey}">
+																						value="${partner.partnerSellerAuthInfo.secretkey}">
 																						
 																	</td>
 																</tr>
@@ -3022,13 +3028,34 @@ input+label {
 																	
 																	<td>
 																	<input type="text" placeholder="marketPlaceId"
-																						class="form-control number"
+																						class="form-control"
 																						id="marketPlaceId"
 																						name="marketPlaceId"
-																						value="${partner.sellerAuthInfo.marketPlaceId}">
+																						value="${partner.partnerSellerAuthInfo.marketplaceid}">
 																						
 																	</td>
 																</tr>
+																
+																<tr>
+																	<td style="vertical-align: middle;">
+																		<label class="label1">
+																		amazonSellerId
+																		</label>  
+																	</td>
+																	
+																	<td>
+																	<input type="text" placeholder="amazonSelleid"
+																						class="form-control"
+																						id="amazonSelleid"
+																						name="amazonSelleid"
+																						value="${partner.partnerSellerAuthInfo.amazonSellerId}">
+																						
+																	</td>
+																</tr>
+																
+																
+																
+																
 															</tbody>
 														</table>
 														</div> 
