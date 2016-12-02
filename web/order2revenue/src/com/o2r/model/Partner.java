@@ -81,7 +81,7 @@ public class Partner {
 	
 
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne@OneToOne(fetch = FetchType.LAZY, mappedBy = "partner", cascade = CascadeType.ALL)
 	private PartnerSellerAuthInfo partnerSellerAuthInfo;	
 	
 
