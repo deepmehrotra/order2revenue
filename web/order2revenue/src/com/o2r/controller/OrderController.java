@@ -1432,24 +1432,16 @@ public class OrderController {
 			@ModelAttribute("command") PartnerSellerAuthInfo partnerSellerAuthInfo, BindingResult result) {
 		
 		log.info("$$$ poOrderListDailyAct Starts : OrderController $$$");
-		Map<String, Object> model = new HashMap<String, Object>();
-
-		
-		
-		
+		Map<String, Object> model = new HashMap<String, Object>();	
 		
 		String fromDate = request.getParameter("single");
 		String endDate = request.getParameter("second");	
-		//String status = request.getParameter("");
 		
-	System.out.println("From Date"+fromDate);
-	System.out.println("endDate"+endDate);
 		try {
 			
 			String status ="Unfulfillable,PartiallyShipped,Unshipped,Pending,Canceled,Shipped,PendingAvailability";
-			amazonOrderMgmt.invokeListOrdersAndOrderItemsByValues(fromDate,endDate,status);
+			amazonOrderMgmt.invokeListOrdersAndOrderItemsByValues(fromDate,endDate,status);			
 			
-			//String value ="Unfulfillable,PartiallyShipped,Unshipped,Pending,Canceled,Shipped,PendingAvailability";
 			List<AmazonOrderInfo> listamazaon = new ArrayList<AmazonOrderInfo>();
 			listamazaon = mwsAmazonOrdMgmtService.getAmazonOrderInfoList(status);
 

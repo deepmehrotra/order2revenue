@@ -214,7 +214,7 @@ public void invokeListOrdersAndOrderItemsFromProperty() throws Exception {
 		    for(int i=0; i<parts.length-1; i++){
 		    	orderStatus.add(parts[i]);
 		    }  
-		    System.out.println("ORDER STATUS"+orderStatus);
+		    
 		    
 			List<PartnerSellerAuthInfo> partnerSellerAuthInfoList = ordMgmtService.getSellersFromPartnerSellerAuthoInfo();		
 			for (PartnerSellerAuthInfo PartnerSellerAuthInfo : partnerSellerAuthInfoList) {						
@@ -255,30 +255,18 @@ public void invokeListOrdersAndOrderItemsByValues(String fromDate, String endDat
 		try {	
 			
 			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-			//String afterDate= props.getProperty("createdAfterDate");
-			//String beforeDate= props.getProperty("createdBeforeDate");			
-			//String status = props.getProperty("orderStatus");
 			
 			XMLGregorianCalendar createdAfterDate=null;
 			XMLGregorianCalendar createBeforeDate=null;
 		    GregorianCalendar calender = new GregorianCalendar();	   
-		    GregorianCalendar calender1 = new GregorianCalendar();		    
 		    Date afterdate1 = formatter.parse(fromDate);
-		    Date beforedate1=formatter.parse(endDate);
-		    
-		    System.out.println("afterdate1afterdate1afterdate1afterdate1"+afterdate1);
-		    System.out.println("beforedate1beforedate1beforedate1"+beforedate1);
-		    
+		    Date beforedate1=formatter.parse(endDate); 
+		   	    
 		    
 		    calender.setTime(afterdate1);		    
 		    createdAfterDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(calender);
-		    calender1.setTime(beforedate1);		
-		    createBeforeDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(calender1); 	    
-		    
-		   // calender1.toGregorianCalendar().getTime();
-		    
-		    System.out.println("createdAfterDatecreatedAfterDate"+createdAfterDate);
-		    System.out.println("createBeforeDatecreateBeforeDate"+createBeforeDate);
+		    calender.setTime(beforedate1);		
+		    createBeforeDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(calender); 		 
 		    
 		    String[] parts = reqstatus.split(",");
 		    List<String> orderStatus = new ArrayList<String>();
@@ -286,7 +274,7 @@ public void invokeListOrdersAndOrderItemsByValues(String fromDate, String endDat
 		    for(int i=0; i<parts.length-1; i++){
 		    	orderStatus.add(parts[i]);
 		    }  
-		   // System.out.println("ORDER STATUS"+orderStatus);
+		  
 		    
 			List<PartnerSellerAuthInfo> partnerSellerAuthInfoList = ordMgmtService.getSellersFromPartnerSellerAuthoInfo();		
 			for (PartnerSellerAuthInfo PartnerSellerAuthInfo : partnerSellerAuthInfoList) {						
