@@ -3,6 +3,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
  <head>
@@ -11,6 +12,7 @@
   <!-- Data Tables -->
     <link href="/O2R/seller/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
     <link href="/O2R/seller/css/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet">
+    <script src="/O2R/seller/js/plugins/datapicker/bootstrap-datepicker.js"></script>
 <script>
  var globalValue="Mahesh kOLLIPAR";
  </script>
@@ -79,23 +81,10 @@
                               <button class="btn btn-primary pull-right" type="button" onclick="moveStatus()">Move Status</button>
                                  
                                <!--   <a class="btn btn-primary btn-xs" style="display;none"  onclick="moveStatus();" >Move Status</a>-->
-                            </div>
+                            </div>  
                             
                             
-                            
-                             <div class="col-md-4">
-                                                <select class="form-control" name="reportGroup" id="reportGroup" >
-                                                    <option value="">Select Report Category</option>
-                                                    <option value="OrderRelatedReport">Order Related Reports</option>
-                                                    <option value="ChannelRelatedReport">Channel Related Report</option>
-                                                    <!-- <option value="ProductRelatedReport">Product Related Report</option> -->
-                                                    <option value="PartnerRelated">Partner Related Reports</option>
-                                                    <!-- <option value="ExpenseReports">Expense Reports</option>
-                                                    <option value="InventoryReports">Inventory Reports</option>
-                                                    <option value="GeneralReports">General Reports</option> -->
-                                                    <option value="RevenueReports">Revenue Reports</option>
-                                                </select>
-                                            </div>
+                             
                                             
                              </form>
                             
@@ -103,11 +92,58 @@
                         </div>
                         <div class="ibox-content overflow-h cus-table-filters">
                         <div class="scroll-y">
-                        	<input type="hidden" id="delStatus" value="${deleteStatus}">
-                        	
+                        	<input type="hidden" id="delStatus" value="${deleteStatus}">               	
                         	
                         	
                         	<form name="abcd" class="form-inline" method="post" action="moveStatusAmazonOrderInfo.html" id="formabcd">
+                        	
+                        	 <div  id="createdDate" style="display:none">  </div>
+                                        
+                        	<div>
+                        	
+                        					
+								<label>StartDate</label>	
+								<input type="text" id="single" name="single" placeholder="select start range" style="width:11%;margin-left: 0%;position: relative;top: -1px;">        
+								
+												
+									<!--  <div class="input-group f-left" style="width:11%;position: relative;top: -1px; height: 10px">
+									<label>StartDate</label>			
+												<div class="input-group date">
+													<span class="input-group-addon"><i
+														class="fa fa-calendar"></i></span> <input type="text"
+														name="startDate" id="startDate" class="form-control">
+												</div>
+											</div>	-->	
+												
+												
+															 
+									<label>EndDate </label> 						
+									&nbsp;			
+																						
+										<input type="text" id="second" name="second" placeholder="select Last range" style="width:11%;position: relative;top: -1px;;margin-top:1px;">
+                                        
+                                     
+                                                <select class="form-control" name="reportGroup" id="reportGroup" >
+                                                    <option value="">Select Status</option>
+                                                    <option value="InvoiceUnconfirmed">InvoiceUnconfirmed</option>                                                    
+                                                    <option value="Unfulfillable">Unfulfillable</option>
+                                                    <option value="PartiallyShipped">PartiallyShipped</option>
+                                                    <option value="Unshipped">Unshipped</option>
+                                                    <option value="Pending">Pending</option>
+                                                     <option value="Canceled">Canceled</option>
+                                                      <option value="Shipped">Shipped</option>
+                                                       <option value="PendingAvailability">PendingAvailability</option>
+                                                       
+                                                </select>
+                                                
+                                                <button class="btn btn-white table-menu-search search-dd"  style="float:right;margin-top:1px;margin-right:441px;">
+										<i class="fa fa-search" ></i>
+									</button>
+									
+                                            </div>
+                              
+                             
+                                                      
                              <table class="table table-striped table-bordered table-hover dataTables-example" >
                                 <thead>
                                 <tr>
@@ -332,14 +368,8 @@
     	        		//window.location.href = "moveStatusAmazonOrderInfo.html";
     	            	$('#centerpane').html(res);
     	        	}
-
     			}
-    		});
-    		
-    		
-    		
-    	
-    	
+    		});    	
     	}
     	
     	function onclickTaxablePurchases(value,id) {
@@ -366,6 +396,17 @@
                 }
             });
         }    	
+    	
+    	
+    	$(document).ready(function() {
+			$('#data_1 .input-group.date').datepicker({
+				todayBtn : "linked",
+				keyboardNavigation : false,
+				forceParse : false,
+				calendarWeeks : false,
+				autoclose : true
+			});
+		});
     	
 
 

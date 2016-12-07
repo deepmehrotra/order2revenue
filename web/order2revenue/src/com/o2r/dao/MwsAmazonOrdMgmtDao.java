@@ -8,7 +8,7 @@ import com.o2r.model.Seller;
  
 public interface MwsAmazonOrdMgmtDao {
 
-	public List<AmazonOrderInfo> getOrderList() throws Exception;
+	public List<AmazonOrderInfo> getOrderList() throws Exception;	
 	
 	public List<AmazonOrderInfo> getOrderList(String value) throws Exception;
 	
@@ -17,5 +17,7 @@ public interface MwsAmazonOrdMgmtDao {
 	public List<PartnerSellerAuthInfo> getSellersFromPartnerSellerAuthoInfo() throws Exception;
 	
 	public void saveAmazonOrderInfo(AmazonOrderInfo orderInfo) throws Exception;
+
+	List<AmazonOrderInfo> getOrderListbyStatus(String value) throws Exception;
 	
 }

@@ -83,10 +83,15 @@ public class AmazonOrderInfo  implements java.io.Serializable {
      
     
  	
-  private Set<AmazonOrderItemInfo> amazonOrderItemInfo = new HashSet<AmazonOrderItemInfo>(0);
+  //private Set<AmazonOrderItemInfo> amazonOrderItemInfo = new HashSet<AmazonOrderItemInfo>(0);
   
-  private Set<ShippingAddress> shippingAddressinfo = new HashSet<ShippingAddress>(0);
-   
+  //private Set<ShippingAddress> shippingAddressinfo = new HashSet<ShippingAddress>(0);
+  
+  
+  private List<AmazonOrderItemInfo> amazonOrderItemInfo = new ArrayList<AmazonOrderItemInfo>();
+
+private List<ShippingAddress> shippingAddressinfo = new ArrayList<ShippingAddress>();
+  
 
 
 	private Seller seller;
@@ -98,7 +103,7 @@ public class AmazonOrderInfo  implements java.io.Serializable {
     public AmazonOrderInfo(int orderId) {
         this.orderId = orderId;
     }
-    public AmazonOrderInfo(int orderId, String amazonorderid, String sellerorderid, Date purchasedate, Date lastupdatedate, String orderstatus, String fulfillmentchannel, String saleschannel, String orderchannel, String shipservicelevel, Integer shippingAddId, String ordertotalcurrencycode, String ordertotalamount, Integer numberofitemsshipped, Integer numberofitemsunshipped, String paymentexecutiondetailcurrencycode, String paymentexecutiondetailamount, String paymentexecutiondetailpaymentmethod, String paymentmethod, String marketplaceid, String buyeremail, String buyername, String shipmentservicelevelcategory, String shippedbyamazontfm, String tfmshipmentstatus, String cbadisplayableshippinglabel, String ordertype, Date earliestshipdate, Date latestshipdate, Date earliestdeliverydate, Date latestdeliverydate, String isbusinessorder, String purchaseordernumber, String isprime, String ispremiumorder, String requestid, int sellerId) {
+   /* public AmazonOrderInfo(int orderId, String amazonorderid, String sellerorderid, Date purchasedate, Date lastupdatedate, String orderstatus, String fulfillmentchannel, String saleschannel, String orderchannel, String shipservicelevel, Integer shippingAddId, String ordertotalcurrencycode, String ordertotalamount, Integer numberofitemsshipped, Integer numberofitemsunshipped, String paymentexecutiondetailcurrencycode, String paymentexecutiondetailamount, String paymentexecutiondetailpaymentmethod, String paymentmethod, String marketplaceid, String buyeremail, String buyername, String shipmentservicelevelcategory, String shippedbyamazontfm, String tfmshipmentstatus, String cbadisplayableshippinglabel, String ordertype, Date earliestshipdate, Date latestshipdate, Date earliestdeliverydate, Date latestdeliverydate, String isbusinessorder, String purchaseordernumber, String isprime, String ispremiumorder, String requestid, int sellerId) {
        this.orderId = orderId;
        this.amazonorderid = amazonorderid;
        this.sellerorderid = sellerorderid;
@@ -135,7 +140,7 @@ public class AmazonOrderInfo  implements java.io.Serializable {
        this.ispremiumorder = ispremiumorder;
        this.requestid = requestid;
        //this.sellerId = sellerId;
-    }
+    }*/
     
 
     @Id
@@ -147,10 +152,7 @@ public class AmazonOrderInfo  implements java.io.Serializable {
     
     public void setOrderId(int orderId) {
         this.orderId = orderId;
-    }
-
-    
-    
+    }   
     
     
     @Column(name="AMAZONORDERID", length=1000)
@@ -515,7 +517,7 @@ public class AmazonOrderInfo  implements java.io.Serializable {
 	
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id", nullable = false, referencedColumnName = "id")
+	/*@JoinColumn(name = "id", nullable = false, referencedColumnName = "id")*/
 	public Seller getSeller() {
 		return seller;
 	}
@@ -548,7 +550,7 @@ public class AmazonOrderInfo  implements java.io.Serializable {
 	
 
 
-	@OneToMany(mappedBy="amazonOrderInfo", cascade=CascadeType.ALL, fetch = FetchType.EAGER )
+	/*@OneToMany(mappedBy="amazonOrderInfo", cascade=CascadeType.ALL, fetch = FetchType.EAGER )
 	public Set<AmazonOrderItemInfo> getAmazonOrderItemInfo() {
 		return amazonOrderItemInfo;
 	}
@@ -566,9 +568,30 @@ public class AmazonOrderInfo  implements java.io.Serializable {
 
 		public void setShippingAddressinfo(Set<ShippingAddress> shippingAddressinfo) {
 			this.shippingAddressinfo = shippingAddressinfo;
-		}
+		}*/
 		
 
+	@OneToMany(mappedBy="amazonOrderInfo", cascade=CascadeType.ALL, fetch = FetchType.EAGER )
+	public List<AmazonOrderItemInfo> getAmazonOrderItemInfo() {
+		return amazonOrderItemInfo;
+	}
+
+
+	public void setAmazonOrderItemInfo(List<AmazonOrderItemInfo> amazonOrderItemInfo) {
+		this.amazonOrderItemInfo = amazonOrderItemInfo;
+	}
+
+	@OneToMany(mappedBy="amazonOrderInfo", cascade=CascadeType.ALL, fetch = FetchType.LAZY )
+	public List<ShippingAddress> getShippingAddressinfo() {
+		return shippingAddressinfo;
+	}
+
+
+	public void setShippingAddressinfo(List<ShippingAddress> shippingAddressinfo) {
+		this.shippingAddressinfo = shippingAddressinfo;
+	}
+	
+	
 }
 
 

@@ -112,9 +112,13 @@ public class Seller {
 	private List<PartnerCategoryMap> partnerCategoryList = new ArrayList<PartnerCategoryMap>();
 
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "seller")
-	private Set<AmazonOrderInfo> orderInfos = new HashSet<AmazonOrderInfo>(0);
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "seller", cascade = CascadeType.ALL)
+	//@OneToMany(cascade = CascadeType.ALL)
+	//@JoinTable(name = "amazon_order_item_info", joinColumns = @JoinColumn(name = "ORDER_ID"), inverseJoinColumns = @JoinColumn(name = "amazonOrderInfo_ORDER_ID"))	
+	//private Set<AmazonOrderInfo> orderInfos = new HashSet<AmazonOrderInfo>(0);
 
+	private List<AmazonOrderInfo> orderInfos = new ArrayList<AmazonOrderInfo>();
+	
 
 	public SellerAccount getSellerAccount() {
 		return sellerAccount;
@@ -342,11 +346,11 @@ public class Seller {
 	}
 
 	
-	public Set<AmazonOrderInfo> getOrderInfos() {
+	public List<AmazonOrderInfo> getOrderInfos() {
 		return orderInfos;
 	}
 
-	public void setOrderInfos(Set<AmazonOrderInfo> orderInfos) {
+	public void setOrderInfos(List<AmazonOrderInfo> orderInfos) {
 		this.orderInfos = orderInfos;
 	}
 

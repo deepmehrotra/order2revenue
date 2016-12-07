@@ -243,6 +243,79 @@ public void invokeListOrdersAndOrderItemsFromProperty() throws Exception {
 		
 	}
 
+
+
+
+public void invokeListOrdersAndOrderItemsByValues(String fromDate, String endDate, String reqstatus) throws Exception {		
+	
+	//Properties props = null;
+	//props = PropertiesLoaderUtils.loadProperties(resource);
+	
+	
+		try {	
+			
+			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+			//String afterDate= props.getProperty("createdAfterDate");
+			//String beforeDate= props.getProperty("createdBeforeDate");			
+			//String status = props.getProperty("orderStatus");
+			
+			XMLGregorianCalendar createdAfterDate=null;
+			XMLGregorianCalendar createBeforeDate=null;
+		    GregorianCalendar calender = new GregorianCalendar();	   
+		    GregorianCalendar calender1 = new GregorianCalendar();		    
+		    Date afterdate1 = formatter.parse(fromDate);
+		    Date beforedate1=formatter.parse(endDate);
+		    
+		    System.out.println("afterdate1afterdate1afterdate1afterdate1"+afterdate1);
+		    System.out.println("beforedate1beforedate1beforedate1"+beforedate1);
+		    
+		    
+		    calender.setTime(afterdate1);		    
+		    createdAfterDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(calender);
+		    calender1.setTime(beforedate1);		
+		    createBeforeDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(calender1); 	    
+		    
+		   // calender1.toGregorianCalendar().getTime();
+		    
+		    System.out.println("createdAfterDatecreatedAfterDate"+createdAfterDate);
+		    System.out.println("createBeforeDatecreateBeforeDate"+createBeforeDate);
+		    
+		    String[] parts = reqstatus.split(",");
+		    List<String> orderStatus = new ArrayList<String>();
+		    
+		    for(int i=0; i<parts.length-1; i++){
+		    	orderStatus.add(parts[i]);
+		    }  
+		   // System.out.println("ORDER STATUS"+orderStatus);
+		    
+			List<PartnerSellerAuthInfo> partnerSellerAuthInfoList = ordMgmtService.getSellersFromPartnerSellerAuthoInfo();		
+			for (PartnerSellerAuthInfo PartnerSellerAuthInfo : partnerSellerAuthInfoList) {						
+		 		PartnerSellerAuthInfo authInfo = ordMgmtService.getAuthInfoBeanObj(PartnerSellerAuthInfo);		 		
+		 		int sellerId = Integer.parseInt(authInfo.getSellerid());			 		
+				com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult listOrderResult = ordMgmtService.getListOrders(createdAfterDate, createBeforeDate, orderStatus, authInfo);
+				System.out.println("The Size "+listOrderResult.getOrders().size());
+				List<com.amazonservices.mws.orders._2013_09_01.model.Order> orders = listOrderResult.getOrders();
+				for (com.amazonservices.mws.orders._2013_09_01.model.Order order : orders) {
+					com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult itemResults = ordMgmtService.getListOrderItems(authInfo, order.getAmazonOrderId());
+					List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems = itemResults.getOrderItems();		
+					
+					System.out.println("orders"+orders.size());
+					System.out.println("orderItems"+orderItems.size());
+					ordMgmtService.saveOrderInfo(order, orderItems,sellerId);
+				}
+			}
+		//}
+		
+	} catch (Exception expObj) {
+		expObj.printStackTrace();
+	}
+		
+		
+		
+		
+	}
+
+
 	
 	
 	
@@ -297,9 +370,11 @@ public void invokeListOrdersAndOrderItemsFromProperty() throws Exception {
 				
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");				
 				AmazonOrderInfo amazonOrderInfo= amazonOrderInfoList.get(rowIndex);				
-				Set<AmazonOrderItemInfo> amazonOrderItemInfoset= amazonOrderInfo.getAmazonOrderItemInfo();
+				//Set<AmazonOrderItemInfo> amazonOrderItemInfoset= amazonOrderInfo.getAmazonOrderItemInfo();
 				
-				Set<ShippingAddress> ShippingAddressinfoset= amazonOrderInfo.getShippingAddressinfo();
+				List<AmazonOrderItemInfo> amazonOrderItemInfoset= amazonOrderInfo.getAmazonOrderItemInfo();
+				
+				List<ShippingAddress> ShippingAddressinfoset= amazonOrderInfo.getShippingAddressinfo();
 				
 				
 				Iterator<ShippingAddress> itr1 = ShippingAddressinfoset.iterator();

@@ -214,7 +214,7 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 			String value) throws Exception {
 		// TODO Auto-generated method stub
 
-		return amazonOrdMgmtDao.getOrderList(value);
+		return amazonOrdMgmtDao.getOrderListbyStatus(value);
 		// return null;
 	}
 	

@@ -78,6 +78,31 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 		return amazonOrderInfos;
 	}
 	
+	
+	@Override
+	public List<AmazonOrderInfo> getOrderListbyStatus(String value) throws Exception {
+		LOGGER.info("Start: getOrderList");
+		Session session = null;
+		List<AmazonOrderInfo> amazonOrderInfos = new ArrayList<AmazonOrderInfo>();
+		final String QRY = "from AmazonOrderInfo where ORDERSTATUS in('Unfulfillable','PartiallyShipped','Unshipped','Pending','Canceled','Shipped','PendingAvailability')";
+		try {
+
+			session = sessionFactory.openSession();
+			amazonOrderInfos = session.createQuery(QRY).list();		
+			LOGGER.info("Response: " + amazonOrderInfos.size());
+			LOGGER.info("Response:" + session.createQuery(QRY).list().size());
+
+		} catch (Exception expObj) {
+			expObj.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		LOGGER.info("End: getOrderList");
+		return amazonOrderInfos;
+	}
+	
 	@Override
 	public List<Seller> getSeller() throws Exception {
 		Session session = null;
@@ -153,7 +178,8 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 			seller.getOrderInfos().add(orderInfo);
 			orderInfo.setSeller(seller);		
 			session.saveOrUpdate(seller);
-			//session.save(orderInfo);				
+			//session.save(orderInfo);	
+			session.getTransaction().commit();
 		} catch (Exception expObj) {
 			expObj.printStackTrace();
 		} finally {

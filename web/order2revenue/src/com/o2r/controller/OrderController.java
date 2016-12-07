@@ -1404,7 +1404,7 @@ public class OrderController {
 			 
 			//amazonOrderMgmt.invokeListOrdersAndOrderItems();
 			
-			amazonOrderMgmt.invokeListOrdersAndOrderItemsFromProperty();
+			//amazonOrderMgmt.invokeListOrdersAndOrderItemsFromProperty();
 			
 			
 			List<AmazonOrderInfo> listamazaon= new ArrayList<AmazonOrderInfo>();
@@ -1421,7 +1421,7 @@ public class OrderController {
 	         log.info("$$$ getXLS Ends : OrderController $$$");
 		
 	     //return new ModelAndView("initialsetup/viewSellerAuthoInfoDtls", model);
-	     return new ModelAndView("dailyactivities/listAmazonwsOrderInfo", model);
+	     return new ModelAndView("dailyactivities/listAdminAmazonwsOrderInfo", model);
 	}
 	
 	
@@ -1429,6 +1429,44 @@ public class OrderController {
 	
 	@RequestMapping(value = "/seller/moveStatusAmazonOrderInfo", method = RequestMethod.POST)	
 	public ModelAndView moveStatusAmazonOrderInfo(HttpServletRequest request,
+			@ModelAttribute("command") PartnerSellerAuthInfo partnerSellerAuthInfo, BindingResult result) {
+		
+		log.info("$$$ poOrderListDailyAct Starts : OrderController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		
+		
+		
+		
+		String fromDate = request.getParameter("single");
+		String endDate = request.getParameter("second");	
+		//String status = request.getParameter("");
+		
+	System.out.println("From Date"+fromDate);
+	System.out.println("endDate"+endDate);
+		try {
+			
+			String status ="Unfulfillable,PartiallyShipped,Unshipped,Pending,Canceled,Shipped,PendingAvailability";
+			amazonOrderMgmt.invokeListOrdersAndOrderItemsByValues(fromDate,endDate,status);
+			
+			//String value ="Unfulfillable,PartiallyShipped,Unshipped,Pending,Canceled,Shipped,PendingAvailability";
+			List<AmazonOrderInfo> listamazaon = new ArrayList<AmazonOrderInfo>();
+			listamazaon = mwsAmazonOrdMgmtService.getAmazonOrderInfoList(status);
+
+			amazonOrderMgmt.saveAmzonOrderContents(listamazaon);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		//return new ModelAndView("redirect:/seller/orderList.html");	
+		return new ModelAndView("dailyactivities/listAmazonwsOrderInfo", model);
+	}
+	
+	
+	
+	@RequestMapping(value = "/seller/moveStatusAmazonOrderInfo11", method = RequestMethod.POST)	
+	public ModelAndView moveStatusAmazonOrderInfo11(HttpServletRequest request,
 			@ModelAttribute("command") PartnerSellerAuthInfo partnerSellerAuthInfo, BindingResult result) {
 		
 		log.info("$$$ poOrderListDailyAct Starts : OrderController $$$");
@@ -1454,13 +1492,9 @@ public class OrderController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		// return new ModelAndView("dailyactivities/listAmazonwsOrderInfo",
-		// model);
-		// return new
-		// ModelAndView("redirect:/dailyactivities/viewSellerAuthoInfoDtls.html");
-		// return new ModelAndView("dailyactivities/poOrderList", model);
-		return new ModelAndView("redirect:/seller/orderList.html");		
+		
+		//return new ModelAndView("redirect:/seller/orderList.html");		
+		 return new ModelAndView("dailyactivities/listAmazonwsOrderInfo", model);
 	}
 	
 	public XMLGregorianCalendar getCreatedAfter() throws Exception {
