@@ -132,6 +132,7 @@
 						<li ><a href="sellerList.html">Seller List</a></li>
 						<li><a href="uploadmappings.html">Channel Upload Mappings</a></li>
 						<li><a href="reverseOrderList.html">Reverse Order</a></li>
+						<li><a href="orderAPI_Admin.html">Fetch Order</a></li>
 					</ul>
 				</li>
 			</c:if>	
