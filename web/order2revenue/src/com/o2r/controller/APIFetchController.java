@@ -43,6 +43,10 @@ public class APIFetchController {
 	public ModelAndView orderAPIPage() {				
 		return new ModelAndView("admin/apiOrdersList");		
 	}
+	@RequestMapping(value = "/seller/orderAPI_Seller", method = RequestMethod.GET)
+	public ModelAndView orderAPIPageSeller() {				
+		return new ModelAndView("dailyactivities/apiOrdersList");		
+	}
 	
 	@RequestMapping(value = "/seller/listAPIOrders_Admin", method = RequestMethod.GET)
 	public ModelAndView OrderAPIListForAdmin(HttpServletRequest request) {
@@ -114,19 +118,33 @@ public class APIFetchController {
 				
 	}*/	
 	
-	@RequestMapping(value = "/seller/listShopsluesOrders_Seller", method = RequestMethod.GET)
-	public ModelAndView listShopcluesOrderList(HttpServletRequest request) {
-		int sellerId = 0;
-		/*Map<Integer, SnapdealOrderAPI> snapdealOrderMap = new HashMap<Integer, SnapdealOrderAPI>();*/
+	@RequestMapping(value = "/seller/listAPIOrders_Seller", method = RequestMethod.GET)
+	public ModelAndView APIOrderListForSeller(HttpServletRequest request) {
+		int sellerId = 0;			
+		Map<Integer, ShopcluesOrderAPI> shopcluesOrderMap = new HashMap<Integer, ShopcluesOrderAPI>();
 		Map<String, Object> model = new HashMap<String, Object>();
+		
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-			/*model.put("Orders", snapdealOrderMap);*/
+			String partner = request.getParameter("selectPartner");				
+			switch (partner) {
+			case "Shopclues":							
+				shopcluesOrderMap = apiService.listShopcluesOrderAPI(sellerId);
+				request.getSession().setAttribute("OrderMap", shopcluesOrderMap);
+				model.put("Orders", shopcluesOrderMap);
+				break;
+			case "Amazon":
+				
+				break;
+			default:
+				break;
+			}			
+			model.put("partner", partner);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed By Seller : "+sellerId, e);
 		}		
-		return new ModelAndView("miscellaneous/shopcluesOrderAPIList", model);		
+		return new ModelAndView("dailyactivities/apiOrdersList", model);			
 	}
 	
 	/*@RequestMapping(value = "", method = RequestMethod.POST)
@@ -134,7 +152,7 @@ public class APIFetchController {
 		return null;		
 	}*/
 	
-	@RequestMapping(value = "/seller/saveShopcluesOrderAPIToO2r", method = RequestMethod.POST)
+	@RequestMapping(value = "/seller/saveShopcluesOrderAPIToO2r", method = RequestMethod.GET)
 	public ModelAndView saveShopcluesOrderAPIToO2r(HttpServletRequest request) {
 		int sellerId = 0;
 		Map<Integer, ShopcluesOrderAPI> snapdealOrderMap = new HashMap<Integer, ShopcluesOrderAPI>();
@@ -143,13 +161,13 @@ public class APIFetchController {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			if(!orderIds.equals("")){
 				snapdealOrderMap = (Map<Integer, ShopcluesOrderAPI>) request.getSession().getAttribute("OrderMap");
-				
+				saveApiContents.saveShopcluesOrderAPIBeanToO2R(sellerId, orderIds, snapdealOrderMap);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed By Seller : "+sellerId, e);
 		}		
-		return new ModelAndView("miscellaneous/shopcluesOrderAPIList");		
+		return new ModelAndView("redirect:/seller/dashboard.html");		
 	}
 	
 	public List<String> fetchOrders(String token, Date from, Date to){

@@ -62,7 +62,9 @@ public class APIDaoImpl implements APIDao{
 								.add(Projections.property("shopcluesUniqueId")));
 				uniqueIds = criteria.list();				
 				for(ShopcluesOrderAPI order : orderList){
-					if(uniqueIds == null || !uniqueIds.contains(order.getShopcluesUniqueId())){
+					if(order.getShopcluesOrderId() != 0){
+						session.merge(order);
+					} else if(uniqueIds == null || !uniqueIds.contains(order.getShopcluesUniqueId())){
 						session.saveOrUpdate(order);
 					}
 				}

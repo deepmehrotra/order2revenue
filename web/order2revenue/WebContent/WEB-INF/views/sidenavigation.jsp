@@ -102,6 +102,7 @@
 					<li><a href="gatepasslist.html">Gate-Passes</a></li>
 					<li><a href="paymentUploadList.html">Payment</a></li>
 					<li><a href="expenselist.html">Expenses</a></li>
+					<li><a href="orderAPI_Seller.html">API Order List</a></li>
 
 				</ul></li>
 			<li><a href="getAllReports.html"><i

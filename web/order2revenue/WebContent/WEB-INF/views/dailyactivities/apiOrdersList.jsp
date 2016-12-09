@@ -25,16 +25,16 @@
 					<div class="col-lg-12">
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
-								<form action="listAPIOrders_Admin.html" method="get">
-									<div class="col-sm-3">
+								<form action="listAPIOrders_Seller.html" method="get">
+									<%-- <div class="col-sm-3">
 										<fmt:formatDate value="${startDate}" var="startDate" type="date" pattern="MM/dd/yyyy" />
 										<input type="text" id="startDateList" name="startDateList" value="${startDate}" placeholder="From" class="btn btn-primary btn-xs"
 											style="background: dimgray; width: 48%; float: left; margin-right: 5px;" />
 										<fmt:formatDate value="${endDate}" var="endDate" type="date" pattern="MM/dd/yyyy" />
 										<input type="text" id="endDateList" name="endDateList" value="${endDate}" placeholder="To" class="btn btn-primary btn-xs"
 											style="background: dimgray; width: 48%; float: left;" />
-									</div>
-									<div class="col-sm-3" style="text-align: right;">
+									</div> --%>
+									<div class="col-sm-3" style="text-align: left;">
 										<select class="btn btn-primary btn-xs" id="selectPartner" name="selectPartner" style="width: 70%; color: #676a6c !important;">
 											<option value="Shopclues" id="Shopclues">Shopclues</option>
 											<option value="Amazon" id="Amazon">Amazon</option>											
@@ -145,32 +145,7 @@
 			}
 		}); */
         
-        $("#endDateList").change(
-				function() {
-					var startDate = document
-							.getElementById("startDateList").value;
-					var endDate = document
-							.getElementById("endDateList").value;
-
-					if ((Date.parse(startDate) > Date
-							.parse(endDate))) {
-						alert("End Date Should Be Greater Than Start Date !");
-						document.getElementById("endDateList").value = "";
-					}
-				});
-        $("#startDateList").change(
-				function() {
-					var startDate = document
-							.getElementById("startDateList").value;
-					var endDate = document
-							.getElementById("endDateList").value;
-
-					if ((Date.parse(startDate) > Date
-							.parse(endDate))) {
-						alert("Start Date Should Be Smaller Than End Date !");
-						document.getElementById("startDateList").value = "";
-					}
-				});
+       
         
         var selectedValue = "${searchStatus}";
         if(selectedValue != ""){
@@ -186,21 +161,6 @@
             $('.search-more-wrp').slideToggle();
         });
         
-        $(function() {
-            $("#startDateList").datepicker({
-              dateFormat: 'mm-dd-yy'
-            });
-            $("#endDateList").datepicker({
-              dateFormat: 'dd-mm-yy'
-            });
-          });
-        /* $('.input-group.date5').datepicker({
-            todayBtn: "linked",
-            keyboardNavigation: false,
-            forceParse: false,
-            calendarWeeks: true,
-            autoclose: true
-        }); */
         
         $('#LoadMoreOrder').click(function (e) {
             e.preventDefault();
