@@ -18,4 +18,6 @@ public interface MwsAmazonOrdMgmtDao {
 	
 	public void saveAmazonOrderInfo(AmazonOrderInfo orderInfo) throws Exception;
 	
+	public void saveAmazonOrderInfo(AmazonOrderInfo orderInfo, int sellerId) throws Exception;
+	
 }

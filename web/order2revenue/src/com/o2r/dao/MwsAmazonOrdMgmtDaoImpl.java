@@ -164,4 +164,35 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 		}
 	}
 	
+	
+	
+	@Override
+	public void saveAmazonOrderInfo(AmazonOrderInfo orderInfo, int sellerId) throws Exception {
+
+
+    	Session session = null;
+		Seller seller = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			System.out.println("sellerId100"+orderInfo.getSellerId());
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
+			seller = (Seller) criteria.list().get(0);
+			
+			orderInfo.setSeller(seller);			
+			Transaction transaction = session.beginTransaction();
+			session.save(orderInfo);
+			transaction.commit();
+		} catch (Exception expObj) {
+			expObj.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+	}
+	
+	
 }

@@ -160,6 +160,173 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 		return listOrdersResult;
 	}
 
+	
+	@Override
+	public void saveOrderInfo(
+			com.amazonservices.mws.orders._2013_09_01.model.Order order,
+			List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems, int sellerId)
+			throws Exception {
+		try {
+
+			AmazonOrderInfo amazonOrderInfo = new AmazonOrderInfo();
+
+			amazonOrderInfo.setAmazonorderid(order.getAmazonOrderId());
+			amazonOrderInfo.setSellerorderid(order.getSellerOrderId());
+			amazonOrderInfo.setPurchasedate(toDate(order.getPurchaseDate()));
+			amazonOrderInfo
+					.setLastupdatedate(toDate(order.getLastUpdateDate()));
+			amazonOrderInfo.setOrderstatus(order.getOrderStatus());
+			amazonOrderInfo
+					.setFulfillmentchannel(order.getFulfillmentChannel());
+			amazonOrderInfo.setSaleschannel(order.getSalesChannel());
+			amazonOrderInfo.setOrderchannel(order.getOrderChannel());
+			amazonOrderInfo.setShipservicelevel(order.getShipServiceLevel());
+			//amazonOrderInfo.setOrdertotalcurrencycode(order.getOrderTotal().getCurrencyCode());
+			//amazonOrderInfo.setOrdertotalamount(order.getOrderTotal().getAmount());
+			amazonOrderInfo.setNumberofitemsshipped(order
+					.getNumberOfItemsShipped());
+			amazonOrderInfo.setNumberofitemsunshipped(order
+					.getNumberOfItemsUnshipped());
+
+			// amazonOrderInfo.setPaymentexecutiondetailcurrencycode(order.getPaymentExecutionDetail().get(0).getPayment().getCurrencyCode());
+			// amazonOrderInfo.setPaymentexecutiondetailamount(order.getPaymentExecutionDetail().get(0).getPayment().getAmount());
+			// amazonOrderInfo.setPaymentexecutiondetailpaymentmethod(order.getPaymentExecutionDetail().get(0).getPaymentMethod());
+			amazonOrderInfo.setPaymentmethod(order.getPaymentMethod());
+			amazonOrderInfo.setMarketplaceid(order.getMarketplaceId());
+			amazonOrderInfo.setBuyeremail(order.getBuyerEmail());
+			amazonOrderInfo.setBuyername(order.getBuyerName());
+			amazonOrderInfo.setShipmentservicelevelcategory(order
+					.getShipmentServiceLevelCategory());
+		//	amazonOrderInfo.setShippedbyamazontfm(order.getShippedByAmazonTFM().toString());
+			amazonOrderInfo.setTfmshipmentstatus(order.getTFMShipmentStatus());
+			amazonOrderInfo.setCbadisplayableshippinglabel(order
+					.getCbaDisplayableShippingLabel());
+			amazonOrderInfo.setOrdertype(order.getOrderType());
+			amazonOrderInfo.setEarliestshipdate(toDate(order
+					.getEarliestShipDate()));
+			amazonOrderInfo
+					.setLatestshipdate(toDate(order.getLatestShipDate()));
+			amazonOrderInfo.setEarliestdeliverydate(toDate(order
+					.getEarliestDeliveryDate()));
+			amazonOrderInfo.setLatestdeliverydate(toDate(order
+					.getLatestDeliveryDate()));
+			if (order.getIsBusinessOrder() != null)
+				amazonOrderInfo.setIsbusinessorder(order.getIsBusinessOrder()
+						.toString());
+			amazonOrderInfo.setPurchaseordernumber(order
+					.getPurchaseOrderNumber());
+			amazonOrderInfo.setIsprime(order.getIsPrime().toString());
+			amazonOrderInfo.setIspremiumorder(order.getIsPremiumOrder()
+					.toString());
+
+			//amazonOrderInfo.setSellerId(sellerId);
+			//amazonOrderInfo.setSellerId(Integer.parseInt(order.getSellerOrderId()));
+			// amazonOrderInfo.setRequestid(order);
+
+			List<AmazonOrderItemInfo> amazonOrderItemInfos = new ArrayList<AmazonOrderItemInfo>();
+			for (OrderItem orderItem : orderItems) {
+				AmazonOrderItemInfo amazonOrderItemInfo = new AmazonOrderItemInfo();
+				//amazonOrderItemInfo.setOrderId(amazonOrderInfo.getOrderId());
+				amazonOrderItemInfo.setSellersku(orderItem.getSellerSKU());
+				amazonOrderItemInfo.setOrderitemid(orderItem.getOrderItemId());
+				amazonOrderItemInfo.setTitle(orderItem.getTitle());
+				amazonOrderItemInfo.setQuantityordered(String.valueOf(orderItem
+						.getQuantityOrdered()));
+				amazonOrderItemInfo.setQuantityshipped(String.valueOf(orderItem
+						.getQuantityShipped()));
+				//if(String.valueOf(orderItem.getPointsGranted().getPointsNumber())!=null)
+				//amazonOrderItemInfo.setPointsgrantedpointsnumber(String.valueOf(orderItem.getPointsGranted().getPointsNumber()));
+				//if(orderItem.getPointsGranted().getPointsMonetaryValue().getCurrencyCode()!=null)
+				//amazonOrderItemInfo.setPointsgrantedcurrencycode(orderItem.getPointsGranted().getPointsMonetaryValue().getCurrencyCode());
+				//if(orderItem.getPointsGranted().getPointsMonetaryValue().getAmount()!=null)
+				//amazonOrderItemInfo.setPointsgrantedamount(orderItem.getPointsGranted().getPointsMonetaryValue().getAmount());
+				//if(orderItem.getItemPrice().getCurrencyCode()!=null)
+				//amazonOrderItemInfo.setItempricecurrencycode(orderItem.getItemPrice().getCurrencyCode());
+				//if(orderItem.getItemPrice().getAmount()!=null)
+				//amazonOrderItemInfo.setItempriceamount(orderItem.getItemPrice().getAmount());
+				//if(orderItem.getShippingPrice().getCurrencyCode()!=null)
+				//amazonOrderItemInfo.setShippingpricecurrencycode(orderItem.getShippingPrice().getCurrencyCode());
+				amazonOrderItemInfo.setShippingpriceamount(orderItem
+						.getShippingPrice().getAmount());
+				amazonOrderItemInfo.setGiftwrappricecurrencycode(orderItem
+						.getGiftWrapPrice().getCurrencyCode());
+				amazonOrderItemInfo.setGiftwrappriceamount(orderItem
+						.getGiftWrapPrice().getAmount());
+				amazonOrderItemInfo.setItemtaxcurrencycode(orderItem
+						.getItemTax().getCurrencyCode());
+				amazonOrderItemInfo.setItemtaxamount(orderItem.getItemTax()
+						.getAmount());
+				amazonOrderItemInfo.setShippingtaxcurrencycode(orderItem
+						.getShippingTax().getCurrencyCode());
+				amazonOrderItemInfo.setShippingtaxamount(orderItem
+						.getShippingTax().getAmount());
+				amazonOrderItemInfo.setGiftwraptaxcurrencycode(orderItem
+						.getGiftWrapTax().getCurrencyCode());
+				amazonOrderItemInfo.setGiftwraptaxamount(orderItem
+						.getGiftWrapTax().getAmount());
+				amazonOrderItemInfo.setShippingdiscountcurrencycode(orderItem
+						.getShippingDiscount().getCurrencyCode());
+				amazonOrderItemInfo.setShippingdiscountamount(orderItem
+						.getShippingDiscount().getAmount());
+				amazonOrderItemInfo.setPromotiondiscountcurrencycode(orderItem
+						.getPromotionDiscount().getCurrencyCode());
+				amazonOrderItemInfo.setPromotiondiscountamount(orderItem
+						.getPromotionDiscount().getAmount());
+				amazonOrderItemInfo.setPromotionids(orderItem.getPromotionIds()
+						.toString());
+				////if(orderItem.getCODFee().getCurrencyCode()!=null)
+				//amazonOrderItemInfo.setCodfeecurrencycode(orderItem.getCODFee().getCurrencyCode());
+				//if(orderItem.getCODFee().getAmount()!=null)
+				//amazonOrderItemInfo.setCodfeeamount(orderItem.getCODFee().getAmount());
+				//if(orderItem.getCODFeeDiscount().getCurrencyCode()!=null)
+				//amazonOrderItemInfo.setCodfeediscountcurrencycode(orderItem.getCODFeeDiscount().getCurrencyCode());
+				//if(orderItem.getCODFeeDiscount().getAmount()!=null)
+				//amazonOrderItemInfo.setCodfeediscountamount(orderItem.getCODFeeDiscount().getAmount());
+				amazonOrderItemInfo.setGiftmessagetext(orderItem
+						.getGiftMessageText());
+				amazonOrderItemInfo.setGiftwraplevel(orderItem
+						.getGiftWrapLevel());
+				
+				//if(orderItem.getInvoiceData().getInvoiceRequirement()!=null)
+				//amazonOrderItemInfo.setInvoicedatainvoicerequirement(orderItem.getInvoiceData().getInvoiceRequirement());
+				//if(orderItem.getInvoiceData().getBuyerSelectedInvoiceCategory()!=null)
+				//amazonOrderItemInfo.setInvoicedatabuyerselectedinvoicecategory(orderItem.getInvoiceData().getBuyerSelectedInvoiceCategory());
+				//if(orderItem.getInvoiceData().getInvoiceTitle()!=null)
+				//amazonOrderItemInfo.setInvoicedatainvoicetitle(orderItem.getInvoiceData().getInvoiceTitle());
+			   // if(orderItem.getInvoiceData().getInvoiceInformation()!=null)
+				//amazonOrderItemInfo.setInvoicedatainvoiceinformation(orderItem.getInvoiceData().getInvoiceInformation());
+				amazonOrderItemInfo.setConditionnote(orderItem
+						.getConditionNote());
+				amazonOrderItemInfo.setConditionid(orderItem.getConditionId());
+				amazonOrderItemInfo.setConditionsubtypeid(orderItem
+						.getConditionSubtypeId());
+				amazonOrderItemInfo.setScheduleddeliverystartdate(orderItem
+						.getScheduledDeliveryStartDate());
+				amazonOrderItemInfo.setScheduleddeliveryenddate(orderItem
+						.getScheduledDeliveryEndDate());
+				amazonOrderItemInfo.setPricedesignation(orderItem
+						.getPriceDesignation());
+				// amazonOrderItemInfo.setBuyercustomizedurl(orderItem.getBuyerCustomizedInfo().getCustomizedURL());
+				amazonOrderItemInfos.add(amazonOrderItemInfo);
+				amazonOrderInfo.getAmazonOrderItemInfo().add(amazonOrderItemInfo);
+			}
+
+			//amazonOrderInfo.setAmazonOrderItemInfo(new Has<AmazonOrderItemInfo>(amazonOrderItemInfos));
+			//amazonOrderInfo.setAmazonOrderItemInfo(new HashSet<AmazonOrderItemInfo>(amazonOrderItemInfos));
+			//amazonOrderInfo.set
+			
+			
+			System.out.println("amazonOrderInfo100"+amazonOrderInfo);
+			System.out.println("order item size : "+amazonOrderItemInfos.size() );
+			if (amazonOrderInfo != null){
+				amazonOrdMgmtDao.saveAmazonOrderInfo(amazonOrderInfo,sellerId);				
+			}
+		} catch (Exception expObj) {
+			expObj.printStackTrace();
+		}
+	}
+
+	
 	@Override
 	public com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult getListOrderItems(PartnerSellerAuthInfo authInfo, String amazonOrderId) throws Exception {
 		com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult listOrderItemsResult = null;
