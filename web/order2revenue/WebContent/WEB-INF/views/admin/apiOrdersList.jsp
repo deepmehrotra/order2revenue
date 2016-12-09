@@ -172,20 +172,6 @@
 					}
 				});
         
-        $('#searchOrders').change(function () {     
-   	     
-	        var thisValue = $(this).children(":selected").attr("id");
-	       	
-	         if(thisValue == 1 || thisValue == 2 || thisValue == 3 || thisValue == 4 ||thisValue == 5 ||thisValue == 6 ){
-	        	$('.TopSearch-box001').show();
-	        	$('.TopSearch-box002').hide();
-	        }
-	        else{
-	        	 $('.TopSearch-box001').hide();
-	        	 $('.TopSearch-box002').show();
-	        } 
-	    });
-        
         var selectedValue = "${searchStatus}";
         if(selectedValue != ""){
         	$('#orderCriteria').val(selectedValue);
