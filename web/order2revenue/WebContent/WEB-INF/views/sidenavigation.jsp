@@ -120,7 +120,7 @@
 					<li><a href="customerList.html">Customers</a></li>					
 					<li><a href="listTaxablePurchases.html">TaxablePurchases</a></li>
 					<li><a href="customerList.html">Customers</a></li>
-					<li><a href="viewSellerAuthoInfoDtls.html">ParnerSellerAuthoInfo</a></li>
+					<li><a href="moveStatusAmazonOrderInfo.html">ParnerSellerAuthoInfo</a></li>
 									
 
 				</ul></li>

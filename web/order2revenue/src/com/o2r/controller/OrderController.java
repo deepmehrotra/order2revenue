@@ -1429,11 +1429,58 @@ public class OrderController {
 			@ModelAttribute("command") PartnerSellerAuthInfo partnerSellerAuthInfo, BindingResult result) {
 		
 		log.info("$$$ poOrderListDailyAct Starts : OrderController $$$");
+		Map<String, Object> model = new HashMap<String, Object>();	
+		
+		String fromDate = request.getParameter("startDate");
+		String endDate = request.getParameter("startDate");	
+		
+		
+		//String[] statusArray;
+		///statusArray= request.getParameterValues("reportGroup");
+		//		System.out.println("reportheaders1"+statusArray);
+		
+		
+		
+		try {
+			
+			//String value = "'" + statusArray[0] + "'";
+		//	if (statusArray != null)
+		//		for (int i = 1; i < statusArray.length; i++) {
+		//			value = value + "," + "'" + statusArray[i] + "'";
+		//		}	
+			
+			String status ="Unfulfillable,PartiallyShipped,Unshipped,Pending,Canceled,Shipped,PendingAvailability";
+			amazonOrderMgmt.invokeListOrdersAndOrderItemsByValues(fromDate,endDate,status);			
+			
+			//List<AmazonOrderInfo> listamazaon = new ArrayList<AmazonOrderInfo>();
+			//listamazaon = mwsAmazonOrdMgmtService.getAmazonOrderInfoList(status);
+
+			//amazonOrderMgmt.saveAmzonOrderContents(listamazaon);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return new ModelAndView("redirect:/seller/orderList.html");	
+		//return new ModelAndView("dailyactivities/listAmazonwsOrderInfo", model);
+		//return new ModelAndView("redirect:/seller/moveStatusAmazonOrderInfo.html");
+	}
+	
+	
+	
+	@RequestMapping(value = "/seller/updateAmazonOrderInfo", method = RequestMethod.POST)	
+	public ModelAndView moveStatusAmazonOrderInfo11(HttpServletRequest request,
+			@ModelAttribute("command") PartnerSellerAuthInfo partnerSellerAuthInfo, BindingResult result) {
+		
+		log.info("$$$ poOrderListDailyAct Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		String[] reportheaders;
-		reportheaders = request.getParameterValues("Jagadeesha");
+		reportheaders = request.getParameterValues("selectedOrderIds");
 
+		
+				
+		
 		if (reportheaders != null)
 			System.out.println("reportheaders length" + reportheaders.length);
 
@@ -1441,7 +1488,8 @@ public class OrderController {
 		if (reportheaders != null)
 			for (int i = 1; i < reportheaders.length; i++) {
 				value = value + "," + "'" + reportheaders[i] + "'";
-			}
+			}	
+	
 		try {
 			List<AmazonOrderInfo> listamazaon = new ArrayList<AmazonOrderInfo>();
 			listamazaon = mwsAmazonOrdMgmtService.getAmazonOrderInfoList(value);
@@ -1450,14 +1498,9 @@ public class OrderController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-
-		// return new ModelAndView("dailyactivities/listAmazonwsOrderInfo",
-		// model);
-		// return new
-		// ModelAndView("redirect:/dailyactivities/viewSellerAuthoInfoDtls.html");
-		// return new ModelAndView("dailyactivities/poOrderList", model);
-		return new ModelAndView("redirect:/seller/orderList.html");		
+		}	
+			
+		 return new ModelAndView("dailyactivities/listAmazonwsOrderInfo", model);
 	}
 	
 	public XMLGregorianCalendar getCreatedAfter() throws Exception {

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,6 +13,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,80 +96,136 @@ public class AmazonOrderMgmt {
 		}
 	}
 
-	public void saveAmzonOrderContents(List<AmazonOrderInfo> amazonOrderInfoList) throws IOException {
-		log.info("$$$ saveAmzonOrderContents starts : SaveMappedFiles $$$");
-		ChannelUploadMapping chanupload = null;
-		Map<String, String> columHeaderMap = new LinkedHashMap<String, String>();
-		Map<String, Integer> cellIndexMap = new LinkedHashMap<String, Integer>();
-		StringBuffer errorMessage = new StringBuffer();
-		CustomerBean customerBean = null;
-		Partner partner = null;
-		Events event = null;
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		List<Order> saveList = new ArrayList<Order>();
-		Map<String, String> idsList = new HashMap<String, String>();
-		Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
-		OrderBean order = null;
-		int noOfEntries = 1;
-		OrderTaxBean otb = null;
-		int sellerId = 0;
-		boolean validaterow = true;
-		Set<String> errorSet = new HashSet<String>();
-		Map<String, String> duplicateKey = new HashMap<String, String>();
-		String uploadFileName = "";
-		AmazonOrderItemInfo amazonOrderItemInfo = null;
-		ShippingAddress shippingAddressInfo = null;
+	
 
-		try {
 
-			// chanupload =
-			// uploadMappingService.getChannelUploadMapping("Amazon","order");
 
-			log.info("columHeaderMap for Amazon Order : " + columHeaderMap);
 
-			for (int cellIndex = 0; cellIndex < amazonOrderInfoList.size(); cellIndex++) {
+	public void invokeListOrdersAndOrderItemsByValues(String fromDate, String endDate, String reqstatus) throws Exception {		
+		
+		
+			try {			
+				SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");			
+				XMLGregorianCalendar createdAfterDate=null;
+				XMLGregorianCalendar createBeforeDate=null;
+			    GregorianCalendar calender = new GregorianCalendar();	   
+			    Date afterdate1 = formatter.parse(fromDate);
+			    Date beforedate1=formatter.parse(endDate); 		   	    
+			    
+			    calender.setTime(afterdate1);		    
+			    createdAfterDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(calender);
+			    calender.setTime(beforedate1);		
+			    createBeforeDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(calender); 		 
+			    
+			    String[] parts = reqstatus.split(",");
+			    List<String> orderStatus = new ArrayList<String>();
+			    
+			    for(int i=0; i<parts.length-1; i++){
+			    	orderStatus.add(parts[i]);
+			    }   
+			    
+				List<PartnerSellerAuthInfo> partnerSellerAuthInfoList = ordMgmtService.getSellersFromPartnerSellerAuthoInfo();		
+				for (PartnerSellerAuthInfo PartnerSellerAuthInfo : partnerSellerAuthInfoList) {						
+			 		PartnerSellerAuthInfo authInfo = ordMgmtService.getAuthInfoBeanObj(PartnerSellerAuthInfo);		 		
+			 		int sellerId = Integer.parseInt(authInfo.getSellerid());			 		
+					com.amazonservices.mws.orders._2013_09_01.model.ListOrdersResult listOrderResult = ordMgmtService.getListOrders(createdAfterDate, createBeforeDate, orderStatus, authInfo);
+					System.out.println("The Size "+listOrderResult.getOrders().size());
+					List<com.amazonservices.mws.orders._2013_09_01.model.Order> orders = listOrderResult.getOrders();
+					for (com.amazonservices.mws.orders._2013_09_01.model.Order order : orders) {
+						com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult itemResults = ordMgmtService.getListOrderItems(authInfo, order.getAmazonOrderId());
+						List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems = itemResults.getOrderItems();					
+						ordMgmtService.saveOrderInfo(order, orderItems,sellerId);
+					}
+				}		
+			
+		} catch (Exception expObj) {
+			expObj.printStackTrace();
+		}
+			
+			
+			
+			
+		}
 
-				AmazonOrderInfo amazonOrderInfo = amazonOrderInfoList
-						.get(cellIndex);
-				sellerId = 65;
-				if (amazonOrderInfo != null) {
 
-					cellIndexMap.put(amazonOrderInfo.getAmazonorderid(),
-							cellIndex);
+		
+		
+		
+		public void  saveAmzonOrderContents(List<AmazonOrderInfo> amazonOrderInfoList) throws IOException {
+			log.info("$$$ saveAmzonOrderContents starts : SaveMappedFiles $$$");
+
+			ChannelUploadMapping chanupload = null;
+			Map<String, String> columHeaderMap = new LinkedHashMap<String, String>();
+			Map<String, Integer> cellIndexMap = new LinkedHashMap<String, Integer>();
+			StringBuffer errorMessage = new StringBuffer();
+			CustomerBean customerBean = null;
+			Partner partner = null;
+			Events event = null;
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			List<Order> saveList = new ArrayList<Order>();
+			Map<String, String> idsList = new HashMap<String, String>();
+			Map<String, OrderBean> returnOrderMap = new LinkedHashMap<>();
+			OrderBean order = null;
+			int noOfEntries = 1;
+			OrderTaxBean otb = null;
+			int sellerId=0;
+			boolean validaterow = true;
+			Set<String> errorSet = new HashSet<String>();
+			Map<String, String> duplicateKey = new HashMap<String, String>();
+			String uploadFileName = "";
+			AmazonOrderItemInfo amazonOrderItemInfo=null;
+			ShippingAddress shippingAddressInfo=null;
+			
+			try {
+				
+				//chanupload = uploadMappingService.getChannelUploadMapping("Amazon","order");
+				
+				log.info("columHeaderMap for Amazon Order : " + columHeaderMap);
+				
+				for (int cellIndex = 0; cellIndex < amazonOrderInfoList.size(); cellIndex++) {				
+					
+					AmazonOrderInfo amazonOrderInfo= amazonOrderInfoList.get(cellIndex); 							
+					sellerId=65;
+					if(amazonOrderInfo!=null){					
+								
+						cellIndexMap.put(amazonOrderInfo.getAmazonorderid(),
+								cellIndex);
+					}
 				}
-			}
-			log.info("cellIndexMap for Amazon Order : " + cellIndexMap);
-			// SKUList = productService.listProductSKU(sellerId);
-			idsList = orderService.listOrderIds("channelOrderID", sellerId);
-			log.info(noOfEntries);
-			log.debug("After getting no of rows" + noOfEntries);
-
-			for (int rowIndex = 0; rowIndex < amazonOrderInfoList.size(); rowIndex++) {
-
-				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
-				AmazonOrderInfo amazonOrderInfo = amazonOrderInfoList
-						.get(rowIndex);
-				Set<AmazonOrderItemInfo> amazonOrderItemInfoset = amazonOrderInfo
-						.getAmazonOrderItemInfo();
-
-				Set<ShippingAddress> ShippingAddressinfoset = amazonOrderInfo
-						.getShippingAddressinfo();
-
-				Iterator<ShippingAddress> itr1 = ShippingAddressinfoset
-						.iterator();
-				while (itr1.hasNext()) {
-
-					shippingAddressInfo = itr1.next();
-
-				}
-
-				Iterator<AmazonOrderItemInfo> itr = amazonOrderItemInfoset
-						.iterator();
-				while (itr.hasNext()) {
-
-					amazonOrderItemInfo = itr.next();
-
-					validaterow = true;
+				log.info("cellIndexMap for Amazon Order : " + cellIndexMap);
+				// SKUList = productService.listProductSKU(sellerId);
+				idsList = orderService.listOrderIds("channelOrderID", sellerId);
+				log.info(noOfEntries);
+				log.debug("After getting no of rows" + noOfEntries);
+							
+				for (int rowIndex = 0; rowIndex < amazonOrderInfoList.size(); rowIndex++) {
+					
+					errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");				
+					AmazonOrderInfo amazonOrderInfo= amazonOrderInfoList.get(rowIndex);				
+					//Set<AmazonOrderItemInfo> amazonOrderItemInfoset= amazonOrderInfo.getAmazonOrderItemInfo();
+					
+					List<AmazonOrderItemInfo> amazonOrderItemInfoset= amazonOrderInfo.getAmazonOrderItemInfo();
+					
+				//	List<ShippingAddress> ShippingAddressinfoset= amazonOrderInfo.getShippingAddressinfo();
+					
+					
+				//	Iterator<ShippingAddress> itr1 = ShippingAddressinfoset.iterator();
+			    //    while(itr1.hasNext())
+			     //   {
+			        	
+			      //  	shippingAddressInfo  =  itr1.next();
+			        	
+			    //    }
+					
+					 Iterator<AmazonOrderItemInfo> itr = amazonOrderItemInfoset.iterator();
+				        while(itr.hasNext())
+				        {
+				        	
+				        	amazonOrderItemInfo = itr.next();		
+				       
+				      
+				        	
+				    validaterow = true;
 					order = new OrderBean();
 					customerBean = new CustomerBean();
 					otb = new OrderTaxBean();
@@ -180,19 +240,15 @@ public class AmazonOrderMgmt {
 					try {
 
 						try {
-							// index =
-							// cellIndexMap.get(columHeaderMap.get("Sales Channel"));
+							//index = cellIndexMap.get(columHeaderMap.get("Sales Channel"));
 							if (amazonOrderInfo.getSaleschannel() != null) {
-
-								partner = partnerService.getPartner(
-										amazonOrderInfo.getSaleschannel(),
-										sellerId);
+								
+								partner = partnerService.getPartner(amazonOrderInfo.getSaleschannel(), sellerId);
 								if (partner != null)
 									order.setPcName(partner.getPcName());
 								else {
-
-									errorMessage
-											.append(" Partner do not exist;");
+									
+									errorMessage.append(" Partner do not exist;");
 									validaterow = false;
 								}
 							} else {
@@ -207,18 +263,14 @@ public class AmazonOrderMgmt {
 						}
 
 						try {
-							// int skuIndex =
-							// cellIndexMap.get(columHeaderMap.get("SkUCode"));
-							if (amazonOrderItemInfo.getSellersku() != null) {
-
+							//int skuIndex = cellIndexMap.get(columHeaderMap.get("SkUCode"));
+							if (amazonOrderItemInfo.getSellersku()!=null) {				
+							
 								if (partner != null) {
-
+									
 									productConfigs = productService
-											.getProductConfig(
-													amazonOrderItemInfo
-															.getSellersku(),
-													partner.getPcName(),
-													sellerId);
+											.getProductConfig(amazonOrderItemInfo.getSellersku(),
+													partner.getPcName(), sellerId);
 									if (productConfigs != null) {
 
 										if (productConfigs.size() == 1) {
@@ -229,8 +281,7 @@ public class AmazonOrderMgmt {
 											Set<String> parent = new HashSet<String>();
 											for (Object PCo : productConfigs) {
 												pc = (ProductConfig) PCo;
-												parent.add(pc
-														.getProductSkuCode());
+												parent.add(pc.getProductSkuCode());
 											}
 											if (parent.size() == 1) {
 												productConfig = (ProductConfig) productConfigs
@@ -244,8 +295,7 @@ public class AmazonOrderMgmt {
 
 										try {
 											if (productConfig.getVendorSkuRef() != null) {
-												channelorderid = amazonOrderInfo
-														.getAmazonorderid()
+												channelorderid = amazonOrderInfo.getAmazonorderid()
 														+ GlobalConstant.orderUniqueSymbol
 														+ productConfig
 																.getVendorSkuRef();
@@ -254,7 +304,7 @@ public class AmazonOrderMgmt {
 														.append(" Vendor SKU code not mapped.");
 												validaterow = false;
 											}
-
+											
 										} catch (Exception e) {
 
 										}
@@ -274,76 +324,59 @@ public class AmazonOrderMgmt {
 							errorMessage
 									.append("The column 'ORDER ID' doesn't exist");
 							validaterow = false;
-						}
-
-						// if
-						// (cellIndexMap.get(columHeaderMap.get("Secondary OrderID"))
-						// != null) {
-						// index =
-						// cellIndexMap.get(columHeaderMap.get("Secondary OrderID"));
-						if (amazonOrderInfo.getAmazonorderid() != null) {
-
-							itemID = amazonOrderInfo.getOrderId() + "";
-							order.setSubOrderID(itemID);
-						}
-						// }
-
-						if (channelorderid != null) {
-							if (!idsList.containsKey(channelorderid)
-									&& !duplicateKey
-											.containsKey(channelorderid)) {
+						}					
+						
+						//if (cellIndexMap.get(columHeaderMap.get("Secondary OrderID")) != null) {
+						//	index = cellIndexMap.get(columHeaderMap.get("Secondary OrderID"));
+							if (amazonOrderInfo.getAmazonorderid() != null) {
+								
+								itemID=amazonOrderInfo.getOrderId()+"";
+								order.setSubOrderID(itemID);
+							}
+						//}
+						
+						if(channelorderid != null){
+							if(!idsList.containsKey(channelorderid)
+									&& !duplicateKey.containsKey(channelorderid)){
 								order.setChannelOrderID(channelorderid);
-								if (productConfig != null) {
-									order.setProductSkuCode(productConfig
-											.getProductSkuCode());
-									order.setPartnerCommission(productConfig
-											.getCommision());
+								if (productConfig != null){
+									order.setProductSkuCode(productConfig.getProductSkuCode());	
+									order.setPartnerCommission(productConfig.getCommision());
 								}
 								duplicateKey.put(channelorderid, itemID);
 							} else {
-								if (itemID != null
-										&& ((idsList.get(channelorderid) != null && !idsList
-												.get(channelorderid).equals(
-														itemID)) || (duplicateKey
-												.containsKey(channelorderid) && (duplicateKey
-												.get(channelorderid) == null || !duplicateKey
-												.get(channelorderid).equals(
-														itemID))))) {
-									channelorderid = channelorderid
-											+ GlobalConstant.orderUniqueSymbol
-											+ itemID;
-									if (!idsList.containsKey(channelorderid)
-											&& !duplicateKey
-													.containsKey(channelorderid)) {
+								if(itemID != null && ((idsList.get(channelorderid) != null 
+										&& !idsList.get(channelorderid).equals(itemID))
+										|| (duplicateKey.containsKey(channelorderid) 
+												&& (duplicateKey.get(channelorderid) == null
+												|| !duplicateKey.get(channelorderid).equals(itemID))))){
+									channelorderid = channelorderid + GlobalConstant.orderUniqueSymbol + itemID;
+									if(!idsList.containsKey(channelorderid)
+											&& !duplicateKey.containsKey(channelorderid)){
 										order.setChannelOrderID(channelorderid);
-										if (productConfig != null) {
-											order.setProductSkuCode(productConfig
-													.getProductSkuCode());
-											order.setPartnerCommission(productConfig
-													.getCommision());
-										}
-										duplicateKey
-												.put(channelorderid, itemID);
+										if (productConfig != null){
+											order.setProductSkuCode(productConfig.getProductSkuCode());	
+											order.setPartnerCommission(productConfig.getCommision());
+										}													
+										duplicateKey.put(channelorderid, itemID);
 									} else {
-										errorMessage
-												.append("Channel Order Id is Already Present.");
+										errorMessage.append("Channel Order Id is Already Present.");
 										validaterow = false;
 									}
 								} else {
-									errorMessage
-											.append("Channel Order Id is Already Present.");
+									errorMessage.append("Channel Order Id is Already Present.");
 									validaterow = false;
-								}
+								}																								
 							}
 						}
+						
+						
 
 						try {
-							// index =
-							// cellIndexMap.get(columHeaderMap.get("Order Recieved Date"));
-							if (amazonOrderInfo.getPurchasedate() != null) {
+							//index = cellIndexMap.get(columHeaderMap.get("Order Recieved Date"));
+							if (amazonOrderInfo.getPurchasedate() != null ) {
 								try {
-									String dateStr = amazonOrderInfo
-											.getPurchasedate().toString();
+									String dateStr = amazonOrderInfo.getPurchasedate().toString();								
 									order.setOrderDate(format.parse(dateStr));
 								} catch (Exception e) {
 									e.printStackTrace();
@@ -353,8 +386,8 @@ public class AmazonOrderMgmt {
 								}
 							} else {
 								errorMessage
-										.append(" Order Received Date is null,");
-								validaterow = false;
+								.append(" Order Received Date is null,");
+						validaterow = false;
 							}
 						} catch (NullPointerException e) {
 							e.printStackTrace();
@@ -363,25 +396,19 @@ public class AmazonOrderMgmt {
 							validaterow = false;
 						}
 
-						// if
-						// (cellIndexMap.get(columHeaderMap.get("Customer Email"))
-						// != null) {
-						// index =
-						// cellIndexMap.get(columHeaderMap.get("Customer Email"));
-						if (amazonOrderInfo.getBuyeremail() != null) {
-							log.debug(" Email from sheet ************ "
-									+ rowIndex + ":"
-									+ amazonOrderInfo.getBuyeremail());
-							customerBean.setCustomerEmail(amazonOrderInfo
-									.getBuyeremail());
-						}
-						// }
+						//if (cellIndexMap.get(columHeaderMap.get("Customer Email")) != null) {
+						//	index = cellIndexMap.get(columHeaderMap.get("Customer Email"));
+							if (amazonOrderInfo.getBuyeremail() != null) {
+								log.debug(" Email from sheet ************ "
+										+ rowIndex + ":"
+										+ amazonOrderInfo.getBuyeremail());
+								customerBean.setCustomerEmail(amazonOrderInfo.getBuyeremail());
+							}
+						//}
 						try {
-							// index =
-							// cellIndexMap.get(columHeaderMap.get("Customer Name"));
-							if (amazonOrderInfo.getBuyername() != null) {
-								customerBean.setCustomerName(amazonOrderInfo
-										.getBuyername());
+							//index = cellIndexMap.get(columHeaderMap.get("Customer Name"));
+							if (amazonOrderInfo.getBuyername() != null ) {
+								customerBean.setCustomerName(amazonOrderInfo.getBuyername());
 							}
 						} catch (NullPointerException e) {
 							e.printStackTrace();
@@ -391,34 +418,32 @@ public class AmazonOrderMgmt {
 							index = cellIndexMap.get(columHeaderMap
 									.get("Customer Phone No"));
 							if (amazonOrderInfo.getBuyername() != null) {
-								customerBean
-										.setCustomerPhnNo(shippingAddressInfo
-												.getPhone());
-								// entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
-								/*
-								 * if (entry.getCell(index).toString().length()
-								 * == 10 && !entry.getCell(index).toString()
-								 * .contains("9999999999")) { if
-								 * (entry.getCell(index).toString()
-								 * .matches("[0-9]+") &&
-								 * entry.getCell(index).toString() .length() >
-								 * 2) { customerBean.setCustomerPhnNo(entry
-								 * .getCell(index).toString()); } }
-								 */
+								customerBean.setCustomerPhnNo(shippingAddressInfo.getPhone());
+								//entry.getCell(index).setCellType(HSSFCell.CELL_TYPE_STRING);
+							/*	if (entry.getCell(index).toString().length() == 10
+										&& !entry.getCell(index).toString()
+												.contains("9999999999")) {
+									if (entry.getCell(index).toString()
+											.matches("[0-9]+")
+											&& entry.getCell(index).toString()
+													.length() > 2) {
+										customerBean.setCustomerPhnNo(entry
+												.getCell(index).toString());
+									}
+								}*/
 							}
 						}
 
+						
+
 						try {
-							// index =
-							// cellIndexMap.get(columHeaderMap.get("Quantity"));
-							if (amazonOrderInfo.getNumberofitemsshipped() >= 0) {
+							//index = cellIndexMap.get(columHeaderMap.get("Quantity"));
+							if (amazonOrderInfo.getNumberofitemsshipped()>=0) {
 								try {
-									if ((int) Float.parseFloat(amazonOrderInfo
-											.getNumberofitemsshipped()
+									if ((int) Float.parseFloat(amazonOrderInfo.getNumberofitemsshipped()
 											.toString()) != 0) {
 										order.setQuantity((int) Float
-												.parseFloat(amazonOrderInfo
-														.getNumberofitemsshipped()
+												.parseFloat(amazonOrderInfo.getNumberofitemsshipped()
 														.toString()));
 									} else {
 										errorMessage
@@ -427,15 +452,14 @@ public class AmazonOrderMgmt {
 									}
 								} catch (NumberFormatException e) {
 									e.printStackTrace();
-									log.error("Failed! by SellerId : "
-											+ sellerId, e);
+									log.error("Failed! by SellerId : " + sellerId,
+											e);
 									errorMessage
 											.append(" Quantity should be a number ");
 									validaterow = false;
 								}
 							} else {
-								errorMessage
-										.append(" Quantity can not be null ");
+								errorMessage.append(" Quantity can not be null ");
 								validaterow = false;
 							}
 						} catch (NullPointerException e) {
@@ -446,15 +470,11 @@ public class AmazonOrderMgmt {
 						}
 
 						try {
-							// index =
-							// cellIndexMap.get(columHeaderMap.get("OrderSP Component A"));
-							// int index1 =
-							// cellIndexMap.get(columHeaderMap.get("OrderSP Component B"));
-							if (amazonOrderInfo.getOrdertotalamount() != null) {
-								try {
-									order.setOrderSP(Double
-											.parseDouble(amazonOrderItemInfo
-													.getItempriceamount()));
+							//index = cellIndexMap.get(columHeaderMap.get("OrderSP Component A"));
+							//int index1 = cellIndexMap.get(columHeaderMap.get("OrderSP Component B"));
+							if (amazonOrderInfo.getOrdertotalamount() != null ) {
+								try {								
+									order.setOrderSP(Double.parseDouble(amazonOrderItemInfo.getItempriceamount()));
 								} catch (NumberFormatException e) {
 									errorMessage
 											.append(" Order SP should be a number ");
@@ -471,180 +491,186 @@ public class AmazonOrderMgmt {
 							validaterow = false;
 						}
 
-						try {
-							// customerBean.setCustomerAddress("No.1, Bangaloe-560001");
-							String shipadd1 = "";
-							String shipadd2 = "";
-							String shipadd3 = "";
-							if (shippingAddressInfo.getAddressline1() != null)
-								shipadd1 = shippingAddressInfo
-										.getAddressline1();
-							if (shippingAddressInfo.getAddressline2() != null)
-								shipadd2 = shippingAddressInfo
-										.getAddressline2();
-							if (shippingAddressInfo.getAddressline3() != null)
-								shipadd2 = shippingAddressInfo
-										.getAddressline3();
-
-							customerBean.setCustomerAddress(shipadd1 + shipadd2
-									+ shipadd2);
-
+						try {						
+							//customerBean.setCustomerAddress("No.1, Bangaloe-560001");						
+							String shipadd1="";
+							String shipadd2="";
+							String shipadd3="";
+						    if(shippingAddressInfo.getAddressline1()!=null)
+						    	shipadd1=shippingAddressInfo.getAddressline1();
+						    if(shippingAddressInfo.getAddressline2()!=null)
+						    	shipadd2=shippingAddressInfo.getAddressline2();
+						    if(shippingAddressInfo.getAddressline3()!=null)
+						    	shipadd2=shippingAddressInfo.getAddressline3();
+						    
+						    customerBean.setCustomerAddress(shipadd1+shipadd2+shipadd2);
+							
 						} catch (NullPointerException e) {
 
 						}
 
-						/*
-						 * if
-						 * (amazonOrderInfo.getcellIndexMap.get(columHeaderMap
-						 * .get("Customer City")) != null) { index =
-						 * cellIndexMap.get(columHeaderMap
-						 * .get("Customer City")); if (entry.getCell(index) !=
-						 * null && entry.getCell(index).getCellType() !=
-						 * HSSFCell.CELL_TYPE_BLANK) {
-						 * customerBean.setCustomerCity(entry.getCell(index)
-						 * .toString()); } }
-						 */
-						String city = "";
-						if (shippingAddressInfo.getCity() != null)
-							city = shippingAddressInfo.getAddressline1();
-
+						/*if (amazonOrderInfo.getcellIndexMap.get(columHeaderMap.get("Customer City")) != null) {
+							index = cellIndexMap.get(columHeaderMap
+									.get("Customer City"));
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								customerBean.setCustomerCity(entry.getCell(index)
+										.toString());
+							}
+						}*/
+						String city="";
+						//if(shippingAddressInfo.getCity()!=null)
+						//	city=shippingAddressInfo.getAddressline1();
+						
 						customerBean.setCustomerCity(city);
-						/*
-						 * try { index = cellIndexMap.get(columHeaderMap
-						 * .get("Shipping PinCode")); if (entry.getCell(index)
-						 * != null && entry.getCell(index).getCellType() !=
-						 * HSSFCell.CELL_TYPE_BLANK) {
-						 * log.debug(" getting zipcode "); String zipCode =
-						 * entry.getCell(index).toString(); if
-						 * (zipCode.contains(".")) { zipCode =
-						 * zipCode.substring(0, zipCode.indexOf(".")); } if
-						 * (areaConfigDao.isZipCodeValid(zipCode)) { try {
-						 * customerBean.setZipcode(zipCode); } catch (Exception
-						 * e) { log.error("Failed! by SellerId : " + sellerId,
-						 * e); errorMessage
-						 * .append("Customer zipcode is corrupted ");
-						 * validaterow = false; } } else { errorMessage .append(
-						 * "Either invalid zipcode or try after some time while admin will add this to database."
-						 * ); validaterow = false;
-						 * customerBean.setZipcode(entry.getCell(index)
-						 * .toString()); } } else {
-						 * errorMessage.append("Customer zipcode is blank ");
-						 * validaterow = false; } } catch (NullPointerException
-						 * e) { errorMessage
-						 * .append("The column 'ship-postal-code' doesn't exist"
-						 * ); validaterow = false; }
-						 */
-
-						String zipcode = "";
-						if (shippingAddressInfo.getPostalcode() != null)
-							zipcode = shippingAddressInfo.getPostalcode();
-
+						/*try {
+							index = cellIndexMap.get(columHeaderMap
+									.get("Shipping PinCode"));
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								log.debug(" getting zipcode ");
+								String zipCode = entry.getCell(index).toString();
+								if (zipCode.contains(".")) {
+									zipCode = zipCode.substring(0,
+											zipCode.indexOf("."));
+								}
+								if (areaConfigDao.isZipCodeValid(zipCode)) {
+									try {
+										customerBean.setZipcode(zipCode);
+									} catch (Exception e) {
+										log.error("Failed! by SellerId : "
+												+ sellerId, e);
+										errorMessage
+												.append("Customer zipcode is corrupted ");
+										validaterow = false;
+									}
+								} else {
+									errorMessage
+											.append("Either invalid zipcode or try after some time while admin will add this to database.");
+									validaterow = false;
+									customerBean.setZipcode(entry.getCell(index)
+											.toString());
+								}
+							} else {
+								errorMessage.append("Customer zipcode is blank ");
+								validaterow = false;
+							}
+						} catch (NullPointerException e) {
+							errorMessage
+									.append("The column 'ship-postal-code' doesn't exist");
+							validaterow = false;
+						}*/
+						
+						String zipcode="560001";
+						//if(shippingAddressInfo.getPostalcode()!=null)
+						//	zipcode=shippingAddressInfo.getPostalcode();	
+						
 						customerBean.setZipcode(zipcode);
-
-						/*
-						 * try { index = cellIndexMap.get(columHeaderMap
-						 * .get("Payment Type")); if
-						 * (amazonOrderInfo.geentry.getCell(index) != null) { if
-						 * (entry.getCell(index).toString().toUpperCase()
-						 * .contains("PREPAID") ||
-						 * entry.getCell(index).getCellType() ==
-						 * HSSFCell.CELL_TYPE_BLANK) {
-						 * order.setPaymentType("Prepaid"); } else if
-						 * (entry.getCell(index).toString()
-						 * .toUpperCase().contains("COD")) {
-						 * order.setPaymentType("COD"); } else if
-						 * (entry.getCell(index).toString()
-						 * .toUpperCase().contains("OTHERS")) {
-						 * order.setPaymentType("Others"); } else {
-						 * order.setPaymentType("Others"); } } else {
-						 * order.setPaymentType("Others"); } } catch
-						 * (NullPointerException e) { errorMessage
-						 * .append("The column 'payment-method' doesn't exist");
-						 * validaterow = false; }
-						 */
-						// System.out.println("Payment Method"+amazonOrderInfo.getPaymentmethod());
-
-						String paymentType = "";
-						if (amazonOrderInfo.getPaymentmethod() != null)
-							paymentType = amazonOrderInfo.getPaymentmethod();
+						
+						
+						/*try {
+							index = cellIndexMap.get(columHeaderMap
+									.get("Payment Type"));
+							if (amazonOrderInfo.geentry.getCell(index) != null) {
+								if (entry.getCell(index).toString().toUpperCase()
+										.contains("PREPAID")
+										|| entry.getCell(index).getCellType() == HSSFCell.CELL_TYPE_BLANK) {
+									order.setPaymentType("Prepaid");
+								} else if (entry.getCell(index).toString()
+										.toUpperCase().contains("COD")) {
+									order.setPaymentType("COD");
+								} else if (entry.getCell(index).toString()
+										.toUpperCase().contains("OTHERS")) {
+									order.setPaymentType("Others");
+								} else {
+									order.setPaymentType("Others");
+								}
+							} else {
+								order.setPaymentType("Others");
+							}
+						} catch (NullPointerException e) {
+							errorMessage
+									.append("The column 'payment-method' doesn't exist");
+							validaterow = false;
+						}*/
+						//System.out.println("Payment Method"+amazonOrderInfo.getPaymentmethod());
+						
+						String paymentType="";
+						if(amazonOrderInfo.getPaymentmethod()!=null)
+						paymentType=amazonOrderInfo.getPaymentmethod();	
 						order.setPaymentType(paymentType);
-
-						/*
-						 * if (cellIndexMap
-						 * .get(columHeaderMap.get("Logistic Partner")) != null)
-						 * { index = cellIndexMap.get(columHeaderMap
-						 * .get("Logistic Partner")); if (entry.getCell(index)
-						 * != null) { if (entry.getCell(index).getCellType() ==
-						 * HSSFCell.CELL_TYPE_BLANK) {
-						 * order.setLogisticPartner("Self Shift"); } else {
-						 * order.setLogisticPartner(entry.getCell(index)
-						 * .toString()); } } }
-						 */
+						
+						/*if (cellIndexMap
+								.get(columHeaderMap.get("Logistic Partner")) != null) {
+							index = cellIndexMap.get(columHeaderMap
+									.get("Logistic Partner"));
+							if (entry.getCell(index) != null) {
+								if (entry.getCell(index).getCellType() == HSSFCell.CELL_TYPE_BLANK) {
+									order.setLogisticPartner("Self Shift");
+								} else {
+									order.setLogisticPartner(entry.getCell(index)
+											.toString());
+								}
+							}
+						}*/
 						order.setLogisticPartner("Self Shift");
-						/*
-						 * try { index = cellIndexMap.get(columHeaderMap
-						 * .get("InvoiceID")); if (entry.getCell(index) != null
-						 * && entry.getCell(index).getCellType() !=
-						 * HSSFCell.CELL_TYPE_BLANK) {
-						 * entry.getCell(index).setCellType(
-						 * HSSFCell.CELL_TYPE_STRING);
-						 * order.setInvoiceID(entry.getCell(index).toString());
-						 * } else {
-						 * order.setInvoiceID(GlobalConstant.randomNo()); } }
-						 * catch (Exception e) {
-						 * order.setInvoiceID(GlobalConstant.randomNo()); }
-						 */
+						/*try {
+							index = cellIndexMap.get(columHeaderMap
+									.get("InvoiceID"));
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								entry.getCell(index).setCellType(
+										HSSFCell.CELL_TYPE_STRING);
+								order.setInvoiceID(entry.getCell(index).toString());
+							} else {
+								order.setInvoiceID(GlobalConstant.randomNo());
+							}
+						} catch (Exception e) {
+							order.setInvoiceID(GlobalConstant.randomNo());
+						}*/
 						order.setInvoiceID(GlobalConstant.randomNo());
-						/*
-						 * if (cellIndexMap.get(columHeaderMap.get("AWB No")) !=
-						 * null) { index =
-						 * cellIndexMap.get(columHeaderMap.get("AWB No")); if
-						 * (entry.getCell(index) != null &&
-						 * entry.getCell(index).getCellType() !=
-						 * HSSFCell.CELL_TYPE_BLANK) {
-						 * entry.getCell(index).setCellType(
-						 * HSSFCell.CELL_TYPE_STRING);
-						 * order.setAwbNum(entry.getCell(index).toString()); } }
-						 */
+						/*if (cellIndexMap.get(columHeaderMap.get("AWB No")) != null) {
+							index = cellIndexMap.get(columHeaderMap.get("AWB No"));
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								entry.getCell(index).setCellType(
+										HSSFCell.CELL_TYPE_STRING);
+								order.setAwbNum(entry.getCell(index).toString());
+							}
+						}*/
 
 						order.setAwbNum("AWB100200");
-						/*
-						 * if
-						 * (cellIndexMap.get(columHeaderMap.get("PIreferenceNo"
-						 * )) != null) { index = cellIndexMap.get(columHeaderMap
-						 * .get("PIreferenceNo")); if (entry.getCell(index) !=
-						 * null && entry.getCell(index).getCellType() !=
-						 * HSSFCell.CELL_TYPE_BLANK) {
-						 * order.setPIreferenceNo(entry.getCell(index)
-						 * .toString()); } }
-						 */
-						order.setPIreferenceNo("PI100");
-						// if (cellIndexMap.get(columHeaderMap.get("Order MRP"))
-						// != null) {
-						// index =
-						// cellIndexMap.get(columHeaderMap.get("Order MRP"));
-
-						if (amazonOrderInfo.getOrdertotalamount() != null) {
-							try {
-								order.setOrderMRP(Double
-										.parseDouble(amazonOrderInfo
-												.getOrdertotalamount()));
-							} catch (NumberFormatException e) {
-								e.printStackTrace();
-								log.error("Failed! by SellerId : " + sellerId,
-										e);
-								errorMessage
-										.append(" Order MRP should be a number ");
+						/*if (cellIndexMap.get(columHeaderMap.get("PIreferenceNo")) != null) {
+							index = cellIndexMap.get(columHeaderMap
+									.get("PIreferenceNo"));
+							if (entry.getCell(index) != null
+									&& entry.getCell(index).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								order.setPIreferenceNo(entry.getCell(index)
+										.toString());
 							}
-						}
-						// }
+						}*/
+						order.setPIreferenceNo("PI100");
+						//if (cellIndexMap.get(columHeaderMap.get("Order MRP")) != null) {
+							//index = cellIndexMap.get(columHeaderMap.get("Order MRP"));
+							
+							if (amazonOrderInfo.getOrdertotalamount() != null) {
+								try {
+									order.setOrderMRP(Double.parseDouble(amazonOrderInfo.getOrdertotalamount()));
+								} catch (NumberFormatException e) {
+									e.printStackTrace();
+									log.error("Failed! by SellerId : " + sellerId,
+											e);
+									errorMessage
+											.append(" Order MRP should be a number ");
+								}
+							}
+						//}
 
 						try {
-
+				
 							if (amazonOrderInfo.getPurchasedate() != null) {
-								try {
-									order.setShippedDate(amazonOrderInfo
-											.getPurchasedate());
+								try {								
+									order.setShippedDate(amazonOrderInfo.getPurchasedate());
 								} catch (Exception e) {
 									e.printStackTrace();
 									errorMessage
@@ -652,13 +678,13 @@ public class AmazonOrderMgmt {
 									validaterow = false;
 								}
 							} else {
-								if (order.getOrderDate() != null)
-									order.setShippedDate(amazonOrderInfo
-											.getPurchasedate());
-								else {
+								if(order.getOrderDate()!=null)
+									order.setShippedDate(amazonOrderInfo.getPurchasedate());
+								else
+								{
 									errorMessage
-											.append("'Order Shipped Date' or 'Purchase Date' are empty. ");
-									validaterow = false;
+									.append("'Order Shipped Date' or 'Purchase Date' are empty. ");
+							validaterow = false;
 								}
 							}
 						} catch (NullPointerException e) {
@@ -668,8 +694,8 @@ public class AmazonOrderMgmt {
 							validaterow = false;
 						}
 
-						if (partner != null) {
-
+						if (partner != null) {					
+							
 							event = eventsService.isEventActiive(
 									order.getOrderDate(), partner.getPcName(),
 									order.getProductSkuCode(), sellerId);
@@ -682,16 +708,13 @@ public class AmazonOrderMgmt {
 											.get("Net Rate")) != null) {
 										index = cellIndexMap.get(columHeaderMap
 												.get("Net Rate"));
-										if (amazonOrderInfo
-												.getOrdertotalamount() != null) {
+										if (amazonOrderInfo.getOrdertotalamount() != null) {
 											try {
 												order.setGrossNetRate(Double
-														.parseDouble(amazonOrderInfo
-																.getOrdertotalamount()));
+														.parseDouble(amazonOrderInfo.getOrdertotalamount()));
 											} catch (NumberFormatException e) {
-												log.error(
-														"Failed! by SellerId : "
-																+ sellerId, e);
+												log.error("Failed! by SellerId : "
+														+ sellerId, e);
 												errorMessage
 														.append(" Net Rate should be number ");
 												validaterow = false;
@@ -712,34 +735,29 @@ public class AmazonOrderMgmt {
 										&& partner.getNrnReturnConfig() != null
 										&& !partner.getNrnReturnConfig()
 												.isNrCalculator()) {
-									// if
-									// (cellIndexMap.get(columHeaderMap.get("Net Rate"))
-									// != null) {
-									// index =
-									// cellIndexMap.get(columHeaderMap.get("Net Rate"));
-									if (amazonOrderInfo.getOrdertotalamount() != null) {
-										try {
-											order.setGrossNetRate(Double
-													.parseDouble(amazonOrderInfo
-															.getOrdertotalamount()
-															.toString()));
-										} catch (NumberFormatException e) {
-											log.error("Failed! by SellerId : "
-													+ sellerId, e);
+									//if (cellIndexMap.get(columHeaderMap.get("Net Rate")) != null) {
+									//	index = cellIndexMap.get(columHeaderMap.get("Net Rate"));
+										if (amazonOrderInfo.getOrdertotalamount() != null) {
+											try {
+												order.setGrossNetRate(Double
+														.parseDouble(amazonOrderInfo.getOrdertotalamount().toString()));
+											} catch (NumberFormatException e) {
+												log.error("Failed! by SellerId : "
+														+ sellerId, e);
+												errorMessage
+														.append(" Net Rate should be number ");
+												validaterow = false;
+											}
+										} else {
 											errorMessage
-													.append(" Net Rate should be number ");
+													.append(" Net Rate is null.");
 											validaterow = false;
 										}
-									} else {
+									/*} else {
 										errorMessage
-												.append(" Net Rate is null.");
+												.append(" The Column 'Net Rate' Not Present.");
 										validaterow = false;
-									}
-									/*
-									 * } else { errorMessage
-									 * .append(" The Column 'Net Rate' Not Present."
-									 * ); validaterow = false; }
-									 */
+									}*/
 								}
 							}
 						}
@@ -748,9 +766,8 @@ public class AmazonOrderMgmt {
 							product = productService.getProduct(
 									order.getProductSkuCode(), sellerId);
 							if (product != null) {
-								taxcat = taxDetailService.getTaxCategory(
-										product, order.getOrderSP(), sellerId,
-										customerBean.getZipcode());
+								taxcat = taxDetailService.getTaxCategory(product,
+										order.getOrderSP(), sellerId, customerBean.getZipcode());
 							}
 						}
 						if (taxcat != null)
@@ -763,17 +780,16 @@ public class AmazonOrderMgmt {
 							}
 						}
 
-						/*
-						 * if
-						 * (cellIndexMap.get(columHeaderMap.get("Seller Note"))
-						 * != null) { index = cellIndexMap.get(columHeaderMap
-						 * .get("Seller Note")); if (entry.getCell(index) !=
-						 * null && StringUtils.isNotBlank(entry.getCell(index)
-						 * .toString())) {
-						 * order.setSellerNote(entry.getCell(index).toString());
-						 * 
-						 * } }
-						 */
+						/*if (cellIndexMap.get(columHeaderMap.get("Seller Note")) != null) {
+							index = cellIndexMap.get(columHeaderMap
+									.get("Seller Note"));
+							if (entry.getCell(index) != null
+									&& StringUtils.isNotBlank(entry.getCell(index)
+											.toString())) {
+								order.setSellerNote(entry.getCell(index).toString());
+
+							}
+						}*/
 						order.setSellerNote("NOTE NOTE");
 						// Pre save to generate id for use in hierarchy
 						if (validaterow) {
@@ -781,8 +797,9 @@ public class AmazonOrderMgmt {
 							order.setCustomer(customerBean);
 							order.setOrderTax(otb);
 							/*
-							 * orderService.addOrder(ConverterClass.prepareModel(
-							 * order ), sellerId);
+							 * orderService.addOrder(ConverterClass.prepareModel(order
+							 * ), sellerId);
+							 * 
 							 */
 							log.info(" Adding order to save list : "
 									+ order.getChannelOrderID());
@@ -793,17 +810,14 @@ public class AmazonOrderMgmt {
 							log.debug(" Error while saving order : "
 									+ order.getChannelOrderID()
 									+ " errorMessage : " + errorMessage);
-							/*
-							 * if(cellIndexMap.get("ship-promotion-id")!=null
-							 * &&entry
-							 * .getCell(cellIndexMap.get("ship-promotion-id"))
-							 * != null &&
-							 * StringUtils.isNotBlank(entry.getCell(cellIndexMap
-							 * .get("ship-promotion-id")) .toString())) {
-							 * log.info
-							 * ("Promotion ID available for this order."); }
-							 * else
-							 */
+							/*if(cellIndexMap.get("ship-promotion-id")!=null
+									&&entry.getCell(cellIndexMap.get("ship-promotion-id")) != null
+									&& StringUtils.isNotBlank(entry.getCell(cellIndexMap.get("ship-promotion-id"))
+											.toString()))
+							{
+								log.info("Promotion ID available for this order.");
+							}
+							else*/
 							returnOrderMap.put(errorMessage.toString(), order);
 						}
 					} catch (Exception e) {
@@ -812,39 +826,40 @@ public class AmazonOrderMgmt {
 						errorMessage.append("Invalid Input! ");
 						returnOrderMap.put(errorMessage.toString(), order);
 					}
+					
+				 
+				  }//100jaga	
+					
+				        
+				}//for loop
 
-				}// 100jaga
-
-			}// for loop
-
-			try {
-				System.out.println(" SaveList Size : " + saveList.size());
-				if (saveList != null && saveList.size() != 0)
-					orderService.addOrder(saveList, sellerId);
-			} catch (CustomException ce) {
-				ce.printStackTrace();
-				returnOrderMap
-						.put("Row :1:Note-Some orders("
-								+ ce.getLocalMessage()
-								+ " ) with valid input "
-								+ "failed due to internal server error. Please contact admin.!",
-								null);
+				try {
+					System.out.println(" SaveList Size : " + saveList.size());
+					if (saveList != null && saveList.size() != 0)
+						orderService.addOrder(saveList, sellerId);
+				} catch (CustomException ce) {
+					ce.printStackTrace();
+					returnOrderMap
+							.put("Row :1:Note-Some orders("
+									+ ce.getLocalMessage()
+									+ " ) with valid input "
+									+ "failed due to internal server error. Please contact admin.!",
+									null);
+				}
+				errorSet = returnOrderMap.keySet();
+				//uploadResultXLS(offices, "Amazon_Order_Upload", uploadFileName, errorSet, path,sellerId, uploadReport);
+				orderService.updateErrorMessage(returnOrderMap, sellerId);
+			} catch (Exception e) {
+				log.debug("Inside save contents exception :"
+						+ e.getLocalizedMessage());
+				e.printStackTrace();
+				//addErrorUploadReport("Amazon_Order_Upload", sellerId, uploadReport);
+				log.error("Failed! by SellerId : " + sellerId, e);
 			}
-			errorSet = returnOrderMap.keySet();
-			// uploadResultXLS(offices, "Amazon_Order_Upload", uploadFileName,
-			// errorSet, path,sellerId, uploadReport);
-			orderService.updateErrorMessage(returnOrderMap, sellerId);
-		} catch (Exception e) {
-			log.debug("Inside save contents exception :"
-					+ e.getLocalizedMessage());
-			e.printStackTrace();
-			// addErrorUploadReport("Amazon_Order_Upload", sellerId,
-			// uploadReport);
-			log.error("Failed! by SellerId : " + sellerId, e);
-		} finally {
-			// session.close();
+			finally {
+				//session.close();
+			}
 		}
-	}
 
 	private static String removeExtraQuote(String input) {
 		if (input.contains("'"))
