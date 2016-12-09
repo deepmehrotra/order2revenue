@@ -159,7 +159,7 @@ public class SaveMappedFiles {
 				if (entry.getCell(cellIndex) != null
 						&& columHeaderMap.containsValue(entry
 								.getCell(cellIndex).toString())) {
-					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+					cellIndexMap.put(entry.getCell(cellIndex).toString().trim(),
 							cellIndex);
 				}
 
@@ -1378,7 +1378,7 @@ public class SaveMappedFiles {
 				 * .toString())) {
 				 */
 				if (entry.getCell(cellIndex) != null)
-					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+					cellIndexMap.put(entry.getCell(cellIndex).toString().trim(),
 							cellIndex);
 				// }
 
@@ -2063,7 +2063,7 @@ public class SaveMappedFiles {
 				 * .toString())) {
 				 */
 				if (entry.getCell(cellIndex) != null)
-					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+					cellIndexMap.put(entry.getCell(cellIndex).toString().trim(),
 							cellIndex);
 				// }
 
@@ -2862,7 +2862,7 @@ public class SaveMappedFiles {
 				if (entry.getCell(cellIndex) != null
 						&& columHeaderMap.containsValue(entry
 								.getCell(cellIndex).toString())) {
-					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+					cellIndexMap.put(entry.getCell(cellIndex).toString().trim(),
 							cellIndex);
 				}
 
@@ -3577,7 +3577,7 @@ public class SaveMappedFiles {
 				 * cellIndex); }
 				 */
 				if (entry.getCell(cellIndex) != null)
-					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+					cellIndexMap.put(entry.getCell(cellIndex).toString().trim(),
 							cellIndex);
 			}
 
@@ -4069,7 +4069,7 @@ public class SaveMappedFiles {
 				 * cellIndex); }
 				 */
 				if (entry.getCell(cellIndex) != null)
-					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+					cellIndexMap.put(entry.getCell(cellIndex).toString().trim(),
 							cellIndex);
 
 			}
@@ -4528,7 +4528,7 @@ public class SaveMappedFiles {
 				if (entry.getCell(cellIndex) != null
 						&& columHeaderMap.containsValue(entry
 								.getCell(cellIndex).toString())) {
-					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+					cellIndexMap.put(entry.getCell(cellIndex).toString().trim(),
 							cellIndex);
 				}
 
@@ -5271,7 +5271,7 @@ public class SaveMappedFiles {
 				 * cellIndex); }
 				 */
 				if (entry.getCell(cellIndex) != null)
-					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+					cellIndexMap.put(entry.getCell(cellIndex).toString().trim(),
 							cellIndex);
 			}
 
@@ -5637,7 +5637,7 @@ public class SaveMappedFiles {
 				if (entry.getCell(cellIndex) != null
 						&& columHeaderMap.containsValue(entry
 								.getCell(cellIndex).toString())) {
-					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+					cellIndexMap.put(entry.getCell(cellIndex).toString().trim(),
 							cellIndex);
 				}
 			}
@@ -6153,7 +6153,7 @@ public class SaveMappedFiles {
 				if (entry.getCell(cellIndex) != null
 						&& columHeaderMap.containsValue(entry
 								.getCell(cellIndex).toString())) {
-					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+					cellIndexMap.put(entry.getCell(cellIndex).toString().trim(),
 							cellIndex);
 				}
 
@@ -7013,7 +7013,7 @@ public class SaveMappedFiles {
 				 * cellIndex); }
 				 */
 				cellIndexMap
-						.put(entry.getCell(cellIndex).toString(), cellIndex);
+						.put(entry.getCell(cellIndex).toString().trim(), cellIndex);
 			}
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
@@ -7317,7 +7317,7 @@ public class SaveMappedFiles {
 				if (entry.getCell(cellIndex) != null
 						&& columHeaderMap.containsValue(entry
 								.getCell(cellIndex).toString())) {
-					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+					cellIndexMap.put(entry.getCell(cellIndex).toString().trim(),
 							cellIndex);
 				}
 			}
@@ -8021,7 +8021,7 @@ public class SaveMappedFiles {
 				 * cellIndex); }
 				 */
 				cellIndexMap
-						.put(entry.getCell(cellIndex).toString(), cellIndex);
+						.put(entry.getCell(cellIndex).toString().trim(), cellIndex);
 
 			}
 			System.out.println(" columHeaderMap : " + columHeaderMap);
@@ -8362,7 +8362,7 @@ public class SaveMappedFiles {
 					.getPhysicalNumberOfCells(); cellIndex++) {
 				if (entry.getCell(cellIndex)!=null&&columHeaderMap.containsValue(entry.getCell(cellIndex)
 						.toString())) {
-					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+					cellIndexMap.put(entry.getCell(cellIndex).toString().trim(),
 							cellIndex);
 				}
 
@@ -9009,7 +9009,7 @@ public class SaveMappedFiles {
 			entry = worksheet.getRow(0);
 			for (int cellIndex = 0; cellIndex < entry
 					.getPhysicalNumberOfCells(); cellIndex++) {				
-				cellIndexMap.put(entry.getCell(cellIndex).toString(), cellIndex);
+				cellIndexMap.put(entry.getCell(cellIndex).toString().trim(), cellIndex);
 			}
 			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
 				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
@@ -9464,7 +9464,7 @@ public class SaveMappedFiles {
 				if (entry.getCell(cellIndex) != null
 						&& columHeaderMap.containsValue(entry
 								.getCell(cellIndex).toString())) {
-					cellIndexMap.put(entry.getCell(cellIndex).toString(),
+					cellIndexMap.put(entry.getCell(cellIndex).toString().trim(),
 							cellIndex);
 				}
 
