@@ -276,14 +276,14 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 			amazonOrderInfo.setIspremiumorder(order.getIsPremiumOrder()
 					.toString());
 
-			amazonOrderInfo.setSellerId(sellerId);
+			//amazonOrderInfo.setSellerId(sellerId);
 			//amazonOrderInfo.setSellerId(Integer.parseInt(order.getSellerOrderId()));
 			// amazonOrderInfo.setRequestid(order);
 
 			List<AmazonOrderItemInfo> amazonOrderItemInfos = new ArrayList<AmazonOrderItemInfo>();
 			for (OrderItem orderItem : orderItems) {
 				AmazonOrderItemInfo amazonOrderItemInfo = new AmazonOrderItemInfo();
-			//	amazonOrderItemInfo.setAmazonorderid(orderItem.getASIN());
+				//amazonOrderItemInfo.setOrderId(amazonOrderInfo.getOrderId());
 				amazonOrderItemInfo.setSellersku(orderItem.getSellerSKU());
 				amazonOrderItemInfo.setOrderitemid(orderItem.getOrderItemId());
 				amazonOrderItemInfo.setTitle(orderItem.getTitle());
@@ -376,7 +376,7 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 			System.out.println("amazonOrderInfo100"+amazonOrderInfo);
 			System.out.println("order item size : "+amazonOrderItemInfos.size() );
 			if (amazonOrderInfo != null){
-				amazonOrdMgmtDao.saveAmazonOrderInfo(amazonOrderInfo);				
+				amazonOrdMgmtDao.saveAmazonOrderInfo(amazonOrderInfo,sellerId);				
 			}
 		} catch (Exception expObj) {
 			expObj.printStackTrace();

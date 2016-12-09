@@ -16,8 +16,10 @@ public interface MwsAmazonOrdMgmtDao {
 	
 	public List<PartnerSellerAuthInfo> getSellersFromPartnerSellerAuthoInfo() throws Exception;
 	
-	public void saveAmazonOrderInfo(AmazonOrderInfo orderInfo) throws Exception;
+	public void saveAmazonOrderInfo(AmazonOrderInfo orderInfo,int sellerId) throws Exception;
 
+	public void saveAmazonOrderInfo(AmazonOrderInfo orderInfo) throws Exception;
+	
 	List<AmazonOrderInfo> getOrderListbyStatus(String value) throws Exception;
 	
 }

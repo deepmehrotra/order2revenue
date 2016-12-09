@@ -5987,10 +5987,11 @@ public class OrderDaoImpl implements OrderDao {
         String keyValue = (String) mapEntry.getKey();
         OrderBean value = (OrderBean) mapEntry.getValue();       
         String chid=value.getChannelOrderID();      
-        String channelOrderId= chid.substring(0, chid.indexOf( '$' )+1);       
-        Query deleteQuery = session.createSQLQuery("update amazon_order_info set error_message=? where amazonorderid=?");		
+        String channelOrderId= chid.substring(0, chid.indexOf( '$' ));       
+        Query deleteQuery = session.createSQLQuery("update amazonorderinfo set error_message=? where amazonorderid=?");		
         deleteQuery.setString(0, keyValue);
 		deleteQuery.setString(1, channelOrderId);
+		
 		deleteQuery.executeUpdate();
 		
         }  

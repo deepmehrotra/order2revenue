@@ -101,29 +101,31 @@
                                         
                         	<div>
                         	
-                        					
-								<label>StartDate</label>	
-								<input type="text" id="single" name="single" placeholder="select start range" style="width:11%;margin-left: 0%;position: relative;top: -1px;">        
-								
-												
-									<!--  <div class="input-group f-left" style="width:11%;position: relative;top: -1px; height: 10px">
-									<label>StartDate</label>			
-												<div class="input-group date">
-													<span class="input-group-addon"><i
-														class="fa fa-calendar"></i></span> <input type="text"
-														name="startDate" id="startDate" class="form-control">
-												</div>
-											</div>	-->	
-												
-												
-															 
-									<label>EndDate </label> 						
-									&nbsp;			
-																						
-										<input type="text" id="second" name="second" placeholder="select Last range" style="width:11%;position: relative;top: -1px;;margin-top:1px;">
-                                        
+                        			
+                        			
+                       <div class="top-search-40 f-left TopSearch-box2" id="option2" style="margin-right:2px;">                     
+						<div class="input-group f-left" style="width: 220px;">
+							<div class="input-group date">
+								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								<input type="text" name="startDate" id="startDate"
+									class="form-control" placeholder="startDate">
+							</div>
+						</div>					
+						
+						<div class="input-group f-left" style="width: 220px;">						 
+							<div class="input-group date">
+								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								<input type="text" name="endDate" id="endDate"
+									class="form-control" placeholder="endDate">
+							</div>
+						</div>
+					</div>			
+							
+							
                                      
-                                                <select class="form-control" name="reportGroup" id="reportGroup" >
+                                     <select class="form-control" name="reportGroup"  multiple="multiple" id="reportGroup" style="height: 30px;margin-bottom: 10px;">
+                                     
+                                               
                                                     <option value="">Select Status</option>
                                                     <option value="InvoiceUnconfirmed">InvoiceUnconfirmed</option>                                                    
                                                     <option value="Unfulfillable">Unfulfillable</option>
@@ -135,10 +137,13 @@
                                                        <option value="PendingAvailability">PendingAvailability</option>
                                                        
                                                 </select>
-                                                
-                                                <button class="btn btn-white table-menu-search search-dd"  style="float:right;margin-top:1px;margin-right:441px;">
-										<i class="fa fa-search" ></i>
-									</button>
+                                               
+                                               	<button class="btn btn-white" type="submit"
+						style="height: 34px;">
+						<i class="fa fa-search"></i>
+					</button>
+					 
+                    
 									
                                             </div>
                               
@@ -162,7 +167,7 @@
                                 <c:if test="${!empty amazonOrderInfoList}">
                                 <c:forEach items="${amazonOrderInfoList}" var="product" varStatus="loop">
                                 <tr>                               
-                                    <td><input type="checkbox" name="Jagadeesha" value="${product.amazonorderid}"></td>                          
+                                    <td><input type="checkbox" name="selectedOrderIds" value="${product.amazonorderid}"></td>                          
                                     <td>${product.orderId}</td>                                     
                                     <td>${product.amazonorderid}</td> 								
 									
@@ -351,11 +356,7 @@
     	}
     	
     	function moveStatus(){
-    		alert('jaga');  	
-    		
-    		
-    		
-    		
+    		alert('jaga');     		
     		$.ajax({
     			url : $("#formabcd").attr("action"),
     			context : document.body,
@@ -363,14 +364,18 @@
     			data : $("#formabcd").serialize(),
     			success : function(res) {
     				if($(res).find('#j_username').length > 0){
-    	        		window.location.href = "moveStatusAmazonOrderInfo.html";
+    	        		window.location.href = "updateAmazonOrderInfo.html";
     	        	}else{
-    	        		//window.location.href = "moveStatusAmazonOrderInfo.html";
+    	        		window.location.href = "updateAmazonOrderInfo.html";
     	            	$('#centerpane').html(res);
     	        	}
     			}
     		});    	
     	}
+    	
+    	
+    	
+    	
     	
     	function onclickTaxablePurchases(value,id) {
     		

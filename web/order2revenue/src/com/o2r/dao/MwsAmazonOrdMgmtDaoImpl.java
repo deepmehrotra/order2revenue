@@ -84,11 +84,16 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 		LOGGER.info("Start: getOrderList");
 		Session session = null;
 		List<AmazonOrderInfo> amazonOrderInfos = new ArrayList<AmazonOrderInfo>();
-		final String QRY = "from AmazonOrderInfo where ORDERSTATUS in('Unfulfillable','PartiallyShipped','Unshipped','Pending','Canceled','Shipped','PendingAvailability')";
+		//final String QRY = "from AmazonOrderInfo where AMAZONORDERID in ('404-0238009-5378707')";		
+		final String QRY = "from AmazonOrderInfo where AMAZONORDERID in ("+value+")";
 		try {
-
+			
+			System.out.println("QRYQRYQRYQRYQRY"+QRY);
+			
 			session = sessionFactory.openSession();
-			amazonOrderInfos = session.createQuery(QRY).list();		
+			amazonOrderInfos = session.createQuery(QRY).list();	
+			
+			System.out.println("QRYQRYQRYQRYQRY size"+amazonOrderInfos.size());
 			LOGGER.info("Response: " + amazonOrderInfos.size());
 			LOGGER.info("Response:" + session.createQuery(QRY).list().size());
 
@@ -158,22 +163,50 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 	}
 	
 	
-
 	@Override
 	public void saveAmazonOrderInfo(AmazonOrderInfo orderInfo) throws Exception {
 
 
-//
+
 
 		Session session = null;
 		Seller seller = null;
 		try {
 			session = sessionFactory.openSession();
-			session.beginTransaction();
+			session.beginTransaction();			
 			
-			int sellerid= orderInfo.getSellerId();
 			Criteria criteria = session.createCriteria(Seller.class).add(
-					Restrictions.eq("id", sellerid));
+					Restrictions.eq("id", 65));
+			seller = (Seller) criteria.list().get(0);
+			seller.getOrderInfos().add(orderInfo);
+			orderInfo.setSeller(seller);		
+			session.saveOrUpdate(seller);
+			//session.save(orderInfo);	
+			session.getTransaction().commit();
+		} catch (Exception expObj) {
+			expObj.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+	}
+	
+
+	@Override
+	public void saveAmazonOrderInfo(AmazonOrderInfo orderInfo, int sellerId) throws Exception {
+
+
+
+
+		Session session = null;
+		Seller seller = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();			
+			
+			Criteria criteria = session.createCriteria(Seller.class).add(
+					Restrictions.eq("id", sellerId));
 			seller = (Seller) criteria.list().get(0);
 			seller.getOrderInfos().add(orderInfo);
 			orderInfo.setSeller(seller);		

@@ -226,9 +226,6 @@ public void invokeListOrdersAndOrderItemsFromProperty() throws Exception {
 				for (com.amazonservices.mws.orders._2013_09_01.model.Order order : orders) {
 					com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult itemResults = ordMgmtService.getListOrderItems(authInfo, order.getAmazonOrderId());
 					List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems = itemResults.getOrderItems();		
-					
-					System.out.println("orders"+orders.size());
-					System.out.println("orderItems"+orderItems.size());
 					ordMgmtService.saveOrderInfo(order, orderItems,sellerId);
 				}
 			}
@@ -248,20 +245,14 @@ public void invokeListOrdersAndOrderItemsFromProperty() throws Exception {
 
 public void invokeListOrdersAndOrderItemsByValues(String fromDate, String endDate, String reqstatus) throws Exception {		
 	
-	//Properties props = null;
-	//props = PropertiesLoaderUtils.loadProperties(resource);
 	
-	
-		try {	
-			
-			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-			
+		try {			
+			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");			
 			XMLGregorianCalendar createdAfterDate=null;
 			XMLGregorianCalendar createBeforeDate=null;
 		    GregorianCalendar calender = new GregorianCalendar();	   
 		    Date afterdate1 = formatter.parse(fromDate);
-		    Date beforedate1=formatter.parse(endDate); 
-		   	    
+		    Date beforedate1=formatter.parse(endDate); 		   	    
 		    
 		    calender.setTime(afterdate1);		    
 		    createdAfterDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(calender);
@@ -273,8 +264,7 @@ public void invokeListOrdersAndOrderItemsByValues(String fromDate, String endDat
 		    
 		    for(int i=0; i<parts.length-1; i++){
 		    	orderStatus.add(parts[i]);
-		    }  
-		  
+		    }   
 		    
 			List<PartnerSellerAuthInfo> partnerSellerAuthInfoList = ordMgmtService.getSellersFromPartnerSellerAuthoInfo();		
 			for (PartnerSellerAuthInfo PartnerSellerAuthInfo : partnerSellerAuthInfoList) {						
@@ -285,14 +275,10 @@ public void invokeListOrdersAndOrderItemsByValues(String fromDate, String endDat
 				List<com.amazonservices.mws.orders._2013_09_01.model.Order> orders = listOrderResult.getOrders();
 				for (com.amazonservices.mws.orders._2013_09_01.model.Order order : orders) {
 					com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult itemResults = ordMgmtService.getListOrderItems(authInfo, order.getAmazonOrderId());
-					List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems = itemResults.getOrderItems();		
-					
-					System.out.println("orders"+orders.size());
-					System.out.println("orderItems"+orderItems.size());
+					List<com.amazonservices.mws.orders._2013_09_01.model.OrderItem> orderItems = itemResults.getOrderItems();					
 					ordMgmtService.saveOrderInfo(order, orderItems,sellerId);
 				}
-			}
-		//}
+			}		
 		
 	} catch (Exception expObj) {
 		expObj.printStackTrace();
@@ -362,16 +348,16 @@ public void invokeListOrdersAndOrderItemsByValues(String fromDate, String endDat
 				
 				List<AmazonOrderItemInfo> amazonOrderItemInfoset= amazonOrderInfo.getAmazonOrderItemInfo();
 				
-				List<ShippingAddress> ShippingAddressinfoset= amazonOrderInfo.getShippingAddressinfo();
+			//	List<ShippingAddress> ShippingAddressinfoset= amazonOrderInfo.getShippingAddressinfo();
 				
 				
-				Iterator<ShippingAddress> itr1 = ShippingAddressinfoset.iterator();
-		        while(itr1.hasNext())
-		        {
+			//	Iterator<ShippingAddress> itr1 = ShippingAddressinfoset.iterator();
+		    //    while(itr1.hasNext())
+		     //   {
 		        	
-		        	shippingAddressInfo  =  itr1.next();
+		      //  	shippingAddressInfo  =  itr1.next();
 		        	
-		        }
+		    //    }
 				
 				 Iterator<AmazonOrderItemInfo> itr = amazonOrderItemInfoset.iterator();
 			        while(itr.hasNext())
@@ -675,8 +661,8 @@ public void invokeListOrdersAndOrderItemsByValues(String fromDate, String endDat
 						}
 					}*/
 					String city="";
-					if(shippingAddressInfo.getCity()!=null)
-						city=shippingAddressInfo.getAddressline1();
+					//if(shippingAddressInfo.getCity()!=null)
+					//	city=shippingAddressInfo.getAddressline1();
 					
 					customerBean.setCustomerCity(city);
 					/*try {
@@ -717,9 +703,9 @@ public void invokeListOrdersAndOrderItemsByValues(String fromDate, String endDat
 						validaterow = false;
 					}*/
 					
-					String zipcode="";
-					if(shippingAddressInfo.getPostalcode()!=null)
-						zipcode=shippingAddressInfo.getPostalcode();	
+					String zipcode="560001";
+					//if(shippingAddressInfo.getPostalcode()!=null)
+					//	zipcode=shippingAddressInfo.getPostalcode();	
 					
 					customerBean.setZipcode(zipcode);
 					

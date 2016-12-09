@@ -30,7 +30,7 @@ import org.hibernate.annotations.Cascade;
  */
 
 @Entity
-@Table(name="amazon_order_info",catalog="o2rschema")
+@Table(name="AmazonOrderInfo",catalog="o2rschema")
 
 public class AmazonOrderInfo  implements java.io.Serializable {
 
@@ -75,7 +75,7 @@ public class AmazonOrderInfo  implements java.io.Serializable {
      private String isprime;
      private String ispremiumorder;
      private String requestid;    
-     private int sellerId;
+     //private int sellerId;
 
 	private String o2rStatus;
      private String errorMessage;
@@ -90,7 +90,7 @@ public class AmazonOrderInfo  implements java.io.Serializable {
   
   private List<AmazonOrderItemInfo> amazonOrderItemInfo = new ArrayList<AmazonOrderItemInfo>();
 
-private List<ShippingAddress> shippingAddressinfo = new ArrayList<ShippingAddress>();
+//private List<ShippingAddress> shippingAddressinfo = new ArrayList<ShippingAddress>();
   
 
 
@@ -505,14 +505,14 @@ private List<ShippingAddress> shippingAddressinfo = new ArrayList<ShippingAddres
     }
 
     
-    @Column(name="SELLER_ID")
+    /*@Column(name="SELLER_ID")
     public int getSellerId() {
         return this.sellerId;
     }
     
     public void setSellerId(int sellerId) {
         this.sellerId = sellerId;
-    }
+    }*/
 	
 	
 	
@@ -571,7 +571,7 @@ private List<ShippingAddress> shippingAddressinfo = new ArrayList<ShippingAddres
 		}*/
 		
 
-	@OneToMany(mappedBy="amazonOrderInfo", cascade=CascadeType.ALL, fetch = FetchType.EAGER )
+	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.EAGER )
 	public List<AmazonOrderItemInfo> getAmazonOrderItemInfo() {
 		return amazonOrderItemInfo;
 	}
@@ -581,7 +581,7 @@ private List<ShippingAddress> shippingAddressinfo = new ArrayList<ShippingAddres
 		this.amazonOrderItemInfo = amazonOrderItemInfo;
 	}
 
-	@OneToMany(mappedBy="amazonOrderInfo", cascade=CascadeType.ALL, fetch = FetchType.LAZY )
+	/*@OneToMany(mappedBy="amazonOrderInfo", cascade=CascadeType.ALL, fetch = FetchType.LAZY )
 	public List<ShippingAddress> getShippingAddressinfo() {
 		return shippingAddressinfo;
 	}
@@ -589,7 +589,7 @@ private List<ShippingAddress> shippingAddressinfo = new ArrayList<ShippingAddres
 
 	public void setShippingAddressinfo(List<ShippingAddress> shippingAddressinfo) {
 		this.shippingAddressinfo = shippingAddressinfo;
-	}
+	}*/
 	
 	
 }

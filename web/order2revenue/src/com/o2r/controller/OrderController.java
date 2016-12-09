@@ -1426,7 +1426,7 @@ public class OrderController {
 	
 	
 	
-	
+	// current working method
 	@RequestMapping(value = "/seller/moveStatusAmazonOrderInfo", method = RequestMethod.POST)	
 	public ModelAndView moveStatusAmazonOrderInfo(HttpServletRequest request,
 			@ModelAttribute("command") PartnerSellerAuthInfo partnerSellerAuthInfo, BindingResult result) {
@@ -1434,30 +1434,44 @@ public class OrderController {
 		log.info("$$$ poOrderListDailyAct Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();	
 		
-		String fromDate = request.getParameter("single");
-		String endDate = request.getParameter("second");	
+		String fromDate = request.getParameter("startDate");
+		String endDate = request.getParameter("startDate");	
+		
+		
+		//String[] statusArray;
+		///statusArray= request.getParameterValues("reportGroup");
+		//		System.out.println("reportheaders1"+statusArray);
+		
+		
 		
 		try {
+			
+			//String value = "'" + statusArray[0] + "'";
+		//	if (statusArray != null)
+		//		for (int i = 1; i < statusArray.length; i++) {
+		//			value = value + "," + "'" + statusArray[i] + "'";
+		//		}	
 			
 			String status ="Unfulfillable,PartiallyShipped,Unshipped,Pending,Canceled,Shipped,PendingAvailability";
 			amazonOrderMgmt.invokeListOrdersAndOrderItemsByValues(fromDate,endDate,status);			
 			
-			List<AmazonOrderInfo> listamazaon = new ArrayList<AmazonOrderInfo>();
-			listamazaon = mwsAmazonOrdMgmtService.getAmazonOrderInfoList(status);
+			//List<AmazonOrderInfo> listamazaon = new ArrayList<AmazonOrderInfo>();
+			//listamazaon = mwsAmazonOrdMgmtService.getAmazonOrderInfoList(status);
 
-			amazonOrderMgmt.saveAmzonOrderContents(listamazaon);
+			//amazonOrderMgmt.saveAmzonOrderContents(listamazaon);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		//return new ModelAndView("redirect:/seller/orderList.html");	
-		return new ModelAndView("dailyactivities/listAmazonwsOrderInfo", model);
+		return new ModelAndView("redirect:/seller/orderList.html");	
+		//return new ModelAndView("dailyactivities/listAmazonwsOrderInfo", model);
+		//return new ModelAndView("redirect:/seller/moveStatusAmazonOrderInfo.html");
 	}
 	
 	
 	
-	@RequestMapping(value = "/seller/moveStatusAmazonOrderInfo11", method = RequestMethod.POST)	
+	@RequestMapping(value = "/seller/updateAmazonOrderInfo", method = RequestMethod.POST)	
 	public ModelAndView moveStatusAmazonOrderInfo11(HttpServletRequest request,
 			@ModelAttribute("command") PartnerSellerAuthInfo partnerSellerAuthInfo, BindingResult result) {
 		
@@ -1465,8 +1479,11 @@ public class OrderController {
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		String[] reportheaders;
-		reportheaders = request.getParameterValues("Jagadeesha");
+		reportheaders = request.getParameterValues("selectedOrderIds");
 
+		
+				
+		
 		if (reportheaders != null)
 			System.out.println("reportheaders length" + reportheaders.length);
 
@@ -1474,7 +1491,8 @@ public class OrderController {
 		if (reportheaders != null)
 			for (int i = 1; i < reportheaders.length; i++) {
 				value = value + "," + "'" + reportheaders[i] + "'";
-			}
+			}	
+	
 		try {
 			List<AmazonOrderInfo> listamazaon = new ArrayList<AmazonOrderInfo>();
 			listamazaon = mwsAmazonOrdMgmtService.getAmazonOrderInfoList(value);
@@ -1483,9 +1501,8 @@ public class OrderController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		
-		//return new ModelAndView("redirect:/seller/orderList.html");		
+		}	
+			
 		 return new ModelAndView("dailyactivities/listAmazonwsOrderInfo", model);
 	}
 	
