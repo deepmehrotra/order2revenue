@@ -22,6 +22,8 @@ public class GenericQuery {
 	@Column
 	private String email;
 	@Column
+	private long contact;
+	@Column
 	private String queryText;
 	@Column
 	private Date  queryTime;
@@ -54,6 +56,12 @@ public class GenericQuery {
 	}
 	public void setQueryTime(Date queryTime) {
 		this.queryTime = queryTime;
+	}
+	public long getContact() {
+		return contact;
+	}
+	public void setContact(long contact) {
+		this.contact = contact;
 	}
 
 

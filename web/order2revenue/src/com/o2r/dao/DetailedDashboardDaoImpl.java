@@ -665,13 +665,15 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 					}
 				}
 			} else {
-				result = (Object[]) criteria.list().get(0);			
-				if (result != null) {
-					topSKU.put("sku", result[0]);
-					topSKU.put("grossQ", Long.parseLong(result[1].toString()));
-					topSKU.put("netQ", Long.parseLong(result[2].toString()));
-					topSKUs.add(topSKU);				
-				}
+				if(criteria.list().size() != 0){
+					result = (Object[]) criteria.list().get(0);			
+					if (result != null) {
+						topSKU.put("sku", result[0]);
+						topSKU.put("grossQ", Long.parseLong(result[1].toString()));
+						topSKU.put("netQ", Long.parseLong(result[2].toString()));
+						topSKUs.add(topSKU);				
+					}
+				}				
 			}						
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);

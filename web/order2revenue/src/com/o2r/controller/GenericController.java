@@ -531,15 +531,19 @@ public class GenericController {
 	public @ResponseBody String saveQuery(HttpServletRequest request) {
 
 		logger.info("$$$ saveQuery Starts : GenericController $$$");
-		int sellerId = 0;
+		long contact = 0;
 		String email = request.getParameter("email");
 		String name = request.getParameter("name");
+		if(request.getParameter("Number") != null){
+			contact = Long.parseLong(request.getParameter("Number"));
+		}
 		String query = request.getParameter("query");
 		GenericQuery gq = new GenericQuery();
 		try {
-			sellerId = helperClass.getSellerIdfromSession(request);
+			//sellerId = helperClass.getSellerIdfromSession(request);
 			if (email != null) {
 				gq.setEmail(email);
+				gq.setContact(contact);
 				if (name != null)
 					gq.setName(name);
 				if (query != null)
@@ -549,7 +553,7 @@ public class GenericController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Failed! by seller ID : " + sellerId, e);
+			logger.error("Failed! During saving user Query. ", e);
 			return "false";
 		}
 		logger.info("$$$ saveQuery Ends : GenericController $$$");
