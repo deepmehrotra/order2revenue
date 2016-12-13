@@ -15,6 +15,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.sql.rowset.spi.SyncResolver;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
@@ -32,6 +34,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Repository;
 
+import com.google.gson.annotations.Since;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.ChargesBean;
 import com.o2r.bean.ChargesBean.SortByCriteria;
@@ -280,7 +283,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public synchronized void addOrder(List<Order> orderList, int sellerId)
+	public void addOrder(List<Order> orderList, int sellerId)
 			throws CustomException {
 
 		log.info("*** AddOrder List starts ***");
@@ -609,14 +612,16 @@ public class OrderDaoImpl implements OrderDao {
 							log.debug("******Saving new  order delivery date : "
 									+ order.getDeliveryDate());
 							// Code for order timeline
+							
 							timeline.setEvent("Order Created");
 							order.setLastActivityOnOrder(new Date());
 							timeline.setEventDate(new Date());
 							order.getOrderTimeline().add(timeline);
 							order.setSeller(seller);
-							seller.getOrders().add(order);
-							/* session.saveOrUpdate(partner); */
-							session.saveOrUpdate(seller);
+							synchronized (order){
+								seller.getOrders().add(order);
+								session.saveOrUpdate(seller);
+							}							
 						}
 						taxDetailService.addMonthlyTaxDetail(session,
 								taxDetails, sellerId);

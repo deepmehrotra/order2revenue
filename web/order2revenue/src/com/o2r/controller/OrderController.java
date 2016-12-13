@@ -646,10 +646,9 @@ public class OrderController {
 					e1.printStackTrace();
 				}
 			}
-
 		}
 		log.info("$$$ save() Ends : OrderController $$$");
-		session.setAttribute("isProgress", false);
+		//session.setAttribute("isProgress", false);
 		return new ModelAndView("redirect:/seller/dashboard.html");
 
 	}
