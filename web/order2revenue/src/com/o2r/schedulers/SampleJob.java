@@ -165,14 +165,17 @@ public class SampleJob {
 				criteria.createAlias("orderPayment", "orderPayment", CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.lt("orderPayment.dateofPayment", backDate))
 					.add(Restrictions.gt("orderPayment.paymentDifference", 0.0))
-					.add(Restrictions.ne("finalStatus", "Settled"));
+					.add(Restrictions.ne("finalStatus", "Settled"))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 					
 			orderList = criteria.list();
 			if(orderList != null){
 				log.info("No of Orders to be Settle : "+orderList.size());
 			}
 			if(orderList != null && orderList.size() != 0){
-				for(Order order : orderList){					
+				for(Order order : orderList){
+					System.out.println(order.getOrderId());
 					order.getOrderPayment().setPaymentDifference(0);
 					order.setFinalStatus("Settled");
 					OrderTimeline timeline = new OrderTimeline();

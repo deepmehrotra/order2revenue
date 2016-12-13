@@ -184,31 +184,31 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
      
      <!-- Schedular mapping START(4 Order Settled) -->  
         
-        <bean name="setTriggerJobOrderS" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <!-- <bean name="setTriggerJobOrderS" class="org.springframework.scheduling.quartz.JobDetailBean">
 			<property name="jobClass" value="com.o2r.schedulers.SetTriggerJobOrderSettled" />		
 			<property name="jobDataAsMap">
 				<map>
 					<entry key="sampleJob" value-ref="sampleJob" />
 				</map>
 			</property>		
-		</bean>
+		</bean> -->
 		<!-- <bean id="simpleTrigger2" class="org.springframework.scheduling.quartz.SimpleTriggerBean">		
 			<property name="jobDetail" ref="setTriggerJobOrderS" />
 			<property name="repeatInterval" value="50000000" />
 			<property name="startDelay" value="50000" />			
 		</bean> -->
-     	<bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerBean">
+     	<!-- <bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerBean">
 			<property name="jobDetail" ref="setTriggerJobOrderS" />
-			<property name="cronExpression" value="0 0 1 * * ?" />	
-		</bean>	
-		<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+			<property name="cronExpression" value="0 0/10 * * * ?" />	
+		</bean> -->	
+		<!-- <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 			<property name="triggers">
 				<list>
 					<ref bean="cronTrigger2" />
-					<!-- <ref bean="simpleTrigger2" /> -->
+					<ref bean="simpleTrigger2" />
 				</list>
 			</property>
-		</bean>
+		</bean> -->
      	
      <!-- schedular mapping END -->
      
