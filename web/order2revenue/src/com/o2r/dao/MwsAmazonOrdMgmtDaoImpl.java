@@ -114,7 +114,7 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 		
 		List<PartnerSellerAuthInfo> returnlist = null;
 		
-		final String QRY = "from PartnerSellerAuthInfo where PCNAME='Amazon'";
+		final String QRY = "from PartnerSellerAuthInfo where PCNAME='Amazon.in'";
 		
 		try {			
 			

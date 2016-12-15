@@ -161,10 +161,11 @@ public class PartnerSellerAuthInfo  {
 	public void setPartner(Partner partner) {
 		this.partner = partner;
 	}
-
-	 public String getAmazonSellerId() {
+	
+	@Column(name="amazonSellerId")
+	public String getAmazonSellerId() {
 			return amazonSellerId;
-	 }
+	}
 
 	public void setAmazonSellerId(String amazonSellerId) {
 			this.amazonSellerId = amazonSellerId;

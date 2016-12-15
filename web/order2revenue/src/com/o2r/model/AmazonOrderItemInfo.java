@@ -80,10 +80,10 @@ public class AmazonOrderItemInfo implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ITEM_ID", unique = true, nullable = false)
+	@Column(name = "ITEM_ID", nullable = true)
 	public int getId() {
 		return this.id;
-		//return 2;
+		
 	}
 
 	public void setId(int id) {

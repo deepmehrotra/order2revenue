@@ -69,6 +69,7 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 			authInfoBean.setMarketplaceid(sellerAuthInfo.getMarketplaceid());
 			authInfoBean.setServiceurl(sellerAuthInfo.getServiceurl());
 			authInfoBean.setStatus(sellerAuthInfo.getStatus());
+			authInfoBean.setAmazonSellerId(sellerAuthInfo.getAmazonSellerId());
 		} catch (Exception expOj) {
 			expOj.printStackTrace();
 		}
@@ -119,9 +120,18 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 		List<String> orderStatus = null;
 		try {
 			orderStatus = new ArrayList<String>();
-			orderStatus.add(MWSConstants.ORDERSTATUSPENDING);
-			orderStatus.add(MWSConstants.ORDERSTATUSPENDINGAVAILABILITY);
+			//orderStatus.add(MWSConstants.ORDERSTATUSPENDING);
+			//orderStatus.add(MWSConstants.ORDERSTATUSPENDINGAVAILABILITY);
+			
+			orderStatus.add("Unfulfillable");
+			orderStatus.add("PartiallyShipped");
+			orderStatus.add("Unshipped");
+			orderStatus.add("Pending");
+			orderStatus.add("Canceled");
+			orderStatus.add("Shipped");
+			orderStatus.add("PendingAvailability");
 		} catch (Exception expObj) {
+			
 			expObj.printStackTrace();
 		}
 		return orderStatus;
@@ -137,7 +147,8 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 			ListOrdersRequest request = new ListOrdersRequest();
 			List<String> marketplaceIds = new ArrayList<String>();
 			marketplaceIds.add(authInfo.getMarketplaceid());
-			request.setSellerId(authInfo.getSellerid());
+			request.setSellerId(authInfo.getAmazonSellerId());
+			//request.setSellerId("A2D1BAVBN6MZ98");
 			request.setMWSAuthToken(authInfo.getMwsauthtoken());
 			request.setMarketplaceId(marketplaceIds);
 			request.setCreatedAfter(createdAfter);
@@ -334,7 +345,7 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 			listOrderItemsResult = new com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult();
 			MarketplaceWebServiceOrdersClient client = com.o2r.amazonservices.mws.orders.config.MarketplaceWebServiceOrdersSampleConfig.getClient();
 			ListOrderItemsRequest request = new ListOrderItemsRequest();
-			request.setSellerId(authInfo.getSellerid());
+			request.setSellerId(authInfo.getAmazonSellerId());
 			request.setMWSAuthToken(authInfo.getMwsauthtoken());
 			request.setAmazonOrderId(amazonOrderId);
 			ListOrderItemsResponse response = client.listOrderItems(request);
