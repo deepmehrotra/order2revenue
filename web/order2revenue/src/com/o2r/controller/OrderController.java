@@ -1420,8 +1420,8 @@ public class OrderController {
 			
 	         log.info("$$$ getXLS Ends : OrderController $$$");
 		
-	     //return new ModelAndView("initialsetup/viewSellerAuthoInfoDtls", model);
-	     return new ModelAndView("dailyactivities/listAmazonwsOrderInfo", model);
+	     return new ModelAndView("dailyactivities/listAdminAmazonwsOrderInfo", model);
+	     //return new ModelAndView("dailyactivities/listAmazonwsOrderInfo", model);
 	}
 	
 	
@@ -1435,7 +1435,7 @@ public class OrderController {
 		Map<String, Object> model = new HashMap<String, Object>();	
 		
 		String fromDate = request.getParameter("startDate");
-		String endDate = request.getParameter("startDate");	
+		String endDate = request.getParameter("endDate");	
 		
 		
 		System.out.println("hellow..............................................");

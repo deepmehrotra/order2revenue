@@ -257,8 +257,8 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 				//amazonOrderItemInfo.setItempriceamount(orderItem.getItemPrice().getAmount());
 				//if(orderItem.getShippingPrice().getCurrencyCode()!=null)
 				//amazonOrderItemInfo.setShippingpricecurrencycode(orderItem.getShippingPrice().getCurrencyCode());
-				amazonOrderItemInfo.setShippingpriceamount(orderItem
-						.getShippingPrice().getAmount());
+				if(orderItem.getShippingPrice().getAmount()!=null)
+				amazonOrderItemInfo.setShippingpriceamount(orderItem.getShippingPrice().getAmount());
 				amazonOrderItemInfo.setGiftwrappricecurrencycode(orderItem
 						.getGiftWrapPrice().getCurrencyCode());
 				amazonOrderItemInfo.setGiftwrappriceamount(orderItem
