@@ -1457,17 +1457,17 @@ public class OrderController {
 			String status ="Unfulfillable,PartiallyShipped,Unshipped,Pending,Canceled,Shipped,PendingAvailability";
 			amazonOrderMgmt.invokeListOrdersAndOrderItemsByValues(fromDate,endDate,status);			
 			
-			//List<AmazonOrderInfo> listamazaon = new ArrayList<AmazonOrderInfo>();
-			//listamazaon = mwsAmazonOrdMgmtService.getAmazonOrderInfoList(status);
+			List<AmazonOrderInfo> listamazaon = new ArrayList<AmazonOrderInfo>();
+			listamazaon = mwsAmazonOrdMgmtService.getAmazonOrderInfoList(status);
 
-			//amazonOrderMgmt.saveAmzonOrderContents(listamazaon);
+			amazonOrderMgmt.saveAmzonOrderContents(listamazaon);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		//return new ModelAndView("redirect:/seller/orderList.html");	
-		return new ModelAndView("dailyactivities/listAmazonwsOrderInfo", model);
+		return new ModelAndView("dailyactivities/listAdminAmazonwsOrderInfo", model);
 		//return new ModelAndView("redirect:/seller/moveStatusAmazonOrderInfo.html");
 	}
 	
