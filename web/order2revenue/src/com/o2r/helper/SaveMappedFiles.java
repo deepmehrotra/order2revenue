@@ -5835,6 +5835,9 @@ public class SaveMappedFiles {
 																			.indexOf(
 																					".") + 1)
 															.trim();
+													if(amt.contains(",")){
+														amt = amt.replaceAll(",", "");
+													}
 													System.out.println(amt);
 													amount = Double
 															.parseDouble(amt);

@@ -32,6 +32,15 @@ span .#error {
 .pickList1Select {
 	height: 200px !important;
 }
+
+.select2-search__field {
+	display: inline-block !important;
+	border: none !important;
+}
+
+.select2-selection--multiple {
+	border: 1px solid #aaa !important;
+}
 </style>
 <link href="/O2R/seller/css/bootstrap.min.css" rel="stylesheet">
 <link href="/O2R/seller/font-awesome/css/font-awesome.css"
@@ -45,6 +54,7 @@ span .#error {
 	rel="stylesheet">
 <link href="/O2R/seller/css/tooltip1.css" rel="stylesheet">
 <link href="/O2R/seller/css/jquery.steps.css" rel="stylesheet">
+<link href="/O2R/seller/css/select2.min.css" rel="stylesheet">
 
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 
@@ -105,7 +115,6 @@ input+label {
 	display: inline-block;
 }
 </style>
-
 </head>
 <body>
 	<div id="wrapper">
@@ -164,17 +173,18 @@ input+label {
 																		<div class="col-sm-9">
 																			<c:if test="${partner.pcName != null}">
 																				<input name="pcNameSuffix" class="form-control"
-																				id="partnerName2" onblur="checkOnBlur()"
-																				style="width: 108%;" placeholder="Suffix" /> <span
-																				id="partnerNameMessage"
-																				style="font-weight: bold;color=red"></span>
+																					id="partnerName2" onblur="checkOnBlur()"
+																					style="width: 108%;" placeholder="Suffix" />
+																				<span id="partnerNameMessage"
+																					style="font-weight: bold;color=red"></span>
 																			</c:if>
 																			<c:if test="${partner.pcName == null}">
 																				<input name="pcNameSuffix" class="form-control"
-																				id="partnerName2" onblur="checkOnBlur()"
-																				style="width: 108%;" placeholder="Suffix"  required='true' /> <span
-																				id="partnerNameMessage"
-																				style="font-weight: bold;color=red"></span>
+																					id="partnerName2" onblur="checkOnBlur()"
+																					style="width: 108%;" placeholder="Suffix"
+																					required='true' />
+																				<span id="partnerNameMessage"
+																					style="font-weight: bold;color=red"></span>
 																			</c:if>
 																		</div>
 																	</c:otherwise>
@@ -212,9 +222,54 @@ input+label {
 																</c:if>
 															</div>
 														</div>
-														<div class="col-sm-6"></div>
 													</div>
-													<div class="col-sm-6"></div>
+													<div class="col-sm-6">
+														<c:if test="${fn:contains(partner.pcName, 'flipkart')}">
+															<div class="form-group">
+																<label class="col-sm-4 control-label">Select
+																	Seller Tier</label>
+																<div class="col-sm-8">
+																	<select class="form-control" name="sellerTier"
+																		id="sellerTier">
+																		<c:choose>
+																			<c:when test="${sellerTier != null}">
+																				<c:if test="${!empty sellerTiers}">
+																					<c:forEach items="${sellerTiers}"
+																						var="sellerTierCur" varStatus="loop">
+																						<c:choose>
+																							<c:when test="${sellerTierCur == sellerTier}">
+																								<option value="${sellerTierCur}" selected>${sellerTierCur}</option>
+																							</c:when>
+																							<c:otherwise>
+																								<option value="${sellerTierCur}">${sellerTierCur}</option>
+																							</c:otherwise>
+																						</c:choose>
+																					</c:forEach>
+																				</c:if>
+																			</c:when>
+																			<c:otherwise>
+																				<option value="default" selected>Choose...</option>
+																				<c:if test="${!empty sellerTiers}">
+																					<c:forEach items="${sellerTiers}"
+																						var="sellerTierCur" varStatus="loop">
+																						<option value="${sellerTierCur}">${sellerTierCur}</option>
+																					</c:forEach>
+																				</c:if>
+																			</c:otherwise>
+																		</c:choose>
+																	</select>
+																</div>
+															</div>
+														</c:if>
+													</div>
+												</div>
+												<div class="col-lg-12" id="sellerTierError"
+													style="display: none; color: #8a1f11;">
+													<div class="col-sm-8"></div>
+													<div class="col-sm-4">
+														<label class="control-label">Please select Seller
+															Tier to proceed</label>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -629,8 +684,8 @@ input+label {
 																<div id="collapseTwo1" class="panel-collapse collapse">
 																	<div class="panel-body">
 																		<h4>Please select .....</h4>
-																		<label id="fixedfee-error"
-																			style="visible: none;"> </label>
+																		<label id="fixedfee-error" style="visible: none;">
+																		</label>
 																		<div id="room_fileds">
 																			<div id="content">
 																				<div class="col-sm-12">
@@ -708,6 +763,133 @@ input+label {
 																								</div>
 																							</c:otherwise>
 																						</c:choose>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																		<c:if test="${fn:contains(partner.pcName, 'amazon')}">
+																			<div class="col-lg-12">
+																				<div class="col-sm-12" id="multiSelect">
+																					<label class="col-sm-3 control-label">Map
+																						Partner Category</label>
+																					<div class="col-sm-7">
+																						<select class="js-example-basic-multiple"
+																							multiple="multiple" name="multiSku" id="multiSku"
+																							style="width: 350px;" tabindex="4">
+
+																							<c:choose>
+																								<c:when test="${!empty mappedPartnerCatList}">
+																									<c:forEach items="${mappedPartnerCatList}"
+																										var="category" varStatus="loop">
+																										<option value="${category}" selected>${category}</option>
+																									</c:forEach>
+																									<c:if test="${!empty partnerCatList}">
+																										<c:forEach items="${partnerCatList}"
+																											var="category" varStatus="loop">
+																											<option value="${category}">${category}</option>
+																										</c:forEach>
+																									</c:if>
+																								</c:when>
+																								<c:otherwise>
+																									<c:if test="${!empty partnerCatList}">
+																										<c:forEach items="${partnerCatList}"
+																											var="category" varStatus="loop">
+																											<option value="${category}">${category}</option>
+																										</c:forEach>
+																									</c:if>
+																								</c:otherwise>
+																							</c:choose>
+																						</select>
+																					</div>
+																				</div>
+																				<div class="col-sm-2"></div>
+																			</div>
+																		</c:if>
+																		<div id="amazonOther" style="display: none;"
+																			class="col-lg-12">
+																			<h4>Other Categories .....</h4>
+																			<div id="room_fileds1">
+																				<div id="content1">
+																					<div class="col-sm-12">
+																						<div class="form-group col-md-12">
+																							<c:choose>
+																								<c:when test="${!empty partner.fixedfeeListOthers}">
+																									<c:forEach items="${partner.fixedfeeListOthers}"
+																										var="fixedfee1" varStatus="loop">
+																										<div class="col-md-3 content-rgt">
+																											<select class="form-control"
+																												name="nr-fixedfeeOthers${loop.index}-criteria">
+																												<c:choose>
+																													<c:when
+																														test="${fixedfee1.criteria eq 'Upto'}">
+																														<option selected>Upto</option>
+																														<option>Greater Than</option>
+																													</c:when>
+																													<c:otherwise>
+																														<option>Upto</option>
+																														<option selected>Greater Than</option>
+																													</c:otherwise>
+																												</c:choose>
+																											</select>
+																										</div>
+																										<div class="col-md-3 content-rgt">
+																											<input type="text"
+																												class="form-control number"
+																												name="nr-fixedfeeOthers${loop.index}-range"
+																												id="nr-fixedfeeOthers${loop.index}-range"
+																												value="${fixedfee1.range}" required/>
+																										</div>
+																										<div class="col-md-3 content-rgt">
+																											<input type="text"
+																												class="form-control number"
+																												name="nr-fixedfeeOthers${loop.index}-value"
+																												id="nr-fixedfeeOthers${loop.index}-value"
+																												value="${fixedfee1.value}" />
+																										</div>
+																										<div class="col-md-3 content-rgt">
+																											<c:choose>
+																												<c:when
+																													test="${fixedfee1.criteria eq 'Upto'}">
+																													<input type="button"
+																														onclick="myFunction1();" value="+"
+																														class="btn btn-primary" id="myBtn1" />
+																												</c:when>
+																												<c:otherwise>
+																													<input type="button"
+																														onclick="myFunction1();" value="+"
+																														class="btn btn-primary" id="myBtn1"
+																														disabled="disabled" />
+																												</c:otherwise>
+																											</c:choose>
+																										</div>
+																									</c:forEach>
+																								</c:when>
+																								<c:otherwise>
+
+																									<div class="col-md-3 content-rgt">
+																										<select class="form-control"
+																											name="nr-fixedfeeOthers0-criteria">
+																											<option>Upto</option>
+																											<option>Greater Than</option>
+																										</select>
+																									</div>
+																									<div class="col-md-3 content-rgt">
+																										<input type="text" class="form-control number"
+																											name="nr-fixedfeeOthers0-range" id="txt1_name0" required/>
+
+																									</div>
+																									<div class="col-md-3 content-rgt">
+																										<input type="text" class="form-control number"
+																											name="nr-fixedfeeOthers0-value"
+																											id="nr-fixedfeeOthers0-value" />
+																									</div>
+																									<div class="col-md-3 content-rgt">
+																										<input type="button" onclick="myFunction1();"
+																											value="+" class="btn btn-primary" id="myBtn1" />
+																									</div>
+																								</c:otherwise>
+																							</c:choose>
+																						</div>
 																					</div>
 																				</div>
 																			</div>
@@ -836,8 +1018,8 @@ input+label {
 																</div>
 																<div id="collapsefour1" class="panel-collapse collapse">
 																	<div class="panel-body">
-																		<label id="shippingfee-error" 
-																			for="shippingfee" style="visible: none;"> </label>
+																		<label id="shippingfee-error" for="shippingfee"
+																			style="visible: none;"> </label>
 																		<div class="col-sm-12">
 																			<div class="col-sm-6">
 																				<div class="radio">
@@ -1289,7 +1471,29 @@ input+label {
 																	</div>
 																</div>
 															</div>
-
+															<c:if test="${fn:contains(partner.pcName, 'amazon')}">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																		<h4 class="panel-title">
+																			<a data-toggle="collapse" data-parent="#accordion"
+																				href="#collapsesix1">Delivery Service Fee</a>
+																		</h4>
+																	</div>
+																	<div id="collapsesix1" class="panel-collapse collapse">
+																		<div class="panel-body">
+																			<div class="form-group col-md-12">
+																				<div class="col-md-4 input-group m-b">
+																					<label>Shipping Fee % </label> <input type="text"
+																						placeholder="" class="form-control number"
+																						name="nr-delServiceFee"
+																						value="${chargeMap.delServiceFee}"
+																						id="delServiceFee" />
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</c:if>
 														</div>
 													</div>
 												</div>
@@ -2983,6 +3187,7 @@ input+label {
 
 	<script src="/O2R/seller/js/pickList.js"></script>
 	<script src="/O2R/seller/js/jquery.steps.min.js"></script>
+	<script src="/O2R/seller/js/select2.min.js"></script>
 
 	<script type="text/javascript">
 		div = {
@@ -3022,6 +3227,38 @@ input+label {
 					+ "</div>"
 					+ "<div class='col-md-3 content-rgt'>"
 					+ "<input type='text' placeholder='' name='nr-fixedfee"+index+"-value' id='nr-fixedfee"+index+"-value' class='form-control'>"
+					+ "</div>" + "<div class='col-md-3 content-rgt'>"
+					+ "</div>" + "</div>" + "</div>";
+			objTo.appendChild(divtest)
+		}
+	</script>
+	<script type="text/javascript">
+		var v = 1;
+		var index = 0;
+		function myFunction1() {
+			v++;
+			index = index + 1;
+			var objTo = document.getElementById('room_fileds1');
+			var divtest = document.createElement("div");
+			divtest.innerHTML = "<div class='col-sm-12'>"
+					+ "<div class='form-group col-md-12'>"
+					+ "<div class='col-md-3 content-rgt'>"
+					+ "<select name='nr-fixedfeeOthers"
+					+ index
+					+ "-criteria' id=='nr-fixedfeeOthers"
+					+ index
+					+ "-criteria' onchange='(this.selectedIndex == 0) ? upto() : additional("
+					+ (index - 1)
+					+ ")' class='form-control'>"
+					+ "<option>Upto</option>"
+					+ "<option>Greater Than</option>"
+					+ "</select>"
+					+ "</div>"
+					+ "<div class='col-md-3 content-rgt'>"
+					+ "<input type='text' name='nr-fixedfeeOthers"+index+"-range' placeholder='' class='form-control' id='txt1_name"+index+"' multiple>"
+					+ "</div>"
+					+ "<div class='col-md-3 content-rgt'>"
+					+ "<input type='text' placeholder='' name='nr-fixedfeeOthers"+index+"-value' id='nr-fixedfeeOthers"+index+"-value' class='form-control'>"
 					+ "</div>" + "<div class='col-md-3 content-rgt'>"
 					+ "</div>" + "</div>" + "</div>";
 			objTo.appendChild(divtest)
@@ -3298,10 +3535,12 @@ input+label {
 													if (currentIndex > newIndex) {
 														return true;
 													}
-													// Forbid suppressing "Warning" step if the user is to young
-													if (newIndex === 3
-															&& Number($("#age")
-																	.val()) < 18) {
+
+													if ($("#pcName").val() == 'flipkart'
+															&& $("#sellerTier")
+																	.val() == 'default') {
+														document
+																.getElementById("sellerTierError").style.display = 'block';
 														return false;
 													}
 													var form = $(this);
@@ -3391,6 +3630,14 @@ input+label {
 							var switchery_3 = new Switchery(elem_3, {
 								color : '#1AB394'
 							});
+							$('#sellerTier')
+									.on(
+											'change',
+											function() {
+												//alert(this.value);
+												location.href = 'addPartner.html?partnerName=flipkart-$$'
+														+ this.value;
+											})
 							$("#nr-switch").change(function() {
 								if (this.checked) {
 									$('.radio5').hide();
@@ -3399,6 +3646,9 @@ input+label {
 									$("#nr-switch-sec").slideUp();
 								}
 							});
+
+							$(".js-example-basic-multiple").select2();
+
 							$(".commissionType").click(function() {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
@@ -3534,7 +3784,30 @@ input+label {
 									"ifChecked", revShippingFeeSF);
 							$("#revShippingFeeType_revShipFeeVar").on(
 									"ifChecked", revShipFeeVar);
-							
+													
+							if ('${(!empty partner.fixedfeeListOthers) && (fn:length(partner.fixedfeeListOthers) gt 0)}') {
+								document.getElementById("amazonOther").style.display = 'block';
+							} 
+
+							$('#multiSku')
+									.on(
+											"select2:select",
+											function(e) {
+												document
+														.getElementById("amazonOther").style.display = 'block';
+											});
+							$('#multiSku')
+									.on(
+											"select2:unselect",
+											function(e) {
+												var value = $('#multiSku')
+														.val();
+												if (!value) {
+													document
+															.getElementById("amazonOther").style.display = 'none';
+												}
+											});
+
 							/* $('#paymentField').change(function() {
 								$('.payment-box').hide();
 								$('#' + $(this).val()).fadeIn();
@@ -3632,8 +3905,8 @@ input+label {
 								$("#commisionType-categoryWise").prop(
 										"checked", true).trigger("click");
 							else if ('${partner.nrnReturnConfig.commissionType}' == 'SKUWise')
-								$("#commisionType-SKUWise").prop(
-										"checked", true);
+								$("#commisionType-SKUWise").prop("checked",
+										true);
 							if ('${partner.nrnReturnConfig.whicheverGreaterPCC}' == 'true')
 								$("#pccHigher").prop("checked", true).trigger(
 										"click");
@@ -3925,7 +4198,9 @@ input+label {
 													document
 															.getElementById("shippingfee-error").innerHTML = "Please select Additional values for Dead Weight calculation";
 
-													$('#shippingfee-error').attr('style', 'color:#8a1f11;');
+													$('#shippingfee-error')
+															.attr('style',
+																	'color:#8a1f11;');
 													e.preventDefault();
 												}
 
@@ -3935,7 +4210,9 @@ input+label {
 															.show();
 													document
 															.getElementById("shippingfee-error").innerHTML = "Please select Additional values for Volumetric Weight calculation";
-													$('#shippingfee-error').attr('style', 'color:#8a1f11;');
+													$('#shippingfee-error')
+															.attr('style',
+																	'color:#8a1f11;');
 													e.preventDefault();
 												}
 											});
@@ -3962,15 +4239,23 @@ input+label {
 														isValid = true;
 														break;
 													}
-													
-													if (i==0) {
-														var rangeVal = $("#txt_name0").val();
+
+													if (i == 0) {
+														var rangeVal = $(
+																"#txt_name0")
+																.val();
 														if (typeof rangeVal === "undefined") {
-															var rangeVal1 = $("#nr-fixedfee0-range").val();
-															if (rangeVal1.length === 0 || !rangeVal1.trim()) {
+															var rangeVal1 = $(
+																	"#nr-fixedfee0-range")
+																	.val();
+															if (rangeVal1.length === 0
+																	|| !rangeVal1
+																			.trim()) {
 																isValid = true;
 															}
-														} else if (rangeVal.length === 0 || !rangeVal.trim()) {
+														} else if (rangeVal.length === 0
+																|| !rangeVal
+																		.trim()) {
 															isValid = true;
 														}
 													}
@@ -3978,11 +4263,13 @@ input+label {
 
 												if (isValid == false) {
 
-													$('#fixedfee-error').show();										
-													
+													$('#fixedfee-error').show();
+
 													document
 															.getElementById("fixedfee-error").innerHTML = "Please select Greater Than values";
-													$('#fixedfee-error').attr('style', 'color:#8a1f11;');
+													$('#fixedfee-error').attr(
+															'style',
+															'color:#8a1f11;');
 
 													e.preventDefault();
 												}
@@ -4213,6 +4500,10 @@ input+label {
 		}
 		function submitForm() {
 
+			$.validator.addMethod("valueNotEquals", function(value, element,
+					arg) {
+				return arg != value;
+			}, "Value must not equal arg.");
 			var validator = $("#addpartnerform")
 					.validate(
 							{
@@ -4260,6 +4551,9 @@ input+label {
 										min : 1,
 										max : 31,
 									},
+									SelectName : {
+										valueNotEquals : "default"
+									},
 									monthlypaydate : {
 										required : function(element) {
 											return (getRole('paymentcycleClass') == 'monthly');
@@ -4274,7 +4568,10 @@ input+label {
 									pcName : " Enter partner name",
 									maxReturnAcceptance : "Max return required between 1 and 100",
 									maxRTOAcceptance : "RTO acceptance required between 1 and 100",
-									toggler : "Please select any Payment Cycle"
+									toggler : "Please select any Payment Cycle",
+									SelectName : {
+										valueNotEquals : "Please select an item!"
+									}
 								}
 							});
 			/* meta disable */
@@ -4283,7 +4580,7 @@ input+label {
 					var clickCheckbox = document.querySelector('.js-switch_2');
 					return clickCheckbox.checked;
 				}
-			}); 
+			});
 			$("#fixedCommissionPercent").rules("add", {
 				required : function(element) {
 					if (getRole('commissionType') == 'fixed')
@@ -4313,12 +4610,13 @@ input+label {
 				},
 				number : true
 			});
-			
+
 			var isError = false;
-			if ($("#fixedfee-error").is(":visible") || $("#shippingfee-error").is(":visible")) {
+			if ($("#fixedfee-error").is(":visible")
+					|| $("#shippingfee-error").is(":visible")) {
 				isError = true;
 			}
-			
+
 			//alert(isError); 
 			if (validator.form() && nameAvailability && isError == false) {
 				$('form#addpartnerform').submit();
@@ -4346,6 +4644,5 @@ input+label {
 				return true;
 		}
 	</script>
-
 </body>
 </html>

@@ -42,6 +42,7 @@ public class PartnerBean {
 	private NRnReturnConfig nrnReturnConfig;
 	
 	private List<ChargesBean> fixedfeeList = new ArrayList<ChargesBean>();
+	private List<ChargesBean> fixedfeeListOthers = new ArrayList<ChargesBean>();
 	private List<ChargesBean> shippingfeeVolumeFixedList = new ArrayList<ChargesBean>();
 	private List<ChargesBean> shippingfeeWeightFixedList = new ArrayList<ChargesBean>();
 	private List<ChargesBean> shippingfeeVolumeVariableList = new ArrayList<ChargesBean>();
@@ -318,5 +319,11 @@ public class PartnerBean {
 	public void setNoofdaysfromdeliverydateOthers(
 			int noofdaysfromdeliverydateOthers) {
 		this.noofdaysfromdeliverydateOthers = noofdaysfromdeliverydateOthers;
+	}
+	public List<ChargesBean> getFixedfeeListOthers() {
+		return fixedfeeListOthers;
+	}
+	public void setFixedfeeListOthers(List<ChargesBean> fixedfeeListOthers) {
+		this.fixedfeeListOthers = fixedfeeListOthers;
 	}
 }

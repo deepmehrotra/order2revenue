@@ -43,6 +43,9 @@ public interface CategoryDao {
 
 	public List<String> listPartnerCategories() throws CustomException;
 
+	public List<String> listPartnerCategories(String partnerName, int sellerId)
+			throws CustomException;
+
 	public PartnerCategoryMap getPartnerCategoryMap(String partnerName,
 			String catName, int sellerId) throws CustomException;
 
