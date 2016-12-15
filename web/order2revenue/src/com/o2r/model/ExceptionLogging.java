@@ -54,7 +54,7 @@ public class ExceptionLogging  implements java.io.Serializable {
     @Column(name="Description", length=1000)
     public String getDesc() {
         return this.desc;
-    }
+    } 
     
     public void setDesc(String desc) {
         this.desc = desc;
