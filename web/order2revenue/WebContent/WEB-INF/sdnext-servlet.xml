@@ -103,7 +103,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 				<value>com.o2r.model.TaxablePurchases</value>
 				<value>com.o2r.model.PaymentUpload_Order</value>
 				<value>com.o2r.model.PartnerCategoryMap</value>
-
+				<value>com.o2r.model.ExceptionLogging</value>
 				<value>com.o2r.model.AmazonOrderInfo</value>
 				<value>com.o2r.model.AmazonOrderItemInfo</value>
 				<value>com.o2r.model.ExceptionLogging</value>
