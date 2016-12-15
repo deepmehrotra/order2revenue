@@ -109,6 +109,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 				<value>com.o2r.model.ExceptionLogging</value>
 				<value>com.o2r.model.PartnerSellerAuthInfo</value>
 				<value>com.o2r.model.ShippingAddress</value>
+				<value>com.o2r.model.ShopcluesOrderAPI</value>
 
 			</list>
 		</property>

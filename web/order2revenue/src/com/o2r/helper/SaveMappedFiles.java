@@ -2412,7 +2412,7 @@ public class SaveMappedFiles {
 							{
 								errorMessage
 								.append("'Order Shipped Date' or 'Purchase Date' are empty. ");
-						validaterow = false;
+								validaterow = false;
 							}
 						}
 					} catch (NullPointerException e) {

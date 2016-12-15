@@ -48,6 +48,7 @@ import com.o2r.bean.ProductConfigBean;
 import com.o2r.bean.SellerAccountBean;
 import com.o2r.bean.SellerAlertsBean;
 import com.o2r.bean.SellerBean;
+import com.o2r.bean.ShopcluesOrderAPIBean;
 import com.o2r.bean.StateBean;
 import com.o2r.bean.StateDeliveryTimeBean;
 import com.o2r.bean.TaxCategoryBean;
@@ -79,6 +80,7 @@ import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
 import com.o2r.model.SellerAccount;
 import com.o2r.model.SellerAlerts;
+import com.o2r.model.ShopcluesOrderAPI;
 import com.o2r.model.State;
 import com.o2r.model.StateDeliveryTime;
 import com.o2r.model.TaxCategory;
@@ -3608,6 +3610,163 @@ public class ConverterClass {
 			doubleList.add(new Double(0));
 		}
 		return doubleList;
+	}
+	
+	
+	
+	public static ShopcluesOrderAPI prepareShopcluesOrderModel(ShopcluesOrderAPIBean orderBean){
+		
+		ShopcluesOrderAPI orderModel = new ShopcluesOrderAPI();
+		if(orderBean != null){			
+			orderModel.setShopcluesOrderId(orderBean.getShopcluesOrderId());
+			orderModel.setShopcluesUniqueId(orderBean.getShopcluesUniqueId());
+			orderModel.setOrder_id(orderBean.getOrder_id());
+			orderModel.setIs_parent_order(orderBean.getIs_parent_order());
+			orderModel.setExempt_from_billing(orderBean.getExempt_from_billing());
+			orderModel.setParent_order_id(orderBean.getParent_order_id());
+			orderModel.setCompany_id(orderBean.getCompany_id());
+			orderModel.setTimestamp(orderBean.getTimestamp());
+			orderModel.setStatus(orderBean.getStatus());
+			orderModel.setTotal(orderBean.getTotal());
+			orderModel.setSubtotal(orderBean.getSubtotal());
+			orderModel.setDetails(orderBean.getDetails());
+			orderModel.setPayment_id(orderBean.getPayment_id());
+			orderModel.setS_city(orderBean.getS_city());
+			orderModel.setS_state(orderBean.getS_state());
+			orderModel.setS_zipcode(orderBean.getS_zipcode());
+			orderModel.setLabel_printed(orderBean.getLabel_printed());
+			orderModel.setGift_it(orderBean.getGift_it());
+			orderModel.setFirstname(orderBean.getFirstname());
+			orderModel.setLastname(orderBean.getLastname());
+			orderModel.setCredit_used(orderBean.getCredit_used());
+			orderModel.setProduct_name(orderBean.getProduct_name());
+			orderModel.setProduct_id(orderBean.getProduct_id());
+			orderModel.setQuantity(orderBean.getQuantity());
+			orderModel.setSelling_price(orderBean.getSelling_price());
+			orderModel.setImage_path(orderBean.getImage_path());
+			orderModel.setPayment_type(orderBean.getPayment_type());
+			orderModel.setErrorMsg(orderBean.getErrorMsg());
+			orderModel.setOrderStatus(orderBean.getOrderStatus());
+			orderModel.setSellerId(orderBean.getSellerId());
+		}
+		return orderModel;
+	}
+	
+	public static ShopcluesOrderAPIBean prepareShopcluesOrderBean(ShopcluesOrderAPI orderModel){
+		
+		ShopcluesOrderAPIBean orderBean = new ShopcluesOrderAPIBean();
+		if(orderModel != null){			
+			orderBean.setShopcluesOrderId(orderModel.getShopcluesOrderId());
+			orderBean.setShopcluesUniqueId(orderModel.getShopcluesUniqueId());
+			orderBean.setOrder_id(orderModel.getOrder_id());
+			orderBean.setIs_parent_order(orderModel.getIs_parent_order());
+			orderBean.setExempt_from_billing(orderModel.getExempt_from_billing());
+			orderBean.setParent_order_id(orderModel.getParent_order_id());
+			orderBean.setCompany_id(orderModel.getCompany_id());
+			orderBean.setTimestamp(orderModel.getTimestamp());
+			orderBean.setStatus(orderModel.getStatus());
+			orderBean.setTotal(orderModel.getTotal());
+			orderBean.setSubtotal(orderModel.getSubtotal());
+			orderBean.setDetails(orderModel.getDetails());
+			orderBean.setPayment_id(orderModel.getPayment_id());
+			orderBean.setS_city(orderModel.getS_city());
+			orderBean.setS_state(orderModel.getS_state());
+			orderBean.setS_zipcode(orderModel.getS_zipcode());
+			orderBean.setLabel_printed(orderModel.getLabel_printed());
+			orderBean.setGift_it(orderModel.getGift_it());
+			orderBean.setFirstname(orderModel.getFirstname());
+			orderBean.setLastname(orderModel.getLastname());
+			orderBean.setCredit_used(orderModel.getCredit_used());
+			orderBean.setProduct_name(orderModel.getProduct_name());
+			orderBean.setProduct_id(orderModel.getProduct_id());
+			orderBean.setQuantity(orderModel.getQuantity());
+			orderBean.setSelling_price(orderModel.getSelling_price());
+			orderBean.setImage_path(orderModel.getImage_path());
+			orderBean.setPayment_type(orderModel.getPayment_type());
+			orderBean.setErrorMsg(orderModel.getErrorMsg());
+			orderBean.setOrderStatus(orderModel.getOrderStatus());
+			orderBean.setSellerId(orderModel.getSellerId());
+		}
+		return orderBean;
+	}
+	
+	
+	public static List<ShopcluesOrderAPI> listShopcluesOrderModel(List<ShopcluesOrderAPIBean> beans){
+		List<ShopcluesOrderAPI> shopcluesOrderModels = new ArrayList<ShopcluesOrderAPI>();
+		for(ShopcluesOrderAPIBean orderBean : beans){
+			ShopcluesOrderAPI orderModel = new ShopcluesOrderAPI();
+			orderModel.setShopcluesOrderId(orderBean.getShopcluesOrderId());
+			orderModel.setShopcluesUniqueId(orderBean.getShopcluesUniqueId());
+			orderModel.setOrder_id(orderBean.getOrder_id());
+			orderModel.setIs_parent_order(orderBean.getIs_parent_order());
+			orderModel.setExempt_from_billing(orderBean.getExempt_from_billing());
+			orderModel.setParent_order_id(orderBean.getParent_order_id());
+			orderModel.setCompany_id(orderBean.getCompany_id());
+			orderModel.setTimestamp(orderBean.getTimestamp());
+			orderModel.setStatus(orderBean.getStatus());
+			orderModel.setTotal(orderBean.getTotal());
+			orderModel.setSubtotal(orderBean.getSubtotal());
+			orderModel.setDetails(orderBean.getDetails());
+			orderModel.setPayment_id(orderBean.getPayment_id());
+			orderModel.setS_city(orderBean.getS_city());
+			orderModel.setS_state(orderBean.getS_state());
+			orderModel.setS_zipcode(orderBean.getS_zipcode());
+			orderModel.setLabel_printed(orderBean.getLabel_printed());
+			orderModel.setGift_it(orderBean.getGift_it());
+			orderModel.setFirstname(orderBean.getFirstname());
+			orderModel.setLastname(orderBean.getLastname());
+			orderModel.setCredit_used(orderBean.getCredit_used());
+			orderModel.setProduct_name(orderBean.getProduct_name());
+			orderModel.setProduct_id(orderBean.getProduct_id());
+			orderModel.setQuantity(orderBean.getQuantity());
+			orderModel.setSelling_price(orderBean.getSelling_price());
+			orderModel.setImage_path(orderBean.getImage_path());
+			orderModel.setPayment_type(orderBean.getPayment_type());
+			orderModel.setErrorMsg(orderBean.getErrorMsg());
+			orderModel.setOrderStatus(orderBean.getOrderStatus());
+			orderModel.setSellerId(orderBean.getSellerId());
+			shopcluesOrderModels.add(orderModel);
+		}
+		return shopcluesOrderModels;
+	}
+	
+	public static List<ShopcluesOrderAPIBean> listShopcluesOrderBean(List<ShopcluesOrderAPI> models){
+		List<ShopcluesOrderAPIBean> shopcluesOrderBeans = new ArrayList<ShopcluesOrderAPIBean>();
+		for(ShopcluesOrderAPI orderModel : models){
+			ShopcluesOrderAPIBean orderBean = new ShopcluesOrderAPIBean();
+			orderBean.setShopcluesOrderId(orderModel.getShopcluesOrderId());
+			orderBean.setShopcluesUniqueId(orderModel.getShopcluesUniqueId());
+			orderBean.setOrder_id(orderModel.getOrder_id());
+			orderBean.setIs_parent_order(orderModel.getIs_parent_order());
+			orderBean.setExempt_from_billing(orderModel.getExempt_from_billing());
+			orderBean.setParent_order_id(orderModel.getParent_order_id());
+			orderBean.setCompany_id(orderModel.getCompany_id());
+			orderBean.setTimestamp(orderModel.getTimestamp());
+			orderBean.setStatus(orderModel.getStatus());
+			orderBean.setTotal(orderModel.getTotal());
+			orderBean.setSubtotal(orderModel.getSubtotal());
+			orderBean.setDetails(orderModel.getDetails());
+			orderBean.setPayment_id(orderModel.getPayment_id());
+			orderBean.setS_city(orderModel.getS_city());
+			orderBean.setS_state(orderModel.getS_state());
+			orderBean.setS_zipcode(orderModel.getS_zipcode());
+			orderBean.setLabel_printed(orderModel.getLabel_printed());
+			orderBean.setGift_it(orderModel.getGift_it());
+			orderBean.setFirstname(orderModel.getFirstname());
+			orderBean.setLastname(orderModel.getLastname());
+			orderBean.setCredit_used(orderModel.getCredit_used());
+			orderBean.setProduct_name(orderModel.getProduct_name());
+			orderBean.setProduct_id(orderModel.getProduct_id());
+			orderBean.setQuantity(orderModel.getQuantity());
+			orderBean.setSelling_price(orderModel.getSelling_price());
+			orderBean.setImage_path(orderModel.getImage_path());
+			orderBean.setPayment_type(orderModel.getPayment_type());
+			orderBean.setErrorMsg(orderModel.getErrorMsg());
+			orderBean.setOrderStatus(orderModel.getOrderStatus());
+			orderBean.setSellerId(orderModel.getSellerId());
+			shopcluesOrderBeans.add(orderBean);
+		}
+		return shopcluesOrderBeans;
 	}
 
 }
