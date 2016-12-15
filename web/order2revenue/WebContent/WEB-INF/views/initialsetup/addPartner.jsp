@@ -359,7 +359,8 @@ input+label {
 													5 Duration will have 5 and Payment from SD will have 10)</small>
 											</div>
 											<div class="col-sm-12 radio1" id="blk-datewisepay">
-												<c:if test="${fn:contains(partner.pcName, 'flipkart')}">
+												<c:if
+													test="${fn:contains(partner.pcName, 'zzzzzzzzzzzzzzzzzzz')}">
 													<div class="row">
 														<div class="col-md-2" style="padding-bottom: 18px;"></div>
 														<div class="col-md-3" style="padding-bottom: 18px;">
@@ -813,8 +814,10 @@ input+label {
 																					<div class="col-sm-12">
 																						<div class="form-group col-md-12">
 																							<c:choose>
-																								<c:when test="${!empty partner.fixedfeeListOthers}">
-																									<c:forEach items="${partner.fixedfeeListOthers}"
+																								<c:when
+																									test="${!empty partner.fixedfeeListOthers}">
+																									<c:forEach
+																										items="${partner.fixedfeeListOthers}"
 																										var="fixedfee1" varStatus="loop">
 																										<div class="col-md-3 content-rgt">
 																											<select class="form-control"
@@ -837,7 +840,7 @@ input+label {
 																												class="form-control number"
 																												name="nr-fixedfeeOthers${loop.index}-range"
 																												id="nr-fixedfeeOthers${loop.index}-range"
-																												value="${fixedfee1.range}" required/>
+																												value="${fixedfee1.range}" required />
 																										</div>
 																										<div class="col-md-3 content-rgt">
 																											<input type="text"
@@ -875,7 +878,8 @@ input+label {
 																									</div>
 																									<div class="col-md-3 content-rgt">
 																										<input type="text" class="form-control number"
-																											name="nr-fixedfeeOthers0-range" id="txt1_name0" required/>
+																											name="nr-fixedfeeOthers0-range"
+																											id="txt1_name0" required />
 
 																									</div>
 																									<div class="col-md-3 content-rgt">
@@ -928,6 +932,31 @@ input+label {
 																					</label>
 																				</div>
 																			</div>
+																			<c:if
+																				test="${fn:contains(partner.pcName, 'zzzzzzzzz')}">
+																				<div class="row">
+																					<div class="col-md-2" style="padding-bottom: 18px;"></div>
+																					<div class="col-md-3" style="padding-bottom: 18px;">
+																						<div class="radio">
+																							<%-- <form:radiobutton path="paymentCategory" value="prepaid"
+																	id="prepaid" name="toggler" class="prepaid"/> --%>
+																							<i class="fa fa-arrow-down" aria-hidden="true"
+																								id="prepaidArrow"></i> <label id="prepaid"
+																								class="prepaid"> Prepaid </label>
+																						</div>
+																					</div>
+																					<div class="col-md-3" style="padding-bottom: 18px;">
+																						<div class="radio">
+																							<%-- <form:radiobutton path="paymentCategory" value="postpaid"
+																	id="postpaid" name="toggler" class="postpaid"/> --%>
+																							<i class="fa fa-arrow-right" aria-hidden="true"
+																								id="postpaidArrow"></i> <label id="postpaid"
+																								class="postpaid"> Postpaid </label>
+																						</div>
+																					</div>
+																					<div class="col-md-1" style="padding-bottom: 18px;"></div>
+																				</div>
+																			</c:if>
 																			<div class="col-sm-12 radio1 collpase in"
 																				id="blk-pccValue">
 																				<div class="col-sm-6">
@@ -3713,7 +3742,7 @@ input+label {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
 							});
-							$(".postpaid").click(
+							/* $(".postpaid").click(
 									function() {
 										$('#blk-prepaid').hide();
 										$('#blk-others').hide();
@@ -3762,6 +3791,40 @@ input+label {
 												'fa fa-arrow-right');
 										$('#prepaidArrow').attr('class',
 												'fa fa-arrow-right');
+									}); */
+							$(".postpaid").click(
+									function() {
+										$('#blk-prepaid').hide();
+										$('#blk-others').hide();
+										$("#blk-" + $(this).attr('id'))
+												.slideDown();
+										//document.getElementById('truePost').style.display = 'block';
+										$("#noofdaysfromshippeddatePost")
+												.fadeIn();
+										$('#paymentField2').trigger('change');
+
+										$('#postpaidArrow').attr('class',
+												'fa fa-arrow-down');
+										$('#prepaidArrow').attr('class',
+												'fa fa-arrow-right');
+										$('#othersArrow').attr('class',
+												'fa fa-arrow-right');
+									});
+							$(".prepaid").click(
+									function() {
+										$('#blk-postpaid').hide();
+										$('#blk-others').hide();
+										$("#blk-" + $(this).attr('id'))
+												.slideDown();
+										$("#noofdaysfromshippeddate").fadeIn();
+										$('#paymentField1').trigger('change');
+
+										$('#prepaidArrow').attr('class',
+												'fa fa-arrow-down');
+										$('#postpaidArrow').attr('class',
+												'fa fa-arrow-right');
+										$('#othersArrow').attr('class',
+												'fa fa-arrow-right');
 									});
 							$("[name=paymentType]").click(function() {
 								$('.radio1').hide();
@@ -3784,10 +3847,11 @@ input+label {
 									"ifChecked", revShippingFeeSF);
 							$("#revShippingFeeType_revShipFeeVar").on(
 									"ifChecked", revShipFeeVar);
-													
-							if ('${(!empty partner.fixedfeeListOthers) && (fn:length(partner.fixedfeeListOthers) gt 0)}') {
+							
+							test = ${!empty partner.fixedfeeListOthers};
+							if (test == true) {
 								document.getElementById("amazonOther").style.display = 'block';
-							} 
+							}
 
 							$('#multiSku')
 									.on(

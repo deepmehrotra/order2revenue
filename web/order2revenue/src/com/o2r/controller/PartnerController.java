@@ -1830,6 +1830,8 @@ public class PartnerController {
 			List<String> mappedPartnerCatList = null;
 			if (!"".equals(mappedPartnerCat)) {
 				mappedPartnerCatList = new ArrayList<String>(Arrays.asList(mappedPartnerCat.split(",")));
+			} else {
+				pbean.setFixedfeeListOthers(null);
 			}
 			
 			model.put("mappedPartnerCatList", mappedPartnerCatList);
