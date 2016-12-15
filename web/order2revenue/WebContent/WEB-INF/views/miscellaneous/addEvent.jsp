@@ -353,7 +353,7 @@ span .#error {
 																			</div>
 																		</div>
 																		<div class="col-sm-12 radio1"
-																			id="blk-commisionType-categoryWise">
+																			id="blk1-commisionType-categoryWise">
 																			<c:choose>
 																				<c:when test="${!empty categoryMap}">
 																					<c:forEach items="${categoryMap}" var="cat"

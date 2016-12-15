@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -2449,6 +2450,7 @@ public class OrderDaoImpl implements OrderDao {
 			// Map<String, Float> returnMap = new HashMap<String, Float>();
 
 			PartnerBean pbean = new PartnerBean();
+			String mappedPartnerCat = "";
 
 			List<NRnReturnCharges> chargesList = partner.getNrnReturnConfig()
 					.getCharges();
@@ -2460,11 +2462,19 @@ public class OrderDaoImpl implements OrderDao {
 						&& !"".equals(charge.getCriteria())) {
 
 					ChargesBean chargeBean = new ChargesBean();
-					chargeBean.setChargeType("fixedfee");
 					chargeBean.setCriteria(charge.getCriteria());
 					chargeBean.setRange(charge.getCriteriaRange());
 					chargeBean.setValue(charge.getChargeAmount());
-					pbean.getFixedfeeList().add(chargeBean);
+
+					if (charge.getChargeName().contains("Others")) {
+						chargeBean.setChargeType("fixedfeeOthers");
+						pbean.getFixedfeeListOthers().add(chargeBean);
+					} else if (charge.getChargeName().contains("Category")) {
+						mappedPartnerCat = charge.getCriteria();
+					} else {
+						chargeBean.setChargeType("fixedfee");
+						pbean.getFixedfeeList().add(chargeBean);
+					}
 
 				} else if (charge.getChargeName().contains("shippingfeeVolume")
 						&& charge.getCriteria() != null
@@ -2563,6 +2573,10 @@ public class OrderDaoImpl implements OrderDao {
 					&& pbean.getFixedfeeList().size() != 0)
 				Collections.sort(pbean.getFixedfeeList(),
 						new SortByCriteriaRange());
+			if (pbean.getFixedfeeListOthers() != null
+					&& pbean.getFixedfeeListOthers().size() != 0)
+				Collections.sort(pbean.getFixedfeeListOthers(),
+						new SortByCriteriaRange());
 			if (pbean.getshippingfeeVolumeFixedList() != null
 					&& pbean.getshippingfeeVolumeFixedList().size() != 0)
 				Collections.sort(pbean.getshippingfeeVolumeFixedList(),
@@ -2606,22 +2620,51 @@ public class OrderDaoImpl implements OrderDao {
 			// Add partner new changes:
 
 			// Getting Fixed fee
-			if (pbean.getFixedfeeList() != null
-					&& pbean.getFixedfeeList().size() != 0) {
-				boolean inRange = false;
-				Iterator<ChargesBean> fixedfeeIterator = pbean
-						.getFixedfeeList().iterator();
-				while (fixedfeeIterator.hasNext()) {
-					ChargesBean cBean = fixedfeeIterator.next();
-					if (SP <= cBean.getRange()) {
-						fixedfee = (float) cBean.getValue();
-						inRange = true;
-						break;
+			List<String> mappedPartnerCatList = null;
+			if (!"".equals(mappedPartnerCat)) {
+				mappedPartnerCatList = new ArrayList<String>(
+						Arrays.asList(mappedPartnerCat.split(",")));
+			}
+			if (mappedPartnerCatList != null
+					&& !mappedPartnerCatList.contains(prodCat)) {
+				if (pbean.getFixedfeeListOthers() != null
+						&& pbean.getFixedfeeListOthers().size() != 0) {
+					boolean inRange = false;
+					Iterator<ChargesBean> fixedfeeIterator = pbean
+							.getFixedfeeListOthers().iterator();
+					while (fixedfeeIterator.hasNext()) {
+						ChargesBean cBean = fixedfeeIterator.next();
+						if (SP <= cBean.getRange()) {
+							fixedfee = (float) cBean.getValue();
+							inRange = true;
+							break;
+						}
+					}
+					if (!inRange) {
+						fixedfee = (float) pbean.getFixedfeeListOthers()
+								.get(pbean.getFixedfeeListOthers().size() - 1)
+								.getValue();
 					}
 				}
-				if (!inRange) {
-					fixedfee = (float) pbean.getFixedfeeList()
-							.get(pbean.getFixedfeeList().size() - 1).getValue();
+			} else {
+				if (pbean.getFixedfeeList() != null
+						&& pbean.getFixedfeeList().size() != 0) {
+					boolean inRange = false;
+					Iterator<ChargesBean> fixedfeeIterator = pbean
+							.getFixedfeeList().iterator();
+					while (fixedfeeIterator.hasNext()) {
+						ChargesBean cBean = fixedfeeIterator.next();
+						if (SP <= cBean.getRange()) {
+							fixedfee = (float) cBean.getValue();
+							inRange = true;
+							break;
+						}
+					}
+					if (!inRange) {
+						fixedfee = (float) pbean.getFixedfeeList()
+								.get(pbean.getFixedfeeList().size() - 1)
+								.getValue();
+					}
 				}
 			}
 			// Payment collection charges

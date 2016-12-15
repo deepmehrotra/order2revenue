@@ -16,6 +16,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -36,6 +37,7 @@ import com.o2r.bean.ChargesBean.SortByCriteriaRange;
 import com.o2r.bean.ChargesBean.SortByCriteria;
 import com.o2r.bean.MetaPartnerBean;
 import com.o2r.bean.PartnerBean;
+import com.o2r.bean.PartnerCategoryBean;
 import com.o2r.bean.PartnerDetailsBean;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
@@ -107,6 +109,19 @@ public class PartnerController {
 			add("tradus");
 			add("voonik");
 			add("zansaar");
+		}
+	};
+	
+	ArrayList<String> sellerTierList = new ArrayList<String>() {
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("Bronze");
+			add("Silver");
+			add("Gold");
 		}
 	};
 
@@ -184,7 +199,12 @@ public class PartnerController {
 											.parseFloat(charge));
 								}
 
-								nrnReturncharge.setChargeName("fixedfee");
+								if (param.contains("Others")) {
+									nrnReturncharge.setChargeName("fixedfeeOthers");
+								} else {
+									nrnReturncharge.setChargeName("fixedfee");
+								}
+								
 								nrnReturncharge.setCriteria(parameters
 										.get(param + "criteria")[0]);
 								if (!parameters.get(param + "range")[0]
@@ -545,6 +565,20 @@ public class PartnerController {
 						}
 					}
 				}
+				
+				String[] catList = request.getParameterValues("multiSku");
+				if (catList != null && catList.length != 0) {
+					
+					NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+					nrnReturncharge.setChargeAmount(0);
+					nrnReturncharge.setChargeName("fixedfeeCategory");
+					nrnReturncharge.setCriteria(StringUtils.join(catList, ",")); 
+
+					nrnReturncharge.setConfig(partnerBean
+							.getNrnReturnConfig());
+					partnerBean.getNrnReturnConfig().getCharges()
+							.add(nrnReturncharge);
+				}
 
 				if (!partnerBean.isIsshippeddatecalc()) {
 					partnerBean.setNoofdaysfromshippeddate(partnerBean
@@ -706,6 +740,7 @@ public class PartnerController {
 
 		log.info("$$$ addPartner Starts : OrderController $$$");
 		int sellerId = 0;
+		String sellerTier = null;
 		Map<String, Object> model = new HashMap<String, Object>();
 		Map<String, Object> datemap = new LinkedHashMap<String, Object>();
 		List<String> categoryList = new ArrayList<String>();
@@ -741,10 +776,17 @@ public class PartnerController {
 				// Code to fetch default values
 				MetaPartner metaPartner = partnerService
 						.getMetaPartner(partnerName);
+				if (partnerName.contains("flipkart") && partnerName.contains("-$$")) {
+					partner.setPcName(partnerName.substring(0,partnerName.indexOf("-$$")));
+					sellerTier = partnerName.substring(partnerName.indexOf("-$$") + 3);
+				}
 
 				if (metaPartner != null) {
 					partner = ConverterClass.preparePartnerBean(ConverterClass
 							.convertPartner(metaPartner));
+					if (partnerName.contains("flipkart") && partnerName.contains("-$$")) {
+						partner.setPcName(partnerName.substring(0,partnerName.indexOf("-$$")));
+					}
 
 					Map<String, Float> chargeMap = new HashMap<String, Float>();
 					for (NRnReturnCharges charge : partner.getNrnReturnConfig()
@@ -911,15 +953,21 @@ public class PartnerController {
 				}
 
 			}
+			
+			List<String> partnerCatList = categoryService
+									.listPartnerCategories("amazon", sellerId);
 
 			Collections.sort(categoryList);
 			model.put("partner", partner);
 			model.put("categoryList", categoryList);
+			model.put("partnerCatList", partnerCatList);
 			model.put("datemap", datemap);
 			model.put("partners", ConverterClass
 					.prepareListofPartnerBean(partnerService
 							.listPartners(helperClass
 									.getSellerIdfromSession(request))));
+			model.put("sellerTiers", sellerTierList);
+			model.put("sellerTier", sellerTier);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed! by Seller ID : " + sellerId, e);
@@ -1606,6 +1654,7 @@ public class PartnerController {
 		Map<String, Float> chargeMap = new HashMap<String, Float>();
 		Map<String, Float> categoryMap = new HashMap<String, Float>();
 		List<Category> categoryObjects = null;
+		String mappedPartnerCat = "";
 
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
@@ -1622,13 +1671,21 @@ public class PartnerController {
 				if (charge.getChargeName().contains("fixedfee")
 						&& charge.getCriteria() != null
 						&& !"".equals(charge.getCriteria())) {
-
+					
 					ChargesBean chargeBean = new ChargesBean();
-					chargeBean.setChargeType("fixedfee");
 					chargeBean.setCriteria(charge.getCriteria());
 					chargeBean.setRange(charge.getCriteriaRange());
 					chargeBean.setValue(charge.getChargeAmount());
-					pbean.getFixedfeeList().add(chargeBean);
+					
+					if (charge.getChargeName().contains("Others")) {
+						chargeBean.setChargeType("fixedfeeOthers");
+						pbean.getFixedfeeListOthers().add(chargeBean);
+					} else if (charge.getChargeName().contains("Category")) {
+						mappedPartnerCat = charge.getCriteria();
+					} else {
+						chargeBean.setChargeType("fixedfee");
+						pbean.getFixedfeeList().add(chargeBean);
+					}
 
 				} else if (charge.getChargeName().contains("shippingfeeVolume")
 						&& charge.getCriteria() != null
@@ -1728,6 +1785,10 @@ public class PartnerController {
 					&& pbean.getFixedfeeList().size() != 0)
 				Collections.sort(pbean.getFixedfeeList(),
 						new SortByCriteriaRange());
+			if (pbean.getFixedfeeListOthers() != null
+					&& pbean.getFixedfeeListOthers().size() != 0)
+				Collections.sort(pbean.getFixedfeeListOthers(),
+						new SortByCriteriaRange());
 			if (pbean.getshippingfeeVolumeFixedList() != null
 					&& pbean.getshippingfeeVolumeFixedList().size() != 0)
 				Collections.sort(pbean.getshippingfeeVolumeFixedList(),
@@ -1762,6 +1823,18 @@ public class PartnerController {
 
 			Map<String, Float> sortedCategoryMap = new TreeMap<String, Float>(
 					categoryMap);
+			
+			List<String> partnerCatList = categoryService
+					.listPartnerCategories("amazon", sellerId);
+			
+			List<String> mappedPartnerCatList = null;
+			if (!"".equals(mappedPartnerCat)) {
+				mappedPartnerCatList = new ArrayList<String>(Arrays.asList(mappedPartnerCat.split(",")));
+			}
+			
+			model.put("mappedPartnerCatList", mappedPartnerCatList);
+			
+			model.put("partnerCatList", partnerCatList);
 			model.put("categoryMap", sortedCategoryMap);
 			model.put("partner", pbean);
 			model.put("chargeMap", chargeMap);

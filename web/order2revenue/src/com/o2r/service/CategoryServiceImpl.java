@@ -92,6 +92,12 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
+	public List<String> listPartnerCategories(String partnerName, int sellerId)
+			throws CustomException {
+		return categoryDao.listPartnerCategories(partnerName, sellerId);
+	}
+
+	@Override
 	public PartnerCategoryMap getPartnerCategoryMap(String partnerName,
 			String catName, int sellerId) throws CustomException {
 		return categoryDao
@@ -115,10 +121,12 @@ public class CategoryServiceImpl implements CategoryService {
 			int sellerId) throws CustomException {
 		categoryDao.addParterCategory(partnerCategoryMap, sellerId);
 	}
-	
+
 	@Override
-	public List<PartnerCategoryMap> searchPartnerCategory(String searchCriteria,
-			String value, int sellerId) throws CustomException {
-		return categoryDao.searchPartnerCategory(searchCriteria, value, sellerId);
+	public List<PartnerCategoryMap> searchPartnerCategory(
+			String searchCriteria, String value, int sellerId)
+			throws CustomException {
+		return categoryDao.searchPartnerCategory(searchCriteria, value,
+				sellerId);
 	}
 }

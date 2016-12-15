@@ -491,6 +491,52 @@ public class CategoryDaoImpl implements CategoryDao {
 		log.info("***listCategories Exit****");
 		return returnlist;
 	}
+	
+	@Override
+	public List<String> listPartnerCategories(String partnerName, int sellerId) throws CustomException {
+
+		log.info("***listPartnerCategories by Name Start****");
+		List<String> returnlist = new ArrayList<String>();
+		Seller seller = null;
+		try {
+
+			List<PartnerCategoryMap> partnerCategoryMapList = new ArrayList<PartnerCategoryMap>();
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session
+					.createCriteria(PartnerCategoryMap.class);
+
+			criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN)
+					.add(Restrictions.eq("seller.id", sellerId))
+					.setResultTransformer(
+							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+			partnerCategoryMapList = criteria.list();
+			
+			/*partnerCategoryMapList = (List<PartnerCategoryMap>) sessionFactory
+					.getCurrentSession()
+					.createCriteria(PartnerCategoryMap.class).list();*/
+
+			if (partnerCategoryMapList != null
+					&& partnerCategoryMapList.size() != 0) {
+				for (PartnerCategoryMap cat : partnerCategoryMapList) {
+					if (partnerName!= null && partnerName.equals(cat.getPartnerName())) {
+						returnlist.add(cat.getPartnerCategoryRef());
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.equals("**Error Code : "
+					+ (GlobalConstant.listCategoryErrorCode));
+			log.error("Failed! by sellerId : " + e);
+			throw new CustomException(GlobalConstant.listCategoryError,
+					new Date(), 3, (GlobalConstant.listCategoryErrorCode), e);
+		}
+		log.info("***listCategories Exit****");
+		return returnlist;
+	}
 
 	@Override
 	public PartnerCategoryMap getPartnerCategoryMap(String partnerName,
