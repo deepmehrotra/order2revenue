@@ -17,7 +17,11 @@ import javax.persistence.Table;
 public class ExceptionLogging  implements java.io.Serializable {
 
 
-     private int id;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int id;
      private String desc;
      private String status;
      private Integer pcid;
@@ -37,9 +41,7 @@ public class ExceptionLogging  implements java.io.Serializable {
     }
    
      @Id 
-
-    
-    @Column(name="ID", unique=true, nullable=false)
+     @Column(name="ID", unique=true, nullable=false)
     public int getId() {
         return this.id;
     }
@@ -49,7 +51,7 @@ public class ExceptionLogging  implements java.io.Serializable {
     }
 
     
-    @Column(name="DESC", length=1000)
+    @Column(name="Description", length=1000)
     public String getDesc() {
         return this.desc;
     }
