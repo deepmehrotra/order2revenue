@@ -401,7 +401,7 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 			amazonOrderInfo.setPurchaseordernumber(order.getPurchaseOrderNumber());
 			amazonOrderInfo.setIsprime(order.getIsPrime().toString());
 			amazonOrderInfo.setIspremiumorder(order.getIsPremiumOrder().toString());
-			amazonOrderInfo.setSellerId(65);
+			//amazonOrderInfo.setSellerId(65);
 			// amazonOrderInfo.setSellerId(Integer.parseInt(order.getSellerOrderId()));
 			// amazonOrderInfo.setRequestid(order);
 			List<AmazonOrderItemInfo> amazonOrderItemInfos = new ArrayList<AmazonOrderItemInfo>();
@@ -454,7 +454,7 @@ public class MwsAmazonOrdMgmtServiceImpl implements MwsAmazonOrdMgmtService {
 			}
 			// amazonOrderInfo.setAmazonOrderItemInfo(new
 			// Has<AmazonOrderItemInfo>(amazonOrderItemInfos));
-			amazonOrderInfo.setAmazonOrderItemInfo(new HashSet<AmazonOrderItemInfo>(amazonOrderItemInfos));
+			amazonOrderInfo.setAmazonOrderItemInfo(new ArrayList<AmazonOrderItemInfo>(amazonOrderItemInfos));
 			if (amazonOrderInfo != null) {
 				amazonOrdMgmtDao.saveAmazonOrderInfo(amazonOrderInfo);
 			}

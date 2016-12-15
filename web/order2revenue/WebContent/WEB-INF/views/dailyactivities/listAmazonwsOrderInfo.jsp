@@ -87,9 +87,7 @@
                         </div>
                         <div class="ibox-content overflow-h cus-table-filters">
                         <div class="scroll-y">
-                        	<input type="hidden" id="delStatus" value="${deleteStatus}">
-                        	
-                        	
+                        	<input type="hidden" id="delStatus" value="${deleteStatus}">                	
                         	
                         	<form name="abcd" class="form-inline" method="post" action="moveStatusAmazonOrderInfo.html" id="formabcd">
                              <table class="table table-striped table-bordered table-hover dataTables-example" >
@@ -125,8 +123,7 @@
                                      
                                      <td>${product.numberofitemsunshipped}</td> 
                                      
-                                     <td>${product.tfmshipmentstatus}</td> 
-                                     
+                                     <td>${product.tfmshipmentstatus}</td>    
 													
 													
                                   

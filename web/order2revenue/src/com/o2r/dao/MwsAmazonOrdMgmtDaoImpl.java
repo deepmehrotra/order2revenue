@@ -146,7 +146,7 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			
-			System.out.println("sellerId100"+orderInfo.getSellerId());
+		//	System.out.println("sellerId100"+orderInfo.getSellerId());
 			Criteria criteria = session.createCriteria(Seller.class).add(
 					Restrictions.eq("id", 65));
 			seller = (Seller) criteria.list().get(0);
@@ -176,7 +176,7 @@ public class MwsAmazonOrdMgmtDaoImpl implements MwsAmazonOrdMgmtDao {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			
-			System.out.println("sellerId100"+orderInfo.getSellerId());
+		//	System.out.println("sellerId100"+orderInfo.getSellerId());
 			Criteria criteria = session.createCriteria(Seller.class).add(
 					Restrictions.eq("id", sellerId));
 			seller = (Seller) criteria.list().get(0);

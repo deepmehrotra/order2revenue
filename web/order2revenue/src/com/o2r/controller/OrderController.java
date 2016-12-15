@@ -1401,8 +1401,11 @@ public class OrderController {
 		log.info("$$$ poOrderListDailyAct Starts : OrderController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {			
-			 
+		
+			System.out.println("hellow..............................................");
+			
 			amazonOrderMgmt.invokeListOrdersAndOrderItems();
+			
 			
 			List<AmazonOrderInfo> listamazaon= new ArrayList<AmazonOrderInfo>();
 			listamazaon = mwsAmazonOrdMgmtService.getAmazonOrderInfoList(partnerSellerAuthInfo);
@@ -1435,6 +1438,8 @@ public class OrderController {
 		String endDate = request.getParameter("startDate");	
 		
 		
+		System.out.println("hellow..............................................");
+		
 		//String[] statusArray;
 		///statusArray= request.getParameterValues("reportGroup");
 		//		System.out.println("reportheaders1"+statusArray);
@@ -1461,8 +1466,8 @@ public class OrderController {
 			e.printStackTrace();
 		}
 		
-		return new ModelAndView("redirect:/seller/orderList.html");	
-		//return new ModelAndView("dailyactivities/listAmazonwsOrderInfo", model);
+		//return new ModelAndView("redirect:/seller/orderList.html");	
+		return new ModelAndView("dailyactivities/listAmazonwsOrderInfo", model);
 		//return new ModelAndView("redirect:/seller/moveStatusAmazonOrderInfo.html");
 	}
 	
@@ -1477,9 +1482,7 @@ public class OrderController {
 
 		String[] reportheaders;
 		reportheaders = request.getParameterValues("selectedOrderIds");
-
 		
-				
 		
 		if (reportheaders != null)
 			System.out.println("reportheaders length" + reportheaders.length);

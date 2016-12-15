@@ -79,7 +79,9 @@
                                 <button type="button"  id="LoadMoreProduct" class="btn btn-xs btn-white">More</button>
                                 
                               <button class="btn btn-primary pull-right" type="button" onclick="moveStatus()">Move Status</button>
-                                 
+                              
+                             
+                                  
                                <!--   <a class="btn btn-primary btn-xs" style="display;none"  onclick="moveStatus();" >Move Status</a>-->
                             </div>  
                             
