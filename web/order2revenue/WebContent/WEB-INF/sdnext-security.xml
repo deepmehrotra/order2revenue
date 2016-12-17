@@ -10,7 +10,7 @@
 
 		<intercept-url pattern="/seller/*" access="hasRole('ROLE_MODERATOR')" />
 		<intercept-url pattern="/admin/*"
-			access="hasRole('ROLE_ADMIN','ROLE_MODERATOR')" />
+			access="hasRole('ROLE_ADMIN')" />
 		<form-login login-page="/user-login.html"
 			default-target-url="/seller/orderindex.html"
 			authentication-failure-url="/error-login.html" />
