@@ -181,7 +181,7 @@ public class GlobalConstant {
 			add("Particular");
 		}
 	};
-	
+
 	public static final ArrayList<String> ShopcluesPaymentHeaderList = new ArrayList<String>() {
 		private static final long serialVersionUID = 1L;
 		{
@@ -189,7 +189,7 @@ public class GlobalConstant {
 			add("SKU");
 			add("Invoice ID");
 			add("Recieved Amount");
-			add("Channel");			
+			add("Channel");
 			add("Criteria");
 			add("Deducted Amount");
 			add("Payment Date");
@@ -326,7 +326,7 @@ public class GlobalConstant {
 
 		}
 	};
-	
+
 	public static final ArrayList<String> ShopcluesOrderHeaderList = new ArrayList<String>() {
 		/**
 	 *
@@ -350,7 +350,7 @@ public class GlobalConstant {
 			add("Logistic Partner");
 			add("Order MRP");
 			add("Net Rate");
-			add("Customer Name");			
+			add("Customer Name");
 			add("Customer Address");
 			add("Customer City");
 			add("Customer Phone No");
@@ -461,7 +461,7 @@ public class GlobalConstant {
 
 		}
 	};
-	
+
 	public static final ArrayList<String> BrownTapeOrderHeaderList = new ArrayList<String>() {
 		/**
 	 *
@@ -574,7 +574,7 @@ public class GlobalConstant {
 
 		}
 	};
-	
+
 	public static final ArrayList<String> flipkartpaymentvariablesList = new ArrayList<String>() {
 		/**
 			 *
@@ -618,12 +618,10 @@ public class GlobalConstant {
 			add("Sellable Longterm 2 Storage Fee");
 			add("Unsellable Longterm 2 Storage Fee");
 			add("Is Replacement");
-			
 
 		}
 	};
-	
-	
+
 	public static final ArrayList<String> paytmpaymentvariablesList = new ArrayList<String>() {
 		/**
 				 */
@@ -644,7 +642,7 @@ public class GlobalConstant {
 
 		}
 	};
-	
+
 	public static final ArrayList<String> snapdealpaymentvariablesList = new ArrayList<String>() {
 		/**
 				 */
@@ -676,8 +674,7 @@ public class GlobalConstant {
 
 		}
 	};
-	
-	
+
 	public static final ArrayList<String> limeroadpaymentvariablesList = new ArrayList<String>() {
 		/**
 				 */
@@ -704,11 +701,10 @@ public class GlobalConstant {
 			add("Transporter Cost Recovered from Vendor on Return (Final)");
 			add("Vendor Payment Due (after TDS addition) (Final)");
 			add("Margin Reversed on Returns");
-			
 
 		}
 	};
-	
+
 	public static final ArrayList<String> jabongpaymentvariablesList = new ArrayList<String>() {
 		/**
 				 */
@@ -727,9 +723,9 @@ public class GlobalConstant {
 			add("Commission Amount");
 		}
 	};
-	
+
 	// Headers For Detailed Dashboard
-	
+
 	public static final ArrayList<String> grossHeader = new ArrayList<String>() {
 		private static final long serialVersionUID = 1L;
 		{
@@ -767,7 +763,7 @@ public class GlobalConstant {
 		{
 			add("#");
 			add("Channel");
-			add("Gross");			
+			add("Gross");
 		}
 	};
 	public static final ArrayList<String> SKUHeader = new ArrayList<String>() {
@@ -790,18 +786,15 @@ public class GlobalConstant {
 			add("Net");
 		}
 	};
-	//Array for Packaging fee of snapdeal
-	public static final int  packageFeeSnapdeal[]={5,10,15,20,25,30,35,40,45,50,60};
-	
-	
-	//Array for Packaging fee of snapdeal
-		public static final int  flipkartRevShippingFeeLT5GM[]={35,60,85};
-		public static final int  flipkartRevShippingFeeLT5KG[]={35,40,55};
-		public static final int  flipkartRevShippingFeeGT5KG[]={5,10,25};
+	// Array for Packaging fee of snapdeal
+	public static final int packageFeeSnapdeal[] = { 5, 10, 15, 20, 25, 30, 35,
+			40, 45, 50, 60 };
 
+	// Array for Packaging fee of snapdeal
+	public static final int flipkartRevShippingFeeLT5GM[] = { 35, 60, 85 };
+	public static final int flipkartRevShippingFeeLT5KG[] = { 35, 40, 55 };
+	public static final int flipkartRevShippingFeeGT5KG[] = { 5, 10, 25 };
 
-		
-	
 	/* Null Area */
 	public static final String nullException = "NullException !";
 	public static final String nullValuesError = "Field Should Not Be Empty!";
@@ -848,9 +841,9 @@ public class GlobalConstant {
 	public static final String deletePaymentUploadErrorCode = "#00014";
 	public static final String getManualPaymentErrorCode = "#00015";
 
-	/** paymentUpload Area **/	
-	
-	public static int MonthNo(String month){
+	/** paymentUpload Area **/
+
+	public static int MonthNo(String month) {
 		switch (month) {
 		case "January":
 			return 1;
@@ -878,9 +871,9 @@ public class GlobalConstant {
 			return 12;
 		default:
 			return 0;
-		}		
+		}
 	}
-	
+
 	/** AdminModule Area **/
 
 	// Constants for Error messages
@@ -1150,6 +1143,20 @@ public class GlobalConstant {
 	public static final String fixedAmtPCC = "pccfixedAmt";
 	public static final String rangePCC = "pccrange";
 	public static final String valuePCC = "pccvalue";
+	public static final String criteriaPCC = "pccValuecriteria";
+	public static final String criteriaPCCSP = "pccpercentSPValuecriteria";
+
+	public static final String percentSPPCCValuePre = "pccpercentSPValuePre";
+	public static final String rangePCCPre = "pccrangepre";
+	public static final String valuePCCPre = "pccvaluepre";
+	public static final String criteriaPCCPre = "pccValuePrecriteria";
+	public static final String criteriaPCCSPPre = "pccpercentSPValuePrecriteria";
+
+	public static final String percentSPPCCValuePost = "pccpercentSPValuePost";
+	public static final String rangePCCPost = "pccrangepost";
+	public static final String valuePCCPost = "pccvaluepost";
+	public static final String criteriaPCCPost = "pccValuePostcriteria";
+	public static final String criteriaPCCSPPost = "pccpercentSPValuePostcriteria";
 
 	// Return Configuration Constansts
 	public static final String SellerFaultString = "sellerFault";
@@ -1587,14 +1594,14 @@ public class GlobalConstant {
 		else
 			return res.toString();
 	}
-	
-	public static String randomNo(){		
+
+	public static String randomNo() {
 		String id = "";
-		Random random=new Random();
+		Random random = new Random();
 		try {
-			int r1=random.nextInt((9999 - 1111) + 1) + 1111;
-			int r2=random.nextInt((9999 - 1111) + 1) + 1111;
-			id="O2R"+r1+r2;
+			int r1 = random.nextInt((9999 - 1111) + 1) + 1111;
+			int r2 = random.nextInt((9999 - 1111) + 1) + 1111;
+			id = "O2R" + r1 + r2;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

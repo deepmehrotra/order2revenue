@@ -153,6 +153,10 @@ public class PartnerController {
 			partnerName = partnerBean.getPcName();
 		}
 		partnerBean.setPcName(partnerName);
+		
+		String sellerTier = request.getParameter("sellerTier");
+		partnerBean.setSellerTier(sellerTier);
+		
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			existPartner = partnerService.getPartner(partnerBean.getPcName(),
@@ -1835,7 +1839,7 @@ public class PartnerController {
 			}
 			
 			model.put("mappedPartnerCatList", mappedPartnerCatList);
-			
+			model.put("sellerTier", pbean.getSellerTier());
 			model.put("partnerCatList", partnerCatList);
 			model.put("categoryMap", sortedCategoryMap);
 			model.put("partner", pbean);
