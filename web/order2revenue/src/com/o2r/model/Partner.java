@@ -27,6 +27,8 @@ public class Partner {
 	@Column
 	private String pcDesc;
 	@Column
+	private String sellerTier;
+	@Column
 	private String pcLogoUrl;
 	@Column
 	private String paymentType;
@@ -226,6 +228,12 @@ public class Partner {
 	public void setNoofdaysfromshippeddateOthers(
 			int noofdaysfromshippeddateOthers) {
 		this.noofdaysfromshippeddateOthers = noofdaysfromshippeddateOthers;
+	}
+	public String getSellerTier() {
+		return sellerTier;
+	}
+	public void setSellerTier(String sellerTier) {
+		this.sellerTier = sellerTier;
 	}
 
 

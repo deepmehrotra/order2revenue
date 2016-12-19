@@ -510,6 +510,7 @@ public class ConverterClass {
 			partner.setPcDesc(partnerBean.getPcDesc());
 			partner.setPcLogoUrl(partnerBean.getPcLogoUrl());
 			partner.setPcName(partnerBean.getPcName());
+			partner.setSellerTier(partnerBean.getSellerTier());
 			partner.setPaymentType(partnerBean.getPaymentType());
 			partner.setPaymentCategory(partnerBean.getPaymentCategory());
 			partner.setIsshippeddatecalc(partnerBean.isIsshippeddatecalc());
@@ -829,6 +830,7 @@ public class ConverterClass {
 			bean.setPcId(partner.getPcId());
 			bean.setPcDesc(partner.getPcDesc());
 			bean.setPcLogoUrl(partner.getPcLogoUrl());
+			bean.setSellerTier(partner.getSellerTier());
 			bean.setPcName(partner.getPcName());
 			bean.setPaymentType(partner.getPaymentType());
 			bean.setPaymentCategory(partner.getPaymentCategory());

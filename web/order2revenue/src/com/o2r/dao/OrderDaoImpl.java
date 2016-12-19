@@ -2690,25 +2690,133 @@ public class OrderDaoImpl implements OrderDao {
 							.get(GlobalConstant.fixedAmtPCC) : 0;
 
 			} else {
-				double pccRange = chargesMap
-						.containsKey(GlobalConstant.rangePCC) ? chargesMap
-						.get(GlobalConstant.rangePCC) : 0;
+				
+				if (partner.getPcName().toLowerCase()
+						.contains(GlobalConstant.PCFLIPKART)) {
+					if (order.getPaymentType().toUpperCase()
+								.equalsIgnoreCase("COD")) {
+						double pccRange = chargesMap
+								.containsKey(GlobalConstant.rangePCCPost) ? chargesMap
+								.get(GlobalConstant.rangePCCPost) : 0;
 
-				if (pccRange == 0) {
-					pccAmount = 0;
-				} else {
-					if (SP < pccRange) {
-						pccAmount = chargesMap
-								.containsKey(GlobalConstant.valuePCC) ? chargesMap
-								.get(GlobalConstant.valuePCC) : 0;
+						if (pccRange == 0) {
+							pccAmount = 0;
+						} else {
+							if (SP < pccRange) {
+								double criteria = chargesMap
+										.containsKey(GlobalConstant.criteriaPCCPost) ? chargesMap
+												.get(GlobalConstant.criteriaPCCPost) : 0;
+								if (criteria > 0) {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.valuePCCPost) ? chargesMap
+											.get(GlobalConstant.valuePCCPost)
+											* SP
+											/ 100 : 0;
+								} else {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.valuePCCPost) ? chargesMap
+											.get(GlobalConstant.valuePCCPost) : 0;
+								}
+							} else {
+								double criteria = chargesMap
+										.containsKey(GlobalConstant.criteriaPCCSPPost) ? chargesMap
+												.get(GlobalConstant.criteriaPCCSPPost) : 0;
+								if (criteria > 0) {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.percentSPPCCValuePost) ? chargesMap
+											.get(GlobalConstant.percentSPPCCValuePost)
+											* SP
+											/ 100 : 0;
+								} else {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.percentSPPCCValuePost) ? chargesMap
+											.get(GlobalConstant.percentSPPCCValuePost) : 0;
+								}
+							}
+						}
 					} else {
-						pccAmount = chargesMap
-								.containsKey(GlobalConstant.percentSPPCCValue) ? chargesMap
-								.get(GlobalConstant.percentSPPCCValue)
-								* SP
-								/ 100 : 0;
+						double pccRange = chargesMap
+								.containsKey(GlobalConstant.rangePCCPre) ? chargesMap
+								.get(GlobalConstant.rangePCCPre) : 0;
+
+						if (pccRange == 0) {
+							pccAmount = 0;
+						} else {
+							if (SP < pccRange) {
+								double criteria = chargesMap
+										.containsKey(GlobalConstant.criteriaPCCPre) ? chargesMap
+												.get(GlobalConstant.criteriaPCCPre) : 0;
+								if (criteria > 0) {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.valuePCCPre) ? chargesMap
+											.get(GlobalConstant.valuePCCPre)
+											* SP
+											/ 100 : 0;
+								} else {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.valuePCCPre) ? chargesMap
+											.get(GlobalConstant.valuePCCPre) : 0;
+								}
+							} else {
+								double criteria = chargesMap
+										.containsKey(GlobalConstant.criteriaPCCSPPre) ? chargesMap
+												.get(GlobalConstant.criteriaPCCSPPre) : 0;
+								if (criteria > 0) {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.percentSPPCCValuePre) ? chargesMap
+											.get(GlobalConstant.percentSPPCCValuePre)
+											* SP
+											/ 100 : 0;
+								} else {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.percentSPPCCValuePre) ? chargesMap
+											.get(GlobalConstant.percentSPPCCValuePre) : 0;
+								}
+							}
+						}
+					}
+				} else {
+					double pccRange = chargesMap
+							.containsKey(GlobalConstant.rangePCC) ? chargesMap
+							.get(GlobalConstant.rangePCC) : 0;
+
+					if (pccRange == 0) {
+						pccAmount = 0;
+					} else {
+						if (SP < pccRange) {
+							double criteria = chargesMap
+									.containsKey(GlobalConstant.criteriaPCC) ? chargesMap
+											.get(GlobalConstant.criteriaPCC) : 0;
+							if (criteria > 0) {
+								pccAmount = chargesMap
+										.containsKey(GlobalConstant.valuePCC) ? chargesMap
+										.get(GlobalConstant.valuePCC)
+										* SP
+										/ 100 : 0;
+							} else {
+								pccAmount = chargesMap
+										.containsKey(GlobalConstant.valuePCC) ? chargesMap
+										.get(GlobalConstant.valuePCC) : 0;
+							}
+						} else {
+							double criteria = chargesMap
+									.containsKey(GlobalConstant.criteriaPCCSP) ? chargesMap
+											.get(GlobalConstant.criteriaPCCSP) : 0;
+							if (criteria > 0) {
+								pccAmount = chargesMap
+										.containsKey(GlobalConstant.percentSPPCCValue) ? chargesMap
+										.get(GlobalConstant.percentSPPCCValue)
+										* SP
+										/ 100 : 0;
+							} else {
+								pccAmount = chargesMap
+										.containsKey(GlobalConstant.percentSPPCCValue) ? chargesMap
+										.get(GlobalConstant.percentSPPCCValue) : 0;
+							}
+						}
 					}
 				}
+
 			}
 
 			log.debug(" States : MetroLsit : "

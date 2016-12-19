@@ -15,6 +15,7 @@ public class PartnerBean {
 	private long pcId;
 	private String pcName;
 	private String pcDesc;
+	private String sellerTier;
 	private String pcLogoUrl;
 	private String paymentType;
 	private String paymentCategory;
@@ -325,5 +326,11 @@ public class PartnerBean {
 	}
 	public void setFixedfeeListOthers(List<ChargesBean> fixedfeeListOthers) {
 		this.fixedfeeListOthers = fixedfeeListOthers;
+	}
+	public String getSellerTier() {
+		return sellerTier;
+	}
+	public void setSellerTier(String sellerTier) {
+		this.sellerTier = sellerTier;
 	}
 }

@@ -27,9 +27,15 @@ public class NRnReturnConfig {
 	@Column
 	private boolean whicheverGreaterPCC;
 	@Column
+	private boolean whicheverGreaterPCCPost;
+	@Column
 	private boolean pccfixedAmt;
 	@Column
 	private boolean pccpercentSP;
+	@Column
+	private boolean pccfixedAmtPost;
+	@Column
+	private boolean pccpercentSPPost;
 	@Column
 	private String shippingFeeType; // - variable or fixed
 
@@ -162,17 +168,17 @@ public class NRnReturnConfig {
 	private boolean canCharBRSerTax;
 	@Column
 	private boolean canCharBRPCC;
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String nationalList;
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String zonalList;
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String metroList;
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String localList;
 	@Column
 	private String revShippingFeeType; // - variable or fixed
-	
+
 	@Column
 	private boolean retCharSFRevShipFee;
 	@Column
@@ -185,7 +191,7 @@ public class NRnReturnConfig {
 	private boolean canCharSFBRTDRevShipFee;
 	@Column
 	private boolean canCharSFARTDRevShipFee;
-	
+
 	@Column
 	private boolean retCharBRRevShipFee;
 	@Column
@@ -204,7 +210,7 @@ public class NRnReturnConfig {
 	private String taxSpType;
 	@Column
 	private String taxPoType;
-	
+
 	@OneToMany(mappedBy = "config", cascade = CascadeType.ALL)
 	private List<NRnReturnCharges> charges = new ArrayList<>();
 
@@ -886,6 +892,31 @@ public class NRnReturnConfig {
 
 	public void setPackagingFee(boolean packagingFee) {
 		this.packagingFee = packagingFee;
+	}
+
+	public boolean isWhicheverGreaterPCCPost() {
+		return whicheverGreaterPCCPost;
+	}
+
+	public void setWhicheverGreaterPCCPost(boolean whicheverGreaterPCCPost) {
+		this.whicheverGreaterPCCPost = whicheverGreaterPCCPost;
+	}
+
+	public boolean isPccfixedAmtPost() {
+		return pccfixedAmtPost;
+	}
+
+	public void setPccfixedAmtPost(boolean pccfixedAmtPost) {
+		this.pccfixedAmtPost = pccfixedAmtPost;
+	}
+
+	public boolean isPccpercentSPPost() {
+		return pccpercentSPPost;
+	}
+
+	public void setPccpercentSPost(boolean pccpercentSPost) {
+		this.pccpercentSPPost = pccpercentSPost;
+
 	}
 
 }

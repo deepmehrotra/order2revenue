@@ -912,92 +912,505 @@ input+label {
 																<div id="collapseThree1" class="panel-collapse collapse">
 																	<div class="panel-body">
 																		<div class="col-sm-12">
-																			<div class="col-sm-6">
-																				<div class="radio">
-																					<label> <form:radiobutton
-																							path="nrnReturnConfig.whicheverGreaterPCC"
-																							value="false" id="pccValue"
-																							name="whicheverGreaterPCC" class="pccValue" />
-																						Value Based
-																					</label>
-																				</div>
-																			</div>
-																			<div class="col-sm-6">
-																				<div class="radio">
-																					<label> <form:radiobutton
-																							path="nrnReturnConfig.whicheverGreaterPCC"
-																							value="true" id="pccHigher"
-																							name="whicheverGreaterPCC" class="pccHigher" />
-																						Which Ever is Higher
-																					</label>
-																				</div>
-																			</div>
-																			<c:if
-																				test="${fn:contains(partner.pcName, 'zzzzzzzzz')}">
-																				<div class="row">
-																					<div class="col-md-2" style="padding-bottom: 18px;"></div>
-																					<div class="col-md-3" style="padding-bottom: 18px;">
-																						<div class="radio">
-																							<%-- <form:radiobutton path="paymentCategory" value="prepaid"
-																	id="prepaid" name="toggler" class="prepaid"/> --%>
-																							<i class="fa fa-arrow-down" aria-hidden="true"
-																								id="prepaidArrow"></i> <label id="prepaid"
-																								class="prepaid"> Prepaid </label>
-																						</div>
+																			<c:choose>
+																				<c:when
+																					test="${fn:contains(partner.pcName, 'flipkart')}">
+																					<div class="col-sm-6" style="padding-bottom: 18px;">
+																						<i class="fa fa-arrow-down" aria-hidden="true"
+																							id="prepaidArrow"></i> <label id="prepaidPCC"
+																							class="prepaid"> Prepaid </label>
 																					</div>
-																					<div class="col-md-3" style="padding-bottom: 18px;">
-																						<div class="radio">
-																							<%-- <form:radiobutton path="paymentCategory" value="postpaid"
-																	id="postpaid" name="toggler" class="postpaid"/> --%>
-																							<i class="fa fa-arrow-right" aria-hidden="true"
-																								id="postpaidArrow"></i> <label id="postpaid"
-																								class="postpaid"> Postpaid </label>
-																						</div>
-																					</div>
-																					<div class="col-md-1" style="padding-bottom: 18px;"></div>
-																				</div>
-																			</c:if>
-																			<div class="col-sm-12 radio1 collpase in"
-																				id="blk-pccValue">
-																				<div class="col-sm-6">
-																					<div class="col-md-2">
-																						<label>Upto</label>
-																					</div>
-																					<div class="col-md-5" style="padding: 0px;">
-																						<input type="text" name="nr-pccrange"
-																							class="form-control number"
-																							value="${chargeMap.pccrange}" id="text1">
-																					</div>
-																					<div class="col-md-5">
-																						<input type="text" name="nr-pccvalue"
-																							class="form-control number"
-																							value="${chargeMap.pccvalue}">
-																					</div>
-																					<br> <br> <br>
-																					<div class="col-md-2">
-																						<label>Greater than</label>
-																					</div>
-																					<div class="col-md-5" style="padding: 0px;">
-																						&nbsp;&nbsp;&nbsp;&nbsp;<label id="label1">${chargeMap.pccrange}</label>
+																					<div class="col-sm-6" style="padding-bottom: 18px;">
+																						<i class="fa fa-arrow-right" aria-hidden="true"
+																							id="postpaidArrow"></i> <label id="postpaidPCC"
+																							class="postpaid"> Postpaid </label>
 																					</div>
 
-																					<div class="col-md-5">
-																						<div class="col-md-6" style="padding: 0px;">
-																							<input type="text" name="nr-pccpercentSPValue"
-																								class="form-control number"
-																								value="${chargeMap.pccpercentSPValue}">
+																					<div class="col-sm-12" id="blk-prepaidPCC">
+																						<div class="row">
+																							<div class="col-sm-6">
+																								<div class="radio">
+																									<label> <form:radiobutton
+																											path="nrnReturnConfig.whicheverGreaterPCC"
+																											value="false" id="pccValuePre"
+																											name="whicheverGreaterPCCPre"
+																											class="pccValuePre" /> Value Based
+																									</label>
+																								</div>
+																							</div>
+																							<div class="col-sm-6">
+																								<div class="radio">
+																									<label> <form:radiobutton
+																											path="nrnReturnConfig.whicheverGreaterPCC"
+																											value="true" id="pccHigherPre"
+																											name="whicheverGreaterPCCPre"
+																											class="pccHigherPre" /> Which Ever is Higher
+																									</label>
+																								</div>
+																							</div>
+
 																						</div>
-																						<div class="col-md-6"
-																							style="margin-top: 3px; padding: 0px 0px 0px 5px;">
-																							<span class="input-group-addon"
-																								style="border: 1px solid #ebdfdf;">% Of
-																								SP</span>
+																						<div class="col-sm-12 radio1 collpase in"
+																							id="blk-pccValuePre">
+																							<div class="col-sm-8">
+																								<div class="col-md-2">
+																									<label>Upto</label>
+																								</div>
+																								<div class="col-md-4" style="padding: 0px;">
+																									<input type="text" name="nr-pccrangepre"
+																										class="form-control number"
+																										value="${chargeMap.pccrangepre}" id="text1">
+																								</div>
+																								<div class="col-md-4"
+																									style="padding-right: 0px;">
+																									<input type="text" name="nr-pccvaluepre"
+																										class="form-control number"
+																										value="${chargeMap.pccvaluepre}">
+																								</div>
+																								<div class="col-md-2" style="padding: 0px;">
+																									<select class="form-control selected"
+																										name="nr-pccValuePrecriteria">
+																										<c:choose>
+																											<c:when
+																												test="${!empty chargeMap.pccValuePrecriteria}">
+																												<c:choose>
+																													<c:when
+																														test="${chargeMap.pccValuePrecriteria gt 0}">
+																														<option value="0">Fixed</option>
+																														<option value="1" selected>% of
+																															SP</option>
+																													</c:when>
+																													<c:otherwise>
+																														<option value="0" selected>Fixed</option>
+																														<option value="1">% of SP</option>
+																													</c:otherwise>
+																												</c:choose>
+																											</c:when>
+																											<c:otherwise>
+																												<option value="0">Fixed</option>
+																												<option value="1">% of SP</option>
+																											</c:otherwise>
+																										</c:choose>
+																									</select>
+																								</div>
+																								<br> <br> <br>
+																								<div class="col-md-2">
+																									<label>Greater than</label>
+																								</div>
+																								<div class="col-md-4" style="padding: 0px;">
+																									&nbsp;&nbsp;&nbsp;&nbsp;<label id="label1">${chargeMap.pccrangepre}</label>
+																								</div>
+
+																								<div class="col-md-4"
+																									style="padding-right: 0px;">
+
+																									<input type="text"
+																										name="nr-pccpercentSPValuePre"
+																										class="form-control number"
+																										value="${chargeMap.pccpercentSPValuePre}">
+																								</div>
+																								<div class="col-md-2" style="padding: 0px;">
+																									<select class="form-control selected"
+																										name="nr-pccpercentSPValuePrecriteria">
+																										<c:choose>
+																											<c:when
+																												test="${!empty chargeMap.pccpercentSPValuePrecriteria}">
+																												<c:choose>
+																													<c:when
+																														test="${chargeMap.pccpercentSPValuePrecriteria gt 0}">
+																														<option value="0">Fixed</option>
+																														<option value="1" selected>% of
+																															SP</option>
+																													</c:when>
+																													<c:otherwise>
+																														<option value="0" selected>Fixed</option>
+																														<option value="1">% of SP</option>
+																													</c:otherwise>
+																												</c:choose>
+																											</c:when>
+																											<c:otherwise>
+																												<option value="0">Fixed</option>
+																												<option value="1">% of SP</option>
+																											</c:otherwise>
+																										</c:choose>
+																									</select>
+																								</div>
+																							</div>
+																							<div class="col-sm-4"></div>
+																						</div>
+																						<div class="col-sm-12 radio1"
+																							id="blk-pccHigherPre">
+																							<div class="col-sm-12">
+																								<div class="col-sm-6">
+																									<div class="checkbox i-checks">
+																										<label> <form:checkbox
+																												path="nrnReturnConfig.pccpercentSP"
+																												id="pccpercentSP" /> <i></i> Percentage of
+																											SP
+																										</label>
+																									</div>
+																								</div>
+																								<div class="col-sm-6">
+																									<div class="input-group m-b">
+																										<input type="text"
+																											name="nr-pccpercentSPHigherPre"
+																											class="form-control number"
+																											value="${chargeMap.pccpercentSPHigherPre}">
+																										<span class="input-group-addon">%</span>
+																									</div>
+																								</div>
+																							</div>
+																							<div class="col-sm-12">
+																								<div class="col-sm-6">
+																									<div class="checkbox i-checks">
+																										<label> <form:checkbox
+																												path="nrnReturnConfig.pccfixedAmt"
+																												id="pccfixedAmt" /> <i></i> Fixed Amount
+																										</label>
+																									</div>
+																								</div>
+																								<div class="col-sm-6">
+																									<div class="input-group m-b">
+																										<input type="text" name="nr-pccfixedAmtPre"
+																											class="form-control number"
+																											value="${chargeMap.pccfixedAmtPre}">
+																									</div>
+																								</div>
+																							</div>
 																						</div>
 																					</div>
-																				</div>
-																				<div class="col-sm-6"></div>
-																			</div>
+
+																					<div class="col-sm-12" id="blk-postpaidPCC"
+																						style="display: none;">
+																						<div class="row">
+																							<div class="col-sm-6">
+																								<div class="radio">
+																									<label> <form:radiobutton
+																											path="nrnReturnConfig.whicheverGreaterPCCPost"
+																											value="false" id="pccValuePost"
+																											name="whicheverGreaterPCCPost"
+																											class="pccValuePost" /> Value Based
+																									</label>
+																								</div>
+																							</div>
+																							<div class="col-sm-6">
+																								<div class="radio">
+																									<label> <form:radiobutton
+																											path="nrnReturnConfig.whicheverGreaterPCCPost"
+																											value="true" id="pccHigherPost"
+																											name="whicheverGreaterPCCPost"
+																											class="pccHigherPost" /> Which Ever is
+																										Higher
+																									</label>
+																								</div>
+																							</div>
+
+																						</div>
+																						<div class="col-sm-12 radio1 collpase in"
+																							id="blk-pccValuePost">
+																							<div class="col-sm-8">
+																								<div class="col-md-2">
+																									<label>Upto</label>
+																								</div>
+																								<div class="col-md-4" style="padding: 0px;">
+																									<input type="text" name="nr-pccrangepost"
+																										class="form-control number"
+																										value="${chargeMap.pccrangepost}" id="text2">
+																								</div>
+																								<div class="col-md-4"
+																									style="padding-right: 0px;">
+																									<input type="text" name="nr-pccvaluepost"
+																										class="form-control number"
+																										value="${chargeMap.pccvaluepost}">
+																								</div>
+																								<div class="col-md-2" style="padding: 0px;">
+																									<select class="form-control selected"
+																										name="nr-pccValuepostcriteria">
+																										<c:choose>
+																											<c:when
+																												test="${!empty chargeMap.pccValuepostcriteria}">
+																												<c:choose>
+																													<c:when
+																														test="${chargeMap.pccValuepostcriteria gt 0}">
+																														<option value="0">Fixed</option>
+																														<option value="1" selected>% of
+																															SP</option>
+																													</c:when>
+																													<c:otherwise>
+																														<option value="0" selected>Fixed</option>
+																														<option value="1">% of SP</option>
+																													</c:otherwise>
+																												</c:choose>
+																											</c:when>
+																											<c:otherwise>
+																												<option value="0">Fixed</option>
+																												<option value="1">% of SP</option>
+																											</c:otherwise>
+																										</c:choose>
+																									</select>
+																								</div>
+																								<br> <br> <br>
+																								<div class="col-md-2">
+																									<label>Greater than</label>
+																								</div>
+																								<div class="col-md-4" style="padding: 0px;">
+																									&nbsp;&nbsp;&nbsp;&nbsp;<label id="label2">${chargeMap.pccrangepost}</label>
+																								</div>
+
+																								<div class="col-md-4"
+																									style="padding-right: 0px;">
+
+																									<input type="text"
+																										name="nr-pccpercentSPValuePost"
+																										class="form-control number"
+																										value="${chargeMap.pccpercentSPValuePost}">
+																								</div>
+																								<div class="col-md-2" style="padding: 0px;">
+																									<select class="form-control selected"
+																										name="nr-pccpercentSPValuePostcriteria">
+																										<c:choose>
+																											<c:when
+																												test="${!empty chargeMap.pccpercentSPValuePostcriteria}">
+																												<c:choose>
+																													<c:when
+																														test="${chargeMap.pccpercentSPValuePostcriteria gt 0}">
+																														<option value="0">Fixed</option>
+																														<option value="1" selected>% of
+																															SP</option>
+																													</c:when>
+																													<c:otherwise>
+																														<option value="0" selected>Fixed</option>
+																														<option value="1">% of SP</option>
+																													</c:otherwise>
+																												</c:choose>
+																											</c:when>
+																											<c:otherwise>
+																												<option value="0">Fixed</option>
+																												<option value="1">% of SP</option>
+																											</c:otherwise>
+																										</c:choose>
+																									</select>
+																								</div>
+
+																							</div>
+																							<div class="col-sm-4"></div>
+																						</div>
+																						<div class="col-sm-12 radio1"
+																							id="blk-pccHigherPost">
+																							<div class="col-sm-12">
+																								<div class="col-sm-6">
+																									<div class="checkbox i-checks">
+																										<label> <form:checkbox
+																												path="nrnReturnConfig.pccpercentSP"
+																												id="pccpercentSP" /> <i></i> Percentage of
+																											SP
+																										</label>
+																									</div>
+																								</div>
+																								<div class="col-sm-6">
+																									<div class="input-group m-b">
+																										<input type="text"
+																											name="nr-pccpercentSPHigherPost"
+																											class="form-control number"
+																											value="${chargeMap.pccpercentSPHigherPost}">
+																										<span class="input-group-addon">%</span>
+																									</div>
+																								</div>
+																							</div>
+																							<div class="col-sm-12">
+																								<div class="col-sm-6">
+																									<div class="checkbox i-checks">
+																										<label> <form:checkbox
+																												path="nrnReturnConfig.pccfixedAmt"
+																												id="pccfixedAmt" /> <i></i> Fixed Amount
+																										</label>
+																									</div>
+																								</div>
+																								<div class="col-sm-6">
+																									<div class="input-group m-b">
+																										<input type="text" name="nr-pccfixedAmtPost"
+																											class="form-control number"
+																											value="${chargeMap.pccfixedAmtPost}">
+																									</div>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</c:when>
+																				<c:otherwise>
+																					<div class="col-sm-6">
+																						<div class="radio">
+																							<label> <form:radiobutton
+																									path="nrnReturnConfig.whicheverGreaterPCC"
+																									value="false" id="pccValue"
+																									name="whicheverGreaterPCC" class="pccValue" />
+																								Value Based
+																							</label>
+																						</div>
+																					</div>
+																					<div class="col-sm-6">
+																						<div class="radio">
+																							<label> <form:radiobutton
+																									path="nrnReturnConfig.whicheverGreaterPCC"
+																									value="true" id="pccHigher"
+																									name="whicheverGreaterPCC" class="pccHigher" />
+																								Which Ever is Higher
+																							</label>
+																						</div>
+																					</div>
+																					<div class="col-sm-12 radio1 collpase in"
+																						id="blk-pccValue">
+																						<div class="col-sm-8">
+																							<div class="col-md-2">
+																								<label>Upto</label>
+																							</div>
+																							<div class="col-md-4" style="padding: 0px;">
+																								<input type="text" name="nr-pccrange"
+																									class="form-control number"
+																									value="${chargeMap.pccrange}" id="text1">
+																							</div>
+																							<div class="col-md-4" style="padding-right: 0px;">
+																								<input type="text" name="nr-pccvalue"
+																									class="form-control number"
+																									value="${chargeMap.pccvalue}">
+																							</div>
+																							<div class="col-md-2" style="padding: 0px;">
+																								<select class="form-control selected"
+																									name="nr-pccValuecriteria">
+																									<c:choose>
+																										<c:when
+																											test="${!empty chargeMap.pccValuecriteria}">
+																											<c:choose>
+																												<c:when
+																													test="${chargeMap.pccValuecriteria gt 0}">
+																													<option value="0">Fixed</option>
+																													<option value="1" selected>% of SP</option>
+																												</c:when>
+																												<c:otherwise>
+																													<option value="0" selected>Fixed</option>
+																													<option value="1">% of SP</option>
+																												</c:otherwise>
+																											</c:choose>
+																										</c:when>
+																										<c:otherwise>
+																											<option value="0">Fixed</option>
+																											<option value="1">% of SP</option>
+																										</c:otherwise>
+																									</c:choose>
+																								</select>
+																							</div>
+																							<br> <br> <br>
+																							<div class="col-md-2">
+																								<label>Greater than</label>
+																							</div>
+																							<div class="col-md-4" style="padding: 0px;">
+																								&nbsp;&nbsp;&nbsp;&nbsp;<label id="label1">${chargeMap.pccrange}</label>
+																							</div>
+
+																							<div class="col-md-4" style="padding-right: 0px;">
+																								<input type="text" name="nr-pccpercentSPValue"
+																									class="form-control number"
+																									value="${chargeMap.pccpercentSPValue}">
+																							</div>
+																							<div class="col-md-2" style="padding: 0px;">
+																								<select class="form-control selected"
+																									name="nr-pccpercentSPValuecriteria">
+																									<c:choose>
+																										<c:when
+																											test="${!empty chargeMap.pccpercentSPValuecriteria}">
+																											<c:choose>
+																												<c:when
+																													test="${chargeMap.pccpercentSPValuecriteria gt 0}">
+																													<option value="0">Fixed</option>
+																													<option value="1" selected>% of SP</option>
+																												</c:when>
+																												<c:otherwise>
+																													<option value="0" selected>Fixed</option>
+																													<option value="1">% of SP</option>
+																												</c:otherwise>
+																											</c:choose>
+																										</c:when>
+																										<c:otherwise>
+																											<option value="0">Fixed</option>
+																											<option value="1">% of SP</option>
+																										</c:otherwise>
+																									</c:choose>
+																								</select>
+																							</div>
+																						</div>
+																						<div class="col-sm-4"></div>
+																					</div>
+																					<div class="col-sm-12 radio1" id="blk-pccHigher">
+																						<div class="col-sm-12">
+																							<div class="col-sm-6">
+																								<div class="checkbox i-checks">
+																									<label> <form:checkbox
+																											path="nrnReturnConfig.pccpercentSP"
+																											id="pccpercentSP" /> <i></i> Percentage of
+																										SP
+																									</label>
+																								</div>
+																							</div>
+																							<div class="col-sm-6">
+																								<div class="input-group m-b">
+																									<input type="text" name="nr-pccpercentSPHigher"
+																										class="form-control number"
+																										value="${chargeMap.pccpercentSPHigher}">
+																									<span class="input-group-addon">%</span>
+																								</div>
+																							</div>
+																						</div>
+																						<div class="col-sm-12">
+																							<div class="col-sm-6">
+																								<div class="checkbox i-checks">
+																									<label> <form:checkbox
+																											path="nrnReturnConfig.pccfixedAmt"
+																											id="pccfixedAmt" /> <i></i> Fixed Amount
+																									</label>
+																								</div>
+																							</div>
+																							<div class="col-sm-6">
+																								<div class="input-group m-b">
+																									<input type="text" name="nr-pccfixedAmt"
+																										class="form-control number"
+																										value="${chargeMap.pccfixedAmt}">
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</c:otherwise>
+																			</c:choose>
 																			<div class="col-sm-12 radio1" id="blk-pccHigher">
+
+																				<c:if
+																					test="${fn:contains(partner.pcName, 'flipkart')}">
+																					<div class="row">
+																						<div class="col-md-2"
+																							style="padding-bottom: 18px;"></div>
+																						<div class="col-md-3"
+																							style="padding-bottom: 18px;">
+																							<div class="radio">
+																								<%-- <form:radiobutton path="paymentCategory" value="prepaid"
+																	id="prepaid" name="toggler" class="prepaid"/> --%>
+																								<i class="fa fa-arrow-down" aria-hidden="true"
+																									id="prepaidArrow"></i> <label id="prepaid"
+																									class="prepaid"> Prepaid </label>
+																							</div>
+																						</div>
+																						<div class="col-md-3"
+																							style="padding-bottom: 18px;">
+																							<div class="radio">
+																								<%-- <form:radiobutton path="paymentCategory" value="postpaid"
+																	id="postpaid" name="toggler" class="postpaid"/> --%>
+																								<i class="fa fa-arrow-right" aria-hidden="true"
+																									id="postpaidArrow"></i> <label id="postpaid"
+																									class="postpaid"> Postpaid </label>
+																							</div>
+																						</div>
+																						<div class="col-md-1"
+																							style="padding-bottom: 18px;"></div>
+																					</div>
+																				</c:if>
 																				<div class="col-sm-12">
 																					<div class="col-sm-6">
 																						<div class="checkbox i-checks">
@@ -1512,12 +1925,21 @@ input+label {
 																		<div class="panel-body">
 																			<div class="form-group col-md-12">
 																				<div class="col-md-4 input-group m-b">
+<<<<<<< HEAD
 																					<label>Packaging Fee </label>
 																					<form:checkbox id="Packaging" path="nrnReturnConfig.packagingFee" 
 																						style="position: absolute; left: 100px;"/>
 																					<div class="col-lg-12 text-center">
 																						<img alt="" src="/O2R/partnerimages/SnapdealPackagingSlab.jpg">
 																					</div>
+=======
+																					<label>Packaging Fee </label> <input type="text"
+																						placeholder="" class="form-control number"
+																						name="nr-delServiceFee"
+																						value="${chargeMap.delServiceFee}"
+																						id="delServiceFee" /> <input type="checkbox"
+																						name="vehicle" value="Bike">
+>>>>>>> refs/heads/Release_14_May_As_Is_Order_Upload_1912
 																				</div>
 																			</div>
 																		</div>
@@ -3741,6 +4163,9 @@ input+label {
 							$("#text1").keyup(function() {
 								$("#label1").text($(this).val()); //OR $("#label1").html($(this).val());
 							});
+							$("#text2").keyup(function() {
+								$("#label2").text($(this).val()); //OR $("#label1").html($(this).val());
+							});
 							$('.i-checks').iCheck({
 								checkboxClass : 'icheckbox_square-green',
 								radioClass : 'iradio_square-green',
@@ -3840,6 +4265,22 @@ input+label {
 								$('.radio1').hide();
 								$("#blk-" + $(this).attr('id')).slideDown();
 							});
+							$(".pccValuePre").click(function() {
+								$('.radio1').hide();
+								$("#blk-" + $(this).attr('id')).slideDown();
+							});
+							$(".pccHigherPre").click(function() {
+								$('.radio1').hide();
+								$("#blk-" + $(this).attr('id')).slideDown();
+							});
+							$(".pccValuePost").click(function() {
+								$('.radio1').hide();
+								$("#blk-" + $(this).attr('id')).slideDown();
+							});
+							$(".pccHigherPost").click(function() {
+								$('.radio1').hide();
+								$("#blk-" + $(this).attr('id')).slideDown();
+							});
 							/* $(".postpaid").click(
 									function() {
 										$('#blk-prepaid').hide();
@@ -3892,36 +4333,24 @@ input+label {
 									}); */
 							$(".postpaid").click(
 									function() {
-										$('#blk-prepaid').hide();
-										$('#blk-others').hide();
+										$('#blk-prepaidPCC').hide();
 										$("#blk-" + $(this).attr('id'))
 												.slideDown();
-										//document.getElementById('truePost').style.display = 'block';
-										$("#noofdaysfromshippeddatePost")
-												.fadeIn();
-										$('#paymentField2').trigger('change');
 
 										$('#postpaidArrow').attr('class',
 												'fa fa-arrow-down');
 										$('#prepaidArrow').attr('class',
-												'fa fa-arrow-right');
-										$('#othersArrow').attr('class',
 												'fa fa-arrow-right');
 									});
 							$(".prepaid").click(
 									function() {
-										$('#blk-postpaid').hide();
-										$('#blk-others').hide();
+										$('#blk-postpaidPCC').hide();
 										$("#blk-" + $(this).attr('id'))
 												.slideDown();
-										$("#noofdaysfromshippeddate").fadeIn();
-										$('#paymentField1').trigger('change');
 
 										$('#prepaidArrow').attr('class',
 												'fa fa-arrow-down');
 										$('#postpaidArrow').attr('class',
-												'fa fa-arrow-right');
-										$('#othersArrow').attr('class',
 												'fa fa-arrow-right');
 									});
 							$("[name=paymentType]").click(function() {
@@ -3945,8 +4374,10 @@ input+label {
 									"ifChecked", revShippingFeeSF);
 							$("#revShippingFeeType_revShipFeeVar").on(
 									"ifChecked", revShipFeeVar);
-							
+
+							//js error
 							test = ${!empty partner.fixedfeeListOthers};
+
 							if (test == true) {
 								document.getElementById("amazonOther").style.display = 'block';
 							}
@@ -3995,7 +4426,7 @@ input+label {
 								autoclose : true
 							});
 
-							if ('${partner.paymentCategory}' == 'prepaid') {
+							/* if ('${partner.paymentCategory}' == 'prepaid') {
 								$("#prepaid").prop("checked", true).trigger(
 										"click");
 								$(".prepaid").trigger("click");
@@ -4012,7 +4443,7 @@ input+label {
 										"click");
 								$(".others").trigger("click");
 								$('#paymentField3').trigger('change');
-							}
+							} */
 
 							if ('${partner.isshippeddatecalcPost}' != 'true') {
 								$("#noofdaysfromdeliverydatePost")
