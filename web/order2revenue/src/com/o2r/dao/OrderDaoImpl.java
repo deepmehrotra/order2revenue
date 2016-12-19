@@ -3171,13 +3171,29 @@ public class OrderDaoImpl implements OrderDao {
 			 * dwchargetemp) shippingCharges = vwchargetemp; else
 			 * shippingCharges = dwchargetemp;
 			 */
+			//calculating packaging charges
+			int packagindCharges=0;
+			if(partner.getPcName().contains(GlobalConstant.PCSNAPDEAL))
+			{
+				//int index=0;
+				if(volWeight<=250)
+				{
+					packagindCharges=GlobalConstant.packageFeeSnapdeal[0];
+				}
+				else if (volWeight<=500)
+				{
+					packagindCharges=GlobalConstant.packageFeeSnapdeal[1];
+				}
+				else
+					packagindCharges=GlobalConstant.packageFeeSnapdeal[((int)volWeight/500)+1];
+			}
 
 			comission = (float) (comission * SP) / 100;
 			serviceTax = (chargesMap.containsKey("serviceTax") ? chargesMap
 					.get("serviceTax") : 0)
-					* (float) (shippingCharges + pccAmount + fixedfee + comission)
+					* (float) (shippingCharges + pccAmount + fixedfee + comission+packagindCharges)
 					/ 100;
-			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
+			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges-packagindCharges
 					- serviceTax;
 			props = PropertiesLoaderUtils.loadProperties(resource);
 			if (partner != null && partner.isTdsApplicable()) {
@@ -3482,6 +3498,7 @@ public class OrderDaoImpl implements OrderDao {
 
 			String revShippingType = partner.getNrnReturnConfig()
 					.getRevShippingFeeType();
+			Product product=null;
 			if (isRevShippingFee && revShippingType != null) {
 
 				switch (revShippingType) {
@@ -3521,10 +3538,67 @@ public class OrderDaoImpl implements OrderDao {
 
 					revShippingFee = (float) order.getShippingCharges();
 					break;
+				
+				case "revShipFeeNewTerms":
+					
+					product=productService.getProduct(order.getProductSkuCode(), sellerId);
+					float temweight=0;
+					
+						temweight=product.getDeadWeight()>product.getVolWeight()?product.getDeadWeight():product.getVolWeight();
+						if(temweight<500)
+						{
+							if(order.getVolShippingString().equals("national"))
+							{
+							revShippingFee=GlobalConstant.flipkartRevShippingFeeLT5GM[2];
+							}
+							else if (order.getVolShippingString().equals("local"))
+							{
+								revShippingFee=GlobalConstant.flipkartRevShippingFeeLT5GM[0];	
+							}
+							else
+							{
+								revShippingFee=GlobalConstant.flipkartRevShippingFeeLT5GM[1];
+							}
+						}
+						else if(temweight>500&&temweight<5000)
+						{
+							int index = ((int)temweight/500)+1;
+							if(order.getVolShippingString().equals("national"))
+							{
+							revShippingFee=(GlobalConstant.flipkartRevShippingFeeLT5KG[2])*index;
+							}
+							else if (order.getVolShippingString().equals("local"))
+							{
+								revShippingFee=GlobalConstant.flipkartRevShippingFeeLT5KG[0]*index;	
+							}
+							else
+							{
+								revShippingFee=GlobalConstant.flipkartRevShippingFeeLT5KG[1]*index;
+							}
+						}
+						else
+						{
+							int index = ((int)temweight/1000)+1;
+							if(order.getVolShippingString().equals("national"))
+							{
+							revShippingFee=(GlobalConstant.flipkartRevShippingFeeGT5KG[2])*index;
+							}
+							else if (order.getVolShippingString().equals("local"))
+							{
+								revShippingFee=GlobalConstant.flipkartRevShippingFeeGT5KG[0]*index;	
+							}
+							else
+							{
+								revShippingFee=GlobalConstant.flipkartRevShippingFeeGT5KG[1]*index;
+							}
+						}
+					
+					
+					break;
 
 				case "revShipFeeVar":
 
-					Product product = productService.getProduct(
+					product = productService.getProduct(
 							order.getProductSkuCode(), sellerId);
 					float deadWeight = (float) (chargesMap
 							.containsKey(GlobalConstant.ReverseShippingFeeDeadWeightMinWeight) ? chargesMap

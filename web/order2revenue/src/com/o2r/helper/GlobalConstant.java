@@ -790,8 +790,17 @@ public class GlobalConstant {
 			add("Net");
 		}
 	};
+	//Array for Packaging fee of snapdeal
+	public static final int  packageFeeSnapdeal[]={5,10,15,20,25,30,35,40,45,50,60};
 	
 	
+	//Array for Packaging fee of snapdeal
+		public static final int  flipkartRevShippingFeeLT5GM[]={35,60,85};
+		public static final int  flipkartRevShippingFeeLT5KG[]={35,40,55};
+		public static final int  flipkartRevShippingFeeGT5KG[]={5,10,25};
+
+
+		
 	
 	/* Null Area */
 	public static final String nullException = "NullException !";
@@ -1238,6 +1247,7 @@ public class GlobalConstant {
 	public static final String PCJABONG = "jabong";
 	public static final String PCFLIPKART = "flipkart";
 	public static final String PCPAYTM = "paytm";
+	public static final String PCSNAPDEAL = "snapdeal";
 
 	/*
 	 * public static final String

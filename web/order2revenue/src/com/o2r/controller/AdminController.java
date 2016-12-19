@@ -101,7 +101,7 @@ public class AdminController {
 		return new ModelAndView("employeesList", model);
 	}
 
-	@RequestMapping(value = "/admin/listQueries", method = RequestMethod.GET)
+	@RequestMapping(value = "/seller/listQueries", method = RequestMethod.GET)
 	public ModelAndView listQueries(HttpServletRequest request) {
 
 		log.info("$$$ listQueries Starts : AdminController $$$");

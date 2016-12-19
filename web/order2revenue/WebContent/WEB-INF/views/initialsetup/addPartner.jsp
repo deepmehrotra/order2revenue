@@ -1500,6 +1500,31 @@ input+label {
 																	</div>
 																</div>
 															</div>
+															<c:if test="${fn:contains(partner.pcName, 'snapdeal')}">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																		<h4 class="panel-title">
+																			<a data-toggle="collapse" data-parent="#accordion"
+																				href="#collapsesix1">Packaging Fee</a>
+																		</h4>
+																	</div>
+																	<div id="collapsesix1" class="panel-collapse collapse">
+																		<div class="panel-body">
+																			<div class="form-group col-md-12">
+																				<div class="col-md-4 input-group m-b">
+																					<label>Packaging Fee </label> <input type="text"
+																						placeholder="" class="form-control number"
+																						name="nr-delServiceFee"
+																						value="${chargeMap.delServiceFee}"
+																						id="delServiceFee" />
+																						<input type="checkbox" name="vehicle" 
+																						value="Bike">
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</c:if>
 															<c:if test="${fn:contains(partner.pcName, 'amazon')}">
 																<div class="panel panel-default">
 																	<div class="panel-heading">
