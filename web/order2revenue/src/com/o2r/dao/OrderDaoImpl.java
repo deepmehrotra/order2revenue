@@ -3175,17 +3175,18 @@ public class OrderDaoImpl implements OrderDao {
 			int packagindCharges=0;
 			if(partner.getPcName().contains(GlobalConstant.PCSNAPDEAL))
 			{
-				//int index=0;
-				if(volWeight<=250)
-				{
-					packagindCharges=GlobalConstant.packageFeeSnapdeal[0];
-				}
-				else if (volWeight<=500)
-				{
-					packagindCharges=GlobalConstant.packageFeeSnapdeal[1];
-				}
-				else
-					packagindCharges=GlobalConstant.packageFeeSnapdeal[((int)volWeight/500)+1];
+				if(partner.getNrnReturnConfig().isPackagingFee() == true){
+					if(volWeight<=250)
+					{
+						packagindCharges=GlobalConstant.packageFeeSnapdeal[0];
+					}
+					else if (volWeight<=500)
+					{
+						packagindCharges=GlobalConstant.packageFeeSnapdeal[1];
+					}
+					else
+						packagindCharges=GlobalConstant.packageFeeSnapdeal[((int)volWeight/500)+1];
+				}				
 			}
 
 			comission = (float) (comission * SP) / 100;
@@ -3527,6 +3528,21 @@ public class OrderDaoImpl implements OrderDao {
 								.get(GlobalConstant.ReverseShippingFeeFlatAmt);
 					} else {
 						revShippingFee = revShipMarketFee;
+					}
+					break;
+				case "revShipFeeLWR":
+
+					float revShipMarketFeeLWR = (float) (chargesMap
+							.containsKey(GlobalConstant.ReverseShippingFeePercentMarketFee) ? ((chargesMap
+							.get(GlobalConstant.ReverseShippingFeePercentMarketFee) / 100) * order
+							.getNetRate())
+							: 0);
+					if (chargesMap
+							.get(GlobalConstant.ReverseShippingFeeFlatAmt) < revShipMarketFeeLWR) {
+						revShipMarketFeeLWR = chargesMap
+								.get(GlobalConstant.ReverseShippingFeeFlatAmt);
+					} else {
+						revShippingFee = revShipMarketFeeLWR;
 					}
 					break;
 				case "revShipFeeFF":

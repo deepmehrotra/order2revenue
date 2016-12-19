@@ -840,7 +840,7 @@ input+label {
 																												class="form-control number"
 																												name="nr-fixedfeeOthers${loop.index}-range"
 																												id="nr-fixedfeeOthers${loop.index}-range"
-																												value="${fixedfee1.range}" required />
+																												value="${fixedfee1.range}" />
 																										</div>
 																										<div class="col-md-3 content-rgt">
 																											<input type="text"
@@ -879,7 +879,7 @@ input+label {
 																									<div class="col-md-3 content-rgt">
 																										<input type="text" class="form-control number"
 																											name="nr-fixedfeeOthers0-range"
-																											id="txt1_name0" required />
+																											id="txt1_name0" />
 
 																									</div>
 																									<div class="col-md-3 content-rgt">
@@ -1512,13 +1512,12 @@ input+label {
 																		<div class="panel-body">
 																			<div class="form-group col-md-12">
 																				<div class="col-md-4 input-group m-b">
-																					<label>Packaging Fee </label> <input type="text"
-																						placeholder="" class="form-control number"
-																						name="nr-delServiceFee"
-																						value="${chargeMap.delServiceFee}"
-																						id="delServiceFee" />
-																						<input type="checkbox" name="vehicle" 
-																						value="Bike">
+																					<label>Packaging Fee </label>
+																					<form:checkbox id="Packaging" path="nrnReturnConfig.packagingFee" 
+																						style="position: absolute; left: 100px;"/>
+																					<div class="col-lg-12 text-center">
+																						<img alt="" src="/O2R/partnerimages/SnapdealPackagingSlab.jpg">
+																					</div>
 																				</div>
 																			</div>
 																		</div>
@@ -2996,7 +2995,7 @@ input+label {
 																					Greater
 																				</label>
 																			</div>
-																		</div>
+																		</div>																		
 																		<div class="col-sm-12">
 																			<div class="col-sm-6">
 																				<div class="checkbox i-checks">
@@ -3031,6 +3030,54 @@ input+label {
 																			</div>
 																		</div>
 																	</div>
+																	<div class="col-sm-12">
+																		<div class="hr-line-dashed"></div>
+																	</div>
+																	<div class="col-sm-12">																		
+																		<div class="col-sm-6">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						class="revShippingFee"
+																						path="nrnReturnConfig.revShippingFeeType"
+																						id="revShippingFeeType_revShipFeeLWR"
+																						value="revShipFeeLWR" /> <i></i> Which Ever Is
+																					Lower
+																				</label>
+																			</div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="col-sm-6">
+																				<div class="checkbox i-checks">
+																					<label> Flat Amount </label>
+																				</div>
+																			</div>
+																			<div class="col-sm-6">
+																				<div class="input-group m-b">
+																					<input type="text" placeholder=""
+																						class="form-control number"
+																						name="nr-revShipFeeFlatAmtLWR"
+																						value="${chargeMap.revShipFeeFlatAmtLWR}">
+																				</div>
+																			</div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="col-sm-6">
+																				<div class="checkbox i-checks">
+																					<label> <i></i> % of NR(Net Rate)
+																					</label>
+																				</div>
+																			</div>
+																			<div class="col-sm-6">
+																				<div class="input-group m-b">
+																					<input type="text" placeholder=""
+																						class="form-control number"
+																						name="nr-revShipFeeNRLWR"
+																						value="${chargeMap.revShipFeeNRLWR}"> <span
+																						class="input-group-addon">%</span>
+																				</div>
+																			</div>
+																		</div>
+																	</div>																	
 																	<div class="col-sm-12">
 																		<div class="hr-line-dashed"></div>
 																	</div>
@@ -3186,6 +3233,32 @@ input+label {
 																			</div>
 																		</div>
 																	</div>
+																	
+																	<c:if test="${fn:contains(partner.pcName, 'flipkart')}">
+																		<div class="col-sm-12">
+																			<div class="hr-line-dashed"></div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="col-sm-6">
+																				<div class="checkbox i-checks">
+																					<label> <form:checkbox
+																							class="revShippingFee"
+																							path="nrnReturnConfig.revShippingFeeType"
+																							id="revShippingFeeType_revShipFeeZB"
+																							value="revShipFeeNewTerms" /> <i></i> Zone Based
+																					</label>
+																				</div>
+																			</div>
+																			<div class="col-sm-6">																				
+																			</div>
+																			<div class="col-sm-12">
+																				<div class="col-lg-12 text-center">
+																					<img alt="" src="/O2R/partnerimages/FlipkartNowZone.jpg">
+																				</div>
+																			</div>
+																		</div>
+																	</c:if>									
+																	
 																</div>
 															</div>
 														</div>
@@ -4110,6 +4183,8 @@ input+label {
 							if ('${partner.nrnReturnConfig.whicheverGreaterPCC}' == 'true') {
 								$('#whicheverGreaterPCC').iCheck('check');
 							}
+							if ('${partner.nrnReturnConfig.packagingFee}' == 'true')
+								$('#Packaging').iCheck('check');
 							if ('${partner.nrnReturnConfig.retCharSFRevShipFee}' == 'true')
 								$('#retCharSFRevShipFee').iCheck('check');
 							if ('${partner.nrnReturnConfig.retCharSFShipFee}' == 'true')
@@ -4192,8 +4267,14 @@ input+label {
 							if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeGRT')
 								$('#revShippingFeeType_revShipFeeGRT').iCheck(
 										'check');
+							if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeLWR')
+								$('#revShippingFeeType_revShipFeeLWR').iCheck(
+										'check');
 							if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeePCC')
 								$('#revShippingFeeType_revShipFeePCC').iCheck(
+										'check');
+							if ('${partner.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeNewTerms')
+								$('#revShippingFeeType_revShipFeeZB').iCheck(
 										'check');
 
 							$('#collapsefour1')

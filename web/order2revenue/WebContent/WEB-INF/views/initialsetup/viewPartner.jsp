@@ -541,9 +541,12 @@ span .#error {
 																					${chargeMap.serviceTax} %</label>
 																			</div>
 																		</td>
-																	</tr>
+																	</tr>																	
 																</tbody>
 															</table>
+															<c:if test="${partner.nrnReturnConfig.packagingFee == 'true'}">
+																<label>* Snapdeal Packaging Fee</label>
+															</c:if>
 														</div>
 													</div>
 												</div>
@@ -1460,6 +1463,11 @@ span .#error {
 																			<label class="labelfix">Flat Amount :	${chargeMap.revShipFeeFlatAmt}</label><br>
 																			<label class="labelfix">% of Market Fee :	${chargeMap.revShipFeePCCMF}</label><br>
 																		</c:when>
+																		<c:when	test="${partner.nrnReturnConfig.revShippingFeeType == 'revShipFeeLWR'}">
+																			<label class="labelfix"><u>Which Ever Is Lower</u></label><br>
+																			<label class="labelfix">Flat Amount :	${chargeMap.revShipFeeFlatAmtLWR}</label><br>
+																			<label class="labelfix">% of Market Fee :	${chargeMap.revShipFeeNRLWR}</label><br>
+																		</c:when>
 																		<c:when	test="${partner.nrnReturnConfig.revShippingFeeType == 'revShipFeeFF'}">
 																			<label class="labelfix">Flat Amount :	${chargeMap.revShipFeeFF}</label><br>
 																		</c:when>
@@ -1479,6 +1487,9 @@ span .#error {
 																					Per Weight : ${chargeMap.revShipFeeVWPW}<br>
 																					Min Weight : ${chargeMap.revShipFeeVWMW}
 																			</div>
+																		</c:when>
+																		<c:when	test="${partner.nrnReturnConfig.revShippingFeeType == 'revShipFeeNewTerms'}">
+																			<label class="labelfix">Flipkart Reverse Shipping Fee Slab</label><br>
 																		</c:when>
 																		<c:otherwise>
 																			<label class="labelfix">None</label>

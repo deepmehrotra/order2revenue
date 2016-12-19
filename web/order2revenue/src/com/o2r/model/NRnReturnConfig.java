@@ -97,6 +97,8 @@ public class NRnReturnConfig {
 	private String PDCharSFType;
 	@Column
 	private String PDCharBRType;
+	@Column
+	private boolean packagingFee;
 	// @Column
 	// private float PDCharSFFixAmt;
 	// @Column
@@ -876,6 +878,14 @@ public class NRnReturnConfig {
 
 	public void setPccpercentSP(boolean pccpercentSP) {
 		this.pccpercentSP = pccpercentSP;
+	}
+
+	public boolean isPackagingFee() {
+		return packagingFee;
+	}
+
+	public void setPackagingFee(boolean packagingFee) {
+		this.packagingFee = packagingFee;
 	}
 
 }

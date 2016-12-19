@@ -231,7 +231,7 @@
 	              		<img src="/O2R/landing/img/icons/contact.png" alt="user">
 	              	</div>
 	              	<div class="inputtext">
-	              		<input type="contactno" id="contactno" name="contactno" required autocomplete="off"/ placeholder="Contact No">	              		
+	              		<input type="number" id="contactNo" name="contactNo" required autocomplete="off"/ placeholder="Contact No">	              		
 	              	</div>
 	            </div>
 	            
