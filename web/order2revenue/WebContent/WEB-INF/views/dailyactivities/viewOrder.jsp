@@ -530,7 +530,7 @@
                               <div class="modal-body">
                                 <div class="row">
                                   <div class="col-sm-12" style="overflow-x: scroll;overflow-y: scroll;height: 228px;">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordered" >
                                         <thead>
                                             <tr>
                                                 <th>S.NO</th>

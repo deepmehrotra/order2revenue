@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.o2r.model.AccountTransaction;
+import com.o2r.model.Seller;
 import com.o2r.model.SellerAccount;
 
 @Repository("sellerAccountDao")
@@ -91,19 +92,20 @@ public class SellerAccountDaoImpl implements SellerAccountDao {
 	@Override
 	public AccountTransaction getLastTXN(int SellerId) {
 		AccountTransaction accTxn = null;
-		SellerAccount sellerAcc = null;
+		Seller seller = null;
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(SellerAccount.class);
-					criteria.createAlias("accountTransactions", "accountTransactions")
-					.add(Restrictions.eq("sellerId", SellerId))
-					.add(Restrictions.eqProperty("lastTransaction", "accountTransactions.transactionDate"));
+			Criteria criteria = session.createCriteria(Seller.class);					
+					criteria.createAlias("sellerAccount", "sellerAccount");
+					criteria.createAlias("sellerAccount.accountTransactions", "accountTransactions")
+					.add(Restrictions.eq("id", SellerId))
+					.add(Restrictions.eqProperty("sellerAccount.lastTransaction", "accountTransactions.transactionDate"));
 			if(criteria != null && criteria.list().size() != 0)
-				sellerAcc = (SellerAccount) criteria.list().get(0);
-			if(sellerAcc != null){
-				accTxn = sellerAcc.getAccountTransactions().get(0);
+				seller = (Seller) criteria.list().get(0);
+			if(seller != null){
+				accTxn = seller.getSellerAccount().getAccountTransactions().get(0);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

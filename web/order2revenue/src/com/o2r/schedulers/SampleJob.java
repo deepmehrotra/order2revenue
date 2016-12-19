@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
@@ -146,7 +147,7 @@ public class SampleJob {
 	}
 	
 	
-	public void executeJobSettleOrder() {
+	public synchronized void executeJobSettleOrder() {
 		
 		log.info("$$$ executeJobSettleOrder() Starts : SampleJob $$$");
 		log.info("Fired At : "+ new Date());
@@ -161,13 +162,13 @@ public class SampleJob {
 			if(session != null)
 				session.beginTransaction();
 			
+						
 			Criteria criteria = session.createCriteria(Order.class);
 				criteria.createAlias("orderPayment", "orderPayment", CriteriaSpecification.LEFT_JOIN)
 					.add(Restrictions.lt("orderPayment.dateofPayment", backDate))
 					.add(Restrictions.gt("orderPayment.paymentDifference", 0.0))
 					.add(Restrictions.ne("finalStatus", "Settled"))
-					.setResultTransformer(
-							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 					
 			orderList = criteria.list();
 			if(orderList != null){

@@ -39,6 +39,7 @@ import com.o2r.helper.SaveContents;
 import com.o2r.helper.ValidateUpload;
 import com.o2r.model.Category;
 import com.o2r.model.Partner;
+import com.o2r.model.PartnerCategoryMap;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.UploadReport;
@@ -946,6 +947,40 @@ public class ProductController {
 			log.info("$$$ checkSKUAvailability Ends : ProductController $$$");
 			return "true";
 		}
+	}
+	
+	@RequestMapping(value = "/seller/listPartnerCatMap", method = RequestMethod.GET)
+	public @ResponseBody String listPartnerCatJSON(HttpServletRequest request) {
+
+		log.info("$$$ listPartnerCatJSON Starts : ProductController $$$");
+		int sellerId = 0;
+		String skuCode = request.getParameter("code") != null ? request.getParameter("code") : "";
+		List<Map<String, String>> model = new ArrayList<Map<String,String>>();
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		Gson gson = gsonBuilder.setPrettyPrinting().create();
+		Product product = null;
+		List<PartnerCategoryMap> partnerCatMapping = null;
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			product = productService.getProduct(skuCode, sellerId);
+			if(product != null){
+				partnerCatMapping = product.getPartnerCategoryMap();
+				if(partnerCatMapping != null && partnerCatMapping.size() != 0){
+					for(PartnerCategoryMap par : partnerCatMapping){
+						Map<String, String> demo = new HashMap<String, String>();
+						demo.put("partner", par.getPartnerName());
+						demo.put("category", par.getPartnerCategoryRef());
+						model.add(demo);
+					}
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+			log.error("Failed By seller ID :"+sellerId,e);
+		}
+		String jsonArray = gson.toJson(model);
+		log.info("$$$ listPartnerCatJSON Ends : ProductController $$$");
+		return jsonArray;
 	}
 
 }

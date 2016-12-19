@@ -1020,6 +1020,10 @@ public class Layouter {
 		HSSFCell cell5 = rowHeader.createCell(startColIndex + 4);
 		cell5.setCellValue("Commision Percent");
 		cell5.setCellStyle(headerCellStyle);
+		
+		HSSFCell cell6 = rowHeader.createCell(startColIndex + 5);
+		cell6.setCellValue("Commision Percent");
+		cell6.setCellStyle(headerCellStyle);
 	}
 	
 	

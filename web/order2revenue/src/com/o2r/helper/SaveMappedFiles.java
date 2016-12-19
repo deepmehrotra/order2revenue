@@ -929,14 +929,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event expects NR.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null and ongoing event expects NR.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append("The column 'Gross NR' doesn't exist");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}									
 								}
 							}
 						} else {
@@ -964,14 +972,21 @@ public class SaveMappedFiles {
 
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage.append(" Net Rate is null.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append(" The Column 'Net Rate' Not Present.");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						}
@@ -1799,14 +1814,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event expects NR.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null and ongoing event expects NR.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append("The column 'Gross NR' doesn't exist");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						} else {
@@ -1833,14 +1856,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append(" The Column 'Net Rate' Not Present.");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						}
@@ -2677,14 +2708,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event expects NR.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null and ongoing event expects NR.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append("The column 'Gross NR' doesn't exist");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						} else {
@@ -2711,14 +2750,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append(" The Column 'Net Rate' Not Present.");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						}
@@ -3392,14 +3439,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event on the order with fixed price.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null and ongoing event expects NR.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append("The column 'Gross NR' doesn't exist");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						} else {
@@ -3426,14 +3481,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append(" The Column 'Net Rate' Not Present.");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						}
@@ -5004,14 +5067,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event expects NR.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null and ongoing event expects NR.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append("The column 'Gross NR' doesn't exist");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						} else {
@@ -5038,14 +5109,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append(" The Column 'Net Rate' Not Present.");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						}
@@ -6684,14 +6763,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event expects NR.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null and ongoing event expects NR.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append("The column 'Gross NR' doesn't exist");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						} else {
@@ -6718,14 +6805,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append(" The Column 'Net Rate' Not Present.");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						}
@@ -7755,14 +7850,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event expects NR.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null and ongoing event expects NR.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append("The column 'Gross NR' doesn't exist");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						} else {
@@ -7789,14 +7892,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append(" The Column 'Net Rate' Not Present.");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						}
@@ -8847,14 +8958,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null and ongoing event on the order with fixed price.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null and ongoing event expects NR.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append("The column 'Gross NR' doesn't exist");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						} else {
@@ -8881,14 +9000,22 @@ public class SaveMappedFiles {
 											validaterow = false;
 										}
 									} else {
-										errorMessage
-												.append(" Net Rate is null.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append(" Net Rate is null.");
+											validaterow = false;
+										}
 									}
 								} else {
-									errorMessage
-											.append(" The Column 'Net Rate' Not Present.");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append("The column 'Gross NR' doesn't exist");
+										validaterow = false;
+									}
 								}
 							}
 						}
@@ -10075,14 +10202,22 @@ public class SaveMappedFiles {
 												validaterow = false;
 											}
 										} else {
-											errorMessage
-													.append(" Net Rate is null and ongoing event expects NR.");
-											validaterow = false;
+											if(productConfig != null && productConfig.getGrossNR() != 0){
+												order.setGrossNetRate(productConfig.getGrossNR());
+											} else {
+												errorMessage
+												.append(" Net Rate is null and ongoing event expects NR.");
+												validaterow = false;
+											}
 										}
 									} else {
-										errorMessage
-												.append("The column 'Gross NR' doesn't exist");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append("The column 'Gross NR' doesn't exist");
+											validaterow = false;
+										}
 									}
 								}
 							} else {
@@ -10112,14 +10247,22 @@ public class SaveMappedFiles {
 
 											}
 										} else {
-											errorMessage
-													.append(" Net Rate is null.");
-											validaterow = false;
+											if(productConfig != null && productConfig.getGrossNR() != 0){
+												order.setGrossNetRate(productConfig.getGrossNR());
+											} else {
+												errorMessage
+												.append(" Net Rate is null.");
+												validaterow = false;
+											}
 										}
 									} else {
-										errorMessage
-												.append(" The Column 'Net Rate' Not Present.");
-										validaterow = false;
+										if(productConfig != null && productConfig.getGrossNR() != 0){
+											order.setGrossNetRate(productConfig.getGrossNR());
+										} else {
+											errorMessage
+											.append("The column 'Gross NR' doesn't exist");
+											validaterow = false;
+										}
 									}
 								}
 							}

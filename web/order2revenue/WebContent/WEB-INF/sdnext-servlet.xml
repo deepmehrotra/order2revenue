@@ -199,9 +199,9 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 		</bean> -->
      	<!-- <bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerBean">
 			<property name="jobDetail" ref="setTriggerJobOrderS" />
-			<property name="cronExpression" value="0 0/10 * * * ?" />	
-		</bean> -->	
-		<!-- <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+			<property name="cronExpression" value="0 0 2 * * ?" />	
+		</bean>
+		<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 			<property name="triggers">
 				<list>
 					<ref bean="cronTrigger2" />
