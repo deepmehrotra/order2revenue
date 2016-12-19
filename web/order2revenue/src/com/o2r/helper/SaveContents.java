@@ -672,9 +672,13 @@ public class SaveContents {
 										validaterow = false;
 									}
 								} else {
-									errorMessage
-											.append(" Net Rate is null and ongoing event expects NR.");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage
+										.append(" Net Rate is null and ongoing event expects NR.");
+										validaterow = false;
+									}									
 								}
 							}
 						} else {
@@ -697,8 +701,12 @@ public class SaveContents {
 
 									}
 								} else {
-									errorMessage.append(" Net Rate is null ");
-									validaterow = false;
+									if(productConfig != null && productConfig.getGrossNR() != 0){
+										order.setGrossNetRate(productConfig.getGrossNR());
+									} else {
+										errorMessage.append(" Net Rate is null ");
+										validaterow = false;
+									}									
 								}
 							}
 
@@ -2431,6 +2439,19 @@ public class SaveContents {
 									validaterow = false;
 								}
 							}
+							
+							if (entry.getCell(5) != null
+									&& entry.getCell(5).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									productConfig.setGrossNR(Double
+											.valueOf(entry.getCell(5)
+													.toString()));
+								} catch (NumberFormatException e) {
+									log.error("Failed! by SellerId : "+ sellerId, e);
+									errorMessage.append("TP should be a number ");
+									validaterow = false;
+								}
+							}
 
 						} else {
 							errorMessage
@@ -2481,7 +2502,7 @@ public class SaveContents {
 			}
 			Set<String> errorSet = returnProductConfigMap.keySet();
 			downloadUploadReportXLS(offices, "MP_Vendor_SKU_Mapping",
-					uploadFileName, 5, errorSet, path, sellerId, uploadReport);
+					uploadFileName, 6, errorSet, path, sellerId, uploadReport);
 		} catch (Exception e) {
 
 			log.error("Failed! by SellerId : " + sellerId, e);

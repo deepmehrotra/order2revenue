@@ -102,7 +102,9 @@
                                 <tr>
                                     <td>${loop.index+1}</td>
                                     <td id="oneone">${product.productName}</td>
-                                     <td>${product.productSkuCode}</td>
+                                     <td><label data-toggle="modal" data-target="#myModal24"
+											onclick="getPartCat('${product.productSkuCode}');"
+											style='cursor: pointer;'>${product.productSkuCode}</label></td>
                                     <td><fmt:formatDate value="${product.productDate}" pattern="MMM dd ,YY"/></td>
                                     <td>${product.productPrice}</td>
                                     <td>${product.categoryName}</td>
@@ -123,12 +125,39 @@
                                 </tbody>
                             </table>
                             </div>
+							<div class="modal inmodal fade" id="myModal24" tabindex="-1" role="dialog" aria-hidden="true">
+										<div class="modal-dialog modal-lg">
+											<div class="modal-content animated bounceInRight"
+												style="left: 22%; width: 50%;">
+												<div class="modal-header" style="padding: 15px;">
+													<button type="button" class="close" data-dismiss="modal">
+														<span aria-hidden="true">&times;</span>
+													</button>
+													<h6 class="modal-title" id="skuCode"></h6>
+												</div>
+												<div class="modal-body" style="padding: 20px 30px 0px 30px;">													
+														<div class="row">
+															<table class="table table-bordered">
+																<thead>
+																	<tr>
+																		<th>Partner</th>
+																		<th>Category</th>
+																	</tr>
+																</thead>
+																<tbody id="tableData">																																
+																</tbody>
+															</table>							
+														</div>													
+												</div>
+											</div>
+										</div>	
+							</div>
+                            
                             <div class="col-sm-12">
-                            <div class="hr-line-dashed"></div>
+                            	<div class="hr-line-dashed"></div>
                                   <a href="#" id="upload" class="btn btn-success btn-xs">Bulk Upload Product</a>&nbsp;&nbsp; 
                                   <a href="#" id="download" class="btn btn-success btn-xs">Download Product Summary</a>  
-                                </div>
-                           
+                            </div>                           
                         </div>
                     </div>
                 </div>
@@ -338,6 +367,20 @@
     	 
     	}	
     	
+    function getPartCat(code){
+    	document.getElementById("skuCode").innerHTML = code;
+    	$.ajax({
+    		url : "listPartnerCatMap.html?code="+code,
+			dataType : "json",
+			success : function(data) {
+				var tableData = '';
+				 $.each(data, function(i, item){
+					 tableData+='<tr><td>'+data[i].partner+'</td><td>'+data[i].category+'</td></tr>';				      
+				 }); 
+				 document.getElementById("tableData").innerHTML = tableData;
+			}
+     	});
+    }
 
 
 </script>   

@@ -127,6 +127,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 														<th>Channel SKU_Ref</th>
 														<th>Vendor SKU_Ref</th>
 														<th>Commission Percent</th>
+														<th>Transfer Price</th>
 														<th>Action</th>
 													</tr>
 												</thead>
@@ -141,6 +142,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 																<td>${productMapping.channelSkuRef}</td>
 																<td>${productMapping.vendorSkuRef}</td>
 																<td>${productMapping.commision}</td>
+																<td>${productMapping.grossNR}</td>
 																<td><a href="#"
 																	onclick="removeSKUMapping('${productMapping.productConfigId}')">
 																	Unlink</a></td>
