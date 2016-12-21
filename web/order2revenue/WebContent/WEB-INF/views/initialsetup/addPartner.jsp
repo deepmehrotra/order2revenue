@@ -125,7 +125,7 @@ input+label {
 				id="centerpane">
 				<div class="row">
 					<div class="col-lg-12">
-						<form:form method="POST" action="saveMetaPartner.html"
+						<form:form method="POST" action="savePartner.html"
 							id="addpartnerform" name="addpartnerform" role="form"
 							class="wizard-big form-horizontal" enctype="multipart/form-data">
 							<%-- <form id="form" action="#" class="wizard-big form-horizontal"
@@ -4188,8 +4188,10 @@ input+label {
 									.on(
 											'change',
 											function() {
+												var pcNameOld = '${partner.pcName}';
+												var id = '${partner.pcId}';
 												//alert(this.value);
-												location.href = 'addPartner.html?partnerName=flipkart-$$'
+												location.href = 'addPartner.html?name='+pcNameOld+'&pid='+id+'&partnerName=flipkart-$$'
 														+ this.value;
 											})
 							$("#nr-switch").change(function() {

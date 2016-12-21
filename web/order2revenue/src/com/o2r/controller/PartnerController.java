@@ -793,7 +793,12 @@ public class PartnerController {
 					partner = ConverterClass.preparePartnerBean(ConverterClass
 							.convertPartner(metaPartner));
 					if (partnerName.contains("flipkart") && partnerName.contains("-$$")) {
-						partner.setPcName(partnerName.substring(0,partnerName.indexOf("-$$")));
+						if(request.getParameter("name") != null && request.getParameter("name") != ""){
+							partner.setPcId(Long.parseLong(request.getParameter("pid")));
+							partner.setPcName(request.getParameter("name"));
+						} else {
+							partner.setPcName(partnerName.substring(0,partnerName.indexOf("-$$")));
+						}						
 					}
 
 					Map<String, Float> chargeMap = new HashMap<String, Float>();
