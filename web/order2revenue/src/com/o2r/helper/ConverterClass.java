@@ -605,7 +605,7 @@ public class ConverterClass {
 					.isPaycyclefromshipordel());
 			partner.setMonthlypaydate(metaPartner.getMonthlypaydate());
 			partner.setNrnReturnConfig(convertNRnReturnConfig(metaPartner
-					.getNrnReturnConfig()));
+					.getNrnReturnConfig()));			
 		}
 		return partner;
 	}
@@ -754,6 +754,10 @@ public class ConverterClass {
 					.getNrCalculatorEvent());
 			nRnReturnConfig.setReturnCalculatorEvent(metaNRnReturnConfig
 					.getReturnCalculatorEvent());
+			nRnReturnConfig.setLocalList(metaNRnReturnConfig.getLocalList());
+			nRnReturnConfig.setZonalList(metaNRnReturnConfig.getZonalList());
+			nRnReturnConfig.setNationalList(metaNRnReturnConfig.getNationalList());
+			nRnReturnConfig.setMetroList(metaNRnReturnConfig.getMetroList());
 			nRnReturnConfig.setTaxSpType(metaNRnReturnConfig.getTaxSpType());
 			nRnReturnConfig.setTaxPoType(metaNRnReturnConfig.getTaxPoType());
 			List<NRnReturnCharges> nRnReturnChargeList = new ArrayList<NRnReturnCharges>();

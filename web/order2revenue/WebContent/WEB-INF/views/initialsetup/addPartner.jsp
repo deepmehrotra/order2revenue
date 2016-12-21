@@ -695,7 +695,8 @@ input+label {
 																							<c:when test="${!empty partner.fixedfeeList}">
 																								<c:forEach items="${partner.fixedfeeList}"
 																									var="fixedfee" varStatus="loop">
-																									<div class="col-md-3 content-rgt">
+																									<c:if test="${fixedfee.range != 0}">
+																										<div class="col-md-3 content-rgt">
 																										<select class="form-control"
 																											name="nr-fixedfee${loop.index}-criteria">
 																											<c:choose>
@@ -737,6 +738,7 @@ input+label {
 																											</c:otherwise>
 																										</c:choose>
 																									</div>
+																									</c:if>																									
 																								</c:forEach>
 																							</c:when>
 																							<c:otherwise>

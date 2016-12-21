@@ -192,6 +192,12 @@ span .#error {
 																		<td style="width : 50%;"><label>PARTNER NAME	</label></td>
 																		<td><font color="green" size="2"><input type="text" class="form-control" placeholder="${partner.pcName}" disabled></font></td>
 																	</tr>
+																	<c:if test="${partner.sellerTier != null}">
+																		<tr>
+																			<td style="width : 50%;"><label>SELLER TIER </label></td>
+																			<td><font color="green" size="2"><input type="text" class="form-control" placeholder="${partner.sellerTier}" disabled></font></td>
+																		</tr>
+																	</c:if>
 																</tbody>
 															</table>
 																	<div>

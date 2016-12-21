@@ -786,6 +786,10 @@ public class PartnerController {
 				}
 
 				if (metaPartner != null) {
+					metaPartner.getNrnReturnConfig().setLocalList(request.getSession().getAttribute("localList").toString());
+					metaPartner.getNrnReturnConfig().setZonalList(request.getSession().getAttribute("zonalList").toString());
+					metaPartner.getNrnReturnConfig().setNationalList(request.getSession().getAttribute("nationalList").toString());
+					metaPartner.getNrnReturnConfig().setMetroList(request.getSession().getAttribute("metroList").toString());
 					partner = ConverterClass.preparePartnerBean(ConverterClass
 							.convertPartner(metaPartner));
 					if (partnerName.contains("flipkart") && partnerName.contains("-$$")) {
@@ -1837,7 +1841,10 @@ public class PartnerController {
 			} else {
 				pbean.setFixedfeeListOthers(null);
 			}
-			
+			request.getSession().setAttribute("localList", pbean.getNrnReturnConfig().getLocalList());
+			request.getSession().setAttribute("zonalList", pbean.getNrnReturnConfig().getZonalList());
+			request.getSession().setAttribute("nationalList", pbean.getNrnReturnConfig().getNationalList());
+			request.getSession().setAttribute("metroList", pbean.getNrnReturnConfig().getMetroList());
 			model.put("mappedPartnerCatList", mappedPartnerCatList);
 			model.put("sellerTiers", sellerTierList);
 			model.put("sellerTier", pbean.getSellerTier());
