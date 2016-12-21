@@ -2095,8 +2095,13 @@ public class PartnerController {
 		int sellerId = 0;
 		Map<String, Object> model = new HashMap<String, Object>();
 		MetaPartner existPartner = null;
-		try {
+		String tier = "";
+		try {			
 			sellerId = helperClass.getSellerIdfromSession(request);
+			tier = request.getParameter("sellerTier");
+			if(!tier.equals("")){
+				partnerBean.setPcName(partnerBean.getPcName()+"-$$"+tier);
+			}
 			existPartner = partnerService.getMetaPartner(partnerBean
 					.getPcName());
 		} catch (Exception e) {
