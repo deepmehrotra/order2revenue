@@ -785,11 +785,11 @@ public class PartnerController {
 					sellerTier = partnerName.substring(partnerName.indexOf("-$$") + 3);
 				}
 
-				if (metaPartner != null) {
-					metaPartner.getNrnReturnConfig().setLocalList(request.getSession().getAttribute("localList").toString());
-					metaPartner.getNrnReturnConfig().setZonalList(request.getSession().getAttribute("zonalList").toString());
-					metaPartner.getNrnReturnConfig().setNationalList(request.getSession().getAttribute("nationalList").toString());
-					metaPartner.getNrnReturnConfig().setMetroList(request.getSession().getAttribute("metroList").toString());
+				if (metaPartner != null) {					
+					metaPartner.getNrnReturnConfig().setLocalList(request.getSession().getAttribute("localList") != null ? request.getSession().getAttribute("localList").toString() : "");
+					metaPartner.getNrnReturnConfig().setZonalList(request.getSession().getAttribute("zonalList") != null ? request.getSession().getAttribute("zonalList").toString() : "");
+					metaPartner.getNrnReturnConfig().setNationalList(request.getSession().getAttribute("nationalList") != null ? request.getSession().getAttribute("nationalList").toString() : "");
+					metaPartner.getNrnReturnConfig().setMetroList(request.getSession().getAttribute("metroList") != null ? request.getSession().getAttribute("metroList").toString() : "");
 					partner = ConverterClass.preparePartnerBean(ConverterClass
 							.convertPartner(metaPartner));
 					if (partnerName.contains("flipkart") && partnerName.contains("-$$")) {

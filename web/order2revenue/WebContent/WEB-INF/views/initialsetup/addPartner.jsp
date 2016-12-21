@@ -125,7 +125,7 @@ input+label {
 				id="centerpane">
 				<div class="row">
 					<div class="col-lg-12">
-						<form:form method="POST" action="savePartner.html"
+						<form:form method="POST" action="saveMetaPartner.html"
 							id="addpartnerform" name="addpartnerform" role="form"
 							class="wizard-big form-horizontal" enctype="multipart/form-data">
 							<%-- <form id="form" action="#" class="wizard-big form-horizontal"
