@@ -1927,21 +1927,12 @@ input+label {
 																		<div class="panel-body">
 																			<div class="form-group col-md-12">
 																				<div class="col-md-4 input-group m-b">
-<<<<<<< HEAD
 																					<label>Packaging Fee </label>
 																					<form:checkbox id="Packaging" path="nrnReturnConfig.packagingFee" 
 																						style="position: absolute; left: 100px;"/>
 																					<div class="col-lg-12 text-center">
 																						<img alt="" src="/O2R/partnerimages/SnapdealPackagingSlab.jpg">
 																					</div>
-=======
-																					<label>Packaging Fee </label> <input type="text"
-																						placeholder="" class="form-control number"
-																						name="nr-delServiceFee"
-																						value="${chargeMap.delServiceFee}"
-																						id="delServiceFee" /> <input type="checkbox"
-																						name="vehicle" value="Bike">
->>>>>>> refs/heads/Release_14_May_As_Is_Order_Upload_1912
 																				</div>
 																			</div>
 																		</div>

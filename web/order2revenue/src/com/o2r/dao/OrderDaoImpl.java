@@ -3656,7 +3656,7 @@ public class OrderDaoImpl implements OrderDao {
 					float revShipMarketFeeLWR = (float) (chargesMap
 							.containsKey(GlobalConstant.ReverseShippingFeePercentMarketFee) ? ((chargesMap
 							.get(GlobalConstant.ReverseShippingFeePercentMarketFee) / 100) * order
-							.getNetRate())
+							.getGrossNetRate())
 							: 0);
 					if (chargesMap
 							.get(GlobalConstant.ReverseShippingFeeFlatAmt) < revShipMarketFeeLWR) {
