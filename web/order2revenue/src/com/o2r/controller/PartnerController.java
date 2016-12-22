@@ -630,11 +630,19 @@ public class PartnerController {
 				} else {
 					try {
 						props = PropertiesLoaderUtils.loadProperties(resource);
-						if (partnerList.contains(partnerBean.getPcName())) {
-							partnerBean.setPcLogoUrl(props
-									.getProperty("partnerimage.view")
-									+ partnerBean.getPcName() + ".jpg");
-						}
+						if(partnerList != null){
+							for(String eachName : partnerList){
+								if(partnerBean.getPcName().contains(eachName)){
+									partnerBean.setPcLogoUrl(props
+											.getProperty("partnerimage.view")
+											+eachName+ ".jpg");
+								} else if (partnerList.contains(partnerBean.getPcName())) {
+									partnerBean.setPcLogoUrl(props
+											.getProperty("partnerimage.view")
+											+ partnerBean.getPcName() + ".jpg");
+								}
+							}
+						}						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

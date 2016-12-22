@@ -1236,9 +1236,11 @@ public class OrderDaoImpl implements OrderDao {
 					.setResultTransformer(
 							CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			seller = (Seller) criteria.list().get(0);
+			
 			if (seller.getOrders() != null && seller.getOrders().size() != 0) {
 				order = seller.getOrders().get(0);
-
+				partner = partnerService
+						.getPartner(order.getPcName(), sellerId);
 				// Check condition 4 Events here
 				event = eventsService.isEventActiive(order.getOrderDate(),
 						order.getPcName(), order.getProductSkuCode(), sellerId);
@@ -1248,13 +1250,25 @@ public class OrderDaoImpl implements OrderDao {
 						returnChargesCalculated = calculateReturnCharges(order,
 								orderReturn, sellerId,
 								event.getNrnReturnConfig());
+					} else if (!event.getNrnReturnConfig().getReturnCalculatorEvent()
+							.equalsIgnoreCase("fixed")){
+						if(partner != null && partner.getNrnReturnConfig().isNrCalculator()){
+							returnChargesCalculated = calculateReturnCharges(order,
+									orderReturn, sellerId);
+						} else {
+							returnChargesCalculated = 0;
+						}
+						
 					} else {
-						returnChargesCalculated = calculateReturnCharges(order,
-								orderReturn, sellerId);
+						returnChargesCalculated = 0;
 					}
 				} else {
-					returnChargesCalculated = calculateReturnCharges(order,
-							orderReturn, sellerId);
+					if(partner != null && partner.getNrnReturnConfig().isNrCalculator()){
+						returnChargesCalculated = calculateReturnCharges(order,
+								orderReturn, sellerId);
+					} else {
+						returnChargesCalculated = 0;
+					}
 				}
 				if (orderReturn.getReturnorrtoQty() > 0) {
 					returnChargesCalculated = returnChargesCalculated
@@ -1358,8 +1372,7 @@ public class OrderDaoImpl implements OrderDao {
 						sellerId);
 
 				// Reverting TDS information for Return Order
-				partner = partnerService
-						.getPartner(order.getPcName(), sellerId);
+				
 				if (partner != null && partner.isTdsApplicable()) {
 					tdsDetails = new TaxDetail();
 					tdsDetails.setBalanceRemaining(-(order.getOrderTax()
@@ -3769,8 +3782,8 @@ public class OrderDaoImpl implements OrderDao {
 				default:
 					break;
 				}
-			}
-
+			}			
+			
 			totalcharge = totalcharge + revShippingFee;
 
 			float serviceTax = chargesMap.containsKey("serviceTax") ? chargesMap
@@ -3783,6 +3796,7 @@ public class OrderDaoImpl implements OrderDao {
 			if (serviceTax > 0) {
 				totalcharge = totalcharge + (totalcharge * serviceTax) / 100;
 			}
+			
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : " + sellerId, e);
 		}
