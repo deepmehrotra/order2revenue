@@ -157,7 +157,7 @@ span .#error {
 												<form:select path="channelName" 
 													id="channelName" class="form-control">
 													<c:forEach var="partner" items="${partnerMap}">
-														<c:if test="${event.channelName eq partner.value}">
+														<c:if test="${eventsBean.channelName eq partner.value}">
 															<option id="" value="${partner.value}" selected>${partner.value}</option>
 														</c:if>														
        													<option id="" value="${partner.value}">${partner.value}</option>   
@@ -468,6 +468,136 @@ span .#error {
 																								</div>
 																							</c:otherwise>
 																						</c:choose>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																		
+																			<div class="col-lg-12" id="amazoneFixedFee">
+																				<div class="col-sm-12" id="multiSelect">
+																					<label class="col-sm-3 control-label">Map
+																						Partner Category</label>
+																					<div class="col-sm-7">
+																						<select class="js-example-basic-multiple"
+																							multiple="multiple" name="multiSkuAm" id="multiSkuAm"
+																							style="width: 350px;" tabindex="4">
+
+																							<c:choose>
+																								<c:when test="${!empty mappedPartnerCatList}">
+																									<c:forEach items="${mappedPartnerCatList}"
+																										var="category" varStatus="loop">
+																										<option value="${category}" selected>${category}</option>
+																									</c:forEach>
+																									<c:if test="${!empty partnerCatList}">
+																										<c:forEach items="${partnerCatList}"
+																											var="category" varStatus="loop">
+																											<option value="${category}">${category}</option>
+																										</c:forEach>
+																									</c:if>
+																								</c:when>
+																								<c:otherwise>
+																									<c:if test="${!empty partnerCatList}">
+																										<c:forEach items="${partnerCatList}"
+																											var="category" varStatus="loop">
+																											<option value="${category}">${category}</option>
+																										</c:forEach>
+																									</c:if>
+																								</c:otherwise>
+																							</c:choose>
+																						</select>
+																					</div>
+																				</div>
+																				<div class="col-sm-2"></div>
+																			</div>
+																		
+																		<div id="amazonOther" style="display: none;"
+																			class="col-lg-12">
+																			<h4>Other Categories .....</h4>
+																			<div id="room_fileds1">
+																				<div id="content1">
+																					<div class="col-sm-12">
+																						<div class="form-group col-md-12">
+																							<c:choose>
+																								<c:when
+																									test="${!empty partner.fixedfeeListOthers}">
+																									<c:forEach
+																										items="${partner.fixedfeeListOthers}"
+																										var="fixedfee1" varStatus="loop">
+																										<div class="col-md-3 content-rgt">
+																											<select class="form-control"
+																												name="nr-fixedfeeOthers${loop.index}-criteria">
+																												<c:choose>
+																													<c:when
+																														test="${fixedfee1.criteria eq 'Upto'}">
+																														<option selected>Upto</option>
+																														<option>Greater Than</option>
+																													</c:when>
+																													<c:otherwise>
+																														<option>Upto</option>
+																														<option selected>Greater Than</option>
+																													</c:otherwise>
+																												</c:choose>
+																											</select>
+																										</div>
+																										<div class="col-md-3 content-rgt">
+																											<input type="text"
+																												class="form-control number"
+																												name="nr-fixedfeeOthers${loop.index}-range"
+																												id="nr-fixedfeeOthers${loop.index}-range"
+																												value="${fixedfee1.range}" />
+																										</div>
+																										<div class="col-md-3 content-rgt">
+																											<input type="text"
+																												class="form-control number"
+																												name="nr-fixedfeeOthers${loop.index}-value"
+																												id="nr-fixedfeeOthers${loop.index}-value"
+																												value="${fixedfee1.value}" />
+																										</div>
+																										<div class="col-md-3 content-rgt">
+																											<c:choose>
+																												<c:when
+																													test="${fixedfee1.criteria eq 'Upto'}">
+																													<input type="button"
+																														onclick="myFunction1();" value="+"
+																														class="btn btn-primary" id="myBtn1" />
+																												</c:when>
+																												<c:otherwise>
+																													<input type="button"
+																														onclick="myFunction1();" value="+"
+																														class="btn btn-primary" id="myBtn1"
+																														disabled="disabled" />
+																												</c:otherwise>
+																											</c:choose>
+																										</div>
+																									</c:forEach>
+																								</c:when>
+																								<c:otherwise>
+
+																									<div class="col-md-3 content-rgt">
+																										<select class="form-control"
+																											name="nr-fixedfeeOthers0-criteria">
+																											<option>Upto</option>
+																											<option>Greater Than</option>
+																										</select>
+																									</div>
+																									<div class="col-md-3 content-rgt">
+																										<input type="text" class="form-control number"
+																											name="nr-fixedfeeOthers0-range"
+																											id="txt1_name0" />
+
+																									</div>
+																									<div class="col-md-3 content-rgt">
+																										<input type="text" class="form-control number"
+																											name="nr-fixedfeeOthers0-value"
+																											id="nr-fixedfeeOthers0-value" />
+																									</div>
+																									<div class="col-md-3 content-rgt">
+																										<input type="button" onclick="myFunction1();"
+																											value="+" class="btn btn-primary" id="myBtn1" />
+																									</div>
+																								</c:otherwise>
+																							</c:choose>
+																						</div>
 																					</div>
 																				</div>
 																			</div>
@@ -1506,10 +1636,10 @@ span .#error {
 																	<div class="panel-heading">
 																		<h4 class="panel-title">
 																			<a data-toggle="collapse" data-parent="#accordion"
-																				href="#collapsesix1">Delivery Service Fee</a>
+																				href="#collapsesix2">Delivery Service Fee</a>
 																		</h4>
 																	</div>
-																	<div id="collapsesix1" class="panel-collapse collapse">
+																	<div id="collapsesix2" class="panel-collapse collapse">
 																		<div class="panel-body">
 																			<div class="form-group col-md-12">
 																				<div class="col-md-4 input-group m-b">
@@ -2981,6 +3111,54 @@ span .#error {
 																	<div class="col-sm-12">
 																		<div class="hr-line-dashed"></div>
 																	</div>
+																	<div class="col-sm-12">																		
+																		<div class="col-sm-6">
+																			<div class="checkbox i-checks">
+																				<label> <form:checkbox
+																						class="revShippingFee"
+																						path="nrnReturnConfig.revShippingFeeType"
+																						id="revShippingFeeType_revShipFeeLWR"
+																						value="revShipFeeLWR" /> <i></i> Which Ever Is
+																					Lower
+																				</label>
+																			</div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="col-sm-6">
+																				<div class="checkbox i-checks">
+																					<label> Flat Amount </label>
+																				</div>
+																			</div>
+																			<div class="col-sm-6">
+																				<div class="input-group m-b">
+																					<input type="text" placeholder=""
+																						class="form-control number"
+																						name="nr-revShipFeeFlatAmtLWR"
+																						value="${chargeMap.revShipFeeFlatAmtLWR}">
+																				</div>
+																			</div>
+																		</div>
+																		<div class="col-sm-12">
+																			<div class="col-sm-6">
+																				<div class="checkbox i-checks">
+																					<label> <i></i> % of NR(Net Rate)
+																					</label>
+																				</div>
+																			</div>
+																			<div class="col-sm-6">
+																				<div class="input-group m-b">
+																					<input type="text" placeholder=""
+																						class="form-control number"
+																						name="nr-revShipFeeNRLWR"
+																						value="${chargeMap.revShipFeeNRLWR}"> <span
+																						class="input-group-addon">%</span>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-sm-12">
+																		<div class="hr-line-dashed"></div>
+																	</div>
 																	<div class="col-sm-12">
 																		<div class="col-sm-6">
 																			<div class="checkbox i-checks">
@@ -3560,7 +3738,8 @@ Custom and plugin javascript
 							$('#zoneBase').hide();
 							$('#snapdealArea').hide();
 							$('#amazoneArea').hide();
-							var getPartner = $('#channelName').val();
+							$('#amazoneFixedFee').hide();
+							var getPartner = '${eventsBean.channelName}';
 							if(getPartner.indexOf('flipkart') !== -1){
 								$('#forFlipkart').show();
 								$('#forFlipkart1').show();
@@ -3568,9 +3747,11 @@ Custom and plugin javascript
 								$('#notFlipkart').hide();
 							} else if(getPartner.indexOf('snapdeal') !== -1){
 								$('#snapdealArea').show();
+								$('#amazoneFixedFee').hide();
 								$('#amazoneArea').hide();
-							} else if(getPartner.indexOf('amazone') !== -1){
+							} else if(getPartner.indexOf('amazon') !== -1){
 								$('#snapdealArea').hide();
+								$('#amazoneFixedFee').show();
 								$('#amazoneArea').show();
 							}
 							$('#channelName').on('change',
@@ -3580,11 +3761,33 @@ Custom and plugin javascript
 									$('#forFlipkart1').show();
 									$('#zoneBase').show();
 									$('#notFlipkart').hide();
+									$('#snapdealArea').hide();
+									$('#amazoneArea').hide();
+									$('#amazoneFixedFee').hide();
+								} else if($('#channelName').val().indexOf('snapdeal') !== -1){
+									$('#forFlipkart').hide();
+									$('#forFlipkart1').hide();
+									$('#zoneBase').hide();
+									$('#notFlipkart').show();
+									$('#snapdealArea').show();
+									$('#amazoneArea').hide();
+									$('#amazoneFixedFee').hide();
+								} else if($('#channelName').val().indexOf('amazon') !== -1){
+									$('#forFlipkart').hide();
+									$('#forFlipkart1').hide();
+									$('#zoneBase').hide();
+									$('#notFlipkart').show();
+									$('#snapdealArea').hide();
+									$('#amazoneArea').show();
+									$('#amazoneFixedFee').show();
 								} else {
 									$('#forFlipkart').hide();
 									$('#forFlipkart1').hide();
 									$('#zoneBase').hide();
 									$('#notFlipkart').show();
+									$('#snapdealArea').hide();
+									$('#amazoneArea').hide();
+									$('#amazoneFixedFee').hide();
 								}
 							})
 							
@@ -3611,6 +3814,31 @@ Custom and plugin javascript
 												'fa fa-arrow-right');
 									});
 							
+							
+							var test = ${!empty partner.fixedfeeListOthers};
+
+							if (test == true) {
+								document.getElementById("amazonOther").style.display = 'block';
+							}
+
+							$('#multiSkuAm')
+									.on(
+											"select2:select",
+											function(e) {
+												document
+														.getElementById("amazonOther").style.display = 'block';
+											});
+							$('#multiSkuAm')
+									.on(
+											"select2:unselect",
+											function(e) {
+												var value = $('#multiSkuAm')
+														.val();
+												if (!value) {
+													document
+															.getElementById("amazonOther").style.display = 'none';
+												}
+											});
 							
 
 							/* Retrive Radio Buttons Starts */
@@ -3712,7 +3940,10 @@ Custom and plugin javascript
 								calendarWeeks : true,
 								autoclose : true
 							});
-
+							
+							if ('${eventsBean.nrnReturnConfig.commissionType}' == 'SKUWise')
+								$("#commisionType-SKUWise").prop("checked",	true);
+							
 							if ('${eventsBean.nrnReturnConfig.nrCalculatorEvent}' == 'original')
 								$("#nrCalculatorEvent_original").prop(
 										"checked", true).trigger("click");
@@ -3736,9 +3967,7 @@ Custom and plugin javascript
 							else if ('${eventsBean.nrnReturnConfig.commissionType}' == 'categoryWise')
 								$("#commisionType-categoryWise").prop(
 										"checked", true).trigger("click");
-							else if ('${partner.nrnReturnConfig.commissionType}' == 'SKUWise')
-								$("#commisionType-SKUWise").prop(
-										"checked", true);
+							
 
 							if ('${eventsBean.nrnReturnConfig.shippingFeeType}' == 'fixed')
 								$("#shippingfee-fixed").prop("checked", true)
@@ -3862,7 +4091,8 @@ Custom and plugin javascript
 
 							if ('${event.selectAll}' == 'true')
 								$('#selectAllSku').iCheck('check');
-
+							if ('${eventsBean.nrnReturnConfig.packagingFee}' == 'true')
+								$('#Packaging').iCheck('check');
 							if ('${eventsBean.nrnReturnConfig.whicheverGreaterPCC}' == 'true') {
 								$('#whicheverGreaterPCC').iCheck('check');
 							}
@@ -3983,6 +4213,12 @@ Custom and plugin javascript
 							else if ('${eventsBean.nrnReturnConfig.revShippingFeeType}' == 'revShipFeePCC')
 								$('#revShippingFeeType_revShipFeePCC').iCheck(
 										'check');
+							if ('${eventsBean.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeNewTerms')
+								$('#revShippingFeeType_revShipFeeZB').iCheck('check');
+							
+							if ('${eventsBean.nrnReturnConfig.revShippingFeeType}' == 'revShipFeeLWR')
+								$('#revShippingFeeType_revShipFeeLWR').iCheck('check');
+							
 
 							$('#collapsefour1')
 									.on(

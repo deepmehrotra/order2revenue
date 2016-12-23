@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.extractor.EventBasedExcelExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +108,14 @@ public class EventsController {
 										nrnReturncharge.setChargeAmount(Float
 											.parseFloat(parameters.get(param
 													+ "value")[0]));
-									nrnReturncharge.setChargeName("fixedfee");
+									if (param.contains("Others")) {
+										nrnReturncharge.setChargeName("fixedfeeOthers");
+									} else {
+										nrnReturncharge.setChargeName("fixedfee");
+									}
+									
+									nrnReturncharge.setCriteria(parameters
+											.get(param + "criteria")[0]);
 									if(!parameters.get(param + "criteria")[0].isEmpty())
 										nrnReturncharge.setCriteria(parameters
 											.get(param + "criteria")[0]);
@@ -484,6 +492,19 @@ public class EventsController {
 				}
 			}
 			}
+			String[] catList = request.getParameterValues("multiSku");
+			if (catList != null && catList.length != 0) {
+				
+				NRnReturnCharges nrnReturncharge = new NRnReturnCharges();
+				nrnReturncharge.setChargeAmount(0);
+				nrnReturncharge.setChargeName("fixedfeeCategory");
+				nrnReturncharge.setCriteria(StringUtils.join(catList, ",")); 
+
+				nrnReturncharge.setConfig(eventsBean
+						.getNrnReturnConfig());
+				eventsBean.getNrnReturnConfig().getCharges()
+						.add(nrnReturncharge);
+			}
 			System.out.println(eventsBean.getNrnReturnConfig().getCharges());
 			Partner partner = partnerService.getPartner(
 					eventsBean.getChannelName(),
@@ -566,7 +587,10 @@ public class EventsController {
 				categoryMap.put(cat.getCatName(),
 						chargeMap.get(cat.getCatName()));
 			}
+			List<String> partnerCatList = categoryService
+					.listPartnerCategories("amazon", helperClass.getSellerIdfromSession(request));
 			model.put("skus", productList);
+			model.put("partnerCatList", partnerCatList);
 			model.put("partnerMap", partnerMap);
 			model.put("categoryMap", categoryMap);
 		} catch (CustomException ce) {
@@ -594,6 +618,7 @@ public class EventsController {
 		Events event = null;
 		Map<String, Float> categoryMap = new HashMap<String, Float>();
 		List<String> productList = new ArrayList<String>();
+		String mappedPartnerCat = "";
 		eventsBean
 				.setEventId(Integer.parseInt(request.getParameter("eventId")));
 		log.debug("***** Check : " + eventsBean.getEventId());
@@ -608,8 +633,130 @@ public class EventsController {
 								.getNrCalculatorEvent()).toString());
 				for (NRnReturnCharges charge : eventsBean.getNrnReturnConfig()
 						.getCharges()) {
-					chargeMap.put(charge.getChargeName(),
-							charge.getChargeAmount());
+					if (charge.getChargeName().contains("fixedfee")
+							&& charge.getCriteria() != null
+							&& !"".equals(charge.getCriteria())) {
+
+						ChargesBean chargeBean = new ChargesBean();
+						chargeBean.setCriteria(charge.getCriteria());
+						chargeBean.setRange(charge.getCriteriaRange());
+						chargeBean.setValue(charge.getChargeAmount());
+						if (charge.getChargeName().contains("Others")) {
+							chargeBean.setChargeType("fixedfeeOthers");
+							eventsBean.getFixedfeeListOthers().add(chargeBean);
+						} else if (charge.getChargeName().contains("Category")) {
+							mappedPartnerCat = charge.getCriteria();
+						} else {
+							chargeBean.setChargeType("fixedfee");
+							eventsBean.getFixedfeeList().add(chargeBean);
+						}
+
+					} else if (charge.getChargeName().contains(
+							"shippingfeeVolume")
+							&& charge.getCriteria() != null
+							&& !"".equals(charge.getCriteria())) {
+
+						if (eventsBean.getNrnReturnConfig()
+								.getShippingFeeType()
+								.equalsIgnoreCase("variable")
+								&& charge.getChargeName().contains(
+										"shippingfeeVolumeVariable")) {
+
+							ChargesBean chargeBean = eventsBean.getChargesBean(
+									"shippingfeeVolumeVariable",
+									charge.getCriteria(),
+									charge.getCriteriaRange());
+							if (chargeBean == null) {
+								chargeBean = new ChargesBean();
+								chargeBean
+										.setChargeType("shippingfeeVolumeVariable");
+								chargeBean.setCriteria(charge.getCriteria());
+								chargeBean.setRange(charge.getCriteriaRange());
+								eventsBean.getShippingfeeVolumeVariableList()
+										.add(chargeBean);
+							}
+
+							if (charge.getChargeName().contains("Local")) {
+								chargeBean.setLocalValue(charge
+										.getChargeAmount());
+							} else if (charge.getChargeName().contains("Zonal")) {
+								chargeBean.setZonalValue(charge
+										.getChargeAmount());
+							} else if (charge.getChargeName().contains(
+									"National")) {
+								chargeBean.setNationalValue(charge
+										.getChargeAmount());
+							} else if (charge.getChargeName().contains("Metro")) {
+								chargeBean.setMetroValue(charge
+										.getChargeAmount());
+							}
+
+						} else if (charge.getChargeName().contains(
+								"shippingfeeVolumeFixed")) {
+							ChargesBean chargeBean = new ChargesBean();
+							chargeBean.setChargeType("shippingfeeVolume");
+							chargeBean.setCriteria(charge.getCriteria());
+							chargeBean.setRange(charge.getCriteriaRange());
+							chargeBean.setValue(charge.getChargeAmount());
+							eventsBean.getShippingfeeVolumeFixedList().add(
+									chargeBean);
+						}
+
+					} else if (charge.getChargeName().contains(
+							"shippingfeeWeight")
+							&& charge.getCriteria() != null
+							&& !"".equals(charge.getCriteria())) {
+
+						if (eventsBean.getNrnReturnConfig()
+								.getShippingFeeType()
+								.equalsIgnoreCase("variable")
+								&& charge.getChargeName().contains(
+										"shippingfeeWeightVariable")) {
+
+							ChargesBean chargeBean = eventsBean.getChargesBean(
+									"shippingfeeWeightVariable",
+									charge.getCriteria(),
+									charge.getCriteriaRange());
+							if (chargeBean == null) {
+								chargeBean = new ChargesBean();
+								chargeBean
+										.setChargeType("shippingfeeWeightVariable");
+								chargeBean.setCriteria(charge.getCriteria());
+								chargeBean.setRange(charge.getCriteriaRange());
+								eventsBean.getShippingfeeWeightVariableList()
+										.add(chargeBean);
+							}
+
+							if (charge.getChargeName().contains("Local")) {
+								chargeBean.setLocalValue(charge
+										.getChargeAmount());
+							} else if (charge.getChargeName().contains("Zonal")) {
+								chargeBean.setZonalValue(charge
+										.getChargeAmount());
+							} else if (charge.getChargeName().contains(
+									"National")) {
+								chargeBean.setNationalValue(charge
+										.getChargeAmount());
+							} else if (charge.getChargeName().contains("Metro")) {
+								chargeBean.setMetroValue(charge
+										.getChargeAmount());
+							}
+
+						} else if (charge.getChargeName().contains(
+								"shippingfeeWeightFixed")) {
+							ChargesBean chargeBean = new ChargesBean();
+							chargeBean.setChargeType("shippingfeeWeight");
+							chargeBean.setCriteria(charge.getCriteria());
+							chargeBean.setRange(charge.getCriteriaRange());
+							chargeBean.setValue(charge.getChargeAmount());
+							eventsBean.getShippingfeeWeightFixedList().add(
+									chargeBean);
+						}
+
+					} else {
+						chargeMap.put(charge.getChargeName(),
+								charge.getChargeAmount());
+					}
 				}
 				model.put("chargeMap", chargeMap);
 			}
@@ -634,6 +781,18 @@ public class EventsController {
 					partnerMap.put(bean.getPcName(), bean.getPcName());
 				}
 			}
+			List<String> mappedPartnerCatList = null;
+			if (!"".equals(mappedPartnerCat)) {
+				mappedPartnerCatList = new ArrayList<String>(Arrays.asList(mappedPartnerCat.split(",")));
+			} else {
+				eventsBean.setFixedfeeListOthers(null);
+			}
+			
+			List<String> partnerCatList = categoryService
+					.listPartnerCategories("amazon", helperClass.getSellerIdfromSession(request));
+			
+			model.put("mappedPartnerCatList", mappedPartnerCatList);
+			model.put("partnerCatList", partnerCatList);
 			model.put("skus", productList);
 			model.put("categoryMap", categoryMap);
 			model.put("partnerMap", partnerMap);
@@ -661,6 +820,7 @@ public class EventsController {
 		Map<String, Float> chargeMap = new HashMap<String, Float>();
 		Events event = null;
 		List<String> skuList=null;
+		String mappedPartnerCat = "";
 		Map<String, Float> categoryMap = new HashMap<String, Float>();
 		List<String> productList = new ArrayList<String>();
 		eventsBean
@@ -685,11 +845,19 @@ public class EventsController {
 							&& !"".equals(charge.getCriteria())) {
 
 						ChargesBean chargeBean = new ChargesBean();
-						chargeBean.setChargeType("fixedfee");
 						chargeBean.setCriteria(charge.getCriteria());
 						chargeBean.setRange(charge.getCriteriaRange());
 						chargeBean.setValue(charge.getChargeAmount());
-						eventsBean.getFixedfeeList().add(chargeBean);
+						
+						if (charge.getChargeName().contains("Others")) {
+							chargeBean.setChargeType("fixedfeeOthers");
+							eventsBean.getFixedfeeListOthers().add(chargeBean);
+						} else if (charge.getChargeName().contains("Category")) {
+							mappedPartnerCat = charge.getCriteria();
+						} else {
+							chargeBean.setChargeType("fixedfee");
+							eventsBean.getFixedfeeList().add(chargeBean);
+						}
 
 					} else if (charge.getChargeName().contains(
 							"shippingfeeVolume")
@@ -842,7 +1010,19 @@ public class EventsController {
 				for (Partner bean : partnerList) {
 					partnerMap.put(bean.getPcName(), bean.getPcName());
 				}
-			}	
+			}
+			List<String> mappedPartnerCatList = null;
+			if (!"".equals(mappedPartnerCat)) {
+				mappedPartnerCatList = new ArrayList<String>(Arrays.asList(mappedPartnerCat.split(",")));
+			} else {
+				eventsBean.setFixedfeeListOthers(null);
+			}
+			
+			List<String> partnerCatList = categoryService
+					.listPartnerCategories("amazon", helperClass.getSellerIdfromSession(request));
+			
+			model.put("mappedPartnerCatList", mappedPartnerCatList);
+			model.put("partnerCatList", partnerCatList);
 			model.put("skus", productList);
 			model.put("event", eventsBean);
 			model.put("categoryMap", categoryMap);

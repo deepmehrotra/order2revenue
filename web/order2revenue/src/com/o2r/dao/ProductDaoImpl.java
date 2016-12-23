@@ -705,7 +705,6 @@ public class ProductDaoImpl implements ProductDao {
 				List<Object> objects = listQuery.list();
 				for (Object eachObject : objects) {
 					Object[] object = (Object[]) eachObject;
-					System.out.println(object.length);
 					productConfig = new ProductConfig();
 					productConfig.setProductSkuCode((String) object[0]);
 					productConfig.setChannelName((String) object[1]);
