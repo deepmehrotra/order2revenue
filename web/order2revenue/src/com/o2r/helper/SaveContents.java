@@ -462,24 +462,33 @@ public class SaveContents {
 						customerBean.setCustomerName(entry.getCell(4)
 								.toString());
 					}
-					if (entry.getCell(5) != null
-							&& entry.getCell(5).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						if (entry.getCell(5).toString().equalsIgnoreCase("COD")
-								|| entry.getCell(5).toString()
-										.equalsIgnoreCase("Prepaid")
-								|| entry.getCell(5).toString()
-										.equalsIgnoreCase("Others"))
+					
+					if(order.getPcName().contains("flipkart")){
+						if (entry.getCell(5).toString().equalsIgnoreCase("Prepaid")) {
 							order.setPaymentType(entry.getCell(5).toString());
-						else {
-							order.setPaymentType(entry.getCell(5).toString());
-							errorMessage
-									.append(" Payment type should be COD or Prepaid;");
-							validaterow = false;
+						} else {
+							order.setPaymentType("COD");
 						}
 					} else {
-						errorMessage.append(" Payment type is null;");
-						validaterow = false;
-					}
+						if (entry.getCell(5) != null
+								&& entry.getCell(5).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+							if (entry.getCell(5).toString().equalsIgnoreCase("COD")
+									|| entry.getCell(5).toString()
+											.equalsIgnoreCase("Prepaid")
+									|| entry.getCell(5).toString()
+											.equalsIgnoreCase("Others"))
+								order.setPaymentType(entry.getCell(5).toString());
+							else {
+								order.setPaymentType(entry.getCell(5).toString());
+								errorMessage
+										.append(" Payment type should be COD or Prepaid;");
+								validaterow = false;
+							}		
+						} else {
+							errorMessage.append(" Payment type is null;");
+							validaterow = false;
+						}
+					}					
 					if (entry.getCell(6) != null
 							&& entry.getCell(6).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 						entry.getCell(6).setCellType(HSSFCell.CELL_TYPE_STRING);
