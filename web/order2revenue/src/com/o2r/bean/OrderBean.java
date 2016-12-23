@@ -66,6 +66,7 @@ public class OrderBean {
 	private ProductConfigBean productConfig;
 	private OrderBean consolidatedOrder;
 	private double grossProfit;
+	private double otherCommissionValue;
 	
 	private int sellerId;
 	private String sellerName;
@@ -524,5 +525,13 @@ public class OrderBean {
 
 	public void setSellerName(String sellerName) {
 		this.sellerName = sellerName;
+	}
+
+	public double getOtherCommissionValue() {
+		return otherCommissionValue;
+	}
+
+	public void setOtherCommissionValue(double otherCommissionValue) {
+		this.otherCommissionValue = otherCommissionValue;
 	}
 }

@@ -147,6 +147,7 @@ public class ConverterClass {
 			order.setDwShippingString(orderBean.getDwShippingString());
 			order.setGrossMargin(orderBean.getGrossMargin());
 			order.setProductCost(orderBean.getProductCost());
+			order.setOtherCommissionValue(orderBean.getOtherCommissionValue());
 		}
 		return order;
 	}
@@ -213,6 +214,7 @@ public class ConverterClass {
 				order.setDwShippingString(orderBean.getDwShippingString());
 				order.setGrossMargin(orderBean.getGrossMargin());
 				order.setProductCost(orderBean.getProductCost());
+				order.setOtherCommissionValue(orderBean.getOtherCommissionValue());
 				orders.add(order);
 			}
 		}
@@ -284,6 +286,7 @@ public class ConverterClass {
 				
 				bean.setSellerId(order.getSeller().getId());
 				bean.setSellerName(order.getSeller().getName());
+				bean.setOtherCommissionValue(order.getOtherCommissionValue());
 				
 				if (order.getProductConfig() != null)
 					bean.setProductConfig(prepareProductConfigBean(order
@@ -354,6 +357,7 @@ public class ConverterClass {
 			
 			bean.setSellerId(order.getSeller().getId());
 			bean.setSellerName(order.getSeller().getName());
+			bean.setOtherCommissionValue(order.getOtherCommissionValue());
 			
 		}
 		return bean;

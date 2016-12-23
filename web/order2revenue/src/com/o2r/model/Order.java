@@ -137,6 +137,8 @@ public class Order {
 	private ProductConfig productConfig;
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Order consolidatedOrder;
+	@Column
+	private double otherCommissionValue;
 
 	/*public List<PaymentUpload> getPaymentUpload() {
 		return paymentUpload;
@@ -620,5 +622,13 @@ public class Order {
 
 	public void setGrossMargin(double grossMargin) {
 		this.grossMargin = grossMargin;
+	}
+
+	public double getOtherCommissionValue() {
+		return otherCommissionValue;
+	}
+
+	public void setOtherCommissionValue(double otherCommissionValue) {
+		this.otherCommissionValue = otherCommissionValue;
 	}
 }

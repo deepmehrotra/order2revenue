@@ -368,6 +368,12 @@
 												value="${(order.fixedfee) * (order.quantity)}" /></td>  
                                     </tr>
                                     <tr>
+                                        <td>Other Value</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${(order.otherCommissionValue) * (order.quantity)}" /></td>  
+                                    </tr>
+                                    <tr>
                                         <td>Service Tax</td>
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
@@ -413,6 +419,12 @@
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
 												value="${order.fixedfee * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
+                                    </tr>
+                                     <tr>
+                                        <td>Return Other</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.otherCommissionValue * order.orderReturnOrRTO.returnorrtoQty}" /></td>  
                                     </tr>
                                     <tr>
                                         <td>Return Service Tax</td>
@@ -461,6 +473,12 @@
                                         <td><fmt:formatNumber
 												type="number" maxFractionDigits="2"
 												value="${order.fixedfee * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
+                                    </tr>
+                                      <tr>
+                                        <td>Net Other</td>
+                                        <td><fmt:formatNumber
+												type="number" maxFractionDigits="2"
+												value="${order.otherCommissionValue * (order.quantity - order.orderReturnOrRTO.returnorrtoQty)}" /></td>  
                                     </tr>
                                     <tr>
                                         <td>Net Service Tax</td>

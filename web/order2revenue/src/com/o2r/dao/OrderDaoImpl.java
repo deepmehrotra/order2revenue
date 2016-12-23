@@ -16,8 +16,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.sql.rowset.spi.SyncResolver;
-
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
@@ -35,7 +33,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Repository;
 
-import com.google.gson.annotations.Since;
 import com.o2r.bean.ChannelSalesDetails;
 import com.o2r.bean.ChargesBean;
 import com.o2r.bean.ChargesBean.SortByCriteria;
@@ -2715,7 +2712,7 @@ public class OrderDaoImpl implements OrderDao {
 						if (pccRange == 0) {
 							pccAmount = 0;
 						} else {
-							if (SP < pccRange) {
+							if (SP <= pccRange) {
 								double criteria = chargesMap
 										.containsKey(GlobalConstant.criteriaPCCPost) ? chargesMap
 												.get(GlobalConstant.criteriaPCCPost) : 0;
@@ -3293,7 +3290,7 @@ public class OrderDaoImpl implements OrderDao {
 			 * shippingCharges = dwchargetemp;
 			 */
 			//calculating packaging charges
-			int packagindCharges=0;
+			float packagindCharges=0;
 			if(partner.getPcName().contains(GlobalConstant.PCSNAPDEAL))
 			{
 				if(partner.getNrnReturnConfig().isPackagingFee() == true){
@@ -3309,7 +3306,12 @@ public class OrderDaoImpl implements OrderDao {
 						packagindCharges=GlobalConstant.packageFeeSnapdeal[((int)volWeight/500)+1];
 				}				
 			}
-
+			else if (partner.getPcName().contains(GlobalConstant.PCAMAZON))
+			{
+				if(chargesMap.containsKey("delServiceFee"))
+					packagindCharges=chargesMap.get("delServiceFee")*shippingCharges/100;
+			}
+			order.setOtherCommissionValue(packagindCharges);
 			comission = (float) (comission * SP) / 100;
 			serviceTax = (chargesMap.containsKey("serviceTax") ? chargesMap
 					.get("serviceTax") : 0)
@@ -3682,7 +3684,7 @@ public class OrderDaoImpl implements OrderDao {
 					float temweight=0;
 					
 						temweight=product.getDeadWeight()>product.getVolWeight()?product.getDeadWeight():product.getVolWeight();
-						if(temweight<500)
+						if(temweight<=500)
 						{
 							if(order.getVolShippingString().equals("national"))
 							{
@@ -3697,7 +3699,7 @@ public class OrderDaoImpl implements OrderDao {
 								revShippingFee=GlobalConstant.flipkartRevShippingFeeLT5GM[1];
 							}
 						}
-						else if(temweight>500&&temweight<5000)
+						else if(temweight>500&&temweight<=5000)
 						{
 							int index = ((int)temweight/500)+1;
 							if(order.getVolShippingString().equals("national"))
