@@ -1231,6 +1231,8 @@ public class GlobalConstant {
 	public static final String ReverseShippingFeePercentShipFee = "revShipFeePCC";
 	public static final String ReverseShippingFeeFlatAmt = "revShipFeeFlatAmt";
 	public static final String ReverseShippingFeePercentMarketFee = "revShipFeePCCMF";
+	public static final String ReverseShippingFeePercentNRLWR = "revShipFeeNRLWR";
+	public static final String ReverseShippingFeeFlatAmtLWR = "revShipFeeFlatAmtLWR";
 	public static final String ReverseShippingFeeFixedAmt = "revShipFeeFF";
 	public static final String ReverseShippingFeeDeadWeightAmt = "revShipFeeDWAmt";
 	public static final String ReverseShippingFeeDeadWeightPerWeight = "revShipFeeDWPW";

@@ -28,6 +28,7 @@ public class EventsBean {
 	private String selectAll;
 
 	private List<ChargesBean> fixedfeeList = new ArrayList<ChargesBean>();
+	private List<ChargesBean> fixedfeeListOthers = new ArrayList<ChargesBean>();
 	private List<ChargesBean> shippingfeeVolumeFixedList = new ArrayList<ChargesBean>();
 	private List<ChargesBean> shippingfeeWeightFixedList = new ArrayList<ChargesBean>();
 	private List<ChargesBean> shippingfeeVolumeVariableList = new ArrayList<ChargesBean>();
@@ -253,6 +254,14 @@ public class EventsBean {
 
 	public void setSelectAll(String selectAll) {
 		this.selectAll = selectAll;
+	}
+
+	public List<ChargesBean> getFixedfeeListOthers() {
+		return fixedfeeListOthers;
+	}
+
+	public void setFixedfeeListOthers(List<ChargesBean> fixedfeeListOthers) {
+		this.fixedfeeListOthers = fixedfeeListOthers;
 	}
 
 }

@@ -3656,14 +3656,14 @@ public class OrderDaoImpl implements OrderDao {
 				case "revShipFeeLWR":
 
 					float revShipMarketFeeLWR = (float) (chargesMap
-							.containsKey(GlobalConstant.ReverseShippingFeePercentMarketFee) ? ((chargesMap
-							.get(GlobalConstant.ReverseShippingFeePercentMarketFee) / 100) * order
+							.containsKey(GlobalConstant.ReverseShippingFeePercentNRLWR) ? ((chargesMap
+							.get(GlobalConstant.ReverseShippingFeePercentNRLWR) / 100) * order
 							.getGrossNetRate())
 							: 0);
 					if (chargesMap
-							.get(GlobalConstant.ReverseShippingFeeFlatAmt) < revShipMarketFeeLWR) {
+							.get(GlobalConstant.ReverseShippingFeeFlatAmtLWR) < revShipMarketFeeLWR) {
 						revShipMarketFeeLWR = chargesMap
-								.get(GlobalConstant.ReverseShippingFeeFlatAmt);
+								.get(GlobalConstant.ReverseShippingFeeFlatAmtLWR);
 					} else {
 						revShippingFee = revShipMarketFeeLWR;
 					}
@@ -4056,7 +4056,7 @@ public class OrderDaoImpl implements OrderDao {
 			// Map<String, Float> returnMap = new HashMap<String, Float>();
 
 			PartnerBean pbean = new PartnerBean();
-
+			String mappedPartnerCat = "";
 			List<NRnReturnCharges> chargesList = nrnReturnConfig.getCharges();
 			System.out.println(" NR chrge list size : " + chargesList.size());
 			for (NRnReturnCharges charge : chargesList) {
@@ -4066,10 +4066,18 @@ public class OrderDaoImpl implements OrderDao {
 						&& !"".equals(charge.getCriteria())) {
 
 					ChargesBean chargeBean = new ChargesBean();
-					chargeBean.setChargeType("fixedfee");
 					chargeBean.setCriteria(charge.getCriteria());
 					chargeBean.setRange(charge.getCriteriaRange());
 					chargeBean.setValue(charge.getChargeAmount());
+					if (charge.getChargeName().contains("Others")) {
+						chargeBean.setChargeType("fixedfeeOthers");
+						pbean.getFixedfeeListOthers().add(chargeBean);
+					} else if (charge.getChargeName().contains("Category")) {
+						mappedPartnerCat = charge.getCriteria();
+					} else {
+						chargeBean.setChargeType("fixedfee");
+						pbean.getFixedfeeList().add(chargeBean);
+					}
 					pbean.getFixedfeeList().add(chargeBean);
 
 				} else if (charge.getChargeName().contains("shippingfeeVolume")
@@ -4187,14 +4195,14 @@ public class OrderDaoImpl implements OrderDao {
 						new SortByCriteria());
 
 			// Extracting commission value
-			if (partner.getNrnReturnConfig().getCommissionType() != null
-					&& partner.getNrnReturnConfig().getCommissionType()
+			if (nrnReturnConfig.getCommissionType() != null
+					&& nrnReturnConfig.getCommissionType()
 							.equals("fixed")) {
 				comission = chargesMap
 						.get(GlobalConstant.fixedCommissionPercent);
 
-			} else if (partner.getNrnReturnConfig().getCommissionType() != null
-					&& partner.getNrnReturnConfig().getCommissionType()
+			} else if (nrnReturnConfig.getCommissionType() != null
+					&& nrnReturnConfig.getCommissionType()
 							.equals("categoryWise")) {
 				PartnerCategoryMap partnerCat = categoryDao
 						.getPartnerCategoryMap(partner.getPcName(), prodCat,
@@ -4212,22 +4220,51 @@ public class OrderDaoImpl implements OrderDao {
 			// Add partner new changes:
 
 			// Getting Fixed fee
-			if (pbean.getFixedfeeList() != null
-					&& pbean.getFixedfeeList().size() != 0) {
-				boolean inRange = false;
-				Iterator<ChargesBean> fixedfeeIterator = pbean
-						.getFixedfeeList().iterator();
-				while (fixedfeeIterator.hasNext()) {
-					ChargesBean cBean = fixedfeeIterator.next();
-					if (SP <= cBean.getRange()) {
-						fixedfee = (float) cBean.getValue();
-						inRange = true;
-						break;
+			List<String> mappedPartnerCatList = null;
+			if (!"".equals(mappedPartnerCat)) {
+				mappedPartnerCatList = new ArrayList<String>(
+						Arrays.asList(mappedPartnerCat.split(",")));
+			}
+			if (mappedPartnerCatList != null
+					&& !mappedPartnerCatList.contains(prodCat)) {
+				if (pbean.getFixedfeeListOthers() != null
+						&& pbean.getFixedfeeListOthers().size() != 0) {
+					boolean inRange = false;
+					Iterator<ChargesBean> fixedfeeIterator = pbean
+							.getFixedfeeListOthers().iterator();
+					while (fixedfeeIterator.hasNext()) {
+						ChargesBean cBean = fixedfeeIterator.next();
+						if (SP <= cBean.getRange()) {
+							fixedfee = (float) cBean.getValue();
+							inRange = true;
+							break;
+						}
+					}
+					if (!inRange) {
+						fixedfee = (float) pbean.getFixedfeeListOthers()
+								.get(pbean.getFixedfeeListOthers().size() - 1)
+								.getValue();
 					}
 				}
-				if (!inRange) {
-					fixedfee = (float) pbean.getFixedfeeList()
-							.get(pbean.getFixedfeeList().size() - 1).getValue();
+			} else {
+				if (pbean.getFixedfeeList() != null
+						&& pbean.getFixedfeeList().size() != 0) {
+					boolean inRange = false;
+					Iterator<ChargesBean> fixedfeeIterator = pbean
+							.getFixedfeeList().iterator();
+					while (fixedfeeIterator.hasNext()) {
+						ChargesBean cBean = fixedfeeIterator.next();
+						if (SP <= cBean.getRange()) {
+							fixedfee = (float) cBean.getValue();
+							inRange = true;
+							break;
+						}
+					}
+					if (!inRange) {
+						fixedfee = (float) pbean.getFixedfeeList()
+								.get(pbean.getFixedfeeList().size() - 1)
+								.getValue();
+					}
 				}
 			}
 			// Payment collection charges
@@ -4246,23 +4283,129 @@ public class OrderDaoImpl implements OrderDao {
 							.get(GlobalConstant.fixedAmtPCC) : 0;
 
 			} else {
-				double pccRange = chargesMap
-						.containsKey(GlobalConstant.rangePCC) ? chargesMap
-						.get(GlobalConstant.rangePCC) : 0;
+				if (partner.getPcName().toLowerCase()
+						.contains(GlobalConstant.PCFLIPKART)) {
+					if (order.getPaymentType().toUpperCase()
+								.equalsIgnoreCase("COD")) {
+						double pccRange = chargesMap
+								.containsKey(GlobalConstant.rangePCCPost) ? chargesMap
+								.get(GlobalConstant.rangePCCPost) : 0;
 
-				if (pccRange == 0) {
-					pccAmount = 0;
-				} else {
-					if (SP < pccRange) {
-						pccAmount = chargesMap
-								.containsKey(GlobalConstant.valuePCC) ? chargesMap
-								.get(GlobalConstant.valuePCC) : 0;
+						if (pccRange == 0) {
+							pccAmount = 0;
+						} else {
+							if (SP < pccRange) {
+								double criteria = chargesMap
+										.containsKey(GlobalConstant.criteriaPCCPost) ? chargesMap
+												.get(GlobalConstant.criteriaPCCPost) : 0;
+								if (criteria > 0) {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.valuePCCPost) ? chargesMap
+											.get(GlobalConstant.valuePCCPost)
+											* SP
+											/ 100 : 0;
+								} else {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.valuePCCPost) ? chargesMap
+											.get(GlobalConstant.valuePCCPost) : 0;
+								}
+							} else {
+								double criteria = chargesMap
+										.containsKey(GlobalConstant.criteriaPCCSPPost) ? chargesMap
+												.get(GlobalConstant.criteriaPCCSPPost) : 0;
+								if (criteria > 0) {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.percentSPPCCValuePost) ? chargesMap
+											.get(GlobalConstant.percentSPPCCValuePost)
+											* SP
+											/ 100 : 0;
+								} else {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.percentSPPCCValuePost) ? chargesMap
+											.get(GlobalConstant.percentSPPCCValuePost) : 0;
+								}
+							}
+						}
 					} else {
-						pccAmount = chargesMap
-								.containsKey(GlobalConstant.percentSPPCCValue) ? chargesMap
-								.get(GlobalConstant.percentSPPCCValue)
-								* SP
-								/ 100 : 0;
+						double pccRange = chargesMap
+								.containsKey(GlobalConstant.rangePCCPre) ? chargesMap
+								.get(GlobalConstant.rangePCCPre) : 0;
+
+						if (pccRange == 0) {
+							pccAmount = 0;
+						} else {
+							if (SP < pccRange) {
+								double criteria = chargesMap
+										.containsKey(GlobalConstant.criteriaPCCPre) ? chargesMap
+												.get(GlobalConstant.criteriaPCCPre) : 0;
+								if (criteria > 0) {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.valuePCCPre) ? chargesMap
+											.get(GlobalConstant.valuePCCPre)
+											* SP
+											/ 100 : 0;
+								} else {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.valuePCCPre) ? chargesMap
+											.get(GlobalConstant.valuePCCPre) : 0;
+								}
+							} else {
+								double criteria = chargesMap
+										.containsKey(GlobalConstant.criteriaPCCSPPre) ? chargesMap
+												.get(GlobalConstant.criteriaPCCSPPre) : 0;
+								if (criteria > 0) {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.percentSPPCCValuePre) ? chargesMap
+											.get(GlobalConstant.percentSPPCCValuePre)
+											* SP
+											/ 100 : 0;
+								} else {
+									pccAmount = chargesMap
+											.containsKey(GlobalConstant.percentSPPCCValuePre) ? chargesMap
+											.get(GlobalConstant.percentSPPCCValuePre) : 0;
+								}
+							}
+						}
+					}
+				} else {
+					double pccRange = chargesMap
+							.containsKey(GlobalConstant.rangePCC) ? chargesMap
+							.get(GlobalConstant.rangePCC) : 0;
+
+					if (pccRange == 0) {
+						pccAmount = 0;
+					} else {
+						if (SP < pccRange) {
+							double criteria = chargesMap
+									.containsKey(GlobalConstant.criteriaPCC) ? chargesMap
+											.get(GlobalConstant.criteriaPCC) : 0;
+							if (criteria > 0) {
+								pccAmount = chargesMap
+										.containsKey(GlobalConstant.valuePCC) ? chargesMap
+										.get(GlobalConstant.valuePCC)
+										* SP
+										/ 100 : 0;
+							} else {
+								pccAmount = chargesMap
+										.containsKey(GlobalConstant.valuePCC) ? chargesMap
+										.get(GlobalConstant.valuePCC) : 0;
+							}
+						} else {
+							double criteria = chargesMap
+									.containsKey(GlobalConstant.criteriaPCCSP) ? chargesMap
+											.get(GlobalConstant.criteriaPCCSP) : 0;
+							if (criteria > 0) {
+								pccAmount = chargesMap
+										.containsKey(GlobalConstant.percentSPPCCValue) ? chargesMap
+										.get(GlobalConstant.percentSPPCCValue)
+										* SP
+										/ 100 : 0;
+							} else {
+								pccAmount = chargesMap
+										.containsKey(GlobalConstant.percentSPPCCValue) ? chargesMap
+										.get(GlobalConstant.percentSPPCCValue) : 0;
+							}
+						}
 					}
 				}
 			}
@@ -4588,13 +4731,30 @@ public class OrderDaoImpl implements OrderDao {
 				shippingCharges = dwchargetemp;
 				order.setDwShippingString(GlobalConstant.dwShipping);
 			}
+			
+			int packagindCharges=0;
+			if(partner.getPcName().contains(GlobalConstant.PCSNAPDEAL))
+			{
+				if(nrnReturnConfig.isPackagingFee() == true){
+					if(volWeight<=250)
+					{
+						packagindCharges=GlobalConstant.packageFeeSnapdeal[0];
+					}
+					else if (volWeight<=500)
+					{
+						packagindCharges=GlobalConstant.packageFeeSnapdeal[1];
+					}
+					else
+						packagindCharges=GlobalConstant.packageFeeSnapdeal[((int)volWeight/500)+1];
+				}				
+			}
 
 			comission = (float) (comission * SP) / 100;
 			serviceTax = (chargesMap.containsKey("serviceTax") ? chargesMap
 					.get("serviceTax") : 0)
-					* (float) (shippingCharges + pccAmount + fixedfee + comission)
+					* (float) (shippingCharges + pccAmount + fixedfee + comission + packagindCharges)
 					/ 100;
-			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges
+			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges - packagindCharges
 					- serviceTax;
 			props = PropertiesLoaderUtils.loadProperties(resource);
 			if (partner != null && partner.isTdsApplicable()) {
@@ -4833,7 +4993,9 @@ public class OrderDaoImpl implements OrderDao {
 							: 0);
 
 		}
-
+		
+		Product product=null;
+		
 		if (isRevShippingFee) {
 			String revShippingType = nrnReturnConfig.getRevShippingFeeType();
 			switch (revShippingType) {
@@ -4862,6 +5024,23 @@ public class OrderDaoImpl implements OrderDao {
 					revShippingFee = revShipMarketFee;
 				}
 				break;
+				
+			case "revShipFeeLWR":
+
+				float revShipMarketFeeLWR = (float) (chargesMap
+						.containsKey(GlobalConstant.ReverseShippingFeePercentNRLWR) ? ((chargesMap
+						.get(GlobalConstant.ReverseShippingFeePercentNRLWR) / 100) * order
+						.getGrossNetRate())
+						: 0);
+				if (chargesMap
+						.get(GlobalConstant.ReverseShippingFeeFlatAmtLWR) < revShipMarketFeeLWR) {
+					revShipMarketFeeLWR = chargesMap
+							.get(GlobalConstant.ReverseShippingFeeFlatAmtLWR);
+				} else {
+					revShippingFee = revShipMarketFeeLWR;
+				}
+				break;
+				
 			case "revShipFeeFF":
 
 				revShippingFee = (float) (chargesMap
@@ -4871,10 +5050,67 @@ public class OrderDaoImpl implements OrderDao {
 
 				revShippingFee = (float) order.getShippingCharges();
 				break;
-
+				
+			case "revShipFeeNewTerms":
+				
+				product=productService.getProduct(order.getProductSkuCode(), sellerId);
+				float temweight=0;
+				
+					temweight=product.getDeadWeight()>product.getVolWeight()?product.getDeadWeight():product.getVolWeight();
+					if(temweight<500)
+					{
+						if(order.getVolShippingString().equals("national"))
+						{
+						revShippingFee=GlobalConstant.flipkartRevShippingFeeLT5GM[2];
+						}
+						else if (order.getVolShippingString().equals("local"))
+						{
+							revShippingFee=GlobalConstant.flipkartRevShippingFeeLT5GM[0];	
+						}
+						else
+						{
+							revShippingFee=GlobalConstant.flipkartRevShippingFeeLT5GM[1];
+						}
+					}
+					else if(temweight>500&&temweight<5000)
+					{
+						int index = ((int)temweight/500)+1;
+						if(order.getVolShippingString().equals("national"))
+						{
+						revShippingFee=(GlobalConstant.flipkartRevShippingFeeLT5KG[2])*index;
+						}
+						else if (order.getVolShippingString().equals("local"))
+						{
+							revShippingFee=GlobalConstant.flipkartRevShippingFeeLT5KG[0]*index;	
+						}
+						else
+						{
+							revShippingFee=GlobalConstant.flipkartRevShippingFeeLT5KG[1]*index;
+						}
+					}
+					else
+					{
+						int index = ((int)temweight/1000)+1;
+						if(order.getVolShippingString().equals("national"))
+						{
+						revShippingFee=(GlobalConstant.flipkartRevShippingFeeGT5KG[2])*index;
+						}
+						else if (order.getVolShippingString().equals("local"))
+						{
+							revShippingFee=GlobalConstant.flipkartRevShippingFeeGT5KG[0]*index;	
+						}
+						else
+						{
+							revShippingFee=GlobalConstant.flipkartRevShippingFeeGT5KG[1]*index;
+						}
+					}
+				
+				
+				break;	
+			
 			case "revShipFeeVar":
 
-				Product product = productService.getProduct(
+				product = productService.getProduct(
 						order.getProductSkuCode(), sellerId);
 				float deadWeight = (float) (chargesMap
 						.get(GlobalConstant.ReverseShippingFeeDeadWeightMinWeight));
