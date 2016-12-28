@@ -38,6 +38,15 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 .dataTables_filter label {
 	margin-right: 5px;
 }
+
+.select2-search__field {
+	display: inline-block !important;
+	border: none !important;
+}
+
+.select2-selection--multiple {
+	border: 1px solid #aaa !important;
+}
 </style>
 
 <style>
@@ -70,6 +79,7 @@ span .#error {
 <link href="/O2R/seller/css/plugins/switchery/switchery.css"
 	rel="stylesheet">
 <link href="/O2R/seller/css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="/O2R/seller/css/select2.min.css" rel="stylesheet">
 
 <script type="text/javascript">
 	var nameAvailability = false;
@@ -3375,7 +3385,7 @@ span .#error {
 	<script
 		src="/O2R/seller/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
 
-
+	<script src="/O2R/seller/js/select2.min.js"></script>
 
 
 	<!-- <script src="/O2R/seller/js/jquery-2.1.1.js"></script> 

@@ -1,13 +1,21 @@
 package com.o2r.dao;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.o2r.model.StaticAreaTable;
+import com.o2r.model.StaticCityTable;
 
 /**
  * @author Deep Mehrotra
@@ -29,8 +37,14 @@ public class AreaConfigDaoImpl implements AreaConfigDao {
 			+ "ta where  ta.city_id=tc.id and  ta.zipcode=:zipcode";
 	private static final String stateRetriveFromCityQuery = "select ts.state_name from tbl_states ts , tbl_city t"
 			+ " where  tc.state_id=ts.id and tc.city_name=:cityName";
-
 	private static final String zipcodeValidQuery = "select * from tbl_area where zipcode=:zipcode";
+	
+	private static final String listCitiesQuery = "SELECT city_name FROM o2rschema.tbl_city order by city_name asc";
+	
+	private static final String getCityQuery = "select id from tbl_city where city_name =:city";
+	
+	private static final String addZipcode = "insert into tbl_area (`id`, `area_name`, `zipcode`, `city_id`, `status`, `is_deleted`)"+
+			"values (:id , :area, :zip, :cityid, 1, 0)";
 
 	@Override
 	public List<String> listCountryStates(String country) {
@@ -184,6 +198,97 @@ public class AreaConfigDaoImpl implements AreaConfigDao {
 		}
 		log.info("*** getCityFromZipCode starts***");
 		return returnCity;
+	}
+	
+	@Override
+	public List<String> listCities() {
+		List<String> listCities = new ArrayList<String>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			/*Criteria listCitiesCriteria = session.createCriteria(StaticCityTable.class)
+					.setProjection(Projections.property("city_name"))
+					.addOrder(org.hibernate.criterion.Order.asc("city_name"));*/
+			Query listCitiesCriteria = session.createSQLQuery(listCitiesQuery);	
+			listCities = listCitiesCriteria.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Error in getting City List....", e);
+		} finally {
+			if(session != null){
+				session.close();
+			}
+		}		
+		return listCities;
+	}
+	
+	@Override
+	public boolean addAreaZipcode(StaticAreaTable areaObj, String city) {
+		Session session = null;	
+		BigInteger cityObj = null;
+		try {
+			if(areaObj != null){
+				session = sessionFactory.openSession();
+				session.beginTransaction();
+				Query getCity = session.createSQLQuery(getCityQuery)
+						.setParameter("city", city);
+				if(getCity.list().size() != 0){
+					cityObj = (BigInteger) getCity.list().get(0);				
+				}
+				
+				if(cityObj != null && areaObj != null){
+					if (checkZipcode(areaObj.getZipcode()) != true) {
+						areaObj.setCity_id(cityObj.longValue());
+						String getMaxID = "select max(id) from tbl_area";
+						BigInteger maxId = (BigInteger) session.createSQLQuery(getMaxID).list().get(0);
+						session.createSQLQuery(addZipcode)
+							.setParameter("id", maxId.longValue()+1)
+							.setParameter("area", areaObj.getArea_name())
+							.setParameter("zip", areaObj.getZipcode())
+							.setParameter("cityid", areaObj.getCity_id())
+							.executeUpdate();
+						session.getTransaction().commit();
+						return true;
+					}					
+				}
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Error in getting City List....", e);
+			return false;
+		} finally {
+			if(session != null){
+				session.close();
+			}
+		}
+		return false;
+	}	
+	
+	@Override
+	public boolean checkZipcode(String zipcode) {
+		List<String> returnList = null;
+		Session session = null;
+		boolean result = false;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Query listCitiesCriteria = session.createSQLQuery(zipcodeValidQuery)
+					.setParameter("zipcode", zipcode);	
+			returnList = listCitiesCriteria.list();
+			if(returnList != null && returnList.size() !=0){
+				result = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Check Zipcode By Admin....", e);
+			return false;
+		} finally {
+			if(session != null){
+				session.close();
+			}
+		}		
+		return result;
 	}
 	
 }

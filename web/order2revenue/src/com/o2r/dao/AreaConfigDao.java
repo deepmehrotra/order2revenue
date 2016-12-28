@@ -2,6 +2,8 @@ package com.o2r.dao;
 
 import java.util.List;
 
+import com.o2r.model.StaticAreaTable;
+
 /**
  * @author Deep Mehrotra
  *
@@ -20,4 +22,10 @@ public interface AreaConfigDao {
 	boolean isZipCodeValid(String zipcode);
 
 	public String getMetroFromZipCode(String zipcode);
+	
+	public List<String> listCities();
+	
+	public boolean addAreaZipcode(StaticAreaTable area, String city);
+	
+	public boolean checkZipcode(String zipcode);
 }

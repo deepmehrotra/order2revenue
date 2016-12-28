@@ -1911,7 +1911,8 @@ public class OrderDaoImpl implements OrderDao {
 			} else {
 				log.debug("Order is Null....");
 			}
-			if (order != null) {
+			if (order != null) {			
+				
 				orderPayment.setNegativeAmount(Math.abs(orderPayment
 						.getNegativeAmount()));
 				if (order.getOrderReturnOrRTO() != null
@@ -6479,5 +6480,9 @@ public class OrderDaoImpl implements OrderDao {
 		}
 		log.info("*** reverseOrder ends : OrderDaoImpl ***");
 		return status;
+	}
+	
+	public double reCalculatePCC(){
+		return 0;
 	}
 }
