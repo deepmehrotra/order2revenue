@@ -29,6 +29,7 @@ import com.o2r.model.Category;
 import com.o2r.model.NRnReturnCharges;
 import com.o2r.model.Order;
 import com.o2r.model.Partner;
+import com.o2r.model.PartnerCategoryMap;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.ProductStockList;
@@ -1450,17 +1451,30 @@ public class ProductDaoImpl implements ProductDao {
 	}
 	
 	@Override
-	public void addPartnerCatMapping(Map<String, Product> productMap, int sellerId)
+	public void addPartnerCatMapping(Map<String,  List<PartnerCategoryMap>> productMap, int sellerId)
 			throws CustomException {
 
 		log.info("*** addPartnerCatMapping Starts : ProductDaoImpl ****");
-
+		Product product=null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-
-			for (Map.Entry<String, Product> entry : productMap.entrySet()) {
-				session.saveOrUpdate(entry.getValue());
+			Seller seller =(Seller)session.get(Seller.class, sellerId);
+			for (Map.Entry<String, List<PartnerCategoryMap>> entry : productMap.entrySet()) {
+				System.out.println(" Geting product : "+entry.getKey());
+			Criteria criteria=session.createCriteria(Product.class);
+			criteria.add(Restrictions.eq("productSkuCode", entry.getKey()));
+			if(criteria.list()!=null)
+			product=(Product)criteria.list().get(0);
+			for(PartnerCategoryMap partcm:entry.getValue()){
+				System.out.println(" Cat : "+partcm.getPartnerCategoryRef()+" channel : "+partcm.getPartnerName());
+				//partcm.getProduct().add(product);
+				partcm.setSeller(seller);
+			product.getPartnerCategoryMap().add(partcm);
+			}
+			
+			System.out.println(" Product cat size : "+product.getPartnerCategoryMap().size());
+				session.saveOrUpdate(product);
 			}
 			session.getTransaction().commit();
 			session.close();

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.o2r.helper.CustomException;
+import com.o2r.model.PartnerCategoryMap;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 
@@ -86,6 +87,6 @@ public interface ProductService {
 	public Map<String, String> getSKUCategoryMap(int sellerId)
 			throws CustomException;
 
-	public void addPartnerCatMapping(Map<String, Product> saveProductMap, int sellerId)
+	public void addPartnerCatMapping(Map<String,  List<PartnerCategoryMap>> saveProductMap, int sellerId)
 			throws CustomException;
 }

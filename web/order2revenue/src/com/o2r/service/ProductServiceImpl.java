@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.o2r.dao.ProductDao;
 import com.o2r.helper.CustomException;
+import com.o2r.model.PartnerCategoryMap;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 
@@ -188,11 +189,12 @@ public class ProductServiceImpl implements ProductService {
 		return productDao.getSKUCategoryMap(sellerId);
 	}
 
-	@Override
-	public void addPartnerCatMapping(Map<String, Product> saveProductMap,
-			int sellerId) throws CustomException {
-		productDao.addPartnerCatMapping(saveProductMap, sellerId);
 
-	}
+	@Override
+	public void addPartnerCatMapping(Map<String,  List<PartnerCategoryMap>> saveProductMap, int sellerId)
+			throws CustomException
+			{
+		productDao.addPartnerCatMapping(saveProductMap, sellerId);
+			}
 
 }
