@@ -236,7 +236,7 @@ public class AreaConfigDaoImpl implements AreaConfigDao {
 				
 				if(cityObj != null && areaObj != null){
 					if (checkZipcode(areaObj.getZipcode()) != true && StringUtils.isNumeric(areaObj.getZipcode())
-							&& areaObj.getZipcode().length() ==  6) {
+							&& areaObj.getZipcode().length() ==  6){
 						areaObj.setCity_id(cityObj.longValue());
 						String getMaxID = "select max(id) from tbl_area";
 						BigInteger maxId = (BigInteger) session.createSQLQuery(getMaxID).list().get(0);
