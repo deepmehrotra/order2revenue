@@ -4,18 +4,15 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.o2r.model.StaticAreaTable;
-import com.o2r.model.StaticCityTable;
 
 /**
  * @author Deep Mehrotra
@@ -238,7 +235,8 @@ public class AreaConfigDaoImpl implements AreaConfigDao {
 				}
 				
 				if(cityObj != null && areaObj != null){
-					if (checkZipcode(areaObj.getZipcode()) != true) {
+					if (checkZipcode(areaObj.getZipcode()) != true && StringUtils.isNumeric(areaObj.getZipcode())
+							&& areaObj.getZipcode().length() ==  6) {
 						areaObj.setCity_id(cityObj.longValue());
 						String getMaxID = "select max(id) from tbl_area";
 						BigInteger maxId = (BigInteger) session.createSQLQuery(getMaxID).list().get(0);

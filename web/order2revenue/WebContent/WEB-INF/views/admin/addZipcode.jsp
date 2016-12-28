@@ -147,6 +147,9 @@
 		if(isSave == 'true'){
 			document.getElementById("result").style = "color: green !important;";
     		document.getElementById("result").innerHTML = "Zipcode Saved Successfully !";
+		} else {
+			document.getElementById("result").style = "color: red !important;";
+    		document.getElementById("result").innerHTML = "Zipcode Must be Numeric & 6 Digit !";
 		}
 		$('.dataTables-example').dataTable({
 			responsive : true,

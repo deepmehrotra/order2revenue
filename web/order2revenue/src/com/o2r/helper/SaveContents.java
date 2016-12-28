@@ -3580,6 +3580,8 @@ public class SaveContents {
 									if (entry.getCell(2) != null
 											&& StringUtils.isNotBlank(entry
 													.getCell(2).toString())) {
+										entry.getCell(2).setCellType(
+												HSSFCell.CELL_TYPE_STRING);
 										productConfigs = productService
 												.getProductConfig(entry
 														.getCell(2).toString()
