@@ -28,7 +28,7 @@ public class PartnerCategoryMap {
 	private String partnerCategoryRef;
 	@Column
 	private float commission;
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Product> product = new ArrayList<>();
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Seller seller;

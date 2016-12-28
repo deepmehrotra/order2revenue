@@ -943,6 +943,7 @@ public class OrderController {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			Order order = orderService.getOrder(orderBean.getOrderId(),
 					sellerId);
+			System.out.println(" order other "+order.getOtherCommissionValue());
 			product = productService.getProduct(order.getProductSkuCode(),
 					sellerId);
 			log.debug(" Payment difference :"

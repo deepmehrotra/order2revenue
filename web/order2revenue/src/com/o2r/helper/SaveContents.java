@@ -229,9 +229,12 @@ public class SaveContents {
 							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK
 							&& entry.getCell(2) != null
 							&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						System.out.println(entry.getCell(2).toString());
 						entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
+						entry.getCell(2).setCellType(HSSFCell.CELL_TYPE_STRING);
+
 						log.info(" Getting string value form : "
-								+ entry.getCell(0));
+								+ entry.getCell(0)+" sku "+entry.getCell(2).toString());
 						if (partner != null) {
 							productConfigs = productService.getProductConfig(
 									entry.getCell(2).toString().toUpperCase(),
@@ -5176,6 +5179,8 @@ public class SaveContents {
 
 							if (entry.getCell(0) != null
 									&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
+
 								product = productMap.get(entry.getCell(0)
 										.toString().trim().toLowerCase());
 
