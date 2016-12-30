@@ -27,7 +27,7 @@
 		<remember-me  token-validity-seconds="2505600"  data-source-ref="dataSource" />
 
 	</http>
-
+<!-- <bean id="customUserDetailsService" class="com.o2r.service.CustomUserDetailsService"></bean> -->
 	<authentication-manager alias="authenticationManager">
 		<authentication-provider user-service-ref="customUserDetailsService" />
 	</authentication-manager>
