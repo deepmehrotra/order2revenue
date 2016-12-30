@@ -26,6 +26,7 @@ import com.o2r.bean.DashboardBean;
 import com.o2r.bean.OrderBean;
 import com.o2r.bean.SellerBean;
 import com.o2r.bean.UploadReportBean;
+import com.o2r.dao.AreaConfigDao;
 import com.o2r.helper.ConverterClass;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.DateDeserializer;
@@ -36,6 +37,7 @@ import com.o2r.model.Order;
 import com.o2r.model.Seller;
 import com.o2r.model.SellerAccount;
 import com.o2r.model.SellerAlerts;
+import com.o2r.model.StaticAreaTable;
 import com.o2r.service.AdminService;
 import com.o2r.service.AlertsService;
 import com.o2r.service.CategoryService;
@@ -83,6 +85,8 @@ public class GenericController {
 	private ExpenseService expenseService;
 	@Autowired
 	private AlertsService alertsService;
+	@Autowired
+	private AreaConfigDao areaConfigDao;
 
 	private Logger logger = Logger.getLogger(GenericController.class);
 
@@ -607,4 +611,78 @@ public class GenericController {
 		logger.info("$$$ saveQuery Ends : GenericController $$$");
 		return "true";
 	}
+	
+	@RequestMapping(value = "/seller/updateZipcode", method = RequestMethod.GET)
+	public ModelAndView updateZipcode(HttpServletRequest request) {
+
+		logger.info("$$$ updateZipcode Starts : GenericController $$$");
+		int sellerId = 0;
+		Map<String, Object> model = new HashMap<String, Object>();
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			model.put("cityList", areaConfigDao.listCities());
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Failed! Getting Zipcode Form... Seller ID : "+sellerId, e);
+		}
+		logger.info("$$$ updateZipcode Ends : GenericController $$$");
+		return new ModelAndView("admin/addZipcode",model);
+	}
+	
+	@RequestMapping(value = "/seller/addZipcode", method = RequestMethod.GET)
+	public ModelAndView addZipcode(HttpServletRequest request) {
+
+		logger.info("$$$ addZipcode Starts : GenericController $$$");		
+		Map<String, Object> model = new HashMap<String, Object>();
+		String zip = "";
+		String city = "";
+		String area = "";
+		StaticAreaTable areaObj = null;
+		try {
+			zip = request.getParameter("zip") != null ? request.getParameter("zip") : "";
+			city = request.getParameter("city") != null ? request.getParameter("city") : "";
+			area = request.getParameter("area") != null ? request.getParameter("area") : "";
+			if(zip != "" && city != "" && area != ""){
+				areaObj = new StaticAreaTable();
+				areaObj.setArea_name(area);
+				areaObj.setZipcode(zip);
+				areaObj.setIs_deleted(false);
+				areaObj.setStatus(true);
+			}
+			model.put("result", areaConfigDao.addAreaZipcode(areaObj, city));
+			model.put("cityList", areaConfigDao.listCities());
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Failed! Adding Zipcode by Admin...", e);
+		}
+		logger.info("$$$ addZipcode Ends : GenericController $$$");
+		return new ModelAndView("admin/addZipcode",model);
+	}
+	
+	@RequestMapping(value = "/seller/checkZipcode", method = RequestMethod.GET)
+	public @ResponseBody String checkZipcode(HttpServletRequest request) {
+
+		logger.info("$$$ checkZipcode Starts : GenericController $$$");
+		int sellerId = 0;
+		boolean result = false;
+		String zipcode = "";
+		try {			
+			sellerId = helperClass.getSellerIdfromSession(request);
+			zipcode = request.getParameter("zipcode");
+			if (zipcode.contains(".")) {
+				return "true";
+			}
+			result = areaConfigDao.checkZipcode(zipcode);
+			if(result != false){
+				return "true";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Failed! on checking Zipcode: "+zipcode+" : Seller ID : "+sellerId, e);
+		}
+		logger.info("$$$ checkZipcode Ends : GenericController $$$");
+		return "false";
+	}
+	
+	
 }
