@@ -1463,7 +1463,11 @@ public class ProductDaoImpl implements ProductDao {
 			for (Map.Entry<String, List<PartnerCategoryMap>> entry : productMap.entrySet()) {
 				System.out.println(" Geting product : "+entry.getKey());
 			Criteria criteria=session.createCriteria(Product.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN);
+			criteria.add(Restrictions.eq("seller.id", sellerId));
 			criteria.add(Restrictions.eq("productSkuCode", entry.getKey()));
+			
 			if(criteria.list()!=null)
 			product=(Product)criteria.list().get(0);
 			for(PartnerCategoryMap partcm:entry.getValue()){

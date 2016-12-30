@@ -5315,7 +5315,7 @@ public class SaveContents {
 							.toLowerCase(), tmpProduct);
 				}
 			}
-			Map<String, Product> saveProductMap = new HashMap<String, Product>();
+			//Map<String, Product> saveProductMap = new HashMap<String, Product>();
 
 			List<PartnerCategoryMap> partnerCatList = categoryService
 					.listPartnerCategoryMap(sellerId, 0);
@@ -5374,12 +5374,7 @@ public class SaveContents {
 															.getCell(2)
 															.toString());
 										}
-										else
-										{
-											errorMessage
-											.append(" Channel Category reference already associated with this SKU for the Channel ");
-									validaterow = false;
-										}
+										
 
 										for (PartnerCategoryMap tempPartnerCatMap : product
 												.getPartnerCategoryMap()) {
@@ -5522,6 +5517,13 @@ public class SaveContents {
 													+ sellerId, e);
 											errorMessage
 													.append(" Commission should be a number ");
+											validaterow = false;
+										}
+										catch (Exception e) {
+											log.error("Failed! by SellerId : "
+													+ sellerId, e);
+											errorMessage
+													.append("Commission should be a number");
 											validaterow = false;
 										}
 									} else {
