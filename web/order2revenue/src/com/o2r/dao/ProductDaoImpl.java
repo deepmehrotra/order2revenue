@@ -1461,7 +1461,6 @@ public class ProductDaoImpl implements ProductDao {
 			session.beginTransaction();
 			Seller seller =(Seller)session.get(Seller.class, sellerId);
 			for (Map.Entry<String, List<PartnerCategoryMap>> entry : productMap.entrySet()) {
-				System.out.println(" Geting product : "+entry.getKey());
 			Criteria criteria=session.createCriteria(Product.class);
 			criteria.createAlias("seller", "seller",
 					CriteriaSpecification.LEFT_JOIN);
@@ -1471,13 +1470,10 @@ public class ProductDaoImpl implements ProductDao {
 			if(criteria.list()!=null)
 			product=(Product)criteria.list().get(0);
 			for(PartnerCategoryMap partcm:entry.getValue()){
-				System.out.println(" Cat : "+partcm.getPartnerCategoryRef()+" channel : "+partcm.getPartnerName());
-				//partcm.getProduct().add(product);
 				partcm.setSeller(seller);
 			product.getPartnerCategoryMap().add(partcm);
 			}
 			
-			System.out.println(" Product cat size : "+product.getPartnerCategoryMap().size());
 				session.saveOrUpdate(product);
 			}
 			session.getTransaction().commit();
