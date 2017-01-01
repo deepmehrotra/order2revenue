@@ -3064,10 +3064,12 @@ public class SaveContents {
 											validaterow = false;
 										}
 									}
-
-									onj = orderService.searchAsIsOrder(
-											"channelOrderID", channelId,
-											sellerId);
+									
+									if(channelId != ""){
+										onj = orderService.searchAsIsOrder(
+												"channelOrderID", channelId,
+												sellerId);
+									}					
 
 									if (entry.getCell(8) != null
 											&& StringUtils.isNotBlank(entry
@@ -4492,9 +4494,15 @@ public class SaveContents {
 					isError = true;
 					row = worksheet.getRow(errorRow + 2);
 					if (row != null) {
-						cell = row.createCell(colNumber);
-						cell.setCellValue(errorMessage);
-						cell.setCellStyle(errorCellStyle);
+						try {
+							cell = row.createCell(colNumber);
+							cell.setCellValue(errorMessage);
+							cell.setCellStyle(errorCellStyle);
+						} catch (Exception e) {
+							System.out.println(errorMessage.length());
+							System.out.println(errorMessage);
+						}
+						
 					}
 				}
 			}
@@ -4546,7 +4554,7 @@ public class SaveContents {
 		} catch (IOException e) {
 			e.printStackTrace();
 			log.error("Failed! by SellerId : " + sellerId, e);
-		}
+		} 
 	}
 
 	public void addErrorUploadReport(String worksheetName, int sellerId,
