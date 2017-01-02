@@ -111,6 +111,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 									<button type="button" class="btn btn-xs btn-white">1000</button>
 									<button type="button" id="LoadMoreProduct"
 										class="btn btn-xs btn-white">More</button>
+									<a href="fetchSKUMapping.html"  class="btn btn-primary btn-xs"  >Fetch SKU Mappings</a>
 								</div>
 							</div>
 							<div class="bs-example">

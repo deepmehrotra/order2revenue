@@ -67,7 +67,7 @@ public class SaveIntegrationCotents {
 					
 					product.setProductPrice((float) jsonObject.getDouble("DirectproductCost"));
 					
-					if(jsonObject.getString("Length") != ""){
+					if(jsonObject.getString("Length").toString() != ""){
 						try {
 							product.setLength(Float.parseFloat(jsonObject.getString("Length")));
 						} catch (Exception e) {
@@ -77,7 +77,7 @@ public class SaveIntegrationCotents {
 						validate = false;
 					}
 					
-					if(jsonObject.getString("Height") != ""){
+					if(jsonObject.getString("Height").toString() != ""){
 						try {
 							product.setHeight(Float.parseFloat(jsonObject.getString("Height")));
 						} catch (Exception e) {
@@ -87,7 +87,7 @@ public class SaveIntegrationCotents {
 						validate = false;
 					}
 					
-					if(jsonObject.getString("DeadWeight") != ""){
+					if(jsonObject.getString("DeadWeight").toString() != ""){
 						try {
 							product.setDeadWeight(Float.parseFloat(jsonObject.getString("DeadWeight")));
 						} catch (Exception e) {

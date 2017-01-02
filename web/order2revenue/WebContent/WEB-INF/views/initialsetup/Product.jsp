@@ -74,6 +74,7 @@
                                 <button type="button" class="btn btn-xs btn-white">1000</button>
                                 <button type="button"  id="LoadMoreProduct" class="btn btn-xs btn-white">More</button>
                                 <a href="addProduct.html"  class="btn btn-primary btn-xs"  >Add SKU</a>
+                                <a href="fetchSKU.html"  class="btn btn-primary btn-xs"  >Fetch SKU</a>
                             </div>
                         </div>
                         <div class="ibox-content overflow-h cus-table-filters">
