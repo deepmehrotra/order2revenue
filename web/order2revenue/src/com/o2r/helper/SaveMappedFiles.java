@@ -1743,21 +1743,13 @@ public class SaveMappedFiles {
 								validaterow = false;
 							}
 						} else {
-							if(order.getOrderDate() != null){
-								order.setShippedDate(order.getOrderDate());
-							} else {
-								errorMessage.append(" Shipping Date is null ");
-								validaterow = false;
-							}							
-						}
-					} catch (NullPointerException e) {
-						if(order.getOrderDate() != null){
-							order.setShippedDate(order.getOrderDate());
-						} else {
-							errorMessage
-							.append("The column 'Dispatch by date' doesn't exist");
+							errorMessage.append(" Shipping Date is null ");
 							validaterow = false;
 						}
+					} catch (NullPointerException e) {
+						errorMessage
+								.append("The column 'Ready to Ship by date' doesn't exist");
+						validaterow = false;
 					}
 
 					try {
@@ -2682,13 +2674,9 @@ public class SaveMappedFiles {
 							}
 						}
 					} catch (NullPointerException e) {
-						if (order.getOrderDate() != null)
-							order.setShippedDate(order.getOrderDate());
-						else {
-							errorMessage
-							.append("The column 'Order Shipped Date' or 'Purchase Date' doesn't exist");
-							validaterow = false;
-						}						
+						errorMessage
+								.append("The column 'Order Shipped Date' or 'Purchase Date' doesn't exist");
+						validaterow = false;
 					}
 
 					if (partner != null) {
@@ -3377,21 +3365,13 @@ public class SaveMappedFiles {
 								validaterow = false;
 							}
 						} else {
-							if(order.getOrderDate() != null){
-								order.setShippedDate(order.getOrderDate());
-							} else {
-								errorMessage.append(" Shipping Date is null ");
-								validaterow = false;
-							}							
+							errorMessage.append(" Shipping Date is null ");
+							validaterow = false;
 						}
 					} catch (NullPointerException e) {
-						if(order.getOrderDate() != null){
-							order.setShippedDate(order.getOrderDate());
-						} else {
-							errorMessage
-							.append("The column 'Handover Date' doesn't exist");
-							validaterow = false;
-						}						
+						errorMessage
+								.append("The column 'Handover Date' doesn't exist");
+						validaterow = false;
 					}
 
 					if (cellIndexMap
