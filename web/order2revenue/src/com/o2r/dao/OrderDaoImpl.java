@@ -995,17 +995,25 @@ public class OrderDaoImpl implements OrderDao {
 
 		log.info("*** getOrder Starts ***");
 		Order returnorder = null;
+		List<Order> returnList=null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-
-			returnorder = (Order) session.get(Order.class, orderId);
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.add(Restrictions.eq("orderId", orderId));
+			
+			returnList = criteria.list();
+			if (returnList != null && returnList.size() != 0
+					&& returnList.get(0) != null) {
+			//returnorder = (Order) session.get(Order.class, orderId);
+				returnorder =returnList.get(0);
 			Hibernate.initialize(returnorder.getOrderReturnOrRTO());
 			Hibernate.initialize(returnorder.getOrderTax());
 			Hibernate.initialize(returnorder.getOrderPayment());
 			Hibernate.initialize(returnorder.getOrderTimeline());
 			Hibernate.initialize(returnorder.getCustomer());
 			Hibernate.initialize(returnorder.getSeller());
+			}
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {

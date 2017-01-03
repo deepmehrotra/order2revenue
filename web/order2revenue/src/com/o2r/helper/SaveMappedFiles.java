@@ -1275,6 +1275,8 @@ public class SaveMappedFiles {
 									|| eachOrder.getValue().getPcName()
 											.toLowerCase()
 											.contains(GlobalConstant.PCJABONG)) {
+								if(eachOrder
+										.getValue().getChannelOrderID().contains("-"))
 								eachOrder
 										.getValue()
 										.setChannelOrderID(
@@ -1303,6 +1305,8 @@ public class SaveMappedFiles {
 									|| eachOrder.getValue().getPcName()
 											.toLowerCase()
 											.contains(GlobalConstant.PCJABONG)) {
+								if(eachOrder
+										.getValue().getChannelOrderID().contains("-"))
 								eachOrder
 										.getValue()
 										.setChannelOrderID(
@@ -3717,7 +3721,7 @@ public class SaveMappedFiles {
 
 								if (onj == null) {
 									errorMessage
-											.append("No Orders With Channel OrderId.");
+											.append("No Orders With Channel OrderId and SKU combination.");
 									validaterow = false;
 								} else if (onj.size() == 1
 										&& onj.get(0).getChannelOrderID()
