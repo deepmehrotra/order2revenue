@@ -4493,8 +4493,8 @@ input+label {
 								$("#commisionType-categoryWise").prop(
 										"checked", true).trigger("click");
 							else if ('${partner.nrnReturnConfig.commissionType}' == 'SKUWise')
-								$("#commisionType-SKUWise").prop("checked",
-										true);
+								$("#commisionType-SKUWise").prop(
+										"checked", true).trigger("click");
 							if ('${partner.nrnReturnConfig.whicheverGreaterPCC}' == 'true')
 								$("#pccHigher").prop("checked", true).trigger(
 										"click");
