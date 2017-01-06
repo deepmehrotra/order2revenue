@@ -63,7 +63,7 @@ public Double getMCforPaymentID(String paymentId, int sellerId)throws CustomExce
 
 @Override
 public List<ManualCharges> listManualCharges(int sellerId, Date startDate,
-		Date endDate) throws CustomException {
+		Date endDate){
 	return manualChargesDao.listManualCharges(sellerId, startDate, endDate);
 }
 

@@ -296,8 +296,7 @@
 														<table class="table table-bordered custom-table" style="margin-bottom: auto;">
 															<thead>
 																<tr>
-																	<th>Payment Date</th>
-																	<th>Payment ID</th>
+																	<th>Payment Date</th>																	
 																	<th>Partner</th>
 																	<th>Manual Charge particulars/Type</th>
 																	<th>Amount</th>
@@ -308,8 +307,7 @@
 																	<c:forEach items="${shortTableMC}" var="mc"
 																		varStatus="loop">
 																		<tr>
-																			<td>${mc.dateOfPayment}</td>
-																			<td>${mc.chargesDesc}</td>
+																			<td>${mc.dateOfPayment}</td>																			
 																			<td>${mc.partner}</td>
 																			<td>${mc.particular}</td>
 																			<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${mc.paidAmount}" /></td>

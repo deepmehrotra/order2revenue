@@ -24,6 +24,6 @@ public interface ManualChargesDao {
 
 public Double getMCforPaymentID(String paymentId, int sellerId)throws CustomException;
 
-	public List<ManualCharges> listManualCharges(int sellerId, Date startDate, Date endDate) throws CustomException;
+	public List<ManualCharges> listManualCharges(int sellerId, Date startDate, Date endDate);
  
 }
