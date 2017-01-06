@@ -34,6 +34,7 @@ import com.o2r.helper.HelperClass;
 import com.o2r.helper.SaveContents;
 import com.o2r.model.Category;
 import com.o2r.model.Partner;
+import com.o2r.model.PartnerCategoryMap;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.TaxCategory;
@@ -802,8 +803,7 @@ public class CategoryController {
 		}
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-			categoryService
-					.addParterCategory(ConverterClass
+			categoryService.addParterCategory(ConverterClass
 							.preparePartnerCategoryModel(partnerCategoryBean),
 							sellerId);
 		} catch (CustomException ce) {
@@ -861,5 +861,33 @@ public class CategoryController {
 		}
 		log.info("$$$ searchPartnerCategory Ends : CategoryController $$$");
 		return new ModelAndView("initialsetup/partnerCategoryMap", model);
+	}
+	
+	@RequestMapping(value = "/seller/checkCat", method = RequestMethod.GET)
+	public @ResponseBody String checkChannelCategory(HttpServletRequest request) {
+
+		log.info("$$$ checkChannelCategory Starts : CategoryController $$$");
+		int sellerId = 0;			
+		List<PartnerCategoryMap> listPatnerCatMap = new ArrayList<PartnerCategoryMap>();
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			String partner = request.getParameter("ch") != null ? request.getParameter("ch") : "";
+			String cat = request.getParameter("cat") != null ? request.getParameter("cat") : "";
+			listPatnerCatMap = categoryService.listPartnerCategoryMap(sellerId, 0);
+			if(listPatnerCatMap != null && listPatnerCatMap.size() != 0){
+				for (PartnerCategoryMap each : listPatnerCatMap) {
+					if(each.getPartnerName().equalsIgnoreCase(partner)
+							&& each.getPartnerCategoryRef().equalsIgnoreCase(cat)){
+						return "present";
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by Seller ID : " + sellerId, e);
+			return "false";
+		}
+		log.info("$$$ checkChannelCategory Ends : CategoryController $$$");
+		return "false";
 	}
 }
