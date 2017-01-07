@@ -473,7 +473,7 @@
 		var xAxisCategories = ['Gross Partner Commission Paid', 'Net Return Commission', 'Additional Return Charges'];
 		<c:forEach items="${partnerByGrossComm}" var="partnerDto" varStatus="loop">
 			var data = {};
-			data.name = '${partnerDto.partner}';
+			data.name = "${partnerDto.partner}";
 			data.data = [parseFloat(parseFloat('${partnerDto.grossPartnerCommissionPaid}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netReturnCommission}').toFixed(2)), parseFloat(parseFloat('${partnerDto.additionalReturnCharges}').toFixed(2))];
 			dataArr.push(data);
 		</c:forEach>
@@ -484,7 +484,7 @@
 		var i = 1;
 		<c:forEach items="${partnerByNetChann}" var="partnerDto" varStatus="loop">
 		var arr1 = [ i, '${partnerDto.netChannelCommissionToBePaid}' ];
-		var arr2 = [ i++, '${partnerDto.partner}' ];
+		var arr2 = [ i++, "${partnerDto.partner}" ];
 		temp2.push(arr1);
 		partnerByNetChannArr.push(arr2);
 		</c:forEach>
@@ -495,7 +495,7 @@
 		var xAxisCategories = ['Gross Partner Commission Paid', 'Net Return Commission', 'Additional Return Charges'];
 		<c:forEach items="${categoryByGrossComm}" var="partnerDto" varStatus="loop">
 			var data = {};
-			data.name = '${partnerDto.partner}';
+			data.name = "${partnerDto.partner}";
 			data.data = [parseFloat(parseFloat('${partnerDto.grossPartnerCommissionPaid}').toFixed(2)), parseFloat(parseFloat('${partnerDto.netReturnCommission}').toFixed(2)), parseFloat(parseFloat('${partnerDto.additionalReturnCharges}').toFixed(2))];
 			dataArr.push(data);
 		</c:forEach>
@@ -506,7 +506,7 @@
 		var i = 1;
 		<c:forEach items="${categoryByNetChann}" var="categoryDto" varStatus="loop">
 		var arr1 = [ i, '${categoryDto.netChannelCommissionToBePaid}' ];
-		var arr2 = [ i++, '${categoryDto.categoryName}' ];
+		var arr2 = [ i++, "${categoryDto.categoryName}" ];
 		temp4.push(arr1);
 		categoryByNetChannArr.push(arr2);
 		</c:forEach>
@@ -514,7 +514,7 @@
 		var monthStrArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; 
 		var monthlyArr = [];
 		<c:forEach items="${monthlyGraph}" var="partnerDto" varStatus="loop">
-		var monthStr = '${partnerDto.key}';
+		var monthStr = "${partnerDto.key}";
 		var month = monthStr.split(" ");
 		var monthInt = parseInt(monthStrArr.indexOf(month[0])) + 1;
 		var finalStr = [month[1], "-", monthInt].join("");
@@ -544,7 +544,7 @@
 		var xAxisCategories = ['Selling Fee', 'PCC', 'Fixed Fee', 'Shipping Charges', 'Service Tax', 'Tax SP', 'Additional Charges'];
 		<c:forEach items="${commTablePartner}" var="partnerDto" varStatus="loop">
 			var data = {};
-			data.name = '${partnerDto.key}';
+			data.name = "${partnerDto.key}";
 			data.data = [parseFloat(parseFloat('${partnerDto.sellingFee}').toFixed(2)), 
 			             parseFloat(parseFloat('${partnerDto.pcc}').toFixed(2)), 
 			             parseFloat(parseFloat('${partnerDto.fixedFee}').toFixed(2)),
@@ -562,7 +562,7 @@
 		var xAxisCategories = ['Selling Fee', 'PCC', 'Fixed Fee', 'Shipping Charges', 'Service Tax', 'Tax SP', 'Additional Charges'];
 		<c:forEach items="${commTableCategory}" var="partnerDto" varStatus="loop">
 			var data = {};
-			data.name = '${partnerDto.key}';
+			data.name = "${partnerDto.key}";
 			data.data = [parseFloat(parseFloat('${partnerDto.sellingFee}').toFixed(2)), 
 			             parseFloat(parseFloat('${partnerDto.pcc}').toFixed(2)), 
 			             parseFloat(parseFloat('${partnerDto.fixedFee}').toFixed(2)),

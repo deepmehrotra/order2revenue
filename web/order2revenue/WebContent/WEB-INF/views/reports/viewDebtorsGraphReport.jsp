@@ -411,7 +411,7 @@
 		var i = 1;
 		<c:forEach items="${categoryByNPR}" var="categoryDto" varStatus="loop">
 		var arr1 = [ i, '${categoryDto.netPaymentResult}' ];
-		var arr2 = [ i, '${categoryDto.category}' ];
+		var arr2 = [ i, "${categoryDto.category}" ];
 		i++;
 		temp2.push(arr1);
 		categoryByNPR.push(arr2);
@@ -422,7 +422,7 @@
 		var i = 1;
 		<c:forEach items="${partnerByACPD}" var="categoryDto" varStatus="loop">
 		var arr1 = [ i, '${categoryDto.actionablePD}' ];
-		var arr2 = [ i, '${categoryDto.partner}' ];
+		var arr2 = [ i, "${categoryDto.partner}" ];
 		i++;
 		temp3.push(arr1);
 		partnerByACPD.push(arr2);
@@ -433,7 +433,7 @@
 		var i = 1;
 		<c:forEach items="${categoryByACPD}" var="categoryDto" varStatus="loop">
 		var arr1 = [ i, '${categoryDto.actionablePD}' ];
-		var arr2 = [ i, '${categoryDto.category}' ];
+		var arr2 = [ i, "${categoryDto.category}"];
 		i++;
 		temp4.push(arr1);
 		categoryByACPD.push(arr2);
@@ -445,7 +445,7 @@
 		var xAxisCategories = ['Actionable PD Order Net Sale Qty', 'Upcoming PD Order Net Sale Qty'];
 		<c:forEach items="${partnerByACNS}" var="partnerDto" varStatus="loop">
 			var data = {};
-			data.name = '${partnerDto.partner}';
+			data.name = "${partnerDto.partner}";
 			data.data = [parseFloat(parseFloat('${partnerDto.netSaleQty}').toFixed(2)), parseInt('${partnerDto.upcomingNetQty}')];
 			dataArr.push(data);
 		</c:forEach>
@@ -457,7 +457,7 @@
 		var xAxisCategories = ['Actionable PD Order Net Sale Qty', 'Upcoming PD Order Net Sale Qty'];
 		<c:forEach items="${categoryByACNS}" var="partnerDto" varStatus="loop">
 			var data = {};
-			data.name = '${partnerDto.partner}';
+			data.name = "${partnerDto.category}";
 			data.data = [parseFloat(parseFloat('${partnerDto.netSaleQty}').toFixed(2)), parseInt('${partnerDto.upcomingNetQty}')];
 			dataArr.push(data);
 		</c:forEach>

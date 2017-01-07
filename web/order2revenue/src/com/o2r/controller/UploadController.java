@@ -154,10 +154,10 @@ public class UploadController {
 
 		log.info("$$$ viewPaymentDetails Starts : UploadController $$$");
 		Map<String, Object> model = new HashMap<String, Object>();
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		//Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		PaymentUpload payment = null;
 		List<OrderBean> orderlist = new ArrayList<OrderBean>();
-		String action = request.getParameter("action");
+		//String action = request.getParameter("action");
 		String uploadId = request.getParameter("uploadId");
 		try {
 			if (uploadId != null && uploadId.length() != 0) {
