@@ -585,6 +585,10 @@ public class OrderController {
 									applicationPath, uploadReport));
 					model.put("mapType", "partnerCatCommMapping");
 					break;
+				case "Order_Reverse":
+					saveContents.ReverseOrderFromContent(files.get(0),
+							sellerId, applicationPath, uploadReport);
+					break;
 
 				}
 				inputStream = files.get(0).getInputStream();

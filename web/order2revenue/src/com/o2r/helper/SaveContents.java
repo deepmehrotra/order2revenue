@@ -42,12 +42,15 @@ import com.o2r.bean.CustomerBean;
 import com.o2r.bean.DebitNoteBean;
 import com.o2r.bean.ExpenseBean;
 import com.o2r.bean.OrderBean;
+import com.o2r.bean.OrderPaymentBean;
 import com.o2r.bean.OrderTaxBean;
 import com.o2r.bean.PoPaymentBean;
 import com.o2r.bean.ProductBean;
 import com.o2r.bean.ProductConfigBean;
 import com.o2r.dao.AreaConfigDao;
 import com.o2r.model.Category;
+import com.o2r.model.ChannelUploadMapping;
+import com.o2r.model.ColumMap;
 import com.o2r.model.Events;
 import com.o2r.model.ExpenseCategory;
 import com.o2r.model.Expenses;
@@ -61,6 +64,7 @@ import com.o2r.model.Partner;
 import com.o2r.model.PartnerCategoryMap;
 import com.o2r.model.PaymentUpload;
 import com.o2r.model.PaymentUpload_Order;
+import com.o2r.model.PaymentVariables;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
@@ -5586,5 +5590,107 @@ public class SaveContents {
 		log.info("$$$ savepartnerCatMapping ends : SaveContents $$$");
 		return validaterow;
 
+	}
+	
+	public void ReverseOrderFromContent(MultipartFile file, int sellerId,
+			String path, UploadReport uploadReport) throws IOException {
+		log.info("$$$ ReverseOrderFromContent starts : SaveContents $$$");
+
+		StringBuffer errorMessage = null;	
+		List<Order> orders = null;		
+		boolean validaterow = true;		
+		Set<String> errorSet = new HashSet<String>();
+		String uploadFileName = "";
+		try {			
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			int noOfEntries = 1;
+			HSSFRow entry;
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			entry = worksheet.getRow(0);			
+			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;				
+				String channelOrderId = null;
+				int sellerNo = 0;
+				Order order = null;
+				// Code for Reverse Order
+				try {
+					if (entry.getCell(0) != null
+							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
+						channelOrderId = entry.getCell(0).toString();
+						if(channelOrderId != null && !channelOrderId.equals("")){
+							if (entry.getCell(1) != null
+									&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									entry.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
+									sellerNo = Integer.parseInt(entry.getCell(1).toString());
+									if(sellerNo != 0){
+										orders = orderService.searchAsIsOrder("channelOrderID", channelOrderId, sellerNo);
+										if(orders != null && orders.size() != 0){
+											log.info("No of Orders With ChannelId : "+channelOrderId+" is : "+orders.size());
+											if(orders.get(0).getChannelOrderID().equalsIgnoreCase(channelOrderId)){
+												order = orders.get(0);
+												if(order != null){
+													try {
+														orderService.reverseOrder(order.getOrderId(), sellerNo);
+													} catch (Exception e) {
+														e.printStackTrace();
+														errorMessage.append("Exception During Order Reverse..");
+														validaterow = false;
+													}													
+												}
+											} else {
+												errorMessage.append("No Orders with this ID for this Seller.");
+												validaterow = false;
+											}										
+										} else {
+											errorMessage.append("No Orders with this ID for this Seller.");
+											validaterow = false;
+										}
+									} else {
+										errorMessage.append("Invalid Seller ID.");
+										validaterow = false;
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									errorMessage.append("SellerID Should Be a Number.");
+									validaterow = false;
+								}								
+							} else {
+								errorMessage.append("Enter Seller ID.");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append("Invalid Channel Order ID.");
+							validaterow = false;
+						}
+					} else {
+						errorMessage.append("Empty Channel Order ID.");
+						validaterow = false;
+					}
+					
+					if (!validaterow) {
+						errorSet.add(errorMessage.toString());							
+					}					
+				} catch (Exception e) {
+					log.error("Failed by seller: " + sellerId, e);
+					errorMessage.append("Invalid Input !");
+					errorSet.add(errorMessage.toString());
+				}
+			}			
+			saveMappedFiles.uploadResultXLS(offices, "Reverse_Order", uploadFileName, errorSet, path,
+					sellerId, uploadReport);
+		} catch (Exception e) {
+			addErrorUploadReport("Reverse_Order", sellerId,
+					uploadReport);
+			log.error("Failed by seller: " + sellerId, e);
+		}
+		log.info("$$$ ReverseOrderFromContent Ends : SaveContents $$$");
 	}
 }

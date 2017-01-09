@@ -1,5 +1,6 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@page import="org.springframework.security.core.context.SecurityContextHolder" %>
 <html>
 <head>
 <link rel='stylesheet' href='/O2R/seller/css/nprogress.css' />
@@ -325,6 +326,9 @@ ol.d {
 											<option value="SKU_PartnerCat_Mapping"
 												data-show=".SKU_PartnerCat_Mapping">Parent SKU
 												Channel Category Mapping Upload</option>
+											<c:if test='<%= SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equals("[ROLE_ADMIN, ROLE_MODERATOR]") %>'>
+												<option value="Order_Reverse">Reverse Order</option>
+											</c:if>
 										</select>
 									</div>
 									<div class="col-md-4">
