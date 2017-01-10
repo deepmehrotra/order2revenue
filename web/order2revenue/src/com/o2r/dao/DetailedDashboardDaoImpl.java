@@ -115,10 +115,10 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 	private static final String upcomingPaymentAll = "select sum(ot.netRate) as NR from order_table ot where ot.seller_id = :sellerId and "
 			+ "ot.paymentDueDate >:currentDate";
 	
-	private static final String outstandingPaymentChannelWise = "select ot.pcName, sum(ot.netRate) from order_table ot, orderpay op where ot.seller_id = :sellerId and "
+	private static final String outstandingPaymentChannelWise = "select ot.pcName, sum(op.paymentDifference) from order_table ot, orderpay op where ot.seller_id = :sellerId and "
 			+ "ot.orderPayment_paymentId = op.paymentId and op.paymentDifference <> 0 group by ot.pcName";
 	
-	private static final String outstandingPaymentAll = "select sum(ot.netRate) from order_table ot, orderpay op where ot.seller_id = :sellerId "
+	private static final String outstandingPaymentAll = "select sum(op.paymentDifference) from order_table ot, orderpay op where ot.seller_id = :sellerId "
 			+ "and ot.orderPayment_paymentId = op.paymentId and op.paymentDifference <> 0";
 	
 	private static final String topSellingRegions = "SELECT  count(ot.orderId) as count,cus.customerCity FROM order_table ot, customer cus, orderreturn ort "
@@ -776,7 +776,7 @@ public class DetailedDashboardDaoImpl implements DetailedDashboardDao{
 						.setParameter("sellerId", sellerId)
 						.setParameter("currentDate", currentDate);
 				if(upcomPay != null && upcomPay.list().size() != 0){
-					double upPay = (double) upcomPay.list().get(0);
+					double upPay = upcomPay.list().get(0) != null ? (double) upcomPay.list().get(0) : 0;
 					upcomingPaymentMap.put("Total", upPay);
 					upcomingPaymentList.add(upcomingPaymentMap);
 				}	

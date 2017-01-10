@@ -101,23 +101,27 @@ public List<PaymentUpload> listPaymentUploads(int sellerId)throws CustomExceptio
  public PaymentUpload getPaymentUpload(int paymentUploadId)throws CustomException
  {
 		log.info("*** getPaymentUpload Starts : PaymentUploadDaoImpl ****");
-	 	PaymentUpload  returnObject=null;
-		try
-		{
-		Session session=sessionFactory.openSession();
-		   session.beginTransaction();
-		   Criteria criteria=session.createCriteria(PaymentUpload.class).add(Restrictions.eq("uploadId", paymentUploadId));
-		   returnObject=(PaymentUpload)criteria.list().get(0);
-		   //Hibernate.initialize(returnObject.getOrders());
-		   Hibernate.initialize(returnObject.getOrderList());
-		   session.getTransaction().commit();
-		   session.close();
-		}
-		catch(Exception e)
-		{
-			log.error("Failed!",e);
+	 	PaymentUpload  returnObject = null;
+	 	Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(PaymentUpload.class)
+					.add(Restrictions.eq("uploadId", paymentUploadId));
+			if(criteria != null && criteria.list().size() != 0){
+				returnObject = (PaymentUpload) criteria.list().get(0);
+				// Hibernate.initialize(returnObject.getOrders());
+				Hibernate.initialize(returnObject.getOrderList());		
+			}				
+		} catch (Exception e) {
+			log.error("Failed!", e);
 			e.printStackTrace();
-			throw new CustomException(GlobalConstant.getPaymentUploadError, new Date(), 3, GlobalConstant.getPaymentUploadErrorCode, e);
+			throw new CustomException(GlobalConstant.getPaymentUploadError,
+					new Date(), 3, GlobalConstant.getPaymentUploadErrorCode, e);
+		} finally {
+			if(session != null){
+				session.close();
+			}
 		}
 		log.info("*** getPaymentUpload Ends : PaymentUploadDaoImpl ****");
 		return returnObject;

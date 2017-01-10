@@ -145,9 +145,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 									</div>
 									<div class="col-lg-12">
 										<div class="hr-line-dashed"></div>
-										<h4>Add/Edit Channel Category Mapping:</h4>
-										<br> <br> <label id="addParterCategory-error"
-											style="visible: none;"> </label>
+										<h4>Add/Edit Channel Category Mapping:</h4>										
 										<form:form method="POST" action="saveParterCategory.html"
 											id="addParterCategoryForm" role="form"
 											class="form-horizontal">
@@ -184,7 +182,8 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 													<div class="col-sm-6">
 														<form:input path="partnerCategoryRef"
 															value="${partnerCat.partnerCategoryRef}"
-															class="form-control" id="partnerCategoryRef" />
+															class="form-control" id="partnerCategoryRef" 
+															onmouseout="checkCat();"/>
 														<span id="catNameMessageR" style="color: red"></span> <span
 															id="catNameMessageG" style="color: green"></span>
 													</div>
@@ -331,8 +330,11 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 			//editProduct.html?id=${product.productId}
 			var xxx = $('editProduct.html?id' + vale).submit();
 		}
-
+		
+		var catvalidate = false;
 		function editCategory(id, partnerName, catName, commission) {
+			catvalidate = true;
+			$('#catNameMessageR').hide();			
 			var elId = document.getElementById('catId');
 			elId.value = id;
 			var elPartnerName = document.getElementById('partnerSelect');
@@ -351,6 +353,7 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 			elId.value = 0;
 			var elPartnerName = document.getElementById('partnerSelect');
 			//elPartnerName.value = "";
+			$('#catNameMessageR').hide();
 			$("#partnerSelect").val($("#partnerSelect option:first").val());
 			elPartnerName.disabled = false;
 			var elCat = document.getElementById('partnerCategoryRef');
@@ -358,17 +361,39 @@ button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
 			elCat.disabled = false;
 			var elComm = document.getElementById('commission');
 			elComm.value = 0.0;
+		}		
+		
+		function checkCat (){
+			var chan = $('#partnerSelect').val();
+			var cat = $('#partnerCategoryRef').val();
+			$('#catNameMessageR').hide();
+			if(cat !== ""){			
+				$.ajax({
+					url : 'checkCat.html?ch='+chan+'&cat='+cat,
+					success : function(data) {
+						if (data == "present") {
+							document.getElementById("catNameMessageR").innerHTML = "Duplicate Channel Category Mapping !";
+							$('#catNameMessageR').attr('style', 'color:red;');
+							catvalidate = false;							
+						} else {
+							catvalidate = true;
+						}
+					}
+				});
+			}			
 		}
 
 		function validateCat() {
 			var elCat = document.getElementById('partnerCategoryRef');
 			if (elCat.value == null || elCat.value == '') {
 				$('#addParterCategory-error').show();
-				document.getElementById("addParterCategory-error").innerHTML = "Please enter Partner Category Reference";
+				document.getElementById("catNameMessageR").innerHTML = "Channel Category Ref. Required";
 
-				$('#addParterCategory-error').attr('style', 'color:#8a1f11;');
+				$('#catNameMessageR').attr('style', 'color:#8a1f11;');
 			} else {
-				$('form#addParterCategoryForm').submit();
+				if(catvalidate == true){
+					$('form#addParterCategoryForm').submit();
+				}
 			}
 		}
 

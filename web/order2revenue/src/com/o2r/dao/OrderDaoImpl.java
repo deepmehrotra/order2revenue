@@ -308,12 +308,15 @@ public class OrderDaoImpl implements OrderDao {
 				seller = (Seller) criteria.list().get(0);
 				erroneousOrders = new StringBuffer("");
 				for (Order order : orderList) {
-
-					if (order.getOrderId() != 0) {
-						reverseOrder(order.getOrderId(), sellerId);
-						order.setOrderId(0);
-					}
+					
 					try {
+						
+						if (order.getOrderId() != 0) {
+							log.info("Reverse Order ChannelOrderId : "+order.getChannelOrderID());
+							reverseOrder(order.getOrderId(), sellerId);
+							order.setOrderId(0);
+						}
+						
 						product = productService.getProduct(
 								order.getProductSkuCode(), sellerId);
 						if (product != null) {
@@ -995,17 +998,25 @@ public class OrderDaoImpl implements OrderDao {
 
 		log.info("*** getOrder Starts ***");
 		Order returnorder = null;
+		List<Order> returnList=null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-
-			returnorder = (Order) session.get(Order.class, orderId);
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.add(Restrictions.eq("orderId", orderId));
+			
+			returnList = criteria.list();
+			if (returnList != null && returnList.size() != 0
+					&& returnList.get(0) != null) {
+			//returnorder = (Order) session.get(Order.class, orderId);
+				returnorder =returnList.get(0);
 			Hibernate.initialize(returnorder.getOrderReturnOrRTO());
 			Hibernate.initialize(returnorder.getOrderTax());
 			Hibernate.initialize(returnorder.getOrderPayment());
 			Hibernate.initialize(returnorder.getOrderTimeline());
 			Hibernate.initialize(returnorder.getCustomer());
 			Hibernate.initialize(returnorder.getSeller());
+			}
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
@@ -6127,30 +6138,32 @@ public class OrderDaoImpl implements OrderDao {
 		String channelOrderId = "";
 		Criteria criteria = null;
 		try {
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-			criteria = session.createCriteria(Order.class);
-			criteria.createAlias("seller", "seller",
-					CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("seller.id", sellerId))
-					.add(Restrictions.like(searchCriteria, ID + "%"));
-			orderList = criteria.list();
-			if (orderList != null && orderList.size() != 0) {
-				return orderList;
-			} else if (ID.contains(GlobalConstant.orderUniqueSymbol)) {
-				channelOrderId = ID.substring(0,
-						ID.indexOf(GlobalConstant.orderUniqueSymbol));
+			if(ID != ""){
+				session = sessionFactory.openSession();
+				session.beginTransaction();
 				criteria = session.createCriteria(Order.class);
 				criteria.createAlias("seller", "seller",
 						CriteriaSpecification.LEFT_JOIN)
 						.add(Restrictions.eq("seller.id", sellerId))
-						.add(Restrictions.like(searchCriteria, channelOrderId
-								+ "%"));
+						.add(Restrictions.like(searchCriteria, ID + "%"));
 				orderList = criteria.list();
 				if (orderList != null && orderList.size() != 0) {
 					return orderList;
+				} else if (ID.contains(GlobalConstant.orderUniqueSymbol)) {
+					channelOrderId = ID.substring(0,
+							ID.indexOf(GlobalConstant.orderUniqueSymbol));
+					criteria = session.createCriteria(Order.class);
+					criteria.createAlias("seller", "seller",
+							CriteriaSpecification.LEFT_JOIN)
+							.add(Restrictions.eq("seller.id", sellerId))
+							.add(Restrictions.like(searchCriteria, channelOrderId
+									+ "%"));
+					orderList = criteria.list();
+					if (orderList != null && orderList.size() != 0) {
+						return orderList;
+					}
 				}
-			}
+			}			
 		} catch (Exception e) {
 			log.error("Failed by Seller ID : " + sellerId, e);
 			e.printStackTrace();
@@ -6378,107 +6391,113 @@ public class OrderDaoImpl implements OrderDao {
 
 		log.info("*** reverseOrder starts : OrderDaoImpl ***");
 		boolean status = false;
+		Session session = null;
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			session.beginTransaction();
 
 			Order order = getOrder(orderId);
+			
+			if (order != null) {
+				if (order.getEventName() != null && !order.getEventName().isEmpty()) {
+					Events event = eventsService.getEvent(order.getEventName(),
+							sellerId);
+					event.setNetSalesQuantity(event.getNetSalesQuantity()
+							- order.getNetSaleQuantity());
+					event.setNetSalesAmount(event.getNetSalesAmount()
+							- order.getNetRate());
+				}
 
-			if (order.getEventName() != null && !order.getEventName().isEmpty()) {
-				Events event = eventsService.getEvent(order.getEventName(),
-						sellerId);
-				event.setNetSalesQuantity(event.getNetSalesQuantity()
-						- order.getNetSaleQuantity());
-				event.setNetSalesAmount(event.getNetSalesAmount()
-						- order.getNetRate());
-			}
-
-			TaxDetail taxDetails = new TaxDetail();
-			taxDetails.setBalanceRemaining(-(order.getOrderTax().getTax()));
-			taxDetails.setParticular(order.getOrderTax().getTaxCategtory());
-			taxDetails.setUploadDate(order.getOrderDate());
-
-			taxDetailService.addMonthlyTaxDetail(session, taxDetails, sellerId);
-
-			Partner partner = partnerService.getPartner(order.getPcName(),
-					sellerId);
-			if (partner.isTdsApplicable()) {
-				log.debug(" PC " + order.getPartnerCommission());
-				taxDetails = new TaxDetail();
-				taxDetails.setBalanceRemaining(-(order.getOrderTax()
-						.getTdsToDeduct()));
-				taxDetails.setParticular("TDS");
-				taxDetails.setUploadDate(order.getShippedDate());
-				taxDetailService.addMonthlyTDSDetail(session, taxDetails,
-						sellerId);
-			}
-			productService.updateInventory(order.getProductSkuCode(), 0,
-					order.getQuantity(), 0, false, sellerId,
-					order.getShippedDate());
-
-			if (order.getOrderReturnOrRTO().getReturnDate() != null) {
-				taxDetails = new TaxDetail();
-				taxDetails.setBalanceRemaining(order.getOrderTax()
-						.getTaxToReturn());
+				TaxDetail taxDetails = new TaxDetail();
+				taxDetails.setBalanceRemaining(-(order.getOrderTax().getTax()));
 				taxDetails.setParticular(order.getOrderTax().getTaxCategtory());
 				taxDetails.setUploadDate(order.getOrderDate());
 
-				taxDetailService.addMonthlyTaxDetail(session, taxDetails, order
-						.getSeller().getId());
+				taxDetailService.addMonthlyTaxDetail(session, taxDetails, sellerId);
 
+				Partner partner = partnerService.getPartner(order.getPcName(),
+						sellerId);
 				if (partner.isTdsApplicable()) {
 					log.debug(" PC " + order.getPartnerCommission());
 					taxDetails = new TaxDetail();
-					taxDetails.setBalanceRemaining(order.getOrderTax()
-							.getTdsToReturn());
+					taxDetails.setBalanceRemaining(-(order.getOrderTax()
+							.getTdsToDeduct()));
 					taxDetails.setParticular("TDS");
 					taxDetails.setUploadDate(order.getShippedDate());
 					taxDetailService.addMonthlyTDSDetail(session, taxDetails,
 							sellerId);
 				}
+				productService.updateInventory(order.getProductSkuCode(), 0,
+						order.getQuantity(), 0, false, sellerId,
+						order.getShippedDate());
 
-				productService
-						.updateInventory(order.getProductSkuCode(), 0, 0,
-								(order.getOrderReturnOrRTO()
-										.getReturnorrtoQty() - order
-										.getOrderReturnOrRTO()
-										.getBadReturnQty()), false, order
-										.getSeller().getId(), order
-										.getShippedDate());
+				if (order.getOrderReturnOrRTO().getReturnDate() != null) {
+					taxDetails = new TaxDetail();
+					taxDetails.setBalanceRemaining(order.getOrderTax()
+							.getTaxToReturn());
+					taxDetails.setParticular(order.getOrderTax().getTaxCategtory());
+					taxDetails.setUploadDate(order.getOrderDate());
+
+					taxDetailService.addMonthlyTaxDetail(session, taxDetails, order
+							.getSeller().getId());
+
+					if (partner.isTdsApplicable()) {
+						log.debug(" PC " + order.getPartnerCommission());
+						taxDetails = new TaxDetail();
+						taxDetails.setBalanceRemaining(order.getOrderTax()
+								.getTdsToReturn());
+						taxDetails.setParticular("TDS");
+						taxDetails.setUploadDate(order.getShippedDate());
+						taxDetailService.addMonthlyTDSDetail(session, taxDetails,
+								sellerId);
+					}
+
+					productService
+							.updateInventory(order.getProductSkuCode(), 0, 0,
+									(order.getOrderReturnOrRTO()
+											.getReturnorrtoQty() - order
+											.getOrderReturnOrRTO()
+											.getBadReturnQty()), false, order
+											.getSeller().getId(), order
+											.getShippedDate());
+				}
+
+				if (order.getOrderPayment().getDateofPayment() != null) {
+
+					/*
+					 * PaymentUpload paymentUpload =
+					 * paymentUploadService.getPaymentUpload(orderId.)
+					 * paymentUpload.setTotalpositivevalue(totalpositive);
+					 * paymentUpload.setTotalnegativevalue(totalnegative);
+					 * paymentUpload.setNetRecievedAmount(totalpositive -
+					 * totalnegative); paymentUpload.setUploadDesc("PAYU" + sellerId
+					 * + "" + todaydat.getTime());
+					 * paymentUpload.setUploadStatus("Success"); uploadPaymentId =
+					 * paymentUploadService.addPaymentUpload( paymentUpload,
+					 * sellerId);
+					 */
+				}
+
+				int orderdelete = session.createSQLQuery(
+						"DELETE FROM partner_order_table WHERE orders_orderId = "
+								+ order.getOrderId()).executeUpdate();
+
+				session.delete(order);
+				status = true;
+
+				log.debug(" Reversal process successful :Deleted " + orderdelete);
 			}
-
-			if (order.getOrderPayment().getDateofPayment() != null) {
-
-				/*
-				 * PaymentUpload paymentUpload =
-				 * paymentUploadService.getPaymentUpload(orderId.)
-				 * paymentUpload.setTotalpositivevalue(totalpositive);
-				 * paymentUpload.setTotalnegativevalue(totalnegative);
-				 * paymentUpload.setNetRecievedAmount(totalpositive -
-				 * totalnegative); paymentUpload.setUploadDesc("PAYU" + sellerId
-				 * + "" + todaydat.getTime());
-				 * paymentUpload.setUploadStatus("Success"); uploadPaymentId =
-				 * paymentUploadService.addPaymentUpload( paymentUpload,
-				 * sellerId);
-				 */
-			}
-
-			int orderdelete = session.createSQLQuery(
-					"DELETE FROM partner_order_table WHERE orders_orderId = "
-							+ order.getOrderId()).executeUpdate();
-
-			session.delete(order);
-			status = true;
-
-			log.debug(" Reversal process successful :Deleted " + orderdelete);
+			
 			session.getTransaction().commit();
-			session.close();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Failed! for order ID : " + orderId, e);
 			throw new CustomException(GlobalConstant.deleteOrderError,
 					new Date(), 3, GlobalConstant.deleteOrderErrorCode, e);
+		} finally {
+			if(session != null){
+				session.close();
+			}
 		}
 		log.info("*** reverseOrder ends : OrderDaoImpl ***");
 		return status;

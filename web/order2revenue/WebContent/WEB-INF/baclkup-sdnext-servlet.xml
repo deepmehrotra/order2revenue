@@ -20,12 +20,11 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
     <property name="location" value="classpath*:database.properties" />
  
 </bean> -->
-<!-- <context:component-scan base-package="com.o2r" />
 	 <context:property-placeholder location="classpath*:database.properties" />
-	
-<context:annotation-config/> -->
+	<context:component-scan base-package="com.o2r" />
+<context:annotation-config/>
 
-  <!--   <mvc:annotation-driven />
+    <mvc:annotation-driven />
 	<tx:annotation-driven transaction-manager="hibernateTransactionManager"/>
 
 	<bean id="jspViewResolver"
@@ -53,7 +52,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 		<property name="successurl" value="${successurl}" />
 		<property name="failurl" value="${failurl}" />
 		<property name="tds" value="${TDS}" />
-		<property name="xlsPath" value="${xlsPath}" />
+		<!-- <property name="xlsPath" value="${xlsPath}" /> -->
 	</bean>
 
 <bean id="multipartResolver"
@@ -124,7 +123,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
      <bean id="sellerService" class="com.o2r.service.SellerServiceImpl"></bean>
      <bean id="helperClass" class="com.o2r.helper.HelperClass"></bean>
      
-     schedular mapping START(4 payment)
+     <!-- schedular mapping START(4 payment) -->
      
      	<bean id="sampleJob" class="com.o2r.schedulers.SampleJob"></bean>     
 	    <bean name="setTriggerJob" class="org.springframework.scheduling.quartz.JobDetailBean">
@@ -135,11 +134,11 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 				</map>
 			</property>		
 		</bean>
-		<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">		
+		<!-- <bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">		
 			<property name="jobDetail" ref="setTriggerJob" />
 			<property name="repeatInterval" value="50000" />
 			<property name="startDelay" value="5000" />			
-		</bean>	
+		</bean> -->	
 		<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 			<property name="jobDetail" ref="setTriggerJob" />
 			<property name="cronExpression" value="0 0 1 * * ?" />	
@@ -152,8 +151,8 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 			</property>
 		</bean>
 		
-     Schedular mapping END
-     schedular mapping START(4 product)  
+     <!-- Schedular mapping END -->
+     <!-- schedular mapping START(4 product) -->  
         
         <bean name="setTriggerJobProductSL" class="org.springframework.scheduling.quartz.JobDetailBean">
 			<property name="jobClass" value="com.o2r.schedulers.SetTriggerJobProductSL" />		
@@ -163,11 +162,11 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 				</map>
 			</property>		
 		</bean>
-		<bean id="simpleTrigger1" class="org.springframework.scheduling.quartz.SimpleTriggerBean">		
+		<!-- <bean id="simpleTrigger1" class="org.springframework.scheduling.quartz.SimpleTriggerBean">		
 			<property name="jobDetail" ref="setTriggerJobProductSL" />
 			<property name="repeatInterval" value="50000" />
 			<property name="startDelay" value="5000" />			
-		</bean>
+		</bean> -->
      	<bean id="cronTrigger1" class="org.springframework.scheduling.quartz.CronTriggerBean">
 			<property name="jobDetail" ref="setTriggerJobProductSL" />
 			<property name="cronExpression" value="0 0 1 1 * ?" />	
@@ -176,10 +175,10 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
 			<property name="triggers">
 				<list>
 					<ref bean="cronTrigger1" />
-					<ref bean="simpleTrigger1" />
+					<!-- <ref bean="simpleTrigger1" /> -->
 				</list>
 			</property>
-		</bean> -->
+		</bean>
      	
      <!-- schedular mapping END -->
      

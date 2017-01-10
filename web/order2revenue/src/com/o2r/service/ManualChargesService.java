@@ -18,7 +18,7 @@ public interface ManualChargesService {
 	 
 	 public List<ManualCharges> listManualCharges(int sellerId)throws CustomException;
 	 
-	 public List<ManualCharges> listManualCharges(int sellerId, Date startDate, Date endDate)throws CustomException;
+	 public List<ManualCharges> listManualCharges(int sellerId, Date startDate, Date endDate);
 
 	 public ManualCharges getManualCharges(int mcId)throws CustomException;
 	 

@@ -353,8 +353,9 @@ public class SaveMappedFiles {
 														idIndex).toString()
 														+ GlobalConstant.orderUniqueSymbol
 														+ sku;
-											}
-
+											}											
+											
+											channelID = removeExtraQuote(channelID);
 											uniqueID4Map = channelID;
 
 											if (channelID != null) {
@@ -1275,6 +1276,8 @@ public class SaveMappedFiles {
 									|| eachOrder.getValue().getPcName()
 											.toLowerCase()
 											.contains(GlobalConstant.PCJABONG)) {
+								if(eachOrder
+										.getValue().getChannelOrderID().contains("-"))
 								eachOrder
 										.getValue()
 										.setChannelOrderID(
@@ -1303,6 +1306,8 @@ public class SaveMappedFiles {
 									|| eachOrder.getValue().getPcName()
 											.toLowerCase()
 											.contains(GlobalConstant.PCJABONG)) {
+								if(eachOrder
+										.getValue().getChannelOrderID().contains("-"))
 								eachOrder
 										.getValue()
 										.setChannelOrderID(
@@ -1329,6 +1334,13 @@ public class SaveMappedFiles {
 								+ " ) with valid input "
 								+ "failed due to internal server error. Please contact admin.!",
 								null);
+			} catch (Exception e) {
+				returnOrderMap
+				.put("Row :1:Note-Some orders("
+						+ e.getLocalizedMessage()+" : Channel Order ID : "+order.getChannelOrderID()
+						+ " ) with valid input "
+						+ "failed due to internal server error. Please contact admin.!",
+						null);
 			}
 			errorSet = returnOrderMap.keySet();
 			uploadResultXLS(offices, "Unicommerce_Order_Upload",
@@ -3717,7 +3729,7 @@ public class SaveMappedFiles {
 
 								if (onj == null) {
 									errorMessage
-											.append("No Orders With Channel OrderId.");
+											.append("No Orders With Channel OrderId and SKU combination.");
 									validaterow = false;
 								} else if (onj.size() == 1
 										&& onj.get(0).getChannelOrderID()

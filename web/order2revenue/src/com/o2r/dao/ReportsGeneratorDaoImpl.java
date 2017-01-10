@@ -2638,9 +2638,12 @@ public class ReportsGeneratorDaoImpl implements ReportsGeneratorDao {
 		try {
 			Session session = sessionFactory.openSession();
 			session.getTransaction().begin();
-			String orderQueryStr = "SELECT mc.partner, sum(mc.paidAmount) as ManualCharges FROM paymentupload pu, manualcharges mc "
-					+ "where pu.uploadId = mc.chargesDesc and pu.uploadDate between :startDate AND :endDate group by mc.partner order by ManualCharges desc";
-			Query orderQuery = session.createSQLQuery(orderQueryStr)
+			/*String orderQueryStr = "SELECT mc.partner, sum(mc.paidAmount) as ManualCharges FROM paymentupload pu, manualcharges mc "
+					+ "where pu.uploadId = mc.chargesDesc and pu.uploadDate between :startDate AND :endDate group by mc.partner order by ManualCharges desc";*/
+			String manualChargesQuery = "select m.partner, sum(m.paidAmount) from seller s, manualcharges m where "
+					+ "s.id = :sellerId and m.dateOfPayment between :startDate AND :endDate group by m.partner order by sum(m.paidAmount) desc";
+			Query orderQuery = session.createSQLQuery(manualChargesQuery)
+					.setParameter("sellerId", sellerId)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate);
 			List<Object[]> orderList = orderQuery.list();

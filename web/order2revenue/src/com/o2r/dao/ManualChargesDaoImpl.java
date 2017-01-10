@@ -14,6 +14,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.o2r.bean.ChannelMC;
 import com.o2r.helper.CustomException;
 import com.o2r.helper.GlobalConstant;
 import com.o2r.model.ManualCharges;
@@ -114,20 +115,41 @@ public class ManualChargesDaoImpl implements ManualChargesDao {
 	}
 
 	@Override
-	public List<ManualCharges> listManualCharges(int sellerId, Date startDate, Date endDate)
-			throws CustomException {
-		log.info("*** ManualCharges between selected date range");
-		List<ManualCharges> manualCharges = listManualCharges(sellerId);
-		List<ManualCharges> filteredList = new ArrayList<ManualCharges>();
-
-		if(manualCharges!=null&&manualCharges.size()!=0){
-			for(ManualCharges manualCharge: manualCharges){
-				if(manualCharge.getDateOfPayment().after(startDate) && manualCharge.getDateOfPayment().before(endDate))
-					filteredList.add(manualCharge);
+	public List<ManualCharges> listManualCharges(int sellerId, Date startDate, Date endDate) {
+		log.info("*** listManualCharges between selected date range");
+		List<ManualCharges> listManualCharges = new ArrayList<ManualCharges>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.getTransaction().begin();
+			
+			String listManualChargesQuery = "select m.dateOfPayment, m.partner, m.particular, m.paidAmount from seller s, manualcharges m where "
+					+ "s.id = :sellerId and m.dateOfPayment between :startDate AND :endDate order by m.partner asc";
+			
+			Query orderQuery = session.createSQLQuery(listManualChargesQuery)
+					.setParameter("sellerId", sellerId)
+					.setParameter("startDate", startDate)
+					.setParameter("endDate", endDate);
+			
+			List<Object[]> MCList = orderQuery.list();
+			for (Object[] eachMC : MCList) {
+				ManualCharges MC = new ManualCharges();
+				MC.setDateOfPayment(eachMC[0] != null ? (Date) eachMC[0] : null);
+				MC.setPartner(eachMC[1] != null ? eachMC[1].toString() : "");
+				MC.setParticular(eachMC[2] != null ? eachMC[2].toString() : "");
+				MC.setPaidAmount(eachMC[3] != null ? new Double(eachMC[3].toString()) : 0);
+				listManualCharges.add(MC);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Error in getting Manuaal Charges For Seller : "+sellerId, e);
+		} finally {
+			if(session != null){
+				session.close();
 			}
 		}
-		log.info("*** ManualCharges between selected date range");
-		return filteredList;
+		log.info("*** listManualCharges between selected date range");
+		return listManualCharges;
 	}
 	
 	@Override

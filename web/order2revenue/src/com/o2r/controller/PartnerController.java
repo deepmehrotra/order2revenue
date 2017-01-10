@@ -2119,7 +2119,7 @@ public class PartnerController {
 		try {			
 			sellerId = helperClass.getSellerIdfromSession(request);
 			tier = request.getParameter("sellerTier");
-			if(!tier.equals("")){
+			if(tier != null && !tier.equals("")){
 				partnerBean.setPcName(partnerBean.getPcName()+"-$$"+tier);
 			}
 			existPartner = partnerService.getMetaPartner(partnerBean

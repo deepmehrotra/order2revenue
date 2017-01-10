@@ -42,12 +42,15 @@ import com.o2r.bean.CustomerBean;
 import com.o2r.bean.DebitNoteBean;
 import com.o2r.bean.ExpenseBean;
 import com.o2r.bean.OrderBean;
+import com.o2r.bean.OrderPaymentBean;
 import com.o2r.bean.OrderTaxBean;
 import com.o2r.bean.PoPaymentBean;
 import com.o2r.bean.ProductBean;
 import com.o2r.bean.ProductConfigBean;
 import com.o2r.dao.AreaConfigDao;
 import com.o2r.model.Category;
+import com.o2r.model.ChannelUploadMapping;
+import com.o2r.model.ColumMap;
 import com.o2r.model.Events;
 import com.o2r.model.ExpenseCategory;
 import com.o2r.model.Expenses;
@@ -61,6 +64,7 @@ import com.o2r.model.Partner;
 import com.o2r.model.PartnerCategoryMap;
 import com.o2r.model.PaymentUpload;
 import com.o2r.model.PaymentUpload_Order;
+import com.o2r.model.PaymentVariables;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
 import com.o2r.model.Seller;
@@ -229,7 +233,6 @@ public class SaveContents {
 							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK
 							&& entry.getCell(2) != null
 							&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
-						System.out.println(entry.getCell(2).toString());
 						entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
 						entry.getCell(2).setCellType(HSSFCell.CELL_TYPE_STRING);
 
@@ -2970,6 +2973,7 @@ public class SaveContents {
 							partner = partnerService.getPartner(entry
 									.getCell(6).toString(), sellerId);
 							if (partner != null) {
+								System.out.println(" Channle id : "+entry.getCell(1).toString());
 								if (entry.getCell(1) != null
 										&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
 									entry.getCell(1).setCellType(
@@ -3048,6 +3052,8 @@ public class SaveContents {
 										if (entry.getCell(3) != null
 												&& entry.getCell(3)
 														.getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+											entry.getCell(3).setCellType(
+													HSSFCell.CELL_TYPE_STRING);
 											String itemId = entry.getCell(3).toString();
 											if(partner.getPcName().toLowerCase().contains(GlobalConstant.PCFLIPKART)
 													&& itemId.contains("OI:")){
@@ -3062,10 +3068,12 @@ public class SaveContents {
 											validaterow = false;
 										}
 									}
-
-									onj = orderService.searchAsIsOrder(
-											"channelOrderID", channelId,
-											sellerId);
+									
+									if(channelId != ""){
+										onj = orderService.searchAsIsOrder(
+												"channelOrderID", channelId,
+												sellerId);
+									}					
 
 									if (entry.getCell(8) != null
 											&& StringUtils.isNotBlank(entry
@@ -4490,9 +4498,15 @@ public class SaveContents {
 					isError = true;
 					row = worksheet.getRow(errorRow + 2);
 					if (row != null) {
-						cell = row.createCell(colNumber);
-						cell.setCellValue(errorMessage);
-						cell.setCellStyle(errorCellStyle);
+						try {
+							cell = row.createCell(colNumber);
+							cell.setCellValue(errorMessage);
+							cell.setCellStyle(errorCellStyle);
+						} catch (Exception e) {
+							System.out.println(errorMessage.length());
+							System.out.println(errorMessage);
+						}
+						
 					}
 				}
 			}
@@ -4544,7 +4558,7 @@ public class SaveContents {
 		} catch (IOException e) {
 			e.printStackTrace();
 			log.error("Failed! by SellerId : " + sellerId, e);
-		}
+		} 
 	}
 
 	public void addErrorUploadReport(String worksheetName, int sellerId,
@@ -5115,7 +5129,7 @@ public class SaveContents {
 		return out;
 	}
 
-	public Object saveSKUCatMapping(MultipartFile file, int sellerId,
+	/*public Object saveSKUCatMapping(MultipartFile file, int sellerId,
 			String path, UploadReport uploadReport) {
 		log.info("$$$ saveSKUCatMapping starts : SaveContents $$$");
 		boolean validaterow = true;
@@ -5278,6 +5292,181 @@ public class SaveContents {
 		log.info("$$$ savepartnerCatMapping ends : SaveContents $$$");
 		return validaterow;
 
+	}*/
+	
+	public Object saveSKUCatMapping(MultipartFile file, int sellerId,
+			String path, UploadReport uploadReport) {
+		log.info("$$$ saveSKUCatMapping starts : SaveContents $$$");
+		boolean validaterow = true;
+		StringBuffer errorMessage = null;
+		String uploadFileName = "";
+		try {
+			Map<String, String> returnlist = new LinkedHashMap<>();
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			HSSFRow entry;
+			Integer noOfEntries = 1;
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			uploadFileName = file.getOriginalFilename().substring(0,
+					file.getOriginalFilename().lastIndexOf("."))
+					+ new Date().getTime();
+			log.info(noOfEntries.toString());
+			log.debug("After getting no of rows" + noOfEntries);
+
+			Map<String, Boolean> partnerMap = partnerService
+					.getPartnerMap(sellerId);
+			//Seller seller = sellerService.getSeller(sellerId);
+			//List<PartnerCategoryMap> saveList=new ArrayList<PartnerCategoryMap>();
+			List<Product> productList = productService.listProducts(sellerId);
+			Map<String, Product> productMap = new HashMap<String, Product>();
+			Map<String, List<PartnerCategoryMap>> saveMap = new HashMap<String, List<PartnerCategoryMap>>();
+
+			if (productList != null && !productList.isEmpty()) {
+				for (Product tmpProduct : productList) {
+					productMap.put(tmpProduct.getProductSkuCode().trim()
+							.toLowerCase(), tmpProduct);
+				}
+			}
+			//Map<String, Product> saveProductMap = new HashMap<String, Product>();
+
+			List<PartnerCategoryMap> partnerCatList = categoryService
+					.listPartnerCategoryMap(sellerId, 0);
+			Map<String, PartnerCategoryMap> partnerCategoryMap = new HashMap<String, PartnerCategoryMap>();
+			if (partnerCatList != null && !partnerCatList.isEmpty()) {
+				
+				for (PartnerCategoryMap tmpPartnerCat : partnerCatList) {
+					String key=tmpPartnerCat.getPartnerCategoryRef()+"-"+tmpPartnerCat.getPartnerName();
+					partnerCategoryMap.put(
+							key,
+							tmpPartnerCat);
+				}
+			}
+
+			for (int rowIndex = 3; rowIndex < noOfEntries; rowIndex++) {
+				Product product = null;
+				PartnerCategoryMap partnerCatMap = null;
+				String partnerName = null;
+
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;
+				errorMessage = new StringBuffer("Row :" + (rowIndex - 2) + ":");
+				try {
+					if (entry.getCell(1) != null
+							&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+
+						if (partnerMap.containsKey(entry.getCell(1).toString()
+								.trim())) {
+
+							partnerName = entry.getCell(1).toString().trim();
+
+							if (entry.getCell(0) != null
+									&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
+
+								product = productMap.get(entry.getCell(0)
+										.toString().trim().toLowerCase());
+
+								if (product != null) {
+
+									if (entry.getCell(2) != null
+											&& entry.getCell(2).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+
+										String catName = entry.getCell(2)
+												.toString().trim();
+										String key=catName+"-"+partnerName;
+										partnerCatMap = partnerCategoryMap
+												.get(key);
+
+										if (partnerCatMap == null) {
+											partnerCatMap = new PartnerCategoryMap();
+											partnerCatMap
+													.setPartnerName(partnerName);
+											partnerCatMap
+													.setPartnerCategoryRef(entry
+															.getCell(2)
+															.toString());
+										}
+										
+
+										for (PartnerCategoryMap tempPartnerCatMap : product
+												.getPartnerCategoryMap()) {
+											if (partnerName
+													.equalsIgnoreCase(tempPartnerCatMap
+															.getPartnerName())) {
+												errorMessage
+														.append(" Channel Category reference already associated with this SKU for the Channel ");
+												validaterow = false;
+											}
+										}
+
+									} else {
+										errorMessage
+												.append(" Channel Category reference is null ");
+										validaterow = false;
+									}
+								} else {
+									errorMessage
+											.append(" Parent SKU does not exist ");
+									validaterow = false;
+								}
+							} else {
+								errorMessage.append(" Parent SKU is null ");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append(" Partner does not exist ");
+							validaterow = false;
+						}
+					} else {
+						errorMessage.append(" Partner Name is null ");
+						validaterow = false;
+					}
+					if (validaterow) {
+						//partnerCatMap.getProduct().add(product);
+						//partnerCatMap.setSeller(seller);
+						if(saveMap.containsKey(product.getProductSkuCode()))
+							saveMap.get(product.getProductSkuCode()).add(partnerCatMap);
+						else
+						{
+							List<PartnerCategoryMap> newlist=new ArrayList<PartnerCategoryMap>();
+							newlist.add(partnerCatMap);
+							saveMap.put(product.getProductSkuCode(), newlist);
+						}
+						/*saveProductMap
+								.put(product.getProductSkuCode(), product);*/
+						
+					} else {
+						returnlist.put(errorMessage.toString(), "");
+					}
+				} catch (Exception e) {
+					log.error("Failed! by SellerId : " + sellerId, e);
+					if (partnerName != null) {
+						errorMessage.append("Invalid Input! ");
+						returnlist.put(errorMessage.toString(), "");
+					}
+				}
+				log.debug("Sheet values :1 :" + entry.getCell(1) + " 2 :"
+						+ entry.getCell(2) + " 3 :" + entry.getCell(3));
+				// Pre save to generate id for use in hierarchy
+			}
+
+			if (saveMap != null && !saveMap.isEmpty()) {
+				productService.addPartnerCatMapping(saveMap, sellerId);
+			}
+			Set<String> errorSet = returnlist.keySet();
+			downloadUploadReportXLS(offices, "SKU_PartnerCat_Mapping",
+					uploadFileName, 3, errorSet, path, sellerId, uploadReport);
+		} catch (Exception e) {
+			log.error("Failed! by SellerId : " + sellerId, e);
+			addErrorUploadReport("SKU_PartnerCat_Mapping", sellerId,
+					uploadReport);
+			throw new MultipartException("Constraints Violated");
+		}
+		log.info("$$$ savepartnerCatMapping ends : SaveContents $$$");
+		return validaterow;
+
 	}
 
 	public Object savePartnerCatCommMapping(MultipartFile file, int sellerId,
@@ -5344,6 +5533,13 @@ public class SaveContents {
 													.append(" Commission should be a number ");
 											validaterow = false;
 										}
+										catch (Exception e) {
+											log.error("Failed! by SellerId : "
+													+ sellerId, e);
+											errorMessage
+													.append("Commission should be a number");
+											validaterow = false;
+										}
 									} else {
 										errorMessage
 												.append(" Commission is null ");
@@ -5394,5 +5590,107 @@ public class SaveContents {
 		log.info("$$$ savepartnerCatMapping ends : SaveContents $$$");
 		return validaterow;
 
+	}
+	
+	public void ReverseOrderFromContent(MultipartFile file, int sellerId,
+			String path, UploadReport uploadReport) throws IOException {
+		log.info("$$$ ReverseOrderFromContent starts : SaveContents $$$");
+
+		StringBuffer errorMessage = null;	
+		List<Order> orders = null;		
+		boolean validaterow = true;		
+		Set<String> errorSet = new HashSet<String>();
+		String uploadFileName = "";
+		try {			
+			HSSFWorkbook offices = new HSSFWorkbook(file.getInputStream());
+			HSSFSheet worksheet = offices.getSheetAt(0);
+			int noOfEntries = 1;
+			HSSFRow entry;
+			while (worksheet.getRow(noOfEntries) != null) {
+				noOfEntries++;
+			}
+			uploadFileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + new Date().getTime();
+			entry = worksheet.getRow(0);			
+			for (int rowIndex = 1; rowIndex < noOfEntries; rowIndex++) {
+				errorMessage = new StringBuffer("Row :" + (rowIndex) + ":");
+				entry = worksheet.getRow(rowIndex);
+				validaterow = true;				
+				String channelOrderId = null;
+				int sellerNo = 0;
+				Order order = null;
+				// Code for Reverse Order
+				try {
+					if (entry.getCell(0) != null
+							&& entry.getCell(0).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+						entry.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
+						channelOrderId = entry.getCell(0).toString();
+						if(channelOrderId != null && !channelOrderId.equals("")){
+							if (entry.getCell(1) != null
+									&& entry.getCell(1).getCellType() != HSSFCell.CELL_TYPE_BLANK) {
+								try {
+									entry.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
+									sellerNo = Integer.parseInt(entry.getCell(1).toString());
+									if(sellerNo != 0){
+										orders = orderService.searchAsIsOrder("channelOrderID", channelOrderId, sellerNo);
+										if(orders != null && orders.size() != 0){
+											log.info("No of Orders With ChannelId : "+channelOrderId+" is : "+orders.size());
+											if(orders.get(0).getChannelOrderID().equalsIgnoreCase(channelOrderId)){
+												order = orders.get(0);
+												if(order != null){
+													try {
+														orderService.reverseOrder(order.getOrderId(), sellerNo);
+													} catch (Exception e) {
+														e.printStackTrace();
+														errorMessage.append("Exception During Order Reverse..");
+														validaterow = false;
+													}													
+												}
+											} else {
+												errorMessage.append("No Orders with this ID for this Seller.");
+												validaterow = false;
+											}										
+										} else {
+											errorMessage.append("No Orders with this ID for this Seller.");
+											validaterow = false;
+										}
+									} else {
+										errorMessage.append("Invalid Seller ID.");
+										validaterow = false;
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									errorMessage.append("SellerID Should Be a Number.");
+									validaterow = false;
+								}								
+							} else {
+								errorMessage.append("Enter Seller ID.");
+								validaterow = false;
+							}
+						} else {
+							errorMessage.append("Invalid Channel Order ID.");
+							validaterow = false;
+						}
+					} else {
+						errorMessage.append("Empty Channel Order ID.");
+						validaterow = false;
+					}
+					
+					if (!validaterow) {
+						errorSet.add(errorMessage.toString());							
+					}					
+				} catch (Exception e) {
+					log.error("Failed by seller: " + sellerId, e);
+					errorMessage.append("Invalid Input !");
+					errorSet.add(errorMessage.toString());
+				}
+			}			
+			saveMappedFiles.uploadResultXLS(offices, "Reverse_Order", uploadFileName, errorSet, path,
+					sellerId, uploadReport);
+		} catch (Exception e) {
+			addErrorUploadReport("Reverse_Order", sellerId,
+					uploadReport);
+			log.error("Failed by seller: " + sellerId, e);
+		}
+		log.info("$$$ ReverseOrderFromContent Ends : SaveContents $$$");
 	}
 }
