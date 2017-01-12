@@ -167,8 +167,8 @@ public class SaveIntegrationCotents {
 			e.printStackTrace();
 			log.error("Failed! by SellerId : " + sellerId, e);
 			/*addErrorUploadReport("Create_Parent_Product", sellerId,
-					uploadReport);*/
-			throw new MultipartException("Constraints Violated");
+					uploadReport);
+			throw new MultipartException("Constraints Violated");*/
 		}
 		log.info("$$$ saveAPIFetchProductMapping ends : SaveIntegrationCotents $$$");
 		return "";
