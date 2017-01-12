@@ -5,6 +5,7 @@ import java.util.List;
 import com.o2r.helper.CustomException;
 import com.o2r.model.AccountTransaction;
 import com.o2r.model.Seller;
+import com.o2r.model.SellerAPIInfo;
 import com.o2r.model.State;
 import com.o2r.model.StateDeliveryTime;
 
@@ -41,4 +42,8 @@ public List<AccountTransaction> getAccountTransactions(int sellerId);
 
 public AccountTransaction upgradeAccountTransaction(String txnStat,String planName, String txnid,
 		int sellerid) throws CustomException;
+
+public SellerAPIInfo getSellerApiInfo(int sellerId);
+
+public void saveSellerApiInfo (SellerAPIInfo sellerInfo);
 }

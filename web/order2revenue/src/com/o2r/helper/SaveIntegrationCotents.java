@@ -87,9 +87,9 @@ public class SaveIntegrationCotents {
 						validate = false;
 					}
 					
-					if(jsonObject.getString("DeadWeight").toString() != ""){
+					if(jsonObject.getString("Weight").toString() != ""){
 						try {
-							product.setDeadWeight(Float.parseFloat(jsonObject.getString("DeadWeight")));
+							product.setDeadWeight(Float.parseFloat(jsonObject.getString("Weight")));
 						} catch (Exception e) {
 							validate = false;
 						}						
@@ -104,8 +104,9 @@ public class SaveIntegrationCotents {
 			}
 			try {
 				System.out.println(" SaveList Size : " + saveList.size());
-				if (saveList != null && saveList.size() != 0)
+				if (saveList != null && saveList.size() != 0){
 					productService.addProduct(saveList, sellerId);
+				}					
 			} catch (CustomException ce) {
 				
 			}			
@@ -115,10 +116,7 @@ public class SaveIntegrationCotents {
 			log.debug("Inside save contents exception :"
 					+ e.getLocalizedMessage());
 			e.printStackTrace();
-			log.error("Failed! by SellerId : " + sellerId, e);
-			/*addErrorUploadReport("Create_Parent_Product", sellerId,
-					uploadReport);*/
-			throw new MultipartException("Constraints Violated");
+			log.error("Failed! by SellerId : " + sellerId, e);			
 		}
 		log.info("$$$ saveAPIFetchProducts ends : SaveIntegrationCotents $$$");
 		return "";

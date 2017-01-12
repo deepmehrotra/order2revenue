@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.o2r.helper.HelperClass;
-import com.o2r.helper.IntergrationFetchClient;
+import com.o2r.helper.IntegrationFetchClient;
 import com.o2r.helper.SaveIntegrationCotents;
 
 @Controller
@@ -18,7 +18,7 @@ public class IntegrationController {
 	@Autowired
 	private HelperClass helperClass;
 	@Autowired
-	private IntergrationFetchClient intergrationFetchClient;
+	private IntegrationFetchClient integrationFetchClient;
 	@Autowired
 	private SaveIntegrationCotents saveIntegrationCotents;
 	
@@ -27,7 +27,7 @@ public class IntegrationController {
 		int sellerId = 0;
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-			String result = saveIntegrationCotents.saveAPIFetchProducts(intergrationFetchClient.fetchAPIProduct(), sellerId);
+			String result = saveIntegrationCotents.saveAPIFetchProducts(integrationFetchClient.fetchAPIProduct(sellerId), sellerId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -40,7 +40,7 @@ public class IntegrationController {
 		int sellerId = 0;
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-			String result = saveIntegrationCotents.saveAPIFetchProductMapping(intergrationFetchClient.fetchAPIProductMapping(), sellerId);
+			String result = saveIntegrationCotents.saveAPIFetchProductMapping(integrationFetchClient.fetchAPIProductMapping(), sellerId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

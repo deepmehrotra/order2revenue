@@ -14,6 +14,7 @@ import com.o2r.dao.SellerDao;
 import com.o2r.helper.CustomException;
 import com.o2r.model.AccountTransaction;
 import com.o2r.model.Seller;
+import com.o2r.model.SellerAPIInfo;
 import com.o2r.model.State;
 import com.o2r.model.StateDeliveryTime;
 
@@ -113,4 +114,15 @@ public class SellerServiceImpl implements SellerService,ServletContextAware {
 			{
 		return sellerDao.upgradeAccountTransaction(txnStat,planName, txnid, sellerid);
 			}
+	
+	@Override
+	public SellerAPIInfo getSellerApiInfo(int sellerId) {
+		return sellerDao.getSellerApiInfo(sellerId);
+	}
+	
+	@Override
+	public void saveSellerApiInfo(SellerAPIInfo sellerInfo) {
+		sellerDao.saveSellerApiInfo(sellerInfo);
+	}
+	
 }

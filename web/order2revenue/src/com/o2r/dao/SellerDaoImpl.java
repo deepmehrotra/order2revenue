@@ -40,6 +40,7 @@ import com.o2r.model.Plan;
 import com.o2r.model.Product;
 import com.o2r.model.ProductStockList;
 import com.o2r.model.Seller;
+import com.o2r.model.SellerAPIInfo;
 import com.o2r.model.SellerAccount;
 import com.o2r.model.State;
 import com.o2r.model.StateDeliveryTime;
@@ -717,5 +718,52 @@ public class SellerDaoImpl implements SellerDao {
 				session.close();
 		}
 		return acctList;
+	}
+	
+	@Override
+	public SellerAPIInfo getSellerApiInfo(int sellerId) {
+		SellerAPIInfo sellerAPIInfo = null;
+		Session session=null;
+		try{
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(SellerAPIInfo.class)
+					.add(Restrictions.eq("sellerId", sellerId));
+			if(criteria.list() != null && criteria.list().size() != 0){
+				sellerAPIInfo = (SellerAPIInfo) criteria.list().get(0);
+			}	
+		}catch(Exception e){
+			log.error("Failed! by sellerId : "+sellerId,e);
+			e.printStackTrace();
+		}finally{
+			if(session != null){
+				session.close();
+			}				
+		}
+		return sellerAPIInfo;
+	}
+	
+	@Override
+	public void saveSellerApiInfo(SellerAPIInfo sellerInfo) {
+		Session session=null;
+		try {
+			if(sellerInfo != null){
+				session = sessionFactory.openSession();
+				session.beginTransaction();	
+				if(sellerInfo.getInfoId() != 0){
+					session.merge(sellerInfo);
+				} else {
+					session.saveOrUpdate(sellerInfo);
+				}
+				session.getTransaction().commit();
+			}					
+		} catch (Exception e) {
+			log.error("Failed! by sellerId : "+sellerInfo.getSellerId(),e);
+			e.printStackTrace();
+		} finally {
+			if(session != null){
+				session.close();
+			}				
+		}
 	}
 }
