@@ -1485,5 +1485,47 @@ public class ProductDaoImpl implements ProductDao {
 					new Date(), 1, GlobalConstant.addProductErrorCode, e);
 		}
 		log.info("*** addPartnerCatMapping Ends : ProductDaoImpl ****");
-	}	
+	}
+	
+	@Override
+	public void addSKUMapping(Map<String, List<ProductConfig>> saveMap,
+			int sellerId) {
+		
+		Session session = null;
+		List dbresult = null;
+		Product product = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			if(saveMap != null && saveMap.size() != 0){
+				for(Map.Entry<String, List<ProductConfig>> entry : saveMap.entrySet()){
+
+					Criteria criteria = session.createCriteria(Product.class);
+					criteria.createAlias("seller", "seller",
+							CriteriaSpecification.LEFT_JOIN).add(
+							Restrictions.eq("seller.id", sellerId));
+					criteria.add(Restrictions.eq("productSkuCode", entry.getKey()));
+					dbresult = criteria.list();
+					if (dbresult != null && dbresult.size() != 0) {
+						product = (Product) dbresult.get(0);
+						if (product != null) {
+							for(ProductConfig productConfig : entry.getValue()){
+								productConfig.setProduct(product);
+								product.getProductConfig().add(productConfig);								
+							}
+							session.saveOrUpdate(product);
+						}
+					}					
+				}
+				session.getTransaction().commit();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed in Product Dao by SellerID : "+sellerId, e);
+		} finally {
+			if(session != null){
+				session.close();
+			}
+		}
+	}
 }

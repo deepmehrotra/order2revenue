@@ -196,5 +196,12 @@ public class ProductServiceImpl implements ProductService {
 			{
 		productDao.addPartnerCatMapping(saveProductMap, sellerId);
 			}
+	
+	@Override
+	public void addSKUMapping(Map<String, List<ProductConfig>> saveMap,
+			int sellerId) {
+		productDao.addSKUMapping(saveMap, sellerId);
+		
+	}
 
 }

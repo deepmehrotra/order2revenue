@@ -89,4 +89,6 @@ public interface ProductService {
 
 	public void addPartnerCatMapping(Map<String,  List<PartnerCategoryMap>> saveProductMap, int sellerId)
 			throws CustomException;
+	
+	public void addSKUMapping(Map<String, List<ProductConfig>> saveMap,	int sellerId);
 }

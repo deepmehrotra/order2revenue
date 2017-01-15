@@ -40,7 +40,20 @@ public class IntegrationController {
 		int sellerId = 0;
 		try {
 			sellerId = helperClass.getSellerIdfromSession(request);
-			String result = saveIntegrationCotents.saveAPIFetchProductMapping(integrationFetchClient.fetchAPIProductMapping(), sellerId);
+			String result = saveIntegrationCotents.saveAPIFetchProductMapping(integrationFetchClient.fetchAPIProductMapping(sellerId, 3), sellerId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("redirect:/seller/productMapping.html");
+	}
+	
+	@RequestMapping(value = "/seller/fetchOrders", method = RequestMethod.GET)
+	public ModelAndView fetchOrders(HttpServletRequest request) {
+		
+		int sellerId = 0;
+		try {
+			sellerId = helperClass.getSellerIdfromSession(request);
+			String result = saveIntegrationCotents.saveAPIFetchProductMapping(integrationFetchClient.fetchAPIProductMapping(sellerId, 3), sellerId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
