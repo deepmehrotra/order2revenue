@@ -1,10 +1,15 @@
 package com.o2r.helper;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -14,10 +19,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.o2r.bean.CustomerBean;
+import com.o2r.bean.OrderBean;
+import com.o2r.bean.OrderTaxBean;
+import com.o2r.dao.AreaConfigDao;
 import com.o2r.model.Order;
 import com.o2r.model.Product;
 import com.o2r.model.ProductConfig;
+import com.o2r.model.TaxCategory;
+import com.o2r.service.OrderService;
 import com.o2r.service.ProductService;
+import com.o2r.service.TaxDetailService;
 
 
 @Service("saveIntegrationCotents")
@@ -25,7 +37,13 @@ import com.o2r.service.ProductService;
 public class SaveIntegrationCotents {
 	
 	@Autowired
+	private OrderService orderService;
+	@Autowired
 	private ProductService productService;
+	@Autowired
+	private AreaConfigDao areaConfigDao;
+	@Autowired
+	private TaxDetailService taxDetailService;
 	
 	static Logger log = Logger.getLogger(SaveContents.class.getName());
 	
@@ -276,6 +294,12 @@ public class SaveIntegrationCotents {
 		log.info("$$$ saveAPIFetchOrders starts : SaveIntegrationCotents $$$");
 		List<Order> saveList = null;
 		List<String> MasterSKUList = null;
+		
+		DateFormat orderDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+		DateFormat shipDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH);
+		
+		StringBuffer errorMsg = new StringBuffer();
+		
 		try {			
 			saveList = new ArrayList<Order>();			
 			if(orderList != null && orderList.size() != 0){
@@ -292,14 +316,145 @@ public class SaveIntegrationCotents {
 						if(jsonArray.length() != 0){
 							for(int each = 0; each < jsonArray.length(); each++){
 								JSONObject eachOrderObject = jsonArray.getJSONObject(each);
-								
+								JSONArray itemsList = eachOrderObject.getJSONArray("Items");								
 								validate = true;
-								Order order = new Order();			
-								
+								List<ProductConfig> productConfigs = null;
+								ProductConfig productConfig = null; 
+								OrderBean order = null;
+								CustomerBean customerBean = null;
+								OrderTaxBean taxBean = null;
+								Product product = null;
+								TaxCategory taxcat = null;
+								if(itemsList.length() !=0){
+									for(int eachItem = 0; each < itemsList.length(); each++){			
+										
+										JSONObject eachItemObject = itemsList.getJSONObject(eachItem);
+										
+										try {
+											productConfigs = productService.getProductConfig(eachItemObject.getString("SKU"),
+													eachOrderObject.getString("Channel"), sellerId);
+											
+											if(productConfigs != null){
+												if (productConfigs.size() == 1) {
+													productConfig = (ProductConfig) productConfigs
+															.get(0);
+												} else {
+													ProductConfig pc = null;
+													Set<String> parent = new HashSet<String>();
+													for (Object PCo : productConfigs) {
+														pc = (ProductConfig) PCo;
+														parent.add(pc.getProductSkuCode());
+													}
+													if (parent.size() == 1) {
+														productConfig = (ProductConfig) productConfigs
+																.get(0);
+													} else {												
+														validate = false;
+													}
+												}
 												
+												if(productConfig != null){													
+													order = new OrderBean();
+													customerBean = new CustomerBean();
+													taxBean = new OrderTaxBean();
+													
+													if(eachOrderObject.has("ChannelOrderId") && eachOrderObject.getString("ChannelOrderId") != ""){
+														
+														order.setProductSkuCode(productConfig.getProductSkuCode());
+														order.setPcName(eachOrderObject.getString("Channel"));
+														order.setQuantity(eachItemObject.getInt("Quantity") != 0 ? eachItemObject.getInt("Quantity") : 1);
+														order.setPartnerCommission(productConfig.getCommision());
+														
+														
+														String channelOrderId = eachOrderObject.getString("ChannelOrderId")
+																+GlobalConstant.orderUniqueSymbol+ productConfig.getVendorSkuRef();
+														
+														order.setChannelOrderID(channelOrderId);
+														
+														if(eachOrderObject.has("OrderDate") && eachOrderObject.getString("OrderDate") != ""){
+															order.setOrderDate(orderDateFormat.parse(eachOrderObject.getString("OrderDate")));
+														} else {
+															validate = false;
+														}
+														
+														if(eachOrderObject.has("ShippedOn") && eachOrderObject.getString("ShippedOn") != ""){
+															order.setShippedDate(shipDateFormat.parse(eachOrderObject.getString("ShippedOn")));
+														} else {
+															validate = false;
+														}
+														
+														if(eachOrderObject.has("Pincode") && (!eachOrderObject.isNull("Pincode") && eachOrderObject.getString("Pincode") != "" ) && validate){
+															String zipCode = eachOrderObject.getString("Pincode");
+															if (zipCode.contains(".")) {
+																zipCode = zipCode.substring(0, zipCode.indexOf("."));
+															}															
+															if (areaConfigDao.isZipCodeValid(zipCode)) {
+																try {
+																	customerBean.setZipcode(zipCode);
+																} catch (Exception e) {
+																	errorMsg.append("Failed : "+eachItemObject.getString("SKU")+" : Cause : "+e.getLocalizedMessage()+"#");
+																	validate = false;
+																}
+															} else {
+																validate = false;
+															}
+															
+															if (order.getProductSkuCode() != null) {
+																product = productService.getProduct(
+																		order.getProductSkuCode(), sellerId);
+																if (product != null) {
+																	taxcat = taxDetailService.getTaxCategory(product,
+																			order.getOrderSP(), sellerId,
+																			customerBean.getZipcode());
+																}
+																if(taxcat != null){
+																	taxBean.setTaxCategtory(taxcat.getTaxCatName());
+																} else {
+																	validate = false;
+																}
+															} 														
+														} else {
+															validate = false;
+														}
+														
+														if(eachOrderObject.has("Courier") && eachOrderObject.getString("Courier") != ""){
+															order.setLogisticPartner(eachOrderObject.getString("Courier"));
+														}
+														
+														if(eachOrderObject.has("TrackingNumber") && eachOrderObject.getString("TrackingNumber") != ""){
+															order.setAwbNum(eachOrderObject.getString("TrackingNumber"));
+														}
+														
+														if(eachOrderObject.has("CustomerName") && (!eachOrderObject.isNull("CustomerName") && eachOrderObject.getString("CustomerName") != "")){
+															customerBean.setCustomerName(eachOrderObject.getString("CustomerName"));
+														}
+														
+														if(eachOrderObject.has("PhoneNumber") && (!eachOrderObject.isNull("PhoneNumber") && eachOrderObject.getString("PhoneNumber") != "")){
+															customerBean.setCustomerPhnNo(eachOrderObject.getString("PhoneNumber"));
+														}
+																
+													} else {
+														validate = false;
+													}
+												} else {
+													validate = false;
+												}												
+											} else {
+												validate = false;
+											}
+										} catch (Exception e) {
+											errorMsg.append("Failed : "+eachItemObject.getString("SKU")+" : Cause : "+e.getLocalizedMessage()+"#");
+											validate = false;
+										}																				
+									}
+								} else {
+									validate = false;
+								}											
 								
 								if(validate && order != null){
-									saveList.add(order);
+									order.setCustomer(customerBean);
+									order.setOrderTax(taxBean);
+									saveList.add(ConverterClass.prepareModel(order));
 								} else {
 									System.out.println("Failed : "+eachOrderObject.toString());
 								}
