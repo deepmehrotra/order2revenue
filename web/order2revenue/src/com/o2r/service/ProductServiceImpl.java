@@ -83,6 +83,11 @@ public class ProductServiceImpl implements ProductService {
 	public Product getProduct(int orderId) throws CustomException {
 		return productDao.getProduct(orderId);
 	}
+	
+	@Override
+	public List<Product> getProductSearch(String skuCode, int sellerId) {
+		return productDao.getProductSearch(skuCode, sellerId);
+	}
 
 	@Override
 	public void deleteProduct(Product product, int sellerId)
