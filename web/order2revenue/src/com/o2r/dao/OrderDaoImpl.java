@@ -2279,7 +2279,7 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	@SuppressWarnings("deprecation")
-	private Date getreconciledate(Order order, Partner partner, Date orderdate) {
+	public Date getreconciledate(Order order, Partner partner, Date orderdate) {
 
 		log.info("*** getreconciledate starts : OrderDaoImpl ***");
 		log.debug(" Delivery date :" + order.getDeliveryDate());
@@ -2418,7 +2418,7 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	// Method to calculate NR
-	private boolean calculateNR(Partner partner, Order order, String prodCat,
+	public boolean calculateNR(Partner partner, Order order, String prodCat,
 			float deadWeight, float volWeight, int sellerId) {
 
 		log.info("*** calculateNR starts : OrderDaoImpl ***");
@@ -3818,7 +3818,7 @@ public class OrderDaoImpl implements OrderDao {
 		return totalcharge;
 	}
 
-	private boolean calculateDeliveryDate(Order order, int sellerId) {
+	public boolean calculateDeliveryDate(Order order, int sellerId) {
 
 		log.info("*** calculateDeliveryDate starts : OrderDaoImpl ***");
 		boolean result = false;
@@ -4001,7 +4001,7 @@ public class OrderDaoImpl implements OrderDao {
 		return projList;
 	}
 
-	private boolean calculateNR(NRnReturnConfig nrnReturnConfig, Order order,
+	public boolean calculateNR(NRnReturnConfig nrnReturnConfig, Order order,
 			String prodCat, float deadWeight, float volWeight, int sellerId) {
 
 		log.info("$$$ calculateNR for Events Start $$$");
@@ -6505,5 +6505,32 @@ public class OrderDaoImpl implements OrderDao {
 	
 	public double reCalculatePCC(){
 		return 0;
+	}
+	
+	@Override
+	public void addAPIOrders(List<Order> orderList, int sellerId) {
+		Session session = null;
+		Seller seller = null;
+		try {
+			if(orderList != null && orderList.size() != 0){
+				session = sessionFactory.openSession();
+				session.beginTransaction();
+				seller = (Seller) session.get(Seller.class, sellerId);
+				if(seller != null){
+					for(Order order : orderList){
+						order.setSeller(seller);
+						seller.getOrders().add(order);
+					}
+					session.saveOrUpdate(seller);
+					session.getTransaction().commit();
+				}				
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null){
+				session.close();
+			}
+		}
 	}
 }

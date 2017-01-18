@@ -109,7 +109,7 @@ public class EventsDaoImpl implements EventsDao {
 		return null;
 	}
 	@Override
-	public List<Events> getEvents(Partner partner, int sellerId)throws CustomException {
+	public List<Events> getEvents(String pcName, int sellerId)throws CustomException {
 		
 		log.info("*** getEvents Starts...***");
 		List<Events> returnList=null;
@@ -120,9 +120,16 @@ public class EventsDaoImpl implements EventsDao {
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Seller.class).add(Restrictions.eq("sellerId", sellerId));
 			criteria.createAlias("events", "events", CriteriaSpecification.LEFT_JOIN)
-					.add(Restrictions.eq("channelName", partner.getPcName()))
+					.add(Restrictions.eq("channelName", pcName))
 					.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 			returnList=criteria.list();
+			if(returnList != null && returnList.size() != 0){
+				for(Events event : returnList){
+					if(event.getNrnReturnConfig()!=null){
+						Hibernate.initialize(event.getNrnReturnConfig().getCharges());
+					}
+				}
+			}
 		} catch (Exception e) {
 			log.error("Failed! by sellerId : "+sellerId,e);
 			e.printStackTrace();

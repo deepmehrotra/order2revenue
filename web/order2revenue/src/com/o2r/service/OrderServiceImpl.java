@@ -306,4 +306,9 @@ public class OrderServiceImpl implements OrderService {
 	public boolean reverseOrder(int orderId, int sellerId) throws CustomException {
 		return orderDao.reverseOrder(orderId, sellerId);
 	}
+	
+	@Override
+	public void addAPIOrders(List<Order> orderList, int sellerId) {
+		orderDao.addAPIOrders(orderList, sellerId);
+	}
 }

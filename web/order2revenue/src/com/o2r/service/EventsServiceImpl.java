@@ -36,8 +36,8 @@ public class EventsServiceImpl implements EventsService{
 	}
 	
 	@Override
-	public List<Events> getEvents(Partner partner, int sellerId)throws CustomException {
-		return eventsDao.getEvents(partner, sellerId);
+	public List<Events> getEvents(String pcName, int sellerId)throws CustomException {
+		return eventsDao.getEvents(pcName, sellerId);
 	}
 	
 	@Override
