@@ -3322,8 +3322,20 @@ public class OrderDaoImpl implements OrderDao {
 			{
 				if(chargesMap.containsKey("delServiceFee"))
 					packagindCharges=chargesMap.get("delServiceFee")*shippingCharges/100;
+			} else if(partner.getPcName().contains(GlobalConstant.PCFLIPKART)) {
+				if(partner.getNrnReturnConfig().isPickNPack() == true){
+					float finalWeight = deadWeight > volWeight ? deadWeight : volWeight;
+					if(finalWeight <= 1000){
+						packagindCharges = GlobalConstant.flipkartPickNPackFee[0];
+					} else {
+						packagindCharges = (GlobalConstant.flipkartPickNPackFee[0] + ( ((int)finalWeight / 1000) * GlobalConstant.flipkartPickNPackFee[1]));
+					}
+				}
 			}
 			order.setOtherCommissionValue(packagindCharges);
+			
+			
+			
 			comission = (float) (comission * SP) / 100;
 			serviceTax = (chargesMap.containsKey("serviceTax") ? chargesMap
 					.get("serviceTax") : 0)

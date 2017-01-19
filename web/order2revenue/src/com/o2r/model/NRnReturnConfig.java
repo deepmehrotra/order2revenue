@@ -105,6 +105,8 @@ public class NRnReturnConfig {
 	private String PDCharBRType;
 	@Column
 	private boolean packagingFee;
+	@Column
+	private boolean pickNPack;
 	// @Column
 	// private float PDCharSFFixAmt;
 	// @Column
@@ -892,6 +894,14 @@ public class NRnReturnConfig {
 
 	public void setPackagingFee(boolean packagingFee) {
 		this.packagingFee = packagingFee;
+	}
+
+	public boolean isPickNPack() {
+		return pickNPack;
+	}
+
+	public void setPickNPack(boolean pickNPack) {
+		this.pickNPack = pickNPack;
 	}
 
 	public boolean isWhicheverGreaterPCCPost() {

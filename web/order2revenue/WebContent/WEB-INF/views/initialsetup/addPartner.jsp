@@ -1915,6 +1915,30 @@ input+label {
 																	</div>
 																</div>
 															</div>
+															<c:if test="${fn:contains(partner.pcName, 'flipkart')}">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																		<h4 class="panel-title">
+																			<a data-toggle="collapse" data-parent="#accordion"
+																				href="#collapsesix1">Flipkart Assure</a>
+																		</h4>
+																	</div>
+																	<div id="collapsesix1" class="panel-collapse collapse">
+																		<div class="panel-body">
+																			<div class="form-group col-md-12">
+																				<div class="col-md-4 input-group m-b">
+																					<label>Flipkart Assure </label>
+																					<form:checkbox id="PickNPack" path="nrnReturnConfig.pickNPack" 
+																						style="position: absolute; left: 100px;"/>
+																					<div class="col-lg-12 text-center">
+																						<img alt="" src="/O2R/partnerimages/PickNPackSlab.jpg">
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</c:if>
 															<c:if test="${fn:contains(partner.pcName, 'snapdeal')}">
 																<div class="panel panel-default">
 																	<div class="panel-heading">
@@ -1938,7 +1962,7 @@ input+label {
 																		</div>
 																	</div>
 																</div>
-															</c:if>
+															</c:if>															
 															<c:if test="${fn:contains(partner.pcName, 'amazon')}">
 																<div class="panel panel-default">
 																	<div class="panel-heading">
@@ -4611,6 +4635,8 @@ input+label {
 							}
 							if ('${partner.nrnReturnConfig.packagingFee}' == 'true')
 								$('#Packaging').iCheck('check');
+							if ('${partner.nrnReturnConfig.pickNPack}' == 'true')
+								$('#PickNPack').iCheck('check');
 							if ('${partner.nrnReturnConfig.retCharSFRevShipFee}' == 'true')
 								$('#retCharSFRevShipFee').iCheck('check');
 							if ('${partner.nrnReturnConfig.retCharSFShipFee}' == 'true')
