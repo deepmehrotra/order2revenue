@@ -3322,6 +3322,37 @@ public class OrderDaoImpl implements OrderDao {
 			{
 				if(chargesMap.containsKey("delServiceFee"))
 					packagindCharges=chargesMap.get("delServiceFee")*shippingCharges/100;
+				if(partner.getNrnReturnConfig().isFBA() == true){
+					int sizeType = 0;
+					float shipWeight = 0;
+					float FBACharges = 0;
+					float pickNPackFee = 0;
+					if(deadWeight > volWeight){
+						if(deadWeight > 1000 && deadWeight <= 12000){
+							sizeType = 1;
+						} else if(deadWeight > 12000){
+							sizeType = 2;
+						}
+						shipWeight = deadWeight;
+					} else {
+						if(volWeight > GlobalConstant.FBASizeType[0] && volWeight <= GlobalConstant.FBASizeType[1]){
+							sizeType = 1;
+						} else if(volWeight > GlobalConstant.FBASizeType[1]){
+							sizeType = 2; 
+						}
+						shipWeight = volWeight;
+					}
+					pickNPackFee = GlobalConstant.FBAPickNPackFee[sizeType];
+					shipWeight = shipWeight + GlobalConstant.FBAWeiHandShipFee[sizeType];
+					if(shipWeight <= 2000){
+						FBACharges = (GlobalConstant.FBAWeiHandShipFee[0] + (((int)shipWeight / 500) * GlobalConstant.FBAWeiHandShipFee[0]));
+					} else if(shipWeight > 2000 && sizeType != 0){
+						FBACharges = ((GlobalConstant.FBAWeiHandShipFee[0] * 5) + (((int)(shipWeight - 2000) / 500) * GlobalConstant.FBAWeiHandShipFee[1]));
+					} else {
+						FBACharges = (GlobalConstant.FBAWeiHandShipFee[0] + (((int)shipWeight / 500) * GlobalConstant.FBAWeiHandShipFee[0]));
+					}
+					packagindCharges = pickNPackFee + FBACharges;
+				}
 			} else if(partner.getPcName().contains(GlobalConstant.PCFLIPKART)) {
 				if(partner.getNrnReturnConfig().isPickNPack() == true){
 					float finalWeight = deadWeight > volWeight ? deadWeight : volWeight;

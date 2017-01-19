@@ -1929,7 +1929,7 @@ input+label {
 																				<div class="col-md-4 input-group m-b">
 																					<label>Flipkart Assure </label>
 																					<form:checkbox id="PickNPack" path="nrnReturnConfig.pickNPack" 
-																						style="position: absolute; left: 100px;"/>
+																						style="position: absolute; left: 105px;"/>
 																					<div class="col-lg-12 text-center">
 																						<img alt="" src="/O2R/partnerimages/PickNPackSlab.jpg">
 																					</div>
@@ -1980,6 +1980,28 @@ input+label {
 																						name="nr-delServiceFee"
 																						value="${chargeMap.delServiceFee}"
 																						id="delServiceFee" />
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																		<h4 class="panel-title">
+																			<a data-toggle="collapse" data-parent="#accordion"
+																				href="#collapsesix2">FBA</a>
+																		</h4>
+																	</div>
+																	<div id="collapsesix2" class="panel-collapse collapse">
+																		<div class="panel-body">
+																			<div class="form-group col-md-12">
+																				<div class="col-md-4 input-group m-b">
+																					<label>FBA </label>
+																					<form:checkbox id="FBA" path="nrnReturnConfig.FBA" 
+																						style="position: absolute; left: 35px;"/>
+																					<div class="col-lg-12 text-center">
+																						<img alt="" src="/O2R/partnerimages/PickNPackSlab.jpg">
+																					</div>
 																				</div>
 																			</div>
 																		</div>
@@ -4637,6 +4659,8 @@ input+label {
 								$('#Packaging').iCheck('check');
 							if ('${partner.nrnReturnConfig.pickNPack}' == 'true')
 								$('#PickNPack').iCheck('check');
+							if ('${partner.nrnReturnConfig.FBA}' == 'true')
+								$('#FBA').iCheck('check');
 							if ('${partner.nrnReturnConfig.retCharSFRevShipFee}' == 'true')
 								$('#retCharSFRevShipFee').iCheck('check');
 							if ('${partner.nrnReturnConfig.retCharSFShipFee}' == 'true')
