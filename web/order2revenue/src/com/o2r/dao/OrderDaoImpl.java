@@ -3347,11 +3347,11 @@ public class OrderDaoImpl implements OrderDao {
 					if(shipWeight <= 2000){
 						FBACharges = (GlobalConstant.FBAWeiHandShipFee[0] + (((int)shipWeight / 500) * GlobalConstant.FBAWeiHandShipFee[0]));
 					} else if(shipWeight > 2000 && sizeType != 0){
-						FBACharges = ((GlobalConstant.FBAWeiHandShipFee[0] * 5) + (((int)(shipWeight - 2000) / 500) * GlobalConstant.FBAWeiHandShipFee[1]));
+						FBACharges = (((GlobalConstant.FBAWeiHandShipFee[0] * 4) + GlobalConstant.FBAWeiHandShipFee[1]) + (((int)(shipWeight - 2000) / 500) * GlobalConstant.FBAWeiHandShipFee[1]));
 					} else {
 						FBACharges = (GlobalConstant.FBAWeiHandShipFee[0] + (((int)shipWeight / 500) * GlobalConstant.FBAWeiHandShipFee[0]));
 					}
-					packagindCharges = pickNPackFee + FBACharges;
+					packagindCharges = packagindCharges + pickNPackFee + FBACharges;
 				}
 			} else if(partner.getPcName().contains(GlobalConstant.PCFLIPKART)) {
 				if(partner.getNrnReturnConfig().isPickNPack() == true){
