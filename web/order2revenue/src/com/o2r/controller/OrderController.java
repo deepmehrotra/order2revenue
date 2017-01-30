@@ -959,7 +959,7 @@ public class OrderController {
 					"serviceTax",
 					(order.getPccAmount() + order.getFixedfee()
 							+ order.getPartnerCommission() + order
-								.getShippingCharges())
+								.getShippingCharges() + order.getOtherCommissionValue())
 							* dataConfig.getServiceTax() / 100);
 			System.out
 					.println((order.getPccAmount() + order.getFixedfee()

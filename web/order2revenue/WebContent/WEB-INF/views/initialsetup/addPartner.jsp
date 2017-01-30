@@ -1927,11 +1927,11 @@ input+label {
 																		<div class="panel-body">
 																			<div class="form-group col-md-12">
 																				<div class="col-md-4 input-group m-b">
-																					<label>Flipkart Assure </label>
+																					<label>Flipkart Assured </label>
 																					<form:checkbox id="PickNPack" path="nrnReturnConfig.pickNPack" 
 																						style="position: absolute; left: 105px;"/>
 																					<div class="col-lg-12 text-center">
-																						<img alt="" src="/O2R/partnerimages/PickNPackSlab.jpg">
+																						<img alt="" src="/O2R/partnerimages/FA.jpg">
 																					</div>
 																				</div>
 																			</div>
@@ -2000,7 +2000,7 @@ input+label {
 																					<form:checkbox id="FBA" path="nrnReturnConfig.FBA" 
 																						style="position: absolute; left: 35px;"/>
 																					<div class="col-lg-12 text-center">
-																						<img alt="" src="/O2R/partnerimages/PickNPackSlab.jpg">
+																						<img alt="" src="/O2R/partnerimages/FBAmazon.jpg">
 																					</div>
 																				</div>
 																			</div>
