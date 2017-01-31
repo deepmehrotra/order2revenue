@@ -790,11 +790,26 @@ public class GlobalConstant {
 	public static final int packageFeeSnapdeal[] = { 5, 10, 15, 20, 25, 30, 35,
 			40, 45, 50, 60 };
 
-	// Array for Packaging fee of snapdeal
+	// Array for Packaging fee of flipkart
 	public static final int flipkartRevShippingFeeLT5GM[] = { 35, 60, 85 };
 	public static final int flipkartRevShippingFeeLT5KG[] = { 35, 40, 55 };
 	public static final int flipkartRevShippingFeeGT5KG[] = { 5, 10, 25 };
+	
 
+	// Array for PickNPack fee of flipkart
+		public static final int flipkartPickNPackFee[] = { 10,5 };		
+	
+	//Amazon Packaging Weight Slab
+		public static final int FBAPacWeiSlab[] = {80, 100, 500};
+	//Amazon Pick n Pack Fee
+		public static final int FBAPickNPackFee[] = {10, 15, 25};
+	//Amazon Weight Handling Shipping Fee 
+		public static final int FBAWeiHandShipFee[] = {30, 15};		
+	//Amazon Size Type
+		public static final double FBASizeType[] = {1258.53, 10487.72};
+		
+		
+		
 	/* Null Area */
 	public static final String nullException = "NullException !";
 	public static final String nullValuesError = "Field Should Not Be Empty!";

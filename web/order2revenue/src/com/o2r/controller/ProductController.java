@@ -94,11 +94,8 @@ public class ProductController {
 			sellerId = helperClass.getSellerIdfromSession(request);
 			if (searchProduct != null && searchProduct.equals("SKU")
 					&& skuCode != null) {
-				productBean = ConverterClass.prepareProductBean(productService
-						.getProduct(skuCode, sellerId));
-				System.out.println(" Product bean in search product: "+productBean);
-				if(productBean!=null)
-				productList.add(productBean);
+				productList = ConverterClass.prepareListofProductBean(productService
+						.getProductSearch(skuCode, sellerId));						
 			} else if (searchProduct != null && startDate != null
 					&& endDate != null) {
 

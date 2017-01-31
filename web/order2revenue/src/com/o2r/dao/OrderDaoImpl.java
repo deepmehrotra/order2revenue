@@ -3322,14 +3322,72 @@ public class OrderDaoImpl implements OrderDao {
 			{
 				if(chargesMap.containsKey("delServiceFee"))
 					packagindCharges=chargesMap.get("delServiceFee")*shippingCharges/100;
+				if(partner.getNrnReturnConfig().isFBA() == true){
+					int sizeType = 0;
+					float shipWeight = 0;
+					float FBACharges = 0;
+					float pickNPackFee = 0;
+					if(deadWeight > volWeight){
+						if(deadWeight > 1000 && deadWeight <= 12000){
+							sizeType = 1;
+						} else if(deadWeight > 12000){
+							sizeType = 2;
+						}
+						shipWeight = deadWeight;
+					} else {
+						if(volWeight > GlobalConstant.FBASizeType[0] && volWeight <= GlobalConstant.FBASizeType[1]){
+							sizeType = 1;
+						} else if(volWeight > GlobalConstant.FBASizeType[1]){
+							sizeType = 2; 
+						}
+						shipWeight = volWeight;
+					}
+					pickNPackFee = GlobalConstant.FBAPickNPackFee[sizeType];
+					shipWeight = shipWeight + GlobalConstant.FBAPacWeiSlab[sizeType];
+					if(shipWeight <= 2000){
+						FBACharges = (GlobalConstant.FBAWeiHandShipFee[0] + 
+								((shipWeight % 500 != 0 ? (int)shipWeight / 500 : ((int)shipWeight / 500 - 1))
+								* GlobalConstant.FBAWeiHandShipFee[0]));
+					} else if(shipWeight > 2000 && sizeType != 0){
+						FBACharges = (((GlobalConstant.FBAWeiHandShipFee[0] * 4) + GlobalConstant.FBAWeiHandShipFee[1]) + 
+								(((shipWeight - 2000) % 500 != 0 ? (int)(shipWeight - 2000) / 500 : ((int)(shipWeight - 2000) / 500 - 1))
+								* GlobalConstant.FBAWeiHandShipFee[1]));
+					} else {
+						FBACharges = (GlobalConstant.FBAWeiHandShipFee[0] + 
+								((shipWeight % 500 != 0 ? (int)shipWeight / 500 : ((int)shipWeight / 500 - 1)) 
+								* GlobalConstant.FBAWeiHandShipFee[0]));
+					}
+					packagindCharges = (packagindCharges + pickNPackFee + FBACharges);
+				}
+			} else if(partner.getPcName().contains(GlobalConstant.PCFLIPKART)) {
+				if(partner.getNrnReturnConfig().isPickNPack() == true){
+					float finalWeight = deadWeight > volWeight ? deadWeight : volWeight;
+					if(finalWeight <= 1000){
+						packagindCharges = GlobalConstant.flipkartPickNPackFee[0];
+					} else {
+						packagindCharges = (GlobalConstant.flipkartPickNPackFee[0] + 
+								((finalWeight % 1000 != 0 ? (int)finalWeight / 1000 : (int)finalWeight / 1000 - 1) 										
+								* GlobalConstant.flipkartPickNPackFee[1]));
+					}
+				}
 			}
-			order.setOtherCommissionValue(packagindCharges);
+			order.setOtherCommissionValue(packagindCharges);		
+			
+			
 			comission = (float) (comission * SP) / 100;
 			serviceTax = (chargesMap.containsKey("serviceTax") ? chargesMap
 					.get("serviceTax") : 0)
-					* (float) (shippingCharges + pccAmount + fixedfee + comission+packagindCharges)
+					* (float) (shippingCharges + pccAmount + fixedfee + comission + packagindCharges)
 					/ 100;
-			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges-packagindCharges
+			
+			/*if(order.getOtherCommissionValue() != 0){
+				serviceTax = serviceTax + ((chargesMap.containsKey("serviceTax") ? chargesMap
+						.get("serviceTax") : 0)
+						* (float) order.getOtherCommissionValue()
+						/ 100);
+			}*/
+			
+			nrValue = SP - comission - fixedfee - pccAmount - shippingCharges - packagindCharges
 					- serviceTax;
 			props = PropertiesLoaderUtils.loadProperties(resource);
 			if (partner != null && partner.isTdsApplicable()) {

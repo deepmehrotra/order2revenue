@@ -49,6 +49,8 @@ public interface ProductDao {
 
 	public Product getProduct(String skuCode, int sellerId)
 			throws CustomException;
+	
+	public List<Product> getProductSearch(String skuCode, int sellerId);
 
 	public List<Product> getProductwithCreatedDate(Date startDate,
 			Date endDate, int sellerId) throws CustomException;

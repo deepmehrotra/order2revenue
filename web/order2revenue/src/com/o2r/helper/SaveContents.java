@@ -172,6 +172,7 @@ public class SaveContents {
 					entry = worksheet.getRow(rowIndex);
 					errorMessage = new StringBuffer("Row :" + (rowIndex - 2)
 							+ ":");
+					 
 					log.debug(" Row index : " + (rowIndex - 2));
 					log.debug(entry.getCell(0));
 					log.debug(entry.getCell(1));

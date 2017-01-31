@@ -836,6 +836,49 @@ public class ProductDaoImpl implements ProductDao {
 		return returnObject;
 
 	}
+	
+	@Override
+	public List<Product> getProductSearch(String skuCode, int sellerId) {
+		log.info("*** getProductSearch by skuCode Starts : ProductDaoImpl ****");
+		
+		List<Product> returnlist = null;
+		log.debug(" ***Insid get product from sku ***" + skuCode);
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Product.class);
+			criteria.createAlias("seller", "seller",
+					CriteriaSpecification.LEFT_JOIN);
+			criteria.createAlias("productConfig", "productConfig",
+					CriteriaSpecification.LEFT_JOIN).add(
+					Restrictions.eq("seller.id", sellerId));
+			Criterion rest1 = Restrictions.like("productSkuCode", skuCode+"%");
+			Criterion rest2 = Restrictions.like("productConfig.channelSkuRef", skuCode+"%");
+			criteria.add(Restrictions.or(rest1, rest2)).setResultTransformer(
+					CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+
+			returnlist = criteria.list();
+
+			if (returnlist != null && returnlist.size() != 0) {
+				for(Product returnObject : returnlist){
+					Hibernate.initialize(returnObject.getPartnerCategoryMap());
+				}
+			} else {
+				log.debug("Product sku " + skuCode + " not found");
+			}
+			session.getTransaction().commit();			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Failed! by sellerId : " + sellerId, e);
+		} finally {
+			if(session != null){
+				session.close();
+			}
+		}
+		log.info("*** getProductSearch by skuCode Ends : ProductDaoImpl ****");
+		return returnlist;
+	}
 
 	@Override
 	public List<ProductConfig> getProductConfig(String SKUCode, String channel,

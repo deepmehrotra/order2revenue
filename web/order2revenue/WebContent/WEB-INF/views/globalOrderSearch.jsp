@@ -428,6 +428,7 @@ function setOrderID(orderid,channelorderid,value)
 	/* setVisibility('payment', 'none'); */
 	document.getElementById("returnorderId").value=orderid;
 	document.getElementById("returnchannelOrderID").value=channelorderid;
+	alert(channelorderid);
 }
 	else
 		{
